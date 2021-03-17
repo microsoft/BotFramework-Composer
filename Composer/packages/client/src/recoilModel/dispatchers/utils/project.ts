@@ -548,39 +548,6 @@ export const createNewBotFromTemplate = async (
   return { projectId, mainDialog };
 };
 
-export const createNewBotFromTemplateV2 = async (
-  callbackHelpers,
-  templateId: string,
-  templateVersion: string,
-  name: string,
-  description: string,
-  location: string,
-  runtimeChoice: RuntimeType,
-  schemaUrl?: string,
-  locale?: string,
-  templateDir?: string,
-  eTag?: string,
-  alias?: string,
-  preserveRoot?: boolean
-) => {
-  const jobId = await httpClient.post(`/v2/projects`, {
-    storageId: 'default',
-    templateId,
-    templateVersion,
-    name,
-    description,
-    location,
-    schemaUrl,
-    locale,
-    templateDir,
-    eTag,
-    alias,
-    preserveRoot,
-    runtimeChoice,
-  });
-  return jobId;
-};
-
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
   let isBotProjectLoaded = false;
   set(botProjectIdsState, (current: string[]) => {

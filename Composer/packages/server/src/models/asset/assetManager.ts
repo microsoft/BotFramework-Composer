@@ -7,7 +7,7 @@ import path from 'path';
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions, FeedType, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from '@bfc/shared';
 import { ServerWorker } from '@bfc/server-workers';
 
 import { ExtensionContext } from '../extension/extensionContext';
@@ -97,6 +97,7 @@ export class AssetManager {
     ref: LocationRef,
     jobId: string,
     runtimeChoice: RuntimeType,
+    runtimeLanguage: FeedName,
     user?: UserIdentity
   ): Promise<LocationRef> {
     try {
@@ -122,6 +123,7 @@ export class AssetManager {
           projectName,
           templateGeneratorPath,
           runtimeChoice,
+          runtimeLanguage,
         },
         (status, msg) => {
           BackgroundProcessManager.updateProcess(jobId, status, msg);

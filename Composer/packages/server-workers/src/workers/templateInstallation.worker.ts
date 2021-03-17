@@ -33,7 +33,9 @@ const instantiateRemoteTemplate = async (
   yeomanEnv: yeoman,
   generatorName: string,
   dstDir: string,
-  projectName: string
+  projectName: string,
+  runtimeChoice: string,
+  runtimeLanguage: string
 ): Promise<void> => {
   log('About to instantiate a template!', dstDir, generatorName, projectName);
   yeomanEnv.cwd = dstDir;
@@ -41,7 +43,7 @@ const instantiateRemoteTemplate = async (
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore @types/yeoman-environment is outdated
-    await yeomanEnv.run([generatorName, projectName]);
+    await yeomanEnv.run([generatorName, projectName, '-p', runtimeLanguage, 'i', runtimeLanguage]);
     log('Template successfully instantiated', dstDir, generatorName, projectName);
   } catch (err) {
     log('Template failed to instantiate', dstDir, generatorName, projectName);
@@ -54,7 +56,9 @@ const yeomanWork = async (
   templateVersion: string,
   dstDir: string,
   projectName: string,
-  templateGeneratorPath: string
+  templateGeneratorPath: string,
+  runtimeChoice: string,
+  runtimeLanguage: string
 ) => {
   const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
   // create yeoman environment
@@ -82,7 +86,7 @@ const yeomanWork = async (
     log('Instantiating Yeoman template');
     parentPort?.postMessage({ status: 'Instantiating Yeoman template' });
 
-    await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName);
+    await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeChoice, runtimeLanguage);
   } else {
     // handle error
     throw new Error(`error hit when installing remote template`);
@@ -96,6 +100,7 @@ export type TemplateInstallationArgs = {
   projectName: string;
   templateGeneratorPath: string;
   runtimeChoice: string;
+  runtimeLanguage: string;
 };
 
 if (!isMainThread) {
@@ -104,7 +109,9 @@ if (!isMainThread) {
     workerData.templateVersion,
     workerData.dstDir,
     workerData.projectName,
-    workerData.templateGeneratorPath
+    workerData.templateGeneratorPath,
+    workerData.runtimeChoice,
+    workerData.runtimeLanguage
   )
     .then(() => {
       process.exit(0);

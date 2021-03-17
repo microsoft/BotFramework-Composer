@@ -372,24 +372,26 @@ export const projectDispatcher = () => {
         profile,
         source,
         runtimeChoice,
+        runtimeLanguage,
       } = newProjectData;
 
       // starts the creation process and stores the jobID in state for tracking
-      const response = await createNewBotFromTemplateV2(
-        callbackHelpers,
+      const response = await httpClient.post(`/v2/projects`, {
+        storageId: 'default',
         templateId,
         templateVersion,
         name,
         description,
         location,
-        runtimeChoice,
         schemaUrl,
         locale,
         templateDir,
         eTag,
         alias,
-        preserveRoot
-      );
+        preserveRoot,
+        runtimeChoice,
+        runtimeLanguage,
+      });
 
       if (response.data.jobId) {
         dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix, profile, source);
