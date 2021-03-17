@@ -208,17 +208,8 @@ export class OneAuthInstance extends OneAuthBase {
         log('Acquired ARM token for tenant: %s', result.credential.value);
         return result.credential.value;
       } catch (e) {
-        log('exception keys: ', Object.keys(e));
-        if (e.error) {
-          log(Object.keys(e.error));
-          log('ARM caught exception with .error property: %O', e.error);
-          if (e.error.status) {
-            log('ARM caught exception with .error.status property: ', e.error.status);
-          }
-        }
-        if (e.error?.status === this.oneAuth.Status.InteractionRequired) {
+        if (e.error?.status === 2 /* InteractionRequired */) {
           // try again but interactively
-          log('Interaction Required enum: ', this.oneAuth.Status.InteractionRequired);
           log('Acquiring ARM token failed: Interaction required. Trying again interactively to get access token.');
           const tokenParams = new this.oneAuth.AuthParameters(
             DEFAULT_AUTH_SCHEME,
@@ -233,7 +224,6 @@ export class OneAuthInstance extends OneAuthBase {
             return result.credential.value;
           }
         }
-        log('SKIPPED INTERACTION REQUIRED BLOCK');
         log('There was an error trying to get an ARM token for tenant %s: %O', tenantId, e);
         throw e;
       }
