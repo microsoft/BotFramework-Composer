@@ -31,7 +31,6 @@ import {
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
-import { get } from 'request';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -550,7 +549,7 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const onSubmit = useMemo(
-    () => async (options) => {
+    () => (options) => {
       // call back to the main Composer API to begin this process...
       startProvision(options);
       clearAll();
@@ -560,7 +559,7 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const onSave = useMemo(
-    () => async () => {
+    () => () => {
       savePublishConfig(importConfig);
       clearAll();
       closeDialog();
