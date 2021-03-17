@@ -110,6 +110,7 @@ export class LGServer {
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLGDocument(textDocument, lgOption);
+          this.recordTemplatesDefintions(textDocument, lgOption);
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
         }
@@ -268,7 +269,6 @@ export class LGServer {
       const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
-      this.recordTemplatesDefintions(lgTextFiles);
       if (fileId && templateId) {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
         if (lgTextFile) {
@@ -289,15 +289,20 @@ export class LGServer {
     this.LGDocuments.push(lgDocument);
   }
 
-  protected async recordTemplatesDefintions(lgTextFiles: any[]) {
+  protected async recordTemplatesDefintions(document: TextDocument, lgOption?: LGOption) {
+    const { fileId, projectId } = lgOption || {};
+    const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
     for (const file of lgTextFiles) {
-      const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
-      for (const template of lgTemplates.templates) {
-        this._templateDefinitions[template.name] = {
-          fileId: this.removeLocaleInId(file.id),
-          templateId: template.name,
-          line: template?.range?.start?.line,
-        };
+      //Only stroe templates in other LG files
+      if (file.id !== fileId) {
+        const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
+        for (const template of lgTemplates.templates) {
+          this._templateDefinitions[template.name] = {
+            fileId: this.removeLocaleInId(file.id),
+            templateId: template.name,
+            line: template?.range?.start?.line,
+          };
+        }
       }
     }
   }
