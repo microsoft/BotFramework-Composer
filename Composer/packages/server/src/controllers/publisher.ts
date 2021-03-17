@@ -57,9 +57,6 @@ export const PublishController = {
     const projectId: string = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    TelemetryService.trackEvent('PublishingProfileStarted', { target, projectId });
-    TelemetryService.startEvent('PublishingProfileCompleted', target + projectId, { target, projectId });
-
     // deal with publishTargets not exist in settings
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
@@ -67,6 +64,23 @@ export const PublishController = {
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
+
+    try {
+      const configuration = JSON.parse(profile?.configuration || '{}');
+      TelemetryService.trackEvent('PublishingProfileStarted', {
+        target,
+        projectId,
+        msAppId: configuration.settings?.MicrosoftAppId,
+        subscriptionId: configuration.subscriptionId,
+      });
+    } catch (error) {
+      TelemetryService.trackEvent('PublishingProfileStarted', {
+        target,
+        projectId,
+      });
+    }
+
+    TelemetryService.startEvent('PublishingProfileCompleted', `${target}${projectId}`, { target, projectId });
 
     log('access token retrieved from body: %s', accessToken || 'no token provided');
     if (profile && extensionImplementsMethod(extensionName, 'publish')) {
@@ -148,7 +162,7 @@ export const PublishController = {
         );
         // update the eTag if the publish was completed and an eTag is provided
         if (results.status === 200) {
-          TelemetryService.endEvent('PublishingProfileCompleted', target + projectId);
+          TelemetryService.endEvent('PublishingProfileCompleted', `${target}${projectId}`);
           if (results.result?.eTag) {
             BotProjectService.setProjectLocationData(projectId, { eTag: results.result.eTag });
           }

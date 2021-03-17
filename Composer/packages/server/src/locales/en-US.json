@@ -1568,9 +1568,6 @@
   "getting_template_910a4116": {
     "message": "Getting template"
   },
-  "getting_yeoman_environment_4f50aae3": {
-    "message": "Getting Yeoman environment"
-  },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Go to QnA all-up view page."
   },
@@ -1712,20 +1709,14 @@
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
-  "install_more_adapters_in_a_package_settings_a_e8b0df7a": {
-    "message": "Install more adapters in <a>Package Settings</a>."
+  "install_more_adapters_in_a_the_package_manager_a_156fb028": {
+    "message": "Install more adapters in <a>the package manager</a>."
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
   },
   "install_the_update_and_restart_composer_fac30a61": {
     "message": "Install the update and restart Composer."
-  },
-  "installing_yeoman_template_38cf1e48": {
-    "message": "Installing Yeoman template"
-  },
-  "instantiating_yeoman_template_5acf7e3f": {
-    "message": "Instantiating Yeoman template"
   },
   "integer_7f378275": {
     "message": "integer"
@@ -2710,6 +2701,9 @@
   },
   "remove_all_text_responses_77592d1a": {
     "message": "Remove all text responses"
+  },
+  "remove_attachment_81f30aa3": {
+    "message": "Remove attachment"
   },
   "remove_f47dc62a": {
     "message": "Remove"

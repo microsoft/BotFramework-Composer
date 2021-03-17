@@ -24,7 +24,14 @@ import {
   IContextualMenuProps,
   IDropdownOption,
 } from 'office-ui-fabric-react';
-import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
+import {
+  render,
+  useHttpClient,
+  useProjectApi,
+  useApplicationApi,
+  useTelemetryClient,
+  TelemetryClient,
+} from '@bfc/extension-client';
 import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
@@ -49,6 +56,7 @@ const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const { projectId, reloadProject, projectCollection } = useProjectApi();
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
+  const telemetryClient: TelemetryClient = useTelemetryClient();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[] | undefined>(undefined);
@@ -84,9 +92,11 @@ const Library: React.FC = () => {
     descriptionLink: formatMessage('Learn more'),
     viewDocumentation: formatMessage('View documentation'),
     installButton: formatMessage('Install'),
+    installToolbarButton: formatMessage('Add a package'),
+
     updateButton: formatMessage('Update to'),
     installed: formatMessage('installed'),
-    importDialogTitle: formatMessage('Install a Package'),
+    importDialogTitle: formatMessage('Add a package'),
     installProgress: formatMessage('Installing package...'),
     uninstallProgress: formatMessage('Removing package...'),
     recentlyUsedCategory: formatMessage('Recently Used'),
@@ -137,15 +147,12 @@ const Library: React.FC = () => {
   };
 
   const getLibraryAPI = () => {
-    const feedUrl = `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    const feedUrl = `${API_ROOT}/feed?key=${feed}`;
     return httpClient.get(feedUrl);
   };
 
   const getSearchResults = () => {
-    const feedUrl = feeds.find((f) => f.key == feed).searchUrl
-      ? `${API_ROOT}/feed?url=` +
-        encodeURIComponent(feeds.find((f) => f.key == feed).searchUrl.replace(/\{\{keyword\}\}/g, searchTerm))
-      : `${API_ROOT}/feed?url=` + encodeURIComponent(feeds.find((f) => f.key == feed).url);
+    const feedUrl = `${API_ROOT}/feed?key=${feed}&term=${encodeURIComponent(searchTerm)}`;
     return httpClient.get(feedUrl);
   };
 
@@ -319,7 +326,7 @@ const Library: React.FC = () => {
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
-      text: strings.installButton,
+      text: strings.installToolbarButton,
       buttonProps: {
         iconProps: {
           iconName: 'Add',
@@ -371,20 +378,33 @@ const Library: React.FC = () => {
 
       // check to see if there was a conflict that requires confirmation
       if (results.data.success === false) {
+        telemetryClient.track('PackageInstallConflictFound', {
+          package: packageName,
+          version: version,
+          isUpdate: isUpdating,
+        });
+
         const title = strings.conflictConfirmationTitle;
         const msg = strings.conflictConfirmationPrompt;
         if (await confirm(title, msg)) {
+          telemetryClient.track('PackageInstallConflictResolved', {
+            package: packageName,
+            version: version,
+            isUpdate: isUpdating,
+          });
           await installComponentAPI(currentProjectId, packageName, version, true, source);
         }
       } else {
+        telemetryClient.track('PackageInstalled', { package: packageName, version: version, isUpdate: isUpdating });
         setWorking('');
-
         updateInstalledComponents(results.data.components);
 
         // reload modified content
         await reloadProject();
       }
     } catch (err) {
+      telemetryClient.track('PackageInstallFailed', { package: packageName, version: version, isUpdate: isUpdating });
+
       console.error(err);
       setApplicationLevelError({
         status: err.response.status,
@@ -412,6 +432,8 @@ const Library: React.FC = () => {
       updateAvailableLibraries(undefined);
       setLoading(true);
       if (searchTerm) {
+        telemetryClient.track('PackageSearch', { term: searchTerm });
+
         const response = await getSearchResults();
         // if we are searching, but there is not a searchUrl, apply a local filter
         if (!feeds.find((f) => f.key === feed)?.searchUrl) {
@@ -473,14 +495,20 @@ const Library: React.FC = () => {
           const results = await uninstallComponentAPI(currentProjectId, selectedItem.name);
 
           if (results.data.success) {
+            telemetryClient.track('PackageUninstalled', { package: selectedItem.name });
+
             updateInstalledComponents(results.data.components);
           } else {
+            telemetryClient.track('PackageUninstallFailed', { package: selectedItem.name });
+
             throw new Error(results.data.message);
           }
 
           // reload modified content
           await reloadProject();
         } catch (err) {
+          telemetryClient.track('PackageUninstallFailed', { package: selectedItem.name });
+
           setApplicationLevelError({
             status: err.response.status,
             message: err.response && err.response.data.message ? err.response.data.message : err,
@@ -513,10 +541,9 @@ const Library: React.FC = () => {
     navigateTo(`/bot/${currentProjectId}/botProjectsSettings/#runtimeSettings`);
   };
 
-  const updateFeed = async (key: string, updatedItem: PackageSourceFeed) => {
+  const updateFeed = async (feeds: PackageSourceFeed[]) => {
     const response = await httpClient.post(`${API_ROOT}/feeds`, {
-      key: key,
-      updatedItem: updatedItem,
+      feeds,
     });
 
     // update the list of feeds in the component state
