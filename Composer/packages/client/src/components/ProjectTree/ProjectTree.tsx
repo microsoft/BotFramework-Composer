@@ -499,12 +499,12 @@ export const ProjectTree: React.FC<Props> = ({
       : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, 1);
   };
 
-  const renderLgImport = (item: LanguageFileImport, projectId: string): React.ReactNode => {
+  const renderLgImport = (item: LanguageFileImport, projectId: string, dialogId: string): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
       lgFileId: item.id,
-      dialogId: 'all',
+      dialogId,
       displayName: item.displayName ?? item.id,
       diagnostics: [],
       isRoot: false,
@@ -532,17 +532,17 @@ export const ProjectTree: React.FC<Props> = ({
     return lgImportsByProjectByDialog[projectId][dialog.id]
       .filter((lgImport) => filterMatch(dialog.displayName) || filterMatch(lgImport.displayName))
       .map((lgImport) => {
-        return renderLgImport(lgImport, projectId);
+        return renderLgImport(lgImport, projectId, dialog.id);
       });
   };
 
-  const renderLuImport = (item: LanguageFileImport, projectId: string): React.ReactNode => {
+  const renderLuImport = (item: LanguageFileImport, projectId: string, dialogId: string): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
       luFileId: item.id,
       displayName: item.displayName ?? item.id,
-      dialogId: 'all',
+      dialogId,
       diagnostics: [],
       isRoot: false,
       isRemote: false,
@@ -569,7 +569,7 @@ export const ProjectTree: React.FC<Props> = ({
     return luImportsByProjectByDialog[projectId][dialog.id]
       .filter((luImport) => filterMatch(dialog.displayName) || filterMatch(luImport.displayName))
       .map((luImport) => {
-        return renderLuImport(luImport, projectId);
+        return renderLuImport(luImport, projectId, dialog.id);
       });
   };
 
