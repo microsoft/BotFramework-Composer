@@ -15,10 +15,11 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage } from '../../../constants';
+import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage, runtimeOptions } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -71,7 +72,7 @@ type DefineConversationFormData = {
   name: string;
   description: string;
   schemaUrl: string;
-  primaryLanguage: string;
+  runtimeLanguage: string;
   runtimeChoice: RuntimeType;
   location?: string;
   templateVersion?: string;
@@ -172,11 +173,11 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     description: {
       required: false,
     },
-    primaryLanguage: {
+    runtimeLanguage: {
       required: false,
     },
     runtimeChoice: {
-      required: false,
+      required: true,
     },
     schemaUrl: {
       required: false,
@@ -202,7 +203,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
-      primaryLanguage: defaultPrimaryLanguage,
+      runtimeLanguage: csharpFeedKey,
       runtimeChoice: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
@@ -279,6 +280,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = getAliasFromPayload(source, payload);
         }
       }
+      dataToSubmit.runtimeLanguage = 'js';
 
       onSubmit({ ...dataToSubmit }, templateId || '');
     },
@@ -337,6 +339,17 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 styles={description}
                 value={formData.description}
                 onChange={(_e, val) => updateField('description', val)}
+              />
+            </StackItem>
+          </Stack>
+          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+            <StackItem grow={0} styles={halfstack}>
+              <Dropdown
+                data-testid="NewDialogRuntimeType"
+                label={formatMessage('Runtime type')}
+                options={runtimeOptions}
+                selectedKey={formData.runtimeChoice}
+                onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
               />
             </StackItem>
           </Stack>
