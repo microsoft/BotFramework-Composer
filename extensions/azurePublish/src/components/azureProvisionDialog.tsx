@@ -30,7 +30,9 @@ import {
   SelectionMode,
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
+import { ProvisionHandoff } from '@bfc/ui-shared';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { BlobContainersLockImmutabilityPolicyHeaders } from '@azure/arm-storage/esm/models/mappers';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -277,6 +279,8 @@ export const AzureProvisionDialog: React.FC = () => {
   const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>([]); // create from optional list
   const [requireResources, setRequireResources] = useState<ResourcesItem[]>([]);
 
+  const [handoffInstructions, setHandoffInstructions] = useState<string>('');
+
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState<any>();
 
@@ -286,6 +290,42 @@ export const AzureProvisionDialog: React.FC = () => {
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
 
   const timerRef = useRef<any>();
+
+  const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const updateHandoffInstructions = (resources) => {
+    const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
+    const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
+    const createCosmosDb = resources.filter((r) => r.key === 'cosmosDb').length > 0;
+    const createStorage = resources.filter((r) => r.key === 'blobStorage').length > 0;
+    const createAppInsights = resources.filter((r) => r.key === 'applicationInsights').length > 0;
+    const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
+
+    const provisionComposer = `node provisionComposer.js --subscriptionId ${
+      currentSubscription ?? '<YOUR SUBSCRIPTION ID>'
+    } --name ${currentHostName ?? '<YOUR BOT PROJECT NAME>'}
+    --appPassword=<16 CHAR PASSWORD>
+    --location=${currentLocation || 'westus'}
+    --resourceGroup=${currentResourceGroup || '<RESOURCE GROUP NAME>'}
+    --createLuisResource=${createLuisResource}
+    --createLuisAuthoringResource=${createLuisAuthoringResource}
+    --createCosmosDb=${createCosmosDb}
+    --createStorage=${createStorage}
+    --createAppInsights=${createAppInsights}
+    --createQnAResource=${createQnAResource}
+    `;
+
+    const instructions = formatMessage(
+      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      { command: provisionComposer }
+    );
+
+    setHandoffInstructions(instructions);
+  };
+
+  useEffect(() => {
+    const selectedResources = requireResources.concat(enabledResources);
+    updateHandoffInstructions(selectedResources);
+  }, [enabledResources]);
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -887,6 +927,12 @@ export const AzureProvisionDialog: React.FC = () => {
                 setTitle(DialogTitle.ADD_RESOURCES);
               }}
             />
+            <DefaultButton
+              text={'Generate Request'}
+              onClick={() => {
+                setShowHandoff(true);
+              }}
+            />
             <PrimaryButton
               disabled={isDisAble}
               style={{ margin: '0 4px' }}
@@ -940,39 +986,49 @@ export const AzureProvisionDialog: React.FC = () => {
   ]);
 
   return (
-    <div style={{ height: '100vh' }}>
-      {page === PageTypes.ConfigProvision && PageFormConfig}
-      {page === PageTypes.AddResources && PageAddResources}
-      {page === PageTypes.ReviewResource && PageReview}
-      {page === PageTypes.EditJson && (
-        <JsonEditor
-          height={400}
-          id={publishType}
-          schema={getSchema()}
-          value={currentConfig || importConfig}
-          onChange={(value) => {
-            setEditorError(false);
-            setImportConfig(value);
+    <Fragment>
+      <ProvisionHandoff
+        developerInstructions={formatMessage('Send this to your IT admin')}
+        handoffInstructions={handoffInstructions}
+        hidden={!showHandoff}
+        title={formatMessage('Generate a provisioning request')}
+        onDismiss={() => setShowHandoff(false)}
+      />
+
+      <div style={{ height: '100vh' }}>
+        {page === PageTypes.ConfigProvision && PageFormConfig}
+        {page === PageTypes.AddResources && PageAddResources}
+        {page === PageTypes.ReviewResource && PageReview}
+        {page === PageTypes.EditJson && (
+          <JsonEditor
+            height={400}
+            id={publishType}
+            schema={getSchema()}
+            value={currentConfig || importConfig}
+            onChange={(value) => {
+              setEditorError(false);
+              setImportConfig(value);
+            }}
+            onError={() => {
+              setEditorError(true);
+            }}
+          />
+        )}
+        <div
+          style={{
+            background: '#FFFFFF',
+            borderTop: '1px solid #EDEBE9',
+            position: 'fixed',
+            width: '100%',
+            bottom: '0',
+            textAlign: 'right',
+            height: 'fit-content',
+            padding: '24px 0px 0px',
           }}
-          onError={() => {
-            setEditorError(true);
-          }}
-        />
-      )}
-      <div
-        style={{
-          background: '#FFFFFF',
-          borderTop: '1px solid #EDEBE9',
-          position: 'fixed',
-          width: '100%',
-          bottom: '0',
-          textAlign: 'right',
-          height: 'fit-content',
-          padding: '24px 0px 0px',
-        }}
-      >
-        {PageFooter}
+        >
+          {PageFooter}
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
