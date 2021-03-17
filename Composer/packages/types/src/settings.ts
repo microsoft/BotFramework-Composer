@@ -99,10 +99,19 @@ export type IQnAConfig = {
   hostname?: string;
 };
 
-export type IConfig = ILuisConfig & {
-  subscriptionKey: string;
-  qnaRegion: string | 'westus';
+export type IOrchestratorConfig = {
+  modelNames?: {
+    type?: 'en_intent' | 'multilingual_intent';
+    name?: string;
+    path?: string;
+  };
 };
+
+export type IConfig = ILuisConfig &
+  IOrchestratorConfig & {
+    subscriptionKey: string;
+    qnaRegion: string | 'westus';
+  };
 
 export type LgOptions = {
   customFunctions: string[];

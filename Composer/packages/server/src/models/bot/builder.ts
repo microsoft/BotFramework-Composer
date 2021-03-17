@@ -167,12 +167,31 @@ export class Builder {
       f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
     );
 
-    const nlrList = await this.runOrchestratorNlrList();
+    let modelDatas: { model: string; lang: string; luFiles: any[] }[] = [];
 
-    const modelDatas = [
-      { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
-      { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
-    ];
+    if (this.config?.modelNames?.['en_intent']) {
+      modelDatas.push({ model: this.config?.modelNames?.['en_intent'], lang: 'en', luFiles: enLuFiles });
+    } else {
+      const nlrList = await this.runOrchestratorNlrList();
+      modelDatas.push({ model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles });
+    }
+
+    if (this.config?.modelNames?.['multilingual_intent']) {
+      modelDatas.push({
+        model: this.config?.modelNames?.['multilingual_intent'],
+        lang: 'multilang',
+        luFiles: multiLangLuFiles,
+      });
+    } else {
+      const nlrList = await this.runOrchestratorNlrList();
+      modelDatas.push({ model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles });
+    }
+
+    // const nlrList = await this.runOrchestratorNlrList();
+    // const modelDatas = [
+    //   { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
+    //   { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
+    // ];
 
     for (const modelData of modelDatas) {
       if (modelData.luFiles.length) {
@@ -180,6 +199,9 @@ export class Builder {
           throw new Error('Model not set');
         }
         const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
+        if (await !pathExists(modelPath)) {
+          throw new Error('Orchestrator Model missing: ' + modelPath);
+        }
         //await this.runOrchestratorNlrGet(modelPath, modelData.model);
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 

@@ -13,6 +13,7 @@ import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { luFilesState, qnaFilesState, botStatusState, botRuntimeErrorState } from '../atoms';
 import { dialogsWithLuProviderSelectorFamily } from '../selectors';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import { IOrchestratorConfig } from '@botframework-composer/types/src';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
@@ -23,7 +24,8 @@ export const builderDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (
       projectId: string,
       luisConfig: ILuisConfig,
-      qnaConfig: IQnAConfig
+      qnaConfig: IQnAConfig,
+      orchestratorConfig: IOrchestratorConfig
     ) => {
       const { set, snapshot } = callbackHelpers;
       const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
@@ -53,6 +55,7 @@ export const builderDispatcher = () => {
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
+          orchestratorConfig,
           projectId,
           luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           qnaFiles: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig, IPublishConfig } from '@bfc/shared';
 import { selector, selectorFamily } from 'recoil';
 import { checkForPVASchema } from '@bfc/shared';
 
@@ -52,6 +52,7 @@ export const buildEssentialsSelector = selectorFamily({
     const configuration = {
       luis: settings.luis,
       qna: settings.qna,
+      orchestrator: settings.orchestrator,
     };
     const dialogs = get(dialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
@@ -121,7 +122,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
       if (config) {
         await dispatcher.downloadLanguageModels(projectId);
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
-        await dispatcher.build(projectId, config.luis, config.qna);
+        await dispatcher.build(projectId, config.luis, config.qna, config.orchestrator);
       }
     },
     startBot: async (projectId: string, sensitiveSettings) => {
