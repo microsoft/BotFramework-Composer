@@ -30,8 +30,8 @@ import axios from 'axios';
 import querystring from 'query-string';
 
 import msftIcon from '../../../images/msftIcon.svg';
-import { DialogCreationCopy, EmptyBotTemplateId, feedDictionary } from '../../../constants';
-import { fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
+import { DialogCreationCopy, feedDictionary } from '../../../constants';
+import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { getAliasFromPayload } from '../../../utils/electronUtil';
 
@@ -136,6 +136,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
 
   const selectedTemplate = useMemo(() => {
     return new Selection({
@@ -209,7 +210,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   useEffect(() => {
     if (templates.length > 1) {
-      const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
+      const emptyBotTemplate = find(templates, ['id', defaultTemplateId]);
       if (emptyBotTemplate) {
         setCurrentTemplateId(emptyBotTemplate.id);
         setEmptyBotKey(emptyBotTemplate.id);
@@ -254,14 +255,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     }
   }, [currentTemplateId, props.fetchReadMe]);
 
+  const dialogWrapperProps =
+    creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT_V2;
+
   return (
     <Fragment>
-      <DialogWrapper
-        isOpen={isOpen}
-        {...DialogCreationCopy.CREATE_NEW_BOT_V2}
-        dialogType={DialogTypes.CreateFlow}
-        onDismiss={onDismiss}
-      >
+      <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <Pivot
           defaultSelectedKey={csharpFeedKey}
           onLinkClick={(item) => {
