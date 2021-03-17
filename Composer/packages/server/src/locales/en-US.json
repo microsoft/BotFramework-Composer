@@ -1223,9 +1223,6 @@
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
   },
-  "enable_the_component_model_including_the_new_creat_f6e5659c": {
-    "message": "Enable the Component Model including the new creation experience, the Adaptive Runtime, and Package Manager."
-  },
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
@@ -1493,6 +1490,9 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
+  "for_the_bot_project_i_am_working_on_i_need_to_prov_6759ad1e": {
+    "message": "For the bot project I am working on i need to provision some Azure resources. I will need * * * * and *.  Please read instructions here: GITHUB  And then you can use this command:  *** command***"
+  },
   "form_dialog_error_ba7c37fe": {
     "message": "Form dialog error"
   },
@@ -1525,6 +1525,9 @@
   },
   "generate_44e33e72": {
     "message": "Generate"
+  },
+  "generate_a_provisioning_request_2b76c65b": {
+    "message": "Generate a provisioning request"
   },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
@@ -2198,6 +2201,9 @@
   "new_13daf639": {
     "message": "New"
   },
+  "new_creation_experience_29591aca": {
+    "message": "New Creation Experience"
+  },
   "new_template_49e6f0f2": {
     "message": "New template"
   },
@@ -2455,6 +2461,9 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
+  },
+  "preview_the_new_bot_creation_experience_create_new_e0b7150f": {
+    "message": "Preview the new bot creation experience. Create new bots that use the Adaptive Runtime, and can be enhanced using Package Manager."
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -2921,6 +2930,9 @@
   "send_messages_c48b239": {
     "message": "Send Messages"
   },
+  "send_this_to_your_it_admin_64af7706": {
+    "message": "Send this to your IT admin"
+  },
   "sentence_wrap_930c8ced": {
     "message": "Sentence wrap"
   },
@@ -3160,9 +3172,6 @@
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
-  },
-  "the_component_model_febefd93": {
-    "message": "The Component Model"
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
