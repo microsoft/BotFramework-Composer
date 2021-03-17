@@ -121,7 +121,7 @@ const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onNext: (templateName: string, urlData?: string) => void;
+  onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
@@ -161,10 +161,11 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
+    const runtimeLanguage = selectedFeed?.props?.itemKey ? selectedFeed.props.itemKey : csharpFeedKey;
     if (props.location && props.location.search) {
-      onNext(routeToTemplate, props.location.search);
+      onNext(routeToTemplate, runtimeLanguage, props.location.search);
     } else {
-      onNext(routeToTemplate);
+      onNext(routeToTemplate, runtimeLanguage);
     }
   };
 

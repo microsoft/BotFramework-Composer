@@ -43,7 +43,7 @@ const instantiateRemoteTemplate = async (
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore @types/yeoman-environment is outdated
-    await yeomanEnv.run([generatorName, projectName, '-p', runtimeLanguage, 'i', runtimeLanguage]);
+    await yeomanEnv.run([generatorName, projectName, '-p', runtimeLanguage, '-i', runtimeChoice]);
     log('Template successfully instantiated', dstDir, generatorName, projectName);
   } catch (err) {
     log('Template failed to instantiate', dstDir, generatorName, projectName);

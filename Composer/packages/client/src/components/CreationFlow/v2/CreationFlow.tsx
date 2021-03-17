@@ -150,11 +150,11 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (templateName: string, urlData?: string) => {
+  const handleCreateNext = async (templateName: string, runtimeLanguage: string, urlData?: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     const navString = urlData
-      ? `./create/${encodeURIComponent(templateName)}${urlData}`
-      : `./create/${encodeURIComponent(templateName)}`;
+      ? `./create/${runtimeLanguage}/${encodeURIComponent(templateName)}${urlData}`
+      : `./create/${runtimeLanguage}/${encodeURIComponent(templateName)}`;
     navigate(navString);
   };
 
@@ -165,7 +165,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
         <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
-          path="create/:templateId"
+          path="create/:runtimeLanguage/:templateId"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
