@@ -175,12 +175,7 @@ export class BotProjectDeploy {
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Uploading zip file...',
-    });
-
-    this.logger({
-      status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: `use token ${token} to upload ${zipPath}`,
+      message: `Uploading zip file... to ${hostname ? hostname : name + (env ? '-' + env : '')}`,
     });
 
     const publishEndpoint = `https://${
