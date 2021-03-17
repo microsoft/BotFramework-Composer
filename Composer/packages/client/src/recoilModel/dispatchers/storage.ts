@@ -20,7 +20,7 @@ import {
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
 
-import { logMessage } from './shared';
+import { logMessage, setError } from './shared';
 
 const projectFiles = ['bot', 'botproj'];
 
@@ -197,6 +197,11 @@ export const storageDispatcher = () => {
       set(featureFlagsState, response.data);
     } catch (ex) {
       logMessage(callbackHelpers, `Error fetching feature flag data: ${ex}`);
+
+      if (process.env.NODE_ENV === 'development') {
+        const err = new Error(`Error fetching feature flag data: ${ex.message}`);
+        setError(callbackHelpers, err);
+      }
     }
   });
 
