@@ -192,7 +192,7 @@ export default async (composer: any): Promise<void> => {
   });
 
   composer.addRuntimeTemplate({
-    key: 'node-azurewebapp-old',
+    key: '`node-`azurewebapp',
     name: 'JS (preview)',
     startCommand: 'node ./lib/webapp.js',
     path: nodeTemplatePath,
@@ -478,7 +478,7 @@ export default async (composer: any): Promise<void> => {
    * This is support for the new javascript runtime
    */
   composer.addRuntimeTemplate({
-    key: 'node-azurewebapp',
+    key: 'adaptive-runtime-js-webapp',
     name: 'JS (preview)',
     startCommand: 'node ./lib/webapp.js',
     path: nodeTemplatePath,
