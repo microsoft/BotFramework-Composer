@@ -348,7 +348,6 @@ export const AzureProvisionDialog: React.FC = () => {
             });
           })
           .catch((err) => {
-            console.log(err);
             setCurrentUser(undefined);
             setLoginErrorMsg(err.message || err.toString());
           });

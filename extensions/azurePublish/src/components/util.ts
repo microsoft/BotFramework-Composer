@@ -71,24 +71,3 @@ export const defaultExtensionState = {
   requiredResources: [],
   choice: { key: 'create', text: 'Create new Azure resources' },
 };
-
-type ResourcesItem = {
-  description: string;
-  text: string;
-  tier: string;
-  group: string;
-  key: string;
-  required: boolean;
-  [key: string]: any;
-};
-
-type AzureExtensionState = {
-  subscriptionId: string;
-  resourceGroup: string;
-  hostName: string;
-  location: string;
-  luisLocation: string;
-  enabledResources: ResourcesItem[];
-  requiredResources: ResourcesItem[];
-  choice: { key: string; text: string };
-};
