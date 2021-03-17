@@ -34,6 +34,7 @@ import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeade
 import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 import { ProjectTreeOptions, TreeLink, TreeMenuItem } from './types';
+import { dialog } from '../ErrorPopup/styles';
 
 // -------------------- Styles -------------------- //
 
@@ -586,8 +587,12 @@ export const ProjectTree: React.FC<Props> = ({
           );
     const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
 
-    const importedLgLinks = options.showLgImports ? lgImportsList.map((file) => renderLgImport(file, projectId)) : [];
-    const importedLuLinks = options.showLuImports ? luImportsList.map((file) => renderLuImport(file, projectId)) : [];
+    const importedLgLinks = options.showLgImports
+      ? lgImportsList.map((file) => renderLgImport(file, projectId, dialog.id))
+      : [];
+    const importedLuLinks = options.showLuImports
+      ? luImportsList.map((file) => renderLuImport(file, projectId, dialog.id))
+      : [];
 
     return [
       ...commonLink,
