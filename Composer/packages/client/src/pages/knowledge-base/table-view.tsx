@@ -100,8 +100,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const settings = useRecoilValue(settingsState(actualProjectId));
   const { languages } = settings;
   const {
-    removeQnAImport,
-    removeQnAFile,
+    removeQnAImportOnAllLocales,
+    removeQnAFileOnAllLocales,
     createQnAPairs,
     removeQnAPairs,
     createQnAQuestion,
@@ -375,20 +375,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const result = await OpenConfirmModal(title, subTitle, setting);
 
           if (result) {
-            await Promise.all(
-              languages.map(async (language) => {
-                const sourceNameWithoutLocale = getBaseName(containerId);
-                await removeQnAImport({
-                  id: `${getBaseName(qnaFileId)}.${language}`,
-                  sourceId: sourceNameWithoutLocale,
-                  projectId,
-                });
-                await removeQnAFile({
-                  id: `${sourceNameWithoutLocale}.${language}`,
-                  projectId,
-                });
-              })
-            );
+            const sourceNameWithoutLocale = getBaseName(containerId);
+            await removeQnAImportOnAllLocales({
+              id: getBaseName(qnaFileId),
+              sourceId: sourceNameWithoutLocale,
+              projectId,
+            });
+            await removeQnAFileOnAllLocales({
+              id: sourceNameWithoutLocale,
+              projectId,
+            });
           }
         }
 

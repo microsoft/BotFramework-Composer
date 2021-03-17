@@ -393,6 +393,23 @@ export const qnaDispatcher = () => {
     }
   );
 
+  const removeQnAFileOnAllLocales = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ id, projectId }: { id: string; projectId: string }) => {
+      const { set, snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+
+      const targetQnAFiles = qnaFiles.filter((item) => getBaseName(item.id) === id);
+      if (!targetQnAFiles || targetQnAFiles.length === 0) {
+        throw new Error(`remove qna files ${id} not exist`);
+      }
+
+      targetQnAFiles.forEach((file) => {
+        qnaFileStatusStorage.removeFileStatus(projectId, file.id);
+      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ deletes: [...targetQnAFiles] }));
+    }
+  );
+
   const dismissCreateQnAModal = useRecoilCallback(
     ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
       set(showCreateQnAFromUrlDialogState(projectId), false);
@@ -537,6 +554,7 @@ ${response.data}
       toBeCopiedLocales.forEach((locale) => {
         pairs.push({ locale, content: pairs[0].content });
       });
+      console.log(pairs);
       await createKBFileOnLocalesState(callbackHelpers, {
         id,
         name,
@@ -770,6 +788,28 @@ ${response.data}
       set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
   );
+
+  const removeQnAImportOnAllLocales = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      id, //dialogName
+      sourceId,
+      projectId,
+    }: {
+      id: string;
+      sourceId: string;
+      projectId: string;
+    }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const targetQnaFiles = qnaFiles.filter((f) => getBaseName(f.id) === id);
+      if (!targetQnaFiles || targetQnaFiles.length === 0) return targetQnaFiles;
+
+      const updatedFiles = targetQnaFiles.map((f) => {
+        return qnaUtil.removeImport(f, `${sourceId}.qna`);
+      });
+      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [...updatedFiles] }));
+    }
+  );
+
   const updateQnAImport = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async ({
       id,
@@ -813,6 +853,7 @@ ${response.data}
   return {
     createQnAImport,
     removeQnAImport,
+    removeQnAImportOnAllLocales,
     updateQnAImport,
     createQnAPairs,
     removeQnAPairs,
@@ -822,16 +863,17 @@ ${response.data}
     updateQnAAnswer,
     createQnAFile,
     removeQnAFile,
+    removeQnAFileOnAllLocales,
     updateQnAFile,
     removeQnAKB,
     renameQnAKB,
     createQnAKBFromUrl,
+    createQnAKBsFromUrls,
     createQnAKBFromScratch,
     createQnAFromScratchDialogBegin,
     createQnAFromScratchDialogBack,
     createQnAFromScratchDialogCancel,
     createQnAFromUrlDialogBegin,
     createQnAFromUrlDialogCancel,
-    createQnAKBsFromUrls,
   };
 };
