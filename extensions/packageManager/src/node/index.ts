@@ -312,7 +312,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               });
 
               let runtimeLanguage = 'c#';
-              if (currentProject.settings.runtime.key === 'node-azurewebapp') {
+              if (
+                currentProject.settings.runtime.key === 'node-azurewebapp' ||
+                currentProject.settings.runtime.key === 'adaptive-runtime-js-webapp'
+              ) {
                 runtimeLanguage = 'js';
               }
 

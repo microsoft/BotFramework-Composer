@@ -209,7 +209,7 @@ const Library: React.FC = () => {
       setEjectedRuntime(true);
       // detect programming language.
       // should one day be a dynamic property of the runtime or at least stored in the settings?
-      if (settings.runtime.key === 'node-azurewebapp') {
+      if (settings.runtime.key === 'node-azurewebapp' || settings.runtime.key === 'adaptive-runtime-js-webapp') {
         setRuntimeLanguage('js');
       } else {
         setRuntimeLanguage('c#');

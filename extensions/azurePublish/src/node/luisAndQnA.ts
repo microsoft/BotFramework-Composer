@@ -11,7 +11,7 @@ import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
 
 const isUsingAdaptiveRuntime = (runtime?: DialogSetting['runtime']): boolean =>
-  runtime?.key === 'csharp-azurewebapp-v2' || runtime?.key === 'adaptive-runtime-dotnet-webapp';
+  runtime.key != 'csharp-azurewebapp' && runtime.key != 'node-azurewebapp';
 
 const botPath = (projPath: string, runtime?: DialogSetting['runtime']) =>
   isUsingAdaptiveRuntime(runtime) ? projPath : path.join(projPath, 'ComposerDialogs');
