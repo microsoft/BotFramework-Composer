@@ -147,6 +147,7 @@ export class BotProjectDeploy {
   }
 
   private async zipDirectory(source: string, out: string) {
+    console.log(`Zip the files in ${source} into a zip file ${out}`);
     try {
       const archive = archiver('zip', { zlib: { level: 9 } });
       // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -156,7 +157,7 @@ export class BotProjectDeploy {
           .glob('**/*', {
             cwd: source,
             dot: true,
-            ignore: ['**/code.zip', 'node_modules/**/*'],
+            ignore: ['**/code.zip'],
           })
           .on('error', (err) => reject(err))
           .pipe(stream);
@@ -174,7 +175,7 @@ export class BotProjectDeploy {
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Uploading zip file...',
+      message: `Uploading zip file... to ${hostname ? hostname : name + (env ? '-' + env : '')}`,
     });
 
     const publishEndpoint = `https://${
