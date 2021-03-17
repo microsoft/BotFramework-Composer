@@ -158,7 +158,7 @@ const TextViewItem = React.memo(
           onFocus={focus}
         >
           <Text styles={displayTextStyles} variant="small">
-            {onRenderDisplayText?.() ?? value}
+            {onRenderDisplayText?.() ?? value.replace(/\r?\n/g, '↵')}
           </Text>
         </Stack>
         <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
@@ -197,18 +197,6 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
     [onShowCallout]
   );
 
-  React.useEffect(() => {
-    if (inputRef.current && inputRef.current.value !== value) {
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')
-        ?.set;
-      if (nativeInputValueSetter) {
-        nativeInputValueSetter.call(inputRef.current, value);
-        const inputEvent = new Event('input', { bubbles: true });
-        inputRef.current.dispatchEvent(inputEvent);
-      }
-    }
-  }, [value]);
-
   return (
     <div ref={containerRef}>
       <Input
@@ -218,6 +206,7 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
         defaultValue={value}
         resizable={false}
         styles={textFieldStyles}
+        value={value}
         onChange={onChange}
         onClick={click}
         onFocus={focus}

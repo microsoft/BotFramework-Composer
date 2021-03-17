@@ -87,6 +87,7 @@ import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
 import { lgFilesSelectorFamily } from '../../selectors/lg';
 import { createMissingLgTemplatesForDialogs } from '../../../utils/lgUtil';
+import { getPublishProfileFromPayload } from '../../../utils/electronUtil';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -691,6 +692,45 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
     mainDialog,
     projectId: rootBotProjectId,
   };
+};
+
+export const postRootBotCreation = async (
+  callbackHelpers,
+  projectId,
+  botFiles,
+  projectData,
+  templateId,
+  profile,
+  source,
+  projectIdCache
+) => {
+  if (settingStorage.get(projectId)) {
+    settingStorage.remove(projectId);
+  }
+  const { mainDialog } = await openRootBotAndSkills(callbackHelpers, { botFiles, projectData });
+  callbackHelpers.set(projectMetaDataState(projectId), {
+    isRootBot: true,
+    isRemote: false,
+  });
+  // if create from QnATemplate, continue creation flow.
+  if (templateId === QnABotTemplateId) {
+    callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
+    callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
+  }
+
+  callbackHelpers.set(botProjectIdsState, [projectId]);
+
+  if (profile) {
+    // ABS Create Flow, update publishProfile after create project
+    const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
+    const newProfile = getPublishProfileFromPayload(profile, source);
+
+    newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+  }
+  projectIdCache.set(projectId);
+
+  // navigate to the new get started section
+  navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
