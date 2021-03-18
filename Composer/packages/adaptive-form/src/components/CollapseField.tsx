@@ -22,6 +22,7 @@ const styles = {
     display: flex;
     margin: 4px 0px;
     align-items: center;
+    height: 24px;
   `,
 };
 
@@ -49,16 +50,16 @@ export const CollapseField: React.FC<CollapseField> = ({ children, description, 
           setIsOpen(!isOpen);
         }}
         onKeyDown={({ key }) => {
-          if (key === 'Enter' || key === 'Space') setIsOpen(!isOpen);
+          if (key === 'Enter' || key === ' ') setIsOpen(!isOpen);
         }}
       >
         <CommandBarButton
           iconProps={{ iconName: isOpen ? 'ChevronDown' : 'ChevronRight' }}
           styles={{
-            root: { color: NeutralColors.gray150 },
+            root: { backgroundColor: 'transparent', color: NeutralColors.gray150 },
+            label: { fontWeight: FontWeights.semibold },
             rootHovered: { backgroundColor: 'transparent' },
             rootFocused: { backgroundColor: 'transparent' },
-            label: { fontWeight: FontWeights.semibold },
           }}
           text={label}
         />

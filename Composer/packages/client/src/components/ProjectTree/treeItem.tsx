@@ -519,7 +519,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         marginLeft
       )}
       data-testid={a11yLabel}
-      role="treeitem"
+      role="link"
       tabIndex={0}
       onClick={() => {
         onSelect?.(link);
@@ -545,7 +545,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           },
         ]}
         overflowItems={overflowMenu}
-        role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem(
           textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,

@@ -476,7 +476,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
+        <div role="rowgroup">{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
       </ExpandableNode>
     );
   };
@@ -622,7 +622,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
+              <div role="rowgroup">{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
             </ExpandableNode>
           );
         } else if (options.showLgImports && lgImports.length > 0 && dialog.isFormDialog) {
@@ -636,7 +636,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{lgImports}</div>
+              <div role="rowgroup">{lgImports}</div>
             </ExpandableNode>
           );
         } else if (options.showLuImports && luImports.length > 0 && dialog.isFormDialog) {
@@ -650,7 +650,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{luImports}</div>
+              <div role="rowgroup">{luImports}</div>
             </ExpandableNode>
           );
         } else {
@@ -712,7 +712,7 @@ export const ProjectTree: React.FC<Props> = ({
           summary={projectHeader}
           onToggle={(newState) => setPageElement(key, newState)}
         >
-          <div>{createDetailsTree(bot, 1)}</div>
+          <div role="rowgroup">{createDetailsTree(bot, 1)}</div>
         </ExpandableNode>
       );
     } else if (options.showRemote) {
