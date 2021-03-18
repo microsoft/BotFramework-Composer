@@ -66,7 +66,7 @@ async function downloadDefaultModel(req: Request, res: Response) {
     modelName = modelData.name;
   }
 
-  const modelPath = await getModelPath(modelData.name);
+  const modelPath = await getModelPath(modelName);
 
   if (await pathExists(modelPath)) {
     state = DownloadState.ALREADYDOWNLOADED;
