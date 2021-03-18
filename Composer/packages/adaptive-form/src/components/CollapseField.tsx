@@ -5,8 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import { Fragment, useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
@@ -35,27 +34,34 @@ interface CollapseField {
 export const CollapseField: React.FC<CollapseField> = ({ children, description, defaultExpanded, title }) => {
   const [isOpen, setIsOpen] = useState(!!defaultExpanded);
 
+  const label = typeof title === 'string' ? title : formatMessage('Field Set');
+
   return (
     <Fragment>
       <div
         data-is-focusable
         aria-expanded={isOpen}
-        aria-label={typeof title === 'string' ? title : formatMessage('Field Set')}
+        aria-label={label}
         css={styles.header}
-        role="presentation"
+        role="button"
+        tabIndex={0}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
+        onKeyDown={({ key }) => {
+          if (key === 'Enter' || key === 'Space') setIsOpen(!isOpen);
+        }}
       >
-        <IconButton
+        <CommandBarButton
           iconProps={{ iconName: isOpen ? 'ChevronDown' : 'ChevronRight' }}
           styles={{
             root: { color: NeutralColors.gray150 },
             rootHovered: { backgroundColor: 'transparent' },
             rootFocused: { backgroundColor: 'transparent' },
+            label: { fontWeight: FontWeights.semibold },
           }}
+          text={label}
         />
-        {title && <Label styles={{ root: { fontWeight: FontWeights.semibold } }}>{title}</Label>}
         {description && <span css={styles.description}>&nbsp;- {description}</span>}
       </div>
       <div>
