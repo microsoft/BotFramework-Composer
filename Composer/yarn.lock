@@ -23,6 +23,24 @@
   dependencies:
     tslib "^2.0.0"
 
+"@azure/arm-cognitiveservices@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-cognitiveservices/-/arm-cognitiveservices-5.2.0.tgz#a1ffde25fe1145a0f4559d0c7a18cf1251e4b2ce"
+  integrity sha512-6+cyoHGPlKgdPW387M20Mys+uE0/gS+MFZh7bUPAag8JyTF/hrSGhWSRQOpNl2BFrMjERJxaUGuaC1/ihoOg+w==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-resources@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-resources/-/arm-resources-4.0.0.tgz#5b0dd7cbb4327a5a2ce184dd4e170459ac41f485"
+  integrity sha512-Dd2tsKnTJ62D/LYsr2njnj+/1HsUclJwBGZ+tVVfmdQir9pnGA11k2jhsuhHiCRU0auEKgMDNfhip7q/TpSrXQ==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
 "@azure/arm-subscriptions@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@azure/arm-subscriptions/-/arm-subscriptions-3.0.0.tgz#e47b57ee35452c289d820ccd5fcb59ac107616ec"
