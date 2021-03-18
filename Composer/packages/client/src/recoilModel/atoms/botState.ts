@@ -376,3 +376,13 @@ export const webChatLogsState = atomFamily<DirectLineLog[], string>({
   key: getFullyQualifiedKey('webChatLogs'),
   default: [],
 });
+
+export const webChatTraffic = atomFamily<any[], string>({
+  key: getFullyQualifiedKey('webChatTraffic'),
+  default: [],
+});
+
+export const selectedWebChatTrafficItemState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('selectedWebChatTraffic'),
+  default: undefined,
+});

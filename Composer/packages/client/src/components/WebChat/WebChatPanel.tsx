@@ -40,6 +40,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const {
     openBotInEmulator,
     appendLogToWebChatInspector,
+    appendTraffic,
     clearWebChatLogs,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
@@ -51,11 +52,21 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
   const directLineErrorChannel = useRef<WebSocket>();
+  const trafficChannel = useRef<WebSocket>();
 
   useEffect(() => {
     const bootstrapChat = async () => {
       const conversationServerPort = await conversationService.setUpConversationServer();
       try {
+        // set up traffic listener
+        trafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic`);
+        if (trafficChannel.current) {
+          trafficChannel.current.onmessage = (event) => {
+            const data: { activities: any[] } = JSON.parse(event.data);
+            console.log('got data back from traffic channel: ', data);
+            appendTraffic(projectId, data.activities);
+          };
+        }
         directLineErrorChannel.current = new WebSocket(
           `ws://localhost:${conversationServerPort}/ws/errors/createErrorChannel`
         );
@@ -88,6 +99,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
     return () => {
       directLineErrorChannel.current?.close();
+      trafficChannel.current?.close();
     };
   }, []);
 

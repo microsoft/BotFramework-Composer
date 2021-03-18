@@ -5,7 +5,12 @@
 import { DirectLineLog } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import { webChatLogsState, isWebChatPanelVisibleState } from '../atoms';
+import {
+  webChatLogsState,
+  webChatTraffic,
+  selectedWebChatTrafficItemState,
+  isWebChatPanelVisibleState,
+} from '../atoms';
 
 export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
@@ -25,9 +30,33 @@ export const webChatLogDispatcher = () => {
     set(isWebChatPanelVisibleState, value);
   });
 
+  const appendTraffic = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (projectId: string, traffic: any | any[]) => {
+      const { set } = callbackHelpers;
+      set(webChatTraffic(projectId), (currentTraffic) => {
+        if (Array.isArray(traffic)) {
+          const updatedTraffic = [...currentTraffic, ...traffic];
+          return updatedTraffic.sort((t1, t2) => t1.timestamp - t2.timestamp);
+        } else {
+          const updatedTraffic = [...currentTraffic, traffic];
+          return updatedTraffic.sort((t1, t2) => t1.timestamp - t2.timestamp);
+        }
+      });
+    }
+  );
+
+  const setSelectedWebChatTrafficItem = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (projectId: string, trafficItem) => {
+      const { set } = callbackHelpers;
+      set(selectedWebChatTrafficItemState(projectId), trafficItem);
+    }
+  );
+
   return {
     clearWebChatLogs,
     appendLogToWebChatInspector,
+    appendTraffic,
     setWebChatPanelVisibility,
+    setSelectedWebChatTrafficItem,
   };
 };
