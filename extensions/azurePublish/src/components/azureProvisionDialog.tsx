@@ -251,14 +251,14 @@ export const AzureProvisionDialog: React.FC = () => {
   const [page, setPage] = useState(PageTypes.ConfigProvision);
   const [listItems, setListItem] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
-  const [isMounted, setIsMounted] = useState<boolean | unknown>();
+  const isMounted = useRef<boolean>();
 
-  const timerRef = useRef<any>();
+  const timerRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    setIsMounted(true);
+    isMounted.current = true;
     return () => {
-      setIsMounted(false);
+      isMounted.current = false;
     };
   }, []);
 
@@ -282,7 +282,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else {
       if (!getTenantIdFromCache()) {
         getTenants().then((tenants) => {
-          if (isMounted && tenants?.length > 0) {
+          if (isMounted.current && tenants?.length > 0) {
             // set tenantId in cache.
             setTenantId(tenants[0].tenantId);
             getARMTokenForTenant(tenants[0].tenantId)
@@ -306,7 +306,7 @@ export const AzureProvisionDialog: React.FC = () => {
       } else {
         getARMTokenForTenant(getTenantIdFromCache())
           .then((token) => {
-            if (isMounted) {
+            if (isMounted.current) {
               setToken(token);
               const decoded = decodeToken(token);
               setCurrentUser({
@@ -357,7 +357,7 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     if (token) {
       getSubscriptions(token).then((data) => {
-        if (isMounted) {
+        if (isMounted.current) {
           setSubscriptions(data);
         }
       });
@@ -397,7 +397,7 @@ export const AzureProvisionDialog: React.FC = () => {
         if (currentSubscription && publishType === 'azurePublish') {
           // check app name whether exist or not
           CheckWebAppNameAvailability(token, newName, currentSubscription).then((value) => {
-            if (isMounted) {
+            if (isMounted.current) {
               if (!value.nameAvailable) {
                 setErrorHostName(value.message);
               } else {
@@ -469,7 +469,7 @@ export const AzureProvisionDialog: React.FC = () => {
     if (currentSubscription && token) {
       // get resource group under subscription
       getDeployLocations(token, currentSubscription).then((data: DeployLocation[]) => {
-        if (isMounted) {
+        if (isMounted.current) {
           setDeployLocations(data);
           const luRegions = getLuisAuthoringRegions();
           const region = data.filter((item) => luRegions.includes(item.name));
