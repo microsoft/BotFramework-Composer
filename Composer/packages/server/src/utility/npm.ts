@@ -6,7 +6,7 @@ import { promisify } from 'util';
 import { mkdir, remove } from 'fs-extra';
 import fetch from 'node-fetch';
 import tar from 'tar';
-import { BotTemplateV2, ExtensionSearchResult } from '@botframework-composer/types';
+import { BotTemplate, ExtensionSearchResult } from '@botframework-composer/types';
 
 import logger from '../logger';
 
@@ -14,9 +14,9 @@ const streamPipeline = promisify(require('stream').pipeline);
 
 const log = logger.extend('extension-manager:npm');
 
-export async function getNpmTemplates(): Promise<BotTemplateV2[]> {
+export async function getNpmTemplates(): Promise<BotTemplate[]> {
   const publicNpmTemplatePackages = await search('', ['bot']);
-  const templates: BotTemplateV2[] = publicNpmTemplatePackages.map((value) => {
+  const templates: BotTemplate[] = publicNpmTemplatePackages.map((value) => {
     return {
       id: value.id,
       name: value.id,
@@ -25,7 +25,7 @@ export async function getNpmTemplates(): Promise<BotTemplateV2[]> {
         packageName: value.id,
         packageSource: 'npm',
       },
-    } as BotTemplateV2;
+    } as BotTemplate;
   });
   return templates;
 }

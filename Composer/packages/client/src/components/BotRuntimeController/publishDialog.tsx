@@ -213,7 +213,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
         {qnaConfigShow ? qnaTitleRender() : ''}
       </div>
       <form css={dialogContent} onSubmit={handlePublish}>
-        <Stack gap={20}>
+        <Stack tokens={{ childrenGap: 20 }}>
           <TextField
             data-testid="ProjectNameInput"
             errorMessage={formErrors.name}
@@ -266,6 +266,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
               />
               <TextField
                 disabled
+                readOnly
                 errorMessage={formErrors.qnaRegion}
                 label={formatMessage('QnA Region')}
                 value={formData.qnaRegion}
@@ -275,6 +276,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
           )}
           <TextField
             disabled
+            readOnly
             errorMessage={formErrors.defaultLanguage}
             label={formatMessage('Default Language')}
             value={formData.defaultLanguage}

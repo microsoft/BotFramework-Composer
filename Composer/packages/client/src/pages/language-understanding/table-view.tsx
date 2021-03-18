@@ -107,9 +107,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return result.concat(items);
       }, []);
 
-    if (!activeDialog) {
-      setIntents(allIntents);
-    } else if (luFileId && file) {
+    if (luFileId && file) {
       const luIntents: Intent[] = [];
       get(file, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(file);
@@ -118,14 +116,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
           phrases,
           fileId: file.id,
           dialogId: activeDialog?.id || '',
-          used: activeDialog?.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+          used: !!activeDialog?.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
           state,
         });
       });
       setIntents(luIntents);
-    } else {
+    } else if (activeDialog) {
       const dialogIntents = allIntents.filter((t) => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
+    } else {
+      setIntents(allIntents);
     }
   }, [luFiles, activeDialog, actualProjectId, luFileId]);
 
@@ -157,14 +157,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
     [defaultLangFile, actualProjectId]
   );
 
-  const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
+  const getTemplatesMoreButtons = (item, index, luFileId): IContextualMenuItem[] => {
     const buttons = [
       {
         key: 'edit',
         name: formatMessage('Edit'),
         onClick: () => {
           const { name, dialogId } = intents[index];
-          navigateTo(`${baseURL}language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
+          navigateTo(
+            `${baseURL}language-understanding/${dialogId}${
+              luFileId ? `/item/${luFileId}/` : '/'
+            }edit?t=${encodeURIComponent(name)}`
+          );
         },
       },
     ];
@@ -373,7 +377,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 menuIconProps={{ iconName: 'MoreVertical' }}
                 menuProps={{
                   shouldFocusOnMount: true,
-                  items: getTemplatesMoreButtons(item, index),
+                  items: getTemplatesMoreButtons(item, index, luFileId),
                 }}
                 styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
               />

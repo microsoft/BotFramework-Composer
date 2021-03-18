@@ -11,6 +11,12 @@ import AssetService from '../../services/asset';
 import { ProjectController } from '../../controllers/project';
 import { Path } from '../../utility/path';
 
+jest.mock('@bfc/server-workers', () => ({
+  ServerWorker: {
+    execute: jest.fn(),
+  },
+}));
+
 jest.mock('../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
@@ -187,21 +193,6 @@ describe('create a component model conversational core bot project', () => {
       templateVersion: '1.0.9',
     },
   } as Request;
-
-  jest.mock('yeoman-environment', () => ({
-    installLocalGenerators: jest.fn(() => {
-      console.log('in mock install local generators');
-    }),
-    lookupLocalPackages: jest.fn(() => {
-      console.log('in mock lookupLocalPackages');
-    }),
-    createEnv: jest.fn().mockImplementation(() => {
-      console.log('in mock create env');
-      return {
-        lookupLocalPackages: jest.fn(),
-      };
-    }),
-  }));
 
   it('should start to create a new project', async () => {
     BotProjectService.createProjectAsync = jest.fn();

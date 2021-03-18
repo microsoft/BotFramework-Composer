@@ -7,6 +7,7 @@ import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
+import cloneDeep from 'lodash/cloneDeep';
 import keys from 'lodash/keys';
 import has from 'lodash/has';
 import partition from 'lodash/partition';
@@ -18,8 +19,8 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
 
-import { IOrchestratorNLRList, IOrchestratorProgress } from './interface';
-import { OrchestratorBuilder } from './process/orchestratorBuilder';
+import { IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
+import orchestratorBuilder from './process/orchestratorBuilder';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -61,8 +62,12 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
-  private containOrchestrator = false;
-  private orchestratorBuilder?: OrchestratorBuilder = undefined;
+  private orchestratorSettings: IOrchestratorSettings = {
+    orchestrator: {
+      models: {},
+      snapshots: {},
+    },
+  };
 
   public luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -104,21 +109,11 @@ export class Builder {
 
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
       const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
-      if (orchestratorBuildFiles.length) {
-        this.containOrchestrator = true;
-      } else {
-        this.containOrchestrator = false;
-      }
       await this.runLuBuild(luBuildFiles, directVersionPublish);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
-    } finally {
-      if (this.orchestratorBuilder) {
-        this.orchestratorBuilder.exit();
-        this.orchestratorBuilder = undefined;
-      }
     }
   };
 
@@ -168,22 +163,11 @@ export class Builder {
   public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
-    if (!this.orchestratorBuilder) {
-      this.orchestratorBuilder = new OrchestratorBuilder();
-    }
-
     const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
       f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
     );
 
     const nlrList = await this.runOrchestratorNlrList();
-
-    const orchestratorSettings = {
-      orchestrator: {
-        models: {},
-        snapshots: {},
-      },
-    };
 
     const modelDatas = [
       { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
@@ -199,15 +183,17 @@ export class Builder {
         await this.runOrchestratorNlrGet(modelPath, modelData.model);
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
-        orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
+        this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
         for (const snap in snapshotData) {
-          orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
+          this.orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
         }
       }
     }
 
-    const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
-    await writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings));
+    if (this.orchestratorSettings.orchestrator.models.en || this.orchestratorSettings.orchestrator.models.multilang) {
+      const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
+      await writeFile(orchestratorSettingsPath, JSON.stringify(this.orchestratorSettings, null, 2));
+    }
   };
 
   /**
@@ -224,8 +210,7 @@ export class Builder {
   ) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
     // build snapshots from LU files
-    if (!this.orchestratorBuilder) return;
-    return await this.orchestratorBuilder.build(luFiles, modelPath, this.generatedFolderPath);
+    return await orchestratorBuilder.build(this.botDir, luFiles, modelPath, this.generatedFolderPath);
   };
 
   /**
@@ -260,15 +245,51 @@ export class Builder {
     }
   }
 
-  public async copyModelPathToBot() {
-    if (this.containOrchestrator) {
-      const nlrList = await this.runOrchestratorNlrList();
-      const defaultNLR = nlrList.defaults.en_intent;
-      const folderName = defaultNLR.replace('.onnx', '');
-      const modelPath = Path.resolve(await this.getModelPathAsync(), folderName);
-      const destDir = Path.resolve(Path.join(this.botDir, MODEL), folderName);
-      await copy(modelPath, destDir);
-      await this.updateOrchestratorSetting(folderName);
+  /**
+   * Orchestrator: Copy language models into bot project (in preparation for publishing)
+   *
+   * Models are placed as a sibling to ComposerDialogs by default
+   */
+  public async copyModelPathToBot(isUsingAdaptiveRuntime: boolean) {
+    for (const lang in this.orchestratorSettings.orchestrator.models) {
+      const modelName = Path.basename(this.orchestratorSettings.orchestrator.models[lang], '.onnx');
+
+      const destDir = isUsingAdaptiveRuntime
+        ? Path.resolve(this.botDir, MODEL, modelName)
+        : Path.resolve(this.botDir, '..', MODEL, modelName);
+
+      await copy(this.orchestratorSettings.orchestrator.models[lang], destDir);
+    }
+
+    await this.updateOrchestratorSetting(isUsingAdaptiveRuntime);
+  }
+
+  /**
+   * Orchestrator: Update Orchestrator Settings for publishing
+   *
+   * Models are located in <project root>/model
+   * In the Adaptive Runtime, Orchestrator snapshot files are located in <project root>/generated.
+   * In the Legacy Runtime, Orchestrator snapshot files are located in <project root>/ComposerDialogs/generated.
+   */
+  private async updateOrchestratorSetting(isUsingAdaptiveRuntime: boolean) {
+    const settingPath = Path.join(this.botDir, GENERATEDFOLDER, 'orchestrator.settings.json');
+    const content = cloneDeep(this.orchestratorSettings);
+
+    keys(content.orchestrator.models).forEach((modelPath) => {
+      const modelName = Path.basename(content.orchestrator.models[modelPath], '.onnx');
+      content.orchestrator.models[modelPath] = Path.join(MODEL, modelName);
+    });
+
+    keys(content.orchestrator.snapshots).forEach((key) => {
+      const snapshotName = Path.basename(content.orchestrator.snapshots[key]);
+
+      content.orchestrator.snapshots[key] = isUsingAdaptiveRuntime
+        ? Path.join(GENERATEDFOLDER, snapshotName)
+        : Path.join('ComposerDialogs', GENERATEDFOLDER, snapshotName);
+    });
+
+    if (this.orchestratorSettings.orchestrator.models.en || this.orchestratorSettings.orchestrator.models.multilang) {
+      await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
     }
   }
 
@@ -289,18 +310,6 @@ export class Builder {
     Object.assign(qna, qnaConfig.qna, { endpointKey: endpointKey.primaryEndpointKey });
 
     return qna;
-  }
-
-  private async updateOrchestratorSetting(dirName: string) {
-    const runtimeRootPath = './ComposerDialogs';
-    const settingPath = Path.join(this.generatedFolderPath, 'orchestrator.settings.json');
-    const content = JSON.parse(await this.storage.readFile(settingPath));
-    content.orchestrator.ModelPath = `${runtimeRootPath}/${MODEL}/${dirName}`;
-    keys(content.orchestrator.snapshots).forEach((key) => {
-      const values = content.orchestrator.snapshots[key].split('ComposerDialogs');
-      content.orchestrator.snapshots[key] = `${runtimeRootPath}${values[1]}`;
-    });
-    await this.storage.writeFile(settingPath, JSON.stringify(content, null, 2));
   }
 
   private async createGeneratedDir() {
