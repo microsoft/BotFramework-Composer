@@ -495,13 +495,6 @@ export default async (composer: any): Promise<void> => {
         composer.log(`npm install timeout, ${installErr}`);
       }
 
-      // runtime build need typescript
-      const { stderr: install2Err } = await execAsync('npm run build', {
-        cwd: runtimePath,
-      });
-      if (install2Err) {
-        throw new Error(install2Err);
-      }
       composer.log('BUILD COMPLETE');
     },
     installComponent: async (
