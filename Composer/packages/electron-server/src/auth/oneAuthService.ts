@@ -34,6 +34,7 @@ type GetTenantsResult = {
   value: AzureTenant[];
 };
 
+// Pulled from ./oneAuth.d.ts
 enum Status {
   Unexpected = 0,
   Reserved = 1,
@@ -49,6 +50,7 @@ enum Status {
   AuthorityUntrusted = 11,
 }
 
+// Pulled from ./oneAuth.d.ts
 enum Flight {
   UseMsalforMsa = 2,
   UseWamforMSA = 1002,
