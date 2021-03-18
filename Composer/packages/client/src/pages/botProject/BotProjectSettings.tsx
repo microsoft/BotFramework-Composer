@@ -28,7 +28,7 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { useFeatureFlag } from '../../utils/hooks';
 
-import { DeleteBotButton, openDeleteBotModal } from './DeleteBotButton';
+import { openDeleteBotModal } from './DeleteBotButton';
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
 // -------------------- Styles -------------------- //
