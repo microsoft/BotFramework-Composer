@@ -15,11 +15,17 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DialogCreationCopy, nameRegexV2, runtimeOptions, defaultRuntime } from '../../../constants';
+import {
+  DialogCreationCopy,
+  nameRegexV2,
+  runtimeOptions,
+  defaultRuntime,
+  runtimeLanguageOptions,
+} from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -114,7 +120,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   } = props;
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
-  const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : defaultRuntime;
+  const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
 
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = (templateId?: string) => {
@@ -314,6 +320,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
 
   return (
+    // TODO remove runtime language drop down prior to merging as that data is indicated by the tab chosen
     <Fragment>
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
@@ -350,6 +357,15 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 options={runtimeOptions}
                 selectedKey={formData.runtimeChoice}
                 onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
+              />
+            </StackItem>
+            <StackItem grow={0} styles={halfstack}>
+              <Dropdown
+                data-testid="NewDialogRuntimeLanguage"
+                label={formatMessage('Runtime type')}
+                options={runtimeLanguageOptions}
+                selectedKey={formData.runtimeLanguage}
+                onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
               />
             </StackItem>
           </Stack>

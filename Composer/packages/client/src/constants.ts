@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FeedName, webAppRuntimeKey, functionsRuntimeKey } from '@botframework-composer/types';
+import {
+  FeedName,
+  webAppRuntimeKey,
+  functionsRuntimeKey,
+  csharpFeedKey,
+  nodeFeedKey,
+} from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -398,9 +404,9 @@ export const feedDictionary: { [key in FeedName]: string } = {
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)
 export const defaultPrimaryLanguage = 'english';
 
-export const mockLanguageOptions: IDropdownOption[] = [
-  { key: defaultPrimaryLanguage, text: 'English' },
-  { key: 'spanish', text: 'Spanish' },
+export const runtimeLanguageOptions: IDropdownOption[] = [
+  { key: nodeFeedKey, text: 'Node' },
+  { key: csharpFeedKey, text: 'Dot Net' },
 ];
 
 export const defaultRuntime = 'azureWebApp';

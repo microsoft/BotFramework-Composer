@@ -39,7 +39,8 @@ const instantiateRemoteTemplate = async (
 ): Promise<void> => {
   log('About to instantiate a template!', dstDir, generatorName, projectName);
   yeomanEnv.cwd = dstDir;
-
+  console.log(`\nruntime choice: ${runtimeChoice}\n`);
+  console.log(`\nruntime language: ${runtimeLanguage}\n`);
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore @types/yeoman-environment is outdated
