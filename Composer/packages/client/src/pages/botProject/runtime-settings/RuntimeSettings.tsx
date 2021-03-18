@@ -16,6 +16,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { DialogSetting } from '@botframework-composer/types';
 
 import {
   dispatcherState,
@@ -46,7 +47,10 @@ type RuntimeType = 'path' | 'command';
 
 /** Determine if a bot is configured to use the adaptive runtime vs the legacy runtime */
 export const isAdaptiveRuntime = (settings: DialogSetting): boolean => {
-  return settings?.runtime?.key === 'csharp-azurewebapp-v2' || settings?.runtime?.key.match(/^adaptive-runtime/);
+  return (
+    settings?.runtime?.key === 'csharp-azurewebapp-v2' ||
+    (settings?.runtime?.key.match(/^adaptive-runtime/) ? true : false)
+  );
 };
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {

@@ -1,0 +1,1 @@
+{"version":3,"file":"templateInstallation.worker.d.ts","sourceRoot":"","sources":["../../src/workers/templateInstallation.worker.ts"],"names":[],"mappings":"AA2FA,oBAAY,wBAAwB,GAAG;IACrC,cAAc,EAAE,MAAM,CAAC;IACvB,eAAe,EAAE,MAAM,CAAC;IACxB,MAAM,EAAE,MAAM,CAAC;IACf,WAAW,EAAE,MAAM,CAAC;IACpB,qBAAqB,EAAE,MAAM,CAAC;CAC/B,CAAC"}
