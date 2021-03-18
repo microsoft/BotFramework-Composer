@@ -70,7 +70,8 @@ export const useActionApi = (projectId: string) => {
 
       await addLgTemplate(lgFileId, newLgTemplateName, mainTemplateBody?.replace(regex, toId) ?? '');
     } catch {
-      // error
+      // It's a normal string
+      await addLgTemplate(lgFileId, newLgTemplateName, lgText);
     }
     return newLgTemplateRefStr;
   };
