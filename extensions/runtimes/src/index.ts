@@ -541,12 +541,6 @@ export default async (composer: any): Promise<void> => {
       if (installErr) {
         composer.log(installErr);
       }
-      // const { stderr: install2Err } = await execAsync('npm run build', {
-      //   cwd: path.resolve(runtimePath, '.'),
-      // });
-      // if (install2Err) {
-      //   throw new Error(install2Err);
-      // }
       // write settings to disk in the appropriate location
       const settingsPath = path.join(runtimePath, 'settings', 'appsettings.json');
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
