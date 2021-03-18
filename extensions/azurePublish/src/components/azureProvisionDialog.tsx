@@ -9,7 +9,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { logOut, usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -50,7 +50,7 @@ import { getExistResources, removePlaceholder, decodeToken } from './util';
 // ---------- Styles ---------- //
 
 const AddResourcesSectionName = styled(Text)`
-  font-size: 16px;
+  font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
 
 const iconStyle = (required) => {
@@ -694,9 +694,7 @@ export const AzureProvisionDialog: React.FC = () => {
               items={optionalListItems}
               selectedKeys={selectedResourceKeys}
               onSelectionChanged={(keys) => {
-                const newSelection = listItems.filter(
-                  (item) => item.required === true || keys.find((key) => key === item.key)
-                );
+                const newSelection = listItems.filter((item) => item.required === true || keys.includes(item.key));
                 setEnabledResources(newSelection);
               }}
             />

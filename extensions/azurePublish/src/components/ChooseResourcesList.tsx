@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import { List } from 'office-ui-fabric-react/lib/List';
 
@@ -46,18 +46,18 @@ const ImageIconPlacholder = styled.div`
 `;
 
 const ItemText = styled(Text)`
-  font-size: 16px;
+  font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
   margin-left: 4px !important;
 `;
 
 const ItemTier = styled(Text)`
-  font-size: 12px;
+  font-size: ${FluentTheme.fonts.small.fontSize};
   margin: 4px 0 0 22px;
   color: ${NeutralColors.gray130};
 `;
 
 const ItemDescription = styled(Text)`
-  font-size: 14px;
+  font-size: ${FluentTheme.fonts.medium.fontSize};
   margin: 4px 2px 0 22px;
   color: ${NeutralColors.gray190};
   max-width: 500px;
@@ -93,13 +93,15 @@ export const ChooseResourcesList = (props: Props) => {
 
   // ----- Hooks
 
-  const [selectedKeys, setSelectedKeys] = React.useState<string[]>(() => {
+  const getInitialSelectedKeys = () => {
     return controlledSelectedKeys || items.filter((item) => item.required).map((item) => item.key);
-  });
+  };
+
+  const [selectedKeys, setSelectedKeys] = React.useState<string[]>(getInitialSelectedKeys);
 
   // When the items or controlled selection changes, update selection state.
   React.useEffect(() => {
-    setSelectedKeys(controlledSelectedKeys || items.filter((item) => item.required).map((item) => item.key));
+    setSelectedKeys(getInitialSelectedKeys());
   }, [items, controlledSelectedKeys]);
 
   // ----- Handlers
@@ -137,7 +139,7 @@ export const ChooseResourcesList = (props: Props) => {
   };
 
   const renderItem = (item: ResourceListItem) => {
-    const checked = item.required || !!selectedKeys.find((selectedKey) => selectedKey === item.key);
+    const checked = item.required || !!selectedKeys.includes(item.key);
     return (
       <ItemCheckbox
         key={item.key}
@@ -152,10 +154,8 @@ export const ChooseResourcesList = (props: Props) => {
   };
 
   return (
-    <div>
-      <FocusZone direction={FocusZoneDirection.vertical}>
-        <List items={items} onRenderCell={renderItem} />
-      </FocusZone>
-    </div>
+    <FocusZone direction={FocusZoneDirection.vertical}>
+      <List items={items} onRenderCell={renderItem} />
+    </FocusZone>
   );
 };
