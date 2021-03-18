@@ -5,12 +5,10 @@ import {
   deepCopyActions,
   deleteActions as destructActions,
   FieldProcessorAsync,
-  walkAdaptiveActionList,
-  LgType,
-  LgMetaData,
   LgTemplateRef,
-  LuType,
   LuMetaData,
+  LuType,
+  walkAdaptiveActionList,
 } from '@bfc/shared';
 import { LuIntentSection, MicrosoftIDialog } from '@botframework-composer/types';
 
@@ -18,12 +16,7 @@ import TelemetryClient from '../telemetry/TelemetryClient';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
-
-type SerializableLg = {
-  originalId: string;
-  mainTemplateBody?: string;
-  relatedLgTemplateBodies?: Record<string, string>;
-};
+import { deserializeLgTemplate, serializeLgTemplate } from './utils';
 
 export const useActionApi = (projectId: string) => {
   const { getLgTemplates, removeLgTemplates, addLgTemplate } = useLgApi(projectId);
@@ -49,31 +42,7 @@ export const useActionApi = (projectId: string) => {
     hostFieldName: string
   ): Promise<string> => {
     if (!lgText) return '';
-    const newLgType = new LgType(hostActionData.$kind, hostFieldName).toString();
-    const newLgTemplateName = new LgMetaData(newLgType, toId).toString();
-    const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
-
-    try {
-      const serializableLg = JSON.parse(lgText) as SerializableLg;
-      const { originalId, mainTemplateBody, relatedLgTemplateBodies } = serializableLg;
-
-      const pattern = `${originalId}`;
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      const regex = new RegExp(pattern, 'g');
-
-      if (relatedLgTemplateBodies) {
-        for (const subTemplateId of Object.keys(relatedLgTemplateBodies)) {
-          const subTemplateBody = relatedLgTemplateBodies[subTemplateId];
-          await addLgTemplate(lgFileId, subTemplateId.replace(regex, toId), subTemplateBody);
-        }
-      }
-
-      await addLgTemplate(lgFileId, newLgTemplateName, mainTemplateBody?.replace(regex, toId) ?? '');
-    } catch {
-      // It's a normal string
-      await addLgTemplate(lgFileId, newLgTemplateName, lgText);
-    }
-    return newLgTemplateRefStr;
+    return await deserializeLgTemplate(lgFileId, toId, lgText, hostActionData, hostFieldName, addLgTemplate);
   };
 
   const readLgTemplate = (lgText: string, fromId: string) => {
@@ -85,38 +54,9 @@ export const useActionApi = (projectId: string) => {
     const lgTemplates = getLgTemplates(inputLgRef.name);
     if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
 
-    const targetTemplate = lgTemplates.find((x) => x.name === inputLgRef.name);
+    const serializedLg = serializeLgTemplate(inputLgRef.name, fromId, lgText, lgTemplates);
 
-    const exprRegex = /^\${(.*)\(\)}$/;
-    const serializableLg: SerializableLg = {
-      originalId: fromId,
-      mainTemplateBody: targetTemplate?.body,
-    };
-
-    if (targetTemplate?.properties?.$type === 'Activity') {
-      for (const responseType of ['Text', 'Speak', 'Attachments']) {
-        if (targetTemplate.properties[responseType]) {
-          const subTemplateItems = Array.isArray(targetTemplate.properties[responseType])
-            ? (targetTemplate.properties[responseType] as string[])
-            : ([targetTemplate.properties[responseType]] as string[]);
-          for (const subTemplateItem of subTemplateItems) {
-            const matched = subTemplateItem.trim().match(exprRegex);
-            if (matched && matched.length > 1) {
-              const subTemplateId = matched[1];
-              const subTemplate = lgTemplates.find((x) => x.name === subTemplateId);
-              if (subTemplate) {
-                if (!serializableLg.relatedLgTemplateBodies) {
-                  serializableLg.relatedLgTemplateBodies = {};
-                }
-                serializableLg.relatedLgTemplateBodies[subTemplateId] = subTemplate.body;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    return targetTemplate ? JSON.stringify(serializableLg) : lgText;
+    return serializedLg;
   };
 
   const createLuIntent = async (
