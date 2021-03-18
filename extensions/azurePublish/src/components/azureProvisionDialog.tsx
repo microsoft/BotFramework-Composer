@@ -244,8 +244,16 @@ export const AzureProvisionDialog: React.FC = () => {
   const [page, setPage] = useState(PageTypes.ConfigProvision);
   const [listItems, setListItem] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
+  const [isMounted, setIsMounted] = useState<boolean | unknown>();
 
   const timerRef = useRef<any>();
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -267,7 +275,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else {
       if (!getTenantIdFromCache()) {
         getTenants().then((tenants) => {
-          if (tenants?.length > 0) {
+          if (isMounted && tenants?.length > 0) {
             // set tenantId in cache.
             setTenantId(tenants[0].tenantId);
             getARMTokenForTenant(tenants[0].tenantId)
@@ -291,15 +299,17 @@ export const AzureProvisionDialog: React.FC = () => {
       } else {
         getARMTokenForTenant(getTenantIdFromCache())
           .then((token) => {
-            setToken(token);
-            const decoded = decodeToken(token);
-            setCurrentUser({
-              token: token,
-              email: decoded.upn,
-              name: decoded.name,
-              expiration: (decoded.exp || 0) * 1000, // convert to ms,
-              sessionExpired: false,
-            });
+            if (isMounted) {
+              setToken(token);
+              const decoded = decodeToken(token);
+              setCurrentUser({
+                token: token,
+                email: decoded.upn,
+                name: decoded.name,
+                expiration: (decoded.exp || 0) * 1000, // convert to ms,
+                sessionExpired: false,
+              });
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -340,7 +350,11 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      getSubscriptions(token).then(setSubscriptions);
+      getSubscriptions(token).then((data) => {
+        if (isMounted) {
+          setSubscriptions(data);
+        }
+      });
       getResources();
     }
   }, [token]);
@@ -377,10 +391,12 @@ export const AzureProvisionDialog: React.FC = () => {
         if (currentSubscription && publishType === 'azurePublish') {
           // check app name whether exist or not
           CheckWebAppNameAvailability(token, newName, currentSubscription).then((value) => {
-            if (!value.nameAvailable) {
-              setErrorHostName(value.message);
-            } else {
-              setErrorHostName('');
+            if (isMounted) {
+              if (!value.nameAvailable) {
+                setErrorHostName(value.message);
+              } else {
+                setErrorHostName('');
+              }
             }
           });
         }
@@ -447,10 +463,12 @@ export const AzureProvisionDialog: React.FC = () => {
     if (currentSubscription && token) {
       // get resource group under subscription
       getDeployLocations(token, currentSubscription).then((data: DeployLocation[]) => {
-        setDeployLocations(data);
-        const luRegions = getLuisAuthoringRegions();
-        const region = data.filter((item) => luRegions.includes(item.name));
-        setLuisLocations(region);
+        if (isMounted) {
+          setDeployLocations(data);
+          const luRegions = getLuisAuthoringRegions();
+          const region = data.filter((item) => luRegions.includes(item.name));
+          setLuisLocations(region);
+        }
       });
     }
   }, [currentSubscription, token]);
