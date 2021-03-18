@@ -73,7 +73,7 @@ const styles = {
       box-sizing: border-box;
       height: calc(${typeof height === 'string' ? height : `${height}px`} - ${heightAdj}px);
       > * {
-        opacity: ${editorOptions?.readOnly ? 0.4 : 1};
+        opacity: ${editorOptions?.readOnly && editorOptions?.fadedWhenReadOnly ? 0.4 : 1};
       }
       label: BaseEditor;
     `;
@@ -100,6 +100,7 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     fontFamily: overrides?.fontSettings?.fontFamily,
     fontSize: overrides?.fontSettings?.fontSize,
     fontWeight: Number(overrides?.fontSettings?.fontWeight),
+    fadedWhenReadOnly: overrides?.fadedWhenReadOnly !== undefined ? overrides?.fadedWhenReadOnly : true,
   };
 };
 
