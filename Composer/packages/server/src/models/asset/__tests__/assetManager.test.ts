@@ -14,23 +14,13 @@ jest.mock('azure-storage', () => {
   return {};
 });
 
-jest.mock('yeoman-environment', () => ({
-  createEnv: jest.fn().mockImplementation(() => {
-    return {
-      lookupLocalPackages: jest.fn(),
-      installLocalGenerators: jest.fn().mockReturnValue(true),
-      run: jest.fn(),
-    };
-  }),
-}));
-
 jest.mock('fs-extra', () => {
   return {
     mkdirSync: jest.fn(),
   };
 });
 
-jest.mock('../../../models/extension/extensionContext', () => {
+jest.mock('@bfc/extension', () => {
   return {
     ExtensionContext: {
       extensions: {
@@ -40,10 +30,10 @@ jest.mock('../../../models/extension/extensionContext', () => {
   };
 });
 
-jest.mock('../../../workers/templateInstallation.worker', () => {
+jest.mock('@bfc/server-workers', () => {
   return {
-    runYeomanTemplatePipeline: () => {
-      return;
+    ServerWorker: {
+      execute: jest.fn(),
     },
   };
 });
@@ -167,7 +157,7 @@ describe('assetManager', () => {
         '0'
       );
       expect(newBotLocationRef).toStrictEqual({
-        path: '/path/to/npmbot/sampleConversationalCore',
+        path: '/path/to/npmbot',
         storageId: 'default',
       });
     });

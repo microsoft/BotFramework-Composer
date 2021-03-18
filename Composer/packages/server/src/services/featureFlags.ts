@@ -28,9 +28,9 @@ export class FeatureFlagService {
       FeatureFlagService.currentFeatureFlagMap[key] = {
         ...FeatureFlagService.defaultFeatureFlags[key],
         ...FeatureFlagService.currentFeatureFlagMap[key],
-        displayName: FeatureFlagService.defaultFeatureFlags[key].displayName,
-        description: FeatureFlagService.defaultFeatureFlags[key].description,
-        documentationLink: FeatureFlagService.defaultFeatureFlags[key].documentationLink,
+        displayName: FeatureFlagService.defaultFeatureFlags[key]?.displayName,
+        description: FeatureFlagService.defaultFeatureFlags[key]?.description,
+        documentationLink: FeatureFlagService.defaultFeatureFlags[key]?.documentationLink,
       };
     });
 

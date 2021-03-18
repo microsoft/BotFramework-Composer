@@ -39,6 +39,7 @@ export enum PageNames {
 
 type ApplicationEvents = {
   NotificationPanelOpened: undefined;
+  HandoffToComposerCompleted: { source: string };
 };
 
 type GettingStartedEvents = {
@@ -108,8 +109,8 @@ type QnaEvents = {
 
 type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
-  NewPublishingProfileSaved: { type: string };
-  PublishingProfileStarted: { target: string; projectId: string };
+  NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
+  PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileCompleted: { target: string; projectId: string };
 };
 
