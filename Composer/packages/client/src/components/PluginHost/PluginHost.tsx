@@ -45,6 +45,7 @@ interface PluginHostProps {
 async function attachPluginAPI(
   win: Window,
   id: string,
+  bundleId: string,
   type: PluginType,
   shell?: object,
   settings?: ExtensionSettings
@@ -56,6 +57,7 @@ async function attachPluginAPI(
   }
 
   win.Composer.__extensionId = id;
+  win.Composer.__bundleId = bundleId;
   win.Composer.__pluginType = type;
   win.Composer.settings = settings ?? {};
   win.Composer.sync(shell);
@@ -96,7 +98,7 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
     const iframeWindow = targetRef.current?.contentWindow as Window;
     const iframeDocument = targetRef.current?.contentDocument as Document;
 
-    await attachPluginAPI(iframeWindow, name, type, shell, extensionSettings);
+    await attachPluginAPI(iframeWindow, name, bundle, type, shell, extensionSettings);
 
     //load the bundle for the specified plugin
     const pluginScriptId = `plugin-${type}-${name}`;
