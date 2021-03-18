@@ -714,17 +714,25 @@ export const AzureProvisionDialog: React.FC = () => {
           style={{ height: 'calc(100vh - 64px)' }}
         >
           <Stack>
-            <AddResourcesSectionName>{formatMessage('Required')}</AddResourcesSectionName>
-            <ChooseResourcesList items={requiredListItems} />
-            <AddResourcesSectionName>{formatMessage('Optional')}</AddResourcesSectionName>
-            <ChooseResourcesList
-              items={optionalListItems}
-              selectedKeys={selectedResourceKeys}
-              onSelectionChanged={(keys) => {
-                const newSelection = listItems.filter((item) => item.required === true || keys.includes(item.key));
-                setEnabledResources(newSelection);
-              }}
-            />
+            {requiredListItems.length > 0 && (
+              <Fragment>
+                <AddResourcesSectionName>{formatMessage('Required')}</AddResourcesSectionName>
+                <ChooseResourcesList items={requiredListItems} />
+              </Fragment>
+            )}
+            {optionalListItems.length > 0 && (
+              <Fragment>
+                <AddResourcesSectionName>{formatMessage('Optional')}</AddResourcesSectionName>
+                <ChooseResourcesList
+                  items={optionalListItems}
+                  selectedKeys={selectedResourceKeys}
+                  onSelectionChanged={(keys) => {
+                    const newSelection = listItems.filter((item) => item.required === true || keys.includes(item.key));
+                    setEnabledResources(newSelection);
+                  }}
+                />
+              </Fragment>
+            )}
           </Stack>
         </ScrollablePane>
       );
