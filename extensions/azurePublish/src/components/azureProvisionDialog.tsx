@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef, Suspense } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { logOut, usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
+import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -37,13 +37,12 @@ import { AzureResourceTypes, ResourcesItem } from '../types';
 import {
   getResourceList,
   getSubscriptions,
-  getResourceGroups,
   getDeployLocations,
   getPreview,
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
 } from './api';
-import { getExistResources, removePlaceholder, decodeToken } from './util';
+import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
 
 const iconStyle = (required) => {
   return {
@@ -248,14 +247,19 @@ export const AzureProvisionDialog: React.FC = () => {
     setTitle,
     getSchema,
     getType,
+    getName,
     getTokenFromCache,
     isGetTokenFromUser,
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
+
+  const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
+  const profileName = getName();
   const currentConfig = removePlaceholder(publishConfig);
+  const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
@@ -265,17 +269,19 @@ export const AzureProvisionDialog: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<any>(undefined);
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
-  const [choice, setChoice] = useState(choiceOptions[0]);
-  const [currentSubscription, setSubscription] = useState<string>('');
-  const [currentResourceGroup, setResourceGroup] = useState<string>('');
-  const [currentHostName, setHostName] = useState('');
+  const [choice, setChoice] = useState(extensionState.choice);
+  const [currentSubscription, setSubscription] = useState<string>(extensionState.subscriptionId);
+  const [currentResourceGroup, setResourceGroup] = useState<string>(extensionState.resourceGroup);
+  const [currentHostName, setHostName] = useState(extensionState.hostName);
   const [errorHostName, setErrorHostName] = useState('');
   const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
-  const [currentLocation, setLocation] = useState<string>(currentConfig?.region);
-  const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(currentConfig?.settings?.luis?.region);
+  const [currentLocation, setLocation] = useState<string>(currentConfig?.region || extensionState.location);
+  const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(
+    currentConfig?.settings?.luis?.region || extensionState.luisLocation
+  );
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
-  const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>([]); // create from optional list
-  const [requireResources, setRequireResources] = useState<ResourcesItem[]>([]);
+  const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>(extensionState.enabledResources); // create from optional list
+  const [requireResources, setRequireResources] = useState<ResourcesItem[]>(extensionState.requiredResources);
 
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState<any>();
@@ -342,7 +348,6 @@ export const AzureProvisionDialog: React.FC = () => {
             });
           })
           .catch((err) => {
-            console.log(err);
             setCurrentUser(undefined);
             setLoginErrorMsg(err.message || err.toString());
           });
@@ -543,9 +548,10 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const onSubmit = useMemo(
-    () => async (options) => {
+    () => (options) => {
       // call back to the main Composer API to begin this process...
       startProvision(options);
+      clearAll();
       closeDialog();
     },
     []
@@ -554,6 +560,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSave = useMemo(
     () => () => {
       savePublishConfig(importConfig);
+      clearAll();
       closeDialog();
     },
     [importConfig]
@@ -599,7 +606,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageFormConfig = (
     <Fragment>
-      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} style={{}} onChange={updateChoice} />
+      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       <Suspense fallback={<Spinner label="Loading" />}>
         {subscriptionOption?.length > 0 && choice.key === 'create' && (
           <form style={{ width: '50%', marginTop: '16px' }}>
@@ -798,6 +805,7 @@ export const AzureProvisionDialog: React.FC = () => {
             <div
               style={{ color: 'blue', cursor: 'pointer' }}
               onClick={() => {
+                clearAll();
                 closeDialog();
                 logOut();
               }}
@@ -806,7 +814,24 @@ export const AzureProvisionDialog: React.FC = () => {
             </div>
           )}
           <div>
-            <DefaultButton style={{ margin: '0 4px' }} text={'Back'} onClick={onBack} />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Back')}
+              onClick={() => {
+                clearAll();
+                setItem(profileName, {
+                  subscriptionId: currentSubscription,
+                  resourceGroup: currentResourceGroup,
+                  hostName: currentHostName,
+                  location: currentLocation,
+                  luisLocation: currentLuisLocation,
+                  enabledResources: enabledResources,
+                  requiredResources: requireResources,
+                  choice: choice,
+                });
+                onBack();
+              }}
+            />
             {choice.key === 'create' ? (
               <PrimaryButton
                 disabled={isDisAble}
