@@ -249,7 +249,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [importConfig, setImportConfig] = useState<any>();
 
   const [page, setPage] = useState(PageTypes.ConfigProvision);
-  const [listItems, setListItem] = useState<(ResourcesItem & { icon?: string })[]>();
+  const [listItems, setListItems] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
   const isMounted = useRef<boolean>();
 
@@ -501,9 +501,10 @@ export const AzureProvisionDialog: React.FC = () => {
       // set review list
       const requireList = result.filter((item) => item.required);
       setRequireResources(requireList);
-      const externalList = result.filter((item) => !item.required);
-      const items = requireList.concat(externalList);
-      setListItem(items);
+      const optionalList = result.filter((item) => !item.required);
+      setEnabledResources(optionalList);
+      const items = requireList.concat(optionalList);
+      setListItems(items);
 
       setPage(PageTypes.AddResources);
       setTitle(DialogTitle.ADD_RESOURCES);
