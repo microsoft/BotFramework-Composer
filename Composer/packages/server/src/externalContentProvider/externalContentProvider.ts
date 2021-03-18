@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { PublishTarget } from '@bfc/shared';
 
 export interface IContentProviderMetadata {
   [key: string]: any;
@@ -57,5 +58,5 @@ export abstract class ExternalContentProvider<T extends IContentProviderMetadata
   /**
    * get different type of profiles base on provider
    */
-  abstract generateProfile?(): Promise<unknown>;
+  abstract generateProfile?(): Promise<PublishTarget>;
 }

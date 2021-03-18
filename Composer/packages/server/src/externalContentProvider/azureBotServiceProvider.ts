@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-import { authService } from '../services/auth/auth';
+import { PublishTarget } from '@bfc/shared';
 import * as axios from 'axios';
 import jwtDecode from 'jwt-decode';
+
+import { authService } from '../services/auth/auth';
 
 import { IContentProviderMetadata, ExternalContentProvider, BotContentInfo } from './externalContentProvider';
 
@@ -11,7 +12,7 @@ export type AzureBotServiceMetadata = IContentProviderMetadata & {
   resourceId: string;
   botName: string;
   appId?: string;
-  appPasswordHint: string;
+  appPasswordHint?: string;
   subscriptionId?: string;
   resourceGroup?: string;
   armEndpoint?: string;
@@ -22,10 +23,10 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
   constructor(metadata: AzureBotServiceMetadata) {
     super(metadata);
   }
-  downloadBotContent(): Promise<BotContentInfo> {
+  public async downloadBotContent(): Promise<BotContentInfo> {
     throw new Error('ABS Not support');
   }
-  cleanUp(): Promise<void> {
+  public async cleanUp(): Promise<void> {
     throw new Error('Method not implemented.');
   }
   public async getAlias(): Promise<string> {
@@ -33,7 +34,11 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
     return alias;
   }
 
-  public async generateProfile(): Promise<object> {
+  public async authenticate(): Promise<string> {
+    return this.getVaultAccessToken();
+  }
+
+  public async generateProfile(): Promise<PublishTarget> {
     const appId = this.metadata.appId;
     // parse subscriptionId ... from this.metadata
     const temp = { ...this.metadata };
@@ -45,7 +50,9 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
     temp.botName = (names && names.length > 0 && names[1]) || '';
     delete temp.appId;
 
-    const hint = this.metadata.appPasswordHint;
+    // transform key vault token hint to microsoft app password
+    const hint = this.metadata.appPasswordHint || '';
+    delete temp.appPasswordHint;
     const vaultNames = hint.match(/vaults\/([^/]*)/);
     const secretNames = hint.match(/secrets\/([^/]*)/);
     const resourceGroupNames = hint.match(/resourceGroups\/([^/]*)/);
@@ -53,16 +60,15 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
     const secretName = (secretNames && secretNames.length > 0 && secretNames[1]) || '';
     const resourceGroupName = (resourceGroupNames && resourceGroupNames.length > 0 && resourceGroupNames[1]) || '';
     const tenantId = this.metadata.tenantId;
-    //TODO. handle key vault hint
+
+    // get token
     const armToken = await this.getArmAccessToken(tenantId);
-
     const vaultToken = await this.getVaultAccessToken();
-
     const decoded = jwtDecode<{ oid: string }>(armToken);
 
+    // set key vault policy
     await this.keyVaultUpdatePolicy(armToken, temp.subscriptionId, resourceGroupName, vaultName, tenantId, decoded.oid);
     const appPwd = await this.keyVaultGetSecretValue(vaultToken, vaultName, secretName);
-    console.log(appPwd);
     return {
       name: `abs-${this.metadata.botName}`,
       type: 'azurePublish',
@@ -78,7 +84,7 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
     };
   }
 
-  public async keyVaultUpdatePolicy(
+  private async keyVaultUpdatePolicy(
     token: string,
     subscriptionId: string,
     resourceGroupName: string,
@@ -113,16 +119,12 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
     return result;
   }
 
-  public async keyVaultGetSecretValue(token: string, vaultName: string, secretName: string) {
+  private async keyVaultGetSecretValue(token: string, vaultName: string, secretName: string) {
     const vaultUri = `https://${vaultName}.vault.azure.net/secrets/${secretName}?api-version=7.1`;
     const result = await axios.default.get(vaultUri, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return result.data.value;
-  }
-
-  public async authenticate(): Promise<string> {
-    return this.getVaultAccessToken();
   }
 
   private async getVaultAccessToken(): Promise<string> {
