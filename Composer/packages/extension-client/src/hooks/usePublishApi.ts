@@ -40,6 +40,9 @@ export function usePublishApi() {
   function getType(): string {
     return window[ComposerGlobalName].getType();
   }
+  function getName(): string {
+    return window[ComposerGlobalName].getName();
+  }
   function savePublishConfig(config): void {
     return window[ComposerGlobalName].savePublishConfig(config);
   }
@@ -55,7 +58,6 @@ export function usePublishApi() {
   function isGetTokenFromUser(): boolean {
     return window[ComposerGlobalName].isGetTokenFromUser();
   }
-
   return {
     publishConfig: getPublishConfig(),
     startProvision,
@@ -65,6 +67,7 @@ export function usePublishApi() {
     setTitle,
     getSchema,
     getType,
+    getName,
     savePublishConfig,
     getTokenFromCache,
     isGetTokenFromUser,
