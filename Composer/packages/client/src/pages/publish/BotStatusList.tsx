@@ -12,7 +12,7 @@ import React, { useState, Fragment, useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishResult, PublishTarget } from '@bfc/shared';
-import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
+import { CheckboxVisibility, DetailsList, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
@@ -26,33 +26,16 @@ import {
   IChoiceGroupOptionStyles,
   IChoiceGroupStyles,
 } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { last } from 'lodash';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 import { PublishType } from '../../recoilModel/types';
+import { publishHistoryState } from '../../recoilModel';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
-
-/*
-  Stack
-    Bot
-      - Checkbox
-      - Name
-      Publish Profiles
-        Publish Profile
-        - Radio
-        - Name
-        - Target
-        - Edit Button
-        - Delete Button
-          Last Published
-            - Date/Time
-            - Status
-            - Message
-            // We should remove Comment - it is useless
-    - Add Button
-*/
+import { PublishProfileList } from './PublishProfileList';
 
 // ---------- Styles ---------- //
 
@@ -205,6 +188,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   onChangePublishTarget,
   onRollbackClick,
 }) => {
+  // ----- Hooks ----- //
+
   const [expandedBotIds, setExpandedBotIds] = useState<Record<string, boolean>>({});
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
 
@@ -214,22 +199,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     return botStatusList.slice().reverse();
   }, [botStatusList, currentSort]);
 
-  const getPublishTargetOptions = (item: BotStatus): IDropdownOption[] => {
-    const options: IDropdownOption[] = [];
-    item.publishTargets &&
-      item.publishTargets.forEach((target) => {
-        options.push({
-          key: target.name,
-          text: target.name,
-        });
-      });
-    options.push({
-      key: 'manageProfiles',
-      text: formatMessage('Manage profiles'),
-      data: { style: { color: '#0078D4' } },
-    });
-    return options;
-  };
+  // ----- Handlers ----- //
 
   const onChangeCheckbox = React.useCallback(
     (skillId: string, isChecked?: boolean) => {
@@ -261,6 +231,25 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
     } else {
       setExpandedBotIds({ ...expandedBotIds, [clickedBotId]: true });
     }
+  };
+
+  // ----- Render Helpers ----- //
+
+  const getPublishTargetOptions = (item: BotStatus): IDropdownOption[] => {
+    const options: IDropdownOption[] = [];
+    item.publishTargets &&
+      item.publishTargets.forEach((target) => {
+        options.push({
+          key: target.name,
+          text: target.name,
+        });
+      });
+    options.push({
+      key: 'manageProfiles',
+      text: formatMessage('Manage profiles'),
+      data: { style: { color: '#0078D4' } },
+    });
+    return options;
   };
 
   const renderDropdownOption = (option?: IDropdownOption): JSX.Element | null => {
@@ -508,6 +497,18 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
         })
       : [];
 
+    // Merge the profile with it's history
+    // Note: This could be memoized, but this control should take a better props data shape instead.
+    // With only a few profiles and history, the map lookup is not expensive to do on render.
+    const publishHistory = botPublishHistoryList[botStatus.id];
+    const profileDetailsListItems =
+      botStatus.publishTargets?.map((pt: PublishTarget) => {
+        return {
+          publishTarget: pt,
+          publishHistory: publishHistory[pt.name],
+        };
+      }) || [];
+
     return (
       <BotItem key={botStatus.id}>
         <BotHeader horizontal>
@@ -519,6 +520,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
           />
         </BotHeader>
         <BotDetails>
+          <PublishProfileList items={profileDetailsListItems} />
           <PublishProfileChoiceGroup disabled={!isChecked} options={profileOptions} />
           <AddProfileAction iconProps={addProfileIcon} onClick={() => onAddProfile(botStatus.id)}>
             {formatMessage('Add Publishing Profile')}
