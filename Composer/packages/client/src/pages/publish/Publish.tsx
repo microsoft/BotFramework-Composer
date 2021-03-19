@@ -8,6 +8,7 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult } from '@bfc/shared';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -39,6 +40,8 @@ import {
   generateBotStatusList,
   deleteNotificationInterval,
 } from './publishPageUtils';
+import { NewPublishBotList } from './NewPublishBotList';
+import { NewPublishProfileList } from './NewPublishProfileList';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -323,6 +326,25 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
+  const renderPublishBotListItemDetails = (id: string): React.ReactNode => {
+    const publishTargets = botPropertyData[id].publishTargets;
+    const publishHistory = publishHistoryList[id];
+    const items = publishTargets.map((publishTarget) => {
+      const profilePublishHistory = publishHistory[publishTarget.name];
+      const lastHistoryItem = profilePublishHistory?.length ? profilePublishHistory[0] : undefined;
+      return {
+        name: publishTarget.name,
+        description: publishTarget.type,
+        status: lastHistoryItem ? lastHistoryItem.status : '',
+        message: lastHistoryItem ? lastHistoryItem.message : '',
+        time: lastHistoryItem ? lastHistoryItem.time : '',
+        log: lastHistoryItem ? lastHistoryItem.log : '',
+      };
+    });
+
+    return <NewPublishProfileList items={items} onAddNewProfile={() => {}} />;
+  };
+
   return (
     <Fragment>
       {showAuthDialog && (
@@ -376,16 +398,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          <BotStatusList
-            botPublishHistoryList={publishHistoryList}
-            botStatusList={botStatusList}
-            checkedIds={checkedSkillIds}
-            disableCheckbox={isPublishPending}
-            onChangePublishTarget={changePublishTarget}
-            onCheck={updateCheckedSkills}
-            onManagePublishProfile={manageSkillPublishProfile}
-            onRollbackClick={onRollbackToVersion}
-          />
+          <Stack>
+            <NewPublishBotList items={botStatusList} renderDetails={(id) => renderPublishBotListItemDetails(id)} />
+            <BotStatusList
+              botPublishHistoryList={publishHistoryList}
+              botStatusList={botStatusList}
+              checkedIds={checkedSkillIds}
+              disableCheckbox={isPublishPending}
+              onChangePublishTarget={changePublishTarget}
+              onCheck={updateCheckedSkills}
+              onManagePublishProfile={manageSkillPublishProfile}
+              onRollbackClick={onRollbackToVersion}
+            />
+          </Stack>
         </div>
       </div>
     </Fragment>
