@@ -4,7 +4,6 @@
 import styled from '@emotion/styled';
 import { EditorDidMount } from '@monaco-editor/react';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
@@ -136,7 +135,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           languageClient.onReady().then(() =>
             languageClient.onNotification('GotoDefinition', (result) => {
               if (lgOption?.projectId) {
-                navigate(`/bot/${lgOption.projectId}/language-generation/${result.fileId}/edit#L=${result.line}`);
+                onNavigateToLgPage?.(result.fileId);
               }
             })
           );
@@ -144,8 +143,15 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
       });
     } else {
       sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      window.monacoLGEditorInstance.onReady().then(() =>
+        window.monacoLGEditorInstance.onNotification('GotoDefinition', (result) => {
+          if (lgOption?.projectId) {
+            onNavigateToLgPage?.(result.fileId);
+          }
+        })
+      );
     }
-  }, [editor]);
+  }, [editor, onNavigateToLgPage]);
 
   const onInit: OnInit = (monaco) => {
     registerLGLanguage(monaco);
