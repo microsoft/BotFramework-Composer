@@ -6,7 +6,7 @@ import { lgUtil } from '@bfc/indexers';
 import uniq from 'lodash/uniq';
 
 import { WorkerMsg } from './lgParser';
-import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes } from './utils';
+import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes, findAllVariables } from './utils';
 
 process.on('message', async (msg: WorkerMsg) => {
   try {
@@ -42,6 +42,19 @@ process.on('message', async (msg: WorkerMsg) => {
           lgImportResolver
         );
         process.send?.({ id: msg.id, payload: { id, content, templates, allTemplates, diagnostics } });
+        break;
+      }
+
+      case 'extractLGVariables': {
+        const { curCbangedFile, lgFiles } = msg.payload;
+        let result: string[] = [];
+        if (curCbangedFile) {
+          result = findAllVariables(curCbangedFile);
+        } else {
+          result = findAllVariables(lgFiles);
+        }
+
+        process.send?.({ id: msg.id, payload: { lgVariables: result } });
         break;
       }
     }
