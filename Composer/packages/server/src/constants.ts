@@ -19,4 +19,4 @@ export const APPINSIGHTS_INSTRUMENTATIONKEY = process.env.APPINSIGHTS_INSTRUMENT
 
 export const piiProperties = [];
 
-export const COMPOSER_VERSION = '1.4.0-rc3';
+export const COMPOSER_VERSION = '1.4.0-rc4';
