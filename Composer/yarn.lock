@@ -3947,10 +3947,10 @@
     tslib "^2.0.3"
     xml2js "^0.4.19"
 
-"@microsoft/bf-dispatcher@4.12.0-beta.20210316.cdd0819":
-  version "4.12.0-beta.20210316.cdd0819"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.12.0-beta.20210316.cdd0819.tgz#454a612d4e17edc964675259be84ccc1c51425b4"
-  integrity sha512-TzkkoUTIITiBjwB8+UIjle9PCRJH8jolczOTEQszCDB3t7twfs54tLXzTmNVBS/bP9EAgZ+TY4xzd8IhoK/XdQ==
+"@microsoft/bf-dispatcher@4.13.0-beta.20210316.e8ec340":
+  version "4.13.0-beta.20210316.e8ec340"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.13.0-beta.20210316.e8ec340.tgz#de2024f41b217c0aa937807855ff519ea1dc370f"
+  integrity sha512-meLDe5MKbXdnPYBy+pXHhH6k/cdGs7zW3Vw9Powf+OfX+oBEgxo8xlfa/J1rIBsleIiGWU9reU+D6gKK/16Uyg==
   dependencies:
     "@microsoft/bf-lu" next
     "@oclif/command" "~1.5.19"
@@ -4057,12 +4057,12 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-orchestrator@4.12.0-beta.20210316.cdd0819":
-  version "4.12.0-beta.20210316.cdd0819"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.12.0-beta.20210316.cdd0819.tgz#1869942269909759eb81e8ce9a538019392c2def"
-  integrity sha512-1jIYXtw+x6mm7cM0iCunf/hM7d+xrI5D3UnVMUrILK8t2oByuLyj7NUyt7oSrSmlAwhEAtYGJ/5xpdqdIxKw0Q==
+"@microsoft/bf-orchestrator@4.13.0-beta.20210316.e8ec340":
+  version "4.13.0-beta.20210316.e8ec340"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.13.0-beta.20210316.e8ec340.tgz#74ae2b91cedc292e19ac33d3f974d1d4c70874ad"
+  integrity sha512-WdWKQkOev4mX1bdk002UsD3DU9jdQms0X4c+wyawgX8XEWFJSNT42EKfKea9jbP5DtiXhwRjzeaDIOpuTgHIFw==
   dependencies:
-    "@microsoft/bf-dispatcher" "4.12.0-beta.20210316.cdd0819"
+    "@microsoft/bf-dispatcher" "4.13.0-beta.20210316.e8ec340"
     "@microsoft/bf-lu" next
     "@types/fs-extra" "~8.1.0"
     "@types/node-fetch" "~2.5.5"
