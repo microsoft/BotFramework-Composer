@@ -27,6 +27,7 @@ import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../u
 import { LUIS_REGIONS } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+import { dispatcherState } from '../../recoilModel/atoms';
 
 type ManageLuisProps = {
   hidden: boolean;
@@ -43,6 +44,8 @@ type KeyRec = {
 
 const dropdownStyles = { dropdown: { width: '100%' } };
 
+const CREATE_NEW_KEY = 'CREATE_NEW';
+
 export const ManageLuis = (props: ManageLuisProps) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
@@ -55,7 +58,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const rootLuisEndpointKey = groupLUISEndpointKey.root;
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
-
+  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
   const [createResourceGroup, setCreateResourceGroup] = useState<boolean>(false);
@@ -83,22 +86,14 @@ export const ManageLuis = (props: ManageLuisProps) => {
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
-      if (subscriptionsResult._response.status >= 300) {
-        // eslint-disable-next-line no-underscore-dangle
-        // TODO: error handle
-        // setErrorMessage(subscriptionsResult._response.bodyAsText);
-        return [];
-      }
-      // eslint-disable-next-line no-underscore-dangle
       return subscriptionsResult._response.parsedBody;
     } catch (err) {
-      // TODO: error handle
-      // setErrorMessage(JSON.stringify(err, Object.getOwnPropertyNames(err)));
+      setApplicationLevelError(err);
       return [];
     }
   };
+
   const hasAuth = async () => {
-    console.log('HAS AUTH');
     let newtoken = '';
     if (isGetTokenFromUser()) {
       if (isShowAuthDialog(false)) {
@@ -108,7 +103,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
     } else {
       newtoken = await AuthClient.getAccessToken(armScopes);
     }
-    console.log('set token to ', newtoken);
+
     setToken(newtoken);
 
     if (newtoken) {
@@ -127,20 +122,14 @@ export const ManageLuis = (props: ManageLuisProps) => {
     setPredictionKeys([]);
     setShowCreateKeyUI(false);
     setActionOptions([
-      { key: 'create', text: 'Create a new LUIS resource', disabled: true },
-      { key: 'handoff', text: 'Generate a resource request', disabled: true },
-      { key: 'choose', text: 'Choose from existing', disabled: true },
+      { key: 'create', text: formatMessage('Create a new LUIS resource'), disabled: true },
+      { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: true },
+      { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
     ]);
     if (!props.hidden) {
       hasAuth();
     }
   }, [props.hidden]);
-
-  // useEffect(() => {
-  // setLocalRootLuisKey(rootLuisKey);
-  // setLocalRootLuisEndpointKey(rootLuisEndpointKey);
-  // setLocalRootLuisRegion(rootLuisRegion);
-  // }, [rootLuisKey, rootLuisEndpointKey, rootLuisRegion]);
 
   const closeDialog = () => {
     props.onDismiss();
@@ -199,18 +188,18 @@ export const ManageLuis = (props: ManageLuisProps) => {
       if (authoring.length == 0 || prediction.length == 0) {
         setNoKeys(true);
         setActionOptions([
-          { key: 'create', text: 'Create a new LUIS resource' },
-          { key: 'handoff', text: 'Generate a resource request', disabled: false },
-          { key: 'choose', text: 'Choose from existing', disabled: true },
+          { key: 'create', text: formatMessage('Create a new LUIS resource') },
+          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
         ]);
       } else {
         setNoKeys(false);
         setAuthoringKeys(authoring);
         setPredictionKeys(prediction);
         setActionOptions([
-          { key: 'create', text: 'Create a new LUIS resource' },
-          { key: 'handoff', text: 'Generate a resource request', disabled: false },
-          { key: 'choose', text: 'Choose from existing', disabled: false },
+          { key: 'create', text: formatMessage('Create a new LUIS resource') },
+          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'choose', text: formatMessage('Choose from existing'), disabled: false },
         ]);
       }
     }
@@ -221,11 +210,10 @@ export const ManageLuis = (props: ManageLuisProps) => {
       const tokenCredentials = new TokenCredentials(token);
       const resourceClient = new ResourceManagementClient(tokenCredentials, subscriptionId);
       const groups = await resourceClient.resourceGroups.list();
-      console.log('loaded resource groups', groups);
 
       setResourceGroups([
         {
-          id: 'CREATE_NEW',
+          id: CREATE_NEW_KEY,
           data: { icon: 'Add' },
           name: formatMessage('Create new'),
         },
@@ -235,26 +223,21 @@ export const ManageLuis = (props: ManageLuisProps) => {
   };
 
   const createLUIS = async () => {
+    let endpointKey = '';
+    let authoringKey = '';
     if (token) {
-      console.log(
-        'create a luis key in',
-        resourceGroupKey === 'CREATE_NEW' ? newResourceGroupName : resourceGroup,
-        localRootLuisRegion,
-        luisResourceName
-      );
-
       setLoadingLUIS(true);
       const tokenCredentials = new TokenCredentials(token);
 
-      const resourceGroupName = resourceGroupKey === 'CREATE_NEW' ? newResourceGroupName : resourceGroup;
-      if (resourceGroupKey === 'CREATE_NEW') {
+      const resourceGroupName = resourceGroupKey === CREATE_NEW_KEY ? newResourceGroupName : resourceGroup;
+      if (resourceGroupKey === CREATE_NEW_KEY) {
         try {
           const resourceClient = new ResourceManagementClient(tokenCredentials, subscriptionId);
           await resourceClient.resourceGroups.createOrUpdate(resourceGroupName, {
             location: localRootLuisRegion,
           });
         } catch (err) {
-          console.error(err);
+          setApplicationLevelError(err);
           setLoadingLUIS(false);
           return;
         }
@@ -281,10 +264,11 @@ export const ManageLuis = (props: ManageLuisProps) => {
         if (!keys?.key1) {
           throw new Error('No key found for newly created authoring resource');
         } else {
+          authoringKey = keys.key1;
           setLocalRootLuisKey(keys.key1);
         }
       } catch (err) {
-        console.error(err);
+        setApplicationLevelError(err);
         setLoadingLUIS(false);
         return;
       }
@@ -301,7 +285,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
           }
         );
 
-        // TODO: Error handle
         const keys = await cognitiveServicesManagementClient.accounts.listKeys(
           resourceGroupName,
           `${luisResourceName}`
@@ -309,10 +292,11 @@ export const ManageLuis = (props: ManageLuisProps) => {
         if (!keys?.key1) {
           throw new Error('No key found for newly created authoring resource');
         } else {
+          endpointKey = keys.key1;
           setLocalRootLuisEndpointKey(keys.key1);
         }
       } catch (err) {
-        console.error(err);
+        setApplicationLevelError(err);
         setLoadingLUIS(false);
         return;
       }
@@ -321,14 +305,18 @@ export const ManageLuis = (props: ManageLuisProps) => {
 
       // ALL DONE!
       // this will pass the new values back to the caller
-      closeDialog();
+      props.onGetKey({
+        authoringKey: authoringKey,
+        endpointKey: endpointKey,
+        authoringRegion: localRootLuisRegion,
+      });
+      props.onDismiss();
     }
   };
 
   // allow a user to provide a subscription id if one is missing
   const onChangeSubscription = async (_, opt) => {
     // get list of luis keys for this subscription
-    console.log('use the subscription', opt.key);
     setSubscription(opt.key);
     fetchLUIS(opt.key);
     fetchResourceGroups(opt.key);
@@ -351,7 +339,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const onChangeResourceGroup = async (_, opt) => {
     setResourceGroupKey(opt.key);
     setResourceGroup(opt.text);
-    if (opt.key === 'CREATE_NEW') {
+    if (opt.key === CREATE_NEW_KEY) {
       setCreateResourceGroup(true);
     } else {
       setCreateResourceGroup(false);
@@ -442,7 +430,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
                       label={formatMessage('Authoring key')}
                       options={
                         authoringKeys.map((p) => {
-                          return { key: p.key, text: p.name, ...p };
+                          return { text: p.name, ...p };
                         }) ?? []
                       }
                       placeholder={formatMessage('Select one')}
@@ -454,7 +442,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
                       label={formatMessage('Prediction key')}
                       options={
                         predictionKeys.map((p) => {
-                          return { key: p.key, text: p.name, ...p };
+                          return { text: p.name, ...p };
                         }) ?? []
                       }
                       placeholder={formatMessage('Select one')}
@@ -525,7 +513,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
                 value={luisResourceName}
                 onChange={(e, val) => setLuisResourceName(val || '')}
               />
-              {loadingLUIS && <LoadingSpinner message="Creating resources..." />}
+              {loadingLUIS && <LoadingSpinner message={formatMessage('Creating resources...')} />}
             </div>
           )}
         </div>
@@ -537,7 +525,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
                 !luisResourceName ||
                 !localRootLuisRegion ||
                 !resourceGroupKey ||
-                (resourceGroupKey == 'CREATE_NEW' && !newResourceGroupName)
+                (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
               }
               text={formatMessage('Next')}
               onClick={createLUIS}

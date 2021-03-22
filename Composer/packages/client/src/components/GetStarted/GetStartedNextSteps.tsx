@@ -3,10 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
@@ -19,7 +18,7 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
 
 import { GetStartedTask } from './GetStartedTask';
-import { h3Style, ulStyle, liStyle } from './styles';
+import { h3Style } from './styles';
 
 type GetStartedProps = {
   requiresLUIS: boolean;

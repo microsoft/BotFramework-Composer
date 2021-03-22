@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment } from 'react';
+import React from 'react';
 import formatMessage from 'format-message';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
@@ -48,23 +48,21 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   );
 
   return (
-    <Fragment>
-      <Panel
-        isBlocking={false}
-        isOpen={props.isOpen}
-        styles={{
-          root: {
-            marginTop: '50px',
-          },
-          navigation: {
-            display: 'block',
-            height: 'auto',
-          },
-        }}
-        onDismiss={props.onDismiss}
-        onRenderHeader={renderTabs}
-        onRenderNavigationContent={onRenderNavigationContent}
-      />
-    </Fragment>
+    <Panel
+      isBlocking={false}
+      isOpen={props.isOpen}
+      styles={{
+        root: {
+          marginTop: '50px',
+        },
+        navigation: {
+          display: 'block',
+          height: 'auto',
+        },
+      }}
+      onDismiss={props.onDismiss}
+      onRenderHeader={renderTabs}
+      onRenderNavigationContent={onRenderNavigationContent}
+    />
   );
 };

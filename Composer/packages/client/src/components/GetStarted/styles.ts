@@ -4,7 +4,6 @@ import { FontSizes } from '@uifabric/fluent-theme';
 
 export const h3Style = {
   fontSize: FontSizes.size14,
-  fontWeight: 'normal',
   marginTop: 0,
 };
 
