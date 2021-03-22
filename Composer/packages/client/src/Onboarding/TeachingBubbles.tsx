@@ -1,17 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { useRecoilValue } from 'recoil';
+import { FluentTheme } from '@uifabric/fluent-theme';
+import { ITeachingBubbleStyles } from 'office-ui-fabric-react/lib/TeachingBubble';
 
-import { onboardingState } from '../../recoilModel';
-import OnboardingContext from '../OnboardingContext';
-import { getTeachingBubble } from '../onboardingUtils';
+import { onboardingState } from '../recoilModel';
 
-import { teachingBubbleStyles, teachingBubbleTheme } from './styles';
+import { useOnboardingContext } from './OnboardingContext';
+import { getTeachingBubble } from './content';
+
+export const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
+  bodyContent: {
+    selectors: {
+      a: {
+        color: FluentTheme.palette.white,
+      },
+    },
+  },
+};
 
 function getPrimaryButtonText(currentStep, setLength) {
   if (setLength > 1) {
@@ -30,9 +41,9 @@ const TeachingBubbles = () => {
   const {
     actions: { nextStep, previousStep },
     state: { currentSet, currentStep, teachingBubble },
-  } = useContext(OnboardingContext);
+  } = useOnboardingContext();
 
-  const [, forceRender] = useState();
+  const [, forceRender] = useState<object>();
   const rerender = useRef(debounce(() => forceRender({}), 200)).current;
 
   useEffect(() => {
@@ -78,8 +89,13 @@ const TeachingBubbles = () => {
     <TeachingBubble
       styles={teachingBubbleStyles}
       target={target}
-      theme={teachingBubbleTheme}
       {...teachingBubbleProps}
+      calloutProps={{
+        preventDismissOnLostFocus: true,
+        preventDismissOnResize: true,
+        preventDismissOnScroll: true,
+        ...teachingBubbleProps.calloutProps,
+      }}
     />
   );
 };
