@@ -8,6 +8,9 @@ import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 import { offsetRange } from '@bfc/indexers';
 import { FoldingRange } from 'vscode-languageserver';
+import { LGResource, Templates } from 'botbuilder-lg';
+import { Expression } from 'adaptive-expressions';
+import uniq from 'lodash/uniq';
 
 const { parseFile } = parser;
 
@@ -244,4 +247,79 @@ export function createFoldingRanges(lines: string[], prefix: string) {
   }
 
   return items;
+}
+
+function findExpr(pst: any, result: string[]): void {
+  const exprRegex = /\$\{.*\}/;
+  if (pst.childCount === 0) {
+    if (exprRegex.test(pst.text)) {
+      result.push(pst.text.substr(2, pst.text.length - 3));
+    }
+  } else {
+    const count = pst.childCount;
+    for (let i = 0; i < count; i++) {
+      const child = pst.getChild(i);
+      findExpr(child, result);
+    }
+  }
+}
+
+function findAllExprs(contents: string | string[]): string[] {
+  const result = [];
+  if (typeof contents === 'string') {
+    try {
+      const templates = Templates.parseResource(new LGResource('id', 'name', contents));
+      templates.allTemplates.forEach((t) => {
+        const parseTree = t.templateBodyParseTree;
+        findExpr(parseTree, result);
+      });
+    } catch (e) {
+      // do nothing
+    }
+  } else {
+    for (const lg of contents) {
+      try {
+        const templates = Templates.parseResource(new LGResource('id', 'name', lg));
+        templates.allTemplates.forEach((t) => {
+          const parseTree = t.templateBodyParseTree;
+          findExpr(parseTree, result);
+        });
+      } catch (e) {
+        // do nothing
+      }
+    }
+  }
+
+  return uniq(result);
+}
+
+function findVariables(expr: Expression, result: string[]) {
+  if (expr.type === 'Accessor') {
+    result.push(expr.toString());
+  } else {
+    if (expr.children.length >= 1) {
+      for (const child of expr.children) {
+        if (child.type === 'Accessor') {
+          result.push(child.toString());
+        } else {
+          findVariables(child, result);
+        }
+      }
+    }
+  }
+}
+
+export function findAllVariables(contents: string | string[]) {
+  const exprs = findAllExprs(contents);
+  const result = [];
+  for (const expr of exprs) {
+    try {
+      const exp = Expression.parse(expr);
+      findVariables(exp, result);
+    } catch (e) {
+      // do nothing
+    }
+  }
+
+  return uniq(result);
 }

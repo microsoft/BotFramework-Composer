@@ -163,14 +163,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
     [defaultLangFile, actualProjectId]
   );
 
-  const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
+  const getTemplatesMoreButtons = (item, index, luFileId): IContextualMenuItem[] => {
     const buttons = [
       {
         key: 'edit',
         name: formatMessage('Edit'),
         onClick: () => {
           const { name, dialogId } = intents[index];
-          navigateTo(`${baseURL}language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
+          navigateTo(
+            `${baseURL}language-understanding/${dialogId}${
+              luFileId ? `/item/${luFileId}/` : '/'
+            }edit?t=${encodeURIComponent(name)}`
+          );
         },
       },
     ];
@@ -379,7 +383,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 menuIconProps={{ iconName: 'MoreVertical' }}
                 menuProps={{
                   shouldFocusOnMount: true,
-                  items: getTemplatesMoreButtons(item, index),
+                  items: getTemplatesMoreButtons(item, index, luFileId),
                 }}
                 styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
               />

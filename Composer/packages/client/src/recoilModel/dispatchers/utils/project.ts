@@ -787,8 +787,6 @@ export const postRootBotCreation = async (
   source,
   projectIdCache
 ) => {
-  callbackHelpers.set(botProjectIdsState, (current) => [...current, projectId]);
-
   if (settingStorage.get(projectId)) {
     settingStorage.remove(projectId);
   }
@@ -802,6 +800,9 @@ export const postRootBotCreation = async (
     callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
     callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
   }
+
+  callbackHelpers.set(botProjectIdsState, [projectId]);
+
   if (profile) {
     // ABS Create Flow, update publishProfile after create project
     const dispatcher = await callbackHelpers.snapshot.getPromise(dispatcherState);
