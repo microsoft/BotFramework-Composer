@@ -390,9 +390,18 @@ export const getResourceList = async (projectId: string, type: string): Promise<
 };
 
 /**
+ * A resource item that could be chosen by the user for provisioning.
+ */
+export type PreviewResourcesItem = {
+  name: string;
+  icon: string;
+  key: string;
+};
+
+/**
  * Get preview and description of resources
  */
-export const getPreview = (hostname: string) => {
+export const getPreview = (hostname: string): PreviewResourcesItem[] => {
   const azureWebAppName = `${hostname}`;
   const azureServicePlanName = `${hostname}`;
   const botServiceName = `${hostname}`;
