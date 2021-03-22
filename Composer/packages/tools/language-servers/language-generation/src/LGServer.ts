@@ -22,6 +22,8 @@ import {
   Location,
 } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
+import uniq from 'lodash/uniq';
+import merge from 'lodash/merge';
 import isEqual from 'lodash/isEqual';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
@@ -58,6 +60,9 @@ export class LGServer {
   private _lastLuContent: string[] = [];
   private _lgFile: LgFile | undefined = undefined;
   private _templateDefinitions: Record<string, any> = {};
+  private _curDefinedVariblesInLG: Record<string, any> = {};
+  private _otherDefinedVariblesInLG: Record<string, any> = {};
+  private _mergedVariables: Record<string, any> = {};
   constructor(
     protected readonly connection: IConnection,
     protected readonly getLgResources: (projectId?: string) => ResolverResource[],
@@ -65,7 +70,10 @@ export class LGServer {
     protected readonly entitiesResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
-    this.documents.onDidChangeContent((change) => this.validate(change.document));
+    this.documents.onDidChangeContent((change) => {
+      this.validate(change.document);
+      this.updateLGVariables(change.document);
+    });
     this.documents.onDidClose((event) => {
       this.cleanPendingValidation(event.document);
       this.cleanDiagnostics(event.document);
@@ -113,6 +121,8 @@ export class LGServer {
           this.recordTemplatesDefintions(textDocument, lgOption);
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
+          this.getOtherLGVariables(lgOption);
+          this.updateMemoryVariables(textDocument);
         }
 
         // update luis entities once user open LG editor
@@ -208,8 +218,8 @@ export class LGServer {
     return items;
   }
 
-  protected updateObject(propertyList: string[]): void {
-    let tempVariable: Record<string, any> = this.memoryVariables;
+  protected updateObject(propertyList: string[], varaibles: Record<string, any>): void {
+    let tempVariable: Record<string, any> = varaibles;
     const antPattern = /\*+/;
     const normalizedAnyPattern = '***';
     for (let property of propertyList) {
@@ -225,12 +235,11 @@ export class LGServer {
     }
   }
 
-  protected updateMemoryVariables(uri: string): void {
+  protected updateMemoryVariables(document: TextDocument): void {
     if (!this.memoryResolver) {
       return;
     }
 
-    const document = this.documents.get(uri);
     if (!document) return;
     const projectId = this.getLGDocument(document)?.projectId;
     if (!projectId) return;
@@ -242,7 +251,7 @@ export class LGServer {
     memoryFileInfo.forEach((variable) => {
       const propertyList = variable.split('.');
       if (propertyList.length >= 1) {
-        this.updateObject(propertyList);
+        this.updateObject(propertyList, this.memoryVariables);
       }
     });
   }
@@ -618,15 +627,16 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
-
-    this.updateMemoryVariables(params.textDocument.uri);
-    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map((e) => {
-      return {
-        label: e.toString(),
-        kind: CompletionItemKind.Property,
-        insertText: e.toString(),
-        documentation: '',
-      };
+    const memoryVariblesRootCompletionList: CompletionItem[] = [];
+    Object.keys(this._mergedVariables).forEach((e) => {
+      if (e.length > 1) {
+        memoryVariblesRootCompletionList.push({
+          label: e.toString(),
+          kind: CompletionItemKind.Property,
+          insertText: e.toString(),
+          documentation: '',
+        });
+      }
     });
 
     if (!wordAtCurRange || !endWithDot) {
@@ -636,7 +646,7 @@ export class LGServer {
     let propertyList = wordAtCurRange.split('.');
     propertyList = propertyList.slice(0, propertyList.length - 1);
 
-    const completionList = this.matchingCompletionProperty(propertyList, this.memoryVariables);
+    const completionList = this.matchingCompletionProperty(propertyList, this._mergedVariables);
 
     return completionList;
   }
@@ -873,6 +883,46 @@ export class LGServer {
     }
 
     return true;
+  }
+
+  protected async getOtherLGVariables(lgOption: LGOption | undefined): Promise<void> {
+    const { fileId, projectId } = lgOption || {};
+    if (projectId && fileId) {
+      const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      const lgContents: string[] = [];
+      lgTextFiles.forEach((item) => {
+        if (item.id !== fileId) {
+          lgContents.push(item.content);
+        }
+      });
+
+      const variables = uniq((await this._lgParser.extractLGVariables(undefined, lgContents)).lgVariables);
+      this._otherDefinedVariblesInLG = {};
+      variables.forEach((variable) => {
+        const propertyList = variable.split('.');
+        if (propertyList.length >= 1) {
+          this.updateObject(propertyList, this._otherDefinedVariblesInLG);
+        }
+      });
+    }
+  }
+
+  protected async updateLGVariables(document: TextDocument) {
+    const variables = uniq((await this._lgParser.extractLGVariables(document.getText(), [])).lgVariables);
+    this._curDefinedVariblesInLG = {};
+    variables.forEach((variable) => {
+      const propertyList = variable.split('.');
+      if (propertyList.length >= 1) {
+        this.updateObject(propertyList, this._curDefinedVariblesInLG);
+      }
+    });
+
+    this._mergedVariables = merge(
+      {},
+      this.memoryVariables,
+      this._curDefinedVariblesInLG,
+      this._otherDefinedVariblesInLG
+    );
   }
 
   protected validate(document: TextDocument): void {
