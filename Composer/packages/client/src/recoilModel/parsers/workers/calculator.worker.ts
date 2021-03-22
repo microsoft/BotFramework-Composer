@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import isEqual from 'lodash/isEqual';
 import differenceWith from 'lodash/differenceWith';
-import get from 'lodash/get';
 
 import { FileAsset } from '../../persistence/types';
 
@@ -18,8 +17,13 @@ type MessageEvent = DifferenceMessage;
 
 const ctx: Worker = self as any;
 
+const getCompareFields = (value: FileAsset) => {
+  const { id, content } = value;
+  return { id, content };
+};
+
 const comparator = (value: FileAsset, other: FileAsset) => {
-  return isEqual(get(value, 'content'), get(other, 'content'));
+  return isEqual(getCompareFields(value), getCompareFields(other));
 };
 
 export function getDifferenceItems(target: FileAsset[], origin: FileAsset[]) {
