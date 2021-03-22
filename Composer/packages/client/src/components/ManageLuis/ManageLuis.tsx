@@ -18,6 +18,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ProvisionHandoff } from '@bfc/ui-shared';
 
 import { LoadingSpinner } from '../LoadingSpinner';
 import { AuthClient } from '../../utils/authClient';
@@ -46,6 +47,10 @@ const dropdownStyles = { dropdown: { width: '100%' } };
 
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
+const handoffInstructions = formatMessage(
+  'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
+);
+
 export const ManageLuis = (props: ManageLuisProps) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
@@ -66,6 +71,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [resourceGroupKey, setResourceGroupKey] = useState<string>('');
   const [resourceGroup, setResourceGroup] = useState<string>('');
 
+  const [showHandoff, setShowHandoff] = useState<boolean>(false);
   const [luisResourceName, setLuisResourceName] = useState<string>('');
   const [loadingLUIS, setLoadingLUIS] = useState<boolean>(false);
   const [showCreateKeyUI, setShowCreateKeyUI] = useState<boolean>(false);
@@ -350,6 +356,9 @@ export const ManageLuis = (props: ManageLuisProps) => {
     if (nextAction === 'choose') {
       // close the modal!
       closeDialog();
+    } else if (nextAction === 'handoff') {
+      setShowHandoff(true);
+      props.onDismiss();
     } else {
       setShowCreateKeyUI(true);
     }
@@ -378,6 +387,13 @@ export const ManageLuis = (props: ManageLuisProps) => {
           }}
         />
       )}
+      <ProvisionHandoff
+        developerInstructions={formatMessage('Send this to your IT admin')}
+        handoffInstructions={handoffInstructions}
+        hidden={!showHandoff}
+        title={formatMessage('Generate a provisioning request')}
+        onDismiss={() => setShowHandoff(false)}
+      />
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
