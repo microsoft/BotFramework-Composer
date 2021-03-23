@@ -120,7 +120,6 @@ type Props = {
   options?: ProjectTreeOptions;
   headerAriaLabel?: string;
   headerPlaceholder?: string;
-  rootDialogRef?: React.LegacyRef<HTMLDivElement>;
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
@@ -154,7 +153,6 @@ export const ProjectTree: React.FC<Props> = ({
   },
   headerAriaLabel = '',
   headerPlaceholder = '',
-  rootDialogRef,
 }) => {
   const {
     onboardingAddCoachMarkRef,
@@ -219,13 +217,7 @@ export const ProjectTree: React.FC<Props> = ({
     onSelect?.(link);
   };
 
-  const renderDialogHeader = (
-    skillId: string,
-    dialog: DialogInfo,
-    depth: number,
-    isPvaSchema: boolean,
-    isRootBot: boolean
-  ) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -295,7 +287,6 @@ export const ProjectTree: React.FC<Props> = ({
           role="grid"
         >
           <TreeItem
-            ref={isRootBot && dialog.isRoot ? rootDialogRef : undefined}
             hasChildren
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
@@ -608,7 +599,7 @@ export const ProjectTree: React.FC<Props> = ({
       ...importedLgLinks,
       ...importedLuLinks,
       ...filteredDialogs.map((dialog: DialogInfo) => {
-        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema, bot.isRootBot);
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
         const key = 'dialog-' + dialog.id;
 
         let lgImports, luImports;
@@ -663,7 +654,7 @@ export const ProjectTree: React.FC<Props> = ({
             </ExpandableNode>
           );
         } else {
-          return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema, bot.isRootBot).summaryElement;
+          return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
         }
       }),
     ];
