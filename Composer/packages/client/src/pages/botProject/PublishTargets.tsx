@@ -17,7 +17,7 @@ import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes } from './styles';
+import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes, addNewButton } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -31,16 +31,6 @@ const publishTargetsHeader = css`
   flex-direction: row;
   height: 42px;
 `;
-
-const addPublishProfile = {
-  root: {
-    fontSize: 12,
-    fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
-    paddingLeft: 0,
-    marginLeft: 5,
-  },
-};
 
 const editPublishProfile = {
   root: {
@@ -121,7 +111,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           })}
           <ActionButton
             data-testid={'addNewPublishProfile'}
-            styles={addPublishProfile}
+            styles={addNewButton}
             onClick={() => {
               if (isShowAuthDialog(true)) {
                 setShowAuthDialog(true);

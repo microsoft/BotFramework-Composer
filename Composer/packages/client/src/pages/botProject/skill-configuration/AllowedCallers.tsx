@@ -1,0 +1,188 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
+import React from 'react';
+import styled from '@emotion/styled';
+import { useRecoilValue } from 'recoil';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/components/Button';
+import { FluentTheme } from '@uifabric/fluent-theme';
+import { Stack } from 'office-ui-fabric-react/lib/components/Stack';
+import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
+import cloneDeep from 'lodash/cloneDeep';
+import formatMessage from 'format-message';
+
+import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../../recoilModel';
+import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
+import { addNewButton, tableColumnHeader } from '../styles';
+
+export const toggle = css`
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+`;
+
+const Input = styled(TextField)({
+  width: '100%',
+  position: 'relative',
+  '& input, & textarea': {
+    fontSize: FluentTheme.fonts.small.fontSize,
+    maxHeight: '97px',
+  },
+  '& .ms-TextField-fieldGroup:focus::after': {
+    content: '""',
+    position: 'absolute',
+    left: -1,
+    top: -1,
+    right: -1,
+    bottom: -1,
+    pointerEvents: 'none',
+    borderRadius: 2,
+    border: `2px solid ${FluentTheme.palette.themePrimary}`,
+    zIndex: 1,
+  },
+});
+
+const RemoveButton = styled(IconButton)(({ hidden }) => ({
+  visibility: hidden ? 'hidden' : 'visible',
+}));
+
+const textFieldStyles = {
+  fieldGroup: {
+    borderColor: 'transparent',
+    transition: 'border-color 0.1s linear',
+    selectors: {
+      ':hover': {
+        borderColor: FluentTheme.palette.neutralLight,
+      },
+    },
+  },
+};
+
+const ItemContainer = styled.div({
+  borderTop: `1px solid ${FluentTheme.palette.neutralLight}`,
+  marginTop: '4px',
+});
+
+const Row = styled(Stack)({
+  borderBottom: `1px solid ${FluentTheme.palette.neutralLight}`,
+  padding: '8px 0 8px 4px',
+});
+
+type ItemProps = {
+  value: string;
+  onBlur: () => void;
+  onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string) => void;
+  onRemove: () => void;
+};
+
+const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
+  const [removeHidden, setRemoveHidden] = React.useState(true);
+  const itemRef = React.useRef<ITextField | null>(null);
+  const didMount = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    if (!value && !didMount.current) {
+      itemRef.current?.focus();
+    }
+    didMount.current = true;
+  }, []);
+
+  const onShowRemoveButton = React.useCallback(() => {
+    setRemoveHidden(false);
+  }, []);
+
+  const onHideRemoveButton = React.useCallback(() => {
+    setRemoveHidden(true);
+  }, []);
+
+  return (
+    <Row
+      horizontal
+      onBlur={onHideRemoveButton}
+      onFocus={onShowRemoveButton}
+      onMouseEnter={onShowRemoveButton}
+      onMouseLeave={onHideRemoveButton}
+    >
+      <Input
+        componentRef={(ref) => (itemRef.current = ref)}
+        styles={textFieldStyles}
+        value={value}
+        onBlur={onBlur}
+        onChange={onChange}
+      />
+      <RemoveButton
+        aria-label={formatMessage('Remove item')}
+        hidden={removeHidden}
+        iconProps={{ iconName: 'Trash' }}
+        onClick={onRemove}
+      />
+    </Row>
+  );
+});
+
+type Props = {
+  projectId: string;
+};
+
+export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
+  const { setSettings } = useRecoilValue(dispatcherState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
+  const settings = useRecoilValue(settingsState(projectId));
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
+  const { skillConfiguration } = mergedSettings;
+
+  const setAllowedCallers = React.useCallback(
+    (allowedCallers: string[] = []) => {
+      const updatedSetting = {
+        ...cloneDeep(mergedSettings),
+        skillConfiguration: { ...skillConfiguration, allowedCallers },
+      };
+      setSettings(projectId, updatedSetting);
+    },
+    [mergedSettings, projectId, skillConfiguration]
+  );
+
+  const onBlur = React.useCallback(() => {
+    const updatedAllowedCallers = [...skillConfiguration?.allowedCallers];
+    setAllowedCallers(updatedAllowedCallers.filter(Boolean));
+  }, [skillConfiguration?.allowedCallers, setAllowedCallers]);
+
+  const onChange = React.useCallback(
+    (index: number) => (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
+      const updatedAllowedCallers = [...skillConfiguration?.allowedCallers];
+      updatedAllowedCallers[index] = newValue;
+      setAllowedCallers(updatedAllowedCallers);
+    },
+    [skillConfiguration?.allowedCallers, setAllowedCallers]
+  );
+
+  const onRemove = React.useCallback(
+    (index: number) => () => {
+      const updatedAllowedCallers = skillConfiguration?.allowedCallers?.filter((_, itemIndex) => itemIndex !== index);
+      setAllowedCallers(updatedAllowedCallers);
+    },
+    [skillConfiguration?.allowedCallers, setAllowedCallers]
+  );
+
+  const onAddNewAllowedCaller = React.useCallback(() => {
+    setAllowedCallers([...skillConfiguration?.allowedCallers, '']);
+  }, [skillConfiguration?.allowedCallers, setAllowedCallers]);
+
+  return (
+    <React.Fragment>
+      <div css={tableColumnHeader()}>{formatMessage('Allowed callers')} </div>
+      <ItemContainer>
+        {skillConfiguration?.allowedCallers?.map((caller, index) => {
+          return (
+            <Item key={index} value={caller} onBlur={onBlur} onChange={onChange(index)} onRemove={onRemove(index)} />
+          );
+        })}
+      </ItemContainer>
+      <ActionButton data-testid={'addNewAllowedCaller'} styles={addNewButton} onClick={onAddNewAllowedCaller}>
+        {formatMessage('Add new')}
+      </ActionButton>
+    </React.Fragment>
+  );
+};
