@@ -190,7 +190,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
       return (
         <CreateBotV2
-          isOpen={true}
+          isOpen
           fetchReadMe={fetchReadMe}
           fetchTemplates={fetchTemplatesV2}
           templates={templateProjects}
@@ -199,9 +199,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         />
       );
     } else {
-      return (
-        <CreateBot isOpen={true} templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
-      );
+      return <CreateBot isOpen templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />;
     }
   };
 

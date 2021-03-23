@@ -38,8 +38,8 @@ describe('<CreateOptions/>', () => {
         path="create"
         templates={templates}
         onDismiss={handleDismissMock}
-        onNext={handleCreateNextMock}
         onJumpToOpenModal={handleJumpToOpenModal}
+        onNext={handleCreateNextMock}
       />
     );
   };
