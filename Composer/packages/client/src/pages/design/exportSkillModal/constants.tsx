@@ -20,6 +20,7 @@ import {
   SelectManifest,
   SelectTriggers,
 } from './content';
+import { SelectProfile } from './content/SelectProfile';
 
 export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
 
@@ -127,7 +128,7 @@ interface EditorStep {
 }
 
 export enum ManifestEditorSteps {
-  ENDPOINTS = 'ENDPOINTS',
+  // ENDPOINTS = 'ENDPOINTS',
   FETCH_MANIFEST_SCHEMA = 'FETCH_MANIFEST_SCHEMA',
   MANIFEST_DESCRIPTION = 'MANIFEST_DESCRIPTION',
   MANIFEST_REVIEW = 'MANIFEST_REVIEW',
@@ -135,13 +136,15 @@ export enum ManifestEditorSteps {
   SELECT_MANIFEST = 'SELECT_MANIFEST',
   SELECT_DIALOGS = 'SELECT_DIALOGS',
   SELECT_TRIGGERS = 'SELECT_TRIGGERS',
+  SELECT_PROFILE = 'SELECT_PROFILE',
 }
 
 export const order: ManifestEditorSteps[] = [
   ManifestEditorSteps.SELECT_MANIFEST,
   ManifestEditorSteps.FETCH_MANIFEST_SCHEMA,
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
-  ManifestEditorSteps.ENDPOINTS,
+  // ManifestEditorSteps.ENDPOINTS,
+  ManifestEditorSteps.SELECT_PROFILE,
   ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
   ManifestEditorSteps.MANIFEST_REVIEW,
@@ -207,27 +210,42 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     subText: () => formatMessage('To make your bot available for others as a skill, we need to generate a manifest.'),
     validate,
   },
-  [ManifestEditorSteps.ENDPOINTS]: {
-    buttons: [cancelButton, nextButton],
-    content: Endpoints,
-    editJson: true,
+  // [ManifestEditorSteps.ENDPOINTS]: {
+  //   buttons: [cancelButton, nextButton],
+  //   content: Endpoints,
+  //   editJson: true,
+  //   subText: () =>
+  //     formatMessage('We need to define the endpoints for the skill to allow other bots to interact with it.'),
+  //   title: () => formatMessage('Skill endpoints'),
+  //   validate: ({ content, schema }) => {
+  //     const { items, minItems } = schema.properties?.endpoints;
+
+  //     if (!content.endpoints || content.endpoints.length < minItems) {
+  //       return { endpoints: formatMessage('Please add at least {minItems} endpoint', { minItems }) };
+  //     }
+
+  //     const endpointSchema = resolveRef(items, schema.definitions);
+  //     const endpoints = (content.endpoints || []).map((endpoint) =>
+  //       validate({ content: endpoint, schema: endpointSchema })
+  //     );
+
+  //     return endpoints.some((endpoint) => Object.keys(endpoint).length) ? { endpoints } : {};
+  //   },
+  // },
+  [ManifestEditorSteps.SELECT_PROFILE]: {
+    buttons: [
+      cancelButton,
+      {
+        primary: true,
+        text: () => formatMessage('Next'),
+        onClick: ({ onNext }) => onNext,
+      },
+    ],
+    editJson: false,
+    content: SelectProfile,
     subText: () =>
       formatMessage('We need to define the endpoints for the skill to allow other bots to interact with it.'),
-    title: () => formatMessage('Skill endpoints'),
-    validate: ({ content, schema }) => {
-      const { items, minItems } = schema.properties?.endpoints;
-
-      if (!content.endpoints || content.endpoints.length < minItems) {
-        return { endpoints: formatMessage('Please add at least {minItems} endpoint', { minItems }) };
-      }
-
-      const endpointSchema = resolveRef(items, schema.definitions);
-      const endpoints = (content.endpoints || []).map((endpoint) =>
-        validate({ content: endpoint, schema: endpointSchema })
-      );
-
-      return endpoints.some((endpoint) => Object.keys(endpoint).length) ? { endpoints } : {};
-    },
+    title: () => formatMessage('Confirm skill endpoints'),
   },
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
