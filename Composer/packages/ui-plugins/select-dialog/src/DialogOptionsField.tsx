@@ -71,9 +71,7 @@ const DialogOptionsField: React.FC<FieldProps> = ({
   const [selectedKey, setSelectedKey] = React.useState<string>(getInitialSelectedKey(options, schema));
 
   React.useLayoutEffect(() => {
-    if (selectedKey === 'form') {
-      setSelectedKey(getInitialSelectedKey(options, schema));
-    }
+    setSelectedKey(getInitialSelectedKey(options, schema));
   }, [dialog]);
 
   const change = React.useCallback(
@@ -113,15 +111,12 @@ const DialogOptionsField: React.FC<FieldProps> = ({
     ];
   }, [schema]);
 
-  const Field = React.useMemo(() => {
-    if (selectedKey === 'form') {
-      return SchemaField;
-    } else if (selectedKey === 'code') {
-      return JsonField;
-    } else {
-      return IntellisenseTextFieldWithIcon;
-    }
-  }, [selectedKey]);
+  let Field = IntellisenseTextFieldWithIcon;
+  if (selectedKey === 'form') {
+    Field = SchemaField;
+  } else if (selectedKey === 'code') {
+    Field = JsonField;
+  }
 
   return (
     <React.Fragment>
