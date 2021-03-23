@@ -163,6 +163,12 @@ export const defaultFilePath = (
     });
   }
 
+  if (fileType === FileExtensions.BotProject) {
+    return templateInterpolate(BotStructureTemplate.botProject, {
+      BOTNAME: rootDialogId,
+    });
+  }
+
   if (fileType === FileExtensions.FormDialogSchema) {
     return templateInterpolate(BotStructureTemplate.formDialogs, {
       FORMDIALOGNAME: filename,
