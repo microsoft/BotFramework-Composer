@@ -365,15 +365,6 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     recognizers,
     crossTrainConfig,
   } = botFiles;
-
-  // TODO: not sure if this is the best place for this.
-  // probably better to do this from where initBotState is called
-  console.log('SETTINGS', settings);
-  if (!isAdaptiveRuntime(settings)) {
-    confirm('Your project must be updated to open it using this version of Composer');
-    navigateTo(`/v2/projects/migrate/${projectId}`);
-  }
-
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   languageStorage.setLocale(botName, locale);
@@ -499,6 +490,7 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   if (error) {
     throw error;
   }
+
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   set(projectMetaDataState(projectData.id), {
     isRootBot: false,
@@ -548,7 +540,6 @@ export const createNewBotFromTemplate = async (
   }
   const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
   set(botProjectFileState(projectId), currentBotProjectFileIndexed);
-
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   // if create from QnATemplate, continue creation flow.
   if (templateId === QnABotTemplateId) {
@@ -720,6 +711,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
   return {
     mainDialog,
     projectId: rootBotProjectId,
+    requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings),
   };
 };
 
@@ -775,6 +767,7 @@ export const openRootBotAndSkillsByProjectId = async (callbackHelpers: CallbackI
   if (data.error) {
     throw data.error;
   }
+
   return await openRootBotAndSkills(callbackHelpers, data);
 };
 
