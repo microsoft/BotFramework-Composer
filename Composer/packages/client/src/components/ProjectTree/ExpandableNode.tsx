@@ -67,7 +67,7 @@ export const ExpandableNode = ({
       <summary
         css={summaryStyle(depth, isActive, isExpanded)}
         data-testid={'summaryTag'}
-        role="button"
+        role="treeitem"
         tabIndex={0}
         onClick={handleClick}
         onKeyUp={handleKey}

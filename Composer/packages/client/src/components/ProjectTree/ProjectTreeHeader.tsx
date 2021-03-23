@@ -106,6 +106,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
       ) : (
         <div css={commands}>
           <CommandButton
+            ariaLabel={formatMessage('Filter')}
             css={buttonStyle}
             iconProps={{ iconName: 'Filter' }}
             onClick={() => {

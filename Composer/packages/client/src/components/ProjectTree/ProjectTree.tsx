@@ -120,6 +120,7 @@ type Props = {
   options?: ProjectTreeOptions;
   headerAriaLabel?: string;
   headerPlaceholder?: string;
+  rootDialogRef?: React.LegacyRef<HTMLDivElement>;
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
@@ -153,6 +154,7 @@ export const ProjectTree: React.FC<Props> = ({
   },
   headerAriaLabel = '',
   headerPlaceholder = '',
+  rootDialogRef,
 }) => {
   const {
     onboardingAddCoachMarkRef,
@@ -217,7 +219,13 @@ export const ProjectTree: React.FC<Props> = ({
     onSelect?.(link);
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number, isPvaSchema: boolean) => {
+  const renderDialogHeader = (
+    skillId: string,
+    dialog: DialogInfo,
+    depth: number,
+    isPvaSchema: boolean,
+    isRootBot: boolean
+  ) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -287,6 +295,7 @@ export const ProjectTree: React.FC<Props> = ({
           role="grid"
         >
           <TreeItem
+            ref={isRootBot && dialog.isRoot ? rootDialogRef : undefined}
             hasChildren
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
@@ -476,7 +485,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
+        <div role="group">{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
       </ExpandableNode>
     );
   };
@@ -599,7 +608,7 @@ export const ProjectTree: React.FC<Props> = ({
       ...importedLgLinks,
       ...importedLuLinks,
       ...filteredDialogs.map((dialog: DialogInfo) => {
-        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema);
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0, bot.isPvaSchema, bot.isRootBot);
         const key = 'dialog-' + dialog.id;
 
         let lgImports, luImports;
@@ -622,7 +631,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
+              <div role="group">{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
             </ExpandableNode>
           );
         } else if (options.showLgImports && lgImports.length > 0 && dialog.isFormDialog) {
@@ -636,7 +645,7 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{lgImports}</div>
+              <div role="group">{lgImports}</div>
             </ExpandableNode>
           );
         } else if (options.showLuImports && luImports.length > 0 && dialog.isFormDialog) {
@@ -650,11 +659,11 @@ export const ProjectTree: React.FC<Props> = ({
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
             >
-              <div>{luImports}</div>
+              <div role="group">{luImports}</div>
             </ExpandableNode>
           );
         } else {
-          return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
+          return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema, bot.isRootBot).summaryElement;
         }
       }),
     ];
@@ -712,7 +721,7 @@ export const ProjectTree: React.FC<Props> = ({
           summary={projectHeader}
           onToggle={(newState) => setPageElement(key, newState)}
         >
-          <div>{createDetailsTree(bot, 1)}</div>
+          <div role="group">{createDetailsTree(bot, 1)}</div>
         </ExpandableNode>
       );
     } else if (options.showRemote) {
