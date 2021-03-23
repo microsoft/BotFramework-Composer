@@ -459,34 +459,84 @@ export class BotProjectService {
       // update project ref to point at newly created folder
       newProjRef.path = `${newProjRef.path}/${name}`;
 
-      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Migrating data'));
 
       const originalProject = await BotProjectService.getProjectById(oldProjectId, user);
-      const originalFiles = originalProject.getProject().files;
+      if (originalProject.settings) {
+        const originalFiles = originalProject.getProject().files;
 
-      // pass in allowPartialBots = true so that this project can be opened even though
-      // it doesn't yet have a root dialog...
-      const id = await BotProjectService.openProject(newProjRef, user, true);
-      const currentProject = await BotProjectService.getProjectById(id, user);
+        // pass in allowPartialBots = true so that this project can be opened even though
+        // it doesn't yet have a root dialog...
+        const id = await BotProjectService.openProject(newProjRef, user, true);
+        const currentProject = await BotProjectService.getProjectById(id, user);
 
-      // add all original files to new project
-      for (let f = 0; f < originalFiles.length; f++) {
-        // console.log(`migrate file ${originalFiles[f].name} with root being ${originalProject.rootDialogId} `);
-        if (!originalFiles[f].name.match(/\.botproj$/)) {
+        // add all original files to new project
+        for (let f = 0; f < originalFiles.length; f++) {
           await currentProject.migrateFile(
             originalFiles[f].name,
             originalFiles[f].content,
             originalProject.rootDialogId
           );
         }
-      }
 
-      const project = currentProject.getProject();
-      log('Project created successfully.');
-      BackgroundProcessManager.updateProcess(jobId, 200, 'Migrated successfully', {
-        id,
-        ...project,
-      });
+        const newSettings = {
+          ...currentProject.settings,
+          runtimeSettings: {
+            features: {
+              showTyping: originalProject.settings?.feature?.UseShowTypingMiddleware || false,
+              useInspection: originalProject.settings?.feature?.UseInspectionMiddleware || false,
+              removeRecipientMentions: originalProject.settings?.feature?.RemoveRecipientMention || false,
+              setSpeak: originalProject.settings?.feature?.useSetSpeakMiddleware || false,
+              blobTranscript: originalProject.settings?.blobStorage?.connectionString
+                ? originalProject.settings?.blobStorage
+                : {},
+            },
+            telemetry: {
+              instrumentationKey: originalProject.settings?.applicationInsights?.instrumentationKey,
+            },
+            skills: {
+              allowedCallers: originalProject.settings?.skillConfiguration?.allowedCallers,
+            },
+            storage: originalProject.settings?.cosmosDb?.authKey ? 'CosmosDbPartitionedStorage' : undefined,
+          },
+          CosmosDbPartitionedStorage: originalProject.settings?.cosmosDb?.authKey
+            ? originalProject.settings.cosmosDb
+            : undefined,
+          luis: { ...originalProject.settings.luis },
+          luFeatures: { ...originalProject.settings.luFeatures },
+          publishTargets: originalProject.settings.publishTargets,
+          qna: { ...originalProject.settings.qna },
+          downsampling: { ...originalProject.settings.downsampling },
+          skill: { ...originalProject.settings.skill },
+          speech: { ...originalProject.settings.speech },
+          defaultLanguage: originalProject.settings.defaultLanguage,
+          languages: originalProject.settings.languages,
+          customFunctions: originalProject.settings.customfunctions,
+          importedLibraries: [],
+          MicrosoftAppId: originalProject.settings.MicrosoftAppId,
+          runtime: {
+            customRuntime: true,
+            path: '../',
+            key: 'adaptive-runtime-dotnet-webapp',
+            command: `dotnet start ${name}.csproj`,
+          },
+        };
+
+        console.log('WRITE NEW SETTINGS', JSON.stringify(newSettings, null, 2));
+
+        // adjust settings from old format to new format
+        await currentProject.updateEnvSettings(newSettings);
+
+        const project = currentProject.getProject();
+
+        log('Project created successfully.');
+        BackgroundProcessManager.updateProcess(jobId, 200, 'Migrated successfully', {
+          id,
+          ...project,
+        });
+      } else {
+        BackgroundProcessManager.updateProcess(jobId, 500, 'Could not find source project to migrate.');
+      }
     } catch (err) {
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
       // TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
