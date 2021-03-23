@@ -120,7 +120,16 @@ Example:
 
 #### UI Customization Options
 
-##### Form
+UI Schema includes four parts:
+1. Form
+2. Menu
+3. Flow
+4. Trigger
+5. Recognizer
+
+For the full JSON Schema definition of them, please reference to the SDK repo: https://github.com/microsoft/botframework-sdk/blob/main/schemas/ui/v1.0/ui.schema.
+
+##### 1. Form
 
 | **Property** | **Description**                                                                        | **Type**            | **Default**          |
 | ------------ | -------------------------------------------------------------------------------------- | ------------------- | -------------------- |
@@ -134,7 +143,7 @@ Example:
 | subtitle     | Subtitle rendered in form title.                                                       | `string`            | `schema.$kind`       |
 | widget       | Override default field widget. See list of widgets below.                              | `enum`              |                      |
 
-###### Widgets
+###### Available Form Widgets
 
 - checkbox
 - date
@@ -144,3 +153,44 @@ Example:
 - radio
 - select
 - textarea
+
+##### 2. Menu
+
+Menu UI Schema describes how an Action $kind appears in the contextual menu.
+
+| Property | Description | Type | Default |
+|----------| ----------- | ---- | ------- |
+| label | Text that appears as the menu item. | `string` | Defaults to SDK title. |
+| submenu | An array of submenu labels to configure how this component is nested in the menu. Set to false to show this component as a top-level menu item. | `string` | |
+| disabled | Hide this Action from creation menu | `boolean` | `false` |
+
+##### 3. Flow
+Flow UI Schema describes how an Action $kind appears in the flow canvas.
+
+| Property | Description | Type | Default |
+|----------| ----------- | ---- | ------- |
+| widget | Name of the React widget that used to render this Action. | `string` | |
+| *...props* | Property of the `widget`. Used as React props. Expression is supproted. | `any` | |
+
+For more information of how to write customize an Action node, please refer to [this link](TBD).
+
+##### 4. Trigger
+
+Trigger UI Schema describes how an Trigger $kind appears in the Trigger creation wizard.
+
+| Property | Description | Type | Default |
+|----------| ----------- | ---- | ------- |
+| label | Displayed trigger name in trigger creation flow. | string | Defaults to SDK title. |
+| submenu | An array of submenu labels to configure how this component is nested in the menu. Set to false to show this component as a top-level menu item. | `string[]` | |
+| disabled | Hide this Trigger from creation wizard. | `boolean` | `false` |
+
+##### 5. Recognizer
+Recognizer UI Schema describes how an Recognizer $kind appears in the Recognizer Type dropdown.
+
+| Property | Description | Type | Default |
+|--|--|--|--|
+| displayName | Recognizer name displayed in the dropdown option. | `string` | Defaults to be SDK title. |
+| intentEditor | Name of the React widget to edit recognizer intents. | `string` | |
+| default | When set to true, new dialogs will use this recognizer by default. | `boolean` | Defauts to be `false` |
+| disabled | When set to true, the recognizer will be hidden from the dropdown. | `boolean` | Defaults to be `false` |
+
