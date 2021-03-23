@@ -54,10 +54,14 @@ export const NewPublishBotList: React.FC<Props> = ({
   const [selectedIds, setSelectedIds] = useState<string[]>(controlledSelectedIds || []);
   const [expandedIds, setExpandedIds] = useState<string[]>(controlledExpandedIds || []);
 
-  // Fluent <List> will not re-render when state outside of the items array changes
+  useEffect(() => {
+    console.log('NewPublishBotList mounted');
+  }, []);
+
+  // Fluent List will not re-render when state outside of the items array changes
   // When data outside the items chagnes, the list items need to be force changed.
   useEffect(() => {
-    setListItems(items.slice());
+    setListItems([...items]);
   }, [items, selectedIds, expandedIds]);
 
   useEffect(() => {
@@ -71,12 +75,14 @@ export const NewPublishBotList: React.FC<Props> = ({
   const onBotSelectChanged = (id: string, isChecked?: boolean) => {
     if (isChecked) {
       if (!selectedIds.includes(id)) {
-        setSelectedIds([...selectedIds, id]);
-        onSelectionChanged?.(selectedIds);
+        const newSelectedIds = [...selectedIds, id];
+        setSelectedIds(newSelectedIds);
+        onSelectionChanged?.(newSelectedIds);
       }
     } else {
-      setSelectedIds(selectedIds.filter((s) => s !== id));
-      onSelectionChanged?.(selectedIds);
+      const newSelectedIds = selectedIds.filter((s) => s !== id);
+      setSelectedIds(newSelectedIds);
+      onSelectionChanged?.(newSelectedIds);
     }
   };
 

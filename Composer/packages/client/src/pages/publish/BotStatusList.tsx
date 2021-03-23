@@ -50,10 +50,10 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
 
   const displayedItems: BotStatus[] = useMemo(() => {
-    if (currentSort.key !== 'Bot') return botStatusList;
+    if (currentSort.key !== 'Bot') return botStatusList.slice();
     if (currentSort.descending) return botStatusList;
     return botStatusList.slice().reverse();
-  }, [botStatusList, currentSort]);
+  }, [botStatusList, checkedIds, currentSort]);
 
   const getPublishTargetOptions = (item: BotStatus): IDropdownOption[] => {
     const options: IDropdownOption[] = [];
@@ -141,6 +141,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
+            checked={checkedIds.includes(item.id)}
             disabled={disableCheckbox}
             label={item.name}
             styles={{

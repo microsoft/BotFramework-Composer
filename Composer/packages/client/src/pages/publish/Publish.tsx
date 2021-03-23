@@ -3,14 +3,20 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
+import { useState, useEffect, useMemo, Fragment, useRef, useCallback } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { PublishResult } from '@bfc/shared';
+import { PublishResult, PublishTarget } from '@bfc/shared';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
-import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
+import {
+  dispatcherState,
+  localBotPublishHistorySelector,
+  localBotsDataSelector,
+  publishTypesState,
+} from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
@@ -26,6 +32,7 @@ import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
 import { navigateTo } from '../../utils/navigation';
+import { PublishProfileDialog } from '../botProject/create-publish-profile/PublishProfileDialog';
 
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -43,14 +50,22 @@ import {
 import { NewPublishBotList } from './NewPublishBotList';
 import { NewPublishProfileList } from './NewPublishProfileList';
 
+type PublishProfileDialogContext = {
+  projectId: string;
+  publishTargetIndex: number;
+  publishTargets: PublishTarget[];
+};
+
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
 
+  const publishTypes = useRecoilValue(publishTypesState(projectId));
   const botProjectData = useRecoilValue(localBotsDataSelector);
   const publishHistoryList = useRecoilValue(localBotPublishHistorySelector);
   const {
     getPublishHistory,
     getPublishStatusV2,
+    getPublishTargetTypes,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
@@ -61,11 +76,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const pendingNotificationRef = useRef<Notification>();
   const showNotificationsRef = useRef<Record<string, boolean>>({});
-
   const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
-  const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState<{
+    show: boolean;
+    needGraph: boolean;
+    next?: () => void;
+  }>({
+    show: false,
+    needGraph: false,
+  });
+  const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
+  const [profileDialogVisible, setProfileDialogVisible] = useState(false);
+  const [profileDialogContext, setProfileDialogContext] = useState<PublishProfileDialogContext>();
   const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>(
     initUpdaterStatus(publishHistoryList)
   );
@@ -99,6 +122,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       return false;
     });
   }, [selectedBots]);
+
+  useEffect(() => {
+    if (projectId) {
+      getPublishTargetTypes(projectId);
+    }
+  }, [projectId]);
 
   const canPublish =
     checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
@@ -301,8 +330,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  const changePublishTarget = (publishTarget, currentBotStatus) => {
-    const target = currentBotStatus.publishTargets.find((t) => t.name === publishTarget);
+  const changePublishTarget = (publishTarget: string, currentBotStatus: BotStatus) => {
+    const target = currentBotStatus.publishTargets?.find((t) => t.name === publishTarget);
     if (currentBotList.some((targetMap) => targetMap.id === currentBotStatus.id)) {
       setCurrentBotList(
         currentBotList.map((targetMap) => {
@@ -326,33 +355,150 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  const renderPublishBotListItemDetails = (id: string): React.ReactNode => {
-    const publishTargets = botPropertyData[id].publishTargets;
-    const publishHistory = publishHistoryList[id];
-    const items = publishTargets.map((publishTarget) => {
-      const profilePublishHistory = publishHistory[publishTarget.name];
-      const lastHistoryItem = profilePublishHistory?.length ? profilePublishHistory[0] : undefined;
-      return {
-        name: publishTarget.name,
-        description: publishTarget.type,
-        status: lastHistoryItem ? lastHistoryItem.status : '',
-        message: lastHistoryItem ? lastHistoryItem.message : '',
-        time: lastHistoryItem ? lastHistoryItem.time : '',
-        log: lastHistoryItem ? lastHistoryItem.log : '',
-      };
-    });
+  const onAddPublishProfileDialog = (projectId: string) => {
+    const botStatus = botStatusList.find((b) => b.id === projectId);
+    if (botStatus?.publishTargets) {
+      setProfileDialogContext({
+        projectId,
+        publishTargetIndex: -1,
+        publishTargets: botStatus.publishTargets,
+      });
 
-    return <NewPublishProfileList items={items} onAddNewProfile={() => {}} />;
+      if (isShowAuthDialog(true)) {
+        setShowAuthDialog({ show: true, needGraph: true, next: () => setProfileDialogVisible(true) });
+      } else {
+        setProfileDialogVisible(true);
+      }
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Could not find project to add a publishing profile.`);
+      setProfileDialogContext(undefined);
+    }
   };
+
+  const onEditPublishProfileDialog = (projectId: string, publishTargetName: string) => {
+    const botStatus = botStatusList.find((b) => b.id === projectId);
+
+    const publishTargetIndex = botStatus?.publishTargets
+      ? botStatus?.publishTargets?.findIndex((t) => {
+          return t.name === publishTargetName;
+        })
+      : -1;
+    if (botStatus?.publishTargets && publishTargetIndex !== -1) {
+      setProfileDialogContext({
+        projectId,
+        publishTargetIndex,
+        publishTargets: botStatus.publishTargets,
+      });
+      if (isShowAuthDialog(true)) {
+        setShowAuthDialog({ show: true, needGraph: true, next: () => setProfileDialogVisible(true) });
+      } else {
+        setProfileDialogVisible(true);
+      }
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Could not find publishing profile to edit.`);
+      setProfileDialogContext(undefined);
+    }
+  };
+
+  const onDeletePublishProfileDialog = useCallback(
+    async (projectId: string, publishTargetName: string) => {
+      const targetName = publishTargetName;
+      const confirmed = await OpenConfirmModal(
+        formatMessage('Delete?'),
+        formatMessage(
+          'Are you sure you want to remove "{targetName}"? This will only remove the profile and will not delete provisioned resources.',
+          { targetName }
+        )
+      );
+      if (confirmed) {
+        const publishTargets = botPropertyData[projectId].publishTargets;
+        const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);
+        setPublishTargets(newPublishTargets, projectId);
+      }
+    },
+    [botPropertyData]
+  );
+
+  const onClosePublishProfileDialog = () => {
+    setProfileDialogVisible(false);
+    setProfileDialogContext(undefined);
+  };
+
+  const renderProfileWizard = (): React.ReactNode => {
+    if (profileDialogVisible && profileDialogContext) {
+      const { projectId, publishTargetIndex, publishTargets } = profileDialogContext;
+      const current =
+        publishTargetIndex !== -1 ? { index: publishTargetIndex, item: publishTargets[publishTargetIndex] } : null;
+      return (
+        <PublishProfileDialog
+          closeDialog={onClosePublishProfileDialog}
+          current={current}
+          projectId={projectId}
+          setPublishTargets={setPublishTargets}
+          targets={publishTargets}
+          types={publishTypes}
+        />
+      );
+    }
+
+    return undefined;
+  };
+
+  const renderPublishProfileList = useMemo(
+    () => (botId: string): React.ReactNode => {
+      const currentBotStatus = botStatusList?.find((c) => c.id === botId);
+      // The publishTypes withing the botPropertyData are always undefined
+      // So I get them from the recoil value directly and ensure they are loaded with this page
+      const { publishTargets } = botPropertyData[botId];
+      const publishHistories = publishHistoryList[botId];
+      const items = publishTargets.map((publishTarget) => {
+        const publishHistory = publishHistories[publishTarget.name];
+        const lastHistoryItem = publishHistory?.length ? publishHistory[0] : undefined;
+        const description =
+          publishTypes.find((t) => {
+            return t.name === publishTarget.type;
+          })?.description || publishTarget.type;
+        return {
+          name: publishTarget.name,
+          description,
+          status: lastHistoryItem ? lastHistoryItem.status : '',
+          message: lastHistoryItem ? lastHistoryItem.message : '',
+          time: lastHistoryItem ? lastHistoryItem.time : '',
+          hasLog: !!lastHistoryItem?.log,
+          hasHistory: publishHistory?.length > 1,
+        };
+      });
+
+      return (
+        <NewPublishProfileList
+          items={items}
+          selectedProfile={currentBotStatus?.publishTarget}
+          onAddNewProfile={() => onAddPublishProfileDialog(botId)}
+          onDeleteProfile={(name: string) => onDeletePublishProfileDialog(botId, name)}
+          onEditProfile={(name: string) => onEditPublishProfileDialog(botId, name)}
+          onSelectedProfileChanged={(name?: string) => {
+            if (currentBotStatus && name) {
+              changePublishTarget(name, currentBotStatus);
+            }
+          }}
+        />
+      );
+    },
+    [botStatusList, botPropertyData, publishHistoryList, publishTypes]
+  );
 
   return (
     <Fragment>
-      {showAuthDialog && (
+      {showAuthDialog.show && (
         <AuthDialog
-          needGraph={false}
-          next={() => setPublishDialogVisiblity(true)}
+          needGraph={showAuthDialog.needGraph}
+          next={() => {
+            showAuthDialog?.next();
+          }}
           onDismiss={() => {
-            setShowAuthDialog(false);
+            setShowAuthDialog({ show: false, needGraph: false });
           }}
         />
       )}
@@ -382,7 +528,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         canPull={canPull}
         onPublish={() => {
           if (isShowAuthDialog(false)) {
-            setShowAuthDialog(true);
+            setShowAuthDialog({ show: true, needGraph: false, next: () => setPublishDialogVisiblity(true) });
           } else {
             setPublishDialogVisiblity(true);
           }
@@ -399,7 +545,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <Stack>
-            <NewPublishBotList items={botStatusList} renderDetails={(id) => renderPublishBotListItemDetails(id)} />
+            <NewPublishBotList
+              items={botStatusList}
+              renderDetails={renderPublishProfileList}
+              selectedIds={checkedSkillIds}
+              onSelectionChanged={updateCheckedSkills}
+            />
             <BotStatusList
               botPublishHistoryList={publishHistoryList}
               botStatusList={botStatusList}
@@ -413,6 +564,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           </Stack>
         </div>
       </div>
+      {renderProfileWizard()}
     </Fragment>
   );
 };

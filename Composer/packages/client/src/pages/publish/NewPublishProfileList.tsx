@@ -3,16 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import {
-  DetailsList,
-  CheckboxVisibility,
-  SelectionMode,
-  DetailsListLayoutMode,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import { Selection, SelectionMode } from 'office-ui-fabric-react/lib/Selection';
+import { DetailsList, CheckboxVisibility, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon, IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
-import { useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
@@ -24,6 +20,8 @@ import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 const editProfileIcon: IIconProps = { iconName: 'Edit' };
 const deleteProfileIcon: IIconProps = { iconName: 'Delete' };
 
+const selectionMode = SelectionMode.single;
+
 type PublishProfileListItem = {
   name: string;
   description: string;
@@ -33,21 +31,69 @@ type PublishProfileListItem = {
   hasLog?: boolean;
   onViewLog?: (name: string) => void;
   hasHistory?: boolean;
-  onViewHistory?: (name: string) => void;
 };
 
 type Props = {
   items: PublishProfileListItem[];
-  onAddNewProfile?: () => void;
+  selectedProfile?: string;
+  onSelectedProfileChanged: (name?: string) => void;
+  onAddNewProfile: () => void;
+  onEditProfile: (name: string) => void;
+  onDeleteProfile: (name: string) => void;
+  renderHistory?: (name: string) => React.ReactNode;
 };
 
-export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile }) => {
+export const NewPublishProfileList: React.FC<Props> = ({
+  items,
+  onSelectedProfileChanged,
+  onAddNewProfile,
+  onEditProfile,
+  onDeleteProfile,
+  renderHistory,
+}) => {
+  const [listItems, setListItems] = useState(items);
   const [currentSort, setSort] = useState({ key: 'publishTime', descending: true });
+  const [showHistoryIds, setShowHistoryIds] = useState<string[]>([]);
 
-  const sortedItems = useMemo(() => {
-    if (currentSort.descending) return items;
-    return items.slice().reverse();
+  useEffect(() => {
+    console.log('NewPublishBotList mounted');
+  }, []);
+
+  useEffect(() => {
+    console.log(`selectedProfile ${selectedProfile}`);
+  }, [selectedProfile]);
+
+  const selection = useRef(
+    new Selection({
+      getKey: (item) => item.name,
+      onSelectionChanged: () => {
+        const currentSelection = selection.current.getSelection();
+        const newSelectedProfile = currentSelection?.length ? currentSelection[0] : undefined;
+        console.log(`onSelectionChanged ${newSelectedProfile?.name}`);
+        if (newSelectedProfile) {
+          onSelectedProfileChanged(newSelectedProfile?.name);
+        }
+      },
+    })
+  );
+
+  // Fluent DetailsList will not re-render when state outside of the items array changes
+  // When data outside the items chagnes, the list items need to be force changed.
+  useEffect(() => {
+    if (currentSort.descending) {
+      setListItems([...items]);
+    } else {
+      setListItems([...items].reverse);
+    }
   }, [items, currentSort]);
+
+  const toggleShowHistory = (name: string) => {
+    if (!showHistoryIds.includes(name)) {
+      setShowHistoryIds([...showHistoryIds, name]);
+    } else {
+      setShowHistoryIds(showHistoryIds.filter((historyId) => historyId !== name));
+    }
+  };
 
   const renderStatus = (status?: ApiStatus, message?: string): JSX.Element | null => {
     if (!status) {
@@ -66,14 +112,15 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
       );
     } else if (status === ApiStatus.Publishing) {
       return (
-        <div style={{ display: 'flex' }}>
+        <Stack horizontal gap={10} verticalAlign="center">
           <Spinner size={SpinnerSize.small} />
-        </div>
+          <span>{message}</span>
+        </Stack>
       );
     } else {
       return (
         <Stack horizontal gap={10} verticalAlign="center">
-          <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />
+          <Icon iconName="ErrorBadge" style={{ color: SharedColors.red10, fontWeight: 600 }} />
           <span>{message}</span>
         </Stack>
       );
@@ -88,8 +135,9 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
       fieldName: 'name',
       isRowHeader: true,
       data: 'string',
-      minWidth: 150,
-      maxWidth: 150,
+      minWidth: 250,
+      maxWidth: 250,
+      isMultiline: true,
       isPadded: true,
       onRender: (item) => {
         return (
@@ -107,8 +155,15 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
       name: '',
       minWidth: 24,
       maxWidth: 24,
-      onRender: () => {
-        return <IconButton className="edit-profile-action" iconProps={editProfileIcon} title={formatMessage('Edit')} />;
+      onRender: (item) => {
+        return (
+          <IconButton
+            className="edit-profile-action"
+            iconProps={editProfileIcon}
+            title={formatMessage('Edit')}
+            onClick={() => onEditProfile(item.name)}
+          />
+        );
       },
       isPadded: true,
     },
@@ -117,9 +172,14 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
       name: '',
       minWidth: 24,
       maxWidth: 24,
-      onRender: () => {
+      onRender: (item) => {
         return (
-          <IconButton className="delete-profile-action" iconProps={deleteProfileIcon} title={formatMessage('Delete')} />
+          <IconButton
+            className="delete-profile-action"
+            iconProps={deleteProfileIcon}
+            title={formatMessage('Delete')}
+            onClick={() => onDeleteProfile(item.name)}
+          />
         );
       },
       isPadded: true,
@@ -156,8 +216,8 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
       isPadded: true,
     },
     {
-      key: 'view-log',
-      name: '',
+      key: 'view-Log',
+      name: 'Log',
       minWidth: 70,
       maxWidth: 90,
       isCollapsible: true,
@@ -181,10 +241,9 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
       isPadded: true,
     },
     {
-      key: 'log',
-      name: '',
+      key: 'viewHistory',
+      name: 'History',
       className: 'profile-publish-log',
-      fieldName: 'log',
       minWidth: 70,
       maxWidth: 90,
       isCollapsible: true,
@@ -196,7 +255,7 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
               allowDisabledFocus
               styles={{ root: { color: '#0078D4' } }}
               onClick={() => {
-                item.onViewHistory && item.onViewHistory(item.name);
+                toggleShowHistory(item.name);
               }}
             >
               {formatMessage('View history')}
@@ -209,19 +268,32 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
     },
   ];
 
+  const renderRow = (props, defaultRender) => {
+    const { item }: { item: PublishProfileListItem } = props;
+    const showHistory = item.hasHistory && showHistoryIds.includes(item.name);
+    return (
+      <Fragment>
+        {defaultRender(props)}
+        {showHistory && renderHistory && renderHistory(item.name)}
+      </Fragment>
+    );
+  };
+
   return (
     <Stack>
       <DetailsList
         isHeaderVisible
+        selectionPreservedOnEmptyClick
         checkboxVisibility={CheckboxVisibility.always}
         columns={columns.map((col) => ({
           ...col,
           isSorted: col.key === currentSort.key,
           isSortedDescending: currentSort.descending,
         }))}
-        items={sortedItems}
+        items={listItems}
         layoutMode={DetailsListLayoutMode.justified}
-        selectionMode={SelectionMode.single}
+        selection={selection.current}
+        selectionMode={selectionMode}
         styles={{
           root: {
             selectors: {
@@ -239,6 +311,7 @@ export const NewPublishProfileList: React.FC<Props> = ({ items, onAddNewProfile 
             clickedCol.isSorted = false;
           }
         }}
+        onRenderRow={renderRow}
       />
       {onAddNewProfile && (
         <ActionButton
