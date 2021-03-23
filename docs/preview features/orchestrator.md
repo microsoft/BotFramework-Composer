@@ -11,6 +11,7 @@ Read more about Orchestrator [here](https://aka.ms/bf-orchestrator).
 - State of the art - Extensive pre-trained transformer-based models for conversational applications
 - Extremely fast inference time: Written in C++ for performance
 - Cross-platform support: Runs on Windows, Linux and Mac OS X, including Cloud platforms
+- Supports a [large number of languages](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/NLRModels.md#pretrained20210205microsoftdte0006unicoder_multilingualonnx) out of the box
 - Free to use: Language models are deployed alongside your bot and runs in memory. No external services required
 
 ## Getting started
@@ -18,9 +19,7 @@ Read more about Orchestrator [here](https://aka.ms/bf-orchestrator).
 ### Limitations
 For this preview release, please be aware of these limitations:
 
-1. Orchestrator has to be deployed on an x64 platform. If you are deploying your bot to a cloud service, please be aware that you need to publish your bot with a `win-x64` [runtime identifier](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish), or use Composer's built-in Azure deployment.
-
-1. We are supporting English-only for this release.
+1. It is recommended to deploy Orchestrator on the `x86-64` platform. On Azure, it is recommended to publish your bot application with the `win-x64` [runtime identifier](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish), or use Composer's built-in Azure deployment to do this automatically.
 
 1. Orchestrator does not support entity extraction for this release. Any entities declared in your LU file will be ignored.
 
@@ -29,7 +28,7 @@ For this preview release, please be aware of these limitations:
 Please see the [roadmap](https://github.com/microsoft/botframework-sdk/blob/main/Orchestrator/docs/Overview.md#Roadmap) for when these features will be added to Orchestrator.
 
 
-### Adding Orchestrator to a new bot in Composer
+### Adding Orchestrator to a new bot in Composer 1.4
 1. Enable Orchestrator from the preview features list:
     - Navigate to `Application Settings` (
     <img src="orchestrator-assets/application-settings.png" alt="drawing" width="30"/> icon)
