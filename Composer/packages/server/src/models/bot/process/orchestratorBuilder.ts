@@ -33,6 +33,17 @@ class OrchestratorBuilder {
     });
   }
 
+  public async warmupCache(projectId: string, generatedFolderPath: string) {
+    const msgId = uniqueId();
+    const msg = { id: msgId, payload: { type: 'warmup', projectId, generatedFolderPath } };
+
+    return new Promise((resolve, reject) => {
+      this.resolves[msgId] = resolve;
+      this.rejects[msgId] = reject;
+      OrchestratorBuilder.worker.send(msg);
+    });
+  }
+
   // Handle incoming calculation result
   public handleMsg(msg: ResponseMsg) {
     const { id, error, payload } = msg;
