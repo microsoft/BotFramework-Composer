@@ -244,6 +244,7 @@ type ITreeItemProps = {
   menuOpenCallback?: (cb: boolean) => void;
   isMenuOpen?: boolean;
   showErrors?: boolean;
+  role?: string;
 };
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -383,6 +384,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
+  role,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
@@ -517,6 +519,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         marginLeft
       )}
       data-testid={a11yLabel}
+      role={role}
       tabIndex={0}
       onClick={() => {
         onSelect?.(link);
