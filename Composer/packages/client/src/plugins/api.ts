@@ -32,6 +32,7 @@ interface PublishAPI {
   setTitle?: (value) => void;
   getSchema?: () => any;
   getType?: () => string;
+  getName?: () => string;
   savePublishConfig?: (config: PublishConfig) => void;
   getTokenFromCache?: () => { accessToken: string; graphToken: string };
   isGetTokenFromUser?: () => boolean;
