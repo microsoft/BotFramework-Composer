@@ -63,7 +63,7 @@ export function CreateOptions(props: CreateOptionsProps) {
         return;
       }
     }
-    setOption('Create');
+    setIsOpenCreateModal(true);
   }, [props.location?.search]);
   const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
 

@@ -10,7 +10,7 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { RouteComponentProps, navigate } from '@reach/router';
+import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
 
@@ -57,7 +57,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         return;
       }
     }
-    setOption('Create');
+    setIsOpenCreateModal(true);
   }, [props.location?.search]);
   const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
 
