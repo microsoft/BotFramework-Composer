@@ -160,6 +160,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
           element: (
             <Fragment>
               <ActionButton
+                ariaLabel={'Get started'}
                 iconProps={{ iconName: 'Rocket' }}
                 id="rocketButton"
                 onClick={() => toggleGetStarted(true)}
