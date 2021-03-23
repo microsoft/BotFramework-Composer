@@ -422,7 +422,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           data-is-focusable
           aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
           css={projectTreeItemContainer}
-          role="cell"
           tabIndex={0}
           onBlur={item.onBlur}
           onFocus={item.onFocus}
@@ -491,7 +490,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                   menuOpenCallback(false);
                 },
               }}
-              role="cell"
               styles={moreButton(isActive || isChildSelected)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -519,7 +517,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         marginLeft
       )}
       data-testid={a11yLabel}
-      role="treeitem"
       tabIndex={0}
       onClick={() => {
         onSelect?.(link);
@@ -545,7 +542,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           },
         ]}
         overflowItems={overflowMenu}
-        role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem(
           textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
