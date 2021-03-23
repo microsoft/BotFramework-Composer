@@ -44,10 +44,6 @@ const Input = styled(TextField)({
   },
 });
 
-const RemoveButton = styled(IconButton)(({ hidden }) => ({
-  visibility: hidden ? 'hidden' : 'visible',
-}));
-
 const textFieldStyles = {
   fieldGroup: {
     borderColor: 'transparent',
@@ -68,6 +64,12 @@ const ItemContainer = styled.div({
 const Row = styled(Stack)({
   borderBottom: `1px solid ${FluentTheme.palette.neutralLight}`,
   padding: '8px 0 8px 4px',
+  '& .ms-Button:not(:focus) i': {
+    visibility: 'hidden',
+  },
+  '&:hover .ms-Button i': {
+    visibility: 'visible',
+  },
 });
 
 type ItemProps = {
@@ -78,7 +80,6 @@ type ItemProps = {
 };
 
 const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
-  const [removeHidden, setRemoveHidden] = React.useState(true);
   const itemRef = React.useRef<ITextField | null>(null);
   const didMount = React.useRef<boolean>(false);
 
@@ -89,22 +90,8 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
     didMount.current = true;
   }, []);
 
-  const onShowRemoveButton = React.useCallback(() => {
-    setRemoveHidden(false);
-  }, []);
-
-  const onHideRemoveButton = React.useCallback(() => {
-    setRemoveHidden(true);
-  }, []);
-
   return (
-    <Row
-      horizontal
-      onBlur={onHideRemoveButton}
-      onFocus={onShowRemoveButton}
-      onMouseEnter={onShowRemoveButton}
-      onMouseLeave={onHideRemoveButton}
-    >
+    <Row horizontal>
       <Input
         componentRef={(ref) => (itemRef.current = ref)}
         styles={textFieldStyles}
@@ -112,12 +99,7 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
         onBlur={onBlur}
         onChange={onChange}
       />
-      <RemoveButton
-        aria-label={formatMessage('Remove item')}
-        hidden={removeHidden}
-        iconProps={{ iconName: 'Trash' }}
-        onClick={onRemove}
-      />
+      <IconButton aria-label={formatMessage('Remove item')} iconProps={{ iconName: 'Trash' }} onClick={onRemove} />
     </Row>
   );
 });
