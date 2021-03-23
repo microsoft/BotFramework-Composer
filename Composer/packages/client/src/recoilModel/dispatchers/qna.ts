@@ -371,6 +371,22 @@ export const qnaDispatcher = () => {
     }
   );
 
+  const updateContainerQnAFile = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      content,
+      projectId,
+    }: {
+      id: string;
+      content: string;
+      projectId: string;
+    }) => {
+      const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
+
+      callbackHelpers.set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedQnAFile] }));
+    }
+  );
+
   const createQnAFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
@@ -414,6 +430,57 @@ export const qnaDispatcher = () => {
     ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
       set(showCreateQnAFromUrlDialogState(projectId), false);
       set(showCreateQnAFromScratchDialogState(projectId), false);
+    }
+  );
+
+  const importQnAFromUrl = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      containerId,
+      url,
+      multiTurn,
+      projectId,
+    }: {
+      containerId: string; // qna container file id: {name}.source.{locale}.qna
+      url: string;
+      multiTurn: boolean;
+      projectId: string;
+    }) => {
+      const { snapshot } = callbackHelpers;
+      const notification = createNotification(getQnaPendingNotification(url));
+      addNotificationInternal(callbackHelpers, notification);
+
+      let response;
+      try {
+        response = await httpClient.get(`/utilities/qna/parse`, {
+          params: { url: encodeURIComponent(url), multiTurn },
+        });
+        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const notification = createNotification(
+          getQnaSuccessNotification(() => {
+            navigateTo(
+              rootBotProjectId === projectId
+                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+            );
+            deleteNotificationInternal(callbackHelpers, notification.id);
+          })
+        );
+        addNotificationInternal(callbackHelpers, notification);
+      } catch (err) {
+        addNotificationInternal(
+          callbackHelpers,
+          createNotification(getQnaFailedNotification(err.response?.data?.message))
+        );
+        return;
+      } finally {
+        deleteNotificationInternal(callbackHelpers, notification.id);
+      }
+
+      const contentForSourceQnA = `> !# @source.url=${url}
+> !# @source.multiTurn=${multiTurn}
+${response.data}
+`;
+      await updateContainerQnAFile({ id: containerId, content: contentForSourceQnA, projectId });
     }
   );
 
@@ -480,7 +547,6 @@ ${response.data}
       });
 
       await createQnAFromUrlDialogSuccess({ projectId });
-      return contentForSourceQnA;
     }
   );
 
@@ -644,7 +710,6 @@ ${response.data}
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
-      // const updatedFile = await updateQnAFileState(callbackHelpers, { id, content });
       const updatedFile = qnaUtil.updateQnAQuestion(qnaFile, sectionId, questionId, content);
       set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
     }
@@ -875,5 +940,6 @@ ${response.data}
     createQnAFromScratchDialogCancel,
     createQnAFromUrlDialogBegin,
     createQnAFromUrlDialogCancel,
+    importQnAFromUrl,
   };
 };

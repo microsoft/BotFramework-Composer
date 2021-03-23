@@ -40,6 +40,7 @@ import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
+import { ImportQnAFromUrlModal } from '../../components/QnA/ImportQnAFromUrlModal';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -107,6 +108,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     createQnAQuestion,
     updateQnAAnswer,
     updateQnAQuestion,
+    importQnAFromUrl,
   } = useRecoilValue(dispatcherState);
 
   const targetFileId = dialogId.endsWith(qnaSuffix(locale)) ? dialogId : `${dialogId}.${locale}`;
@@ -145,6 +147,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const detailListRef = useRef<IDetailsList | null>(null);
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
+  const [importingResourceQnAFile, setImportingResourceQnAFile] = useState<QnAFile | undefined>(undefined);
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<string>('');
   const [creatQnAPairSettings, setCreatQnAPairSettings] = useState<{
@@ -305,6 +308,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setEditQnAFile(undefined);
   };
 
+  const handleImportUrl = async ({ url, multiTurn }: { url: string; multiTurn: boolean }) => {
+    if (importingResourceQnAFile) {
+      importQnAFromUrl({
+        containerId: importingResourceQnAFile.id,
+        url,
+        multiTurn,
+        projectId,
+      });
+    }
+    setImportingResourceQnAFile(undefined);
+  };
+
   const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = useCallback(
     (props) => {
       const groupName = props?.group?.name || '';
@@ -431,6 +446,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         onClick: async () => {
                           if (!qnaFile) return;
                           handleDeleteQnASourceFile(actualProjectId, qnaFile.id);
+                        },
+                      },
+                      {
+                        key: 'update',
+                        iconProps: { iconName: 'Download' },
+                        name: formatMessage('Import new url and overwrite'),
+                        disabled: dialogId === 'all',
+                        onClick: async () => {
+                          if (!containerQnAFile) return;
+                          console.log(containerQnAFile.id);
+                          setImportingResourceQnAFile(containerQnAFile);
                         },
                       },
                     ] as IOverflowSetItemProps[]
@@ -900,6 +926,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
           }}
           onSubmit={onSubmitEditKB}
         ></EditQnAModal>
+      )}
+      {importingResourceQnAFile && (
+        <ImportQnAFromUrlModal
+          qnaFile={importingResourceQnAFile}
+          onDismiss={() => {
+            setImportingResourceQnAFile(undefined);
+          }}
+          onSubmit={handleImportUrl}
+        ></ImportQnAFromUrlModal>
       )}
     </div>
   );

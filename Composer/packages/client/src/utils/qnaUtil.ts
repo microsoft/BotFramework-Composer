@@ -115,6 +115,10 @@ export const getQnAFileUrlOption = (file: QnAFile): string | undefined => {
   return file.options.find((opt) => opt.name === 'url')?.value;
 };
 
+export const getQnAFileMultiTurnOption = (file: QnAFile): boolean | undefined => {
+  return file.options.find((opt) => opt.name === 'multiTurn')?.value === 'true';
+};
+
 export const isQnAFileCreatedFromUrl = (file: QnAFile): boolean => {
   return getQnAFileUrlOption(file) ? true : false;
 };
