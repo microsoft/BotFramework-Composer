@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import path from 'path';
+
 import URI from 'vscode-uri';
 import { IConnection, TextDocuments } from 'vscode-languageserver';
 import formatMessage from 'format-message';
@@ -147,6 +149,19 @@ export class LGServer {
     if (!document) {
       return;
     }
+
+    const importRegex = /^\s*\[[^[\]]+\](\([^()]+\))/;
+    const curLine = document.getText().split(/\r?\n/g)[params.position.line];
+    if (importRegex.test(curLine)) {
+      const importedFile = curLine.match(importRegex)?.[1];
+      if (importedFile) {
+        const source = importedFile.substr(1, importedFile.length - 2); // remove starting [ and tailing
+        const fileId = path.parse(source).name;
+        this.connection.sendNotification('GotoDefinition', { fileId: fileId });
+        return;
+      }
+    }
+
     const wordRange = getRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
     const curFileResult = this._lgFile?.templates.find((t) => t.name === word);
@@ -307,21 +322,12 @@ export class LGServer {
         const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
         for (const template of lgTemplates.templates) {
           this._templateDefinitions[template.name] = {
-            fileId: this.removeLocaleInId(file.id),
+            fileId: file.id,
             templateId: template.name,
             line: template?.range?.start?.line,
           };
         }
       }
-    }
-  }
-
-  private removeLocaleInId(fileId: string): string {
-    const idx = fileId.lastIndexOf('.');
-    if (idx !== -1) {
-      return fileId.substring(0, idx);
-    } else {
-      return fileId;
     }
   }
 

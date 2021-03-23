@@ -180,13 +180,17 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   };
 
   const navigateToLgPage = useCallback(
-    (lgFileId: string) => {
+    (lgFileId: string, options?: { templateId: string; line: number }) => {
       // eslint-disable-next-line security/detect-non-literal-regexp
       const pattern = new RegExp(`.${locale}`, 'g');
       const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
-      const url = currentDialog.isFormDialog
+      let url = currentDialog.isFormDialog
         ? `/bot/${actualProjectId}/language-generation/${currentDialog.id}/item/${fileId}`
         : `/bot/${actualProjectId}/language-generation/${fileId}`;
+      if (options?.line) {
+        url = url + `/edit#L=${options.line}`;
+      }
+
       navigateTo(url);
     },
     [actualProjectId, locale]

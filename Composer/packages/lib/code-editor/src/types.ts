@@ -31,7 +31,7 @@ export type LgResponseEditorProps = LgCommonEditorProps & {
 export type LgCodeEditorProps = LgCommonEditorProps &
   BaseEditorProps & {
     toolbarHidden?: boolean;
-    onNavigateToLgPage?: (lgFileId: string) => void;
+    onNavigateToLgPage?: (lgFileId: string, options?: { templateId: string; line: number }) => void;
     languageServer?:
       | {
           host?: string;

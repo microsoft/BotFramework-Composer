@@ -213,13 +213,17 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   }, [editorMode, allowResponseEditor, props.onChange, shellApi.telemetryClient]);
 
   const navigateToLgPage = useCallback(
-    (lgFileId: string) => {
+    (lgFileId: string, options?: { templateId: string; line: number }) => {
       // eslint-disable-next-line security/detect-non-literal-regexp
       const pattern = new RegExp(`.${locale}`, 'g');
       const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
-      const url = currentDialog.isFormDialog
+      let url = currentDialog.isFormDialog
         ? `/bot/${projectId}/language-generation/${currentDialog.id}/item/${fileId}`
         : `/bot/${projectId}/language-generation/${fileId}`;
+
+      if (options?.line) {
+        url = url + `/edit#L=${options.line}`;
+      }
       shellApi.navigateTo(url);
     },
     [shellApi, projectId, locale]
