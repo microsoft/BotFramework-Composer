@@ -246,49 +246,37 @@ export const ManageQNA = (props: ManageQNAProps) => {
         const qnaMakerServiceName = `${qnaResourceName}-qna`;
 
         const searchManagementClient = new SearchManagementClient(tokenCredentials, subscriptionId);
-        const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(
-          resourceGroupName,
-          qnaMakerSearchName,
-          {
-            location: localRootQNARegion,
-            sku: {
-              name: 'standard',
-            },
-            replicaCount: 1,
-            partitionCount: 1,
-            hostingMode: 'default',
-          }
-        );
+        await searchManagementClient.services.createOrUpdate(resourceGroupName, qnaMakerSearchName, {
+          location: localRootQNARegion,
+          sku: {
+            name: 'standard',
+          },
+          replicaCount: 1,
+          partitionCount: 1,
+          hostingMode: 'default',
+        });
 
         const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
-        const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
-          resourceGroupName,
-          resourceGroupName,
-          {
-            location: localRootQNARegion,
-            sku: {
-              name: 'S1',
-              tier: 'Standard',
-              size: 'S1',
-              family: 'S',
-              capacity: 1,
-            },
-          }
-        );
+        await webSiteManagementClient.appServicePlans.createOrUpdate(resourceGroupName, resourceGroupName, {
+          location: localRootQNARegion,
+          sku: {
+            name: 'S1',
+            tier: 'Standard',
+            size: 'S1',
+            family: 'S',
+            capacity: 1,
+          },
+        });
         // deploy or update exisiting app insights component
         const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
           tokenCredentials,
           subscriptionId
         );
-        const appinsightsDeployResult = await applicationInsightsManagementClient.components.createOrUpdate(
-          resourceGroupName,
-          resourceGroupName,
-          {
-            location: localRootQNARegion,
-            applicationType: 'web',
-            kind: 'web',
-          }
-        );
+        await applicationInsightsManagementClient.components.createOrUpdate(resourceGroupName, resourceGroupName, {
+          location: localRootQNARegion,
+          applicationType: 'web',
+          kind: 'web',
+        });
         // deploy qna host webapp
         const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
           resourceGroupName,
@@ -321,72 +309,64 @@ export const ManageQNA = (props: ManageQNAProps) => {
         const defaultAnswer = 'No good match found in KB.';
         const QNAMAKER_EXTENSION_VERSION = 'latest';
 
-        const webAppConfigUpdateResult = await webSiteManagementClient.webApps.createOrUpdateConfiguration(
-          resourceGroupName,
-          qnaMakerWebAppName,
-          {
-            appSettings: [
-              {
-                name: 'AzureSearchName',
-                value: qnaMakerSearchName,
-              },
-              {
-                name: 'AzureSearchAdminKey',
-                value: azureSearchAdminKey,
-              },
-              {
-                name: 'UserAppInsightsKey',
-                value: userAppInsightsKey,
-              },
-              {
-                name: 'UserAppInsightsName',
-                value: userAppInsightsName,
-              },
-              {
-                name: 'UserAppInsightsAppId',
-                value: userAppInsightsAppId,
-              },
-              {
-                name: 'PrimaryEndpointKey',
-                value: primaryEndpointKey,
-              },
-              {
-                name: 'SecondaryEndpointKey',
-                value: secondaryEndpointKey,
-              },
-              {
-                name: 'DefaultAnswer',
-                value: defaultAnswer,
-              },
-              {
-                name: 'QNAMAKER_EXTENSION_VERSION',
-                value: QNAMAKER_EXTENSION_VERSION,
-              },
-            ],
-          }
-        );
+        await webSiteManagementClient.webApps.createOrUpdateConfiguration(resourceGroupName, qnaMakerWebAppName, {
+          appSettings: [
+            {
+              name: 'AzureSearchName',
+              value: qnaMakerSearchName,
+            },
+            {
+              name: 'AzureSearchAdminKey',
+              value: azureSearchAdminKey,
+            },
+            {
+              name: 'UserAppInsightsKey',
+              value: userAppInsightsKey,
+            },
+            {
+              name: 'UserAppInsightsName',
+              value: userAppInsightsName,
+            },
+            {
+              name: 'UserAppInsightsAppId',
+              value: userAppInsightsAppId,
+            },
+            {
+              name: 'PrimaryEndpointKey',
+              value: primaryEndpointKey,
+            },
+            {
+              name: 'SecondaryEndpointKey',
+              value: secondaryEndpointKey,
+            },
+            {
+              name: 'DefaultAnswer',
+              value: defaultAnswer,
+            },
+            {
+              name: 'QNAMAKER_EXTENSION_VERSION',
+              value: QNAMAKER_EXTENSION_VERSION,
+            },
+          ],
+        });
 
         // Create qna account
         const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
           tokenCredentials,
           subscriptionId
         );
-        const deployResult = await cognitiveServicesManagementClient.accounts.create(
-          resourceGroupName,
-          qnaMakerServiceName,
-          {
-            kind: 'QnAMaker',
-            sku: {
-              name: 'S0',
+        await cognitiveServicesManagementClient.accounts.create(resourceGroupName, qnaMakerServiceName, {
+          kind: 'QnAMaker',
+          sku: {
+            name: 'S0',
+          },
+          location: localRootQNARegion,
+          properties: {
+            apiProperties: {
+              qnaRuntimeEndpoint: `https://${webAppResult.hostNames?.[0]}`,
             },
-            location: localRootQNARegion,
-            properties: {
-              apiProperties: {
-                qnaRuntimeEndpoint: `https://${webAppResult.hostNames?.[0]}`,
-              },
-            },
-          }
-        );
+          },
+        });
 
         const keys = await cognitiveServicesManagementClient.accounts.listKeys(resourceGroupName, qnaMakerServiceName);
         if (!keys?.key1) {
