@@ -479,14 +479,6 @@ export class BotProject implements IBotProject {
       throw new Error(`${filename} dialog already exist`);
     }
 
-    if (dialogId === rootDialogId && filename === `${rootDialogId}.dialog`) {
-      const rootDialogData = JSON.parse(content);
-      rootDialogData.recognizer = rootDialogData.recognizer.replace(rootDialogId, this.rootDialogId);
-      rootDialogData.generator = rootDialogData.generator.replace(rootDialogId, this.rootDialogId);
-      rootDialogData.id = rootDialogData.id.replace(rootDialogId, this.rootDialogId);
-      content = JSON.stringify(rootDialogData, null, 2);
-    }
-
     return await this._createFile(relativePath, content);
   };
 

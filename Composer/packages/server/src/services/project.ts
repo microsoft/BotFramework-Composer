@@ -526,6 +526,7 @@ export class BotProjectService {
         await currentProject.updateEnvSettings(newSettings);
 
         await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+        await currentProject.updateBotInfo(name, description, true);
 
         const runtime = ExtensionContext.getRuntimeByProject(currentProject);
         const runtimePath = currentProject.getRuntimePath();
