@@ -225,7 +225,17 @@ export const projectDispatcher = () => {
         set(botOpeningState, true);
 
         await flushExistingTasks(callbackHelpers);
-        const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
+        const { projectId, mainDialog, requiresMigrate } = await openRootBotAndSkillsByPath(
+          callbackHelpers,
+          path,
+          storageId
+        );
+
+        if (requiresMigrate) {
+          confirm('Your project must be updated to open it using this version of Composer');
+          navigateTo(`/v2/projects/migrate/${projectId}`);
+          return;
+        }
 
         // Post project creation
         set(projectMetaDataState(projectId), {
@@ -267,8 +277,12 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
-
+      const { requiresMigrate } = await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
+      if (requiresMigrate) {
+        confirm('Your project must be updated to open it using this version of Composer');
+        navigateTo(`/v2/projects/migrate/${projectId}`);
+        return;
+      }
       // Post project creation
       set(projectMetaDataState(projectId), {
         isRootBot: true,
