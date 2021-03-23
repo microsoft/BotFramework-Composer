@@ -18,6 +18,7 @@ import {
   userSettingsState,
   templateProjectsState,
 } from '../../../recoilModel';
+import { localBotsDataSelector } from '../../../recoilModel/selectors/project';
 import Home from '../../../pages/home/Home';
 import { useProjectIdCache } from '../../../utils/hooks';
 import { ImportModal } from '../../ImportModal/ImportModal';
@@ -52,6 +53,8 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
+  const botProjects = useRecoilValue(localBotsDataSelector);
+  const botProject = botProjects.find((b) => b.projectId === projectId);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
   const cachedProjectId = useProjectIdCache();
@@ -138,7 +141,6 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
 
   const handleMigrate = (formData) => {
     setCreationFlowStatus(CreationFlowStatus.MIGRATE);
-    alert(`Migrate ${projectId} to ${formData.location}`);
     migrateProjectTo(projectId, formData.name, formData.description, formData.location);
   };
 
@@ -206,6 +208,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="migrate/:projectId"
+          templateId={botProject?.name || 'migrated_project'} // use templateId for default project name
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}

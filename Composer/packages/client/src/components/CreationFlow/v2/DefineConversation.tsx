@@ -96,6 +96,7 @@ type DefineConversationProps = {
   focusedStorageFolder: StorageFolder;
 } & RouteComponentProps<{
   templateId: string;
+  defaultName: string;
   location: string;
 }>;
 
