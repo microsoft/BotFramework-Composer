@@ -174,6 +174,18 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
   },
 });
 
+export const schemaDiagnosticsSelectorFamily = selectorFamily({
+  key: 'schemaDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    // TODO: insert schema logic here: 1. policy 2. existence validation
+    console.log('try validate project schema diagnostics', projectId);
+    return [];
+  },
+});
+
 export const luDiagnosticsSelectorFamily = selectorFamily({
   key: 'luDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
@@ -251,6 +263,7 @@ export const diagnosticsSelectorFamily = selectorFamily({
     ...get(luDiagnosticsSelectorFamily(projectId)),
     ...get(lgDiagnosticsSelectorFamily(projectId)),
     ...get(qnaDiagnosticsSelectorFamily(projectId)),
+    ...get(schemaDiagnosticsSelectorFamily(projectId)),
   ],
 });
 
