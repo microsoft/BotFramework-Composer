@@ -9,6 +9,7 @@ import { UserIdentity, FileExtensions, FeedType, RuntimeType } from '@bfc/extens
 import { mkdirSync, readFile } from 'fs-extra';
 import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from '@bfc/shared';
 import { ServerWorker } from '@bfc/server-workers';
+import isArray from 'lodash/isArray';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -267,9 +268,9 @@ export class AssetManager {
       const feedType = this.getFeedType();
       if (feedType === 'npm') {
         return data.objects.map((result) => {
-          const { name, version, description = '' } = result.package;
+          const { name, version, keywords, description = '' } = result.package;
           const displayName = this.getPackageDisplayName(name);
-          return {
+          const templateToReturn = {
             id: name,
             name: displayName,
             description: description,
@@ -279,6 +280,13 @@ export class AssetManager {
               packageVersion: version,
             },
           } as BotTemplate;
+          if (isArray(keywords)) {
+            templateToReturn.dotnetSupport = keywords.indexOf('bf-dotnet') != -1;
+            templateToReturn.nodeSupport = keywords.indexOf('bf-js') != -1;
+            templateToReturn.functionsSupport = keywords.indexOf('bf-functions') != -1;
+            templateToReturn.webAppSupport = keywords.indexOf('bf-webapp') != -1;
+          }
+          return templateToReturn;
         });
       } else if (feedType === 'nuget') {
         // TODO: handle nuget processing

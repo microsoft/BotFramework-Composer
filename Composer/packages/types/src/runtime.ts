@@ -36,6 +36,10 @@ export type BotTemplate = {
   id: string;
   name: string;
   description: string;
+  nodeSupport?: boolean;
+  dotnetSupport?: boolean;
+  webAppSupport?: boolean;
+  functionsSupport?: boolean;
   /* absolute path */
   path?: string;
   /* tags for further grouping and search secenario */
