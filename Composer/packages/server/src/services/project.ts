@@ -449,7 +449,7 @@ export class BotProjectService {
 
       const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(
         '@microsoft/generator-microsoft-bot-adaptive',
-        '*', // use any available version
+        '1.0.0-preview-20210310.8ee9434', // use any available version
         name,
         locationRef,
         jobId,
@@ -518,14 +518,22 @@ export class BotProjectService {
             customRuntime: true,
             path: '../',
             key: 'adaptive-runtime-dotnet-webapp',
-            command: `dotnet start ${name}.csproj`,
+            command: `dotnet run --project ${name}.csproj`,
           },
         };
 
-        console.log('WRITE NEW SETTINGS', JSON.stringify(newSettings, null, 2));
-
         // adjust settings from old format to new format
         await currentProject.updateEnvSettings(newSettings);
+
+        await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
+        const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+        const runtimePath = currentProject.getRuntimePath();
+        if (runtimePath) {
+          // install all dependencies and build the app
+          BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
+          await runtime.build(runtimePath, currentProject);
+        }
 
         const project = currentProject.getProject();
 
