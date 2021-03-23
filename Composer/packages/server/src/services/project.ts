@@ -204,7 +204,11 @@ export class BotProjectService {
     }
   };
 
-  public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
+  public static openProject = async (
+    locationRef: LocationRef,
+    user?: UserIdentity,
+    allowPartialBots?: boolean
+  ): Promise<string> => {
     BotProjectService.initialize();
 
     // TODO: this should be refactored or moved into the BotProject constructor so that it can use user auth amongst other things
@@ -213,7 +217,7 @@ export class BotProjectService {
       throw new Error(`file ${locationRef.path} does not exist`);
     }
 
-    if (!(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))) {
+    if (!allowPartialBots && !(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))) {
       throw new Error(`${locationRef.path} is not a bot project folder`);
     }
 
@@ -427,6 +431,67 @@ export class BotProjectService {
       throw new Error(`Failed to backup project ${project.id}: ${e}`);
     }
   };
+
+  public static async migrateProjectAsync(req: Request, jobId: string) {
+    const { oldProjectId, name, description, location, storageId } = req.body;
+    // todo: use this
+    description;
+    // console.log(`Migrate ${oldProjectId} to ${location}/${name} with ${description}`);
+    const user = await ExtensionContext.getUserFromRequest(req);
+
+    try {
+      const locationRef = getLocationRef(location, storageId, name);
+
+      await BotProjectService.cleanProject(locationRef);
+
+      // Update status for polling
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
+
+      const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(
+        '@microsoft/generator-microsoft-bot-adaptive',
+        '*', // use any available version
+        name,
+        locationRef,
+        jobId,
+        user
+      );
+
+      // update project ref to point at newly created folder
+      newProjRef.path = `${newProjRef.path}/${name}`;
+
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Bot files created'));
+
+      const originalProject = await BotProjectService.getProjectById(oldProjectId, user);
+      const originalFiles = originalProject.getProject().files;
+
+      // pass in allowPartialBots = true so that this project can be opened even though
+      // it doesn't yet have a root dialog...
+      const id = await BotProjectService.openProject(newProjRef, user, true);
+      const currentProject = await BotProjectService.getProjectById(id, user);
+
+      // add all original files to new project
+      for (let f = 0; f < originalFiles.length; f++) {
+        // console.log(`migrate file ${originalFiles[f].name} with root being ${originalProject.rootDialogId} `);
+        if (!originalFiles[f].name.match(/\.botproj$/)) {
+          await currentProject.migrateFile(
+            originalFiles[f].name,
+            originalFiles[f].content,
+            originalProject.rootDialogId
+          );
+        }
+      }
+
+      const project = currentProject.getProject();
+      log('Project created successfully.');
+      BackgroundProcessManager.updateProcess(jobId, 200, 'Migrated successfully', {
+        id,
+        ...project,
+      });
+    } catch (err) {
+      BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
+      // TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+    }
+  }
 
   public static async createProjectAsync(req: Request, jobId: string) {
     const {
