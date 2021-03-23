@@ -59,6 +59,7 @@ import {
   removeRecentProject,
   resetBotStates,
   saveProject,
+  migrateToV2,
 } from './utils/project';
 
 export const projectDispatcher = () => {
@@ -429,6 +430,27 @@ export const projectDispatcher = () => {
     }
   );
 
+  const migrateProjectTo = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (oldProjectId, name, description, location) => {
+      const { set, snapshot } = callbackHelpers;
+      try {
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        set(botOpeningState, true);
+
+        // starts the creation process and stores the jobID in state for tracking
+        const response = await migrateToV2(callbackHelpers, oldProjectId, name, description, location);
+
+        if (response.data.jobId) {
+          dispatcher.updateCreationMessage(response.data.jobId, '', '', '', '');
+        }
+      } catch (ex) {
+        set(botProjectIdsState, []);
+        handleProjectFailure(callbackHelpers, ex);
+        navigateTo('/home');
+      }
+    }
+  );
+
   const deleteBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
       const { reset } = callbackHelpers;
@@ -596,6 +618,7 @@ export const projectDispatcher = () => {
     createNewBotV2,
     deleteBot,
     saveProjectAs,
+    migrateProjectTo,
     fetchProjectById,
     fetchRecentProjects,
     setBotStatus,

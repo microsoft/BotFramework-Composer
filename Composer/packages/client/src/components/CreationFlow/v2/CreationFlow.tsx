@@ -42,6 +42,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     fetchRecentProjects,
     openProject,
     saveProjectAs,
+    migrateProjectTo,
     fetchProjectById,
     createNewBotV2,
     fetchReadMe,
@@ -135,13 +136,21 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
+  const handleMigrate = (formData) => {
+    setCreationFlowStatus(CreationFlowStatus.MIGRATE);
+    alert(`Migrate ${projectId} to ${formData.location}`);
+    migrateProjectTo(projectId, formData.name, formData.description, formData.location);
+  };
+
   const handleSubmit = async (formData, templateId: string) => {
     handleDismiss();
     switch (creationFlowStatus) {
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
         break;
-
+      case CreationFlowStatus.MIGRATE:
+        handleMigrate(formData);
+        break;
       default:
         saveTemplateId(templateId);
         await handleCreateNew(formData, templateId);
@@ -192,6 +201,15 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onOpen={openBot}
+        />
+        <DefineConversationV2
+          createFolder={createFolder}
+          focusedStorageFolder={focusedStorageFolder}
+          path="migrate/:projectId"
+          updateFolder={updateFolder}
+          onCurrentPathUpdate={updateCurrentPath}
+          onDismiss={handleDismiss}
+          onSubmit={handleMigrate}
         />
         <ImportModal path="import" />
       </Router>

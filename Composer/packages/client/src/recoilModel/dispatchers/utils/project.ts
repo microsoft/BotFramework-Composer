@@ -345,6 +345,10 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
 
+export const isAdaptiveRuntime = (settings): boolean => {
+  return settings?.runtime?.key?.match(/^adaptive-runtime/) ? true : false;
+};
+
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { set } = callbackHelpers;
   const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
@@ -361,6 +365,14 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     recognizers,
     crossTrainConfig,
   } = botFiles;
+
+  // TODO: not sure if this is the best place for this.
+  // probably better to do this from where initBotState is called
+  console.log('SETTINGS', settings);
+  if (!isAdaptiveRuntime(settings)) {
+    confirm('Your project must be updated to open it using this version of Composer');
+    navigateTo(`/v2/projects/migrate/${projectId}`);
+  }
 
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -578,6 +590,23 @@ export const createNewBotFromTemplateV2 = async (
   return jobId;
 };
 
+export const migrateToV2 = async (
+  callbackHelpers,
+  oldProjectId: string,
+  name: string,
+  description: string,
+  location: string
+) => {
+  const jobId = await httpClient.post(`/v2/projects/migrate`, {
+    storageId: 'default',
+    oldProjectId,
+    name,
+    description,
+    location,
+  });
+  return jobId;
+};
+
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
   let isBotProjectLoaded = false;
   set(botProjectIdsState, (current: string[]) => {
@@ -750,6 +779,22 @@ export const openRootBotAndSkillsByProjectId = async (callbackHelpers: CallbackI
 };
 
 export const saveProject = async (callbackHelpers, oldProjectData) => {
+  const { oldProjectId, name, description, location } = oldProjectData;
+  const response = await httpClient.post(`/projects/${oldProjectId}/project/saveAs`, {
+    storageId: 'default',
+    name,
+    description,
+    location,
+  });
+  const data = loadProjectData(response.data);
+  if (data.error) {
+    throw data.error;
+  }
+  const result = openRootBotAndSkills(callbackHelpers, data);
+  return result;
+};
+
+export const migrateProject = async (callbackHelpers, oldProjectData) => {
   const { oldProjectId, name, description, location } = oldProjectData;
   const response = await httpClient.post(`/projects/${oldProjectId}/project/saveAs`, {
     storageId: 'default',

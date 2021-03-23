@@ -51,6 +51,7 @@ const parseSourceFileName = (name: string, locale: string) => {
   } else {
     fileId = id;
   }
+  // console.log('PARSE SOURCe FILE NAME', name, locale, id, dialogId, fileId);
 
   return { fileId, dialogId, fileType, locale };
 };
@@ -85,6 +86,7 @@ export const BotStructureFilesPatterns = [
 
 // parse file name: [fileId].[locale].[fileType]
 export const parseFileName = (name: string, defaultLocale: string) => {
+  // console.log('PARSE FILE NAME', name);
   if (name.endsWith(FileExtensions.SourceQnA)) {
     return parseSourceFileName(name, defaultLocale);
   }
@@ -99,6 +101,7 @@ export const parseFileName = (name: string, defaultLocale: string) => {
     locale = id.slice(index + 1);
   }
   const dialogId = fileId;
+  // console.log('PARSED FILE NAME', dialogId, fileId);
   return { dialogId, fileId, locale, fileType };
 };
 
@@ -121,9 +124,13 @@ export const defaultFilePath = (
   const { fileId, locale, fileType, dialogId } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
 
+  // console.log('GOT DIALOG ID', dialogId, ' for ', filename, 'with', rootDialogId);
+
   // now recognizer extension is .lu.dialog or .qna.dialog
   if (isRecognizer(filename)) {
+    // console.log('IS RECOGNIZER!!!', filename);
     const dialogId = filename.split('.')[0];
+    // console.log('NEW DIALOG ID', dialogId);
     const isRoot = filename.startsWith(botName) || (rootDialogId && filename.startsWith(rootDialogId));
     if (endpoint) {
       return templateInterpolate(Path.join(endpoint, BotStructureTemplate.recognizer), {
@@ -170,7 +177,9 @@ export const defaultFilePath = (
   }
 
   const DIALOGNAME = dialogId;
-  const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
+  const isRootFile = BOTNAME === DIALOGNAME.toLowerCase() || rootDialogId === DIALOGNAME;
+
+  // console.log(`${filename} is root? ${isRootFile} because ${rootDialogId} and ${DIALOGNAME}`);
 
   if (fileType === FileExtensions.SourceQnA) {
     if (endpoint) {
