@@ -26,7 +26,6 @@ import { triggerNotSupported } from '../../utils/dialogValidator';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { dialog } from '../ErrorPopup/styles';
 import { getBaseName } from '../../utils/fileUtil';
 
 import { TreeItem } from './treeItem';
