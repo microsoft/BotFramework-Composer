@@ -467,7 +467,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 />
               </Fragment>
             )}
-            {!isImportedSource && <div>{groupName}</div>}
+            {!isImportedSource && <div css={groupNameStyle}>{groupName}</div>}
           </div>
         );
       };

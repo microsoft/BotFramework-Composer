@@ -154,7 +154,7 @@ const QnAPage: React.FC<RouteComponentProps<{
             {onRenderContent()}
           </TabHeader>
         ) : (
-          onRenderContent()
+          <div css={{ overflowY: 'auto', height: '100%' }}>{onRenderContent()}</div>
         )}
         <CreateQnAModal
           dialogId={createQnAOnInfo.dialogId}
