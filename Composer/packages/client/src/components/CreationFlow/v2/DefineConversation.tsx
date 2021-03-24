@@ -359,15 +359,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
               />
             </StackItem>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                data-testid="NewDialogRuntimeLanguage"
-                label={formatMessage('Runtime type')}
-                options={runtimeLanguageOptions}
-                selectedKey={formData.runtimeLanguage}
-                onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
-              />
-            </StackItem>
           </Stack>
           {locationSelectContent}
           <DialogFooter>
