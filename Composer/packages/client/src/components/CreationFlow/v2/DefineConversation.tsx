@@ -15,22 +15,16 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey, QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-import {
-  DialogCreationCopy,
-  nameRegexV2,
-  runtimeOptions,
-  defaultRuntime,
-  runtimeLanguageOptions,
-} from '../../../constants';
+import { DialogCreationCopy, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
-import { dispatcherState } from '../../../recoilModel';
+import { dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
 
@@ -121,6 +115,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
   const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
+  const templateProjects = useRecoilValue(templateProjectsState);
 
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = (templateId?: string) => {
@@ -298,6 +293,28 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     updateField('location', newPath);
   };
 
+  const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
+    const result: IDropdownOption[] = [];
+    const currentTemplate = templateProjects.find((t) => {
+      if (t?.id) {
+        return t.id === templateId;
+      }
+    });
+
+    if (currentTemplate) {
+      if (runtimeLanguage === csharpFeedKey) {
+        currentTemplate.dotnetSupport?.functionsSupported &&
+          result.push({ key: functionsRuntimeKey, text: 'Azure Functions' });
+        currentTemplate.dotnetSupport?.webAppSupported && result.push({ key: webAppRuntimeKey, text: 'Azure Web App' });
+      } else if (runtimeLanguage === nodeFeedKey) {
+        currentTemplate.nodeSupport?.functionsSupported &&
+          result.push({ key: functionsRuntimeKey, text: 'Azure Functions' });
+        currentTemplate.nodeSupport?.webAppSupported && result.push({ key: webAppRuntimeKey, text: 'Azure Web App' });
+      }
+    }
+    return result;
+  };
+
   useEffect(() => {
     const location =
       focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
@@ -354,7 +371,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
               <Dropdown
                 data-testid="NewDialogRuntimeType"
                 label={formatMessage('Runtime type')}
-                options={runtimeOptions}
+                options={getSupportedRuntimesForTemplate()}
                 selectedKey={formData.runtimeChoice}
                 onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
               />
