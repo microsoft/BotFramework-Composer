@@ -287,6 +287,7 @@ export const AzureProvisionDialog: React.FC = () => {
           sessionExpired: false,
         });
         setPage(PageTypes.ConfigProvision);
+        setLoginErrorMsg(undefined);
       })
       .catch((err) => {
         setTenantId(undefined);
@@ -328,24 +329,7 @@ export const AzureProvisionDialog: React.FC = () => {
           }
         });
       } else {
-        getARMTokenForTenant(getTenantIdFromCache())
-          .then((token) => {
-            if (isMounted.current) {
-              setToken(token);
-              const decoded = decodeToken(token);
-              setCurrentUser({
-                token: token,
-                email: decoded.upn,
-                name: decoded.name,
-                expiration: (decoded.exp || 0) * 1000, // convert to ms,
-                sessionExpired: false,
-              });
-            }
-          })
-          .catch((err) => {
-            setCurrentUser(undefined);
-            setLoginErrorMsg(err.message || err.toString());
-          });
+        getTokenForTenant(getTenantIdFromCache());
       }
     }
   }, []);
