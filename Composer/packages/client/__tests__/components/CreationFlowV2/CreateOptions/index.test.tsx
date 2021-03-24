@@ -10,6 +10,7 @@ import { CreateOptionsV2 } from '../../../../src/components/CreationFlow/v2/Crea
 describe('<CreateOptionsV2/>', () => {
   const handleDismissMock = jest.fn();
   const handleCreateNextMock = jest.fn();
+  const handleJumpToOpenModal = jest.fn();
   const handleFetchReadMeMock = jest.fn();
   const handleFetchTemplatesMock = jest.fn();
 
@@ -35,6 +36,7 @@ describe('<CreateOptionsV2/>', () => {
         path="create"
         templates={templates}
         onDismiss={handleDismissMock}
+        onJumpToOpenModal={handleJumpToOpenModal}
         onNext={handleCreateNextMock}
       />
     );
