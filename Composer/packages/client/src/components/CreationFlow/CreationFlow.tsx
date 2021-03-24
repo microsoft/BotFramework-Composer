@@ -99,6 +99,11 @@ const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => 
     navigate(`/home`);
   };
 
+  const handleJumpToOpenModal = () => {
+    setCreationFlowStatus(CreationFlowStatus.OPEN);
+    navigate('./open');
+  };
+
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
     await openProject(botFolder, 'default', true, (projectId) => {
@@ -164,7 +169,13 @@ const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => 
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
         />
-        <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
+        <CreateOptions
+          path="create"
+          templates={templateProjects}
+          onDismiss={handleDismiss}
+          onJumpToOpenModal={handleJumpToOpenModal}
+          onNext={handleCreateNext}
+        />
         <DefineConversation
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
