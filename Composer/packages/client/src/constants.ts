@@ -420,4 +420,4 @@ export const runtimeOptions: IDropdownOption[] = [
   { key: 'azureFunctions', text: 'Azure Functions' },
 ];
 
-export const onboardingDisabled = true;
+export const onboardingDisabled = false;
