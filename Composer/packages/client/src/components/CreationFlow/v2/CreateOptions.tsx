@@ -115,8 +115,6 @@ const optionKeys = {
 const templateRequestUrl =
   'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
 
-const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
-
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
@@ -131,8 +129,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [disabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { templates, onDismiss, onNext } = props;
-  const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
-  const [emptyBotKey, setEmptyBotKey] = useState('');
+  const [currentTemplateId, setCurrentTemplateId] = useState('');
   const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
     props: { itemKey: csharpFeedKey },
   });
@@ -154,22 +151,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, []);
 
   const handleJumpToNext = () => {
-    let routeToTemplate = emptyBotKey;
-    if (option === optionKeys.createFromTemplate) {
-      routeToTemplate = currentTemplateId;
-    }
-
-    if (option === optionKeys.createFromQnA) {
-      routeToTemplate = QnABotTemplateId;
-    }
-
-    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: currentTemplateId });
 
     const runtimeLanguage = selectedProgLang?.props?.itemKey ? selectedProgLang.props.itemKey : csharpFeedKey;
     if (props.location && props.location.search) {
-      onNext(routeToTemplate, runtimeLanguage, props.location.search);
+      onNext(currentTemplateId, runtimeLanguage, props.location.search);
     } else {
-      onNext(routeToTemplate, runtimeLanguage);
+      onNext(currentTemplateId, runtimeLanguage);
     }
   };
 
@@ -260,10 +248,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   useEffect(() => {
     if (displayedTemplates.length > 1) {
-      const emptyBotTemplate = find(displayedTemplates, ['id', defaultTemplateId]);
-      if (emptyBotTemplate) {
-        setCurrentTemplateId(emptyBotTemplate.id);
-        setEmptyBotKey(emptyBotTemplate.id);
+      if (displayedTemplates[0].id) {
+        setCurrentTemplateId(displayedTemplates[0].id);
       }
     }
   }, [displayedTemplates]);
