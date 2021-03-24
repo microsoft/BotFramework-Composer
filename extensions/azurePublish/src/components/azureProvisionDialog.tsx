@@ -597,7 +597,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const PageFormConfig = (
     <Fragment>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
-      <Suspense fallback={<Spinner label="Loading" />}>
+      <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
         {subscriptionOption?.length > 0 && choice.key === 'create' && (
           <form style={{ width: '50%', marginTop: '16px' }}>
             <Dropdown
@@ -607,7 +607,7 @@ export const AzureProvisionDialog: React.FC = () => {
               disabled={currentConfig?.subscriptionId}
               label={formatMessage('Subscription')}
               options={subscriptionOption}
-              placeholder={'Select one'}
+              placeholder={formatMessage('Select one')}
               styles={{ root: { paddingBottom: '8px' } }}
               onChange={updateCurrentSubscription}
               onRenderLabel={onRenderLabel}
@@ -621,7 +621,7 @@ export const AzureProvisionDialog: React.FC = () => {
               disabled={currentConfig?.resourceGroup}
               errorMessage={errorResourceGroupName}
               label={formatMessage('Resource group name')}
-              placeholder={'Name of your new resource group'}
+              placeholder={formatMessage('Name of your new resource group')}
               styles={{ root: { paddingBottom: '8px' } }}
               onChange={updateCurrentResourceGroup}
               onRenderLabel={onRenderLabel}
@@ -635,7 +635,7 @@ export const AzureProvisionDialog: React.FC = () => {
               disabled={currentConfig?.hostname || currentConfig?.name}
               errorMessage={errorHostName}
               label={formatMessage('Resource name')}
-              placeholder={'Name of your services'}
+              placeholder={formatMessage('Name of your services')}
               styles={{ root: { paddingBottom: '8px' } }}
               onChange={newHostName}
               onRenderLabel={onRenderLabel}
@@ -653,9 +653,9 @@ export const AzureProvisionDialog: React.FC = () => {
               <Dropdown
                 required
                 defaultSelectedKey={currentLocation}
-                label={'Region'}
+                label={formatMessage('Region')}
                 options={deployLocationsOption}
-                placeholder={'Select one'}
+                placeholder={formatMessage('Select one')}
                 styles={{ root: { paddingBottom: '8px' } }}
                 onChange={updateCurrentLocation}
               />
@@ -674,9 +674,9 @@ export const AzureProvisionDialog: React.FC = () => {
               <Dropdown
                 required
                 defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
-                label={'Region for Luis'}
+                label={formatMessage('Region for Luis')}
                 options={luisLocationsOption}
-                placeholder={'Select one'}
+                placeholder={formatMessage('Select one')}
                 onChange={updateLuisLocation}
               />
             )}
@@ -797,7 +797,7 @@ export const AzureProvisionDialog: React.FC = () => {
             <PrimaryButton
               disabled={!selectedTenant}
               style={{ margin: '0 4px' }}
-              text="Next: Configure Resources"
+              text={formatMessage('Next: Configure Resources')}
               onClick={() => {
                 getTokenForTenant(selectedTenant);
               }}
@@ -810,7 +810,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
@@ -850,13 +850,18 @@ export const AzureProvisionDialog: React.FC = () => {
               <PrimaryButton
                 disabled={isDisAble}
                 style={{ margin: '0 4px' }}
-                text="Next: Review"
+                text={formatMessage('Next: Review')}
                 onClick={() => {
                   onNext(currentHostName);
                 }}
               />
             ) : (
-              <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
+              <PrimaryButton
+                disabled={isEditorError}
+                style={{ margin: '0 4px' }}
+                text={formatMessage('Save')}
+                onClick={onSave}
+              />
             )}
           </div>
         </div>
@@ -866,7 +871,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
@@ -875,7 +880,7 @@ export const AzureProvisionDialog: React.FC = () => {
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
-              text={'Back'}
+              text={formatMessage('Back')}
               onClick={() => {
                 setPage(PageTypes.ConfigProvision);
                 setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -884,7 +889,7 @@ export const AzureProvisionDialog: React.FC = () => {
             <PrimaryButton
               disabled={!isSelectAddResources}
               style={{ margin: '0 4px' }}
-              text={'Next'}
+              text={formatMessage('Next')}
               onClick={() => {
                 setPage(PageTypes.ReviewResource);
                 setTitle(DialogTitle.REVIEW);
@@ -920,7 +925,7 @@ export const AzureProvisionDialog: React.FC = () => {
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
-              text={'Back'}
+              text={formatMessage('Back')}
               onClick={() => {
                 setPage(PageTypes.AddResources);
                 setTitle(DialogTitle.ADD_RESOURCES);
@@ -929,8 +934,8 @@ export const AzureProvisionDialog: React.FC = () => {
             <PrimaryButton
               disabled={isDisAble}
               style={{ margin: '0 4px' }}
-              text={'Done'}
-              onClick={async () => {
+              text={formatMessage('Done')}
+              onClick={() => {
                 const selectedResources = requireResources.concat(enabledResources);
                 onSubmit({
                   subscription: currentSubscription,
@@ -951,12 +956,17 @@ export const AzureProvisionDialog: React.FC = () => {
         <>
           <DefaultButton
             style={{ margin: '0 4px' }}
-            text={'Cancel'}
+            text={formatMessage('Cancel')}
             onClick={() => {
               closeDialog();
             }}
           />
-          <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
+          <PrimaryButton
+            disabled={isEditorError}
+            style={{ margin: '0 4px' }}
+            text={formatMessage('Save')}
+            onClick={onSave}
+          />
         </>
       );
     }
