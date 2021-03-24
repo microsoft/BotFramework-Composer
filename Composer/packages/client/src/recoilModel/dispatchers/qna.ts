@@ -74,9 +74,7 @@ export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
-  const locale = await snapshot.getPromise(localeState(projectId));
-  id = id.endsWith('.source') ? id : `${getBaseName(id)}.${locale}`;
+  const { set } = callbackHelpers;
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
 
   set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedQnAFile] }));
@@ -359,7 +357,7 @@ export const qnaDispatcher = () => {
 
   const updateQnAFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
-      id,
+      id, //qna file id: dialogName.locale or kbName.source.locale
       content,
       projectId,
     }: {
