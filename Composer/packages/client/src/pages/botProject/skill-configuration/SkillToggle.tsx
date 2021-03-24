@@ -12,7 +12,7 @@ import formatMessage from 'format-message';
 import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
 
-export const toggle = css`
+const toggle = css`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -22,7 +22,7 @@ type Props = {
   projectId: string;
 };
 
-export const IsSkill: React.FC<Props> = ({ projectId }) => {
+export const SkillToggle: React.FC<Props> = ({ projectId }) => {
   const { setSettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));

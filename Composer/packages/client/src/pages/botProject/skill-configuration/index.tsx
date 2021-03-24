@@ -8,7 +8,7 @@ import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
 import { title } from '../styles';
 
 import { AllowedCallers } from './AllowedCallers';
-import { IsSkill } from './IsSkill';
+import { SkillToggle } from './SkillToggle';
 
 type Props = {
   projectId: string;
@@ -17,7 +17,7 @@ type Props = {
 export const SkillConfiguration: React.FC<Props> = ({ projectId }) => {
   return (
     <CollapsableWrapper title={formatMessage('Skill configuration')} titleStyle={title}>
-      <IsSkill projectId={projectId} />
+      <SkillToggle projectId={projectId} />
       <AllowedCallers projectId={projectId} />
     </CollapsableWrapper>
   );
