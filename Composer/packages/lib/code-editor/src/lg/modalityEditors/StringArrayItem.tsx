@@ -38,6 +38,9 @@ const Input = styled(TextField)({
   padding: '8px 0 8px 4px',
   width: '100%',
   position: 'relative',
+  '& input::placeholder, & textarea::placeholder': {
+    fontSize: FluentTheme.fonts.small.fontSize,
+  },
   '& input, & textarea': {
     fontSize: FluentTheme.fonts.small.fontSize,
     maxHeight: '97px',
@@ -108,6 +111,7 @@ type Props = {
   onChange?: (event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>, value?: string) => void;
   onLgChange?: (value: string) => void;
   onShowCallout?: (target: HTMLTextAreaElement) => void;
+  onEditorPopToggle?: (expanded: boolean) => void;
 };
 
 type TextViewItemProps = Pick<
@@ -204,6 +208,7 @@ const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldI
         multiline
         componentRef={(ref) => (itemRef.current = ref)}
         defaultValue={value}
+        placeholder={formatMessage('Press Shift+Enter to insert a new line')}
         resizable={false}
         styles={textFieldStyles}
         value={value}
@@ -228,6 +233,7 @@ export const StringArrayItem = (props: Props) => {
     onShowCallout,
     onRemove,
     onFocus,
+    onEditorPopToggle,
     value,
     telemetryClient,
     codeEditorSettings,
@@ -242,6 +248,10 @@ export const StringArrayItem = (props: Props) => {
     },
     [editorMode]
   );
+
+  const popExpandOptions = React.useMemo(() => ({ onEditorPopToggle, popExpandTitle: formatMessage('Attachment') }), [
+    onEditorPopToggle,
+  ]);
 
   return (
     <Root verticalAlign="center">
@@ -258,6 +268,7 @@ export const StringArrayItem = (props: Props) => {
               lgTemplates={lgTemplates}
               memoryVariables={memoryVariables}
               options={{ folding: false }}
+              popExpandOptions={popExpandOptions}
               telemetryClient={telemetryClient}
               value={value}
               onChange={onLgChange}

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { filterSectionDiagnostics } from '@bfc/indexers';
@@ -40,6 +40,19 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     );
   }, [intentName]);
 
+  const navigateToLuPage = useCallback(
+    (luFileId: string, sectionId?: string) => {
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      const pattern = new RegExp(`.${locale}`, 'g');
+      const fileId = currentDialog.isFormDialog ? luFileId : luFileId.replace(pattern, '');
+      const url = currentDialog.isFormDialog
+        ? `/bot/${projectId}/language-understanding/${currentDialog.id}/item/${fileId}`
+        : `/bot/${projectId}/language-understanding/${fileId}${sectionId ? `/edit?t=${sectionId}` : ''}`;
+      shellApi.navigateTo(url);
+    },
+    [shellApi, projectId, locale]
+  );
+
   if (!luFile || !intentName) {
     return null;
   }
@@ -65,11 +78,13 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
       height={225}
+      luFile={luFile}
       luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId, luFeatures }}
       placeholder={placeholder || inlineModePlaceholder}
       value={luIntent.Body}
       onChange={commitChanges}
       onChangeSettings={handleSettingsChange}
+      onNavigateToLuPage={navigateToLuPage}
     />
   );
 };
