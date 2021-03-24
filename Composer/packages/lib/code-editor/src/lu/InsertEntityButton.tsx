@@ -77,6 +77,7 @@ export const InsertEntityButton = React.memo((props: Props) => {
   return (
     <CommandBarButton
       className={jsLuToolbarMenuClassName}
+      data-testid="menuButton"
       disabled={disabled}
       iconProps={{ iconName }}
       menuProps={menuProps}

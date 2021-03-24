@@ -157,6 +157,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
   return (
     <CommandBarButton
       className={jsLuToolbarMenuClassName}
+      data-testid="menuButton"
       iconProps={{ iconName }}
       menuProps={menuProps}
       styles={buttonStyles}
