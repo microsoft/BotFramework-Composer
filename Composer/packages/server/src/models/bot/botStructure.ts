@@ -10,6 +10,7 @@ const BotStructureTemplate = {
   entry: '${BOTNAME}.dialog',
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
+  manifestLu: 'manifest/${FILENAME}.${LOCALE}.lu',
   qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
   sourceQnA: 'knowledge-base/source/${FILENAME}.source.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
@@ -104,6 +105,14 @@ export const parseFileName = (name: string, defaultLocale: string) => {
 
 export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
 export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config.json');
+
+export const defaultManifestFilePath = (botName: string, fileName: string, locale: string): string => {
+  return templateInterpolate(BotStructureTemplate.manifestLu, {
+    BOTNAME: botName,
+    FILENAME: fileName,
+    LOCALE: locale,
+  });
+};
 
 export const defaultFilePath = (
   botName: string,
