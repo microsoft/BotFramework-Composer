@@ -8,6 +8,7 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
+import { Tenants } from '@azure/arm-subscriptions';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -240,12 +241,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           // old publish profile without tenant id
         } else {
           let tenant = getTenantIdFromCache();
+          let tenants;
           if (!tenant) {
             try {
-              const tenants = await AuthClient.getTenants();
+              tenants = await AuthClient.getTenants();
 
-              if (tenants.length > 1) {
-                const notification = createNotification({
+              tenant = tenants?.[0]?.tenantId;
+              setTenantId(tenant);
+
+              token = tenantTokenMap.get(tenant) ?? (await AuthClient.getARMTokenForTenant(tenant));
+            } catch (err) {
+              let notification;
+              if (err?.message.includes('does not exist in tenant') && tenants.length > 1) {
+                notification = createNotification({
                   type: 'error',
                   title: formatMessage('Unsupported publishing profile'),
                   description: formatMessage(
@@ -253,22 +261,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
                     { profileName: target.name }
                   ),
                 });
-                addNotification(notification);
-                return token;
               } else {
-                tenant = tenants?.[0]?.tenantId;
-                setTenantId(tenant);
+                notification = createNotification({
+                  type: 'error',
+                  title: formatMessage('Authentication Error'),
+                  description: formatMessage('There was an error accessing your Azure account: {errorMsg}', {
+                    errorMsg: err.message,
+                  }),
+                });
               }
-
-              token = tenantTokenMap.get(tenant) ?? (await AuthClient.getARMTokenForTenant(tenant));
-            } catch (err) {
-              const notification = createNotification({
-                type: 'error',
-                title: formatMessage('Authentication Error'),
-                description: formatMessage('There was an error accessing your Azure account: {errorMsg}', {
-                  errorMsg: err.message,
-                }),
-              });
               addNotification(notification);
             }
           }
