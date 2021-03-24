@@ -103,7 +103,7 @@ describe('OneAuth Serivce', () => {
   });
 
   it('should try to acquire a token interactively if interaction is required', async () => {
-    mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({ error: { status: INTERACTION_REQUIRED } });
+    mockOneAuth.acquireCredentialSilently.mockRejectedValueOnce({ error: { status: 2 /* Interaction Required */ } });
     const result = await oneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
 
     expect(mockOneAuth.acquireCredentialInteractively).toHaveBeenCalled();
@@ -214,6 +214,16 @@ describe('OneAuth Serivce', () => {
     (oneAuthService as any).signedInARMAccount = {};
     const result = await oneAuthService.getARMTokenForTenant('someTenant');
 
+    expect(result).toBe('someARMToken');
+  });
+
+  it('should get an ARM token for a tenant interactively if interaction is required', async () => {
+    mockOneAuth.acquireCredentialInteractively.mockReturnValueOnce({ credential: { value: 'someARMToken' } });
+    mockOneAuth.acquireCredentialSilently.mockRejectedValueOnce({ error: { status: 2 /* Interaction Required */ } });
+    (oneAuthService as any).signedInARMAccount = {};
+    const result = await oneAuthService.getARMTokenForTenant('someTenant');
+
+    expect(mockOneAuth.acquireCredentialInteractively).toHaveBeenCalled();
     expect(result).toBe('someARMToken');
   });
 
