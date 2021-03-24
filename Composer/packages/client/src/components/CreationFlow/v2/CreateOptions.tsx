@@ -30,7 +30,7 @@ type CreateOptionsProps = {
 } & RouteComponentProps<{}>;
 
 export function CreateOptionsV2(props: CreateOptionsProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const { templates, onDismiss, onNext, onJumpToOpenModal, fetchTemplates, fetchReadMe } = props;
@@ -47,7 +47,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           .get<any>(`/api/projects/alias/${alias}`)
           .then((aliasRes) => {
             if (aliasRes.status === 200) {
-              setIsOpen(true);
+              setIsOpenOptionsModal(true);
               return;
             }
           })
@@ -80,7 +80,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   return (
     <Fragment>
-      <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
+      <DialogWrapper
+        isOpen={isOpenOptionsModal}
+        {...dialogWrapperProps}
+        dialogType={DialogTypes.CreateFlow}
+        onDismiss={onDismiss}
+      >
         <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
         <DialogFooter>
           <PrimaryButton data-testid="NextStepButton" text={formatMessage('Open')} onClick={handleJumpToNext} />
