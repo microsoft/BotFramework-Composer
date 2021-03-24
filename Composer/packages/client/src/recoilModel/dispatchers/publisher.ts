@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig, isSkillHostUpdateRequired, PublishResult } from '@bfc/shared';
+import { defaultPublishConfig, isSkillHostUpdateRequired, PublishResult, PublishTarget } from '@bfc/shared';
 
 import {
   publishTypesState,
@@ -179,7 +179,7 @@ export const publisherDispatcher = () => {
   const publishToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       projectId: string,
-      target: any,
+      target: PublishTarget,
       metadata: any,
       sensitiveSettings,
       token = ''

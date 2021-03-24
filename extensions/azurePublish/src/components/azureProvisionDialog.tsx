@@ -519,15 +519,12 @@ export const AzureProvisionDialog: React.FC = () => {
     [extensionResourceOptions]
   );
 
-  const onSubmit = useMemo(
-    () => (options) => {
-      // call back to the main Composer API to begin this process...
-      startProvision(options);
-      clearAll();
-      closeDialog();
-    },
-    []
-  );
+  const onSubmit = useCallback((options) => {
+    // call back to the main Composer API to begin this process...
+    startProvision({ ...options, tenantId: selectedTenant });
+    clearAll();
+    closeDialog();
+  }, []);
 
   const onSave = useMemo(
     () => () => {
@@ -587,8 +584,7 @@ export const AzureProvisionDialog: React.FC = () => {
               label={formatMessage('Tenant')}
               options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
               selectedKey={selectedTenant}
-              onChange={(e, o) => {
-                console.log('selecting option', o.text, o.key);
+              onChange={(_e, o) => {
                 setSelectedTenant(o.key as string);
               }}
             />
@@ -936,7 +932,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={'Done'}
               onClick={async () => {
                 const selectedResources = requireResources.concat(enabledResources);
-                await onSubmit({
+                onSubmit({
                   subscription: currentSubscription,
                   resourceGroup: currentResourceGroup,
                   hostname: currentHostName,
