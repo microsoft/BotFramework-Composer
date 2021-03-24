@@ -255,9 +255,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         token = await AuthClient.getARMTokenForTenant(tenant);
       }
     }
-    // get keyvault token
-    const result = await AuthClient.getAccessToken(vaultScopes);
-    console.log('kv -----------', result);
 
     setPublishDialogVisiblity(false);
     // notifications

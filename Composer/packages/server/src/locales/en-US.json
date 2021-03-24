@@ -707,6 +707,9 @@
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
   },
+  "connect_to_an_existing_bot_7f42990b": {
+    "message": "Connect to an existing bot"
+  },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
   },
@@ -784,6 +787,9 @@
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
+  },
+  "create_a_new_bot_51ce70d3": {
+    "message": "Create a new bot"
   },
   "create_a_new_dialog_21d84b82": {
     "message": "Create a new dialog"
@@ -1085,6 +1091,9 @@
   "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
     "message": "Display text used by the channel to render visually."
   },
+  "do_you_want_to_create_a_new_bot_or_connect_your_az_f5c9dee": {
+    "message": "Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?"
+  },
   "do_you_want_to_proceed_cd35aa38": {
     "message": "Do you want to proceed?"
   },
@@ -1222,9 +1231,6 @@
   },
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
-  },
-  "enable_the_component_model_including_the_new_creat_f6e5659c": {
-    "message": "Enable the Component Model including the new creation experience, the Adaptive Runtime, and Package Manager."
   },
   "enabled_ba7cab66": {
     "message": "Enabled"
@@ -2198,6 +2204,9 @@
   "new_13daf639": {
     "message": "New"
   },
+  "new_creation_experience_29591aca": {
+    "message": "New Creation Experience"
+  },
   "new_template_49e6f0f2": {
     "message": "New template"
   },
@@ -2360,6 +2369,9 @@
   "open_web_chat_7a24d4f8": {
     "message": "Open web chat"
   },
+  "open_your_azure_bot_resource_9165e3d1": {
+    "message": "Open your Azure Bot resource"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -2455,6 +2467,9 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
+  },
+  "preview_the_new_bot_creation_experience_create_new_e0b7150f": {
+    "message": "Preview the new bot creation experience. Create new bots that use the Adaptive Runtime, and can be enhanced using Package Manager."
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -3160,9 +3175,6 @@
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
-  },
-  "the_component_model_febefd93": {
-    "message": "The Component Model"
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."

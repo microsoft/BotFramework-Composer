@@ -32,9 +32,8 @@ export async function getPublishProfileFromPayload(
   source: string
 ): Promise<PublishTarget | undefined> {
   try {
-    const resutl = await httpClient.post(`/import/${source}/generateProfile`, profile);
-    console.log(resutl);
-    return resutl.data;
+    const result = await httpClient.post(`/import/${source}/generateProfile`, profile);
+    return result.data;
   } catch (error) {
     console.log(error);
   }
@@ -42,9 +41,8 @@ export async function getPublishProfileFromPayload(
 
 export async function getAliasFromPayload(source: string, payload: string): Promise<string | undefined> {
   try {
-    const resutl = await httpClient.post(`/import/${source}/getAlias`, JSON.parse(payload));
-    console.log(resutl);
-    return resutl.data.alias;
+    const result = await httpClient.post(`/import/${source}/getAlias`, JSON.parse(payload));
+    return result.data.alias;
   } catch (error) {
     console.log(error);
   }
