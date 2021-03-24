@@ -593,6 +593,9 @@
   "close_d634289d": {
     "message": "Close"
   },
+  "code_editor_1438efc": {
+    "message": "code editor"
+  },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
   },
@@ -1493,6 +1496,9 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
+  "form_b674666c": {
+    "message": "form"
+  },
   "form_dialog_error_ba7c37fe": {
     "message": "Form dialog error"
   },
@@ -2335,6 +2341,9 @@
   },
   "one_of_the_variations_added_below_will_be_selected_bee3c3f1": {
     "message": "One of the variations added below will be selected at random by the LG library."
+  },
+  "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
+    "message": "One or more options that are passed to the dialog that is called."
   },
   "open_an_existing_skill_fbd87273": {
     "message": "Open an existing skill"
