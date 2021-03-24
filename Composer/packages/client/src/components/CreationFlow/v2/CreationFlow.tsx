@@ -140,6 +140,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   };
 
   const handleMigrate = (formData) => {
+    handleDismiss();
     setCreationFlowStatus(CreationFlowStatus.MIGRATE);
     migrateProjectTo(projectId, formData.name, formData.description, formData.location);
   };
@@ -208,7 +209,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="migrate/:projectId"
-          templateId={botProject?.name || 'migrated_project'} // use templateId for default project name
+          templateId={botProject?.name || 'migrated_project'} // templateId is used for default project name
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
