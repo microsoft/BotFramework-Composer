@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogSetting, FileInfo, lgImportResolverGenerator } from '@bfc/shared';
+import { DialogSetting, FileInfo, lgImportResolverGenerator, luImportResolverGenerator } from '@bfc/shared';
 
 import { recognizerIndexer } from './recognizerIndexer';
 import { dialogIndexer } from './dialogIndexer';
@@ -80,6 +80,17 @@ class Indexer {
     return lgImportResolverGenerator(lgFiles, '.lg', locale);
   };
 
+  private getLuImportResolver = (files: FileInfo[], locale: string) => {
+    const luFiles = files.map(({ name, content }) => {
+      return {
+        id: getBaseName(name, '.lu'),
+        content,
+      };
+    });
+
+    return luImportResolverGenerator(luFiles, '.lu', locale);
+  };
+
   public index(files: FileInfo[], botName: string, locale: string, settings: DialogSetting) {
     const result = this.classifyFile(files);
     const luFeatures = settings.luFeatures;
@@ -89,7 +100,11 @@ class Indexer {
       dialogs: dialogIndexer.index(dialogs, botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
-      luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
+      luFiles: luIndexer.index(
+        result[FileExtensions.Lu],
+        luFeatures,
+        this.getLuImportResolver(result[FileExtensions.Lu], locale)
+      ),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifests: skillManifestIndexer.index(skillManifestFiles),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),

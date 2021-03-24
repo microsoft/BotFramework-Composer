@@ -8,18 +8,21 @@ export type LuParsePayload = {
   id: string;
   content: string;
   luFeatures: ILUFeaturesConfig;
+  luFiles: LuFile[];
 };
 
 export type LuAddIntentPayload = {
   luFile: LuFile;
   intent: LuIntentSection;
   luFeatures: ILUFeaturesConfig;
+  luFiles: LuFile[];
 };
 
 export type LuAddIntentsPayload = {
   luFile: LuFile;
   intents: LuIntentSection[];
   luFeatures: ILUFeaturesConfig;
+  luFiles: LuFile[];
 };
 
 export type LuUpdateIntentPayload = {
@@ -27,18 +30,21 @@ export type LuUpdateIntentPayload = {
   intentName: string;
   intent?: { Name?: string; Body?: string };
   luFeatures: ILUFeaturesConfig;
+  luFiles: LuFile[];
 };
 
 export type LuRemoveIntentPayload = {
   luFile: LuFile;
   intentName: string;
   luFeatures: ILUFeaturesConfig;
+  luFiles: LuFile[];
 };
 
 export type LuRemoveIntentsPayload = {
   luFile: LuFile;
   intentNames: string[];
   luFeatures: ILUFeaturesConfig;
+  luFiles: LuFile[];
 };
 
 export type LgParsePayload = {

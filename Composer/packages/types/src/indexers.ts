@@ -112,6 +112,7 @@ export type LuFile = {
   content: string;
   diagnostics: IDiagnostic[];
   intents: LuIntentSection[];
+  allIntents: LuIntentSection[];
   empty: boolean;
   resource: LuParseResource;
   imports: { id: string; path: string; description: string }[];
