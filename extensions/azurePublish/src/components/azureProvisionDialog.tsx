@@ -10,6 +10,7 @@ import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorag
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -70,6 +71,7 @@ const iconStyle = (required) => {
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
+  { key: 'generate', text: 'Generate resource request' },
 ];
 const PageTypes = {
   ConfigProvision: 'config',
@@ -254,6 +256,43 @@ export const AzureProvisionDialog: React.FC = () => {
   const isMounted = useRef<boolean>();
 
   const timerRef = useRef<NodeJS.Timeout>();
+
+  const [handoffInstructions, setHandoffInstructions] = useState<string>('');
+  const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const updateHandoffInstructions = (resources) => {
+    const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
+    const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
+    const createCosmosDb = resources.filter((r) => r.key === 'cosmosDb').length > 0;
+    const createStorage = resources.filter((r) => r.key === 'blobStorage').length > 0;
+    const createAppInsights = resources.filter((r) => r.key === 'applicationInsights').length > 0;
+    const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
+
+    const provisionComposer = `node provisionComposer.js --subscriptionId ${
+      currentSubscription ?? '<YOUR SUBSCRIPTION ID>'
+    } --name ${currentHostName ?? '<RESOURCE NAME>'}
+    --appPassword=<16 CHAR PASSWORD>
+    --location=${currentLocation || 'westus'}
+    --resourceGroup=${currentResourceGroup || '<RESOURCE GROUP NAME>'}
+    --createLuisResource=${createLuisResource}
+    --createLuisAuthoringResource=${createLuisAuthoringResource}
+    --createCosmosDb=${createCosmosDb}
+    --createStorage=${createStorage}
+    --createAppInsights=${createAppInsights}
+    --createQnAResource=${createQnAResource}
+    `;
+
+    const instructions = formatMessage(
+      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      { command: provisionComposer }
+    );
+
+    setHandoffInstructions(instructions);
+  };
+
+  useEffect(() => {
+    const selectedResources = requireResources.concat(enabledResources);
+    updateHandoffInstructions(selectedResources);
+  }, [enabledResources]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -799,7 +838,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 onBack();
               }}
             />
-            {choice.key === 'create' ? (
+            {choice.key === 'create' && (
               <PrimaryButton
                 disabled={isDisAble}
                 style={{ margin: '0 4px' }}
@@ -808,7 +847,15 @@ export const AzureProvisionDialog: React.FC = () => {
                   onNext(currentHostName);
                 }}
               />
-            ) : (
+            )}
+            {choice.key === 'generate' && (
+              <PrimaryButton
+                style={{ margin: '0 4px' }}
+                text={formatMessage('Generate resource request')}
+                onClick={() => onNext(currentHostName)}
+              />
+            )}
+            {choice.key === 'import' && (
               <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
             )}
           </div>
@@ -839,21 +886,26 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={'Next'}
               onClick={() => {
-                setPage(PageTypes.ReviewResource);
-                setTitle(DialogTitle.REVIEW);
-                let selectedResources = enabledResources.slice();
-                selectedResources = selectedResources.map((item) => {
-                  let region = currentConfig?.region || currentLocation;
-                  if (item.key.includes('luis')) {
-                    region = currentLuisLocation;
-                  }
-                  return {
-                    ...item,
-                    region: region,
-                    resourceGroup: currentConfig?.resourceGroup || currentResourceGroup,
-                  };
-                });
-                setReviewListItems(selectedResources);
+                if (choice.key === 'generate') {
+                  alert('FOOO');
+                  setShowHandoff(true);
+                } else {
+                  setPage(PageTypes.ReviewResource);
+                  setTitle(DialogTitle.REVIEW);
+                  let selectedResources = enabledResources.slice();
+                  selectedResources = selectedResources.map((item) => {
+                    let region = currentConfig?.region || currentLocation;
+                    if (item.key.includes('luis')) {
+                      region = currentLuisLocation;
+                    }
+                    return {
+                      ...item,
+                      region: region,
+                      resourceGroup: currentConfig?.resourceGroup || currentResourceGroup,
+                    };
+                  });
+                  setReviewListItems(selectedResources);
+                }
               }}
             />
           </div>
@@ -965,6 +1017,16 @@ export const AzureProvisionDialog: React.FC = () => {
       >
         {PageFooter}
       </div>
+      <ProvisionHandoff
+        developerInstructions={formatMessage('Send this to your IT admin')}
+        handoffInstructions={handoffInstructions}
+        hidden={!showHandoff}
+        title={formatMessage('Generate a provisioning request')}
+        onDismiss={() => {
+          closeDialog();
+          setShowHandoff(false);
+        }}
+      />
     </div>
   );
 };

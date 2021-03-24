@@ -4,29 +4,25 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useMemo, useState, Suspense, Fragment, useEffect } from 'react';
+import React, { useMemo, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogSetting } from '@bfc/shared';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { defaultToolbarButtonStyles, IToolbarItem } from '@bfc/ui-shared';
+import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
-import { GetStarted } from '../../components/GetStarted/GetStarted';
 import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';
 import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { useFeatureFlag } from '../../utils/hooks';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
@@ -69,10 +65,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const userSettings = useRecoilValue(userSettingsState);
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
-  const newCreationFlowFlag = useFeatureFlag('NEW_CREATION_FLOW');
-  const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
-  const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(true);
-  const [toolbarItems, setToolbarItems] = useState<IToolbarItem[]>([]);
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
@@ -94,104 +86,58 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     navigateTo(link);
   };
 
-  const hideTeachingBubble = () => {
-    setShowTeachingBubble(false);
-  };
-  const toggleGetStarted = (newvalue) => {
-    hideTeachingBubble();
-    setShowGetStarted(newvalue);
-  };
-
-  useEffect(() => {
-    if (newCreationFlowFlag) {
-      setToolbarItems([
-        {
-          text: formatMessage('Add a package'),
-          type: 'action',
-          buttonProps: {
-            iconProps: { iconName: 'Package' },
-            onClick: () => buttonClick(linkToPackageManager),
-            styles: defaultToolbarButtonStyles,
-          },
-          align: 'left',
-        },
-        {
-          text: formatMessage('Edit LG'),
-          type: 'action',
-          buttonProps: {
-            iconProps: { iconName: 'Robot' },
-            onClick: () => buttonClick(linkToLGEditor),
-            styles: defaultToolbarButtonStyles,
-          },
-          align: 'left',
-        },
-        {
-          text: formatMessage('Edit LU'),
-          type: 'action',
-          buttonProps: {
-            iconProps: { iconName: 'People' },
-            onClick: () => buttonClick(linkToLUEditor),
-            styles: defaultToolbarButtonStyles,
-          },
-          align: 'left',
-        },
-        {
-          text: formatMessage('Manage connections'),
-          type: 'action',
-          buttonProps: {
-            iconProps: { iconName: 'PlugConnected' },
-            onClick: () => buttonClick(linkToConnections),
-            styles: defaultToolbarButtonStyles,
-          },
-          align: 'left',
-        },
-        {
-          text: formatMessage('Delete bot'),
-          type: 'action',
-          buttonProps: {
-            iconProps: { iconName: 'Trash' },
-            onClick: () => buttonClick(linkToDelete),
-            styles: defaultToolbarButtonStyles,
-          },
-          align: 'left',
-        },
-        {
-          type: 'element',
-          element: (
-            <Fragment>
-              <ActionButton
-                iconProps={{ iconName: 'Rocket' }}
-                id="rocketButton"
-                onClick={() => toggleGetStarted(true)}
-              />
-              {showTeachingBubble && (
-                <TeachingBubble
-                  hasCloseButton
-                  hasCondensedHeadline
-                  headline={formatMessage('Get your bot up and running')}
-                  target="#rocketButton"
-                  onDismiss={hideTeachingBubble}
-                >
-                  {formatMessage(
-                    'Explore next steps and find valuable references and learning resources to design, build, and publish your new bot using Composer.'
-                  )}
-                </TeachingBubble>
-              )}
-            </Fragment>
-          ),
-          align: 'right',
-        },
-      ]);
-    }
-  }, [showTeachingBubble]);
-
-  useEffect(() => {
-    if (props.location?.hash === '#getstarted') {
-      setShowTeachingBubble(true);
-    } else {
-      setShowTeachingBubble(false);
-    }
-  }, []);
+  const toolbarItems = [
+    {
+      text: formatMessage('Add a package'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'Package' },
+        onClick: () => buttonClick(linkToPackageManager),
+        styles: defaultToolbarButtonStyles,
+      },
+      align: 'left',
+    },
+    {
+      text: formatMessage('Edit LG'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'Robot' },
+        onClick: () => buttonClick(linkToLGEditor),
+        styles: defaultToolbarButtonStyles,
+      },
+      align: 'left',
+    },
+    {
+      text: formatMessage('Edit LU'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'People' },
+        onClick: () => buttonClick(linkToLUEditor),
+        styles: defaultToolbarButtonStyles,
+      },
+      align: 'left',
+    },
+    {
+      text: formatMessage('Manage connections'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'PlugConnected' },
+        onClick: () => buttonClick(linkToConnections),
+        styles: defaultToolbarButtonStyles,
+      },
+      align: 'left',
+    },
+    {
+      text: formatMessage('Delete bot'),
+      type: 'action',
+      buttonProps: {
+        iconProps: { iconName: 'Trash' },
+        onClick: () => buttonClick(linkToDelete),
+        styles: defaultToolbarButtonStyles,
+      },
+      align: 'left',
+    },
+  ];
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const localBotProjects = botProjects.filter((b) => !b.isRemote);
@@ -250,12 +196,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <GetStarted
-          isOpen={showGetStarted}
-          onDismiss={() => {
-            toggleGetStarted(false);
-          }}
-        />
         <div css={container}>
           <div css={mainContentHeader}>
             <div css={botNameStyle}>
