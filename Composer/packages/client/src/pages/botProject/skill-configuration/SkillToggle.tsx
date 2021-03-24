@@ -29,7 +29,7 @@ export const SkillToggle: React.FC<Props> = ({ projectId }) => {
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const { skillConfiguration } = mergedSettings;
 
-  const setIsSkill = React.useCallback(
+  const updateIsSkill = React.useCallback(
     (isSkill: boolean) => {
       const updatedSetting = {
         ...cloneDeep(mergedSettings),
@@ -42,21 +42,19 @@ export const SkillToggle: React.FC<Props> = ({ projectId }) => {
 
   const toggleIsSKill = React.useCallback(
     (event, checked?: boolean) => {
-      setIsSkill(!!checked);
+      updateIsSkill(!!checked);
     },
-    [setIsSkill]
+    [updateIsSkill]
   );
 
   return (
-    <React.Fragment>
-      <div css={toggle}>
-        <Toggle
-          inlineLabel
-          checked={!!skillConfiguration?.isSkill}
-          label={formatMessage('Allow bot to be called as skill')}
-          onChange={toggleIsSKill}
-        />
-      </div>
-    </React.Fragment>
+    <div css={toggle}>
+      <Toggle
+        inlineLabel
+        checked={!!skillConfiguration?.isSkill}
+        label={formatMessage('Allow bot to be called as skill')}
+        onChange={toggleIsSKill}
+      />
+    </div>
   );
 };

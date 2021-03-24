@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React from 'react';
 import styled from '@emotion/styled';
 import { useRecoilValue } from 'recoil';
@@ -17,19 +17,9 @@ import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../
 import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
 import { addNewButton, tableColumnHeader } from '../styles';
 
-export const toggle = css`
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-`;
-
 const Input = styled(TextField)({
   width: '100%',
   position: 'relative',
-  '& input, & textarea': {
-    fontSize: FluentTheme.fonts.small.fontSize,
-    maxHeight: '97px',
-  },
   '& .ms-TextField-fieldGroup:focus::after': {
     content: '""',
     position: 'absolute',
@@ -115,7 +105,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const { skillConfiguration } = mergedSettings;
 
-  const setAllowedCallers = React.useCallback(
+  const updateAllowedCallers = React.useCallback(
     (allowedCallers: string[] = []) => {
       const updatedSetting = {
         ...cloneDeep(mergedSettings),
@@ -127,30 +117,29 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   );
 
   const onBlur = React.useCallback(() => {
-    const updatedAllowedCallers = [...skillConfiguration?.allowedCallers];
-    setAllowedCallers(updatedAllowedCallers.filter(Boolean));
-  }, [skillConfiguration?.allowedCallers, setAllowedCallers]);
+    updateAllowedCallers(skillConfiguration?.allowedCallers?.filter(Boolean));
+  }, [skillConfiguration?.allowedCallers, updateAllowedCallers]);
 
   const onChange = React.useCallback(
     (index: number) => (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
-      const updatedAllowedCallers = [...skillConfiguration?.allowedCallers];
+      const updatedAllowedCallers = [...(skillConfiguration?.allowedCallers || [])];
       updatedAllowedCallers[index] = newValue;
-      setAllowedCallers(updatedAllowedCallers);
+      updateAllowedCallers(updatedAllowedCallers);
     },
-    [skillConfiguration?.allowedCallers, setAllowedCallers]
+    [skillConfiguration?.allowedCallers, updateAllowedCallers]
   );
 
   const onRemove = React.useCallback(
     (index: number) => () => {
       const updatedAllowedCallers = skillConfiguration?.allowedCallers?.filter((_, itemIndex) => itemIndex !== index);
-      setAllowedCallers(updatedAllowedCallers);
+      updateAllowedCallers(updatedAllowedCallers);
     },
-    [skillConfiguration?.allowedCallers, setAllowedCallers]
+    [skillConfiguration?.allowedCallers, updateAllowedCallers]
   );
 
   const onAddNewAllowedCaller = React.useCallback(() => {
-    setAllowedCallers([...skillConfiguration?.allowedCallers, '']);
-  }, [skillConfiguration?.allowedCallers, setAllowedCallers]);
+    updateAllowedCallers([...skillConfiguration?.allowedCallers, '']);
+  }, [skillConfiguration?.allowedCallers, updateAllowedCallers]);
 
   return (
     <React.Fragment>
