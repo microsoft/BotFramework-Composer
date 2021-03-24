@@ -87,8 +87,8 @@ function getClientEnvironment(publicUrl) {
         // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
         GIT_SHA: getGitSha().toString().replace('\n', ''),
-        SDK_PACKAGE_VERSION: '4.11.0', // TODO: change this when Composer supports custom schema/custom runtime
-        COMPOSER_VERSION: '1.3.1',
+        SDK_PACKAGE_VERSION: '4.12.2', // TODO: change this when Composer supports custom schema/custom runtime
+        COMPOSER_VERSION: '1.4.0',
         LOCAL_PUBLISH_PATH:
           process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../../extensions/localPublish/hostedBots'),
         WEBLOGIN_CLIENTID: process.env.WEBLOGIN_CLIENTID,
