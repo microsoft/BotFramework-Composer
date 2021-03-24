@@ -9,9 +9,9 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { useRecoilValue } from 'recoil';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import get from 'lodash/get';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
@@ -20,20 +20,18 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
 
-import { LoadingSpinner } from '../LoadingSpinner';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { armScopes } from '../../constants';
 import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
 import { LUIS_REGIONS } from '../../constants';
-import settingStorage from '../../utils/dialogSettingStorage';
-import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { dispatcherState } from '../../recoilModel/atoms';
 
 type ManageLuisProps = {
   hidden: boolean;
   onDismiss: () => void;
   onGetKey: (settings: any) => void;
+  onNext?: () => void;
 };
 
 type KeyRec = {
@@ -44,6 +42,8 @@ type KeyRec = {
 };
 
 const dropdownStyles = { dropdown: { width: '100%' } };
+const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: '14' };
+const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
@@ -52,17 +52,9 @@ const handoffInstructions = formatMessage(
 );
 
 export const ManageLuis = (props: ManageLuisProps) => {
-  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
-  const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [token, setToken] = useState<string | undefined>();
 
-  const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
-  const rootLuisKey = groupLUISAuthoringKey.root;
-  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
-  const rootLuisEndpointKey = groupLUISEndpointKey.root;
-  const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
-  const rootLuisRegion = groupLUISRegion.root;
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
@@ -73,17 +65,21 @@ export const ManageLuis = (props: ManageLuisProps) => {
 
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
   const [luisResourceName, setLuisResourceName] = useState<string>('');
-  const [loadingLUIS, setLoadingLUIS] = useState<boolean>(false);
-  const [showCreateKeyUI, setShowCreateKeyUI] = useState<boolean>(false);
+  const [loadingLUIS, setLoadingLUIS] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('create');
   const [actionOptions, setActionOptions] = useState<IChoiceGroupOption[]>([]);
-  const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(''); // rootLuisKey ??
-  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>(''); //rootLuisEndpointKey ??
-  const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(''); // rootLuisRegion ??
+  const [localRootLuisKey, setLocalRootLuisKey] = useState<string>('');
+  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>('');
+  const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>('');
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [predictionKeys, setPredictionKeys] = useState<KeyRec[]>([]);
   const [authoringKeys, setAuthoringKeys] = useState<KeyRec[]>([]);
+
+  const [outcomeDescription, setOutcomeDescription] = useState<string>('');
+  const [outcomeSummary, setOutcomeSummary] = useState<any>();
+  const [outcomeError, setOutcomeError] = useState<boolean>(false);
 
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -126,7 +122,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
     setSubscription('');
     setAuthoringKeys([]);
     setPredictionKeys([]);
-    setShowCreateKeyUI(false);
+    setCurrentPage(1);
     setActionOptions([
       { key: 'create', text: formatMessage('Create a new LUIS resource'), disabled: true },
       { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: true },
@@ -136,15 +132,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
       hasAuth();
     }
   }, [props.hidden]);
-
-  const closeDialog = () => {
-    props.onDismiss();
-    props.onGetKey({
-      authoringKey: localRootLuisKey,
-      endpointKey: localRootLuisEndpointKey,
-      authoringRegion: localRootLuisRegion,
-    });
-  };
 
   const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
     if (value != null) {
@@ -243,7 +230,18 @@ export const ManageLuis = (props: ManageLuisProps) => {
             location: localRootLuisRegion,
           });
         } catch (err) {
-          setApplicationLevelError(err);
+          setOutcomeDescription(
+            formatMessage(
+              'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
+            )
+          );
+          setOutcomeSummary(
+            <div>
+              <p>{err.message}</p>
+            </div>
+          );
+          setOutcomeError(true);
+          setCurrentPage(3);
           setLoadingLUIS(false);
           return;
         }
@@ -251,17 +249,13 @@ export const ManageLuis = (props: ManageLuisProps) => {
 
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
       try {
-        const authoringResult = await cognitiveServicesManagementClient.accounts.create(
-          resourceGroupName,
-          `${luisResourceName}-authoring`,
-          {
-            kind: 'LUIS.Authoring',
-            sku: {
-              name: 'F0',
-            },
-            location: localRootLuisRegion,
-          }
-        );
+        await cognitiveServicesManagementClient.accounts.create(resourceGroupName, `${luisResourceName}-authoring`, {
+          kind: 'LUIS.Authoring',
+          sku: {
+            name: 'F0',
+          },
+          location: localRootLuisRegion,
+        });
 
         const keys = await cognitiveServicesManagementClient.accounts.listKeys(
           resourceGroupName,
@@ -274,22 +268,29 @@ export const ManageLuis = (props: ManageLuisProps) => {
           setLocalRootLuisKey(keys.key1);
         }
       } catch (err) {
-        setApplicationLevelError(err);
+        setOutcomeDescription(
+          formatMessage(
+            'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
+          )
+        );
+        setOutcomeSummary(
+          <div>
+            <p>{err.message}</p>
+          </div>
+        );
+        setOutcomeError(true);
+        setCurrentPage(3);
         setLoadingLUIS(false);
         return;
       }
       try {
-        const predictionResult = await cognitiveServicesManagementClient.accounts.create(
-          resourceGroupName,
-          `${luisResourceName}`,
-          {
-            kind: 'LUIS',
-            sku: {
-              name: 'S0',
-            },
-            location: localRootLuisRegion,
-          }
-        );
+        await cognitiveServicesManagementClient.accounts.create(resourceGroupName, `${luisResourceName}`, {
+          kind: 'LUIS',
+          sku: {
+            name: 'S0',
+          },
+          location: localRootLuisRegion,
+        });
 
         const keys = await cognitiveServicesManagementClient.accounts.listKeys(
           resourceGroupName,
@@ -302,12 +303,48 @@ export const ManageLuis = (props: ManageLuisProps) => {
           setLocalRootLuisEndpointKey(keys.key1);
         }
       } catch (err) {
-        setApplicationLevelError(err);
+        setOutcomeDescription(
+          formatMessage(
+            'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
+          )
+        );
+        setOutcomeSummary(
+          <div>
+            <p>{err.message}</p>
+          </div>
+        );
+        setOutcomeError(true);
+        setCurrentPage(3);
         setLoadingLUIS(false);
         return;
       }
 
       setLoadingLUIS(false);
+
+      setOutcomeDescription(
+        formatMessage('The following LUIS resource was successfully created and added to your bot project:')
+      );
+      setOutcomeSummary(
+        <div>
+          <p>
+            <label css={summaryLabelStyles}>{formatMessage('Subscription')}</label>
+            {subscriptionId}
+          </p>
+          <p>
+            <label css={summaryLabelStyles}>{formatMessage('Resource Group')}</label>
+            {resourceGroupName}
+          </p>
+          <p>
+            <label css={summaryLabelStyles}>{formatMessage('Region')}</label>
+            {localRootLuisRegion}
+          </p>
+          <p>
+            <label css={summaryLabelStyles}>{formatMessage('Resource name')}</label>
+            {luisResourceName}
+          </p>
+        </div>
+      );
+      setOutcomeError(false);
 
       // ALL DONE!
       // this will pass the new values back to the caller
@@ -316,7 +353,8 @@ export const ManageLuis = (props: ManageLuisProps) => {
         endpointKey: endpointKey,
         authoringRegion: localRootLuisRegion,
       });
-      props.onDismiss();
+
+      setCurrentPage(3);
     }
   };
 
@@ -355,12 +393,36 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const performNextAction = () => {
     if (nextAction === 'choose') {
       // close the modal!
-      closeDialog();
+      props.onGetKey({
+        authoringKey: localRootLuisKey,
+        endpointKey: localRootLuisEndpointKey,
+        authoringRegion: localRootLuisRegion,
+      });
+      setOutcomeDescription(formatMessage('The following LUIS keys have been successfully added to your bot project:'));
+      setOutcomeSummary(
+        <div>
+          <p>
+            <label css={summaryLabelStyles}>{formatMessage('Authoring key')}</label>
+            {localRootLuisKey}
+          </p>
+          <p>
+            <label css={summaryLabelStyles}>{formatMessage('Endpoint Key')}</label>
+            {localRootLuisEndpointKey}
+          </p>
+          <p>
+            <label css={summaryLabelStyles}>{formatMessage('Region')}</label>
+            {localRootLuisRegion}
+          </p>
+        </div>
+      );
+      setOutcomeError(false);
+
+      setCurrentPage(3);
     } else if (nextAction === 'handoff') {
       setShowHandoff(true);
       props.onDismiss();
     } else {
-      setShowCreateKeyUI(true);
+      setCurrentPage(2);
     }
   };
 
@@ -397,7 +459,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
-          title: showCreateKeyUI ? formatMessage('Create new LUIS resources') : formatMessage('Select LUIS keys'),
+          title: currentPage === 2 ? formatMessage('Create new LUIS resources') : formatMessage('Select LUIS keys'),
         }}
         hidden={props.hidden}
         minWidth={480}
@@ -406,162 +468,167 @@ export const ManageLuis = (props: ManageLuisProps) => {
         }}
         onDismiss={props.onDismiss}
       >
-        <div>
-          {!showCreateKeyUI && (
-            <div>
-              <p>
-                {formatMessage(
-                  'Select your Azure subscription and choose from existing LUIS keys, or create a new LUIS resource. Learn more'
-                )}
-              </p>
-              <Dropdown
-                disabled={!(availableSubscriptions?.length > 0)}
-                label={formatMessage('Select subscription')}
-                options={
-                  availableSubscriptions
-                    ?.filter((p) => p.subscriptionId && p.displayName)
-                    .map((p) => {
-                      return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
-                    }) ?? []
-                }
-                placeholder={formatMessage('Select one')}
-                selectedKey={subscriptionId}
-                styles={dropdownStyles}
-                onChange={onChangeSubscription}
-              />
-
-              <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
-
-              <div style={{ marginLeft: 26 }}>
-                {noKeys && (
-                  <p>
-                    {formatMessage('No existing LUIS resource found in this subscription. Click “Next” to create new.')}
-                  </p>
-                )}
-                {loadingLUIS && <LoadingSpinner message="Loading keys..." />}
-                {!loadingLUIS && !noKeys && (
-                  <div>
-                    <Dropdown
-                      disabled={!(authoringKeys?.length > 0) || nextAction !== 'choose'}
-                      label={formatMessage('Authoring key')}
-                      options={
-                        authoringKeys.map((p) => {
-                          return { text: p.name, ...p };
-                        }) ?? []
-                      }
-                      placeholder={formatMessage('Select one')}
-                      styles={dropdownStyles}
-                      onChange={onChangeLUISAuthoring}
-                    />
-                    <Dropdown
-                      disabled={!(predictionKeys?.length > 0) || nextAction !== 'choose'}
-                      label={formatMessage('Prediction key')}
-                      options={
-                        predictionKeys.map((p) => {
-                          return { text: p.name, ...p };
-                        }) ?? []
-                      }
-                      placeholder={formatMessage('Select one')}
-                      styles={dropdownStyles}
-                      onChange={onChangeLUISPrediction}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-          {showCreateKeyUI && (
-            <div>
-              <p>
-                {formatMessage(
-                  'Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. Learn more'
-                )}
-              </p>
-              <Dropdown
-                disabled={resourceGroups.length === 0}
-                label={formatMessage('Resource group:')}
-                options={
-                  resourceGroups.map((p) => {
-                    return { key: p.id, text: p.name, data: p.data };
-                  }) ?? []
-                }
-                placeholder={formatMessage('Select one')}
-                selectedKey={resourceGroupKey}
-                styles={dropdownStyles}
-                onChange={onChangeResourceGroup}
-                onRenderOption={onRenderOption}
-              />
-              {createResourceGroup && (
-                <TextField
-                  required
-                  aria-label={formatMessage('Resource group name')}
-                  data-testid={'luisResourceGroupName'}
-                  id={'luisResourceGroupName'}
-                  label={formatMessage('Resource group name')}
-                  placeholder={formatMessage('Enter name for new resource group')}
-                  styles={{ root: { marginTop: 10 } }}
-                  value={newResourceGroupName}
-                  onChange={(e, val) => {
-                    setNewResourceGroupName(val || '');
-                  }}
-                />
+        {currentPage === 1 && (
+          <div>
+            <p>
+              {formatMessage(
+                'Select your Azure subscription and choose from existing LUIS keys, or create a new LUIS resource. Learn more'
               )}
-              <Dropdown
-                required
-                aria-label={formatMessage('LUIS region')}
-                data-testid={'rootLUISRegion'}
-                id={'luisRegion'}
-                label={formatMessage('LUIS region')}
-                options={LUIS_REGIONS}
-                placeholder={formatMessage('Enter LUIS region')}
-                selectedKey={localRootLuisRegion}
-                styles={dropdownStyles}
-                onChange={handleRootLuisRegionOnChange}
+            </p>
+            <Dropdown
+              disabled={!(availableSubscriptions?.length > 0)}
+              label={formatMessage('Select subscription')}
+              options={
+                availableSubscriptions
+                  ?.filter((p) => p.subscriptionId && p.displayName)
+                  .map((p) => {
+                    return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+                  }) ?? []
+              }
+              placeholder={formatMessage('Select one')}
+              selectedKey={subscriptionId}
+              styles={dropdownStyles}
+              onChange={onChangeSubscription}
+            />
+
+            <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
+
+            <div style={{ marginLeft: 26 }}>
+              {noKeys && (
+                <p>
+                  {formatMessage('No existing LUIS resource found in this subscription. Click “Next” to create new.')}
+                </p>
+              )}
+              {!noKeys && (
+                <div>
+                  <Dropdown
+                    disabled={!(authoringKeys?.length > 0) || nextAction !== 'choose'}
+                    label={formatMessage('Authoring key')}
+                    options={
+                      authoringKeys.map((p) => {
+                        return { text: p.name, ...p };
+                      }) ?? []
+                    }
+                    placeholder={formatMessage('Select one')}
+                    styles={dropdownStyles}
+                    onChange={onChangeLUISAuthoring}
+                  />
+                  <Dropdown
+                    disabled={!(predictionKeys?.length > 0) || nextAction !== 'choose'}
+                    label={formatMessage('Prediction key')}
+                    options={
+                      predictionKeys.map((p) => {
+                        return { text: p.name, ...p };
+                      }) ?? []
+                    }
+                    placeholder={formatMessage('Select one')}
+                    styles={dropdownStyles}
+                    onChange={onChangeLUISPrediction}
+                  />
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              {loadingLUIS && <Spinner label="Loading keys..." labelPosition="right" />}
+              <PrimaryButton
+                disabled={
+                  loadingLUIS ||
+                  (nextAction === 'choose' &&
+                    !(localRootLuisRegion != '' && localRootLuisKey != '' && localRootLuisEndpointKey != '')) ||
+                  (nextAction === 'create' && !subscriptionId)
+                }
+                text={formatMessage('Next')}
+                onClick={performNextAction}
               />
+            </DialogFooter>
+          </div>
+        )}
+        {currentPage === 2 && (
+          <div>
+            <p>
+              {formatMessage(
+                'Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. Learn more'
+              )}
+            </p>
+            <Dropdown
+              disabled={resourceGroups.length === 0}
+              label={formatMessage('Resource group:')}
+              options={
+                resourceGroups.map((p) => {
+                  return { key: p.id, text: p.name, data: p.data };
+                }) ?? []
+              }
+              placeholder={formatMessage('Select one')}
+              selectedKey={resourceGroupKey}
+              styles={dropdownStyles}
+              onChange={onChangeResourceGroup}
+              onRenderOption={onRenderOption}
+            />
+            {createResourceGroup && (
               <TextField
                 required
-                aria-label={formatMessage('Resource name')}
-                data-testid={'luisResourceName'}
-                id={'luisResourceName'}
-                label={formatMessage('Resource name')}
-                placeholder={formatMessage('Enter name for new LUIS resources')}
+                aria-label={formatMessage('Resource group name')}
+                data-testid={'luisResourceGroupName'}
+                id={'luisResourceGroupName'}
+                label={formatMessage('Resource group name')}
+                placeholder={formatMessage('Enter name for new resource group')}
                 styles={{ root: { marginTop: 10 } }}
-                value={luisResourceName}
-                onChange={(e, val) => setLuisResourceName(val || '')}
+                value={newResourceGroupName}
+                onChange={(e, val) => {
+                  setNewResourceGroupName(val || '');
+                }}
               />
-              {loadingLUIS && <LoadingSpinner message={formatMessage('Creating resources...')} />}
-            </div>
-          )}
-        </div>
-        {showCreateKeyUI && (
-          <DialogFooter>
-            <DefaultButton text={formatMessage('Back')} onClick={() => setShowCreateKeyUI(false)} />
-            <PrimaryButton
-              disabled={
-                !luisResourceName ||
-                !localRootLuisRegion ||
-                !resourceGroupKey ||
-                (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
-              }
-              text={formatMessage('Next')}
-              onClick={createLUIS}
+            )}
+            <Dropdown
+              required
+              aria-label={formatMessage('LUIS region')}
+              data-testid={'rootLUISRegion'}
+              id={'luisRegion'}
+              label={formatMessage('LUIS region')}
+              options={LUIS_REGIONS}
+              placeholder={formatMessage('Enter LUIS region')}
+              selectedKey={localRootLuisRegion}
+              styles={dropdownStyles}
+              onChange={handleRootLuisRegionOnChange}
             />
-            <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
-          </DialogFooter>
+            <TextField
+              required
+              aria-label={formatMessage('Resource name')}
+              data-testid={'luisResourceName'}
+              id={'luisResourceName'}
+              label={formatMessage('Resource name')}
+              placeholder={formatMessage('Enter name for new LUIS resources')}
+              styles={{ root: { marginTop: 10 } }}
+              value={luisResourceName}
+              onChange={(e, val) => setLuisResourceName(val || '')}
+            />
+            <DialogFooter>
+              {loadingLUIS && <Spinner label={formatMessage('Creating resources...')} labelPosition="right" />}
+              <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
+              <PrimaryButton
+                disabled={
+                  !luisResourceName ||
+                  !localRootLuisRegion ||
+                  !resourceGroupKey ||
+                  (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
+                }
+                text={formatMessage('Next')}
+                onClick={createLUIS}
+              />
+              <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+            </DialogFooter>
+          </div>
         )}
-        {!showCreateKeyUI && (
-          <DialogFooter>
-            <PrimaryButton
-              disabled={
-                loadingLUIS ||
-                (nextAction === 'choose' &&
-                  !(localRootLuisRegion != '' && localRootLuisKey != '' && localRootLuisEndpointKey != '')) ||
-                (nextAction === 'create' && !subscriptionId)
-              }
-              text={formatMessage('Next')}
-              onClick={performNextAction}
-            />
-          </DialogFooter>
+        {currentPage === 3 && (
+          <div>
+            <p>{outcomeDescription}</p>
+            <div css={summaryStyles}>{outcomeSummary}</div>
+            <DialogFooter>
+              {outcomeError && <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />}
+              <PrimaryButton text={formatMessage('Done')} onClick={props.onDismiss} />
+              {props.onNext && <PrimaryButton text={formatMessage('Next')} onClick={props.onNext} />}
+            </DialogFooter>
+          </div>
         )}
       </Dialog>
     </Fragment>

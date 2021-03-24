@@ -73,9 +73,6 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       ...mergedSettings,
       luis: { ...mergedSettings.luis, ...newLuisSettings },
     });
-
-    // once update, launch the next step if any
-    doNextStep('luis');
   };
 
   const updateQNASettings = (newQNASettings) => {
@@ -83,9 +80,6 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       ...mergedSettings,
       qna: { ...mergedSettings.qna, ...newQNASettings },
     });
-
-    // once update, launch the next step if any
-    doNextStep('qna');
   };
 
   const linkToPackageManager = `/bot/${projectId}/plugin/package-manager/package-manager`;
@@ -189,8 +183,22 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   return (
     <div css={{ paddingLeft: 27, paddingRight: 20 }}>
-      <ManageLuis hidden={!displayManageLuis} onDismiss={hideManageLuis} onGetKey={updateLuisSettings} />
-      <ManageQNA hidden={!displayManageQNA} onDismiss={hideManageQNA} onGetKey={updateQNASettings} />
+      <ManageLuis
+        hidden={!displayManageLuis}
+        onDismiss={hideManageLuis}
+        onGetKey={updateLuisSettings}
+        onNext={() => {
+          doNextStep('luis');
+        }}
+      />
+      <ManageQNA
+        hidden={!displayManageQNA}
+        onDismiss={hideManageQNA}
+        onGetKey={updateQNASettings}
+        onNext={() => {
+          doNextStep('qna');
+        }}
+      />
 
       <p>{formatMessage('These are next steps so you always know what to do next to get your bot going.')}</p>
       {requiredNextSteps && (
