@@ -6,7 +6,6 @@ import { join } from 'path';
 
 import { ensureDirSync, remove } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
-import { PublishTarget } from '@bfc/shared';
 
 import logger from '../logger';
 import { authService } from '../services/auth/auth';
@@ -140,10 +139,6 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
 
   public async authenticate(): Promise<string> {
     return this.getAccessToken();
-  }
-
-  public async generateProfile(): Promise<PublishTarget> {
-    throw new Error('PVA Not support');
   }
 
   private async getAccessToken(): Promise<string> {

@@ -66,10 +66,9 @@ export class ElectronAuthProvider extends AuthProvider {
       log('Auth login flow is currently unsupported in Linux.');
       return '';
     }
-    log('Getting access token.');
+    log('Getting ARM access token.');
     try {
       // otherwise get a fresh token
-      log('Did not find cached token. Getting fresh token.');
       const token = await getARMTokenForTenant(tenantId);
       return token;
     } catch (e) {
