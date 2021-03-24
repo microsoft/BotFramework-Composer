@@ -434,11 +434,13 @@ export const qnaDispatcher = () => {
   const importQnAFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       containerId,
+      dialogId,
       url,
       multiTurn,
       projectId,
     }: {
-      containerId: string; // qna container file id: {name}.source.{locale}.qna
+      containerId: string; // qna container file id: {name}.source.{locale}
+      dialogId: string;
       url: string;
       multiTurn: boolean;
       projectId: string;
@@ -457,8 +459,8 @@ export const qnaDispatcher = () => {
           getQnaSuccessNotification(() => {
             navigateTo(
               rootBotProjectId === projectId
-                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
-                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+                ? `/bot/${projectId}/knowledge-base/${dialogId}`
+                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${dialogId}`
             );
             deleteNotificationInternal(callbackHelpers, notification.id);
           })
@@ -676,6 +678,7 @@ ${response.data}
       await createKBFileState(callbackHelpers, { id, name, content, projectId });
       await createQnAFromScratchDialogSuccess({ projectId });
       const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
+      console.log(getBaseName(id));
       const notification = createNotification(
         getQnaSuccessNotification(() => {
           navigateTo(

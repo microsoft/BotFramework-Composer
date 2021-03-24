@@ -91,7 +91,6 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
 
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, locale, skillId, qnaFileId } = props;
-
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
@@ -312,6 +311,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (importingResourceQnAFile) {
       importQnAFromUrl({
         containerId: importingResourceQnAFile.id,
+        dialogId: qnaFile ? getBaseName(qnaFile.id) : '',
         url,
         multiTurn,
         projectId,
