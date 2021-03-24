@@ -30,7 +30,7 @@ import axios from 'axios';
 import querystring from 'query-string';
 
 import msftIcon from '../../../images/msftIcon.svg';
-import { DialogCreationCopy, feedDictionary } from '../../../constants';
+import { DialogCreationCopy } from '../../../constants';
 import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { getAliasFromPayload } from '../../../utils/electronUtil';
@@ -133,7 +133,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const { templates, onDismiss, onNext } = props;
   const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
   const [emptyBotKey, setEmptyBotKey] = useState('');
-  const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
+  const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
+    props: { itemKey: csharpFeedKey },
+  });
+  const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -142,6 +145,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     return new Selection({
       onSelectionChanged: () => {
         const t = selectedTemplate.getSelection()[0] as BotTemplate;
+
         if (t) {
           setCurrentTemplateId(t.id);
         }
@@ -161,7 +165,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
-    const runtimeLanguage = selectedFeed?.props?.itemKey ? selectedFeed.props.itemKey : csharpFeedKey;
+    const runtimeLanguage = selectedProgLang?.props?.itemKey ? selectedProgLang.props.itemKey : csharpFeedKey;
     if (props.location && props.location.search) {
       onNext(routeToTemplate, runtimeLanguage, props.location.search);
     } else {
@@ -203,21 +207,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   };
 
   const getTemplate = (): BotTemplate | undefined => {
-    const currentTemplate = templates.find((t) => {
-      return t.id === currentTemplateId;
+    const currentTemplate = displayedTemplates.find((t) => {
+      if (t?.id) {
+        return t.id === currentTemplateId;
+      }
     });
     return currentTemplate;
   };
-
-  useEffect(() => {
-    if (templates.length > 1) {
-      const emptyBotTemplate = find(templates, ['id', defaultTemplateId]);
-      if (emptyBotTemplate) {
-        setCurrentTemplateId(emptyBotTemplate.id);
-        setEmptyBotKey(emptyBotTemplate.id);
-      }
-    }
-  }, [templates]);
 
   useEffect(() => {
     // open bot directly if alias exist.
@@ -245,10 +241,32 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [props.location?.search]);
 
   useEffect(() => {
-    if (selectedFeed?.props?.itemKey) {
-      props.fetchTemplates([feedDictionary[selectedFeed.props.itemKey]]);
+    const itemKey = selectedProgLang?.props?.itemKey;
+    if (itemKey) {
+      if (itemKey === csharpFeedKey) {
+        const newTemplates = templates.filter((template) => {
+          return template.dotnetSupport;
+        });
+        setDisplayedTemplates(newTemplates);
+        // setCurrentTemplateId(newTemplates[0].id);
+      } else if (itemKey === nodeFeedKey) {
+        const newTemplates = templates.filter((template) => {
+          return template.nodeSupport;
+        });
+        setDisplayedTemplates(newTemplates);
+      }
     }
-  }, [selectedFeed]);
+  }, [selectedProgLang]);
+
+  useEffect(() => {
+    if (displayedTemplates.length > 1) {
+      const emptyBotTemplate = find(displayedTemplates, ['id', defaultTemplateId]);
+      if (emptyBotTemplate) {
+        setCurrentTemplateId(emptyBotTemplate.id);
+        setEmptyBotKey(emptyBotTemplate.id);
+      }
+    }
+  }, [displayedTemplates]);
 
   useEffect(() => {
     if (currentTemplateId) {
@@ -266,7 +284,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           defaultSelectedKey={csharpFeedKey}
           onLinkClick={(item) => {
             if (item) {
-              setSelectedFeed(item);
+              setSelectedProgLang(item);
             }
           }}
         >
@@ -285,7 +303,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
                 compact={false}
                 getKey={(item) => item.name}
                 isHeaderVisible={false}
-                items={templates}
+                items={displayedTemplates}
                 layoutMode={DetailsListLayoutMode.justified}
                 selection={selectedTemplate}
                 selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
