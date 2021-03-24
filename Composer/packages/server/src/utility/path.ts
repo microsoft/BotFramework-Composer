@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
+import * as path from 'path';
 
 // handle all the path to unix pattern
 class PathHandler {
