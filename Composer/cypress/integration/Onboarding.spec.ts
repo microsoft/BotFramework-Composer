@@ -15,12 +15,13 @@ context('Onboarding', () => {
     cy.visitPage('Design');
   });
 
-  // The onboarding test is disabled since we are temporarily disabling onboarding
-  xit('walk through product tour teaching bubbles', () => {
+  it('walk through product tour teaching bubbles', () => {
     cy.findByTestId('onboardingNextSet').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
+
+    cy.findByTestId('onboardingNextSet').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
 
@@ -28,11 +29,6 @@ context('Onboarding', () => {
     cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingNextSet').click();
-
-    cy.findByTestId('onboardingNext').click();
-
-    cy.findByTestId('onboardingNextSet').click();
-
     cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingDone').click();
