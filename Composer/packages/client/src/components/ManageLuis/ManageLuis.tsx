@@ -535,8 +535,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
               <PrimaryButton
                 disabled={
                   loadingLUIS ||
-                  (nextAction === 'choose' &&
-                    !(localRootLuisRegion != '' && localRootLuisKey != '' && localRootLuisEndpointKey != '')) ||
+                  (nextAction === 'choose' && !(localRootLuisRegion && localRootLuisKey && localRootLuisEndpointKey)) ||
                   (nextAction === 'create' && !subscriptionId)
                 }
                 text={formatMessage('Next')}
