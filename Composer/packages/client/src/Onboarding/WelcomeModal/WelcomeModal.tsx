@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
