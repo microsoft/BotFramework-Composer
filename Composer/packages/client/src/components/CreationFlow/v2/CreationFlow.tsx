@@ -102,6 +102,11 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     navigate(`/home`);
   };
 
+  const handleJumpToOpenModal = () => {
+    setCreationFlowStatus(CreationFlowStatus.OPEN);
+    navigate('./open');
+  };
+
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
     await openProject(botFolder, 'default', true, (projectId) => {
@@ -187,6 +192,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           path="create"
           templates={templateProjects}
           onDismiss={handleDismiss}
+          onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
         />
         <DefineConversationV2
