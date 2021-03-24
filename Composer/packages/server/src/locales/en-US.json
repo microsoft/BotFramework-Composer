@@ -167,6 +167,9 @@
   "add_connections_d720a32e": {
     "message": "Add connections"
   },
+  "add_and_remove_packages_9e439f32": {
+    "message": "Add and remove packages"
+  },
   "add_custom_a376ce51": {
     "message": "Add Custom"
   },
@@ -607,6 +610,9 @@
   },
   "close_d634289d": {
     "message": "Close"
+  },
+  "code_editor_1438efc": {
+    "message": "code editor"
   },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
@@ -1544,6 +1550,9 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
+  "form_b674666c": {
+    "message": "form"
+  },
   "form_dialog_error_ba7c37fe": {
     "message": "Form dialog error"
   },
@@ -1607,9 +1616,12 @@
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
   },
+<<<<<<< HEAD
   "get_started_76ed4cb9": {
     "message": "Get started"
   },
+=======
+>>>>>>> benbrown/getsmarted
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
   },
@@ -1907,9 +1919,12 @@
   "learn_more_c08939e8": {
     "message": "Learn more."
   },
+<<<<<<< HEAD
   "learning_70e0f90b": {
     "message": "Learning"
   },
+=======
+>>>>>>> benbrown/getsmarted
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
   },
@@ -2411,6 +2426,9 @@
   "one_of_the_variations_added_below_will_be_selected_bee3c3f1": {
     "message": "One of the variations added below will be selected at random by the LG library."
   },
+  "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
+    "message": "One or more options that are passed to the dialog that is called."
+  },
   "open_an_existing_skill_fbd87273": {
     "message": "Open an existing skill"
   },
@@ -2659,6 +2677,9 @@
   },
   "publish_target_388f6adf": {
     "message": "Publish target"
+  },
+  "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
+    "message": "Publish your bot to Azure and manage published bots here."
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
     "message": "Publish your bot to Azure and manage published bots here."
