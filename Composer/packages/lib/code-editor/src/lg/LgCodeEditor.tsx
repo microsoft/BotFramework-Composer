@@ -108,6 +108,10 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   const [editor, setEditor] = useState<any>();
 
   useEffect(() => {
+    if (props.options?.readOnly) {
+      return;
+    }
+
     if (!editor) return;
 
     if (!window.monacoServiceInstance) {
@@ -127,6 +131,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
             ['botbuilderlg'],
             connection
           );
+
           sendRequestWithRetry(languageClient, 'initializeDocuments', { lgOption, uri });
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
@@ -135,6 +140,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           languageClient.onReady().then(() =>
             languageClient.onNotification('GotoDefinition', (result) => {
               if (lgOption?.projectId) {
+                console.log('LG option project id:', lgOption?.projectId);
                 onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
               }
             })
@@ -142,7 +148,9 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
         },
       });
     } else {
-      sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      if (!props.options?.readOnly) {
+        sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      }
       window.monacoLGEditorInstance.onReady().then(() =>
         window.monacoLGEditorInstance.onNotification('GotoDefinition', (result) => {
           if (lgOption?.projectId) {

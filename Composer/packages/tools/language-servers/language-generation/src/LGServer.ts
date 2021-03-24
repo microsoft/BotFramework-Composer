@@ -120,7 +120,7 @@ export class LGServer {
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLGDocument(textDocument, lgOption);
-          this.recordTemplatesDefintions(textDocument, lgOption);
+          this.recordTemplatesDefintions(lgOption);
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
           this.getOtherLGVariables(lgOption);
@@ -313,21 +313,52 @@ export class LGServer {
     this.LGDocuments.push(lgDocument);
   }
 
-  protected async recordTemplatesDefintions(document: TextDocument, lgOption?: LGOption) {
+  protected async recordTemplatesDefintions(lgOption?: LGOption) {
     const { fileId, projectId } = lgOption || {};
-    const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
-    for (const file of lgTextFiles) {
-      //Only stroe templates in other LG files
-      if (file.id !== fileId) {
-        const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
-        for (const template of lgTemplates.templates) {
-          this._templateDefinitions[template.name] = {
-            fileId: file.id,
-            templateId: template.name,
-            line: template?.range?.start?.line,
-          };
+    if (projectId) {
+      const curLocale = this.getLocale(fileId);
+      const fileIdWitoutLocale = this.removeLocaleInId(fileId);
+      const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      for (const file of lgTextFiles) {
+        //Only stroe templates in other LG files
+        if (this.removeLocaleInId(file.id) !== fileIdWitoutLocale && this.getLocale(file.id) === curLocale) {
+          const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
+          this._templateDefinitions = {};
+          for (const template of lgTemplates.templates) {
+            this._templateDefinitions[template.name] = {
+              fileId: file.id,
+              templateId: template.name,
+              line: template?.range?.start?.line,
+            };
+          }
         }
       }
+    }
+  }
+
+  private removeLocaleInId(fileId: string | undefined): string {
+    if (!fileId) {
+      return '';
+    }
+
+    const idx = fileId.lastIndexOf('.');
+    if (idx !== -1) {
+      return fileId.substring(0, idx);
+    } else {
+      return fileId;
+    }
+  }
+
+  private getLocale(fileId: string | undefined): string {
+    if (!fileId) {
+      return '';
+    }
+
+    const idx = fileId.lastIndexOf('.');
+    if (idx !== -1) {
+      return fileId.substring(idx, fileId.length);
+    } else {
+      return '';
     }
   }
 
