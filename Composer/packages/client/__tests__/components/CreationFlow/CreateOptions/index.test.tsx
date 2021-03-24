@@ -10,6 +10,7 @@ import { CreateOptions } from '../../../../src/components/CreationFlow/CreateOpt
 describe('<CreateOptions/>', () => {
   const handleDismissMock = jest.fn();
   const handleCreateNextMock = jest.fn();
+  const handleJumpToOpenModal = jest.fn();
   const templates = [
     {
       description: 'empty bot',
@@ -33,7 +34,13 @@ describe('<CreateOptions/>', () => {
 
   const renderComponent = () => {
     return renderWithRecoil(
-      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />
+      <CreateOptions
+        path="create"
+        templates={templates}
+        onDismiss={handleDismissMock}
+        onJumpToOpenModal={handleJumpToOpenModal}
+        onNext={handleCreateNextMock}
+      />
     );
   };
 
