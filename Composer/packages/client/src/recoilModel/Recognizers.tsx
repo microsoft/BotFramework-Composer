@@ -220,7 +220,6 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
         }
       });
     if (!isEqual([...recognizers].sort(), [...curRecognizersRef.current].sort())) {
-      console.log(recognizers);
       setRecognizers(recognizers);
     }
   }, [dialogs, luFiles, qnaFiles, filePersistence]);
