@@ -48,6 +48,8 @@ const oauthInput = () => ({
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
 
+const isUsingAdaptiveRuntime = (runtime?: DialogSetting['runtime']): boolean =>
+  runtime?.key === 'csharp-azurewebapp-v2' || runtime?.key === 'adaptive-runtime-dotnet-webapp';
 export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
@@ -200,8 +202,11 @@ export class BotProject implements IBotProject {
    */
   public getRuntimePath = (): string | undefined => {
     let runtimePath = this.settings?.runtime?.path;
+
     if (runtimePath && !Path.isAbsolute(runtimePath)) {
-      runtimePath = Path.resolve(this.dir, 'settings', runtimePath);
+      const dir = isUsingAdaptiveRuntime(this.settings?.runtime) ? Path.resolve(this.dir, 'settings') : this.dir;
+
+      runtimePath = Path.resolve(dir, runtimePath);
     }
     return runtimePath;
   };

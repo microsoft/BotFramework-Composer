@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
-import { IStep, IStepSet } from './onboardingUtils';
+import { IStep, IStepSet } from './content';
 
 interface OnboardingContext {
   actions: {
@@ -46,5 +46,7 @@ const OnboardingContext = createContext<OnboardingContext>({
     teachingBubble: null,
   },
 });
+
+export const useOnboardingContext = () => useContext(OnboardingContext);
 
 export default OnboardingContext;
