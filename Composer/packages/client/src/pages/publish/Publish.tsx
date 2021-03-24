@@ -21,7 +21,7 @@ import {
   setTenantId,
   getTenantIdFromCache,
 } from '../../utils/auth';
-import { vaultScopes } from '../../constants';
+// import { vaultScopes } from '../../constants';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
