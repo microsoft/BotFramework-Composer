@@ -81,10 +81,8 @@ const PageTypes = {
 
 const DialogTitle = {
   SELECT_TENANT: {
-    title: formatMessage('Select tenant'),
-    subText: formatMessage(
-      'You are a member of more than 1 Azure tenant. Please select the tenant you wish to use before continuing.'
-    ),
+    title: formatMessage('Sign in'),
+    subText: formatMessage('Choose the Azure tenant you wish to use before continuing.'),
   },
   CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
@@ -287,6 +285,7 @@ export const AzureProvisionDialog: React.FC = () => {
           sessionExpired: false,
         });
         setPage(PageTypes.ConfigProvision);
+        setTitle(DialogTitle.CONFIG_RESOURCES);
         setLoginErrorMsg(undefined);
       })
       .catch((err) => {
@@ -297,7 +296,7 @@ export const AzureProvisionDialog: React.FC = () => {
   };
 
   useEffect(() => {
-    setTitle(DialogTitle.CONFIG_RESOURCES);
+    setTitle(DialogTitle.SELECT_TENANT);
     if (isGetTokenFromUser()) {
       const { accessToken } = getTokenFromCache();
 
