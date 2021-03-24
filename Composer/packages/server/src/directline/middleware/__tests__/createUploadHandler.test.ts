@@ -89,10 +89,11 @@ describe('upload handler', () => {
     res = {
       send: mockSend,
       status: mockStatus,
+      is: jest.fn(),
     };
   });
 
-  it('should send a 404 if there is no conversation attached to the request', () => {
+  it('should send a 404 if there is no conversation attached to the request', async () => {
     const mockLogToDoc = jest.fn();
     const serverContext: any = {
       state: {
@@ -107,7 +108,7 @@ describe('upload handler', () => {
       },
     };
     const upload = createUploadHandler(serverContext.state);
-    upload(req, res);
+    await upload(req, res);
 
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockSend).toHaveBeenCalledWith('Cannot upload file. Conversation not found.');
@@ -116,14 +117,20 @@ describe('upload handler', () => {
     expect(mockLogToDoc).toHaveBeenCalledWith('conversation1', logItem);
   });
 
-  it('should short circuit if the request content is not form data', () => {
+  it('should short circuit if the request content is not form data', async () => {
     const serverContext: any = {
-      state: {},
+      state: {
+        dispatchers: {
+          logToDocument: jest.fn(),
+        },
+      },
     };
 
     const req: any = {
       is: jest.fn(() => false),
-      conversation: {},
+      conversation: {
+        postActivityToBot: jest.fn(),
+      },
       getContentType: jest.fn(() => 'text/plain'),
       params: {
         conversationId: 'conversation1',
@@ -131,7 +138,7 @@ describe('upload handler', () => {
     };
 
     const upload = createUploadHandler(serverContext.state);
-    upload(req, res);
+    await upload(req, res);
 
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockSend).toHaveBeenCalledWith('Cannot parse attachment.');
@@ -156,30 +163,39 @@ describe('upload handler', () => {
     expect(mockEnd).toHaveBeenCalled();
   });
 
-  it('should short circuit if there is no request content', () => {
+  it('should short circuit if there is no request content', async () => {
     const mockEmulatorServer: any = {
       logger: {
         logMessage: jest.fn(),
       },
-      state: {},
+      dispatchers: {
+        logToDocument: jest.fn(),
+      },
     };
     const req: any = {
-      conversation: {},
+      conversation: {
+        postActivityToBot: jest.fn(),
+      },
+      headers: {
+        'content-length': 0,
+      },
       getContentLength: jest.fn(() => 0),
       getContentType: jest.fn(() => 'multipart/form-data'),
       isChunked: jest.fn(() => false),
       params: {
         conversationId: 'conversation1',
       },
+      is: () => true,
     };
     const res: any = {
-      end: jest.fn(),
-      send: jest.fn(),
+      end: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(),
     };
     const upload = createUploadHandler(mockEmulatorServer);
-    upload(req, res);
+    await upload(req, res);
 
-    expect(res.send).not.toHaveBeenCalled();
-    expect(res.end).not.toHaveBeenCalled();
+    expect(res.send).toHaveBeenCalledWith('Cannot parse attachment.');
+    expect(res.end).toHaveBeenCalled();
   });
 });
