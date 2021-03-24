@@ -104,6 +104,11 @@ export class Builder {
     try {
       //warm up the orchestrator cache if we're using it, before deleting and recreating the generated folder
       await orchestratorBuilder.warmupCache(this.botDir, this.generatedFolderPath);
+    } catch (error) {
+      throw new Error(error.message ?? 'Orchestrator cache warmup hit unexpected error');
+    }
+
+    try {
       await this.createGeneratedDir();
       //do cross train before publish
       await this.crossTrain(luFiles, qnaFiles, allFiles);

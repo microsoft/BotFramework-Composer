@@ -51,81 +51,53 @@ const cache = new LabelResolversCache();
  * @param generatedFolderPath
  */
 export async function warmUpCache(generatedFolderPath: string, projectId: string) {
-  //warm up the cache only if it's empty...
-  if (cache.get(projectId).size == 0) {
-    if (!(await pathExists(generatedFolderPath))) {
-      return false;
-    }
-
-    const bluFiles = (await readdir(generatedFolderPath)).filter((fileName) => fileName.endsWith('.blu'));
-
-    //if there are blu file in the generated folders to hydrate with...
-    if (bluFiles.length == 0) {
-      return false;
-    }
-
-    const orchestratorSettingsPath = Path.resolve(generatedFolderPath, 'orchestrator.settings.json');
-    if (!(await pathExists(orchestratorSettingsPath))) {
-      return false;
-    }
-
-    //todo - typeguards and safety checks needed
-    const orchestratorSettings: IOrchestratorSettings = await readJson(orchestratorSettingsPath);
-
-    let [en_files, multilang_files] = partition(bluFiles, (f) => f.split('.')?.[1].startsWith('en'));
-
-    let enLabelResolvers: Map<string, LabelResolver> = new Map();
-
-    const enSnapShotData = await Promise.all(
-      en_files.map(
-        async (f) =>
-          [f.replace('.blu', '.lu'), new Uint8Array(await readFile(Path.join(generatedFolderPath, f)))] as [
-            string,
-            Uint8Array
-          ]
-      )
-    );
-
-    if (orchestratorSettings.orchestrator?.models?.en) {
-      try {
-        enLabelResolvers = await Orchestrator.getLabelResolversAsync(
-          orchestratorSettings.orchestrator.models.en,
-          '',
-          new Map(enSnapShotData),
-          false
-        );
-      } catch (err) {}
-    }
-
-    //todo: reduce code duplication
-    const multilangSnapShotData = await Promise.all(
-      multilang_files.map(
-        async (f) =>
-          [f.replace('.blu', '.lu'), new Uint8Array(await readFile(Path.join(generatedFolderPath, f)))] as [
-            string,
-            Uint8Array
-          ]
-      )
-    );
-
-    let multiLangLabelResolvers: Map<string, LabelResolver> = new Map();
-
-    if (orchestratorSettings.orchestrator?.models?.multilang) {
-      try {
-        multiLangLabelResolvers = await Orchestrator.getLabelResolversAsync(
-          orchestratorSettings.orchestrator.models.multilang,
-          '',
-          new Map(multilangSnapShotData),
-          false
-        );
-      } catch (err) {}
-    }
-
-    cache.set(projectId, new Map([...enLabelResolvers, ...multiLangLabelResolvers]));
-
-    return true;
+  //warm up the cache only if it's empty
+  if (!((await pathExists(generatedFolderPath)) || cache.get(projectId).size > 0)) {
+    return false;
   }
-  return false;
+
+  const bluFiles = (await readdir(generatedFolderPath)).filter((fileName) => fileName.endsWith('.blu'));
+
+  if (!bluFiles.length) {
+    return false;
+  }
+
+  const orchestratorSettingsPath = Path.resolve(generatedFolderPath, 'orchestrator.settings.json');
+  if (!(await pathExists(orchestratorSettingsPath))) {
+    return false;
+  }
+
+  const orchestratorSettings: IOrchestratorSettings = await readJson(orchestratorSettingsPath);
+
+  let [enLuFiles, multiLangLuFiles] = partition(bluFiles, (f) => f.split('.')?.[1].startsWith('en'));
+
+  const modelDatas = [
+    { model: orchestratorSettings.orchestrator?.models?.en, lang: 'en', luFiles: enLuFiles },
+    { model: orchestratorSettings.orchestrator?.models?.multilang, lang: 'multilang', luFiles: multiLangLuFiles },
+  ];
+
+  const [enMap, multilangMap] = await Promise.all(
+    modelDatas.map(async (modelData) => {
+      const snapshotData = await Promise.all(
+        modelData.luFiles.map(
+          async (f) =>
+            [f.replace('.blu', '.lu'), new Uint8Array(await readFile(Path.join(generatedFolderPath, f)))] as [
+              string,
+              Uint8Array
+            ]
+        )
+      );
+
+      if (modelData.model) {
+        return await Orchestrator.getLabelResolversAsync(modelData.model, '', new Map(snapshotData), false);
+      }
+      return new Map<string, LabelResolver>();
+    })
+  );
+
+  cache.set(projectId, new Map([...enMap, ...multilangMap]));
+
+  return true;
 }
 
 /**
