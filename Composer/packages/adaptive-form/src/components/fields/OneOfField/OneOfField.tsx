@@ -6,7 +6,6 @@
 import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import { jsx } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme/lib/fluent';
-import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React, { useMemo, useState } from 'react';
@@ -138,18 +137,20 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   const renderDropDown = () => {
     // We want a dropdown only if there are multiple options to choose from
     if (options && options.length > 1) {
+      console.log(label);
       return (
         <Dropdown
-          ariaLabel={formatMessage('Select property type')}
           data-testid="OneOfFieldType"
           dropdownWidth={-1}
           id={`${props.id}-oneOf`}
+          label={label !== false ? label : undefined}
           options={options}
           responsiveMode={ResponsiveMode.large}
           selectedKey={selectedKey}
           styles={isNested ? styles.nestedDropdown : styles.dropdown}
           onChange={handleTypeChange}
           onRenderCaretDown={isNested ? undefined : () => null}
+          onRenderLabel={() => null}
           onRenderOption={onRenderOption}
           onRenderTitle={isNested ? undefined : onRenderTitle}
         />

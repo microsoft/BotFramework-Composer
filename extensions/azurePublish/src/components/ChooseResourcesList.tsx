@@ -129,7 +129,11 @@ export const ChooseResourcesList = (props: Props) => {
     return (
       <ItemLabel>
         <ItemHeader horizontal>
-          {item.icon ? <ImageIcon height="16" src={item.icon} width="16" /> : <ImageIconPlacholder />}
+          {item.icon ? (
+            <ImageIcon role="presentation" height="16" src={item.icon} width="16" />
+          ) : (
+            <ImageIconPlacholder />
+          )}
           <ItemText>{item.text}</ItemText>
         </ItemHeader>
         <ItemTier>{item.tier}</ItemTier>
