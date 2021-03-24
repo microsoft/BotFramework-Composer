@@ -8,8 +8,9 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { DeployLocation } from '@botframework-composer/types';
+import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { LoadingSpinner } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -18,8 +19,6 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  IGroup,
-  CheckboxVisibility,
   TooltipHost,
   Icon,
   TextField,
@@ -71,13 +70,22 @@ const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
 ];
+
 const PageTypes = {
+  SelectTenant: 'tenant',
   ConfigProvision: 'config',
   AddResources: 'add',
   ReviewResource: 'review',
   EditJson: 'edit',
 };
+
 const DialogTitle = {
+  SELECT_TENANT: {
+    title: formatMessage('Select tenant'),
+    subText: formatMessage(
+      'You are a member of more than 1 Azure tenant. Please select the tenant you wish to use before continuing.'
+    ),
+  },
   CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
@@ -227,6 +235,8 @@ export const AzureProvisionDialog: React.FC = () => {
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
 
+  const [allTenants, setAllTenants] = useState<AzureTenant[]>();
+  const [selectedTenant, setSelectedTenant] = useState<string>();
   const [token, setToken] = useState<string>();
   const [currentUser, setCurrentUser] = useState<any>(undefined);
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
@@ -248,7 +258,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState<any>();
 
-  const [page, setPage] = useState(PageTypes.ConfigProvision);
+  const [page, setPage] = useState<string>();
   const [listItems, setListItems] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
   const isMounted = useRef<boolean>();
@@ -261,6 +271,29 @@ export const AzureProvisionDialog: React.FC = () => {
       isMounted.current = false;
     };
   }, []);
+
+  const getTokenForTenant = (tenantId: string) => {
+    // set tenantId in cache.
+    setTenantId(tenantId);
+    getARMTokenForTenant(tenantId)
+      .then((token) => {
+        setToken(token);
+        const decoded = decodeToken(token);
+        setCurrentUser({
+          token: token,
+          email: decoded.upn,
+          name: decoded.name,
+          expiration: (decoded.exp || 0) * 1000, // convert to ms,
+          sessionExpired: false,
+        });
+        setPage(PageTypes.ConfigProvision);
+      })
+      .catch((err) => {
+        setTenantId(undefined);
+        setCurrentUser(undefined);
+        setLoginErrorMsg(err.message || err.toString());
+      });
+  };
 
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -283,24 +316,15 @@ export const AzureProvisionDialog: React.FC = () => {
       if (!getTenantIdFromCache()) {
         getTenants().then((tenants) => {
           if (isMounted.current && tenants?.length > 0) {
-            // set tenantId in cache.
-            setTenantId(tenants[0].tenantId);
-            getARMTokenForTenant(tenants[0].tenantId)
-              .then((token) => {
-                setToken(token);
-                const decoded = decodeToken(token);
-                setCurrentUser({
-                  token: token,
-                  email: decoded.upn,
-                  name: decoded.name,
-                  expiration: (decoded.exp || 0) * 1000, // convert to ms,
-                  sessionExpired: false,
-                });
-              })
-              .catch((err) => {
-                setCurrentUser(undefined);
-                setLoginErrorMsg(err.message || err.toString());
-              });
+            // if there is only 1 tenant, go ahead and fetch the token and store it in the cache
+            if (tenants.length === 1) {
+              getTokenForTenant(tenants[0].tenantId);
+            } else {
+              // we need to show the tenant selection UI
+              setAllTenants(tenants);
+              setSelectedTenant(tenants[0].tenantId);
+              setPage(PageTypes.SelectTenant);
+            }
           }
         });
       } else {
@@ -569,6 +593,28 @@ export const AzureProvisionDialog: React.FC = () => {
     return enabledResources.length > 0 || requireResources.length > 0;
   }, [enabledResources]);
 
+  const SelectTenant = useMemo(
+    () =>
+      allTenants?.length && (
+        <Fragment>
+          <form style={{ width: '50%', marginTop: '16px' }}>
+            <Dropdown
+              required
+              errorMessage={loginErrorMsg}
+              label={formatMessage('Tenant')}
+              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+              selectedKey={selectedTenant}
+              onChange={(e, o) => {
+                console.log('selecting option', o.text, o.key);
+                setSelectedTenant(o.key as string);
+              }}
+            />
+          </form>
+        </Fragment>
+      ),
+    [allTenants, selectedTenant, loginErrorMsg]
+  );
+
   const PageFormConfig = (
     <Fragment>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
@@ -758,7 +804,29 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
-    if (page === PageTypes.ConfigProvision) {
+    if (page === PageTypes.SelectTenant) {
+      return (
+        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'flex-end' }}>
+          <div>
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Back')}
+              onClick={() => {
+                onBack();
+              }}
+            />
+            <PrimaryButton
+              disabled={!selectedTenant}
+              style={{ margin: '0 4px' }}
+              text="Next: Configure Resources"
+              onClick={() => {
+                getTokenForTenant(selectedTenant);
+              }}
+            />
+          </div>
+        </div>
+      );
+    } else if (page === PageTypes.ConfigProvision) {
       return (
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
@@ -929,10 +997,22 @@ export const AzureProvisionDialog: React.FC = () => {
     enabledResources,
     requireResources,
     currentLuisLocation,
+    selectedTenant,
   ]);
+
+  // if we haven't loaded the token yet, show a loading spinner
+  // unless we need to select the tenant first
+  if (page !== PageTypes.SelectTenant && !token) {
+    return (
+      <div style={{ height: '100vh' }}>
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div style={{ height: '100vh' }}>
+      {page === PageTypes.SelectTenant && SelectTenant}
       {page === PageTypes.ConfigProvision && PageFormConfig}
       {page === PageTypes.AddResources && PageAddResources()}
       {page === PageTypes.ReviewResource && PageReview}
