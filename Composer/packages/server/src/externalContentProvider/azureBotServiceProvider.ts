@@ -92,39 +92,47 @@ export class AzureBotServiceProvider extends ExternalContentProvider<AzureBotSer
     tenantId: string,
     objectId: string
   ) {
-    const operationKind = 'add';
-    const url = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.KeyVault/vaults/${vaultName}/accessPolicies/${operationKind}?api-version=2019-09-01`;
-    const result = await axios.default.put(
-      url,
-      {
-        properties: {
-          accessPolicies: [
-            {
-              tenantId: tenantId,
-              objectId: objectId,
-              permissions: {
-                secrets: ['get', 'list'],
+    try {
+      const operationKind = 'add';
+      const url = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.KeyVault/vaults/${vaultName}/accessPolicies/${operationKind}?api-version=2019-09-01`;
+      const result = await axios.default.put(
+        url,
+        {
+          properties: {
+            accessPolicies: [
+              {
+                tenantId: tenantId,
+                objectId: objectId,
+                permissions: {
+                  secrets: ['get', 'list'],
+                },
               },
-            },
-          ],
+            ],
+          },
         },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    return result;
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return result;
+    } catch (e) {
+      throw `Error while trying to update key vault policy: ${e.toString()}`;
+    }
   }
 
   private async keyVaultGetSecretValue(token: string, vaultName: string, secretName: string) {
-    const vaultUri = `https://${vaultName}.vault.azure.net/secrets/${secretName}?api-version=7.1`;
-    const result = await axios.default.get(vaultUri, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return result.data.value;
+    try {
+      const vaultUri = `https://${vaultName}.vault.azure.net/secrets/${secretName}?api-version=7.1`;
+      const result = await axios.default.get(vaultUri, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return result.data.value;
+    } catch (e) {
+      throw `Error while trying to get key vault value ${e.toString()}`;
+    }
   }
 
   private async getVaultAccessToken(): Promise<string> {
