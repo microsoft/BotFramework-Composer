@@ -3,12 +3,11 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
 import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
-import OnboardingContext from '../../OnboardingContext';
+import { useOnboardingContext } from '../../OnboardingContext';
 
 import {
   buttonStyle,
@@ -38,13 +37,13 @@ const WelcomeModal = () => {
   const {
     actions: { exit, nextSet, onComplete, toggleMinimized },
     state: { currentSet, currentStep, stepSets },
-  } = useContext(OnboardingContext);
+  } = useOnboardingContext();
 
   return (
     <div css={contentStyle}>
       <div css={headerStyle}>
         <div css={topBarStyle}>
-          <div css={titleStyle}>{formatMessage('Welcome!')}</div>
+          <div css={titleStyle}>{formatMessage('Welcome to Composer!')}</div>
           <div css={buttonStyle}>
             <IconButton
               iconProps={{ iconName: 'ChromeMinimize' }}
@@ -60,7 +59,7 @@ const WelcomeModal = () => {
           </div>
         </div>
         <img alt="Welcome" src={welcomeImage} />
-        <div css={subtitleStyle}>{formatMessage('Your bot creation journey on Composer')}</div>
+        <div css={subtitleStyle}>{formatMessage('What you need to know to get started')}</div>
       </div>
       <div>
         {stepSets.map(({ steps: { length }, title }, index) => (

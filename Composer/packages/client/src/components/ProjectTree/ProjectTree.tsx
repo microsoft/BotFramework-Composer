@@ -617,7 +617,6 @@ export const ProjectTree: React.FC<Props> = ({
               key={key}
               defaultState={getPageElement(key)}
               depth={startDepth}
-              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
               isActive={doesLinkMatch(dialogLink, selectedLink)}
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
@@ -631,7 +630,6 @@ export const ProjectTree: React.FC<Props> = ({
               key={key}
               defaultState={getPageElement(key)}
               depth={startDepth}
-              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
               isActive={doesLinkMatch(dialogLink, selectedLink)}
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
@@ -645,7 +643,6 @@ export const ProjectTree: React.FC<Props> = ({
               key={key}
               defaultState={getPageElement(key)}
               depth={startDepth}
-              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
               isActive={doesLinkMatch(dialogLink, selectedLink)}
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
