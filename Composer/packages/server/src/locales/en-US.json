@@ -593,6 +593,9 @@
   "close_d634289d": {
     "message": "Close"
   },
+  "code_editor_1438efc": {
+    "message": "code editor"
+  },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
   },
@@ -698,6 +701,9 @@
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
   },
+  "connect_to_an_existing_bot_7f42990b": {
+    "message": "Connect to an existing bot"
+  },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
   },
@@ -775,6 +781,9 @@
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
+  },
+  "create_a_new_bot_51ce70d3": {
+    "message": "Create a new bot"
   },
   "create_a_new_dialog_21d84b82": {
     "message": "Create a new dialog"
@@ -1078,6 +1087,9 @@
   },
   "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
     "message": "Display text used by the channel to render visually."
+  },
+  "do_you_want_to_create_a_new_bot_or_connect_your_az_f5c9dee": {
+    "message": "Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?"
   },
   "do_you_want_to_proceed_cd35aa38": {
     "message": "Do you want to proceed?"
@@ -1483,6 +1495,9 @@
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
+  },
+  "form_b674666c": {
+    "message": "form"
   },
   "form_dialog_error_ba7c37fe": {
     "message": "Form dialog error"
@@ -2327,6 +2342,9 @@
   "one_of_the_variations_added_below_will_be_selected_bee3c3f1": {
     "message": "One of the variations added below will be selected at random by the LG library."
   },
+  "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
+    "message": "One or more options that are passed to the dialog that is called."
+  },
   "open_an_existing_skill_fbd87273": {
     "message": "Open an existing skill"
   },
@@ -2347,6 +2365,9 @@
   },
   "open_web_chat_7a24d4f8": {
     "message": "Open web chat"
+  },
+  "open_your_azure_bot_resource_9165e3d1": {
+    "message": "Open your Azure Bot resource"
   },
   "optional_221bcc9d": {
     "message": "Optional"
