@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 import { PublishTarget } from '@bfc/shared';
 
-import { armScopes } from '../constants';
+// import { armScopes } from '../constants';
 
 import httpClient from './httpUtil';
-import { AuthClient } from './authClient';
+// import { AuthClient } from './authClient';
 /**
  * Returns true if the client is embedded in the Composer Electron environment.
  */
