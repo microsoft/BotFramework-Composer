@@ -8,7 +8,7 @@ import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
 
-import { CreationFlowStatus } from '../../../constants';
+import { CreationFlowStatus, firstPartyTemplateFeed } from '../../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -75,6 +75,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
+    await fetchTemplatesV2([firstPartyTemplateFeed]);
 
     fetchRecentProjects();
   };

@@ -395,11 +395,7 @@ export const triggerNotSupportedWarning = () =>
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
 
-export const feedDictionary: { [key in FeedName]: string } = {
-  dotnet:
-    'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-  js: 'https://registry.npmjs.org/-/v1/search?text=generator+scope:standardlabs-test',
-};
+export const firstPartyTemplateFeed = 'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template';
 
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)
 export const defaultPrimaryLanguage = 'english';

@@ -281,10 +281,18 @@ export class AssetManager {
             },
           } as BotTemplate;
           if (isArray(keywords)) {
-            templateToReturn.dotnetSupport = keywords.indexOf('bf-dotnet') != -1;
-            templateToReturn.nodeSupport = keywords.indexOf('bf-js') != -1;
-            templateToReturn.functionsSupport = keywords.indexOf('bf-functions') != -1;
-            templateToReturn.webAppSupport = keywords.indexOf('bf-webapp') != -1;
+            if (keywords.indexOf('bf-dotnet-functions') != -1 || keywords.indexOf('bf-dotnet-webapp') != -1) {
+              templateToReturn.dotnetSupport = {
+                functionsSupported: keywords.indexOf('bf-dotnet-functions') != -1,
+                webAppSupported: keywords.indexOf('bf-dotnet-webapp') != -1,
+              };
+            }
+            if (keywords.indexOf('bf-js-functions') != -1 || keywords.indexOf('bf-js-webapp') != -1) {
+              templateToReturn.nodeSupport = {
+                functionsSupported: keywords.indexOf('bf-js-functions') != -1,
+                webAppSupported: keywords.indexOf('bf-js-webapp') != -1,
+              };
+            }
           }
           return templateToReturn;
         });
