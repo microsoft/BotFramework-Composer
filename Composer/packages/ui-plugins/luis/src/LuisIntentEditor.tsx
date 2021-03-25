@@ -50,7 +50,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
         : `/bot/${projectId}/language-understanding/${fileId}${sectionId ? `/edit?t=${sectionId}` : ''}`;
       shellApi.navigateTo(url);
     },
-    [shellApi, projectId, locale]
+    [shellApi, projectId, locale, currentDialog]
   );
 
   if (!luFile || !intentName) {

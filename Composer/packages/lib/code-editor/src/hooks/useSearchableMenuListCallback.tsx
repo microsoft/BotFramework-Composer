@@ -42,7 +42,7 @@ export const useSearchableMenuListCallback = (
         </Stack>
       );
     },
-    [headerRenderer, onSearchAbort, onSearchQueryChange]
+    [searchFiledPlaceHolder, headerRenderer, onSearchAbort, onSearchQueryChange]
   );
 
   return { onRenderMenuList: callback, query, setQuery };
