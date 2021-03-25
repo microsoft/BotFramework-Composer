@@ -109,13 +109,26 @@ export class Builder {
       await this.downSamplingInterruption((await this.getInterruptionFiles()).interruptionLuFiles);
 
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
+      const { luBuildFiles, orchestratorBuildFiles } = this.separateFiles(interruptionLuFiles, allFiles, 'lu');
+      const { orchestratorBuildFiles: needReplacedFiles } = this.separateFiles(interruptionQnaFiles, allFiles, 'qna');
+      await this.replaceDeferToForOrchestrator(needReplacedFiles);
+
       await this.runLuBuild(luBuildFiles, directVersionPublish);
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
+  };
+
+  public replaceDeferToForOrchestrator = async (files: FileInfo[]) => {
+    await Promise.all(
+      files.map((file) => {
+        file.content = file.content.replace('DeferToRecognizer_LUIS', 'DeferToRecognizer_ORCHESTRATOR');
+        this.storage.writeFile(file.path, file.content);
+        return file;
+      })
+    );
   };
 
   public getQnaEndpointKey = async (subscriptionKey: string, config: IConfig) => {
@@ -357,7 +370,6 @@ export class Builder {
     const files = await this.storage.readDir(this.interruptionFolderPath);
     const interruptionLuFiles: FileInfo[] = [];
     const interruptionQnaFiles: FileInfo[] = [];
-
     for (const file of files) {
       const content = await this.storage.readFile(Path.join(this.interruptionFolderPath, file));
       const path = Path.join(this.interruptionFolderPath, file);
@@ -580,13 +592,12 @@ export class Builder {
     };
   };
 
-  private separateLuFiles = (luFiles: FileInfo[], allFiles: FileInfo[]) => {
-    const luRecoginzers = allFiles.filter((item) => item.name.endsWith('.lu.dialog'));
+  private separateFiles = (files: FileInfo[], allFiles: FileInfo[], type: 'qna' | 'lu') => {
+    const luRecoginzers = allFiles.filter((item) => item.name.endsWith(`.lu.dialog`));
     const luBuildFiles: FileInfo[] = [];
     const orchestratorBuildFiles: FileInfo[] = [];
-
-    luFiles.forEach((file) => {
-      const recognizer = luRecoginzers.find((item) => item.name.replace('.dialog', '') === file.name);
+    files.forEach((file) => {
+      const recognizer = luRecoginzers.find((item) => item.name.replace('lu.dialog', type) === file.name);
       if (recognizer && JSON.parse(recognizer.content).$kind === SDKKinds.OrchestratorRecognizer) {
         orchestratorBuildFiles.push(file);
       } else {
