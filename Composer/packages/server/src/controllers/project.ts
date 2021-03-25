@@ -148,6 +148,7 @@ async function setProjectAlias(req: Request, res: Response) {
 
     if (currentProject !== undefined) {
       try {
+        await BotProjectService.setProjectAlias(projectId, alias);
         res.status(200).json({ id: currentProject.id, name: currentProject.name, alias: alias });
       } catch (error) {
         res.status(400).json({

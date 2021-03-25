@@ -348,9 +348,9 @@ export class BotProjectService {
     }
   };
 
-  public static setProjectAlias(projectId: string, alias: string): void {
+  public static setProjectAlias = (projectId: string, alias: string): void => {
     BotProjectService.setProjectLocationData(projectId, { alias });
-  }
+  };
 
   private static updateCurrentProjects = (project: BotProject): void => {
     const { id } = project;
