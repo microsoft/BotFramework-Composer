@@ -29,10 +29,11 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   projectId: string;
   skillId?: string;
   lgFileId?: string;
+  file?: LgFile;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { dialogId, projectId, skillId, lgFileId } = props;
+  const { dialogId, projectId, skillId, lgFileId, file } = props;
   const actualProjectId = skillId ?? projectId;
 
   const userSettings = useRecoilValue(userSettingsState);
@@ -48,10 +49,6 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-
-  const file: LgFile | undefined = lgFileId
-    ? lgFiles.find(({ id }) => id === lgFileId)
-    : lgFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
 
   const defaultLangFile = lgFileId
     ? lgFiles.find(({ id }) => id === lgFileId)
