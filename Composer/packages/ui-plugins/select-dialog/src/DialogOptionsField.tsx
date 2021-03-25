@@ -131,6 +131,11 @@ const DialogOptionsField: React.FC<FieldProps> = ({
   const onDropdownChange = React.useCallback(
     (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
       if (option) {
+        // When the user switched between data types - either a string (expression) or an object (form or object) - we need to set
+        // options to undefined so we don't incorrectly pass a string to an object editor or pass an object to a string editor.
+
+        // If selectedKey is currently set to expression and the user is switching to form or object, set the value to undefined.
+        // If the user is switching to expression meaning the selectedKey is currently set to form or form, set the value to undefined.
         if (option.key === 'expression' || selectedKey === 'expression') {
           change();
         }
