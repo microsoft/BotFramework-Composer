@@ -24,7 +24,7 @@ type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
   onNext: (data: string) => void;
-  onJumpToOpenModal: () => void;
+  onJumpToOpenModal: (search?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
@@ -74,7 +74,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     if (option === 'Create') {
       setIsOpenCreateModal(true);
     } else {
-      onJumpToOpenModal();
+      onJumpToOpenModal(props.location?.search);
     }
   };
 
