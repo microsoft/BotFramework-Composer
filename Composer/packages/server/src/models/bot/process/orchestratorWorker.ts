@@ -4,7 +4,7 @@
 import { FileInfo } from '@bfc/shared';
 import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
 import { writeFile, readdir, readFile, pathExists, readJson } from 'fs-extra';
-import { partition } from 'lodash';
+import partition from 'lodash/partition';
 
 import { Path } from '../../../utility/path';
 import { IOrchestratorBuildOutput, IOrchestratorSettings } from '../interface';
@@ -79,7 +79,7 @@ export async function warmUpCache(generatedFolderPath: string, projectId: string
     return false;
   }
 
-  let [enLuFiles, multiLangLuFiles] = partition(bluFiles, (f) => f.split('.')?.[1].startsWith('en'));
+  const [enLuFiles, multiLangLuFiles] = partition(bluFiles, (f) => f.split('.')?.[1].startsWith('en'));
 
   const modelDatas = [
     { model: orchestratorSettings?.orchestrator?.models?.en, lang: 'en', luFiles: enLuFiles },

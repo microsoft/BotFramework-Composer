@@ -1,6 +1,10 @@
-import { cache, warmUpCache } from '../process/orchestratorWorker';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { LabelResolver, Utility, Orchestrator } from '@microsoft/bf-orchestrator';
 import { pathExists, readdir, readJson } from 'fs-extra';
+
+import { cache, warmUpCache } from '../process/orchestratorWorker';
 
 jest.mock('@microsoft/bf-orchestrator');
 jest.mock('fs-extra', () => ({
@@ -19,7 +23,7 @@ jest.mock('fs-extra', () => ({
           multilang: './model/multilang.onnx',
         },
         snapshots: {
-          test_zh_cn: './generated/test.zh-cn.blu',
+          testZhCn: './generated/test.zh-cn.blu',
         },
       },
     };
