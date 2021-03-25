@@ -17,7 +17,7 @@ import { ToolbarButtonPayload } from '../types';
 
 import { StringArrayItem } from './StringArrayItem';
 
-const submitKeys = ['Enter', 'Escape'];
+const inputs = ['input', 'textarea'];
 
 const styles: { link: ILinkStyles } = {
   link: {
@@ -118,7 +118,11 @@ export const StringArrayEditor = React.memo(
 
     useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
-        if (submitKeys.includes(e.key)) {
+        if (
+          e.key === 'Enter' ||
+          (e.key === 'Escape' &&
+            (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase())))
+        ) {
           // Allow multiline via shift+Enter
           if (e.key === 'Enter' && e.shiftKey) {
             return;
