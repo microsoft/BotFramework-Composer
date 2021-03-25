@@ -83,3 +83,19 @@ export const getPendingNotificationCardProps = (items: BotStatus[]): CardProps =
     ),
   };
 };
+
+export const getPendingNotificationSkillCardProps = (): CardProps => {
+  return {
+    title: '',
+    description: formatMessage(`Publishing skill`),
+    type: 'pending',
+    onRenderCardContent: (props) => (
+      <div css={cardContent}>
+        <Icon css={infoType} iconName="CloudUpload" />
+        <div css={cardDetail}>
+          <ProgressIndicator label={props.description} />
+        </div>
+      </div>
+    ),
+  };
+};

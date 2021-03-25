@@ -17,6 +17,7 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
+  PublishTarget,
 } from '@bfc/shared';
 import { DirectLineLog } from '@botframework-composer/types/src';
 import { atomFamily } from 'recoil';
@@ -310,6 +311,11 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
 export const qnaFilesState = atomFamily<QnAFile[], string>({
   key: getFullyQualifiedKey('qnaFiles'),
   default: [],
+});
+
+export const currentTargetState = atomFamily<PublishTarget, string>({
+  key: getFullyQualifiedKey('currentTarget'),
+  default: {} as PublishTarget,
 });
 
 export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({
