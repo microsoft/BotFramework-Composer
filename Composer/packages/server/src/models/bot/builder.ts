@@ -19,7 +19,7 @@ import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
 
-import { IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
+import { CrossTrainingSetting, IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
 import orchestratorBuilder from './process/orchestratorBuilder';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
@@ -61,6 +61,7 @@ export class Builder {
   public storage: IFileStorage;
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
+  public crossTrainingSetting: CrossTrainingSetting = { inner: true, intra: true };
   private _locale: string;
   private orchestratorSettings: IOrchestratorSettings = {
     orchestrator: {
@@ -127,9 +128,14 @@ export class Builder {
     }
   };
 
-  public setBuildConfig(config: IConfig, downSamplingConfig: DownSamplingConfig) {
+  public setBuildConfig(
+    config: IConfig,
+    downSamplingConfig: DownSamplingConfig,
+    crossTrainingSetting: CrossTrainingSetting
+  ) {
     this.config = config;
     this.downSamplingConfig = downSamplingConfig;
+    this.crossTrainingSetting = crossTrainingSetting;
   }
 
   public get locale(): string {
@@ -338,7 +344,10 @@ export class Builder {
     });
 
     const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, crossTrainConfig, { importResolver });
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, crossTrainConfig, {
+      importResolver,
+      trainingOpt: this.crossTrainingSetting,
+    });
 
     await this.writeFiles(result.luResult, 'lu');
     await this.writeFiles(result.qnaResult, 'qna');

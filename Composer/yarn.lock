@@ -4013,10 +4013,10 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-lu@next":
-  version "4.13.0-dev.20210218.d9e7d3a"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.13.0-dev.20210218.d9e7d3a.tgz#351004819bf9a130d324e687e774df621914e2a0"
-  integrity sha512-Z/cBw1nu6WzvPR4r8dVuGfp3Cw6hSws9TNntrIsSYr2hCcGw9fROf2GJP1JMIs+QZYAt6+AvnuKnH8L1BiZOTg==
+"@microsoft/bf-lu@4.13.0-dev.20210324.2241623", "@microsoft/bf-lu@next":
+  version "4.13.0-dev.20210324.2241623"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.13.0-dev.20210324.2241623.tgz#e95425283507f1752f054cc0cfe4415c97f47f1b"
+  integrity sha512-yNj64usSn1Cct/3zcHIyJvFyJA+AtJ8td1V0ZQikEqRpupoqVRTWU9UCq8rbWmv7T/hIKcBD4xsnFU+xvDJdIQ==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"

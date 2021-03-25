@@ -240,7 +240,7 @@ export async function build(project: IBotProject, path: string, settings: BuildS
   });
 
   builder.rootDir = botPath(path, settings?.runtime);
-  builder.setBuildConfig({ ...luisConfig, ...qnaConfig }, project.settings.downsampling);
+  builder.setBuildConfig({ ...luisConfig, ...qnaConfig }, project.settings.downsampling, project.settings.crossTrain);
   await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[], emptyFiles);
   await builder.copyModelPathToBot(isUsingAdaptiveRuntime(settings?.runtime));
 }

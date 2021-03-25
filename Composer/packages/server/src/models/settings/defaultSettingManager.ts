@@ -21,6 +21,7 @@ const newSettingsValuePath = [
   'luis.authoringEndpoint',
   'skillConfiguration',
   'customFunctions',
+  'crossTrain',
 ];
 
 const discardedSettingsValuePath = ['downsampling.maxUtteranceAllowed'];
@@ -102,6 +103,10 @@ export class DefaultSettingManager extends FileSettingManager {
         // TODO: Setting isSkill property to true for now. A runtime change is required to remove dependancy on isSkill prop #4501
         isSkill: true,
         allowedCallers: [],
+      },
+      crossTrain: {
+        inner: true,
+        intra: true,
       },
       skill: {},
       defaultLanguage: 'en-us',

@@ -26,7 +26,7 @@
     "rimraf": "^2.6.3"
   },
   "dependencies": {
-    "@microsoft/bf-lu": "4.12.0-rc0",
+    "@microsoft/bf-lu": "4.13.0-dev.20210324.2241623",
     "adaptive-expressions": "4.12.0-rc1",
     "botbuilder-lg": "4.12.0-rc1",
     "lodash": "^4.17.19"
