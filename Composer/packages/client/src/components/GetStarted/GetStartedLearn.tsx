@@ -11,23 +11,23 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { h3Style, ulStyle, liStyle } from './styles';
 
+const linkToAdaptiveExpressions =
+  'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-adaptive-expressions?view=azure-bot-service-4.0&tabs=arithmetic';
+const linkToGetStarted = 'https://docs.microsoft.com/en-us/composer/introduction';
+const linkToCreateFirstBot = 'https://docs.microsoft.com/en-us/composer/quickstart-create-bot';
+const linkToTutorials = 'https://docs.microsoft.com/en-us/composer/tutorial/tutorial-introduction';
+const linkToLGFileFormat =
+  'https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lg-file-format?view=azure-bot-service-4.0';
+const linkToLUFileFormat =
+  'https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lu-file-format?view=azure-bot-service-4.0';
+const linkToPreBuiltExpressions =
+  'https://docs.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0';
+
+const linkClick = (event) => {
+  TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: event.target.href });
+};
+
 export const GetStartedLearn: React.FC = () => {
-  const linkToAdaptiveExpressions =
-    'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-adaptive-expressions?view=azure-bot-service-4.0&tabs=arithmetic';
-  const linkToGetStarted = 'https://docs.microsoft.com/en-us/composer/introduction';
-  const linkToCreateFirstBot = 'https://docs.microsoft.com/en-us/composer/quickstart-create-bot';
-  const linkToTutorials = 'https://docs.microsoft.com/en-us/composer/tutorial/tutorial-introduction';
-  const linkToLGFileFormat =
-    'https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lg-file-format?view=azure-bot-service-4.0';
-  const linkToLUFileFormat =
-    'https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lu-file-format?view=azure-bot-service-4.0';
-  const linkToPreBuiltExpressions =
-    'https://docs.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0';
-
-  const linkClick = (event) => {
-    TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: event.target.href });
-  };
-
   return (
     <div css={{ paddingLeft: 27, paddingRight: 20 }}>
       <p>{formatMessage('These are next steps so you always know what to do next to get your bot going.')}</p>

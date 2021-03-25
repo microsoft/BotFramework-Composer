@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
-import { Panel } from 'office-ui-fabric-react/lib/Panel';
+import { Panel, IPanelStyles } from 'office-ui-fabric-react/lib/Panel';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
 import { GetStartedNextSteps } from './GetStartedNextSteps';
@@ -25,6 +25,16 @@ export type NextSteps = {
   checkedLabel: string;
   onClick: () => void;
 };
+
+const panelStyles = {
+  root: {
+    marginTop: 50,
+  },
+  navigation: {
+    display: 'block',
+    height: 'auto',
+  },
+} as IPanelStyles;
 
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const renderTabs = () => {
@@ -51,15 +61,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
     <Panel
       isBlocking={false}
       isOpen={props.isOpen}
-      styles={{
-        root: {
-          marginTop: '50px',
-        },
-        navigation: {
-          display: 'block',
-          height: 'auto',
-        },
-      }}
+      styles={panelStyles}
       onDismiss={props.onDismiss}
       onRenderHeader={renderTabs}
       onRenderNavigationContent={onRenderNavigationContent}

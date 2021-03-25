@@ -1157,6 +1157,9 @@
   "downloading_language_model_9d40c817": {
     "message": "Downloading Language Model"
   },
+  "due_to_the_following_error_we_were_unable_to_succe_5ca033c7": {
+    "message": "Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:"
+  },
   "due_to_the_following_error_we_were_unable_to_succe_897e7abb": {
     "message": "Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:"
   },
@@ -1520,6 +1523,12 @@
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
   },
+  "finish_setting_up_your_development_environment_by__87296088": {
+    "message": "Finish setting up your development environment by adding LUIS..."
+  },
+  "finish_setting_up_your_development_environment_by__d9da90fb": {
+    "message": "Finish setting up your development environment by adding QnA Maker..."
+  },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
   },
@@ -1616,12 +1625,12 @@
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
   },
-<<<<<<< HEAD
   "get_started_76ed4cb9": {
     "message": "Get started"
   },
-=======
->>>>>>> benbrown/getsmarted
+  "get_started_76ed4cb9": {
+    "message": "Get started"
+  },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
   },
@@ -1919,12 +1928,12 @@
   "learn_more_c08939e8": {
     "message": "Learn more."
   },
-<<<<<<< HEAD
+ "learning_70e0f90b": {
+    "message": "Learning"
+  },
   "learning_70e0f90b": {
     "message": "Learning"
   },
-=======
->>>>>>> benbrown/getsmarted
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
   },
@@ -3329,6 +3338,9 @@
   "the_following_luis_resource_was_successfully_creat_5dfde928": {
     "message": "The following LUIS resource was successfully created and added to your bot project:"
   },
+  "the_following_qna_key_has_been_successfully_added__7c97bbc0": {
+    "message": "The following QnA key has been successfully added to your bot project:"
+  },
   "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
     "message": "The main dialog is named after your bot. It is the root and entry point of a bot."
   },
@@ -3853,6 +3865,9 @@
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
+  },
+  "your_new_bot_is_almost_ready_1bb596e": {
+    "message": "Your new bot is almost ready!"
   },
   "your_template_requires_qna_maker_to_access_content_a4ca6f76": {
     "message": "Your template requires QnA Maker to access content for your bot."

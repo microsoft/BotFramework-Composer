@@ -30,7 +30,7 @@ import { dispatcherState } from '../../recoilModel/atoms';
 type ManageLuisProps = {
   hidden: boolean;
   onDismiss: () => void;
-  onGetKey: (settings: any) => void;
+  onGetKey: (settings: { authoringKey: string; endpointKey: string; authoringRegion: string }) => void;
   onNext?: () => void;
 };
 
@@ -44,7 +44,7 @@ type KeyRec = {
 const dropdownStyles = { dropdown: { width: '100%' } };
 const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: '14' };
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
-
+const mainElementStyle = { marginBottom: 20 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
 const handoffInstructions = formatMessage(
@@ -66,7 +66,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
   const [luisResourceName, setLuisResourceName] = useState<string>('');
   const [loadingLUIS, setLoadingLUIS] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('create');
   const [actionOptions, setActionOptions] = useState<IChoiceGroupOption[]>([]);
@@ -77,6 +76,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [predictionKeys, setPredictionKeys] = useState<KeyRec[]>([]);
   const [authoringKeys, setAuthoringKeys] = useState<KeyRec[]>([]);
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
@@ -438,6 +438,202 @@ export const ManageLuis = (props: ManageLuisProps) => {
     );
   };
 
+  const renderPageOne = () => {
+    return (
+      <div>
+        <p>
+          {formatMessage(
+            'Select your Azure subscription and choose from existing LUIS keys, or create a new LUIS resource. Learn more'
+          )}
+        </p>
+        <div css={mainElementStyle}>
+          <Dropdown
+            disabled={!(availableSubscriptions?.length > 0)}
+            label={formatMessage('Select subscription')}
+            options={
+              availableSubscriptions
+                ?.filter((p) => p.subscriptionId && p.displayName)
+                .map((p) => {
+                  return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+                }) ?? []
+            }
+            placeholder={formatMessage('Select one')}
+            selectedKey={subscriptionId}
+            styles={dropdownStyles}
+            onChange={onChangeSubscription}
+          />
+        </div>
+        <div css={mainElementStyle}>
+          {subscriptionId && <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />}
+
+          <div style={{ marginLeft: 26 }}>
+            {noKeys && subscriptionId && (
+              <span style={{ color: 'rgb(161, 159, 157)' }}>
+                {formatMessage('No existing LUIS resource found in this subscription. Click “Next” to create new.')}
+              </span>
+            )}
+            {!noKeys && subscriptionId && (
+              <div>
+                <Dropdown
+                  disabled={!(authoringKeys?.length > 0) || nextAction !== 'choose'}
+                  label={formatMessage('Authoring key')}
+                  options={
+                    authoringKeys.map((p) => {
+                      return { text: p.name, ...p };
+                    }) ?? []
+                  }
+                  placeholder={formatMessage('Select one')}
+                  styles={dropdownStyles}
+                  onChange={onChangeLUISAuthoring}
+                />
+                <Dropdown
+                  disabled={!(predictionKeys?.length > 0) || nextAction !== 'choose'}
+                  label={formatMessage('Prediction key')}
+                  options={
+                    predictionKeys.map((p) => {
+                      return { text: p.name, ...p };
+                    }) ?? []
+                  }
+                  placeholder={formatMessage('Select one')}
+                  styles={dropdownStyles}
+                  onChange={onChangeLUISPrediction}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        <DialogFooter>
+          {loadingLUIS && (
+            <Spinner label="Loading keys..." labelPosition="right" styles={{ root: { float: 'left' } }} />
+          )}
+          <PrimaryButton
+            disabled={
+              loadingLUIS ||
+              (nextAction === 'choose' && !(localRootLuisRegion && localRootLuisKey && localRootLuisEndpointKey)) ||
+              (nextAction === 'create' && !subscriptionId)
+            }
+            text={formatMessage('Next')}
+            onClick={performNextAction}
+          />
+          <DefaultButton
+            disabled={loadingLUIS || showAuthDialog}
+            text={formatMessage('Cancel')}
+            onClick={props.onDismiss}
+          />
+        </DialogFooter>
+      </div>
+    );
+  };
+
+  const renderPageTwo = () => {
+    return (
+      <div>
+        <div css={mainElementStyle}>
+          <p>
+            {formatMessage(
+              'Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. Learn more'
+            )}
+          </p>
+          <Dropdown
+            disabled={resourceGroups.length === 0 || loadingLUIS}
+            label={formatMessage('Resource group:')}
+            options={
+              resourceGroups.map((p) => {
+                return { key: p.id, text: p.name, data: p.data };
+              }) ?? []
+            }
+            placeholder={formatMessage('Select one')}
+            selectedKey={resourceGroupKey}
+            styles={dropdownStyles}
+            onChange={onChangeResourceGroup}
+            onRenderOption={onRenderOption}
+          />
+          {createResourceGroup && (
+            <TextField
+              required
+              aria-label={formatMessage('Resource group name')}
+              data-testid={'luisResourceGroupName'}
+              disabled={loadingLUIS}
+              id={'luisResourceGroupName'}
+              label={formatMessage('Resource group name')}
+              placeholder={formatMessage('Enter name for new resource group')}
+              styles={{ root: { marginTop: 10 } }}
+              value={newResourceGroupName}
+              onChange={(e, val) => {
+                setNewResourceGroupName(val || '');
+              }}
+            />
+          )}
+          <Dropdown
+            required
+            aria-label={formatMessage('LUIS region')}
+            data-testid={'rootLUISRegion'}
+            disabled={loadingLUIS}
+            id={'luisRegion'}
+            label={formatMessage('LUIS region')}
+            options={LUIS_REGIONS}
+            placeholder={formatMessage('Enter LUIS region')}
+            selectedKey={localRootLuisRegion}
+            styles={dropdownStyles}
+            onChange={handleRootLuisRegionOnChange}
+          />
+          <TextField
+            required
+            aria-label={formatMessage('Resource name')}
+            data-testid={'luisResourceName'}
+            disabled={loadingLUIS}
+            id={'luisResourceName'}
+            label={formatMessage('Resource name')}
+            placeholder={formatMessage('Enter name for new LUIS resources')}
+            styles={{ root: { marginTop: 10 } }}
+            value={luisResourceName}
+            onChange={(e, val) => setLuisResourceName(val || '')}
+          />
+        </div>
+        <DialogFooter>
+          {loadingLUIS && (
+            <Spinner
+              label={formatMessage('Creating resources...')}
+              labelPosition="right"
+              styles={{ root: { float: 'left' } }}
+            />
+          )}
+          <DefaultButton disabled={loadingLUIS} text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
+          <PrimaryButton
+            disabled={
+              loadingLUIS ||
+              !luisResourceName ||
+              !localRootLuisRegion ||
+              !resourceGroupKey ||
+              (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
+            }
+            text={formatMessage('Next')}
+            onClick={createLUIS}
+          />
+          <DefaultButton disabled={loadingLUIS} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+        </DialogFooter>
+      </div>
+    );
+  };
+
+  const renderPageThree = () => {
+    return (
+      <div>
+        <p>{outcomeDescription}</p>
+        <div css={summaryStyles}>{outcomeSummary}</div>
+        {outcomeError && (
+          <p>
+            {formatMessage('If you would like to try again, or select from existing resources, please click “Back”.')}
+          </p>
+        )}
+        <DialogFooter>
+          {outcomeError && <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />}
+          <PrimaryButton text={formatMessage('Done')} onClick={props.onNext} />
+        </DialogFooter>
+      </div>
+    );
+  };
+
   return (
     <Fragment>
       {showAuthDialog && (
@@ -468,186 +664,9 @@ export const ManageLuis = (props: ManageLuisProps) => {
         }}
         onDismiss={props.onDismiss}
       >
-        {currentPage === 1 && (
-          <div>
-            <p>
-              {formatMessage(
-                'Select your Azure subscription and choose from existing LUIS keys, or create a new LUIS resource. Learn more'
-              )}
-            </p>
-            <Dropdown
-              disabled={!(availableSubscriptions?.length > 0)}
-              label={formatMessage('Select subscription')}
-              options={
-                availableSubscriptions
-                  ?.filter((p) => p.subscriptionId && p.displayName)
-                  .map((p) => {
-                    return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
-                  }) ?? []
-              }
-              placeholder={formatMessage('Select one')}
-              selectedKey={subscriptionId}
-              styles={dropdownStyles}
-              onChange={onChangeSubscription}
-            />
-
-            <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
-
-            <div style={{ marginLeft: 26 }}>
-              {noKeys && (
-                <p>
-                  {formatMessage('No existing LUIS resource found in this subscription. Click “Next” to create new.')}
-                </p>
-              )}
-              {!noKeys && (
-                <div>
-                  <Dropdown
-                    disabled={!(authoringKeys?.length > 0) || nextAction !== 'choose'}
-                    label={formatMessage('Authoring key')}
-                    options={
-                      authoringKeys.map((p) => {
-                        return { text: p.name, ...p };
-                      }) ?? []
-                    }
-                    placeholder={formatMessage('Select one')}
-                    styles={dropdownStyles}
-                    onChange={onChangeLUISAuthoring}
-                  />
-                  <Dropdown
-                    disabled={!(predictionKeys?.length > 0) || nextAction !== 'choose'}
-                    label={formatMessage('Prediction key')}
-                    options={
-                      predictionKeys.map((p) => {
-                        return { text: p.name, ...p };
-                      }) ?? []
-                    }
-                    placeholder={formatMessage('Select one')}
-                    styles={dropdownStyles}
-                    onChange={onChangeLUISPrediction}
-                  />
-                </div>
-              )}
-            </div>
-            <DialogFooter>
-              {loadingLUIS && (
-                <Spinner label="Loading keys..." labelPosition="right" styles={{ root: { float: 'left' } }} />
-              )}
-              <PrimaryButton
-                disabled={
-                  loadingLUIS ||
-                  (nextAction === 'choose' && !(localRootLuisRegion && localRootLuisKey && localRootLuisEndpointKey)) ||
-                  (nextAction === 'create' && !subscriptionId)
-                }
-                text={formatMessage('Next')}
-                onClick={performNextAction}
-              />
-            </DialogFooter>
-          </div>
-        )}
-        {currentPage === 2 && (
-          <div>
-            <p>
-              {formatMessage(
-                'Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. Learn more'
-              )}
-            </p>
-            <Dropdown
-              disabled={resourceGroups.length === 0 || loadingLUIS}
-              label={formatMessage('Resource group:')}
-              options={
-                resourceGroups.map((p) => {
-                  return { key: p.id, text: p.name, data: p.data };
-                }) ?? []
-              }
-              placeholder={formatMessage('Select one')}
-              selectedKey={resourceGroupKey}
-              styles={dropdownStyles}
-              onChange={onChangeResourceGroup}
-              onRenderOption={onRenderOption}
-            />
-            {createResourceGroup && (
-              <TextField
-                required
-                aria-label={formatMessage('Resource group name')}
-                data-testid={'luisResourceGroupName'}
-                disabled={loadingLUIS}
-                id={'luisResourceGroupName'}
-                label={formatMessage('Resource group name')}
-                placeholder={formatMessage('Enter name for new resource group')}
-                styles={{ root: { marginTop: 10 } }}
-                value={newResourceGroupName}
-                onChange={(e, val) => {
-                  setNewResourceGroupName(val || '');
-                }}
-              />
-            )}
-            <Dropdown
-              required
-              aria-label={formatMessage('LUIS region')}
-              data-testid={'rootLUISRegion'}
-              disabled={loadingLUIS}
-              id={'luisRegion'}
-              label={formatMessage('LUIS region')}
-              options={LUIS_REGIONS}
-              placeholder={formatMessage('Enter LUIS region')}
-              selectedKey={localRootLuisRegion}
-              styles={dropdownStyles}
-              onChange={handleRootLuisRegionOnChange}
-            />
-            <TextField
-              required
-              aria-label={formatMessage('Resource name')}
-              data-testid={'luisResourceName'}
-              disabled={loadingLUIS}
-              id={'luisResourceName'}
-              label={formatMessage('Resource name')}
-              placeholder={formatMessage('Enter name for new LUIS resources')}
-              styles={{ root: { marginTop: 10 } }}
-              value={luisResourceName}
-              onChange={(e, val) => setLuisResourceName(val || '')}
-            />
-            <DialogFooter>
-              {loadingLUIS && (
-                <Spinner
-                  label={formatMessage('Creating resources...')}
-                  labelPosition="right"
-                  styles={{ root: { float: 'left' } }}
-                />
-              )}
-              <DefaultButton disabled={loadingLUIS} text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
-              <PrimaryButton
-                disabled={
-                  loadingLUIS ||
-                  !luisResourceName ||
-                  !localRootLuisRegion ||
-                  !resourceGroupKey ||
-                  (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
-                }
-                text={formatMessage('Next')}
-                onClick={createLUIS}
-              />
-              <DefaultButton disabled={loadingLUIS} text={formatMessage('Cancel')} onClick={props.onDismiss} />
-            </DialogFooter>
-          </div>
-        )}
-        {currentPage === 3 && (
-          <div>
-            <p>{outcomeDescription}</p>
-            <div css={summaryStyles}>{outcomeSummary}</div>
-            {outcomeError && (
-              <p>
-                {formatMessage(
-                  'If you would like to try again, or select from existing resources, please click “Back”.'
-                )}
-              </p>
-            )}
-            <DialogFooter>
-              {outcomeError && <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />}
-              <PrimaryButton text={formatMessage('Done')} onClick={props.onDismiss} />
-              {props.onNext && <PrimaryButton text={formatMessage('Next')} onClick={props.onNext} />}
-            </DialogFooter>
-          </div>
-        )}
+        {currentPage === 1 && renderPageOne()}
+        {currentPage === 2 && renderPageTwo()}
+        {currentPage === 3 && renderPageThree()}
       </Dialog>
     </Fragment>
   );
