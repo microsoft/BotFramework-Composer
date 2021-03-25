@@ -101,10 +101,10 @@ export function CreateOptions(props: CreateOptionsProps) {
       </DialogWrapper>
       <CreateBot
         isOpen={isOpenCreateModal}
+        location={props.location}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}
-        location={props.location}
       />
     </Fragment>
   );
