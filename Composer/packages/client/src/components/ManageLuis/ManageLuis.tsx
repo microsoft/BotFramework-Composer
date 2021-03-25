@@ -32,6 +32,7 @@ type ManageLuisProps = {
   onDismiss: () => void;
   onGetKey: (settings: { authoringKey: string; endpointKey: string; authoringRegion: string }) => void;
   onNext?: () => void;
+  setDisplayManageLuis: (value: any) => void;
 };
 
 type KeyRec = {
@@ -450,10 +451,16 @@ export const ManageLuis = (props: ManageLuisProps) => {
         />
       )}
       <ProvisionHandoff
-        developerInstructions={formatMessage('Send this to your IT admin')}
+        developerInstructions={formatMessage(
+          'Copy and share this information with your Azure admin. After your Luis key is provisioned, you will be ready to test your bot.'
+        )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
-        title={formatMessage('Generate a provisioning request')}
+        title={formatMessage('Share resource request')}
+        onBack={() => {
+          setShowHandoff(false);
+          props.setDisplayManageLuis(true);
+        }}
         onDismiss={() => setShowHandoff(false)}
       />
       <Dialog

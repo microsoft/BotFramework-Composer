@@ -185,6 +185,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     <div css={{ paddingLeft: 27, paddingRight: 20 }}>
       <ManageLuis
         hidden={!displayManageLuis}
+        setDisplayManageLuis={setDisplayManageLuis}
         onDismiss={hideManageLuis}
         onGetKey={updateLuisSettings}
         onNext={() => {
@@ -193,6 +194,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       />
       <ManageQNA
         hidden={!displayManageQNA}
+        setDisplayManageQna={setDisplayManageQNA}
         onDismiss={hideManageQNA}
         onGetKey={updateQNASettings}
         onNext={() => {
