@@ -11,6 +11,7 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { LuFile } from '@bfc/shared';
 
 import { luFilesState, localeState, settingsState } from '../../recoilModel/atoms';
 import { userSettingsState, dispatcherState } from '../../recoilModel';
@@ -24,6 +25,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   projectId: string;
   skillId?: string;
   luFileId?: string;
+  file?: LuFile;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
@@ -34,7 +36,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-  const { dialogId, projectId, skillId, luFileId } = props;
+  const { dialogId, projectId, skillId, luFileId, file } = props;
   const actualProjectId = skillId ?? projectId;
 
   const luFiles = useRecoilValue(luFilesState(actualProjectId));
@@ -42,10 +44,6 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const settings = useRecoilValue(settingsState(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
-
-  const file = luFileId
-    ? luFiles.find(({ id }) => id === luFileId)
-    : luFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
 
   const defaultLangFile = luFileId
     ? luFiles.find(({ id }) => id === luFileId)
