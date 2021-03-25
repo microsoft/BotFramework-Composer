@@ -84,25 +84,22 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     }
   }, [scrollToSectionId]);
 
-  const onDeletePublishTarget = useCallback(
-    async (publishTarget: PublishTarget) => {
-      if (publishTargets) {
-        const targetName = publishTarget.name;
-        const confirmed = await OpenConfirmModal(
-          formatMessage('Delete?'),
-          formatMessage(
-            'Are you sure you want to remove {targetName}? This will remove only the profile and will not delete provisioned resources.',
-            { targetName }
-          )
-        );
-        if (confirmed) {
-          const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);
-          setPublishTargets(newPublishTargets, projectId);
-        }
+  const onDeletePublishTarget = async (publishTarget: PublishTarget) => {
+    if (publishTargets) {
+      const targetName = publishTarget.name;
+      const confirmed = await OpenConfirmModal(
+        formatMessage('Delete?'),
+        formatMessage(
+          'Are you sure you want to remove {targetName}? This will remove only the profile and will not delete provisioned resources.',
+          { targetName }
+        )
+      );
+      if (confirmed) {
+        const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);
+        setPublishTargets(newPublishTargets, projectId);
       }
-    },
-    [projectId, publishTargets]
-  );
+    }
+  };
 
   return (
     <Fragment>
