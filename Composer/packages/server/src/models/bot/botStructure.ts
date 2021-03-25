@@ -10,7 +10,7 @@ const BotStructureTemplate = {
   entry: '${BOTNAME}.dialog',
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
-  manifestLu: 'manifest/${FILENAME}.${LOCALE}.lu',
+  manifestLu: 'manifests/${FILENAME}.${LOCALE}.lu',
   qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
   sourceQnA: 'knowledge-base/source/${FILENAME}.source.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
