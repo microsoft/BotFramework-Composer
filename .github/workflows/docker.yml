@@ -30,7 +30,7 @@ jobs:
           push: false
           context: .
           file: Dockerfile
-          tags: build
+          tags: botframework-composer
           target: build
 
       - name: Health check

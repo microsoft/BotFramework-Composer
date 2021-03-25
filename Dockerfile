@@ -43,7 +43,7 @@ COPY --from=build /src/extensions ../extensions
 ENV NODE_ENV "production"
 RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
 
-FROM base as botframework-composer
+FROM base
 ENV NODE_ENV "production"
 
 WORKDIR /app/Composer
