@@ -159,7 +159,7 @@ export function CreateBotV2(props: CreateBotProps) {
 
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
-    if (location && location.search) {
+    if (location?.search) {
       onNext(routeToTemplate, location.search);
     } else {
       onNext(routeToTemplate);

@@ -96,10 +96,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         fetchReadMe={fetchReadMe}
         fetchTemplates={fetchTemplates}
         isOpen={isOpenCreateModal}
+        location={props.location}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}
-        location={props.location}
       />
     </Fragment>
   );
