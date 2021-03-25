@@ -69,3 +69,5 @@ export function validateDialog(
     return { diagnostics: [new Diagnostic(error.message, id)], cache };
   }
 }
+
+export { validateSchema } from './schemaValidation';
