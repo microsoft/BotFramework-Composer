@@ -12,7 +12,7 @@ const IntentField: React.FC<FieldProps> = (props) => {
   const { currentRecognizer } = useRecognizerConfig();
 
   const Editor = currentRecognizer?.intentEditor;
-  const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
+  const label = formatMessage('Trigger phrases');
 
   const handleChange = () => {
     onChange(value);
