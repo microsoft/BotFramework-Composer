@@ -138,7 +138,7 @@ export const generateDispatchModels = (
   }
 
   const config = JSON.parse(target.configuration);
-  const baseEndpointUrl = `https://${config.hostname}.azurewebsites.net/manifest`;
+  const baseEndpointUrl = `https://${config.hostname}.azurewebsites.net/manifests`;
 
   for (const rootLuFile of rootLuFiles) {
     const currentFileName = `skill-${rootLuFile.id}.lu`;
