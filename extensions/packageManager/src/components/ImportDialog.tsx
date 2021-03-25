@@ -40,6 +40,11 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
   return (
     <Fragment>
       <form onSubmit={submit}>
+        <p>
+          {formatMessage(
+            'Install a specific package by pasting the name and version number below. The text must be an exact match in order to find the correct package. You can also add and browse feeds to find packages to add.'
+          )}
+        </p>
         <TextField
           required
           defaultValue={props.name || ''}
@@ -54,8 +59,8 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
           onChange={updateVersion}
         />
         <DialogFooter>
+          <PrimaryButton disabled={isDisable()} text={formatMessage('Add')} type="submit" onClick={submit} />
           <DefaultButton onClick={props.closeDialog}>{formatMessage('Cancel')}</DefaultButton>
-          <PrimaryButton disabled={isDisable()} text={formatMessage('Import')} type="submit" onClick={submit} />
         </DialogFooter>
       </form>
     </Fragment>

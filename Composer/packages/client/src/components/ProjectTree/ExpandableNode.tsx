@@ -18,33 +18,20 @@ type Props = {
   isActive?: boolean;
 };
 
-const summaryStyle = (depth: number, isActive: boolean) => css`
+const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) => css`
   label: summary;
-  display: flex;
   padding-left: ${depth * INDENT_PER_LEVEL + 12}px;
   padding-top: 6px;
+  display: list-item;
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
   }
   background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
+  ${isOpen ? 'list-style-type: "⏷";' : 'list-style-type: "⏵";'}
 `;
 
 const nodeStyle = css`
   margin-top: 2px;
-`;
-
-const TRIANGLE_SCALE = 0.6;
-
-const detailsStyle = css`
-  &:not([open]) > summary::-webkit-details-marker {
-    transform: scaleX(${TRIANGLE_SCALE});
-    min-width: 10px;
-  }
-
-  &[open] > summary::-webkit-details-marker {
-    transform: scaleY(${TRIANGLE_SCALE});
-    min-width: 10px;
-  }
 `;
 
 export const ExpandableNode = ({
@@ -75,21 +62,19 @@ export const ExpandableNode = ({
   }
 
   return (
-    <div css={nodeStyle} data-testid="dialog">
-      <details ref={detailsRef} css={detailsStyle} open={isExpanded}>
-        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-        <summary
-          css={summaryStyle(depth, isActive)}
-          data-testid={'summaryTag'}
-          role="button"
-          tabIndex={0}
-          onClick={handleClick}
-          onKeyUp={handleKey}
-        >
-          {summary}
-        </summary>
-        {children}
-      </details>
-    </div>
+    <details ref={detailsRef} css={nodeStyle} data-testid="dialog" open={isExpanded}>
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+      <summary
+        css={summaryStyle(depth, isActive, isExpanded)}
+        data-testid={'summaryTag'}
+        role="button"
+        tabIndex={0}
+        onClick={handleClick}
+        onKeyUp={handleKey}
+      >
+        {summary}
+      </summary>
+      {children}
+    </details>
   );
 };

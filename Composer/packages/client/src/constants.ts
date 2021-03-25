@@ -180,6 +180,12 @@ export const BotStatusesCopy = {
 };
 
 export const DialogCreationCopy = {
+  get CREATE_OPTIONS() {
+    return {
+      title: formatMessage('Open your Azure Bot resource'),
+      subText: formatMessage('Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?'),
+    };
+  },
   get CREATE_NEW_BOT() {
     return {
       title: formatMessage('Create bot from template or scratch?'),
@@ -409,3 +415,5 @@ export const runtimeOptions: IDropdownOption[] = [
   { key: defaultRuntime, text: 'Azure Web App' },
   { key: 'azureFunctions', text: 'Azure Functions' },
 ];
+
+export const onboardingDisabled = false;

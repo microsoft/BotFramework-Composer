@@ -165,7 +165,7 @@ export default async (composer: any): Promise<void> => {
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
         const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/Schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
-        return path.relative(path.join(project.dir, 'settings'), destPath);
+        return path.relative(project.dir, destPath);
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
@@ -322,7 +322,7 @@ export default async (composer: any): Promise<void> => {
   });
 
   composer.addRuntimeTemplate({
-    key: 'csharp-azurewebapp-v2',
+    key: 'adaptive-runtime-dotnet-webapp',
     name: 'C#',
     startCommand: 'dotnet run',
     path: dotnetTemplatePath,
