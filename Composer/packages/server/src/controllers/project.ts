@@ -133,7 +133,7 @@ async function getProjectByAlias(req: Request, res: Response) {
 }
 
 async function setProjectAlias(req: Request, res: Response) {
-  const alias = req.params.alias;
+  const { alias } = req.body;
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (!alias) {
