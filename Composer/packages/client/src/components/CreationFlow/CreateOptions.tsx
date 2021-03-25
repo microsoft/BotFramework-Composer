@@ -53,12 +53,12 @@ export function CreateOptions(props: CreateOptionsProps) {
             .get<any>(`/api/projects/alias/${alias}`)
             .then((aliasRes) => {
               if (aliasRes.status === 200) {
-                setIsOpenOptionsModal(true);
+                navigate(`/bot/${aliasRes.data.id}`);
                 return;
               }
             })
             .catch((e) => {
-              setIsOpenCreateModal(true);
+              setIsOpenOptionsModal(true);
             });
         });
         return;
@@ -99,7 +99,13 @@ export function CreateOptions(props: CreateOptionsProps) {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </DialogWrapper>
-      <CreateBot isOpen={isOpenCreateModal} templates={templates} onDismiss={onDismiss} onNext={onNext} />
+      <CreateBot
+        isOpen={isOpenCreateModal}
+        templates={templates}
+        onDismiss={onDismiss}
+        onNext={onNext}
+        location={props.location}
+      />
     </Fragment>
   );
 }
