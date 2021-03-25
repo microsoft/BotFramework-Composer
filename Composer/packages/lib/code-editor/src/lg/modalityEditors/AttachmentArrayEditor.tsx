@@ -21,6 +21,8 @@ import { getUniqueTemplateName } from '../../utils/lgUtils';
 
 import { StringArrayItem } from './StringArrayItem';
 
+const inputs = ['input', 'textarea'];
+
 const getLgCardTemplateDisplayName = (attachmentType: LgCardTemplateType) => {
   switch (attachmentType) {
     case 'hero':
@@ -87,6 +89,9 @@ export const AttachmentArrayEditor = React.memo(
   }: AttachmentArrayEditorProps) => {
     const containerRef = React.useRef<HTMLDivElement | null>(null);
     const [currentIndex, setCurrentIndex] = React.useState<number | null>(null);
+    const [editorExpanded, setEditorExpanded] = React.useState(false);
+
+    const editorPopToggle = React.useCallback((expanded: boolean) => setEditorExpanded(expanded), []);
 
     const debouncedChange = React.useCallback(
       debounce((id: string, content: string | undefined, callback: (templateId: string, body?: string) => void) => {
@@ -167,7 +172,10 @@ export const AttachmentArrayEditor = React.memo(
 
     React.useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
+        if (
+          e.key === 'Escape' &&
+          (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase()))
+        ) {
           setCurrentIndex(null);
           // Remove empty variations only if necessary
           if (items.some((item) => !item)) {
@@ -178,6 +186,10 @@ export const AttachmentArrayEditor = React.memo(
 
       const focusHandler = (e: FocusEvent) => {
         if (containerRef.current?.contains(e.target as Node)) {
+          return;
+        }
+
+        if (editorExpanded) {
           return;
         }
 
@@ -203,7 +215,7 @@ export const AttachmentArrayEditor = React.memo(
         document.removeEventListener('keydown', keydownHandler);
         document.removeEventListener('focusin', focusHandler);
       };
-    }, [items, onChange]);
+    }, [items, editorExpanded, onChange]);
 
     const templates: LgTemplate[] = React.useMemo(() => {
       return items.map((name) => {
@@ -245,6 +257,7 @@ export const AttachmentArrayEditor = React.memo(
             removeTooltipTextContent={formatMessage('Remove attachment')}
             telemetryClient={telemetryClient}
             value={body}
+            onEditorPopToggle={editorPopToggle}
             onFocus={onFocus(idx)}
             onLgChange={onLgCodeChange(name)}
             onRemove={onRemove(name)}
