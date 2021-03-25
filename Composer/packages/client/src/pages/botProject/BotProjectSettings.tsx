@@ -28,6 +28,7 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { useFeatureFlag } from '../../utils/hooks';
 
+import { openDeleteBotModal } from './DeleteBotButton';
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
 // -------------------- Styles -------------------- //
@@ -73,6 +74,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
   const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(true);
   const [toolbarItems, setToolbarItems] = useState<IToolbarItem[]>([]);
+  const { deleteBot } = useRecoilValue(dispatcherState);
 
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
@@ -87,7 +89,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
   const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
   const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
-  const linkToDelete = `/bot/${rootBotProjectId}/botProjectsSettings/#deleteBot`;
 
   const buttonClick = (link) => {
     TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
@@ -150,7 +151,12 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
           type: 'action',
           buttonProps: {
             iconProps: { iconName: 'Trash' },
-            onClick: () => buttonClick(linkToDelete),
+            onClick: () => {
+              openDeleteBotModal(async () => {
+                await deleteBot(projectId);
+                navigateTo('home');
+              });
+            },
             styles: defaultToolbarButtonStyles,
           },
           align: 'left',
