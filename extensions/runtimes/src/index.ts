@@ -192,7 +192,7 @@ export default async (composer: any): Promise<void> => {
   });
 
   composer.addRuntimeTemplate({
-    key: '`node-`azurewebapp',
+    key: 'node-azurewebapp',
     name: 'JS (preview)',
     startCommand: 'node ./lib/webapp.js',
     path: nodeTemplatePath,
@@ -323,9 +323,9 @@ export default async (composer: any): Promise<void> => {
 
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-dotnet-webapp',
-    name: 'C# - webapp',
-    startCommand: 'dotnet run',
-    path: dotnetTemplatePath,
+    name: 'C# - Web App',
+    // startCommand: 'dotnet run',
+    // path: dotnetTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
@@ -476,9 +476,9 @@ export default async (composer: any): Promise<void> => {
 
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-dotnet-functions',
-    name: 'C# - functions',
-    startCommand: 'dotnet run',
-    path: dotnetTemplatePath,
+    name: 'C# - Functions',
+    // startCommand: 'dotnet run',
+    // path: dotnetTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
@@ -632,9 +632,9 @@ export default async (composer: any): Promise<void> => {
    */
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-js-webapp',
-    name: 'JS WebApp (preview)',
-    startCommand: 'node ./lib/webapp.js',
-    path: nodeTemplatePath,
+    name: 'JS - Web App (preview)',
+    // startCommand: 'node ./lib/webapp.js',
+    // path: nodeTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
@@ -715,9 +715,9 @@ export default async (composer: any): Promise<void> => {
 
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-js-functions',
-    name: 'JS Functions (preview)',
-    startCommand: 'node index.js',
-    path: nodeTemplatePath,
+    name: 'JS - Functions (preview)',
+    // startCommand: 'node index.js',
+    // path: nodeTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
