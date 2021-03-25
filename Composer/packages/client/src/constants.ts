@@ -294,7 +294,10 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
+      afterSubText: formatMessage(
+        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
+      ),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
@@ -302,6 +305,32 @@ export const addSkillDialog = {
       title: formatMessage('Edit a skill'),
       subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
     };
+  },
+};
+
+export const selectIntentDialog = {
+  get SELECT_INTENT() {
+    return {
+      title: formatMessage('Select intents to trigger Bookings skill'),
+      subText: formatMessage('These intents will trigger this skill from ToDoBotSample'),
+    };
+  },
+  get ADD_OR_EDIT_PHRASE() {
+    return {
+      title: formatMessage('Add or edit phrases to trigger Bookings skill'),
+      subText: formatMessage('These phrases will trigger this skill from ToDoBotSample'),
+    };
+  },
+};
+
+export const enableOrchestratorDialog = {
+  get title() {
+    return formatMessage('Enable Orchestrator');
+  },
+  get subText() {
+    return formatMessage(
+      'Connecting to skills works best with the Orchestrator recognizer at the root bot (TodoBotSample)'
+    );
   },
 };
 
