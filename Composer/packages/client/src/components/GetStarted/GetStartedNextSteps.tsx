@@ -3,9 +3,10 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
@@ -33,12 +34,13 @@ export type NextSteps = {
   required?: boolean;
   label: string;
   onClick: (step?: NextSteps) => void;
+  highlight?: (step?: NextSteps) => void;
 };
 
 export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const projectId = useRecoilValue(currentProjectIdState);
   const botProjects = useRecoilValue(localBotsDataSelector);
-  const botProject = botProjects.find((b) => b.projectId === projectId);
+  const botProject = useMemo(() => botProjects.find((b) => b.projectId === projectId), [botProjects, projectId]);
   const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
@@ -46,8 +48,11 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const [requiredNextSteps, setNextSteps] = useState<NextSteps[]>([]);
+  const [requiredNextSteps, setRequiredNextSteps] = useState<NextSteps[]>([]);
   const [optionalSteps, setOptionalSteps] = useState<NextSteps[]>([]);
+
+  const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
+  const [highlightQNA, setHighlightQNA] = useState<boolean>(false);
 
   const hideManageLuis = () => {
     setDisplayManageLuis(false);
@@ -63,8 +68,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   const doNextStep = (currentStep) => {
     const nextAction = requiredNextSteps.filter((f) => !f.checked && f.key != currentStep)?.[0];
-    if (nextAction) {
-      nextAction.onClick();
+    if (!nextAction?.checked && nextAction?.highlight) {
+      nextAction.highlight();
     }
   };
 
@@ -92,14 +97,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
 
-    let hasLUIS = false;
-    let hasQNA = false;
-    if (botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion) {
-      hasLUIS = true;
-    }
-    if (botProject?.setting?.qna?.subscriptionKey) {
-      hasQNA = true;
-    }
+    const hasLUIS =
+      botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion ? true : false;
+    const hasQNA = botProject?.setting?.qna?.subscriptionKey ? true : false;
 
     if (props.requiresLUIS) {
       newNextSteps.push({
@@ -109,6 +109,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         required: true,
         checked: hasLUIS,
+        highlight: (step) => {
+          setHighlightLUIS(true);
+        },
         onClick: (step) => {
           if (!step?.checked) {
             setDisplayManageLuis(true);
@@ -126,6 +129,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         required: true,
         checked: hasQNA,
+        highlight: (step) => {
+          setHighlightQNA(true);
+        },
         onClick: (step) => {
           if (!step?.checked) {
             setDisplayManageQNA(true);
@@ -135,7 +141,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         },
       });
     }
-    setNextSteps(newNextSteps);
+    setRequiredNextSteps(newNextSteps);
+    // if (newNextSteps.length && newNextSteps[0].highlight) {
+    //   newNextSteps[0].highlight();
+    // }
 
     setOptionalSteps([
       {
@@ -189,6 +198,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         onDismiss={hideManageLuis}
         onGetKey={updateLuisSettings}
         onNext={() => {
+          hideManageLuis();
           doNextStep('luis');
         }}
       />
@@ -198,9 +208,36 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         onDismiss={hideManageQNA}
         onGetKey={updateQNASettings}
         onNext={() => {
+          hideManageQNA();
           doNextStep('qna');
         }}
       />
+
+      {highlightLUIS && (
+        <TeachingBubble
+          hasCondensedHeadline
+          headline={formatMessage('Your new bot is almost ready!')}
+          target="#luis"
+          onDismiss={() => {
+            setHighlightLUIS(false);
+          }}
+        >
+          {formatMessage('Finish setting up your development environment by adding LUIS...')}
+        </TeachingBubble>
+      )}
+
+      {highlightQNA && (
+        <TeachingBubble
+          hasCondensedHeadline
+          headline={formatMessage('Your new bot is almost ready!')}
+          target="#qna"
+          onDismiss={() => {
+            setHighlightQNA(false);
+          }}
+        >
+          {formatMessage('Finish setting up your development environment by adding QnA Maker...')}
+        </TeachingBubble>
+      )}
 
       <p>{formatMessage('These are next steps so you always know what to do next to get your bot going.')}</p>
       {requiredNextSteps && (

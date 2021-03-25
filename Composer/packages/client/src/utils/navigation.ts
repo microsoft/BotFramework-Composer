@@ -121,11 +121,11 @@ export function buildURL(pageMode: PageMode, link: Partial<TreeLink>) {
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   if (pageMode === 'language-generation' && lgFileId) {
-    return `${baseURL}${pageMode}/${dialogId ?? 'all'}/item/${lgFileId}`;
+    return dialogId ? `${baseURL}${pageMode}/${dialogId}/item/${lgFileId}` : `${baseURL}${pageMode}/${lgFileId}`;
   }
 
   if (pageMode === 'language-understanding' && luFileId) {
-    return `${baseURL}${pageMode}/${dialogId ?? 'all'}/item/${luFileId}`;
+    return dialogId ? `${baseURL}${pageMode}/${dialogId}/item/${luFileId}` : `${baseURL}${pageMode}/${luFileId}`;
   }
 
   return `${baseURL}${pageMode}/${dialogId ?? 'all'}`;

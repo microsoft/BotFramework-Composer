@@ -607,7 +607,11 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   text={formatMessage('Next')}
                   onClick={performNextAction}
                 />
-                <DefaultButton disabled={loadingQNA} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+                <DefaultButton
+                  disabled={loadingQNA || showAuthDialog}
+                  text={formatMessage('Cancel')}
+                  onClick={props.onDismiss}
+                />
               </DialogFooter>
             </div>
           )}

@@ -16,6 +16,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
   return (
     <CompoundButton
       iconProps={{ iconName: props.step.checked ? 'Completed' : 'Error' }}
+      id={props.step.key}
       secondaryText={props.step.description}
       styles={{
         root: { border: 0 },
