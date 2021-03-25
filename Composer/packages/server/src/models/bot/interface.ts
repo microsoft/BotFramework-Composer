@@ -81,3 +81,8 @@ export interface IOrchestratorSettings {
     snapshots: Record<string, string>;
   };
 }
+
+export type CrossTrainingSetting = {
+  inner: boolean; //Only performs the inner dialog cross train
+  intra: boolean; //Only performs the intra dialog cross train
+};
