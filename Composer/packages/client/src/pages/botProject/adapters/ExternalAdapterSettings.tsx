@@ -87,13 +87,18 @@ const ExternalAdapterSettings = (props: Props) => {
               {keyConfigured ? (
                 <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
               ) : (
-                <Link key={key} onClick={() => openModal(key, true, packageName)}>
+                <Link
+                  key={key}
+                  ariaLabel={formatMessage('Configure {title}', { title })}
+                  onClick={() => openModal(key, true, packageName)}
+                >
                   {formatMessage('Configure')}
                 </Link>
               )}
             </div>
             <div css={tableRowItem(columnSizes[2])}>
               <Toggle
+                ariaLabel={formatMessage('Adapter for {title}', { title })}
                 checked={keyEnabled}
                 data-testid={`toggle_${key}`}
                 disabled={!keyConfigured}

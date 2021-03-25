@@ -5,6 +5,7 @@ import { css, jsx, SerializedStyles } from '@emotion/core';
 import React, { useState } from 'react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import formatMessage from 'format-message';
 
 type CollapsableComponentProps = {
   title: string;
@@ -28,6 +29,7 @@ export const CollapsableWrapper: React.FC<CollapsableComponentProps> = (props) =
     <div css={containerStyle}>
       <div data-is-focusable css={header}>
         <IconButton
+          ariaLabel={isCollapsed ? `${title}, ${formatMessage('Expand')}` : `${title}, ${formatMessage('Collapse')}`}
           iconProps={{ iconName: isCollapsed ? 'ChevronRight' : 'ChevronDown' }}
           styles={{ root: { color: NeutralColors.gray150 } }}
           onClick={() => setIsCollapsed(!isCollapsed)}
