@@ -6,23 +6,7 @@ import uniq from 'lodash/uniq';
 
 import { LgLanguageContext, PropertyItem } from '../lg/types';
 
-type MonacoPosition = {
-  lineNumber: number;
-  column: number;
-};
-
-type MonacoRange = {
-  startLineNumber: number;
-  startColumn: number;
-  endLineNumber: number;
-  endColumn: number;
-};
-
-type MonacoEdit = {
-  range: MonacoRange;
-  text: string;
-  forceMoveMarkers: boolean;
-};
+import { MonacoPosition, MonacoRange, MonacoEdit } from './monacoTypes';
 
 export const getCursorContextWithinLine = (lineContent: string) => {
   const state: LgLanguageContext[] = [];
@@ -109,7 +93,8 @@ export const computeRequiredEdits = (text: string, editor: any): MonacoEdit[] | 
   if (editor) {
     const position: MonacoPosition = editor.getPosition() ?? { lineNumber: 1, column: 1 };
     const selection: MonacoRange = editor.getSelection();
-    const textSelected = selection?.startColumn !== editor.getSelection()?.endColumn;
+    const textSelected =
+      selection.startLineNumber !== selection.endLineNumber || selection.startColumn !== selection.endColumn;
 
     const context = getCursorContext(editor);
 
