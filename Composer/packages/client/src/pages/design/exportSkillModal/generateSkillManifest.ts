@@ -21,7 +21,7 @@ const getActivityType = (kind: SDKKinds): ActivityTypes | undefined => activityH
 
 export const isSupportedTrigger = ({ type }: ITrigger) => Object.keys(activityHandlerMap).includes(type as SDKKinds);
 
-export const generateSkillManifest = async (
+export const generateSkillManifest = (
   schema: JSONSchema7,
   skillManifest: Partial<SkillManifestFile>,
   dialogs: DialogInfo[],
@@ -52,15 +52,7 @@ export const generateSkillManifest = async (
   const triggers = selectedTriggers.map((tr) => get(content, tr.id) as ITrigger).filter(Boolean);
 
   const activities = generateActivities(dialogSchemas, triggers, resolvedDialogs);
-  const dispatchModels = await generateDispatchModels(
-    schema,
-    dialogs,
-    triggers,
-    luFiles,
-    qnaFiles,
-    currentTarget,
-    projectId
-  );
+  const dispatchModels = generateDispatchModels(schema, dialogs, triggers, luFiles, qnaFiles, currentTarget, projectId);
   const definitions = getDefinitions(dialogSchemas, resolvedDialogs);
 
   return {
@@ -119,7 +111,7 @@ export const generateOtherActivities = (kind: SDKKinds): Activities => {
   return type ? { [type]: { type } } : {};
 };
 
-export const generateDispatchModels = async (
+export const generateDispatchModels = (
   schema: JSONSchema7,
   dialogs: DialogInfo[],
   selectedTriggers: any[],
@@ -150,7 +142,7 @@ export const generateDispatchModels = async (
 
   for (const rootLuFile of rootLuFiles) {
     const currentFileName = `skill-${rootLuFile.id}.lu`;
-    await createManifestFile(projectId, currentFileName, rootLuFile.content);
+    createManifestFile(projectId, currentFileName, rootLuFile.content);
   }
 
   const luLanguages = intents.length
