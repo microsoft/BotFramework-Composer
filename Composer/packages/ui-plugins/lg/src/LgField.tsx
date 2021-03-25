@@ -213,13 +213,13 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
   }, [editorMode, allowResponseEditor, props.onChange, shellApi.telemetryClient]);
 
   const navigateToLgPage = useCallback(
-    (lgFileId: string) => {
+    (lgFileId: string, templateId?: string) => {
       // eslint-disable-next-line security/detect-non-literal-regexp
       const pattern = new RegExp(`.${locale}`, 'g');
       const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
       const url = currentDialog.isFormDialog
         ? `/bot/${projectId}/language-generation/${currentDialog.id}/item/${fileId}`
-        : `/bot/${projectId}/language-generation/${fileId}`;
+        : `/bot/${projectId}/language-generation/${fileId}${templateId ? `/edit?t=${templateId}` : ''}`;
       shellApi.navigateTo(url);
     },
     [shellApi, projectId, locale]
@@ -248,6 +248,8 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     },
     [onTemplateChange]
   );
+
+  const popExpandOptions = React.useMemo(() => ({ popExpandTitle: label || formatMessage('Bot response') }), []);
 
   return (
     <React.Fragment>
@@ -290,6 +292,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
         lgTemplates={availableLgTemplates}
         memoryVariables={memoryVariables}
         mode={editorMode}
+        popExpandOptions={popExpandOptions}
         telemetryClient={shellApi.telemetryClient}
         value={template.body}
         onChange={onChange}
