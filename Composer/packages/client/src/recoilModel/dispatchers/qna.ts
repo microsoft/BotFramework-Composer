@@ -620,7 +620,7 @@ ${response.data}
       toBeCopiedLocales.forEach((locale) => {
         pairs.push({ locale, content: pairs[0].content });
       });
-      console.log(pairs);
+
       await createKBFileOnLocalesState(callbackHelpers, {
         id,
         name,
@@ -678,7 +678,6 @@ ${response.data}
       await createKBFileState(callbackHelpers, { id, name, content, projectId });
       await createQnAFromScratchDialogSuccess({ projectId });
       const rootBotProjectId = await callbackHelpers.snapshot.getPromise(rootBotProjectIdSelector);
-      console.log(getBaseName(id));
       const notification = createNotification(
         getQnaSuccessNotification(() => {
           navigateTo(
