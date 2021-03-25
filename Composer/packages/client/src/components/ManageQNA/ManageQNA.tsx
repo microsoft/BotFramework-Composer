@@ -31,6 +31,7 @@ import { dispatcherState } from '../../recoilModel/atoms';
 
 type ManageQNAProps = {
   hidden: boolean;
+  setDisplayManageQna: (value: any) => void;
   onDismiss: () => void;
   onGetKey: (settings: { subscriptionKey: string }) => void;
   onNext?: () => void;
@@ -513,10 +514,16 @@ export const ManageQNA = (props: ManageQNAProps) => {
         />
       )}
       <ProvisionHandoff
-        developerInstructions={formatMessage('Send this to your IT admin')}
+        developerInstructions={formatMessage(
+          'Copy and share this information with your Azure admin. After your QNA key is provisioned, you will be ready to test your bot with qna.'
+        )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
-        title={formatMessage('Generate a provisioning request')}
+        title={formatMessage('Share resource request')}
+        onBack={() => {
+          setShowHandoff(false);
+          props.setDisplayManageQna(true);
+        }}
         onDismiss={() => setShowHandoff(false)}
       />
       <Dialog
