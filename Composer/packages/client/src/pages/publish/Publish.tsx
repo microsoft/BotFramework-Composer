@@ -29,7 +29,11 @@ import { navigateTo } from '../../utils/navigation';
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { BotStatusList } from './BotStatusList';
-import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
+import {
+  getPendingNotificationCardProps,
+  getPendingNotificationSkillCardProps,
+  getPublishedNotificationCardProps,
+} from './Notifications';
 import { PullDialog } from './pullDialog';
 import { PublishToolbar } from './PublishToolbar';
 import { Bot, BotStatus } from './type';

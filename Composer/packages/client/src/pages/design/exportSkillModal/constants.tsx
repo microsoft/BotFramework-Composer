@@ -143,10 +143,9 @@ export const order: ManifestEditorSteps[] = [
   ManifestEditorSteps.SELECT_MANIFEST,
   ManifestEditorSteps.FETCH_MANIFEST_SCHEMA,
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
-  // ManifestEditorSteps.ENDPOINTS,
-  ManifestEditorSteps.SELECT_PROFILE,
   ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
+  // ManifestEditorSteps.SELECT_PROFILE,
   ManifestEditorSteps.MANIFEST_REVIEW,
   ManifestEditorSteps.SAVE_MANIFEST,
 ];
@@ -210,35 +209,17 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     subText: () => formatMessage('To make your bot available for others as a skill, we need to generate a manifest.'),
     validate,
   },
-  // [ManifestEditorSteps.ENDPOINTS]: {
-  //   buttons: [cancelButton, nextButton],
-  //   content: Endpoints,
-  //   editJson: true,
-  //   subText: () =>
-  //     formatMessage('We need to define the endpoints for the skill to allow other bots to interact with it.'),
-  //   title: () => formatMessage('Skill endpoints'),
-  //   validate: ({ content, schema }) => {
-  //     const { items, minItems } = schema.properties?.endpoints;
-
-  //     if (!content.endpoints || content.endpoints.length < minItems) {
-  //       return { endpoints: formatMessage('Please add at least {minItems} endpoint', { minItems }) };
-  //     }
-
-  //     const endpointSchema = resolveRef(items, schema.definitions);
-  //     const endpoints = (content.endpoints || []).map((endpoint) =>
-  //       validate({ content: endpoint, schema: endpointSchema })
-  //     );
-
-  //     return endpoints.some((endpoint) => Object.keys(endpoint).length) ? { endpoints } : {};
-  //   },
-  // },
   [ManifestEditorSteps.SELECT_PROFILE]: {
     buttons: [
       cancelButton,
       {
         primary: true,
-        text: () => formatMessage('Next'),
-        onClick: ({ onNext }) => onNext,
+        text: () => formatMessage('Generate and Publish'),
+        onClick: ({ onNext, generateManifest }) => () => {
+          onNext({ dismiss: true, save: true });
+          generateManifest();
+          // onPublish();
+        },
       },
     ],
     editJson: false,
@@ -282,9 +263,8 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       {
         primary: true,
-        text: () => formatMessage('Generate'),
-        onClick: ({ generateManifest, onNext }) => () => {
-          generateManifest();
+        text: () => formatMessage('Next'),
+        onClick: ({ onNext }) => () => {
           onNext();
         },
       },

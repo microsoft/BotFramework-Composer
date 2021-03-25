@@ -1,13 +1,19 @@
-import { PublishTarget } from '@bfc/shared';
+import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { css, Dropdown, Icon, IDropdownOption, PrimaryButton, TextField, TooltipHost } from 'office-ui-fabric-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { settingsState } from '../../../../recoilModel';
+import {
+  botDisplayNameState,
+  currentTargetState,
+  dispatcherState,
+  settingsState,
+  skillManifestsState,
+} from '../../../../recoilModel';
 import { PublishTargets } from '../../../botProject/PublishTargets';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
 import Publish from '../../../publish/Publish';
-import { ContentProps } from '../constants';
+import { ContentProps, VERSION_REGEX } from '../constants';
 
 const styles = {
   container: css`
@@ -42,12 +48,37 @@ const onRenderLabel = (props) => {
   );
 };
 
-export const SelectProfile: React.FC<ContentProps> = ({ errors, value, schema, onChange, projectId }) => {
+export const getManifestId = (
+  botName: string,
+  skillManifests: SkillManifestFile[],
+  { content: { $schema } = {} }: Partial<SkillManifestFile>
+): string => {
+  const [version] = VERSION_REGEX.exec($schema) || [''];
+
+  let fileId = version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
+  let i = -1;
+
+  while (skillManifests.some(({ id }) => id === fileId)) {
+    if (i < 0) {
+      fileId = fileId.concat(`-${++i}`);
+    } else {
+      fileId = fileId.substr(0, fileId.lastIndexOf('-')).concat(`-${++i}`);
+    }
+  }
+
+  return fileId;
+};
+
+export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManifest, value, onChange, projectId }) => {
   const [publishingTargets, setPublishingTargets] = useState<PublishTarget[]>([]);
   const [currentTarget, setCurrentTarget] = useState<PublishTarget>();
+  const { updateCurrentTarget } = useRecoilValue(dispatcherState);
   const [endpointUrl, setEndpointUrl] = useState<string>();
   const [appId, setAppId] = useState<string>();
   const { endpoints, ...rest } = value;
+  const { id } = manifest;
+  const botName = useRecoilValue(botDisplayNameState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
   const updateCurrentProfile = useMemo(
     () => (_e, option?: IDropdownOption) => {
@@ -56,20 +87,21 @@ export const SelectProfile: React.FC<ContentProps> = ({ errors, value, schema, o
       });
       if (target) {
         setCurrentTarget(target);
+        updateCurrentTarget(projectId, target);
         const config = JSON.parse(target.configuration);
         setEndpointUrl(`https://${config.hostname}.azurewebsites.net`);
         setAppId(config.settings.MicrosoftAppId);
         onChange({
+          ...rest,
           endpoints: [
             {
               protocol: 'BotFrameworkV3',
               name: option?.key,
-              endpointUrl: `https://${config.hostname}.azurewebsites.net`,
+              endpointUrl: `https://${config.hostname}.azurewebsites.net/api/messages`,
               description: '<description>',
               msAppId: config.settings.MicrosoftAppId,
             },
           ],
-          ...rest,
         });
       }
     },
@@ -121,6 +153,13 @@ export const SelectProfile: React.FC<ContentProps> = ({ errors, value, schema, o
   useEffect(() => {
     setPublishingTargets(settings.publishTargets || []);
   }, [settings]);
+
+  useEffect(() => {
+    if (!id) {
+      const fileId = getManifestId(botName, skillManifests, manifest);
+      setSkillManifest({ ...manifest, id: fileId });
+    }
+  }, []);
 
   return isProfileValid() ? (
     <div css={styles.container}>
