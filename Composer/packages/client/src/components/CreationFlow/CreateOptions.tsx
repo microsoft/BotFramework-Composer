@@ -25,7 +25,7 @@ import { CreateBot } from './CreateBot';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onJumpToOpenModal: () => void;
+  onJumpToOpenModal: (search?: string) => void;
   onNext: (data: string) => void;
 } & RouteComponentProps<{}>;
 
@@ -81,7 +81,7 @@ export function CreateOptions(props: CreateOptionsProps) {
     if (option === 'Create') {
       setIsOpenCreateModal(true);
     } else {
-      onJumpToOpenModal();
+      onJumpToOpenModal(props.location?.search);
     }
   };
 

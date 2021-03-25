@@ -348,6 +348,10 @@ export class BotProjectService {
     }
   };
 
+  public static setProjectAlias(projectId: string, alias: string): void {
+    BotProjectService.setProjectLocationData(projectId, { alias });
+  }
+
   private static updateCurrentProjects = (project: BotProject): void => {
     const { id } = project;
     const idx = BotProjectService.currentBotProjects.findIndex((item) => item.id === id);
