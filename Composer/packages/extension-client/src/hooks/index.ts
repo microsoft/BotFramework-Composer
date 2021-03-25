@@ -17,3 +17,4 @@ export * from './useLgApi';
 export * from './useProjectApi';
 export * from './usePublishApi';
 export * from './useTelemetryClient';
+export * from './useLocalStorage';

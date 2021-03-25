@@ -7,6 +7,7 @@ import fs from 'fs';
 import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import {
   getNewDesigner,
   FileInfo,
@@ -47,7 +48,6 @@ const oauthInput = () => ({
 });
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
-
 export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
@@ -200,8 +200,11 @@ export class BotProject implements IBotProject {
    */
   public getRuntimePath = (): string | undefined => {
     let runtimePath = this.settings?.runtime?.path;
+
     if (runtimePath && !Path.isAbsolute(runtimePath)) {
-      runtimePath = Path.resolve(this.dir, 'settings', runtimePath);
+      const dir = isUsingAdaptiveRuntime(this.settings?.runtime) ? Path.resolve(this.dir, 'settings') : this.dir;
+
+      runtimePath = Path.resolve(dir, runtimePath);
     }
     return runtimePath;
   };
@@ -777,33 +780,32 @@ export class BotProject implements IBotProject {
 
     await this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
-    for (const pattern of BotStructureFilesPatterns) {
-      // load only from the data dir, otherwise may get "build" versions from
-      // deployment process
-      const root = this.dataDir;
-      const paths = await this.fileStorage.glob(
-        [
-          pattern,
-          '!(generated/**)',
-          '!(runtime/**)',
-          '!(bin/**)',
-          '!(obj/**)',
-          '!(scripts/**)',
-          '!(settings/appsettings.json)',
-          '!(**/luconfig.json)',
-        ],
-        root
-      );
 
-      for (const filePath of paths.sort()) {
-        const realFilePath: string = Path.join(root, filePath);
-        const fileInfo = await this._getFileInfo(realFilePath);
-        if (fileInfo) {
-          if (fileList.has(fileInfo.name)) {
-            throw new Error(`duplicate file found: ${fileInfo.relativePath}`);
-          }
-          fileList.set(fileInfo.name, fileInfo);
+    // load only from the data dir, otherwise may get "build" versions from
+    // deployment process
+    const root = this.dataDir;
+    const paths = await this.fileStorage.glob(
+      [
+        ...BotStructureFilesPatterns,
+        '!(generated/**)',
+        '!(runtime/**)',
+        '!(bin/**)',
+        '!(obj/**)',
+        '!(scripts/**)',
+        '!(settings/appsettings.json)',
+        '!(**/luconfig.json)',
+      ],
+      root
+    );
+
+    for (const filePath of paths.sort()) {
+      const realFilePath: string = Path.join(root, filePath);
+      const fileInfo = await this._getFileInfo(realFilePath);
+      if (fileInfo) {
+        if (fileList.has(fileInfo.name)) {
+          throw new Error(`duplicate file found: ${fileInfo.relativePath}`);
         }
+        fileList.set(fileInfo.name, fileInfo);
       }
     }
 

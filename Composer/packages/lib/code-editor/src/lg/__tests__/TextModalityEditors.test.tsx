@@ -13,6 +13,7 @@ describe('TextModalityEditor', () => {
   it('should render the value if it is not a template reference', async () => {
     const { findByText } = render(
       <TextModalityEditor
+        focusOnMount={false}
         lgOption={{ fileId: '', templateId: 'Activity' }}
         removeModalityDisabled={false}
         response={{ kind: 'Text', value: ['hello world'], valueType: 'direct' } as TextStructuredResponseItem}
@@ -30,6 +31,7 @@ describe('TextModalityEditor', () => {
   it('should render items from template if the value is a template reference', async () => {
     const { findByText, queryByText } = render(
       <TextModalityEditor
+        focusOnMount={false}
         lgOption={{ fileId: '', templateId: 'Activity' }}
         lgTemplates={[{ name: 'Activity_text', body: '- variation1\n- variation2\n- variation3', parameters: [] }]}
         removeModalityDisabled={false}

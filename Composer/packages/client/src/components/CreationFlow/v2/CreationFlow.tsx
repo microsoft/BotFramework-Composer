@@ -98,6 +98,11 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     navigate(`/home`);
   };
 
+  const handleJumpToOpenModal = () => {
+    setCreationFlowStatus(CreationFlowStatus.OPEN);
+    navigate('./open');
+  };
+
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
     await openProject(botFolder, 'default', true, (projectId) => {
@@ -121,8 +126,10 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       templateDir: formData?.pvaData?.templateDir,
       eTag: formData?.pvaData?.eTag,
       urlSuffix: formData?.pvaData?.urlSuffix,
-      alias: formData?.pvaData?.alias,
       preserveRoot: formData?.pvaData?.preserveRoot,
+      alias: formData?.alias,
+      profile: formData?.profile,
+      source: formData?.source,
     };
     TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
 
@@ -146,9 +153,12 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (data: string) => {
+  const handleCreateNext = async (templateName: string, urlData?: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-    navigate(`./create/${encodeURIComponent(data)}`);
+    const navString = urlData
+      ? `./create/${encodeURIComponent(templateName)}${urlData}`
+      : `./create/${encodeURIComponent(templateName)}`;
+    navigate(navString);
   };
 
   return (
@@ -170,6 +180,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           path="create"
           templates={templateProjects}
           onDismiss={handleDismiss}
+          onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
         />
         <DefineConversationV2

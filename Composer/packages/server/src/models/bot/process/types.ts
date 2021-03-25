@@ -4,6 +4,7 @@ import { FileInfo } from '@bfc/shared';
 
 export type BuildPayload = {
   type: 'build';
+  projectId: string;
   files: FileInfo[];
   modelPath: string;
   generatedFolderPath: string;
