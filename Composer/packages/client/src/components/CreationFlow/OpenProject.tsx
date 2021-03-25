@@ -13,9 +13,9 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { StorageFolder } from '../../recoilModel/types';
 import { DialogCreationCopy } from '../../constants';
+import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 
 import { LocationSelectContent } from './LocationSelectContent';
-import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 
 interface OpenProjectFormData {
   path: string;
