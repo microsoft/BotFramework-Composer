@@ -26,9 +26,13 @@ export class LabelResolversCache {
   public removeProject(projectId: string) {
     this.projects.delete(projectId);
   }
+
+  public clear() {
+    this.projects.clear();
+  }
 }
 
-const cache = new LabelResolversCache();
+export const cache = new LabelResolversCache();
 
 /**
  * Orchestrator: Warm up the LabelResolversCache if .blu files already exist.
@@ -51,8 +55,8 @@ const cache = new LabelResolversCache();
  * @param generatedFolderPath
  */
 export async function warmUpCache(generatedFolderPath: string, projectId: string) {
-  //warm up the cache only if it's empty
-  if (!((await pathExists(generatedFolderPath)) || cache.get(projectId).size > 0)) {
+  //warm up the cache only if it's empty and we've built this bot before
+  if (!(await pathExists(generatedFolderPath)) || cache.get(projectId).size > 0) {
     return false;
   }
 
@@ -67,13 +71,19 @@ export async function warmUpCache(generatedFolderPath: string, projectId: string
     return false;
   }
 
+  // an implementation detail is that we need to use the right model to reproduce the right LabelResolvers
+  // so we get the model versions from a pre-existing settings file, and split the files based on
+  // language
   const orchestratorSettings: IOrchestratorSettings = await readJson(orchestratorSettingsPath);
+  if (!orchestratorSettings?.orchestrator?.models || !orchestratorSettings?.orchestrator?.models) {
+    return false;
+  }
 
   let [enLuFiles, multiLangLuFiles] = partition(bluFiles, (f) => f.split('.')?.[1].startsWith('en'));
 
   const modelDatas = [
-    { model: orchestratorSettings.orchestrator?.models?.en, lang: 'en', luFiles: enLuFiles },
-    { model: orchestratorSettings.orchestrator?.models?.multilang, lang: 'multilang', luFiles: multiLangLuFiles },
+    { model: orchestratorSettings?.orchestrator?.models?.en, lang: 'en', luFiles: enLuFiles },
+    { model: orchestratorSettings?.orchestrator?.models?.multilang, lang: 'multilang', luFiles: multiLangLuFiles },
   ];
 
   const [enMap, multilangMap] = await Promise.all(
@@ -88,10 +98,9 @@ export async function warmUpCache(generatedFolderPath: string, projectId: string
         )
       );
 
-      if (modelData.model) {
-        return await Orchestrator.getLabelResolversAsync(modelData.model, '', new Map(snapshotData), false);
-      }
-      return new Map<string, LabelResolver>();
+      return modelData.model && snapshotData.length
+        ? await Orchestrator.getLabelResolversAsync(modelData.model, '', new Map(snapshotData), false)
+        : new Map<string, LabelResolver>();
     })
   );
 
