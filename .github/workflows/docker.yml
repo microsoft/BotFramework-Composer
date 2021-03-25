@@ -31,6 +31,7 @@ jobs:
           context: .
           file: Dockerfile
           tags: botframework-composer
+          target: build   # CI will stop at the build stage
 
       - name: Health check
         run: |
