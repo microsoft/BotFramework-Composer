@@ -48,7 +48,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const [requiredNextSteps, setNextSteps] = useState<NextSteps[]>([]);
+  const [requiredNextSteps, setRequiredNextSteps] = useState<NextSteps[]>([]);
   const [optionalSteps, setOptionalSteps] = useState<NextSteps[]>([]);
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
@@ -93,20 +93,16 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const linktoQNASettings = `/bot/${projectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${projectId}/language-generation`;
   const linkToLUEditor = `/bot/${projectId}/language-understanding`;
+  console.log('Render get started next stps');
 
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
 
-    console.log('RERENDER ROCKET SHIP CHOICES');
+    const hasLUIS =
+      botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion ? true : false;
+    const hasQNA = botProject?.setting?.qna?.subscriptionKey ? true : false;
 
-    let hasLUIS = false;
-    let hasQNA = false;
-    if (botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion) {
-      hasLUIS = true;
-    }
-    if (botProject?.setting?.qna?.subscriptionKey) {
-      hasQNA = true;
-    }
+    console.log('GENERATE NEXT STEPS');
 
     if (props.requiresLUIS) {
       newNextSteps.push({
@@ -148,10 +144,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         },
       });
     }
-    setNextSteps(newNextSteps);
-    if (newNextSteps.length && newNextSteps[0].highlight) {
-      newNextSteps[0].highlight();
-    }
+    setRequiredNextSteps(newNextSteps);
+    // if (newNextSteps.length && newNextSteps[0].highlight) {
+    //   newNextSteps[0].highlight();
+    // }
 
     setOptionalSteps([
       {
