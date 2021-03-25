@@ -104,7 +104,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
   const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
 
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
-    manifestUrl: 'https://luhan0603-dev.azurewebsites.net/manifests/calendar-2-1-manifest.json',
+    manifestUrl: '',
     endpointName: '',
   });
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
