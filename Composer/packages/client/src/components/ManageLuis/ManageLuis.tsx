@@ -30,7 +30,7 @@ import { dispatcherState } from '../../recoilModel/atoms';
 type ManageLuisProps = {
   hidden: boolean;
   onDismiss: () => void;
-  onGetKey: (settings: any) => void;
+  onGetKey: (settings: { authoringKey: string; endpointKey: string; authoringRegion: string }) => void;
   onNext?: () => void;
 };
 
@@ -66,7 +66,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
   const [luisResourceName, setLuisResourceName] = useState<string>('');
   const [loadingLUIS, setLoadingLUIS] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('create');
   const [actionOptions, setActionOptions] = useState<IChoiceGroupOption[]>([]);
@@ -77,6 +76,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [predictionKeys, setPredictionKeys] = useState<KeyRec[]>([]);
   const [authoringKeys, setAuthoringKeys] = useState<KeyRec[]>([]);
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
