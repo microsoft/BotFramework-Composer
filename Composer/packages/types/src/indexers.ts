@@ -105,6 +105,7 @@ export enum LuSectionTypes {
 
 export type LuEntity = {
   Name: string;
+  Type: string;
 };
 
 export type LuFile = {
