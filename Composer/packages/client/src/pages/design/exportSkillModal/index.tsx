@@ -36,6 +36,7 @@ import { AuthClient } from '../../../utils/authClient';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 import { getPendingNotificationCardProps, getPendingNotificationSkillCardProps } from '../../publish/Notifications';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';
+import { navigate } from '@reach/router';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -71,8 +72,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const editorStep = order[currentStep];
   const { buttons = [], content: Content, editJson, helpLink, subText, title, validate } = editorSteps[editorStep];
 
-  const handleGenerateManifest = async () => {
-    const manifest = await generateSkillManifest(
+  const handleGenerateManifest = () => {
+    const manifest = generateSkillManifest(
       schema,
       skillManifest,
       dialogs,
@@ -96,24 +97,25 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   };
 
   const handleTriggerPublish = async () => {
+    navigate(`/bot/${projectId}/publish/all`);
     // get token
-    setShowAuthDialog(true);
-    let token = '';
-    // TODO: this logic needs to be moved into the Azure publish extensions
-    if (isGetTokenFromUser()) {
-      token = getTokenFromCache('accessToken');
-    } else {
-      let tenant = getTenantIdFromCache();
-      if (!tenant) {
-        const tenants = await AuthClient.getTenants();
-        tenant = tenants?.[0]?.tenantId;
-        setTenantId(tenant);
-      }
-      token = await AuthClient.getARMTokenForTenant(tenant);
-    }
-    // const notification = createNotification(getPendingNotificationSkillCardProps());
-    // addNotification(notification);
-    await publishToTarget(projectId, currentTarget, {}, null, token);
+    // setShowAuthDialog(true);
+    // let token = '';
+    // // TODO: this logic needs to be moved into the Azure publish extensions
+    // if (isGetTokenFromUser()) {
+    //   token = getTokenFromCache('accessToken');
+    // } else {
+    //   let tenant = getTenantIdFromCache();
+    //   if (!tenant) {
+    //     const tenants = await AuthClient.getTenants();
+    //     tenant = tenants?.[0]?.tenantId;
+    //     setTenantId(tenant);
+    //   }
+    //   token = await AuthClient.getARMTokenForTenant(tenant);
+    // }
+    // // const notification = createNotification(getPendingNotificationSkillCardProps());
+    // // addNotification(notification);
+    // await publishToTarget(projectId, currentTarget, {}, null, token);
   };
 
   const handleSave = () => {
@@ -211,7 +213,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             {editJson && <DefaultButton text={formatMessage('Edit in JSON')} onClick={handleEditJson} />}
           </div>
         </DialogFooter>
-        {clickPublish && isShowAuthDialog(false) && (
+        {/* {clickPublish && isShowAuthDialog(false) && (
           <AuthDialog
             needGraph={false}
             next={() => {
@@ -221,7 +223,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
               setShowAuthDialog(false);
             }}
           />
-        )}
+        )} */}
       </div>
     </Dialog>
   );

@@ -215,10 +215,10 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Generate and Publish'),
-        onClick: ({ generateManifest, onNext }) => () => {
+        onClick: ({ generateManifest, onNext, onPublish }) => () => {
           generateManifest();
           onNext({ dismiss: true, save: true });
-          // onPublish();
+          onPublish();
         },
       },
     ],
@@ -227,6 +227,20 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     subText: () =>
       formatMessage('We need to define the endpoints for the skill to allow other bots to interact with it.'),
     title: () => formatMessage('Confirm skill endpoints'),
+    validate: ({ editingId, id, skillManifests }) => {
+      if (!id || !nameRegex.test(id)) {
+        return { id: formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.') };
+      }
+
+      if (
+        (typeof editingId === 'undefined' || editingId !== id) &&
+        skillManifests.some(({ id: manifestId }) => manifestId === id)
+      ) {
+        return { id: formatMessage('{id} already exists. Please enter a unique file name.', { id }) };
+      }
+
+      return {};
+    },
   },
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
@@ -263,9 +277,9 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       {
         primary: true,
-        text: () => formatMessage('Generate'),
-        onClick: ({ onNext }) => () => {
-          // generateManifest();
+        text: () => formatMessage('Next'),
+        onClick: ({ onNext, generateManifest }) => () => {
+          generateManifest();
           onNext();
         },
       },
