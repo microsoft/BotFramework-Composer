@@ -26,6 +26,11 @@ ENV NODE_ENV "production"
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
 RUN yarn build:prod $YARN_ARGS
 
+ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/src/remote-extensions"
+ENV COMPOSER_REMOTE_EXTENSION_DATA_DIR "/src/extension-data"
+ENV COMPOSER_EXTENSION_MANIFEST "/src/extensions.json"
+CMD ["yarn","start:server"]
+
 FROM base as composerbasic
 ARG YARN_ARGS
 
@@ -38,7 +43,7 @@ COPY --from=build /src/extensions ../extensions
 ENV NODE_ENV "production"
 RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
 
-FROM base
+FROM base as botframework-composer
 ENV NODE_ENV "production"
 
 WORKDIR /app/Composer
