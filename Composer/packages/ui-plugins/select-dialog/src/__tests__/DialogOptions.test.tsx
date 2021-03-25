@@ -14,7 +14,7 @@ jest.mock('@bfc/adaptive-form', () => {
 
   return {
     ...AdaptiveForm,
-    JsonField: () => <div>Json Field</div>,
+    OpenObjectField: () => <div>Object Field</div>,
     SchemaField: () => <div>Options Form</div>,
     IntellisenseTextField: () => <div>Intellisense Text Field</div>,
   };
@@ -28,10 +28,10 @@ jest.mock('office-ui-fabric-react/lib/Dropdown', () => {
     Dropdown: ({ onChange }) => (
       <button
         onClick={(e) => {
-          onChange(e, { key: 'code' });
+          onChange(e, { key: 'object' });
         }}
       >
-        Switch to Json Field
+        Switch to Object Field
       </button>
     ),
   };
@@ -88,7 +88,7 @@ describe('DialogOptionsField', () => {
   });
   it('should render the JsonField if the dialog schema is undefined and options is not a string', async () => {
     const { findByText } = renderDialogOptionsField({ value: { dialog: 'dialog2', options: {} } });
-    await findByText('Json Field');
+    await findByText('Object Field');
   });
   it('should render the IntellisenseTextField if options is a string', async () => {
     const { findByText } = renderDialogOptionsField({ value: { dialog: 'dialog2', options: '=user.data' } });
@@ -102,10 +102,10 @@ describe('DialogOptionsField', () => {
     // Should initially render Options Form
     await findByText('Options Form');
 
-    // Switch to Json field
-    const button = await findByText('Switch to Json Field');
+    // Switch to Object field
+    const button = await findByText('Switch to Object Field');
     fireEvent.click(button);
 
-    await findByText('Json Field');
+    await findByText('Object Field');
   });
 });
