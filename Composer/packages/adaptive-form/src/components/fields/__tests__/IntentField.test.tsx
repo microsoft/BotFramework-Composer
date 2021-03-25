@@ -47,7 +47,7 @@ describe('<IntentField />', () => {
     });
 
     const { getByLabelText } = renderSubject({ value: 'MyIntent' });
-    expect(getByLabelText('Trigger phrases (intent: #MyIntent)')).toBeInTheDocument();
+    expect(getByLabelText('Trigger phrases')).toBeInTheDocument();
   });
 
   it('invokes change handler with intent name', () => {

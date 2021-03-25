@@ -6,7 +6,6 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@botframework-composer/types';
 
-import { CreateOptions } from '../../components/CreationFlow/CreateOptions';
 import { OpenProject } from '../../components/CreationFlow/OpenProject';
 import DefineConversation from '../../components/CreationFlow/DefineConversation';
 import {
@@ -22,7 +21,8 @@ import {
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
-import { CreateOptionsV2 } from '../../components/CreationFlow/v2/CreateOptions';
+import { CreateBotV2 } from '../../components/CreationFlow/v2/CreateBot';
+import { CreateBot } from '../../components/CreationFlow/CreateBot';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -189,7 +189,8 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const renderCreateOptions = () => {
     if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
       return (
-        <CreateOptionsV2
+        <CreateBotV2
+          isOpen
           fetchReadMe={fetchReadMe}
           fetchTemplates={fetchTemplatesV2}
           templates={templateProjects}
@@ -198,7 +199,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         />
       );
     } else {
-      return <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />;
+      return <CreateBot isOpen templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />;
     }
   };
 
