@@ -3440,6 +3440,9 @@
   "trigger_connects_user_intent_with_bot_responses_th_57279180": {
     "message": "Trigger connects user intent with bot responses. Think of a trigger as one capability of your bot. So a dialog contains a collection of triggers. To add a new trigger from the dialog menu."
   },
+  "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
+    "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
+  },
   "trigger_phrases_f6754fa": {
     "message": "Trigger phrases"
   },
