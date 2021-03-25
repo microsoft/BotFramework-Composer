@@ -470,7 +470,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       return (overflowItems: IContextualMenuItem[] | undefined) => {
         if (overflowItems == null) return null;
         return (
-          <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
+          <TooltipHost
+            content={moreLabel}
+            directionalHint={DirectionalHint.rightCenter}
+            styles={moreButtonContainer}
+            tabIndex={0}
+          >
             <IconButton
               ariaLabel={moreLabel}
               className="dialog-more-btn"
@@ -545,7 +550,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           },
         ]}
         overflowItems={overflowMenu}
-        role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem(
           textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
