@@ -10,7 +10,7 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
 
@@ -47,12 +47,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           .get<any>(`/api/projects/alias/${alias}`)
           .then((aliasRes) => {
             if (aliasRes.status === 200) {
-              setIsOpenOptionsModal(true);
+              navigate(`/bot/${aliasRes.data.id}`);
               return;
             }
           })
           .catch((e) => {
-            setIsOpenCreateModal(true);
+            setIsOpenOptionsModal(true);
           });
         return;
       }
@@ -99,6 +99,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}
+        location={props.location}
       />
     </Fragment>
   );
