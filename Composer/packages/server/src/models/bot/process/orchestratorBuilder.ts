@@ -68,7 +68,10 @@ class OrchestratorBuilder {
     const workerScriptPath = path.join(__dirname, 'orchestratorWorker.ts');
     if (fs.existsSync(workerScriptPath)) {
       // set exec arguments to empty, avoid fork nodemon `--inspect` error
-      this._worker = fork(workerScriptPath, [], { execArgv: ['-r', 'ts-node/register'] });
+      this._worker = fork(workerScriptPath, [], {
+        execArgv: ['-r', 'ts-node/register'],
+        env: { TS_NODE_PROJECT: path.resolve(__dirname, '..', '..', '..', '..', 'tsconfig.json') },
+      });
     } else {
       // set exec arguments to empty, avoid fork nodemon `--inspect` error
       this._worker = fork(path.join(__dirname, 'orchestratorWorker.js'), [], { execArgv: [] });
