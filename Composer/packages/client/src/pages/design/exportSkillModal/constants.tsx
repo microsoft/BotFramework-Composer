@@ -145,9 +145,9 @@ export const order: ManifestEditorSteps[] = [
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
   ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
-  // ManifestEditorSteps.SELECT_PROFILE,
-  ManifestEditorSteps.MANIFEST_REVIEW,
-  ManifestEditorSteps.SAVE_MANIFEST,
+  ManifestEditorSteps.SELECT_PROFILE,
+  // ManifestEditorSteps.MANIFEST_REVIEW,
+  // ManifestEditorSteps.SAVE_MANIFEST,
 ];
 
 const cancelButton: Button = {
@@ -215,14 +215,14 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Generate and Publish'),
-        onClick: ({ onNext, generateManifest }) => () => {
-          onNext({ dismiss: true, save: true });
+        onClick: ({ generateManifest, onNext }) => () => {
           generateManifest();
+          onNext({ dismiss: true, save: true });
           // onPublish();
         },
       },
     ],
-    editJson: false,
+    editJson: true,
     content: SelectProfile,
     subText: () =>
       formatMessage('We need to define the endpoints for the skill to allow other bots to interact with it.'),
@@ -263,8 +263,9 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       {
         primary: true,
-        text: () => formatMessage('Next'),
+        text: () => formatMessage('Generate'),
         onClick: ({ onNext }) => () => {
+          // generateManifest();
           onNext();
         },
       },
