@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useCallback } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
@@ -10,6 +10,7 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
@@ -83,6 +84,26 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     }
   }, [scrollToSectionId]);
 
+  const onDeletePublishTarget = useCallback(
+    async (publishTarget: PublishTarget) => {
+      if (publishTargets) {
+        const targetName = publishTarget.name;
+        const confirmed = await OpenConfirmModal(
+          formatMessage('Delete?'),
+          formatMessage(
+            'Are you sure you want to remove "{targetName}"? This will remove only the profile and will not delete provisioned resources.',
+            { targetName }
+          )
+        );
+        if (confirmed) {
+          const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);
+          setPublishTargets(newPublishTargets, projectId);
+        }
+      }
+    },
+    [projectId, publishTargets]
+  );
+
   return (
     <Fragment>
       <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={title}>
@@ -103,6 +124,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                 </div>
                 <div css={tableRowItem(columnSizes[2])}>
                   <ActionButton
+                    data-testid={'editPublishProfile'}
                     styles={editPublishProfile}
                     onClick={() => {
                       setCurrent({ item: p, index: index });
@@ -114,6 +136,15 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                     }}
                   >
                     {formatMessage('Edit')}
+                  </ActionButton>
+                </div>
+                <div css={tableRowItem(columnSizes[2])}>
+                  <ActionButton
+                    data-testid={'deletePublishProfile'}
+                    styles={editPublishProfile}
+                    onClick={() => onDeletePublishTarget(p)}
+                  >
+                    {formatMessage('Delete')}
                   </ActionButton>
                 </div>
               </div>
