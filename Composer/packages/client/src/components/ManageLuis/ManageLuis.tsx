@@ -81,8 +81,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
 
-  console.log('Render manage luis');
-
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
@@ -120,7 +118,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
   };
 
   useEffect(() => {
-    console.log('MANAGE LUIS SETTINGS RENDER');
     // reset the ui
     setSubscription('');
     setAuthoringKeys([]);
@@ -518,7 +515,11 @@ export const ManageLuis = (props: ManageLuisProps) => {
             text={formatMessage('Next')}
             onClick={performNextAction}
           />
-          <DefaultButton disabled={loadingLUIS} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton
+            disabled={loadingLUIS || showAuthDialog}
+            text={formatMessage('Cancel')}
+            onClick={props.onDismiss}
+          />
         </DialogFooter>
       </div>
     );

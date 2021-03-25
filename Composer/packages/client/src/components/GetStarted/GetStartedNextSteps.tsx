@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
@@ -40,7 +40,7 @@ export type NextSteps = {
 export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const projectId = useRecoilValue(currentProjectIdState);
   const botProjects = useRecoilValue(localBotsDataSelector);
-  const botProject = botProjects.find((b) => b.projectId === projectId);
+  const botProject = useMemo(() => botProjects.find((b) => b.projectId === projectId), [botProjects, projectId]);
   const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
@@ -93,7 +93,6 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const linktoQNASettings = `/bot/${projectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${projectId}/language-generation`;
   const linkToLUEditor = `/bot/${projectId}/language-understanding`;
-  console.log('Render get started next stps');
 
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
@@ -101,8 +100,6 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     const hasLUIS =
       botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion ? true : false;
     const hasQNA = botProject?.setting?.qna?.subscriptionKey ? true : false;
-
-    console.log('GENERATE NEXT STEPS');
 
     if (props.requiresLUIS) {
       newNextSteps.push({
