@@ -140,7 +140,6 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           languageClient.onReady().then(() =>
             languageClient.onNotification('GotoDefinition', (result) => {
               if (lgOption?.projectId) {
-                console.log('LG option project id:', lgOption?.projectId);
                 onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
               }
             })
