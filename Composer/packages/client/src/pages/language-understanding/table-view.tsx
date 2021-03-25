@@ -38,6 +38,7 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   skillId?: string;
   dialogId?: string;
   luFileId?: string;
+  file?: LuFile;
 }
 
 interface Intent {
@@ -50,7 +51,7 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId, luFileId } = props;
+  const { dialogId, projectId, skillId, luFileId, file } = props;
 
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
@@ -65,10 +66,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const { languages, defaultLanguage } = settings;
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
-
-  const file = luFileId
-    ? luFiles.find(({ id }) => id === luFileId)
-    : luFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
 
   const defaultLangFile = luFileId
     ? luFiles.find(({ id }) => id === luFileId)
@@ -113,7 +110,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return result.concat(items);
       }, []);
 
-    if (luFileId && file) {
+    if (file) {
       const luIntents: Intent[] = [];
       get(file, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(file);
@@ -133,7 +130,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     } else {
       setIntents(allIntents);
     }
-  }, [luFiles, activeDialog, actualProjectId, luFileId]);
+  }, [luFiles, activeDialog, actualProjectId, luFileId, file]);
 
   const handleIntentUpdate = useCallback(
     (fileId: string, intentName: string, intent: LuIntentSection) => {
