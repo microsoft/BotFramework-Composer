@@ -91,7 +91,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         const confirmed = await OpenConfirmModal(
           formatMessage('Delete?'),
           formatMessage(
-            'Are you sure you want to remove "{targetName}"? This will remove only the profile and will not delete provisioned resources.',
+            'Are you sure you want to remove {targetName}? This will remove only the profile and will not delete provisioned resources.',
             { targetName }
           )
         );

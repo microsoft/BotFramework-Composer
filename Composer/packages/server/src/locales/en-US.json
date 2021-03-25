@@ -305,8 +305,8 @@
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "Are you sure you want to remove \"{ propertyName }\"?"
   },
-  "are_you_sure_you_want_to_remove_targetname_this_wi_9d9d1d80": {
-    "message": "Are you sure you want to remove \"{ targetName }\"? This will remove only the profile and will not delete provisioned resources."
+  "are_you_sure_you_want_to_remove_targetname_this_wi_b3ddce54": {
+    "message": "Are you sure you want to remove { targetName }? This will remove only the profile and will not delete provisioned resources."
   },
   "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
     "message": "Are you sure you want to remove this property?"
