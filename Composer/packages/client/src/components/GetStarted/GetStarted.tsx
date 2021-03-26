@@ -17,6 +17,7 @@ type GetStartedProps = {
   requiresLUIS: boolean;
   requiresQNA: boolean;
   onDismiss: () => void;
+  onBotReady: () => void;
 };
 
 export type NextSteps = {
@@ -46,6 +47,8 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
             requiresLUIS={props.requiresLUIS}
             requiresQNA={props.requiresQNA}
             showTeachingBubble={props.showTeachingBubble}
+            onBotReady={props.onBotReady}
+            onDismiss={props.onDismiss}
           />
         </PivotItem>
         <PivotItem headerText={formatMessage('Learning')}>

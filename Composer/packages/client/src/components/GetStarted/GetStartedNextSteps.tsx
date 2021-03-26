@@ -25,6 +25,8 @@ type GetStartedProps = {
   requiresLUIS: boolean;
   requiresQNA: boolean;
   showTeachingBubble: boolean;
+  onBotReady: () => void;
+  onDismiss: () => void;
 };
 
 export type NextSteps = {
@@ -72,6 +74,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     const nextAction = requiredNextSteps.filter((f) => !f.checked && f.key != currentStep)?.[0];
     if (!nextAction?.checked && nextAction?.highlight) {
       nextAction.highlight();
+    }
+    if (!nextAction) {
+      props.onDismiss();
+      props.onBotReady();
     }
   };
 

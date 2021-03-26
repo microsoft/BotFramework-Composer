@@ -323,12 +323,13 @@ export const Header = () => {
           <TeachingBubble
             hasCloseButton
             hasCondensedHeadline
-            headline={formatMessage('Get your bot up and running')}
-            target="#rocketButton"
+            calloutProps={{ directionalHint: DirectionalHint.bottomAutoEdge }}
+            headline={formatMessage("You're ready to go!")}
+            target="#startbot"
             onDismiss={hideTeachingBubble}
           >
             {formatMessage(
-              'Explore next steps and find valuable references and learning resources to design, build, and publish your new bot using Composer.'
+              'Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test.'
             )}
           </TeachingBubble>
         )}
@@ -406,6 +407,9 @@ export const Header = () => {
           requiresLUIS={requiresLUIS}
           requiresQNA={requiresQNA}
           showTeachingBubble={showGetStartedTeachingBubble}
+          onBotReady={() => {
+            setShowTeachingBubble(true);
+          }}
           onDismiss={() => {
             toggleGetStarted(false);
           }}
