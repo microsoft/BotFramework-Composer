@@ -7,7 +7,9 @@ import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { FieldToolbar } from '@bfc/code-editor';
 import { useShellApi } from '@bfc/extension-client';
 
-type ExpressionsListMenuProps = {
+const inputs = ['input', 'textarea'];
+
+type Props = {
   container: HTMLDivElement | null;
   target: HTMLInputElement | HTMLTextAreaElement | null;
   value?: string;
@@ -17,7 +19,7 @@ type ExpressionsListMenuProps = {
 
 const jsFieldToolbarMenuClassName = 'js-field-toolbar-menu';
 
-export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
+export const ExpressionFieldToolbar = (props: Props) => {
   const { onClearTarget, container, target, value = '', onChange } = props;
   const { projectId, shellApi } = useShellApi();
 
@@ -37,7 +39,10 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
 
   React.useEffect(() => {
     const keyDownHandler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (
+        e.key === 'Escape' &&
+        (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase()))
+      ) {
         onClearTarget();
       }
     };

@@ -7,7 +7,7 @@ import React, { useRef, useState } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
 import { ExpressionSwitchWindow } from '../expressions/ExpressionSwitchWindow';
-import { ExpressionsListMenu } from '../expressions/ExpressionsListMenu';
+import { ExpressionFieldToolbar } from '../expressions/ExpressionFieldToolbar';
 
 import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
@@ -118,7 +118,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
             onKeyDown={onKeyDownTextField}
             onKeyUp={onKeyUpTextField}
           />
-          <ExpressionsListMenu
+          <ExpressionFieldToolbar
             container={containerElm}
             target={toolbarTargetElm}
             value={textFieldValue}
