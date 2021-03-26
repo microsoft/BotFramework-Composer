@@ -16,6 +16,7 @@ import { JSONSchema7 } from '@bfc/extension-client';
 
 import { Activities, Activity, activityHandlerMap, ActivityTypes, DispatchModels } from './constants';
 import { createManifestFile } from '../../../utils/manifestFileUtil';
+import { luIndexer } from '@bfc/indexers';
 
 const getActivityType = (kind: SDKKinds): ActivityTypes | undefined => activityHandlerMap[kind];
 
@@ -142,7 +143,14 @@ export const generateDispatchModels = (
 
   for (const rootLuFile of rootLuFiles) {
     const currentFileName = `skill-${rootLuFile.id}.lu`;
-    createManifestFile(projectId, currentFileName, rootLuFile.content);
+    const parsedLuFile = luIndexer.parse(rootLuFile.content, rootLuFile.id, {});
+    const contents = parsedLuFile.intents.map((x) => {
+      if (intents.find((intent) => intent == x.Name) != -1) {
+        return x.Body;
+      }
+    });
+    const mergedContents = contents.join('\n');
+    createManifestFile(projectId, currentFileName, mergedContents);
   }
 
   const luLanguages = intents.length
