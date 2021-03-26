@@ -3,8 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
-import { CompoundButton } from 'office-ui-fabric-react/lib/Button';
+import React, { Fragment } from 'react';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { NextSteps } from './GetStartedNextSteps';
 
@@ -13,20 +14,37 @@ type TaskProps = {
 };
 
 export const GetStartedTask: React.FC<TaskProps> = (props) => {
+  const icon = props.step.checked ? 'CompletedSolid' : props.step.required ? 'Error' : 'Completed';
+  const color = props.step.checked ? '#219653' : props.step.required ? '#ca5010' : '#0078D4';
   return (
-    <CompoundButton
-      iconProps={{ iconName: props.step.checked ? 'Completed' : 'Error' }}
-      id={props.step.key}
-      secondaryText={props.step.description}
-      styles={{
-        root: { border: 0 },
-        icon: { color: props.step.required ? (props.step.checked ? '#0F0' : '#EF7100') : '#000' },
-      }}
-      onClick={() => {
-        props.step.onClick(props.step);
-      }}
-    >
-      {props.step.label}
-    </CompoundButton>
+    <div css={{ marginBottom: 20 }}>
+      <ActionButton
+        iconProps={{ iconName: icon }}
+        id={props.step.key}
+        styles={{
+          root: { display: 'block', fontSize: 16 },
+          icon: {
+            fontSize: props.step.checked ? 20 : 22,
+            color: color,
+          },
+        }}
+        onClick={() => {
+          props.step.onClick(props.step);
+        }}
+      >
+        {props.step.label}
+      </ActionButton>
+      <div css={{ marginLeft: 40, fontSize: 12 }}>
+        {props.step.description}
+        {props.step.learnMore && (
+          <Fragment>
+            &nbsp;
+            <Link href={props.step.learnMore} target="_new">
+              Learn more
+            </Link>
+          </Fragment>
+        )}
+      </div>
+    </div>
   );
 };

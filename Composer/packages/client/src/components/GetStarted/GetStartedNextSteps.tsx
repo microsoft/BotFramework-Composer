@@ -30,7 +30,7 @@ export type NextSteps = {
   checked: boolean;
   key: string;
   description: string;
-  learnMore: string;
+  learnMore?: string;
   required?: boolean;
   label: string;
   onClick: (step?: NextSteps) => void;
@@ -49,6 +49,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const [requiredNextSteps, setRequiredNextSteps] = useState<NextSteps[]>([]);
+  const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextSteps[]>([]);
   const [optionalSteps, setOptionalSteps] = useState<NextSteps[]>([]);
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
@@ -89,6 +90,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   const linkToPackageManager = `/bot/${projectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${projectId}/botProjectsSettings/#connections`;
+  const linkToPublishProfile = `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`;
   const linkToLUISSettings = `/bot/${projectId}/botProjectsSettings/#luisKey`;
   const linktoQNASettings = `/bot/${projectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${projectId}/language-generation`;
@@ -96,17 +98,21 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
+    const newRecomendedSteps: NextSteps[] = [];
 
     const hasLUIS =
       botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion ? true : false;
     const hasQNA = botProject?.setting?.qna?.subscriptionKey ? true : false;
+
+    const hasPublishingProfile =
+      botProject?.setting?.publishTargets && botProject?.setting?.publishTargets?.length > 0 ? true : false;
 
     if (props.requiresLUIS) {
       newNextSteps.push({
         key: 'luis',
         label: formatMessage('Add a LUIS key'),
         description: formatMessage('Setup Language Understanding so that you can start and test your bot.'),
-        learnMore: '',
+        learnMore: 'https://www.luis.ai',
         required: true,
         checked: hasLUIS,
         highlight: (step) => {
@@ -146,13 +152,27 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     //   newNextSteps[0].highlight();
     // }
 
-    setOptionalSteps([
+    if (!hasPublishingProfile) {
+      newRecomendedSteps.push({
+        key: 'publishing',
+        label: formatMessage('Create a publishing profile'),
+        description: formatMessage('Set up hosting and other Azure resources to enable publishing'),
+        required: true,
+        checked: hasPublishingProfile,
+        onClick: (step) => {
+          openLink(linkToPublishProfile);
+        },
+      });
+    }
+    setRecommendedNextSteps(newRecomendedSteps);
+
+    const optSteps = [
       {
         key: 'packages',
         label: formatMessage('Add packages'),
         description: formatMessage('Visit the Package manager to browse packages to add to your bot.'),
         learnMore: '',
-        checked: true,
+        checked: false,
         onClick: () => {
           openLink(linkToPackageManager);
         },
@@ -162,7 +182,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         label: formatMessage('Edit what your bot says'),
         description: formatMessage('Customize your bot by editing and adding bot responses.'),
         learnMore: '',
-        checked: true,
+        checked: false,
         onClick: () => {
           openLink(linkToLGEditor);
         },
@@ -172,22 +192,27 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         label: formatMessage('Train your language model'),
         description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
         learnMore: '',
-        checked: true,
+        checked: false,
         onClick: () => {
           openLink(linkToLUEditor);
         },
       },
-      {
+    ];
+
+    if (hasPublishingProfile) {
+      optSteps.push({
         key: 'connections',
         label: formatMessage('Add connections'),
         description: formatMessage('Connect your bot to Teams, external channels, or enable speech. Learn more'),
         learnMore: '',
-        checked: true,
+        checked: false,
         onClick: () => {
           openLink(linkToConnections);
         },
-      },
-    ]);
+      });
+    }
+
+    setOptionalSteps(optSteps);
   }, [botProject]);
 
   return (
@@ -240,22 +265,37 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       )}
 
       <p>{formatMessage('These are next steps so you always know what to do next to get your bot going.')}</p>
-      {requiredNextSteps && (
+      {requiredNextSteps.length ? (
         <div>
           <h3 style={h3Style}>{formatMessage('Required')}</h3>
           {requiredNextSteps.map((step) => (
             <GetStartedTask key={step.key} step={step} />
           ))}
         </div>
+      ) : (
+        ''
       )}
 
-      {optionalSteps && (
+      {recommendedNextSteps.length ? (
+        <div>
+          <h3 style={h3Style}>{formatMessage('Recommended')}</h3>
+          {recommendedNextSteps.map((step) => (
+            <GetStartedTask key={step.key} step={step} />
+          ))}
+        </div>
+      ) : (
+        ''
+      )}
+
+      {optionalSteps.length ? (
         <div>
           <h3 style={h3Style}>{formatMessage('Optional')}</h3>
           {optionalSteps.map((step) => (
             <GetStartedTask key={step.key} step={step} />
           ))}
         </div>
+      ) : (
+        ''
       )}
     </div>
   );

@@ -11,17 +11,21 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { h3Style, ulStyle, liStyle } from './styles';
 
-const linkToAdaptiveExpressions =
-  'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-adaptive-expressions?view=azure-bot-service-4.0&tabs=arithmetic';
-const linkToGetStarted = 'https://docs.microsoft.com/en-us/composer/introduction';
-const linkToCreateFirstBot = 'https://docs.microsoft.com/en-us/composer/quickstart-create-bot';
-const linkToTutorials = 'https://docs.microsoft.com/en-us/composer/tutorial/tutorial-introduction';
-const linkToLGFileFormat =
-  'https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lg-file-format?view=azure-bot-service-4.0';
-const linkToLUFileFormat =
-  'https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lu-file-format?view=azure-bot-service-4.0';
-const linkToPreBuiltExpressions =
-  'https://docs.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0';
+const linkToEmulator = 'https://aka.ms/composer-getstarted-emulator';
+const linkToQNA = 'https://aka.ms/composer-getstarted-qnamaker';
+const linkToPackages = 'https://aka.ms/composer-getstarted-packages';
+const linkToImport = 'https://aka.ms/composer-getstarted-importpublishing';
+const linkToPVA = 'https://aka.ms/composer-getstarted-pva';
+const linkToMigrate = 'https://aka.ms/composer-getstarted-migrate';
+const linkToFeatureRequest = 'https://aka.ms/composer-getstarted-featurerequest';
+
+const linkToAdaptiveExpressions = 'https://aka.ms/composer-getstarted-adaptiveexpressions';
+const linkToGetStarted = 'https://aka.ms/composer-getstarted-getstarted';
+const linkToCreateFirstBot = 'https://aka.ms/composer-getstarted-quickstart';
+const linkToTutorials = 'https://aka.ms/composer-getstarted-tutorials';
+const linkToLGFileFormat = 'https://aka.ms/composer-getstarted-lgfiles';
+const linkToLUFileFormat = 'https://aka.ms/composer-getstarted-lufiles';
+const linkToPreBuiltExpressions = 'https://aka.ms/composer-getstarted-prebuilt';
 
 const linkClick = (event) => {
   TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: event.target.href });
@@ -49,6 +53,21 @@ export const GetStartedLearn: React.FC = () => {
             {formatMessage('Composer tutorials')}
           </Link>
         </li>
+        <li style={liStyle}>
+          <Link href={linkToEmulator} target="_blank" onClick={linkClick}>
+            {formatMessage('Setting up Bot Framework Emulator')}
+          </Link>
+        </li>
+        <li style={liStyle}>
+          <Link href={linkToQNA} target="_blank" onClick={linkClick}>
+            {formatMessage('QnA Maker introduction')}
+          </Link>
+        </li>
+        <li style={liStyle}>
+          <Link href={linkToPackages} target="_blank" onClick={linkClick}>
+            {formatMessage('Working with packages')}
+          </Link>
+        </li>
       </ul>
 
       <h3 style={h3Style}>{formatMessage('Quick references')}</h3>
@@ -71,6 +90,26 @@ export const GetStartedLearn: React.FC = () => {
         <li style={liStyle}>
           <Link href={linkToLGFileFormat} target="_blank" onClick={linkClick}>
             {formatMessage('LG file format and syntax')}
+          </Link>
+        </li>
+        <li style={liStyle}>
+          <Link href={linkToImport} target="_blank" onClick={linkClick}>
+            {formatMessage('Importing a publishing profile')}
+          </Link>
+        </li>
+        <li style={liStyle}>
+          <Link href={linkToPVA} target="_blank" onClick={linkClick}>
+            {formatMessage('Integrating with Power Virtual Agents')}
+          </Link>
+        </li>
+        <li style={liStyle}>
+          <Link href={linkToMigrate} target="_blank" onClick={linkClick}>
+            {formatMessage('Migrating to Composer')}
+          </Link>
+        </li>
+        <li style={liStyle}>
+          <Link href={linkToFeatureRequest} target="_blank" onClick={linkClick}>
+            {formatMessage('Submit a feature request')}
           </Link>
         </li>
       </ul>
