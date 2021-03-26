@@ -68,6 +68,7 @@ export type FieldToolbarProps = {
   moreToolbarItems?: ICommandBarItemProps[];
   farItems?: ICommandBarItemProps[];
   className?: string;
+  dismissHandlerClassName?: string;
 };
 
 export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
@@ -78,6 +79,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
     lgTemplates,
     moreToolbarItems,
     farItems,
+    dismissHandlerClassName = jsLgToolbarMenuClassName,
     onSelectToolbarMenuItem,
   } = props;
 
@@ -146,11 +148,11 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
     () =>
       moreToolbarItems?.map<ICommandBarItemProps>((itemProps) => ({
         ...itemProps,
-        subMenuProps: configureMenuProps(itemProps.subMenuProps, jsLgToolbarMenuClassName),
+        subMenuProps: configureMenuProps(itemProps.subMenuProps, dismissHandlerClassName),
         buttonStyles: moreButtonStyles,
-        className: jsLgToolbarMenuClassName,
+        className: dismissHandlerClassName,
       })) ?? [],
-    [moreToolbarItems]
+    [moreToolbarItems, dismissHandlerClassName]
   );
 
   const items = React.useMemo(

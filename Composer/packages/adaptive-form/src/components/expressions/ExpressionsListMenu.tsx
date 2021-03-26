@@ -10,13 +10,15 @@ import { useShellApi } from '@bfc/extension-client';
 type ExpressionsListMenuProps = {
   container: HTMLDivElement | null;
   target: HTMLInputElement | HTMLTextAreaElement | null;
-  clearTarget: () => void;
   value?: string;
   onChange: (expression: string) => void;
+  onClearTarget: () => void;
 };
 
+const jsFieldToolbarMenuClassName = 'js-field-toolbar-menu';
+
 export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
-  const { clearTarget, container, target, value = '', onChange } = props;
+  const { onClearTarget, container, target, value = '', onChange } = props;
   const { projectId, shellApi } = useShellApi();
 
   const [memoryVariables, setMemoryVariables] = React.useState<string[] | undefined>();
@@ -36,7 +38,7 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
   React.useEffect(() => {
     const keyDownHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        clearTarget();
+        onClearTarget();
       }
     };
 
@@ -50,9 +52,9 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
           .composedPath()
           .filter((n) => n instanceof Element)
           .map((n) => (n as Element).className)
-          .some((c) => c.indexOf('js-lg-toolbar-menu') !== -1)
+          .some((c) => c.indexOf(jsFieldToolbarMenuClassName) !== -1)
       ) {
-        clearTarget();
+        onClearTarget();
       }
     };
 
@@ -63,7 +65,7 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
       document.removeEventListener('focusin', focusHandler);
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [clearTarget, container]);
+  }, [container, onClearTarget]);
 
   const onSelectToolbarMenuItem = React.useCallback(
     (text: string) => {
@@ -92,7 +94,8 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
       target={target}
     >
       <FieldToolbar
-        key="lg-toolbar"
+        key="field-toolbar"
+        dismissHandlerClassName={jsFieldToolbarMenuClassName}
         excludedToolbarItems={['template']}
         properties={memoryVariables}
         onSelectToolbarMenuItem={onSelectToolbarMenuItem}

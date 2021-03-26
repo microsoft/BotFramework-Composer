@@ -68,21 +68,22 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
-  const [container, setContainer] = useState<HTMLDivElement | null>(null);
-  const [target, setTarget] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const containerElm = React.useRef<HTMLDivElement | null>(null);
+  // const [containerElm, setContainerElm] = useState<HTMLDivElement | null>(null);
+  const [toolbarTargetElm, setToolbarTargetElm] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   const focus = React.useCallback(
     (id: string, value?: string, event?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       if (event?.target) {
         event.stopPropagation();
-        setTarget(event.target as HTMLInputElement | HTMLTextAreaElement);
+        setToolbarTargetElm(event.target as HTMLInputElement | HTMLTextAreaElement);
       }
     },
     []
   );
 
-  const clearTarget = React.useCallback(() => {
-    setTarget(null);
+  const onClearTarget = React.useCallback(() => {
+    setToolbarTargetElm(null);
   }, []);
 
   return (
@@ -104,7 +105,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
         onKeyUpTextField,
         onClickTextField,
       }) => (
-        <div ref={(ref) => setContainer(ref)}>
+        <div ref={containerElm}>
           <StringField
             {...props}
             cursorPosition={cursorPosition}
@@ -119,11 +120,11 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
             onKeyUp={onKeyUpTextField}
           />
           <ExpressionsListMenu
-            clearTarget={clearTarget}
-            container={container}
-            target={target}
+            container={containerElm.current}
+            target={toolbarTargetElm}
             value={textFieldValue}
             onChange={onChange}
+            onClearTarget={onClearTarget}
           />
         </div>
       )}
