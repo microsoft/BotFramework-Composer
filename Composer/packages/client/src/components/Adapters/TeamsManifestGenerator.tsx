@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import { randomBytes } from 'crypto';
+
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -17,6 +19,8 @@ import { defaultTeamsManifest } from '../../constants';
 
 type TeamsManifestGeneratorProps = {
   hidden: boolean;
+  botAppId?: string;
+  botDisplayName?: string;
   onDismiss: () => void;
 };
 
@@ -36,6 +40,16 @@ export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
   };
 
   const generateTeamsManifest = () => {
+    const appId = props.botAppId ? props.botAppId : '{AddBotAppId}';
+    const botName = props.botDisplayName ? props.botDisplayName : '{AddBotDisplayName}';
+    const result = defaultTeamsManifest;
+    result.id = randomBytes(32).toString('base64');
+    result.description.short = `short description for ${botName}`;
+    result.description.full = `full description for ${botName}`;
+    result.packageName = botName;
+    result.name.short = botName;
+    result.name.full = botName;
+    result.bots[0].botId = appId;
     return JSON.stringify(defaultTeamsManifest, null, 2);
   };
 
@@ -51,6 +65,30 @@ export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
     >
       <div>
         <Text style={{ fontWeight: 700 }}>{formatMessage('Teams manifest for your bot:')}</Text>
+        <a
+          download={'teamsManifest.json'}
+          href={'data:text/plain;charset=utf-8,' + encodeURIComponent(generateTeamsManifest())}
+        >
+          <IconButton
+            ariaLabel={formatMessage('Download Icon')}
+            menuIconProps={{ iconName: 'Download' }}
+            styles={{
+              root: {
+                height: 'unset',
+                float: 'right',
+                marginRight: '10px',
+              },
+              menuIcon: {
+                backgroundColor: NeutralColors.white,
+                color: NeutralColors.gray130,
+                fontSize: FontSizes.size16,
+              },
+              rootDisabled: {
+                backgroundColor: NeutralColors.white,
+              },
+            }}
+          />
+        </a>
         <IconButton
           ariaLabel={formatMessage('Copy Icon')}
           menuIconProps={{ iconName: 'Copy' }}

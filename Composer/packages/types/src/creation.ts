@@ -21,8 +21,8 @@ export type TeamsManifest = {
   bots: Bot[];
   permissions: string[];
   validDomains: string[];
-  webApplicationInfo: WebApplicationInfo;
-  devicePermissions: string[];
+  webApplicationInfo?: WebApplicationInfo;
+  devicePermissions?: string[];
 };
 
 type WebApplicationInfo = {
@@ -34,8 +34,8 @@ type Bot = {
   botId: string;
   scopes: string[];
   commandList?: CommandList[];
-  supportsFiles: boolean;
-  isNotificationOnly: boolean;
+  supportsFiles?: boolean;
+  isNotificationOnly?: boolean;
 };
 
 type CommandList = {
