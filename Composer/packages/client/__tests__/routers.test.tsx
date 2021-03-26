@@ -12,6 +12,7 @@ import { wrapWithRecoil } from './testUtils';
 jest.mock('axios', () => ({
   create: jest.fn().mockReturnThis(),
   get: jest.fn(),
+  request: jest.fn(),
 }));
 
 function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
