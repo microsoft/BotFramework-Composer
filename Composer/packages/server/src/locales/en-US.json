@@ -299,6 +299,9 @@
   "apr_9_2020_3c8b47d7": {
     "message": "Apr 9, 2020"
   },
+  "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
+    "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
+  },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings."
   },
@@ -1427,9 +1430,6 @@
   "extension_settings_899ccb55": {
     "message": "Extension Settings"
   },
-  "external_resources_will_not_be_changed_c08b0009": {
-    "message": "External resources will not be changed."
-  },
   "external_service_adapters_5218e6a3": {
     "message": "External service adapters"
   },
@@ -1639,9 +1639,6 @@
   },
   "http_request_79847109": {
     "message": "HTTP Request"
-  },
-  "i_want_to_delete_this_bot_f81a4735": {
-    "message": "I want to delete this bot"
   },
   "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
     "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
@@ -3449,6 +3446,9 @@
   "trigger_connects_user_intent_with_bot_responses_th_57279180": {
     "message": "Trigger connects user intent with bot responses. Think of a trigger as one capability of your bot. So a dialog contains a collection of triggers. To add a new trigger from the dialog menu."
   },
+  "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
+    "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
+  },
   "trigger_phrases_f6754fa": {
     "message": "Trigger phrases"
   },
@@ -3641,9 +3641,6 @@
   "warning_aacb8c24": {
     "message": "Warning"
   },
-  "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
-    "message": "Warning: the action you are about to take cannot be undone. Going further will delete this bot and any related files in the bot project folder."
-  },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"
   },
@@ -3733,6 +3730,9 @@
   },
   "yes_dde87d5": {
     "message": "Yes"
+  },
+  "yes_delete_d43476ee": {
+    "message": "Yes, delete"
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "You already have a KB with that name. Choose another name and try again."
