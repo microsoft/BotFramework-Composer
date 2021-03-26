@@ -129,18 +129,30 @@ export function convertLuParseResultToLuFile(
 
   // find all reference and parse them.
   const allIntents: LuIntentSection[] = clone(intents);
-
+  const referenceDiagnostics: Diagnostic[] = [];
   if (importResolver) {
-    imports.forEach((item) => {
-      const targetFile = importResolver(id, item.path);
-      if (targetFile) {
-        const targetFileParsed = luIndexer.parse(targetFile.content, targetFile.id, luFeatures, importResolver);
-        allIntents.push(...targetFileParsed.allIntents);
+    Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).forEach((item) => {
+      try {
+        const targetFile = importResolver(id, item.Path);
+        if (targetFile) {
+          const targetFileParsed = luIndexer.parse(targetFile.content, targetFile.id, luFeatures, importResolver);
+          allIntents.push(...targetFileParsed.allIntents);
+        }
+      } catch (_error) {
+        const res = new Diagnostic(_error.message, item.Path, DiagnosticSeverity.Error, item.Path);
+        const start: Position = item.Range
+          ? new Position(item.Range.Start.Line, item.Range.Start.Character)
+          : new Position(0, 0);
+        const end: Position = item.Range
+          ? new Position(item.Range.End.Line, item.Range.End.Character)
+          : new Position(0, 0);
+        res.range = new Range(start, end);
+        referenceDiagnostics.push(res);
       }
     });
   }
 
-  const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics);
+  const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics).concat(referenceDiagnostics);
   return {
     id,
     content: Content,
