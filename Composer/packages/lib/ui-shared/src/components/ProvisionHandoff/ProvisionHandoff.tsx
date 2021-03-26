@@ -24,10 +24,6 @@ type ProvisionHandoffProps = {
 };
 
 export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
-  const closeDialog = () => {
-    props.onDismiss();
-  };
-
   const textFieldRef = useRef<ITextField>(null);
 
   const copyCodeToClipboard = () => {
@@ -89,7 +85,7 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
             props.onBack();
           }}
         />
-        <PrimaryButton text={formatMessage('Okay')} onClick={closeDialog} />
+        <PrimaryButton text={formatMessage('Okay')} onClick={props.onDismiss} />
       </DialogFooter>
     </DialogWrapper>
   );
