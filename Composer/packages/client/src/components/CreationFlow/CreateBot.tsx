@@ -23,7 +23,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { RouteComponentProps } from '@reach/router';
+import { WindowLocation } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
@@ -115,14 +115,15 @@ const optionKeys = {
 type CreateBotProps = {
   isOpen: boolean;
   templates: BotTemplate[];
+  location?: WindowLocation | undefined;
   onDismiss: () => void;
   onNext: (data: string) => void;
-} & RouteComponentProps<{}>;
+};
 
 export function CreateBot(props: CreateBotProps) {
   const [option, setOption] = useState(optionKeys.createFromScratch);
   const [disabled, setDisabled] = useState(true);
-  const { templates, onDismiss, onNext, isOpen } = props;
+  const { templates, location, onDismiss, onNext, isOpen } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -169,8 +170,8 @@ export function CreateBot(props: CreateBotProps) {
     if (option === optionKeys.createFromQnA) {
       routeToTemplate = QnABotTemplateId;
     }
-    if (props.location?.search) {
-      routeToTemplate += props.location.search;
+    if (location?.search) {
+      routeToTemplate += location.search;
     }
 
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
