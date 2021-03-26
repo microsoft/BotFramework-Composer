@@ -86,11 +86,11 @@ export const LuLabelingMenu = ({ editor, luFile, onMenuToggled, onInsertEntity }
     [onInsertEntity]
   );
 
-  const { menuProps } = useLabelingMenuProps('filter', luFile, itemClick, {
+  const { menuProps, noEntities } = useLabelingMenuProps('filter', luFile, itemClick, {
     menuHeaderText: formatMessage('Tag entity'),
   });
 
-  return menuTargetElm ? (
+  return menuTargetElm && !noEntities ? (
     <ContextualMenu
       {...menuProps}
       directionalHint={DirectionalHint.bottomLeftEdge}
