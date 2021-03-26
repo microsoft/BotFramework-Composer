@@ -126,10 +126,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightLUIS(true);
         },
         onClick: (step) => {
+          openLink(linkToLUISSettings);
           if (!step?.checked) {
             setDisplayManageLuis(true);
-          } else {
-            openLink(linkToLUISSettings);
           }
         },
       });
@@ -146,10 +145,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightQNA(true);
         },
         onClick: (step) => {
+          openLink(linktoQNASettings);
           if (!step?.checked) {
             setDisplayManageQNA(true);
-          } else {
-            openLink(linktoQNASettings);
           }
         },
       });
