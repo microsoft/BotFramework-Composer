@@ -225,6 +225,19 @@ const calloutRootStyle = css`
   padding: 11px;
 `;
 
+const icons = {
+  trigger: 'LightningBolt',
+  dialog: 'Org',
+  'form dialog': 'Table',
+  'form field': 'Variable2', // x in parentheses
+  'form trigger': 'TriggerAuto', // lightning bolt with gear
+  filter: 'Filter',
+  lg: 'Robot',
+  lu: 'People',
+  bot: 'CubeShape',
+  'external skill': 'Globe',
+};
+
 // -------------------- TreeItem -------------------- //
 
 type ITreeItemProps = {
@@ -233,7 +246,7 @@ type ITreeItemProps = {
   isChildSelected?: boolean;
   isSubItemActive?: boolean;
   onSelect?: (link: TreeLink) => void;
-  icon?: string;
+  itemType: 'bot' | 'dialog' | 'trigger' | 'form dialog' | 'trigger group' | 'bot' | 'external skill';
   dialogName?: string;
   textWidth?: number;
   extraSpace?: number;
@@ -371,8 +384,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   link,
   isActive = false,
   isChildSelected = false,
-  icon,
-  dialogName,
+  itemType,
   onSelect,
   textWidth = 100,
   hasChildren = false,
@@ -385,7 +397,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   showErrors = true,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
-  const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
+  const a11yLabel = `${itemType} ${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
@@ -420,7 +432,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       return (
         <div
           data-is-focusable
-          aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
+          aria-label={`${item.itemType} ${item.displayName} ${warningContent} ${errorContent}`}
           css={projectTreeItemContainer}
           role="cell"
           tabIndex={0}
@@ -428,7 +440,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           onFocus={item.onFocus}
         >
           <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.icon != null && (
+            {item.itemType != null && (
               <Icon
                 iconName={item.icon}
                 styles={{
@@ -535,7 +547,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         }
       }}
     >
-      <div style={{ minWidth: `${spacerWidth}px` }}></div>
+      <div style={{ minWidth: `${spacerWidth}px` }} />
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
@@ -545,7 +557,8 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         items={[
           {
             key: linkString,
-            icon: isBroken ? 'RemoveLink' : icon,
+            icon: isBroken ? 'RemoveLink' : icons[itemType],
+            itemType,
             ...link,
           },
         ]}

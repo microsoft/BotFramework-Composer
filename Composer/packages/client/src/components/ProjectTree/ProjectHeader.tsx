@@ -159,10 +159,10 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`} role="grid">
       <TreeItem
         hasChildren={!isRemote}
-        icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
         isChildSelected={isChildDialogLinkSelected(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={isRemote ? 'external skill' : 'bot'}
         link={link}
         menu={options.showMenu ? menu : []}
         menuOpenCallback={setMenuOpen}
