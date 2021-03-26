@@ -3,7 +3,7 @@
 
 import * as crypto from 'crypto';
 
-import { computePropertyItemTree, getAllNodes } from '../lgUtils';
+import { computePropertyItemTree, getAllNodes } from '../fieldToolbarUtils';
 
 (global as any).crypto = {
   getRandomValues: (arr: any[]) => crypto.randomBytes(arr.length),
