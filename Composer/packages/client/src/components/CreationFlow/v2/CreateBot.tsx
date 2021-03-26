@@ -20,7 +20,7 @@ import {
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { RouteComponentProps } from '@reach/router';
+import { WindowLocation } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
@@ -118,11 +118,12 @@ const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
 type CreateBotProps = {
   isOpen: boolean;
   templates: BotTemplate[];
+  location?: WindowLocation | undefined;
   onDismiss: () => void;
   onNext: (templateName: string, urlData?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
-} & RouteComponentProps<{}>;
+};
 
 export function CreateBotV2(props: CreateBotProps) {
   const [option] = useState(optionKeys.createFromTemplate);
@@ -158,8 +159,8 @@ export function CreateBotV2(props: CreateBotProps) {
 
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
 
-    if (props.location && props.location.search) {
-      onNext(routeToTemplate, props.location.search);
+    if (location?.search) {
+      onNext(routeToTemplate, location.search);
     } else {
       onNext(routeToTemplate);
     }
