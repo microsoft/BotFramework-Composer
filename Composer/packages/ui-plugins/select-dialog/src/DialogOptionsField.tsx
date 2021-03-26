@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import React from 'react';
 import styled from '@emotion/styled';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension-client';
@@ -94,7 +92,7 @@ const DialogOptionsField: React.FC<FieldProps> = ({
 
   React.useEffect(() => {
     mountRef.current = true;
-    if (schema) {
+    if (schema && !Object.keys(schema.properties || {}).length) {
       (async () => {
         setValidationStatus('validating');
         try {
@@ -150,7 +148,7 @@ const DialogOptionsField: React.FC<FieldProps> = ({
       {
         key: 'form',
         text: formatMessage('form'),
-        disabled: validationStatus !== 'valid' || !schema || !Object.keys(schema.properties || {}).length,
+        disabled: !schema || validationStatus !== 'valid',
       },
       {
         key: 'object',
