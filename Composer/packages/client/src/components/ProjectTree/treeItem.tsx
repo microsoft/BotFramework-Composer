@@ -434,7 +434,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           data-is-focusable
           aria-label={`${item.itemType} ${item.displayName} ${warningContent} ${errorContent}`}
           css={projectTreeItemContainer}
-          role="cell"
           tabIndex={0}
           onBlur={item.onBlur}
           onFocus={item.onFocus}
@@ -508,7 +507,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                   menuOpenCallback(false);
                 },
               }}
-              role="cell"
               styles={moreButton(isActive || isChildSelected)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
