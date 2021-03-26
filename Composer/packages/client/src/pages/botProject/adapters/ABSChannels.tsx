@@ -40,6 +40,7 @@ import {
   errorTextStyle,
   columnSizes,
 } from '../styles';
+import { TeamsManifestGenerator } from '../../../components/Adapters/TeamsManifestGenerator';
 
 import ABSChannelSpeechModal from './ABSChannelSpeechModal';
 
@@ -92,6 +93,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [isLoading, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
+  const [showTeamsManifestModal, setShowTeamsManifestModal] = useState<boolean>(true);
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -581,6 +583,12 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}
+        <TeamsManifestGenerator
+          hidden={!showTeamsManifestModal}
+          onDismiss={() => {
+            setShowTeamsManifestModal(false);
+          }}
+        />
       </div>
     </React.Fragment>
   );
