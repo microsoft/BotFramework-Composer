@@ -67,8 +67,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           // {
           //   key: 'npm',
           //   text: 'npm',
-          //   url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
-          //   searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bf-component&size=100&from=0',
+          //   url: 'https://registry.npmjs.org/-/v1/search?text=keywords:msbot-component&size=100&from=0',
+          //   searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:msbot-component&size=100&from=0',
           //   readonly: true,
           // },
           {
@@ -79,7 +79,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             defaultQuery: {
               prerelease: true,
               semVerLevel: '2.0.0',
-              query: 'microsoft.bot.components+tags:bf-component',
+              query: 'microsoft.bot.components+tags:msbot-component',
             },
             type: PackageSourceType.NuGet,
           },
@@ -90,7 +90,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             defaultQuery: {
               prerelease: true,
               semVerLevel: '2.0.0',
-              query: 'tags:bf-component',
+              query: 'tags:msbot-component',
             },
             type: PackageSourceType.NuGet,
           },
@@ -154,7 +154,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           const packageQuery: IPackageQuery = {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: 'tags:bf-component',
+            query: 'tags:msbot-component',
           };
 
           const packages = await feed.getPackages(packageSource.defaultQuery ?? packageQuery);
