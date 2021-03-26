@@ -74,7 +74,8 @@ const configureMenuProps = (props: IContextualMenuProps | undefined, className: 
   return props;
 };
 
-export type LgEditorToolbarProps = {
+export type FieldToolbarProps = {
+  excludedToolbarItems?: ToolbarButtonPayload['kind'];
   lgTemplates?: readonly LgTemplate[];
   properties?: readonly string[];
   onSelectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void;
@@ -83,8 +84,16 @@ export type LgEditorToolbarProps = {
   onPopExpand?: () => void;
 };
 
-export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
-  const { className, properties, lgTemplates, moreToolbarItems, onSelectToolbarMenuItem, onPopExpand } = props;
+export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
+  const {
+    className,
+    excludedToolbarItems,
+    properties,
+    lgTemplates,
+    moreToolbarItems,
+    onSelectToolbarMenuItem,
+    onPopExpand,
+  } = props;
 
   const { functionRefPayload, propertyRefPayload, templateRefPayload } = useLgEditorToolbarItems(
     lgTemplates ?? [],
@@ -106,8 +115,8 @@ export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
     []
   );
 
-  const fixedItems: ICommandBarItemProps[] = React.useMemo(
-    () => [
+  const fixedItems: ICommandBarItemProps[] = React.useMemo(() => {
+    const items = [
       {
         key: 'template',
         disabled: !templateRefPayload?.data?.templates?.length,
@@ -134,16 +143,18 @@ export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
         key: 'function',
         commandBarButtonAs: () => <TooltipFunctionButton key="function" payload={functionRefPayload} />,
       },
-    ],
-    [
-      TooltipTemplateButton,
-      TooltipPropertyButton,
-      TooltipFunctionButton,
-      templateRefPayload,
-      propertyRefPayload,
-      functionRefPayload,
-    ]
-  );
+    ];
+
+    return items.filter(({ key }) => !excludedToolbarItems?.includes(key as ToolbarButtonPayload['kind']));
+  }, [
+    TooltipTemplateButton,
+    TooltipPropertyButton,
+    TooltipFunctionButton,
+    templateRefPayload,
+    propertyRefPayload,
+    functionRefPayload,
+    excludedToolbarItems,
+  ]);
 
   const moreItems = React.useMemo(
     () =>

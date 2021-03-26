@@ -61,7 +61,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (typeof onFocus === 'function') {
       e.stopPropagation();
-      onFocus(id, value);
+      onFocus(id, value, e);
     }
   };
 

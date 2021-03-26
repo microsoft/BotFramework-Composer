@@ -24,7 +24,7 @@ import { computeRequiredEdits } from '../utils/lgUtils';
 import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry } from '../utils/lspUtil';
 import { withTooltip } from '../utils/withTooltip';
 
-import { LgEditorToolbar as DefaultLgEditorToolbar } from './LgEditorToolbar';
+import { FieldToolbar as DefaultLgEditorToolbar } from './LgEditorToolbar';
 import { ToolbarButtonPayload } from './types';
 
 const placeholder = formatMessage(

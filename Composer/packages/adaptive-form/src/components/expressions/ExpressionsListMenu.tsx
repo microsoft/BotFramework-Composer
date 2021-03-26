@@ -1,62 +1,96 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ContextualMenu, DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
-import React, { useCallback, useMemo } from 'react';
-import { builtInFunctionsGrouping, getBuiltInFunctionInsertText } from '@bfc/built-in-functions';
-
-import { expressionGroupingsToMenuItems } from './utils/expressionsListMenuUtils';
-
-const componentMaxHeight = 400;
+import { DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
+import React from 'react';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { LgEditorToolbar } from '@bfc/code-editor/lib/lg/LgEditorToolbar';
+import { useShellApi } from '@bfc/extension-client';
 
 type ExpressionsListMenuProps = {
-  onExpressionSelected: (expression: string) => void;
-  onMenuMount: (menuContainerElms: HTMLDivElement[]) => void;
+  container: HTMLDivElement | null;
+  target: HTMLInputElement | HTMLTextAreaElement | null;
+  clearTarget: () => void;
+  value?: string;
+  onChange: (expression: string) => void;
 };
+
 export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
-  const { onExpressionSelected, onMenuMount } = props;
+  const { clearTarget, container, target, value = '', onChange } = props;
+  const { projectId, shellApi } = useShellApi();
 
-  const containerRef = React.createRef<HTMLDivElement>();
+  const [memoryVariables, setMemoryVariables] = React.useState<string[] | undefined>();
 
-  const onExpressionKeySelected = useCallback(
-    (key) => {
-      const insertText = getBuiltInFunctionInsertText(key);
-      onExpressionSelected('= ' + insertText);
+  React.useEffect(() => {
+    const abortController = new AbortController();
+    (async () => {
+      try {
+        const variables = await shellApi.getMemoryVariables(projectId, { signal: abortController.signal });
+        setMemoryVariables(variables);
+      } catch (e) {
+        // error can be due to abort
+      }
+    })();
+  }, [projectId]);
+
+  React.useEffect(() => {
+    const keyDownHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        clearTarget();
+      }
+    };
+
+    const focusHandler = (e: FocusEvent) => {
+      if (container?.contains(e.target as Node)) {
+        return;
+      }
+
+      if (
+        !e
+          .composedPath()
+          .filter((n) => n instanceof Element)
+          .map((n) => (n as Element).className)
+          .some((c) => c.indexOf('js-lg-toolbar-menu') !== -1)
+      ) {
+        clearTarget();
+      }
+    };
+
+    document.addEventListener('focusin', focusHandler);
+    document.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      document.removeEventListener('focusin', focusHandler);
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, [clearTarget, container]);
+
+  const onSelectToolbarMenuItem = React.useCallback(
+    (text: string) => {
+      if (typeof target?.selectionStart === 'number') {
+        const start = target.selectionStart;
+        const end = typeof target?.selectionEnd === 'number' ? target.selectionEnd : target.selectionStart;
+
+        const updatedItem = [value.slice(0, start), text, value.slice(end)].join('');
+        onChange(updatedItem);
+
+        setTimeout(() => {
+          target.setSelectionRange(updatedItem.length, updatedItem.length);
+        }, 0);
+      }
+
+      target?.focus();
     },
-    [onExpressionSelected]
+    [target, value, onChange]
   );
-
-  const onLayerMounted = useCallback(() => {
-    const elms = document.querySelectorAll<HTMLDivElement>('.ms-ContextualMenu-Callout');
-    onMenuMount(Array.prototype.slice.call(elms));
-  }, [onMenuMount]);
-
-  const menuItems = useMemo(
-    () =>
-      expressionGroupingsToMenuItems(
-        builtInFunctionsGrouping,
-        onExpressionKeySelected,
-        onLayerMounted,
-        componentMaxHeight
-      ),
-    [onExpressionKeySelected, onLayerMounted]
-  );
-
-  return (
-    <div ref={containerRef}>
-      <ContextualMenu
-        calloutProps={{
-          onLayerMounted: onLayerMounted,
-        }}
-        directionalHint={DirectionalHint.bottomLeftEdge}
-        hidden={false}
-        items={menuItems}
-        shouldFocusOnMount={false}
-        styles={{
-          container: { maxHeight: componentMaxHeight },
-        }}
-        target={containerRef}
+  return target ? (
+    <Callout directionalHint={DirectionalHint.topLeftEdge} gapSpace={2} isBeakVisible={false} target={target}>
+      <LgEditorToolbar
+        key="lg-toolbar"
+        excludedToolbarItems={['template']}
+        properties={memoryVariables}
+        onSelectToolbarMenuItem={onSelectToolbarMenuItem}
       />
-    </div>
-  );
+    </Callout>
+  ) : null;
 };

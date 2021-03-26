@@ -14,7 +14,7 @@ import * as React from 'react';
 import { ItemWithTooltip } from '../components/ItemWithTooltip';
 
 import { jsLgToolbarMenuClassName } from './constants';
-import { LgEditorToolbar, LgEditorToolbarProps } from './LgEditorToolbar';
+import { FieldToolbar, FieldToolbarProps } from './LgEditorToolbar';
 
 const menuItemStyles = {
   fontSize: FluentTheme.fonts.small.fontSize,
@@ -26,7 +26,7 @@ const ssmlHeaderTooltipProps = { calloutProps: { layerProps: { className: jsLgTo
 
 export type SSMLTagType = 'break' | 'prosody' | 'audio';
 
-type Props = Omit<LgEditorToolbarProps, 'moreMenuItems'> & {
+type Props = Omit<FieldToolbarProps, 'moreMenuItems'> & {
   onInsertSSMLTag: (tagType: SSMLTagType) => void;
 };
 
@@ -72,5 +72,5 @@ export const LgSpeechModalityToolbar = React.memo((props: Props) => {
     subMenuProps,
   ]);
 
-  return <LgEditorToolbar {...restProps} moreToolbarItems={moreToolbarItems} />;
+  return <FieldToolbar {...restProps} moreToolbarItems={moreToolbarItems} />;
 });

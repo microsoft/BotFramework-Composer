@@ -68,23 +68,25 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
-  const [expressionsListContainerElements, setExpressionsListContainerElements] = useState<HTMLDivElement[]>([]);
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const [target, setTarget] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
-  const completionListOverrideResolver = (value: string) => {
-    return value === '=' ? (
-      <ExpressionsListMenu
-        onExpressionSelected={(expression: string) => onChange(expression)}
-        onMenuMount={(refs) => {
-          setExpressionsListContainerElements(refs);
-        }}
-      />
-    ) : null;
-  };
+  const focus = React.useCallback(
+    (id: string, value?: string, event?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      if (event?.target) {
+        event.stopPropagation();
+        setTarget(event.target as HTMLInputElement | HTMLTextAreaElement);
+      }
+    },
+    []
+  );
+
+  const clearTarget = React.useCallback(() => {
+    setTarget(null);
+  }, []);
 
   return (
     <Intellisense
-      completionListOverrideContainerElements={expressionsListContainerElements}
-      completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
@@ -102,18 +104,28 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
         onKeyUpTextField,
         onClickTextField,
       }) => (
-        <StringField
-          {...props}
-          cursorPosition={cursorPosition}
-          focused={focused}
-          id={id}
-          value={textFieldValue}
-          onBlur={noop} // onBlur managed by Intellisense
-          onChange={(newValue) => onValueChanged(newValue || '')}
-          onClick={onClickTextField}
-          onKeyDown={onKeyDownTextField}
-          onKeyUp={onKeyUpTextField}
-        />
+        <div ref={(ref) => setContainer(ref)}>
+          <StringField
+            {...props}
+            cursorPosition={cursorPosition}
+            focused={focused}
+            id={id}
+            value={textFieldValue}
+            onBlur={noop} // onBlur managed by Intellisense
+            onChange={(newValue) => onValueChanged(newValue || '')}
+            onClick={onClickTextField}
+            onFocus={focus}
+            onKeyDown={onKeyDownTextField}
+            onKeyUp={onKeyUpTextField}
+          />
+          <ExpressionsListMenu
+            clearTarget={clearTarget}
+            container={container}
+            target={target}
+            value={textFieldValue}
+            onChange={onChange}
+          />
+        </div>
       )}
     </Intellisense>
   );

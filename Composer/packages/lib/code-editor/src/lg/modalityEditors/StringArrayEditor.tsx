@@ -11,7 +11,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
 import { jsLgToolbarMenuClassName } from '../constants';
-import { LgEditorToolbar } from '../LgEditorToolbar';
+import { FieldToolbar } from '../LgEditorToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
 import { ToolbarButtonPayload } from '../types';
 
@@ -284,7 +284,7 @@ export const StringArrayEditor = React.memo(
             onSelectToolbarMenuItem={onSelectToolbarMenuItem}
           />
         ) : (
-          <LgEditorToolbar
+          <FieldToolbar
             key="lg-toolbar"
             lgTemplates={lgTemplates}
             properties={memoryVariables}
