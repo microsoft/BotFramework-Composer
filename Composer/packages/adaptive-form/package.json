@@ -32,9 +32,11 @@
     "@types/react": "16.9.23"
   },
   "dependencies": {
-    "@bfc/built-in-functions": "*","@bfc/code-editor": "*",
+    "@bfc/built-in-functions": "*",
+    "@bfc/code-editor": "*",
     "@bfc/extension-client": "*",
-    "@bfc/intellisense": "*","@emotion/core": "^10.0.27",
+    "@bfc/intellisense": "*",
+    "@emotion/core": "^10.0.27",
     "lodash": "^4.17.19",
     "react-error-boundary": "^1.2.5"
   }
