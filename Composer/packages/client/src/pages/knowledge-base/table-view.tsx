@@ -149,7 +149,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [importingResourceQnAFile, setImportingResourceQnAFile] = useState<QnAFile | undefined>(undefined);
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<string>('');
-  const [creatQnAPairSettings, setCreatQnAPairSettings] = useState<{
+  const [createQnAPairSettings, setCreateQnAPairSettings] = useState<{
     groupKey: string;
     sectionIndex: number;
     item?: { Qustion: string; Answer: string };
@@ -224,7 +224,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    setCreatQnAPairSettings({ groupKey: '', sectionIndex: -1 });
+    setCreateQnAPairSettings({ groupKey: '', sectionIndex: -1 });
     removeQnAPairs({
       id: fileId,
       sectionId,
@@ -244,7 +244,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const { Question, Answer } = updatedItem;
     if (!Question || !Answer) return;
     const createdQnAPair = qnaUtil.generateQnAPair(Question, Answer);
-    setCreatQnAPairSettings({ groupKey: '', sectionIndex: -1 });
+    setCreateQnAPairSettings({ groupKey: '', sectionIndex: -1 });
     createQnAPairs({ id: fileId, content: createdQnAPair, projectId: actualProjectId });
   };
 
@@ -263,7 +263,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     newQnaSections.splice(insertPosition, 0, newItem);
     setQnASections(newQnaSections);
     setExpandedIndex(insertPosition);
-    setCreatQnAPairSettings({ groupKey: fileId, sectionIndex: insertPosition, item: { Answer: '', Qustion: '' } });
+    setCreateQnAPairSettings({ groupKey: fileId, sectionIndex: insertPosition, item: { Answer: '', Qustion: '' } });
   };
 
   const onCreateNewQuestion = (fileId, sectionId, content?: string) => {
@@ -329,7 +329,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const isImportedSource = containerId.endsWith(qnaSuffix(locale));
       const sourceUrl = isImportedSource && containerQnAFile && getQnAFileUrlOption(containerQnAFile);
       const isAllTab = dialogId === 'all';
-      const isCreatingQnA = creatQnAPairSettings.groupKey === containerId && creatQnAPairSettings.sectionIndex > -1;
+      const isCreatingQnA = createQnAPairSettings.groupKey === containerId && createQnAPairSettings.sectionIndex > -1;
       const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
         return (
           <IconButton
@@ -544,7 +544,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             item.fileId.endsWith(qnaSuffix(locale)) && !dialogId.endsWith(qnaSuffix(locale));
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           const isCreatingQnA =
-            item.fileId === creatQnAPairSettings.groupKey && index === creatQnAPairSettings.sectionIndex;
+            item.fileId === createQnAPairSettings.groupKey && index === createQnAPairSettings.sectionIndex;
 
           const addQuestionButton = (
             <ActionButton
@@ -592,15 +592,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         if ((!newValue && isOnlyQuestion) || !isChanged) return;
 
                         if (isCreatingQnA) {
-                          const creatingQnAItem = creatQnAPairSettings.item;
-                          const fileId = creatQnAPairSettings.groupKey;
+                          const creatingQnAItem = createQnAPairSettings.item;
+                          const fileId = createQnAPairSettings.groupKey;
                           if (!creatingQnAItem) return;
                           const updatedItem = {
                             ...creatingQnAItem,
                             Question: newValue,
                           };
-                          setCreatQnAPairSettings({
-                            ...creatQnAPairSettings,
+                          setCreateQnAPairSettings({
+                            ...createQnAPairSettings,
                             item: updatedItem,
                           });
                           onCreateNewQnAPairsEnd(fileId, updatedItem);
@@ -637,15 +637,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     }
 
                     if (isCreatingQnA) {
-                      const creatingQnAItem = creatQnAPairSettings.item;
-                      const fileId = creatQnAPairSettings.groupKey;
+                      const creatingQnAItem = createQnAPairSettings.item;
+                      const fileId = createQnAPairSettings.groupKey;
                       if (!creatingQnAItem) return;
                       const updatedItem = {
                         ...creatingQnAItem,
                         Question: newValue,
                       };
-                      setCreatQnAPairSettings({
-                        ...creatQnAPairSettings,
+                      setCreateQnAPairSettings({
+                        ...createQnAPairSettings,
                         item: updatedItem,
                       });
                       onCreateNewQnAPairsEnd(fileId, updatedItem);
@@ -678,7 +678,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           const isExpanded = expandedIndex === index;
           const isCreatingQnA =
-            item.fileId === creatQnAPairSettings.groupKey && index === creatQnAPairSettings.sectionIndex;
+            item.fileId === createQnAPairSettings.groupKey && index === createQnAPairSettings.sectionIndex;
 
           return (
             <div data-is-focusable css={formCell}>
@@ -705,15 +705,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   if (!newValue || !isChanged) return;
 
                   if (isCreatingQnA) {
-                    const creatingQnAItem = creatQnAPairSettings.item;
-                    const fileId = creatQnAPairSettings.groupKey;
+                    const creatingQnAItem = createQnAPairSettings.item;
+                    const fileId = createQnAPairSettings.groupKey;
                     if (!creatingQnAItem) return;
                     const updatedItem = {
                       ...creatingQnAItem,
                       Answer: newValue,
                     };
-                    setCreatQnAPairSettings({
-                      ...creatQnAPairSettings,
+                    setCreateQnAPairSettings({
+                      ...createQnAPairSettings,
                       item: updatedItem,
                     });
                     onCreateNewQnAPairsEnd(fileId, updatedItem);
@@ -829,13 +829,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
   useEffect(() => {
     if (groups) {
       const newGroup = [...groups];
-      const toExpandGroup = groups.find((g) => g.key === creatQnAPairSettings.groupKey);
+      const toExpandGroup = groups.find((g) => g.key === createQnAPairSettings.groupKey);
       if (toExpandGroup) {
         toExpandGroup.isCollapsed = false;
         setGroups(newGroup);
       }
     }
-  }, [creatQnAPairSettings]);
+  }, [createQnAPairSettings]);
 
   const onRenderDetailsHeader = useCallback(
     (props, defaultRender) => {
