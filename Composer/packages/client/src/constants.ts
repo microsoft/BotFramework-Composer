@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FeedName } from '@botframework-composer/types/src';
+import { FeedName, TeamsManifest, TeamsManifestObj } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -417,3 +417,45 @@ export const runtimeOptions: IDropdownOption[] = [
 ];
 
 export const onboardingDisabled = false;
+
+export const defaultTeamsManifest: TeamsManifest = {
+  $schema: 'https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json',
+  manifestVersion: '1.9',
+  version: '1.0.0',
+  id: '{BOT_APPID}',
+  packageName: 'com.microsoft.yourcompany.{BOTNAME}',
+  developer: {
+    name: '',
+    websiteUrl: '',
+    privacyUrl: '',
+    termsOfUseUrl: '',
+  },
+  icons: {
+    color: '',
+    outline: '',
+  },
+  name: {
+    short: '{BOTNAME}',
+    full: '{BOTNAME} full name goes here.',
+  },
+  description: {
+    short: 'Short description for {BOTNAME} goes here.',
+    full: 'Full description for {BOTNAME} goes here.',
+  },
+  accentColor: '#781EFC',
+  bots: [
+    {
+      botId: '{BOT_APPID}',
+      scopes: ['personal'],
+      supportsFiles: false,
+      isNotificationOnly: false,
+    },
+  ],
+  permissions: ['identity', 'messageTeamMembers'],
+  validDomains: ['token.botframework.com'],
+  webApplicationInfo: {
+    id: '{BOT_APPID}',
+    resource: 'https://token.botframework.com/.auth/web/redirect',
+  },
+  devicePermissions: ['notifications', 'openExternal'],
+};
