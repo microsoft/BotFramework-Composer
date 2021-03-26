@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from '@uifabric/styling';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -16,7 +16,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { DialogSetting } from '@botframework-composer/types';
+import { isAdaptiveRuntime } from '@bfc/shared';
 
 import {
   dispatcherState,
@@ -45,14 +45,6 @@ import {
 
 type RuntimeType = 'path' | 'command';
 
-/** Determine if a bot is configured to use the adaptive runtime vs the legacy runtime */
-export const isAdaptiveRuntime = (settings: DialogSetting): boolean => {
-  return (
-    settings?.runtime?.key === 'csharp-azurewebapp-v2' ||
-    (settings?.runtime?.key.match(/^adaptive-runtime/) ? true : false)
-  );
-};
-
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
   const botName = useRecoilValue(botDisplayNameState(projectId));
@@ -77,13 +69,12 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [templateKey, setTemplateKey] = useState('');
   const [runtimePath, setRuntimePath] = useState(settings.runtime?.path ?? '');
   const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime?.command ?? '');
-  const [isAdaptive, setIsAdaptive] = useState(false);
   const [usingCustomRuntime, setUsingCustomRuntime] = useState(settings.runtime?.customRuntime ?? false);
+  const isAdaptive = useMemo(isAdaptiveRuntime(settings), [settings]);
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
     if (projectId) getBoilerplateVersion(projectId);
-    setIsAdaptive(isAdaptiveRuntime(settings));
   }, [projectId]);
 
   useEffect(() => {
