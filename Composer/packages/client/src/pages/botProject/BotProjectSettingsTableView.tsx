@@ -16,7 +16,6 @@ import { ExternalService } from './ExternalService';
 import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
-import { DeleteBotButton } from './DeleteBotButton';
 import AdapterSection from './adapters/AdapterSection';
 import { SkillConfiguration } from './skill-configuration';
 
