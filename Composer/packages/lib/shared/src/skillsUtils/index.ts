@@ -100,3 +100,6 @@ export const isLocalhostUrl = (matchUrl: string) => {
 export const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
+
+export const isUsingAdaptiveRuntime = (runtime?: DialogSetting['runtime']): boolean =>
+  runtime?.key === 'csharp-azurewebapp-v2' || !!runtime?.key?.startsWith('adaptive-runtime-');
