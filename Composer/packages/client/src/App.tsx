@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { Header } from './components/Header';
 import { Announcement } from './components/AppComponents/Announcement';
 import { MainContainer } from './components/AppComponents/MainContainer';
-import { dispatcherState, userSettingsState } from './recoilModel';
+import { dispatcherState, userHasNodeInstalledState, userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
 import { NodeModal } from './components/CreationFlow/v2/NodeModal';
@@ -22,16 +22,25 @@ const Logger = () => {
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
-  const { fetchExtensions, fetchFeatureFlags } = useRecoilValue(dispatcherState);
-  const [showNodeModal, setShowNodeModal] = useState(true);
+  const userHasNode = useRecoilValue(userHasNodeInstalledState);
+
+  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion } = useRecoilValue(dispatcherState);
+  const [showNodeModal, setShowNodeModal] = useState(false);
   useEffect(() => {
     loadLocale(appLocale);
   }, [appLocale]);
 
   useEffect(() => {
+    checkNodeVersion();
     fetchExtensions();
     fetchFeatureFlags();
   }, []);
+
+  useEffect(() => {
+    if (!userHasNode) {
+      setShowNodeModal(true);
+    }
+  }, [userHasNode]);
 
   return (
     <Fragment key={appLocale}>

@@ -334,3 +334,8 @@ export const isWebChatPanelVisibleState = atom<boolean>({
   key: getFullyQualifiedKey('isWebChatPanelVisible'),
   default: false,
 });
+
+export const userHasNodeInstalledState = atom<boolean>({
+  key: getFullyQualifiedKey('userHasNodeInstalled'),
+  default: true,
+});
