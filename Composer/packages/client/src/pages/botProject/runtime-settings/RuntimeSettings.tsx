@@ -16,7 +16,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { isAdaptiveRuntime } from '@bfc/shared';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 
 import {
   dispatcherState,
@@ -70,7 +70,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [runtimePath, setRuntimePath] = useState(settings.runtime?.path ?? '');
   const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime?.command ?? '');
   const [usingCustomRuntime, setUsingCustomRuntime] = useState(settings.runtime?.customRuntime ?? false);
-  const isAdaptive = useMemo(isAdaptiveRuntime(settings), [settings]);
+  const isAdaptive = useMemo(isUsingAdaptiveRuntime(settings.runtime), [settings]);
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
