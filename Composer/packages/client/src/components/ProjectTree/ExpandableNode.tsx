@@ -27,7 +27,9 @@ const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) => css`
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
   }
   background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
-  ${isOpen ? 'list-style-type: "⏷";' : 'list-style-type: "⏵";'}
+  ${isOpen
+    ? `list-style-image: url(../../../../downTriangle.svg);`
+    : 'list-style-image: url(../../../../rightTriangle.svg);'}
 `;
 
 const nodeStyle = css`
