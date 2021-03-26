@@ -26,6 +26,7 @@ import { triggerNotSupported } from '../../utils/dialogValidator';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { getBaseName } from '../../utils/fileUtil';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -499,12 +500,41 @@ export const ProjectTree: React.FC<Props> = ({
       : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, 1);
   };
 
-  const renderLgImport = (item: LanguageFileImport, projectId: string): React.ReactNode => {
+  // flatten lg imports url is same to dialog, to match correct link need render it as dialog
+  const renderLgImportAsDialog = (item: LanguageFileImport, projectId: string): React.ReactNode => {
+    const link: TreeLink = {
+      projectId: rootProjectId,
+      skillId: projectId === rootProjectId ? undefined : projectId,
+      dialogId: getBaseName(item.id),
+      displayName: item.displayName ?? item.id,
+      diagnostics: [],
+      isRoot: false,
+      isRemote: false,
+    };
+
+    return (
+      <TreeItem
+        key={`lg_${item.id}`}
+        extraSpace={INDENT_PER_LEVEL}
+        icon={icons.DIALOG}
+        isActive={doesLinkMatch(link, selectedLink)}
+        isMenuOpen={isMenuOpen}
+        link={link}
+        menu={[]}
+        menuOpenCallback={setMenuOpen}
+        showErrors={options.showErrors}
+        textWidth={leftSplitWidth - TREE_PADDING}
+        onSelect={handleOnSelect}
+      />
+    );
+  };
+
+  const renderLgImport = (item: LanguageFileImport, projectId: string, dialogId: string): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
       lgFileId: item.id,
-      dialogId: 'all',
+      dialogId,
       displayName: item.displayName ?? item.id,
       diagnostics: [],
       isRoot: false,
@@ -532,17 +562,45 @@ export const ProjectTree: React.FC<Props> = ({
     return lgImportsByProjectByDialog[projectId][dialog.id]
       .filter((lgImport) => filterMatch(dialog.displayName) || filterMatch(lgImport.displayName))
       .map((lgImport) => {
-        return renderLgImport(lgImport, projectId);
+        return renderLgImport(lgImport, projectId, dialog.id);
       });
   };
 
-  const renderLuImport = (item: LanguageFileImport, projectId: string): React.ReactNode => {
+  const renderLuImportAsDialog = (item: LanguageFileImport, projectId: string): React.ReactNode => {
+    const link: TreeLink = {
+      projectId: rootProjectId,
+      skillId: projectId === rootProjectId ? undefined : projectId,
+      dialogId: getBaseName(item.id),
+      displayName: item.displayName ?? item.id,
+      diagnostics: [],
+      isRoot: false,
+      isRemote: false,
+    };
+
+    return (
+      <TreeItem
+        key={`lu_${item.id}`}
+        extraSpace={INDENT_PER_LEVEL}
+        icon={icons.DIALOG}
+        isActive={doesLinkMatch(link, selectedLink)}
+        isMenuOpen={isMenuOpen}
+        link={link}
+        menu={[]}
+        menuOpenCallback={setMenuOpen}
+        showErrors={options.showErrors}
+        textWidth={leftSplitWidth - TREE_PADDING}
+        onSelect={handleOnSelect}
+      />
+    );
+  };
+
+  const renderLuImport = (item: LanguageFileImport, projectId: string, dialogId: string): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
       luFileId: item.id,
       displayName: item.displayName ?? item.id,
-      dialogId: 'all',
+      dialogId,
       diagnostics: [],
       isRoot: false,
       isRemote: false,
@@ -569,7 +627,7 @@ export const ProjectTree: React.FC<Props> = ({
     return luImportsByProjectByDialog[projectId][dialog.id]
       .filter((luImport) => filterMatch(dialog.displayName) || filterMatch(luImport.displayName))
       .map((luImport) => {
-        return renderLuImport(luImport, projectId);
+        return renderLuImport(luImport, projectId, dialog.id);
       });
   };
 
@@ -586,8 +644,12 @@ export const ProjectTree: React.FC<Props> = ({
           );
     const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
 
-    const importedLgLinks = options.showLgImports ? lgImportsList.map((file) => renderLgImport(file, projectId)) : [];
-    const importedLuLinks = options.showLuImports ? luImportsList.map((file) => renderLuImport(file, projectId)) : [];
+    const importedLgLinks = options.showLgImports
+      ? lgImportsList.map((file) => renderLgImportAsDialog(file, projectId))
+      : [];
+    const importedLuLinks = options.showLuImports
+      ? luImportsList.map((file) => renderLuImportAsDialog(file, projectId))
+      : [];
 
     return [
       ...commonLink,
@@ -612,7 +674,6 @@ export const ProjectTree: React.FC<Props> = ({
               key={key}
               defaultState={getPageElement(key)}
               depth={startDepth}
-              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
               isActive={doesLinkMatch(dialogLink, selectedLink)}
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
@@ -626,7 +687,6 @@ export const ProjectTree: React.FC<Props> = ({
               key={key}
               defaultState={getPageElement(key)}
               depth={startDepth}
-              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
               isActive={doesLinkMatch(dialogLink, selectedLink)}
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
@@ -640,7 +700,6 @@ export const ProjectTree: React.FC<Props> = ({
               key={key}
               defaultState={getPageElement(key)}
               depth={startDepth}
-              detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
               isActive={doesLinkMatch(dialogLink, selectedLink)}
               summary={summaryElement}
               onToggle={(newState) => setPageElement(key, newState)}
