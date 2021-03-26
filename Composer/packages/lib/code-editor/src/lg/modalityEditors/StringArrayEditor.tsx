@@ -11,9 +11,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
 import { jsLgToolbarMenuClassName } from '../constants';
-import { FieldToolbar } from '../LgEditorToolbar';
+import { FieldToolbar } from '../../components/FieldToolbar/FieldToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
-import { ToolbarButtonPayload } from '../types';
+import { ToolbarButtonPayload } from '../../types';
 
 import { StringArrayItem } from './StringArrayItem';
 

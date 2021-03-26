@@ -23,9 +23,8 @@ import { LgCodeEditorProps } from '../types';
 import { computeRequiredEdits } from '../utils/lgUtils';
 import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry } from '../utils/lspUtil';
 import { withTooltip } from '../utils/withTooltip';
-
-import { FieldToolbar as DefaultLgEditorToolbar } from './LgEditorToolbar';
-import { ToolbarButtonPayload } from './types';
+import { FieldToolbar } from '../components/FieldToolbar/FieldToolbar';
+import { ToolbarButtonPayload } from '../types';
 
 const placeholder = formatMessage(
   `> To learn more about the LG file format, read the documentation at
@@ -64,7 +63,7 @@ const LgTemplateLink = withTooltip(
 
 const templateLinkTokens = { childrenGap: 4 };
 
-const LgEditorToolbar = styled(DefaultLgEditorToolbar)({
+const EditorToolbar = styled(FieldToolbar)({
   border: `1px solid ${NeutralColors.gray120}`,
   borderBottom: 'none',
 });
@@ -202,7 +201,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     <>
       <Stack verticalFill>
         {!toolbarHidden && (
-          <LgEditorToolbar
+          <EditorToolbar
             lgTemplates={lgTemplates}
             properties={memoryVariables}
             onPopExpand={

@@ -14,7 +14,7 @@ import * as React from 'react';
 import { ItemWithTooltip } from '../components/ItemWithTooltip';
 
 import { jsLgToolbarMenuClassName } from './constants';
-import { FieldToolbar, FieldToolbarProps } from './LgEditorToolbar';
+import { FieldToolbar, FieldToolbarProps } from '../components/FieldToolbar/FieldToolbar';
 
 const menuItemStyles = {
   fontSize: FluentTheme.fonts.small.fontSize,

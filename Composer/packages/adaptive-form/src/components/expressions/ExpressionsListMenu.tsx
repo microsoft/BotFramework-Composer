@@ -4,7 +4,7 @@
 import { DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
 import React from 'react';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { LgEditorToolbar } from '@bfc/code-editor/lib/lg/LgEditorToolbar';
+import { FieldToolbar } from '@bfc/code-editor';
 import { useShellApi } from '@bfc/extension-client';
 
 type ExpressionsListMenuProps = {
@@ -85,7 +85,7 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
   );
   return target ? (
     <Callout directionalHint={DirectionalHint.topLeftEdge} gapSpace={2} isBeakVisible={false} target={target}>
-      <LgEditorToolbar
+      <FieldToolbar
         key="lg-toolbar"
         excludedToolbarItems={['template']}
         properties={memoryVariables}

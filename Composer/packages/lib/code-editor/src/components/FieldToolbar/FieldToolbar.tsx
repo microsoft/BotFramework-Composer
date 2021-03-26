@@ -10,12 +10,12 @@ import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
 import * as React from 'react';
 import { createSvgIcon } from '@fluentui/react-icons';
 
-import { withTooltip } from '../utils/withTooltip';
+import { withTooltip } from '../../utils/withTooltip';
+import { jsLgToolbarMenuClassName } from '../../lg/constants';
+import { ToolbarButtonPayload } from '../../types';
+import { useEditorToolbarItems } from '../../hooks/useEditorToolbarItems';
 
-import { jsLgToolbarMenuClassName } from './constants';
-import { useLgEditorToolbarItems } from './hooks/useLgEditorToolbarItems';
 import { ToolbarButtonMenu } from './ToolbarButtonMenu';
-import { ToolbarButtonPayload } from './types';
 
 const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
 
@@ -75,7 +75,7 @@ const configureMenuProps = (props: IContextualMenuProps | undefined, className: 
 };
 
 export type FieldToolbarProps = {
-  excludedToolbarItems?: ToolbarButtonPayload['kind'];
+  excludedToolbarItems?: ToolbarButtonPayload['kind'][];
   lgTemplates?: readonly LgTemplate[];
   properties?: readonly string[];
   onSelectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void;
@@ -95,7 +95,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
     onPopExpand,
   } = props;
 
-  const { functionRefPayload, propertyRefPayload, templateRefPayload } = useLgEditorToolbarItems(
+  const { functionRefPayload, propertyRefPayload, templateRefPayload } = useEditorToolbarItems(
     lgTemplates ?? [],
     properties ?? [],
     onSelectToolbarMenuItem

@@ -20,20 +20,20 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import * as React from 'react';
 
-import { useNoSearchResultMenuItem } from '../hooks/useNoSearchResultMenuItem';
-import { useSearchableMenuListCallback } from '../hooks/useSearchableMenuListCallback';
-import { computePropertyItemTree, getAllNodes } from '../utils/lgUtils';
-import { withTooltip } from '../utils/withTooltip';
-
-import { jsLgToolbarMenuClassName } from './constants';
-import { PropertyTreeItem } from './PropertyTreeItem';
+import { useNoSearchResultMenuItem } from '../../hooks/useNoSearchResultMenuItem';
+import { useSearchableMenuListCallback } from '../../hooks/useSearchableMenuListCallback';
+import { computePropertyItemTree, getAllNodes } from '../../utils/fieldToolbarUtils';
+import { withTooltip } from '../../utils/withTooltip';
+import { jsLgToolbarMenuClassName } from '../../lg/constants';
 import {
   FunctionRefPayload,
   PropertyItem,
   PropertyRefPayload,
   TemplateRefPayload,
   ToolbarButtonPayload,
-} from './types';
+} from '../../types';
+
+import { PropertyTreeItem } from './PropertyTreeItem';
 
 // no op operation
 const noop = () => {};
