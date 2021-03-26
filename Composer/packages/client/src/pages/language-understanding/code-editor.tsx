@@ -153,18 +153,20 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         languageServer={{
           path: lspServerPath,
         }}
+        luFile={file}
         luOption={luOption}
         value={content}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
       />
     );
-  }, [luOption]);
+  }, [luOption, file]);
 
   const defaultLanguageFileEditor = useMemo(() => {
     return (
       <LuEditor
         editorSettings={userSettings.codeEditor}
+        luFile={defaultLangFile}
         luOption={{
           fileId: dialogId,
           luFeatures,
@@ -176,7 +178,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         onChange={() => {}}
       />
     );
-  }, [dialogId]);
+  }, [defaultLangFile, dialogId]);
 
   return (
     <Fragment>
