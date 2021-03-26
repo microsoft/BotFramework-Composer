@@ -16,4 +16,4 @@ export * from './QnAEditor';
 export * from './constants';
 export * from './utils/lgValidate';
 export * from './types';
-export * from './Components/FieldToolbar';
+export * from './components/toolbar';

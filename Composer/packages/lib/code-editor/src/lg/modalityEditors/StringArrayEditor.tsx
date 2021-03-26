@@ -11,7 +11,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
 import { jsLgToolbarMenuClassName } from '../constants';
-import { FieldToolbar } from '../../components/FieldToolbar/FieldToolbar';
+import { FieldToolbar } from '../../components/toolbar/FieldToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
 import { ToolbarButtonPayload } from '../../types';
 
@@ -315,6 +315,7 @@ export const StringArrayEditor = React.memo(
         )}
         {calloutTargetElement && (
           <Callout
+            doNotLayer
             directionalHint={DirectionalHint.topLeftEdge}
             gapSpace={2}
             isBeakVisible={false}

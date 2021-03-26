@@ -84,7 +84,13 @@ export const ExpressionsListMenu = (props: ExpressionsListMenuProps) => {
     [target, value, onChange]
   );
   return target ? (
-    <Callout directionalHint={DirectionalHint.topLeftEdge} gapSpace={2} isBeakVisible={false} target={target}>
+    <Callout
+      doNotLayer
+      directionalHint={DirectionalHint.topLeftEdge}
+      gapSpace={2}
+      isBeakVisible={false}
+      target={target}
+    >
       <FieldToolbar
         key="lg-toolbar"
         excludedToolbarItems={['template']}

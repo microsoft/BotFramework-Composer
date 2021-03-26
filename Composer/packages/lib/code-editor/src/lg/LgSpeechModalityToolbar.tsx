@@ -12,9 +12,9 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import * as React from 'react';
 
 import { ItemWithTooltip } from '../components/ItemWithTooltip';
+import { FieldToolbar, FieldToolbarProps } from '../components/toolbar/FieldToolbar';
 
 import { jsLgToolbarMenuClassName } from './constants';
-import { FieldToolbar, FieldToolbarProps } from '../components/FieldToolbar/FieldToolbar';
 
 const menuItemStyles = {
   fontSize: FluentTheme.fonts.small.fontSize,
