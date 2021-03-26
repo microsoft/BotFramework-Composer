@@ -224,6 +224,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
+  const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
 
@@ -356,11 +357,24 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      getSubscriptions(token).then((data) => {
-        if (isMounted.current) {
-          setSubscriptions(data);
-        }
-      });
+      setSubscriptionsErrorMessage(undefined);
+      getSubscriptions(token)
+        .then((data) => {
+          if (isMounted.current) {
+            setSubscriptions(data);
+            if (data.length === 0) {
+              setSubscriptionsErrorMessage(
+                formatMessage(
+                  'Your subscription list is empty, please add your subscription, or login with another account.'
+                )
+              );
+            }
+          }
+        })
+        .catch((err) => {
+          setSubscriptionsErrorMessage(err.message);
+        });
+
       getResources();
     }
   }, [token]);
@@ -657,10 +671,12 @@ export const AzureProvisionDialog: React.FC = () => {
             )}
           </form>
         )}
-        {choice.key === 'create' && loginErrorMsg !== '' && <div style={{ marginTop: '10px' }}> {loginErrorMsg} </div>}
-        {choice.key === 'create' && currentUser && subscriptionOption?.length < 1 && (
-          <div style={{ marginTop: '10px' }}>
-            Your subscription list is empty, please add your subscription, or login with another account.
+        {choice.key === 'create' && loginErrorMsg !== '' && (
+          <div style={{ marginTop: '10px', color: FluentTheme.semanticColors.errorText }}> {loginErrorMsg} </div>
+        )}
+        {choice.key === 'create' && currentUser && subscriptionsErrorMessage && (
+          <div style={{ marginTop: '10px', color: FluentTheme.semanticColors.errorText }}>
+            {subscriptionsErrorMessage}
           </div>
         )}
       </Suspense>
