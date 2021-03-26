@@ -75,11 +75,11 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
   const { updateCurrentTarget } = useRecoilValue(dispatcherState);
   const [endpointUrl, setEndpointUrl] = useState<string>();
   const [appId, setAppId] = useState<string>();
-  const { endpoints, ...rest } = value;
-  const { id } = manifest;
+  const { id, content } = manifest;
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
+  const { ...rest } = content;
   const updateCurrentProfile = useMemo(
     () => (_e, option?: IDropdownOption) => {
       const target = publishingTargets.find((t) => {
@@ -91,17 +91,21 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
         const config = JSON.parse(target.configuration);
         setEndpointUrl(`https://${config.hostname}.azurewebsites.net`);
         setAppId(config.settings.MicrosoftAppId);
-        onChange({
-          ...rest,
-          endpoints: [
-            {
-              protocol: 'BotFrameworkV3',
-              name: option?.key,
-              endpointUrl: `https://${config.hostname}.azurewebsites.net/api/messages`,
-              description: '<description>',
-              msAppId: config.settings.MicrosoftAppId,
-            },
-          ],
+
+        setSkillManifest({
+          content: {
+            ...rest,
+            endpoints: [
+              {
+                protocol: 'BotFrameworkV3',
+                name: option?.key,
+                endpointUrl: `https://${config.hostname}.azurewebsites.net/api/messages`,
+                description: '<description>',
+                msAppId: config.settings.MicrosoftAppId,
+              },
+            ],
+          },
+          id: id,
         });
       }
     },

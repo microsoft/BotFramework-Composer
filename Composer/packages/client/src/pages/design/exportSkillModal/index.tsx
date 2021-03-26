@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -53,9 +53,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const currentTarget = useRecoilValue(currentTargetState(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
-  const { publishToTarget, addNotification } = useRecoilValue(dispatcherState);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [clickPublish, setclickPublish] = useState(false);
 
   const [editingId, setEditingId] = useState<string>();
   const [currentStep, setCurrentStep] = useState(0);
@@ -63,7 +60,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [schema, setSchema] = useState<JSONSchema7>({});
 
   const [skillManifest, setSkillManifest] = useState<Partial<SkillManifestFile>>({});
-
   const { content = {}, id } = skillManifest;
 
   const [selectedDialogs, setSelectedDialogs] = useState<any[]>([]);
@@ -119,8 +115,20 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   };
 
   const handleSave = () => {
-    if (skillManifest.content && skillManifest.id) {
-      updateSkillManifest(skillManifest as SkillManifestFile, projectId);
+    const manifest = generateSkillManifest(
+      schema,
+      skillManifest,
+      dialogs,
+      dialogSchemas,
+      luFiles,
+      qnaFiles,
+      selectedTriggers,
+      selectedDialogs,
+      currentTarget,
+      projectId
+    );
+    if (manifest.content && manifest.id) {
+      updateSkillManifest(manifest as SkillManifestFile, projectId);
     }
   };
 
