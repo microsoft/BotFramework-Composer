@@ -65,7 +65,7 @@ const Row = styled(Stack)({
 type ItemProps = {
   value: string;
   onBlur: () => void;
-  onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string) => void;
+  onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
   onRemove: () => void;
 };
 
