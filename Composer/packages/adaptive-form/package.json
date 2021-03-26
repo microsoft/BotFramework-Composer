@@ -30,15 +30,9 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "@bfc/code-editor": "*",
-    "@bfc/extension-client": "*",
-    "@bfc/intellisense": "*",
     "@botframework-composer/test-utils": "*",
     "@types/lodash": "^4.14.149",
-    "@types/react": "16.9.23",
-    "format-message": "^6.2.3",
-    "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "@types/react": "16.9.23"
   },
   "dependencies": {
     "@emotion/core": "^10.0.27",

@@ -68,8 +68,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
-  const containerElm = React.useRef<HTMLDivElement | null>(null);
-  // const [containerElm, setContainerElm] = useState<HTMLDivElement | null>(null);
+  const [containerElm, setContainerElm] = useState<HTMLDivElement | null>(null);
   const [toolbarTargetElm, setToolbarTargetElm] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   const focus = React.useCallback(
@@ -105,7 +104,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
         onKeyUpTextField,
         onClickTextField,
       }) => (
-        <div ref={containerElm}>
+        <div ref={setContainerElm}>
           <StringField
             {...props}
             cursorPosition={cursorPosition}
@@ -120,7 +119,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
             onKeyUp={onKeyUpTextField}
           />
           <ExpressionsListMenu
-            container={containerElm.current}
+            container={containerElm}
             target={toolbarTargetElm}
             value={textFieldValue}
             onChange={onChange}
