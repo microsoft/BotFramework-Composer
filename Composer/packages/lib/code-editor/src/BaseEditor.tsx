@@ -110,7 +110,7 @@ export interface BaseEditorProps extends EditorProps {
   helpURL?: string;
   hidePlaceholder?: boolean;
   id?: string;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string, isFlush?: boolean) => void;
   onInit?: OnInit;
   placeholder?: string;
   value?: string;
@@ -192,10 +192,10 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   useEffect(() => {
     if (editorRef.current) {
-      const disposable = editorRef.current.onDidChangeModelContent(() => {
+      const disposable = editorRef.current.onDidChangeModelContent((e) => {
         if (editorRef.current) {
           const newValue = editorRef.current.getValue();
-          setTimeout(() => onChange(newValue), 0);
+          setTimeout(() => onChange(newValue, e.isFlush), 0);
         }
       });
 

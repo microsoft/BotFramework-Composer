@@ -7,6 +7,7 @@ import fs from 'fs';
 import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import {
   getNewDesigner,
   FileInfo,
@@ -47,9 +48,6 @@ const oauthInput = () => ({
 });
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
-
-const isUsingAdaptiveRuntime = (runtime?: DialogSetting['runtime']): boolean =>
-  runtime?.key === 'csharp-azurewebapp-v2' || runtime?.key === 'adaptive-runtime-dotnet-webapp';
 export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
