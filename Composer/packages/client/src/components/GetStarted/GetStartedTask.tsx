@@ -19,8 +19,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
   return (
     <div css={{ marginBottom: 20 }}>
       <ActionButton
-        iconProps={{ iconName: icon }}
-        id={props.step.key}
+        iconProps={{ iconName: icon, id: props.step.key }}
         styles={{
           root: { display: 'block', fontSize: 16 },
           icon: {

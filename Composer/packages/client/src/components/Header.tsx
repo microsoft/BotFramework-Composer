@@ -152,6 +152,7 @@ export const Header = () => {
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
+  const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
@@ -193,6 +194,16 @@ export const Header = () => {
     hideTeachingBubble();
     setShowGetStarted(newvalue);
   };
+
+  // pop out
+  useEffect(() => {
+    if (window.location.hash === '#getstarted') {
+      setshowGetStartedTeachingBubble(true);
+      setShowGetStarted(true);
+    } else {
+      setshowGetStartedTeachingBubble(false);
+    }
+  }, [window.location.hash]);
 
   useEffect(() => {
     if (isWebChatPanelVisible) {
@@ -394,6 +405,7 @@ export const Header = () => {
           isOpen={showGetStarted}
           requiresLUIS={requiresLUIS}
           requiresQNA={requiresQNA}
+          showTeachingBubble={showGetStartedTeachingBubble}
           onDismiss={() => {
             toggleGetStarted(false);
           }}

@@ -13,6 +13,7 @@ import { GetStartedLearn } from './GetStartedLearn';
 
 type GetStartedProps = {
   isOpen: boolean;
+  showTeachingBubble: boolean;
   requiresLUIS: boolean;
   requiresQNA: boolean;
   onDismiss: () => void;
@@ -41,7 +42,11 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
     return (
       <Pivot styles={{ root: { paddingLeft: 20, paddingTop: 10, width: '100%' } }}>
         <PivotItem headerText={formatMessage('Next steps')}>
-          <GetStartedNextSteps requiresLUIS={props.requiresLUIS} requiresQNA={props.requiresQNA} />
+          <GetStartedNextSteps
+            requiresLUIS={props.requiresLUIS}
+            requiresQNA={props.requiresQNA}
+            showTeachingBubble={props.showTeachingBubble}
+          />
         </PivotItem>
         <PivotItem headerText={formatMessage('Learning')}>
           <GetStartedLearn />

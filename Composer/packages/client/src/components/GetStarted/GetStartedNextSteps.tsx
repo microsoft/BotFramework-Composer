@@ -24,6 +24,7 @@ import { h3Style } from './styles';
 type GetStartedProps = {
   requiresLUIS: boolean;
   requiresQNA: boolean;
+  showTeachingBubble: boolean;
 };
 
 export type NextSteps = {
@@ -148,9 +149,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       });
     }
     setRequiredNextSteps(newNextSteps);
-    // if (newNextSteps.length && newNextSteps[0].highlight) {
-    //   newNextSteps[0].highlight();
-    // }
+
+    if (props.showTeachingBubble && newNextSteps.length && newNextSteps[0].highlight) {
+      newNextSteps[0].highlight();
+    }
 
     if (!hasPublishingProfile) {
       newRecomendedSteps.push({
@@ -247,20 +249,20 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             setHighlightLUIS(false);
           }}
         >
-          {formatMessage('Finish setting up your development environment by adding LUIS...')}
+          {formatMessage('Continue setting up your development environment by adding LUIS keys.')}
         </TeachingBubble>
       )}
 
       {highlightQNA && (
         <TeachingBubble
           hasCondensedHeadline
-          headline={formatMessage('Your new bot is almost ready!')}
+          headline={formatMessage('Almost there!')}
           target="#qna"
           onDismiss={() => {
             setHighlightQNA(false);
           }}
         >
-          {formatMessage('Finish setting up your development environment by adding QnA Maker...')}
+          {formatMessage("Just add a QnA key and you'll be ready to talk to your bot.")}
         </TeachingBubble>
       )}
 
