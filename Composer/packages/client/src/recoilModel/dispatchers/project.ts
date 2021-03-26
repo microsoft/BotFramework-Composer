@@ -226,16 +226,19 @@ export const projectDispatcher = () => {
 
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
-        const { profile, source, alias } = absData;
 
         // ABS open Flow, update publishProfile & set alias for project after open project
-        if (profile && alias) {
-          const dispatcher = await snapshot.getPromise(dispatcherState);
-          const newProfile = await getPublishProfileFromPayload(profile, source);
+        if (absData) {
+          const { profile, source, alias } = absData;
 
-          newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+          if (profile && alias) {
+            const dispatcher = await snapshot.getPromise(dispatcherState);
+            const newProfile = await getPublishProfileFromPayload(profile, source);
 
-          await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
+            newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+
+            await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
+          }
         }
 
         // Post project creation
