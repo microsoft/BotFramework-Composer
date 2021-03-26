@@ -13,6 +13,9 @@ jest.mock('axios', () => ({
   create: jest.fn().mockReturnThis(),
   get: jest.fn(),
   request: jest.fn(),
+  interceptors: {
+    request: { use: jest.fn() },
+  },
 }));
 
 function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
