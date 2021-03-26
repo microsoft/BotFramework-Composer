@@ -224,6 +224,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    setCreatQnAPairSettings({ groupKey: '', sectionIndex: -1 });
     removeQnAPairs({
       id: fileId,
       sectionId,
