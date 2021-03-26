@@ -3,11 +3,10 @@
 
 import { css } from '@emotion/core';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-
-import { palette } from '../../palette';
+import { FluentTheme } from '@uifabric/fluent-theme';
 
 export const content = css`
-  color: ${palette.white};
+  color: ${FluentTheme.palette.white};
   display: flex;
   padding: 10px;
   justify-content: space-between;
@@ -16,20 +15,20 @@ export const content = css`
 
 export const buttonStyles: IButtonStyles = {
   icon: {
-    color: palette.white,
+    color: FluentTheme.palette.white,
   },
   root: {
     selectors: {
       ':hover .ms-Button-icon': {
-        background: palette.themeDarkAlt,
-        color: palette.white,
+        background: FluentTheme.palette.themeDarkAlt,
+        color: FluentTheme.palette.white,
       },
       ':active .ms-Button-icon': {
-        background: palette.themeDark,
-        color: palette.white,
+        background: FluentTheme.palette.themeDark,
+        color: FluentTheme.palette.white,
       },
     },
   },
-  rootHovered: { backgroundColor: palette.themeDarkAlt },
-  rootPressed: { backgroundColor: palette.themeDark },
+  rootHovered: { backgroundColor: FluentTheme.palette.themeDarkAlt },
+  rootPressed: { backgroundColor: FluentTheme.palette.themeDark },
 };

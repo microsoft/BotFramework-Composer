@@ -85,9 +85,9 @@ export const PVADialog: FC = () => {
     if (tenantId) {
       // get environments for tenant id
       const url = `${BASE_URL}/environments`;
-      const fetchEnvs = async () => {
+      const fetchEnvs = async (headers) => {
         setFetchingEnvironments(true);
-        const res = await fetch(url, { method: 'GET', headers: pvaHeaders });
+        const res = await fetch(url, { method: 'GET', headers });
         const envs = await res.json();
         setFetchingEnvironments(false);
         setEnvs(envs);
@@ -95,7 +95,7 @@ export const PVADialog: FC = () => {
           setEnv(envs[0].id);
         }
       };
-      fetchEnvs();
+      fetchEnvs(pvaHeaders);
     }
   }, [tenantId, token, pvaHeaders]);
 
@@ -119,10 +119,9 @@ export const PVADialog: FC = () => {
   useEffect(() => {
     if (env) {
       // get bots for environment
-      const url = `${BASE_URL}/environments/${encodeURIComponent(env)}/bots`;
-      const fetchBots = async () => {
+      const fetchBots = async (url, headers) => {
         setFetchingBots(true);
-        const res = await fetch(url, { method: 'GET', headers: pvaHeaders });
+        const res = await fetch(url, { method: 'GET', headers });
         const bots = await res.json();
         setFetchingBots(false);
         setBots(bots);
@@ -132,7 +131,8 @@ export const PVADialog: FC = () => {
           setBot(undefined);
         }
       };
-      fetchBots();
+      const url = `${BASE_URL}/environments/${encodeURIComponent(env)}/bots`;
+      fetchBots(url, pvaHeaders);
     }
   }, [env, pvaHeaders]);
 
@@ -145,7 +145,7 @@ export const PVADialog: FC = () => {
   }, [env, bot, tenantId]);
 
   const onSave = useCallback(() => {
-    savePublishConfig({ botId: (bot || {}).id, envId: env, tenantId, deleteMissingComponents: true });
+    savePublishConfig({ botId: bot?.id, envId: env, tenantId, deleteMissingComponents: true });
     closeDialog();
   }, [env, bot, tenantId]);
 
@@ -186,7 +186,7 @@ export const PVADialog: FC = () => {
         );
       }
     }
-  }, [loggedIn, fetchingEnvironments, envs]);
+  }, [loggedIn, fetchingEnvironments, envs, onSelectEnv]);
 
   const botPicker = useMemo(() => {
     if (loggedIn && !fetchingEnvironments && env) {
@@ -221,7 +221,7 @@ export const PVADialog: FC = () => {
         );
       }
     }
-  }, [loggedIn, fetchingEnvironments, env, fetchingBots, bots]);
+  }, [loggedIn, fetchingEnvironments, env, fetchingBots, bots, onSelectBot]);
 
   const loginSplash = useMemo(() => {
     if (!loggedIn) {
@@ -281,7 +281,7 @@ export const PVADialog: FC = () => {
         </Stack>
       );
     }
-  }, [loggedIn, loggingIn]);
+  }, [loggedIn, loggingIn, login]);
 
   const buttonBar = useMemo(() => {
     if (loggedIn) {
@@ -305,7 +305,7 @@ export const PVADialog: FC = () => {
         </div>
       );
     }
-  }, [configIsValid, loggedIn]);
+  }, [configIsValid, loggedIn, onBack, onSave]);
 
   return (
     <div style={root}>
