@@ -98,17 +98,29 @@ export const copySourceQnAFilesOnOtherLocales = (
   for (let i = 0; i < originalSourceQnAFiles.length; i++) {
     //source.{locale}.qna
     const newSourceQnAFileIds = locales.map((l) => `${originalSourceQnAFiles[i].id}.${l}`);
+    const createdFile = qnaUtil.parse('dummyId', originalSourceQnAFiles[i].content);
     for (let j = 0; j < newSourceQnAFileIds.length; j++) {
-      const createdFile = qnaUtil.parse(newSourceQnAFileIds[j], originalSourceQnAFiles[i].content);
-      if (!qnaFiles.find((f) => f.id === createdFile.id)) {
-        createFile(projectId, `${createdFile.id}.qna`, createdFile.content);
-        createdFiles.push(createdFile);
+      if (!qnaFiles.find((f) => f.id === newSourceQnAFileIds[j])) {
+        createFile(projectId, `${newSourceQnAFileIds[j]}.qna`, createdFile.content);
+        createdFiles.push({
+          ...createdFile,
+          id: newSourceQnAFileIds[j],
+        });
       }
     }
     deleteFile(projectId, `${originalSourceQnAFiles[i].id}.qna`);
   }
   qnaFiles.push(...createdFiles);
   return qnaFiles.filter((f) => !f.id.endsWith('.source'));
+};
+
+//migrate first and second version of qna files to the lastest design
+export const migrateQnAFiles = (projectId: string, qnaFiles: QnAFile[], locales: string[]): QnAFile[] => {
+  // migrate script move qna pairs in *.qna to *-manual.source.qna.
+  const updateQnAFiles1 = reformQnAToContainerKB(projectId, qnaFiles, locales);
+  // copy source qna file on other locales including  *-manual.source.qna
+  const updateQnAFiles2 = copySourceQnAFilesOnOtherLocales(projectId, updateQnAFiles1, locales);
+  return updateQnAFiles2;
 };
 
 export const getQnAFileUrlOption = (file: QnAFile): string | undefined => {

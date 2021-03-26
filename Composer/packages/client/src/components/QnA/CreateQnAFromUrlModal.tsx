@@ -57,15 +57,7 @@ const DialogTitle = () => {
 };
 
 const hasErrors = (errors: CreateQnAFromUrlFormDataErrors) => {
-  for (let i = 0; i < errors.urls.length; i++) {
-    if (errors.urls[i]) {
-      return true;
-    }
-  }
-  if (errors.name) {
-    return true;
-  }
-  return false;
+  return !!errors.name || errors.urls.some((e) => !!e);
 };
 
 const initializeLocales = (locales: string[], defaultLocale: string) => {
@@ -200,7 +192,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
             placeholder={formatMessage('Type a name that describes this content')}
             styles={textFieldKBNameFromUrl}
             value={formData.name}
-            onChange={(e, name = '') => onChangeNameField(name)}
+            onChange={(e, name) => onChangeNameField(name)}
           />
           <Text styles={knowledgeBaseStyle}>{formatMessage('Knowledge base')}</Text>
           {formData.locales.map((locale, i) => {
