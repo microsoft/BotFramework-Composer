@@ -57,7 +57,6 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
       </div>
       <SkillConfiguration projectId={projectId} />
-      {isRootBot && <DeleteBotButton projectId={projectId} scrollToSectionId={scrollToSectionId} />}
     </div>
   );
 };
