@@ -177,7 +177,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   };
 
   const navigateToLgPage = useCallback(
-    (lgFileId: string, options?: { templateId: string; line: number }) => {
+    (lgFileId: string, options?: { templateId: string | undefined; line: number | undefined }) => {
       // eslint-disable-next-line security/detect-non-literal-regexp
       const pattern = new RegExp(`.${locale}`, 'g');
       const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
@@ -186,8 +186,9 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         : `/bot/${actualProjectId}/language-generation/${fileId}`;
       if (options?.line) {
         url = url + `/edit#L=${options.line}`;
+      } else if (options?.templateId) {
+        url = url + `/edit?t=${options.templateId}`;
       }
-
       navigateTo(url);
     },
     [actualProjectId, locale]
