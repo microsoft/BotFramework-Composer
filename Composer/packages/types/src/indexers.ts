@@ -295,6 +295,7 @@ export type RecognizerFile = {
   id: string;
   content: {
     $kind: SDKKinds;
+    [key: string]: any;
   };
 };
 

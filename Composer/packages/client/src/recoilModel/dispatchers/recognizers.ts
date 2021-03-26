@@ -27,6 +27,19 @@ export const recognizerDispatcher = () => {
           id.split('.')[0] === dialogId && LuProviderRecognizer.includes(content.$kind) && content.$kind !== kind
       );
 
+      const mutlilangRecognizer = recognizers.find(
+        ({ id, content }) => id.split('.')[0] === dialogId && content.$kind === SDKKinds.MultiLanguageRecognizer
+      );
+
+      if (mutlilangRecognizer) {
+        const { id, content } = mutlilangRecognizer;
+        const key = kind === SDKKinds.OrchestratorRecognizer ? 'ORCHESTRATOR' : 'LUIS';
+        set(recognizerState({ projectId, id }), {
+          content: { ...content, id: `${key}_${id.replace('.lu.dialog', '')}` },
+          id,
+        });
+      }
+
       updates.forEach(({ id }) => {
         set(recognizerState({ projectId, id }), {
           id,

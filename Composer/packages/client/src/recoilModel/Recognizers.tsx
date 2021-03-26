@@ -34,9 +34,9 @@ export const QnAMakerRecognizerTemplate = (target: string, fileName: string) => 
   endpointKey: '=settings.qna.endpointKey',
 });
 
-export const MultiLanguageRecognizerTemplate = (target: string, fileType: 'lu' | 'qna') => ({
+export const MultiLanguageRecognizerTemplate = (target: string, key: 'LUIS' | 'QnA' | 'ORCHESTRATOR') => ({
   $kind: SDKKinds.MultiLanguageRecognizer,
-  id: `${fileType === 'lu' ? 'LUIS' : 'QnA'}_${target}`,
+  id: `${key}_${target}`,
   recognizers: {},
 });
 
@@ -63,9 +63,12 @@ export const getMultiLanguagueRecognizerDialog = (
   target: string,
   files: { empty: boolean; id: string }[],
   fileType: 'lu' | 'qna',
+  isOrchestrator = false,
   defaultLanguage = 'en-us'
 ) => {
-  const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target, fileType);
+  const key = fileType === 'qna' ? 'QnA' : isOrchestrator ? 'ORCHESTRATOR' : 'LUIS';
+
+  const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target, key);
 
   files.forEach((item) => {
     if (item.empty || getBaseName(item.id) !== target) return;
@@ -128,11 +131,11 @@ export const generateRecognizers = (
   luProvide?: LuProviderType
 ) => {
   const isCrossTrain = isCrossTrainedRecognizerSet(dialog);
-  const luisRecognizers =
-    luProvide === SDKKinds.OrchestratorRecognizer
-      ? getOrchestratorRecognizerDialogs(dialog.id, luFiles)
-      : getLuisRecognizerDialogs(dialog.id, luFiles);
-  const luMultiLanguageRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu');
+  const isOrchestrator = luProvide === SDKKinds.OrchestratorRecognizer;
+  const luisRecognizers = isOrchestrator
+    ? getOrchestratorRecognizerDialogs(dialog.id, luFiles)
+    : getLuisRecognizerDialogs(dialog.id, luFiles);
+  const luMultiLanguageRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu', isOrchestrator);
 
   const crossTrainedRecognizer = getCrossTrainedRecognizerDialog(dialog.id, luFiles, qnaFiles);
   const qnaMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, qnaFiles, 'qna');
