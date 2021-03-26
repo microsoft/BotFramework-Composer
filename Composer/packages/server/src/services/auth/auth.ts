@@ -40,6 +40,10 @@ class AuthService {
     return this.provider.getAccessToken(params);
   }
 
+  async getArmAccessToken(tenantId: string): Promise<string> {
+    return this.provider.getArmAccessToken(tenantId);
+  }
+
   logOut() {
     this.provider.logOut();
   }
