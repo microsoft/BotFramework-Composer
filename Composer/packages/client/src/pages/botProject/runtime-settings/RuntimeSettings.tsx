@@ -70,7 +70,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [runtimePath, setRuntimePath] = useState(settings.runtime?.path ?? '');
   const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime?.command ?? '');
   const [usingCustomRuntime, setUsingCustomRuntime] = useState(settings.runtime?.customRuntime ?? false);
-  const isAdaptive = useMemo(isUsingAdaptiveRuntime(settings.runtime), [settings]);
+  const isAdaptive = useMemo(() => isUsingAdaptiveRuntime(settings.runtime), [settings]);
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
