@@ -230,6 +230,12 @@
   "all_4321c3a1": {
     "message": "All"
   },
+  "allow_bot_to_be_called_as_skill_d3496fd8": {
+    "message": "Allow bot to be called as skill"
+  },
+  "allowed_callers_fe0f5bfe": {
+    "message": "Allowed callers"
+  },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
   },
@@ -2780,6 +2786,9 @@
   "remove_f47dc62a": {
     "message": "Remove"
   },
+  "remove_item_5877e701": {
+    "message": "Remove item"
+  },
   "remove_this_dialog_6146716c": {
     "message": "Remove this dialog"
   },
@@ -3058,6 +3067,9 @@
   },
   "skill_9b084d2e": {
     "message": "Skill"
+  },
+  "skill_configuration_5e4bfbcd": {
+    "message": "Skill configuration"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "Skill Dialog Name"
