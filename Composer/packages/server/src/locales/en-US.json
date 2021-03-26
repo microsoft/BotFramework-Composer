@@ -245,6 +245,9 @@
   "allowed_callers_fe0f5bfe": {
     "message": "Allowed callers"
   },
+  "almost_there_f90939cb": {
+    "message": "Almost there!"
+  },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
   },
@@ -620,6 +623,9 @@
   "clear_all_da755751": {
     "message": "Clear all"
   },
+  "click_start_and_your_bot_will_be_up_and_running_on_424c29da": {
+    "message": "Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test."
+  },
   "click_the_start_button_to_test_your_bot_using_web__821e827c": {
     "message": "Click the start button to test your bot using Web Chat or Emulator. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
   },
@@ -766,6 +772,9 @@
   },
   "continue_loop_22635585": {
     "message": "Continue loop"
+  },
+  "continue_setting_up_your_development_environment_b_5ec84955": {
+    "message": "Continue setting up your development environment by adding LUIS keys."
   },
   "conversation_ended_a8bd37dd": {
     "message": "Conversation ended"
@@ -1484,9 +1493,6 @@
   "expecting_4df12c00": {
     "message": "Expecting"
   },
-  "explore_next_steps_and_find_valuable_references_an_a0820025": {
-    "message": "Explore next steps and find valuable references and learning resources to design, build, and publish your new bot using Composer."
-  },
   "export_json_2e2981f5": {
     "message": "Export JSON"
   },
@@ -1561,12 +1567,6 @@
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
-  },
-  "finish_setting_up_your_development_environment_by__87296088": {
-    "message": "Finish setting up your development environment by adding LUIS..."
-  },
-  "finish_setting_up_your_development_environment_by__d9da90fb": {
-    "message": "Finish setting up your development environment by adding QnA Maker..."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1666,9 +1666,6 @@
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
-  },
-  "get_your_bot_up_and_running_418dd8ea": {
-    "message": "Get your bot up and running"
   },
   "getting_help_ab6811b0": {
     "message": "Getting Help"
@@ -1906,6 +1903,9 @@
   },
   "jan_28_2020_8beb36dc": {
     "message": "Jan 28, 2020"
+  },
+  "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__b617787e": {
+    "message": "Just add a QnA key and you''ll be ready to talk to your bot."
   },
   "kb_d9c53902": {
     "message": "KB"
@@ -3500,9 +3500,6 @@
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "There was error creating your KB"
   },
-  "these_are_next_steps_so_you_always_know_what_to_do_aedcd8e2": {
-    "message": "These are next steps so you always know what to do next to get your bot going."
-  },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
     "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
   },
@@ -3967,6 +3964,9 @@
   },
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
     "message": "You have successfully published { name } to { publishTarget }"
+  },
+  "you_re_ready_to_go_1b701a5d": {
+    "message": "You''re ready to go!"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."

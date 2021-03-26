@@ -250,7 +250,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         const qnaMakerWebAppName = `${qnaResourceName}-qnahost`.toLowerCase().replace('_', '');
         const qnaMakerServiceName = `${qnaResourceName}-qna`;
 
-        const searchManagementClient = new SearchManagementClient(tokenCredentials, subscriptionId);
+        const searchManagementClient = new SearchManagementClient(tokenCredentials as any, subscriptionId);
         await searchManagementClient.services.createOrUpdate(resourceGroupName, qnaMakerSearchName, {
           location: localRootQNARegion,
           sku: {
