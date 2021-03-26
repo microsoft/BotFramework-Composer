@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -33,86 +34,86 @@ const linkClick = (event) => {
 
 export const GetStartedLearn: React.FC = () => {
   return (
-    <div css={{ paddingLeft: 27, paddingRight: 20 }}>
-      <p>{formatMessage('These are next steps so you always know what to do next to get your bot going.')}</p>
+    <ScrollablePane styles={{ root: { marginTop: 60 } }}>
+      <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
+        <h3 style={h3Style}>{formatMessage('Get started')}</h3>
+        <ul style={ulStyle}>
+          <li style={liStyle}>
+            <Link href={linkToGetStarted} target="_blank" onClick={linkClick}>
+              {formatMessage('Get started with Bot Framework Composer')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToCreateFirstBot} target="_blank" onClick={linkClick}>
+              {formatMessage('Create your first bot')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToTutorials} target="_blank" onClick={linkClick}>
+              {formatMessage('Composer tutorials')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToEmulator} target="_blank" onClick={linkClick}>
+              {formatMessage('Setting up Bot Framework Emulator')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToQNA} target="_blank" onClick={linkClick}>
+              {formatMessage('QnA Maker introduction')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToPackages} target="_blank" onClick={linkClick}>
+              {formatMessage('Working with packages')}
+            </Link>
+          </li>
+        </ul>
 
-      <h3 style={h3Style}>{formatMessage('Get started')}</h3>
-      <ul style={ulStyle}>
-        <li style={liStyle}>
-          <Link href={linkToGetStarted} target="_blank" onClick={linkClick}>
-            {formatMessage('Get started with Bot Framework Composer')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToCreateFirstBot} target="_blank" onClick={linkClick}>
-            {formatMessage('Create your first bot')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToTutorials} target="_blank" onClick={linkClick}>
-            {formatMessage('Composer tutorials')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToEmulator} target="_blank" onClick={linkClick}>
-            {formatMessage('Setting up Bot Framework Emulator')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToQNA} target="_blank" onClick={linkClick}>
-            {formatMessage('QnA Maker introduction')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToPackages} target="_blank" onClick={linkClick}>
-            {formatMessage('Working with packages')}
-          </Link>
-        </li>
-      </ul>
-
-      <h3 style={h3Style}>{formatMessage('Quick references')}</h3>
-      <ul style={ulStyle}>
-        <li style={liStyle}>
-          <Link href={linkToAdaptiveExpressions} target="_blank" onClick={linkClick}>
-            {formatMessage('Learn about Adaptive expressions')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToPreBuiltExpressions} target="_blank" onClick={linkClick}>
-            {formatMessage('Find pre-built Adaptive expressions')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToLUFileFormat} target="_blank" onClick={linkClick}>
-            {formatMessage('LU file format and syntax')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToLGFileFormat} target="_blank" onClick={linkClick}>
-            {formatMessage('LG file format and syntax')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToImport} target="_blank" onClick={linkClick}>
-            {formatMessage('Importing a publishing profile')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToPVA} target="_blank" onClick={linkClick}>
-            {formatMessage('Integrating with Power Virtual Agents')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToMigrate} target="_blank" onClick={linkClick}>
-            {formatMessage('Migrating to Composer')}
-          </Link>
-        </li>
-        <li style={liStyle}>
-          <Link href={linkToFeatureRequest} target="_blank" onClick={linkClick}>
-            {formatMessage('Submit a feature request')}
-          </Link>
-        </li>
-      </ul>
-    </div>
+        <h3 style={h3Style}>{formatMessage('Quick references')}</h3>
+        <ul style={ulStyle}>
+          <li style={liStyle}>
+            <Link href={linkToAdaptiveExpressions} target="_blank" onClick={linkClick}>
+              {formatMessage('Learn about Adaptive expressions')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToPreBuiltExpressions} target="_blank" onClick={linkClick}>
+              {formatMessage('Find pre-built Adaptive expressions')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToLUFileFormat} target="_blank" onClick={linkClick}>
+              {formatMessage('LU file format and syntax')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToLGFileFormat} target="_blank" onClick={linkClick}>
+              {formatMessage('LG file format and syntax')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToImport} target="_blank" onClick={linkClick}>
+              {formatMessage('Importing a publishing profile')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToPVA} target="_blank" onClick={linkClick}>
+              {formatMessage('Integrating with Power Virtual Agents')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToMigrate} target="_blank" onClick={linkClick}>
+              {formatMessage('Migrating to Composer')}
+            </Link>
+          </li>
+          <li style={liStyle}>
+            <Link href={linkToFeatureRequest} target="_blank" onClick={linkClick}>
+              {formatMessage('Submit a feature request')}
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </ScrollablePane>
   );
 };

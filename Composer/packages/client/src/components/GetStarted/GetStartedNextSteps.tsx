@@ -7,6 +7,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
@@ -222,87 +223,88 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   }, [botProject]);
 
   return (
-    <div css={{ paddingLeft: 27, paddingRight: 20 }}>
-      <ManageLuis
-        hidden={!displayManageLuis}
-        setDisplayManageLuis={setDisplayManageLuis}
-        onDismiss={hideManageLuis}
-        onGetKey={updateLuisSettings}
-        onNext={() => {
-          hideManageLuis();
-          doNextStep('luis');
-        }}
-      />
-      <ManageQNA
-        hidden={!displayManageQNA}
-        setDisplayManageQna={setDisplayManageQNA}
-        onDismiss={hideManageQNA}
-        onGetKey={updateQNASettings}
-        onNext={() => {
-          hideManageQNA();
-          doNextStep('qna');
-        }}
-      />
-
-      {highlightLUIS && (
-        <TeachingBubble
-          hasCondensedHeadline
-          headline={formatMessage('Your new bot is almost ready!')}
-          target="#luis"
-          onDismiss={() => {
-            setHighlightLUIS(false);
+    <ScrollablePane styles={{ root: { marginTop: 60 } }}>
+      <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
+        <ManageLuis
+          hidden={!displayManageLuis}
+          setDisplayManageLuis={setDisplayManageLuis}
+          onDismiss={hideManageLuis}
+          onGetKey={updateLuisSettings}
+          onNext={() => {
+            hideManageLuis();
+            doNextStep('luis');
           }}
-        >
-          {formatMessage('Continue setting up your development environment by adding LUIS keys.')}
-        </TeachingBubble>
-      )}
-
-      {highlightQNA && (
-        <TeachingBubble
-          hasCondensedHeadline
-          headline={formatMessage('Almost there!')}
-          target="#qna"
-          onDismiss={() => {
-            setHighlightQNA(false);
+        />
+        <ManageQNA
+          hidden={!displayManageQNA}
+          setDisplayManageQna={setDisplayManageQNA}
+          onDismiss={hideManageQNA}
+          onGetKey={updateQNASettings}
+          onNext={() => {
+            hideManageQNA();
+            doNextStep('qna');
           }}
-        >
-          {formatMessage("Just add a QnA key and you'll be ready to talk to your bot.")}
-        </TeachingBubble>
-      )}
+        />
 
-      <p>{formatMessage('These are next steps so you always know what to do next to get your bot going.')}</p>
-      {requiredNextSteps.length ? (
-        <div>
-          <h3 style={h3Style}>{formatMessage('Required')}</h3>
-          {requiredNextSteps.map((step) => (
-            <GetStartedTask key={step.key} step={step} />
-          ))}
-        </div>
-      ) : (
-        ''
-      )}
+        {highlightLUIS && (
+          <TeachingBubble
+            hasCondensedHeadline
+            headline={formatMessage('Your new bot is almost ready!')}
+            target="#luis"
+            onDismiss={() => {
+              setHighlightLUIS(false);
+            }}
+          >
+            {formatMessage('Continue setting up your development environment by adding LUIS keys.')}
+          </TeachingBubble>
+        )}
 
-      {recommendedNextSteps.length ? (
-        <div>
-          <h3 style={h3Style}>{formatMessage('Recommended')}</h3>
-          {recommendedNextSteps.map((step) => (
-            <GetStartedTask key={step.key} step={step} />
-          ))}
-        </div>
-      ) : (
-        ''
-      )}
+        {highlightQNA && (
+          <TeachingBubble
+            hasCondensedHeadline
+            headline={formatMessage('Almost there!')}
+            target="#qna"
+            onDismiss={() => {
+              setHighlightQNA(false);
+            }}
+          >
+            {formatMessage("Just add a QnA key and you'll be ready to talk to your bot.")}
+          </TeachingBubble>
+        )}
 
-      {optionalSteps.length ? (
-        <div>
-          <h3 style={h3Style}>{formatMessage('Optional')}</h3>
-          {optionalSteps.map((step) => (
-            <GetStartedTask key={step.key} step={step} />
-          ))}
-        </div>
-      ) : (
-        ''
-      )}
-    </div>
+        {requiredNextSteps.length ? (
+          <div>
+            <h3 style={h3Style}>{formatMessage('Required')}</h3>
+            {requiredNextSteps.map((step) => (
+              <GetStartedTask key={step.key} step={step} />
+            ))}
+          </div>
+        ) : (
+          ''
+        )}
+
+        {recommendedNextSteps.length ? (
+          <div>
+            <h3 style={h3Style}>{formatMessage('Recommended')}</h3>
+            {recommendedNextSteps.map((step) => (
+              <GetStartedTask key={step.key} step={step} />
+            ))}
+          </div>
+        ) : (
+          ''
+        )}
+
+        {optionalSteps.length ? (
+          <div>
+            <h3 style={h3Style}>{formatMessage('Optional')}</h3>
+            {optionalSteps.map((step) => (
+              <GetStartedTask key={step.key} step={step} />
+            ))}
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
+    </ScrollablePane>
   );
 };
