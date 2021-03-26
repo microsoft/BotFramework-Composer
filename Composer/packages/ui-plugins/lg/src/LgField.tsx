@@ -282,6 +282,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
       </Stack>
       <LgEditor
         hidePlaceholder
+        showDirectTemplateLink
         diagnostics={diagnostics}
         editorSettings={userSettings.codeEditor}
         height={225}

@@ -5,35 +5,6 @@ import { LgTemplate, TelemetryClient } from '@bfc/shared';
 
 import { LGOption } from '../utils';
 
-export type TemplateRefPayload = {
-  kind: 'template';
-  data: {
-    templates: readonly LgTemplate[];
-    onSelectTemplate: (templateString: string, itemType: 'template') => void;
-  };
-};
-
-export type PropertyItem = {
-  id: string;
-  name: string;
-  children: PropertyItem[];
-};
-
-export type PropertyRefPayload = {
-  kind: 'property';
-  data: { properties: readonly string[]; onSelectProperty: (property: string, itemType: 'property') => void };
-};
-
-export type FunctionRefPayload = {
-  kind: 'function';
-  data: {
-    functions: readonly { key: string; name: string; children: string[] }[];
-    onSelectFunction: (functionString: string, itemType: 'function') => void;
-  };
-};
-
-export type ToolbarButtonPayload = TemplateRefPayload | PropertyRefPayload | FunctionRefPayload;
-
 export type LgLanguageContext =
   | 'expression'
   | 'singleQuote'
