@@ -112,6 +112,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
           <TooltipTemplateButton
             key="template"
             disabled={!templateRefPayload?.data?.templates?.length}
+            dismissHandlerClassName={dismissHandlerClassName}
             payload={templateRefPayload}
           />
         ),
@@ -123,13 +124,20 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
           <TooltipPropertyButton
             key="property"
             disabled={!propertyRefPayload?.data?.properties?.length}
+            dismissHandlerClassName={dismissHandlerClassName}
             payload={propertyRefPayload}
           />
         ),
       },
       {
         key: 'function',
-        commandBarButtonAs: () => <TooltipFunctionButton key="function" payload={functionRefPayload} />,
+        commandBarButtonAs: () => (
+          <TooltipFunctionButton
+            key="function"
+            dismissHandlerClassName={dismissHandlerClassName}
+            payload={functionRefPayload}
+          />
+        ),
       },
     ];
 
@@ -142,6 +150,7 @@ export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
     propertyRefPayload,
     functionRefPayload,
     excludedToolbarItems,
+    dismissHandlerClassName,
   ]);
 
   const moreItems = React.useMemo(

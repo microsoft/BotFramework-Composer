@@ -7,7 +7,7 @@ import React, { useRef, useState } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
 import { ExpressionSwitchWindow } from '../expressions/ExpressionSwitchWindow';
-import { ExpressionsListMenu } from '../expressions/ExpressionsListMenu';
+import { ExpressionFieldToolbar } from '../expressions/ExpressionFieldToolbar';
 
 import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
@@ -68,8 +68,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
-  const containerElm = React.useRef<HTMLDivElement | null>(null);
-  // const [containerElm, setContainerElm] = useState<HTMLDivElement | null>(null);
+  const [containerElm, setContainerElm] = useState<HTMLDivElement | null>(null);
   const [toolbarTargetElm, setToolbarTargetElm] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   const focus = React.useCallback(
@@ -105,7 +104,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
         onKeyUpTextField,
         onClickTextField,
       }) => (
-        <div ref={containerElm}>
+        <div ref={setContainerElm}>
           <StringField
             {...props}
             cursorPosition={cursorPosition}
@@ -119,8 +118,8 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
             onKeyDown={onKeyDownTextField}
             onKeyUp={onKeyUpTextField}
           />
-          <ExpressionsListMenu
-            container={containerElm.current}
+          <ExpressionFieldToolbar
+            container={containerElm}
             target={toolbarTargetElm}
             value={textFieldValue}
             onChange={onChange}
