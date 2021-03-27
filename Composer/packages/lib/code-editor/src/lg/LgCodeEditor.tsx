@@ -170,7 +170,6 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           languageClient.onReady().then(() =>
             languageClient.onNotification('GotoDefinition', (result) => {
               if (lgOption?.projectId) {
-                console.log('Navi', onNavigateToLgPage);
                 onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
               }
             })
@@ -184,7 +183,6 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
       window.monacoLGEditorInstance.onReady().then(() =>
         window.monacoLGEditorInstance.onNotification('GotoDefinition', (result) => {
           if (lgOption?.projectId) {
-            console.log('Navi', onNavigateToLgPage);
             onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
           }
         })
