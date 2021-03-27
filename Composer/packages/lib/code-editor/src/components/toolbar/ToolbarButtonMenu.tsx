@@ -20,20 +20,20 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import * as React from 'react';
 
-import { useNoSearchResultMenuItem } from '../hooks/useNoSearchResultMenuItem';
-import { useSearchableMenuListCallback } from '../hooks/useSearchableMenuListCallback';
-import { computePropertyItemTree, getAllNodes } from '../utils/lgUtils';
-import { withTooltip } from '../utils/withTooltip';
-
-import { jsLgToolbarMenuClassName } from './constants';
-import { PropertyTreeItem } from './PropertyTreeItem';
+import { useNoSearchResultMenuItem } from '../../hooks/useNoSearchResultMenuItem';
+import { useSearchableMenuListCallback } from '../../hooks/useSearchableMenuListCallback';
+import { computePropertyItemTree, getAllNodes } from '../../utils/fieldToolbarUtils';
+import { withTooltip } from '../../utils/withTooltip';
+import { jsLgToolbarMenuClassName } from '../../lg/constants';
 import {
   FunctionRefPayload,
   PropertyItem,
   PropertyRefPayload,
   TemplateRefPayload,
   ToolbarButtonPayload,
-} from './types';
+} from '../../types';
+
+import { PropertyTreeItem } from './PropertyTreeItem';
 
 // no op operation
 const noop = () => {};
@@ -84,16 +84,13 @@ const OneLiner = styled.div({
 const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
 const iconStyles = { root: { color: NeutralColors.black, margin: '0 4px', width: 16, height: 16 } };
 
-const calloutProps = {
-  styles: {
-    calloutMain: { overflowY: 'hidden' },
-  },
-  layerProps: { className: jsLgToolbarMenuClassName },
-};
-
 type ToolbarButtonMenuProps = {
   payload: ToolbarButtonPayload;
   disabled?: boolean;
+
+  // This className can be use for handling dismal of the toolbar in the container
+  // due to the portal nature of this component
+  dismissHandlerClassName?: string;
 };
 
 const getIcon = (kind: ToolbarButtonPayload['kind']): JSX.Element => {
@@ -140,10 +137,20 @@ const TooltipItem = React.memo(({ text, tooltip }: { text?: string; tooltip?: st
 });
 
 export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
-  const { payload, disabled = false } = props;
+  const { payload, disabled = false, dismissHandlerClassName = jsLgToolbarMenuClassName } = props;
 
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
   const uiStrings = React.useMemo(() => getStrings(payload.kind), [payload.kind]);
+
+  const calloutProps = React.useMemo(
+    () => ({
+      styles: {
+        calloutMain: { overflowY: 'hidden' },
+      },
+      layerProps: { className: dismissHandlerClassName },
+    }),
+    [dismissHandlerClassName]
+  );
 
   const propertyTreeConfig = React.useMemo(() => {
     if (payload.kind === 'property') {
@@ -175,7 +182,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
             subMenuProps: {
               calloutProps: {
                 calloutMaxHeight: 432,
-                layerProps: { className: jsLgToolbarMenuClassName },
+                layerProps: { className: dismissHandlerClassName },
               },
               contextualMenuItemAs: (itemProps: IContextualMenuItemProps) => {
                 return (
@@ -424,13 +431,13 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         } as IContextualMenuProps;
       }
     }
-  }, [items, onRenderMenuList, onDismiss, propertyTreeExpanded, query]);
+  }, [items, calloutProps, onRenderMenuList, onDismiss, propertyTreeExpanded, query]);
 
   const renderIcon = React.useCallback(() => getIcon(payload.kind), [payload.kind]);
 
   return (
     <IconButton
-      className={jsLgToolbarMenuClassName}
+      className={dismissHandlerClassName}
       data-testid="menuButton"
       disabled={disabled}
       menuProps={menuProps}
