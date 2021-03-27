@@ -177,7 +177,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   };
 
   const navigateToLgPage = useCallback(
-    (lgFileId: string, options?: { templateId: string | undefined; line: number | undefined }) => {
+    (lgFileId: string, options?: { templateId?: string; line?: number }) => {
       // eslint-disable-next-line security/detect-non-literal-regexp
       const pattern = new RegExp(`.${locale}`, 'g');
       const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
