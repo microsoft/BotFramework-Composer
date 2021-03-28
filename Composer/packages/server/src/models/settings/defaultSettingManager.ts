@@ -36,6 +36,7 @@ export class DefaultSettingManager extends FileSettingManager {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
         RemoveRecipientMention: false,
+        UseSetSpeakMiddleware: true,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
@@ -52,6 +53,10 @@ export class DefaultSettingManager extends FileSettingManager {
         connectionString: '',
         container: 'transcripts',
       },
+      speech: {
+        voiceFontName: 'en-US-AriaNeural',
+        fallbackToTextForSpeechIfEmpty: true,
+      },
       luis: {
         name: '',
         authoringKey: '',
@@ -61,6 +66,7 @@ export class DefaultSettingManager extends FileSettingManager {
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
+        directVersionPublish: true,
       },
       luFeatures: {
         enablePattern: true,

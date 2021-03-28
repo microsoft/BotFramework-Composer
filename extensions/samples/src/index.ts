@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable security/detect-non-literal-fs-filename */
 
 import path from 'path';
 import fs from 'fs';
+
 import { BotTemplate } from '@botframework-composer/types';
 
 const samplesDir = path.resolve(__dirname, '../assets/projects');
@@ -70,16 +72,18 @@ const samplesRegitry = {
 };
 
 function getRemoteSamples(): BotTemplate[] {
-  return [{
-    id: 'conversationalcore',
-    name: 'Conversational Core',
-    description: 'A hosted template that provides a root bot extended by common .lg packages',
-    package: {
-      packageName: 'Preview.Bot.Component.ConversationalCore',
-      packageSource: 'nuget',
-      packageVersion: '0.0.1-preview5'
-    }
-  }]
+  return [
+    {
+      id: 'conversationalcore',
+      name: 'Conversational Core',
+      description: 'A hosted template that provides a root bot extended by common .lg packages',
+      package: {
+        packageName: 'Preview.Bot.Component.ConversationalCore',
+        packageSource: 'nuget',
+        packageVersion: '0.0.1-preview5',
+      },
+    },
+  ];
 }
 
 function getSamples(): BotTemplate[] {
@@ -93,7 +97,13 @@ function getSamples(): BotTemplate[] {
 
     // only looking for directories
     const dirname = subPath;
-    let sample: BotTemplate = { id: dirname, name: dirname, description: dirname, path: fullPath, ...samplesRegitry['*'] };
+    let sample: BotTemplate = {
+      id: dirname,
+      name: dirname,
+      description: dirname,
+      path: fullPath,
+      ...samplesRegitry['*'],
+    };
     if (samplesRegitry[sample.id]) {
       sample = { ...sample, ...samplesRegitry[sample.id] };
     }

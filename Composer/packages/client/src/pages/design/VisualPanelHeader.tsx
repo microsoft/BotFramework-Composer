@@ -9,19 +9,14 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
 import { PluginConfig } from '@bfc/extension-client';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo, getFriendlyName } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { TreeLink } from '../../components/ProjectTree/ProjectTree';
-import {
-  designPageLocationState,
-  dialogsSelectorFamily,
-  dispatcherState,
-  visualEditorSelectionState,
-} from '../../recoilModel';
-import { getDialogData, getFriendlyName } from '../../utils/dialogUtil';
+import { designPageLocationState, dialogsSelectorFamily, dispatcherState } from '../../recoilModel';
+import { getDialogData } from '../../utils/dialogUtil';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { getFocusPath } from '../../utils/navigation';
+import { TreeLink } from '../../components/ProjectTree/types';
 
 import { breadcrumbClass } from './styles';
 
@@ -34,10 +29,24 @@ type BreadcrumbItem = {
 
 type VisualPanelHeaderProps = {
   projectId: string;
-  visible: boolean;
   showCode: boolean;
   onShowCodeClick: () => void;
   pluginConfig?: PluginConfig;
+};
+
+// field types
+const BreadcrumbKeyPrefix = {
+  Dialog: 'D',
+  Trigger: 'T',
+  Action: 'A',
+};
+
+const buildKey = (prefix: string, name: string | number): string => {
+  return `${prefix}-${name}`;
+};
+
+const parseKey = (key: string): { prefix: string; name: string } => {
+  return { prefix: key.charAt(0), name: key.substr(2) };
 };
 
 const parseTriggerId = (triggerId: string | undefined): number | undefined => {
@@ -55,7 +64,7 @@ const getActionName = (action, pluginConfig?: PluginConfig) => {
     detectedActionName = nameFromAction;
   } else {
     const kind: string = action?.$kind as string;
-    const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
+    const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label;
     if (typeof actionNameFromSchema === 'string') {
       detectedActionName = actionNameFromSchema;
     } else if (typeof actionNameFromSchema === 'function') {
@@ -71,7 +80,6 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const { navTo } = useRecoilValue(dispatcherState);
-  const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
 
   const { dialogId, selected: encodedSelect, focused: encodedFocused } = designPageLocation;
   const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
@@ -85,11 +93,11 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   const focusPath = getFocusPath(selected, focused);
   const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
 
-  let breadcrumbArray: Array<BreadcrumbItem> = [];
+  const initialBreadcrumbArray: Array<BreadcrumbItem> = [];
 
-  breadcrumbArray.push({
-    key: 'dialog-' + dialogId,
-    label: dialogMap[dialogId]?.$designer?.name ?? dialogMap[dialogId]?.$designer?.$designer?.name,
+  initialBreadcrumbArray.push({
+    key: buildKey(BreadcrumbKeyPrefix.Dialog, dialogId),
+    label: getFriendlyName(dialogMap[dialogId], true),
     link: {
       projectId: projectId,
       dialogId: dialogId,
@@ -98,9 +106,9 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   });
 
   if (triggerIndex != null && trigger != null) {
-    breadcrumbArray.push({
-      key: 'trigger-' + triggerIndex,
-      label: trigger.$designer?.name || getFriendlyName(trigger),
+    initialBreadcrumbArray.push({
+      key: buildKey(BreadcrumbKeyPrefix.Trigger, triggerIndex),
+      label: getFriendlyName(trigger),
       link: {
         projectId: projectId,
         dialogId: dialogId,
@@ -115,35 +123,41 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
 
   if (encodedFocused) {
     // we've linked to an action, so put that in too
-    breadcrumbArray.push({
-      key: 'action-' + focusPath,
+    initialBreadcrumbArray.push({
+      key: buildKey(BreadcrumbKeyPrefix.Action, focusPath),
       label: getActionName(possibleAction, pluginConfig),
     });
   }
 
   const currentDialog = (dialogs.find(({ id }) => id === dialogId) ?? dialogs[0]) as DialogInfo;
 
-  const selectedActions = useMemo(() => {
-    const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
-    if (!actionSelected) return [];
+  // get newest label for breadcrumbs
+  const breadcrumbArray = useMemo(() => {
+    if (currentDialog.content) {
+      initialBreadcrumbArray.map((b) => {
+        const { prefix, name } = parseKey(b.key);
 
-    const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
-
-    return selectedActions;
-  }, [visualEditorSelection, currentDialog?.content]);
-
-  if (selectedActions.length === 1 && selectedActions[0] != null) {
-    const action = selectedActions[0] as any;
-    const actionName = getActionName(action, pluginConfig);
-
-    breadcrumbArray = [...breadcrumbArray.slice(0, 2), { key: 'action-' + actionName, label: actionName }];
-  }
-
+        switch (prefix) {
+          case BreadcrumbKeyPrefix.Dialog:
+            b.label = getFriendlyName(currentDialog.content, true);
+            break;
+          case BreadcrumbKeyPrefix.Trigger:
+            b.label = getFriendlyName(get(currentDialog.content, `triggers[${name}]`));
+            break;
+          case BreadcrumbKeyPrefix.Action:
+            b.label = getActionName(get(currentDialog.content, name), pluginConfig);
+            break;
+        }
+        return b;
+      });
+    }
+    return initialBreadcrumbArray;
+  }, [currentDialog?.content, initialBreadcrumbArray]);
   return breadcrumbArray;
 };
 
 const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) => {
-  const { visible, showCode, projectId, onShowCodeClick, pluginConfig } = props;
+  const { showCode, projectId, onShowCodeClick, pluginConfig } = props;
   const breadcrumbs = useBreadcrumbs(projectId, pluginConfig);
 
   const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
@@ -156,7 +170,7 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
 
   const items = breadcrumbs.map(createBreadcrumbItem);
 
-  return visible ? (
+  return (
     <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
       <Breadcrumb
         ariaLabel={formatMessage('Navigation Path')}
@@ -172,7 +186,7 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
         </ActionButton>
       </div>
     </div>
-  ) : null;
+  );
 });
 
 export default VisualPanelHeader;

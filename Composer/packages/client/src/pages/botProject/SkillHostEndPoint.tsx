@@ -9,21 +9,16 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-// -------------------- Styles -------------------- //
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+import { title } from './styles';
+// -------------------- Styles -------------------- //
 
 const labelContainer = css`
   display: flex;
@@ -75,7 +70,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
 
   return (
-    <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={titleStyle}>
+    <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={title}>
       <TextField
         aria-label={formatMessage('Skill host endpoint')}
         data-testid={'SkillHostEndPointTextField'}

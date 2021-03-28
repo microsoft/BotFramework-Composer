@@ -337,7 +337,7 @@
         },
         "skillHostEndpoint": {
           "title": "Yetenek konağı",
-          "description": "Yetenek konağının geri arama URL'si."
+          "description": "Yetenek konağının geri arama URL’si."
         },
         "connectionName": {
           "title": "OAuth bağlantı adı (SSO)",
@@ -575,7 +575,7 @@
         },
         "style": {
           "title": "Liste stili",
-          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle'ı ayarlar.",
+          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle’ı ayarlar.",
           "oneOf": {
             "0": {
               "title": "Liste stili",
@@ -593,7 +593,7 @@
               "properties": {
                 "inlineSeparator": {
                   "title": "Satır içi ayırıcı",
-                  "description": "2'den fazla seçenek olduğunda seçimleri tek tek ayırmak için kullanılan karakter"
+                  "description": "2\"den fazla seçenek olduğunda seçimleri tek tek ayırmak için kullanılan karakter"
                 },
                 "inlineOr": {
                   "title": "Satır içi veya",
@@ -601,7 +601,7 @@
                 },
                 "inlineOrMore": {
                   "title": "Satır içi veya daha fazla",
-                  "description": "2'den fazla seçenek olduğunda son 2 seçenek arasına eklenen ayırıcı."
+                  "description": "2\"den fazla seçenek olduğunda son 2 seçenek arasına eklenen ayırıcı."
                 },
                 "includeNumbers": {
                   "title": "Sayıları ekle",
@@ -741,7 +741,7 @@
         },
         "style": {
           "title": "Liste stili",
-          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle'ı ayarlar.",
+          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle’ı ayarlar.",
           "oneOf": {
             "0": {
               "title": "Standart stil",
@@ -759,7 +759,7 @@
               "properties": {
                 "inlineSeparator": {
                   "title": "Satır içi ayırıcı",
-                  "description": "2'den fazla seçenek olduğunda seçimleri tek tek ayıracak metin"
+                  "description": "2\"den fazla seçenek olduğunda seçimleri tek tek ayıracak metin"
                 },
                 "inlineOr": {
                   "title": "Satır içi veya",
@@ -767,7 +767,7 @@
                 },
                 "inlineOrMore": {
                   "title": "Satır içi veya daha fazla",
-                  "description": "2'den fazla seçenek olduğunda son 2 seçim arasına eklenecek metin."
+                  "description": "2\"den fazla seçenek olduğunda son 2 seçim arasına eklenecek metin."
                 },
                 "includeNumbers": {
                   "title": "Sayıları ekle",
@@ -1707,7 +1707,7 @@
     },
     "Microsoft.GuidEntityRecognizer": {
       "title": "GUID varlığı tanıyıcısı",
-      "description": "GUID'leri tanıyan tanıyıcı.",
+      "description": "GUID’leri tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -1970,7 +1970,7 @@
               "title": "suggestedActions",
               "properties": {
                 "to": {
-                  "description": "Eylemlerin gösterilmesi gereken alıcıların kimlikleri. Bu kimlikler channelId'ye görelidir\nve etkinliğin tüm alıcılarının bir alt kümesidir",
+                  "description": "Eylemlerin gösterilmesi gereken alıcıların kimlikleri. Bu kimlikler channelId’ye görelidir\nve etkinliğin tüm alıcılarının bir alt kümesidir",
                   "title": "-",
                   "items": {
                     "title": "Kimlik",
@@ -1993,7 +1993,7 @@
                         "title": "başlık"
                       },
                       "image": {
-                        "description": "Düğmede metin etiketinin yanında görünecek resim URL'si",
+                        "description": "Düğmede metin etiketinin yanında görünecek resim URL’si",
                         "title": "görüntü"
                       },
                       "text": {
@@ -2005,7 +2005,7 @@
                         "title": "displayText"
                       },
                       "value": {
-                        "description": "Eylemin tamamlayıcı parametresi. Bu özelliğin içeriği ActionType'a bağımlıdır",
+                        "description": "Eylemin tamamlayıcı parametresi. Bu özelliğin içeriği ActionType’a bağımlıdır",
                         "title": "değer"
                       },
                       "channelData": {
@@ -2029,7 +2029,7 @@
                     "title": "contentType"
                   },
                   "contentUrl": {
-                    "description": "İçerik URL'si",
+                    "description": "İçerik URL’si",
                     "title": "contentUrl"
                   },
                   "content": {
@@ -2185,7 +2185,7 @@
     },
     "Microsoft.IEntityRecognizer": {
       "title": "Varlık tanıyıcıları",
-      "description": "EntityRecognizer'dan türetilen bileşenler.",
+      "description": "EntityRecognizer’dan türetilen bileşenler.",
       "oneOf": {
         "0": {
           "title": "Microsoft.IEntityRecognizer başvurusu",
@@ -2407,7 +2407,7 @@
         },
         "traceActivity": {
           "title": "İzleme etkinliği gönder",
-          "description": "True ise, otomatik olarak bir TraceActivity gönderir (Bot Framework Emulator'da görüntüleyin)."
+          "description": "True ise, otomatik olarak bir TraceActivity gönderir (Bot Framework Emulator’da görüntüleyin)."
         },
         "$kind": {
           "title": "İletişim kutusu nesnesinin türü",
@@ -2451,7 +2451,7 @@
         },
         "externalEntityRecognizer": {
           "title": "Dış varlık tanıyıcısı",
-          "description": "Bu tanıyıcı tarafından tanınan varlıklar, LUIS'ye dış varlık olarak geçirilir."
+          "description": "Bu tanıyıcı tarafından tanınan varlıklar, LUIS’ye dış varlık olarak geçirilir."
         },
         "dynamicLists": {
           "title": "Dinamik listeler",
@@ -2813,7 +2813,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2861,7 +2861,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2897,7 +2897,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2933,7 +2933,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2977,7 +2977,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3021,7 +3021,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3077,7 +3077,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3113,7 +3113,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3149,7 +3149,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3185,7 +3185,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3225,7 +3225,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3261,7 +3261,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3297,7 +3297,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3333,7 +3333,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3369,7 +3369,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3405,7 +3405,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3441,7 +3441,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kez Çalıştır",
@@ -3489,7 +3489,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3525,7 +3525,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3561,7 +3561,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3597,7 +3597,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3633,7 +3633,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3669,7 +3669,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3687,7 +3687,7 @@
     },
     "Microsoft.OnQnAMatch": {
       "title": "Soru-Cevap Oluşturma eşleşmesinde",
-      "description": "Soru-Cevap Oluşturma'dan bir eşleştirme bulunduğunda gerçekleştirilecek eylemler.",
+      "description": "Soru-Cevap Oluşturma’dan bir eşleştirme bulunduğunda gerçekleştirilecek eylemler.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -3705,7 +3705,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3741,7 +3741,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3777,7 +3777,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3813,7 +3813,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3905,7 +3905,7 @@
         },
         "endpointKey": {
           "title": "Uç nokta anahtarı",
-          "description": "Soru-Cevap Oluşturma BB'nin uç nokta anahtarı."
+          "description": "Soru-Cevap Oluşturma BB’nin uç nokta anahtarı."
         },
         "hostname": {
           "title": "Konak adı",
@@ -3989,7 +3989,7 @@
     },
     "Microsoft.QnAMakerRecognizer": {
       "title": "Soru-Cevap Oluşturma tanıyıcısı",
-      "description": "Bir BB'den QnAMatch amaçları oluşturmaya yönelik tanıyıcı.",
+      "description": "Bir BB’den QnAMatch amaçları oluşturmaya yönelik tanıyıcı.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -4007,7 +4007,7 @@
         },
         "endpointKey": {
           "title": "Uç nokta anahtarı",
-          "description": "Soru-Cevap Oluşturma BB'nin uç nokta anahtarı."
+          "description": "Soru-Cevap Oluşturma BB’nin uç nokta anahtarı."
         },
         "hostname": {
           "title": "Konak adı",
@@ -4022,7 +4022,7 @@
           "description": "Soru-Cevap Oluşturma BB çağrılırken kullanılacak meta veri filtreleri.",
           "items": {
             "title": "Meta veri filtreleri",
-            "description": "Soru-Cevap Oluşturma BB'si sorgulanırken kullanılacak meta veri filtreleri.",
+            "description": "Soru-Cevap Oluşturma BB’si sorgulanırken kullanılacak meta veri filtreleri.",
             "properties": {
               "name": {
                 "title": "Ad",
@@ -4065,14 +4065,14 @@
         },
         "includeDialogNameInMetadata": {
           "title": "Diyalog adını ekle",
-          "description": "False olarak ayarlandığında, iletişim kutusu adı Soru-Cevap Oluşturma'ya geçirilmez. (varsayılan) true"
+          "description": "False olarak ayarlandığında, iletişim kutusu adı Soru-Cevap Oluşturma’ya geçirilmez. (varsayılan) true"
         },
         "metadata": {
           "title": "Meta veri filtreleri",
           "description": "Soru-Cevap Oluşturma BB çağrılırken kullanılacak meta veri filtreleri.",
           "items": {
             "title": "Meta veri filtresi",
-            "description": "Soru-Cevap Oluşturma BB'si çağrılırken kullanılacak meta veri filtresi.",
+            "description": "Soru-Cevap Oluşturma BB’si çağrılırken kullanılacak meta veri filtresi.",
             "properties": {
               "name": {
                 "title": "Ad",
@@ -4091,7 +4091,7 @@
         },
         "qnaId": {
           "title": "Soru-Cevap kimliği",
-          "description": "Soru-Cevap Oluşturma API'sine geçirilecek QnAId olan bir sayı veya ifade."
+          "description": "Soru-Cevap Oluşturma API’sine geçirilecek QnAId olan bir sayı veya ifade."
         },
         "$kind": {
           "title": "İletişim kutusu nesnesinin türü",
@@ -4800,7 +4800,7 @@
     },
     "Microsoft.TraceActivity": {
       "title": "TraceActivity gönderin",
-      "description": "Transkript günlükçüsüne ve/veya Bot Framework Emulator'a bir izleme etkinliği gönderin.",
+      "description": "Transkript günlükçüsüne ve/veya Bot Framework Emulator’a bir izleme etkinliği gönderin.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -4900,7 +4900,7 @@
     },
     "Microsoft.UrlEntityRecognizer": {
       "title": "URL tanıyıcısı",
-      "description": "URL'leri tanıyan tanıyıcı.",
+      "description": "URL’leri tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",

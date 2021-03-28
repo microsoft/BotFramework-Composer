@@ -3,7 +3,7 @@
 
 import { useRef, useState, Fragment, useLayoutEffect, MutableRefObject } from 'react';
 // eslint-disable-next-line @typescript-eslint/camelcase
-import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
+import { useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
 import React from 'react';
 import { BotAssets } from '@bfc/shared';
@@ -24,6 +24,7 @@ import {
   botProjectFileState,
   jsonSchemaFilesState,
   crossTrainConfigState,
+  dispatcherState,
 } from './atoms';
 import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from './selectors';
 import { Recognizer } from './Recognizers';
@@ -60,11 +61,6 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     crossTrainConfig,
   };
 };
-
-export const dispatcherState = atom<Dispatcher>({
-  key: 'dispatcherState',
-  default: {} as Dispatcher,
-});
 
 const wrapDispatcher = (dispatchers, forceUpdate) => {
   return Object.keys(dispatchers).reduce((boundDispatchers, dispatcherName) => {
@@ -103,11 +99,15 @@ export const DispatcherWrapper = ({ children }) => {
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
     const botsForFilePersistence = await snapshot.getPromise(localBotsWithoutErrorsSelector);
+    const { setProjectError } = await snapshot.getPromise(dispatcherState);
     for (const projectId of botsForFilePersistence) {
       const assets = await getBotAssets(projectId, snapshot);
       const previousAssets = await getBotAssets(projectId, previousSnapshot);
       const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
       if (!isEmpty(filePersistence)) {
+        if (filePersistence.isErrorHandlerEmpty()) {
+          filePersistence.registerErrorHandler(setProjectError);
+        }
         filePersistence.notify(assets, previousAssets);
       }
     }

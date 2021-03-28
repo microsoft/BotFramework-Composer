@@ -11,6 +11,12 @@ import AssetService from '../../services/asset';
 import { ProjectController } from '../../controllers/project';
 import { Path } from '../../utility/path';
 
+jest.mock('@bfc/server-workers', () => ({
+  ServerWorker: {
+    execute: jest.fn(),
+  },
+}));
+
 jest.mock('../../models/extension/extensionContext', () => {
   return {
     ExtensionContext: {
@@ -169,6 +175,30 @@ describe('should get recent projects', () => {
     } as Request;
     await ProjectController.getRecentProjects(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('create a component model conversational core bot project', () => {
+  const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
+  const name = 'newConversationalCoreBot';
+  const mockReq = {
+    params: {},
+    query: {},
+    body: {
+      storageId: 'default',
+      location: newBotDir,
+      description: '',
+      name: name,
+      templateId: 'generator-conversational-core',
+      templateVersion: '1.0.9',
+    },
+  } as Request;
+
+  it('should start to create a new project', async () => {
+    BotProjectService.createProjectAsync = jest.fn();
+
+    ProjectController.createProjectV2(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(202);
   });
 });
 

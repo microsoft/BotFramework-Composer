@@ -15,9 +15,9 @@ import {
   onCreateDialogCompleteState,
   showCreateDialogModalState,
   qnaFilesState,
+  dispatcherState,
 } from '../../atoms';
 import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
 const projectId = '42345.23432';
@@ -74,23 +74,12 @@ jest.mock('@bfc/indexers', () => {
 jest.mock('../../parsers/luWorker', () => {
   return {
     parse: (id: string, content) => ({ id, content }),
-    addIntent: require('@bfc/indexers/lib/utils/luUtil').addIntent,
-    addIntents: require('@bfc/indexers/lib/utils/luUtil').addIntents,
-    updateIntent: require('@bfc/indexers/lib/utils/luUtil').updateIntent,
-    removeIntent: require('@bfc/indexers/lib/utils/luUtil').removeIntent,
-    removeIntents: require('@bfc/indexers/lib/utils/luUtil').removeIntents,
   };
 });
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
     parse: (id: string, content) => ({ id, content }),
-    addTemplate: require('../../../utils/lgUtil').addTemplate,
-    addTemplates: require('../../../utils/lgUtil').addTemplates,
-    updateTemplate: require('../../../utils/lgUtil').updateTemplate,
-    removeTemplate: require('../../../utils/lgUtil').removeTemplate,
-    removeAllTemplates: require('../../../utils/lgUtil').removeTemplates,
-    copyTemplate: require('../../../utils/lgUtil').copyTemplate,
   };
 });
 
@@ -158,7 +147,10 @@ describe('dialog dispatcher', () => {
 
     expect(renderedComponent.current.dialogs).toEqual([{ id: '1' }, { id: '2' }]);
     expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '1' }, { id: '2' }]);
-    expect(renderedComponent.current.lgFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
+    expect(renderedComponent.current.lgFiles).toEqual([
+      { id: '1.en-us', diagnostics: [] },
+      { id: '2.en-us', diagnostics: [] },
+    ]);
     expect(renderedComponent.current.luFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
     expect(renderedComponent.current.qnaFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
   });

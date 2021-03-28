@@ -4,6 +4,7 @@
 import { BotIndexer } from '@bfc/indexers';
 import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
+import uniqBy from 'lodash/uniqBy';
 import { selector, selectorFamily } from 'recoil';
 
 import { LanguageFileImport } from '../../../../types/src';
@@ -27,12 +28,16 @@ import {
   dialogIdsState,
   dialogState,
   schemasState,
+  botEndpointsState,
+  localeState,
+  botStatusState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
   buildEssentialsSelector,
   lgImportsSelectorFamily,
   luImportsSelectorFamily,
+  dialogsWithLuProviderSelectorFamily,
 } from '../selectors';
 
 import { lgFilesSelectorFamily } from './lg';
@@ -44,6 +49,8 @@ export type TreeDataPerProject = {
   sortedDialogs: DialogInfo[];
   lgImports: Record<string, LanguageFileImport[]>;
   luImports: Record<string, LanguageFileImport[]>;
+  lgImportsList: LanguageFileImport[]; // all imported file exclude form diloag
+  luImportsList: LanguageFileImport[];
   name: string;
   isPvaSchema: boolean;
   formDialogSchemas: FormDialogSchema[];
@@ -124,7 +131,7 @@ export const botProjectSpaceSelector = selector({
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
-      const dialogs = get(dialogsSelectorFamily(projectId));
+      const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
       const luFiles = get(luFilesState(projectId));
       const lgFiles = get(lgFilesSelectorFamily(projectId));
       const qnaFiles = get(qnaFilesState(projectId));
@@ -212,7 +219,7 @@ export const perProjectDiagnosticsSelectorFamily = selectorFamily({
     const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
     const rootBotId = get(rootBotProjectIdSelector) || projectId;
     const rootSetting = get(settingsState(rootBotId));
-    const dialogs = get(dialogsSelectorFamily(projectId));
+    const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const lgFiles = get(lgFilesSelectorFamily(projectId));
@@ -267,12 +274,9 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
   },
 });
 
-export const projectTreeSelectorFamily = selectorFamily<
-  TreeDataPerProject[],
-  { showLgImports: boolean; showLuImports: boolean }
->({
+export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
   key: 'projectTreeSelectorFamily',
-  get: (options) => ({ get }) => {
+  get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
     return projectIds.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
@@ -289,23 +293,35 @@ export const projectTreeSelectorFamily = selectorFamily<
 
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
+      const dialogIds = get(dialogIdsState(projectId));
 
       const lgImports: Record<string, LanguageFileImport[]> = {};
       const luImports: Record<string, LanguageFileImport[]> = {};
 
+      // flatten imported file list
+      let lgImportsList: LanguageFileImport[] = [];
+      let luImportsList: LanguageFileImport[] = [];
+
       dialogs.forEach((d) => {
-        if (options.showLgImports) {
-          lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        const currentLgImports = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        lgImports[d.id] = currentLgImports;
+        if (!d.isFormDialog) {
+          lgImportsList.push(...currentLgImports);
         }
 
-        if (options.showLuImports) {
-          luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        const currentLuImports = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        luImports[d.id] = currentLuImports;
+        if (!d.isFormDialog) {
+          luImportsList.push(...currentLuImports);
         }
       });
 
       const schemas = get(schemasState(projectId));
       const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+
+      lgImportsList = uniqBy(lgImportsList, 'id').filter((item) => !dialogIds.includes(item.displayName) && item.id);
+      luImportsList = uniqBy(luImportsList, 'id').filter((item) => !dialogIds.includes(item.displayName) && item.id);
 
       return {
         projectId,
@@ -314,11 +330,42 @@ export const projectTreeSelectorFamily = selectorFamily<
         sortedDialogs,
         luImports,
         lgImports,
+        lgImportsList,
+        luImportsList,
         name,
         isPvaSchema,
         formDialogSchemas,
         botError,
       };
     });
+  },
+});
+
+export const webChatEssentialsSelector = selector({
+  key: 'webChatEssentialsSelector',
+  get: ({ get }) => {
+    const projectId = get(rootBotProjectIdSelector);
+    if (!projectId) {
+      return undefined;
+    }
+    const settings = get(settingsState(projectId));
+    const secrets = {
+      msAppId: settings.MicrosoftAppId || '',
+      msPassword: settings.MicrosoftAppPassword || '',
+    };
+    const botEndpoints = get(botEndpointsState);
+    const botUrl = botEndpoints[projectId];
+    const botName = get(botDisplayNameState(projectId));
+    const activeLocale = get(localeState(projectId));
+    const botStatus = get(botStatusState(projectId));
+
+    return {
+      projectId,
+      botName,
+      secrets,
+      botUrl,
+      activeLocale,
+      botStatus,
+    };
   },
 });

@@ -17,6 +17,6 @@ export enum ClaimNames {
 
 export const APPINSIGHTS_INSTRUMENTATIONKEY = process.env.APPINSIGHTS_INSTRUMENTATIONKEY;
 
-export const piiProperties = ['projectId', 'rootProjectId'];
+export const piiProperties = [];
 
-export const COMPOSER_VERSION = '1.3.1';
+export const COMPOSER_VERSION = '1.4.0';

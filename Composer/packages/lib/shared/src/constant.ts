@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export const QnABotTemplateId = 'QnASample';
+
+export const emptyBotNpmTemplateName = '@microsoft/generator-microsoft-bot-empty';
+
 export const SensitiveProperties = [
   'MicrosoftAppPassword',
   'luis.endpointKey',

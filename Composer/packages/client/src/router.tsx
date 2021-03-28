@@ -36,8 +36,10 @@ const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
 const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
 const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
+const ExtensionsPage = React.lazy(() => import('./pages/extensions/ExtensionsPage'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
+const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
 const Routes = (props) => {
@@ -64,14 +66,11 @@ const Routes = (props) => {
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId/skill/:skillId">
             <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/all/*" />
             <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/all/*" />
-            <LGPage path="language-generation/common/*" />
             <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/all/*" />
             <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <BotProjectSettings path="botProjectsSettings" />
@@ -80,7 +79,6 @@ const Routes = (props) => {
           </ProjectRouter>
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/all/*" />
             <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/all/*" />
@@ -103,7 +101,9 @@ const Routes = (props) => {
             ))}
           </ProjectRouter>
           <SettingPage path="settings/*" />
+          <ExtensionsPage path="extensions/*" />
           <BotCreationFlowRouter path="projects/*" />
+          <BotCreationFlowRouterV2 path="v2/projects/*" />
           <BotCreationFlowRouter path="home" />
           <NotFound default />
         </Router>
@@ -168,7 +168,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
       openAlertModal(title, subTitle, { style: dialogStyle.console });
     }
   }, [schemas, projectId]);
-
   if (props.projectId && botProjects.includes(props.projectId)) {
     if (props.skillId && !botProjects.includes(props.skillId)) {
       return <LoadingSpinner />;

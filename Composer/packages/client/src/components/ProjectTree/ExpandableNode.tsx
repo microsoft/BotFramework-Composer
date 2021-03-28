@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useState, MouseEvent, KeyboardEvent } from 'react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { INDENT_PER_LEVEL } from './constants';
 
@@ -14,35 +15,34 @@ type Props = {
   detailsRef?: (el: HTMLElement | null) => void;
   onToggle?: (newState: boolean) => void;
   defaultState?: boolean;
+  isActive?: boolean;
 };
 
-const summaryStyle = css`
+const summaryStyle = (depth: number, isActive: boolean, isOpen: boolean) => css`
   label: summary;
-  display: flex;
-  padding-left: 12px;
+  padding-left: ${depth * INDENT_PER_LEVEL + 12}px;
   padding-top: 6px;
+  display: list-item;
+  :hover {
+    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+  }
+  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
+  ${isOpen ? 'list-style-type: "⏷";' : 'list-style-type: "⏵";'}
 `;
 
-const nodeStyle = (depth: number) => css`
+const nodeStyle = css`
   margin-top: 2px;
-  margin-left: ${depth * INDENT_PER_LEVEL}px;
 `;
 
-const TRIANGLE_SCALE = 0.6;
-
-const detailsStyle = css`
-  &:not([open]) > summary::-webkit-details-marker {
-    transform: scaleX(${TRIANGLE_SCALE});
-    min-width: 10px;
-  }
-
-  &[open] > summary::-webkit-details-marker {
-    transform: scaleY(${TRIANGLE_SCALE});
-    min-width: 10px;
-  }
-`;
-
-export const ExpandableNode = ({ children, summary, detailsRef, depth = 0, onToggle, defaultState = true }: Props) => {
+export const ExpandableNode = ({
+  children,
+  summary,
+  detailsRef,
+  depth = 0,
+  onToggle,
+  defaultState = true,
+  isActive = false,
+}: Props) => {
   const [isExpanded, setExpanded] = useState(defaultState);
 
   function setExpandedWithCallback(newState: boolean) {
@@ -62,21 +62,19 @@ export const ExpandableNode = ({ children, summary, detailsRef, depth = 0, onTog
   }
 
   return (
-    <div css={nodeStyle(depth)} data-testid="dialog">
-      <details ref={detailsRef} css={detailsStyle} open={isExpanded}>
-        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-        <summary
-          css={summaryStyle}
-          data-testid={'summaryTag'}
-          role="button"
-          tabIndex={0}
-          onClick={handleClick}
-          onKeyUp={handleKey}
-        >
-          {summary}
-        </summary>
-        {children}
-      </details>
-    </div>
+    <details ref={detailsRef} css={nodeStyle} data-testid="dialog" open={isExpanded}>
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+      <summary
+        css={summaryStyle(depth, isActive, isExpanded)}
+        data-testid={'summaryTag'}
+        role="button"
+        tabIndex={0}
+        onClick={handleClick}
+        onKeyUp={handleKey}
+      >
+        {summary}
+      </summary>
+      {children}
+    </details>
   );
 };

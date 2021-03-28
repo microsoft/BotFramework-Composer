@@ -17,8 +17,8 @@ import {
   locationState,
   projectMetaDataState,
   botDisplayNameState,
+  dispatcherState,
 } from '../../atoms';
-import { dispatcherState } from '../../DispatcherWrapper';
 import { botEndpointsState, botProjectIdsState, currentProjectIdState, displaySkillManifestState } from '../../atoms';
 import { Dispatcher } from '..';
 import { skillsStateSelector } from '../../selectors';
@@ -113,7 +113,6 @@ describe('skill dispatcher', () => {
         { recoilState: displaySkillManifestState, initialValue: undefined },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: botProjectIdsState, initialValue: [projectId, ...skillIds] },
-        { recoilState: settingsState(projectId), initialValue: {} },
         {
           recoilState: botProjectFileState(projectId),
           initialValue: {

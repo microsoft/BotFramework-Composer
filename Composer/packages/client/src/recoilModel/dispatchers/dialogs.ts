@@ -12,8 +12,8 @@ import {
   actionsSeedState,
   showCreateDialogModalState,
   dialogState,
+  dispatcherState,
 } from '../atoms';
-import { dispatcherState } from '../DispatcherWrapper';
 
 import { createLgFileState, removeLgFileState } from './lg';
 import { createLuFileState, removeLuFileState } from './lu';
@@ -70,7 +70,11 @@ export const dialogsDispatcher = () => {
   );
 
   const createDialogCancel = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
+    const { func: onComplete } = await snapshot.getPromise(onCreateDialogCompleteState(projectId));
+
+    onComplete?.(null);
+
     set(actionsSeedState(projectId), []);
     set(onCreateDialogCompleteState(projectId), { func: undefined });
     set(showCreateDialogModalState, false);
@@ -80,7 +84,7 @@ export const dialogsDispatcher = () => {
     const { set, snapshot } = callbackHelpers;
     const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
     const schemas = await snapshot.getPromise(schemasState(projectId));
-    const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
+    const dialog = { isRoot: false, ...dialogIndexer.parse(id, fixedContent) };
 
     if (typeof dialog.content === 'object') {
       dialog.content.id = id;

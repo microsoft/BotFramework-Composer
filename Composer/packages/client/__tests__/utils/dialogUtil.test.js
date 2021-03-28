@@ -9,7 +9,6 @@ import {
   updateRegExIntent,
   createSelectedPath,
   deleteTrigger,
-  getFriendlyName,
   getBreadcrumbLabel,
   getSelected,
 } from '../../src/utils/dialogUtil';
@@ -175,13 +174,6 @@ describe('deleteTrigger', () => {
     const length = dialogs[0].content.triggers.length;
     const dialogContent = deleteTrigger(dialogs, 'id1', 2);
     expect(dialogContent.triggers.length).toBe(length - 1);
-  });
-});
-
-describe('getFriendlyName', () => {
-  it('return friendly name', () => {
-    const name = getFriendlyName(dialogs[0].content);
-    expect(name).toBe('kind1');
   });
 });
 

@@ -11,7 +11,8 @@ import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { luFilesState, qnaFilesState, botStatusState, botRuntimeErrorState } from '../atoms';
-import { dialogsSelectorFamily } from '../selectors';
+import { dialogsWithLuProviderSelectorFamily } from '../selectors';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
@@ -19,16 +20,18 @@ const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
 
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (
+    (callbackHelpers: CallbackInterface) => async (
       projectId: string,
       luisConfig: ILuisConfig,
       qnaConfig: IQnAConfig
     ) => {
-      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+      const { set, snapshot } = callbackHelpers;
+      const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-      const errorMsg = qnaFiles.reduce(
+      const referredQnaFiles = getReferredQnaFiles(qnaFiles, dialogs, false);
+      const errorMsg = referredQnaFiles.reduce(
         (result, file) => {
           if (
             file.qnaSections &&
@@ -52,7 +55,7 @@ export const builderDispatcher = () => {
           qnaConfig,
           projectId,
           luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-          qnaFiles: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+          qnaFiles: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
         });
         luFileStatusStorage.publishAll(projectId);
         qnaFileStatusStorage.publishAll(projectId);

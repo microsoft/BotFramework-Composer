@@ -1,13 +1,9 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 using System;
 using System.IO;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.AI.QnA;
@@ -71,6 +67,14 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             }
         }
 
+        public void ConfigureSetSpeakMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings?.Feature?.UseSetSpeakMiddleware == true && settings.Speech != null)
+            {
+                adapter.Use(new SetSpeakMiddleware(settings.Speech.VoiceFontName, settings.Speech.FallbackToTextForSpeechIfEmpty));
+            }
+        }
+
         public IStorage ConfigureStorage(BotSettings settings)
         {
             if (string.IsNullOrEmpty(settings?.CosmosDb?.ContainerId))
@@ -115,6 +119,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
             ConfigureInspectionMiddleWare(adapter, settings, storage);
             ConfigureShowTypingMiddleWare(adapter, settings);
+            ConfigureSetSpeakMiddleWare(adapter, settings);
 
             adapter.OnTurnError = async (turnContext, exception) =>
             {

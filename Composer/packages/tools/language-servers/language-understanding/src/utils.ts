@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import { Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { offsetRange } from '@bfc/indexers';
 import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic } from '@bfc/shared';
 
@@ -69,4 +70,11 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
     diagnostics.push(diagnostic);
   });
   return diagnostics;
+}
+
+export function getLineByIndex(document: TextDocument, line: number) {
+  const lineCount = document.lineCount;
+  if (line >= lineCount || line < 0) return null;
+
+  return document.getText().split(/\r?\n/g)[line];
 }

@@ -75,7 +75,9 @@ async function createAppDataDir() {
   const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
+  process.env.TEMPLATE_GENERATOR_PATH = join(composerAppDataPath, '.yo-repository');
   process.env.COMPOSER_EXTENSION_MANIFEST = join(composerAppDataPath, 'extensions.json');
+  process.env.COMPOSER_EXTENSION_SETTINGS = join(composerAppDataPath, 'extension-settings.json');
   process.env.COMPOSER_EXTENSION_DATA_DIR = join(composerAppDataPath, 'extension-data');
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
   process.env.COMPOSER_TEMP_DIR = join(composerAppDataPath, 'temp');
@@ -158,6 +160,8 @@ async function loadServer() {
   const { start } = await import('@bfc/server');
   serverPort = await start({
     getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
+    getARMTokenForTenant: OneAuthService.getARMTokenForTenant.bind(OneAuthService),
+    getTenants: OneAuthService.getTenants.bind(OneAuthService),
     logOut: OneAuthService.signOut.bind(OneAuthService),
     machineId,
     sessionId,
@@ -300,6 +304,7 @@ async function run() {
   app.on('before-quit', () => {
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
+    mainWindow?.webContents.send('conversation-cleanup');
   });
 
   app.on('activate', () => {

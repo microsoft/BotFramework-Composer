@@ -3,16 +3,28 @@
 
 import * as React from 'react';
 
-import { LgCodeEditor, LgCodeEditorProps } from './lg/LgCodeEditor';
+import { LgCodeEditor } from './lg/LgCodeEditor';
 import { LgResponseEditor } from './lg/LgResponseEditor';
+import { LgCodeEditorProps, LgResponseEditorProps } from './types';
 
 export type LgEditorMode = 'codeEditor' | 'responseEditor';
 
-export type LgEditorProps = LgCodeEditorProps & {
-  mode: LgEditorMode;
-};
+export type LgEditorProps = LgCodeEditorProps &
+  LgResponseEditorProps & {
+    mode: LgEditorMode;
+    codeEditorToolbarHidden?: boolean;
+  };
 
 export const LgEditor = (props: LgEditorProps) => {
-  const { mode, ...editorProps } = props;
-  return mode === 'codeEditor' ? <LgCodeEditor {...editorProps} /> : <LgResponseEditor />;
+  const { mode, codeEditorToolbarHidden = false, ...editorProps } = props;
+
+  return mode === 'codeEditor' ? (
+    <LgCodeEditor
+      toolbarHidden={codeEditorToolbarHidden}
+      {...(editorProps as LgCodeEditorProps)}
+      options={{ folding: false, ...editorProps.options }}
+    />
+  ) : (
+    <LgResponseEditor {...(editorProps as LgResponseEditorProps)} />
+  );
 };

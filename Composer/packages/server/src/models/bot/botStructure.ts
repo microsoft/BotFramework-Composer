@@ -55,6 +55,34 @@ const parseSourceFileName = (name: string, locale: string) => {
   return { fileId, dialogId, fileType, locale };
 };
 
+export const BotStructureFilesPatterns = [
+  templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.settings, { FILENAME: 'appsettings.json' }),
+  templateInterpolate(BotStructureTemplate.dialogs.entry, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.dialogs.dialogSchema, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.dialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
+
+  templateInterpolate(BotStructureTemplate.formDialogs, { FORMDIALOGNAME: '*.form' }),
+  templateInterpolate(BotStructureTemplate.skillManifests, { MANIFESTFILENAME: '*.json' }),
+  templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.recognizer, { RECOGNIZERNAME: '*.dialog' }),
+  templateInterpolate(BotStructureTemplate.crossTrainConfig, { CROSSTRAINCONFIGNAME: 'cross-train.config.json' }),
+  '*.schema',
+  '*.uischema',
+  'language-generation/**/*.lg',
+  'language-understanding/**/*.lu',
+  'knowledge-base/**/*.qna',
+  'dialogs/*/language-generation/**/*.lg',
+  'dialogs/*/language-understanding/**/*.lu',
+  'dialogs/*/knowledge-base/**/*.qna',
+  'dialogs/imported/**/*.dialog',
+  'dialogs/imported/**/language-generation/**/*.lg',
+  'dialogs/imported/**/language-understanding/**/*.lu',
+  'dialogs/imported/**/knowledge-base/**/*.qna',
+  'dialogs/imported/**/*.dialog.schema',
+  'dialogs/*/*.json',
+];
+
 // parse file name: [fileId].[locale].[fileType]
 export const parseFileName = (name: string, defaultLocale: string) => {
   if (name.endsWith(FileExtensions.SourceQnA)) {

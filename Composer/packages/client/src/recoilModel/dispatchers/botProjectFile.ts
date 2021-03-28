@@ -8,9 +8,8 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
 import { BotProjectFile, BotProjectSpaceSkill, Skill } from '@bfc/shared';
 
-import { botNameIdentifierState, botProjectFileState, locationState, settingsState } from '../atoms';
+import { botNameIdentifierState, botProjectFileState, dispatcherState, locationState, settingsState } from '../atoms';
 import { rootBotProjectIdSelector } from '../selectors';
-import { dispatcherState } from '../DispatcherWrapper';
 
 import { setRootBotSettingState } from './setting';
 

@@ -6,14 +6,13 @@ import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { OpenConfirmModal } from '@bfc/ui-shared';
+import { OpenConfirmModal, dialogStyle } from '@bfc/ui-shared';
 import { useSetRecoilState } from 'recoil';
 import React from 'react';
 
-import { DialogDeleting } from '../../constants';
+import { DialogDeleting, removeSkillDialog } from '../../constants';
 import { createSelectedPath, deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
-import { dialogStyle } from '../../components/Modal/dialogStyle';
-import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
+import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { navigateTo, createBotSettingUrl } from '../../utils/navigation';
 import {
   dispatcherState,
@@ -26,6 +25,7 @@ import {
   showAddSkillDialogModalState,
   rootBotProjectIdSelector,
   currentDialogState,
+  skillUsedInBotsSelector,
 } from '../../recoilModel';
 import { undoFunctionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
@@ -33,8 +33,9 @@ import { CreationFlowStatus } from '../../constants';
 import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { TreeLink } from '../../components/ProjectTree/types';
 
-import { deleteDialogContent } from './styles';
+import { deleteDialogContent, removeSkillDialogContentStyle, removeSkillDialogStyle } from './styles';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -65,9 +66,10 @@ const parseTriggerId = (triggerId: string | undefined): number | undefined => {
   return parseInt(indexString);
 };
 
-type SideBarProps = { dialogId: string; projectId: string };
+type SideBarProps = { projectId: string };
 
-const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
+const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
+  const { dialogId, selected: encodedSelected } = useRecoilValue(designPageLocationState(projectId));
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
@@ -75,7 +77,6 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const { commitChanges } = undoFunction;
-  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
 
   const {
     removeDialog,
@@ -90,10 +91,10 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
     updateZoomRate,
     deleteTrigger,
   } = useRecoilValue(dispatcherState);
-
+  const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === dialogId)?.content,
-    designPageLocation.selected || ''
+    encodedSelected || ''
   );
 
   const setTriggerModalInfo = useSetRecoilState(triggerModalInfoState);
@@ -103,28 +104,33 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
   const setBrokenSkillInfo = useSetRecoilState(brokenSkillInfoState);
   const setAddSkillDialogModalVisibility = useSetRecoilState(showAddSkillDialogModalState);
 
-  function handleSelect(link: TreeLink) {
-    if (link.botError) {
-      setBrokenSkillInfo(link);
+  function handleSelect(destination: TreeLink) {
+    if (destination.botError) {
+      setBrokenSkillInfo(destination);
+      return;
     }
-    const { skillId, dialogId, trigger } = link;
+    const {
+      skillId: targetSkillId,
+      dialogId: targetDialogId,
+      trigger: targetTrigger,
+      projectId: targetProjectId,
+    } = destination;
 
     updateZoomRate({ currentRate: 1 });
 
-    if (trigger != null) {
-      selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`);
-    } else if (dialogId != null) {
-      navTo(skillId ?? projectId, dialogId);
+    if (targetTrigger != null) {
+      selectTo(targetSkillId ?? null, targetDialogId ?? null, `triggers[${targetTrigger}]`);
+    } else if (targetDialogId != null) {
+      navTo(targetSkillId ?? targetProjectId, targetDialogId);
     } else {
       // with no dialog or ID, we must be looking at a bot link
-      navTo(skillId ?? projectId, null);
+      navTo(targetSkillId ?? targetProjectId, null);
     }
   }
 
-  const onCreateDialogComplete = (projectId: string) => (dialogId: string) => {
-    const target = projectId;
-    if (dialogId) {
-      navTo(target, dialogId);
+  const onCreateDialogComplete = (targetProjectId: string) => (targetDialogId: string) => {
+    if (targetDialogId) {
+      navTo(targetProjectId, targetDialogId);
     }
   };
 
@@ -238,34 +244,55 @@ const SideBar: React.FC<SideBarProps> = ({ dialogId, projectId }) => {
     }
   };
 
+  async function handleRemoveSkill(skillId: string) {
+    // check if skill used in current project workspace
+    const usedInBots = skillUsedInBotsMap[skillId];
+    const confirmRemove = usedInBots.length
+      ? await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subText, {
+          onRenderContent: () => {
+            return (
+              <div css={removeSkillDialogStyle}>
+                <div> {removeSkillDialog().subText} </div>
+                <div css={removeSkillDialogContentStyle}> {usedInBots.map(({ name }) => name).join('\n')} </div>
+                <div> {removeSkillDialog().footerText} </div>
+              </div>
+            );
+          },
+        })
+      : await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subTextNoUse);
+
+    if (!confirmRemove) return;
+    removeSkillFromBotProject(skillId);
+  }
+
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
 
   return (
-    <React.Fragment>
-      <ProjectTree
-        headerMenu={projectTreeHeaderMenuItems}
-        selectedLink={{
-          projectId: rootProjectId,
-          skillId: rootProjectId === projectId ? undefined : projectId,
-          dialogId,
-          trigger: parseTriggerId(selectedTrigger?.id),
-        }}
-        onBotCreateDialog={handleCreateDialog}
-        onBotDeleteDialog={handleDeleteDialog}
-        onBotEditManifest={handleDisplayManifestModal}
-        onBotExportZip={exportToZip}
-        onBotRemoveSkill={removeSkillFromBotProject}
-        onBotStart={startSingleBot}
-        onBotStop={stopSingleBot}
-        onDialogCreateTrigger={(projectId, dialogId) => {
-          setTriggerModalInfo({ projectId, dialogId });
-        }}
-        onDialogDeleteTrigger={handleDeleteTrigger}
-        onErrorClick={handleErrorClick}
-        onSelect={handleSelect}
-      />
-    </React.Fragment>
+    <ProjectTree
+      headerAriaLabel={formatMessage('Filter by dialog or trigger name')}
+      headerMenu={projectTreeHeaderMenuItems}
+      headerPlaceholder={formatMessage('Filter by dialog or trigger name')}
+      selectedLink={{
+        projectId: rootProjectId,
+        skillId: rootProjectId === projectId ? undefined : projectId,
+        dialogId,
+        trigger: parseTriggerId(selectedTrigger?.id),
+      }}
+      onBotCreateDialog={handleCreateDialog}
+      onBotDeleteDialog={handleDeleteDialog}
+      onBotEditManifest={handleDisplayManifestModal}
+      onBotExportZip={exportToZip}
+      onBotRemoveSkill={handleRemoveSkill}
+      onBotStart={startSingleBot}
+      onBotStop={stopSingleBot}
+      onDialogCreateTrigger={(projectId, dialogId) => {
+        setTriggerModalInfo({ projectId, dialogId });
+      }}
+      onDialogDeleteTrigger={handleDeleteTrigger}
+      onErrorClick={handleErrorClick}
+      onSelect={handleSelect}
+    />
   );
-};
+});
 
 export default SideBar;

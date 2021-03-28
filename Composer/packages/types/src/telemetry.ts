@@ -39,6 +39,23 @@ export enum PageNames {
 
 type ApplicationEvents = {
   NotificationPanelOpened: undefined;
+  HandoffToComposerCompleted: { source: string };
+};
+
+type GettingStartedEvents = {
+  GettingStartedLinkClicked: { method: 'link' | 'button'; url: string };
+};
+
+type PackageManagerEvents = {
+  PackageInstallConflictFound: { package: string; version: string; isUpdate: boolean };
+  PackageInstallConflictResolved: { package: string; version: string; isUpdate: boolean };
+  PackageInstalled: { package: string; version: string; isUpdate: boolean };
+  PackageInstallFailed: { package: string; version: string; isUpdate: boolean };
+  PackageSearch: { term: string };
+  PackageUninstalled: { package: string };
+  PackageUninstallFailed: { package: string };
+  PackageFeedAdded: undefined;
+  PackageFeedDeleted: undefined;
 };
 
 type SessionEvents = {
@@ -51,6 +68,7 @@ type BotProjectEvents = {
   CreateNewBotProject: { method: 'toolbar' | 'newCallToAction' | 'luisCallToAction' };
   CreateNewBotProjectNextButton: { template: string };
   CreateNewBotProjectFromExample: { template: string };
+  CreateNewBotProjectStarted: { template: string };
   CreateNewBotProjectCompleted: { template: string; status: number };
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
@@ -67,7 +85,7 @@ type DesignerEvents = {
   EditModeToggled: { jsonView: boolean };
   HelpLinkClicked: { url: string };
   ToolbarButtonClicked: { name: string };
-  EmulatorButtonClicked: { isRoot: boolean; projectId: string };
+  EmulatorButtonClicked: { isRoot: boolean; projectId: string; location: 'WebChatPane' | 'BotController' };
   LeftMenuModeToggled: { expanded: boolean };
   ProjectTreeFilterUsed: undefined;
   TooltipOpened: { location?: string; title: string; duration: number };
@@ -83,15 +101,16 @@ type DesignerEvents = {
 
 type QnaEvents = {
   AddNewKnowledgeBaseStarted: undefined;
-  AddNewKnowledgeBaseCompleted: undefined;
+  AddNewKnowledgeBaseCompleted: { scratch: boolean };
+  AddNewKnowledgeBaseCanceled: undefined;
   NewQnAPair: undefined;
   AlternateQnAPhraseAdded: undefined;
 };
 
 type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
-  NewPublishingProfileSaved: { type: string };
-  PublishingProfileStarted: { target: string; projectId: string };
+  NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
+  PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileCompleted: { target: string; projectId: string };
 };
 
@@ -102,6 +121,36 @@ type AppSettingsEvents = {
 type BotSettingsEvents = {
   CustomRuntimeToggleChanged: { enabled: boolean };
   GetNewRuntime: { runtimeType: string };
+};
+
+type LgEditorEvents = {
+  LGEditorSwitchToCodeEditor: undefined;
+  LGEditorSwitchToResponseEditor: undefined;
+  LGEditorModalityAdded: { modality: string };
+  LGEditorModalityDeleted: { modality: string };
+  LGQuickInsertItem: {
+    itemType: string;
+    item?: string;
+    location: 'LGCodeEditor' | 'LGResponseEditor';
+  };
+};
+
+type WebChatEvents = {
+  WebChatPaneOpened: undefined;
+  WebChatPaneClosed: undefined;
+  WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
+  DrawerPaneOpened: undefined;
+  DrawerPaneClosed: undefined;
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' };
+  SaveTranscriptClicked: undefined;
+};
+
+type ABSChannelsEvents = {
+  ConnectionsAddNewProfile: undefined;
+  ConnectionsChannelStatusDisplayed: { teams: boolean; speech: boolean; webchat: boolean };
+  ConnectionsChannelStatusError: { error: string };
+  ConnectionsToggleChannel: { channel: string; enabled: boolean };
+  ConnectionsToggleChannelFailed: { channel: string; enabled: boolean };
 };
 
 type OtherEvents = {};
@@ -123,15 +172,20 @@ type PageView = {
 };
 
 export type TelemetryEvents = ApplicationEvents &
+  GettingStartedEvents &
   BotProjectEvents &
+  PackageManagerEvents &
   DesignerEvents &
+  ABSChannelsEvents &
   SessionEvents &
   BotSettingsEvents &
   OtherEvents &
   PublishingEvents &
   QnaEvents &
   AppSettingsEvents &
-  PageView;
+  PageView &
+  LgEditorEvents &
+  WebChatEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

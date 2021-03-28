@@ -7,8 +7,7 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import httpClient from '../../../utils/httpUtil';
 import { exportDispatcher } from '../export';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { botDisplayNameState, currentProjectIdState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { botDisplayNameState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '../../../recoilModel/dispatchers';
 
 jest.mock('../../../utils/httpUtil');

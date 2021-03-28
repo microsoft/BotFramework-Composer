@@ -13,7 +13,9 @@ import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 
+import { BASEPATH } from '../constants';
 import { schemasState } from '../recoilModel/atoms';
 import {
   dispatcherState,
@@ -22,11 +24,15 @@ import {
   localeState,
   currentProjectIdState,
   settingsState,
+  webChatEssentialsSelector,
+  isWebChatPanelVisibleState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
-import { useLocation } from '../utils/hooks';
+import TelemetryClient from '../telemetry/TelemetryClient';
+import { useBotControllerBar } from '../hooks/useControllerBar';
 
+import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
@@ -36,7 +42,6 @@ export const actionButton = css`
 `;
 
 // -------------------- Styles -------------------- //
-
 const headerContainer = css`
   position: relative;
   background: ${SharedColors.cyanBlue10};
@@ -82,25 +87,32 @@ const rightSection = css`
   align-items: center;
   justify-content: flex-end;
   width: 50%;
-  margin: 15px 10px;
+  margin: 0 10px;
 `;
 
 const buttonStyles: IButtonStyles = {
   icon: {
     color: '#fff',
-    fontSize: FontSizes.size20,
+    fontSize: FontSizes.size18,
   },
   root: {
-    height: '20px',
-    width: '20px',
-    marginLeft: '16px',
-    marginTop: '4px',
+    height: '40px',
+    width: '40px',
+    selectors: {
+      ':disabled .ms-Button-icon': {
+        opacity: 0.4,
+        color: `${NeutralColors.white}`,
+      },
+    },
   },
   rootHovered: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
   rootPressed: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+  },
+  rootDisabled: {
+    backgroundColor: `${CommunicationColors.primary}`,
   },
 };
 
@@ -136,23 +148,31 @@ export const Header = () => {
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
   const settings = useRecoilValue(settingsState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
+  const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
-  const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
+  const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
+  const { setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
+  const [hideBotController, hideBotStartController] = useState(true);
 
-  const {
-    location: { pathname },
-  } = useLocation();
+  const isShow = useBotControllerBar();
 
   useEffect(() => {
-    // hide it on the /home page, but make sure not to hide on /bot/stuff/home in case someone names a dialog "home"
-    setStartBotsWidgetVisible(!pathname.endsWith('/home') || pathname.includes('/bot/'));
-  }, [pathname]);
+    if (!isShow) {
+      setWebChatPanelVisibility(false);
+    }
+  }, [isShow]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
   }, []);
+
+  useEffect(() => {
+    if (isWebChatPanelVisible) {
+      hideBotStartController(true);
+    }
+  }, [isWebChatPanelVisible]);
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
@@ -215,7 +235,44 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {showStartBotsWidget && !checkForPVASchema(schemas.sdk) && <BotController />}
+        {isShow && !checkForPVASchema(schemas.sdk) && (
+          <div
+            css={css`
+              margin-right: 12px;
+            `}
+          >
+            <BotController
+              isControllerHidden={hideBotController}
+              onHideController={(isHidden: boolean) => {
+                hideBotStartController(isHidden);
+                if (!isHidden) {
+                  setWebChatPanelVisibility(false);
+                }
+              }}
+            />
+          </div>
+        )}
+        {isShow && (
+          <IconButton
+            ariaDescription={formatMessage('Open web chat')}
+            disabled={!webchatEssentials?.botUrl}
+            iconProps={{
+              iconName: 'OfficeChat',
+            }}
+            styles={buttonStyles}
+            title={formatMessage('Open Web Chat')}
+            onClick={() => {
+              const currentWebChatVisibility = !isWebChatPanelVisible;
+              setWebChatPanelVisibility(currentWebChatVisibility);
+              if (currentWebChatVisibility) {
+                TelemetryClient.track('WebChatPaneOpened');
+              } else {
+                TelemetryClient.track('WebChatPaneClosed');
+              }
+            }}
+          />
+        )}
+        <NotificationButton buttonStyles={buttonStyles} />
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
@@ -224,7 +281,6 @@ export const Header = () => {
             onClick={onUpdateAvailableClick}
           />
         )}
-        <NotificationButton buttonStyles={buttonStyles} />
       </div>
       {teachingBubbleVisibility && (
         <Callout
@@ -250,6 +306,43 @@ export const Header = () => {
           </FocusTrapZone>
         </Callout>
       )}
+
+      <Panel
+        isHiddenOnDismiss
+        closeButtonAriaLabel={formatMessage('Close')}
+        customWidth={'395px'}
+        headerText={projectName}
+        isBlocking={false}
+        isOpen={isWebChatPanelVisible}
+        styles={{
+          root: {
+            marginTop: '50px',
+          },
+          scrollableContent: {
+            width: '100%',
+            height: '100%',
+          },
+          content: {
+            width: '100%',
+            height: '100%',
+            padding: 0,
+            margin: 0,
+          },
+        }}
+        type={PanelType.custom}
+        onDismiss={() => {
+          setWebChatPanelVisibility(false);
+          TelemetryClient.track('WebChatPaneClosed');
+        }}
+      >
+        {webchatEssentials ? (
+          <WebChatPanel
+            botData={{ ...webchatEssentials }}
+            directlineHostUrl={BASEPATH}
+            isWebChatPanelVisible={isWebChatPanelVisible}
+          />
+        ) : null}
+      </Panel>
     </div>
   );
 };

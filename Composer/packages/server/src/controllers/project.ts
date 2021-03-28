@@ -4,7 +4,7 @@
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { remove } from 'fs-extra';
-import formatMessage from 'format-message';
+import set from 'lodash/set';
 
 import { ExtensionContext } from '../models/extension/extensionContext';
 import log from '../logger';
@@ -14,7 +14,7 @@ import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
-import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
+import { getLocationRef, getNewProjRef } from '../utility/project';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 import { TelemetryService } from '../services/telemetry';
 
@@ -50,7 +50,7 @@ async function createProject(req: Request, res: Response) {
 
     const id = await BotProjectService.openProject(newProjRef, user);
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
-    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
+    BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
@@ -132,6 +132,41 @@ async function getProjectByAlias(req: Request, res: Response) {
   }
 }
 
+async function setProjectAlias(req: Request, res: Response) {
+  const { alias } = req.body;
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  if (!alias) {
+    res.status(400).json({
+      message: 'Parameters not provided, requires "alias" parameter',
+    });
+    return;
+  }
+
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    if (currentProject !== undefined) {
+      try {
+        await BotProjectService.setProjectAlias(projectId, alias);
+        res.status(200).json({ id: currentProject.id, name: currentProject.name, alias: alias });
+      } catch (error) {
+        res.status(400).json({
+          message: error instanceof Error ? error.message : error,
+        });
+      }
+    } else {
+      res.status(404).json({
+        message: `No matching bot project found for projectId ${projectId}`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 async function removeProject(req: Request, res: Response) {
   const projectId = req.params.projectId;
   if (!projectId) {
@@ -158,7 +193,7 @@ async function removeProject(req: Request, res: Response) {
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
@@ -195,7 +230,7 @@ async function openProject(req: Request, res: Response) {
 async function saveProjectAs(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.name) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
@@ -216,6 +251,9 @@ async function saveProjectAs(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      const settings = await currentProject.settingManager.get(false);
+      set(settings, 'luis.name', name);
+      await currentProject.updateFile('appsettings.json', JSON.stringify(settings));
       await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
@@ -510,69 +548,29 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
 
 function createProjectV2(req: Request, res: Response) {
   const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Creating Bot Project');
-  createProjectAsync(req, jobId);
+  BotProjectService.createProjectAsync(req, jobId);
   res.status(202).json({
     jobId: jobId,
   });
 }
-async function createProjectAsync(req: Request, jobId: string) {
-  let { templateId } = req.body;
-  const {
-    name,
-    description,
-    storageId,
-    location,
-    schemaUrl,
-    locale,
-    preserveRoot,
-    templateDir,
-    eTag,
-    alias,
-  } = req.body;
+
+async function getVariablesByProjectId(req: Request, res: Response) {
+  const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
-  if (templateId === '') {
-    templateId = 'EmptyBot';
-  }
+  const project = await BotProjectService.getProjectById(projectId, user);
 
-  const locationRef = getLocationRef(location, storageId, name);
-  try {
-    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
-    const createFromRemoteTemplate = !!templateDir;
-
-    await BotProjectService.cleanProject(locationRef);
-    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
-    const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
-
-    const id = await BotProjectService.openProject(newProjRef, user);
-    // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
-    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
-    const currentProject = await BotProjectService.getProjectById(id, user);
-
-    // inject shared content into every new project.  this comes from assets/shared
-    if (!createFromRemoteTemplate) {
-      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+  if (project !== undefined) {
+    try {
+      const variables = await BotProjectService.staticMemoryResolver(projectId);
+      res.status(200).json({ variables });
+    } catch (e) {
+      log('Failed to fetch memory variables for project %s: %O', projectId, e);
+      res.status(500).json(e);
     }
-
-    if (currentProject !== undefined) {
-      await ejectAndMerge(currentProject, jobId);
-      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
-      await currentProject.updateBotInfo(name, description, preserveRoot);
-      if (schemaUrl && !createFromRemoteTemplate) {
-        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-      }
-      await currentProject.init();
-
-      const project = currentProject.getProject();
-      log('Project created successfully.');
-      BackgroundProcessManager.updateProcess(jobId, 200, 'Created Successfully', {
-        id,
-        ...project,
-      });
-    }
-    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 200 });
-  } catch (err) {
-    BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
-    TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
   }
 }
 
@@ -596,6 +594,8 @@ export const ProjectController = {
   checkBoilerplateVersion,
   generateProjectId,
   getProjectByAlias,
+  setProjectAlias,
   backupProject,
   copyTemplateToExistingProject,
+  getVariablesByProjectId,
 };
