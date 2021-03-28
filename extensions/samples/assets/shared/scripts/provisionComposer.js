@@ -31,6 +31,7 @@ const usage = () => {
     ['appPassword', '16 character password'],
     ['environment', 'Environment name (Defaults to dev)'],
     ['location', 'Azure Region (Defaults to westus)'],
+    ['resourceGroup', 'Name of your resource group (Defaults to name-environment)'],
     ['appId', 'Microsoft App ID (Will create if absent)'],
     ['tenantId', 'ID of your tenant if required (will choose first in list by default)'],
     ['createLuisResource', 'Create a LUIS resource? Default true'],
@@ -100,6 +101,7 @@ var tenantId = argv.tenantId ? argv.tenantId : '';
 const templatePath =
   argv.customArmTemplate || path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
 const qnaTemplatePath = argv.qnaTemplate || path.join(__dirname, 'DeploymentTemplates', 'qna-template.json');
+const resourceGroup = argv.resourceGroup || `${name}-${environment}`;
 
 const BotProjectDeployLoggerType = {
   // Logger Type for Provision
@@ -467,7 +469,7 @@ const create = async (
     message: `> Create App Id Success! ID: ${appId}`,
   });
 
-  const resourceGroupName = botName;
+  const resourceGroupName = resourceGroup;
 
   // timestamp will be used as deployment name
   const timeStamp = new Date().getTime().toString();
@@ -802,6 +804,10 @@ msRestNodeAuth
         luisResource: `${name}-${environment}-luis`,
         settings: createResult,
         runtimeIdentifier: 'win-x64',
+        resourceGroup: resourceGroup,
+        botName: `${name}-${environment}`,
+        region: location,
+        subscriptionId: subId,
       };
 
       console.log(chalk.white(JSON.stringify(profile, null, 2)));
