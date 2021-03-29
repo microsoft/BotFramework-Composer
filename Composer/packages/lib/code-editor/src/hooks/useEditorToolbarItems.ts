@@ -7,7 +7,7 @@ import * as React from 'react';
 
 import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload, ToolbarButtonPayload } from '../types';
 
-export const useLgEditorToolbarItems = (
+export const useEditorToolbarItems = (
   lgTemplates: readonly LgTemplate[],
   properties: readonly string[],
   selectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void
