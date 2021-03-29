@@ -8,7 +8,6 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
-import { Tenants } from '@azure/arm-subscriptions';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
