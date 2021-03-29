@@ -7,6 +7,7 @@ import fs from 'fs';
 import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import {
   getNewDesigner,
   FileInfo,
@@ -47,7 +48,6 @@ const oauthInput = () => ({
 });
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
-
 export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
@@ -200,8 +200,11 @@ export class BotProject implements IBotProject {
    */
   public getRuntimePath = (): string | undefined => {
     let runtimePath = this.settings?.runtime?.path;
+
     if (runtimePath && !Path.isAbsolute(runtimePath)) {
-      runtimePath = Path.resolve(this.dir, 'settings', runtimePath);
+      const dir = isUsingAdaptiveRuntime(this.settings?.runtime) ? Path.resolve(this.dir, 'settings') : this.dir;
+
+      runtimePath = Path.resolve(dir, runtimePath);
     }
     return runtimePath;
   };

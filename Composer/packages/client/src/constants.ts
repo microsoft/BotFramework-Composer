@@ -180,6 +180,12 @@ export const BotStatusesCopy = {
 };
 
 export const DialogCreationCopy = {
+  get CREATE_OPTIONS() {
+    return {
+      title: formatMessage('Open your Azure Bot resource'),
+      subText: formatMessage('Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?'),
+    };
+  },
   get CREATE_NEW_BOT() {
     return {
       title: formatMessage('Create bot from template or scratch?'),
@@ -410,6 +416,10 @@ export const graphScopes = {
   scopes: ['https://graph.microsoft.com/Application.ReadWrite.All'],
   targetResource: 'https://graph.microsoft.com/',
 };
+export const vaultScopes = {
+  scopes: ['https://vault.azure.net/user_impersonation'],
+  targetResource: 'https://vault.azure.net/',
+};
 
 export const authUrl = `https://login.microsoftonline.com/${authConfig.tenantId}/oauth2/v2.0/authorize`;
 
@@ -439,4 +449,4 @@ export const runtimeOptions: IDropdownOption[] = [
   { key: 'azureFunctions', text: 'Azure Functions' },
 ];
 
-export const onboardingDisabled = true;
+export const onboardingDisabled = false;

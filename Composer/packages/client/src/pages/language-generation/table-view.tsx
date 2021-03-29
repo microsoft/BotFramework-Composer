@@ -18,6 +18,7 @@ import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { lgUtil } from '@bfc/indexers';
+import { LgFile } from '@botframework-composer/types/src';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
@@ -32,10 +33,11 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   skillId?: string;
   dialogId?: string;
   lgFileId?: string;
+  file?: LgFile;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId, lgFileId } = props;
+  const { dialogId, projectId, skillId, lgFileId, file } = props;
 
   const actualProjectId = skillId ?? projectId;
 
@@ -48,10 +50,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   );
 
   const { languages, defaultLanguage } = settings;
-
-  const file = lgFileId
-    ? lgFiles.find(({ id }) => id === lgFileId)
-    : lgFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
 
   const defaultLangFile = lgFileId
     ? lgFiles.find(({ id }) => id === lgFileId)
