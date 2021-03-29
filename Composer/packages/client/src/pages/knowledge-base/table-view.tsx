@@ -824,7 +824,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const newGroups = getGroups();
     const isChanged = !isEqual(groups, newGroups);
     if (isChanged) setGroups(newGroups);
-  }, [dialogId, qnaFiles]);
+  }, [dialogId, qnaFiles, locale]);
 
   useEffect(() => {
     if (groups) {

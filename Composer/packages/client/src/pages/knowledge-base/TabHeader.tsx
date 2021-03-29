@@ -43,7 +43,7 @@ export const TabHeader: React.FC<TabHeaderProps> = (props) => {
           left: '20px',
           top: '0px',
           width: 'calc(100% - 40px)',
-          zIndex: 1000,
+          zIndex: 1,
           backgroundColor: 'white',
         },
         itemContainer: { height: 'calc(100% - 60px)', marginTop: '60px', padding: '0 20px' },
