@@ -14,12 +14,15 @@ import {
   isEjectRuntimeExistState,
   filePersistenceState,
   settingsState,
-  luFilesState,
-  qnaFilesState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
-import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
+import {
+  rootBotProjectIdSelector,
+  dialogsSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+} from '../selectors';
 import * as luUtil from '../../utils/luUtil';
 import { ClientStorage } from '../../utils/storage';
 
@@ -187,8 +190,8 @@ export const publisherDispatcher = () => {
       try {
         const { snapshot } = callbackHelpers;
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-        const luFiles = await snapshot.getPromise(luFilesState(projectId));
-        const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           accessToken: token,
