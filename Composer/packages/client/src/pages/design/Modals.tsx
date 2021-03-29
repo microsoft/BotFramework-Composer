@@ -15,7 +15,7 @@ import {
   schemasState,
   showCreateDialogModalState,
   localeState,
-  qnaFilesState,
+  qnaFilesSelectorFamily,
   displaySkillManifestState,
   brokenSkillInfoState,
   brokenSkillRepairCallbackState,
@@ -42,7 +42,7 @@ type ModalsProps = {
   projectId: string;
 };
 const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
   const displaySkillManifestNameIdentifier = useRecoilValue(displaySkillManifestState);
