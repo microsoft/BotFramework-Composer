@@ -80,10 +80,6 @@ const PageTypes = {
 };
 
 const DialogTitle = {
-  SELECT_TENANT: {
-    title: formatMessage('Sign in'),
-    subText: formatMessage('Choose the Azure tenant you wish to use before continuing.'),
-  },
   CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
@@ -233,7 +229,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
 
-  const [allTenants, setAllTenants] = useState<AzureTenant[]>();
+  const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<string>();
   const [token, setToken] = useState<string>();
   const [currentUser, setCurrentUser] = useState<any>(undefined);
@@ -296,7 +292,8 @@ export const AzureProvisionDialog: React.FC = () => {
   };
 
   useEffect(() => {
-    setTitle(DialogTitle.SELECT_TENANT);
+    // TODO: need to get the tenant id from the auth config when running as web app,
+    // for electron we will always fetch tenants.
     if (isGetTokenFromUser()) {
       const { accessToken } = getTokenFromCache();
 
@@ -313,28 +310,37 @@ export const AzureProvisionDialog: React.FC = () => {
         });
       }
     } else {
-      if (!getTenantIdFromCache()) {
-        getTenants().then((tenants) => {
+      getTenants().then((tenants) => {
+        setAllTenants(tenants);
+        if (!getTenantIdFromCache()) {
           if (isMounted.current && tenants?.length > 0) {
             // if there is only 1 tenant, go ahead and fetch the token and store it in the cache
             if (tenants.length === 1) {
-              getTokenForTenant(tenants[0].tenantId);
-            } else {
-              // we need to show the tenant selection UI
-              setAllTenants(tenants);
               setSelectedTenant(tenants[0].tenantId);
-              setPage(PageTypes.SelectTenant);
+              // getTokenForTenant(tenants[0].tenantId);
+            } else {
+              // seed tenant selection with first tenant
+              setSelectedTenant(tenants[0].tenantId);
             }
           }
-        });
-      } else {
-        getTokenForTenant(getTenantIdFromCache());
-      }
+        } else {
+          setSelectedTenant(getTenantIdFromCache());
+        }
+      });
     }
   }, []);
 
   useEffect(() => {
+    if (selectedTenant) {
+      getTokenForTenant(selectedTenant);
+    }
+  }, [selectedTenant]);
+
+  useEffect(() => {
     if (currentConfig) {
+      if (currentConfig.tennantId) {
+        setSelectedTenant(currentConfig.tennantId);
+      }
       if (currentConfig.subscriptionId) {
         setSubscription(currentConfig.subscriptionId);
       }
@@ -383,17 +389,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const luisLocationsOption = useMemo((): IDropdownOption[] => {
     return luisLocations.map((t) => ({ key: t.name, text: t.displayName }));
   }, [luisLocations]);
-
-  const updateCurrentSubscription = useMemo(
-    () => (_e, option?: IDropdownOption) => {
-      const sub = subscriptionOption?.find((t) => t.key === option?.key);
-
-      if (sub) {
-        setSubscription(sub.key);
-      }
-    },
-    [subscriptionOption]
-  );
 
   const checkNameAvailability = useCallback(
     (newName: string) => {
@@ -521,7 +516,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSubmit = useCallback((options) => {
     // call back to the main Composer API to begin this process...
-    startProvision({ ...options, tenantId: selectedTenant });
+    startProvision(options);
     clearAll();
     closeDialog();
   }, []);
@@ -533,13 +528,6 @@ export const AzureProvisionDialog: React.FC = () => {
       closeDialog();
     },
     [importConfig]
-  );
-
-  const updateChoice = useMemo(
-    () => (ev, option) => {
-      setChoice(option);
-    },
-    []
   );
 
   const onRenderSecondaryText = useMemo(
@@ -573,150 +561,154 @@ export const AzureProvisionDialog: React.FC = () => {
     return enabledResources.length > 0 || requireResources.length > 0;
   }, [enabledResources]);
 
-  const SelectTenant = useMemo(
-    () =>
-      allTenants?.length && (
-        <Fragment>
-          <form style={{ width: '50%', marginTop: '16px' }}>
-            <Dropdown
-              required
-              errorMessage={loginErrorMsg}
-              label={formatMessage('Tenant')}
-              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-              selectedKey={selectedTenant}
-              onChange={(_e, o) => {
-                setSelectedTenant(o.key as string);
-              }}
-            />
-          </form>
-        </Fragment>
-      ),
-    [allTenants, selectedTenant, loginErrorMsg]
-  );
-
   const PageFormConfig = (
-    <Fragment>
-      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
-      <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
-        {subscriptionOption?.length > 0 && choice.key === 'create' && (
-          <form style={{ width: '50%', marginTop: '16px' }}>
-            <Dropdown
-              required
-              ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-              defaultSelectedKey={currentSubscription}
-              disabled={currentConfig?.subscriptionId}
-              label={formatMessage('Subscription')}
-              options={subscriptionOption}
-              placeholder={formatMessage('Select one')}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onChange={updateCurrentSubscription}
-              onRenderLabel={onRenderLabel}
-            />
-            <TextField
-              required
-              ariaLabel={formatMessage(
-                'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
-              )}
-              defaultValue={currentResourceGroup}
-              disabled={currentConfig?.resourceGroup}
-              errorMessage={errorResourceGroupName}
-              label={formatMessage('Resource group name')}
-              placeholder={formatMessage('Name of your new resource group')}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onChange={updateCurrentResourceGroup}
-              onRenderLabel={onRenderLabel}
-            />
-            <TextField
-              required
-              ariaLabel={formatMessage(
-                'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
-              )}
-              defaultValue={currentHostName}
-              disabled={currentConfig?.hostname || currentConfig?.name}
-              errorMessage={errorHostName}
-              label={formatMessage('Resource name')}
-              placeholder={formatMessage('Name of your services')}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onChange={newHostName}
-              onRenderLabel={onRenderLabel}
-            />
-            {currentConfig?.region ? (
-              <TextField
-                required
-                defaultValue={currentConfig?.region}
-                disabled={currentConfig?.region}
-                label={formatMessage('Region')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onRenderLabel={onRenderLabel}
-              />
-            ) : (
+    <div style={{ display: 'flex', height: '100%' }}>
+      <div style={{ flex: '0 0 auto', marginRight: '2rem' }}>
+        <ChoiceGroup
+          options={choiceOptions}
+          selectedKey={choice?.key || 'create'}
+          onChange={(_e, option: IChoiceGroupOption) => {
+            setChoice(option);
+          }}
+        />
+      </div>
+      <div style={{ flex: 1, height: '100%' }}>
+        <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
+          {subscriptionOption?.length > 0 && choice.key === 'create' && (
+            <form style={{ width: '100%' }}>
               <Dropdown
                 required
-                defaultSelectedKey={currentLocation}
-                label={formatMessage('Region')}
-                options={deployLocationsOption}
-                placeholder={formatMessage('Select one')}
+                disabled={allTenants.length === 1 || currentConfig?.tenantId}
+                errorMessage={loginErrorMsg}
+                label={formatMessage('Azure Directory')}
+                options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+                selectedKey={selectedTenant}
                 styles={{ root: { paddingBottom: '8px' } }}
-                onChange={updateCurrentLocation}
+                onChange={(_e, o) => {
+                  setSelectedTenant(o.key as string);
+                }}
               />
-            )}
-            {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
-              <TextField
-                disabled
-                required
-                defaultValue={currentConfig?.settings?.luis?.region}
-                label={formatMessage('Region for Luis')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onRenderLabel={onRenderLabel}
-              />
-            )}
-            {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
               <Dropdown
                 required
-                defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
-                label={formatMessage('Region for Luis')}
-                options={luisLocationsOption}
+                ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
+                defaultSelectedKey={currentSubscription}
+                disabled={currentConfig?.subscriptionId}
+                errorMessage={
+                  currentUser && subscriptionOption?.length < 1
+                    ? formatMessage(
+                        'Your subscription list is empty, please add your subscription, or login with another account.'
+                      )
+                    : undefined
+                }
+                label={formatMessage('Subscription')}
+                options={subscriptionOption}
                 placeholder={formatMessage('Select one')}
-                onChange={updateLuisLocation}
+                styles={{ root: { paddingBottom: '8px' } }}
+                onChange={(_e, o: IDropdownOption) => {
+                  setSubscription(o.key as string);
+                }}
+                onRenderLabel={onRenderLabel}
               />
-            )}
-          </form>
-        )}
-        {choice.key === 'create' && loginErrorMsg !== '' && <div style={{ marginTop: '10px' }}> {loginErrorMsg} </div>}
-        {choice.key === 'create' && currentUser && subscriptionOption?.length < 1 && (
-          <div style={{ marginTop: '10px' }}>
-            Your subscription list is empty, please add your subscription, or login with another account.
-          </div>
-        )}
-      </Suspense>
-      {choice.key === 'import' && (
-        <div style={{ width: '50%', marginTop: '10px', height: '100%' }}>
-          <div
-            style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: '#323130',
-              padding: '5px 0px',
-            }}
-          >
-            {formatMessage('Publish Configuration')}
-          </div>
-          <JsonEditor
-            height={300}
-            id={publishType}
-            schema={getSchema()}
-            value={currentConfig || importConfig}
-            onChange={(value) => {
-              setEditorError(false);
-              setImportConfig(value);
-            }}
-            onError={() => {
-              setEditorError(true);
-            }}
-          />
-        </div>
-      )}
-    </Fragment>
+              <TextField
+                required
+                ariaLabel={formatMessage(
+                  'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
+                )}
+                defaultValue={currentResourceGroup}
+                disabled={currentConfig?.resourceGroup}
+                errorMessage={errorResourceGroupName}
+                label={formatMessage('Resource group name')}
+                placeholder={formatMessage('Name of your new resource group')}
+                styles={{ root: { paddingBottom: '8px' } }}
+                onChange={updateCurrentResourceGroup}
+                onRenderLabel={onRenderLabel}
+              />
+              <TextField
+                required
+                ariaLabel={formatMessage(
+                  'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
+                )}
+                defaultValue={currentHostName}
+                disabled={currentConfig?.hostname || currentConfig?.name}
+                errorMessage={errorHostName}
+                label={formatMessage('Resource name')}
+                placeholder={formatMessage('Name of your services')}
+                styles={{ root: { paddingBottom: '8px' } }}
+                onChange={newHostName}
+                onRenderLabel={onRenderLabel}
+              />
+              {currentConfig?.region ? (
+                <TextField
+                  required
+                  defaultValue={currentConfig?.region}
+                  disabled={currentConfig?.region}
+                  label={formatMessage('Region')}
+                  styles={{ root: { paddingBottom: '8px' } }}
+                  onRenderLabel={onRenderLabel}
+                />
+              ) : (
+                <Dropdown
+                  required
+                  defaultSelectedKey={currentLocation}
+                  label={formatMessage('Region')}
+                  options={deployLocationsOption}
+                  placeholder={formatMessage('Select one')}
+                  styles={{ root: { paddingBottom: '8px' } }}
+                  onChange={updateCurrentLocation}
+                />
+              )}
+              {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
+                <TextField
+                  disabled
+                  required
+                  defaultValue={currentConfig?.settings?.luis?.region}
+                  label={formatMessage('Region for Luis')}
+                  styles={{ root: { paddingBottom: '8px' } }}
+                  onRenderLabel={onRenderLabel}
+                />
+              )}
+              {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
+                <Dropdown
+                  required
+                  defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
+                  label={formatMessage('Region for Luis')}
+                  options={luisLocationsOption}
+                  placeholder={formatMessage('Select one')}
+                  onChange={updateLuisLocation}
+                />
+              )}
+            </form>
+          )}
+          {choice.key === 'import' && (
+            <div style={{ width: '100%', height: '100%' }}>
+              <div
+                style={{
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: '#323130',
+                  padding: '5px 0px',
+                }}
+              >
+                {formatMessage('Publish Configuration')}
+              </div>
+              <JsonEditor
+                height={300}
+                id={publishType}
+                schema={getSchema()}
+                value={currentConfig || importConfig}
+                onChange={(value) => {
+                  setEditorError(false);
+                  setImportConfig(value);
+                }}
+                onError={() => {
+                  setEditorError(true);
+                }}
+              />
+            </div>
+          )}
+        </Suspense>
+      </div>
+    </div>
   );
 
   useEffect(() => {
@@ -783,29 +775,7 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
-    if (page === PageTypes.SelectTenant) {
-      return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'flex-end' }}>
-          <div>
-            <DefaultButton
-              style={{ margin: '0 4px' }}
-              text={formatMessage('Back')}
-              onClick={() => {
-                onBack();
-              }}
-            />
-            <PrimaryButton
-              disabled={!selectedTenant}
-              style={{ margin: '0 4px' }}
-              text={formatMessage('Next: Configure Resources')}
-              onClick={() => {
-                getTokenForTenant(selectedTenant);
-              }}
-            />
-          </div>
-        </div>
-      );
-    } else if (page === PageTypes.ConfigProvision) {
+    if (page === PageTypes.ConfigProvision) {
       return (
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
@@ -991,7 +961,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // if we haven't loaded the token yet, show a loading spinner
   // unless we need to select the tenant first
-  if (page !== PageTypes.SelectTenant && !token) {
+  if (!token) {
     return (
       <div style={{ height: '100vh' }}>
         <LoadingSpinner />
@@ -1000,33 +970,34 @@ export const AzureProvisionDialog: React.FC = () => {
   }
 
   return (
-    <div style={{ height: '100vh' }}>
-      {page === PageTypes.SelectTenant && SelectTenant}
-      {page === PageTypes.ConfigProvision && PageFormConfig}
-      {page === PageTypes.AddResources && PageAddResources()}
-      {page === PageTypes.ReviewResource && PageReview}
-      {page === PageTypes.EditJson && (
-        <JsonEditor
-          height={400}
-          id={publishType}
-          schema={getSchema()}
-          value={currentConfig || importConfig}
-          onChange={(value) => {
-            setEditorError(false);
-            setImportConfig(value);
-          }}
-          onError={() => {
-            setEditorError(true);
-          }}
-        />
-      )}
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div style={{ flex: 1 }}>
+        {page === PageTypes.ConfigProvision && PageFormConfig}
+        {page === PageTypes.AddResources && PageAddResources()}
+        {page === PageTypes.ReviewResource && PageReview}
+        {page === PageTypes.EditJson && (
+          <JsonEditor
+            height={400}
+            id={publishType}
+            schema={getSchema()}
+            value={currentConfig || importConfig}
+            onChange={(value) => {
+              setEditorError(false);
+              setImportConfig(value);
+            }}
+            onError={() => {
+              setEditorError(true);
+            }}
+          />
+        )}
+      </div>
       <div
         style={{
+          flex: 'auto',
+          flexGrow: 0,
           background: '#FFFFFF',
           borderTop: '1px solid #EDEBE9',
-          position: 'fixed',
           width: '100%',
-          bottom: '0',
           textAlign: 'right',
           height: 'fit-content',
           padding: '24px 0px 0px',
