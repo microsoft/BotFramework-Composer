@@ -309,16 +309,16 @@ export const addSkillDialog = {
 };
 
 export const selectIntentDialog = {
-  get SELECT_INTENT() {
+  SELECT_INTENT: (name: string) => {
     return {
       title: formatMessage('Select intents to trigger Bookings skill'),
-      subText: formatMessage('These intents will trigger this skill from ToDoBotSample'),
+      subText: formatMessage(`These intents will trigger this skill from ${name}`),
     };
   },
-  get ADD_OR_EDIT_PHRASE() {
+  ADD_OR_EDIT_PHRASE: (name: string) => {
     return {
       title: formatMessage('Add or edit phrases to trigger Bookings skill'),
-      subText: formatMessage('These phrases will trigger this skill from ToDoBotSample'),
+      subText: formatMessage(`These phrases will trigger this skill from ${name}`),
     };
   },
 };

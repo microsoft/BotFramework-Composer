@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useRef, useState, useMemo } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Label } from 'office-ui-fabric-react/lib/Label';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -15,12 +13,14 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
-import { settingsState, skillsStateSelector, luFilesState } from '../recoilModel';
-import { addSkillDialog } from '../constants';
-import httpClient from '../utils/httpUtil';
-import TelemetryClient from '../telemetry/TelemetryClient';
+import { settingsState, skillsStateSelector, luFilesState, designPageLocationState } from '../../recoilModel';
+import { addSkillDialog } from '../../constants';
+import httpClient from '../../utils/httpUtil';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { SelectIntentModal } from './SelectIntentModal';
+import { SkillDetail } from './SkillDetail';
+import { TriggerFormData } from '../../utils/dialogUtil';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -34,7 +34,7 @@ export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A
 
 export interface CreateSkillModalProps {
   projectId: string;
-  onSubmit: (manifestUrl: string, endpointName: string) => void;
+  onSubmit: (manifestUrl: string, endpointName: string, dialogId: string, triggerFormData: TriggerFormData) => void;
   onDismiss: () => void;
 }
 
@@ -98,11 +98,21 @@ export const validateManifestUrl = async ({
   }
 };
 
+const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
+  errors: {},
+  $kind: 'Microsoft.OnIntent',
+  event: '',
+  intent: intent,
+  triggerPhrases: content,
+  regEx: '',
+});
+
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, onSubmit, onDismiss }) => {
   const skills = useRecoilValue(skillsStateSelector);
   const { publishTargets, languages, luFeatures } = useRecoilValue(settingsState(projectId));
-  const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
+  const { dialogId } = useRecoilValue(designPageLocationState(projectId));
 
+  const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
     manifestUrl: '',
     endpointName: '',
@@ -113,20 +123,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
     manifestUrl: ValidationState.NotValidated,
     name: ValidationState.Validated,
   });
-  // const [selectedEndpointKey, setSelectedEndpointKey] = useState<number | null>(null);
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
   const luFiles = useRecoilValue(luFilesState(projectId));
-
-  // const endpointOptions = useMemo<IDropdownOption[]>(() => {
-  //   return (skillManifest?.endpoints || [])?.map(({ name, endpointUrl, msAppId }, key) => ({
-  //     key,
-  //     text: name,
-  //     data: {
-  //       endpointUrl,
-  //       msAppId,
-  //     },
-  //   }));
-  // }, [skillManifest]);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -160,39 +158,21 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
     // setSelectedEndpointKey(null);
   };
 
-  // const handleEndpointUrlChange = (_, option?: IDropdownOption) => {
-  //   if (option) {
-  //     const { data, key } = option;
-  //     validateEndpoint({
-  //       formData: {
-  //         ...data,
-  //         ...formData,
-  //       },
-  //       ...validationHelpers,
-  //     });
-  //     setFormData({
-  //       ...data,
-  //       ...formData,
-  //     });
-  //     setSelectedEndpointKey(key as number);
-  //   }
-  // };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = (event, content) => {
     event.preventDefault();
-    console.log(formData);
-    onSubmit(formData.manifestUrl, formData.endpointName);
+    // add a remote skill
+    console.log(skillManifest.name);
+
+    const triggerFormData = getTriggerFormData(skillManifest.name, content);
+    onSubmit(formData.manifestUrl, formData.endpointName, dialogId, triggerFormData);
     TelemetryClient.track('AddNewSkillCompleted');
+    // add trigger to root bot
+    TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
   };
 
   const validateUrl = (event) => {
     event.preventDefault();
   };
-
-  // const isDisabled =
-  //   !formData.manifestUrl ||
-  //   Object.values(formDataErrors).some(Boolean) ||
-  //   !Object.values(validationState).every((validation) => validation === ValidationState.Validated);
 
   return (
     <Fragment>
@@ -205,6 +185,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
           onDismiss={onDismiss}
           onSubmit={handleSubmit}
           rootLuFiles={luFiles}
+          dialogId={dialogId}
         />
       ) : (
         <DialogWrapper
@@ -227,7 +208,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
             </div>
             <Separator />
             <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
-              <StackItem grow={1}>
+              <div style={{ width: '70%' }}>
                 <TextField
                   required
                   disabled={!publishTargets || publishTargets.length < 1}
@@ -244,13 +225,13 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
                     </Link>
                   </div>
                 )}
-              </StackItem>
+              </div>
               {skillManifest && (
                 <Fragment>
-                  <Separator vertical />
-                  <StackItem grow={1}>
-                    <div>{skillManifest.name}</div>
-                  </StackItem>
+                  <Separator vertical styles={{ root: { padding: '0px 20px' } }} />
+                  <div style={{ minWidth: '50%' }}>
+                    <SkillDetail manifest={skillManifest} />
+                  </div>
                 </Fragment>
               )}
             </Stack>

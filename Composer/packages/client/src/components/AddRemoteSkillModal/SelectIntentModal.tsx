@@ -16,10 +16,10 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { selectIntentDialog } from '../constants';
-import httpClient from '../utils/httpUtil';
-import luWorker from '../recoilModel/parsers/luWorker';
-import { localeState, dispatcherState } from '../recoilModel';
+import { selectIntentDialog } from '../../constants';
+import httpClient from '../../utils/httpUtil';
+import luWorker from '../../recoilModel/parsers/luWorker';
+import { localeState, dispatcherState } from '../../recoilModel';
 
 const detailListContainer = css`
   width: 100%;
@@ -42,7 +42,8 @@ interface SelectIntentModalProps {
   projectId: string;
   luFeatures: any;
   rootLuFiles: LuFile[];
-  onSubmit: (event) => void;
+  dialogId: string;
+  onSubmit: (event, content: string) => void;
   onDismiss: () => void;
 }
 
@@ -94,7 +95,7 @@ const getParsedLuFiles = async (files: { id: string; content: string }[], luFeat
 };
 
 export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
-  const { manifest, onSubmit, onDismiss, languages, luFeatures, projectId, rootLuFiles } = props;
+  const { manifest, onSubmit, onDismiss, languages, luFeatures, projectId, rootLuFiles, dialogId } = props;
   const [page, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
   // luFiles from manifest
@@ -105,7 +106,7 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
   const [displayIntents, setDisplayIntent] = useState<Array<LuIntentSection>>([]);
   const [displayContent, setDisplayContent] = useState<string>('');
   // const [luFileError, setError] = useState();
-  const [title, setTitle] = useState(selectIntentDialog.SELECT_INTENT);
+  const [title, setTitle] = useState(selectIntentDialog.SELECT_INTENT(dialogId));
   const locale = useRecoilValue(localeState(projectId));
 
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
@@ -139,7 +140,7 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
       const payload = {
         projectId: projectId,
         id,
-        content: file.content + '\n' + content,
+        content: file.content + `\n # ${manifest.name} \n` + content,
       };
       updateLuFileDispatcher(payload);
     },
@@ -180,7 +181,7 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
       // current locale, selected intent value.
       const intentsValue = intents
         .map((item) => {
-          return `# ${item.Name}` + '\n' + item.Body;
+          return `> ${item.Name}` + '\n' + item.Body;
         })
         .join('\n');
       setDisplayContent(intentsValue);
@@ -217,7 +218,7 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
               text={formatMessage('Back')}
               onClick={() => {
                 setPage(page - 1);
-                setTitle(selectIntentDialog.SELECT_INTENT);
+                setTitle(selectIntentDialog.SELECT_INTENT(dialogId));
               }}
             />
           )}
@@ -229,7 +230,7 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
                 text={formatMessage('Next')}
                 onClick={() => {
                   setPage(page + 1);
-                  setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE);
+                  setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId));
                 }}
               />
             ) : (
@@ -237,8 +238,10 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
                 styles={{ root: { marginLeft: '8px' } }}
                 text={formatMessage('Done')}
                 onClick={(event) => {
+                  // merge lu file
                   updateLuFile(displayContent);
-                  onSubmit(event);
+                  onSubmit(event, displayContent);
+                  // add a trigger to root bot
                   onDismiss();
                 }}
               />
