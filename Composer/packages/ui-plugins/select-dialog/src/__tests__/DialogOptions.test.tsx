@@ -10,10 +10,10 @@ import { EditorExtension } from '@bfc/extension-client';
 import { DialogOptionsField } from '../DialogOptionsField';
 
 jest.mock('@bfc/adaptive-form', () => {
-  const AdaptiveForm = jest.requireActual('@bfc/adaptive-form');
+  const MockAdaptiveForm = jest.requireActual('@bfc/adaptive-form');
 
   return {
-    ...AdaptiveForm,
+    ...MockAdaptiveForm,
     OpenObjectField: () => <div>Object Field</div>,
     SchemaField: () => <div>Options Form</div>,
     IntellisenseTextField: () => <div>Intellisense Text Field</div>,
@@ -21,10 +21,10 @@ jest.mock('@bfc/adaptive-form', () => {
 });
 
 jest.mock('office-ui-fabric-react/lib/Dropdown', () => {
-  const Dropdown = jest.requireActual('office-ui-fabric-react/lib/Dropdown');
+  const MockDropdown = jest.requireActual('office-ui-fabric-react/lib/Dropdown');
 
   return {
-    ...Dropdown,
+    ...MockDropdown,
     Dropdown: ({ onChange }) => (
       <button
         onClick={(e) => {

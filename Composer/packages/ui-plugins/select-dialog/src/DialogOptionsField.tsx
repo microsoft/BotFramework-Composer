@@ -60,7 +60,7 @@ const getSelectedKey = (
 ): string => {
   if (typeof value !== 'string' && schema && validSchema) {
     return 'form';
-  } else if (typeof value !== 'string' && !schema) {
+  } else if (typeof value !== 'string' && (!schema || !validSchema)) {
     return 'object';
   } else {
     return 'expression';
@@ -92,7 +92,7 @@ const DialogOptionsField: React.FC<FieldProps> = ({
 
   React.useEffect(() => {
     mountRef.current = true;
-    if (schema && !Object.keys(schema.properties || {}).length) {
+    if (schema && Object.keys(schema.properties || {}).length) {
       (async () => {
         setValidationStatus('validating');
         try {
