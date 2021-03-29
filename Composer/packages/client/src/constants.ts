@@ -402,7 +402,7 @@ export const triggerNotSupportedWarning = () =>
   );
 
 export const firstPartyTemplateFeed =
-  'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template+scope:microsoft+maintainer:botframework';
+  'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template+scope:microsoft'; // +maintainer:botframework
 
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)
 export const defaultPrimaryLanguage = 'english';
