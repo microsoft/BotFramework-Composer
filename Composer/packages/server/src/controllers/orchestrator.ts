@@ -49,7 +49,7 @@ async function status(req: Request, res: Response) {
   res.send(200, state);
 }
 
-async function downloadDefaultModel(req: Request, res: Response) {
+async function downloadLanguageModel(req: Request, res: Response) {
   const modelData = req.body?.modelData;
 
   if (!isDefaultModelRequest(modelData)) {
@@ -93,6 +93,6 @@ async function downloadDefaultModel(req: Request, res: Response) {
 }
 
 export const OrchestratorController = {
-  downloadDefaultModel,
+  downloadLanguageModel,
   status,
 };
