@@ -31,7 +31,7 @@ import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/a
 
 import CreationModal from './creationModal';
 
-const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/AddRemoteSkillModal/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
@@ -131,9 +131,10 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
           onDismiss={() => {
             setAddSkillDialogModalVisibility(false);
           }}
-          onSubmit={(manifestUrl, endpointName) => {
+          onSubmit={(manifestUrl, endpointName, dialogId, formData) => {
             setAddSkillDialogModalVisibility(false);
             addRemoteSkillToBotProject(manifestUrl, endpointName);
+            createTrigger(projectId, dialogId, formData);
           }}
         />
       )}
