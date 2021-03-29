@@ -255,7 +255,10 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         const edits = computeInsertLuEntityEdits(entityName, editor);
         if (edits) {
           editor.executeEdits('toolbarMenu', edits);
-          telemetryClient.track('LUEditorToolbarEntityTagAdded', { entityType: entityType || entityName, method });
+          telemetryClient.track('LUEditorToolbarEntityTagAdded', {
+            entityType: entityType !== 'prebuilt' ? entityType : entityName,
+            method,
+          });
           editor.focus();
         }
       }

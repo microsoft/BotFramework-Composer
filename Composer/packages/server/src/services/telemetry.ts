@@ -19,10 +19,10 @@ const getTelemetryContext = () => {
 
   if (electronContext) {
     const {
-      telemetryData: { composerVersion, sessionId, machineId, architecture, cpu, memory },
+      telemetryData: { composerVersion, sessionId, machineId, architecture, cpus, memory },
     } = electronContext;
     const { telemetry = {} } = SettingsService.getSettings();
-    return { sessionId, userId: machineId, telemetry, composerVersion, architecture, cpu, memory };
+    return { sessionId, userId: machineId, telemetry, composerVersion, architecture, cpus, memory };
   }
 
   return {};
@@ -41,7 +41,7 @@ if (instrumentationKey) {
   // do not collect the user's machine name
   AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope, context): boolean => {
-    const { sessionId, telemetry, composerVersion, userId, architecture, cpu, memory } = getTelemetryContext();
+    const { sessionId, telemetry, composerVersion, userId, architecture, cpus, memory } = getTelemetryContext();
 
     if (!telemetry?.allowDataCollection) {
       return false;
@@ -77,11 +77,11 @@ if (instrumentationKey) {
           data.baseData.properties.architecture = architecture;
         }
 
-        if (cpu) {
+        if (cpus !== undefined) {
           data.baseData.properties.cpu = cpu;
         }
 
-        if (memory) {
+        if (memory !== undefined) {
           data.baseData.properties.memory = memory;
         }
       }

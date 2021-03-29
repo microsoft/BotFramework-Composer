@@ -15,7 +15,7 @@ export type ElectronContext = {
     machineId: string;
     sessionId: string;
     architecture: string;
-    cpu?: string;
+    cpus: number;
     memory: number;
   };
 };

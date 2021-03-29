@@ -169,7 +169,7 @@ async function loadServer() {
       machineId,
       sessionId,
       architecture: os.arch(),
-      cpu: os.cpus()[0]?.model,
+      cpus: os.cpus().length,
       memory: os.totalmem(),
     },
   });
