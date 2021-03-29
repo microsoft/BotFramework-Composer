@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuFile } from '@botframework-composer/types';
+import { LuFile, TelemetryClient } from '@botframework-composer/types';
 import styled from '@emotion/styled';
 import { EditorDidMount, Monaco } from '@monaco-editor/react';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
@@ -77,6 +77,7 @@ export interface LULSPEditorProps extends BaseEditorProps {
     | string;
   toolbarHidden?: boolean;
   onNavigateToLuPage?: (luFileId: string, luSectionId?: string) => void;
+  telemetryClient: TelemetryClient;
 }
 
 const defaultLUServer = {
@@ -127,6 +128,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   };
 
   const {
+    telemetryClient,
     toolbarHidden,
     onNavigateToLuPage,
     luOption,
@@ -239,6 +241,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
           if (luEdits?.scrollLine) {
             editor.revealLineInCenter(luEdits?.scrollLine);
           }
+          telemetryClient.track('LUEditorEntityDefinitionAdded', { entityType });
 
           editor.focus();
         }
@@ -248,16 +251,17 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   );
 
   const insertEntity = useCallback(
-    (entityName: string) => {
+    (entityName: string, entityType: string) => {
       if (editor) {
         const edits = computeInsertLuEntityEdits(entityName, editor);
         if (edits) {
           editor.executeEdits('toolbarMenu', edits);
           editor.focus();
+          telemetryClient.track('LUEditorEntityTagAdded', { entityType });
         }
       }
     },
-    [editor]
+    [editor, telemetryClient]
   );
 
   const navigateToLuPage = React.useCallback(() => {

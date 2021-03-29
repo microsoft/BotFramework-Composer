@@ -135,6 +135,11 @@ type LgEditorEvents = {
   };
 };
 
+type LuEditorEvents = {
+  LUEditorEntityTagAdded: { entityType: string };
+  LUEditorEntityDefinitionAdded: { entityType: string };
+};
+
 type WebChatEvents = {
   WebChatPaneOpened: undefined;
   WebChatPaneClosed: undefined;
@@ -185,7 +190,8 @@ export type TelemetryEvents = ApplicationEvents &
   AppSettingsEvents &
   PageView &
   LgEditorEvents &
-  WebChatEvents;
+  WebChatEvents &
+  LuEditorEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 
