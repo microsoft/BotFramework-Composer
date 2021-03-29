@@ -49,7 +49,7 @@ export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isAct
           margin-right: 4px;
         `}
       >
-        {formatMessage('Webchat Inspector')}
+        {formatMessage('Web Chat')}
       </div>
       <DebugPanelErrorIndicator hasError={hasUnreadLogs} />
     </div>

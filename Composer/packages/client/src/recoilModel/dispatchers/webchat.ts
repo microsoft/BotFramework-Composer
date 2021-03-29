@@ -2,15 +2,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DirectLineLog } from '@botframework-composer/types';
+import { ConversationTrafficItem, DirectLineLog } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import {
-  webChatLogsState,
-  webChatTraffic,
-  selectedWebChatTrafficItemState,
-  isWebChatPanelVisibleState,
-} from '../atoms';
+import { webChatLogsState, webChatTraffic, webChatInspectionData, isWebChatPanelVisibleState } from '../atoms';
+import { WebChatInspectionData } from '../types';
 
 export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
@@ -31,24 +27,25 @@ export const webChatLogDispatcher = () => {
   });
 
   const appendTraffic = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (projectId: string, traffic: any | any[]) => {
+    (callbackHelpers: CallbackInterface) => (
+      projectId: string,
+      traffic: ConversationTrafficItem | ConversationTrafficItem[]
+    ) => {
       const { set } = callbackHelpers;
       set(webChatTraffic(projectId), (currentTraffic) => {
         if (Array.isArray(traffic)) {
-          const updatedTraffic = [...currentTraffic, ...traffic];
-          return updatedTraffic.sort((t1, t2) => t1.timestamp - t2.timestamp);
+          return [...currentTraffic, ...traffic];
         } else {
-          const updatedTraffic = [...currentTraffic, traffic];
-          return updatedTraffic.sort((t1, t2) => t1.timestamp - t2.timestamp);
+          return [...currentTraffic, traffic];
         }
       });
     }
   );
 
-  const setSelectedWebChatTrafficItem = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (projectId: string, trafficItem) => {
+  const setWebChatInspectionData = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (projectId: string, inspectionData: WebChatInspectionData) => {
       const { set } = callbackHelpers;
-      set(selectedWebChatTrafficItemState(projectId), trafficItem);
+      set(webChatInspectionData(projectId), inspectionData);
     }
   );
 
@@ -57,6 +54,6 @@ export const webChatLogDispatcher = () => {
     appendLogToWebChatInspector,
     appendTraffic,
     setWebChatPanelVisibility,
-    setSelectedWebChatTrafficItem,
+    setWebChatInspectionData,
   };
 };

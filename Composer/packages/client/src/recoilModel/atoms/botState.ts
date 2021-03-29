@@ -18,10 +18,10 @@ import {
   SkillManifestFile,
   RecognizerFile,
 } from '@bfc/shared';
-import { DirectLineLog } from '@botframework-composer/types/src';
+import { ConversationTrafficItem, DirectLineLog } from '@botframework-composer/types';
 import { atomFamily } from 'recoil';
 
-import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
+import { BotRuntimeError, DesignPageLocation, WebChatInspectionData } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -377,12 +377,12 @@ export const webChatLogsState = atomFamily<DirectLineLog[], string>({
   default: [],
 });
 
-export const webChatTraffic = atomFamily<any[], string>({
+export const webChatTraffic = atomFamily<ConversationTrafficItem[], string>({
   key: getFullyQualifiedKey('webChatTraffic'),
   default: [],
 });
 
-export const selectedWebChatTrafficItemState = atomFamily<any, string>({
-  key: getFullyQualifiedKey('selectedWebChatTraffic'),
+export const webChatInspectionData = atomFamily<WebChatInspectionData | undefined, string>({
+  key: getFullyQualifiedKey('webChatInspectionData'),
   default: undefined,
 });

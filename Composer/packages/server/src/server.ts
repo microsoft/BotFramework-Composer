@@ -34,6 +34,7 @@ import DLServerContext from './directline/store/dlServerState';
 import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
+import { logNetworkTraffic } from './middleware/logNetworkTraffic';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -136,17 +137,14 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   // Setup directline and conversation routes for v3 bots
   const DLServerState = DLServerContext.getInstance(port);
   const conversationRouter = mountConversationsRoutes(DLServerState);
-  app.use(`${BASEURL}`, conversationRouter);
-
   const directlineRouter = mountDirectLineRoutes(DLServerState);
-  app.use(`${BASEURL}`, directlineRouter);
-
   const attachmentsRouter = mountAttachmentRoutes(DLServerState);
-  app.use(`${BASEURL}`, attachmentsRouter);
 
-  conversationRouter.use((req, res, next) => addCORSHeaders(req, res, next));
-  directlineRouter.use((req, res, next) => addCORSHeaders(req, res, next));
-  attachmentsRouter.use((req, res, next) => addCORSHeaders(req, res, next));
+  [conversationRouter, directlineRouter, attachmentsRouter].forEach((router) => {
+    app.use(`${BASEURL}`, router);
+    router.use((req, res, next) => addCORSHeaders(req, res, next));
+    router.use(logNetworkTraffic);
+  });
 
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

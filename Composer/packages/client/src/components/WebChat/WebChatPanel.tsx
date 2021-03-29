@@ -3,7 +3,11 @@
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { DirectLineLog } from '@botframework-composer/types';
+import {
+  DirectLineLog,
+  ConversationActivityTraffic,
+  ConversationNetworkTrafficItem,
+} from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 
@@ -52,19 +56,30 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
   const directLineErrorChannel = useRef<WebSocket>();
-  const trafficChannel = useRef<WebSocket>();
+  const activityTrafficChannel = useRef<WebSocket>();
+  const networkTrafficChannel = useRef<WebSocket>();
 
   useEffect(() => {
     const bootstrapChat = async () => {
       const conversationServerPort = await conversationService.setUpConversationServer();
       try {
+        // set up activity traffic listener
+        activityTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic/activity`);
+        if (activityTrafficChannel.current) {
+          activityTrafficChannel.current.onmessage = (event) => {
+            const data: ConversationActivityTraffic = JSON.parse(event.data);
+            appendTraffic(
+              projectId,
+              data.activities.map((a) => ({ activity: a, timestamp: a.timestamp, trafficType: data.trafficType }))
+            );
+          };
+        }
         // set up traffic listener
-        trafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic`);
-        if (trafficChannel.current) {
-          trafficChannel.current.onmessage = (event) => {
-            const data: { activities: any[] } = JSON.parse(event.data);
-            console.log('got data back from traffic channel: ', data);
-            appendTraffic(projectId, data.activities);
+        networkTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic/network`);
+        if (networkTrafficChannel.current) {
+          networkTrafficChannel.current.onmessage = (event) => {
+            const data: ConversationNetworkTrafficItem = JSON.parse(event.data) as ConversationNetworkTrafficItem;
+            appendTraffic(projectId, data);
           };
         }
         directLineErrorChannel.current = new WebSocket(
@@ -99,7 +114,8 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
     return () => {
       directLineErrorChannel.current?.close();
-      trafficChannel.current?.close();
+      activityTrafficChannel.current?.close();
+      networkTrafficChannel.current?.close();
     };
   }, []);
 

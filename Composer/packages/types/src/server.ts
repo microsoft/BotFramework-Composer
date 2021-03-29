@@ -51,3 +51,34 @@ export interface DirectLineLog extends DirectLineError {
   route?: string;
   logType: DirectLineLogType;
 }
+
+export type ConversationTrafficItem = ConversationActivityTrafficItem | ConversationNetworkTrafficItem;
+
+export type NetworkTrafficRequest = {
+  method: string;
+  payload: any;
+  route: string;
+};
+
+export type NetworkTrafficResponse = {
+  payload: any;
+  statusCode: number;
+};
+
+export type ConversationNetworkTrafficItem = {
+  request: NetworkTrafficRequest;
+  response: NetworkTrafficResponse;
+  timestamp: string;
+  trafficType: 'network';
+};
+
+export type ConversationActivityTraffic = {
+  activities: any[];
+  trafficType: 'activity';
+};
+
+export type ConversationActivityTrafficItem = {
+  activity: any;
+  timestamp: string;
+  trafficType: 'activity';
+};
