@@ -13,7 +13,7 @@ import { createCustomizeError, ProvisionErrors, stringifyError } from './utils/e
 export interface ProvisionConfig {
   accessToken: string;
   graphToken: string;
-  tenantId: string;
+  tenantId?: string;
   hostname: string; // for previous bot, it's ${name}-${environment}
   externalResources: ResourceType[];
   location: string;
@@ -215,7 +215,7 @@ export class BotProjectProvision {
         appInsights: null,
         qna: null,
         botName: null,
-        tenantId: config.tenantId,
+        tenantId: this.tenantId,
       };
 
       const resourceGroupName = config.resourceGroup ?? config.hostname;
