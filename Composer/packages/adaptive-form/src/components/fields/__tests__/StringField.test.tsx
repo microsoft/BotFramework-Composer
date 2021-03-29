@@ -34,7 +34,7 @@ describe('<StringField />', () => {
     const input = getByLabelText('a label');
 
     fireEvent.focus(input);
-    expect(onFocus).toHaveBeenCalledWith('string field', 'string value');
+    expect(onFocus).toHaveBeenCalledWith('string field', 'string value', expect.any(Object));
 
     fireEvent.blur(input);
     expect(onBlur).toHaveBeenCalledWith('string field', 'string value');

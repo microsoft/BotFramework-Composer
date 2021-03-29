@@ -1,12 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection, LgFile, LuFile, QnASection, FileInfo, LgTemplate, ILUFeaturesConfig } from '@bfc/shared';
+import { LuIntentSection, LgFile, LuFile, FileInfo, LgTemplate, ILUFeaturesConfig, TextFile } from '@bfc/shared';
 
 import { FileAsset } from '../persistence/types';
 
 export type LuParsePayload = {
   id: string;
   content: string;
+  luFeatures: ILUFeaturesConfig;
+};
+
+export type LuParseAllPayload = {
+  luResources: TextFile[];
   luFeatures: ILUFeaturesConfig;
 };
 
@@ -86,12 +91,16 @@ export interface LgRemoveAllTemplatesPayload {
 
 export interface LgNewCachePayload {
   projectId: string;
-  lgFiles: LgFile[];
 }
 
 export interface LgCleanCachePayload {
   projectId: string;
 }
+
+export type LgParseAllPayload = {
+  projectId: string;
+  lgResources: TextFile[];
+};
 
 export interface LgCopyTemplatePayload {
   projectId: string;
@@ -109,10 +118,13 @@ export type IndexPayload = {
   luFeatures: { key: string; value: boolean };
 };
 
-export type QnAPayload = {
+export type QnAParsePayload = {
   content: string;
-  id?: string;
-  section?: QnASection;
+  id: string;
+};
+
+export type QnAParseAllPayload = {
+  qnaResources: TextFile[];
 };
 
 export enum LuActionType {
@@ -122,6 +134,7 @@ export enum LuActionType {
   RemoveIntent = 'remove-intent',
   AddIntents = 'add-intents',
   RemoveIntents = 'remove-intents',
+  ParseAll = 'parse-all',
 }
 
 export enum LgActionType {
@@ -134,6 +147,7 @@ export enum LgActionType {
   RemoveTemplate = 'remove-template',
   RemoveAllTemplates = 'remove-all-templates',
   CopyTemplate = 'copy-template',
+  ParseAll = 'parse-all',
 }
 
 export enum IndexerActionType {
@@ -142,9 +156,7 @@ export enum IndexerActionType {
 
 export enum QnAActionType {
   Parse = 'parse',
-  AddSection = 'add-section',
-  UpdateSection = 'update-section',
-  RemoveSection = 'remove-section',
+  ParseAll = 'parse-all',
 }
 
 export type FilesDifferencePayload = {
