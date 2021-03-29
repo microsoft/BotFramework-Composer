@@ -136,8 +136,8 @@ type LgEditorEvents = {
 };
 
 type LuEditorEvents = {
-  LUEditorEntityTagAdded: { entityType: string };
-  LUEditorEntityDefinitionAdded: { entityType: string };
+  LUEditorToolbarEntityTagAdded: { entityType: string; method: 'toolbar' | 'floatingMenu' };
+  LUEditorToolbarEntityDefinitionAdded: { entityType: string };
 };
 
 type WebChatEvents = {

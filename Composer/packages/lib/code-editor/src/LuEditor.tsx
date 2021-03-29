@@ -241,7 +241,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
           if (luEdits?.scrollLine) {
             editor.revealLineInCenter(luEdits?.scrollLine);
           }
-          telemetryClient.track('LUEditorEntityDefinitionAdded', { entityType });
+          telemetryClient.track('LUEditorToolbarEntityDefinitionAdded', { entityType });
           editor.focus();
         }
       }
@@ -250,12 +250,12 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   );
 
   const insertEntity = useCallback(
-    (entityName: string, entityType: string) => {
+    (entityName: string, entityType: string, method: 'toolbar' | 'floatingMenu' = 'toolbar') => {
       if (editor) {
         const edits = computeInsertLuEntityEdits(entityName, editor);
         if (edits) {
           editor.executeEdits('toolbarMenu', edits);
-          telemetryClient.track('LUEditorEntityTagAdded', { entityType });
+          telemetryClient.track('LUEditorToolbarEntityTagAdded', { entityType: entityType || entityName, method });
           editor.focus();
         }
       }
