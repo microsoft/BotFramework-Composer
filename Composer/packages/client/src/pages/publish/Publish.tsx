@@ -21,6 +21,7 @@ import {
   setTenantId,
   getTenantIdFromCache,
 } from '../../utils/auth';
+// import { vaultScopes } from '../../constants';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
@@ -48,6 +49,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const {
     getPublishHistory,
     getPublishStatusV2,
+    getPublishTargetTypes,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
@@ -84,18 +86,26 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     return currentBotList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
   }, [checkedSkillIds]);
 
+  // The publishTypes are loaded from the server and put into the publishTypesState per project
+  // The botProjectSpaceSelector maps the publishTypes to the project bots.
+  // The localBotsDataSelector uses botProjectSpaceSelector
+  // The botPropertyData uses localBotsDataSelector
+  // When the botPropertyData is used (like in the canPull method), the publishTypes must be loaded for the current project.
+  // Otherwise the botPropertyData publishTypes will always be empty and this component won't function properly.
+  useEffect(() => {
+    if (projectId) {
+      getPublishTargetTypes(projectId);
+    }
+  }, [projectId]);
+
   const canPull = useMemo(() => {
     return selectedBots.some((bot) => {
       const { publishTypes, publishTargets } = botPropertyData[bot.id];
-      const type = publishTypes?.find(
-        (t) => t.name === publishTargets?.find((target) => target.name === bot.publishTarget)?.type
-      );
-      if (type?.features?.pull) {
-        return true;
-      }
-      return false;
+      const botPublishTarget = publishTargets?.find((target) => target.name === bot.publishTarget);
+      const type = publishTypes?.find((t) => t.name === botPublishTarget?.type);
+      return type?.features?.pull;
     });
-  }, [selectedBots]);
+  }, [selectedBots, botPropertyData]);
 
   const canPublish =
     checkedSkillIds.length > 0 && !isPublishPending && selectedBots.some((bot) => Boolean(bot.publishTarget));
@@ -172,6 +182,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const updater = pollingUpdaterList.find((i) => i.isSameUpdater(botProjectId, targetName));
     const updatedBot = botList.find((bot) => bot.id === botProjectId);
     if (!updatedBot || !updater) return;
+    if (!apiResponse) {
+      stopUpdater(updater);
+      return;
+    }
     const responseData = apiResponse.data;
 
     if (responseData.status !== ApiStatus.Publishing) {
@@ -194,7 +208,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const updateUpdaterStatus = (payload) => {
     const { botProjectId, targetName, apiResponse } = payload;
-    const pending = apiResponse.data.status === ApiStatus.Publishing;
+    const pending = apiResponse && apiResponse.data.status === ApiStatus.Publishing;
     setUpdaterStatus({
       ...updaterStatus,
       [`${botProjectId}/${targetName}`]: pending,
