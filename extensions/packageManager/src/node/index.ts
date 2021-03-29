@@ -3,7 +3,6 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-import { DH_CHECK_P_NOT_SAFE_PRIME } from 'constants';
 
 import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
