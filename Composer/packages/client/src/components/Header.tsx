@@ -29,8 +29,8 @@ import {
   webChatEssentialsSelector,
   isWebChatPanelVisibleState,
   dialogsWithLuProviderSelectorFamily,
-  luFilesState,
-  qnaFilesState,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
@@ -169,8 +169,8 @@ export const Header = () => {
   // this data is passed into the GetStarted widget
   // ... if the get started widget moves, this code should too!
   const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const requiresLUIS = BotIndexer.shouldUseLuis(dialogs, luFiles);
   const requiresQNA = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
   // ... end of get started stuff
