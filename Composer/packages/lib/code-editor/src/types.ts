@@ -33,7 +33,7 @@ export type LgCodeEditorProps = LgCommonEditorProps &
     popExpandOptions?: { onEditorPopToggle?: (expanded: boolean) => void; popExpandTitle: string };
     toolbarHidden?: boolean;
     showDirectTemplateLink?: boolean;
-    onNavigateToLgPage?: (lgFileId: string, templateId?: string) => void;
+    onNavigateToLgPage?: (lgFileId: string, options?: { templateId?: string; line?: number }) => void;
     languageServer?:
       | {
           host?: string;
