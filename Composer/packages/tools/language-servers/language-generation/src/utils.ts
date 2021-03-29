@@ -54,7 +54,7 @@ export function getRangeAtPosition(document: TextDocument, position: Position): 
   const pos = position.character;
   const lineText = text.split(/\r?\n/g)[line];
   let match: RegExpMatchArray | null;
-  const wordDefinition = /[a-zA-Z0-9_/.]+/g;
+  const wordDefinition = /[a-zA-Z0-9_]+/g;
   while ((match = wordDefinition.exec(lineText))) {
     const matchIndex = match.index || 0;
     if (matchIndex > pos) {

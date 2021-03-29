@@ -25,7 +25,7 @@ import { CreateBot } from './CreateBot';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onJumpToOpenModal: () => void;
+  onJumpToOpenModal: (search?: string) => void;
   onNext: (data: string) => void;
 } & RouteComponentProps<{}>;
 
@@ -47,19 +47,20 @@ export function CreateOptions(props: CreateOptionsProps) {
       const decoded = decodeURIComponent(props.location.search);
       const { source, payload } = querystring.parse(decoded);
       if (typeof source === 'string' && typeof payload === 'string') {
-        const alias = getAliasFromPayload(source, payload);
-        // check to see if Composer currently has a bot project corresponding to the alias
-        axios
-          .get<any>(`/api/projects/alias/${alias}`)
-          .then((aliasRes) => {
-            if (aliasRes.status === 200) {
+        getAliasFromPayload(source, payload).then((alias) => {
+          // check to see if Composer currently has a bot project corresponding to the alias
+          axios
+            .get<any>(`/api/projects/alias/${alias}`)
+            .then((aliasRes) => {
+              if (aliasRes.status === 200) {
+                navigate(`/bot/${aliasRes.data.id}`);
+                return;
+              }
+            })
+            .catch((e) => {
               setIsOpenOptionsModal(true);
-              return;
-            }
-          })
-          .catch((e) => {
-            setIsOpenCreateModal(true);
-          });
+            });
+        });
         return;
       }
     }
@@ -80,7 +81,7 @@ export function CreateOptions(props: CreateOptionsProps) {
     if (option === 'Create') {
       setIsOpenCreateModal(true);
     } else {
-      onJumpToOpenModal();
+      onJumpToOpenModal(props.location?.search);
     }
   };
 
@@ -98,7 +99,13 @@ export function CreateOptions(props: CreateOptionsProps) {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </DialogWrapper>
-      <CreateBot isOpen={isOpenCreateModal} templates={templates} onDismiss={onDismiss} onNext={onNext} />
+      <CreateBot
+        isOpen={isOpenCreateModal}
+        location={props.location}
+        templates={templates}
+        onDismiss={onDismiss}
+        onNext={onNext}
+      />
     </Fragment>
   );
 }
