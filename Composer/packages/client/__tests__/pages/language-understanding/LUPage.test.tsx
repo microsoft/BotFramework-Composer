@@ -10,7 +10,7 @@ import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
   dialogsSelectorFamily,
-  luFilesState,
+  luFilesSelectorFamily,
   settingsState,
   schemasState,
   currentProjectIdState,
@@ -37,8 +37,8 @@ const state = {
   ],
   locale: 'en-us',
   luFiles: [
-    { id: 'a.en-us', content: initialContent, templates: initialIntents, diagnostics: [] },
-    { id: 'a.fr-fr', content: initialContent, templates: initialIntents, diagnostics: [] },
+    { id: 'a.en-us', content: initialContent, templates: initialIntents, diagnostics: [], intents: [] },
+    { id: 'a.fr-fr', content: initialContent, templates: initialIntents, diagnostics: [], intents: [] },
   ],
   settings: {
     defaultLanguage: 'en-us',
@@ -50,7 +50,7 @@ const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
   set(dialogsSelectorFamily(state.projectId), state.dialogs);
-  set(luFilesState(state.projectId), state.luFiles);
+  set(luFilesSelectorFamily(state.projectId), state.luFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
 };

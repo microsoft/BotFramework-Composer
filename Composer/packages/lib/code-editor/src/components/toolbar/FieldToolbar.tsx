@@ -5,18 +5,16 @@ import { LgTemplate } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { VerticalDivider } from 'office-ui-fabric-react/lib/Divider';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { VerticalDivider } from 'office-ui-fabric-react/lib/Divider';
 import * as React from 'react';
 
-import { withTooltip } from '../utils/withTooltip';
+import { useEditorToolbarItems } from '../../hooks/useEditorToolbarItems';
+import { defaultMenuHeight, jsLgToolbarMenuClassName } from '../../lg/constants';
+import { ToolbarButtonPayload } from '../../types';
+import { withTooltip } from '../../utils/withTooltip';
 
-import { jsLgToolbarMenuClassName } from './constants';
-import { useLgEditorToolbarItems } from './hooks/useLgEditorToolbarItems';
 import { ToolbarButtonMenu } from './ToolbarButtonMenu';
-import { ToolbarButtonPayload } from './types';
-
-const menuHeight = 32;
 
 const dividerStyles = {
   divider: {
@@ -27,14 +25,14 @@ const dividerStyles = {
 const moreButtonStyles = {
   root: {
     fontSize: FluentTheme.fonts.small.fontSize,
-    height: menuHeight,
+    height: defaultMenuHeight,
   },
   menuIcon: { fontSize: 8, color: NeutralColors.black },
 };
 
 const commandBarStyles = {
   root: {
-    height: menuHeight,
+    height: defaultMenuHeight,
     padding: 0,
     fontSize: FluentTheme.fonts.small.fontSize,
   },
@@ -62,18 +60,30 @@ const configureMenuProps = (props: IContextualMenuProps | undefined, className: 
   return props;
 };
 
-export type LgEditorToolbarProps = {
+export type FieldToolbarProps = {
+  onSelectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void;
+  excludedToolbarItems?: ToolbarButtonPayload['kind'][];
   lgTemplates?: readonly LgTemplate[];
   properties?: readonly string[];
-  onSelectToolbarMenuItem: (itemText: string, itemType: ToolbarButtonPayload['kind']) => void;
-  moreToolbarItems?: readonly ICommandBarItemProps[];
+  moreToolbarItems?: ICommandBarItemProps[];
+  farItems?: ICommandBarItemProps[];
   className?: string;
+  dismissHandlerClassName?: string;
 };
 
-export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
-  const { className, properties, lgTemplates, moreToolbarItems, onSelectToolbarMenuItem } = props;
+export const FieldToolbar = React.memo((props: FieldToolbarProps) => {
+  const {
+    className,
+    excludedToolbarItems,
+    properties,
+    lgTemplates,
+    moreToolbarItems,
+    farItems,
+    dismissHandlerClassName = jsLgToolbarMenuClassName,
+    onSelectToolbarMenuItem,
+  } = props;
 
-  const { functionRefPayload, propertyRefPayload, templateRefPayload } = useLgEditorToolbarItems(
+  const { functionRefPayload, propertyRefPayload, templateRefPayload } = useEditorToolbarItems(
     lgTemplates ?? [],
     properties ?? [],
     onSelectToolbarMenuItem
@@ -93,8 +103,8 @@ export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
     []
   );
 
-  const fixedItems: ICommandBarItemProps[] = React.useMemo(
-    () => [
+  const fixedItems: ICommandBarItemProps[] = React.useMemo(() => {
+    const items = [
       {
         key: 'template',
         disabled: !templateRefPayload?.data?.templates?.length,
@@ -102,6 +112,7 @@ export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
           <TooltipTemplateButton
             key="template"
             disabled={!templateRefPayload?.data?.templates?.length}
+            dismissHandlerClassName={dismissHandlerClassName}
             payload={templateRefPayload}
           />
         ),
@@ -113,34 +124,44 @@ export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
           <TooltipPropertyButton
             key="property"
             disabled={!propertyRefPayload?.data?.properties?.length}
+            dismissHandlerClassName={dismissHandlerClassName}
             payload={propertyRefPayload}
           />
         ),
       },
       {
         key: 'function',
-        commandBarButtonAs: () => <TooltipFunctionButton key="function" payload={functionRefPayload} />,
+        commandBarButtonAs: () => (
+          <TooltipFunctionButton
+            key="function"
+            dismissHandlerClassName={dismissHandlerClassName}
+            payload={functionRefPayload}
+          />
+        ),
       },
-    ],
-    [
-      TooltipTemplateButton,
-      TooltipPropertyButton,
-      TooltipFunctionButton,
-      templateRefPayload,
-      propertyRefPayload,
-      functionRefPayload,
-    ]
-  );
+    ];
+
+    return items.filter(({ key }) => !excludedToolbarItems?.includes(key as ToolbarButtonPayload['kind']));
+  }, [
+    TooltipTemplateButton,
+    TooltipPropertyButton,
+    TooltipFunctionButton,
+    templateRefPayload,
+    propertyRefPayload,
+    functionRefPayload,
+    excludedToolbarItems,
+    dismissHandlerClassName,
+  ]);
 
   const moreItems = React.useMemo(
     () =>
       moreToolbarItems?.map<ICommandBarItemProps>((itemProps) => ({
         ...itemProps,
-        subMenuProps: configureMenuProps(itemProps.subMenuProps, jsLgToolbarMenuClassName),
+        subMenuProps: configureMenuProps(itemProps.subMenuProps, dismissHandlerClassName),
         buttonStyles: moreButtonStyles,
-        className: jsLgToolbarMenuClassName,
+        className: dismissHandlerClassName,
       })) ?? [],
-    [moreToolbarItems]
+    [moreToolbarItems, dismissHandlerClassName]
   );
 
   const items = React.useMemo(
@@ -154,5 +175,13 @@ export const LgEditorToolbar = React.memo((props: LgEditorToolbarProps) => {
     [fixedItems, moreItems]
   );
 
-  return <CommandBar className={className} items={items} styles={commandBarStyles} onReduceData={() => undefined} />;
+  return (
+    <CommandBar
+      className={className}
+      farItems={farItems}
+      items={items}
+      styles={commandBarStyles}
+      onReduceData={() => undefined}
+    />
+  );
 });

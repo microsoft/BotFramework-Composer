@@ -16,5 +16,12 @@ export class WebAuthProvider extends AuthProvider {
       'WebAuthProvider has not been implemented yet. Implicit auth flow currently only works in Electron.'
     );
   }
+
+  async getArmAccessToken(tenantId: string): Promise<string> {
+    throw new Error(
+      'WebAuthProvider has not been implemented yet. Implicit auth flow currently only works in Electron.'
+    );
+  }
+
   logOut() {}
 }

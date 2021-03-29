@@ -218,9 +218,10 @@ export const projectDispatcher = () => {
       path: string,
       storageId = 'default',
       navigate = true,
+      absData?: any,
       callback?: (projectId: string) => void
     ) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
 
@@ -235,6 +236,20 @@ export const projectDispatcher = () => {
           confirm('Your project must be updated to open it using this version of Composer');
           navigateTo(`/v2/projects/migrate/${projectId}`);
           return;
+        }
+
+        // ABS open Flow, update publishProfile & set alias for project after open project
+        if (absData) {
+          const { profile, source, alias } = absData;
+
+          if (profile && alias) {
+            const dispatcher = await snapshot.getPromise(dispatcherState);
+            const newProfile = await getPublishProfileFromPayload(profile, source);
+
+            newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+
+            await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
+          }
         }
 
         // Post project creation
@@ -339,7 +354,7 @@ export const projectDispatcher = () => {
       if (profile) {
         // ABS Create Flow, update publishProfile after create project
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const newProfile = getPublishProfileFromPayload(profile, source);
+        const newProfile = await getPublishProfileFromPayload(profile, source);
 
         newProfile && dispatcher.setPublishTargets([newProfile], projectId);
       }
@@ -554,7 +569,7 @@ export const projectDispatcher = () => {
             const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
 
             callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
-            const { botFiles, projectData } = loadProjectData(response.data.result);
+            const { botFiles, projectData } = await loadProjectData(response.data.result);
             const projectId = response.data.result.id;
 
             if (creationFlowType === 'Skill') {
