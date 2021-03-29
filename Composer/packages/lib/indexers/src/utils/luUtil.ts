@@ -79,7 +79,7 @@ export function convertLuParseResultToLuFile(
       new Position(get(section, 'Range.End.Line', 0), get(section, 'Range.End.Character', 0))
     );
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
-      const Entities = section.Entities.map(({ Name }) => Name);
+      const Entities = section.Entities.map(({ Name, Type }) => ({ Name, Type }));
       intents.push({ Name, Body, Entities, range });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
       const Children = section.SimpleIntentSections.map((subSection) => {
@@ -88,7 +88,7 @@ export function convertLuParseResultToLuFile(
           new Position(get(section, 'Range.Start.Line', 0), get(subSection, 'Range.Start.Character', 0)),
           new Position(get(section, 'Range.End.Line', 0), get(subSection, 'Range.End.Character', 0))
         );
-        const Entities = subSection.Entities.map(({ Name }) => Name);
+        const Entities = subSection.Entities.map(({ Name, Type }) => ({ Name, Type }));
         return { Name, Body, Entities, range };
       });
       intents.push({ Name, Body, Children, range });

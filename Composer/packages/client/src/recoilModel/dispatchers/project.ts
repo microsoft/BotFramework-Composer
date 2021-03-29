@@ -217,14 +217,29 @@ export const projectDispatcher = () => {
       path: string,
       storageId = 'default',
       navigate = true,
+      absData?: any,
       callback?: (projectId: string) => void
     ) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
 
         await flushExistingTasks(callbackHelpers);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
+
+        // ABS open Flow, update publishProfile & set alias for project after open project
+        if (absData) {
+          const { profile, source, alias } = absData;
+
+          if (profile && alias) {
+            const dispatcher = await snapshot.getPromise(dispatcherState);
+            const newProfile = await getPublishProfileFromPayload(profile, source);
+
+            newProfile && dispatcher.setPublishTargets([newProfile], projectId);
+
+            await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
+          }
+        }
 
         // Post project creation
         set(projectMetaDataState(projectId), {
@@ -324,7 +339,7 @@ export const projectDispatcher = () => {
       if (profile) {
         // ABS Create Flow, update publishProfile after create project
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const newProfile = getPublishProfileFromPayload(profile, source);
+        const newProfile = await getPublishProfileFromPayload(profile, source);
 
         newProfile && dispatcher.setPublishTargets([newProfile], projectId);
       }

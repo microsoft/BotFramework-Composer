@@ -37,8 +37,8 @@ const state = {
   ],
   locale: 'en-us',
   luFiles: [
-    { id: 'a.en-us', content: initialContent, templates: initialIntents, diagnostics: [] },
-    { id: 'a.fr-fr', content: initialContent, templates: initialIntents, diagnostics: [] },
+    { id: 'a.en-us', content: initialContent, templates: initialIntents, diagnostics: [], intents: [] },
+    { id: 'a.fr-fr', content: initialContent, templates: initialIntents, diagnostics: [], intents: [] },
   ],
   settings: {
     defaultLanguage: 'en-us',
