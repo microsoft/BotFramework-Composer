@@ -18,9 +18,11 @@ const getTelemetryContext = () => {
   const electronContext = useElectronContext();
 
   if (electronContext) {
-    const { sessionId, machineId, composerVersion } = electronContext;
+    const {
+      telemetryData: { composerVersion, sessionId, machineId, architecture, cpu, memory },
+    } = electronContext;
     const { telemetry = {} } = SettingsService.getSettings();
-    return { sessionId, userId: machineId, telemetry, composerVersion };
+    return { sessionId, userId: machineId, telemetry, composerVersion, architecture, cpu, memory };
   }
 
   return {};
@@ -39,7 +41,7 @@ if (instrumentationKey) {
   // do not collect the user's machine name
   AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
   AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope, context): boolean => {
-    const { sessionId, telemetry, composerVersion, userId } = getTelemetryContext();
+    const { sessionId, telemetry, composerVersion, userId, architecture, cpu, memory } = getTelemetryContext();
 
     if (!telemetry?.allowDataCollection) {
       return false;
@@ -68,6 +70,20 @@ if (instrumentationKey) {
 
       if (composerVersion) {
         data.baseData.properties.composerVersion = composerVersion;
+      }
+
+      if (data.baseData.name === 'SessionStarted') {
+        if (architecture) {
+          data.baseData.properties.architecture = architecture;
+        }
+
+        if (cpu) {
+          data.baseData.properties.cpu = cpu;
+        }
+
+        if (memory) {
+          data.baseData.properties.memory = memory;
+        }
       }
 
       // remove PII
