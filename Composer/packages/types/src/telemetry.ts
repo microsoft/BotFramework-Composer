@@ -59,7 +59,7 @@ type PackageManagerEvents = {
 };
 
 type SessionEvents = {
-  SessionStarted: { os: string };
+  SessionStarted: { os: string; height: number; width: number; devicePixelRatio: number };
   SessionEnded: undefined;
   NavigateTo: { sectionName: string; url: string };
 };
