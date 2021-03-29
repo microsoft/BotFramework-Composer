@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
+import * as fs from 'fs';
+import { DH_CHECK_P_NOT_SAFE_PRIME } from 'constants';
 
 import axios from 'axios';
 import { IExtensionRegistration } from '@botframework-composer/types';
@@ -24,6 +26,26 @@ const hasSchema = (c) => {
 
 const isAdaptiveComponent = (c) => {
   return hasSchema(c) || c.includesExports;
+};
+
+const loadReadme = async (components) => {
+  const variants = ['readme.md', 'README.md', 'README.MD'];
+  for (const c in components) {
+    if (components[c].path) {
+      const rootFolder = path.dirname(components[c].path);
+      for (const v in variants) {
+        const readmePath = path.join(rootFolder, variants[v]);
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        if (fs.existsSync(readmePath)) {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename
+          components[c].readme = fs.readFileSync(readmePath, 'utf-8');
+          continue;
+        }
+      }
+    }
+  }
+
+  return components;
 };
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
@@ -216,7 +238,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (dryRunMergeResults) {
           res.json({
             projectId,
-            components: dryRunMergeResults.components.filter(isAdaptiveComponent),
+            components: await loadReadme(dryRunMergeResults.components.filter(isAdaptiveComponent)),
           });
         } else {
           res.status(500).json({
@@ -304,7 +326,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
-            const installedComponents = mergeResults.components.filter(isAdaptiveComponent);
+            const installedComponents = await loadReadme(mergeResults.components.filter(isAdaptiveComponent));
             if (mergeResults) {
               res.json({
                 success: true,
@@ -406,7 +428,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           res.json({
             success: true,
-            components: mergeResults.components.filter(isAdaptiveComponent),
+            components: await loadReadme(mergeResults.components.filter(isAdaptiveComponent)),
           });
 
           // update the settings.plugins array

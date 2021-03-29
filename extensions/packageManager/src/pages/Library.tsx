@@ -32,7 +32,7 @@ import {
   useTelemetryClient,
   TelemetryClient,
 } from '@bfc/extension-client';
-import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, LoadingSpinner, DisplayReadme } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
 import { ContentHeaderStyle, HeaderText } from '../components/styles';
@@ -78,6 +78,7 @@ const Library: React.FC = () => {
   const [readmeContent, setReadmeContent] = useState<string>('');
   const [versionOptions, setVersionOptions] = useState<IContextualMenuProps | undefined>(undefined);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
   const httpClient = useHttpClient();
   const API_ROOT = '';
   const TABS = {
@@ -399,6 +400,14 @@ const Library: React.FC = () => {
         setWorking('');
         updateInstalledComponents(results.data.components);
 
+        // find newly installed item
+        // and pop up the readme if one exists.
+        const newItem = results.data.components.find((i) => i.name === packageName);
+        if (newItem?.readme) {
+          setSelectedItem(newItem);
+          setReadmeHidden(false);
+        }
+
         // reload modified content
         await reloadProject();
       }
@@ -571,6 +580,16 @@ const Library: React.FC = () => {
         hidden={!isModalVisible}
         onUpdateFeed={updateFeed}
       />
+      {selectedItem && (
+        <DisplayReadme
+          hidden={readmeHidden}
+          readme={selectedItem?.readme}
+          title={'Project Readme'}
+          onDismiss={() => {
+            setReadmeHidden(true);
+          }}
+        />
+      )}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
@@ -826,6 +845,18 @@ const Library: React.FC = () => {
                 </p>
               )}
 
+              {selectedItem.readme && (
+                <Fragment>
+                  <DefaultButton
+                    onClick={() => {
+                      setReadmeHidden(false);
+                    }}
+                  >
+                    View readme
+                  </DefaultButton>
+                  &nbsp;
+                </Fragment>
+              )}
               {isInstalled(selectedItem) && <DefaultButton onClick={removeComponent}>Uninstall</DefaultButton>}
             </Fragment>
           ) : (

@@ -33,6 +33,7 @@ export interface LibraryRef {
   language: string;
   source?: string;
   isCompatible?: boolean;
+  readme?: string;
 }
 
 export interface ILibraryListProps {
