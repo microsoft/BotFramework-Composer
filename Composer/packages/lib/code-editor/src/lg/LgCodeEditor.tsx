@@ -11,10 +11,12 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
+import { ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import React, { useEffect, useState } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import omit from 'lodash/omit';
+import { createSvgIcon } from '@fluentui/react-icons';
 
 import { BaseEditor, OnInit } from '../BaseEditor';
 import { LG_HELP } from '../constants';
@@ -23,9 +25,29 @@ import { LgCodeEditorProps } from '../types';
 import { computeRequiredEdits } from '../utils/lgUtils';
 import { createLanguageClient, createUrl, createWebSocket, sendRequestWithRetry } from '../utils/lspUtil';
 import { withTooltip } from '../utils/withTooltip';
+import { FieldToolbar } from '../components/toolbar/FieldToolbar';
+import { ToolbarButtonPayload } from '../types';
 
-import { LgEditorToolbar as DefaultLgEditorToolbar } from './LgEditorToolbar';
-import { ToolbarButtonPayload } from './types';
+import { jsLgToolbarMenuClassName, defaultMenuHeight } from './constants';
+
+const farItemButtonStyles = {
+  root: {
+    fontSize: FluentTheme.fonts.small.fontSize,
+    height: defaultMenuHeight,
+  },
+  menuIcon: { fontSize: 8, color: NeutralColors.black },
+};
+
+const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
+
+const popExpandSvgIcon = (
+  <svg fill="none" height="16" viewBox="0 0 10 10" width="16" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M8.75 8.75V5.625H9.375V9.375H0.625V0.625H4.375V1.25H1.25V8.75H8.75ZM5.625 0.625H9.375V4.375H8.75V1.69434L5.21973 5.21973L4.78027 4.78027L8.30566 1.25H5.625V0.625Z"
+      fill="black"
+    />
+  </svg>
+);
 
 const placeholder = formatMessage(
   `> To learn more about the LG file format, read the documentation at
@@ -64,7 +86,7 @@ const LgTemplateLink = withTooltip(
 
 const templateLinkTokens = { childrenGap: 4 };
 
-const LgEditorToolbar = styled(DefaultLgEditorToolbar)({
+const EditorToolbar = styled(FieldToolbar)({
   border: `1px solid ${NeutralColors.gray120}`,
   borderBottom: 'none',
 });
@@ -85,6 +107,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     quickSuggestions: true,
     wordBasedSuggestions: false,
     folding: true,
+    definitions: true,
     ...props.options,
   };
 
@@ -96,6 +119,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     memoryVariables,
     lgTemplates,
     telemetryClient,
+    showDirectTemplateLink,
     onNavigateToLgPage,
     popExpandOptions,
     onChange,
@@ -114,6 +138,10 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    if (props.options?.readOnly) {
+      return;
+    }
+
     if (!editor) return;
 
     if (!window.monacoServiceInstance) {
@@ -133,16 +161,34 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
             ['botbuilderlg'],
             connection
           );
+
           sendRequestWithRetry(languageClient, 'initializeDocuments', { lgOption, uri });
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLGEditorInstance = languageClient;
+
+          languageClient.onReady().then(() =>
+            languageClient.onNotification('GotoDefinition', (result) => {
+              if (lgOption?.projectId) {
+                onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
+              }
+            })
+          );
         },
       });
     } else {
-      sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      if (!props.options?.readOnly) {
+        sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      }
+      window.monacoLGEditorInstance.onReady().then(() =>
+        window.monacoLGEditorInstance.onNotification('GotoDefinition', (result) => {
+          if (lgOption?.projectId) {
+            onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
+          }
+        })
+      );
     }
-  }, [editor]);
+  }, [editor, onNavigateToLgPage]);
 
   const onInit: OnInit = (monaco) => {
     registerLGLanguage(monaco);
@@ -177,7 +223,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   );
 
   const navigateToLgPage = React.useCallback(() => {
-    onNavigateToLgPage?.(lgOption?.fileId ?? 'common', lgOption?.templateId);
+    onNavigateToLgPage?.(lgOption?.fileId ?? 'common', { templateId: lgOption?.templateId, line: undefined });
   }, [onNavigateToLgPage, lgOption]);
 
   const onExpandedEditorChange = React.useCallback(
@@ -198,21 +244,37 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     [onChange]
   );
 
+  const toolbarFarItems = React.useMemo<ICommandBarItemProps[]>(
+    () =>
+      popExpandOptions
+        ? [
+            {
+              key: 'popExpandButton',
+              buttonStyles: farItemButtonStyles,
+              className: jsLgToolbarMenuClassName,
+              onRenderIcon: () => {
+                let PopExpandIcon = createSvgIcon({ svg: () => popExpandSvgIcon, displayName: 'PopExpandIcon' });
+                PopExpandIcon = withTooltip({ content: formatMessage('Pop out editor') }, PopExpandIcon);
+                return <PopExpandIcon style={svgIconStyle} />;
+              },
+              onClick: () => {
+                setExpanded(true);
+                popExpandOptions.onEditorPopToggle?.(true);
+              },
+            },
+          ]
+        : [],
+    [popExpandOptions]
+  );
+
   return (
     <>
       <Stack verticalFill>
         {!toolbarHidden && (
-          <LgEditorToolbar
+          <EditorToolbar
+            farItems={toolbarFarItems}
             lgTemplates={lgTemplates}
             properties={memoryVariables}
-            onPopExpand={
-              popExpandOptions
-                ? () => {
-                    setExpanded(true);
-                    popExpandOptions.onEditorPopToggle?.(true);
-                  }
-                : undefined
-            }
             onSelectToolbarMenuItem={selectToolbarMenuItem}
           />
         )}
@@ -228,7 +290,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           theme="lgtheme"
           onInit={onInit}
         />
-        {onNavigateToLgPage && lgOption && (
+        {showDirectTemplateLink && onNavigateToLgPage && lgOption && (
           <Stack horizontal tokens={templateLinkTokens} verticalAlign="center">
             <Text styles={grayTextStyle}>{formatMessage('Template name: ')}</Text>
             <LgTemplateLink as="button" styles={linkStyles} onClick={navigateToLgPage}>
@@ -251,8 +313,9 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           }}
         >
           <LgCodeEditor
-            {...omit(props, ['onNavigateToLgPage', 'popExpandOptions'])}
+            {...omit(props, ['popExpandOptions'])}
             height={400}
+            showDirectTemplateLink={false}
             onChange={onExpandedEditorChange}
           />
         </Dialog>

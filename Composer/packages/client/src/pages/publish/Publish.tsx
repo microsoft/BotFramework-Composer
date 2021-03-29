@@ -21,6 +21,7 @@ import {
   setTenantId,
   getTenantIdFromCache,
 } from '../../utils/auth';
+// import { vaultScopes } from '../../constants';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
@@ -181,6 +182,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const updater = pollingUpdaterList.find((i) => i.isSameUpdater(botProjectId, targetName));
     const updatedBot = botList.find((bot) => bot.id === botProjectId);
     if (!updatedBot || !updater) return;
+    if (!apiResponse) {
+      stopUpdater(updater);
+      return;
+    }
     const responseData = apiResponse.data;
 
     if (responseData.status !== ApiStatus.Publishing) {
@@ -203,7 +208,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const updateUpdaterStatus = (payload) => {
     const { botProjectId, targetName, apiResponse } = payload;
-    const pending = apiResponse.data.status === ApiStatus.Publishing;
+    const pending = apiResponse && apiResponse.data.status === ApiStatus.Publishing;
     setUpdaterStatus({
       ...updaterStatus,
       [`${botProjectId}/${targetName}`]: pending,
