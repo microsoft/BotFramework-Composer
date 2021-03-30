@@ -13,8 +13,8 @@ import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { LuFile } from '@bfc/shared';
 
-import { luFilesState, localeState, settingsState } from '../../recoilModel/atoms';
-import { userSettingsState, dispatcherState } from '../../recoilModel';
+import { localeState, settingsState } from '../../recoilModel/atoms';
+import { userSettingsState, dispatcherState, luFilesSelectorFamily } from '../../recoilModel';
 
 import { DiffCodeEditor } from './diff-editor';
 
@@ -39,7 +39,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { dialogId, projectId, skillId, luFileId, file } = props;
   const actualProjectId = skillId ?? projectId;
 
-  const luFiles = useRecoilValue(luFilesState(actualProjectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
 
