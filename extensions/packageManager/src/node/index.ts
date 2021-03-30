@@ -57,47 +57,46 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
     },
     getFeeds: async function (req, res) {
-      // read the list of sources from the config file.
-      let packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
+      // Read the list of sources from the config file.
+      let storedSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      // if no sources are in the config file, set the default list to our 1st party feed.
-      if (!packageSources) {
-        packageSources = [
-          // TODO: Re-enable the NPM feed when we have a JS runtime
-          // {
-          //   key: 'npm',
-          //   text: 'npm',
-          //   url: 'https://registry.npmjs.org/-/v1/search?text=keywords:msbot-component&size=100&from=0',
-          //   searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:msbot-component&size=100&from=0',
-          //   readonly: true,
-          // },
-          {
-            key: 'nuget',
-            text: 'nuget',
-            url: 'https://api.nuget.org/v3/index.json',
-            readonly: true,
-            defaultQuery: {
-              prerelease: true,
-              semVerLevel: '2.0.0',
-              query: 'microsoft.bot.components+tags:msbot-component',
-            },
-            type: PackageSourceType.NuGet,
+      // Default sources
+      let packageSources: IPackageSource[] = [
+        {
+          key: 'nuget',
+          text: 'nuget',
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: 'microsoft.bot.components+tags:msbot-component',
           },
-          {
-            key: 'nuget-community',
-            text: 'community packages',
-            url: 'https://api.nuget.org/v3/index.json',
-            readonly: true,
-            defaultQuery: {
-              prerelease: true,
-              semVerLevel: '2.0.0',
-              query: 'tags:msbot-component',
-            },
-            type: PackageSourceType.NuGet,
+          type: PackageSourceType.NuGet,
+        },
+        {
+          key: 'nuget-community',
+          text: 'community packages',
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: 'tags:msbot-component',
           },
-        ];
-        composer.store.write('feeds', packageSources);
+          type: PackageSourceType.NuGet,
+        },
+      ];
+
+      // If there are package sources stored in the user profile
+      if (storedSources) {
+        // Extract list of read-only sources
+        let readOnlyKeys = packageSources.map((s) => s.key);
+
+        // Add user sources to the package sources, excluding modifications of the read-only ones
+        packageSources = packageSources.concat(storedSources.filter((s) => !readOnlyKeys.includes(s.key)));
       }
+      composer.store.write('feeds', packageSources);
 
       res.json(packageSources);
     },
