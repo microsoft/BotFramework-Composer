@@ -315,15 +315,19 @@ export const addSkillDialog = {
 };
 
 export const selectIntentDialog = {
-  SELECT_INTENT: (name: string) => {
+  SELECT_INTENT: (name: string, skill: string) => {
     return {
-      title: formatMessage('Select intents to trigger Bookings skill'),
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Select intents to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
       subText: formatMessage(`These intents will trigger this skill from ${name}`),
     };
   },
-  ADD_OR_EDIT_PHRASE: (name: string) => {
+  ADD_OR_EDIT_PHRASE: (name: string, skill: string) => {
     return {
-      title: formatMessage('Add or edit phrases to trigger Bookings skill'),
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Add or edit phrases to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
       subText: formatMessage(`These phrases will trigger this skill from ${name}`),
     };
   },
@@ -334,9 +338,7 @@ export const enableOrchestratorDialog = {
     return formatMessage('Enable Orchestrator');
   },
   get subText() {
-    return formatMessage(
-      'Connecting to skills works best with the Orchestrator recognizer at the root bot (TodoBotSample)'
-    );
+    return formatMessage('Connecting to skills works best with the Orchestrator recognizer at the root bot');
   },
 };
 

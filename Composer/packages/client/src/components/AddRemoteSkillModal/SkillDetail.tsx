@@ -1,10 +1,10 @@
+/* eslint-disable format-message/literal-pattern */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { Fragment } from 'react';
+import React from 'react';
 import formatMessage from 'format-message';
-import { title } from '../../pages/about/styles';
 
 interface SkillDetailProps {
   manifest: {
@@ -16,6 +16,7 @@ interface SkillDetailProps {
     activities: object;
     publisherName: string;
     description: string;
+    name: string;
     [key: string]: any;
   };
 }

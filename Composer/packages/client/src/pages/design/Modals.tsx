@@ -62,6 +62,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createTrigger,
+    createTriggerWithAction,
     createQnATrigger,
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
@@ -127,14 +128,17 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
       )}
       {showAddSkillDialogModal && (
         <CreateSkillModal
+          addRemoteSkill={(manifestUrl, endpointName) => {
+            setAddSkillDialogModalVisibility(false);
+            addRemoteSkillToBotProject(manifestUrl, endpointName);
+          }}
+          addTriggerToRoot={(dialogId, formData, actions) => {
+            console.log(actions);
+            createTriggerWithAction(projectId, dialogId, formData, actions);
+          }}
           projectId={projectId}
           onDismiss={() => {
             setAddSkillDialogModalVisibility(false);
-          }}
-          onSubmit={(manifestUrl, endpointName, dialogId, formData) => {
-            setAddSkillDialogModalVisibility(false);
-            addRemoteSkillToBotProject(manifestUrl, endpointName);
-            createTrigger(projectId, dialogId, formData);
           }}
         />
       )}
