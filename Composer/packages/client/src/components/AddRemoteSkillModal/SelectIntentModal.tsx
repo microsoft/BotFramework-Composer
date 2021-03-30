@@ -21,6 +21,8 @@ import httpClient from '../../utils/httpUtil';
 import luWorker from '../../recoilModel/parsers/luWorker';
 import { localeState, dispatcherState } from '../../recoilModel';
 
+import { OrchestractorModal } from './OrchestractorModal';
+
 const detailListContainer = css`
   width: 100%;
   height: 400px;
@@ -106,9 +108,9 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
   const [displayIntents, setDisplayIntent] = useState<Array<LuIntentSection>>([]);
   const [displayContent, setDisplayContent] = useState<string>('');
   // const [luFileError, setError] = useState();
-  const [title, setTitle] = useState(selectIntentDialog.SELECT_INTENT(dialogId));
+  const [title, setTitle] = useState(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
   const locale = useRecoilValue(localeState(projectId));
-
+  const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
 
   const selection = useMemo(() => {
@@ -189,66 +191,71 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
   }, [selectedIntents, currentLuFile]);
 
   return (
-    <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss} {...title}>
-      <Stack>
-        {page === 0 ? (
-          <StackItem>
-            <Label>{formatMessage('Intents')}</Label>
-            <div css={detailListContainer} data-is-scrollable="true">
-              <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-                <DetailsList
-                  columns={columns}
-                  isHeaderVisible={false}
-                  items={intentItems}
-                  selection={selection}
-                  selectionMode={SelectionMode.multiple}
-                />
-              </ScrollablePane>
-            </div>
-          </StackItem>
-        ) : (
-          <StackItem>
-            <LuEditor height={400} value={displayContent} onChange={setDisplayContent} />
-          </StackItem>
-        )}
-        <Separator />
-        <Stack horizontal horizontalAlign={page === 1 ? 'space-between' : 'end'}>
-          {page === 1 && (
-            <DefaultButton
-              text={formatMessage('Back')}
-              onClick={() => {
-                setPage(page - 1);
-                setTitle(selectIntentDialog.SELECT_INTENT(dialogId));
-              }}
-            />
-          )}
-          <span>
-            <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+    <Fragment>
+      {showOrchestratorDialog ? (
+        <OrchestractorModal
+          dialogId={dialogId}
+          onDismiss={onDismiss}
+          onSubmit={(ev) => {
+            // append remote lufile into root lu file
+            updateLuFile(displayContent);
+            // add trigger to root
+            onSubmit(ev, displayContent);
+          }}
+        />
+      ) : (
+        <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss} {...title}>
+          <Stack>
             {page === 0 ? (
-              <PrimaryButton
-                styles={{ root: { marginLeft: '8px' } }}
-                text={formatMessage('Next')}
-                onClick={() => {
-                  setPage(page + 1);
-                  setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId));
-                }}
-              />
+              <StackItem>
+                <Label>{formatMessage('Intents')}</Label>
+                <div css={detailListContainer} data-is-scrollable="true">
+                  <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+                    <DetailsList
+                      columns={columns}
+                      isHeaderVisible={false}
+                      items={intentItems}
+                      selection={selection}
+                      selectionMode={SelectionMode.multiple}
+                    />
+                  </ScrollablePane>
+                </div>
+              </StackItem>
             ) : (
-              <PrimaryButton
-                styles={{ root: { marginLeft: '8px' } }}
-                text={formatMessage('Done')}
-                onClick={(event) => {
-                  // merge lu file
-                  updateLuFile(displayContent);
-                  onSubmit(event, displayContent);
-                  // add a trigger to root bot
-                  onDismiss();
-                }}
-              />
+              <StackItem>
+                <LuEditor height={400} value={displayContent} onChange={setDisplayContent} />
+              </StackItem>
             )}
-          </span>
-        </Stack>
-      </Stack>
-    </DialogWrapper>
+            <Separator />
+            <Stack horizontal horizontalAlign={page === 1 ? 'space-between' : 'end'}>
+              {page === 1 && (
+                <DefaultButton
+                  text={formatMessage('Back')}
+                  onClick={() => {
+                    setPage(page - 1);
+                    setTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
+                  }}
+                />
+              )}
+              <span>
+                <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+                <PrimaryButton
+                  styles={{ root: { marginLeft: '8px' } }}
+                  text={formatMessage('Next')}
+                  onClick={() => {
+                    if (page === 1) {
+                      setShowOrchestratorDialog(true);
+                    } else {
+                      setPage(page + 1);
+                      setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
+                    }
+                  }}
+                />
+              </span>
+            </Stack>
+          </Stack>
+        </DialogWrapper>
+      )}
+    </Fragment>
   );
 };
