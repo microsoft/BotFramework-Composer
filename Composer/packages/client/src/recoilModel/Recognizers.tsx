@@ -13,8 +13,8 @@ import { getLuProvider } from '../utils/dialogUtil';
 
 import * as luUtil from './../utils/luUtil';
 import * as buildUtil from './../utils/buildUtil';
-import { crossTrainConfigState, filePersistenceState, luFilesState, qnaFilesState, settingsState } from './atoms';
-import { dialogsSelectorFamily } from './selectors';
+import { crossTrainConfigState, filePersistenceState, settingsState } from './atoms';
+import { dialogsSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from './selectors';
 import { recognizersSelectorFamily } from './selectors/recognizers';
 
 export const LuisRecognizerTemplate = (target: string, fileName: string) => ({
@@ -164,8 +164,8 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   const setRecognizers = useSetRecoilState(recognizersSelectorFamily(projectId));
   const [crossTrainConfig, setCrossTrainConfig] = useRecoilState(crossTrainConfigState(projectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const curRecognizersRef = useRef(curRecognizers);
@@ -210,6 +210,9 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
 
   useEffect(() => {
     try {
+      //if the lu file still in the loading stage, do nothing
+      if (luFiles.some((item) => item.isContentUnparsed)) return;
+
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
 
       const curCrossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles, settings.languages);
