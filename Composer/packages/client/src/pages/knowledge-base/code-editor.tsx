@@ -13,7 +13,7 @@ import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import { dispatcherState, userSettingsState, qnaFilesState } from '../../recoilModel';
+import { dispatcherState, userSettingsState, qnaFilesSelectorFamily } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { getBaseName } from '../../utils/fileUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -33,7 +33,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
-  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(actualProjectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
