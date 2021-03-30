@@ -251,6 +251,9 @@
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
   },
+  "an_azure_tenant_must_be_set_in_order_to_provision__a223f1b8": {
+    "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
+  },
   "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
     "message": "An error occurred connecting initializing the DirectLine server"
   },
@@ -382,6 +385,9 @@
   },
   "australiaeast_f3227a31": {
     "message": "australiaeast"
+  },
+  "authentication_error_39e996c5": {
+    "message": "Authentication Error"
   },
   "authoring_canvas_18802e39": {
     "message": "Authoring canvas"
@@ -1451,6 +1457,9 @@
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
   },
+  "error_provisioning_25835400": {
+    "message": "Error provisioning."
+  },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
   },
@@ -1904,8 +1913,8 @@
   "jan_28_2020_8beb36dc": {
     "message": "Jan 28, 2020"
   },
-  "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__b617787e": {
-    "message": "Just add a QnA key and you''ll be ready to talk to your bot."
+  "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__d18758bb": {
+    "message": "Just add a QnA key and you’ll be ready to talk to your bot."
   },
   "kb_d9c53902": {
     "message": "KB"
@@ -3491,6 +3500,9 @@
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
+  "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
+    "message": "There was an error accessing your Azure account: { errorMsg }"
+  },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
     "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
   },
@@ -3541,6 +3553,9 @@
   },
   "this_page_contains_detailed_information_about_your_b2b3413b": {
     "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
+  },
+  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
+    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type."
@@ -3697,6 +3712,9 @@
   },
   "unread_notifications_indicator_e2ca00d5": {
     "message": "Unread notifications Indicator"
+  },
+  "unsupported_publishing_profile_ad088e54": {
+    "message": "Unsupported publishing profile"
   },
   "unused_8d193e3": {
     "message": "Unused"
@@ -3965,8 +3983,8 @@
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
     "message": "You have successfully published { name } to { publishTarget }"
   },
-  "you_re_ready_to_go_1b701a5d": {
-    "message": "You''re ready to go!"
+  "you_re_ready_to_go_18ee8dac": {
+    "message": "You’re ready to go!"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
