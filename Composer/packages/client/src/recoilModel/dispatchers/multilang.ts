@@ -10,9 +10,8 @@ import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../selectors/project';
 import { lgFilesSelectorFamily } from '../selectors/lg';
-
+import { luFilesSelectorFamily, qnaFilesSelectorFamily } from '../selectors';
 import {
-  luFilesState,
   localeState,
   settingsState,
   showAddLanguageModalState,
@@ -20,7 +19,6 @@ import {
   onDelLanguageDialogCompleteState,
   showDelLanguageModalState,
   botDisplayNameState,
-  qnaFilesState,
 } from './../atoms/botState';
 
 const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: string[]): any[] => {
@@ -93,15 +91,15 @@ export const multilangDispatcher = () => {
       const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesSelectorFamily(projectId), (prevlgFiles) => {
-        const addedLgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
-        return [...prevlgFiles, ...addedLgFiles];
+      set(lgFilesSelectorFamily(projectId), (oldLgFiles) => {
+        const addedLgFiles = copyLanguageResources(oldLgFiles, defaultLang, languages);
+        return [...oldLgFiles, ...addedLgFiles];
       });
-      set(luFilesState(projectId), (prevluFiles) => {
+      set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
         return [...prevluFiles, ...addedLuFiles];
       });
-      set(qnaFilesState(projectId), (prevQnAFiles) => {
+      set(qnaFilesSelectorFamily(projectId), (prevQnAFiles) => {
         const addedQnAFiles = copyLanguageResources(prevQnAFiles, defaultLang, languages);
         return [...prevQnAFiles, ...addedQnAFiles];
       });
@@ -135,15 +133,15 @@ export const multilangDispatcher = () => {
       const onDelLanguageDialogComplete = (await snapshot.getPromise(onDelLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesSelectorFamily(projectId), (prevlgFiles) => {
-        const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
+      set(lgFilesSelectorFamily(projectId), (prevLgFiles) => {
+        const { left: leftLgFiles } = deleteLanguageResources(prevLgFiles, languages);
         return leftLgFiles;
       });
-      set(luFilesState(projectId), (prevluFiles) => {
-        const { left: leftLuFiles } = deleteLanguageResources(prevluFiles, languages);
+      set(luFilesSelectorFamily(projectId), (prevLuFiles) => {
+        const { left: leftLuFiles } = deleteLanguageResources(prevLuFiles, languages);
         return leftLuFiles;
       });
-      set(qnaFilesState(projectId), (prevQnAFiles) => {
+      set(qnaFilesSelectorFamily(projectId), (prevQnAFiles) => {
         const { left: leftQnAFiles } = deleteLanguageResources(prevQnAFiles, languages);
         return leftQnAFiles;
       });

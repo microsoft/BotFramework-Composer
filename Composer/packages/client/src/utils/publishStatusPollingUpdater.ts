@@ -45,6 +45,11 @@ export class PublishStatusPollingUpdater {
       ? publishStorage.get('jobIds')[`${botProjectId}-${publishTargetName}`]
       : undefined;
     if (!currentJobId) {
+      onData({
+        botProjectId,
+        targetName: publishTargetName,
+        apiResponse: null,
+      });
       return;
     }
     const response = await httpClient

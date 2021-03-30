@@ -14,7 +14,7 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import {
   dialogIdsState,
-  qnaFilesState,
+  qnaFilesSelectorFamily,
   dispatcherState,
   createQnAOnState,
   localeState,
@@ -50,7 +50,7 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const createQnAOnInfo = useRecoilValue(createQnAOnState);
   const settings = useRecoilValue(settingsState(actualProjectId));
@@ -63,6 +63,7 @@ const QnAPage: React.FC<RouteComponentProps<{
     const qnaFile = qnaFiles.find(({ id }) => id === qnaFileId ?? targetFileId);
     return !(defaultLanguage === locale || qnaFile?.empty);
   }, [defaultLanguage, locale, qnaFiles, dialogId, qnaFileId]);
+
   useEffect(() => {
     if (locale !== currentLocale) {
       setCurrentLocale(locale);

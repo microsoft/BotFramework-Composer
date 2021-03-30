@@ -71,7 +71,7 @@ export const Intellisense = React.memo(
       if (didComplete.current) {
         didComplete.current = false;
       } else {
-        if (completionItems && completionItems.length) {
+        if (completionItems?.length) {
           setShowCompletionList(true);
         } else {
           setShowCompletionList(false);
@@ -93,24 +93,21 @@ export const Intellisense = React.memo(
           shouldBlur = false;
         }
 
-        if (
-          completionListOverrideContainerElements &&
-          completionListOverrideContainerElements.some((item) => !checkIsOutside(x, y, item))
-        ) {
+        if (completionListOverrideContainerElements?.some((item) => !checkIsOutside(x, y, item))) {
           shouldBlur = false;
         }
 
         if (shouldBlur) {
           setShowCompletionList(false);
           setCursorPosition(-1);
-          onBlur && onBlur(id);
+          onBlur?.(id);
         }
       };
 
       const keydownHandler = (event: KeyboardEvent) => {
         if ((event.key === 'Escape' || event.key === 'Tab') && focused) {
           setShowCompletionList(false);
-          onBlur && onBlur(id);
+          onBlur?.(id);
         }
       };
 
