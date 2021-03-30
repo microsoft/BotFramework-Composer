@@ -11,13 +11,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
 import { jsLgToolbarMenuClassName } from '../constants';
-import { LgEditorToolbar } from '../LgEditorToolbar';
+import { FieldToolbar } from '../../components/toolbar/FieldToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
-import { ToolbarButtonPayload } from '../types';
+import { ToolbarButtonPayload } from '../../types';
 
 import { StringArrayItem } from './StringArrayItem';
 
-const submitKeys = ['Enter', 'Escape'];
+const inputs = ['input', 'textarea'];
 
 const styles: { link: ILinkStyles } = {
   link: {
@@ -118,7 +118,11 @@ export const StringArrayEditor = React.memo(
 
     useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
-        if (submitKeys.includes(e.key)) {
+        if (
+          e.key === 'Enter' ||
+          (e.key === 'Escape' &&
+            (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase())))
+        ) {
           // Allow multiline via shift+Enter
           if (e.key === 'Enter' && e.shiftKey) {
             return;
@@ -280,7 +284,7 @@ export const StringArrayEditor = React.memo(
             onSelectToolbarMenuItem={onSelectToolbarMenuItem}
           />
         ) : (
-          <LgEditorToolbar
+          <FieldToolbar
             key="lg-toolbar"
             lgTemplates={lgTemplates}
             properties={memoryVariables}
@@ -311,6 +315,7 @@ export const StringArrayEditor = React.memo(
         )}
         {calloutTargetElement && (
           <Callout
+            doNotLayer
             directionalHint={DirectionalHint.topLeftEdge}
             gapSpace={2}
             isBeakVisible={false}

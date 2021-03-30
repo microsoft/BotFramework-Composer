@@ -132,6 +132,41 @@ async function getProjectByAlias(req: Request, res: Response) {
   }
 }
 
+async function setProjectAlias(req: Request, res: Response) {
+  const { alias } = req.body;
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  if (!alias) {
+    res.status(400).json({
+      message: 'Parameters not provided, requires "alias" parameter',
+    });
+    return;
+  }
+
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    if (currentProject !== undefined) {
+      try {
+        await BotProjectService.setProjectAlias(projectId, alias);
+        res.status(200).json({ id: currentProject.id, name: currentProject.name, alias: alias });
+      } catch (error) {
+        res.status(400).json({
+          message: error instanceof Error ? error.message : error,
+        });
+      }
+    } else {
+      res.status(404).json({
+        message: `No matching bot project found for projectId ${projectId}`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 async function removeProject(req: Request, res: Response) {
   const projectId = req.params.projectId;
   if (!projectId) {
@@ -607,6 +642,7 @@ export const ProjectController = {
   checkBoilerplateVersion,
   generateProjectId,
   getProjectByAlias,
+  setProjectAlias,
   backupProject,
   copyTemplateToExistingProject,
   getVariablesByProjectId,
