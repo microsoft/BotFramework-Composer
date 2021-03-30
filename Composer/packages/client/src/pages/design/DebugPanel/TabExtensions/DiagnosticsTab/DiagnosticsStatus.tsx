@@ -8,7 +8,6 @@ import { useSetRecoilState } from 'recoil';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { divProperties } from '@uifabric/utilities';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
 import { DiagnosticsTabKey } from '../types';

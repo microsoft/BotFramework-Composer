@@ -18,11 +18,6 @@ import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
 import { ProjectTreeOptions, TreeLink } from './types';
 
-const icons = {
-  BOT: 'CubeShape',
-  EXTERNAL_SKILL: 'Globe',
-};
-
 const headerCSS = (label: string) => css`
   margin-top: -6px;
   width: 100%;
