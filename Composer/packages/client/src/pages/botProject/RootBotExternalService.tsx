@@ -20,8 +20,8 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import {
   dispatcherState,
   settingsState,
-  luFilesState,
-  qnaFilesState,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
   botDisplayNameState,
   dialogsWithLuProviderSelectorFamily,
 } from '../../recoilModel';
@@ -167,8 +167,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const rootqnaKey = groupQnAKey.root;
 
   const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const isLUISKeyNeeded = BotIndexer.shouldUseLuis(dialogs, luFiles);
   const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);

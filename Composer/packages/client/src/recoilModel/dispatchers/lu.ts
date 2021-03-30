@@ -9,8 +9,10 @@ import formatMessage from 'format-message';
 import luWorker from '../parsers/luWorker';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { luFilesState, localeState, settingsState } from '../atoms/botState';
+import { localeState, settingsState, luFileIdsState } from '../atoms/botState';
+import { luFilesSelectorFamily } from '../selectors/lu';
 
+import { luFileState } from './../atoms/botState';
 import { setError } from './shared';
 
 const intentIsNotEmpty = ({ Name, Body }) => {
@@ -27,37 +29,41 @@ const initialBody = '- ';
  *
  */
 
-const luFilesAtomUpdater = (
+const updateLuFiles = (
+  { set }: CallbackInterface,
+  projectId: string,
   changes: {
     adds?: LuFile[];
     deletes?: LuFile[];
     updates?: LuFile[];
   },
-  filter?: (oldList: LuFile[]) => (changeItem: LuFile) => boolean
+  getLatestFile?: (current: LuFile, changed: LuFile) => LuFile
 ) => {
-  return (oldList: LuFile[]) => {
-    const updates = changes.updates ? (filter ? changes.updates.filter(filter(oldList)) : changes.updates) : [];
-    const adds = changes.adds ? (filter ? changes.adds.filter(filter(oldList)) : changes.adds) : [];
-    const deletes = changes.deletes
-      ? filter
-        ? changes.deletes.filter(filter(oldList)).map(({ id }) => id)
-        : changes.deletes.map(({ id }) => id)
-      : [];
+  const { updates, adds, deletes } = changes;
 
-    // updates
-    let newList = oldList.map((file) => {
-      const changedFile = updates.find(({ id }) => id === file.id);
-      return changedFile ?? file;
+  // updates
+  updates?.forEach((luFile) => {
+    set(luFileState({ projectId, luFileId: luFile.id }), (oldLuFile) =>
+      getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile
+    );
+  });
+
+  // deletes
+  if (deletes?.length) {
+    const deletedIds = deletes.map((file) => file.id);
+    set(luFileIdsState(projectId), (ids) => ids.filter((id) => !deletedIds.includes(id)));
+  }
+
+  // adds
+  if (adds?.length) {
+    const addedIds = adds.map((file) => file.id);
+    adds.forEach((luFile) => {
+      set(luFileState({ projectId, luFileId: luFile.id }), (oldLuFile) =>
+        getLatestFile ? getLatestFile(oldLuFile, luFile) : luFile
+      );
     });
-
-    // deletes
-    newList = newList.filter((file) => !deletes.includes(file.id));
-
-    // adds
-    newList = adds.concat(newList);
-
-    return newList;
-  };
+    set(luFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
+  }
 };
 const getRelatedLuFileChanges = async (
   luFiles: LuFile[],
@@ -119,8 +125,8 @@ export const createLuFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
-  const luFiles = await snapshot.getPromise(luFilesState(projectId));
+  const { snapshot } = callbackHelpers;
+  const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
   const locale = await snapshot.getPromise(localeState(projectId));
   const { languages, luFeatures } = await snapshot.getPromise(settingsState(projectId));
   const createdLuId = `${id}.${locale}`;
@@ -141,15 +147,15 @@ export const createLuFileState = async (
     });
   });
 
-  set(luFilesState(projectId), luFilesAtomUpdater({ adds: changes }));
+  updateLuFiles(callbackHelpers, projectId, { adds: changes });
 };
 
 export const removeLuFileState = async (
   callbackHelpers: CallbackInterface,
   { id, projectId }: { id: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
-  const luFiles = await snapshot.getPromise(luFilesState(projectId));
+  const { snapshot } = callbackHelpers;
+  const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
   const locale = await snapshot.getPromise(localeState(projectId));
 
   const targetLuFile = luFiles.find((item) => item.id === id) || luFiles.find((item) => item.id === `${id}.${locale}`);
@@ -164,7 +170,7 @@ export const removeLuFileState = async (
       luFileStatusStorage.removeFileStatus(projectId, targetLuFile.id);
     }
   });
-  set(luFilesState(projectId), luFilesAtomUpdater({ deletes: [targetLuFile] }));
+  updateLuFiles(callbackHelpers, projectId, { deletes: [targetLuFile] });
 };
 
 export const luDispatcher = () => {
@@ -180,19 +186,14 @@ export const luDispatcher = () => {
     }) => {
       const { set, snapshot } = callbackHelpers;
       //set content first
-      set(luFilesState(projectId), (prevLuFiles) => {
-        return prevLuFiles.map((file) => {
-          if (file.id === id) {
-            return {
-              ...file,
-              content,
-            };
-          }
-          return file;
-        });
+      set(luFileState({ projectId, luFileId: id }), (prevLuFile) => {
+        return {
+          ...prevLuFile,
+          content,
+        };
       });
 
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       try {
@@ -203,19 +204,11 @@ export const luDispatcher = () => {
          * Why other methods do not need double check content?
          * Because this method already did set content before call luFilesAtomUpdater.
          */
-        set(
-          luFilesState(projectId),
-          luFilesAtomUpdater({ updates: updatedFiles }, (prevLuFiles) => {
-            const targetInState = prevLuFiles.find((file) => file.id === updatedFile.id);
-            const targetInCurrentChange = updatedFiles.find((file) => file.id === updatedFile.id);
-            // compare to drop expired content already setted above.
-            if (targetInState?.content !== targetInCurrentChange?.content) {
-              return (luFile) => luFile.id !== updatedFile.id;
-            } else {
-              return () => true;
-            }
-          })
-        );
+        updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles }, (current, changed) => {
+          // compare to drop expired content already setted above.
+          if (current.id === id && current?.content !== changed?.content) return current;
+          return changed;
+        });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -234,8 +227,8 @@ export const luDispatcher = () => {
       intent: LuIntentSection;
       projectId: string;
     }) => {
-      const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       const luFile = luFiles.find((temp) => temp.id === id);
@@ -263,8 +256,7 @@ export const luDispatcher = () => {
             )) as LuFile;
             changes.push(updatedFile);
           }
-          set(luFilesState(projectId), luFilesAtomUpdater({ updates: changes }));
-
+          updateLuFiles(callbackHelpers, projectId, { updates: changes });
           // body change, only update current locale file
         } else {
           const updatedFile = (await luWorker.updateIntent(
@@ -273,7 +265,7 @@ export const luDispatcher = () => {
             { Body: intent.Body },
             luFeatures
           )) as LuFile;
-          set(luFilesState(projectId), luFilesAtomUpdater({ updates: [updatedFile] }));
+          updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
         }
       } catch (error) {
         setError(callbackHelpers, error);
@@ -291,8 +283,8 @@ export const luDispatcher = () => {
       intent: LuIntentSection;
       projectId: string;
     }) => {
-      const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       const file = luFiles.find((temp) => temp.id === id);
@@ -300,7 +292,7 @@ export const luDispatcher = () => {
       try {
         const updatedFile = (await luWorker.addIntent(file, intent, luFeatures)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        set(luFilesState(projectId), luFilesAtomUpdater({ updates: updatedFiles }));
+        updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -317,8 +309,8 @@ export const luDispatcher = () => {
       intentName: string;
       projectId: string;
     }) => {
-      const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       const file = luFiles.find((temp) => temp.id === id);
@@ -326,7 +318,7 @@ export const luDispatcher = () => {
       try {
         const updatedFile = (await luWorker.removeIntent(file, intentName, luFeatures)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
-        set(luFilesState(projectId), luFilesAtomUpdater({ updates: updatedFiles }));
+        updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {
         setError(callbackHelpers, error);
       }

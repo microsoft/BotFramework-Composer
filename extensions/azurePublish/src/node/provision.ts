@@ -215,6 +215,7 @@ export class BotProjectProvision {
         appInsights: null,
         qna: null,
         botName: null,
+        tenantId: this.tenantId,
       };
 
       const resourceGroupName = config.resourceGroup ?? config.hostname;
