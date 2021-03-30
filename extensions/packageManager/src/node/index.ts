@@ -64,13 +64,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       if (!packageSources) {
         packageSources = [
           // TODO: Re-enable the NPM feed when we have a JS runtime
-          // {
-          //   key: 'npm',
-          //   text: 'npm',
-          //   url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
-          //   searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bf-component&size=100&from=0',
-          //   readonly: true,
-          // },
           {
             key: 'nuget',
             text: 'nuget',
@@ -79,20 +72,35 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             defaultQuery: {
               prerelease: true,
               semVerLevel: '2.0.0',
-              query: 'microsoft.bot.components+tags:bf-component',
+              query: 'microsoft.bot.components+tags:msbot-component',
             },
             type: PackageSourceType.NuGet,
           },
           {
             key: 'nuget-community',
-            text: 'community packages',
+            text: 'C# community packages',
             url: 'https://api.nuget.org/v3/index.json',
             defaultQuery: {
               prerelease: true,
               semVerLevel: '2.0.0',
-              query: 'tags:bf-component',
+              query: 'tags:msbot-component',
             },
             type: PackageSourceType.NuGet,
+          },
+          {
+            key: 'npm',
+            text: 'npm',
+            url: 'https://registry.npmjs.org/-/v1/search?text=keywords:msbot-component+scope:microsoft&size=100&from=0',
+            searchUrl:
+              'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:msbot-component&size=100&from=0',
+            readonly: true,
+          },
+          {
+            key: 'npm-community',
+            text: 'JS community packages',
+            url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bot-component&size=100&from=0',
+            searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bot-component&size=100&from=0',
+            readonly: true,
           },
         ];
         composer.store.write('feeds', packageSources);
@@ -154,8 +162,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           const packageQuery: IPackageQuery = {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: 'tags:bf-component',
+            query: 'tags:msbot-component',
           };
+
+          composer.log('GETTING FEED', packageSource, packageSource.defaultQuery ?? packageQuery);
 
           const packages = await feed.getPackages(packageSource.defaultQuery ?? packageQuery);
 
@@ -304,6 +314,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
+
+            composer.log(
+              'MERGE RESULTS',
+              path.join(currentProject.dataDir, 'dialogs/imported'),
+              JSON.stringify(mergeResults, null, 2)
+            );
+
             const installedComponents = mergeResults.components.filter(isAdaptiveComponent);
             if (mergeResults) {
               res.json({
@@ -314,7 +331,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               let runtimeLanguage = 'c#';
               if (
                 currentProject.settings.runtime.key === 'node-azurewebapp' ||
-                currentProject.settings.runtime.key === 'adaptive-runtime-js-webapp'
+                currentProject.settings.runtime.key.startsWith('adaptive-runtime-js')
               ) {
                 runtimeLanguage = 'js';
               }
