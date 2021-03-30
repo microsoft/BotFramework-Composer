@@ -147,16 +147,16 @@ export const getBotAdapter = (
     );
   }
 
-  if (settings.feature?.useInspectionMiddleware) {
+  if (settings.feature?.UseInspectionMiddleware) {
     adapter.use(new InspectionMiddleware(new InspectionState(storage)));
   }
 
-  if (settings.feature?.useShowTypingMiddleware) {
+  if (settings.feature?.UseShowTypingMiddleware) {
     adapter.use(new ShowTypingMiddleware());
   }
 
-  if (settings.feature?.useSetSpeakMiddleware && settings.speech) {
-    // TODO: add SetSpeakMiddleware
+  if (settings.feature?.UseSetSpeakMiddleware && settings.speech) {
+    // TODO: add SetSpeakMiddleware (not available in botbuilder 4.12)
   }
 
   adapter.onTurnError = async (turnContext: TurnContext, error: Error) => {

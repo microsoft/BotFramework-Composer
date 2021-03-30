@@ -81,7 +81,7 @@ export class ComposerBot extends ActivityHandler {
       rootDialog.configure({ autoEndDialog: true });
     }
 
-    const removeRecipientMention = (this.settings.feature && this.settings.feature.removeRecipientMention) || false;
+    const removeRecipientMention = this.settings.feature?.RemoveRecipientMention ?? false;
     if (removeRecipientMention && turnContext.activity.type == ActivityTypes.Message) {
       TurnContext.removeRecipientMention(turnContext.activity);
     }
