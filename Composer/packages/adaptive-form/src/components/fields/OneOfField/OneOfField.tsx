@@ -121,7 +121,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
       <Field
         key={selectedSchema.type}
         expression={expression}
-        hasIcon={options.length > 1}
+        hasIcon={options.length > 1 || !isNested}
         {...props}
         {...customProps}
         css={{ label: 'ExpressionFieldValue' }}
