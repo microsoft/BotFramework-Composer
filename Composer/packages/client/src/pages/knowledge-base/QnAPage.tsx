@@ -166,7 +166,7 @@ const QnAPage: React.FC<RouteComponentProps<{
           }}
           onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
             if (urls.length !== 0) {
-              actions.createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
+              actions.createQnAKBsFromUrls({ id: createQnAOnInfo.dialogId, name, projectId, locales, urls, multiTurn });
             } else {
               await actions.createQnAKBFromScratch({
                 id: createQnAOnInfo.dialogId,

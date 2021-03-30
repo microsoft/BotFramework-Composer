@@ -29,7 +29,7 @@ export const checkQnaBuild = (qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
   const referred = getReferredQnaFiles(qnaFiles, dialogs, false);
 
   // supported QnA locale.
-  const supported = BotIndexer.filterQnAFilesToPublish(referred, dialogs);
+  const supported = BotIndexer.filterQnAFilesToPublish(referred);
   return supported;
 };
 
