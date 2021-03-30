@@ -87,6 +87,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             key: 'nuget-community',
             text: 'community packages',
             url: 'https://api.nuget.org/v3/index.json',
+            readonly: true,
             defaultQuery: {
               prerelease: true,
               semVerLevel: '2.0.0',
