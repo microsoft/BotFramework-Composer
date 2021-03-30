@@ -51,8 +51,10 @@ configureSkillEndpoint(server, adapter, bot, skillConversationIdFactory);
 configureManifestsEndpoint(server);
 
 // Configure telemetry client, initializers and middleware.
-server.use(ApplicationInsightsWebserverMiddleware);
-configureTelemetry(adapter, telemetryClient);
+if (telemetryClient) {
+  server.use(ApplicationInsightsWebserverMiddleware);
+  configureTelemetry(adapter, telemetryClient);
+}
 
 // Get port and listen.
 const port = getServerPort();

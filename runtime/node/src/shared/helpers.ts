@@ -28,7 +28,6 @@ import {
 } from 'botbuilder';
 import {
   ApplicationInsightsTelemetryClient,
-  ApplicationInsightsWebserverMiddleware,
   TelemetryInitializerMiddleware,
 } from 'botbuilder-applicationinsights';
 import { BlobsTranscriptStore } from 'botbuilder-azure-blobs';
@@ -187,7 +186,10 @@ export const getBotAdapter = (
 
 export const getTelemetryClient = (): BotTelemetryClient => {
   const settings = getSettings();
-  return new ApplicationInsightsTelemetryClient(settings.applicationInsights?.InstrumentationKey ?? '');
+  if (settings.applicationInsights?.InstrumentationKey) {
+    return new ApplicationInsightsTelemetryClient(settings.applicationInsights?.InstrumentationKey);
+  }
+  return undefined;
 };
 
 /**
