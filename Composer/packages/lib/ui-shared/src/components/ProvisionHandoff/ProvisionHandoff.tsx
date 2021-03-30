@@ -27,14 +27,15 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
   const textFieldRef = useRef<ITextField>(null);
 
   const copyCodeToClipboard = () => {
-    try {
-      textFieldRef.current?.select;
-      textFieldRef.current?.select();
-      document.execCommand('copy');
-      textFieldRef.current?.setSelectionRange(0, 0);
-      textFieldRef.current?.blur();
-    } catch (e) {
-      console.error('Something went wrong when trying to copy content to clipboard.', e);
+    if (textFieldRef.current) {
+      try {
+        textFieldRef.current.select();
+        document.execCommand('copy');
+        textFieldRef.current.setSelectionRange(0, 0);
+        textFieldRef.current.blur();
+      } catch (e) {
+        console.error('Something went wrong when trying to copy content to clipboard.', e);
+      }
     }
   };
 

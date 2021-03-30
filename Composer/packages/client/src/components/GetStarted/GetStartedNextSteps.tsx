@@ -20,6 +20,7 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
 
 import { GetStartedTask } from './GetStartedTask';
+import { NextSteps } from './types';
 import { h3Style } from './styles';
 
 type GetStartedProps = {
@@ -28,17 +29,6 @@ type GetStartedProps = {
   showTeachingBubble: boolean;
   onBotReady: () => void;
   onDismiss: () => void;
-};
-
-export type NextSteps = {
-  checked: boolean;
-  key: string;
-  description: string;
-  learnMore?: string;
-  required?: boolean;
-  label: string;
-  onClick: (step?: NextSteps) => void;
-  highlight?: (step?: NextSteps) => void;
 };
 
 export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
@@ -220,7 +210,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     }
 
     setOptionalSteps(optSteps);
-  }, [botProject]);
+  }, [botProject, props.requiresLUIS, props.requiresQNA, props.showTeachingBubble]);
 
   return (
     <ScrollablePane styles={{ root: { marginTop: 60 } }}>
@@ -268,7 +258,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
               setHighlightQNA(false);
             }}
           >
-            {formatMessage("Just add a QnA key and you'll be ready to talk to your bot.")}
+            {formatMessage('Just add a QnA key and you’ll be ready to talk to your bot.')}
           </TeachingBubble>
         )}
 
@@ -279,9 +269,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
               <GetStartedTask key={step.key} step={step} />
             ))}
           </div>
-        ) : (
-          ''
-        )}
+        ) : null}
 
         {recommendedNextSteps.length ? (
           <div>
@@ -290,9 +278,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
               <GetStartedTask key={step.key} step={step} />
             ))}
           </div>
-        ) : (
-          ''
-        )}
+        ) : null}
 
         {optionalSteps.length ? (
           <div>
@@ -301,9 +287,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
               <GetStartedTask key={step.key} step={step} />
             ))}
           </div>
-        ) : (
-          ''
-        )}
+        ) : null}
       </div>
     </ScrollablePane>
   );

@@ -43,14 +43,10 @@ type KeyRec = {
 };
 
 const dropdownStyles = { dropdown: { width: '100%' } };
-const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: '14' };
+const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 const mainElementStyle = { marginBottom: 20 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
-
-const handoffInstructions = formatMessage(
-  'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
-);
 
 export const ManageLuis = (props: ManageLuisProps) => {
   const [showAuthDialog, setShowAuthDialog] = useState(false);
@@ -650,7 +646,9 @@ export const ManageLuis = (props: ManageLuisProps) => {
         developerInstructions={formatMessage(
           'Copy and share this information with your Azure admin. After your Luis key is provisioned, you will be ready to test your bot.'
         )}
-        handoffInstructions={handoffInstructions}
+        handoffInstructions={formatMessage(
+          'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
+        )}
         hidden={!showHandoff}
         title={formatMessage('Share resource request')}
         onBack={() => {

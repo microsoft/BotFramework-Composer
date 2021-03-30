@@ -4,10 +4,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
+import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import formatMessage from 'format-message';
 
-import { NextSteps } from './GetStartedNextSteps';
+import { NextSteps } from './types';
 
 type TaskProps = {
   step: NextSteps;
@@ -15,7 +17,11 @@ type TaskProps = {
 
 export const GetStartedTask: React.FC<TaskProps> = (props) => {
   const icon = props.step.checked ? 'CompletedSolid' : props.step.required ? 'Error' : 'Completed';
-  const color = props.step.checked ? '#219653' : props.step.required ? '#ca5010' : '#0078D4';
+  const color = props.step.checked
+    ? FluentTheme.palette.green
+    : props.step.required
+    ? SharedColors.orange20
+    : SharedColors.cyanBlue10;
   return (
     <div css={{ marginBottom: 20 }}>
       <ActionButton
@@ -38,8 +44,8 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
         {props.step.learnMore && (
           <Fragment>
             &nbsp;
-            <Link href={props.step.learnMore} target="_new">
-              Learn more
+            <Link href={props.step.learnMore} target="_blank">
+              {formatMessage('Learn more')}
             </Link>
           </Fragment>
         )}

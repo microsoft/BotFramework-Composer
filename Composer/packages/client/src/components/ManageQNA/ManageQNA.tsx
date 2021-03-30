@@ -233,11 +233,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
               'Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:'
             )
           );
-          setOutcomeSummary(
-            <div>
-              <p>{err.message}</p>
-            </div>
-          );
+          setOutcomeSummary(<p>{err.message}</p>);
           setOutcomeError(true);
           setCurrentPage(3);
           setLoadingQNA(false);
@@ -386,11 +382,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
             'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
           )
         );
-        setOutcomeSummary(
-          <div>
-            <p>{err.message}</p>
-          </div>
-        );
+        setOutcomeSummary(<p>{err.message}</p>);
         setOutcomeError(true);
         setCurrentPage(3);
         setLoadingQNA(false);

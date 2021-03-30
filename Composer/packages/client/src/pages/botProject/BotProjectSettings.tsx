@@ -77,73 +77,75 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   const { setSettings } = useRecoilValue(dispatcherState);
 
-  const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
-  const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
-  const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
-  const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
-
   const buttonClick = (link) => {
     TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
     navigateTo(link);
   };
 
-  const toolbarItems = [
-    {
-      text: formatMessage('Add a package'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'Package' },
-        onClick: () => buttonClick(linkToPackageManager),
-        styles: defaultToolbarButtonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Edit LG'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'Robot' },
-        onClick: () => buttonClick(linkToLGEditor),
-        styles: defaultToolbarButtonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Edit LU'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'People' },
-        onClick: () => buttonClick(linkToLUEditor),
-        styles: defaultToolbarButtonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Manage connections'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'PlugConnected' },
-        onClick: () => buttonClick(linkToConnections),
-        styles: defaultToolbarButtonStyles,
-      },
-      align: 'left',
-    },
-    {
-      text: formatMessage('Delete bot'),
-      type: 'action',
-      buttonProps: {
-        iconProps: { iconName: 'Trash' },
-        onClick: () => {
-          openDeleteBotModal(async () => {
-            await deleteBot(projectId);
-            navigateTo('home');
-          });
+  const toolbarItems = useMemo(() => {
+    const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
+    const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
+    const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
+    const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
+
+    return [
+      {
+        text: formatMessage('Add a package'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'Package' },
+          onClick: () => buttonClick(linkToPackageManager),
+          styles: defaultToolbarButtonStyles,
         },
-        styles: defaultToolbarButtonStyles,
+        align: 'left',
       },
-      align: 'left',
-    },
-  ];
+      {
+        text: formatMessage('Edit LG'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'Robot' },
+          onClick: () => buttonClick(linkToLGEditor),
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+      {
+        text: formatMessage('Edit LU'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'People' },
+          onClick: () => buttonClick(linkToLUEditor),
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+      {
+        text: formatMessage('Manage connections'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'PlugConnected' },
+          onClick: () => buttonClick(linkToConnections),
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+      {
+        text: formatMessage('Delete bot'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'Trash' },
+          onClick: () => {
+            openDeleteBotModal(async () => {
+              await deleteBot(projectId);
+              navigateTo('home');
+            });
+          },
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+    ];
+  }, [projectId, rootBotProjectId]);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const localBotProjects = botProjects.filter((b) => !b.isRemote);

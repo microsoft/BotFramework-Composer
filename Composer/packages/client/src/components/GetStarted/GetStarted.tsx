@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
 import { Panel, IPanelStyles } from 'office-ui-fabric-react/lib/Panel';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Pivot, PivotItem, IPivotStyles } from 'office-ui-fabric-react/lib/Pivot';
 
 import { GetStartedNextSteps } from './GetStartedNextSteps';
 import { GetStartedLearn } from './GetStartedLearn';
@@ -20,14 +20,6 @@ type GetStartedProps = {
   onBotReady: () => void;
 };
 
-export type NextSteps = {
-  checked: boolean;
-  key: string;
-  label: string;
-  checkedLabel: string;
-  onClick: () => void;
-};
-
 const panelStyles = {
   root: {
     marginTop: 50,
@@ -38,18 +30,14 @@ const panelStyles = {
   },
 } as IPanelStyles;
 
+const pivotStyles = { root: { paddingLeft: 20, paddingTop: 10, width: '100%' } } as IPivotStyles;
+
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const renderTabs = () => {
     return (
-      <Pivot styles={{ root: { paddingLeft: 20, paddingTop: 10, width: '100%' } }}>
+      <Pivot styles={pivotStyles}>
         <PivotItem headerText={formatMessage('Next steps')}>
-          <GetStartedNextSteps
-            requiresLUIS={props.requiresLUIS}
-            requiresQNA={props.requiresQNA}
-            showTeachingBubble={props.showTeachingBubble}
-            onBotReady={props.onBotReady}
-            onDismiss={props.onDismiss}
-          />
+          <GetStartedNextSteps {...props} />
         </PivotItem>
         <PivotItem headerText={formatMessage('Learning')}>
           <GetStartedLearn />

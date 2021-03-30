@@ -324,7 +324,7 @@ export const Header = () => {
             hasCloseButton
             hasCondensedHeadline
             calloutProps={{ directionalHint: DirectionalHint.bottomAutoEdge }}
-            headline={formatMessage("You're ready to go!")}
+            headline={formatMessage('You’re ready to go!')}
             target="#startbot"
             onDismiss={hideTeachingBubble}
           >
