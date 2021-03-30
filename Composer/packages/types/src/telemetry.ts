@@ -136,7 +136,7 @@ type LgEditorEvents = {
 };
 
 type LuEditorEvents = {
-  LUEditorToolbarEntityTagAdded: { entityType: string; method: 'toolbar' | 'floatingMenu' };
+  LUEditorToolbarEntityTagAdded: { entityType: string; source: 'toolbar' | 'floatingMenu' };
   LUEditorToolbarEntityDefinitionAdded: { entityType: string };
 };
 

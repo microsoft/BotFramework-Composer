@@ -40,7 +40,7 @@ if (instrumentationKey) {
     .setAutoCollectRequests(true);
   // do not collect the user's machine name
   AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
-  AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope, context): boolean => {
+  AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope): boolean => {
     const { sessionId, telemetry, composerVersion, userId, architecture, cpus, memory } = getTelemetryContext();
 
     if (!telemetry?.allowDataCollection) {
@@ -78,7 +78,7 @@ if (instrumentationKey) {
         }
 
         if (cpus !== undefined) {
-          data.baseData.properties.cpu = cpu;
+          data.baseData.properties.cpus = cpus;
         }
 
         if (memory !== undefined) {
