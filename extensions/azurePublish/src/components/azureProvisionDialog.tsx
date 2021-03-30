@@ -73,6 +73,7 @@ const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
 ];
+
 const PageTypes = {
   SelectTenant: 'tenant',
   ConfigProvision: 'config',
@@ -258,7 +259,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState<any>();
 
-  const [page, setPage] = useState();
+  const [page, setPage] = useState<string>();
   const [listItems, setListItems] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
   const isMounted = useRef<boolean>();
@@ -339,6 +340,27 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     if (selectedTenant) {
       getTokenForTenant(selectedTenant);
+    }
+  }, [selectedTenant]);
+
+  useEffect(() => {
+    if (currentConfig) {
+      if (currentConfig.tennantId) {
+        setSelectedTenant(currentConfig.tennantId);
+      }
+      if (currentConfig.subscriptionId) {
+        setSubscription(currentConfig.subscriptionId);
+      }
+      if (currentConfig.resourceGroup) {
+        setResourceGroup(currentConfig.resourceGroup);
+      }
+      if (currentConfig.hostname) {
+        setHostName(currentConfig.hostname);
+      } else if (currentConfig.name) {
+        setHostName(
+          currentConfig.environment ? `${currentConfig.name}-${currentConfig.environment}` : currentConfig.name
+        );
+      }
     }
   }, [selectedTenant]);
 
@@ -862,7 +884,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
