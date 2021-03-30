@@ -3,12 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { useEffect } from 'react';
+
 import { Dialog, DialogType } from 'office-ui-fabric-react';
 import { LoadingSpinner } from '@bfc/ui-shared';
 import { useApplicationApi } from '@bfc/extension-client';
 
 import { modalControlGroup } from './styles';
-import { useEffect } from 'react';
 
 export interface WorkingModalProps {
   hidden: boolean;
