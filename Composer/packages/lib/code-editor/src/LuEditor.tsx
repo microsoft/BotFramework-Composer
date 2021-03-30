@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuFile } from '@botframework-composer/types';
+import { LuFile, TelemetryClient } from '@botframework-composer/types';
 import styled from '@emotion/styled';
 import { EditorDidMount, Monaco } from '@monaco-editor/react';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
@@ -76,6 +76,7 @@ export interface LULSPEditorProps extends BaseEditorProps {
       }
     | string;
   toolbarHidden?: boolean;
+  telemetryClient: TelemetryClient;
   onNavigateToLuPage?: (luFileId: string, luSectionId?: string) => void;
 }
 
@@ -135,6 +136,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     onInit: onInitProp,
     placeholder = defaultPlaceholder,
     helpURL = LU_HELP,
+    telemetryClient,
     ...restProps
   } = props;
   const luServer = languageServer || defaultLUServer;
@@ -239,7 +241,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
           if (luEdits?.scrollLine) {
             editor.revealLineInCenter(luEdits?.scrollLine);
           }
-
+          telemetryClient.track('LUEditorToolbarEntityDefinitionAdded', { entityType });
           editor.focus();
         }
       }
@@ -248,11 +250,15 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   );
 
   const insertEntity = useCallback(
-    (entityName: string) => {
+    (entityName: string, entityType: string, source: 'toolbar' | 'floatingMenu' = 'toolbar') => {
       if (editor) {
         const edits = computeInsertLuEntityEdits(entityName, editor);
         if (edits) {
           editor.executeEdits('toolbarMenu', edits);
+          telemetryClient.track('LUEditorToolbarEntityTagAdded', {
+            entityType: entityType !== 'prebuilt' ? entityType : entityName,
+            source,
+          });
           editor.focus();
         }
       }
