@@ -15,6 +15,7 @@ import { LuFile } from '@bfc/shared';
 
 import { localeState, settingsState } from '../../recoilModel/atoms';
 import { userSettingsState, dispatcherState, luFilesSelectorFamily } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { DiffCodeEditor } from './diff-editor';
 
@@ -155,6 +156,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         }}
         luFile={file}
         luOption={luOption}
+        telemetryClient={TelemetryClient}
         value={content}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
@@ -174,6 +176,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         options={{
           readOnly: true,
         }}
+        telemetryClient={TelemetryClient}
         value={defaultLangContent}
         onChange={() => {}}
       />
