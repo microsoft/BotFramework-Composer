@@ -8,7 +8,10 @@ import { WebSocketServer } from '../directline/utils/webSocketServer';
 export function logNetworkTraffic(req: Request, res: Response, next?: NextFunction) {
   const data = {
     request: { method: req.method, payload: req.body, route: req.originalUrl },
-    response: { payload: { data: 'someData' }, statusCode: res.statusCode },
+    response: {
+      payload: { status: res.statusCode /* TODO: plumb actual response into this */ },
+      statusCode: res.statusCode,
+    },
     timestamp: new Date().toISOString(),
     trafficType: 'network' as 'network',
   };

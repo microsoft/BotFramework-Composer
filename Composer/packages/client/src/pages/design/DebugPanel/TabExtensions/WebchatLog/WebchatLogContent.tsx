@@ -59,12 +59,10 @@ const emptyStateMessage = css`
 `;
 
 const getActivityDirection = (activity) => {
-  if (activity.type && activity.type === 'message') {
-    if (activity?.recipient && activity.recipient.role === 'bot') {
-      return <span>{'->'}</span>;
-    }
-    return <span>{'<-'}</span>;
+  if (activity?.recipient && activity.recipient.role === 'bot') {
+    return <span>{'->'}</span>;
   }
+  return <span>{'<-'}</span>;
 };
 
 // R12: We are showing Errors from the root bot only.
@@ -161,6 +159,7 @@ export const WebchatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         {renderTimeStamp(item.timestamp)}
         {getActivityDirection(item.activity)}
         <span css={link}>{item.activity.type || 'no type found'}</span>
+        {item.activity.type === 'message' && item.activity.text}
       </span>
     );
   };

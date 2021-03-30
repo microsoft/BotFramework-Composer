@@ -49,7 +49,13 @@ export const webChatLogDispatcher = () => {
     }
   );
 
+  const clearTraffic = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
+    const { set } = callbackHelpers;
+    set(webChatTraffic(projectId), []);
+  });
+
   return {
+    clearTraffic,
     clearWebChatLogs,
     appendLogToWebChatInspector,
     appendTraffic,

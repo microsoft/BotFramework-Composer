@@ -45,6 +45,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     openBotInEmulator,
     appendLogToWebChatInspector,
     appendTraffic,
+    clearTraffic,
     clearWebChatLogs,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
@@ -181,6 +182,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       setConversationData(chatData);
       sendInitialActivities(chatData);
       clearWebChatLogs(projectId);
+      clearTraffic(projectId);
     } catch (ex) {
       // DL errors are handled through socket above.
     }
