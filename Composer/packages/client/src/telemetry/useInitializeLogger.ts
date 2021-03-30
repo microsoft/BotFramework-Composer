@@ -38,7 +38,12 @@ export const useInitializeLogger = () => {
     ipcRenderer?.on('session-update', (_event, name) => {
       switch (name) {
         case 'session-started':
-          TelemetryClient.track('SessionStarted', { os: window.navigator.platform });
+          TelemetryClient.track('SessionStarted', {
+            os: window.navigator.platform,
+            height: screen.height,
+            width: screen.width,
+            devicePixelRatio: window.devicePixelRatio,
+          });
           break;
         case 'session-ended':
           TelemetryClient.track('SessionEnded');
