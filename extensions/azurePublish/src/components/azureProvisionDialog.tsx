@@ -4,7 +4,7 @@ import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef, Suspense } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
@@ -581,7 +581,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 disabled={allTenants.length === 1 || currentConfig?.tenantId}
                 errorMessage={loginErrorMsg}
                 label={formatMessage('Azure Directory')}
-                options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+                responsiveMode={ResponsiveMode.large}
                 selectedKey={selectedTenant}
                 styles={{ root: { paddingBottom: '8px' } }}
                 onChange={(_e, o) => {
@@ -603,6 +603,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 label={formatMessage('Subscription')}
                 options={subscriptionOption}
                 placeholder={formatMessage('Select one')}
+                responsiveMode={ResponsiveMode.large}
                 styles={{ root: { paddingBottom: '8px' } }}
                 onChange={(_e, o: IDropdownOption) => {
                   setSubscription(o.key as string);
@@ -653,6 +654,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   label={formatMessage('Region')}
                   options={deployLocationsOption}
                   placeholder={formatMessage('Select one')}
+                  responsiveMode={ResponsiveMode.large}
                   styles={{ root: { paddingBottom: '8px' } }}
                   onChange={updateCurrentLocation}
                 />
@@ -674,6 +676,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   label={formatMessage('Region for Luis')}
                   options={luisLocationsOption}
                   placeholder={formatMessage('Select one')}
+                  responsiveMode={ResponsiveMode.large}
                   onChange={updateLuisLocation}
                 />
               )}
