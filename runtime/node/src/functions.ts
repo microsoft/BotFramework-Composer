@@ -36,7 +36,9 @@ const telemetryClient = getTelemetryClient();
 const bot = new ComposerBot(userState, conversationState, skillConversationIdFactory, telemetryClient);
 
 // Configure telemetry client.
-configureTelemetry(adapter, telemetryClient);
+if (telemetryClient) {
+  configureTelemetry(adapter, telemetryClient);
+}
 
 export const messagesTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
   context.log('Messages endpoint triggerd.');
