@@ -33,6 +33,7 @@ import {
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { ResourceGroup } from '@azure/arm-resources/esm/models';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -43,9 +44,11 @@ import {
   getPreview,
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
+  getResourceGroups,
 } from './api';
 import { ChooseResourcesList } from './ChooseResourcesList';
 import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
+import { ResourceGroupPicker } from './ResourceGroupPicker';
 
 // ---------- Styles ---------- //
 
@@ -232,11 +235,15 @@ export const AzureProvisionDialog: React.FC = () => {
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [choice, setChoice] = useState(extensionState.choice);
-  const [currentSubscription, setSubscription] = useState<string>(extensionState.subscriptionId);
-  const [currentResourceGroup, setResourceGroup] = useState<string>(extensionState.resourceGroup);
+  const [currentSubscription, setCurrentSubscription] = useState<string>(extensionState.subscriptionId);
+
+  const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
+  const [isNewResourceGroupName, setIsNewResourceGroupName] = useState<boolean>(true);
+  const [currentResourceGroupName, setCurrentResourceGroupName] = useState<string>(extensionState.resourceGroup);
+  const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
+
   const [currentHostName, setHostName] = useState(extensionState.hostName);
   const [errorHostName, setErrorHostName] = useState('');
-  const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
   const [currentLocation, setLocation] = useState<string>(currentConfig?.region || extensionState.location);
   const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(
     currentConfig?.settings?.luis?.region || extensionState.luisLocation
@@ -326,24 +333,6 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (currentConfig) {
-      if (currentConfig.subscriptionId) {
-        setSubscription(currentConfig.subscriptionId);
-      }
-      if (currentConfig.resourceGroup) {
-        setResourceGroup(currentConfig.resourceGroup);
-      }
-      if (currentConfig.hostname) {
-        setHostName(currentConfig.hostname);
-      } else if (currentConfig.name) {
-        setHostName(
-          currentConfig.environment ? `${currentConfig.name}-${currentConfig.environment}` : currentConfig.name
-        );
-      }
-    }
-  }, [currentConfig]);
-
   const getResources = async () => {
     try {
       const resources = await getResourceList(currentProjectId(), publishType);
@@ -365,6 +354,46 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (currentConfig) {
+      if (currentConfig.subscriptionId) {
+        setCurrentSubscription(currentConfig.subscriptionId);
+      }
+      if (currentConfig.resourceGroup) {
+        setCurrentResourceGroupName(currentConfig.resourceGroup);
+      }
+      if (currentConfig.hostname) {
+        setHostName(currentConfig.hostname);
+      } else if (currentConfig.name) {
+        setHostName(
+          currentConfig.environment ? `${currentConfig.name}-${currentConfig.environment}` : currentConfig.name
+        );
+      }
+    }
+  }, [currentConfig]);
+
+  const loadResourceGroups = async () => {
+    if (token && currentSubscription) {
+      try {
+        const resourceGroups = await getResourceGroups(token, currentSubscription);
+        setResourceGroups(resourceGroups);
+
+        // After the resource groups load, isNewResourceGroupName can be determined
+        setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === currentResourceGroupName));
+      } catch (err) {
+        // todo: how do we handle API errors in this component
+        console.log('ERROR', err);
+        setResourceGroups(undefined);
+      }
+    } else {
+      setResourceGroups(undefined);
+    }
+  };
+
+  useEffect(() => {
+    loadResourceGroups();
+  }, [token, currentSubscription]);
+
   const subscriptionOption = useMemo(() => {
     return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
@@ -382,7 +411,7 @@ export const AzureProvisionDialog: React.FC = () => {
       const sub = subscriptionOption?.find((t) => t.key === option?.key);
 
       if (sub) {
-        setSubscription(sub.key);
+        setCurrentSubscription(sub.key);
       }
     },
     [subscriptionOption]
@@ -409,25 +438,6 @@ export const AzureProvisionDialog: React.FC = () => {
       }, 500);
     },
     [publishType, currentSubscription, token]
-  );
-
-  const checkResourceGroupName = useCallback((group: string) => {
-    if (group.match(/^[-\w._()]+$/)) {
-      setErrorResourceGroupName('');
-    } else {
-      setErrorResourceGroupName(
-        'Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis and cannot end in a period.'
-      );
-    }
-  }, []);
-
-  const updateCurrentResourceGroup = useMemo(
-    () => (e, newGroup) => {
-      setResourceGroup(newGroup);
-      // check resource group name
-      checkResourceGroupName(newGroup);
-    },
-    [checkResourceGroupName]
   );
 
   const newHostName = useCallback(
@@ -555,24 +565,38 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
-  const isDisAble = useMemo(() => {
+  const isNextDisabled = useMemo(() => {
     return (
       !currentSubscription ||
+      !currentResourceGroupName ||
       !currentHostName ||
-      errorHostName !== '' ||
-      errorResourceGroupName !== '' ||
-      !currentLocation
+      !currentLocation ||
+      errorResourceGroupName ||
+      errorHostName !== ''
     );
-  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName]);
+  }, [
+    currentSubscription,
+    currentResourceGroupName,
+    currentHostName,
+    currentLocation,
+    errorResourceGroupName,
+    errorHostName,
+  ]);
 
   const isSelectAddResources = useMemo(() => {
     return enabledResources.length > 0 || requireResources.length > 0;
   }, [enabledResources]);
 
+  const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
+
   const PageFormConfig = (
-    <Fragment>
+    <ScrollablePane
+      data-is-scrollable="true"
+      scrollbarVisibility={ScrollbarVisibility.auto}
+      style={{ height: 'calc(100vh - 64px)' }}
+    >
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
-      <Suspense fallback={<Spinner label="Loading" />}>
+      <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
         {subscriptionOption?.length > 0 && choice.key === 'create' && (
           <form style={{ width: '50%', marginTop: '16px' }}>
             <Dropdown
@@ -587,19 +611,15 @@ export const AzureProvisionDialog: React.FC = () => {
               onChange={updateCurrentSubscription}
               onRenderLabel={onRenderLabel}
             />
-            <TextField
-              required
-              ariaLabel={formatMessage(
-                'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
-              )}
-              defaultValue={currentResourceGroup}
-              disabled={currentConfig?.resourceGroup}
-              errorMessage={errorResourceGroupName}
-              label={formatMessage('Resource group name')}
-              placeholder={'Name of your new resource group'}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onChange={updateCurrentResourceGroup}
-              onRenderLabel={onRenderLabel}
+            <ResourceGroupPicker
+              newName={isNewResourceGroupName ? currentResourceGroupName : undefined}
+              resourceGroupNames={resourceGroupNames}
+              selectedName={isNewResourceGroupName ? undefined : currentResourceGroupName}
+              onChange={(choice) => {
+                setIsNewResourceGroupName(choice.isNew);
+                setCurrentResourceGroupName(choice.name);
+                setErrorResourceGroupName(choice.errorMessage);
+              }}
             />
             <TextField
               required
@@ -691,7 +711,7 @@ export const AzureProvisionDialog: React.FC = () => {
           />
         </div>
       )}
-    </Fragment>
+    </ScrollablePane>
   );
 
   useEffect(() => {
@@ -788,7 +808,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 clearAll();
                 setItem(profileName, {
                   subscriptionId: currentSubscription,
-                  resourceGroup: currentResourceGroup,
+                  resourceGroup: currentResourceGroupName,
                   hostName: currentHostName,
                   location: currentLocation,
                   luisLocation: currentLuisLocation,
@@ -801,15 +821,20 @@ export const AzureProvisionDialog: React.FC = () => {
             />
             {choice.key === 'create' ? (
               <PrimaryButton
-                disabled={isDisAble}
+                disabled={isNextDisabled}
                 style={{ margin: '0 4px' }}
-                text="Next: Review"
+                text={formatMessage('Next')}
                 onClick={() => {
                   onNext(currentHostName);
                 }}
               />
             ) : (
-              <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
+              <PrimaryButton
+                disabled={isEditorError}
+                style={{ margin: '0 4px' }}
+                text={formatMessage('Save')}
+                onClick={onSave}
+              />
             )}
           </div>
         </div>
@@ -828,7 +853,7 @@ export const AzureProvisionDialog: React.FC = () => {
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
-              text={'Back'}
+              text={formatMessage('Back')}
               onClick={() => {
                 setPage(PageTypes.ConfigProvision);
                 setTitle(DialogTitle.CONFIG_RESOURCES);
@@ -837,7 +862,7 @@ export const AzureProvisionDialog: React.FC = () => {
             <PrimaryButton
               disabled={!isSelectAddResources}
               style={{ margin: '0 4px' }}
-              text={'Next'}
+              text={formatMessage('Next')}
               onClick={() => {
                 setPage(PageTypes.ReviewResource);
                 setTitle(DialogTitle.REVIEW);
@@ -850,7 +875,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   return {
                     ...item,
                     region: region,
-                    resourceGroup: currentConfig?.resourceGroup || currentResourceGroup,
+                    resourceGroup: currentConfig?.resourceGroup || currentResourceGroupName,
                   };
                 });
                 setReviewListItems(selectedResources);
@@ -864,7 +889,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
@@ -880,14 +905,14 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
             <PrimaryButton
-              disabled={isDisAble}
+              disabled={isNextDisabled}
               style={{ margin: '0 4px' }}
-              text={'Done'}
+              text={formatMessage('Done')}
               onClick={async () => {
                 const selectedResources = requireResources.concat(enabledResources);
                 await onSubmit({
                   subscription: currentSubscription,
-                  resourceGroup: currentResourceGroup,
+                  resourceGroup: currentResourceGroupName,
                   hostname: currentHostName,
                   location: currentLocation,
                   luisLocation: currentLuisLocation || currentLocation,
@@ -904,12 +929,17 @@ export const AzureProvisionDialog: React.FC = () => {
         <>
           <DefaultButton
             style={{ margin: '0 4px' }}
-            text={'Cancel'}
+            text={formatMessage('Cancel')}
             onClick={() => {
               closeDialog();
             }}
           />
-          <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
+          <PrimaryButton
+            disabled={isEditorError}
+            style={{ margin: '0 4px' }}
+            text={formatMessage('Save')}
+            onClick={onSave}
+          />
         </>
       );
     }
@@ -918,9 +948,9 @@ export const AzureProvisionDialog: React.FC = () => {
     page,
     choice,
     isEditorError,
-    isDisAble,
+    isNextDisabled,
     currentSubscription,
-    currentResourceGroup,
+    currentResourceGroupName,
     currentHostName,
     currentLocation,
     publishType,
