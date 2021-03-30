@@ -266,6 +266,9 @@ export class AssetManager {
       const res = await fetch(feedUrl);
       const data = await res.json();
       const feedType = this.getFeedType();
+
+      console.log('GET FEED ', feedUrl);
+
       if (feedType === 'npm') {
         return data.objects.map((result) => {
           const { name, version, keywords, description = '' } = result.package;

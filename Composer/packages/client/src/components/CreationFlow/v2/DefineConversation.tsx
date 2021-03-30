@@ -240,7 +240,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   }, [focusedStorageFolder]);
 
   const handleSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
       if (hasErrors) {
         return;
@@ -280,7 +280,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
         if (payload && typeof payload === 'string' && typeof source === 'string') {
           dataToSubmit.profile = JSON.parse(payload);
           dataToSubmit.source = source;
-          dataToSubmit.alias = getAliasFromPayload(source, payload);
+          dataToSubmit.alias = await getAliasFromPayload(source, payload);
         }
       }
       onSubmit({ ...dataToSubmit }, templateId || '');

@@ -20,7 +20,7 @@ import {
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { RouteComponentProps } from '@reach/router';
+import { WindowLocation } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
@@ -116,11 +116,12 @@ const templateRequestUrl =
 type CreateBotProps = {
   isOpen: boolean;
   templates: BotTemplate[];
+  location?: WindowLocation | undefined;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
-} & RouteComponentProps<{}>;
+};
 
 export function CreateBotV2(props: CreateBotProps) {
   const [option] = useState(optionKeys.createFromTemplate);
@@ -151,8 +152,8 @@ export function CreateBotV2(props: CreateBotProps) {
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: currentTemplateId });
 
     const runtimeLanguage = selectedProgLang?.props?.itemKey ? selectedProgLang.props.itemKey : csharpFeedKey;
-    if (props.location && props.location.search) {
-      onNext(currentTemplateId, runtimeLanguage, props.location.search);
+    if (location?.search) {
+      onNext(currentTemplateId, runtimeLanguage, location.search);
     } else {
       onNext(currentTemplateId, runtimeLanguage);
     }

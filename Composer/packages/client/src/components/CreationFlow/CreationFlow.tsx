@@ -99,16 +99,22 @@ const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => 
     navigate(`/home`);
   };
 
-  const handleJumpToOpenModal = () => {
+  const handleJumpToOpenModal = (search) => {
     setCreationFlowStatus(CreationFlowStatus.OPEN);
-    navigate('./open');
+    navigate(`./open${search}`);
   };
 
-  const openBot = async (botFolder) => {
+  const openBot = async (formData) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    await openProject(botFolder, 'default', true, (projectId) => {
-      TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
-    });
+    await openProject(
+      formData.path,
+      'default',
+      true,
+      { profile: formData.profile, source: formData.source, alias: formData.alias },
+      (projectId) => {
+        TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
+      }
+    );
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
