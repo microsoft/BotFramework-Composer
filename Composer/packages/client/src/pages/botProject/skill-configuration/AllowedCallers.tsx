@@ -151,7 +151,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   return (
     <React.Fragment>
       <div css={[defaultSubtitle, subtitle]}>
-        {formatMessage('List of App Ids of bots that are permitted to use this skill')}
+        {formatMessage('List of app ids for bots that are allowed to use this skill')}
       </div>
       <ItemContainer>
         {skillConfiguration?.allowedCallers?.map((caller, index) => {
@@ -165,7 +165,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       </ActionButton>
       {!skillConfiguration?.allowedCallers?.length && (
         <MessageBar messageBarType={MessageBarType.warning}>
-          {formatMessage('No bot can use this skill as the allowed caller list is empty')}
+          {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
         </MessageBar>
       )}
     </React.Fragment>

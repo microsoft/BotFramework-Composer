@@ -1940,8 +1940,8 @@
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "List of actions rendered as suggestions to user."
   },
-  "list_of_app_ids_of_bots_that_are_permitted_to_use__c4d00abb": {
-    "message": "List of App Ids of bots that are permitted to use this skill"
+  "list_of_app_ids_for_bots_that_are_allowed_to_use_t_bee9fea8": {
+    "message": "List of app ids for bots that are allowed to use this skill"
   },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
@@ -2278,9 +2278,6 @@
   },
   "next_steps_fce2208": {
     "message": "Next steps"
-  },
-  "no_bot_can_use_this_skill_as_the_allowed_caller_li_d9cb4704": {
-    "message": "No bot can use this skill as the allowed caller list is empty"
   },
   "no_editor_for_type_8b5593c5": {
     "message": "No Editor for { type }"
@@ -3343,6 +3340,9 @@
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
+  },
+  "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
+    "message": "This bot cannot be called as a skill since the allowed caller list is empty"
   },
   "this_cognitive_service_account_is_already_set_as_t_841165f7": {
     "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
