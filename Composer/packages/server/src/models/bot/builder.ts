@@ -102,6 +102,13 @@ export class Builder {
     setEnvDefault('QNA_USER_AGENT', userAgent);
 
     try {
+      //warm up the orchestrator build cache before deleting and recreating the generated folder
+      await orchestratorBuilder.warmupCache(this.botDir, this.generatedFolderPath);
+    } catch (err) {
+      log(err);
+    }
+
+    try {
       await this.createGeneratedDir();
       //do cross train before publish
       await this.crossTrain(luFiles, qnaFiles, allFiles);

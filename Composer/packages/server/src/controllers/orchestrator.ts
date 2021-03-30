@@ -53,7 +53,7 @@ async function downloadLanguageModel(req: Request, res: Response) {
   const modelData = req.body?.modelData;
 
   if (!isDefaultModelRequest(modelData)) {
-    res.send(400);
+    res.sendStatus(400);
     return;
   }
 
@@ -70,7 +70,7 @@ async function downloadLanguageModel(req: Request, res: Response) {
 
   if (await pathExists(modelPath)) {
     state = DownloadState.ALREADYDOWNLOADED;
-    return res.send(201);
+    return res.sendStatus(201);
   }
 
   const onProgress = (msg: string) => {
