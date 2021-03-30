@@ -81,6 +81,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
       luFile={luFile}
       luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId, luFeatures }}
       placeholder={placeholder || inlineModePlaceholder}
+      telemetryClient={shellApi.telemetryClient}
       value={luIntent.Body}
       onChange={commitChanges}
       onChangeSettings={handleSettingsChange}
