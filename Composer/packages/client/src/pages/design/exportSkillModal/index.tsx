@@ -93,7 +93,10 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   };
 
   const handleTriggerPublish = async () => {
-    navigate(`/bot/${projectId}/publish/all`);
+    const filePath = `https://${JSON.parse(currentTarget.configuration).hostname}.azurewebsites.net/manifests/${
+      skillManifest.id
+    }.json`;
+    navigate(`/bot/${projectId}/publish/all?publishTargetName=${currentTarget.name}&url=${filePath}`);
     // get token
     // setShowAuthDialog(true);
     // let token = '';

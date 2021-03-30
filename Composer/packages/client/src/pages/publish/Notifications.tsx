@@ -68,10 +68,52 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
     ),
   };
 };
-export const getPendingNotificationCardProps = (items: BotStatus[]): CardProps => {
+
+export const getSkillPublishedNotificationCardProps = (
+  item: BotStatus,
+  endpoint?: string,
+  manifestName?: string
+): CardProps => {
+  const statusIconStyle = css({
+    margin: '12px 0 0 -1px',
+    width: '12px',
+    height: '12px',
+    fontSize: '12px',
+    color: item.status === 200 ? '#27AE60' : 'rgb(161, 159, 157)',
+    transform: item.status !== 200 ? 'rotate(45deg)' : '',
+  });
   return {
     title: '',
-    description: formatMessage(`Publishing {count} bots`, { count: items.length }),
+    description:
+      item.status === 200
+        ? formatMessage(`You have successfully published {name} to {publishTarget}`, {
+            name: item.name,
+            publishTarget: item.publishTarget,
+          })
+        : formatMessage(`Publishing {name} to {publishTarget} failed.`, {
+            name: item.name,
+            publishTarget: item.publishTarget,
+          }),
+    type: 'pending',
+    onRenderCardContent: (props) => (
+      <div css={cardContent}>
+        <Icon css={infoType} iconName="CloudUpload" />
+        <Icon css={statusIconStyle} iconName={item.status === 200 ? 'SkypeCircleCheck' : 'CircleAdditionSolid'} />
+        <div css={cardDetail}>
+          <div css={cardDescription}>{props.description}</div>
+        </div>
+      </div>
+    ),
+  };
+};
+
+export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = false): CardProps => {
+  const description = isSkill
+    ? 'Publishing your skill...'
+    : formatMessage(`Publishing {count} bots`, { count: items.length });
+  return {
+    title: '',
+    description,
     type: 'pending',
     onRenderCardContent: (props) => (
       <div css={cardContent}>
