@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogSetting, FileInfo, lgImportResolverGenerator, luImportResolverGenerator } from '@bfc/shared';
+import { FileInfo } from '@bfc/shared';
 
 import { recognizerIndexer } from './recognizerIndexer';
 import { dialogIndexer } from './dialogIndexer';
@@ -72,18 +72,7 @@ class Indexer {
     }));
   };
 
-  private getLuImportResolver = (files: FileInfo[], locale: string) => {
-    const luFiles = files.map(({ name, content }) => {
-      return {
-        id: getBaseName(name, '.lu'),
-        content,
-      };
-    });
-
-    return luImportResolverGenerator(luFiles, '.lu', locale);
-  };
-
-  public index(files: FileInfo[], botName: string, locale: string, settings: DialogSetting) {
+  public index(files: FileInfo[], botName: string) {
     const result = this.classifyFile(files);
     const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
     const { skillManifestFiles, crossTrainConfigs } = this.separateConfigAndManifests(result[FileExtensions.Manifest]);

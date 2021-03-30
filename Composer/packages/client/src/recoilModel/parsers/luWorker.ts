@@ -21,8 +21,8 @@ class LuWorker extends BaseWorker<LuActionType> {
     return this.sendMsg<LuParsePayload>(LuActionType.Parse, payload);
   }
 
-  parseAll(luResources: TextFile[], luFeatures, luFiles: LuFile[]) {
-    const payload = { luResources, luFeatures, luFiles };
+  parseAll(luResources: TextFile[], luFeatures) {
+    const payload = { luResources, luFeatures };
     return this.sendMsg<LuParseAllPayload>(LuActionType.ParseAll, payload);
   }
 
