@@ -308,7 +308,7 @@ export default async (composer: any): Promise<void> => {
         const schemaFolderInRuntime = path.join(destPath, 'schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
 
-        return path.relative(path.join(project.dir, 'settings'), destPath);
+        return path.relative(project.dir, destPath);
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
