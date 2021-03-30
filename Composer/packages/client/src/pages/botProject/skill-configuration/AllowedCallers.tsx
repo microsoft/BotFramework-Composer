@@ -16,7 +16,7 @@ import formatMessage from 'format-message';
 
 import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
-import { actionButton, tableColumnHeader, subtitle as defaultSubtitle } from '../styles';
+import { actionButton, subtitle as defaultSubtitle } from '../styles';
 
 const Input = styled(TextField)({
   width: '100%',
@@ -150,7 +150,6 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
 
   return (
     <React.Fragment>
-      <div css={tableColumnHeader()}>{formatMessage('Allowed callers')} </div>
       <div css={[defaultSubtitle, subtitle]}>
         {formatMessage('List of App Ids of bots that are permitted to use this skill')}
       </div>
