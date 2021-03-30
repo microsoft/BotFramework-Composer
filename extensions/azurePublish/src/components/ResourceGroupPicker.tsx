@@ -35,7 +35,7 @@ const CREATE_NEW_KEY = 'CREATE_NEW';
 
 const createNewOption: IDropdownOption = {
   key: CREATE_NEW_KEY,
-  data: { icon: 'Add' },
+  data: { iconName: 'Add' },
   text: formatMessage('Create new'),
 };
 
@@ -55,16 +55,16 @@ type Props = {
    * The selected name of the existing resource.
    * When undefined, the 'Create new' option will be selected.
    */
-  selectedName?: string;
+  selectedResourceGroupName?: string;
   /**
    * The name chosen for a new resource group.
    * Used when the 'Create new' option is selected.
    */
-  newName?: string;
+  newResourceGroupName?: string;
   /**
    * Called when the selection or new resource name changes.
    */
-  onChange: (item: ResourceGroupItemChoice) => void;
+  onChange: (choice: ResourceGroupItemChoice) => void;
 };
 
 const onRenderLabel = (props) => {
@@ -83,8 +83,7 @@ const onRenderLabel = (props) => {
           fontSize: '14px',
         }}
       >
-        {' '}
-        {props.label}{' '}
+        {` ${props.label} `}
       </div>
       <TooltipHost content={props.ariaLabel}>
         <Icon iconName="Info" styles={getInfoIconStyle(props.required)} />
@@ -95,14 +94,14 @@ const onRenderLabel = (props) => {
 
 export const ResourceGroupPicker = ({
   resourceGroupNames,
-  selectedName: controlledSelectedName,
-  newName: controlledNewName,
+  selectedResourceGroupName: controlledSelectedName,
+  newResourceGroupName: controlledNewName,
   onChange,
 }: Props) => {
   // ----- Hooks -----//
   const [selectedName, setSelectedName] = React.useState(controlledSelectedName || CREATE_NEW_KEY);
-  const [newName, setNewName] = React.useState(controlledNewName || '');
-  const debouncedNewName = useDebounce<string | undefined>(newName, 300);
+  const [newName, setNewName] = React.useState(controlledNewName);
+  const debouncedNewName = useDebounce<string>(newName, 300);
   const [newNameErrorMessage, setNewNameErrorMessage] = React.useState('');
 
   React.useEffect(() => {
@@ -123,37 +122,40 @@ export const ResourceGroupPicker = ({
         )
       );
     } else if (alreadyExists) {
-      setNewNameErrorMessage(formatMessage('The resource already exists.'));
+      setNewNameErrorMessage(formatMessage('A resource with this name already exists.'));
     } else {
-      setNewNameErrorMessage('');
+      setNewNameErrorMessage(undefined);
     }
-  }, [debouncedNewName]);
+  }, [debouncedNewName, resourceGroupNames]);
 
   React.useEffect(() => {
     const isNew = selectedName === CREATE_NEW_KEY;
     onChange({
       isNew,
-      name: isNew ? newName : selectedName,
+      name: isNew ? debouncedNewName : selectedName,
       errorMessage: isNew ? newNameErrorMessage : undefined,
     });
   }, [selectedName, debouncedNewName, newNameErrorMessage]);
+
+  const options = React.useMemo(() => {
+    const optionsList: IDropdownOption[] =
+      resourceGroupNames?.map((p) => {
+        return { key: p, text: p };
+      }) || [];
+
+    optionsList.unshift(createNewOption);
+    return optionsList;
+  }, [resourceGroupNames]);
 
   // ----- Render -----//
 
   const loading = resourceGroupNames === undefined;
 
-  const options: IDropdownOption[] =
-    resourceGroupNames?.map((p) => {
-      return { key: p, text: p };
-    }) || [];
-
-  options.unshift(createNewOption);
-
   const onRenderOption = (option) => {
     return (
       <div>
-        {option.data && option.data.icon && (
-          <Icon aria-hidden="true" iconName={option.data.icon} style={itemIconStyles} title={option.data.icon} />
+        {option.data?.iconName && (
+          <Icon aria-hidden="true" iconName={option.data.iconName} style={itemIconStyles} title={option.text} />
         )}
         <span>{option.text}</span>
       </div>
@@ -168,7 +170,7 @@ export const ResourceGroupPicker = ({
           'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
         )}
         disabled={loading}
-        label={formatMessage('Resource group:')}
+        label={formatMessage('Resource group')}
         options={options}
         placeholder={formatMessage('Select one')}
         selectedKey={selectedName}
@@ -182,7 +184,7 @@ export const ResourceGroupPicker = ({
       {selectedName === CREATE_NEW_KEY && (
         <TextField
           required
-          ariaLabel={formatMessage('Enter a name for new new resource group to create')}
+          ariaLabel={formatMessage('Enter a name for the new resource group')}
           data-testid={'newResourceGroupName'}
           disabled={loading}
           errorMessage={newNameErrorMessage}

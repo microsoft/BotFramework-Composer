@@ -612,9 +612,9 @@ export const AzureProvisionDialog: React.FC = () => {
               onRenderLabel={onRenderLabel}
             />
             <ResourceGroupPicker
-              newName={isNewResourceGroupName ? currentResourceGroupName : undefined}
+              newResourceGroupName={isNewResourceGroupName ? currentResourceGroupName : undefined}
               resourceGroupNames={resourceGroupNames}
-              selectedName={isNewResourceGroupName ? undefined : currentResourceGroupName}
+              selectedResourceGroupName={isNewResourceGroupName ? undefined : currentResourceGroupName}
               onChange={(choice) => {
                 setIsNewResourceGroupName(choice.isNew);
                 setCurrentResourceGroupName(choice.name);
