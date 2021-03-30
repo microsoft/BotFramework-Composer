@@ -17,7 +17,7 @@ import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/proj
 import {
   getTokenFromCache,
   isShowAuthDialog,
-  isGetTokenFromUser,
+  userShouldProvideTokens,
   setTenantId,
   getTenantIdFromCache,
 } from '../../utils/auth';
@@ -249,7 +249,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         if (tenantId) {
           token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));
           tenantTokenMap.set(tenantId, token);
-        } else if (isGetTokenFromUser()) {
+        } else if (userShouldProvideTokens()) {
           token = getTokenFromCache('accessToken');
           // old publish profile without tenant id
         } else {

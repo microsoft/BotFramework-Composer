@@ -213,7 +213,7 @@ export const AzureProvisionDialog: React.FC = () => {
     getType,
     getName,
     getTokenFromCache,
-    isGetTokenFromUser,
+    userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
@@ -295,7 +295,7 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     // TODO: need to get the tenant id from the auth config when running as web app,
     // for electron we will always fetch tenants.
-    if (isGetTokenFromUser()) {
+    if (userShouldProvideTokens()) {
       const { accessToken } = getTokenFromCache();
 
       setToken(accessToken);
@@ -577,7 +577,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
           {subscriptionOption?.length > 0 && choice.key === 'create' && (
             <form style={{ width: '100%' }}>
-              {!isGetTokenFromUser() && (
+              {!userShouldProvideTokens() && (
                 <Dropdown
                   required
                   disabled={allTenants.length === 1 || currentConfig?.tenantId}
