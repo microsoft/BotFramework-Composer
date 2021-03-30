@@ -7,7 +7,7 @@ import { Icon, IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import * as React from 'react';
 
-import { PropertyItem } from './types';
+import { PropertyItem } from '../../types';
 
 const DEFAULT_TREE_ITEM_HEIGHT = 36;
 const DEFAULT_INDENTATION_PADDING = 16;

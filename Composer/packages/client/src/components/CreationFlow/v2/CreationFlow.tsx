@@ -98,11 +98,22 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     navigate(`/home`);
   };
 
-  const openBot = async (botFolder) => {
+  const handleJumpToOpenModal = (search) => {
+    setCreationFlowStatus(CreationFlowStatus.OPEN);
+    navigate(`./open${search}`);
+  };
+
+  const openBot = async (formData) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    await openProject(botFolder, 'default', true, (projectId) => {
-      TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
-    });
+    await openProject(
+      formData.path,
+      'default',
+      true,
+      { profile: formData.profile, source: formData.source, alias: formData.alias },
+      (projectId) => {
+        TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
+      }
+    );
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
@@ -175,6 +186,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           path="create"
           templates={templateProjects}
           onDismiss={handleDismiss}
+          onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
         />
         <DefineConversationV2
