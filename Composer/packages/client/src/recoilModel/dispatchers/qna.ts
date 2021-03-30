@@ -7,12 +7,13 @@ import { qnaUtil } from '@bfc/indexers';
 
 import qnaWorker from '../parsers/qnaWorker';
 import {
-  qnaFilesState,
   settingsState,
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
+  qnaFileState,
+  qnaFileIdsState,
 } from '../atoms/botState';
 import { createQnAOnState } from '../atoms/appState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
@@ -24,7 +25,7 @@ import {
   getQnaPendingNotification,
 } from '../../utils/notifications';
 import httpClient from '../../utils/httpUtil';
-import { rootBotProjectIdSelector } from '../selectors';
+import { qnaFilesSelectorFamily, rootBotProjectIdSelector } from '../selectors';
 
 import { addNotificationInternal, deleteNotificationInternal, createNotification } from './notification';
 
@@ -36,57 +37,60 @@ import { addNotificationInternal, deleteNotificationInternal, createNotification
  *
  */
 
-const qnaFilesAtomUpdater = (
+const updateQnaFiles = (
+  { set }: CallbackInterface,
+  projectId: string,
   changes: {
     adds?: QnAFile[];
     deletes?: QnAFile[];
     updates?: QnAFile[];
   },
-  filter?: (oldList: QnAFile[]) => (changeItem: QnAFile) => boolean
+  getLatestFile?: (current: QnAFile, changed: QnAFile) => QnAFile
 ) => {
-  return (oldList: QnAFile[]) => {
-    const updates = changes.updates ? (filter ? changes.updates.filter(filter(oldList)) : changes.updates) : [];
-    const adds = changes.adds ? (filter ? changes.adds.filter(filter(oldList)) : changes.adds) : [];
-    const deletes = changes.deletes
-      ? filter
-        ? changes.deletes.filter(filter(oldList)).map(({ id }) => id)
-        : changes.deletes.map(({ id }) => id)
-      : [];
+  const { updates, adds, deletes } = changes;
 
-    // updates
-    let newList = oldList.map((file) => {
-      const changedFile = updates.find(({ id }) => id === file.id);
-      return changedFile ?? file;
+  // updates
+  updates?.forEach((qnaFile) => {
+    set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (oldQnaFile) =>
+      getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile
+    );
+  });
+
+  // deletes
+  if (deletes?.length) {
+    const deletedIds = deletes.map((file) => file.id);
+    set(qnaFileIdsState(projectId), (ids) => ids.filter((id) => !deletedIds.includes(id)));
+  }
+
+  // adds
+  if (adds?.length) {
+    const addedIds = adds.map((file) => file.id);
+    adds.forEach((qnaFile) => {
+      set(qnaFileState({ projectId, qnaFileId: qnaFile.id }), (oldQnaFile) =>
+        getLatestFile ? getLatestFile(oldQnaFile, qnaFile) : qnaFile
+      );
     });
-
-    // deletes
-    newList = newList.filter((file) => !deletes.includes(file.id));
-
-    // adds
-    newList = adds.concat(newList);
-
-    return newList;
-  };
+    set(qnaFileIdsState(projectId), (ids) => [...ids, ...addedIds]);
+  }
 };
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
-  const { set } = callbackHelpers;
   //To do: support other languages on qna
   id = id.endsWith('.source') ? id : `${getBaseName(id)}.en-us`;
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
 
-  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedQnAFile] }));
+  updateQnaFiles(callbackHelpers, projectId, { updates: [updatedQnAFile] });
 };
 
 export const createQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
-  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const { snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
   //const locale = await snapshot.getPromise(localeState(projectId));
   //To do: support other languages on qna
   const locale = 'en-us';
@@ -107,7 +111,7 @@ export const createQnAFileState = async (
       id: fileId,
     });
   });
-  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ adds: changes }));
+  updateQnaFiles(callbackHelpers, projectId, { adds: changes });
 };
 
 /**
@@ -120,8 +124,8 @@ export const removeQnAFileState = async (
   callbackHelpers: CallbackInterface,
   { id, projectId }: { id: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
-  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const { snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
   //const locale = await snapshot.getPromise(localeState(projectId));
   //To do: support other languages on qna
   const locale = 'en-us';
@@ -137,15 +141,15 @@ export const removeQnAFileState = async (
       qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
     }
   });
-  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ deletes: [targetQnAFile] }));
+  updateQnaFiles(callbackHelpers, projectId, { deletes: [targetQnAFile] });
 };
 
 export const createKBFileState = async (
   callbackHelpers: CallbackInterface,
   { id, name, content, projectId }: { id: string; name: string; content: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
-  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const { snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
   const createdSourceQnAId = `${name}.source`;
 
   if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
@@ -173,15 +177,15 @@ export const createKBFileState = async (
   }
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
-  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: updatedQnAFiles, adds: [createdQnAFile] }));
+  updateQnaFiles(callbackHelpers, projectId, { updates: updatedQnAFiles, adds: [createdQnAFile] });
 };
 
 export const removeKBFileState = async (
   callbackHelpers: CallbackInterface,
   { id, projectId }: { id: string; projectId: string }
 ) => {
-  const { set, snapshot } = callbackHelpers;
-  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const { snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
   // const locale = await snapshot.getPromise(localeState(projectId));
   //To do: support other languages on qna
   const locale = 'en-us';
@@ -197,7 +201,7 @@ export const removeKBFileState = async (
       qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
     }
   });
-  set(qnaFilesState(projectId), qnaFilesAtomUpdater({ deletes: [targetQnAFile] }));
+  updateQnaFiles(callbackHelpers, projectId, { deletes: [targetQnAFile] });
 };
 
 export const renameKBFileState = async (
@@ -205,7 +209,7 @@ export const renameKBFileState = async (
   { id, name, projectId }: { id: string; name: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+  const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
   //const locale = await snapshot.getPromise(localeState(projectId));
   //To do: support other languages
   const locale = 'en-us';
@@ -223,16 +227,11 @@ export const renameKBFileState = async (
   }
   qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
 
-  set(qnaFilesState(projectId), (prevQnAFiles) => {
-    return prevQnAFiles.map((file) => {
-      if (file.id === targetQnAFile.id) {
-        return {
-          ...file,
-          id: name,
-        };
-      }
-      return file;
-    });
+  set(qnaFileState({ projectId, qnaFileId: id }), (prevQnAFile) => {
+    return {
+      ...prevQnAFile,
+      id: name,
+    };
   });
 };
 
@@ -465,7 +464,7 @@ ${response.data}
   );
 
   const updateQnAQuestion = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sectionId,
       questionId,
@@ -478,18 +477,19 @@ ${response.data}
       content: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       // const updatedFile = await updateQnAFileState(callbackHelpers, { id, content });
       const updatedFile = qnaUtil.updateQnAQuestion(qnaFile, sectionId, questionId, content);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
 
   const updateQnAAnswer = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sectionId,
       content,
@@ -500,17 +500,18 @@ ${response.data}
       content: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.updateQnAAnswer(qnaFile, sectionId, content);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
 
   const createQnAQuestion = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sectionId,
       content,
@@ -521,17 +522,18 @@ ${response.data}
       content: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.createQnAQuestion(qnaFile, sectionId, content);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
 
   const removeQnAQuestion = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sectionId,
       questionId,
@@ -542,17 +544,18 @@ ${response.data}
       questionId: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.removeQnAQuestion(qnaFile, sectionId, questionId);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
 
   const createQnAPairs = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       content,
       projectId,
@@ -561,18 +564,19 @@ ${response.data}
       content: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       // insert into head, need investigate
       const updatedFile = qnaUtil.insertSection(qnaFile, 0, content);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
 
   const removeQnAPairs = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sectionId,
       projectId,
@@ -581,17 +585,18 @@ ${response.data}
       sectionId: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.removeSection(qnaFile, sectionId);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
 
   const createQnAImport = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sourceId,
       projectId,
@@ -600,16 +605,17 @@ ${response.data}
       sourceId: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.addImport(qnaFile, `${sourceId}.qna`);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
   const removeQnAImport = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sourceId,
       projectId,
@@ -618,16 +624,17 @@ ${response.data}
       sourceId: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       const updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
   const updateQnAImport = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       sourceId,
       newSourceId,
@@ -638,13 +645,14 @@ ${response.data}
       newSourceId: string;
       projectId: string;
     }) => {
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const { snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
       let updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
       updatedFile = qnaUtil.addImport(updatedFile, `${newSourceId}.qna`);
-      set(qnaFilesState(projectId), qnaFilesAtomUpdater({ updates: [updatedFile] }));
+      updateQnaFiles(callbackHelpers, projectId, { updates: [updatedFile] });
     }
   );
   const removeQnAKB = useRecoilCallback(
