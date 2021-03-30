@@ -91,11 +91,12 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // If there are package sources stored in the user profile
       if (storedSources) {
         // Extract list of read-only sources
-        let readOnlyKeys = packageSources.map((s) => s.key);
+        const readOnlyKeys = packageSources.map((s) => s.key);
 
         // Add user sources to the package sources, excluding modifications of the read-only ones
         packageSources = packageSources.concat(storedSources.filter((s) => !readOnlyKeys.includes(s.key)));
       }
+
       composer.store.write('feeds', packageSources);
 
       res.json(packageSources);
