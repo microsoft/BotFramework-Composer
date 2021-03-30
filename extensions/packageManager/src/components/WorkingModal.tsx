@@ -18,10 +18,9 @@ export const WorkingModal: React.FC<WorkingModalProps> = (props) => {
   const { announce } = useApplicationApi();
 
   useEffect(() => {
-    async function doAnnouncement() {
+    (async () => {
       announce(props.title);
-    }
-    doAnnouncement();
+    })();
   }, [props.title]);
 
   return (
