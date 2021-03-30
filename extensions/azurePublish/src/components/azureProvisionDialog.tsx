@@ -577,20 +577,22 @@ export const AzureProvisionDialog: React.FC = () => {
         <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
           {subscriptionOption?.length > 0 && choice.key === 'create' && (
             <form style={{ width: '100%' }}>
-              <Dropdown
-                required
-                disabled={allTenants.length === 1 || currentConfig?.tenantId}
-                errorMessage={loginErrorMsg}
-                label={formatMessage('Azure Directory')}
-                options={token ? allTenants.map((t) => ({ key: t.tenantId, text: t.displayName })) : []}
-                placeholder={formatMessage('Select one')}
-                responsiveMode={ResponsiveMode.large}
-                selectedKey={selectedTenant}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={(_e, o) => {
-                  setSelectedTenant(o.key as string);
-                }}
-              />
+              {!isGetTokenFromUser() && (
+                <Dropdown
+                  required
+                  disabled={allTenants.length === 1 || currentConfig?.tenantId}
+                  errorMessage={loginErrorMsg}
+                  label={formatMessage('Azure Directory')}
+                  options={token ? allTenants.map((t) => ({ key: t.tenantId, text: t.displayName })) : []}
+                  placeholder={formatMessage('Select one')}
+                  responsiveMode={ResponsiveMode.large}
+                  selectedKey={selectedTenant}
+                  styles={{ root: { paddingBottom: '8px' } }}
+                  onChange={(_e, o) => {
+                    setSelectedTenant(o.key as string);
+                  }}
+                />
+              )}
               <Dropdown
                 required
                 ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
