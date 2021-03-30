@@ -13,7 +13,7 @@ import {
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
   lgFilesSelectorFamily,
-  luFilesState,
+  luFilesSelectorFamily,
   schemasState,
   settingsState,
 } from '../../../src/recoilModel';
@@ -110,7 +110,7 @@ describe('<DiagnosticList/>', () => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
     set(dialogIdsState(state.projectId), []);
-    set(luFilesState(state.projectId), state.luFiles);
+    set(luFilesSelectorFamily(state.projectId), state.luFiles);
     set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
     set(botDiagnosticsState(state.projectId), state.diagnostics);
