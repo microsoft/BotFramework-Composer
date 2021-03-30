@@ -95,7 +95,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         placeholder={placeholder}
         readOnly={readonly}
         styles={{
-          ...borderStyles(Boolean(transparentBorder), Boolean(error), hasIcon),
+          ...borderStyles(Boolean(transparentBorder), Boolean(error), !!hasIcon),
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}
