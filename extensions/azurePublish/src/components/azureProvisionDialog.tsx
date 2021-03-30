@@ -231,7 +231,8 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<string>();
-  const [token, setToken] = useState<string>();
+  // null = loading
+  const [token, setToken] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(undefined);
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
@@ -379,16 +380,16 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [token]);
 
   const subscriptionOption = useMemo(() => {
-    return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
-  }, [subscriptions]);
+    return (token && subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }))) || [];
+  }, [token, subscriptions]);
 
   const deployLocationsOption = useMemo((): IDropdownOption[] => {
-    return deployLocations.map((t) => ({ key: t.name, text: t.displayName }));
-  }, [deployLocations]);
+    return (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  }, [token, deployLocations]);
 
   const luisLocationsOption = useMemo((): IDropdownOption[] => {
-    return luisLocations.map((t) => ({ key: t.name, text: t.displayName }));
-  }, [luisLocations]);
+    return (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  }, [token, luisLocations]);
 
   const checkNameAvailability = useCallback(
     (newName: string) => {
@@ -581,6 +582,8 @@ export const AzureProvisionDialog: React.FC = () => {
                 disabled={allTenants.length === 1 || currentConfig?.tenantId}
                 errorMessage={loginErrorMsg}
                 label={formatMessage('Azure Directory')}
+                options={token ? allTenants.map((t) => ({ key: t.tenantId, text: t.displayName })) : []}
+                placeholder={formatMessage('Select one')}
                 responsiveMode={ResponsiveMode.large}
                 selectedKey={selectedTenant}
                 styles={{ root: { paddingBottom: '8px' } }}
@@ -591,7 +594,6 @@ export const AzureProvisionDialog: React.FC = () => {
               <Dropdown
                 required
                 ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-                defaultSelectedKey={currentSubscription}
                 disabled={currentConfig?.subscriptionId}
                 errorMessage={
                   currentUser && subscriptionOption?.length < 1
@@ -604,6 +606,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 options={subscriptionOption}
                 placeholder={formatMessage('Select one')}
                 responsiveMode={ResponsiveMode.large}
+                selectedKey={currentSubscription}
                 styles={{ root: { paddingBottom: '8px' } }}
                 onChange={(_e, o: IDropdownOption) => {
                   setSubscription(o.key as string);
