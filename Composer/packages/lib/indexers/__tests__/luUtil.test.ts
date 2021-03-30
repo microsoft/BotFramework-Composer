@@ -24,6 +24,7 @@ describe('LU parse and validation', () => {
     expect(result1.diagnostics.length).toEqual(0);
     expect(result1.intents.length).toEqual(1);
     expect(result1.allIntents.length).toEqual(2);
+    expect(result1.allIntents[1].fileId).toEqual('welcome');
   });
 
   it('should parse reference deep and with locale', () => {
@@ -50,6 +51,8 @@ describe('LU parse and validation', () => {
     expect(result1.diagnostics.length).toEqual(0);
     expect(result1.intents.length).toEqual(1);
     expect(result1.allIntents.length).toEqual(3);
+    expect(result1.allIntents[1].fileId).toEqual('welcome.en-us');
+    expect(result1.allIntents[2].fileId).toEqual('greeting');
   });
 
   it('Throws when ML entity is disable (validateResource)', () => {

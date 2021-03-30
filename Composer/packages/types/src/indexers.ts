@@ -89,6 +89,7 @@ export type LuIntentSection = {
   Entities?: LuEntity[];
   Children?: LuIntentSection[];
   range?: IRange;
+  fileId?: string;
 };
 
 export type LuParsed = {

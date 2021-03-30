@@ -79,6 +79,7 @@ export function convertLuParseResultToLuFile(
   // filter structured-object from LUParser result.
   const { Sections, Errors, Content } = resource;
   const intents: LuIntentSection[] = [];
+  const fileId = id;
   Sections.forEach((section) => {
     const { Name, Body, SectionType } = section;
     const range = new Range(
@@ -87,7 +88,7 @@ export function convertLuParseResultToLuFile(
     );
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name, Type }) => ({ Name, Type }));
-      intents.push({ Name, Body, Entities, range });
+      intents.push({ Name, Body, Entities, range, fileId });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
       const Children = section.SimpleIntentSections.map((subSection) => {
         const { Name, Body } = subSection;
@@ -96,9 +97,9 @@ export function convertLuParseResultToLuFile(
           new Position(get(section, 'Range.End.Line', 0), get(subSection, 'Range.End.Character', 0))
         );
         const Entities = subSection.Entities.map(({ Name, Type }) => ({ Name, Type }));
-        return { Name, Body, Entities, range };
+        return { Name, Body, Entities, range, fileId };
       });
-      intents.push({ Name, Body, Children, range });
+      intents.push({ Name, Body, Children, range, fileId });
       intents.push(
         ...Children.map((subSection) => {
           return {
