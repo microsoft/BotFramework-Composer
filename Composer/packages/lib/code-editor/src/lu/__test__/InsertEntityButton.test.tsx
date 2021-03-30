@@ -40,6 +40,7 @@ const luFile: LuFile = {
   content: '',
   imports: [],
   resource: { Content: '', Errors: [], Sections: [] },
+  isContentUnparsed: false,
 };
 
 jest.useFakeTimers();

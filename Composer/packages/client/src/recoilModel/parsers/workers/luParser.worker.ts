@@ -12,6 +12,7 @@ import {
   LuUpdateIntentPayload,
   LuAddIntentsPayload,
   LuAddIntentPayload,
+  LuParseAllPayload,
 } from '../types';
 const ctx: Worker = self as any;
 
@@ -51,7 +52,20 @@ interface RemoveIntentsMessage {
   payload: LuRemoveIntentsPayload;
 }
 
-type LuMessageEvent = ParseMessage | AddMessage | AddsMessage | UpdateMessage | RemoveMessage | RemoveIntentsMessage;
+type ParseAllMessage = {
+  id: string;
+  type: LuActionType.ParseAll;
+  payload: LuParseAllPayload;
+};
+
+type LuMessageEvent =
+  | ParseMessage
+  | AddMessage
+  | AddsMessage
+  | UpdateMessage
+  | RemoveMessage
+  | RemoveIntentsMessage
+  | ParseAllMessage;
 
 const luFileResolver = (luFiles) => {
   return luImportResolverGenerator(luFiles, '.lu');
@@ -63,6 +77,12 @@ export const handleMessage = (msg: LuMessageEvent) => {
     case LuActionType.Parse: {
       const { id, content, luFeatures, luFiles } = msg.payload;
       result = luUtil.parse(id, content, luFeatures, luFiles);
+      break;
+    }
+
+    case LuActionType.ParseAll: {
+      const { luResources, luFeatures } = msg.payload;
+      result = luResources.map(({ id, content }) => luUtil.parse(id, content, luFeatures));
       break;
     }
 

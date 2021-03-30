@@ -415,6 +415,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const publishProfile = {
           name: currentProfile?.name ?? config.hostname,
           environment: currentProfile?.environment ?? 'composer',
+          tenantId: provisionResults?.tenantId ?? currentProfile?.tenantId,
           subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
           resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
           botName: currentProfile?.botName ?? provisionResults.botName,
