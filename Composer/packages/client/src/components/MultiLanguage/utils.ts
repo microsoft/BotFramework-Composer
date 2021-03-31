@@ -40,3 +40,10 @@ export const languageListTemplates = (languages: string[], locale: string, defau
   });
   return languageList;
 };
+
+export const languageFullName = (testLocale: string) => {
+  for (const { locale, language } of Locales) {
+    if (locale === testLocale) return language;
+  }
+  return testLocale;
+};
