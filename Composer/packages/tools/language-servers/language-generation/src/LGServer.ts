@@ -337,7 +337,7 @@ export class LGServer {
     if (diagnostics.length) {
       return Promise.resolve(null);
     }
-    const wordRange = getRangeAtPosition(document, params.position);
+    const wordRange = getRangeAtPosition(document, params.position, true);
     let word = document.getText(wordRange);
     const matchItem = allTemplates.find((u) => u.name === word);
     if (matchItem) {
@@ -619,7 +619,7 @@ export class LGServer {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return [];
     const position = params.position;
-    const range = getRangeAtPosition(document, position);
+    const range = getRangeAtPosition(document, position, true);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
     const memoryVariblesRootCompletionList: CompletionItem[] = [];
@@ -652,7 +652,7 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const position = params.position;
-    const range = getRangeAtPosition(document, position);
+    const range = getRangeAtPosition(document, position, true);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
     const includesDot = wordAtCurRange.includes('.');
