@@ -17,6 +17,7 @@ import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { BotIndexer } from '@bfc/indexers';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
+import { useLocation } from '../utils/hooks';
 import { BASEPATH } from '../constants';
 import { schemasState } from '../recoilModel/atoms';
 import {
@@ -170,6 +171,7 @@ export const Header = () => {
   const [hideBotController, hideBotStartController] = useState(true);
   const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
   const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(false);
+  const { location } = useLocation();
 
   // These are needed to determine if the bot needs LUIS or QNA
   // this data is passed into the GetStarted widget
@@ -201,15 +203,15 @@ export const Header = () => {
     setShowGetStarted(newvalue);
   };
 
-  // pop out
+  // pop out get started if #getstarted is in the URL
   useEffect(() => {
-    if (window.location.hash === '#getstarted') {
+    if (location.hash === '#getstarted') {
       setshowGetStartedTeachingBubble(true);
       setShowGetStarted(true);
     } else {
       setshowGetStartedTeachingBubble(false);
     }
-  }, [window.location.hash]);
+  }, [location]);
 
   useEffect(() => {
     if (isWebChatPanelVisible) {

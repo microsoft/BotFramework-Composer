@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -40,14 +40,14 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
         {props.step.label}
       </ActionButton>
       <div css={{ marginLeft: 40, fontSize: 12 }}>
-        {props.step.description}
+        <span>{props.step.description}</span>
         {props.step.learnMore && (
-          <Fragment>
+          <span>
             &nbsp;
             <Link href={props.step.learnMore} target="_blank">
               {formatMessage('Learn more')}
             </Link>
-          </Fragment>
+          </span>
         )}
       </div>
     </div>
