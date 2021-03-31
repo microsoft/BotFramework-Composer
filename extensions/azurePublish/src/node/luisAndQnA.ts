@@ -11,7 +11,6 @@ import { ILuisConfig, FileInfo, IBotProject, RuntimeTemplate, DialogSetting } fr
 import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
 
-
 const botPath = (projPath: string, runtime?: DialogSetting['runtime']) =>
   isUsingAdaptiveRuntime(runtime) ? projPath : path.join(projPath, 'ComposerDialogs');
 
