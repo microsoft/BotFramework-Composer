@@ -910,8 +910,6 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Done')}
               onClick={() => {
                 const selectedResources = requireResources.concat(enabledResources);
-                console.log('SELECTED RESOURCES', selectedResources, requireResources, enabledResources);
-
                 onSubmit({
                   subscription: currentSubscription,
                   resourceGroup: currentResourceGroup,
