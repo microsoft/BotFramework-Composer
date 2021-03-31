@@ -247,6 +247,7 @@ const emptyLuFile = (id: string, content: string): LuFile => {
     content,
     diagnostics: [],
     intents: [],
+    allIntents: [],
     empty: true,
     resource: {
       Sections: [],
