@@ -6,6 +6,7 @@ import { fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../testUtils/renderWithRecoil';
 import CreateQnAFromUrlModal from '../../src/components/QnA/CreateQnAFromUrlModal';
+import CreateQnAFromScratchModal from '../../src/components/QnA/CreateQnAFromScratchModal';
 import { showCreateQnAFromUrlDialogState } from '../../src/recoilModel';
 
 describe('<CreateQnAFromUrlModal />', () => {
@@ -68,5 +69,26 @@ describe('<CreateQnAFromUrlModal />', () => {
     fireEvent.click(createKnowledgeButton);
     expect(onSubmit).toBeCalled();
     expect(onSubmit).toBeCalledWith({ urls: ['http://test'], locales: ['en-us'], name: 'test', multiTurn: false });
+  });
+
+  it('create qna from scratch with name and validate the value', () => {
+    const container = renderWithRecoil(
+      <CreateQnAFromScratchModal
+        dialogId="test"
+        projectId={projectId}
+        qnaFiles={[]}
+        onDismiss={onDismiss}
+        onSubmit={onSubmit}
+      />,
+      () => {}
+    );
+
+    const { getByTestId } = container;
+    const inputName = getByTestId('knowledgeLocationTextField-name') as HTMLInputElement;
+    fireEvent.change(inputName, { target: { value: 'test' } });
+    const createKnowledgeButton = getByTestId('createKnowledgeBase');
+    expect(createKnowledgeButton).not.toBeNull();
+    fireEvent.click(createKnowledgeButton);
+    expect(onSubmit).toBeCalledWith({ name: 'test' });
   });
 });
