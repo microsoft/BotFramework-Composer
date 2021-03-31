@@ -38,7 +38,7 @@ import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
 import { WebChatPanel } from './WebChat/WebChatPanel';
-import { languageListTemplates } from './MultiLanguage';
+import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { GetStarted } from './GetStarted/GetStarted';
 import { BotController } from './BotRuntimeController/BotController';
@@ -65,11 +65,17 @@ const title = css`
 `;
 
 const botName = css`
-  margin-left: 20px;
   font-size: 16px;
   color: #fff;
+  padding-left: 20px;
+`;
+
+const botLocale = css`
+  margin-left: 20px;
+  font-size: 12px;
+  color: #fff;
   border-radius: 19px;
-  background: ${CommunicationColors.tint10};
+  background: ${CommunicationColors.shade30};
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
@@ -257,15 +263,16 @@ export const Header = () => {
         {projectName && (
           <Fragment>
             <div css={divider} />
+            <span css={botName}>{projectName}</span>
             <span
-              css={botName}
+              css={botLocale}
               id="targetButton"
               role={'button'}
               tabIndex={0}
               onClick={() => setTeachingBubbleVisibility(true)}
               onKeyDown={handleActiveLanguageButtonOnKeyDown}
             >
-              {`${projectName} (${locale})`}
+              {languageFullName(locale)}
             </span>
           </Fragment>
         )}

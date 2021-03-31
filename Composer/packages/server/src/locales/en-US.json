@@ -167,6 +167,9 @@
   "add_connections_d720a32e": {
     "message": "Add connections"
   },
+  "add_caller_5c12aa5b": {
+    "message": "Add caller"
+  },
   "add_custom_a376ce51": {
     "message": "Add Custom"
   },
@@ -640,9 +643,6 @@
   },
   "close_d634289d": {
     "message": "Close"
-  },
-  "code_editor_1438efc": {
-    "message": "code editor"
   },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
@@ -2036,6 +2036,9 @@
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "List of actions rendered as suggestions to user."
   },
+  "list_of_app_ids_for_bots_that_are_allowed_to_use_t_bee9fea8": {
+    "message": "List of app ids for bots that are allowed to use this skill"
+  },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
   },
@@ -2470,6 +2473,9 @@
   },
   "oauth_login_b6aa9534": {
     "message": "OAuth login"
+  },
+  "object_33fc75c0": {
+    "message": "object"
   },
   "object_345070f6": {
     "message": "Object"
@@ -3242,9 +3248,6 @@
   "skill_9b084d2e": {
     "message": "Skill"
   },
-  "skill_configuration_5e4bfbcd": {
-    "message": "Skill configuration"
-  },
   "skill_dialog_name_1bbf0eff": {
     "message": "Skill Dialog Name"
   },
@@ -3517,6 +3520,9 @@
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
+  },
+  "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
+    "message": "This bot cannot be called as a skill since the allowed caller list is empty"
   },
   "this_cognitive_service_account_is_already_set_as_t_841165f7": {
     "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
