@@ -15,7 +15,7 @@ type Props = {
   editor: any;
   luFile?: LuFile;
   onMenuToggled?: (visible: boolean) => void;
-  onInsertEntity: (entityName: string) => void;
+  onInsertEntity: (entityName: string, entityType: string, method: 'toolbar' | 'floatingMenu') => void;
 };
 
 export const LuLabelingMenu = ({ editor, luFile, onMenuToggled, onInsertEntity }: Props) => {
@@ -79,18 +79,18 @@ export const LuLabelingMenu = ({ editor, luFile, onMenuToggled, onInsertEntity }
     (_, item?: IContextualMenuItem) => {
       const entity = item?.data as LuEntity;
       if (entity) {
-        onInsertEntity(entity.Name);
+        onInsertEntity(entity.Name, entity.Type, 'floatingMenu');
       }
       setMenuTargetElm(null);
     },
     [onInsertEntity]
   );
 
-  const { menuProps } = useLabelingMenuProps('filter', luFile, itemClick, {
+  const { menuProps, noEntities } = useLabelingMenuProps('filter', luFile, itemClick, {
     menuHeaderText: formatMessage('Tag entity'),
   });
 
-  return menuTargetElm ? (
+  return menuTargetElm && !noEntities ? (
     <ContextualMenu
       {...menuProps}
       directionalHint={DirectionalHint.bottomLeftEdge}

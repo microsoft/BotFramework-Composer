@@ -29,7 +29,7 @@ type Props = {
   luFile?: LuFile;
   labelingMenuVisible: boolean;
   onDefineEntity: (entityType: ToolbarLuEntityType, entityName?: string) => void;
-  onInsertEntity: (entityName: string) => void;
+  onInsertEntity: (entityName: string, entityType: string) => void;
 };
 
 export const LuEditorToolbar = React.memo((props: Props) => {
