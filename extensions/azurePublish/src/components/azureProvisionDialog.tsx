@@ -410,7 +410,7 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [token]);
 
-  const loadResourceGroups = useCallback(async () => {
+  const loadResourceGroups = async () => {
     if (token && formData.subscriptionId) {
       try {
         const resourceGroups = await getResourceGroups(token, formData.subscriptionId);
@@ -426,7 +426,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } else {
       setResourceGroups(undefined);
     }
-  }, [formData.subscriptionId, formData.resourceGroup]);
+  };
 
   useEffect(() => {
     loadResourceGroups();
@@ -654,6 +654,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 onRenderLabel={onRenderLabel}
               />
               <ResourceGroupPicker
+                disabled={currentConfig?.resourceGroup}
                 newResourceGroupName={isNewResourceGroupName ? formData.resourceGroup : undefined}
                 resourceGroupNames={resourceGroupNames}
                 selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
