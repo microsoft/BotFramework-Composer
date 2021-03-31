@@ -56,3 +56,10 @@ export const languageListTemplates = (
   });
   return languageList;
 };
+
+export const languageFullName = (testLocale: string) => {
+  for (const { locale, language } of Locales) {
+    if (locale === testLocale) return language;
+  }
+  return testLocale;
+};
