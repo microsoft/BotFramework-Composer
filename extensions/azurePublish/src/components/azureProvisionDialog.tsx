@@ -314,8 +314,6 @@ export const AzureProvisionDialog: React.FC = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
-        setPage(PageTypes.ConfigProvision);
-        setTitle(DialogTitle.CONFIG_RESOURCES);
         setLoginErrorMsg(undefined);
       })
       .catch((err) => {
@@ -326,6 +324,7 @@ export const AzureProvisionDialog: React.FC = () => {
   };
 
   useEffect(() => {
+    setPage(PageTypes.ConfigProvision);
     // TODO: need to get the tenant id from the auth config when running as web app,
     // for electron we will always fetch tenants.
     if (userShouldProvideTokens()) {
