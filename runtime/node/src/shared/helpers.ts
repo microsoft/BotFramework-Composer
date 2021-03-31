@@ -12,13 +12,25 @@ import {
   ChannelServiceRoutes,
   ConversationState,
   InputHints,
+  InspectionMiddleware,
+  InspectionState,
   SkillHandler,
+  Storage,
+  TranscriptLoggerMiddleware,
   TurnContext,
   UserState,
   useBotState,
   WebRequest,
   WebResponse,
+  ShowTypingMiddleware,
+  TelemetryLoggerMiddleware,
+  BotTelemetryClient,
 } from 'botbuilder';
+import {
+  ApplicationInsightsTelemetryClient,
+  TelemetryInitializerMiddleware,
+} from 'botbuilder-applicationinsights';
+import { BlobsTranscriptStore } from 'botbuilder-azure-blobs';
 import { AuthenticationConfiguration, SimpleCredentialProvider } from 'botframework-connector';
 import { ComposerBot } from './composerBot';
 import { BotSettings } from './settings';
@@ -113,7 +125,11 @@ export const getRootDialog = (folderPath: string): string => {
  * @param userState User state required by a botframework adapter.
  * @param conversationState Conversation state required by a botframework adapter.
  */
-export const getBotAdapter = (userState: UserState, conversationState: ConversationState): BotFrameworkAdapter => {
+export const getBotAdapter = (
+  storage: Storage,
+  userState: UserState,
+  conversationState: ConversationState
+): BotFrameworkAdapter => {
   const settings = getSettings();
   const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
     appId: settings.MicrosoftAppId,
@@ -121,6 +137,28 @@ export const getBotAdapter = (userState: UserState, conversationState: Conversat
   };
   const adapter = new BotFrameworkAdapter(adapterSettings);
   useBotState(adapter, userState, conversationState);
+
+  // Configure Middlewares
+  if (settings.blobStorage?.connectionString && settings.blobStorage?.container) {
+    adapter.use(
+      new TranscriptLoggerMiddleware(
+        new BlobsTranscriptStore(settings.blobStorage?.connectionString, settings.blobStorage?.container)
+      )
+    );
+  }
+
+  if (settings.feature?.UseInspectionMiddleware) {
+    adapter.use(new InspectionMiddleware(new InspectionState(storage)));
+  }
+
+  if (settings.feature?.UseShowTypingMiddleware) {
+    adapter.use(new ShowTypingMiddleware());
+  }
+
+  if (settings.feature?.UseSetSpeakMiddleware && settings.speech) {
+    // TODO: add SetSpeakMiddleware (not available in botbuilder 4.12)
+  }
+
   adapter.onTurnError = async (turnContext: TurnContext, error: Error) => {
     try {
       // Send a message to the user.
@@ -144,6 +182,14 @@ export const getBotAdapter = (userState: UserState, conversationState: Conversat
     await conversationState.saveChanges(turnContext);
   };
   return adapter;
+};
+
+export const getTelemetryClient = (): BotTelemetryClient => {
+  const settings = getSettings();
+  if (settings.applicationInsights?.InstrumentationKey) {
+    return new ApplicationInsightsTelemetryClient(settings.applicationInsights?.InstrumentationKey);
+  }
+  return undefined;
 };
 
 /**
@@ -203,4 +249,22 @@ export const configureManifestsEndpoint = (server: Server) => {
       }
     }
   }
+};
+
+/**
+ * Configure botframework adapter to use telemetry client.
+ * @param adapter Botframework adapter to be configured.
+ * @param telemetryClient Telemetry client.
+ */
+export const configureTelemetry = (adapter: BotFrameworkAdapter, telemetryClient: BotTelemetryClient): void => {
+  const settings = getSettings();
+
+  const telemetryLoggerMiddleware = new TelemetryLoggerMiddleware(
+    telemetryClient,
+    settings.telemetry?.logPersonalInformation ?? false
+  );
+
+  adapter.use(
+    new TelemetryInitializerMiddleware(telemetryLoggerMiddleware, settings.telemetry?.logActivities ?? false)
+  );
 };
