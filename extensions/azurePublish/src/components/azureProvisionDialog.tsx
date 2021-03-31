@@ -334,6 +334,7 @@ export const AzureProvisionDialog: React.FC = () => {
       // decode token
       const decoded = decodeToken(accessToken);
       if (decoded) {
+        updateFormData('tenantId', decoded.tid);
         setCurrentUser({
           token: accessToken,
           email: decoded.upn,
@@ -366,7 +367,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (formData.tenantId) {
-      if (formData.tenantId !== currentConfig.tenantId) {
+      if (formData.tenantId !== currentConfig?.tenantId) {
         // reset form data when tenant id changes
         setFormData((current) => ({
           ...current,
@@ -601,7 +602,6 @@ export const AzureProvisionDialog: React.FC = () => {
                   label={formatMessage('Azure Directory')}
                   options={token ? allTenants.map((t) => ({ key: t.tenantId, text: t.displayName })) : []}
                   placeholder={formatMessage('Select one')}
-                  responsiveMode={ResponsiveMode.large}
                   selectedKey={formData.tenantId}
                   styles={{ root: { paddingBottom: '8px' } }}
                   onChange={(_e, o) => {
@@ -624,7 +624,6 @@ export const AzureProvisionDialog: React.FC = () => {
                 label={formatMessage('Subscription')}
                 options={subscriptionOption}
                 placeholder={formatMessage('Select one')}
-                responsiveMode={ResponsiveMode.large}
                 selectedKey={formData.subscriptionId}
                 styles={{ root: { paddingBottom: '8px' } }}
                 onChange={(_e, o) => {
@@ -666,7 +665,6 @@ export const AzureProvisionDialog: React.FC = () => {
                 label={formatMessage('Region')}
                 options={deployLocationsOption}
                 placeholder={formatMessage('Select one')}
-                responsiveMode={ResponsiveMode.large}
                 selectedKey={formData.region}
                 styles={{ root: { paddingBottom: '8px' } }}
                 onChange={updateCurrentLocation}
@@ -678,7 +676,6 @@ export const AzureProvisionDialog: React.FC = () => {
                 label={formatMessage('Region for Luis')}
                 options={luisLocationsOption}
                 placeholder={formatMessage('Select one')}
-                responsiveMode={ResponsiveMode.large}
                 selectedKey={formData.luisLocation}
                 onChange={(e, o) => {
                   updateFormData('luisLocation', o.key as string);
