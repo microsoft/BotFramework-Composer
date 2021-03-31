@@ -104,6 +104,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         </ActionButton>
       )}
       <QnAEditor
+        toolbarHidden
         diagnostics={currentDiagnostics}
         editorDidMount={editorDidMount}
         editorSettings={userSettings.codeEditor}

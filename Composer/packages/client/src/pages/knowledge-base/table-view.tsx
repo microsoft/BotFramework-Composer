@@ -456,7 +456,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!containerQnAFile) return;
-                          console.log(containerQnAFile.id);
                           setImportingResourceQnAFile(containerQnAFile);
                         },
                       },
