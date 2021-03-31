@@ -175,7 +175,7 @@ export const defaultFilePath = (
   }
 
   const DIALOGNAME = dialogId;
-  const isRootFile = BOTNAME === DIALOGNAME.toLowerCase() || rootDialogId === DIALOGNAME;
+  const isRootFile = BOTNAME === DIALOGNAME.toLowerCase() || rootDialogId.toLowerCase() === DIALOGNAME.toLowerCase();
 
   if (fileType === FileExtensions.SourceQnA) {
     if (endpoint) {

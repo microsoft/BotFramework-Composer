@@ -5,6 +5,7 @@
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
 import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
@@ -233,8 +234,19 @@ export const projectDispatcher = () => {
         );
 
         if (requiresMigrate) {
-          confirm('Your project must be updated to open it using this version of Composer');
-          navigateTo(`/v2/projects/migrate/${projectId}`);
+          if (
+            await OpenConfirmModal(
+              formatMessage('Convert your project to the latest format'),
+              formatMessage(
+                'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
+              ),
+              { confirmText: formatMessage('Convert') }
+            )
+          ) {
+            navigateTo(`/v2/projects/migrate/${projectId}`);
+          } else {
+            navigateTo(`/home`);
+          }
           return;
         }
 
@@ -294,8 +306,19 @@ export const projectDispatcher = () => {
       set(botOpeningState, true);
       const { requiresMigrate } = await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
       if (requiresMigrate) {
-        confirm('Your project must be updated to open it using this version of Composer');
-        navigateTo(`/v2/projects/migrate/${projectId}`);
+        if (
+          await OpenConfirmModal(
+            formatMessage('Convert your project to the latest format'),
+            formatMessage(
+              'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
+            ),
+            { confirmText: formatMessage('Convert') }
+          )
+        ) {
+          navigateTo(`/v2/projects/migrate/${projectId}`);
+        } else {
+          navigateTo(`/home`);
+        }
         return;
       }
       // Post project creation
