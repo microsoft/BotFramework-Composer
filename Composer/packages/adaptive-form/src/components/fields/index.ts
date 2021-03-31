@@ -9,7 +9,6 @@ export * from './FieldSets';
 export * from './IntentField';
 export * from './JsonField';
 export * from './NumberField';
-export * from './ObjectArrayField';
 export * from './ObjectField';
 export * from './OneOfField';
 export * from './OpenObjectField';
