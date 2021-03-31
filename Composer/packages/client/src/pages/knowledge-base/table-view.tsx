@@ -130,7 +130,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         });
       }
     });
-
     return file.qnaSections.map((qnaSection) => {
       const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
       return {
@@ -349,6 +348,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return (
           <IconButton
             hidden
+            data-testId={'knowledgeBaseMore'}
             menuIconProps={{ iconName: 'More' }}
             menuProps={{ items: overflowItems || [] }}
             role="menuitem"

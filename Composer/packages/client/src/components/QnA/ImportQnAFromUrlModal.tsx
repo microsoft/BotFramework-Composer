@@ -78,9 +78,10 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
       <div css={dialogWindow}>
         <Stack>
           <TextField
+            data-testId={'ImportNewUrlToOverwriteQnAFile'}
             errorMessage={formErrors.url}
             label={formatMessage('Knowledge source')}
-            placeholder={formatMessage('Enter a URL to Import QnA resource ')}
+            placeholder={formatMessage('Enter a URL to Import QnA resource')}
             styles={textFieldKBNameFromScratch}
             value={formData.url}
             onChange={(e, url) => updateUrl(url)}
