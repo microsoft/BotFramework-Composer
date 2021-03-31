@@ -6,7 +6,7 @@ import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations, NeutralColors } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 const theme: ITheme = getTheme();
-const { palette, fonts } = theme;
+const { fonts } = theme;
 
 export const outline = css`
   display: flex;
@@ -32,13 +32,18 @@ export const rightPage = css`
   flex: 1;
   padding: 25px;
   display: flex;
-  background: #f6f6f6;
   flex-direction: column;
+  background: #f6f6f6;
+  @media (max-width: 1366px) {
+    flex: none;
+    width: cacl(100% - 100px);
+    background: none;
+  }
 `;
 
 export const title = css`
   display: block;
-  padding: 25px 25px 10px 25px;
+  padding: 25px 25px 0px 25px;
   font-size: ${FontSizes.xxLarge};
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
@@ -58,7 +63,7 @@ export const introduction = css`
 
 export const rowContainer = css`
   display: flex;
-  margin: 20px 0;
+  margin: 12px 0;
 `;
 
 export const leftContainer = css`
@@ -80,7 +85,7 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   min-width: 262px;
   height: 183px;
   width: 20vw;
-  margin-right: 30px;
+  margin-right: 12px;
   padding: 0;
 `;
 
@@ -88,28 +93,6 @@ export const itemContainer = css`
   outline: none;
   height: 50%;
 `;
-
-// export const itemContainerTitle = css`
-//   height: 100%;
-//   color: ${NeutralColors.gray160}
-//   font-size: ${FontSizes.medium}
-//   box-sizing: border-box;
-//   outline: none;
-// `;
-
-// export const itemContainerContent = css`
-//   height: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   font-size: 16px;
-//   font-weight: 600;
-//   text-align: left;
-//   padding: 10px 0 0 16px;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-//   word-break: break-word;
-//   outline: none;
-// `;
 
 export const subtitle = css`
   font-size: 18px;
@@ -125,6 +108,30 @@ export const bluetitle = css`
   display: flex;
   color: #0078d4;
   margin: 16px 0 0 0;
+`;
+
+export const recentBotsTitle = css`
+  ${subtitle};
+  padding: 18px 0;
+`;
+
+export const noRecentBotsContainer = css`
+  height: 227px;
+  background: rgba(242, 242, 242, 0.7);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const noRecentBotsCover = css`
+  width: 70px;
+  height: 70px;
+  margin-top: 50px;
+`;
+
+export const noRecentBotsDescription = css`
+  margin-top: 28px;
 `;
 
 export const newsDescription = css`
@@ -168,24 +175,38 @@ export const cardItem = {
   title: css`
     font-weight: ${FontWeights.semibold};
     color: ${NeutralColors.gray160};
-    text-align: left;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   `,
   imageCover: css`
-    width: 48px;
+    width: 53px;
     height: 48px;
-    margin-bottom: 12px;
+    margin: 2px 0 12px 0;
   `,
   content: css`
     color: ${NeutralColors.gray140};
-    margin-bottom: 12px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     overflow: hidden;
+    min-height: 34px;
     -webkit-box-orient: vertical;
+    margin-bottom: 16px;
   `,
   moreLink: css`
     color: #0078d4;
+  `,
+};
+
+export const articleCardItem = {
+  ...cardItem,
+  title: css`
+    font-weight: ${FontWeights.semibold};
+    color: ${NeutralColors.gray160};
+    margin-bottom: 6px;
+  `,
+  imageCover: css`
+    width: 244px;
+    height: 95px;
+    margin: 9px 0 4px 0;
   `,
 };
 

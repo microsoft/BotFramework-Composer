@@ -5,22 +5,15 @@
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-
-import {
-  itemContainerWrapper,
-  itemContainer,
-  itemContainerContent,
-  itemContainerTitle,
-  disabledItem,
-  childrenContainer,
-} from './styles';
+import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
 import formatMessage from 'format-message';
-import { Link } from 'office-ui-fabric-react';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+
+import { itemContainerWrapper } from './styles';
 
 interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
-  imageCover?: any;
+  imageCover: string;
   title: string | JSX.Element;
   subContent?: string;
   content: string;
@@ -53,15 +46,14 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 }) => {
   const onRenderChildren = () => {
     return (
-      <div ref={forwardedRef} aria-label={ariaLabel} css={childrenContainer}>
-        {imageCover && (
-          <img
-            alt={formatMessage('Composer Logo')}
-            aria-label={formatMessage('Composer Logo')}
-            src={imageCover}
-            css={styles.imageCover}
-          />
-        )}
+      <div ref={forwardedRef} aria-label={ariaLabel}>
+        <Image
+          alt={formatMessage('Composer Logo')}
+          aria-label={formatMessage('Composer Logo')}
+          css={styles.imageCover}
+          imageFit={ImageFit.centerCover}
+          src={imageCover}
+        />
 
         <div css={styles.title}>{title}</div>
         <div css={styles.content}>{content}</div>

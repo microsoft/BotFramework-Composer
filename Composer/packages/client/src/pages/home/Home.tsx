@@ -3,17 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useCallback } from 'react';
+import React, { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
+import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem, defaultToolbarButtonStyles, defaultFirstToolbarButtonStyles } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
+import { dispatcherState, botDisplayNameState } from '../../recoilModel';
 import {
   recentProjectsState,
   templateIdState,
@@ -21,13 +22,14 @@ import {
   featureFlagsState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-
-import * as home from './styles';
-import { ItemContainer } from './ItemContainer';
-import { RecentBotList } from './RecentBotList';
-import { ExampleList } from './ExampleList';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
-import composerIcon from '../../images/composerIcon.svg';
+import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
+import githubIcon from '../../images/githubIcon.svg';
+import defaultArticleCover from '../../images/defaultArticleCover.svg';
+
+import { RecentBotList } from './RecentBotList';
+import { ItemContainer } from './ItemContainer';
+import * as home from './styles';
 
 const feeds = {
   whatsNewLinks: [
@@ -61,25 +63,26 @@ const feeds = {
       viewAllLinkUrl: 'https://www.youtube.com/channel/UC8qPRh20PpuxBvxf0w2WrwQ',
       cards: [
         {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          image: 'https://via.placeholder.com/244x95/0078d4/ffffff?text=Bot+FrameWork+Composer',
           title: 'Introduction to Composer',
           description: 'A five minute intro to Composer',
           url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
         },
         {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          image: 'https://via.placeholder.com/300x200/',
           title: 'Build a weather bot',
-          description: 'An end to end tutorial for creating a weather bot',
+          description:
+            'An end to end tutorial for creating a weather bot x An end to end tutorial for creating a weather bot',
           url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
         },
         {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          image: 'https://via.placeholder.com/244x55/',
           title: 'Using prompts',
           description: 'Discover how to use prompts to accept input from users',
           url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
         },
         {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          image: 'https://via.placeholder.com/200x95/',
           title: 'Using LG',
           description: 'Explore Language Generation and how to generate dynamic responses',
           url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
@@ -91,7 +94,7 @@ const feeds = {
       cards: [
         {
           image: 'https://via.placeholder.com/244x95/09f/fff.png',
-          title: 'Introduction to Composer',
+          title: 'Introduction to Composer Document',
           description: 'A five minute intro to Composer',
           url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
         },
@@ -121,31 +124,31 @@ const feeds = {
 const resources = [
   {
     imageCover: composerDocumentIcon,
-    title: 'Composer documentation',
-    description: 'Find tutorials, step-by-step guides. Discover what you can build with Composer.',
-    moreText: 'Read documentation',
+    title: formatMessage('Composer documentation'),
+    description: formatMessage('Find tutorials, step-by-step guides. Discover what you can build with Composer.'),
+    moreText: formatMessage('Read documentation'),
+    url: 'https://docs.microsoft.com/en-us/composer/',
+  },
+  {
+    imageCover: githubIcon,
+    title: formatMessage('Composer on GitHub'),
+    description: formatMessage('Check out the resources on GitHub.'),
+    moreText: formatMessage('Go to Composer repository'),
     url: 'https://github.com/microsoft/BotFramework-Composer',
   },
-];
-
-const tutorials = [
   {
-    title: formatMessage('5 Minute Intro'),
-    content: formatMessage('Chris Whitten'),
-    subContent: formatMessage('Apr 9, 2020'),
-    href: 'https://aka.ms/bf-composer-tutorial-chris',
+    imageCover: githubIcon,
+    title: formatMessage('Bot Framework Emulator'),
+    description: formatMessage('Test and debug bots built using the Bot Framework SDK. Available on GitHub.'),
+    moreText: formatMessage('Download Emulator'),
+    url: 'https://github.com/microsoft/BotFramework-Emulator/releases',
   },
   {
-    title: formatMessage('Weather Bot'),
-    content: formatMessage('Ben Brown'),
-    subContent: formatMessage('Nov 12, 2019'),
-    href: 'https://aka.ms/bf-composer-tutorial-ben',
-  },
-  {
-    title: formatMessage('MSFT Ignite AI Show'),
-    content: formatMessage('Vishwac Sena'),
-    subContent: formatMessage('Jan 28, 2020'),
-    href: 'https://aka.ms/bf-composer-tutorial-vishwac',
+    imageCover: stackoverflowIcon,
+    title: formatMessage('Stack Overflow'),
+    description: formatMessage('Engage with other bot builders. Ask and answer questions.'),
+    moreText: formatMessage('Go to Stack Overflow'),
+    url: 'https://stackoverflow.com/questions/tagged/botframework',
   },
 ];
 
@@ -154,10 +157,9 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
-  const { openProject, setCreationFlowStatus, saveTemplateId, setCreationFlowType } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
 
   const featureFlags = useRecoilValue(featureFlagsState);
-  const botTemplates = useRecoilValue(templateProjectsState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -165,13 +167,6 @@ const Home: React.FC<RouteComponentProps> = () => {
         TelemetryClient.track('BotProjectOpened', { method: 'list', projectId });
       });
     }
-  };
-
-  const onClickTemplate = async (id: string) => {
-    saveTemplateId(id);
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-    TelemetryClient.track('CreateNewBotProject', { method: 'luisCallToAction' });
-    navigate(`projects/create/${id}`);
   };
 
   const onClickNewBot = () => {
@@ -240,16 +235,38 @@ const Home: React.FC<RouteComponentProps> = () => {
       <div css={home.page}>
         <div css={home.leftPage} role="main">
           <div css={home.leftContainer}>
-            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
+            <h2 css={home.recentBotsTitle}>{formatMessage(`Recent Bots`)}</h2>
             <Toolbar toolbarItems={toolbarItems} />
-
-            {recentProjects.length > 0 && (
+            {recentProjects.length > 0 ? (
               <RecentBotList
                 recentProjects={recentProjects}
                 onItemChosen={async (item) => {
                   await onItemChosen(item);
                 }}
               />
+            ) : (
+              <div css={home.noRecentBotsContainer}>
+                <Image
+                  alt={formatMessage('No recent bots')}
+                  aria-label={formatMessage('No recent bots')}
+                  css={home.noRecentBotsCover}
+                  imageFit={ImageFit.centerCover}
+                  src={'https://via.placeholder.com/70x70'}
+                />
+                <div css={home.noRecentBotsDescription}>
+                  {' '}
+                  {formatMessage('You don’t have any bot yet. Start to ')}
+                  <Link
+                    onClick={() => {
+                      onClickNewBot();
+                      TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+                    }}
+                  >
+                    {' '}
+                    {formatMessage('create a new bot')}{' '}
+                  </Link>
+                </div>
+              </div>
             )}
           </div>
           <div css={[home.leftContainer, home.gap40]}>
@@ -271,15 +288,40 @@ const Home: React.FC<RouteComponentProps> = () => {
               ))}
             </div>
           </div>
+          <div css={[home.leftContainer, home.gap40]}>
+            <div css={home.rowContainer}>
+              <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
+                {feeds.tabs.map((tab, index) => (
+                  <PivotItem key={index} headerText={tab.title}>
+                    <div css={home.rowContainer}>
+                      {tab.cards.map((card, index) => (
+                        <ItemContainer
+                          key={index}
+                          ariaLabel={card.title}
+                          content={card.description}
+                          href={card.url}
+                          imageCover={card.image ?? defaultArticleCover}
+                          rel="noopener nofollow"
+                          styles={home.articleCardItem}
+                          target="_blank"
+                          title={card.title}
+                        />
+                      ))}
+                    </div>
+                  </PivotItem>
+                ))}
+              </Pivot>
+            </div>
+          </div>
         </div>
         {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
           <div aria-label={formatMessage(`What's new list`)} css={home.rightPage} role="region">
             <h3 css={home.subtitle}>{formatMessage(`What's new`)}</h3>
 
-            {feeds.whatsNewLinks.map(({ title, description, url }) => {
+            {feeds.whatsNewLinks.map(({ title, description, url }, index) => {
               return (
-                <Fragment>
-                  <Link href={url} css={home.bluetitle}>
+                <Fragment key={index}>
+                  <Link css={home.bluetitle} href={url}>
                     {title}
                   </Link>
                   <p css={home.newsDescription}>{description}</p>
