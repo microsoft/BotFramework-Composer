@@ -501,6 +501,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           <Spinner />
         </Stack.Item>
       )}
+      {key === CHANNELS.TEAMS && channelStatus?.[key].enabled && !channelStatus?.[key].loading && (
+        <Stack.Item>
+          <Link
+            styles={{ root: { marginTop: '7px' } }}
+            onClick={() => {
+              setShowTeamsManifestModal(true);
+            }}
+          >
+            {formatMessage('Open Manifest')}
+          </Link>
+        </Stack.Item>
+      )}
     </Stack>
   );
 

@@ -14,6 +14,7 @@ import { FontSizes, NeutralColors } from '@uifabric/fluent-theme/lib/fluent';
 import { useRef } from 'react';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { defaultTeamsManifest } from '../../constants';
 
@@ -120,7 +121,7 @@ export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
         value={generateTeamsManifest()}
       />
       <DialogFooter>
-        <PrimaryButton
+        <DefaultButton
           text={formatMessage('Close')}
           onClick={() => {
             props.onDismiss();
