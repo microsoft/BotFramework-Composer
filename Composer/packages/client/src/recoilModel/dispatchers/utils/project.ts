@@ -870,22 +870,6 @@ export const saveProject = async (callbackHelpers, oldProjectData) => {
   return result;
 };
 
-export const migrateProject = async (callbackHelpers, oldProjectData) => {
-  const { oldProjectId, name, description, location } = oldProjectData;
-  const response = await httpClient.post(`/projects/${oldProjectId}/project/saveAs`, {
-    storageId: 'default',
-    name,
-    description,
-    location,
-  });
-  const data = loadProjectData(response.data);
-  if (data.error) {
-    throw data.error;
-  }
-  const result = openRootBotAndSkills(callbackHelpers, data);
-  return result;
-};
-
 export const getSkillNameIdentifier = async (
   callbackHelpers: CallbackInterface,
   displayName: string

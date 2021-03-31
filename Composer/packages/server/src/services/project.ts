@@ -207,7 +207,7 @@ export class BotProjectService {
   public static openProject = async (
     locationRef: LocationRef,
     user?: UserIdentity,
-    allowPartialBots?: boolean
+    options?: { allowPartialBots: boolean }
   ): Promise<string> => {
     BotProjectService.initialize();
 
@@ -217,7 +217,10 @@ export class BotProjectService {
       throw new Error(`file ${locationRef.path} does not exist`);
     }
 
-    if (!allowPartialBots && !(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))) {
+    if (
+      !options?.allowPartialBots &&
+      !(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))
+    ) {
       throw new Error(`${locationRef.path} is not a bot project folder`);
     }
 
@@ -438,9 +441,6 @@ export class BotProjectService {
 
   public static async migrateProjectAsync(req: Request, jobId: string) {
     const { oldProjectId, name, description, location, storageId } = req.body;
-    // todo: use this
-    description;
-    // console.log(`Migrate ${oldProjectId} to ${location}/${name} with ${description}`);
     const user = await ExtensionContext.getUserFromRequest(req);
 
     try {
@@ -453,7 +453,7 @@ export class BotProjectService {
 
       const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(
         '@microsoft/generator-microsoft-bot-adaptive',
-        '1.0.0-preview-20210310.8ee9434', // use any available version
+        '*', // use any available version
         name,
         locationRef,
         jobId,
@@ -471,7 +471,7 @@ export class BotProjectService {
 
         // pass in allowPartialBots = true so that this project can be opened even though
         // it doesn't yet have a root dialog...
-        const id = await BotProjectService.openProject(newProjRef, user, true);
+        const id = await BotProjectService.openProject(newProjRef, user, { allowPartialBots: true });
         const currentProject = await BotProjectService.getProjectById(id, user);
 
         // add all original files to new project
@@ -552,7 +552,10 @@ export class BotProjectService {
       }
     } catch (err) {
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
-      // TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+      TelemetryService.trackEvent('CreateNewBotProjectCompleted', {
+        template: '@microsoft/generator-microsoft-bot-adaptive',
+        status: 500,
+      });
     }
   }
 
