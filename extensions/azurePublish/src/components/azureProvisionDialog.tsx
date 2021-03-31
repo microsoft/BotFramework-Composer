@@ -220,6 +220,20 @@ const getHostname = (config) => {
   }
 };
 
+const getDefaultFormData = (currentProfile, defaults) => {
+  return {
+    choice: defaults.choice ?? 'create',
+    tenantId: currentProfile?.tenantId ?? defaults.tenantId,
+    subscriptionId: currentProfile?.subscriptionId ?? defaults.subscriptionId,
+    resourceGroup: currentProfile?.resourceGroup ?? defaults.resourceGroup,
+    hostname: getHostname(currentProfile) ?? defaults.hostname,
+    region: currentProfile?.region ?? defaults.region,
+    luisLocation: currentProfile?.settings?.luis?.region ?? defaults.luisLocation,
+    enabledResources: defaults.enabledResources ?? [],
+    requiredResources: defaults.requireResources ?? [],
+  };
+};
+
 export const AzureProvisionDialog: React.FC = () => {
   const {
     currentProjectId,
@@ -256,17 +270,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
 
-  const [formData, setFormData] = useState<ProvisionFormData>({
-    choice: extensionState.choice ?? 'create',
-    tenantId: currentConfig.tenantId ?? extensionState.tenantId,
-    subscriptionId: currentConfig.subscriptionId ?? extensionState.subscriptionId,
-    resourceGroup: currentConfig.resourceGroup ?? extensionState.resourceGroup,
-    hostname: getHostname(currentConfig) ?? extensionState.hostname,
-    region: currentConfig.region ?? extensionState.region,
-    luisLocation: currentConfig?.settings?.luis?.region ?? extensionState.luisLocation,
-    enabledResources: extensionState.enabledResources ?? [],
-    requiredResources: extensionState.requireResources ?? [],
-  });
+  const [formData, setFormData] = useState<ProvisionFormData>(getDefaultFormData(currentConfig, extensionState));
 
   // null = loading
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
@@ -590,6 +594,9 @@ export const AzureProvisionDialog: React.FC = () => {
               {!userShouldProvideTokens() && (
                 <Dropdown
                   required
+                  ariaLabel={formatMessage(
+                    'Switching your Azure directory will change which subscriptions you can access'
+                  )}
                   disabled={allTenants.length === 1 || currentConfig?.tenantId}
                   errorMessage={loginErrorMsg}
                   label={formatMessage('Azure Directory')}
@@ -601,6 +608,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   onChange={(_e, o) => {
                     updateFormData('tenantId', o.key as string);
                   }}
+                  onRenderLabel={onRenderLabel}
                 />
               )}
               <Dropdown
@@ -663,6 +671,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 selectedKey={formData.region}
                 styles={{ root: { paddingBottom: '8px' } }}
                 onChange={updateCurrentLocation}
+                onRenderLabel={onRenderLabel}
               />
               <Dropdown
                 required
