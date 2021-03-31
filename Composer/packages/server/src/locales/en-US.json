@@ -161,6 +161,9 @@
   "add_and_remove_packages_9e439f32": {
     "message": "Add and remove packages"
   },
+  "add_caller_5c12aa5b": {
+    "message": "Add caller"
+  },
   "add_custom_a376ce51": {
     "message": "Add Custom"
   },
@@ -238,6 +241,9 @@
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
+  },
+  "an_azure_tenant_must_be_set_in_order_to_provision__a223f1b8": {
+    "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
   },
   "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
     "message": "An error occurred connecting initializing the DirectLine server"
@@ -370,6 +376,9 @@
   },
   "australiaeast_f3227a31": {
     "message": "australiaeast"
+  },
+  "authentication_error_39e996c5": {
+    "message": "Authentication Error"
   },
   "authoring_canvas_18802e39": {
     "message": "Authoring canvas"
@@ -613,9 +622,6 @@
   },
   "close_d634289d": {
     "message": "Close"
-  },
-  "code_editor_1438efc": {
-    "message": "code editor"
   },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
@@ -1373,6 +1379,9 @@
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
   },
+  "error_provisioning_25835400": {
+    "message": "Error provisioning."
+  },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
   },
@@ -1931,6 +1940,9 @@
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "List of actions rendered as suggestions to user."
   },
+  "list_of_app_ids_for_bots_that_are_allowed_to_use_t_bee9fea8": {
+    "message": "List of app ids for bots that are allowed to use this skill"
+  },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
   },
@@ -2356,6 +2368,9 @@
   },
   "oauth_login_b6aa9534": {
     "message": "OAuth login"
+  },
+  "object_33fc75c0": {
+    "message": "object"
   },
   "object_345070f6": {
     "message": "Object"
@@ -3068,9 +3083,6 @@
   "skill_9b084d2e": {
     "message": "Skill"
   },
-  "skill_configuration_5e4bfbcd": {
-    "message": "Skill configuration"
-  },
   "skill_dialog_name_1bbf0eff": {
     "message": "Skill Dialog Name"
   },
@@ -3311,6 +3323,9 @@
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
+  "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
+    "message": "There was an error accessing your Azure account: { errorMsg }"
+  },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
     "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
   },
@@ -3325,6 +3340,9 @@
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
+  },
+  "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
+    "message": "This bot cannot be called as a skill since the allowed caller list is empty"
   },
   "this_cognitive_service_account_is_already_set_as_t_841165f7": {
     "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
@@ -3361,6 +3379,9 @@
   },
   "this_page_contains_detailed_information_about_your_b2b3413b": {
     "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
+  },
+  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
+    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type."
@@ -3517,6 +3538,9 @@
   },
   "unread_notifications_indicator_e2ca00d5": {
     "message": "Unread notifications Indicator"
+  },
+  "unsupported_publishing_profile_ad088e54": {
+    "message": "Unsupported publishing profile"
   },
   "unused_8d193e3": {
     "message": "Unused"
