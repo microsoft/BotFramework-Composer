@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { renderWithRecoil, wrapWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import { botProjectIdsState, projectMetaDataState, webChatLogsState } from '../../../recoilModel';
-import { WebChatLogItemHeader } from '../DebugPanel/TabExtensions/WebchatLog/WebchatLogItemHeader';
+import { WebChatLogItemHeader } from '../DebugPanel/TabExtensions/WebChatLog/WebChatLogItemHeader';
 
 const rootBotId = '123-adc';
 

@@ -7,6 +7,7 @@ import { css, jsx } from '@emotion/core';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { useCallback } from 'react';
+import { Resizable } from 're-resizable';
 
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 
@@ -103,7 +104,7 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
 
   if (inspectionData) {
     return (
-      <div
+      <Resizable
         css={{
           height: '100%',
           width: '50%',
@@ -112,6 +113,20 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
           overflow: 'auto',
           flexDirection: 'column',
           boxSizing: 'border-box',
+        }}
+        defaultSize={{
+          height: '100%',
+          width: '50%',
+        }}
+        enable={{
+          top: false,
+          right: false,
+          bottom: false,
+          left: true,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false,
         }}
       >
         {renderHeader(inspectionData)}
@@ -127,7 +142,7 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
           value={getInspectedData(inspectionData)}
           onChange={(_d) => null}
         />
-      </div>
+      </Resizable>
     );
   } else {
     return null;

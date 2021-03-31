@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { renderWithRecoil, wrapWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import { botProjectIdsState, projectMetaDataState, webChatLogsState } from '../../../recoilModel';
-import { WebchatLogContent } from '../DebugPanel/TabExtensions/WebchatLog/WebchatLogContent';
+import { WebchatLogContent } from '../DebugPanel/TabExtensions/WebChatLog/WebChatLogContent';
 
 const rootBotId = '123-adc';
 const scrollIntoViewMock = jest.fn();

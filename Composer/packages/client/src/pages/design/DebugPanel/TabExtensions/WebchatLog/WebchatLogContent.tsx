@@ -22,7 +22,7 @@ import { webChatLogsState } from '../../../../../recoilModel/atoms';
 import { DebugPanelTabHeaderProps } from '../types';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 
-import { WebchatLogItem } from './WebchatLogItem';
+import { WebchatLogItem } from './WebChatLogItem';
 import { WebChatInspectorPane } from './WebChatInspectorPane';
 
 const isActive = false; // TODO: put this into a component
@@ -66,7 +66,7 @@ const getActivityDirection = (activity) => {
 };
 
 // R12: We are showing Errors from the root bot only.
-export const WebchatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
+export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const displayedLogs = useRecoilValue(webChatLogsState(currentProjectId ?? ''));
   const displayedTraffic = useRecoilValue(webChatTraffic(currentProjectId ?? ''));
@@ -185,7 +185,7 @@ export const WebchatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         ref={webChatContainerRef}
         css={{
           height: '100%',
-          width: '50%',
+          width: '100%',
           display: 'flex',
           overflow: 'auto',
           flexDirection: 'column',
