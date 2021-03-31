@@ -974,7 +974,6 @@ export const AzureProvisionDialog: React.FC = () => {
                     };
                   });
                   setReviewListItems(selectedResources);
-
                 }
               }}
             />
