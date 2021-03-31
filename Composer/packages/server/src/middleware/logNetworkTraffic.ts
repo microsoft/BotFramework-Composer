@@ -5,17 +5,13 @@ import { NextFunction, Request, Response } from 'express';
 
 import { WebSocketServer } from '../directline/utils/webSocketServer';
 
-let hasHookedIntoSend = false;
 export function logNetworkTraffic(req: Request, res: Response, next?: NextFunction) {
-  if (!hasHookedIntoSend) {
-    // hook into .send() so that it stores the data it sends on the response object
-    const originalSend = res.send.bind(res);
-    res.send = (data) => {
-      (res as any).sentData = data;
-      return originalSend(data);
-    };
-    hasHookedIntoSend = true;
-  }
+  // hook into .send() so that it stores the data it sends on the response object
+  const originalSend = res.send.bind(res);
+  res.send = (data) => {
+    (res as any).sentData = data;
+    return originalSend(data);
+  };
 
   // when the request finishes, log the payload and status code to the client
   res.once('finish', () => {
