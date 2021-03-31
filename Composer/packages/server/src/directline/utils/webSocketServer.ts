@@ -9,13 +9,12 @@ import { Activity } from 'botframework-schema';
 import { Server as WSServer } from 'ws';
 import {
   ConversationActivityTraffic,
+  ConversationNetworkErrorItem,
   ConversationNetworkTrafficItem,
-  DirectLineLog,
 } from '@botframework-composer/types';
 
 import log from './logger';
 
-const socketErrorChannelKey = 'DL_ERROR_SOCKET';
 const socketTrafficChannelKey = 'DL_TRAFFIC_SOCKET';
 interface WebSocket {
   close(): void;
@@ -25,7 +24,6 @@ interface WebSocket {
 export class WebSocketServer {
   private static restServer: http.Server;
   private static servers: Record<string, WSServer> = {};
-  private static dLErrorsServer: WSServer | null = null;
   private static trafficServer: WSServer | null = null;
   private static sockets: Record<string, WebSocket> = {};
 
@@ -116,15 +114,12 @@ export class WebSocketServer {
         }
       });
 
-      const genericWebSocketHandler = (socketServer: WSServer | null, socketIdentifier: string) => (
-        req: express.Request,
-        res: express.Response
-      ) => {
+      app.use('/ws/traffic', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {
           return res.status(426).send('Connection must upgrade for web sockets.');
         }
 
-        if (!socketServer) {
+        if (!this.trafficServer) {
           const { head, socket } = (req as any).claimUpgrade();
 
           const wsServer = new WSServer({
@@ -132,62 +127,28 @@ export class WebSocketServer {
           });
 
           wsServer.on('connection', (socket, req) => {
-            this.sockets[socketIdentifier] = socket;
+            this.sockets[socketTrafficChannelKey] = socket;
 
             socket.on('close', () => {
-              socketServer = null;
-              delete this.sockets[socketIdentifier];
+              this.trafficServer = null;
+              delete this.sockets[socketTrafficChannelKey];
             });
           });
 
           wsServer.handleUpgrade(req as any, socket, head, (socket) => {
             wsServer.emit('connection', socket, req);
           });
-          socketServer = wsServer;
-        }
-      };
-
-      app.use('/ws/errors/createErrorChannel', (req: express.Request, res: express.Response) => {
-        if (!(req as any).claimUpgrade) {
-          return res.status(426).send('Connection must upgrade for web sockets.');
-        }
-
-        if (!this.dLErrorsServer) {
-          const { head, socket } = (req as any).claimUpgrade();
-
-          const wsServer = new WSServer({
-            noServer: true,
-          });
-
-          wsServer.on('connection', (socket, req) => {
-            this.sockets[socketErrorChannelKey] = socket;
-
-            socket.on('close', () => {
-              this.dLErrorsServer = null;
-              delete this.sockets[socketErrorChannelKey];
-            });
-          });
-
-          wsServer.handleUpgrade(req as any, socket, head, (socket) => {
-            wsServer.emit('connection', socket, req);
-          });
-          this.dLErrorsServer = wsServer;
+          this.trafficServer = wsServer;
         }
       });
-
-      app.use('/ws/traffic', genericWebSocketHandler(this.trafficServer, socketTrafficChannelKey));
 
       log(`Web Socket host server listening on ${this.port}...`);
       return this.port;
     }
   }
 
-  public static sendDLErrorsToSubscribers(logItem: DirectLineLog): void {
-    this.sockets[socketErrorChannelKey]?.send(JSON.stringify(logItem));
-  }
-
   public static sendTrafficToSubscribers(
-    data: Partial<ConversationActivityTraffic> | ConversationNetworkTrafficItem
+    data: Partial<ConversationActivityTraffic> | ConversationNetworkTrafficItem | ConversationNetworkErrorItem
   ): void {
     this.sockets[socketTrafficChannelKey]?.send(JSON.stringify(data));
   }
@@ -207,9 +168,8 @@ export class WebSocketServer {
       this.cleanUpConversation(conversationId);
     }
 
-    if (this.dLErrorsServer) {
-      this.sockets.errorSocket?.close();
-      this.dLErrorsServer?.close();
+    if (this.trafficServer) {
+      this.trafficServer.close();
     }
 
     if (this.restServer) {

@@ -8,13 +8,13 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import isEqual from 'lodash/isEqual';
 
-import { rootBotProjectIdSelector, webChatLogsState } from '../../../../../recoilModel';
+import { rootBotProjectIdSelector, webChatTraffic } from '../../../../../recoilModel';
 import { DebugPanelErrorIndicator } from '../DebugPanelErrorIndicator';
 import { DebugPanelTabHeaderProps } from '../types';
 
 export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
-  const logItems = useRecoilValue(webChatLogsState(rootBotId ?? ''));
+  const logItems = useRecoilValue(webChatTraffic(rootBotId ?? ''));
 
   const [hasUnreadLogs, setHasUnreadLogs] = useState(false);
   const [lastReadLogIds, setLastReadLogIds] = useState<string[]>([]);

@@ -134,7 +134,7 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
           editorSettings={{ fadedWhenReadOnly: false }}
           options={{
             folding: true,
-            minimap: { enabled: false /* not working? */, showSlider: 'mouseover' },
+            minimap: { enabled: false, showSlider: 'mouseover' },
             showFoldingControls: 'always',
             readOnly: true,
           }}
