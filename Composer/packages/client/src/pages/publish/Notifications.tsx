@@ -9,6 +9,8 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
 import { BotStatus } from './type';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 const cardContent = css`
   display: flex;
@@ -56,11 +58,11 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
             name: item.name,
             publishTarget: item.publishTarget,
           }),
-    type: 'pending',
+    type: item.status === 200 ? 'success' : 'error',
     onRenderCardContent: (props) => (
       <div css={cardContent}>
         <Icon css={infoType} iconName="CloudUpload" />
-        <Icon css={statusIconStyle} iconName={item.status === 200 ? 'SkypeCircleCheck' : 'CircleAdditionSolid'} />
+        <Icon css={statusIconStyle} iconName={item.status === 200 ? 'Completed' : 'CircleAdditionSolid'} />
         <div css={cardDetail}>
           <div css={cardDescription}>{props.description}</div>
         </div>
@@ -69,41 +71,91 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
   };
 };
 
-export const getSkillPublishedNotificationCardProps = (
-  item: BotStatus,
-  endpoint?: string,
-  manifestName?: string
-): CardProps => {
+export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: string): CardProps => {
+  const skillCardContent = css`
+    display: flex;
+    padding: 0 16px 16px 12px;
+    min-height: 64px;
+  `;
   const statusIconStyle = css({
     margin: '12px 0 0 -1px',
     width: '12px',
     height: '12px',
     fontSize: '12px',
-    color: item.status === 200 ? '#27AE60' : 'rgb(161, 159, 157)',
-    transform: item.status !== 200 ? 'rotate(45deg)' : '',
+    color: '#D92525',
   });
+  const errorType = css`
+    margin-top: 4px;
+    color: #d92525;
+  `;
+  const successType = css`
+    margin-top: 4px;
+    color: #27ae60;
+  `;
+  const cardTitle = css`
+    font-size: ${FontSizes.size16};
+    lint-height: 22px;
+    margin-right: 16px;
+  `;
+
+  const cardDescription = css`
+    text-size-adjust: none;
+    font-size: ${FontSizes.size10};
+    margin-top: 8px;
+    margin-right: 16px;
+    word-break: break-word;
+  `;
+
+  const linkButton = css`
+    color: #0078d4;
+    float: right;
+    font-size: 12px;
+    height: auto;
+    margin: 10px 8px 0 0;
+  `;
   return {
-    title: '',
+    title: item.status === 200 ? formatMessage('Your skill is ready to be shared!') : '',
     description:
       item.status === 200
-        ? formatMessage(`You have successfully published {name} to {publishTarget}`, {
-            name: item.name,
-            publishTarget: item.publishTarget,
-          })
-        : formatMessage(`Publishing {name} to {publishTarget} failed.`, {
-            name: item.name,
-            publishTarget: item.publishTarget,
-          }),
-    type: 'pending',
-    onRenderCardContent: (props) => (
-      <div css={cardContent}>
-        <Icon css={infoType} iconName="CloudUpload" />
-        <Icon css={statusIconStyle} iconName={item.status === 200 ? 'SkypeCircleCheck' : 'CircleAdditionSolid'} />
-        <div css={cardDetail}>
-          <div css={cardDescription}>{props.description}</div>
-        </div>
-      </div>
-    ),
+        ? formatMessage(
+            'Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab.'
+          )
+        : formatMessage(`Your skill could not be published.`),
+    type: item.status === 200 ? 'success' : 'error',
+    onRenderCardContent: (props) => {
+      const { title, description } = props;
+      if (item.status === 200) {
+        return (
+          <div css={skillCardContent}>
+            <Icon css={successType} iconName="SkypeCircleCheck" />
+            <div css={cardDetail}>
+              <div css={cardTitle}>{title}</div>
+              {description && <div css={cardDescription}>{description}</div>}
+              {url && (
+                <div css={linkButton}>
+                  {url}
+                  <IconButton
+                    iconProps={{ iconName: 'copy' }}
+                    styles={{ icon: { fontSize: '12px' } }}
+                    onClick={() => navigator.clipboard.writeText(url)}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div css={cardContent}>
+            <Icon css={errorType} iconName="CloudUpload" />
+            <Icon css={statusIconStyle} iconName="StatusCircleErrorX" />
+            <div css={cardDetail}>
+              <div css={cardDescription}>{props.description}</div>
+            </div>
+          </div>
+        );
+      }
+    },
   };
 };
 
