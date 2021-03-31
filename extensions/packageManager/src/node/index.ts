@@ -9,6 +9,7 @@ import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 import { IFeed, IPackageDefinition, IPackageQuery, IPackageSource, PackageSourceType } from './feeds/feedInterfaces';
 import { FeedFactory } from './feeds/feedFactory';
+import formatMessage from 'format-message';
 
 const API_ROOT = '/api';
 
@@ -60,13 +61,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // Read the list of sources from the config file.
       const userStoredSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      const botComponentTag: string = 'msbot-component';
+      const botComponentTag = 'msbot-component';
 
       // Default sources
       let packageSources: IPackageSource[] = [
         {
           key: 'nuget',
-          text: 'nuget',
+          text: formatMessage('nuget'),
           url: 'https://api.nuget.org/v3/index.json',
           readonly: true,
           defaultQuery: {
@@ -78,7 +79,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         },
         {
           key: 'nuget-community',
-          text: 'community packages',
+          text: formatMessage('community packages'),
           url: 'https://api.nuget.org/v3/index.json',
           readonly: true,
           defaultQuery: {
