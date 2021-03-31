@@ -630,7 +630,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   placeholder={formatMessage('Select one')}
                   styles={{ root: { paddingBottom: '8px' } }}
                   onChange={(_e, o: IDropdownOption) => {
-                    setSubscription(o.key as string);
+                    setCurrentSubscription(o.key as string);
                   }}
                   onRenderLabel={onRenderLabel}
                 />
