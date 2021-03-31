@@ -32,6 +32,7 @@ import {
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { ResourceGroup } from '@azure/arm-resources/esm/models';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -42,9 +43,11 @@ import {
   getPreview,
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
+  getResourceGroups,
 } from './api';
 import { ChooseResourcesList } from './ChooseResourcesList';
 import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
+import { ResourceGroupPicker } from './ResourceGroupPicker';
 
 // ---------- Styles ---------- //
 
@@ -236,11 +239,15 @@ export const AzureProvisionDialog: React.FC = () => {
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [choice, setChoice] = useState(extensionState.choice);
-  const [currentSubscription, setSubscription] = useState<string>(extensionState.subscriptionId);
-  const [currentResourceGroup, setResourceGroup] = useState<string>(extensionState.resourceGroup);
+  const [currentSubscription, setCurrentSubscription] = useState<string>(extensionState.subscriptionId);
+
+  const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
+  const [isNewResourceGroupName, setIsNewResourceGroupName] = useState<boolean>(true);
+  const [currentResourceGroupName, setCurrentResourceGroupName] = useState<string>(extensionState.resourceGroup);
+  const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
+
   const [currentHostName, setHostName] = useState(extensionState.hostName);
   const [errorHostName, setErrorHostName] = useState('');
-  const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
   const [currentLocation, setLocation] = useState<string>(currentConfig?.region || extensionState.location);
   const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(
     currentConfig?.settings?.luis?.region || extensionState.luisLocation
@@ -252,7 +259,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState<any>();
 
-  const [page, setPage] = useState<string>();
+  const [page, setPage] = useState<string>(PageTypes.ConfigProvision);
   const [listItems, setListItems] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
   const isMounted = useRef<boolean>();
@@ -342,10 +349,10 @@ export const AzureProvisionDialog: React.FC = () => {
         setSelectedTenant(currentConfig.tennantId);
       }
       if (currentConfig.subscriptionId) {
-        setSubscription(currentConfig.subscriptionId);
+        setCurrentSubscription(currentConfig.subscriptionId);
       }
       if (currentConfig.resourceGroup) {
-        setResourceGroup(currentConfig.resourceGroup);
+        setCurrentResourceGroupName(currentConfig.resourceGroup);
       }
       if (currentConfig.hostname) {
         setHostName(currentConfig.hostname);
@@ -377,6 +384,28 @@ export const AzureProvisionDialog: React.FC = () => {
       getResources();
     }
   }, [token]);
+
+  const loadResourceGroups = async () => {
+    if (token && currentSubscription) {
+      try {
+        const resourceGroups = await getResourceGroups(token, currentSubscription);
+        setResourceGroups(resourceGroups);
+
+        // After the resource groups load, isNewResourceGroupName can be determined
+        setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === currentResourceGroupName));
+      } catch (err) {
+        // todo: how do we handle API errors in this component
+        console.log('ERROR', err);
+        setResourceGroups(undefined);
+      }
+    } else {
+      setResourceGroups(undefined);
+    }
+  };
+
+  useEffect(() => {
+    loadResourceGroups();
+  }, [token, currentSubscription]);
 
   const subscriptionOption = useMemo(() => {
     return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
@@ -411,25 +440,6 @@ export const AzureProvisionDialog: React.FC = () => {
       }, 500);
     },
     [publishType, currentSubscription, token]
-  );
-
-  const checkResourceGroupName = useCallback((group: string) => {
-    if (group.match(/^[-\w._()]+$/)) {
-      setErrorResourceGroupName('');
-    } else {
-      setErrorResourceGroupName(
-        'Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis and cannot end in a period.'
-      );
-    }
-  }, []);
-
-  const updateCurrentResourceGroup = useMemo(
-    () => (e, newGroup) => {
-      setResourceGroup(newGroup);
-      // check resource group name
-      checkResourceGroupName(newGroup);
-    },
-    [checkResourceGroupName]
   );
 
   const newHostName = useCallback(
@@ -547,168 +557,180 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
-  const isDisAble = useMemo(() => {
+  const isNextDisabled = useMemo(() => {
     return (
       !currentSubscription ||
+      !currentResourceGroupName ||
       !currentHostName ||
-      errorHostName !== '' ||
-      errorResourceGroupName !== '' ||
-      !currentLocation
+      !currentLocation ||
+      errorResourceGroupName ||
+      errorHostName !== ''
     );
-  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName]);
+  }, [
+    currentSubscription,
+    currentResourceGroupName,
+    currentHostName,
+    currentLocation,
+    errorResourceGroupName,
+    errorHostName,
+  ]);
 
   const isSelectAddResources = useMemo(() => {
     return enabledResources.length > 0 || requireResources.length > 0;
   }, [enabledResources]);
 
+  const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
+
   const PageFormConfig = (
-    <div style={{ display: 'flex', height: '100%' }}>
-      <div style={{ flex: '0 0 auto', marginRight: '2rem' }}>
-        <ChoiceGroup
-          options={choiceOptions}
-          selectedKey={choice?.key || 'create'}
-          onChange={(_e, option: IChoiceGroupOption) => {
-            setChoice(option);
-          }}
-        />
-      </div>
-      <div style={{ flex: 1, height: '100%' }}>
-        <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
-          {subscriptionOption?.length > 0 && choice.key === 'create' && (
-            <form style={{ width: '100%' }}>
-              <Dropdown
-                required
-                disabled={allTenants.length === 1 || currentConfig?.tenantId}
-                errorMessage={loginErrorMsg}
-                label={formatMessage('Azure Directory')}
-                options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-                selectedKey={selectedTenant}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={(_e, o) => {
-                  setSelectedTenant(o.key as string);
-                }}
-              />
-              <Dropdown
-                required
-                ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-                defaultSelectedKey={currentSubscription}
-                disabled={currentConfig?.subscriptionId}
-                errorMessage={
-                  currentUser && subscriptionOption?.length < 1
-                    ? formatMessage(
-                        'Your subscription list is empty, please add your subscription, or login with another account.'
-                      )
-                    : undefined
-                }
-                label={formatMessage('Subscription')}
-                options={subscriptionOption}
-                placeholder={formatMessage('Select one')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={(_e, o: IDropdownOption) => {
-                  setSubscription(o.key as string);
-                }}
-                onRenderLabel={onRenderLabel}
-              />
-              <TextField
-                required
-                ariaLabel={formatMessage(
-                  'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
-                )}
-                defaultValue={currentResourceGroup}
-                disabled={currentConfig?.resourceGroup}
-                errorMessage={errorResourceGroupName}
-                label={formatMessage('Resource group name')}
-                placeholder={formatMessage('Name of your new resource group')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={updateCurrentResourceGroup}
-                onRenderLabel={onRenderLabel}
-              />
-              <TextField
-                required
-                ariaLabel={formatMessage(
-                  'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
-                )}
-                defaultValue={currentHostName}
-                disabled={currentConfig?.hostname || currentConfig?.name}
-                errorMessage={errorHostName}
-                label={formatMessage('Resource name')}
-                placeholder={formatMessage('Name of your services')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={newHostName}
-                onRenderLabel={onRenderLabel}
-              />
-              {currentConfig?.region ? (
-                <TextField
-                  required
-                  defaultValue={currentConfig?.region}
-                  disabled={currentConfig?.region}
-                  label={formatMessage('Region')}
-                  styles={{ root: { paddingBottom: '8px' } }}
-                  onRenderLabel={onRenderLabel}
-                />
-              ) : (
+    <ScrollablePane
+      data-is-scrollable="true"
+      scrollbarVisibility={ScrollbarVisibility.auto}
+      style={{ height: 'calc(100vh - 64px)' }}
+    >
+      <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ flex: '0 0 auto', marginRight: '2rem' }}>
+          <ChoiceGroup
+            options={choiceOptions}
+            selectedKey={choice?.key || 'create'}
+            onChange={(_e, option: IChoiceGroupOption) => {
+              setChoice(option);
+            }}
+          />
+        </div>
+        <div style={{ flex: 1, height: '100%' }}>
+          <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
+            {subscriptionOption?.length > 0 && choice.key === 'create' && (
+              <form style={{ width: '100%' }}>
                 <Dropdown
                   required
-                  defaultSelectedKey={currentLocation}
-                  label={formatMessage('Region')}
-                  options={deployLocationsOption}
-                  placeholder={formatMessage('Select one')}
+                  disabled={allTenants.length === 1 || currentConfig?.tenantId}
+                  errorMessage={loginErrorMsg}
+                  label={formatMessage('Azure Directory')}
+                  options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+                  selectedKey={selectedTenant}
                   styles={{ root: { paddingBottom: '8px' } }}
-                  onChange={updateCurrentLocation}
+                  onChange={(_e, o) => {
+                    setSelectedTenant(o.key as string);
+                  }}
                 />
-              )}
-              {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
-                <TextField
-                  disabled
-                  required
-                  defaultValue={currentConfig?.settings?.luis?.region}
-                  label={formatMessage('Region for Luis')}
-                  styles={{ root: { paddingBottom: '8px' } }}
-                  onRenderLabel={onRenderLabel}
-                />
-              )}
-              {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
                 <Dropdown
                   required
-                  defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
-                  label={formatMessage('Region for Luis')}
-                  options={luisLocationsOption}
+                  ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
+                  defaultSelectedKey={currentSubscription}
+                  disabled={currentConfig?.subscriptionId}
+                  errorMessage={
+                    currentUser && subscriptionOption?.length < 1
+                      ? formatMessage(
+                          'Your subscription list is empty, please add your subscription, or login with another account.'
+                        )
+                      : undefined
+                  }
+                  label={formatMessage('Subscription')}
+                  options={subscriptionOption}
                   placeholder={formatMessage('Select one')}
-                  onChange={updateLuisLocation}
+                  styles={{ root: { paddingBottom: '8px' } }}
+                  onChange={(_e, o: IDropdownOption) => {
+                    setCurrentSubscription(o.key as string);
+                  }}
+                  onRenderLabel={onRenderLabel}
                 />
-              )}
-            </form>
-          )}
-          {choice.key === 'import' && (
-            <div style={{ width: '100%', height: '100%' }}>
-              <div
-                style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: '#323130',
-                  padding: '5px 0px',
-                }}
-              >
-                {formatMessage('Publish Configuration')}
+                <ResourceGroupPicker
+                  newResourceGroupName={isNewResourceGroupName ? currentResourceGroupName : undefined}
+                  resourceGroupNames={resourceGroupNames}
+                  selectedResourceGroupName={isNewResourceGroupName ? undefined : currentResourceGroupName}
+                  onChange={(choice) => {
+                    setIsNewResourceGroupName(choice.isNew);
+                    setCurrentResourceGroupName(choice.name);
+                    setErrorResourceGroupName(choice.errorMessage);
+                  }}
+                />
+                <TextField
+                  required
+                  ariaLabel={formatMessage(
+                    'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
+                  )}
+                  defaultValue={currentHostName}
+                  disabled={currentConfig?.hostname || currentConfig?.name}
+                  errorMessage={errorHostName}
+                  label={formatMessage('Resource name')}
+                  placeholder={formatMessage('Name of your services')}
+                  styles={{ root: { paddingBottom: '8px' } }}
+                  onChange={newHostName}
+                  onRenderLabel={onRenderLabel}
+                />
+                {currentConfig?.region ? (
+                  <TextField
+                    required
+                    defaultValue={currentConfig?.region}
+                    disabled={currentConfig?.region}
+                    label={formatMessage('Region')}
+                    styles={{ root: { paddingBottom: '8px' } }}
+                    onRenderLabel={onRenderLabel}
+                  />
+                ) : (
+                  <Dropdown
+                    required
+                    defaultSelectedKey={currentLocation}
+                    label={formatMessage('Region')}
+                    options={deployLocationsOption}
+                    placeholder={formatMessage('Select one')}
+                    styles={{ root: { paddingBottom: '8px' } }}
+                    onChange={updateCurrentLocation}
+                  />
+                )}
+                {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
+                  <TextField
+                    disabled
+                    required
+                    defaultValue={currentConfig?.settings?.luis?.region}
+                    label={formatMessage('Region for Luis')}
+                    styles={{ root: { paddingBottom: '8px' } }}
+                    onRenderLabel={onRenderLabel}
+                  />
+                )}
+                {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
+                  <Dropdown
+                    required
+                    defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
+                    label={formatMessage('Region for Luis')}
+                    options={luisLocationsOption}
+                    placeholder={formatMessage('Select one')}
+                    onChange={updateLuisLocation}
+                  />
+                )}
+              </form>
+            )}
+            {choice.key === 'import' && (
+              <div style={{ width: '100%', height: '100%' }}>
+                <div
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#323130',
+                    padding: '5px 0px',
+                  }}
+                >
+                  {formatMessage('Publish Configuration')}
+                </div>
+                <JsonEditor
+                  height={300}
+                  id={publishType}
+                  schema={getSchema()}
+                  value={currentConfig || importConfig}
+                  onChange={(value) => {
+                    setEditorError(false);
+                    setImportConfig(value);
+                  }}
+                  onError={() => {
+                    setEditorError(true);
+                  }}
+                />
               </div>
-              <JsonEditor
-                height={300}
-                id={publishType}
-                schema={getSchema()}
-                value={currentConfig || importConfig}
-                onChange={(value) => {
-                  setEditorError(false);
-                  setImportConfig(value);
-                }}
-                onError={() => {
-                  setEditorError(true);
-                }}
-              />
-            </div>
-          )}
-        </Suspense>
+            )}
+          </Suspense>
+        </div>
       </div>
-    </div>
+    </ScrollablePane>
   );
 
   useEffect(() => {
@@ -805,7 +827,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 clearAll();
                 setItem(profileName, {
                   subscriptionId: currentSubscription,
-                  resourceGroup: currentResourceGroup,
+                  resourceGroup: currentResourceGroupName,
                   hostName: currentHostName,
                   location: currentLocation,
                   luisLocation: currentLuisLocation,
@@ -818,7 +840,7 @@ export const AzureProvisionDialog: React.FC = () => {
             />
             {choice.key === 'create' ? (
               <PrimaryButton
-                disabled={isDisAble}
+                disabled={isNextDisabled}
                 style={{ margin: '0 4px' }}
                 text={formatMessage('Next: Review')}
                 onClick={() => {
@@ -872,7 +894,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   return {
                     ...item,
                     region: region,
-                    resourceGroup: currentConfig?.resourceGroup || currentResourceGroup,
+                    resourceGroup: currentConfig?.resourceGroup || currentResourceGroupName,
                   };
                 });
                 setReviewListItems(selectedResources);
@@ -886,7 +908,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
@@ -902,14 +924,14 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
             <PrimaryButton
-              disabled={isDisAble}
+              disabled={isNextDisabled}
               style={{ margin: '0 4px' }}
               text={formatMessage('Done')}
               onClick={() => {
                 const selectedResources = requireResources.concat(enabledResources);
                 onSubmit({
                   subscription: currentSubscription,
-                  resourceGroup: currentResourceGroup,
+                  resourceGroup: currentResourceGroupName,
                   hostname: currentHostName,
                   location: currentLocation,
                   luisLocation: currentLuisLocation || currentLocation,
@@ -945,9 +967,9 @@ export const AzureProvisionDialog: React.FC = () => {
     page,
     choice,
     isEditorError,
-    isDisAble,
+    isNextDisabled,
     currentSubscription,
-    currentResourceGroup,
+    currentResourceGroupName,
     currentHostName,
     currentLocation,
     publishType,
