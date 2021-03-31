@@ -16,7 +16,6 @@ import { ExternalService } from './ExternalService';
 import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
-import { DeleteBotButton } from './DeleteBotButton';
 import AdapterSection from './adapters/AdapterSection';
 import { AllowedCallers } from './AllowedCallers';
 
@@ -57,7 +56,6 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
       </div>
       <AllowedCallers projectId={projectId} />
-      {isRootBot && <DeleteBotButton projectId={projectId} scrollToSectionId={scrollToSectionId} />}
     </div>
   );
 };
