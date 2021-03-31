@@ -89,6 +89,7 @@ export type LuIntentSection = {
   Entities?: LuEntity[];
   Children?: LuIntentSection[];
   range?: IRange;
+  fileId?: string;
 };
 
 export type LuParsed = {
@@ -113,6 +114,7 @@ export type LuFile = {
   content: string;
   diagnostics: IDiagnostic[];
   intents: LuIntentSection[];
+  allIntents: LuIntentSection[];
   empty: boolean;
   resource: LuParseResource;
   imports: { id: string; path: string; description: string }[];
