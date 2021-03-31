@@ -259,7 +259,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState<any>();
 
-  const [page, setPage] = useState<string>();
+  const [page, setPage] = useState<string>(PageTypes.ConfigProvision);
   const [listItems, setListItems] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
   const isMounted = useRef<boolean>();
