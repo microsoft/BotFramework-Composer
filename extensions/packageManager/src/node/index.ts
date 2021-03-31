@@ -58,7 +58,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     },
     getFeeds: async function (req, res) {
       // Read the list of sources from the config file.
-      let storedSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
+      const userStoredSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
+
+      const botComponentTag: string = 'msbot-component';
 
       // Default sources
       let packageSources: IPackageSource[] = [
@@ -70,7 +72,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           defaultQuery: {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: 'microsoft.bot.components+tags:msbot-component',
+            query: `microsoft.bot.components+tags:${botComponentTag}`,
           },
           type: PackageSourceType.NuGet,
         },
@@ -82,19 +84,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           defaultQuery: {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: 'tags:msbot-component',
+            query: `tags:${botComponentTag}`,
           },
           type: PackageSourceType.NuGet,
         },
       ];
 
       // If there are package sources stored in the user profile
-      if (storedSources) {
+      if (userStoredSources) {
         // Extract list of read-only sources
         const readOnlyKeys = packageSources.map((s) => s.key);
 
         // Add user sources to the package sources, excluding modifications of the read-only ones
-        packageSources = packageSources.concat(storedSources.filter((s) => !readOnlyKeys.includes(s.key)));
+        packageSources = packageSources.concat(userStoredSources.filter((s) => !readOnlyKeys.includes(s.key)));
       }
 
       composer.store.write('feeds', packageSources);
