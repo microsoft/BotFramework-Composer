@@ -3,8 +3,8 @@
 import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
-import { useState, useMemo, useEffect, Fragment, useCallback, useRef, Suspense } from 'react';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
@@ -22,7 +22,6 @@ import {
   TooltipHost,
   Icon,
   TextField,
-  Spinner,
   Persona,
   IPersonaProps,
   PersonaSize,
@@ -66,6 +65,12 @@ type ProvisionFormData = {
 const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
+
+const labelTooltipStyles = {
+  root: {
+    userSelect: 'none',
+  },
+};
 
 const iconStyle = (required) => {
   return {
@@ -136,7 +141,7 @@ const onRenderLabel = (props) => {
         {' '}
         {props.label}{' '}
       </div>
-      <TooltipHost content={props.ariaLabel}>
+      <TooltipHost content={props.ariaLabel} styles={labelTooltipStyles}>
         <Icon iconName="Info" styles={iconStyle(props.required)} />
       </TooltipHost>
     </div>
@@ -269,6 +274,7 @@ export const AzureProvisionDialog: React.FC = () => {
   // form options
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
+  const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
@@ -385,8 +391,10 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      const resources = await getResourceList(currentProjectId(), publishType);
-      setExtensionResourceOptions(resources);
+      if (isMounted.current) {
+        const resources = await getResourceList(currentProjectId(), publishType);
+        setExtensionResourceOptions(resources);
+      }
     } catch (err) {
       // todo: how do we handle API errors in this component
       // eslint-disable-next-line no-console
@@ -396,11 +404,26 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      getSubscriptions(token).then((data) => {
-        if (isMounted.current) {
-          setSubscriptions(data);
-        }
-      });
+      setSubscriptionsErrorMessage(undefined);
+      getSubscriptions(token)
+        .then((data) => {
+          if (isMounted.current) {
+            setSubscriptions(data);
+            if (data.length === 0) {
+              setSubscriptionsErrorMessage(
+                formatMessage(
+                  'Your subscription list is empty, please add your subscription, or login with another account.'
+                )
+              );
+            }
+          }
+        })
+        .catch((err) => {
+          if (isMounted.current) {
+            setSubscriptionsErrorMessage(err.message);
+          }
+        });
+
       getResources();
     }
   }, [token]);
@@ -409,14 +432,18 @@ export const AzureProvisionDialog: React.FC = () => {
     if (token && formData.subscriptionId) {
       try {
         const resourceGroups = await getResourceGroups(token, formData.subscriptionId);
-        setResourceGroups(resourceGroups);
+        if (isMounted.current) {
+          setResourceGroups(resourceGroups);
 
-        // After the resource groups load, isNewResourceGroupName can be determined
-        setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === formData.resourceGroup));
+          // After the resource groups load, isNewResourceGroupName can be determined
+          setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === formData.resourceGroup));
+        }
       } catch (err) {
         // todo: how do we handle API errors in this component
         console.log('ERROR', err);
-        setResourceGroups(undefined);
+        if (isMounted.current) {
+          setResourceGroups(undefined);
+        }
       }
     } else {
       setResourceGroups(undefined);
@@ -427,9 +454,9 @@ export const AzureProvisionDialog: React.FC = () => {
     loadResourceGroups();
   }, [token, formData.subscriptionId]);
 
-  const subscriptionOption = useMemo(() => {
-    return (token && subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }))) || [];
-  }, [token, subscriptions]);
+  const subscriptionOptions = useMemo(() => {
+    return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
+  }, [subscriptions]);
 
   const deployLocationsOption = useMemo((): IDropdownOption[] => {
     return (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
@@ -571,6 +598,7 @@ export const AzureProvisionDialog: React.FC = () => {
         !formData.resourceGroup ||
         !formData.hostname ||
         !formData.region ||
+        subscriptionsErrorMessage ||
         errorResourceGroupName ||
         errorHostName !== ''
     );
@@ -606,40 +634,30 @@ export const AzureProvisionDialog: React.FC = () => {
           />
         </div>
         <div style={{ flex: 1, height: '100%' }}>
-          {subscriptionOption?.length > 0 && formData.choice === 'create' && (
+          {formData.choice === 'create' && (
             <form style={{ width: '100%' }}>
-              {!userShouldProvideTokens() && (
-                <Dropdown
-                  required
-                  ariaLabel={formatMessage(
-                    'Switching your Azure directory will change which subscriptions you can access'
-                  )}
-                  disabled={allTenants.length === 1 || currentConfig?.tenantId}
-                  errorMessage={loginErrorMsg}
-                  label={formatMessage('Azure Directory')}
-                  options={token ? allTenants.map((t) => ({ key: t.tenantId, text: t.displayName })) : []}
-                  placeholder={formatMessage('Select one')}
-                  selectedKey={formData.tenantId}
-                  styles={{ root: { paddingBottom: '8px' } }}
-                  onChange={(_e, o) => {
-                    updateFormData('tenantId', o.key as string);
-                  }}
-                  onRenderLabel={onRenderLabel}
-                />
-              )}
+              <Dropdown
+                ariaLabel={formatMessage(
+                  'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
+                )}
+                disabled={allTenants.length === 1 || currentConfig?.tenantId}
+                errorMessage={loginErrorMsg}
+                label={formatMessage('Azure Directory')}
+                options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+                selectedKey={formData.tenantId}
+                styles={{ root: { paddingBottom: '8px' } }}
+                onChange={(_e, o) => {
+                  updateFormData('tenantId', o.key as string);
+                }}
+                onRenderLabel={onRenderLabel}
+              />
               <Dropdown
                 required
                 ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
                 disabled={currentConfig?.subscriptionId}
-                errorMessage={
-                  currentUser && subscriptionOption?.length < 1
-                    ? formatMessage(
-                        'Your subscription list is empty, please add your subscription, or login with another account.'
-                      )
-                    : undefined
-                }
+                errorMessage={subscriptionsErrorMessage}
                 label={formatMessage('Subscription')}
-                options={subscriptionOption}
+                options={subscriptionOptions}
                 placeholder={formatMessage('Select one')}
                 selectedKey={formData.subscriptionId}
                 styles={{ root: { paddingBottom: '8px' } }}
@@ -749,7 +767,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   items={optionalListItems}
                   selectedKeys={selectedResourceKeys}
                   onSelectionChanged={(keys) => {
-                    const newSelection = listItems.filter((item) => item.required === true || keys.includes(item.key));
+                    const newSelection = optionalListItems.filter((item) => keys.includes(item.key));
                     updateFormData('enabledResources', newSelection);
                   }}
                 />
@@ -859,7 +877,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 setPage(PageTypes.ReviewResource);
                 setTitle(DialogTitle.REVIEW);
-                let selectedResources = formData.enabledResources.slice();
+                let selectedResources = formData.requiredResources.concat(formData.enabledResources);
                 selectedResources = selectedResources.map((item) => {
                   let region = currentConfig?.region || formData.region;
                   if (item.key.includes('luis')) {
