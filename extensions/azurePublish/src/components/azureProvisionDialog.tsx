@@ -290,7 +290,7 @@ export const AzureProvisionDialog: React.FC = () => {
     } --name ${currentHostName ?? '<RESOURCE NAME>'}
     --appPassword=<16 CHAR PASSWORD>
     --location=${currentLocation || 'westus'}
-    --resourceGroup=${currentResourceGroup || '<RESOURCE GROUP NAME>'}
+    --resourceGroup=${currentResourceGroupName || '<RESOURCE GROUP NAME>'}
     --createLuisResource=${createLuisResource}
     --createLuisAuthoringResource=${createLuisAuthoringResource}
     --createCosmosDb=${createCosmosDb}
