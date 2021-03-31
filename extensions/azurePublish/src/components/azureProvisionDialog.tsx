@@ -349,10 +349,10 @@ export const AzureProvisionDialog: React.FC = () => {
         setSelectedTenant(currentConfig.tennantId);
       }
       if (currentConfig.subscriptionId) {
-        setSubscription(currentConfig.subscriptionId);
+        setCurrentSubscription(currentConfig.subscriptionId);
       }
       if (currentConfig.resourceGroup) {
-        setResourceGroup(currentConfig.resourceGroup);
+        setCurrentResourceGroupName(currentConfig.resourceGroup);
       }
       if (currentConfig.hostname) {
         setHostName(currentConfig.hostname);
@@ -362,7 +362,7 @@ export const AzureProvisionDialog: React.FC = () => {
         );
       }
     }
-  }, [selectedTenant]);
+  }, [currentConfig]);
 
   const getResources = async () => {
     try {
@@ -384,27 +384,6 @@ export const AzureProvisionDialog: React.FC = () => {
       getResources();
     }
   }, [token]);
-
-  useEffect(() => {
-    if (currentConfig) {
-      if (currentConfig.tennantId) {
-        setSelectedTenant(currentConfig.tennantId);
-      }
-      if (currentConfig.subscriptionId) {
-        setCurrentSubscription(currentConfig.subscriptionId);
-      }
-      if (currentConfig.resourceGroup) {
-        setCurrentResourceGroupName(currentConfig.resourceGroup);
-      }
-      if (currentConfig.hostname) {
-        setHostName(currentConfig.hostname);
-      } else if (currentConfig.name) {
-        setHostName(
-          currentConfig.environment ? `${currentConfig.name}-${currentConfig.environment}` : currentConfig.name
-        );
-      }
-    }
-  }, [currentConfig]);
 
   const loadResourceGroups = async () => {
     if (token && currentSubscription) {
