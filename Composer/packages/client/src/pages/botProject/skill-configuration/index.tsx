@@ -16,9 +16,9 @@ type Props = {
 
 export const SkillConfiguration: React.FC<Props> = ({ projectId }) => {
   return (
-    <CollapsableWrapper title={formatMessage('Skill configuration')} titleStyle={title}>
-      <SkillToggle projectId={projectId} />
+    <CollapsableWrapper title={formatMessage('Allowed callers')} titleStyle={title}>
       <AllowedCallers projectId={projectId} />
+      <SkillToggle projectId={projectId} />
     </CollapsableWrapper>
   );
 };
