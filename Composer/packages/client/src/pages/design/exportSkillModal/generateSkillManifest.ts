@@ -13,10 +13,11 @@ import {
   PublishTarget,
 } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension-client';
+import { luIndexer } from '@bfc/indexers';
+
+import { createManifestFile } from '../../../utils/manifestFileUtil';
 
 import { Activities, Activity, activityHandlerMap, ActivityTypes, DispatchModels } from './constants';
-import { createManifestFile } from '../../../utils/manifestFileUtil';
-import { luIndexer } from '@bfc/indexers';
 
 const getActivityType = (kind: SDKKinds): ActivityTypes | undefined => activityHandlerMap[kind];
 
@@ -142,11 +143,11 @@ export const generateDispatchModels = (
   const baseEndpointUrl = `https://${config.hostname}.azurewebsites.net/manifests`;
 
   for (const rootLuFile of rootLuFiles) {
-    const currentFileName = `skill-${rootLuFile.id}.lu`;
+    const currentFileName = `skill-${rootLuFile.id}`;
     const parsedLuFile = luIndexer.parse(rootLuFile.content, rootLuFile.id, {});
     const contents = parsedLuFile.intents.map((x) => {
       if (intents.find((intent) => intent == x.Name) != -1) {
-        return x.Body;
+        return [`# ${x.Name}`, x.Body].join('\n');
       }
     });
     const mergedContents = contents.join('\n');

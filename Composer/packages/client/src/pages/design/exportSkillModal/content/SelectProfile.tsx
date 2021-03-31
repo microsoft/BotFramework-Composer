@@ -1,18 +1,17 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { css, Dropdown, Icon, IDropdownOption, PrimaryButton, TextField, TooltipHost } from 'office-ui-fabric-react';
+import { css, Dropdown, Icon, IDropdownOption, TextField, TooltipHost } from 'office-ui-fabric-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import {
-  botDisplayNameState,
-  currentTargetState,
-  dispatcherState,
-  settingsState,
-  skillManifestsState,
-} from '../../../../recoilModel';
+
+import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
 import { PublishTargets } from '../../../botProject/PublishTargets';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
-import Publish from '../../../publish/Publish';
 import { ContentProps, VERSION_REGEX } from '../constants';
 
 const styles = {
@@ -89,7 +88,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
         setCurrentTarget(target);
         updateCurrentTarget(projectId, target);
         const config = JSON.parse(target.configuration);
-        setEndpointUrl(`https://${config.hostname}.azurewebsites.net`);
+        setEndpointUrl(`https://${config.hostname}.azurewebsites.net/api/messages`);
         setAppId(config.settings.MicrosoftAppId);
 
         setSkillManifest({
@@ -140,20 +139,6 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
 
   const settings = useRecoilValue(settingsState(projectId));
 
-  const OnEndpointChange = useMemo(
-    () => (e, newValue) => {
-      setEndpointUrl(newValue);
-    },
-    [setEndpointUrl]
-  );
-
-  const OnAppIdChange = useMemo(
-    () => (e, newValue) => {
-      setAppId(newValue);
-    },
-    [setAppId]
-  );
-
   useEffect(() => {
     setPublishingTargets(settings.publishTargets || []);
   }, [settings]);
@@ -177,22 +162,22 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
         onChange={updateCurrentProfile}
       />
       <TextField
+        disabled
         required
         ariaLabel={formatMessage('The endpoint url')}
         label={formatMessage('Endpoint Url')}
         placeholder={'The endpoint url of your web app resource'}
         styles={{ root: { paddingBottom: '8px' } }}
-        onChange={OnEndpointChange}
         value={endpointUrl}
         onRenderLabel={onRenderLabel}
       />
       <TextField
+        disabled
         required
         ariaLabel={formatMessage('The app id of your application registration')}
         label={formatMessage('Microsoft App Id')}
         placeholder={'The app id'}
         styles={{ root: { paddingBottom: '8px' } }}
-        onChange={OnAppIdChange}
         value={appId}
         onRenderLabel={onRenderLabel}
       />

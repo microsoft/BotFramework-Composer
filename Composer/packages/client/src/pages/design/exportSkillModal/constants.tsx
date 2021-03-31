@@ -21,6 +21,7 @@ import {
   SelectTriggers,
 } from './content';
 import { SelectProfile } from './content/SelectProfile';
+import { AddCallers } from './content/AddCallers';
 
 export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
 
@@ -100,6 +101,8 @@ export interface ContentProps {
   value: { [key: string]: any };
   onChange: (_: any) => void;
   projectId: string;
+  callers: string[];
+  setCallers: (callers: string[]) => void;
 }
 
 interface Button {
@@ -137,6 +140,7 @@ export enum ManifestEditorSteps {
   SELECT_DIALOGS = 'SELECT_DIALOGS',
   SELECT_TRIGGERS = 'SELECT_TRIGGERS',
   SELECT_PROFILE = 'SELECT_PROFILE',
+  ADD_CALLERS = 'ADD_CALLERS',
 }
 
 export const order: ManifestEditorSteps[] = [
@@ -145,6 +149,7 @@ export const order: ManifestEditorSteps[] = [
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
   ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
+  ManifestEditorSteps.ADD_CALLERS,
   ManifestEditorSteps.SELECT_PROFILE,
   // ManifestEditorSteps.MANIFEST_REVIEW,
   // ManifestEditorSteps.SAVE_MANIFEST,
@@ -204,7 +209,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.MANIFEST_DESCRIPTION]: {
     buttons: [cancelButton, nextButton],
     content: Description,
-    editJson: true,
+    editJson: false,
     title: () => formatMessage('Describe your skill'),
     subText: () => formatMessage('To make your bot available for others as a skill, we need to generate a manifest.'),
     validate,
@@ -217,30 +222,36 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
         text: () => formatMessage('Generate and Publish'),
         onClick: ({ generateManifest, onNext, onPublish }) => () => {
           generateManifest();
-          onNext({ dismiss: true, save: true });
+          onNext();
           onPublish();
         },
       },
     ],
-    editJson: true,
+    editJson: false,
     content: SelectProfile,
     subText: () =>
       formatMessage('We need to define the endpoints for the skill to allow other bots to interact with it.'),
     title: () => formatMessage('Confirm skill endpoints'),
-    // validate: ({ editingId, id, skillManifests }) => {
-    //   if (!id || !nameRegex.test(id)) {
-    //     return { id: formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.') };
-    //   }
-
-    //   if (
-    //     (typeof editingId === 'undefined' || editingId !== id) &&
-    //     skillManifests.some(({ id: manifestId }) => manifestId === id)
-    //   ) {
-    //     return { id: formatMessage('{id} already exists. Please enter a unique file name.', { id }) };
-    //   }
-
-    //   return {};
-    // },
+  },
+  [ManifestEditorSteps.ADD_CALLERS]: {
+    buttons: [
+      cancelButton,
+      {
+        primary: true,
+        text: () => formatMessage('Next'),
+        onClick: ({ onNext, onSaveSkill }) => () => {
+          onSaveSkill();
+          onNext();
+        },
+      },
+    ],
+    editJson: false,
+    content: AddCallers,
+    subText: () =>
+      formatMessage(
+        'Add Microsoft App Ids of bots that can access this skill. You can skip this step and add this information later from the project settings tab.'
+      ),
+    title: () => formatMessage('Which bots are allowed to use this skill?'),
   },
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
@@ -265,7 +276,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       },
     ],
     content: SelectDialogs,
-    editJson: true,
+    editJson: false,
     subText: () =>
       formatMessage(
         'These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.'
@@ -285,7 +296,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       },
     ],
     content: SelectTriggers,
-    editJson: true,
+    editJson: false,
     subText: () =>
       formatMessage(
         'These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.'
@@ -304,7 +315,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       },
     ],
     content: SaveManifest,
-    editJson: true,
+    editJson: false,
     subText: () => formatMessage('Name and save your skill manifest.'),
     title: () => formatMessage('Save your skill manifest'),
     validate: ({ editingId, id, skillManifests }) => {
