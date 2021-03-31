@@ -2,10 +2,12 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
-import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
+import { Depths, MotionTimings, MotionDurations, NeutralColors } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+const theme: ITheme = getTheme();
+const { palette, fonts } = theme;
+
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -21,7 +23,7 @@ export const page = css`
 
 export const leftPage = css`
   flex: 50%;
-  padding: 25px;
+  padding: 0 25px 25px 25px;
   display: flex;
   flex-direction: column;
 `;
@@ -30,11 +32,13 @@ export const rightPage = css`
   flex: 1;
   padding: 25px;
   display: flex;
+  background: #f6f6f6;
   flex-direction: column;
 `;
 
 export const title = css`
   display: block;
+  padding: 25px 25px 10px 25px;
   font-size: ${FontSizes.xxLarge};
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
@@ -52,17 +56,20 @@ export const introduction = css`
   font-size: 18px;
 `;
 
-export const newBotContainer = css`
+export const rowContainer = css`
   display: flex;
   margin: 20px 0;
 `;
 
 export const leftContainer = css`
-  margin-top: 10px;
   margin-bottom: 10px;
   flex: auto;
   display: flex;
   flex-direction: column;
+`;
+
+export const gap40 = css`
+  margin-top: 40px;
 `;
 
 export const itemContainerWrapper = (disabled?: boolean) => css`
@@ -70,9 +77,9 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   border-width: 0;
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
-  min-width: 180px;
-  height: 130px;
-  width: 11vw;
+  min-width: 262px;
+  height: 183px;
+  width: 20vw;
   margin-right: 30px;
   padding: 0;
 `;
@@ -82,32 +89,27 @@ export const itemContainer = css`
   height: 50%;
 `;
 
-export const itemContainerTitle = css`
-  height: 100%;
-  color: white;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  box-sizing: border-box;
-  outline: none;
-`;
+// export const itemContainerTitle = css`
+//   height: 100%;
+//   color: ${NeutralColors.gray160}
+//   font-size: ${FontSizes.medium}
+//   box-sizing: border-box;
+//   outline: none;
+// `;
 
-export const itemContainerContent = css`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  font-size: 16px;
-  font-weight: 600;
-  text-align: left;
-  padding: 10px 0 0 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  outline: none;
-`;
+// export const itemContainerContent = css`
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   font-size: 16px;
+//   font-weight: 600;
+//   text-align: left;
+//   padding: 10px 0 0 16px;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   word-break: break-word;
+//   outline: none;
+// `;
 
 export const subtitle = css`
   font-size: 18px;
@@ -118,28 +120,20 @@ export const subtitle = css`
 `;
 
 export const bluetitle = css`
-  font-size: 18px;
-  line-height: 24px;
+  line-height: 20px;
+  font-size: ${fonts.medium.fontSize};
   display: flex;
-  font-weight: 600;
   color: #0078d4;
+  margin: 16px 0 0 0;
+`;
+
+export const newsDescription = css`
   margin: 0;
-`;
-
-export const examplesDescription = css`
-  margin: 0;
-`;
-
-export const linkContainer = css`
-  width: 50%;
-  margin-top: 10px;
-  font-weight: 600;
-`;
-
-export const linkInfo = css`
-  color: #0078d4;
-  margin-top: 10px;
-  text-decoration: underline;
+  font-size: ${fonts.medium.fontSize};
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
 `;
 
 export const botContainer = css`
@@ -151,33 +145,11 @@ export const botContainer = css`
   margin-top: 24px;
 `;
 
-export const button: IIconStyles = {
-  root: {
-    fontSize: '24px',
-    fontWeight: 600,
-    color: 'white',
-  },
-};
-
-export const disabledItem = {
-  title: css`
-    background-color: #f2f2f2;
-    color: #a19f9d;
-  `,
-  content: css`
-    border: 2px solid #f2f2f2;
-    width: auto;
-    font-size: smaller;
-    word-wrap: break-word;
-    color: #a19f9d;
-    background: white;
-  `,
-};
-
 const baseBotItem = {
   container: css`
-    padding: 0;
-    border-width: 1px;
+    padding: 9px;
+    text-align: left;
+    border: 1px #efedeb solid;
     box-shadow: ${Depths.depth4};
     transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
     &:hover,
@@ -189,29 +161,31 @@ const baseBotItem = {
       box-shadow: ${Depths.depth0};
     }
   `,
+};
+
+export const cardItem = {
+  ...baseBotItem,
+  title: css`
+    font-weight: ${FontWeights.semibold};
+    color: ${NeutralColors.gray160};
+    text-align: left;
+    margin-bottom: 12px;
+  `,
+  imageCover: css`
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+  `,
   content: css`
-    background-color: #f2f2f2;
+    color: ${NeutralColors.gray140};
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
   `,
-};
-
-export const newBotItem = {
-  ...baseBotItem,
-  title: css`
-    background-color: #0078d4;
-  `,
-};
-
-export const latestBotItem = {
-  ...baseBotItem,
-  title: css`
-    background-color: #56ccf2;
-  `,
-};
-
-export const tutorialTile = {
-  ...baseBotItem,
-  title: css`
-    background-color: #004c87;
+  moreLink: css`
+    color: #0078d4;
   `,
 };
 
@@ -243,44 +217,6 @@ export const exampleListContainer = css`
 export const loading = css`
   height: 50vh;
   width: 600px;
-`;
-
-const theme: ITheme = getTheme();
-const { palette, fonts } = theme;
-export const exampleListCell = css`
-  min-height: 54px;
-  padding: 16px;
-  box-sizing: border-box;
-  display: flex;
-  &:focus {
-    outline: rgb(102, 102, 102) solid 1px;
-  }
-  &:hover {
-    background: ${palette.neutralLight};
-  }
-`;
-
-export const exampleListCellIcon = css`
-  height: 51px;
-  width: 51px;
-  flex-basis: 51px;
-`;
-
-export const exampleListCellContent = css`
-  margin-left: 16px;
-  overflow: hidden;
-  flex: 1;
-`;
-
-export const exampleListCellName = css`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-export const exampleListCellDescription = css`
-  font-size: ${fonts.small.fontSize};
-  color: ${palette.neutralTertiary};
 `;
 
 export const tableCell = css`

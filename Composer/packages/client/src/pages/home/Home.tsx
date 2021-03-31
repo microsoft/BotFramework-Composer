@@ -3,14 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, defaultToolbarButtonStyles, defaultFirstToolbarButtonStyles } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
@@ -26,17 +26,105 @@ import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
+import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
+import composerIcon from '../../images/composerIcon.svg';
 
-const linksBottom = [
+const feeds = {
+  whatsNewLinks: [
+    {
+      title: 'Composer 1.4',
+      description: "Learn about new features in Composer's latest release.",
+      url: 'https://www.microsoft.com',
+    },
+    {
+      title: 'Build 2020 updates',
+      description: 'Read all of the updates from this years Build conference, including Composer GA and SDK v4.9.',
+      url: 'https://techcommunity.microsoft.com/t5/azure-ai/build-2020-conversational-ai-updates/ba-p/1397685',
+    },
+    {
+      title: 'November 2020 update',
+      description:
+        'November release of the Bot Framework SDK and Composer, including deeper integration with Power Virtual Agents!',
+      url: 'https://www.microsoft.com',
+    },
+    {
+      title: 'Conversational AI at Microsoft Ignite',
+      description:
+        'Updates from Microsoft Ignite. New Composer release, public preview of Orchestrator and updates to Azure Bot Service and Bot Framework SDK.',
+      url: 'https://www.microsoft.com',
+    },
+  ],
+  tabs: [
+    {
+      title: 'Videos',
+      viewAllLinkText: 'View all videos',
+      viewAllLinkUrl: 'https://www.youtube.com/channel/UC8qPRh20PpuxBvxf0w2WrwQ',
+      cards: [
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Introduction to Composer',
+          description: 'A five minute intro to Composer',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Build a weather bot',
+          description: 'An end to end tutorial for creating a weather bot',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Using prompts',
+          description: 'Discover how to use prompts to accept input from users',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Using LG',
+          description: 'Explore Language Generation and how to generate dynamic responses',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+      ],
+    },
+    {
+      title: 'Articles',
+      cards: [
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Introduction to Composer',
+          description: 'A five minute intro to Composer',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Build a weather bot',
+          description: 'An end to end tutorial for creating a weather bot',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Using prompts',
+          description: 'Discover how to use prompts to accept input from users',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+        {
+          image: 'https://via.placeholder.com/244x95/09f/fff.png',
+          title: 'Using LG',
+          description: 'Explore Language Generation and how to generate dynamic responses',
+          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+        },
+      ],
+    },
+  ],
+};
+
+const resources = [
   {
-    to: 'https://aka.ms/BF-Composer-Getting-Started',
-    text: formatMessage('Getting Started'),
-    css: home.linkInfo,
-  },
-  {
-    to: 'https://aka.ms/bf-composer-docs-create-first-bot',
-    text: formatMessage('Build your first bot'),
-    css: home.linkInfo,
+    imageCover: composerDocumentIcon,
+    title: 'Composer documentation',
+    description: 'Find tutorials, step-by-step guides. Discover what you can build with Composer.',
+    moreText: 'Read documentation',
+    url: 'https://github.com/microsoft/BotFramework-Composer',
   },
 ];
 
@@ -66,13 +154,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
-  const {
-    openProject,
-    setCreationFlowStatus,
-    onboardingAddCoachMarkRef,
-    saveTemplateId,
-    setCreationFlowType,
-  } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, saveTemplateId, setCreationFlowType } = useRecoilValue(dispatcherState);
 
   const featureFlags = useRecoilValue(featureFlagsState);
   const botTemplates = useRecoilValue(templateProjectsState);
@@ -92,10 +174,6 @@ const Home: React.FC<RouteComponentProps> = () => {
     navigate(`projects/create/${id}`);
   };
 
-  const addButton = <Icon iconName="Add" styles={home.button} />;
-
-  const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
-
   const onClickNewBot = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
@@ -108,13 +186,13 @@ const Home: React.FC<RouteComponentProps> = () => {
       text: formatMessage('New'),
       buttonProps: {
         iconProps: {
-          iconName: 'CirclePlus',
+          iconName: 'Add',
         },
         onClick: () => {
           onClickNewBot();
           TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
         },
-        styles: defaultToolbarButtonStyles,
+        styles: defaultFirstToolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-New',
@@ -158,114 +236,57 @@ const Home: React.FC<RouteComponentProps> = () => {
   ];
   return (
     <div css={home.outline}>
-      <Toolbar toolbarItems={toolbarItems} />
+      <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
       <div css={home.page}>
         <div css={home.leftPage} role="main">
-          <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
-          <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
-            {formatMessage(
-              'Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation.'
-            )}
-          </div>
-          <div css={home.newBotContainer}>
-            <div data-testid={'homePage-body-New'}>
-              <ItemContainer
-                ariaLabel={formatMessage('Create new empty bot')}
-                content={formatMessage('New')}
-                styles={home.newBotItem}
-                title={addButton}
-                onClick={() => {
-                  onClickNewBot();
-                  TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
-                }}
-              />
-            </div>
-            {recentProjects.length > 0 ? (
-              <ItemContainer
-                ariaLabel={recentProjects[0].name}
-                content={recentProjects[0].name}
-                forwardedRef={addRef}
-                styles={home.latestBotItem}
-                title={''}
-                onClick={async () => {
-                  await openProject(recentProjects[0].path, 'default', true, null, (projectId) => {
-                    TelemetryClient.track('BotProjectOpened', { method: 'callToAction', projectId });
-                  });
-                }}
-              />
-            ) : (
-              <ItemContainer
-                ariaLabel={'ToDo bot with LUIS'}
-                content={'ToDoBotWithLuis'}
-                forwardedRef={addRef}
-                styles={home.latestBotItem}
-                title={''}
-                onClick={() => {
-                  onClickTemplate('ToDoBotWithLuisSample');
-                }}
-              />
-            )}
-          </div>
-          {recentProjects.length > 0 && (
-            <div css={home.leftContainer}>
-              <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
+          <div css={home.leftContainer}>
+            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
+            <Toolbar toolbarItems={toolbarItems} />
+
+            {recentProjects.length > 0 && (
               <RecentBotList
                 recentProjects={recentProjects}
                 onItemChosen={async (item) => {
                   await onItemChosen(item);
                 }}
               />
-            </div>
-          )}
-          <div css={home.leftContainer}>
-            <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
-            <div css={home.newBotContainer}>
-              {tutorials.map((item, index) => (
+            )}
+          </div>
+          <div css={[home.leftContainer, home.gap40]}>
+            <h2 css={home.subtitle}>{formatMessage('Resources')}&nbsp;</h2>
+            <div css={home.rowContainer}>
+              {resources.map((item, index) => (
                 <ItemContainer
                   key={index}
                   ariaLabel={item.title}
-                  content={item.content}
-                  href={item.href}
+                  content={item.description}
+                  href={item.url}
+                  imageCover={item.imageCover}
+                  moreLinkText={item.moreText}
                   rel="noopener nofollow"
-                  styles={home.tutorialTile}
-                  subContent={item.subContent}
+                  styles={home.cardItem}
                   target="_blank"
                   title={item.title}
                 />
               ))}
-              <div css={home.linkContainer}>
-                <div>
-                  {formatMessage(
-                    'Bot Framework provides the most comprehensive experience for building conversational applications.'
-                  )}
-                </div>
-                {linksBottom.map((link) => {
-                  return (
-                    <Link
-                      key={'homePageLeftLinks-' + link.text}
-                      href={link.to}
-                      rel="noopener noreferrer"
-                      style={{ width: '150px' }}
-                      tabIndex={0}
-                      target="_blank"
-                    >
-                      <div css={link.css}>{link.text}</div>
-                    </Link>
-                  );
-                })}
-              </div>
             </div>
           </div>
         </div>
         {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
-          <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
-            <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
-            <p css={home.examplesDescription}>
-              {formatMessage(
-                "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
-              )}
-            </p>
-            <ExampleList examples={botTemplates} onClick={onClickTemplate} />
+          <div aria-label={formatMessage(`What's new list`)} css={home.rightPage} role="region">
+            <h3 css={home.subtitle}>{formatMessage(`What's new`)}</h3>
+
+            {feeds.whatsNewLinks.map(({ title, description, url }) => {
+              return (
+                <Fragment>
+                  <Link href={url} css={home.bluetitle}>
+                    {title}
+                  </Link>
+                  <p css={home.newsDescription}>{description}</p>
+                </Fragment>
+              );
+            })}
+            <Link css={home.bluetitle}>{formatMessage(`More...`)}</Link>
           </div>
         )}
       </div>
