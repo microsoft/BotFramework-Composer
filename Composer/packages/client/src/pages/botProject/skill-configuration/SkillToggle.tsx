@@ -16,6 +16,7 @@ const toggle = css`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  padding-top: 8px;
 `;
 
 type Props = {

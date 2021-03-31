@@ -18,7 +18,7 @@ import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes, addNewButton } from './styles';
+import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -139,7 +139,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           })}
           <ActionButton
             data-testid={'addNewPublishProfile'}
-            styles={addNewButton}
+            styles={actionButton}
             onClick={() => {
               if (isShowAuthDialog(true)) {
                 setShowAuthDialog(true);
