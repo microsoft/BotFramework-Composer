@@ -110,6 +110,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           path: lspServerPath,
         }}
         placeholder={defaultQnAPlaceholder}
+        telemetryClient={TelemetryClient}
         value={content}
         onChange={onChangeContent}
         onChangeSettings={handleSettingsChange}

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import os from 'os';
 import { join, resolve } from 'path';
 
 import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
@@ -163,9 +164,14 @@ async function loadServer() {
     getARMTokenForTenant: OneAuthService.getARMTokenForTenant.bind(OneAuthService),
     getTenants: OneAuthService.getTenants.bind(OneAuthService),
     logOut: OneAuthService.signOut.bind(OneAuthService),
-    machineId,
-    sessionId,
-    composerVersion: app.getVersion(),
+    telemetryData: {
+      composerVersion: app.getVersion(),
+      machineId,
+      sessionId,
+      architecture: os.arch(),
+      cpus: os.cpus().length,
+      memory: os.totalmem(),
+    },
   });
   log(`Server started at port: ${serverPort}`);
 }

@@ -30,7 +30,7 @@ const buttonStyles = {
 };
 
 type Props = {
-  onInsertEntity: (entityName: string) => void;
+  onInsertEntity: (entityName: string, eventType: string) => void;
   labelingMenuVisible: boolean;
   insertEntityDisabled: boolean;
   tagEntityDisabled: boolean;
@@ -47,7 +47,7 @@ export const InsertEntityButton = React.memo((props: Props) => {
     (_, item?: IContextualMenuItem) => {
       const entity = item?.data as LuEntity;
       if (entity) {
-        onInsertEntity(entity.Name);
+        onInsertEntity(entity.Name, entity.Type);
       }
     },
     [onInsertEntity]
