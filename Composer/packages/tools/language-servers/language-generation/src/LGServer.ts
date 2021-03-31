@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import path from 'path';
+
 import URI from 'vscode-uri';
 import { IConnection, TextDocuments } from 'vscode-languageserver';
 import formatMessage from 'format-message';
@@ -19,6 +21,7 @@ import {
   DocumentOnTypeFormattingParams,
   FoldingRangeParams,
   FoldingRange,
+  Location,
 } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import uniq from 'lodash/uniq';
@@ -40,7 +43,7 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
-  getLineByIndex,
+  createFoldingRanges,
 } from './utils';
 
 // define init methods call from client
@@ -57,6 +60,8 @@ export class LGServer {
   private _lgParser = new LgParser();
   private _luisEntities: string[] = [];
   private _lastLuContent: string[] = [];
+  private _lgFile: LgFile | undefined = undefined;
+  private _templateDefinitions: Record<string, any> = {};
   private _curDefinedVariblesInLG: Record<string, any> = {};
   private _otherDefinedVariblesInLG: Record<string, any> = {};
   private _mergedVariables: Record<string, any> = {};
@@ -94,6 +99,7 @@ export class LGServer {
           },
           hoverProvider: true,
           foldingRangeProvider: true,
+          definitionProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -101,6 +107,7 @@ export class LGServer {
       };
     });
     this.connection.onCompletion(async (params) => await this.completion(params));
+    this.connection.onDefinition((params: TextDocumentPositionParams) => this.definitionHandler(params));
     this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
     this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
@@ -113,6 +120,7 @@ export class LGServer {
         const textDocument = this.documents.get(uri);
         if (textDocument) {
           this.addLGDocument(textDocument, lgOption);
+          this.recordTemplatesDefintions(lgOption);
           this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
           this.getOtherLGVariables(lgOption);
@@ -136,56 +144,51 @@ export class LGServer {
     this.connection.listen();
   }
 
+  protected definitionHandler(params: TextDocumentPositionParams): Location | undefined {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return;
+    }
+
+    const importRegex = /^\s*\[[^[\]]+\](\([^()]+\))/;
+    const curLine = document.getText().split(/\r?\n/g)[params.position.line];
+    if (importRegex.test(curLine)) {
+      const importedFile = curLine.match(importRegex)?.[1];
+      if (importedFile) {
+        const source = importedFile.substr(1, importedFile.length - 2); // remove starting [ and tailing
+        const fileId = path.parse(source).name;
+        this.connection.sendNotification('GotoDefinition', { fileId: fileId });
+        return;
+      }
+    }
+
+    const wordRange = getRangeAtPosition(document, params.position);
+    const word = document.getText(wordRange);
+    const curFileResult = this._lgFile?.templates.find((t) => t.name === word);
+
+    if (curFileResult?.range) {
+      return Location.create(
+        params.textDocument.uri,
+        Range.create(curFileResult.range.start.line - 1, 0, curFileResult.range.end.line, 0)
+      );
+    }
+
+    const refResult = this._templateDefinitions[word];
+    if (refResult) {
+      this.connection.sendNotification('GotoDefinition', refResult);
+    }
+
+    return;
+  }
+
   protected foldingRangeHandler(params: FoldingRangeParams): FoldingRange[] {
     const document = this.documents.get(params.textDocument.uri);
-    const items: FoldingRange[] = [];
     if (!document) {
-      return items;
+      return [];
     }
 
-    const lineCount = document.lineCount;
-    let i = 0;
-    while (i < lineCount) {
-      const currLine = getLineByIndex(document, i);
-      if (currLine?.startsWith('>>')) {
-        for (let j = i + 1; j < lineCount; j++) {
-          if (getLineByIndex(document, j)?.startsWith('>>')) {
-            items.push(FoldingRange.create(i, j - 1));
-            i = j - 1;
-            break;
-          }
-
-          if (j === lineCount - 1) {
-            items.push(FoldingRange.create(i, j));
-            i = j;
-          }
-        }
-      }
-
-      i = i + 1;
-    }
-
-    for (let i = 0; i < lineCount; i++) {
-      const currLine = getLineByIndex(document, i);
-      if (currLine?.startsWith('#')) {
-        let j = i + 1;
-        for (j = i + 1; j < lineCount; j++) {
-          const secLine = getLineByIndex(document, j);
-          if (secLine?.startsWith('>>') || secLine?.startsWith('#')) {
-            items.push(FoldingRange.create(i, j - 1));
-            i = j - 1;
-            break;
-          }
-        }
-
-        if (i !== j - 1) {
-          items.push(FoldingRange.create(i, j - 1));
-          i == j - 2;
-        }
-      }
-    }
-
-    return items;
+    const lines = document.getText().split(/\r?\n/g);
+    return [...createFoldingRanges(lines, '>>'), ...createFoldingRanges(lines, '#')];
   }
 
   protected updateObject(propertyList: string[], varaibles: Record<string, any>): void {
@@ -255,6 +258,7 @@ export class LGServer {
           return await this._lgParser.updateTemplate(lgFile, templateId, { body: content }, lgTextFiles);
         }
       }
+
       return await this._lgParser.parse(fileId || uri, content, lgTextFiles);
     };
     const lgDocument: LGDocument = {
@@ -265,6 +269,55 @@ export class LGServer {
       index,
     };
     this.LGDocuments.push(lgDocument);
+  }
+
+  protected async recordTemplatesDefintions(lgOption?: LGOption) {
+    const { fileId, projectId } = lgOption || {};
+    if (projectId) {
+      const curLocale = this.getLocale(fileId);
+      const fileIdWitoutLocale = this.removeLocaleInId(fileId);
+      const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      for (const file of lgTextFiles) {
+        //Only stroe templates in other LG files
+        if (this.removeLocaleInId(file.id) !== fileIdWitoutLocale && this.getLocale(file.id) === curLocale) {
+          const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
+          this._templateDefinitions = {};
+          for (const template of lgTemplates.templates) {
+            this._templateDefinitions[template.name] = {
+              fileId: file.id,
+              templateId: template.name,
+              line: template?.range?.start?.line,
+            };
+          }
+        }
+      }
+    }
+  }
+
+  private removeLocaleInId(fileId: string | undefined): string {
+    if (!fileId) {
+      return '';
+    }
+
+    const idx = fileId.lastIndexOf('.');
+    if (idx !== -1) {
+      return fileId.substring(0, idx);
+    } else {
+      return fileId;
+    }
+  }
+
+  private getLocale(fileId: string | undefined): string {
+    if (!fileId) {
+      return '';
+    }
+
+    const idx = fileId.lastIndexOf('.');
+    if (idx !== -1) {
+      return fileId.substring(idx, fileId.length);
+    } else {
+      return '';
+    }
   }
 
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
@@ -898,6 +951,7 @@ export class LGServer {
       return;
     }
 
+    this._lgFile = lgFile;
     if (text.length === 0) {
       this.cleanDiagnostics(document);
       return;
