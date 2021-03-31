@@ -17,6 +17,7 @@ import {
   luFileState,
   qnaFileState,
   settingsState,
+  luFilesSelectorFamily,
 } from '../../recoilModel';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import lgDiagnosticWorker from '../../recoilModel/parsers/lgDiagnosticWorker';
@@ -50,6 +51,7 @@ export const useEmptyPropsHandler = (
     qnaFileState({ projectId: activeBot, qnaFileId: `${dialogId}.${locale}` })
   );
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateDialog, setDesignPageLocation, navTo } = useRecoilValue(dispatcherState);
 
   // migration: add id to dialog when dialog doesn't have id
@@ -84,14 +86,14 @@ export const useEmptyPropsHandler = (
     let isMounted = true;
     if (currentLu.isContentUnparsed) {
       //for current dialog, check the lu file to make sure the file is parsed.
-      luWorker.parse(currentLu.id, currentLu.content, settings.luFeatures).then((result) => {
+      luWorker.parse(currentLu.id, currentLu.content, settings.luFeatures, luFiles).then((result) => {
         isMounted ? setCurrentLu(result as LuFile) : null;
       });
       return () => {
         isMounted = false;
       };
     }
-  }, [currentDialog, currentLu]);
+  }, [currentDialog, currentLu, luFiles]);
 
   useEffect(() => {
     if (!currentDialog || !currentQna.id) return;
