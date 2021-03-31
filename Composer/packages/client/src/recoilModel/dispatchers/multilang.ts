@@ -11,6 +11,7 @@ import { getExtension } from '../../utils/fileUtil';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../selectors/project';
 import { lgFilesSelectorFamily } from '../selectors/lg';
 import { luFilesSelectorFamily, qnaFilesSelectorFamily } from '../selectors';
+
 import {
   localeState,
   settingsState,
