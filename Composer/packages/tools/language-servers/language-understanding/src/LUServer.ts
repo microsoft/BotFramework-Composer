@@ -12,6 +12,7 @@ import {
   Range,
   DiagnosticSeverity,
   TextEdit,
+  Location,
 } from 'vscode-languageserver-types';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
@@ -66,6 +67,7 @@ export class LUServer {
         capabilities: {
           textDocumentSync: this.documents.syncKind,
           codeActionProvider: false,
+          definitionProvider: true,
           completionProvider: {
             resolveProvider: true,
             triggerCharacters: ['@', ' ', '{', ':', '[', '('],
@@ -79,6 +81,7 @@ export class LUServer {
     });
     this.connection.onCompletion((params) => this.completion(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onDefinition((params: TextDocumentPositionParams) => this.definitionHandler(params));
     this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
       this.foldingRangeHandler(foldingRangeParams)
     );
@@ -99,6 +102,18 @@ export class LUServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected definitionHandler(params: TextDocumentPositionParams): Location | undefined {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return;
+    }
+
+    // eslint-disable-next-line security/detect-unsafe-regex
+    const importRegex = /^\s*-?\s*\[[^[\]]+\](\([^()#]+(#[a-zA-Z0-9_-]*)?(\*[a-zA-Z0-9_-]+\*)?\))/;
+
+    return;
   }
 
   protected async foldingRangeHandler(params: FoldingRangeParams): Promise<FoldingRange[]> {
