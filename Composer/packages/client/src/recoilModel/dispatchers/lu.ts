@@ -101,11 +101,12 @@ const getRelatedLuFileChanges = async (
   // sync add/remove intents
   if (onlyAdds || onlyDeletes) {
     for (const item of sameIdOtherLocaleFiles) {
-      let newLuFile = (await luWorker.addIntents(item, addedIntents, luFeatures)) as LuFile;
+      let newLuFile = (await luWorker.addIntents(item, addedIntents, luFeatures, luFiles)) as LuFile;
       newLuFile = (await luWorker.removeIntents(
         newLuFile,
         deletedIntents.map(({ Name }) => Name),
-        luFeatures
+        luFeatures,
+        luFiles
       )) as LuFile;
       changes.push(newLuFile);
     }
@@ -130,7 +131,7 @@ export const createLuFileState = async (
   const locale = await snapshot.getPromise(localeState(projectId));
   const { languages, luFeatures } = await snapshot.getPromise(settingsState(projectId));
   const createdLuId = `${id}.${locale}`;
-  const createdLuFile = (await luWorker.parse(id, content, luFeatures)) as LuFile;
+  const createdLuFile = (await luWorker.parse(id, content, luFeatures, luFiles)) as LuFile;
   if (luFiles.find((lu) => lu.id === createdLuId)) {
     setError(callbackHelpers, new Error(formatMessage('lu file already exist')));
     return;
@@ -197,7 +198,7 @@ export const luDispatcher = () => {
       const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
 
       try {
-        const updatedFile = (await luWorker.parse(id, content, luFeatures)) as LuFile;
+        const updatedFile = (await luWorker.parse(id, content, luFeatures, luFiles)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
         // compare to drop expired change on current id file.
         /**
@@ -252,7 +253,8 @@ export const luDispatcher = () => {
               item,
               intentName,
               { Name: intent.Name },
-              luFeatures
+              luFeatures,
+              luFiles
             )) as LuFile;
             changes.push(updatedFile);
           }
@@ -263,7 +265,8 @@ export const luDispatcher = () => {
             luFile,
             intentName,
             { Body: intent.Body },
-            luFeatures
+            luFeatures,
+            luFiles
           )) as LuFile;
           updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
         }
@@ -290,7 +293,7 @@ export const luDispatcher = () => {
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return luFiles;
       try {
-        const updatedFile = (await luWorker.addIntent(file, intent, luFeatures)) as LuFile;
+        const updatedFile = (await luWorker.addIntent(file, intent, luFeatures, luFiles)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
         updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {
@@ -316,7 +319,7 @@ export const luDispatcher = () => {
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return luFiles;
       try {
-        const updatedFile = (await luWorker.removeIntent(file, intentName, luFeatures)) as LuFile;
+        const updatedFile = (await luWorker.removeIntent(file, intentName, luFeatures, luFiles)) as LuFile;
         const updatedFiles = await getRelatedLuFileChanges(luFiles, updatedFile, projectId, luFeatures);
         updateLuFiles(callbackHelpers, projectId, { updates: updatedFiles });
       } catch (error) {

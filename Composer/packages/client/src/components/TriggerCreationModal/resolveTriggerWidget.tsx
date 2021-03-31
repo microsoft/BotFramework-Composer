@@ -11,6 +11,7 @@ import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { isRegExRecognizerType, isLUISnQnARecognizerType, isPVARecognizerType } from '../../utils/dialogValidator';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { intentStyles } from './styles';
 import { validateEventName, validateIntentName, getLuDiagnostics, validateRegExPattern } from './validators';
@@ -108,6 +109,7 @@ export function resolveTriggerWidget(
           luFeatures: {},
         }}
         placeholder={inlineModePlaceholder}
+        telemetryClient={TelemetryClient}
         value={formData.triggerPhrases}
         onChange={onTriggerPhrasesChange}
       />
