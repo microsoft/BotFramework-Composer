@@ -469,8 +469,7 @@ export class BotProject implements IBotProject {
     this.validateFileName(filename);
     this._validateFileContent(name, content);
     const botName = this.name;
-    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultManifestFilePath(botName, filename, defaultLocale);
+    const relativePath = defaultManifestFilePath(botName, filename);
     const file = this.files.get(filename);
     if (file) {
       throw new Error(`${filename} dialog already exist`);
