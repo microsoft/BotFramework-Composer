@@ -373,8 +373,10 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      const resources = await getResourceList(currentProjectId(), publishType);
-      setExtensionResourceOptions(resources);
+      if (isMounted.current) {
+        const resources = await getResourceList(currentProjectId(), publishType);
+        setExtensionResourceOptions(resources);
+      }
     } catch (err) {
       // todo: how do we handle API errors in this component
       console.log('ERROR', err);
@@ -398,7 +400,9 @@ export const AzureProvisionDialog: React.FC = () => {
           }
         })
         .catch((err) => {
-          setSubscriptionsErrorMessage(err.message);
+          if (isMounted.current) {
+            setSubscriptionsErrorMessage(err.message);
+          }
         });
 
       getResources();
@@ -409,14 +413,18 @@ export const AzureProvisionDialog: React.FC = () => {
     if (token && currentSubscription) {
       try {
         const resourceGroups = await getResourceGroups(token, currentSubscription);
-        setResourceGroups(resourceGroups);
+        if (isMounted.current) {
+          setResourceGroups(resourceGroups);
 
-        // After the resource groups load, isNewResourceGroupName can be determined
-        setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === currentResourceGroupName));
+          // After the resource groups load, isNewResourceGroupName can be determined
+          setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === currentResourceGroupName));
+        }
       } catch (err) {
         // todo: how do we handle API errors in this component
         console.log('ERROR', err);
-        setResourceGroups(undefined);
+        if (isMounted.current) {
+          setResourceGroups(undefined);
+        }
       }
     } else {
       setResourceGroups(undefined);
