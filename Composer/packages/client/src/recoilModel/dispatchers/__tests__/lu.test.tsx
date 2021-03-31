@@ -31,7 +31,7 @@ const file1 = {
   content: `\r\n# Hello\r\n-hi`,
 };
 
-const luFiles = [luUtil.parse(file1.id, file1.content, luFeatures)] as LuFile[];
+const luFiles = [luUtil.parse(file1.id, file1.content, luFeatures, [])] as LuFile[];
 
 const getLuIntent = (Name, Body): LuIntentSection =>
   ({
