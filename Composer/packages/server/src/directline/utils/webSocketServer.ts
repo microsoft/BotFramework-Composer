@@ -16,8 +16,7 @@ import {
 import log from './logger';
 
 const socketErrorChannelKey = 'DL_ERROR_SOCKET';
-const socketActivityTrafficChannelKey = 'DL_ACTIVITY_TRAFFIC_SOCKET';
-const socketNetworkTrafficChannelKey = 'DL_NETWORK_TRAFFIC_SOCKET';
+const socketTrafficChannelKey = 'DL_TRAFFIC_SOCKET';
 interface WebSocket {
   close(): void;
   send(data: any, cb?: (err?: Error) => void): void;
@@ -27,8 +26,7 @@ export class WebSocketServer {
   private static restServer: http.Server;
   private static servers: Record<string, WSServer> = {};
   private static dLErrorsServer: WSServer | null = null;
-  private static activityTrafficServer: WSServer | null = null;
-  private static networkTrafficServer: WSServer | null = null;
+  private static trafficServer: WSServer | null = null;
   private static sockets: Record<string, WebSocket> = {};
 
   private static queuedMessages: { [conversationId: string]: Activity[] } = {};
@@ -39,7 +37,7 @@ export class WebSocketServer {
         const activity: Activity | undefined = this.queuedMessages[conversationId].shift();
         const payload = { activities: [activity] };
         socket.send(JSON.stringify(payload));
-        this.sendActivityTrafficToSubscribers(payload); // TODO: probably align this with above call to socket.send and use (JSON.stringify(payload))
+        this.sendTrafficToSubscribers({ ...payload, trafficType: 'activity' });
       }
     }
   }
@@ -63,7 +61,7 @@ export class WebSocketServer {
       const payload = { activities: [activity] };
       this.sendBackedUpMessages(conversationId, socket);
       socket.send(JSON.stringify(payload));
-      this.sendActivityTrafficToSubscribers(payload); // TODO: probably align this with above call to socket.send and use (JSON.stringify(payload))
+      this.sendTrafficToSubscribers({ ...payload, trafficType: 'activity' });
     } else {
       this.queueActivities(conversationId, activity);
     }
@@ -177,15 +175,7 @@ export class WebSocketServer {
         }
       });
 
-      app.use(
-        '/ws/traffic/activity',
-        genericWebSocketHandler(this.activityTrafficServer, socketActivityTrafficChannelKey)
-      );
-
-      app.use(
-        '/ws/traffic/network',
-        genericWebSocketHandler(this.networkTrafficServer, socketNetworkTrafficChannelKey)
-      );
+      app.use('/ws/traffic', genericWebSocketHandler(this.trafficServer, socketTrafficChannelKey));
 
       log(`Web Socket host server listening on ${this.port}...`);
       return this.port;
@@ -196,13 +186,10 @@ export class WebSocketServer {
     this.sockets[socketErrorChannelKey]?.send(JSON.stringify(logItem));
   }
 
-  public static sendActivityTrafficToSubscribers(data: Partial<ConversationActivityTraffic>): void {
-    data.trafficType = 'activity';
-    this.sockets[socketActivityTrafficChannelKey]?.send(JSON.stringify(data));
-  }
-
-  public static sendNetworkTrafficToSubscribers(data: ConversationNetworkTrafficItem): void {
-    this.sockets[socketNetworkTrafficChannelKey]?.send(JSON.stringify(data));
+  public static sendTrafficToSubscribers(
+    data: Partial<ConversationActivityTraffic> | ConversationNetworkTrafficItem
+  ): void {
+    this.sockets[socketTrafficChannelKey]?.send(JSON.stringify(data));
   }
 
   public static cleanUpConversation(conversationId: string): void {

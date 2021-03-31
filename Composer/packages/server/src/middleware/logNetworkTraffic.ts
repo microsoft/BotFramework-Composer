@@ -24,7 +24,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
       timestamp: new Date().toISOString(),
       trafficType: 'network' as 'network',
     };
-    WebSocketServer.sendNetworkTrafficToSubscribers(data);
+    WebSocketServer.sendTrafficToSubscribers(data);
   });
   next?.();
 }

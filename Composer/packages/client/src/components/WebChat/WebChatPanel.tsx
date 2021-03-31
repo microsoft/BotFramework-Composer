@@ -64,23 +64,20 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     const bootstrapChat = async () => {
       const conversationServerPort = await conversationService.setUpConversationServer();
       try {
-        // set up activity traffic listener
-        activityTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic/activity`);
+        // set up Web Chat traffic listener
+        activityTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic`);
         if (activityTrafficChannel.current) {
           activityTrafficChannel.current.onmessage = (event) => {
-            const data: ConversationActivityTraffic = JSON.parse(event.data);
-            appendTraffic(
-              projectId,
-              data.activities.map((a) => ({ activity: a, timestamp: a.timestamp, trafficType: data.trafficType }))
-            );
-          };
-        }
-        // set up traffic listener
-        networkTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic/network`);
-        if (networkTrafficChannel.current) {
-          networkTrafficChannel.current.onmessage = (event) => {
-            const data: ConversationNetworkTrafficItem = JSON.parse(event.data) as ConversationNetworkTrafficItem;
-            appendTraffic(projectId, data);
+            const data: ConversationActivityTraffic | ConversationNetworkTrafficItem = JSON.parse(event.data);
+            if (data.trafficType === 'network') {
+              appendTraffic(projectId, data);
+            }
+            if (data.trafficType === 'activity') {
+              appendTraffic(
+                projectId,
+                data.activities.map((a) => ({ activity: a, timestamp: a.timestamp, trafficType: data.trafficType }))
+              );
+            }
           };
         }
         directLineErrorChannel.current = new WebSocket(
