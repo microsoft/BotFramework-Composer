@@ -246,13 +246,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       if (target && isPublishingToAzure(target)) {
         const { tenantId } = JSON.parse(target.configuration);
 
-        if (tenantId) {
+        if (userShouldProvideTokens()) {
+          token = getTokenFromCache('accessToken');
+        } else if (tenantId) {
           token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));
           tenantTokenMap.set(tenantId, token);
-        } else if (userShouldProvideTokens()) {
-          token = getTokenFromCache('accessToken');
-          // old publish profile without tenant id
         } else {
+          // old publish profile without tenant id
           let tenant = getTenantIdFromCache();
           let tenants;
           if (!tenant) {
