@@ -9,9 +9,10 @@ import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { formDialogSchemaAtom } from '../../atoms/appState';
+import { HelpTooltip } from '../common/HelpTooltip';
 
 const Root = styled(Stack)({
-  width: 140,
+  width: 150,
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -42,13 +43,26 @@ export const RequiredPriorityIndicator = React.memo((props: Props) => {
   const content = React.useMemo(
     () =>
       required
-        ? formatMessage('{requiredText} | Priority: {priority}', { requiredText, priority })
+        ? formatMessage.rich(
+            '{requiredText} | Priority <help>Priority refers to the order in which the bot will ask for the required properties.</help> : {priority}',
+            {
+              requiredText,
+              priority,
+              help: ({ children }) => (
+                <HelpTooltip
+                  key={`${propertyId}-priority-tooltip`}
+                  helpMessage={children}
+                  tooltipId={`${propertyId}-priority-tooltip`}
+                />
+              ),
+            }
+          )
         : formatMessage('{requiredText}', { requiredText }),
     [requiredText, priority]
   );
 
   return (
-    <Root horizontal horizontalAlign="end" title={content} verticalAlign="center">
+    <Root horizontal horizontalAlign="end" verticalAlign="center">
       {<Text>{content}</Text>}
     </Root>
   );

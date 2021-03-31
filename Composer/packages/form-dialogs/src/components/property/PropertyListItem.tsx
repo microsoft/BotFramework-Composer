@@ -14,13 +14,17 @@ import * as React from 'react';
 import { Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
 
+import {
+  activePropertyIdAtom,
+  formDialogPropertyValidSelector,
+  formDialogTemplatesAtom,
+  propertyCardDataAtom,
+} from '../../atoms/appState';
 import { useHandlers } from '../../atoms/handlers';
-import { activePropertyIdAtom, formDialogPropertyAtom, formDialogPropertyValidSelector } from '../../atoms/appState';
-import { FormDialogProperty, FormDialogPropertyKind, FormDialogPropertyPayload } from '../../atoms/types';
-import { getPropertyTypeDisplayName } from '../../atoms/utils';
 
 import { FormDialogPropertyCard } from './FormDialogPropertyCard';
 import { RequiredPriorityIndicator } from './RequiredPriorityIndicator';
+import { PropertyCardData } from './types';
 
 const ItemRoot = styled.div(({ isDragging }: { isDragging: boolean }) => ({
   boxShadow: isDragging ? '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)' : null,
@@ -66,18 +70,23 @@ const ErrorIcon = styled(Stack.Item)({
 
 type ContentProps = {
   valid: boolean;
-  property: FormDialogProperty;
+  propertyCardData: PropertyCardData;
   dragHandleProps: DraggableProvidedDragHandleProps;
   onActivateItem: (propertyId: string) => void;
 };
 const PropertyListItemContent = React.memo((props: ContentProps) => {
-  const { property, valid, dragHandleProps, onActivateItem } = props;
+  const { propertyCardData, valid, dragHandleProps, onActivateItem } = props;
 
+  const templates = useRecoilValue(formDialogTemplatesAtom);
   const tooltipId = useId('PropertyListItemContent');
+  const { title: typeDisplayText, description: typeDisplayTitle } = React.useMemo(
+    () => templates.find((template) => template.id === propertyCardData.propertyType).$generator,
+    [templates, propertyCardData.propertyType]
+  );
 
   const activateItem = React.useCallback(() => {
-    onActivateItem(property.id);
-  }, [onActivateItem, property.id]);
+    onActivateItem(propertyCardData.id);
+  }, [onActivateItem, propertyCardData.id]);
 
   const keyUp = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -87,8 +96,6 @@ const PropertyListItemContent = React.memo((props: ContentProps) => {
     },
     [activateItem]
   );
-
-  const propertyTypeDisplayName = React.useMemo(() => getPropertyTypeDisplayName(property), [property]);
 
   return (
     <ItemContentRoot
@@ -109,12 +116,14 @@ const PropertyListItemContent = React.memo((props: ContentProps) => {
           {!valid && <Icon iconName="WarningSolid" styles={{ root: { color: FluentTheme.palette.red } }} />}
         </TooltipHost>
       </ErrorIcon>
-      <PropertyName>{property.name || formatMessage('[no name]')}</PropertyName>
-      <PropertyType title={propertyTypeDisplayName} variant="small">
-        {propertyTypeDisplayName}
+      <PropertyName>{propertyCardData.name || formatMessage('[no name]')}</PropertyName>
+      <PropertyType title={typeDisplayTitle} variant="small">
+        {typeDisplayText}
       </PropertyType>
-      <ArrayText variant="smallPlus">{property.array ? formatMessage('Accepts multiple values') : ''}</ArrayText>
-      <RequiredPriorityIndicator propertyId={property.id} required={property.required} />
+      <ArrayText variant="smallPlus">
+        {propertyCardData.array ? formatMessage('Accepts multiple values') : ''}
+      </ArrayText>
+      <RequiredPriorityIndicator propertyId={propertyCardData.id} required={propertyCardData.isRequired} />
     </ItemContentRoot>
   );
 });
@@ -128,24 +137,24 @@ export const PropertyListItem = React.memo((props: Props) => {
   const { propertyId, index } = props;
 
   const activePropertyId = useRecoilValue(activePropertyIdAtom);
-  const property = useRecoilValue(formDialogPropertyAtom(propertyId));
+  const propertyCardData = useRecoilValue(propertyCardDataAtom(propertyId));
   const valid = useRecoilValue(formDialogPropertyValidSelector(propertyId));
 
   const {
-    changePropertyKind,
+    changePropertyType,
     changePropertyName,
-    changePropertyPayload,
+    changePropertyCardData,
     changePropertyArray,
     activatePropertyId,
     removeProperty,
     duplicateProperty,
   } = useHandlers();
 
-  const onChangePropertyKind = React.useCallback(
-    (kind: FormDialogPropertyKind, payload: FormDialogPropertyPayload) => {
-      changePropertyKind({ id: propertyId, kind, payload });
+  const onChangePropertyType = React.useCallback(
+    (propertyType: string) => {
+      changePropertyType({ id: propertyId, propertyType });
     },
-    [changePropertyKind, propertyId]
+    [changePropertyType, propertyId]
   );
 
   const onChangePropertyName = React.useCallback(
@@ -155,11 +164,11 @@ export const PropertyListItem = React.memo((props: Props) => {
     [changePropertyName, propertyId]
   );
 
-  const onChangePayload = React.useCallback(
-    (payload: FormDialogPropertyPayload) => {
-      changePropertyPayload({ id: propertyId, payload });
+  const onChangeData = React.useCallback(
+    (data: Record<string, any>) => {
+      changePropertyCardData({ id: propertyId, data });
     },
-    [changePropertyPayload, propertyId]
+    [changePropertyCardData, propertyId]
   );
 
   const onChangeArray = React.useCallback(
@@ -179,8 +188,8 @@ export const PropertyListItem = React.memo((props: Props) => {
   const onRemove = React.useCallback(async () => {
     const res = await OpenConfirmModal(
       formatMessage('Delete property?'),
-      property.name
-        ? formatMessage('Are you sure you want to remove "{propertyName}"?', { propertyName: property.name })
+      propertyCardData.name
+        ? formatMessage('Are you sure you want to remove "{propertyName}"?', { propertyName: propertyCardData.name })
         : formatMessage('Are you sure you want to remove this property?')
     );
     if (res) {
@@ -200,20 +209,20 @@ export const PropertyListItem = React.memo((props: Props) => {
             {propertyId === activePropertyId ? (
               <FormDialogPropertyCard
                 dragHandleProps={provided.dragHandleProps}
-                property={property}
+                propertyCardData={propertyCardData}
                 valid={valid}
                 onActivateItem={onActivateItem}
                 onChangeArray={onChangeArray}
-                onChangeKind={onChangePropertyKind}
+                onChangeData={onChangeData}
                 onChangeName={onChangePropertyName}
-                onChangePayload={onChangePayload}
+                onChangePropertyType={onChangePropertyType}
                 onDuplicate={onDuplicate}
                 onRemove={onRemove}
               />
             ) : (
               <PropertyListItemContent
                 dragHandleProps={provided.dragHandleProps}
-                property={property}
+                propertyCardData={propertyCardData}
                 valid={valid}
                 onActivateItem={onActivateItem}
               />

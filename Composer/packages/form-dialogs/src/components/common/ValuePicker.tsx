@@ -6,13 +6,13 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import * as React from 'react';
 
-import { TagInput } from '../tags/TagInput';
+import { TagInput } from './tags/TagInput';
 
 type Props = {
   /**
    * The label of the value picker control.
    */
-  label: string;
+  label?: string;
   /**
    * Callback for custom rendering of label.
    */
@@ -34,11 +34,11 @@ const defaultLabelRender = (props: Props) => {
 };
 
 export const ValuePicker = (props: Props) => {
-  const { values, onChange, onRenderLabel = defaultLabelRender } = props;
+  const { label, values, onChange, onRenderLabel = defaultLabelRender } = props;
 
   return (
-    <Stack>
-      {onRenderLabel(props, defaultLabelRender)}
+    <Stack grow>
+      {label && onRenderLabel(props, defaultLabelRender)}
       <TagInput removeOnBackspace editable={false} tags={values} onChange={onChange} />
     </Stack>
   );

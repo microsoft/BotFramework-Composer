@@ -293,8 +293,15 @@ export type FormDialogSchema = {
 };
 
 export type FormDialogSchemaTemplate = {
-  name: string;
-  isGlobal: boolean;
+  id: string;
+  type: string;
+  $global: boolean;
+  $template?: string;
+  format?: string;
+  $generator: Record<string, any> & {
+    title: string;
+    description: string;
+  };
 };
 
 export type RecognizerFile = {

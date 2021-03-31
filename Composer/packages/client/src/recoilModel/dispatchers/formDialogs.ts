@@ -50,11 +50,10 @@ export const formDialogsDispatcher = () => {
     }
 
     try {
-      const { data } = await httpClient.get<FormDialogSchemaTemplate[]>('/formDialogs/templateSchemas');
-      const templates = Object.keys(data).map((key) => ({
-        name: key,
-        isGlobal: data[key].$global,
-      }));
+      const { data } = await httpClient.get<Record<string, Omit<FormDialogSchemaTemplate, 'id'>>>(
+        '/formDialogs/templateSchemas'
+      );
+      const templates = Object.keys(data).map<FormDialogSchemaTemplate>((id) => ({ id, ...data[id] }));
 
       set(formDialogLibraryTemplatesState, templates);
     } catch (ex) {

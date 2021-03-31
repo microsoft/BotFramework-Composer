@@ -3,16 +3,19 @@
 
 export type PropertyRequiredKind = 'required' | 'optional';
 
-export type FormDialogPropertyKind = 'ref' | 'number' | 'integer' | 'string' | 'array';
+export type FormDialogPropertyKind = 'ref' | 'number' | 'integer' | 'string' | 'array' | 'boolean';
 
 export type RefPropertyPayload = TypedPropertyPayload & {
   ref: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type GenericPayloadData = Record<string, any>;
+
 export type TypedPropertyPayload = {
   kind: FormDialogPropertyKind;
   entities?: string[];
-};
+} & GenericPayloadData;
 
 const builtInFormats = ['date-time', 'date', 'time', 'email', 'uri', 'iri'] as const;
 
@@ -28,6 +31,8 @@ export const builtInStringFormats: readonly StringFormatItem[] = [
   { displayName: 'uri', value: 'uri' },
   { displayName: 'iri', value: 'iri' },
 ];
+
+export type BooleanPropertyPayload = TypedPropertyPayload;
 
 export type StringPropertyPayload = TypedPropertyPayload & {
   kind: 'string';
@@ -58,6 +63,7 @@ export type ArrayPropertyPayload = Pick<TypedPropertyPayload, 'kind'> & {
 };
 
 export type FormDialogPropertyPayload =
+  | BooleanPropertyPayload
   | RefPropertyPayload
   | StringPropertyPayload
   | NumberPropertyPayload
