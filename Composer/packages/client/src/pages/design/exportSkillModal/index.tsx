@@ -11,6 +11,7 @@ import { JSONSchema7 } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 import { SkillManifestFile } from '@bfc/shared';
+import { navigate } from '@reach/router';
 
 import {
   dispatcherState,
@@ -20,23 +21,15 @@ import {
   dialogSchemasState,
   currentTargetState,
   luFilesSelectorFamily,
+  settingsState,
+  rootBotProjectIdSelector,
 } from '../../../recoilModel';
 
-import { editorSteps, ManifestEditorSteps, order } from './constants';
-import { generateSkillManifest } from './generateSkillManifest';
 import { styles } from './styles';
-import {
-  getTenantIdFromCache,
-  getTokenFromCache,
-  isGetTokenFromUser,
-  isShowAuthDialog,
-  setTenantId,
-} from '../../../utils/auth';
-import { AuthClient } from '../../../utils/authClient';
-import { createNotification } from '../../../recoilModel/dispatchers/notification';
-import { getPendingNotificationCardProps, getPendingNotificationSkillCardProps } from '../../publish/Notifications';
-import { AuthDialog } from '../../../components/Auth/AuthDialog';
-import { navigate } from '@reach/router';
+import { generateSkillManifest } from './generateSkillManifest';
+import { editorSteps, ManifestEditorSteps, order } from './constants';
+import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
+import { cloneDeep } from 'lodash';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -68,6 +61,24 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const editorStep = order[currentStep];
   const { buttons = [], content: Content, editJson, helpLink, subText, title, validate } = editorSteps[editorStep];
 
+  const settings = useRecoilValue(settingsState(projectId));
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
+  const { skillConfiguration } = mergedSettings;
+  const { setSettings } = useRecoilValue(dispatcherState);
+  const [callers, setCallers] = useState<string[]>(skillConfiguration?.allowedCallers ?? []);
+
+  const updateAllowedCallers = React.useCallback(
+    (allowedCallers: string[] = []) => {
+      const updatedSetting = {
+        ...cloneDeep(mergedSettings),
+        skillConfiguration: { ...skillConfiguration, allowedCallers },
+      };
+      setSettings(projectId, updatedSetting);
+    },
+    [mergedSettings, projectId, skillConfiguration]
+  );
+
   const handleGenerateManifest = () => {
     const manifest = generateSkillManifest(
       schema,
@@ -94,24 +105,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
   const handleTriggerPublish = async () => {
     navigate(`/bot/${projectId}/publish/all`);
-    // get token
-    // setShowAuthDialog(true);
-    // let token = '';
-    // // TODO: this logic needs to be moved into the Azure publish extensions
-    // if (isGetTokenFromUser()) {
-    //   token = getTokenFromCache('accessToken');
-    // } else {
-    //   let tenant = getTenantIdFromCache();
-    //   if (!tenant) {
-    //     const tenants = await AuthClient.getTenants();
-    //     tenant = tenants?.[0]?.tenantId;
-    //     setTenantId(tenant);
-    //   }
-    //   token = await AuthClient.getARMTokenForTenant(tenant);
-    // }
-    // // const notification = createNotification(getPendingNotificationSkillCardProps());
-    // // addNotification(notification);
-    // await publishToTarget(projectId, currentTarget, {}, null, token);
   };
 
   const handleSave = () => {
@@ -130,6 +123,10 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     if (manifest.content && manifest.id) {
       updateSkillManifest(manifest as SkillManifestFile, projectId);
     }
+  };
+
+  const onSaveSkill = () => {
+    updateAllowedCallers(callers);
   };
 
   const handleNext = (options?: { dismiss?: boolean; id?: string; save?: boolean }) => {
@@ -188,6 +185,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             setSkillManifest={setSkillManifest}
             skillManifests={skillManifests}
             value={content}
+            callers={callers}
+            setCallers={setCallers}
             onChange={(manifestContent) => setSkillManifest({ ...skillManifest, content: manifestContent })}
           />
         </div>
@@ -213,6 +212,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                       onSave: handleSave,
                       onPublish: handleTriggerPublish,
                       onSubmit,
+                      onSaveSkill,
                     })}
                   />
                 );
@@ -221,17 +221,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             {editJson && <DefaultButton text={formatMessage('Edit in JSON')} onClick={handleEditJson} />}
           </div>
         </DialogFooter>
-        {/* {clickPublish && isShowAuthDialog(false) && (
-          <AuthDialog
-            needGraph={false}
-            next={() => {
-              // setDialogHidden(false);
-            }}
-            onDismiss={() => {
-              setShowAuthDialog(false);
-            }}
-          />
-        )} */}
       </div>
     </Dialog>
   );
