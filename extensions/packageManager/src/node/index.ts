@@ -321,19 +321,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
                 runtimeLanguage = 'js';
               }
 
-              // update the settings.plugins array
+              // update the settings.components array
               const newlyInstalledPlugin = installedComponents.find((c) => hasSchema(c) && c.name == packageName);
               if (
                 newlyInstalledPlugin &&
-                !currentProject.settings.runtimeSettings?.plugins?.find((p) => p.name === newlyInstalledPlugin.name)
+                !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
               ) {
                 const newSettings = currentProject.settings;
                 if (!newSettings.runtimeSettings) {
                   newSettings.runtimeSettings = {
-                    plugins: [],
+                    components: [],
                   };
                 }
-                newSettings.runtimeSettings.plugins.push({
+                newSettings.runtimeSettings.components.push({
                   name: newlyInstalledPlugin.name,
                   settingsPrefix: newlyInstalledPlugin.name,
                 });
@@ -414,10 +414,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             components: mergeResults.components.filter(isAdaptiveComponent),
           });
 
-          // update the settings.plugins array
-          if (currentProject.settings.runtimeSettings?.plugins?.find((p) => p.name === packageName)) {
+          // update the settings.components array
+          if (currentProject.settings.runtimeSettings?.components?.find((p) => p.name === packageName)) {
             const newSettings = currentProject.settings;
-            newSettings.runtimeSettings.plugins = newSettings.runtimeSettings.plugins.filter(
+            newSettings.runtimeSettings.components = newSettings.runtimeSettings.components.filter(
               (p) => p.name !== packageName
             );
             currentProject.updateEnvSettings(newSettings);
