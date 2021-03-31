@@ -131,7 +131,6 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
       <div>
         <EditableField
           ariaLabel={formatMessage('form title')}
-          depth={0}
           fontSize={FontSizes.size20}
           id="form-title"
           name="$designer.name"

@@ -5,7 +5,6 @@ import assign from 'lodash/assign';
 import { FieldProps } from '@bfc/extension-client';
 
 const defaults: FieldProps = {
-  depth: 0,
   schema: {},
   definitions: {},
   uiOptions: {},

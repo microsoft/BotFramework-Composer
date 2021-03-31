@@ -21,7 +21,7 @@ const styles = {
   header: css`
     background-color: #eff6fc;
     display: flex;
-    margin: 4px 0px;
+    margin: 4px -18px;
     align-items: center;
   `,
 };

@@ -72,14 +72,12 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
         <div css={item}>
           <StringField
             definitions={definitions}
-            depth={0}
             error={errorMessage}
             id={`${name}.key`}
             label={stackedLayout ? formatMessage('Key') : false}
             name="key"
             placeholder={initialName || formatMessage('Add a new key')}
             schema={{}}
-            transparentBorder={!stackedLayout}
             uiOptions={{}}
             value={name}
             onBlur={handleBlur}
@@ -95,7 +93,6 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
             name="value"
             placeholder={placeholder}
             schema={schema}
-            transparentBorder={!stackedLayout}
             value={value}
             onChange={onChange}
           />

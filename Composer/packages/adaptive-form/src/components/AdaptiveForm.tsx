@@ -64,8 +64,8 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
             onChange={(newData) => onChange({ ...formData, ...newData })}
           />
           <SchemaField
+            isRoot
             definitions={schema?.definitions}
-            depth={-1}
             id={formData?.$designer?.id ? `root[${formData?.$designer?.id}]` : 'root'}
             name="root"
             rawErrors={errors}

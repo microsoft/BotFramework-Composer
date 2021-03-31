@@ -10,7 +10,6 @@ import { OpenObjectField } from '../OpenObjectField';
 const defaultProps = {
   onChange: jest.fn(),
   value: {},
-  depth: 0,
   definitions: {},
   schema: {
     additionalProperties: false,

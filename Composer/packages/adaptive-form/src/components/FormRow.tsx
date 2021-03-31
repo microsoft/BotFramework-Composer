@@ -18,12 +18,10 @@ export interface FormRowProps extends Omit<FieldProps, 'onChange'> {
 export function getRowProps(rowProps: FormRowProps, field: string): FieldProps {
   const {
     id,
-    depth,
     schema,
     definitions,
     value,
     uiOptions,
-    transparentBorder,
     className,
     label,
     rawErrors,
@@ -60,9 +58,7 @@ export function getRowProps(rowProps: FormRowProps, field: string): FieldProps {
     uiOptions: newUiOptions,
     value: !newUiOptions.additionalField && value ? value[field] : value,
     onChange: !newUiOptions.additionalField ? handleChange : onChange,
-    depth,
     definitions,
-    transparentBorder,
     className,
     onBlur,
     onFocus,

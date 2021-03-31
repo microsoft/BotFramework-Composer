@@ -42,17 +42,11 @@ export const arrayItem = {
     label: ArrayFieldItemField;
   `,
 
-  schemaFieldOverride: (stacked: boolean) => css`
-    display: flex;
-    flex-direction: ${stacked ? 'column' : 'row'};
+  schemaFieldOverride: css`
     flex: 1;
     margin: 0;
     /* prevents field from overflowing when error present */
     min-width: 0px;
-
-    & + & {
-      margin-left: ${stacked ? 0 : '16px'};
-    }
 
     label: ArrayItemSchemaFieldOverride;
   `,

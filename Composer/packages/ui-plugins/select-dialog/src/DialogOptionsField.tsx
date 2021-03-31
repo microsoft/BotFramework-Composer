@@ -190,7 +190,6 @@ const DialogOptionsField: React.FC<FieldProps> = ({
       </BorderedStack>
       <Field
         definitions={schema?.definitions || {}}
-        depth={-1}
         id={`${id}.options`}
         label={false}
         name={'options'}

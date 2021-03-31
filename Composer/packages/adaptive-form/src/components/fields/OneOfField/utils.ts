@@ -155,10 +155,8 @@ export function getFieldProps(props: FieldProps, schema?: JSONSchema7): FieldPro
     ...props,
     enumOptions,
     schema: schema || {},
-    transparentBorder: false,
     // allows object fields to render their labels
     label: schema?.type === 'object' ? undefined : false,
-    depth: props.depth - 1,
     placeholder: getUiPlaceholder({ ...props }),
     description: getUiDescription({ ...props, description: undefined }),
   };

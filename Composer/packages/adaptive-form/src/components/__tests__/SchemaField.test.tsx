@@ -24,7 +24,6 @@ jest.mock('@bfc/extension-client', () => ({
 
 const defaultProps: FieldProps = {
   onChange: jest.fn(),
-  depth: 0,
   id: 'test-id',
   name: 'test-name',
   definitions: { foo: { type: 'string' } },

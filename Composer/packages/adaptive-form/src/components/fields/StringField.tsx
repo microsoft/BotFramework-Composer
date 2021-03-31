@@ -3,26 +3,10 @@
 
 import React, { useEffect } from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
-
-export const borderStyles = (transparentBorder: boolean, error: boolean) =>
-  transparentBorder
-    ? {
-        fieldGroup: {
-          borderColor: error ? undefined : 'transparent',
-          transition: 'border-color 0.1s linear',
-          selectors: {
-            ':hover': {
-              borderColor: error ? undefined : NeutralColors.gray30,
-            },
-          },
-        },
-      }
-    : {};
 
 export const StringField: React.FC<FieldProps<string>> = function StringField(props) {
   const {
@@ -34,7 +18,6 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     description,
     placeholder,
     readonly,
-    transparentBorder,
     onFocus,
     onBlur,
     error,
@@ -89,7 +72,6 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         placeholder={placeholder}
         readOnly={readonly}
         styles={{
-          ...borderStyles(Boolean(transparentBorder), Boolean(error)),
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}

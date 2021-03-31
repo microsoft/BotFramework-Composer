@@ -22,7 +22,6 @@ const OpenObjectField: React.FC<FieldProps<{
 }>> = (props) => {
   const {
     definitions,
-    depth,
     description,
     id,
     label,
@@ -79,7 +78,6 @@ const OpenObjectField: React.FC<FieldProps<{
           <ObjectItem
             key={index}
             definitions={definitions}
-            depth={depth + 1}
             formData={value}
             id={`${id}.value`}
             name={propertyName}
