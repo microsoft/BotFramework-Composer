@@ -8,6 +8,7 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
+import querystring from 'query-string';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -32,8 +33,8 @@ import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './s
 import { BotStatusList } from './BotStatusList';
 import {
   getPendingNotificationCardProps,
-  getPendingNotificationSkillCardProps,
   getPublishedNotificationCardProps,
+  getSkillPublishedNotificationCardProps,
 } from './Notifications';
 import { PullDialog } from './pullDialog';
 import { PublishToolbar } from './PublishToolbar';
@@ -44,7 +45,15 @@ import {
   generateBotStatusList,
   deleteNotificationInterval,
 } from './publishPageUtils';
+import { manifestUrl } from '../design/styles';
 
+const SKILL_PUBLISH_STATUS = {
+  INITIAL: 'inital',
+  WAITING: 'wait for publish',
+  PUBLISHING: 'publishing',
+  PUBLISHED: 'published',
+  CANCEL: 'cancel',
+};
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
 
@@ -124,6 +133,20 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     pendingNotificationRef.current = undefined;
   };
 
+  const [skillPublishStatus, setSkillPublishStatus] = useState(SKILL_PUBLISH_STATUS.INITIAL);
+  const decoded = props.location?.search ? decodeURIComponent(props.location.search) : '';
+  const { publishTargetName, url } = querystring.parse(decoded);
+
+  useEffect(() => {
+    if (publishTargetName && botStatusList.length > 0 && skillPublishStatus === SKILL_PUBLISH_STATUS.INITIAL) {
+      setSkillPublishStatus(SKILL_PUBLISH_STATUS.WAITING);
+      const currentBotStatus = botStatusList.find((bot) => bot.id === projectId);
+      changePublishTarget(publishTargetName, currentBotStatus);
+      setCheckedSkillIds([projectId]);
+      setPublishDialogVisiblity(true);
+    }
+  }, [publishTargetName, botStatusList]);
+
   useEffect(() => {
     if (currentBotList.length < botList.length) {
       // init bot status list for the botProjectData is empty array when first mounted
@@ -198,9 +221,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // Show result notifications
       const displayedNotifications = showNotificationsRef.current;
       if (displayedNotifications[botProjectId]) {
-        const resultNotification = createNotification(
-          getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status })
-        );
+        const notificationCard =
+          skillPublishStatus === SKILL_PUBLISH_STATUS.PUBLISHING
+            ? getSkillPublishedNotificationCardProps({ ...updatedBot, status: responseData.status }, url)
+            : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status });
+        const resultNotification = createNotification(notificationCard);
         addNotification(resultNotification);
         setTimeout(() => {
           deleteNotification(resultNotification.id);
@@ -302,9 +327,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       accumulator[item.id] = true;
       return accumulator;
     }, {});
-    const notification = createNotification(getPendingNotificationCardProps(items));
+    const notification = createNotification(
+      getPendingNotificationCardProps(items, skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING)
+    );
     pendingNotificationRef.current = notification;
     addNotification(notification);
+
+    if (skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING) {
+      setSkillPublishStatus(SKILL_PUBLISH_STATUS.PUBLISHING);
+    }
 
     // publish to remote
     for (const bot of items) {

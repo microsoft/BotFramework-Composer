@@ -142,6 +142,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
         return (
           <Checkbox
             disabled={disableCheckbox}
+            checked={checkedIds.includes(item.id)}
             label={item.name}
             styles={{
               label: { width: '100%' },
