@@ -222,7 +222,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
         text: () => formatMessage('Generate and Publish'),
         onClick: ({ generateManifest, onNext, onPublish }) => () => {
           generateManifest();
-          onNext();
+          onNext({ dismiss: true, save: true });
           onPublish();
         },
       },
