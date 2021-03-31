@@ -93,6 +93,9 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       projectId
     );
     setSkillManifest(manifest);
+    if (manifest.content && manifest.id) {
+      updateSkillManifest(manifest as SkillManifestFile, projectId);
+    }
   };
 
   const handleEditJson = () => {
