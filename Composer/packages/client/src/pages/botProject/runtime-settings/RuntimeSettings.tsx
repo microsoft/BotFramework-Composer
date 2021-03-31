@@ -3,8 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
+import { mergeStyleSets } from '@uifabric/styling';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -15,6 +16,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 
 import {
   dispatcherState,
@@ -68,6 +70,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [runtimePath, setRuntimePath] = useState(settings.runtime?.path ?? '');
   const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime?.command ?? '');
   const [usingCustomRuntime, setUsingCustomRuntime] = useState(settings.runtime?.customRuntime ?? false);
+  const isAdaptive = useMemo(() => isUsingAdaptiveRuntime(settings.runtime), [settings]);
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
@@ -225,36 +228,43 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   return botName ? (
     <div css={runtimeSettingsStyle} id="runtimeSettings">
       {header()}
-      {toggleOfCustomRuntime()}
+      {!isAdaptive && toggleOfCustomRuntime()}
       <div>
-        <TextField
-          required
-          data-testid="runtimeCodeLocation"
-          disabled={!settings.runtime || !settings.runtime.customRuntime}
-          errorMessage={errorElement(formDataErrors.path)}
-          label={formatMessage('Runtime code location')}
-          styles={customError}
-          value={runtimePath}
-          onBlur={() => handleRuntimeSettingOnBlur('path')}
-          onChange={handleRuntimeSettingOnChange('path')}
-          onRenderLabel={onRenderLabel}
-        />
-        <span css={textOr}>{formatMessage('Or: ')}</span>
-        <Link
-          css={breathingSpace}
-          disabled={!settings.runtime || !settings.runtime.customRuntime}
-          onClick={showEjectModal}
-        >
-          {formatMessage('Get a new copy of the runtime code')}
-        </Link>
-
+        {!isAdaptive && (
+          <TextField
+            required
+            data-testid="runtimeCodeLocation"
+            disabled={!settings.runtime || !settings.runtime.customRuntime}
+            errorMessage={errorElement(formDataErrors.path)}
+            label={formatMessage('Runtime code location')}
+            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            value={runtimePath}
+            onBlur={() => handleRuntimeSettingOnBlur('path')}
+            onChange={handleRuntimeSettingOnChange('path')}
+            onRenderLabel={onRenderLabel}
+          />
+        )}
+        {!isAdaptive && (
+          <div>
+            <span css={textOr}>{formatMessage('Or: ')}</span>
+            <Link
+              css={breathingSpace}
+              disabled={!settings.runtime || !settings.runtime.customRuntime}
+              onClick={showEjectModal}
+            >
+              {formatMessage('Get a new copy of the runtime code')}
+            </Link>
+          </div>
+        )}
+      </div>
+      <div>
         <TextField
           required
           data-testid="runtimeCommand"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
           errorMessage={errorElement(formDataErrors.command)}
           label={formatMessage('Start command')}
-          styles={customError}
+          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
           value={runtimeCommand}
           onBlur={() => handleRuntimeSettingOnBlur('command')}
           onChange={handleRuntimeSettingOnChange('command')}
