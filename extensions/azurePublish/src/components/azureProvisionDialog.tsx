@@ -354,13 +354,8 @@ export const AzureProvisionDialog: React.FC = () => {
           setAllTenants(tenants);
           if (!getTenantIdFromCache()) {
             if (tenants?.length > 0) {
-              // if there is only 1 tenant, go ahead and fetch the token and store it in the cache
-              if (tenants.length === 1) {
-                updateFormData('tenantId', tenants[0].tenantId);
-              } else {
-                // seed tenant selection with first tenant
-                updateFormData('tenantId', tenants[0].tenantId);
-              }
+              // seed tenant selection with 1st tenant
+              updateFormData('tenantId', tenants[0].tenantId);
             }
           } else {
             updateFormData('tenantId', getTenantIdFromCache());
