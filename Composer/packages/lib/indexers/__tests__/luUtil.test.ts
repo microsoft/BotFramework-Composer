@@ -3,19 +3,66 @@
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
 import { updateIntent, addIntent, removeIntent, checkSection, parse, semanticValidate } from '../src/utils/luUtil';
-import { luIndexer } from '../src/luIndexer';
 
 const { luParser, luSectionTypes } = sectionHandler;
 
 describe('LU parse and validation', () => {
+  it('should parse reference', () => {
+    const fileContent = `[import](welcome.lu)
+    # AskForName
+    - {@userName=Jack}
+    `;
+    const luFiles = [
+      {
+        id: 'welcome',
+        content: `# welcome
+    - hi
+    `,
+      },
+    ];
+    const result1 = parse('a.lu', fileContent, {}, luFiles);
+    expect(result1.diagnostics.length).toEqual(0);
+    expect(result1.intents.length).toEqual(1);
+    expect(result1.allIntents.length).toEqual(2);
+    expect(result1.allIntents[1].fileId).toEqual('welcome');
+  });
+
+  it('should parse reference deep and with locale', () => {
+    const fileContent = `[import](welcome.lu)
+    # AskForName
+    - {@userName=Jack}
+    `;
+    const luFiles = [
+      {
+        id: 'welcome.en-us',
+        content: `[import](greeting.lu)
+    # welcome
+    - hi
+    `,
+      },
+      {
+        id: 'greeting',
+        content: `# greeting
+    - hi
+    `,
+      },
+    ];
+    const result1 = parse('a.en-us.lu', fileContent, {}, luFiles);
+    expect(result1.diagnostics.length).toEqual(0);
+    expect(result1.intents.length).toEqual(1);
+    expect(result1.allIntents.length).toEqual(3);
+    expect(result1.allIntents[1].fileId).toEqual('welcome.en-us');
+    expect(result1.allIntents[2].fileId).toEqual('greeting');
+  });
+
   it('Throws when ML entity is disable (validateResource)', () => {
     const fileContent = `# AskForName
     - {@userName=Jack}
     `;
-    const result1 = luIndexer.parse(fileContent, 'a.lu', { enableMLEntities: false });
+    const result1 = parse('a.lu', fileContent, { enableMLEntities: false }, []);
     expect(result1.diagnostics.length).toEqual(1);
 
-    const result2 = luIndexer.parse(fileContent, 'a.lu', { enableMLEntities: true });
+    const result2 = parse('a.lu', fileContent, { enableMLEntities: true }, []);
     expect(result2.diagnostics.length).toEqual(0);
   });
 
@@ -75,7 +122,7 @@ hi
   const luFeatures = {};
 
   it('parse section test', () => {
-    const luresource = luIndexer.parse(fileContent, fileId1, luFeatures).resource;
+    const luresource = parse(fileId1, fileContent, luFeatures, []).resource;
     const { Sections, Errors, Content } = luresource;
 
     expect(Content).toEqual(fileContent);
@@ -90,7 +137,7 @@ hi
   });
 
   it('parse section with syntax error test', () => {
-    const luresource = luIndexer.parse(fileContentError1, fileId2, luFeatures).resource;
+    const luresource = parse(fileId2, fileContentError1, luFeatures, []).resource;
     const { Sections, Errors, Content } = luresource;
 
     expect(Content).toEqual(fileContentError1);
@@ -101,7 +148,7 @@ hi
   });
 
   it('parse section can get diagnostic line number', () => {
-    const luFile = parse(fileId2, fileContentError1, luFeatures);
+    const luFile = parse(fileId2, fileContentError1, luFeatures, []);
     const { intents, diagnostics, content } = luFile;
 
     expect(content).toEqual(fileContentError1);
@@ -119,7 +166,7 @@ hi
       Body: `- check my unread email
       - show my unread emails`,
     };
-    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const luFile1 = parse(fileId1, fileContent, luFeatures, []);
 
     const luFile1Updated = addIntent(luFile1, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
@@ -151,7 +198,7 @@ hi
 - show my emails 2
 - check my mail box please`,
     };
-    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const luFile1 = parse(fileId1, fileContent, luFeatures, []);
     const updatedLuFile = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = updatedLuFile.resource;
 
@@ -186,7 +233,7 @@ hi
   it('update section with only name', () => {
     const intentName = 'CheckEmail';
 
-    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const luFile1 = parse(fileId1, fileContent, luFeatures, []);
     const updatedLuFile = updateIntent(luFile1, intentName, { Name: 'CheckEmail1' }, luFeatures);
     const luresource = updatedLuFile.resource;
 
@@ -208,7 +255,7 @@ hi
 - show my emails 2
 - check my mail box please`;
 
-    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const luFile1 = parse(fileId1, fileContent, luFeatures, []);
     const updatedLuFile = updateIntent(luFile1, intentName, { Body: updatedBody }, luFeatures);
     const luresource = updatedLuFile.resource;
 
@@ -227,7 +274,7 @@ hi
 
   it('update section with empty, should perform a remove', () => {
     const intentName = 'CheckEmail';
-    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const luFile1 = parse(fileId1, fileContent, luFeatures, []);
     const updatedLuFile = updateIntent(luFile1, intentName, null, luFeatures);
     const luresource = updatedLuFile.resource;
 
@@ -258,7 +305,7 @@ hi
 `,
     };
 
-    const luFile1 = luIndexer.parse(validFileContent, 'a.lu', luFeatures);
+    const luFile1 = parse('a.lu', validFileContent, luFeatures, []);
 
     // when intent invalid, after update can still be parsed
     const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent, luFeatures).content;
@@ -266,7 +313,7 @@ hi
     expect(updatedContent2Parsed.Sections.length).toEqual(1);
     expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
     // when file invalid, update with valid intent should fix error.
-    const luFile2 = luIndexer.parse(updatedContent2, 'a.lu', luFeatures);
+    const luFile2 = parse('a.lu', updatedContent2, luFeatures, []);
 
     const updatedContent3 = updateIntent(luFile2, intentName, validIntent, luFeatures).content;
     const updatedContent3Parsed = luParser.parse(updatedContent3);
@@ -287,7 +334,7 @@ hi
 - show my emails
 @`,
     };
-    const luFile1 = luIndexer.parse(validFileContent, 'a.lu', luFeatures);
+    const luFile1 = parse('a.lu', validFileContent, luFeatures, []);
 
     // when intent invalid, after update can still be parsed
     const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent, luFeatures).content;
@@ -313,7 +360,7 @@ hi
 # UnexpectedIntentDefination
 `,
     };
-    const luFile1 = luIndexer.parse(validFileContent, 'a.lu', luFeatures);
+    const luFile1 = parse('a.lu', validFileContent, luFeatures, []);
 
     // should auto escape # to \#
     const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent, luFeatures).content;
@@ -328,7 +375,7 @@ hi
 
   it('delete section test', () => {
     const intentName = 'CheckEmail';
-    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const luFile1 = parse(fileId1, fileContent, luFeatures, []);
     const fileContentUpdated = removeIntent(luFile1, intentName, luFeatures).content;
     const luresource = luParser.parse(fileContentUpdated);
 
@@ -372,7 +419,7 @@ describe('LU Nested Section CRUD test', () => {
   `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
     const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const result = luParser.parse(luFile1Updated.content);
     const { Sections, Errors } = result;
@@ -415,7 +462,7 @@ describe('LU Nested Section CRUD test', () => {
       `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
     const luFile1Updated = addIntent(luFile1, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
@@ -447,7 +494,7 @@ describe('LU Nested Section CRUD test', () => {
       `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
     const luFile1Updated = addIntent(luFile1, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
@@ -482,7 +529,7 @@ describe('LU Nested Section CRUD test', () => {
       `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
     const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
@@ -521,7 +568,7 @@ describe('LU Nested Section CRUD test', () => {
   `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
     const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
@@ -553,7 +600,7 @@ describe('LU Nested Section CRUD test', () => {
   ### Oops
   `;
 
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
     const luFile1Updated1 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody1 }, luFeatures);
     const luresource1 = luParser.parse(luFile1Updated1.content);
 
@@ -565,7 +612,7 @@ describe('LU Nested Section CRUD test', () => {
       `;
     const luFile1Updated2 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody2 }, luFeatures);
     const luresource2 = luParser.parse(luFile1Updated2.content);
-    expect(luresource2.Sections.length).toEqual(2);
+    expect(luresource2.Sections.length).toEqual(3);
     expect(luresource2.Errors.length).toBeGreaterThan(0);
     expect(luresource2.Sections[0].SectionType).toEqual(luSectionTypes.MODELINFOSECTION);
     expect(luresource2.Sections[1].SectionType).toEqual(luSectionTypes.NESTEDINTENTSECTION);
@@ -580,7 +627,7 @@ describe('LU Nested Section CRUD test', () => {
     const intentBody3 = `## Oops
   ### Oops
   `;
-    const luFile2 = luIndexer.parse(fileContent3, fileId, luFeatures);
+    const luFile2 = parse(fileId, fileContent3, luFeatures, []);
     const luFile1Updated3 = updateIntent(luFile2, intentName, { Name: intentName, Body: intentBody3 }, luFeatures);
     const luresource3 = luParser.parse(luFile1Updated3.content);
     expect(luresource3.Sections.length).toBeGreaterThan(0);
@@ -602,7 +649,7 @@ describe('LU Nested Section CRUD test', () => {
     `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
 
     const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
@@ -631,7 +678,7 @@ describe('LU Nested Section CRUD test', () => {
 
   it('delete nestedIntentSection test', () => {
     const Name = 'CheckTodo/CheckUnreadTodo';
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
     const luFile1Updated = removeIntent(luFile1, Name, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
@@ -654,7 +701,7 @@ describe('LU Nested Section CRUD test', () => {
 
   it('delete nestedIntentSection test, parrent not exist', () => {
     const Name = 'CheckTodoNotExist/CheckUnreadTodo';
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
 
     const luFile1Updated = removeIntent(luFile1, Name, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
@@ -664,7 +711,7 @@ describe('LU Nested Section CRUD test', () => {
 
   it('delete nestedIntentSection test, child not exist', () => {
     const Name = 'CheckTodo/CheckUnreadTodoNotExist';
-    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1 = parse(fileId, fileContent, luFeatures, []);
 
     const luFile1Updated = removeIntent(luFile1, Name, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);

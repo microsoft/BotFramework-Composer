@@ -35,6 +35,7 @@ const luFile: LuFile = {
       Entities: [{ Name: 'target', Type: 'ml' }],
     },
   ],
+  allIntents: [],
   empty: false,
   content: '',
   imports: [],
