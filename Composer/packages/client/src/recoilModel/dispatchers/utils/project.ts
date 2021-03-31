@@ -315,7 +315,7 @@ export const loadProjectData = async (data) => {
   const mergedSettings = getMergedSettings(projectId, settings, botName);
   const indexedFiles = indexer.index(files, botName);
 
-  const { lgResources, luResources, qnaResources } = indexedFiles;
+  const { lgResources, luResources, qnaResources, dialogs } = indexedFiles;
   const locales = settings.languages;
 
   //parse all resources with worker
@@ -324,9 +324,10 @@ export const loadProjectData = async (data) => {
   const lgFiles = lgResources.map(({ id, content }) => emptyLgFile(id, content));
   const luFiles = luResources.map(({ id, content }) => emptyLuFile(id, content));
   const qnaFiles = qnaResources.map(({ id, content }) => emptyQnaFile(id, content));
+  const dialogIds = dialogs.map((d) => d.id);
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
-  const updatedQnAFiles = migrateQnAFiles(projectId, qnaFiles, locales);
+  const updatedQnAFiles = migrateQnAFiles(projectId, dialogIds, qnaFiles, locales);
 
   const assets = { ...indexedFiles, lgFiles, luFiles, qnaFiles: updatedQnAFiles };
   //Validate all files
