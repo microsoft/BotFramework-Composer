@@ -18,7 +18,7 @@ import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
 import { DeleteBotButton } from './DeleteBotButton';
 import AdapterSection from './adapters/AdapterSection';
-import { SkillConfiguration } from './skill-configuration';
+import { AllowedCallers } from './AllowedCallers';
 
 // -------------------- Styles -------------------- //
 
@@ -56,7 +56,7 @@ export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{
       <div css={publishTargetsWrap(!isRootBot)}>
         <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
       </div>
-      <SkillConfiguration projectId={projectId} />
+      <AllowedCallers projectId={projectId} />
       {isRootBot && <DeleteBotButton projectId={projectId} scrollToSectionId={scrollToSectionId} />}
     </div>
   );
