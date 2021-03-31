@@ -747,7 +747,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   items={optionalListItems}
                   selectedKeys={selectedResourceKeys}
                   onSelectionChanged={(keys) => {
-                    const newSelection = listItems.filter((item) => item.required === true || keys.includes(item.key));
+                    const newSelection = listItems.filter((item) => keys.includes(item.key));
                     setEnabledResources(newSelection);
                   }}
                 />
@@ -866,7 +866,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 setPage(PageTypes.ReviewResource);
                 setTitle(DialogTitle.REVIEW);
-                let selectedResources = enabledResources.slice();
+                let selectedResources = requireResources.concat(enabledResources);
                 selectedResources = selectedResources.map((item) => {
                   let region = currentConfig?.region || currentLocation;
                   if (item.key.includes('luis')) {
@@ -910,6 +910,8 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Done')}
               onClick={() => {
                 const selectedResources = requireResources.concat(enabledResources);
+                console.log('SELECTED RESOURCES', selectedResources, requireResources, enabledResources);
+
                 onSubmit({
                   subscription: currentSubscription,
                   resourceGroup: currentResourceGroup,
