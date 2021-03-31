@@ -12,7 +12,7 @@ describe('<CreateQnAFromUrlModal />', () => {
   const onDismiss = jest.fn(() => {});
   const onSubmit = jest.fn(() => {});
   const projectId = 'test-create-qna';
-  const locales = ['en-us', 'ch-zn'];
+  const locales = ['en-us', 'zh-cn'];
   const defaultLocale = 'en-us';
 
   it('renders <CreateQnAFromUrlModal /> and create from scratch', () => {
@@ -56,7 +56,7 @@ describe('<CreateQnAFromUrlModal />', () => {
     const inputName = getByTestId('knowledgeLocationTextField-name') as HTMLInputElement;
     fireEvent.change(inputName, { target: { value: 'test' } });
 
-    const inputUrl = getByTestId('knowledgeLocationTextField-url') as HTMLInputElement;
+    const inputUrl = getByTestId(`adden-usInCreateQnAFromUrlModal`) as HTMLInputElement;
     fireEvent.change(inputUrl, { target: { value: 'test' } });
 
     expect(inputUrl.value).toBe('test');
@@ -67,6 +67,6 @@ describe('<CreateQnAFromUrlModal />', () => {
     expect(createKnowledgeButton).not.toBeNull();
     fireEvent.click(createKnowledgeButton);
     expect(onSubmit).toBeCalled();
-    expect(onSubmit).toBeCalledWith({ url: 'http://test', name: 'test', multiTurn: false });
+    expect(onSubmit).toBeCalledWith({ urls: ['http://test'], locales: ['en-us'], name: 'test', multiTurn: false });
   });
 });
