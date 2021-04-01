@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { randomBytes } from 'crypto';
 
+import { v4 as uuidv4 } from 'uuid';
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -44,7 +45,7 @@ export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
     const appId = props.botAppId ? props.botAppId : '{AddBotAppId}';
     const botName = props.botDisplayName ? props.botDisplayName : '{AddBotDisplayName}';
     const result = defaultTeamsManifest;
-    result.id = randomBytes(32).toString('base64');
+    result.id = uuidv4().toString();
     result.description.short = `short description for ${botName}`;
     result.description.full = `full description for ${botName}`;
     result.packageName = botName;
