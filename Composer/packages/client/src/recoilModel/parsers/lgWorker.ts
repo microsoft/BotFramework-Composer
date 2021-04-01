@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LgFile, LgTemplate } from '@bfc/shared';
+import { LgFile, LgTemplate, TextFile } from '@bfc/shared';
 
 import Worker from './workers/lgParser.worker.ts';
 import { BaseWorker } from './baseWorker';
@@ -15,12 +15,13 @@ import {
   LgCopyTemplatePayload,
   LgNewCachePayload,
   LgCleanCachePayload,
+  LgParseAllPayload,
 } from './types';
 
 // Wrapper class
 class LgWorker extends BaseWorker<LgActionType> {
-  addProject(projectId: string, lgFiles: LgFile[]) {
-    return this.sendMsg<LgNewCachePayload>(LgActionType.NewCache, { projectId, lgFiles });
+  addProject(projectId: string) {
+    return this.sendMsg<LgNewCachePayload>(LgActionType.NewCache, { projectId });
   }
 
   removeProject(projectId: string) {
@@ -29,6 +30,10 @@ class LgWorker extends BaseWorker<LgActionType> {
 
   parse(projectId: string, id: string, content: string, lgFiles: LgFile[]) {
     return this.sendMsg<LgParsePayload>(LgActionType.Parse, { id, content, lgFiles, projectId });
+  }
+
+  parseAll(projectId: string, lgResources: TextFile[]) {
+    return this.sendMsg<LgParseAllPayload>(LgActionType.ParseAll, { lgResources, projectId });
   }
 
   addTemplate(projectId: string, lgFile: LgFile, template: LgTemplate, lgFiles: LgFile[]) {

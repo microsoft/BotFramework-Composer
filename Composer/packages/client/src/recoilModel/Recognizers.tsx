@@ -1,7 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, LuFile, QnAFile, SDKKinds, RecognizerFile, LuProviderType } from '@bfc/shared';
+import {
+  DialogInfo,
+  LuFile,
+  QnAFile,
+  SDKKinds,
+  RecognizerFile,
+  LuProviderType,
+  QnALocales,
+  LUISLocales,
+} from '@bfc/shared';
 import React, { useEffect, useRef } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useRecoilValue } from 'recoil';
@@ -13,8 +22,8 @@ import { getLuProvider } from '../utils/dialogUtil';
 
 import * as luUtil from './../utils/luUtil';
 import * as buildUtil from './../utils/buildUtil';
-import { crossTrainConfigState, filePersistenceState, luFilesState, qnaFilesState, settingsState } from './atoms';
-import { dialogsSelectorFamily } from './selectors';
+import { crossTrainConfigState, filePersistenceState, settingsState } from './atoms';
+import { dialogsSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from './selectors';
 import { recognizersSelectorFamily } from './selectors/recognizers';
 
 export const LuisRecognizerTemplate = (target: string, fileName: string) => ({
@@ -63,15 +72,22 @@ export const getMultiLanguagueRecognizerDialog = (
   target: string,
   files: { empty: boolean; id: string }[],
   fileType: 'lu' | 'qna',
+  supportedLanguages: string[] = [],
   defaultLanguage = 'en-us'
 ) => {
   const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target, fileType);
-
+  const defaultLanguageFile = files.find((f) => getExtension(f.id) === defaultLanguage);
+  if (!defaultLanguageFile) throw new Error('default language file not found');
   files.forEach((item) => {
     if (item.empty || getBaseName(item.id) !== target) return;
     const locale = getExtension(item.id);
     const fileName = `${item.id}.${fileType}`;
-    multiLanguageRecognizer.recognizers[locale] = fileName;
+    if (supportedLanguages.includes(locale)) {
+      multiLanguageRecognizer.recognizers[locale] = fileName;
+    } else {
+      multiLanguageRecognizer.recognizers[locale] = `${defaultLanguageFile.id}.${fileType}`;
+    }
+
     if (locale === defaultLanguage) {
       multiLanguageRecognizer.recognizers[''] = fileName;
     }
@@ -132,10 +148,10 @@ export const generateRecognizers = (
     luProvide === SDKKinds.OrchestratorRecognizer
       ? getOrchestratorRecognizerDialogs(dialog.id, luFiles)
       : getLuisRecognizerDialogs(dialog.id, luFiles);
-  const luMultiLanguageRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu');
+  const luMultiLanguageRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu', LUISLocales);
 
   const crossTrainedRecognizer = getCrossTrainedRecognizerDialog(dialog.id, luFiles, qnaFiles);
-  const qnaMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, qnaFiles, 'qna');
+  const qnaMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, qnaFiles, 'qna', QnALocales);
   const qnaMakeRecognizers = getQnAMakerRecognizerDialogs(dialog.id, qnaFiles);
 
   return {
@@ -164,8 +180,8 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   const setRecognizers = useSetRecoilState(recognizersSelectorFamily(projectId));
   const [crossTrainConfig, setCrossTrainConfig] = useRecoilState(crossTrainConfigState(projectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const curRecognizersRef = useRef(curRecognizers);
@@ -210,6 +226,9 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
 
   useEffect(() => {
     try {
+      //if the lu file still in the loading stage, do nothing
+      if (luFiles.some((item) => item.isContentUnparsed)) return;
+
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
 
       const curCrossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles, settings.languages);

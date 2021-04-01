@@ -11,31 +11,29 @@ import {
   ContextualMenuItem,
   IContextualMenuItem,
   IContextualMenuItemProps,
-  IContextualMenuListProps,
   IContextualMenuProps,
 } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
 
-import { computePropertyItemTree, getAllNodes } from '../utils/lgUtils';
-import { withTooltip } from '../utils/withTooltip';
-
-import { jsLgToolbarMenuClassName } from './constants';
-import { useDebounce } from './hooks/useDebounce';
-import { PropertyTreeItem } from './PropertyTreeItem';
+import { useNoSearchResultMenuItem } from '../../hooks/useNoSearchResultMenuItem';
+import { useSearchableMenuListCallback } from '../../hooks/useSearchableMenuListCallback';
+import { computePropertyItemTree, getAllNodes } from '../../utils/fieldToolbarUtils';
+import { withTooltip } from '../../utils/withTooltip';
+import { jsLgToolbarMenuClassName } from '../../lg/constants';
 import {
   FunctionRefPayload,
   PropertyItem,
   PropertyRefPayload,
   TemplateRefPayload,
   ToolbarButtonPayload,
-} from './types';
+} from '../../types';
+
+import { PropertyTreeItem } from './PropertyTreeItem';
 
 // no op operation
 const noop = () => {};
@@ -83,23 +81,16 @@ const OneLiner = styled.div({
   padding: '0 8px',
 });
 
-const searchEmptyMessageStyles = { root: { height: 32 } };
-const searchEmptyMessageTokens = { childrenGap: 8 };
-
 const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
 const iconStyles = { root: { color: NeutralColors.black, margin: '0 4px', width: 16, height: 16 } };
-const searchFieldStyles = { root: { borderRadius: 0, ...fontSizeStyle }, iconContainer: { display: 'none' } };
-const calloutProps = {
-  styles: {
-    calloutMain: { overflowY: 'hidden' },
-  },
-  layerProps: { className: jsLgToolbarMenuClassName },
-};
-const itemsContainerStyles = { root: { overflowY: 'auto', maxHeight: 216, width: 200, overflowX: 'hidden' } };
 
 type ToolbarButtonMenuProps = {
   payload: ToolbarButtonPayload;
   disabled?: boolean;
+
+  // This className can be use for handling dismal of the toolbar in the container
+  // due to the portal nature of this component
+  dismissHandlerClassName?: string;
 };
 
 const getIcon = (kind: ToolbarButtonPayload['kind']): JSX.Element => {
@@ -146,12 +137,20 @@ const TooltipItem = React.memo(({ text, tooltip }: { text?: string; tooltip?: st
 });
 
 export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
-  const { payload, disabled = false } = props;
+  const { payload, disabled = false, dismissHandlerClassName = jsLgToolbarMenuClassName } = props;
 
   const [propertyTreeExpanded, setPropertyTreeExpanded] = React.useState<Record<string, boolean>>({});
-  const [query, setQuery] = React.useState<string | undefined>();
-  const debouncedQuery = useDebounce<string | undefined>(query, 300);
   const uiStrings = React.useMemo(() => getStrings(payload.kind), [payload.kind]);
+
+  const calloutProps = React.useMemo(
+    () => ({
+      styles: {
+        calloutMain: { overflowY: 'hidden' },
+      },
+      layerProps: { className: dismissHandlerClassName },
+    }),
+    [dismissHandlerClassName]
+  );
 
   const propertyTreeConfig = React.useMemo(() => {
     if (payload.kind === 'property') {
@@ -183,7 +182,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
             subMenuProps: {
               calloutProps: {
                 calloutMaxHeight: 432,
-                layerProps: { className: jsLgToolbarMenuClassName },
+                layerProps: { className: dismissHandlerClassName },
               },
               contextualMenuItemAs: (itemProps: IContextualMenuItemProps) => {
                 return (
@@ -290,15 +289,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
 
   React.useEffect(() => setItems(menuItems), [menuItems]);
 
-  const onSearchAbort = React.useCallback(() => {
-    setQuery('');
-  }, []);
-
-  const onSearchQueryChange = React.useCallback((_?: React.ChangeEvent<HTMLInputElement>, newValue?: string) => {
-    setQuery(newValue);
-  }, []);
-
-  const getFilterPredictable = React.useCallback((kind: ToolbarButtonPayload['kind'], q: string) => {
+  const getFilterPredicate = React.useCallback((kind: ToolbarButtonPayload['kind'], q: string) => {
     switch (kind) {
       case 'function':
       case 'template':
@@ -309,8 +300,24 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
     }
   }, []);
 
+  const noSearchResultMenuItem = useNoSearchResultMenuItem(uiStrings.emptyMessage);
+
+  const menuHeaderRenderer = React.useCallback(
+    () => (
+      <Stack styles={headerContainerStyles} verticalAlign="center">
+        <Header>{uiStrings.header}</Header>
+      </Stack>
+    ),
+    []
+  );
+
+  const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
+    uiStrings.searchPlaceholder,
+    menuHeaderRenderer
+  );
+
   React.useEffect(() => {
-    if (debouncedQuery) {
+    if (query) {
       const searchableItems =
         payload.kind === 'function'
           ? flatFunctionListItems
@@ -318,55 +325,19 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
           ? flatPropertyListItems
           : menuItems;
 
-      const predictable = getFilterPredictable(payload.kind, debouncedQuery);
+      const predicate = getFilterPredicate(payload.kind, query);
 
-      const filteredItems = searchableItems.filter(predictable);
+      const filteredItems = searchableItems.filter(predicate);
 
       if (!filteredItems || !filteredItems.length) {
-        filteredItems.push({
-          key: 'no_results',
-          onRender: () => (
-            <Stack
-              key="no_results"
-              horizontal
-              horizontalAlign="center"
-              styles={searchEmptyMessageStyles}
-              tokens={searchEmptyMessageTokens}
-              verticalAlign="center"
-            >
-              <Icon iconName="SearchIssue" title={uiStrings.emptyMessage} />
-              <Text variant="small">{uiStrings.emptyMessage}</Text>
-            </Stack>
-          ),
-        });
+        filteredItems.push(noSearchResultMenuItem);
       }
 
       setItems(filteredItems);
     } else {
       setItems(menuItems);
     }
-  }, [menuItems, flatPropertyListItems, flatFunctionListItems, debouncedQuery, payload.kind]);
-
-  const onRenderMenuList = React.useCallback(
-    (menuListProps?: IContextualMenuListProps, defaultRender?: IRenderFunction<IContextualMenuListProps>) => {
-      return (
-        <Stack>
-          <Stack styles={headerContainerStyles} verticalAlign="center">
-            <Header>{uiStrings.header}</Header>
-          </Stack>
-          <SearchBox
-            disableAnimation
-            placeholder={uiStrings.searchPlaceholder}
-            styles={searchFieldStyles}
-            onAbort={onSearchAbort}
-            onChange={onSearchQueryChange}
-          />
-          <Stack styles={itemsContainerStyles}>{defaultRender?.(menuListProps)}</Stack>
-        </Stack>
-      );
-    },
-    [onSearchAbort, onSearchQueryChange, payload.kind, debouncedQuery]
-  );
+  }, [menuItems, flatPropertyListItems, flatFunctionListItems, noSearchResultMenuItem, query, payload.kind]);
 
   const onDismiss = React.useCallback(() => {
     setQuery('');
@@ -452,7 +423,7 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
                 expanded={propertyTreeExpanded[node.id]}
                 item={node}
                 level={level}
-                onRenderLabel={debouncedQuery ? renderSearchResultLabel : renderLabel}
+                onRenderLabel={query ? renderSearchResultLabel : renderLabel}
                 onToggleExpand={onToggleExpand}
               />
             );
@@ -460,13 +431,13 @@ export const ToolbarButtonMenu = React.memo((props: ToolbarButtonMenuProps) => {
         } as IContextualMenuProps;
       }
     }
-  }, [items, onRenderMenuList, onDismiss, propertyTreeExpanded, debouncedQuery]);
+  }, [items, calloutProps, onRenderMenuList, onDismiss, propertyTreeExpanded, query]);
 
   const renderIcon = React.useCallback(() => getIcon(payload.kind), [payload.kind]);
 
   return (
     <IconButton
-      className={jsLgToolbarMenuClassName}
+      className={dismissHandlerClassName}
       data-testid="menuButton"
       disabled={disabled}
       menuProps={menuProps}
