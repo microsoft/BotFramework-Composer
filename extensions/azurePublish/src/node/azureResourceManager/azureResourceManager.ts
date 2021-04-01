@@ -363,6 +363,7 @@ export class AzureResourceMananger {
       const secondaryEndpointKey = `${qnaMakerWebAppName}-SecondaryEndpointKey`;
       const defaultAnswer = 'No good match found in KB.';
       const QNAMAKER_EXTENSION_VERSION = 'latest';
+      const EnalbeMultipleTestIndex = 'true';
 
       const webAppConfigUpdateResult = await webSiteManagementClient.webApps.createOrUpdateConfiguration(
         config.resourceGroupName,
@@ -404,6 +405,10 @@ export class AzureResourceMananger {
             {
               name: 'QNAMAKER_EXTENSION_VERSION',
               value: QNAMAKER_EXTENSION_VERSION,
+            },
+            {
+              name: 'EnalbeMultipleTestIndex',
+              value: EnalbeMultipleTestIndex,
             },
           ],
         }

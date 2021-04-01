@@ -120,7 +120,7 @@ export class AssetManager {
           dstDir,
           projectName,
           templateGeneratorPath,
-        },
+        } as any,
         (status, msg) => {
           BackgroundProcessManager.updateProcess(jobId, status, msg);
         }

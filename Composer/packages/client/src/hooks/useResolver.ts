@@ -4,15 +4,15 @@ import { useRef } from 'react';
 import { lgImportResolverGenerator } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { dialogsSelectorFamily, luFilesState, localeState, qnaFilesState } from '../recoilModel';
+import { dialogsSelectorFamily, luFilesSelectorFamily, localeState, qnaFilesSelectorFamily } from '../recoilModel';
 import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
 
 export const useResolvers = (projectId: string) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
 
   const lgFilesRef = useRef(lgFiles);
   lgFilesRef.current = lgFiles;

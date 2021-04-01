@@ -8,9 +8,10 @@ import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { luUtil } from '@bfc/indexers';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { luFilesState, currentProjectIdState, dispatcherState } from '../../atoms';
+import { currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '..';
 import { luDispatcher } from '../lu';
+import { luFilesSelectorFamily } from '../../selectors';
 
 const luFeatures = {};
 
@@ -30,7 +31,7 @@ const file1 = {
   content: `\r\n# Hello\r\n-hi`,
 };
 
-const luFiles = [luUtil.parse(file1.id, file1.content, luFeatures)] as LuFile[];
+const luFiles = [luUtil.parse(file1.id, file1.content, luFeatures, [])] as LuFile[];
 
 const getLuIntent = (Name, Body): LuIntentSection =>
   ({
@@ -40,7 +41,7 @@ const getLuIntent = (Name, Body): LuIntentSection =>
 
 describe('Lu dispatcher', () => {
   const useRecoilTestHook = () => {
-    const [luFiles, setLuFiles] = useRecoilState(luFilesState(projectId));
+    const [luFiles, setLuFiles] = useRecoilState(luFilesSelectorFamily(projectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
 
     return {
@@ -55,7 +56,7 @@ describe('Lu dispatcher', () => {
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: luFilesState(projectId), initialValue: luFiles },
+        { recoilState: luFilesSelectorFamily(projectId), initialValue: luFiles },
         { recoilState: currentProjectIdState, initialValue: projectId },
       ],
       dispatcher: {
