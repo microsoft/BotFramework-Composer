@@ -11,15 +11,15 @@ import ReactMarkdown from 'react-markdown';
 
 import { DialogTypes, DialogWrapper } from '../DialogWrapper';
 
-type DisplayReadmeProps = {
+type DisplayMarkdownDialogProps = {
   title: string;
-  readme: string;
+  content: string;
   hidden: boolean;
   onBack?: () => void;
   onDismiss: () => void;
 };
 
-export const DisplayReadme = (props: DisplayReadmeProps) => {
+export const DisplayMarkdownDialog = (props: DisplayMarkdownDialogProps) => {
   return (
     <DialogWrapper
       dialogType={DialogTypes.CreateFlow}
@@ -30,13 +30,13 @@ export const DisplayReadme = (props: DisplayReadmeProps) => {
       <div css={{ height: 500, position: 'relative', border: '1px solid #333' }}>
         <ScrollablePane>
           <ReactMarkdown css={{ padding: 20 }} linkTarget="_blank">
-            {props.readme}
+            {props.content}
           </ReactMarkdown>
         </ScrollablePane>
       </div>
       <DialogFooter>
         {props.onBack && <DefaultButton text={formatMessage('Back')} onClick={props.onBack} />}
-        <PrimaryButton text={formatMessage('Okay')} onClick={props.onDismiss} />
+        <PrimaryButton text={formatMessage('OK')} onClick={props.onDismiss} />
       </DialogFooter>
     </DialogWrapper>
   );

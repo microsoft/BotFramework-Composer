@@ -178,7 +178,7 @@ export const locationState = atomFamily<string, string>({
   },
 });
 
-export const readmeState = atomFamily<string, string>({
+export const projectReadmeState = atomFamily<string, string>({
   key: getFullyQualifiedKey('readme'),
   default: (id) => {
     return '';

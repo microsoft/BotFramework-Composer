@@ -27,6 +27,18 @@ const isAdaptiveComponent = (c) => {
   return hasSchema(c) || c.includesExports;
 };
 
+const readFileAsync = async (path, encoding) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    fs.readFile(path, { encoding }, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
 const loadReadme = async (components) => {
   const variants = ['readme.md', 'README.md', 'README.MD'];
   for (const c in components) {
@@ -36,8 +48,7 @@ const loadReadme = async (components) => {
         const readmePath = path.join(rootFolder, variants[v]);
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         if (fs.existsSync(readmePath)) {
-          // eslint-disable-next-line security/detect-non-literal-fs-filename
-          components[c].readme = fs.readFileSync(readmePath, 'utf-8');
+          components[c].readme = await readFileAsync(readmePath, 'utf-8');
           continue;
         }
       }
