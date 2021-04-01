@@ -43,24 +43,25 @@ const text = css`
 `;
 export const SkillDetail: React.FC<SkillDetailProps> = (props) => {
   const { manifest } = props;
+  console.log(manifest);
   return (
     <div css={container}>
-      <div css={title}>{formatMessage(manifest.name)}</div>
+      <div css={title}>{formatMessage(manifest?.name || '')}</div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Description')}</div>
-        <div css={text}>{formatMessage(manifest.description)}</div>
+        <div css={text}>{formatMessage(manifest?.description || '')}</div>
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Version')}</div>
-        <div css={text}>{formatMessage(manifest.version)}</div>
+        <div css={text}>{formatMessage(manifest?.version || '')}</div>
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Activities')}</div>
-        <div css={text}>{formatMessage(Object.keys(manifest.activities).join(', '))}</div>
+        <div css={text}>{formatMessage(Object.keys(manifest?.activities).join(', '))}</div>
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Publisher')}</div>
-        <div css={text}>{formatMessage(manifest.publisherName)}</div>
+        <div css={text}>{formatMessage(manifest?.publisherName || '')}</div>
       </div>
     </div>
   );
