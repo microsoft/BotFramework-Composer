@@ -10,7 +10,7 @@ import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../selectors/project';
 import { lgFilesSelectorFamily } from '../selectors/lg';
-import { luFilesSelectorFamily } from '../selectors';
+import { luFilesSelectorFamily, qnaFilesSelectorFamily } from '../selectors';
 
 import {
   localeState,
@@ -100,6 +100,10 @@ export const multilangDispatcher = () => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
         return [...prevluFiles, ...addedLuFiles];
       });
+      set(qnaFilesSelectorFamily(projectId), (prevQnAFiles) => {
+        const addedQnAFiles = copyLanguageResources(prevQnAFiles, defaultLang, languages);
+        return [...prevQnAFiles, ...addedQnAFiles];
+      });
       set(settingsState(projectId), (prevSettings) => {
         const settings: any = cloneDeep(prevSettings);
         if (Array.isArray(settings.languages)) {
@@ -137,6 +141,10 @@ export const multilangDispatcher = () => {
       set(luFilesSelectorFamily(projectId), (prevLuFiles) => {
         const { left: leftLuFiles } = deleteLanguageResources(prevLuFiles, languages);
         return leftLuFiles;
+      });
+      set(qnaFilesSelectorFamily(projectId), (prevQnAFiles) => {
+        const { left: leftQnAFiles } = deleteLanguageResources(prevQnAFiles, languages);
+        return leftQnAFiles;
       });
       set(settingsState(projectId), (prevSettings) => {
         const settings: any = cloneDeep(prevSettings);

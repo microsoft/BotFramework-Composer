@@ -18,7 +18,8 @@ const styles = {
     ...sharedFieldIconStyles,
     textAlign: 'center',
     border: '1px solid rgb(96, 94, 92)',
-    borderRadius: '2px',
+    borderRadius: '2px 0 0 2px',
+    borderRight: 'none',
     cursor: 'default',
   }),
   componentWrapper: css({ flexGrow: 1 }),
@@ -38,7 +39,7 @@ export function WithTypeIcons(WrappedComponent: FieldWidget): FieldWidget {
         <div css={styles.mainWrapper}>
           {iconText && <div css={styles.iconWrapper}>{iconText}</div>}
           <div css={styles.componentWrapper}>
-            <WrappedComponent {...props} label={undefined} />
+            <WrappedComponent hasIcon {...props} label={undefined} />
           </div>
         </div>
       </React.Fragment>
