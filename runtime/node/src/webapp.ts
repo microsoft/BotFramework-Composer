@@ -3,6 +3,7 @@
 
 import * as restify from 'restify';
 import { ConversationState, MemoryStorage, UserState } from 'botbuilder';
+import { ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import { ComposerBot } from './shared/composerBot';
 import {
   getBotAdapter,
@@ -10,6 +11,8 @@ import {
   configureMessageEndpoint,
   getServerPort,
   configureManifestsEndpoint,
+  configureTelemetry,
+  getTelemetryClient,
 } from './shared/helpers';
 import { SkillConversationIdFactory } from './shared/skillConversationIdFactory';
 import debug from 'debug';
@@ -30,10 +33,13 @@ const skillConversationIdFactory = new SkillConversationIdFactory();
 const server = restify.createServer({ maxParamLength: 1000 });
 
 // Get botframework adapter.
-const adapter = getBotAdapter(userState, conversationState);
+const adapter = getBotAdapter(memoryStorage, userState, conversationState);
+
+// Get bot telemetry client.
+const telemetryClient = getTelemetryClient();
 
 // Create composer bot instance with root dialog.
-const bot = new ComposerBot(userState, conversationState, skillConversationIdFactory);
+const bot = new ComposerBot(userState, conversationState, skillConversationIdFactory, telemetryClient);
 
 // Configure message endpoint.
 configureMessageEndpoint(server, adapter, bot);
@@ -43,6 +49,12 @@ configureSkillEndpoint(server, adapter, bot, skillConversationIdFactory);
 
 // Configure manifests endpoint.
 configureManifestsEndpoint(server);
+
+// Configure telemetry client, initializers and middleware.
+if (telemetryClient) {
+  server.use(ApplicationInsightsWebserverMiddleware);
+  configureTelemetry(adapter, telemetryClient);
+}
 
 // Get port and listen.
 const port = getServerPort();
