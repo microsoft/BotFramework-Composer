@@ -12,6 +12,7 @@ export enum DialogTypes {
   CreateFlow,
   DesignFlow,
   Customer,
+  ProvisionFlow,
 }
 
 // -------------------- Styles -------------------- //
@@ -19,6 +20,7 @@ export enum DialogTypes {
 const styles: {
   [DialogTypes.DesignFlow]: { dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> };
   [DialogTypes.CreateFlow]: { dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> };
+  [DialogTypes.ProvisionFlow]: { dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> };
 } = {
   [DialogTypes.CreateFlow]: {
     dialog: {
@@ -37,6 +39,25 @@ const styles: {
         // maxWidth: '416px !important',
         maxWidth: '80% !important',
         width: '960px !important',
+      },
+    },
+  },
+  [DialogTypes.ProvisionFlow]: {
+    dialog: {
+      title: {
+        fontWeight: FontWeights.bold,
+        fontSize: FontSizes.size20,
+        paddingTop: '14px',
+        paddingBottom: '11px',
+      },
+      subText: {
+        fontSize: FontSizes.size14,
+      },
+    },
+    modal: {
+      main: {
+        maxWidth: '70% !important',
+        width: '900px !important',
       },
     },
   },

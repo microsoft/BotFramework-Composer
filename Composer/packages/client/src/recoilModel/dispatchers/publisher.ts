@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig, isSkillHostUpdateRequired, PublishResult } from '@bfc/shared';
+import { defaultPublishConfig, isSkillHostUpdateRequired, PublishResult, PublishTarget } from '@bfc/shared';
 
 import {
   publishTypesState,
@@ -14,13 +14,17 @@ import {
   isEjectRuntimeExistState,
   filePersistenceState,
   settingsState,
-  luFilesState,
-  qnaFilesState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
-import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
+import {
+  rootBotProjectIdSelector,
+  dialogsSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+} from '../selectors';
 import * as luUtil from '../../utils/luUtil';
+import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
 
 import { BotStatus, Text } from './../../constants';
@@ -179,7 +183,7 @@ export const publisherDispatcher = () => {
   const publishToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       projectId: string,
-      target: any,
+      target: PublishTarget,
       metadata: any,
       sensitiveSettings,
       token = ''
@@ -187,15 +191,16 @@ export const publisherDispatcher = () => {
       try {
         const { snapshot } = callbackHelpers;
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-        const luFiles = await snapshot.getPromise(luFilesState(projectId));
-        const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
+        const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           accessToken: token,
           metadata: {
             ...metadata,
             luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-            qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            qnaResources: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           },
           sensitiveSettings,
         });

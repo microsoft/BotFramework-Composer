@@ -109,6 +109,9 @@ export class BotProjectService {
       'turn.recognized.intent',
       'turn.recognized.score',
       'turn.recognized.text',
+      'turn.recognized.alteredText',
+      'turn.recognized.entities',
+      'turn.recognized.intents',
       'turn.unrecognizedText',
       'turn.recognizedEntities',
       'turn.interrupted',
@@ -346,6 +349,10 @@ export class BotProjectService {
       // no match found
       return undefined;
     }
+  };
+
+  public static setProjectAlias = (projectId: string, alias: string): void => {
+    BotProjectService.setProjectLocationData(projectId, { alias });
   };
 
   private static updateCurrentProjects = (project: BotProject): void => {

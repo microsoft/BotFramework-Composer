@@ -116,10 +116,10 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
         return (
           <div style={{ textAlign: 'right' }}>
             {props.isInstalled(item) && (
-              <span style={{ color: '#219653' }}>
+              <span style={{ color: '#156639' }}>
                 <FontIcon
                   iconName={'CheckMark'}
-                  style={{ color: '#219653', fontSize: '1rem', position: 'relative', top: '3px' }}
+                  style={{ color: '#156639', fontSize: '1rem', position: 'relative', top: '3px' }}
                 />{' '}
                 {formatMessage('Installed')}
               </span>
