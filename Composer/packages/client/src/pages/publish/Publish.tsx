@@ -45,7 +45,6 @@ import {
   generateBotStatusList,
   deleteNotificationInterval,
 } from './publishPageUtils';
-import { manifestUrl } from '../design/styles';
 
 const SKILL_PUBLISH_STATUS = {
   INITIAL: 'inital',
@@ -222,11 +221,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       const displayedNotifications = showNotificationsRef.current;
       if (displayedNotifications[botProjectId]) {
         const notificationCard =
-          skillPublishStatus === SKILL_PUBLISH_STATUS.PUBLISHING
-            ? getSkillPublishedNotificationCardProps({ ...updatedBot, status: responseData.status }, url)
+          skillPublishStatus !== SKILL_PUBLISH_STATUS.INITIAL
+            ? getSkillPublishedNotificationCardProps({ ...updatedBot, status: responseData.status }, url as string)
             : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status });
         const resultNotification = createNotification(notificationCard);
         addNotification(resultNotification);
+        setSkillPublishStatus(SKILL_PUBLISH_STATUS.INITIAL);
         setTimeout(() => {
           deleteNotification(resultNotification.id);
           showNotificationsRef.current = { ...displayedNotifications, [botProjectId]: false };
