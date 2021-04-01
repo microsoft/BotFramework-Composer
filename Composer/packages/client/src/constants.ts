@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FeedName, TeamsManifest, TeamsManifestObj } from '@botframework-composer/types/src';
+import { FeedName, TeamsManifest } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
