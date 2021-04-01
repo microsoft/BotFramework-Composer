@@ -86,6 +86,7 @@ const walkWithPath = (
   return true;
 };
 
+// TODO: optimize the discoverNestedProperties handler to makes cases[i].actions discoverable.
 const walkSwitchCondition = (
   switchConditionData: SwitchCondition,
   sdkSchema: SchemaDefinitions,

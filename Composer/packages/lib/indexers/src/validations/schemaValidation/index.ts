@@ -1,16 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIDialog, Diagnostic } from '@bfc/shared';
-import { SchemaDefinitions } from '@botframework-composer/types';
+import { Diagnostic } from '@bfc/shared';
+import formatMessage from 'format-message';
+import { DiagnosticSeverity, MicrosoftAdaptiveDialog, SchemaDefinitions } from '@botframework-composer/types';
 
 import { walkAdaptiveDialog } from './walkAdaptiveDialog';
 
+const SCHEMA_NOT_FOUND = formatMessage('Schema definition not found in sdk.schema.');
+
 export const validateSchema = (
   dialogId: string,
-  dialogData: MicrosoftIDialog,
+  dialogData: MicrosoftAdaptiveDialog,
   schema: SchemaDefinitions
 ): Diagnostic[] => {
-  walkAdaptiveDialog;
-  console.log('id, data, schema', dialogId, dialogData, schema.definitions);
-  return [];
+  const diagnostics: Diagnostic[] = [];
+  const schemas: any = schema.definitions ?? {};
+
+  walkAdaptiveDialog(dialogData, schemas, ($kind, data, path) => {
+    if (!schemas[$kind]) {
+      diagnostics.push(
+        new Diagnostic(`${$kind}: ${SCHEMA_NOT_FOUND}`, `${dialogId}.dialog`, DiagnosticSeverity.Error, path)
+      );
+    }
+    return true;
+  });
+
+  return diagnostics;
 };
