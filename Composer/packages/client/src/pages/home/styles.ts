@@ -35,8 +35,6 @@ export const rightPage = css`
   flex-direction: column;
   background: #f6f6f6;
   @media (max-width: 1366px) {
-    flex: none;
-    width: cacl(100% - 100px);
     background: none;
   }
 `;
@@ -82,9 +80,9 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   border-width: 0;
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
-  min-width: 262px;
+  min-width: 210px;
   height: 183px;
-  width: 20vw;
+  width: 17vw;
   margin-right: 12px;
   padding: 0;
 `;
@@ -204,7 +202,7 @@ export const articleCardItem = {
     margin-bottom: 6px;
   `,
   imageCover: css`
-    width: 244px;
+    width: 100%;
     height: 95px;
     margin: 9px 0 4px 0;
   `,
@@ -226,13 +224,10 @@ export const detailListContainer = css`
   min-height: 250px;
 `;
 
-export const exampleListContainer = css`
-  border: 1px solid #979797;
-  margin-top: 20px;
+export const whatsNewsContainer = css`
   position: relative;
-  min-width: 260px;
+  min-width: 200px;
   flex: 1;
-  min-height: 582px;
 `;
 
 export const loading = css`

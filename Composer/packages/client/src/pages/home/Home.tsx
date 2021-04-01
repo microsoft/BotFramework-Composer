@@ -230,18 +230,19 @@ const Home: React.FC<RouteComponentProps> = () => {
         {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
           <div aria-label={formatMessage(`What's new list`)} css={home.rightPage} role="region">
             <h3 css={home.subtitle}>{formatMessage(`What's new`)}</h3>
-
-            {feed.whatsNewLinks.map(({ title, description, url }, index) => {
-              return (
-                <Fragment key={index}>
-                  <Link css={home.bluetitle} href={url}>
-                    {title}
-                  </Link>
-                  <p css={home.newsDescription}>{description}</p>
-                </Fragment>
-              );
-            })}
-            <Link css={home.bluetitle}>{formatMessage(`More...`)}</Link>
+            <div css={home.whatsNewsContainer}>
+              {feed.whatsNewLinks.map(({ title, description, url }, index) => {
+                return (
+                  <Fragment key={index}>
+                    <Link css={home.bluetitle} href={url}>
+                      {title}
+                    </Link>
+                    <p css={home.newsDescription}>{description}</p>
+                  </Fragment>
+                );
+              })}
+              <Link css={home.bluetitle}>{formatMessage(`More...`)}</Link>
+            </div>
           </div>
         )}
       </div>
