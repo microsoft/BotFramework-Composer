@@ -72,7 +72,7 @@ jobs:
       - task: UseDotNet@2
         inputs:
           version: "3.1.x"
-          packageType: runtime
+          packageType: sdk
       - task: DotNetCoreCLI@2
         displayName: "dotnet build"
         inputs:

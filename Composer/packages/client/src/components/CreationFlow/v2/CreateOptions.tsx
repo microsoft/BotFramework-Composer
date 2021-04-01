@@ -10,7 +10,7 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
 
@@ -24,7 +24,7 @@ type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
   onNext: (data: string) => void;
-  onJumpToOpenModal: () => void;
+  onJumpToOpenModal: (search?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
@@ -47,12 +47,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           .get<any>(`/api/projects/alias/${alias}`)
           .then((aliasRes) => {
             if (aliasRes.status === 200) {
-              setIsOpenOptionsModal(true);
+              navigate(`/bot/${aliasRes.data.id}`);
               return;
             }
           })
           .catch((e) => {
-            setIsOpenCreateModal(true);
+            setIsOpenOptionsModal(true);
           });
         return;
       }
@@ -74,7 +74,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     if (option === 'Create') {
       setIsOpenCreateModal(true);
     } else {
-      onJumpToOpenModal();
+      onJumpToOpenModal(props.location?.search);
     }
   };
 
@@ -96,6 +96,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         fetchReadMe={fetchReadMe}
         fetchTemplates={fetchTemplates}
         isOpen={isOpenCreateModal}
+        location={props.location}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}

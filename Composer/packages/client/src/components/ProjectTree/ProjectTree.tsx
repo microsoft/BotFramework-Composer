@@ -786,13 +786,13 @@ export const ProjectTree: React.FC<Props> = ({
       css={root}
       data-testid="ProjectTree"
     >
+      <ProjectTreeHeader
+        ariaLabel={headerAriaLabel}
+        menu={headerMenu}
+        placeholder={headerPlaceholder}
+        onFilter={onFilter}
+      />
       <FocusZone isCircularNavigation css={focusStyle} direction={FocusZoneDirection.vertical}>
-        <ProjectTreeHeader
-          ariaLabel={headerAriaLabel}
-          menu={headerMenu}
-          placeholder={headerPlaceholder}
-          onFilter={onFilter}
-        />
         <div
           aria-label={formatMessage(
             `{
