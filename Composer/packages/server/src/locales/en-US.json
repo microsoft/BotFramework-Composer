@@ -164,14 +164,11 @@
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
-  "add_connections_d720a32e": {
-    "message": "Add connections"
-  },
   "add_caller_5c12aa5b": {
     "message": "Add caller"
- },
-  "add_and_remove_packages_9e439f32": {
-    "message": "Add and remove packages"
+  },
+  "add_connections_d720a32e": {
+    "message": "Add connections"
   },
   "add_custom_a376ce51": {
     "message": "Add Custom"
@@ -244,9 +241,6 @@
   },
   "all_4321c3a1": {
     "message": "All"
-  },
-  "allow_bot_to_be_called_as_skill_d3496fd8": {
-    "message": "Allow bot to be called as skill"
   },
   "allowed_callers_fe0f5bfe": {
     "message": "Allowed callers"
@@ -908,6 +902,9 @@
   "create_kb_e78571ba": {
     "message": "Create KB"
   },
+  "create_knowledge_base_db6d66c4": {
+    "message": "Create knowledge base"
+  },
   "create_knowledge_base_from_scratch_afe4d2a2": {
     "message": "Create knowledge base from scratch"
   },
@@ -1061,6 +1058,9 @@
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
   },
+  "delete_one_source_file_will_also_delete_qna_files__232d0834": {
+    "message": "Delete one source file will also delete qna files with the same name on other locales"
+  },
   "delete_properties_8bc77b42": {
     "message": "Delete Properties"
   },
@@ -1213,6 +1213,9 @@
   },
   "downloading_language_model_9d40c817": {
     "message": "Downloading Language Model"
+  },
+  "due_to_the_following_error_we_were_unable_to_succe_5ca033c7": {
+    "message": "Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:"
   },
   "due_to_the_following_error_we_were_unable_to_succe_897e7abb": {
     "message": "Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:"
@@ -1369,6 +1372,9 @@
   },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
+  },
+  "enter_a_url_to_import_qna_resource_223ded92": {
+    "message": "Enter a URL to Import QnA resource"
   },
   "enter_cognitive_service_region_a0f684a4": {
     "message": "Enter cognitive service region"
@@ -1643,9 +1649,6 @@
   "generate_44e33e72": {
     "message": "Generate"
   },
-  "generate_a_provisioning_request_2b76c65b": {
-    "message": "Generate a provisioning request"
-  },
   "generate_a_resource_request_9d5bcacd": {
     "message": "Generate a resource request"
   },
@@ -1673,6 +1676,7 @@
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
   },
+  "get_started_76ed4cb9": {
     "message": "Get started"
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
@@ -1762,8 +1766,14 @@
   "import_as_new_35630827": {
     "message": "Import as new"
   },
+  "import_new_url_and_overwrite_ef1f405e": {
+    "message": "Import new url and overwrite"
+  },
   "import_schema_75659c5f": {
     "message": "Import schema"
+  },
+  "import_url_ccaa2f16": {
+    "message": "Import Url"
   },
   "import_your_bot_to_new_project_8751d82f": {
     "message": "Import your bot to new project"
@@ -1930,8 +1940,14 @@
   "keys_must_be_unique_2028cef3": {
     "message": "Keys must be unique"
   },
+  "knowledge_base_31e6868e": {
+    "message": "Knowledge base"
+  },
   "knowledge_base_name_7d83bbe4": {
     "message": "Knowledge base name"
+  },
+  "knowledge_qna_7a4e84f7": {
+    "message": "Knowledge(QnA)"
   },
   "knowledge_source_dd66f38f": {
     "message": "Knowledge source"
@@ -2779,9 +2795,6 @@
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
     "message": "Publish your bot to Azure and manage published bots here."
   },
-  "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
-    "message": "Publish your bot to Azure and manage published bots here."
-  },
   "publish_your_bots_6e1ba7c2": {
     "message": "Publish your bots"
   },
@@ -3187,9 +3200,6 @@
   "send_messages_c48b239": {
     "message": "Send Messages"
   },
-  "send_this_to_your_it_admin_64af7706": {
-    "message": "Send this to your IT admin"
-  },
   "sentence_wrap_930c8ced": {
     "message": "Sentence wrap"
   },
@@ -3525,9 +3535,6 @@
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "There was error creating your KB"
-  },
-  "these_are_next_steps_so_you_always_know_what_to_do_aedcd8e2": {
-    "message": "These are next steps so you always know what to do next to get your bot going."
   },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
     "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."

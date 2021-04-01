@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useState, Fragment, useEffect, useMemo } from 'react';
-import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -17,7 +16,7 @@ import {
   CheckboxVisibility,
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { WindowLocation } from '@reach/router';

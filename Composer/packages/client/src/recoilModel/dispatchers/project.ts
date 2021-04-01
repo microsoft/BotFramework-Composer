@@ -43,7 +43,6 @@ import { logMessage, setError } from './../dispatchers/shared';
 import {
   checkIfBotExistsInBotProjectFile,
   createNewBotFromTemplate,
-  createNewBotFromTemplateV2,
   fetchProjectDataById,
   flushExistingTasks,
   getSkillNameIdentifier,
