@@ -96,7 +96,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // Extract list of read-only sources
         const readOnlyKeys = packageSources.map((s) => s.key);
 
-        // Add user sources to the package sources, excluding modifications of the read-only ones
+        // Add user sources to the package sources, excluding modified versions of the read-only ones
         packageSources = packageSources.concat(userStoredSources.filter((s) => !readOnlyKeys.includes(s.key)));
       }
 
