@@ -100,11 +100,6 @@ export default async (composer: any): Promise<void> => {
         const configuration = JSON.parse(profile.configuration);
         const runtimeIdentifier = configuration.runtimeIdentifier;
 
-        // Don't set self-contained and runtimeIdentifier for AzureFunctions.
-        // let buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`;
-
-        // if (profile.type === 'azurePublish')
-        // {
         // if runtime identifier set, make dotnet runtime to self contained, default runtime identifier is win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
         const buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${
           runtimeIdentifier ?? 'win-x64'
@@ -122,13 +117,6 @@ export default async (composer: any): Promise<void> => {
         throw err;
         return;
       }
-      // Then, copy the declarative assets into the build artifacts folder.
-      // const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
-      // const localBotPath = path.join(runtimePath, 'ComposerDialogs');
-      // await fs.copy(localBotPath, remoteBotPath, {
-      // overwrite: true,
-      // recursive: true,
-      // });
 
       // write settings to disk in the appropriate location
       const settingsPath = path.join(publishFolder, 'settings', 'appsettings.json');
@@ -248,11 +236,9 @@ export default async (composer: any): Promise<void> => {
         const configuration = JSON.parse(profile.configuration);
         const runtimeIdentifier = configuration.runtimeIdentifier;
 
+        // TODO: swap these lines??? ben to confirm
         // Don't set self-contained and runtimeIdentifier for AzureFunctions.
         // let buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`;
-
-        // if (profile.type === 'azurePublish')
-        // {
         // if runtime identifier set, make dotnet runtime to self contained, default runtime identifier is win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
         const buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${
           runtimeIdentifier ?? 'win-x64'
@@ -270,13 +256,6 @@ export default async (composer: any): Promise<void> => {
         throw err;
         return;
       }
-      // Then, copy the declarative assets into the build artifacts folder.
-      // const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
-      // const localBotPath = path.join(runtimePath, 'ComposerDialogs');
-      // await fs.copy(localBotPath, remoteBotPath, {
-      // overwrite: true,
-      // recursive: true,
-      // });
 
       // write settings to disk in the appropriate location
       const settingsPath = path.join(publishFolder, 'settings', 'appsettings.json');
@@ -399,8 +378,6 @@ export default async (composer: any): Promise<void> => {
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-js-functions',
     name: 'JS - Functions (preview)',
-    // startCommand: 'node index.js',
-    // path: nodeTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
