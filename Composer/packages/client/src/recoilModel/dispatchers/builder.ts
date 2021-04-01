@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+import { ILuisConfig, IQnAConfig, IOrchestratorConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
 import { Text, BotStatus } from '../../constants';
@@ -13,7 +13,6 @@ import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { botStatusState, botRuntimeErrorState } from '../atoms';
 import { dialogsWithLuProviderSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from '../selectors';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
-import { IOrchestratorConfig } from '@botframework-composer/types/src';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));

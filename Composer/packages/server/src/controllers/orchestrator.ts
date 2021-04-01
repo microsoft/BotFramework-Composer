@@ -14,6 +14,26 @@ enum DownloadState {
   DOWNLOADING,
 }
 
+interface ModelRequest {
+  type: 'en_intent' | 'multilingual_intent';
+  name: string;
+  path?: string;
+}
+
+let state: DownloadState = DownloadState.STOPPED;
+
+const onProgress = (msg: string) => {
+  state = DownloadState.DOWNLOADING;
+};
+
+const onFinish = (msg: string) => {
+  state = DownloadState.STOPPED;
+};
+
+function isValidModelRequest(arg: any): arg is ModelRequest {
+  return arg.type !== undefined && arg.name !== undefined;
+}
+
 async function getModelBasePath() {
   let appDataPath = '';
   if (process?.versions?.hasOwnProperty('electron')) {
@@ -34,58 +54,39 @@ async function getModelList(): Promise<IOrchestratorNLRList> {
   return await Orchestrator.baseModelGetVersionsAsync();
 }
 
-let state: DownloadState = DownloadState.STOPPED;
-
-interface DefaultModelRequest {
-  type: 'en_intent' | 'multilingual_intent';
-  name: string;
-}
-
-function isDefaultModelRequest(arg: any): arg is DefaultModelRequest {
-  return arg !== undefined;
-}
-
 async function status(req: Request, res: Response) {
   res.send(200, state);
 }
 
-async function downloadLanguageModel(req: Request, res: Response) {
+async function downloadLanguageModel(req: Request, res: Response, next) {
   const modelData = req.body?.modelData;
 
-  if (!isDefaultModelRequest(modelData)) {
-    res.sendStatus(400);
-    return;
+  if (!isValidModelRequest(modelData)) {
+    return res.sendStatus(400);
   }
 
-  let modelName = '';
+  const modelList = await getModelList();
+  let modelName: string;
+  let modelPath: string;
 
   if (modelData?.name === 'default') {
-    const modelList = await getModelList();
     modelName = modelList.defaults[modelData.type];
+    modelPath = await getModelPath(modelName);
   } else {
+    if (!(modelData.name in modelList.models)) {
+      throw new Error(`Invalid Model: ${modelData.name}`);
+    }
     modelName = modelData.name;
+    modelPath = modelData?.path ?? (await getModelPath(modelName));
   }
-
-  const modelPath = await getModelPath(modelName);
 
   if (await pathExists(modelPath)) {
     state = DownloadState.ALREADYDOWNLOADED;
     return res.sendStatus(201);
   }
 
-  const onProgress = (msg: string) => {
-    setTimeout(() => {
-      state = DownloadState.DOWNLOADING;
-    }, 20000);
-  };
-
-  const onFinish = (msg: string) => {
-    state = DownloadState.STOPPED;
-  };
-
-  state = DownloadState.DOWNLOADING;
-
   setTimeout(async () => {
+    state = DownloadState.DOWNLOADING;
     await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
   }, 0);
 

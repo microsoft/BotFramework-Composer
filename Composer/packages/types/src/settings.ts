@@ -47,6 +47,7 @@ export type DialogSetting = {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  orchestrator?: IOrchestratorConfig;
   luFeatures: ILUFeaturesConfig;
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
@@ -100,10 +101,11 @@ export type IQnAConfig = {
 };
 
 export type IOrchestratorConfig = {
+  modelPath?: string;
   modelNames?: {
-    type?: 'en_intent' | 'multilingual_intent';
-    name?: string;
-    path?: string;
+    [key in 'en_intent' | 'multilingual_intent']: {
+      name: string;
+    };
   };
 };
 

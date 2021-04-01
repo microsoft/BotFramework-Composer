@@ -6,52 +6,54 @@ import { DialogSetting, RecognizerFile, SDKKinds } from '@bfc/shared';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import partition from 'lodash/partition';
 
-import { orchestratorDownloadNotificationProps } from '../../components/Orchestrator/DownloadNotification';
+import {
+  orchestratorDownloadErrorProps,
+  orchestratorDownloadNotificationProps,
+} from '../../components/Orchestrator/DownloadNotification';
 import httpClient from '../../utils/httpUtil';
 import { dispatcherState } from '../../../src/recoilModel';
 import { recognizersSelectorFamily } from '../selectors/recognizers';
 import { Locales } from '../../locales';
 
-import { createNotification } from './notification';
+import { createNotification, updateNotificationInternal } from './notification';
 import { settingsState } from '../atoms';
 
 interface IModelQueueItem {
   type: 'en_intent' | 'multilingual_intent';
   name: string;
+  path?: string;
 }
 
-export const downloadModel = (addr: string, model: IModelQueueItem, notificationStartCallback: () => void) => {
-  return new Promise<boolean>((resolve, reject) => {
-    httpClient.post(addr, { modelData: model }).then((resp) => {
-      if (resp.status === 201) {
-        resolve(true);
-        return;
-      }
-
-      if (resp.status !== 200) {
-        reject(false);
-        return;
-      }
-
-      notificationStartCallback();
-
-      const statusUri = resp.data;
-
+const pollUntilDone = (predicate: () => Promise<boolean>, pollingIntervalMs: number) =>
+  new Promise((resolve, reject) => {
+    try {
       const timer = setInterval(async () => {
-        const resp = await httpClient.get(statusUri);
-
-        if (resp.status === 200 && resp.data < 2) {
+        if (await predicate()) {
           clearInterval(timer);
           resolve(true);
         }
-      }, 1000);
-    });
+      }, pollingIntervalMs);
+    } catch (err) {
+      reject(err);
+    }
   });
+
+export const downloadModel = async (addr: string, model: IModelQueueItem, notificationStartCallback: () => void) => {
+  const resp = await httpClient.post(addr, { modelData: model });
+
+  // Model has been downloaded before
+  if (resp.status === 201) {
+    return true;
+  }
+
+  notificationStartCallback();
+
+  return await pollUntilDone(async () => (await httpClient.get(resp.data)).data < 2, 5000);
 };
 
 export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSettings: DialogSetting) => {
   const dialogsUsingOrchestrator = recognizerFiles.filter(
-    ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
+    ({ content }) => content.$kind === SDKKinds.OrchestratorRecognizer
   );
   const languageModels: IModelQueueItem[] = [];
   if (dialogsUsingOrchestrator.length) {
@@ -61,7 +63,11 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSe
     );
 
     if (enLuFiles.length) {
-      languageModels.push({ type: 'en_intent', name: botSettings?.orchestrator?.modelNames?.en_intent ?? 'default' });
+      languageModels.push({
+        type: 'en_intent',
+        name: botSettings?.orchestrator?.modelNames?.en_intent ?? 'default',
+        path: botSettings?.orchestrator?.path,
+      });
     }
 
     if (
@@ -73,6 +79,7 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSe
       languageModels.push({
         type: 'multilingual_intent',
         name: botSettings?.orchestrator?.modelNames?.multilingual_intent ?? 'default',
+        path: botSettings?.orchestrator?.path,
       });
     }
   }
@@ -80,30 +87,36 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSe
 };
 
 export const orchestratorDispatcher = () => {
-  const downloadLanguageModels = useRecoilCallback(({ snapshot }: CallbackInterface) => async (projectId: string) => {
-    const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
+  const downloadLanguageModels = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string) => {
+      const { snapshot } = callbackHelpers;
 
-    const isUsingOrchestrator = recognizers.some(
-      ({ id, content }) => content.$kind === SDKKinds.OrchestratorRecognizer
-    );
+      const recognizers = await snapshot.getPromise(recognizersSelectorFamily(projectId));
 
-    if (isUsingOrchestrator) {
-      // Download Model Notification
-      const { addNotification, deleteNotification } = await snapshot.getPromise(dispatcherState);
-      const notification = createNotification(orchestratorDownloadNotificationProps());
-      const botSettings = await snapshot.getPromise(settingsState(projectId));
+      const isUsingOrchestrator = recognizers.some(({ content }) => content.$kind === SDKKinds.OrchestratorRecognizer);
 
-      try {
-        for (const languageModel of availableLanguageModels(recognizers, botSettings)) {
-          await downloadModel('/orchestrator/download', languageModel, () => {
-            addNotification(notification);
-          });
+      if (isUsingOrchestrator) {
+        // Download Model Notification
+        const { addNotification, deleteNotification } = await snapshot.getPromise(dispatcherState);
+        const notification = createNotification(orchestratorDownloadNotificationProps());
+        const botSettings = await snapshot.getPromise(settingsState(projectId));
+
+        try {
+          for (const languageModel of availableLanguageModels(recognizers, botSettings)) {
+            await downloadModel('/orchestrator/download', languageModel, () => {
+              updateNotificationInternal(callbackHelpers, notification.id, notification);
+            });
+          }
+        } catch (err) {
+          addNotification(
+            createNotification(orchestratorDownloadErrorProps(err?.response?.data?.message || err.message))
+          );
+        } finally {
+          deleteNotification(notification.id);
         }
-      } finally {
-        deleteNotification(notification.id);
       }
     }
-  });
+  );
 
   return {
     downloadLanguageModels,
