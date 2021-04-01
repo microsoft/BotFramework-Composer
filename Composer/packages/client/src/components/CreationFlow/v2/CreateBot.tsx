@@ -202,13 +202,13 @@ export function CreateBotV2(props: CreateBotProps) {
 
   useEffect(() => {
     const itemKey = selectedProgLang?.props?.itemKey;
+
     if (itemKey) {
       if (itemKey === csharpFeedKey) {
         const newTemplates = templates.filter((template) => {
           return template.dotnetSupport;
         });
         setDisplayedTemplates(newTemplates);
-        // setCurrentTemplateId(newTemplates[0].id);
       } else if (itemKey === nodeFeedKey) {
         const newTemplates = templates.filter((template) => {
           return template.nodeSupport;
@@ -216,7 +216,7 @@ export function CreateBotV2(props: CreateBotProps) {
         setDisplayedTemplates(newTemplates);
       }
     }
-  }, [selectedProgLang]);
+  }, [templates, selectedProgLang]);
 
   useEffect(() => {
     if (displayedTemplates.length > 1) {
