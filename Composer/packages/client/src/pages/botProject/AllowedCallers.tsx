@@ -14,9 +14,11 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 
-import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../../recoilModel';
-import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
-import { actionButton, subtitle as defaultSubtitle } from '../styles';
+import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../recoilModel';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { CollapsableWrapper } from '../../components/CollapsableWrapper';
+
+import { actionButton, subtitle as defaultSubtitle, title } from './styles';
 
 const Input = styled(TextField)({
   width: '100%',
@@ -149,7 +151,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   }, [skillConfiguration?.allowedCallers, updateAllowedCallers]);
 
   return (
-    <React.Fragment>
+    <CollapsableWrapper title={formatMessage('Allowed callers')} titleStyle={title}>
       <div css={[defaultSubtitle, subtitle]}>
         {formatMessage('List of app ids for bots that are allowed to use this skill')}
       </div>
@@ -168,6 +170,6 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
           {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
         </MessageBar>
       )}
-    </React.Fragment>
+    </CollapsableWrapper>
   );
 };
