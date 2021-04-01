@@ -4,23 +4,20 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { useFeatureFlag } from '../../utils/hooks';
 
 import { BotProjectInfo } from './BotProjectInfo';
-import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
 import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
-import { DeleteBotButton } from './DeleteBotButton';
 import AdapterSection from './adapters/AdapterSection';
 import { SkillConfiguration } from './skill-configuration';
 
@@ -37,6 +34,22 @@ const publishTargetsWrap = (isLastComponent) => css`
   margin-bottom: ${isLastComponent ? '120px' : 0};
 `;
 
+const idsInTab: Record<PivotItemKey, string[]> = {
+  Basics: ['runtimeSettings'],
+  LuisQna: [],
+  Connections: ['connections', 'addNewPublishProfile'],
+  SkillConfig: [],
+  Language: [],
+};
+
+enum PivotItemKey {
+  Basics = 'Basics',
+  LuisQna = 'LuisQna',
+  Connections = 'Connections',
+  SkillConfig = 'SkillConfig',
+  Language = 'Language',
+}
+
 // -------------------- BotProjectSettingsTableView -------------------- //
 
 export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
@@ -48,28 +61,45 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
   const useAdapters = useFeatureFlag('NEW_CREATION_FLOW');
+  const [selectedKey, setSelectedKey] = useState(PivotItemKey.Basics);
+
+  useEffect(() => {
+    if (scrollToSectionId) {
+      const htmlIdTagName = scrollToSectionId.replace('#', '');
+      for (const key in PivotItemKey) {
+        if (idsInTab[key].indexOf(htmlIdTagName) !== -1) {
+          setSelectedKey(key as PivotItemKey);
+        }
+      }
+    }
+  }, [scrollToSectionId]);
 
   return (
     <div css={container}>
-      <Pivot>
-        <PivotItem headerText={formatMessage('Basics')}>
+      <Pivot
+        selectedKey={String(selectedKey)}
+        onLinkClick={(item) => {
+          item?.props.itemKey && setSelectedKey(item.props.itemKey as PivotItemKey);
+        }}
+      >
+        <PivotItem headerText={formatMessage('Basics')} itemKey={PivotItemKey.Basics}>
           <BotProjectInfo projectId={projectId} />
           <AppIdAndPassword projectId={projectId} />
           <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('LUIS and QnA')}>
+        <PivotItem headerText={formatMessage('LUIS and QnA')} itemKey={PivotItemKey.LuisQna}>
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('Connections')}>
+        <PivotItem headerText={formatMessage('Connections')} itemKey={PivotItemKey.Connections}>
           <div css={publishTargetsWrap(!isRootBot)}>
             <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
             {isRootBot && useAdapters && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
           </div>
         </PivotItem>
-        <PivotItem headerText={formatMessage('Skill Configuration')}>
+        <PivotItem headerText={formatMessage('Skill Configuration')} itemKey={PivotItemKey.SkillConfig}>
           <SkillConfiguration projectId={projectId} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('Language')}>
+        <PivotItem headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
           <BotLanguage projectId={projectId} />
         </PivotItem>
       </Pivot>
