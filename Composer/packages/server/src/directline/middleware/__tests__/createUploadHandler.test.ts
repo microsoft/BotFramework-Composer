@@ -4,7 +4,6 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { BotErrorCodes } from '../../utils/apiErrorException';
-import { textItem } from '../../utils/helpers';
 import { createUploadAttachmentHandler, createUploadHandler } from '../createUploadHandler';
 
 let res;
@@ -93,12 +92,9 @@ describe('upload handler', () => {
   });
 
   it('should send a 404 if there is no conversation attached to the request', () => {
-    const mockLogToDoc = jest.fn();
     const serverContext: any = {
       state: {
-        dispatchers: {
-          logToDocument: mockLogToDoc,
-        },
+        dispatchers: {},
       },
     };
     const req: any = {
@@ -112,8 +108,6 @@ describe('upload handler', () => {
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockSend).toHaveBeenCalledWith('Cannot upload file. Conversation not found.');
     expect(mockEnd).toHaveBeenCalled();
-    const logItem = textItem('Error', 'Cannot upload file. Conversation not found.');
-    expect(mockLogToDoc).toHaveBeenCalledWith('conversation1', logItem);
   });
 
   it('should short circuit if the request content is not form data', () => {

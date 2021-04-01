@@ -43,7 +43,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 }) => {
   const {
     openBotInEmulator,
-    appendTraffic,
+    appendWebChatTraffic,
     clearWebChatLogs,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
@@ -69,16 +69,16 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
               | ConversationNetworkTrafficItem
               | ConversationNetworkErrorItem = JSON.parse(event.data);
             if (data.trafficType === 'network') {
-              appendTraffic(projectId, data);
+              appendWebChatTraffic(projectId, data);
             }
             if (data.trafficType === 'activity') {
-              appendTraffic(
+              appendWebChatTraffic(
                 projectId,
                 data.activities.map((a) => ({ activity: a, timestamp: a.timestamp, trafficType: data.trafficType }))
               );
             }
             if (data.trafficType === 'networkError') {
-              appendTraffic(projectId, data);
+              appendWebChatTraffic(projectId, data);
               setTimeout(() => {
                 setActiveTabInDebugPanel('WebChatInspector');
                 setDebugPanelExpansion(true);
@@ -97,7 +97,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           timestamp: new Date().toISOString(),
           trafficType: 'networkError',
         };
-        appendTraffic(projectId, err);
+        appendWebChatTraffic(projectId, err);
         setActiveTabInDebugPanel('WebChatInspector');
         setDebugPanelExpansion(true);
       }
@@ -204,7 +204,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         timestamp: new Date().toISOString(),
         trafficType: 'networkError',
       };
-      appendTraffic(projectId, err);
+      appendWebChatTraffic(projectId, err);
     }
   };
 

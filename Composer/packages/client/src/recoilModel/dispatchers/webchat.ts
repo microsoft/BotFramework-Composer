@@ -19,7 +19,7 @@ export const webChatLogDispatcher = () => {
     set(isWebChatPanelVisibleState, value);
   });
 
-  const appendTraffic = useRecoilCallback(
+  const appendWebChatTraffic = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (
       projectId: string,
       traffic: ConversationTrafficItem | ConversationTrafficItem[]
@@ -44,7 +44,7 @@ export const webChatLogDispatcher = () => {
 
   return {
     clearWebChatLogs,
-    appendTraffic,
+    appendWebChatTraffic,
     setWebChatPanelVisibility,
     setWebChatInspectionData,
   };

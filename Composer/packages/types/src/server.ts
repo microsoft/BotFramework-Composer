@@ -38,20 +38,13 @@ export type ISettingManager = {
   getFileName: () => string;
 };
 
-export type DirectLineLogType = 'Error' | 'Warn' | 'Info';
-
 export interface DirectLineError {
   status: number;
   message: string;
   details?: string;
 }
 
-export interface DirectLineLog extends DirectLineError {
-  timestamp: string;
-  route?: string;
-  logType: DirectLineLogType;
-}
-
+/** Types of Web Chat traffic that can be sent to the client */
 export type ConversationTrafficItem =
   | ConversationActivityTrafficItem
   | ConversationNetworkTrafficItem
