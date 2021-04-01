@@ -2,11 +2,9 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
+import { fireEvent } from '@botframework-composer/test-utils';
 
-import QnAPage from '../../../src/pages/knowledge-base/QnAPage';
 import TableView from '../../../src/pages/knowledge-base/table-view';
-import CodeEditor from '../../../src/pages/knowledge-base/code-editor';
-import { TabHeader } from '../../../src/pages/knowledge-base/TabHeader';
 import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
@@ -30,22 +28,28 @@ const state = {
   projectId: 'test',
   skillId: '',
   dialogs: [
-    { id: '1', content: '', skills: [] },
-    { id: '2', content: '', skills: [] },
+    { id: 'dialog1', content: '', skills: [] },
+    { id: 'dialog2', content: '', skills: [] },
   ],
   locale: 'en-us',
   qnaFiles: [
     {
-      id: 'a.en-us',
+      id: 'a.source.en-us',
       content: initialContent,
       imports: [],
+      options: [],
       qnaSections: [
         {
-          Questions: [{ content: 'question', id: 1 }],
-          Answer: 'answer',
+          Questions: [{ content: 'question1', id: 1 }],
+          Answer: 'answer1',
           uuid: 1,
         },
       ],
+    },
+    {
+      id: 'dialog1.en-us',
+      content: '[import](a.source.qna)',
+      imports: [{ id: 'a.source.qna', description: 'import', path: 'a.source.qna' }],
     },
   ],
   settings: {
@@ -71,36 +75,13 @@ const initRecoilState = ({ set }) => {
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
     const { getByTestId, getByText } = renderWithRecoil(
-      <TableView dialogId={'a'} locale={state.locale} projectId={state.projectId} skillId={state.skillId} />,
+      <TableView dialogId={'dialog1'} locale={state.locale} projectId={state.projectId} />,
       initRecoilState
     );
-    getByTestId('table-view');
-    getByText('Question');
-  });
-
-  it('should render QnA page code editor', () => {
-    renderWithRecoil(
-      <CodeEditor dialogId={'a'} locale={state.locale} projectId={state.projectId} skillId={state.skillId} />,
-      initRecoilState
-    );
-  });
-
-  it('should render QnA page', () => {
-    const { getByTestId } = renderWithRecoil(<QnAPage dialogId={'a'} projectId={state.projectId} />, initRecoilState);
-    getByTestId('QnAPage');
-  });
-
-  it('should render QnA page TabHeader', () => {
-    const { getByText } = renderWithRecoil(
-      <TabHeader
-        defaultLanguage={state.settings.defaultLanguage}
-        languages={state.settings.languages}
-        locale={'en-us'}
-        onChangeLocale={() => {}}
-      />,
-      initRecoilState
-    );
-    getByText('English (United States)(Default)');
-    getByText('Chinese (Simplified, China)');
+    const more = getByTestId('knowledgeBaseMore');
+    fireEvent.click(more);
+    getByText('Import new url and overwrite');
+    getByText('Delete knowledge base');
+    getByText('Show code');
   });
 });
