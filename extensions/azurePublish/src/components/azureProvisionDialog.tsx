@@ -11,6 +11,7 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { LoadingSpinner } from '@bfc/ui-shared';
+import { ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -55,6 +56,12 @@ const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
 
+const labelTooltipStyles = {
+  root: {
+    userSelect: 'none',
+  },
+};
+
 const iconStyle = (required) => {
   return {
     root: {
@@ -72,6 +79,7 @@ const iconStyle = (required) => {
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
+  { key: 'generate', text: 'Generate resource request' },
 ];
 
 const PageTypes = {
@@ -124,7 +132,7 @@ const onRenderLabel = (props) => {
         {' '}
         {props.label}{' '}
       </div>
-      <TooltipHost content={props.ariaLabel}>
+      <TooltipHost content={props.ariaLabel} styles={labelTooltipStyles}>
         <Icon iconName="Info" styles={iconStyle(props.required)} />
       </TooltipHost>
     </div>
@@ -229,6 +237,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
+  const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
 
@@ -265,6 +274,43 @@ export const AzureProvisionDialog: React.FC = () => {
   const isMounted = useRef<boolean>();
 
   const timerRef = useRef<NodeJS.Timeout>();
+
+  const [handoffInstructions, setHandoffInstructions] = useState<string>('');
+  const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const updateHandoffInstructions = (resources) => {
+    const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
+    const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
+    const createCosmosDb = resources.filter((r) => r.key === 'cosmosDb').length > 0;
+    const createStorage = resources.filter((r) => r.key === 'blobStorage').length > 0;
+    const createAppInsights = resources.filter((r) => r.key === 'applicationInsights').length > 0;
+    const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
+
+    const provisionComposer = `node provisionComposer.js --subscriptionId ${
+      currentSubscription ?? '<YOUR SUBSCRIPTION ID>'
+    } --name ${currentHostName ?? '<RESOURCE NAME>'}
+    --appPassword=<16 CHAR PASSWORD>
+    --location=${currentLocation || 'westus'}
+    --resourceGroup=${currentResourceGroup || '<RESOURCE GROUP NAME>'}
+    --createLuisResource=${createLuisResource}
+    --createLuisAuthoringResource=${createLuisAuthoringResource}
+    --createCosmosDb=${createCosmosDb}
+    --createStorage=${createStorage}
+    --createAppInsights=${createAppInsights}
+    --createQnAResource=${createQnAResource}
+    `;
+
+    const instructions = formatMessage(
+      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      { command: provisionComposer }
+    );
+
+    setHandoffInstructions(instructions);
+  };
+
+  useEffect(() => {
+    const selectedResources = requireResources.concat(enabledResources);
+    updateHandoffInstructions(selectedResources);
+  }, [enabledResources]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -366,8 +412,10 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      const resources = await getResourceList(currentProjectId(), publishType);
-      setExtensionResourceOptions(resources);
+      if (isMounted.current) {
+        const resources = await getResourceList(currentProjectId(), publishType);
+        setExtensionResourceOptions(resources);
+      }
     } catch (err) {
       // todo: how do we handle API errors in this component
       console.log('ERROR', err);
@@ -376,11 +424,26 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      getSubscriptions(token).then((data) => {
-        if (isMounted.current) {
-          setSubscriptions(data);
-        }
-      });
+      setSubscriptionsErrorMessage(undefined);
+      getSubscriptions(token)
+        .then((data) => {
+          if (isMounted.current) {
+            setSubscriptions(data);
+            if (data.length === 0) {
+              setSubscriptionsErrorMessage(
+                formatMessage(
+                  'Your subscription list is empty, please add your subscription, or login with another account.'
+                )
+              );
+            }
+          }
+        })
+        .catch((err) => {
+          if (isMounted.current) {
+            setSubscriptionsErrorMessage(err.message);
+          }
+        });
+
       getResources();
     }
   }, [token]);
@@ -389,14 +452,18 @@ export const AzureProvisionDialog: React.FC = () => {
     if (token && currentSubscription) {
       try {
         const resourceGroups = await getResourceGroups(token, currentSubscription);
-        setResourceGroups(resourceGroups);
+        if (isMounted.current) {
+          setResourceGroups(resourceGroups);
 
-        // After the resource groups load, isNewResourceGroupName can be determined
-        setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === currentResourceGroupName));
+          // After the resource groups load, isNewResourceGroupName can be determined
+          setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === currentResourceGroupName));
+        }
       } catch (err) {
         // todo: how do we handle API errors in this component
         console.log('ERROR', err);
-        setResourceGroups(undefined);
+        if (isMounted.current) {
+          setResourceGroups(undefined);
+        }
       }
     } else {
       setResourceGroups(undefined);
@@ -407,7 +474,7 @@ export const AzureProvisionDialog: React.FC = () => {
     loadResourceGroups();
   }, [token, currentSubscription]);
 
-  const subscriptionOption = useMemo(() => {
+  const subscriptionOptions = useMemo(() => {
     return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
@@ -563,6 +630,7 @@ export const AzureProvisionDialog: React.FC = () => {
       !currentResourceGroupName ||
       !currentHostName ||
       !currentLocation ||
+      subscriptionsErrorMessage ||
       errorResourceGroupName ||
       errorHostName !== ''
     );
@@ -599,10 +667,12 @@ export const AzureProvisionDialog: React.FC = () => {
         </div>
         <div style={{ flex: 1, height: '100%' }}>
           <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
-            {subscriptionOption?.length > 0 && choice.key === 'create' && (
+            {choice.key === 'create' && (
               <form style={{ width: '100%' }}>
                 <Dropdown
-                  required
+                  ariaLabel={formatMessage(
+                    'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
+                  )}
                   disabled={allTenants.length === 1 || currentConfig?.tenantId}
                   errorMessage={loginErrorMsg}
                   label={formatMessage('Azure Directory')}
@@ -612,22 +682,17 @@ export const AzureProvisionDialog: React.FC = () => {
                   onChange={(_e, o) => {
                     setSelectedTenant(o.key as string);
                   }}
+                  onRenderLabel={onRenderLabel}
                 />
                 <Dropdown
                   required
                   ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-                  defaultSelectedKey={currentSubscription}
                   disabled={currentConfig?.subscriptionId}
-                  errorMessage={
-                    currentUser && subscriptionOption?.length < 1
-                      ? formatMessage(
-                          'Your subscription list is empty, please add your subscription, or login with another account.'
-                        )
-                      : undefined
-                  }
+                  errorMessage={subscriptionsErrorMessage}
                   label={formatMessage('Subscription')}
-                  options={subscriptionOption}
+                  options={subscriptionOptions}
                   placeholder={formatMessage('Select one')}
+                  selectedKey={currentSubscription}
                   styles={{ root: { paddingBottom: '8px' } }}
                   onChange={(_e, o: IDropdownOption) => {
                     setCurrentSubscription(o.key as string);
@@ -766,7 +831,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   items={optionalListItems}
                   selectedKeys={selectedResourceKeys}
                   onSelectionChanged={(keys) => {
-                    const newSelection = listItems.filter((item) => item.required === true || keys.includes(item.key));
+                    const newSelection = optionalListItems.filter((item) => keys.includes(item.key));
                     setEnabledResources(newSelection);
                   }}
                 />
@@ -838,7 +903,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 onBack();
               }}
             />
-            {choice.key === 'create' ? (
+            {choice.key === 'create' && (
               <PrimaryButton
                 disabled={isNextDisabled}
                 style={{ margin: '0 4px' }}
@@ -847,7 +912,15 @@ export const AzureProvisionDialog: React.FC = () => {
                   onNext(currentHostName);
                 }}
               />
-            ) : (
+            )}
+            {choice.key === 'generate' && (
+              <PrimaryButton
+                style={{ margin: '0 4px' }}
+                text={formatMessage('Generate resource request')}
+                onClick={() => onNext(currentHostName)}
+              />
+            )}
+            {choice.key === 'import' && (
               <PrimaryButton
                 disabled={isEditorError}
                 style={{ margin: '0 4px' }}
@@ -883,21 +956,25 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Next')}
               onClick={() => {
-                setPage(PageTypes.ReviewResource);
-                setTitle(DialogTitle.REVIEW);
-                let selectedResources = enabledResources.slice();
-                selectedResources = selectedResources.map((item) => {
-                  let region = currentConfig?.region || currentLocation;
-                  if (item.key.includes('luis')) {
-                    region = currentLuisLocation;
-                  }
-                  return {
-                    ...item,
-                    region: region,
-                    resourceGroup: currentConfig?.resourceGroup || currentResourceGroupName,
-                  };
-                });
-                setReviewListItems(selectedResources);
+                if (choice.key === 'generate') {
+                  setShowHandoff(true);
+                } else {
+                  setPage(PageTypes.ReviewResource);
+                  setTitle(DialogTitle.REVIEW);
+                  let selectedResources = requireResources.concat(enabledResources);
+                  selectedResources = selectedResources.map((item) => {
+                    let region = currentConfig?.region || currentLocation;
+                    if (item.key.includes('luis')) {
+                      region = currentLuisLocation;
+                    }
+                    return {
+                      ...item,
+                      region: region,
+                      resourceGroup: currentConfig?.resourceGroup || currentResourceGroupName,
+                    };
+                  });
+                  setReviewListItems(selectedResources);
+                }
               }}
             />
           </div>
@@ -1027,6 +1104,16 @@ export const AzureProvisionDialog: React.FC = () => {
       >
         {PageFooter}
       </div>
+      <ProvisionHandoff
+        developerInstructions={formatMessage('Send this to your IT admin')}
+        handoffInstructions={handoffInstructions}
+        hidden={!showHandoff}
+        title={formatMessage('Generate a provisioning request')}
+        onDismiss={() => {
+          closeDialog();
+          setShowHandoff(false);
+        }}
+      />
     </div>
   );
 };
