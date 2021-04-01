@@ -21,7 +21,6 @@ import {
   RootBotManagedProperties,
   defaultPublishConfig,
   LgFile,
-  RuntimeType,
   QnABotTemplateId,
 } from '@bfc/shared';
 import formatMessage from 'format-message';

@@ -1,13 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  FeedName,
-  webAppRuntimeKey,
-  functionsRuntimeKey,
-  csharpFeedKey,
-  nodeFeedKey,
-} from '@botframework-composer/types';
+import { webAppRuntimeKey, functionsRuntimeKey, csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 

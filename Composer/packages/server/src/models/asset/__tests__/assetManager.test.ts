@@ -155,7 +155,8 @@ describe('assetManager', () => {
         'sampleConversationalCore',
         mockLocRef,
         '0',
-        'azureWebApp'
+        'webapp',
+        'dotnet'
       );
       expect(newBotLocationRef).toStrictEqual({
         path: '/path/to/npmbot',
