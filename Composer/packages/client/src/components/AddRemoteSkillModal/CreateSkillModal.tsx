@@ -13,6 +13,7 @@ import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 import { settingsState, luFilesState, designPageLocationState } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
@@ -77,6 +78,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   });
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
+  const [showDetail, setShowDetail] = useState(false);
 
   const { languages, luFeatures, runtime } = useRecoilValue(settingsState(projectId));
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
@@ -107,6 +109,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const validateUrl = useCallback(
     async (event) => {
       event.preventDefault();
+      setShowDetail(true);
       try {
         const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
           params: {
@@ -182,11 +185,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                 onChange={handleManifestUrlChange}
               />
             </div>
-            {skillManifest && (
+            {showDetail && (
               <Fragment>
                 <Separator vertical styles={{ root: { padding: '0px 20px' } }} />
                 <div style={{ minWidth: '50%' }}>
-                  <SkillDetail manifest={skillManifest} />
+                  {skillManifest ? <SkillDetail manifest={skillManifest} /> : <LoadingSpinner />}
                 </div>
               </Fragment>
             )}

@@ -203,9 +203,6 @@
   "add_new_variation_e49425ea": {
     "message": "Add new variation"
   },
-  "add_or_edit_phrases_to_trigger_bookings_skill_8c0147ab": {
-    "message": "Add or edit phrases to trigger Bookings skill"
-  },
   "add_property_d381eba3": {
     "message": "Add Property"
   },
@@ -749,9 +746,6 @@
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
     "message": "Connecting to <b>{ targetName }</b> to import bot content..."
   },
-  "connecting_to_skills_works_best_with_the_orchestra_bb3b2e38": {
-    "message": "Connecting to skills works best with the Orchestrator recognizer at the root bot (TodoBotSample)"
-  },
   "continue_ac067716": {
     "message": "Continue"
   },
@@ -826,9 +820,6 @@
   },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Create a new skill manifest or select which one you want to edit"
-  },
-  "create_a_publish_profile_83a61c3f": {
-    "message": " Create a publish profile"
   },
   "create_a_skill_in_your_bot_d7659e6b": {
     "message": "Create a skill in your bot"
@@ -1264,6 +1255,9 @@
   },
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
+  },
+  "enable_orchestrator_as_the_recognizer_at_the_root__1de64c98": {
+    "message": "Enable orchestrator as the recognizer at the root dialog to add this skill"
   },
   "enable_orchestrator_cdbbd2c5": {
     "message": "Enable Orchestrator"
@@ -1754,6 +1748,9 @@
   "insert_template_reference_bb33720e": {
     "message": "Insert template reference"
   },
+  "install_error_a9319839": {
+    "message": "Install Error"
+  },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
@@ -1891,6 +1888,9 @@
   },
   "learn_more_about_manifests_6e7c364b": {
     "message": "Learn more about manifests"
+  },
+  "learn_more_about_orchestractor_d0c99460": {
+    "message": "\n learn more about Orchestractor"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
@@ -2206,6 +2206,9 @@
   },
   "msg_bf173fef": {
     "message": "{ msg }"
+  },
+  "multi_bot_projects_work_best_with_the_orchestrator_8b80e480": {
+    "message": "Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level."
   },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
@@ -2990,9 +2993,6 @@
   "select_input_hint_267a6208": {
     "message": "Select input hint"
   },
-  "select_intents_to_trigger_bookings_skill_fa2bc681": {
-    "message": "Select intents to trigger Bookings skill"
-  },
   "select_language_to_delete_d1662d3d": {
     "message": "Select language to delete"
   },
@@ -3118,6 +3118,9 @@
   },
   "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
     "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
+  },
+  "skip_bcb86160": {
+    "message": "Skip"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
@@ -3418,9 +3421,6 @@
   },
   "title_msg_ee91458d": {
     "message": "{ title }. { msg }"
-  },
-  "to_add_a_skill_your_bot_todobotwithluissample_must_ece86fa": {
-    "message": "To add a skill, your bot ToDoBotWithLuisSample must have publish profile"
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
