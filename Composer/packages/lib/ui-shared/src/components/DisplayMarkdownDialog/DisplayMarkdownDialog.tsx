@@ -34,7 +34,7 @@ export const DisplayMarkdownDialog = (props: DisplayMarkdownDialogProps) => {
         </ScrollablePane>
       </div>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('Okay')} onClick={props.onDismiss} />
+        <PrimaryButton text={formatMessage('OK')} onClick={props.onDismiss} />
       </DialogFooter>
     </DialogWrapper>
   );

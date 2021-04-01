@@ -846,16 +846,14 @@ const Library: React.FC = () => {
               )}
 
               {selectedItem.readme && (
-                <Fragment>
-                  <DefaultButton
-                    onClick={() => {
-                      setReadmeHidden(false);
-                    }}
-                  >
-                    {formatMessage('View readme')}
-                  </DefaultButton>
-                  &nbsp;
-                </Fragment>
+                <DefaultButton
+                  styles={{ root: { marginRight: 20 } }}
+                  onClick={() => {
+                    setReadmeHidden(false);
+                  }}
+                >
+                  {formatMessage('View readme')}
+                </DefaultButton>
               )}
               {isInstalled(selectedItem) && <DefaultButton onClick={removeComponent}>Uninstall</DefaultButton>}
             </Fragment>
