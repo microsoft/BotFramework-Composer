@@ -110,9 +110,18 @@ export class LUServer {
       return;
     }
 
+    const curLine = document.getText().split(/\r?\n/g)[params.position.line];
     // eslint-disable-next-line security/detect-unsafe-regex
     const importRegex = /^\s*-?\s*\[[^[\]]+\](\([^()#]+(#[a-zA-Z0-9_-]*)?(\*[a-zA-Z0-9_-]+\*)?\))/;
-
+    if (importRegex.test(curLine)) {
+      const importedFile = curLine.match(importRegex);
+      if (importedFile) {
+        const importFilename = importedFile[2];
+        const intent = importedFile[3];
+        const untterance = importedFile[4];
+        return;
+      }
+    }
     return;
   }
 
