@@ -100,6 +100,8 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', '
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.get('/skill/retrieveRemoteFile', UtilitiesController.getRemoteFile);
+
 // extensions
 router.get('/extensions', ExtensionsController.listExtensions);
 router.post('/extensions', ExtensionsController.addExtension);

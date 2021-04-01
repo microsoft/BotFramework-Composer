@@ -31,7 +31,7 @@ import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/a
 
 import CreationModal from './creationModal';
 
-const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/AddRemoteSkillModal/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
@@ -62,6 +62,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createTrigger,
+    createTriggerWithAction,
     createQnATrigger,
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
@@ -127,13 +128,17 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
       )}
       {showAddSkillDialogModal && (
         <CreateSkillModal
+          addRemoteSkill={(manifestUrl, endpointName) => {
+            setAddSkillDialogModalVisibility(false);
+            addRemoteSkillToBotProject(manifestUrl, endpointName);
+          }}
+          addTriggerToRoot={(dialogId, formData, actions) => {
+            console.log(actions);
+            createTriggerWithAction(projectId, dialogId, formData, actions, false);
+          }}
           projectId={projectId}
           onDismiss={() => {
             setAddSkillDialogModalVisibility(false);
-          }}
-          onSubmit={(manifestUrl, endpointName) => {
-            setAddSkillDialogModalVisibility(false);
-            addRemoteSkillToBotProject(manifestUrl, endpointName);
           }}
         />
       )}

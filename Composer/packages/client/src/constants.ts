@@ -300,7 +300,10 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
+      afterSubText: formatMessage(
+        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
+      ),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
@@ -308,6 +311,39 @@ export const addSkillDialog = {
       title: formatMessage('Edit a skill'),
       subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
     };
+  },
+};
+
+export const selectIntentDialog = {
+  SELECT_INTENT: (name: string, skill: string) => {
+    return {
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Select intents to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
+      subText: formatMessage(`These intents will trigger this skill from ${name}`),
+    };
+  },
+  ADD_OR_EDIT_PHRASE: (name: string, skill: string) => {
+    return {
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Add or edit phrases to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
+      subText: formatMessage(`These phrases will trigger this skill from ${name}`),
+    };
+  },
+};
+
+export const enableOrchestratorDialog = {
+  get title() {
+    return formatMessage('Enable Orchestrator');
+  },
+  get subText() {
+    return formatMessage('Enable orchestrator as the recognizer at the root dialog to add this skill');
+  },
+  get content() {
+    return formatMessage(
+      'Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level.'
+    );
   },
 };
 

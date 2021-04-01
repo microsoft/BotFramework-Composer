@@ -1262,6 +1262,12 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
   },
+  "enable_orchestrator_as_the_recognizer_at_the_root__1de64c98": {
+    "message": "Enable orchestrator as the recognizer at the root dialog to add this skill"
+  },
+  "enable_orchestrator_cdbbd2c5": {
+    "message": "Enable Orchestrator"
+  },
   "enable_speech_e30d6a2a": {
     "message": "Enable Speech"
   },
@@ -1595,6 +1601,9 @@
   "get_activity_members_11339605": {
     "message": "Get activity members"
   },
+  "get_an_overview_ef09e016": {
+    "message": " Get an overview "
+  },
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
   },
@@ -1751,6 +1760,9 @@
   "insert_template_reference_bb33720e": {
     "message": "Insert template reference"
   },
+  "install_error_a9319839": {
+    "message": "Install Error"
+  },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
@@ -1789,6 +1801,9 @@
   },
   "intentname_is_missing_or_empty_e49db2f8": {
     "message": "intentName is missing or empty"
+  },
+  "intents_9b8593e0": {
+    "message": "Intents"
   },
   "interpolated_string_c96053f2": {
     "message": "Interpolated string."
@@ -1865,6 +1880,9 @@
   "learn_about_adaptive_expressions_fb1b6c3c": {
     "message": "Learn about Adaptive expressions"
   },
+  "learn_how_to_build_a_skill_dbc58063": {
+    "message": " learn how to build a skill "
+  },
   "learn_more_14816ec": {
     "message": "Learn More."
   },
@@ -1882,6 +1900,9 @@
   },
   "learn_more_about_manifests_6e7c364b": {
     "message": "Learn more about manifests"
+  },
+  "learn_more_about_orchestractor_d0c99460": {
+    "message": "\n learn more about Orchestractor"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
@@ -2198,6 +2219,9 @@
   "msg_bf173fef": {
     "message": "{ msg }"
   },
+  "multi_bot_projects_work_best_with_the_orchestrator_8b80e480": {
+    "message": "Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level."
+  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -2510,9 +2534,6 @@
   "please_select_a_trigger_type_67417abb": {
     "message": "Please select a trigger type"
   },
-  "please_select_a_valid_endpoint_bf608af1": {
-    "message": "Please select a valid endpoint"
-  },
   "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
     "message": "Please select a version of the manifest schema"
   },
@@ -2674,6 +2695,9 @@
   },
   "published_4bb5209e": {
     "message": "Published"
+  },
+  "publisher_bf6195cf": {
+    "message": "Publisher"
   },
   "publishing_count_bots_b2a7f564": {
     "message": "Publishing { count } bots"
@@ -3104,11 +3128,17 @@
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Skill host endpoint url"
   },
-  "skill_manifest_endpoint_is_configured_improperly_e083731d": {
-    "message": "Skill manifest endpoint is configured improperly"
+  "skill_manifest_url_be7ef8d0": {
+    "message": "Skill Manifest Url"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
+  },
+  "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
+    "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
+  },
+  "skip_bcb86160": {
+    "message": "Skip"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
@@ -3440,6 +3470,9 @@
   "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
     "message": "To learn more about the { title }, <a>visit its documentation page</a>."
   },
+  "to_make_sure_the_skill_will_work_correctly_we_perf_8de42615": {
+    "message": "To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author."
+  },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
   },
@@ -3632,14 +3665,14 @@
   "user_is_typing_typing_activity_cd938615": {
     "message": "User is typing (Typing activity)"
   },
-  "validating_35b79a96": {
-    "message": "Validating..."
-  },
   "validation_b10c677c": {
     "message": "Validation"
   },
   "validation_rules_efd3144d": {
     "message": "Validation Rules"
+  },
+  "valify_url_d4289305": {
+    "message": "Valify Url"
   },
   "value_d842f16d": {
     "message": "Value"
