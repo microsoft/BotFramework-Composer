@@ -66,7 +66,7 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSe
       languageModels.push({
         type: 'en_intent',
         name: botSettings?.orchestrator?.modelNames?.en_intent ?? 'default',
-        path: botSettings?.orchestrator?.path,
+        path: botSettings?.orchestrator?.modelPath,
       });
     }
 
@@ -79,7 +79,7 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSe
       languageModels.push({
         type: 'multilingual_intent',
         name: botSettings?.orchestrator?.modelNames?.multilingual_intent ?? 'default',
-        path: botSettings?.orchestrator?.path,
+        path: botSettings?.orchestrator?.modelPath,
       });
     }
   }

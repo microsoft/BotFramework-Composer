@@ -176,16 +176,16 @@ export class Builder {
 
     let modelDatas: { model: string; lang: string; luFiles: any[] }[] = [];
 
-    if (this.config?.modelNames?.['en_intent']) {
-      modelDatas.push({ model: this.config?.modelNames?.['en_intent'], lang: 'en', luFiles: enLuFiles });
+    if (this.config?.modelNames?.en_intent) {
+      modelDatas.push({ model: this.config.modelNames.en_intent, lang: 'en', luFiles: enLuFiles });
     } else {
       const nlrList = await this.runOrchestratorNlrList();
       modelDatas.push({ model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles });
     }
 
-    if (this.config?.modelNames?.['multilingual_intent']) {
+    if (this.config?.modelNames?.multilingual_intent) {
       modelDatas.push({
-        model: this.config?.modelNames?.['multilingual_intent'],
+        model: this.config.modelNames.multilingual_intent,
         lang: 'multilang',
         luFiles: multiLangLuFiles,
       });
@@ -194,22 +194,15 @@ export class Builder {
       modelDatas.push({ model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles });
     }
 
-    // const nlrList = await this.runOrchestratorNlrList();
-    // const modelDatas = [
-    //   { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
-    //   { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
-    // ];
-
     for (const modelData of modelDatas) {
       if (modelData.luFiles.length) {
         if (!modelData.model) {
           throw new Error('Model not set');
         }
         const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
-        if (await !pathExists(modelPath)) {
+        if (!(await pathExists(modelPath))) {
           throw new Error('Orchestrator Model missing: ' + modelPath);
         }
-        //await this.runOrchestratorNlrGet(modelPath, modelData.model);
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
         this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;

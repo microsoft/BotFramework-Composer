@@ -46,7 +46,11 @@ async function getModelBasePath() {
   return baseModelPath;
 }
 
-async function getModelPath(modelName) {
+async function getModelPath(modelName: string, userFolder?: string) {
+  if (userFolder) {
+    return Path.resolve(userFolder, modelName.replace('.onnx', ''));
+  }
+
   return Path.resolve(await getModelBasePath(), modelName.replace('.onnx', ''));
 }
 
@@ -67,18 +71,17 @@ async function downloadLanguageModel(req: Request, res: Response) {
 
   const modelList = await getModelList();
   let modelName: string;
-  let modelPath: string;
 
   if (modelData?.name === 'default') {
     modelName = modelList.defaults[modelData.type];
-    modelPath = await getModelPath(modelName);
   } else {
     if (!(modelData.name in modelList.models)) {
       throw new Error(`Invalid Model: ${modelData.name}`);
     }
     modelName = modelData.name;
-    modelPath = modelData?.path ?? (await getModelPath(modelName));
   }
+
+  const modelPath = await getModelPath(modelName, modelData?.path);
 
   if (await pathExists(modelPath)) {
     state = DownloadState.ALREADYDOWNLOADED;
