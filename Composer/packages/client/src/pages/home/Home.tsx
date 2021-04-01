@@ -17,6 +17,7 @@ import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState } from '../../recoilModel';
 import {
   recentProjectsState,
+  feedState,
   templateIdState,
   currentProjectIdState,
   featureFlagsState,
@@ -31,96 +32,6 @@ import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 import { RecentBotList } from './RecentBotList';
 import { ItemContainer } from './ItemContainer';
 import * as home from './styles';
-
-const feeds = {
-  whatsNewLinks: [
-    {
-      title: 'Composer 1.4',
-      description: "Learn about new features in Composer's latest release.",
-      url: 'https://www.microsoft.com',
-    },
-    {
-      title: 'Build 2020 updates',
-      description: 'Read all of the updates from this years Build conference, including Composer GA and SDK v4.9.',
-      url: 'https://techcommunity.microsoft.com/t5/azure-ai/build-2020-conversational-ai-updates/ba-p/1397685',
-    },
-    {
-      title: 'November 2020 update',
-      description:
-        'November release of the Bot Framework SDK and Composer, including deeper integration with Power Virtual Agents!',
-      url: 'https://www.microsoft.com',
-    },
-    {
-      title: 'Conversational AI at Microsoft Ignite',
-      description:
-        'Updates from Microsoft Ignite. New Composer release, public preview of Orchestrator and updates to Azure Bot Service and Bot Framework SDK.',
-      url: 'https://www.microsoft.com',
-    },
-  ],
-  tabs: [
-    {
-      title: 'Videos',
-      viewAllLinkText: 'View all videos',
-      viewAllLinkUrl: 'https://www.youtube.com/channel/UC8qPRh20PpuxBvxf0w2WrwQ',
-      cards: [
-        {
-          image: 'https://via.placeholder.com/244x95/0078d4/ffffff?text=Bot+FrameWork+Composer',
-          title: 'Introduction to Composer',
-          description: 'A five minute intro to Composer',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-        {
-          image: 'https://via.placeholder.com/300x200/',
-          title: 'Build a weather bot',
-          description:
-            'An end to end tutorial for creating a weather bot x An end to end tutorial for creating a weather bot',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-        {
-          image: 'https://via.placeholder.com/244x55/',
-          title: 'Using prompts',
-          description: 'Discover how to use prompts to accept input from users',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-        {
-          image: 'https://via.placeholder.com/200x95/',
-          title: 'Using LG',
-          description: 'Explore Language Generation and how to generate dynamic responses',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-      ],
-    },
-    {
-      title: 'Articles',
-      cards: [
-        {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
-          title: 'Introduction to Composer Document',
-          description: 'A five minute intro to Composer',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-        {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
-          title: 'Build a weather bot',
-          description: 'An end to end tutorial for creating a weather bot',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-        {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
-          title: 'Using prompts',
-          description: 'Discover how to use prompts to accept input from users',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-        {
-          image: 'https://via.placeholder.com/244x95/09f/fff.png',
-          title: 'Using LG',
-          description: 'Explore Language Generation and how to generate dynamic responses',
-          url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
-        },
-      ],
-    },
-  ],
-};
 
 const resources = [
   {
@@ -157,6 +68,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
+  const feed = useRecoilValue(feedState);
   const templateId = useRecoilValue(templateIdState);
   const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
 
@@ -292,7 +204,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={[home.leftContainer, home.gap40]}>
             <div css={home.rowContainer}>
               <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
-                {feeds.tabs.map((tab, index) => (
+                {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
                     <div css={home.rowContainer}>
                       {tab.cards.map((card, index) => (
@@ -319,7 +231,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div aria-label={formatMessage(`What's new list`)} css={home.rightPage} role="region">
             <h3 css={home.subtitle}>{formatMessage(`What's new`)}</h3>
 
-            {feeds.whatsNewLinks.map(({ title, description, url }, index) => {
+            {feed.whatsNewLinks.map(({ title, description, url }, index) => {
               return (
                 <Fragment key={index}>
                   <Link css={home.bluetitle} href={url}>

@@ -63,6 +63,14 @@ export const recentProjectsState = atom<any[]>({
   default: [],
 });
 
+export const feedState = atom<{ tabs: any[]; whatsNewLinks: any[] }>({
+  key: getFullyQualifiedKey('feed'),
+  default: {
+    tabs: [],
+    whatsNewLinks: [],
+  },
+});
+
 export const templateProjectsState = atom<BotTemplate[]>({
   key: getFullyQualifiedKey('templateProjects'),
   default: [],

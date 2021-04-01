@@ -29,6 +29,7 @@ import {
   creationFlowTypeState,
   currentProjectIdState,
   dispatcherState,
+  feedState,
   fetchReadMePendingState,
   filePersistenceState,
   projectMetaDataState,
@@ -473,6 +474,17 @@ export const projectDispatcher = () => {
     }
   });
 
+  const fetchFeed = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.get(`/projects/feed`);
+      set(feedState, response.data);
+    } catch (ex) {
+      set(feedState, []);
+      logMessage(callbackHelpers, `Error in fetching feed projects: ${ex}`);
+    }
+  });
+
   const setBotStatus = useRecoilCallback<[string, BotStatus], void>(
     ({ set }: CallbackInterface) => (projectId: string, status: BotStatus) => {
       set(botStatusState(projectId), status);
@@ -613,6 +625,7 @@ export const projectDispatcher = () => {
     saveProjectAs,
     fetchProjectById,
     fetchRecentProjects,
+    fetchFeed,
     setBotStatus,
     saveTemplateId,
     updateBoilerplate,
