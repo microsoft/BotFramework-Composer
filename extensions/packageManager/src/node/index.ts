@@ -5,7 +5,6 @@ import * as path from 'path';
 
 import axios from 'axios';
 import formatMessage from 'format-message';
-
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
