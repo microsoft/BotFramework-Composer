@@ -24,6 +24,7 @@ import {
   qnaFilesSelectorFamily,
 } from '../selectors';
 import * as luUtil from '../../utils/luUtil';
+import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
 
 import { BotStatus, Text } from './../../constants';
@@ -193,12 +194,13 @@ export const publisherDispatcher = () => {
         const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
+        const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           accessToken: token,
           metadata: {
             ...metadata,
             luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-            qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            qnaResources: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           },
           sensitiveSettings,
         });
