@@ -7,9 +7,9 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import { QnAFile, DialogInfo } from '@bfc/shared';
-import { qnaUtil } from '@bfc/indexers';
+import { qnaUtil, BotIndexer } from '@bfc/indexers';
 
-import { createFile, updateFile } from '../recoilModel/persistence/http';
+import { createFile, updateFile, deleteFile } from '../recoilModel/persistence/http';
 
 import { getBaseName, getExtension } from './fileUtil';
 
@@ -24,6 +24,15 @@ export const getReferredQnaFiles = (qnaFiles: QnAFile[], dialogs: DialogInfo[], 
     return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale && contentNotEmpty);
   });
 };
+
+export const checkQnaBuild = (qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
+  const referred = getReferredQnaFiles(qnaFiles, dialogs, false);
+
+  // supported QnA locale.
+  const supported = BotIndexer.filterQnAFilesToPublish(referred);
+  return supported;
+};
+
 // substring text file by lines
 export const substringTextByLine = (text: string, start?: number, end?: number): string => {
   return text.split('\n').slice(start, end).join('\n');
@@ -32,9 +41,9 @@ export const substringTextByLine = (text: string, start?: number, end?: number):
  * Migrate qna pair in <dialog>.qna to container KB <dialog>-munual.source.qna file.
  * @param qnaFiles
  */
-export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): QnAFile[] => {
+export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[], locales: string[]): QnAFile[] => {
   const qnaFilesNeedMigrate = qnaFiles.filter((file) => {
-    return !file.id.endsWith('.source') && file.qnaSections.length;
+    return !file.id.endsWith('.source') && !locales.includes(file.id.split('.source.')[1]) && file.qnaSections.length;
   });
   if (!qnaFilesNeedMigrate.length) return qnaFiles;
   const updatedFiles: QnAFile[] = [];
@@ -78,8 +87,71 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): 
   return newQnAfiles;
 };
 
+export const copyQnAFilesOnOtherLocales = (
+  projectId: string,
+  dialogIds: string[],
+  qnaFiles: QnAFile[],
+  locales: string[]
+): QnAFile[] => {
+  const originalSourceQnAFiles = qnaFiles.filter((f) => f.id.endsWith('.source'));
+  const containerQnAFileIds = dialogIds.map((d) => `${d}.en-us`);
+  const containerKbFiles = qnaFiles.filter((f) => containerQnAFileIds.includes(f.id));
+  const createdFiles: QnAFile[] = [];
+  for (let i = 0; i < originalSourceQnAFiles.length; i++) {
+    //source.{locale}.qna
+    const newSourceQnAFileIds = locales.map((l) => `${originalSourceQnAFiles[i].id}.${l}`);
+    const createdFile = qnaUtil.parse('dummyId', originalSourceQnAFiles[i].content);
+    for (let j = 0; j < newSourceQnAFileIds.length; j++) {
+      if (!qnaFiles.find((f) => f.id === newSourceQnAFileIds[j])) {
+        createFile(projectId, `${newSourceQnAFileIds[j]}.qna`, createdFile.content);
+        createdFiles.push({
+          ...createdFile,
+          id: newSourceQnAFileIds[j],
+        });
+      }
+    }
+    deleteFile(projectId, `${originalSourceQnAFiles[i].id}.qna`);
+  }
+
+  for (let i = 0; i < containerKbFiles.length; i++) {
+    //source.{locale}.qna
+    const newContainerKbFileIds = locales.map((l) => `${getBaseName(containerKbFiles[i].id)}.${l}`);
+    const createdFile = qnaUtil.parse('dummyId', containerKbFiles[i].content);
+    for (let j = 0; j < newContainerKbFileIds.length; j++) {
+      if (!qnaFiles.find((f) => f.id === newContainerKbFileIds[j])) {
+        createFile(projectId, `${newContainerKbFileIds[j]}.qna`, createdFile.content);
+        createdFiles.push({
+          ...createdFile,
+          id: newContainerKbFileIds[j],
+        });
+      }
+    }
+  }
+  qnaFiles.push(...createdFiles);
+  return qnaFiles.filter((f) => !f.id.endsWith('.source'));
+};
+
+//migrate first and second version of qna files to the lastest design
+export const migrateQnAFiles = (
+  projectId: string,
+  dialogIds: string[],
+  qnaFiles: QnAFile[],
+  locales: string[]
+): QnAFile[] => {
+  // migrate script move qna pairs in *.qna to *-manual.source.qna.
+  const updateQnAFiles1 = reformQnAToContainerKB(projectId, qnaFiles, locales);
+  // copy qna file on other locales including  *-manual.source.qna
+  const updateQnAFiles2 = copyQnAFilesOnOtherLocales(projectId, dialogIds, updateQnAFiles1, locales);
+
+  return updateQnAFiles2;
+};
+
 export const getQnAFileUrlOption = (file: QnAFile): string | undefined => {
   return file.options.find((opt) => opt.name === 'url')?.value;
+};
+
+export const getQnAFileMultiTurnOption = (file: QnAFile): boolean | undefined => {
+  return file.options.find((opt) => opt.name === 'multiTurn')?.value === 'true';
 };
 
 export const isQnAFileCreatedFromUrl = (file: QnAFile): boolean => {
