@@ -15,7 +15,6 @@ type DisplayMarkdownDialogProps = {
   title: string;
   content: string;
   hidden: boolean;
-  onBack?: () => void;
   onDismiss: () => void;
 };
 
@@ -35,7 +34,6 @@ export const DisplayMarkdownDialog = (props: DisplayMarkdownDialogProps) => {
         </ScrollablePane>
       </div>
       <DialogFooter>
-        {props.onBack && <DefaultButton text={formatMessage('Back')} onClick={props.onBack} />}
         <PrimaryButton text={formatMessage('Okay')} onClick={props.onDismiss} />
       </DialogFooter>
     </DialogWrapper>
