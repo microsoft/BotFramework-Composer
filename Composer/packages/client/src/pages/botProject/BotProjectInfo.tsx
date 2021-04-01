@@ -2,16 +2,31 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import React, { useState, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DisplayReadme } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { readmeState, locationState } from '../../recoilModel/atoms';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+
+const labelStyle = css`
+  font-size: 12px;
+  color: #828282;
+`;
+
+const valueStyle = css`
+  font-size: 14px;
+`;
+
+const headerStyle = css`
+  font-size: 16px;
+  font-weight: 600;
+`;
 
 export const BotProjectInfo: React.FC<RouteComponentProps<{
   projectId: string;
@@ -25,39 +40,40 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
 
   return (
     <div>
-      <h1>{botProject?.name}</h1>
-      <p>
-        {formatMessage('File Location:')}
-        <span
-          style={{
-            display: 'inline-block',
-            overflowWrap: 'break-word',
-            maxWidth: '100%',
-            fontSize: 12,
-          }}
-        >
-          {location}
-        </span>
-      </p>
-      {readme && (
-        <Fragment>
-          <DefaultButton
-            onClick={() => {
-              setReadmeHidden(false);
-            }}
-          >
-            {formatMessage('View project readme')}
-          </DefaultButton>
-          <DisplayReadme
-            hidden={readmeHidden}
-            readme={readme}
-            title={'Project Readme'}
-            onDismiss={() => {
-              setReadmeHidden(true);
-            }}
-          />
-        </Fragment>
-      )}
+      <h3 css={headerStyle}>{formatMessage('Bot Details')}</h3>
+      <Stack tokens={{ childrenGap: 10 }}>
+        <StackItem>
+          <div css={labelStyle}>{formatMessage('Bot Handle')}</div>
+          <div css={valueStyle}>{botProject?.name}</div>
+        </StackItem>
+        <StackItem>
+          <div css={labelStyle}>{formatMessage('File Location')}</div>
+          <div css={valueStyle}>{location}</div>
+        </StackItem>
+        <StackItem styles={{ root: { marginBottom: '10px' } }}>
+          <div css={labelStyle}>{formatMessage('Template')}</div>
+          <div css={valueStyle}>Need To Add</div>
+          {readme && (
+            <Fragment>
+              <Link
+                onClick={() => {
+                  setReadmeHidden(false);
+                }}
+              >
+                {formatMessage('View project readme')}
+              </Link>
+              <DisplayReadme
+                hidden={readmeHidden}
+                readme={readme}
+                title={'Project Readme'}
+                onDismiss={() => {
+                  setReadmeHidden(true);
+                }}
+              />
+            </Fragment>
+          )}
+        </StackItem>
+      </Stack>
     </div>
   );
 };
