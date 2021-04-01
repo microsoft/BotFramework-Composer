@@ -332,6 +332,20 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
+  const updateLuisSettings = (newLuisSettings) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, ...newLuisSettings },
+    });
+  };
+
+  const updateQNASettings = (newQNASettings) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      qna: { ...mergedSettings.qna, ...newQNASettings },
+    });
+  };
+
   return (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
       <div css={externalServiceContainerStyle}>
@@ -434,7 +448,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onDismiss={() => {
             setDisplayManageLuis(false);
           }}
-          onGetKey={() => {}}
+          onGetKey={updateLuisSettings}
           onNext={() => {
             setDisplayManageLuis(false);
           }}
@@ -443,11 +457,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           hidden={!displayManageQNA}
           setDisplayManageQna={setDisplayManageQNA}
           onDismiss={() => {
-            setDisplayManageLuis(false);
+            setDisplayManageQNA(false);
           }}
-          onGetKey={() => {}}
+          onGetKey={updateQNASettings}
           onNext={() => {
-            setDisplayManageLuis(false);
+            setDisplayManageQNA(false);
           }}
         />
       </div>
