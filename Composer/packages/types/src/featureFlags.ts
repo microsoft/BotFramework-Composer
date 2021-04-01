@@ -14,6 +14,6 @@ export type FeatureFlag = {
   enabled: boolean;
 };
 
-export type FeatureFlagKey = 'FORM_DIALOG' | 'NEW_CREATION_FLOW';
+export type FeatureFlagKey = 'FORM_DIALOG';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;

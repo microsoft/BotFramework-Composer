@@ -99,7 +99,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const onClickNewBot = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
-    featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
+    navigate(`v2/projects/create`);
   };
 
   const toolbarItems: IToolbarItem[] = [
@@ -257,17 +257,6 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
-          <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
-            <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
-            <p css={home.examplesDescription}>
-              {formatMessage(
-                "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
-              )}
-            </p>
-            <ExampleList examples={botTemplates} onClick={onClickTemplate} />
-          </div>
-        )}
       </div>
     </div>
   );
