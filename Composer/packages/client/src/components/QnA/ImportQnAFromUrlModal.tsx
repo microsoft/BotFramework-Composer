@@ -9,62 +9,56 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { getKBName } from '../../utils/fileUtil';
-import { getQnAFileUrlOption } from '../../utils/qnaUtil';
+import { getQnAFileUrlOption, getQnAFileMultiTurnOption } from '../../utils/qnaUtil';
 
-import { validateName, validateUrl } from './constants';
+import { validateUrl } from './constants';
 import { styles, dialogWindow, textFieldKBNameFromScratch } from './styles';
 
-type EditQnAFromUrlModalProps = {
-  qnaFiles: QnAFile[];
+type ImportQnAFromUrlModalProps = {
   qnaFile: QnAFile;
   onDismiss: () => void;
-  onSubmit: (formData: EditQnAFromUrlFormData) => void;
+  onSubmit: (formData: ImportQnAFromUrlFormData) => void;
 };
 
-export type EditQnAFromUrlFormData = {
-  preName: string;
-  name: string;
+export type ImportQnAFromUrlFormData = {
   url: string;
+  multiTurn: boolean;
 };
 
-const formConfig: FieldConfig<EditQnAFromUrlFormData> = {
-  preName: {
-    defaultValue: '',
-  },
-  name: {
-    required: true,
-    defaultValue: '',
-  },
+const formConfig: FieldConfig<ImportQnAFromUrlFormData> = {
   url: {
     required: true,
     defaultValue: '',
   },
+  multiTurn: {
+    defaultValue: false,
+  },
 };
 
 const DialogTitle = () => {
-  return <div>{formatMessage('Edit KB name')}</div>;
+  return <div>{formatMessage('Import Url')}</div>;
 };
 
-export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) => {
-  const { onDismiss, onSubmit, qnaFiles, qnaFile } = props;
-
-  formConfig.name.validate = validateName(qnaFiles.filter(({ id }) => qnaFile.id !== id));
-  formConfig.name.defaultValue = getKBName(qnaFile.id);
+export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
+  const { onDismiss, onSubmit, qnaFile } = props;
+  const defaultUrl = getQnAFileUrlOption(qnaFile);
+  const defaultMultiTurn = getQnAFileMultiTurnOption(qnaFile);
   formConfig.url.validate = validateUrl;
   formConfig.url.defaultValue = getQnAFileUrlOption(qnaFile);
-  formConfig.preName.defaultValue = getKBName(qnaFile.id);
+  formConfig.multiTurn.defaultValue = getQnAFileMultiTurnOption(qnaFile);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors;
 
-  const updateName = (name = '') => {
-    updateField('name', name);
-  };
   const updateUrl = (url = '') => {
     updateField('url', url);
+  };
+
+  const updateMultiTurn = (multiTurn = false) => {
+    updateField('multiTurn', multiTurn);
   };
 
   return (
@@ -84,39 +78,36 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
       <div css={dialogWindow}>
         <Stack>
           <TextField
-            data-testid={`knowledgeLocationTextField-name`}
-            errorMessage={formErrors.name}
-            label={formatMessage('Knowledge base name')}
-            placeholder={formatMessage('Type a name that describes this content')}
-            styles={textFieldKBNameFromScratch}
-            value={formData.name}
-            onChange={(e, name) => updateName(name)}
-          />
-        </Stack>
-        <Stack>
-          <TextField
-            disabled
-            data-testid={`knowledgeLocationTextField-url`}
+            data-testId={'ImportNewUrlToOverwriteQnAFile'}
             errorMessage={formErrors.url}
             label={formatMessage('Knowledge source')}
-            placeholder={formatMessage('Enter a URL or browse to upload a file ')}
+            placeholder={formatMessage('Enter a URL to Import QnA resource')}
             styles={textFieldKBNameFromScratch}
             value={formData.url}
             onChange={(e, url) => updateUrl(url)}
+          />
+        </Stack>
+        <Stack>
+          <Checkbox
+            checked={formData.multiTurn}
+            label={formatMessage('Enable multi-turn extraction')}
+            onChange={(_e, val) => updateMultiTurn(val)}
           />
         </Stack>
       </div>
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton
-          data-testid={'editKnowledgeBase'}
           disabled={disabled}
           text={formatMessage('Done')}
           onClick={() => {
             if (hasErrors) {
               return;
             }
-            onSubmit(formData);
+            if (formData.url !== defaultUrl || formData.multiTurn !== defaultMultiTurn) {
+              onSubmit(formData);
+            }
+            onDismiss();
           }}
         />
       </DialogFooter>
@@ -124,4 +115,4 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
   );
 };
 
-export default EditQnAFromUrlModal;
+export default ImportQnAFromUrlModal;
