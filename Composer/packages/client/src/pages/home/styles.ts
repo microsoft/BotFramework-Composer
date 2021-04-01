@@ -125,9 +125,9 @@ export const noRecentBotsContainer = css`
 `;
 
 export const noRecentBotsCover = css`
-  width: 70px;
-  height: 70px;
-  margin-top: 50px;
+  width: 104px;
+  height: 84px;
+  margin-top: 48px;
 `;
 
 export const noRecentBotsDescription = css`

@@ -26,6 +26,7 @@ import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
 import defaultArticleCover from '../../images/defaultArticleCover.svg';
+import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 
 import { RecentBotList } from './RecentBotList';
 import { ItemContainer } from './ItemContainer';
@@ -251,7 +252,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                   aria-label={formatMessage('No recent bots')}
                   css={home.noRecentBotsCover}
                   imageFit={ImageFit.centerCover}
-                  src={'https://via.placeholder.com/70x70'}
+                  src={noRecentBotsCover}
                 />
                 <div css={home.noRecentBotsDescription}>
                   {' '}
