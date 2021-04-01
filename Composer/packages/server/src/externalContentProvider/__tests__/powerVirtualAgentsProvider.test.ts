@@ -83,6 +83,54 @@ describe('Power Virtual Agents provider', () => {
     expect(Buffer.from(result.urlSuffix, 'base64').toString()).toBe('dialogs/myDialog');
   });
 
+  it('should not include topics by default', async () => {
+    process.env.COMPOSER_PVA_TOPICS = 'any-value-other-than-true';
+    const mockResult = {
+      body: {
+        pipe: jest.fn(),
+      },
+      headers: {
+        get: (header) => {
+          if (header === 'content-type') {
+            return 'application/zip';
+          }
+          if (header === 'etag') {
+            return 'W/"Version"';
+          }
+        },
+      },
+    };
+    mockFetch.mockResolvedValueOnce(mockResult);
+    await provider.downloadBotContent();
+
+    expect(mockFetch).not.toHaveBeenCalledWith(expect.stringContaining('?includeTopics'), expect.any(Object));
+    delete process.env.COMPOSER_PVA_TOPICS;
+  });
+
+  it('should include topics if env variable is set', async () => {
+    process.env.COMPOSER_PVA_TOPICS = 'true';
+    const mockResult = {
+      body: {
+        pipe: jest.fn(),
+      },
+      headers: {
+        get: (header) => {
+          if (header === 'content-type') {
+            return 'application/zip';
+          }
+          if (header === 'etag') {
+            return 'W/"Version"';
+          }
+        },
+      },
+    };
+    mockFetch.mockResolvedValueOnce(mockResult);
+    await provider.downloadBotContent();
+
+    expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('?includeTopics'), expect.any(Object));
+    delete process.env.COMPOSER_PVA_TOPICS;
+  });
+
   it('should throw if the zip response does not have the correct header', async () => {
     const mockResult = {
       body: undefined,
