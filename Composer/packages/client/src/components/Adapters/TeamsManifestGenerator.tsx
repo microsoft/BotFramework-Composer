@@ -2,15 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { randomBytes } from 'crypto';
-
 import { v4 as uuidv4 } from 'uuid';
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { IconButton } from 'office-ui-fabric-react/lib/components/Button';
+import { IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/components/Button';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme/lib/fluent';
 import { useRef } from 'react';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
@@ -18,6 +16,28 @@ import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/Dialog
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { defaultTeamsManifest } from '../../constants';
+
+const iconButtonStyle: IButtonStyles = {
+  root: {
+    height: 'unset',
+    float: 'right',
+    marginRight: '10px',
+  },
+  menuIcon: {
+    backgroundColor: NeutralColors.white,
+    color: NeutralColors.gray130,
+    fontSize: FontSizes.size16,
+  },
+  rootDisabled: {
+    backgroundColor: NeutralColors.white,
+  },
+  rootHovered: {
+    backgroundColor: 'unset',
+  },
+  rootPressed: {
+    backgroundColor: 'unset',
+  },
+};
 
 type TeamsManifestGeneratorProps = {
   hidden: boolean;
@@ -74,41 +94,13 @@ export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
           <IconButton
             ariaLabel={formatMessage('Download Icon')}
             menuIconProps={{ iconName: 'Download' }}
-            styles={{
-              root: {
-                height: 'unset',
-                float: 'right',
-                marginRight: '10px',
-              },
-              menuIcon: {
-                backgroundColor: NeutralColors.white,
-                color: NeutralColors.gray130,
-                fontSize: FontSizes.size16,
-              },
-              rootDisabled: {
-                backgroundColor: NeutralColors.white,
-              },
-            }}
+            styles={iconButtonStyle}
           />
         </a>
         <IconButton
           ariaLabel={formatMessage('Copy Icon')}
           menuIconProps={{ iconName: 'Copy' }}
-          styles={{
-            root: {
-              height: 'unset',
-              float: 'right',
-              marginRight: '10px',
-            },
-            menuIcon: {
-              backgroundColor: NeutralColors.white,
-              color: NeutralColors.gray130,
-              fontSize: FontSizes.size16,
-            },
-            rootDisabled: {
-              backgroundColor: NeutralColors.white,
-            },
-          }}
+          styles={iconButtonStyle}
           onClick={() => {
             copyCodeToClipboard();
           }}
