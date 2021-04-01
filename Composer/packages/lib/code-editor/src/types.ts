@@ -30,8 +30,10 @@ export type LgResponseEditorProps = LgCommonEditorProps & {
  */
 export type LgCodeEditorProps = LgCommonEditorProps &
   BaseEditorProps & {
+    popExpandOptions?: { onEditorPopToggle?: (expanded: boolean) => void; popExpandTitle: string };
     toolbarHidden?: boolean;
-    onNavigateToLgPage?: (lgFileId: string) => void;
+    showDirectTemplateLink?: boolean;
+    onNavigateToLgPage?: (lgFileId: string, options?: { templateId?: string; line?: number }) => void;
     languageServer?:
       | {
           host?: string;
@@ -41,3 +43,32 @@ export type LgCodeEditorProps = LgCommonEditorProps &
         }
       | string;
   };
+
+export type PropertyItem = {
+  id: string;
+  name: string;
+  children: PropertyItem[];
+};
+
+export type TemplateRefPayload = {
+  kind: 'template';
+  data: {
+    templates: readonly LgTemplate[];
+    onSelectTemplate: (templateString: string, itemType: 'template') => void;
+  };
+};
+
+export type PropertyRefPayload = {
+  kind: 'property';
+  data: { properties: readonly string[]; onSelectProperty: (property: string, itemType: 'property') => void };
+};
+
+export type FunctionRefPayload = {
+  kind: 'function';
+  data: {
+    functions: readonly { key: string; name: string; children: string[] }[];
+    onSelectFunction: (functionString: string, itemType: 'function') => void;
+  };
+};
+
+export type ToolbarButtonPayload = TemplateRefPayload | PropertyRefPayload | FunctionRefPayload;

@@ -35,6 +35,7 @@ import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 import { logNetworkTraffic } from './middleware/logNetworkTraffic';
+import { cleanHostedBots } from './utility/cleanHostedBots';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -43,6 +44,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   if (electronContext) {
     setElectronContext(electronContext);
   }
+  cleanHostedBots();
   const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
   const app: Express = express();
   app.set('view engine', 'ejs');

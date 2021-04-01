@@ -7,6 +7,7 @@ import fs from 'fs';
 import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import {
   getNewDesigner,
   FileInfo,
@@ -47,7 +48,6 @@ const oauthInput = () => ({
 });
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
-
 export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
@@ -200,8 +200,11 @@ export class BotProject implements IBotProject {
    */
   public getRuntimePath = (): string | undefined => {
     let runtimePath = this.settings?.runtime?.path;
+
     if (runtimePath && !Path.isAbsolute(runtimePath)) {
-      runtimePath = Path.resolve(this.dir, 'settings', runtimePath);
+      const dir = isUsingAdaptiveRuntime(this.settings?.runtime) ? Path.resolve(this.dir, 'settings') : this.dir;
+
+      runtimePath = Path.resolve(dir, runtimePath);
     }
     return runtimePath;
   };
@@ -417,8 +420,8 @@ export class BotProject implements IBotProject {
     if (file === undefined) {
       throw new Error(`no such file ${name}`);
     }
-    await this._removeFile(file.relativePath);
-    await this._cleanUp(file.relativePath);
+    this._removeFile(file.relativePath);
+    this._cleanUp(file.relativePath);
   };
 
   public deleteFiles = async (files) => {
@@ -659,26 +662,26 @@ export class BotProject implements IBotProject {
     }
   }
 
-  private _cleanUp = async (relativePath: string) => {
+  private _cleanUp = (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
-    await this._removeEmptyFolderFromBottomToUp(dirPath, this.dataDir);
+    this._removeEmptyFolderFromBottomToUp(dirPath, this.dataDir);
   };
 
   private _removeEmptyFolderFromBottomToUp = async (folderPath: string, prefix: string) => {
     let currentFolder = folderPath;
     //make sure the folder to delete is in current project
     while (currentFolder.startsWith(prefix)) {
-      await this._removeEmptyFolder(currentFolder);
+      this._removeEmptyFolder(currentFolder);
       currentFolder = Path.dirname(currentFolder);
     }
   };
 
-  private _removeEmptyFolder = async (folderPath: string) => {
-    const files = await this.fileStorage.readDir(folderPath);
+  private _removeEmptyFolder = (folderPath: string) => {
+    const files = this.fileStorage.readDirSync(folderPath);
     if (files.length === 0) {
       try {
-        await this.fileStorage.rmDir(folderPath);
+        this.fileStorage.rmDirSync(folderPath);
       } catch (e) {
         // pass
       }
@@ -692,9 +695,9 @@ export class BotProject implements IBotProject {
     if (!absolutePath.startsWith(this.dir)) {
       throw new Error('Cannot create file outside of current project folder');
     }
-    await this.ensureDirExists(Path.dirname(absolutePath));
+    this.ensureDirExists(Path.dirname(absolutePath));
     debug('Creating file: %s', absolutePath);
-    await this.fileStorage.writeFile(absolutePath, content);
+    this.fileStorage.writeFileSync(absolutePath, content);
 
     // TODO: we should get the lastModified from the writeFile operation
     // instead of calling stat again which could be expensive
@@ -741,7 +744,7 @@ export class BotProject implements IBotProject {
 
   // remove file in this project this function will guarantee the memory cache
   // (this.files, all indexes) also gets updated
-  private _removeFile = async (relativePath: string) => {
+  private _removeFile = (relativePath: string) => {
     const name = Path.basename(relativePath);
     if (!this.files.has(name)) {
       throw new Error(`no such file at ${relativePath}`);
@@ -749,24 +752,24 @@ export class BotProject implements IBotProject {
     this.files.delete(name);
 
     const absolutePath = `${this.dir}/${relativePath}`;
-    await this.fileStorage.removeFile(absolutePath);
+    this.fileStorage.removeFileSync(absolutePath);
   };
   // ensure dir exist, dir is a absolute dir path
-  private ensureDirExists = async (dir: string) => {
+  private ensureDirExists = (dir: string) => {
     if (!dir || dir === '.') {
       return;
     }
-    if (!(await this.fileStorage.exists(dir))) {
+    if (!this.fileStorage.existsSync(dir)) {
       debug('Creating directory: %s', dir);
-      await this.fileStorage.mkDir(dir, { recursive: true });
+      this.fileStorage.mkDirSync(dir, { recursive: true });
     }
   };
 
   //migrate the recognizer folder
-  private removeRecognizers = async () => {
-    const paths = await this.fileStorage.glob('recognizers/cross-train.config.json', this.dataDir);
+  private removeRecognizers = () => {
+    const paths = this.fileStorage.globSync('recognizers/cross-train.config.json', this.dataDir);
     if (paths.length) {
-      await this.fileStorage.rmrfDir(Path.join(this.dataDir, 'recognizers'));
+      this.fileStorage.rmrfDirSync(Path.join(this.dataDir, 'recognizers'));
     }
   };
 
@@ -775,13 +778,13 @@ export class BotProject implements IBotProject {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
-    await this.removeRecognizers();
+    this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
 
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    const paths = await this.fileStorage.glob(
+    const paths = this.fileStorage.globSync(
       [
         ...BotStructureFilesPatterns,
         '!(generated/**)',
@@ -797,7 +800,7 @@ export class BotProject implements IBotProject {
 
     for (const filePath of paths.sort()) {
       const realFilePath: string = Path.join(root, filePath);
-      const fileInfo = await this._getFileInfo(realFilePath);
+      const fileInfo = this._getFileInfo(realFilePath);
       if (fileInfo) {
         if (fileList.has(fileInfo.name)) {
           throw new Error(`duplicate file found: ${fileInfo.relativePath}`);
@@ -866,11 +869,11 @@ export class BotProject implements IBotProject {
     // load only from the data dir, otherwise may get "build" versions from
     // deployment process
     const root = this.dataDir;
-    const paths = await this.fileStorage.glob([...patterns, '!(generated/**)', '!(runtime/**)'], root);
+    const paths = this.fileStorage.globSync([...patterns, '!(generated/**)', '!(runtime/**)'], root);
 
     for (const filePath of paths.sort()) {
       const realFilePath: string = Path.join(root, filePath);
-      const fileInfo = await this._getFileInfo(realFilePath);
+      const fileInfo = this._getFileInfo(realFilePath);
       if (fileInfo) {
         fileList.set(fileInfo.name, fileInfo);
       }
@@ -919,10 +922,10 @@ export class BotProject implements IBotProject {
 
     debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
-    const paths = await this.fileStorage.glob('*.{uischema,schema}', schemasDir);
+    const paths = this.fileStorage.globSync('*.{uischema,schema}', schemasDir);
 
     for (const path of paths) {
-      const fileInfo = await this._getFileInfo(Path.join(schemasDir, path));
+      const fileInfo = this._getFileInfo(Path.join(schemasDir, path));
       if (fileInfo) {
         schemas.push(fileInfo);
       }
@@ -931,10 +934,10 @@ export class BotProject implements IBotProject {
     return schemas;
   };
 
-  private _getFileInfo = async (path: string): Promise<FileInfo | undefined> => {
-    const stats = await this.fileStorage.stat(path);
+  private _getFileInfo = (path: string): FileInfo | undefined => {
+    const stats = this.fileStorage.statSync(path);
     if (stats.isFile) {
-      const content: string = await this.fileStorage.readFile(path);
+      const content: string = this.fileStorage.readFileSync(path);
       return {
         name: Path.basename(path),
         content: content,

@@ -4,6 +4,7 @@
 import {
   ActivityHandler,
   ActivityTypes,
+  BotTelemetryClient,
   ComponentRegistration,
   ConversationState,
   SkillHttpClient,
@@ -19,6 +20,7 @@ import {
   LanguagePolicy,
   ResourceExtensions,
   SkillExtensions,
+  useTelemetry,
 } from 'botbuilder-dialogs-adaptive';
 import { ResourceExplorer } from 'botbuilder-dialogs-declarative';
 import { SimpleCredentialProvider, SkillValidation } from 'botframework-connector';
@@ -36,6 +38,7 @@ export class ComposerBot extends ActivityHandler {
   private readonly userState: UserState;
   private readonly conversationState: ConversationState;
   private readonly skillConversationIdFactory: SkillConversationIdFactory;
+  private readonly telemetryClient: BotTelemetryClient;
   private readonly projectRoot: string;
   private readonly settings: BotSettings;
   private readonly resourceExplorer: ResourceExplorer;
@@ -44,12 +47,14 @@ export class ComposerBot extends ActivityHandler {
   public constructor(
     userState: UserState,
     conversationState: ConversationState,
-    skillConversationIdFactory: SkillConversationIdFactory
+    skillConversationIdFactory: SkillConversationIdFactory,
+    telemetryClient: BotTelemetryClient
   ) {
     super();
     this.userState = userState;
     this.conversationState = conversationState;
     this.skillConversationIdFactory = skillConversationIdFactory;
+    this.telemetryClient = telemetryClient;
     this.projectRoot = getProjectRoot();
     this.settings = getSettings(this.projectRoot);
 
@@ -76,7 +81,7 @@ export class ComposerBot extends ActivityHandler {
       rootDialog.configure({ autoEndDialog: true });
     }
 
-    const removeRecipientMention = (this.settings.feature && this.settings.feature.removeRecipientMention) || false;
+    const removeRecipientMention = this.settings.feature?.RemoveRecipientMention ?? false;
     if (removeRecipientMention && turnContext.activity.type == ActivityTypes.Message) {
       TurnContext.removeRecipientMention(turnContext.activity);
     }
@@ -92,6 +97,9 @@ export class ComposerBot extends ActivityHandler {
     this.dialogManager = new DialogManager(rootDialog);
     ResourceExtensions.useResourceExplorer(this.dialogManager, this.resourceExplorer);
     this.dialogManager.initialTurnState.set('settings', this.settings);
+    if (this.telemetryClient) {
+      useTelemetry(this.dialogManager, this.telemetryClient);
+    }
   }
 
   private configureLanguageGeneration() {

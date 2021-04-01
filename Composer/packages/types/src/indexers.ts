@@ -89,6 +89,7 @@ export type LuIntentSection = {
   Entities?: LuEntity[];
   Children?: LuIntentSection[];
   range?: IRange;
+  fileId?: string;
 };
 
 export type LuParsed = {
@@ -105,6 +106,7 @@ export enum LuSectionTypes {
 
 export type LuEntity = {
   Name: string;
+  Type: string;
 };
 
 export type LuFile = {
@@ -112,10 +114,12 @@ export type LuFile = {
   content: string;
   diagnostics: IDiagnostic[];
   intents: LuIntentSection[];
+  allIntents: LuIntentSection[];
   empty: boolean;
   resource: LuParseResource;
   imports: { id: string; path: string; description: string }[];
   published?: boolean;
+  isContentUnparsed: boolean;
 };
 
 export type LuParseResourceSection = {
@@ -154,6 +158,7 @@ export type QnAFile = {
   options: { id: string; name: string; value: string }[];
   empty: boolean;
   resource: LuParseResource;
+  isContentUnparsed: boolean;
 };
 
 export type LgTemplate = {
@@ -195,6 +200,7 @@ export type LgFile = {
   imports: { id: string; path: string; description: string }[];
   options?: string[];
   parseResult?: any;
+  isContentUnparsed: boolean;
 };
 
 export type Manifest = {

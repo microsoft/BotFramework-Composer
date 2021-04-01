@@ -10,6 +10,7 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
@@ -17,7 +18,7 @@ import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes } from './styles';
+import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -31,16 +32,6 @@ const publishTargetsHeader = css`
   flex-direction: row;
   height: 42px;
 `;
-
-const addPublishProfile = {
-  root: {
-    fontSize: 12,
-    fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
-    paddingLeft: 0,
-    marginLeft: 5,
-  },
-};
 
 const editPublishProfile = {
   root: {
@@ -83,6 +74,23 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     }
   }, [scrollToSectionId]);
 
+  const onDeletePublishTarget = async (publishTarget: PublishTarget) => {
+    if (publishTargets) {
+      const targetName = publishTarget.name;
+      const confirmed = await OpenConfirmModal(
+        formatMessage('Delete?'),
+        formatMessage(
+          'Are you sure you want to remove {targetName}? This will remove only the profile and will not delete provisioned resources.',
+          { targetName }
+        )
+      );
+      if (confirmed) {
+        const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);
+        setPublishTargets(newPublishTargets, projectId);
+      }
+    }
+  };
+
   return (
     <Fragment>
       <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={title}>
@@ -103,6 +111,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                 </div>
                 <div css={tableRowItem(columnSizes[2])}>
                   <ActionButton
+                    data-testid={'editPublishProfile'}
                     styles={editPublishProfile}
                     onClick={() => {
                       setCurrent({ item: p, index: index });
@@ -116,12 +125,21 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                     {formatMessage('Edit')}
                   </ActionButton>
                 </div>
+                <div css={tableRowItem(columnSizes[2])}>
+                  <ActionButton
+                    data-testid={'deletePublishProfile'}
+                    styles={editPublishProfile}
+                    onClick={() => onDeletePublishTarget(p)}
+                  >
+                    {formatMessage('Delete')}
+                  </ActionButton>
+                </div>
               </div>
             );
           })}
           <ActionButton
             data-testid={'addNewPublishProfile'}
-            styles={addPublishProfile}
+            styles={actionButton}
             onClick={() => {
               if (isShowAuthDialog(true)) {
                 setShowAuthDialog(true);

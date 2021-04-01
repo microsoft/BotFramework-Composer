@@ -12,11 +12,11 @@ import { useLocation } from '../utils/hooks';
 import { dispatcherState, onboardingState, botProjectIdsState, dialogsSelectorFamily } from '../recoilModel';
 
 import OnboardingContext from './OnboardingContext';
-import TeachingBubbles from './TeachingBubbles/TeachingBubbles';
+import TeachingBubbles from './TeachingBubbles';
 import WelcomeModal from './WelcomeModal/WelcomeModal';
-import { IStepSet, stepSets as defaultStepSets } from './onboardingUtils';
+import { IStepSet, stepSets as defaultStepSets } from './content';
 
-const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboardingStorage.getCurrentSet('setUpBot'));
+const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboardingStorage.getCurrentSet());
 
 const Onboarding: React.FC = () => {
   const didMount = useRef(false);
@@ -46,7 +46,7 @@ const Onboarding: React.FC = () => {
   }, [rootBotProjectId, rootDialogId]);
 
   const [currentSet, setCurrentSet] = useState<number>(getCurrentSet(stepSets));
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(-1);
   const [hideModal, setHideModal] = useState(true);
   const [minimized, setMinimized] = useState<boolean>(false);
   const [teachingBubble, setTeachingBubble] = useState<any>({});
