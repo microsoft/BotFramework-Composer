@@ -852,7 +852,7 @@ const Library: React.FC = () => {
                       setReadmeHidden(false);
                     }}
                   >
-                    View readme
+                    {formatMessage('View readme')}
                   </DefaultButton>
                   &nbsp;
                 </Fragment>
