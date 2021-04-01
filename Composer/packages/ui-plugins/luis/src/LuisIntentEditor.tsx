@@ -31,14 +31,26 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
   }
 
   const luIntent = useMemo(() => {
-    return (
-      luFile?.intents.find((intent) => intent.Name === intentName) ||
-      ({
-        Name: intentName,
-        Body: '',
-      } as LuIntentSection)
-    );
-  }, [intentName]);
+    /**
+     * if intent is referenced from imported files, use origin intent.
+     * because update on origin file won't reparse current file, so the `allIntent` may out of date.
+     */
+    const intentInCurrentFile = luFile?.allIntents.find((intent) => intent.Name === intentName);
+    if (intentInCurrentFile) {
+      if (intentInCurrentFile.fileId === luFile?.id) {
+        return intentInCurrentFile;
+      } else {
+        const intentInOriginFile = luFiles
+          .find(({ id }) => id === intentInCurrentFile.fileId)
+          ?.intents?.find((intent) => intent.Name === intentName);
+        if (intentInOriginFile) return intentInOriginFile;
+      }
+    }
+    return {
+      Name: intentName,
+      Body: '',
+    } as LuIntentSection;
+  }, [intentName, luFiles]);
 
   const navigateToLuPage = useCallback(
     (luFileId: string, sectionId?: string) => {
@@ -63,7 +75,9 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     }
 
     const newIntent = { Name: intentName, Body: newValue };
-    shellApi.debouncedUpdateLuIntent(luFile.id, intentName, newIntent)?.then(shellApi.commitChanges);
+    shellApi
+      .debouncedUpdateLuIntent(luIntent?.fileId ?? luFile.id, intentName, newIntent)
+      ?.then(shellApi.commitChanges);
     onChange(intentName);
   };
 
