@@ -247,6 +247,7 @@ const emptyLuFile = (id: string, content: string): LuFile => {
     content,
     diagnostics: [],
     intents: [],
+    allIntents: [],
     empty: true,
     resource: {
       Sections: [],
@@ -813,7 +814,7 @@ export const postRootBotCreation = async (
   projectIdCache.set(projectId);
 
   // navigate to the new get started section
-  navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
+  navigateToBot(callbackHelpers, projectId, undefined, btoa('dialogs#getstarted'));
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
