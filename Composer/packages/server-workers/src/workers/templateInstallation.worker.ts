@@ -34,7 +34,7 @@ const instantiateRemoteTemplate = async (
   generatorName: string,
   dstDir: string,
   projectName: string,
-  runtimeChoice: string,
+  runtimeType: string,
   runtimeLanguage: string
 ): Promise<void> => {
   log('About to instantiate a template!', dstDir, generatorName, projectName);
@@ -42,7 +42,7 @@ const instantiateRemoteTemplate = async (
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore @types/yeoman-environment is outdated
-    await yeomanEnv.run([generatorName, projectName, '-p', runtimeLanguage, '-i', runtimeChoice]);
+    await yeomanEnv.run([generatorName, projectName, '-p', runtimeLanguage, '-i', runtimeType]);
     log('Template successfully instantiated', dstDir, generatorName, projectName);
   } catch (err) {
     log('Template failed to instantiate', dstDir, generatorName, projectName);
@@ -56,7 +56,7 @@ const yeomanWork = async (
   dstDir: string,
   projectName: string,
   templateGeneratorPath: string,
-  runtimeChoice: string,
+  runtimeType: string,
   runtimeLanguage: string
 ) => {
   const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
@@ -85,7 +85,7 @@ const yeomanWork = async (
     log('Instantiating Yeoman template');
     parentPort?.postMessage({ status: 'Instantiating Yeoman template' });
 
-    await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeChoice, runtimeLanguage);
+    await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeType, runtimeLanguage);
   } else {
     // handle error
     throw new Error(`error hit when installing remote template`);
@@ -98,7 +98,7 @@ export type TemplateInstallationArgs = {
   dstDir: string;
   projectName: string;
   templateGeneratorPath: string;
-  runtimeChoice: string;
+  runtimeType: string;
   runtimeLanguage: string;
 };
 
@@ -109,7 +109,7 @@ if (!isMainThread) {
     workerData.dstDir,
     workerData.projectName,
     workerData.templateGeneratorPath,
-    workerData.runtimeChoice,
+    workerData.runtimeType,
     workerData.runtimeLanguage
   )
     .then(() => {

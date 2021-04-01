@@ -385,7 +385,7 @@ export const projectDispatcher = () => {
         preserveRoot,
         profile,
         source,
-        runtimeChoice,
+        runtimeType,
         runtimeLanguage,
       } = newProjectData;
 
@@ -403,7 +403,7 @@ export const projectDispatcher = () => {
         eTag,
         alias,
         preserveRoot,
-        runtimeChoice,
+        runtimeType,
         runtimeLanguage,
       });
 

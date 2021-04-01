@@ -193,9 +193,7 @@ export function CreateBotV2(props: CreateBotProps) {
 
   const getTemplate = (): BotTemplate | undefined => {
     const currentTemplate = displayedTemplates.find((t) => {
-      if (t?.id) {
-        return t.id === currentTemplateId;
-      }
+      return t?.id === currentTemplateId;
     });
     return currentTemplate;
   };
@@ -219,10 +217,8 @@ export function CreateBotV2(props: CreateBotProps) {
   }, [templates, selectedProgLang]);
 
   useEffect(() => {
-    if (displayedTemplates.length > 1) {
-      if (displayedTemplates[0].id) {
-        setCurrentTemplateId(displayedTemplates[0].id);
-      }
+    if (displayedTemplates?.[0]?.id) {
+      setCurrentTemplateId(displayedTemplates[0].id);
     }
   }, [displayedTemplates]);
 

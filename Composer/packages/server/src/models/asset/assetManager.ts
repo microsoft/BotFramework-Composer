@@ -97,7 +97,7 @@ export class AssetManager {
     projectName: string,
     ref: LocationRef,
     jobId: string,
-    runtimeChoice: RuntimeType,
+    runtimeType: RuntimeType,
     runtimeLanguage: FeedName,
     user?: UserIdentity
   ): Promise<LocationRef> {
@@ -123,7 +123,7 @@ export class AssetManager {
           dstDir,
           projectName,
           templateGeneratorPath,
-          runtimeChoice,
+          runtimeType,
           runtimeLanguage,
         },
         (status, msg) => {

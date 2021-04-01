@@ -73,7 +73,7 @@ type DefineConversationFormData = {
   description: string;
   schemaUrl: string;
   runtimeLanguage: string;
-  runtimeChoice: RuntimeType;
+  runtimeType: RuntimeType;
   location?: string;
   templateVersion?: string;
   profile?: Profile; // abs payload to create bot
@@ -179,7 +179,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     runtimeLanguage: {
       required: false,
     },
-    runtimeChoice: {
+    runtimeType: {
       required: false,
     },
     schemaUrl: {
@@ -207,7 +207,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       runtimeLanguage: runtimeLanguage,
-      runtimeChoice: webAppRuntimeKey,
+      runtimeType: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
       location:
@@ -304,12 +304,14 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     if (currentTemplate) {
       if (runtimeLanguage === csharpFeedKey) {
         currentTemplate.dotnetSupport?.functionsSupported &&
-          result.push({ key: functionsRuntimeKey, text: 'Azure Functions' });
-        currentTemplate.dotnetSupport?.webAppSupported && result.push({ key: webAppRuntimeKey, text: 'Azure Web App' });
+          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+        currentTemplate.dotnetSupport?.webAppSupported &&
+          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
       } else if (runtimeLanguage === nodeFeedKey) {
         currentTemplate.nodeSupport?.functionsSupported &&
-          result.push({ key: functionsRuntimeKey, text: 'Azure Functions' });
-        currentTemplate.nodeSupport?.webAppSupported && result.push({ key: webAppRuntimeKey, text: 'Azure Web App' });
+          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+        currentTemplate.nodeSupport?.webAppSupported &&
+          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
       }
     }
     return result;
@@ -372,8 +374,8 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 data-testid="NewDialogRuntimeType"
                 label={formatMessage('Runtime type')}
                 options={getSupportedRuntimesForTemplate()}
-                selectedKey={formData.runtimeChoice}
-                onChange={(_e, option) => updateField('runtimeChoice', option?.key.toString())}
+                selectedKey={formData.runtimeType}
+                onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
               />
             </StackItem>
           </Stack>

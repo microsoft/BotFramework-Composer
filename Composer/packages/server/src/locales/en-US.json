@@ -410,6 +410,12 @@
   "azure_bot_service_channels_5b358c1c": {
     "message": "Azure Bot Service channels"
   },
+  "azure_functions_5e23be5c": {
+    "message": "Azure Functions"
+  },
+  "azure_web_app_d834cb4c": {
+    "message": "Azure Web App"
+  },
   "back_2900f52a": {
     "message": "Back"
   },
@@ -2366,9 +2372,6 @@
   "new_13daf639": {
     "message": "New"
   },
-  "new_creation_experience_29591aca": {
-    "message": "New Creation Experience"
-  },
   "new_template_49e6f0f2": {
     "message": "New template"
   },
@@ -2662,9 +2665,6 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
-  },
-  "preview_the_new_bot_creation_experience_create_new_e0b7150f": {
-    "message": "Preview the new bot creation experience. Create new bots that use the Adaptive Runtime, and can be enhanced using Package Manager."
   },
   "previous_bd2ac015": {
     "message": "Previous"

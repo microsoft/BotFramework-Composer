@@ -95,7 +95,7 @@ describe('<CreationFlowV2/>', () => {
       eTag: undefined,
       preserveRoot: undefined,
       qnqKbUrls: undefined,
-      runtimeChoice: 'webapp',
+      runtimeType: 'webapp',
       templateDir: undefined,
       urlSuffix: undefined,
       profile: undefined,

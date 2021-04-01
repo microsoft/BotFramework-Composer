@@ -7,7 +7,6 @@ import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@botframework-composer/types';
 
 import { OpenProject } from '../../components/CreationFlow/OpenProject';
-import DefineConversation from '../../components/CreationFlow/DefineConversation';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -16,13 +15,11 @@ import {
   creationFlowTypeState,
   userSettingsState,
   templateProjectsState,
-  featureFlagsState,
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
 import { CreateBotV2 } from '../../components/CreationFlow/v2/CreateBot';
-import { CreateBot } from '../../components/CreationFlow/CreateBot';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -42,7 +39,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     createNewBot,
     createNewBotV2,
     openProject,
-    addNewSkillToBotProject,
     addExistingSkillToBotProject,
     fetchTemplatesV2,
     fetchReadMe,
@@ -51,7 +47,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
-  const featureFlags = useRecoilValue(featureFlagsState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
   const storages = useRecoilValue(storagesState);
