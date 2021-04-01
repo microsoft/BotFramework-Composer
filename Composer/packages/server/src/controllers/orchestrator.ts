@@ -58,7 +58,7 @@ async function status(req: Request, res: Response) {
   res.send(200, state);
 }
 
-async function downloadLanguageModel(req: Request, res: Response, next) {
+async function downloadLanguageModel(req: Request, res: Response) {
   const modelData = req.body?.modelData;
 
   if (!isValidModelRequest(modelData)) {
@@ -85,12 +85,10 @@ async function downloadLanguageModel(req: Request, res: Response, next) {
     return res.sendStatus(201);
   }
 
-  setTimeout(async () => {
-    state = DownloadState.DOWNLOADING;
-    await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
-  }, 0);
+  res.send(200, '/orchestrator/status');
 
-  return res.send(200, '/orchestrator/status');
+  state = DownloadState.DOWNLOADING;
+  await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
 }
 
 export const OrchestratorController = {
