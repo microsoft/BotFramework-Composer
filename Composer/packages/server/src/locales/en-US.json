@@ -1487,9 +1487,6 @@
   "events_cf7a8c50": {
     "message": "Events"
   },
-  "example_bot_list_9be1d563": {
-    "message": "Example bot list"
-  },
   "examples_c435f08c": {
     "message": "Examples"
   },
@@ -3535,9 +3532,6 @@
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "There was error creating your KB"
-  },
-  "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
-    "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."

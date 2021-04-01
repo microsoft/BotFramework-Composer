@@ -98,30 +98,26 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       appLocale,
     };
     if (creationFlowType === 'Skill') {
-      if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
-        const templateVersion = templateProjects.find((template: BotTemplate) => {
-          return template.id == templateId;
-        })?.package?.packageVersion;
-        const newCreationBotData = {
-          templateId: templateId || '',
-          templateVersion: templateVersion || '',
-          name: formData.name,
-          description: formData.description,
-          location: formData.location,
-          schemaUrl: formData.schemaUrl,
-          appLocale,
-          templateDir: formData?.pvaData?.templateDir,
-          eTag: formData?.pvaData?.eTag,
-          urlSuffix: formData?.pvaData?.urlSuffix,
-          preserveRoot: formData?.pvaData?.preserveRoot,
-          alias: formData?.alias,
-          profile: formData?.profile,
-          source: formData?.source,
-        };
-        createNewBotV2(newCreationBotData);
-      } else {
-        addNewSkillToBotProject(newBotData);
-      }
+      const templateVersion = templateProjects.find((template: BotTemplate) => {
+        return template.id == templateId;
+      })?.package?.packageVersion;
+      const newCreationBotData = {
+        templateId: templateId || '',
+        templateVersion: templateVersion || '',
+        name: formData.name,
+        description: formData.description,
+        location: formData.location,
+        schemaUrl: formData.schemaUrl,
+        appLocale,
+        templateDir: formData?.pvaData?.templateDir,
+        eTag: formData?.pvaData?.eTag,
+        urlSuffix: formData?.pvaData?.urlSuffix,
+        preserveRoot: formData?.pvaData?.preserveRoot,
+        alias: formData?.alias,
+        profile: formData?.profile,
+        source: formData?.source,
+      };
+      createNewBotV2(newCreationBotData);
     } else {
       createNewBot(newBotData);
     }
@@ -159,48 +155,30 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   };
 
   const renderDefineConversation = () => {
-    if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
-      return (
-        <DefineConversationV2
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          templateId={templateId}
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleDefineConversationSubmit}
-        />
-      );
-    } else {
-      return (
-        <DefineConversation
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          templateId={templateId}
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleDefineConversationSubmit}
-        />
-      );
-    }
+    return (
+      <DefineConversationV2
+        createFolder={createFolder}
+        focusedStorageFolder={focusedStorageFolder}
+        templateId={templateId}
+        updateFolder={updateFolder}
+        onCurrentPathUpdate={updateCurrentPath}
+        onDismiss={handleDismiss}
+        onSubmit={handleDefineConversationSubmit}
+      />
+    );
   };
 
   const renderCreateOptions = () => {
-    if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
-      return (
-        <CreateBotV2
-          isOpen
-          fetchReadMe={fetchReadMe}
-          fetchTemplates={fetchTemplatesV2}
-          templates={templateProjects}
-          onDismiss={handleDismiss}
-          onNext={handleCreateNext}
-        />
-      );
-    } else {
-      return <CreateBot isOpen templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />;
-    }
+    return (
+      <CreateBotV2
+        isOpen
+        fetchReadMe={fetchReadMe}
+        fetchTemplates={fetchTemplatesV2}
+        templates={templateProjects}
+        onDismiss={handleDismiss}
+        onNext={handleCreateNext}
+      />
+    );
   };
 
   return (
