@@ -53,7 +53,7 @@ import {
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
-  readmeState,
+  projectReadmeState,
   currentProjectIdState,
   dialogSchemasState,
   dialogState,
@@ -504,7 +504,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(botDiagnosticsState(projectId), diagnostics);
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
-  set(readmeState(projectId), readme);
+  set(projectReadmeState(projectId), readme);
 
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));

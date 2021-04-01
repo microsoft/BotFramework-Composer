@@ -32,7 +32,7 @@ import {
   useTelemetryClient,
   TelemetryClient,
 } from '@bfc/extension-client';
-import { Toolbar, IToolbarItem, LoadingSpinner, DisplayReadme } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, LoadingSpinner, DisplayMarkdownDialog } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
 import { ContentHeaderStyle, HeaderText } from '../components/styles';
@@ -581,9 +581,9 @@ const Library: React.FC = () => {
         onUpdateFeed={updateFeed}
       />
       {selectedItem && (
-        <DisplayReadme
+        <DisplayMarkdownDialog
+          content={selectedItem?.readme}
           hidden={readmeHidden}
-          readme={selectedItem?.readme}
           title={'Project Readme'}
           onDismiss={() => {
             setReadmeHidden(true);

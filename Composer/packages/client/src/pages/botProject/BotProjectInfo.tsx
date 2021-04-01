@@ -6,12 +6,12 @@ import { css, jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import React, { useState, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { DisplayReadme } from '@bfc/ui-shared';
+import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { readmeState, locationState } from '../../recoilModel/atoms';
+import { projectReadmeState, locationState } from '../../recoilModel/atoms';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 
 const labelStyle = css`
@@ -34,7 +34,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
   const { projectId = '' } = props;
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
-  const readme = useRecoilValue(readmeState(projectId));
+  const readme = useRecoilValue(projectReadmeState(projectId));
   const location = useRecoilValue(locationState(projectId));
   const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
 
@@ -62,9 +62,9 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
               >
                 {formatMessage('View project readme')}
               </Link>
-              <DisplayReadme
+              <DisplayMarkdownDialog
+                content={readme}
                 hidden={readmeHidden}
-                readme={readme}
                 title={'Project Readme'}
                 onDismiss={() => {
                   setReadmeHidden(true);
