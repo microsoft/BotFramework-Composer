@@ -9,21 +9,21 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
-import { settingsState, skillsStateSelector, luFilesState, designPageLocationState } from '../../recoilModel';
+import { settingsState, luFilesState, designPageLocationState } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
-
-import { SelectIntentModal } from './SelectIntentModal';
+import { selectIntentDialog } from '../../constants';
+import { dispatcherState } from '../../recoilModel';
+import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
-import { createActionFromManifest } from './createActionHelper';
-
+import { createActionFromManifest } from './helper';
 export interface SkillFormDataErrors {
   endpoint?: string;
   manifestUrl?: string;
@@ -65,19 +65,23 @@ const getTriggerFormData = (intent: string, content: string): TriggerFormData =>
 
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
-  const { publishTargets, languages, luFeatures, runtime } = useRecoilValue(settingsState(projectId));
-  const { dialogId } = useRecoilValue(designPageLocationState(projectId));
 
+  const [title, setTitle] = useState({
+    subText: '',
+    title: addSkillDialog.SKILL_MANIFEST_FORM.title,
+  });
   const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
-
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
     manifestUrl: '',
     endpointName: '',
   });
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
-
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
+
+  const { languages, luFeatures, runtime } = useRecoilValue(settingsState(projectId));
+  const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
+  const { updateRecognizer } = useRecoilValue(dispatcherState);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -117,107 +121,112 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     [projectId, formData]
   );
 
-  const handleSubmit = (event, content) => {
+  const handleSubmit = (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill
     const triggerFormData = getTriggerFormData(skillManifest.name, content);
     addRemoteSkill(formData.manifestUrl, formData.endpointName);
     TelemetryClient.track('AddNewSkillCompleted');
     // add trigger to root bot
-    const action = createActionFromManifest(content);
+    const action = createActionFromManifest(skillManifest);
     addTriggerToRoot(dialogId, triggerFormData, [action]);
     TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
+    if (enable) {
+      // update recognizor type to orchestrator
+      updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
+    }
   };
 
   return (
-    <Fragment>
+    <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss} {...title}>
       {showIntentSelectDialog ? (
-        <SelectIntentModal
+        <SelectIntent
           dialogId={dialogId}
           languages={languages}
           luFeatures={luFeatures}
           manifest={skillManifest}
           projectId={projectId}
           rootLuFiles={luFiles}
+          setTitle={setTitle}
+          onBack={() => {
+            setTitle({
+              subText: '',
+              title: addSkillDialog.SKILL_MANIFEST_FORM.title,
+            });
+            setShowIntentSelectDialog(false);
+          }}
           onDismiss={onDismiss}
           onSubmit={handleSubmit}
         />
       ) : (
-        <DialogWrapper
-          isOpen
-          dialogType={DialogTypes.CreateFlow}
-          title={addSkillDialog.SKILL_MANIFEST_FORM.title}
-          onDismiss={onDismiss}
-        >
-          <Fragment>
-            <div style={{ marginBottom: '16px' }}>
-              {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
-              <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage(' Get an overview ')}
-              </Link>
-              or
-              <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage(' learn how to build a skill ')}
-              </Link>
-              {addSkillDialog.SKILL_MANIFEST_FORM.afterSubText}
+        <Fragment>
+          <div style={{ marginBottom: '16px' }}>
+            {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
+              {formatMessage(' Get an overview ')}
+            </Link>
+            or
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
+              {formatMessage(' learn how to build a skill ')}
+            </Link>
+            {addSkillDialog.SKILL_MANIFEST_FORM.afterSubText}
+          </div>
+          <Separator />
+          <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
+            <div style={{ width: '70%' }}>
+              <TextField
+                required
+                errorMessage={formDataErrors.manifestUrl}
+                label={formatMessage('Skill Manifest Url')}
+                value={formData.manifestUrl || ''}
+                onChange={handleManifestUrlChange}
+              />
             </div>
+            {skillManifest && (
+              <Fragment>
+                <Separator vertical styles={{ root: { padding: '0px 20px' } }} />
+                <div style={{ minWidth: '50%' }}>
+                  <SkillDetail manifest={skillManifest} />
+                </div>
+              </Fragment>
+            )}
+          </Stack>
+          <Stack>
             <Separator />
-            <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
-              <div style={{ width: '70%' }}>
-                <TextField
-                  required
-                  disabled={!publishTargets || publishTargets.length < 1}
-                  errorMessage={formDataErrors.manifestUrl}
-                  label={formatMessage('Skill Manifest Url')}
-                  value={formData.manifestUrl || ''}
-                  onChange={handleManifestUrlChange}
-                />
-              </div>
-              {skillManifest && (
-                <Fragment>
-                  <Separator vertical styles={{ root: { padding: '0px 20px' } }} />
-                  <div style={{ minWidth: '50%' }}>
-                    <SkillDetail manifest={skillManifest} />
-                  </div>
-                </Fragment>
-              )}
-            </Stack>
-            <Stack>
-              <Separator />
-              <StackItem align={'end'}>
-                <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
-                {skillManifest ? (
-                  isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
-                    <PrimaryButton
-                      styles={{ root: { marginLeft: '8px' } }}
-                      text={formatMessage('Next')}
-                      onClick={(event) => {
-                        setShowIntentSelectDialog(true);
-                      }}
-                    />
-                  ) : (
-                    <PrimaryButton
-                      styles={{ root: { marginLeft: '8px' } }}
-                      text={formatMessage('Done')}
-                      onClick={(event) => {
-                        addRemoteSkill(formData.manifestUrl, formData.endpointName);
-                      }}
-                    />
-                  )
+            <StackItem align={'end'}>
+              <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
+              {skillManifest ? (
+                isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
+                  <PrimaryButton
+                    styles={{ root: { marginLeft: '8px' } }}
+                    text={formatMessage('Next')}
+                    onClick={(event) => {
+                      setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
+                      setShowIntentSelectDialog(true);
+                    }}
+                  />
                 ) : (
                   <PrimaryButton
-                    disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
                     styles={{ root: { marginLeft: '8px' } }}
-                    text={formatMessage('Valify Url')}
-                    onClick={validateUrl}
+                    text={formatMessage('Done')}
+                    onClick={(event) => {
+                      addRemoteSkill(formData.manifestUrl, formData.endpointName);
+                    }}
                   />
-                )}
-              </StackItem>
-            </Stack>
-          </Fragment>
-        </DialogWrapper>
+                )
+              ) : (
+                <PrimaryButton
+                  disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
+                  styles={{ root: { marginLeft: '8px' } }}
+                  text={formatMessage('Valify Url')}
+                  onClick={validateUrl}
+                />
+              )}
+            </StackItem>
+          </Stack>
+        </Fragment>
       )}
-    </Fragment>
+    </DialogWrapper>
   );
 };
 

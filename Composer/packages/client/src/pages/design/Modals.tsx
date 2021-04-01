@@ -134,7 +134,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
           }}
           addTriggerToRoot={(dialogId, formData, actions) => {
             console.log(actions);
-            createTriggerWithAction(projectId, dialogId, formData, actions);
+            createTriggerWithAction(projectId, dialogId, formData, actions, false);
           }}
           projectId={projectId}
           onDismiss={() => {
