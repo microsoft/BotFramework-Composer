@@ -10,7 +10,7 @@ import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorag
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { LoadingSpinner } from '@bfc/ui-shared';
+import { LoadingSpinner, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -89,6 +89,7 @@ const iconStyle = (required) => {
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
+  { key: 'generate', text: 'Generate resource request' },
 ];
 
 const PageTypes = {
@@ -300,9 +301,46 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const timerRef = useRef<NodeJS.Timeout>();
 
+  const [handoffInstructions, setHandoffInstructions] = useState<string>('');
+  const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const updateHandoffInstructions = (resources) => {
+    const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
+    const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
+    const createCosmosDb = resources.filter((r) => r.key === 'cosmosDb').length > 0;
+    const createStorage = resources.filter((r) => r.key === 'blobStorage').length > 0;
+    const createAppInsights = resources.filter((r) => r.key === 'applicationInsights').length > 0;
+    const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
+
+    const provisionComposer = `node provisionComposer.js --subscriptionId ${
+      formData.subscriptionId ?? '<YOUR SUBSCRIPTION ID>'
+    } --name ${formData.hostname ?? '<RESOURCE NAME>'}
+    --appPassword=<16 CHAR PASSWORD>
+    --location=${formData.region || 'westus'}
+    --resourceGroup=${formData.resourceGroup || '<RESOURCE GROUP NAME>'}
+    --createLuisResource=${createLuisResource}
+    --createLuisAuthoringResource=${createLuisAuthoringResource}
+    --createCosmosDb=${createCosmosDb}
+    --createStorage=${createStorage}
+    --createAppInsights=${createAppInsights}
+    --createQnAResource=${createQnAResource}
+    `;
+
+    const instructions = formatMessage(
+      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      { command: provisionComposer }
+    );
+
+    setHandoffInstructions(instructions);
+  };
+
   function updateFormData<K extends keyof ProvisionFormData>(field: K, value: ProvisionFormData[K]) {
     setFormData((current) => ({ ...current, [field]: value }));
   }
+
+  useEffect(() => {
+    const selectedResources = formData.requiredResources.concat(formData.enabledResources);
+    updateHandoffInstructions(selectedResources);
+  }, [formData.enabledResources]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -440,6 +478,7 @@ export const AzureProvisionDialog: React.FC = () => {
         }
       } catch (err) {
         // todo: how do we handle API errors in this component
+        // eslint-disable-next-line no-console
         console.log('ERROR', err);
         if (isMounted.current) {
           setResourceGroups(undefined);
@@ -830,7 +869,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 onBack();
               }}
             />
-            {formData.choice === 'create' ? (
+            {formData.choice === 'create' && (
               <PrimaryButton
                 disabled={isNextDisabled}
                 style={{ margin: '0 4px' }}
@@ -839,7 +878,15 @@ export const AzureProvisionDialog: React.FC = () => {
                   onNext(formData.hostname);
                 }}
               />
-            ) : (
+            )}
+            {formData.choice === 'generate' && (
+              <PrimaryButton
+                style={{ margin: '0 4px' }}
+                text={formatMessage('Generate resource request')}
+                onClick={() => onNext(formData.hostname)}
+              />
+            )}
+            {formData.choice === 'import' && (
               <PrimaryButton
                 disabled={isEditorError}
                 style={{ margin: '0 4px' }}
@@ -875,21 +922,25 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Next')}
               onClick={() => {
-                setPage(PageTypes.ReviewResource);
-                setTitle(DialogTitle.REVIEW);
-                let selectedResources = formData.requiredResources.concat(formData.enabledResources);
-                selectedResources = selectedResources.map((item) => {
-                  let region = currentConfig?.region || formData.region;
-                  if (item.key.includes('luis')) {
-                    region = formData.luisLocation;
-                  }
-                  return {
-                    ...item,
-                    region: region,
-                    resourceGroup: currentConfig?.resourceGroup || formData.resourceGroup,
-                  };
-                });
-                setReviewListItems(selectedResources);
+                if (formData.choice === 'generate') {
+                  setShowHandoff(true);
+                } else {
+                  setPage(PageTypes.ReviewResource);
+                  setTitle(DialogTitle.REVIEW);
+                  let selectedResources = formData.requiredResources.concat(formData.enabledResources);
+                  selectedResources = selectedResources.map((item) => {
+                    let region = currentConfig?.region || formData.region;
+                    if (item.key.includes('luis')) {
+                      region = formData.luisLocation;
+                    }
+                    return {
+                      ...item,
+                      region: region,
+                      resourceGroup: currentConfig?.resourceGroup || formData.resourceGroup,
+                    };
+                  });
+                  setReviewListItems(selectedResources);
+                }
               }}
             />
           </div>
@@ -1002,6 +1053,16 @@ export const AzureProvisionDialog: React.FC = () => {
       >
         {PageFooter}
       </div>
+      <ProvisionHandoff
+        developerInstructions={formatMessage('Send this to your IT admin')}
+        handoffInstructions={handoffInstructions}
+        hidden={!showHandoff}
+        title={formatMessage('Generate a provisioning request')}
+        onDismiss={() => {
+          closeDialog();
+          setShowHandoff(false);
+        }}
+      />
     </div>
   );
 };
