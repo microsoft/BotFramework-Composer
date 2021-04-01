@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import path from 'path';
 
 import URI from 'vscode-uri';
 import { FoldingRangeParams, IConnection, TextDocuments } from 'vscode-languageserver';
@@ -112,16 +113,25 @@ export class LUServer {
 
     const curLine = document.getText().split(/\r?\n/g)[params.position.line];
     // eslint-disable-next-line security/detect-unsafe-regex
-    const importRegex = /^\s*-?\s*\[[^[\]]+\](\([^()#]+(#[a-zA-Z0-9_-]*)?(\*[a-zA-Z0-9_-]+\*)?\))/;
+    const importRegex = /^\s*-?\s*\[[^[\]]+\](\(([^()#]+)(#([a-zA-Z0-9_-]*))?(\*([a-zA-Z0-9_-]+)\*)?\))/;
     if (importRegex.test(curLine)) {
       const importedFile = curLine.match(importRegex);
       if (importedFile) {
-        const importFilename = importedFile[2];
-        const intent = importedFile[3];
-        const untterance = importedFile[4];
+        const source = importedFile[2];
+        const intent = importedFile[4];
+        const utterance = importedFile[6];
+        const fileId = path.parse(source).name;
+
+        this.connection.sendNotification('LuGotoDefinition', {
+          fileId: fileId,
+          intent: intent,
+          utterance: utterance,
+        });
+
         return;
       }
     }
+
     return;
   }
 

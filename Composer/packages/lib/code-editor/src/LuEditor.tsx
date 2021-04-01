@@ -155,6 +155,10 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   const editorDomRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    if (props.options?.readOnly) {
+      return;
+    }
+
     if (!editor) return;
 
     if (!window.monacoServiceInstance) {
@@ -170,6 +174,13 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         webSocket,
         onConnection: (connection: MessageConnection) => {
           const languageClient = createLanguageClient(formatMessage('LU Language Client'), ['lu'], connection);
+          languageClient.onReady().then(() =>
+            languageClient.onNotification('LuGotoDefinition', (result) => {
+              if (luOption?.projectId) {
+                onNavigateToLuPage?.(result.fileId, result.intent);
+              }
+            })
+          );
 
           const m = monacoRef.current;
           if (m) {
@@ -199,6 +210,14 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     } else {
       const m = monacoRef.current;
       const languageClient = window.monacoLUEditorInstance;
+      languageClient.onReady().then(() =>
+        languageClient.onNotification('LuGotoDefinition', (result) => {
+          if (luOption?.projectId) {
+            onNavigateToLuPage?.(result.fileId, result.intent);
+          }
+        })
+      );
+
       if (m) {
         // this is the correct way to combine keycodes in Monaco
         // eslint-disable-next-line no-bitwise
@@ -209,7 +228,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       }
       sendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
     }
-  }, [editor]);
+  }, [editor, onNavigateToLuPage]);
 
   const onInit: OnInit = (monaco) => {
     registerLULanguage(monaco);
