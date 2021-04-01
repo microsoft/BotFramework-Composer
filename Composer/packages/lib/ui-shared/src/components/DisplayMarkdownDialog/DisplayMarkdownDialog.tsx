@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import formatMessage from 'format-message';
 import ReactMarkdown from 'react-markdown';
@@ -15,7 +15,6 @@ type DisplayMarkdownDialogProps = {
   title: string;
   content: string;
   hidden: boolean;
-  onBack?: () => void;
   onDismiss: () => void;
 };
 
@@ -35,7 +34,6 @@ export const DisplayMarkdownDialog = (props: DisplayMarkdownDialogProps) => {
         </ScrollablePane>
       </div>
       <DialogFooter>
-        {props.onBack && <DefaultButton text={formatMessage('Back')} onClick={props.onBack} />}
         <PrimaryButton text={formatMessage('OK')} onClick={props.onDismiss} />
       </DialogFooter>
     </DialogWrapper>
