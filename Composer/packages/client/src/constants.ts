@@ -338,7 +338,12 @@ export const enableOrchestratorDialog = {
     return formatMessage('Enable Orchestrator');
   },
   get subText() {
-    return formatMessage('Connecting to skills works best with the Orchestrator recognizer at the root bot');
+    return formatMessage('Enable orchestrator as the recognizer at the root dialog to add this skill');
+  },
+  get content() {
+    return formatMessage(
+      'Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level.'
+    );
   },
 };
 

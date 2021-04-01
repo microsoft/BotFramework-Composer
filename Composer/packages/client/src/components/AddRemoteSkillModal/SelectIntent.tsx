@@ -4,7 +4,6 @@
 import { jsx, css } from '@emotion/core';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { DetailsList, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Selection } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
@@ -21,7 +20,7 @@ import httpClient from '../../utils/httpUtil';
 import luWorker from '../../recoilModel/parsers/luWorker';
 import { localeState, dispatcherState } from '../../recoilModel';
 
-import { OrchestractorModal } from './OrchestractorModal';
+import { Orchestractor } from './Orchestractor';
 
 const detailListContainer = css`
   width: 100%;
@@ -32,7 +31,7 @@ const detailListContainer = css`
   border: 1px solid E5E5E5;
 `;
 
-interface SelectIntentModalProps {
+interface SelectIntentProps {
   manifest: {
     dispatchModels: {
       intents: Array<string> | object;
@@ -45,8 +44,10 @@ interface SelectIntentModalProps {
   luFeatures: any;
   rootLuFiles: LuFile[];
   dialogId: string;
-  onSubmit: (event, content: string) => void;
+  onSubmit: (event, content: string, enable: boolean) => void;
   onDismiss: () => void;
+  setTitle: (value) => void;
+  onBack: () => void;
 }
 
 const columns = [
@@ -96,8 +97,19 @@ const getParsedLuFiles = async (files: { id: string; content: string }[], luFeat
   return luFiles;
 };
 
-export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
-  const { manifest, onSubmit, onDismiss, languages, luFeatures, projectId, rootLuFiles, dialogId } = props;
+export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
+  const {
+    manifest,
+    onSubmit,
+    onDismiss,
+    languages,
+    luFeatures,
+    projectId,
+    rootLuFiles,
+    dialogId,
+    setTitle,
+    onBack,
+  } = props;
   const [page, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
   // luFiles from manifest
@@ -108,7 +120,6 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
   const [displayIntents, setDisplayIntent] = useState<Array<LuIntentSection>>([]);
   const [displayContent, setDisplayContent] = useState<string>('');
   // const [luFileError, setError] = useState();
-  const [title, setTitle] = useState(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
   const locale = useRecoilValue(localeState(projectId));
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
@@ -193,68 +204,71 @@ export const SelectIntentModal: React.FC<SelectIntentModalProps> = (props) => {
   return (
     <Fragment>
       {showOrchestratorDialog ? (
-        <OrchestractorModal
-          dialogId={dialogId}
-          onDismiss={onDismiss}
-          onSubmit={(ev) => {
+        <Orchestractor
+          projectId={projectId}
+          onBack={() => {
+            setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
+            setShowOrchestratorDialog(false);
+          }}
+          onSubmit={(ev, enable) => {
             // append remote lufile into root lu file
             updateLuFile(displayContent);
             // add trigger to root
-            onSubmit(ev, displayContent);
+            onSubmit(ev, displayContent, enable);
           }}
         />
       ) : (
-        <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss} {...title}>
-          <Stack>
-            {page === 0 ? (
-              <StackItem>
-                <Label>{formatMessage('Intents')}</Label>
-                <div css={detailListContainer} data-is-scrollable="true">
-                  <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-                    <DetailsList
-                      columns={columns}
-                      isHeaderVisible={false}
-                      items={intentItems}
-                      selection={selection}
-                      selectionMode={SelectionMode.multiple}
-                    />
-                  </ScrollablePane>
-                </div>
-              </StackItem>
+        <Stack>
+          {page === 0 ? (
+            <StackItem>
+              <Label>{formatMessage('Intents')}</Label>
+              <div css={detailListContainer} data-is-scrollable="true">
+                <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+                  <DetailsList
+                    columns={columns}
+                    isHeaderVisible={false}
+                    items={intentItems}
+                    selection={selection}
+                    selectionMode={SelectionMode.multiple}
+                  />
+                </ScrollablePane>
+              </div>
+            </StackItem>
+          ) : (
+            <StackItem>
+              <LuEditor height={400} value={displayContent} onChange={setDisplayContent} />
+            </StackItem>
+          )}
+          <Separator />
+          <Stack horizontal horizontalAlign="space-between">
+            {page === 1 ? (
+              <DefaultButton
+                text={formatMessage('Back')}
+                onClick={() => {
+                  setPage(page - 1);
+                  setTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
+                }}
+              />
             ) : (
-              <StackItem>
-                <LuEditor height={400} value={displayContent} onChange={setDisplayContent} />
-              </StackItem>
+              <DefaultButton text={formatMessage('Back')} onClick={onBack} />
             )}
-            <Separator />
-            <Stack horizontal horizontalAlign={page === 1 ? 'space-between' : 'end'}>
-              {page === 1 && (
-                <DefaultButton
-                  text={formatMessage('Back')}
-                  onClick={() => {
-                    setPage(page - 1);
-                    setTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
-                  }}
-                />
-              )}
-              <span>
-                <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-                <PrimaryButton
-                  styles={{ root: { marginLeft: '8px' } }}
-                  text={formatMessage('Next')}
-                  onClick={() => {
-                    if (page === 1) {
-                      setShowOrchestratorDialog(true);
-                    } else {
-                      setPage(page + 1);
-                      setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
-                    }
-                  }}
-                />
-              </span>
-            </Stack>
+            <span>
+              <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+              <PrimaryButton
+                styles={{ root: { marginLeft: '8px' } }}
+                text={formatMessage('Next')}
+                onClick={() => {
+                  if (page === 1) {
+                    setShowOrchestratorDialog(true);
+                  } else {
+                    setPage(page + 1);
+                    setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
+                  }
+                }}
+              />
+            </span>
           </Stack>
-        </DialogWrapper>
+        </Stack>
       )}
     </Fragment>
   );
