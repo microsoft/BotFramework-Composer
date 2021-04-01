@@ -213,7 +213,7 @@ export enum DialogEvent {
   stepsResumed = 'stepsResumed',
 }
 
-type RuleBase = BaseSchema & {
+export type MicrosoftITrigger = BaseSchema & {
   /** Optional constraint to which must be met for this rule to fire */
   constraint?: string;
   /** Sequence of steps or dialogs to execute */
@@ -221,7 +221,7 @@ type RuleBase = BaseSchema & {
 };
 
 /** This defines the steps to take when an Intent is recognized (and optionally entities) */
-export type OnIntent = RuleBase & {
+export type OnIntent = MicrosoftITrigger & {
   /** Intent name to trigger on */
   intent: string;
   /** The entities required to trigger this rule */
@@ -229,7 +229,7 @@ export type OnIntent = RuleBase & {
 };
 
 /** Defines a sequence of steps to take if there is no other trigger or plan operating */
-export type OnUnknownIntent = RuleBase & {};
+export type OnUnknownIntent = MicrosoftITrigger & {};
 
 export type ITriggerCondition = OnIntent | OnUnknownIntent;
 
