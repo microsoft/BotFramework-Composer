@@ -72,15 +72,8 @@ export interface IOrchestratorBuildOutput {
   };
 }
 
-export type ModelTypes = 'en_intent' | 'multilingual_intent';
-
 export interface IOrchestratorSettings {
   orchestrator: {
-    modelNames?: Record<ModelTypes, string>;
-    modelPaths?: {
-      en_intent?: string;
-      multilingual_intent?: string;
-    };
     models: {
       en?: string;
       multilang?: string;

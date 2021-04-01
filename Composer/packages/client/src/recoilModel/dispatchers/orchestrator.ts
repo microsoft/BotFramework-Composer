@@ -21,7 +21,6 @@ import { settingsState } from '../atoms';
 interface IModelQueueItem {
   type: 'en_intent' | 'multilingual_intent';
   name: string;
-  path?: string;
 }
 
 const pollUntilDone = (predicate: () => Promise<boolean>, pollingIntervalMs: number) =>
@@ -65,8 +64,7 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSe
     if (enLuFiles.length) {
       languageModels.push({
         type: 'en_intent',
-        name: botSettings?.orchestrator?.modelNames?.en_intent ?? 'default',
-        path: botSettings?.orchestrator?.modelPath,
+        name: botSettings?.orchestrator?.model?.en_intent ?? 'default',
       });
     }
 
@@ -78,8 +76,7 @@ export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSe
     ) {
       languageModels.push({
         type: 'multilingual_intent',
-        name: botSettings?.orchestrator?.modelNames?.multilingual_intent ?? 'default',
-        path: botSettings?.orchestrator?.modelPath,
+        name: botSettings?.orchestrator?.model?.multilingual_intent ?? 'default',
       });
     }
   }

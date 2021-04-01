@@ -129,6 +129,21 @@ export async function orchestratorBuilder(
 ): Promise<IOrchestratorBuildOutput> {
   const orchestratorLabelResolvers = cache.get(projectId);
 
+  //if user has changed language model settings, invalidate cached embeddings for that dialog
+  let keysToInvalidate: string[] = [];
+
+  for (const [key, labelResolver] of orchestratorLabelResolvers.entries()) {
+    const modelName: string | undefined = JSON.parse(LabelResolver.getConfigJson(labelResolver))?.Name;
+
+    if (modelName && modelName !== Path.basename(modelPath) + '.onnx') {
+      keysToInvalidate.push(key);
+    }
+  }
+
+  for (let key of keysToInvalidate) {
+    orchestratorLabelResolvers.delete(key);
+  }
+
   const luObjects = files
     .filter((fi) => fi.name.endsWith('.lu') && fi.content)
     .map((fi) => ({

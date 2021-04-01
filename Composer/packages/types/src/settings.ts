@@ -101,12 +101,7 @@ export type IQnAConfig = {
 };
 
 export type IOrchestratorConfig = {
-  modelPath?: string;
-  modelNames?: {
-    [key in 'en_intent' | 'multilingual_intent']: {
-      name: string;
-    };
-  };
+  model?: Record<'en_intent' | 'multilingual_intent', string>;
 };
 
 export type IConfig = ILuisConfig &

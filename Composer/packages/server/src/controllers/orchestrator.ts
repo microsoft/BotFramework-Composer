@@ -17,7 +17,6 @@ enum DownloadState {
 interface ModelRequest {
   type: 'en_intent' | 'multilingual_intent';
   name: string;
-  path?: string;
 }
 
 let state: DownloadState = DownloadState.STOPPED;
@@ -46,11 +45,7 @@ async function getModelBasePath() {
   return baseModelPath;
 }
 
-async function getModelPath(modelName: string, userFolder?: string) {
-  if (userFolder) {
-    return Path.resolve(userFolder, modelName.replace('.onnx', ''));
-  }
-
+async function getModelPath(modelName: string) {
   return Path.resolve(await getModelBasePath(), modelName.replace('.onnx', ''));
 }
 
@@ -81,7 +76,7 @@ async function downloadLanguageModel(req: Request, res: Response) {
     modelName = modelData.name;
   }
 
-  const modelPath = await getModelPath(modelName, modelData?.path);
+  const modelPath = await getModelPath(modelName);
 
   if (await pathExists(modelPath)) {
     state = DownloadState.ALREADYDOWNLOADED;

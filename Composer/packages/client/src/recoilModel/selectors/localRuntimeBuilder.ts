@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultPublishConfig, IPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig } from '@bfc/shared';
 import { selector, selectorFamily } from 'recoil';
 import { checkForPVASchema } from '@bfc/shared';
 
