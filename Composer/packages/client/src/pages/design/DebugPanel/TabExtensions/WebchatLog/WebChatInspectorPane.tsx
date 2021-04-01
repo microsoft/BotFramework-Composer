@@ -11,7 +11,6 @@ import { Resizable } from 're-resizable';
 
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 
-// TODO: make this complete
 type ActivityType = 'conversationUpdate' | 'message' | 'trace';
 
 const editorStyles = css`
@@ -99,7 +98,10 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
       default:
         break;
     }
-    return inspectionData.item;
+    // hide the 'trafficType' property from the view
+    const shownData = { ...inspectionData.item, trafficType: undefined };
+    delete shownData.trafficType;
+    return shownData;
   };
 
   if (inspectionData) {
