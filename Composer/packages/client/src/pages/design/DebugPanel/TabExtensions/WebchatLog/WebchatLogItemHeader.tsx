@@ -20,7 +20,7 @@ export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isAct
   const [lastReadLogIds, setLastReadLogIds] = useState<string[]>([]);
 
   useEffect(() => {
-    const newLogIds = logItems.map((item) => item.timestamp);
+    const newLogIds = logItems.filter((item) => item.trafficType === 'networkError').map((item) => item.timestamp);
     const areLogsSame = isEqual(newLogIds, lastReadLogIds);
 
     if (!areLogsSame) {

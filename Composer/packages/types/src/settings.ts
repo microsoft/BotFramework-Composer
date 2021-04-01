@@ -18,7 +18,7 @@ export type CodeEditorSettings = {
     fontSize: string;
     fontWeight: string;
   };
-  fadedWhenReadOnly: boolean;
+  fadedWhenReadOnly?: boolean;
 };
 
 export type TelemetrySettings = {
