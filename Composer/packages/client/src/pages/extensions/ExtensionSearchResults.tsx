@@ -76,7 +76,7 @@ const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) =>
     },
     {
       key: 'url',
-      name: formatMessage('Url'),
+      name: formatMessage('URL'),
       minWidth: 100,
       maxWidth: 100,
       onRender: (item: ExtensionSearchResult) => {

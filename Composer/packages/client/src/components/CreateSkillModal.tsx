@@ -73,9 +73,9 @@ export const validateManifestUrl = async ({
   const { manifestUrl: _, ...errors } = formDataErrors;
 
   if (!manifestUrl) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest Url') });
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest URL') });
   } else if (!urlRegex.test(manifestUrl)) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Url should start with http[s]://') });
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('URL should start with http:// or https://') });
   } else {
     try {
       setValidationState({ ...validationState, manifestUrl: ValidationState.Validating });
@@ -88,7 +88,7 @@ export const validateManifestUrl = async ({
       setSkillManifest(data);
       setValidationState({ ...validationState, manifestUrl: ValidationState.Validated });
     } catch (error) {
-      setFormDataErrors({ ...errors, manifestUrl: formatMessage('Manifest url can not be accessed') });
+      setFormDataErrors({ ...errors, manifestUrl: formatMessage('Manifest URL can not be accessed') });
       setValidationState({ ...validationState, manifestUrl: ValidationState.NotValidated });
     }
   }
@@ -202,7 +202,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
             <TextField
               required
               errorMessage={formDataErrors.manifestUrl}
-              label={formatMessage('Manifest url')}
+              label={formatMessage('Manifest URL')}
               value={formData.manifestUrl || ''}
               onChange={handleManifestUrlChange}
             />

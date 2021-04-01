@@ -381,7 +381,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           };
           const title = formatMessage('Warning');
           const subTitle = formatMessage(
-            'Delete one source file will also delete qna files with the same name on other locales'
+            'Deleting one source file will also delete qna files with the same name on other locales'
           );
 
           setting = {
@@ -452,7 +452,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       {
                         key: 'update',
                         iconProps: { iconName: 'Download' },
-                        name: formatMessage('Import new url and overwrite'),
+                        name: formatMessage('Import new URL and overwrite'),
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!containerQnAFile) return;

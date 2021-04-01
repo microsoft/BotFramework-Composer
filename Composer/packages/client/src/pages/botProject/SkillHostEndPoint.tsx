@@ -74,8 +74,8 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
       <TextField
         aria-label={formatMessage('Skill host endpoint')}
         data-testid={'SkillHostEndPointTextField'}
-        label={formatMessage('Skill host endpoint url')}
-        placeholder={formatMessage('Enter Skill host endpoint url')}
+        label={formatMessage('Skill host endpoint URL')}
+        placeholder={formatMessage('Enter Skill host endpoint URL')}
         value={skillHostEndpoint}
         onChange={(e, value) => {
           setSettings(projectId, {

@@ -140,7 +140,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       pageMode={'knowledge-base'}
       projectId={projectId}
       skillId={skillId}
-      title={formatMessage('Knowledge(QnA)')}
+      title={formatMessage('Knowledge (QnA)')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >

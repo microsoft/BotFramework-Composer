@@ -40,7 +40,7 @@ const formConfig: FieldConfig<ImportQnAFromUrlFormData> = {
 };
 
 const DialogTitle = () => {
-  return <div>{formatMessage('Import Url')}</div>;
+  return <div>{formatMessage('Import URL')}</div>;
 };
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
