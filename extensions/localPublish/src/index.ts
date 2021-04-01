@@ -195,7 +195,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   removeRuntimeData = async (botId: string) => {
-    const targetDir = path.resolve(__dirname, `../hostedBots/${botId}`);
+    const targetDir = path.resolve(this.getBotsDir(), `./${botId}`);
     if (!(await this.dirExist(targetDir))) {
       return { msg: `runtime path ${targetDir} does not exist` };
     }

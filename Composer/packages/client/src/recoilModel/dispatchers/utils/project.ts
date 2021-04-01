@@ -42,7 +42,7 @@ import luFileStatusStorage from '../../../utils/luFileStatusStorage';
 import { getReferredLuFiles } from '../../../utils/luUtil';
 import { navigateTo } from '../../../utils/navigation';
 import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
-import { getReferredQnaFiles, reformQnAToContainerKB } from '../../../utils/qnaUtil';
+import { getReferredQnaFiles, migrateQnAFiles } from '../../../utils/qnaUtil';
 import {
   botDiagnosticsState,
   botDisplayNameState,
@@ -315,7 +315,8 @@ export const loadProjectData = async (data) => {
   const mergedSettings = getMergedSettings(projectId, settings, botName);
   const indexedFiles = indexer.index(files, botName);
 
-  const { lgResources, luResources, qnaResources } = indexedFiles;
+  const { lgResources, luResources, qnaResources, dialogs } = indexedFiles;
+  const locales = settings.languages;
 
   //parse all resources with worker
   lgWorker.addProject(projectId);
@@ -323,11 +324,12 @@ export const loadProjectData = async (data) => {
   const lgFiles = lgResources.map(({ id, content }) => emptyLgFile(id, content));
   const luFiles = luResources.map(({ id, content }) => emptyLuFile(id, content));
   const qnaFiles = qnaResources.map(({ id, content }) => emptyQnaFile(id, content));
+  const dialogIds = dialogs.map((d) => d.id);
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
-  const updateQnAFiles = reformQnAToContainerKB(projectId, qnaFiles);
+  const updatedQnAFiles = migrateQnAFiles(projectId, dialogIds, qnaFiles, locales);
 
-  const assets = { ...indexedFiles, lgFiles, luFiles, qnaFiles: updateQnAFiles };
+  const assets = { ...indexedFiles, lgFiles, luFiles, qnaFiles: updatedQnAFiles };
   //Validate all files
   const diagnostics = BotIndexer.validate({
     ...assets,
@@ -814,7 +816,7 @@ export const postRootBotCreation = async (
   projectIdCache.set(projectId);
 
   // navigate to the new get started section
-  navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
+  navigateToBot(callbackHelpers, projectId, undefined, btoa('dialogs#getstarted'));
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {

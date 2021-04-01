@@ -17,7 +17,8 @@
     "axios": "^0.21.1",
     "y18n": "^5.0.5",
     "immer": "^8.0.1",
-    "url-parse": "^1.5.1"
+    "url-parse": "^1.5.1",
+    "underscore": "^1.12.1"
   },
   "engines": {
     "node": ">=12"

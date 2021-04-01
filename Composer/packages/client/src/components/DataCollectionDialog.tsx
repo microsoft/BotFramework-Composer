@@ -26,6 +26,7 @@ const DataCollectionDialog: React.FC = () => {
       hidden={false}
       modalProps={{
         isBlocking: true,
+        isDarkOverlay: false,
       }}
       title={formatMessage('Help us improve?')}
       onDismiss={handleDataCollectionChange(false)}
