@@ -64,6 +64,7 @@ const emptyLu: LuFile = {
   content: '',
   diagnostics: [],
   intents: [],
+  allIntents: [],
   empty: true,
   resource: {
     Sections: [],

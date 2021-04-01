@@ -14,7 +14,10 @@ import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@ui
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
+import { BotIndexer } from '@bfc/indexers';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
+import { useLocation } from '../utils/hooks';
 import { BASEPATH } from '../constants';
 import { schemasState } from '../recoilModel/atoms';
 import {
@@ -26,6 +29,9 @@ import {
   settingsState,
   webChatEssentialsSelector,
   isWebChatPanelVisibleState,
+  dialogsWithLuProviderSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
@@ -33,8 +39,9 @@ import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
 import { WebChatPanel } from './WebChat/WebChatPanel';
-import { languageListTemplates } from './MultiLanguage';
+import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
+import { GetStarted } from './GetStarted/GetStarted';
 import { BotController } from './BotRuntimeController/BotController';
 export const actionButton = css`
   font-size: ${FontSizes.size18};
@@ -59,11 +66,17 @@ const title = css`
 `;
 
 const botName = css`
-  margin-left: 20px;
   font-size: 16px;
   color: #fff;
+  padding-left: 20px;
+`;
+
+const botLocale = css`
+  margin-left: 20px;
+  font-size: 12px;
+  color: #fff;
   border-radius: 19px;
-  background: ${CommunicationColors.tint10};
+  background: ${CommunicationColors.shade30};
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
@@ -146,6 +159,7 @@ export const Header = () => {
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
+  const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
@@ -155,6 +169,19 @@ export const Header = () => {
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
   const { setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
+  const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
+  const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(false);
+  const { location } = useLocation();
+
+  // These are needed to determine if the bot needs LUIS or QNA
+  // this data is passed into the GetStarted widget
+  // ... if the get started widget moves, this code should too!
+  const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
+  const requiresLUIS = BotIndexer.shouldUseLuis(dialogs, luFiles);
+  const requiresQNA = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
+  // ... end of get started stuff
 
   const isShow = useBotControllerBar();
 
@@ -167,6 +194,24 @@ export const Header = () => {
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
   }, []);
+
+  const hideTeachingBubble = () => {
+    setShowTeachingBubble(false);
+  };
+  const toggleGetStarted = (newvalue) => {
+    hideTeachingBubble();
+    setShowGetStarted(newvalue);
+  };
+
+  // pop out get started if #getstarted is in the URL
+  useEffect(() => {
+    if (location.hash === '#getstarted') {
+      setshowGetStartedTeachingBubble(true);
+      setShowGetStarted(true);
+    } else {
+      setshowGetStartedTeachingBubble(false);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (isWebChatPanelVisible) {
@@ -220,15 +265,16 @@ export const Header = () => {
         {projectName && (
           <Fragment>
             <div css={divider} />
+            <span css={botName}>{projectName}</span>
             <span
-              css={botName}
+              css={botLocale}
               id="targetButton"
               role={'button'}
               tabIndex={0}
               onClick={() => setTeachingBubbleVisibility(true)}
               onKeyDown={handleActiveLanguageButtonOnKeyDown}
             >
-              {`${projectName} (${locale})`}
+              {languageFullName(locale)}
             </span>
           </Fragment>
         )}
@@ -273,6 +319,29 @@ export const Header = () => {
           />
         )}
         <NotificationButton buttonStyles={buttonStyles} />
+        {isShow && (
+          <IconButton
+            iconProps={{ iconName: 'Rocket' }}
+            id="rocketButton"
+            styles={buttonStyles}
+            title={formatMessage('Get started')}
+            onClick={() => toggleGetStarted(true)}
+          />
+        )}
+        {isShow && showTeachingBubble && (
+          <TeachingBubble
+            hasCloseButton
+            hasCondensedHeadline
+            calloutProps={{ directionalHint: DirectionalHint.bottomAutoEdge }}
+            headline={formatMessage('You’re ready to go!')}
+            target="#startbot"
+            onDismiss={hideTeachingBubble}
+          >
+            {formatMessage(
+              'Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test.'
+            )}
+          </TeachingBubble>
+        )}
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
@@ -342,6 +411,18 @@ export const Header = () => {
             isWebChatPanelVisible={isWebChatPanelVisible}
           />
         ) : null}
+        <GetStarted
+          isOpen={showGetStarted}
+          requiresLUIS={requiresLUIS}
+          requiresQNA={requiresQNA}
+          showTeachingBubble={showGetStartedTeachingBubble}
+          onBotReady={() => {
+            setShowTeachingBubble(true);
+          }}
+          onDismiss={() => {
+            toggleGetStarted(false);
+          }}
+        />
       </Panel>
     </div>
   );

@@ -47,7 +47,7 @@ export function luImportResolverGenerator(
 
     if (!targetFile) throw new Error(formatMessage(`File not found`));
     return {
-      id: resourceId,
+      id: targetFile.id,
       content: targetFile.content,
     };
   };
