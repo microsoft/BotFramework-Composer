@@ -60,6 +60,9 @@ export class BotProjectDeploy {
         await this.BindKeyVault(absSettings, hostname);
       }
 
+      const skillManifestPath = path.join(this.projPath, 'ComposerDialogs', 'manifests');
+      const msAppId = settings.MicrosoftAppId;
+      await this.updateSkillSettings(profileName, hostname, msAppId, skillManifestPath);
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -143,6 +146,44 @@ export class BotProjectDeploy {
         message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       });
       throw error;
+    }
+  }
+
+  /**
+   * update the skill related settings to skills' manifest
+   * @param hostname hostname of web app
+   * @param msAppId microsoft app id
+   * @param skillSettingsPath the path of skills manifest settings
+   */
+  private async updateSkillSettings(profileName: string, hostname: string, msAppId: string, skillSettingsPath: string) {
+    const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
+    if (manifestFiles.length === 0) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `The manifest does not exsit on path: ${skillSettingsPath}`,
+      });
+      return;
+    }
+
+    for (const manifestFile of manifestFiles) {
+      const hostEndpoint = `https://${hostname}.azurewebsites.net/api/messages`;
+
+      const manifest = await fs.readJson(path.join(skillSettingsPath, manifestFile));
+
+      const endpointIndex = manifest.endpoints.findIndex((x) => x.name === profileName);
+      if (endpointIndex > -1) {
+        // already exists
+        return;
+      }
+      manifest.endpoints.push({
+        protocol: 'BotFrameworkV3',
+        name: profileName,
+        endpointUrl: hostEndpoint,
+        description: '<description>',
+        msAppId: msAppId,
+      });
+
+      await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest);
     }
   }
 
