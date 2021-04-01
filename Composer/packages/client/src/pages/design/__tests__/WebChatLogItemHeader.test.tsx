@@ -18,7 +18,7 @@ describe('<DebugPanel />', () => {
         set(botProjectIdsState, [rootBotId]);
         set(webChatTraffic(rootBotId), []);
       });
-      await findByText('Webchat Inspector');
+      await findByText('Web Chat');
     });
 
     it('should render unread error indicator as the tab is inactive. Once read, the error indicator needs to disappear.', async () => {
