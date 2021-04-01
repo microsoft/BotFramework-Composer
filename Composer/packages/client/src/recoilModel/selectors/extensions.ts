@@ -3,7 +3,7 @@
 
 import { selector } from 'recoil';
 
-import { extensionsState, featureFlagsState } from '../atoms/appState';
+import { extensionsState } from '../atoms/appState';
 import { ExtensionPageConfig } from '../../utils/pageLinks';
 
 export const enabledExtensionsSelector = selector({
@@ -19,7 +19,6 @@ export const pluginPagesSelector = selector({
   key: 'pluginPagesSelector',
   get: ({ get }) => {
     const extensions = get(enabledExtensionsSelector);
-    const featureFlags = get(featureFlagsState);
 
     return extensions.reduce((pages, p) => {
       const pagesConfig = p.contributes?.views?.pages;

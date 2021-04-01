@@ -8,7 +8,6 @@ import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
-import { useFeatureFlag } from '../../utils/hooks';
 
 import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { AppIdAndPassword } from './AppIdAndPassword';

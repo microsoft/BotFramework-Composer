@@ -449,7 +449,7 @@ export class BotProjectService {
       alias,
       locale,
       schemaUrl,
-      runtimeChoice,
+      runtimeType,
       runtimeLanguage,
     } = req.body;
 
@@ -479,7 +479,7 @@ export class BotProjectService {
             name,
             locationRef,
             jobId,
-            runtimeChoice,
+            runtimeType,
             runtimeLanguage,
             user
           );

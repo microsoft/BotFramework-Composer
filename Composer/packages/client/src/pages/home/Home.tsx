@@ -13,19 +13,13 @@ import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
-import {
-  recentProjectsState,
-  templateIdState,
-  currentProjectIdState,
-  featureFlagsState,
-} from '../../recoilModel/atoms/appState';
+import { dispatcherState, botDisplayNameState } from '../../recoilModel';
+import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
-import { ExampleList } from './ExampleList';
 
 const linksBottom = [
   {
@@ -73,9 +67,6 @@ const Home: React.FC<RouteComponentProps> = () => {
     saveTemplateId,
     setCreationFlowType,
   } = useRecoilValue(dispatcherState);
-
-  const featureFlags = useRecoilValue(featureFlagsState);
-  const botTemplates = useRecoilValue(templateProjectsState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {

@@ -128,7 +128,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       description: formData.description,
       location: formData.location,
       schemaUrl: formData.schemaUrl,
-      runtimeChoice: formData.runtimeChoice,
+      runtimeType: formData.runtimeType,
       runtimeLanguage: formData.runtimeLanguage,
       appLocale,
       qnaKbUrls,

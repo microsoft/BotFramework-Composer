@@ -16,7 +16,6 @@ import {
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
-  featureFlagsState,
   templateProjectsState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
@@ -32,7 +31,6 @@ type CreationFlowProps = RouteComponentProps<{}>;
 
 const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => {
   const {
-    fetchTemplates,
     fetchTemplatesV2,
     fetchRecentProjects,
     fetchStorages,
@@ -50,7 +48,6 @@ const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => 
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(templateProjectsState);
-  const featureFlags = useRecoilValue(featureFlagsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
@@ -77,7 +74,7 @@ const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => 
     }
     await fetchStorages();
     fetchRecentProjects();
-    featureFlags.NEW_CREATION_FLOW?.enabled ? fetchTemplatesV2([firstPartyTemplateFeed]) : fetchTemplates();
+    fetchTemplatesV2([firstPartyTemplateFeed]);
   };
 
   useEffect(() => {
