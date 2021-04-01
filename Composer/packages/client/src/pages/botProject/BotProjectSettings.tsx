@@ -30,6 +30,7 @@ import { useFeatureFlag } from '../../utils/hooks';
 
 import { openDeleteBotModal } from './DeleteBotButton';
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
+import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 
 // -------------------- Styles -------------------- //
 
@@ -263,19 +264,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
           }}
         />
         <div css={container}>
-          <div css={mainContentHeader}>
-            <div css={botNameStyle}>
-              {`${botName} (${isRootBot ? formatMessage('Root Bot') : formatMessage('Skill')})`}
-            </div>
-            <Toggle
-              inlineLabel
-              checked={isAdvancedSettingsEnabled}
-              className={'advancedSettingsView'}
-              defaultChecked={false}
-              label={formatMessage('Advanced Settings View (json)')}
-              onChange={() => setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled)}
-            />
-          </div>
           {isAdvancedSettingsEnabled ? (
             <JsonEditor
               key={'settingsjson'}
@@ -285,8 +273,19 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               onChange={handleChange}
             />
           ) : (
-            <BotProjectSettingsTableView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
+            <BotProjectSettingsTabView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
           )}
+          <Toggle
+            inlineLabel
+            checked={isAdvancedSettingsEnabled}
+            className={'advancedSettingsView'}
+            defaultChecked={false}
+            label={formatMessage('Advanced Settings View (json)')}
+            styles={{ root: { position: 'absolute', left: '700px', top: '30px' } }}
+            onChange={() => {
+              setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
+            }}
+          />
         </div>
       </Suspense>
     </Page>
