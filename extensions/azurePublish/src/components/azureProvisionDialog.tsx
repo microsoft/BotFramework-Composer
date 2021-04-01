@@ -421,7 +421,7 @@ export const AzureProvisionDialog: React.FC = () => {
       }
     } catch (err) {
       // todo: how do we handle API errors in this component
-      console.log('ERROR', err);
+      console.error('ERROR', err);
     }
   };
 
@@ -463,7 +463,7 @@ export const AzureProvisionDialog: React.FC = () => {
         }
       } catch (err) {
         // todo: how do we handle API errors in this component
-        console.log('ERROR', err);
+        console.error('ERROR', err);
         if (isMounted.current) {
           setResourceGroups(undefined);
         }
@@ -1072,51 +1072,55 @@ export const AzureProvisionDialog: React.FC = () => {
   }
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-      <div style={{ flex: 1 }}>
-        {page === PageTypes.ConfigProvision && PageFormConfig}
-        {page === PageTypes.AddResources && PageAddResources()}
-        {page === PageTypes.ReviewResource && PageReview}
-        {page === PageTypes.EditJson && (
-          <JsonEditor
-            height={400}
-            id={publishType}
-            schema={getSchema()}
-            value={currentConfig || importConfig}
-            onChange={(value) => {
-              setEditorError(false);
-              setImportConfig(value);
-            }}
-            onError={() => {
-              setEditorError(true);
-            }}
-          />
-        )}
-      </div>
-      <div
-        style={{
-          flex: 'auto',
-          flexGrow: 0,
-          background: '#FFFFFF',
-          borderTop: '1px solid #EDEBE9',
-          width: '100%',
-          textAlign: 'right',
-          height: 'fit-content',
-          padding: '24px 0px 0px',
-        }}
-      >
-        {PageFooter}
-      </div>
+    <Fragment>
       <ProvisionHandoff
         developerInstructions={formatMessage('Send this to your IT admin')}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
         title={formatMessage('Generate a provisioning request')}
-        onDismiss={() => {
-          closeDialog();
+        onBack={() => {
           setShowHandoff(false);
         }}
+        onDismiss={() => {
+          closeDialog();
+        }}
       />
-    </div>
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1 }}>
+          {page === PageTypes.ConfigProvision && PageFormConfig}
+          {page === PageTypes.AddResources && PageAddResources()}
+          {page === PageTypes.ReviewResource && PageReview}
+          {page === PageTypes.EditJson && (
+            <JsonEditor
+              height={400}
+              id={publishType}
+              schema={getSchema()}
+              value={currentConfig || importConfig}
+              onChange={(value) => {
+                setEditorError(false);
+                setImportConfig(value);
+              }}
+              onError={() => {
+                setEditorError(true);
+              }}
+            />
+          )}
+        </div>
+        <div
+          style={{
+            flex: 'auto',
+            flexGrow: 0,
+            background: '#FFFFFF',
+            borderTop: '1px solid #EDEBE9',
+            width: '100%',
+            textAlign: 'right',
+            height: 'fit-content',
+            padding: '24px 0px 0px',
+          }}
+        >
+          {PageFooter}
+        </div>
+      </div>
+    </Fragment>
   );
 };
