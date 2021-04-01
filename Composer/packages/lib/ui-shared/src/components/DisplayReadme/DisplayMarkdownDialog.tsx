@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import formatMessage from 'format-message';
 import ReactMarkdown from 'react-markdown';
