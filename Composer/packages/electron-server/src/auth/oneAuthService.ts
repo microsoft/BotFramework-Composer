@@ -62,6 +62,8 @@ export class OneAuthInstance extends OneAuthBase {
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
   private signedInARMAccount: OneAuth.Account | undefined;
+  /** Token solely used to fetch tenants */
+  private tenantToken: string | undefined;
 
   constructor() {
     super();
@@ -189,17 +191,19 @@ export class OneAuthInstance extends OneAuthBase {
       if (!this.initialized) {
         this.initialize();
       }
-      // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
-      log('Logging user into ARM...');
-      this.signedInARMAccount = undefined;
-      const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
-      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
-      this.signedInARMAccount = result.account;
-      const token = result.credential.value;
+
+      if (!this.signedInARMAccount || !this.tenantToken) {
+        // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
+        log('Logging user into ARM...');
+        const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
+        const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+        this.signedInARMAccount = result.account;
+        this.tenantToken = result.credential.value;
+      }
 
       // call the tenants API
       const tenantsResult = await fetch('https://management.azure.com/tenants?api-version=2020-01-01', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${this.tenantToken}` },
       });
       const tenants = (await tenantsResult.json()) as GetTenantsResult;
       log('Got Azure tenants for user: %O', tenants.value);

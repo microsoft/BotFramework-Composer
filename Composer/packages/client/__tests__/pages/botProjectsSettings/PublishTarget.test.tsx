@@ -13,7 +13,7 @@ import { isShowAuthDialog } from '../../../src/utils/auth';
 jest.mock('../../../src/utils/auth', () => ({
   isShowAuthDialog: jest.fn(),
   getTokenFromCache: jest.fn(),
-  isGetTokenFromUser: jest.fn(),
+  userShouldProvideTokens: jest.fn(),
 }));
 
 const state = {
