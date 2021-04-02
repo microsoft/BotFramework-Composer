@@ -815,6 +815,9 @@
   "copy_project_location_to_clipboard_eb85c474": {
     "message": "Copy project location to clipboard"
   },
+  "copy_skill_manifest_url_8f9371d0": {
+    "message": "Copy Skill Manifest URL"
+  },
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
   },
