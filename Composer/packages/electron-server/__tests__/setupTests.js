@@ -1,4 +1,5 @@
-process.env.DEBUG = 'composer*';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 jest.mock('electron', () => ({
   app: {

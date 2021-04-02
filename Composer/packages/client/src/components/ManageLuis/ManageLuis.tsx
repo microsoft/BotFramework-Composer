@@ -23,7 +23,7 @@ import { ProvisionHandoff } from '@bfc/ui-shared';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { armScopes } from '../../constants';
-import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
+import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { LUIS_REGIONS } from '../../constants';
 import { dispatcherState } from '../../recoilModel/atoms';
 
@@ -94,7 +94,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
 
   const hasAuth = async () => {
     let newtoken = '';
-    if (isGetTokenFromUser()) {
+    if (userShouldProvideTokens()) {
       if (isShowAuthDialog(false)) {
         setShowAuthDialog(true);
       }
