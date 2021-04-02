@@ -133,6 +133,7 @@ export async function orchestratorBuilder(
   const keysToInvalidate: string[] = [];
 
   for (const [key, labelResolver] of orchestratorLabelResolvers.entries()) {
+    //JSON.parse can throw - this is expected to be caught in the process message handler below.
     const modelName: string | undefined = JSON.parse(LabelResolver.getConfigJson(labelResolver))?.Name;
 
     if (modelName && modelName !== Path.basename(modelPath) + '.onnx') {
@@ -150,6 +151,7 @@ export async function orchestratorBuilder(
       id: fi.name,
       content: fi.content,
     }));
+
   const result = await Orchestrator.buildAsync(
     modelPath,
     luObjects,
