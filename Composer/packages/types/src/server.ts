@@ -1,5 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+import { Activity } from 'botframework-schema';
+
 import { FileInfo } from './indexers';
 import { IDiagnostic } from './diagnostic';
 import { DialogSetting } from './settings';
@@ -69,12 +72,12 @@ export type ConversationNetworkTrafficItem = {
 };
 
 export type ConversationActivityTraffic = {
-  activities: any[];
+  activities: Activity[];
   trafficType: 'activity';
 };
 
 export type ConversationActivityTrafficItem = {
-  activity: any;
+  activity: Activity;
   timestamp: number;
   trafficType: 'activity';
 };

@@ -32,7 +32,7 @@ describe('<DebugPanel />', () => {
         set(webChatTraffic(rootBotId), [
           {
             trafficType: 'activity',
-            activity: {},
+            activity: {} as any,
             timestamp: Date.now(),
           },
         ]);
@@ -50,7 +50,7 @@ describe('<DebugPanel />', () => {
         set(webChatTraffic(rootBotId), [
           {
             trafficType: 'activity',
-            activity: {},
+            activity: {} as any,
             timestamp: Date.now(),
           },
         ]);

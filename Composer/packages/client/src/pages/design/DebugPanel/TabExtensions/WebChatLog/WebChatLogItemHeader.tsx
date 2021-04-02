@@ -17,7 +17,7 @@ export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isAct
   const logItems = useRecoilValue(webChatTraffic(rootBotId ?? ''));
 
   const [hasUnreadLogs, setHasUnreadLogs] = useState(false);
-  const [lastReadLogIds, setLastReadLogIds] = useState<string[]>([]);
+  const [lastReadLogIds, setLastReadLogIds] = useState<number[]>([]);
 
   useEffect(() => {
     const newLogIds = logItems.filter((item) => item.trafficType === 'networkError').map((item) => item.timestamp);
