@@ -518,14 +518,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
         // verify the publish profile has the required resources configured
         const resources = await this.getResources(project, user);
-        const missingResourceNames = [];
-        resources
-          .filter((r) => r.required)
-          .forEach((r) => {
-            if (!this.isResourceProvisionedInProfile(r, config)) {
-              missingResourceNames.push(r.text);
-            }
-          });
+
+        const missingResourceNames = resources.reduce((result, resource) => {
+          if (resource.required && !this.isResourceProvisionedInProfile(resource, config)) {
+            result.push(resource.text);
+          }
+          return result;
+        }, []);
 
         if (missingResourceNames.length > 0) {
           const missingResourcesText = missingResourceNames.join(',');
@@ -745,7 +744,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         case AzureResourceTypes.WEBAPP:
           return profile?.hostname;
         default:
-          throw new Error(`Azure resource type ${resource.key} is not handled.`);
+          throw new Error(
+            formatMessage('Azure resource type {resourceKey} is not handled.', { resourceKey: resource.key })
+          );
       }
     };
 
