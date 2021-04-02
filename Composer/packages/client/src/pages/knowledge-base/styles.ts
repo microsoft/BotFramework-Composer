@@ -4,6 +4,7 @@ import { css } from '@emotion/core';
 import { FontWeights, mergeStyleSets } from '@uifabric/styling';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 
 export const classNames = mergeStyleSets({
   groupHeader: {
@@ -24,7 +25,6 @@ export const classNames = mergeStyleSets({
     flexDirection: 'column',
     width: '50%',
     textAlign: 'center',
-    marginTop: '-20%',
   },
 });
 
@@ -177,7 +177,7 @@ export const backIcon = {
   },
 };
 
-export const editableField = {
+export const editableField: Partial<ITextFieldStyles> = {
   root: {
     height: '100%',
     selectors: {
@@ -200,9 +200,11 @@ export const editableField = {
     },
   },
   field: {
-    overflowY: 'auto' as 'auto',
+    overflow: 'hidden',
     fontSize: FontSizes.size12,
     maxHeight: 500,
+    textOverflow: 'ellipsis',
+    paddingRight: '1rem',
     selectors: {
       '::placeholder': {
         fontSize: FontSizes.size12,
