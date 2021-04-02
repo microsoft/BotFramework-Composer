@@ -16,7 +16,7 @@ const clickable = css`
 `;
 
 const renderActivityArrow = (activity) => {
-  if (activity?.recipient && activity.recipient.role === 'bot') {
+  if (activity?.recipient?.role === 'bot') {
     return <span>{'->'}</span>;
   }
   return <span>{'<-'}</span>;

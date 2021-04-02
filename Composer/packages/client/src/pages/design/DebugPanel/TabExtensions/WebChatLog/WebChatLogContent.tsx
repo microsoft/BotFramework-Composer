@@ -6,6 +6,7 @@ import { css, jsx } from '@emotion/core';
 import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ConversationTrafficItem } from '@botframework-composer/types/src';
+import formatMessage from 'format-message';
 
 import {
   dispatcherState,
@@ -69,27 +70,33 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     navigateToLatestEntryWhenActive(true);
   }, [currentLogItemCount]);
 
-  const onClickTraffic = useCallback((data: WebChatInspectionData) => {
-    if (currentProjectId) {
-      setWebChatInspectionData(currentProjectId, data);
-    }
-  }, []);
+  const onClickTraffic = useCallback(
+    (data: WebChatInspectionData) => {
+      if (currentProjectId) {
+        setWebChatInspectionData(currentProjectId, data);
+      }
+    },
+    [currentProjectId]
+  );
 
-  const renderLogItem = (item: ConversationTrafficItem, index: number) => {
-    switch (item.trafficType) {
-      case 'activity':
-        return <WebChatActivityLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+  const renderLogItem = useCallback(
+    (item: ConversationTrafficItem, index: number) => {
+      switch (item.trafficType) {
+        case 'activity':
+          return <WebChatActivityLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
 
-      case 'network':
-        return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+        case 'network':
+          return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
 
-      case 'networkError':
-        return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+        case 'networkError':
+          return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
 
-      default:
-        return null;
-    }
-  };
+        default:
+          return null;
+      }
+    },
+    [onClickTraffic]
+  );
 
   const displayedTraffic = useMemo(() => {
     const sortedTraffic = [...rawWebChatTraffic]
@@ -97,7 +104,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
       .map((t, i) => renderLogItem(t, i));
     setLogItemCount(sortedTraffic.length);
     return sortedTraffic;
-  }, [rawWebChatTraffic]);
+  }, [rawWebChatTraffic, renderLogItem]);
 
   const setInspectionData = (data: WebChatInspectionData) => {
     if (currentProjectId) {
@@ -108,7 +115,11 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   return (
     <div css={logContainer(isActive)}>
       <div ref={webChatContainerRef} css={logPane} data-testid="Webchat-Logs-Container">
-        {displayedTraffic.length ? displayedTraffic : <span css={emptyStateMessage}>No Web Chat activity yet.</span>}
+        {displayedTraffic.length ? (
+          displayedTraffic
+        ) : (
+          <span css={emptyStateMessage}>{formatMessage('No Web Chat activity yet.')}</span>
+        )}
       </div>
       <WebChatInspectorPane inspectionData={inspectionData} setInspectionData={setInspectionData} />
     </div>

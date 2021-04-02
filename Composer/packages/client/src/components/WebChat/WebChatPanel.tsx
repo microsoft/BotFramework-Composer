@@ -68,21 +68,29 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
               | ConversationActivityTraffic
               | ConversationNetworkTrafficItem
               | ConversationNetworkErrorItem = JSON.parse(event.data);
-            if (data.trafficType === 'network') {
-              appendWebChatTraffic(projectId, data);
-            }
-            if (data.trafficType === 'activity') {
-              appendWebChatTraffic(
-                projectId,
-                data.activities.map((a) => ({ activity: a, timestamp: a.timestamp, trafficType: data.trafficType }))
-              );
-            }
-            if (data.trafficType === 'networkError') {
-              appendWebChatTraffic(projectId, data);
-              setTimeout(() => {
-                setActiveTabInDebugPanel('WebChatInspector');
-                setDebugPanelExpansion(true);
-              }, 300);
+
+            switch (data.trafficType) {
+              case 'network': {
+                appendWebChatTraffic(projectId, data);
+                break;
+              }
+              case 'activity': {
+                appendWebChatTraffic(
+                  projectId,
+                  data.activities.map((a) => ({ activity: a, timestamp: a.timestamp, trafficType: data.trafficType }))
+                );
+                break;
+              }
+              case 'networkError': {
+                appendWebChatTraffic(projectId, data);
+                setTimeout(() => {
+                  setActiveTabInDebugPanel('WebChatInspector');
+                  setDebugPanelExpansion(true);
+                }, 300);
+                break;
+              }
+              default:
+                break;
             }
           };
         }

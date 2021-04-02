@@ -49,8 +49,7 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
       if (item && inspectionData) {
         if (item.props.itemKey === 'networkReq') {
           setInspectionData({ ...inspectionData, mode: 'request' });
-        }
-        if (item.props.itemKey === 'networkRes') {
+        } else if (item.props.itemKey === 'networkRes') {
           setInspectionData({ ...inspectionData, mode: 'response' });
         }
       }

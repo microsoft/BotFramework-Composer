@@ -100,7 +100,7 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     fontFamily: overrides?.fontSettings?.fontFamily,
     fontSize: overrides?.fontSettings?.fontSize,
     fontWeight: Number(overrides?.fontSettings?.fontWeight),
-    fadedWhenReadOnly: overrides?.fadedWhenReadOnly !== undefined ? overrides?.fadedWhenReadOnly : true,
+    fadedWhenReadOnly: overrides?.fadedWhenReadOnly !== undefined ? overrides.fadedWhenReadOnly : true,
   };
 };
 
