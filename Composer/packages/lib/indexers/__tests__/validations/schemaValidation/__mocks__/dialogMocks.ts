@@ -1,7 +1,36 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const simpleGreeting: any = {
+export const sendActivityStub = {
+  $kind: 'Microsoft.SendActivity',
+  $designer: {
+    id: 'AwT1u7',
+  },
+};
+
+export const switchConditionStub = {
+  $kind: 'Microsoft.SwitchCondition',
+  $designer: {
+    id: 'sJzdQm',
+  },
+  default: [sendActivityStub],
+  cases: [
+    {
+      value: 'case1',
+      actions: [sendActivityStub],
+    },
+  ],
+};
+
+export const onConversationUpdateActivityStub = {
+  $kind: 'Microsoft.OnConversationUpdateActivity',
+  $designer: {
+    id: '376720',
+  },
+  actions: [switchConditionStub],
+};
+
+export const simpleGreetingDialog: any = {
   $kind: 'Microsoft.AdaptiveDialog',
   $designer: {
     $designer: {
@@ -12,43 +41,7 @@ export const simpleGreeting: any = {
   },
   autoEndDialog: true,
   defaultResultProperty: 'dialog.result',
-  triggers: [
-    {
-      $kind: 'Microsoft.OnConversationUpdateActivity',
-      $designer: {
-        id: '376720',
-      },
-      actions: [
-        {
-          $kind: 'Microsoft.SwitchCondition',
-          $designer: {
-            id: 'sJzdQm',
-          },
-          cases: [
-            {
-              value: 'asd',
-              actions: [
-                {
-                  $kind: 'Microsoft.SendActivity',
-                  $designer: {
-                    id: 'AwT1u7',
-                  },
-                },
-              ],
-            },
-          ],
-          default: [
-            {
-              $kind: 'Microsoft.SendActivity',
-              $designer: {
-                id: 'rMLkPc',
-              },
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  triggers: [onConversationUpdateActivityStub],
   $schema:
     'https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema',
   generator: 'EmptyBot-1.lg',

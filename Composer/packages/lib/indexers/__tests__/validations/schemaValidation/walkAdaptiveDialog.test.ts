@@ -5,13 +5,13 @@ import { SDKKinds } from '@botframework-composer/types';
 
 import { walkAdaptiveDialog } from '../../../src/validations/schemaValidation/walkAdaptiveDialog';
 
-import { simpleGreeting } from './__mocks__/dialogMocks';
+import { simpleGreetingDialog } from './__mocks__/dialogMocks';
 import { sdkSchemaDefinitionMock } from './__mocks__/sdkSchema';
 
 describe('visitAdaptiveDialog', () => {
   it('should visit every adaptive elements in `simpleGreeting`', () => {
     const result: any = {};
-    walkAdaptiveDialog(simpleGreeting, sdkSchemaDefinitionMock, ($kind, _, path) => {
+    walkAdaptiveDialog(simpleGreetingDialog, sdkSchemaDefinitionMock, ($kind, _, path) => {
       result[path] = $kind;
       return true;
     });
