@@ -231,7 +231,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         projectId: actualProjectId,
       });
     } else {
-      setQnASections(qnaSections.filter((section) => section.Answer === '' && section.Questions.length === 0));
+      setQnASections(qnaSections.filter((section) => !(section.Answer === '' && section.Questions.length === 0)));
     }
     // update expand status
     if (expandedIndex) {
