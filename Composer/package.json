@@ -42,7 +42,9 @@
       "packages/types",
       "packages/ui-plugins/*"
     ],
-    "nohoist": ["**/server-workers/**"]
+    "nohoist": [
+      "**/server-workers/**"
+    ]
   },
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
@@ -91,11 +93,11 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,jsx}": [
+    "**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ],
-    "../extensions/**/*": [
+    "../extensions/**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ]
