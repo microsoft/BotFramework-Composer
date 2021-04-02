@@ -1058,6 +1058,9 @@
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
   },
+  "delete_one_source_file_will_also_delete_qna_files__232d0834": {
+    "message": "Delete one source file will also delete qna files with the same name on other locales"
+  },
   "delete_properties_8bc77b42": {
     "message": "Delete Properties"
   },
