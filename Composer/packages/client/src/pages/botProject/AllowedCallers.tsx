@@ -2,20 +2,23 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import React from 'react';
 import styled from '@emotion/styled';
 import { useRecoilValue } from 'recoil';
-import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/components/Button';
+import { ActionButton } from 'office-ui-fabric-react/lib/components/Button';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { Stack } from 'office-ui-fabric-react/lib/components/Stack';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 
-import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../../recoilModel';
-import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
-import { addNewButton, tableColumnHeader } from '../styles';
+import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../recoilModel';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { CollapsableWrapper } from '../../components/CollapsableWrapper';
+
+import { actionButton, subtitle as defaultSubtitle, title } from './styles';
 
 const Input = styled(TextField)({
   width: '100%',
@@ -53,14 +56,18 @@ const ItemContainer = styled.div({
 
 const Row = styled(Stack)({
   borderBottom: `1px solid ${FluentTheme.palette.neutralLight}`,
-  padding: '8px 0 8px 4px',
-  '& .ms-Button:not(:focus) i': {
+  padding: '4px 0',
+  '& .ms-Button:not(:focus)': {
     visibility: 'hidden',
   },
-  '&:hover .ms-Button i': {
+  '&:hover .ms-Button': {
     visibility: 'visible',
   },
 });
+
+const subtitle = css`
+  padding: 8px 0;
+`;
 
 type ItemProps = {
   value: string;
@@ -81,7 +88,7 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
   }, []);
 
   return (
-    <Row horizontal>
+    <Row horizontal verticalAlign={'center'}>
       <Input
         componentRef={(ref) => (itemRef.current = ref)}
         styles={textFieldStyles}
@@ -89,7 +96,9 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
         onBlur={onBlur}
         onChange={onChange}
       />
-      <IconButton aria-label={formatMessage('Remove item')} iconProps={{ iconName: 'Trash' }} onClick={onRemove} />
+      <ActionButton aria-label={formatMessage('Remove item')} styles={actionButton} onClick={onRemove}>
+        {formatMessage('Remove')}
+      </ActionButton>
     </Row>
   );
 });
@@ -142,8 +151,10 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   }, [skillConfiguration?.allowedCallers, updateAllowedCallers]);
 
   return (
-    <React.Fragment>
-      <div css={tableColumnHeader()}>{formatMessage('Allowed callers')} </div>
+    <CollapsableWrapper title={formatMessage('Allowed callers')} titleStyle={title}>
+      <div css={[defaultSubtitle, subtitle]}>
+        {formatMessage('List of app ids for bots that are allowed to use this skill')}
+      </div>
       <ItemContainer>
         {skillConfiguration?.allowedCallers?.map((caller, index) => {
           return (
@@ -151,9 +162,14 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
           );
         })}
       </ItemContainer>
-      <ActionButton data-testid={'addNewAllowedCaller'} styles={addNewButton} onClick={onAddNewAllowedCaller}>
-        {formatMessage('Add new')}
+      <ActionButton data-testid={'addNewAllowedCaller'} styles={actionButton} onClick={onAddNewAllowedCaller}>
+        {formatMessage('Add caller')}
       </ActionButton>
-    </React.Fragment>
+      {!skillConfiguration?.allowedCallers?.length && (
+        <MessageBar messageBarType={MessageBarType.warning}>
+          {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
+        </MessageBar>
+      )}
+    </CollapsableWrapper>
   );
 };

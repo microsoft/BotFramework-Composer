@@ -24,7 +24,6 @@ import {
   runtimeTemplatesState,
   currentProjectIdState,
   skillManifestsState,
-  luFilesState,
   settingsState,
   botEnvironmentState,
   botDiagnosticsState,
@@ -41,7 +40,7 @@ import {
   botProjectSpaceLoadedState,
   dispatcherState,
 } from '../../atoms';
-import { dialogsSelectorFamily, lgFilesSelectorFamily } from '../../selectors';
+import { dialogsSelectorFamily, lgFilesSelectorFamily, luFilesSelectorFamily } from '../../selectors';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
 
@@ -68,12 +67,37 @@ jest.mock('../../parsers/lgWorker', () => {
   return {
     flush: () => new Promise((resolve) => resolve(null)),
     addProject: () => new Promise((resolve) => resolve(null)),
+
+    parseAll: (id, files) =>
+      new Promise((resolve) =>
+        resolve(
+          files.map(({ id, content }) => {
+            const result = require('@bfc/indexers').lgUtil.parse(id, content, files);
+            delete result.parseResult;
+            return result;
+          })
+        )
+      ),
   };
 });
 
 jest.mock('../../parsers/luWorker', () => {
   return {
     flush: () => new Promise((resolve) => resolve(null)),
+    parseAll: (files, luFeatures) =>
+      new Promise((resolve) =>
+        resolve(files.map(({ id, content }) => require('@bfc/indexers').luUtil.parse(id, content, luFeatures)))
+      ),
+  };
+});
+
+jest.mock('../../parsers/qnaWorker', () => {
+  return {
+    flush: () => new Promise((resolve) => resolve(null)),
+    parseAll: (files) =>
+      new Promise((resolve) =>
+        resolve(files.map(({ id, content }) => require('@bfc/indexers').qnaUtil.parse(id, content)))
+      ),
   };
 });
 
@@ -113,7 +137,7 @@ describe('Project dispatcher', () => {
     const location = useRecoilValue(locationState(projectId));
     const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
-    const luFiles = useRecoilValue(luFilesState(projectId));
+    const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
     const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const settings = useRecoilValue(settingsState(projectId));
     const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));

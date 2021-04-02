@@ -12,7 +12,9 @@
     "build": "tsc --build ./tsconfig.build.json",
     "lint": "eslint --quiet src",
     "test": "jest",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "watch": "yarn build --watch"
+
   },
   "keywords": [
     "botframework",

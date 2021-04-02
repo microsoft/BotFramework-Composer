@@ -55,3 +55,5 @@ export const extensionDataDir = process.env.COMPOSER_EXTENSION_DATA_DIR || resol
 export const extensionsBuiltinDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || resolveFromRoot('../extensions');
 export const extensionsRemoteDir =
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR || resolveFromRoot('.composer/extensions');
+export const localPublishPath =
+  process.env.LOCAL_PUBLISH_PATH || resolveFromRoot('../extensions/localPublish/hostedBots');
