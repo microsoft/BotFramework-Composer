@@ -121,7 +121,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
           <span css={emptyStateMessage}>{formatMessage('No Web Chat activity yet.')}</span>
         )}
       </div>
-      <WebChatInspectorPane inspectionData={inspectionData} setInspectionData={setInspectionData} />
+      <WebChatInspectorPane inspectionData={inspectionData} onSetInspectionData={setInspectionData} />
     </div>
   );
 };

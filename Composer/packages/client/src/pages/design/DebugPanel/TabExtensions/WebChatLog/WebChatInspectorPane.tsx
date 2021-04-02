@@ -23,7 +23,7 @@ const pivotStyles = css`
 
 type WebChatInspectorPaneProps = {
   inspectionData?: WebChatInspectionData;
-  setInspectionData: (data: WebChatInspectionData) => void;
+  onSetInspectionData: (data: WebChatInspectionData) => void;
 };
 
 const getUserFriendlyActivityType = (type: ActivityType | undefined) => {
@@ -43,42 +43,45 @@ const getUserFriendlyActivityType = (type: ActivityType | undefined) => {
 };
 
 export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props) => {
-  const { inspectionData, setInspectionData } = props;
+  const { inspectionData, onSetInspectionData } = props;
   const handleInspectorTabClick = useCallback(
     (item: PivotItem | undefined) => {
       if (item && inspectionData) {
         if (item.props.itemKey === 'networkReq') {
-          setInspectionData({ ...inspectionData, mode: 'request' });
+          onSetInspectionData({ ...inspectionData, mode: 'request' });
         } else if (item.props.itemKey === 'networkRes') {
-          setInspectionData({ ...inspectionData, mode: 'response' });
+          onSetInspectionData({ ...inspectionData, mode: 'response' });
         }
       }
     },
-    [inspectionData, setInspectionData]
+    [inspectionData, onSetInspectionData]
   );
-  const renderHeader = (inspectionData: WebChatInspectionData) => {
-    switch (inspectionData.item.trafficType) {
-      case 'network': {
-        const selectedKey = inspectionData.mode === 'request' ? 'networkReq' : 'networkRes';
-        return (
-          <Pivot headersOnly css={pivotStyles} selectedKey={selectedKey} onLinkClick={handleInspectorTabClick}>
-            <PivotItem headerText={inspectionData.item.request.method} itemKey={'networkReq'} />
-            <PivotItem headerText={inspectionData.item.response.statusCode.toString()} itemKey={'networkRes'} />
-          </Pivot>
-        );
+  const renderHeader = useCallback(
+    (inspectionData: WebChatInspectionData) => {
+      switch (inspectionData.item.trafficType) {
+        case 'network': {
+          const selectedKey = inspectionData.mode === 'request' ? 'networkReq' : 'networkRes';
+          return (
+            <Pivot headersOnly css={pivotStyles} selectedKey={selectedKey} onLinkClick={handleInspectorTabClick}>
+              <PivotItem headerText={inspectionData.item.request.method} itemKey={'networkReq'} />
+              <PivotItem headerText={inspectionData.item.response.statusCode.toString()} itemKey={'networkRes'} />
+            </Pivot>
+          );
+        }
+
+        case 'activity':
+          return (
+            <Pivot headersOnly css={pivotStyles}>
+              <PivotItem headerText={getUserFriendlyActivityType(inspectionData.item.activity.type)} />
+            </Pivot>
+          );
+
+        default:
+          return null;
       }
-
-      case 'activity':
-        return (
-          <Pivot headersOnly css={pivotStyles}>
-            <PivotItem headerText={getUserFriendlyActivityType(inspectionData.item.activity.type)} />
-          </Pivot>
-        );
-
-      default:
-        return null;
-    }
-  };
+    },
+    [handleInspectorTabClick]
+  );
 
   const getInspectedData = (inspectionData: WebChatInspectionData) => {
     switch (inspectionData.mode) {
