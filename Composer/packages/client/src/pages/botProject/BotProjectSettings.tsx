@@ -25,7 +25,6 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 import { openDeleteBotModal } from './DeleteBotButton';
-import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 
 // -------------------- Styles -------------------- //
@@ -46,18 +45,6 @@ const container = css`
   height: 100%;
 `;
 
-const botNameStyle = css`
-  font-size: ${FontSizes.xLarge};
-  font-weight: ${FontWeights.semibold};
-  color: ${NeutralColors.black};
-`;
-
-const mainContentHeader = css`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-`;
-
 // -------------------- BotProjectSettings -------------------- //
 
 const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
@@ -69,8 +56,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
   const { deleteBot } = useRecoilValue(dispatcherState);
 
-  const isRootBot = !!botProject?.isRootBot;
-  const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
 
