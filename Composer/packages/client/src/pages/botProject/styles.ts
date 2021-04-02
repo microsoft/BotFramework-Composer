@@ -122,7 +122,7 @@ export const unknownIconStyle = (required: boolean) => {
 
 export const columnSizes = ['300px', '150px', '150px'];
 
-export const addNewButton = {
+export const actionButton = {
   root: {
     fontSize: 12,
     fontWeight: FontWeights.regular,
