@@ -14,6 +14,8 @@ enum DownloadState {
   DOWNLOADING,
 }
 
+let errorMsg: any;
+
 interface ModelRequest {
   type: 'en_intent' | 'multilingual_intent';
   name: string;
@@ -54,11 +56,16 @@ async function getModelList(): Promise<IOrchestratorNLRList> {
 }
 
 async function status(req: Request, res: Response) {
-  res.send(200, state);
+  if (errorMsg) {
+    res.status(400).send(errorMsg);
+    return;
+  }
+  res.status(200).send(state.toString());
 }
 
 async function downloadLanguageModel(req: Request, res: Response) {
   const modelData = req.body?.modelData;
+  errorMsg = null;
 
   if (!isValidModelRequest(modelData)) {
     return res.sendStatus(400);
@@ -83,10 +90,15 @@ async function downloadLanguageModel(req: Request, res: Response) {
     return res.sendStatus(201);
   }
 
-  res.send(200, '/orchestrator/status');
+  res.status(200).send('/orchestrator/status');
 
-  state = DownloadState.DOWNLOADING;
-  await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
+  try {
+    state = DownloadState.DOWNLOADING;
+    await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
+  } catch (err) {
+    errorMsg = err;
+    state = DownloadState.STOPPED;
+  }
 }
 
 export const OrchestratorController = {
