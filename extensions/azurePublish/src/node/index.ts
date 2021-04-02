@@ -703,7 +703,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       return recommendedResources;
     };
 
-    private isProfileProvisioned = (profile: PublishConfig) => {
+    private isProfileProvisioned = (profile: PublishConfig): boolean => {
       //TODO: Post-migration we can check for profile?.tenantId
       return profile?.resourceGroup && profile?.subscriptionId && profile?.region;
     };
