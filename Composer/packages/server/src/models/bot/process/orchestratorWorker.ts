@@ -130,7 +130,7 @@ export async function orchestratorBuilder(
   const orchestratorLabelResolvers = cache.get(projectId);
 
   //if user has changed language model settings, invalidate cached embeddings for that dialog
-  let keysToInvalidate: string[] = [];
+  const keysToInvalidate: string[] = [];
 
   for (const [key, labelResolver] of orchestratorLabelResolvers.entries()) {
     const modelName: string | undefined = JSON.parse(LabelResolver.getConfigJson(labelResolver))?.Name;
@@ -140,7 +140,7 @@ export async function orchestratorBuilder(
     }
   }
 
-  for (let key of keysToInvalidate) {
+  for (const key of keysToInvalidate) {
     orchestratorLabelResolvers.delete(key);
   }
 

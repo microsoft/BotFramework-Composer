@@ -62,7 +62,7 @@ export const orchestratorDownloadNotificationProps = (): CardProps => {
 export const orchestratorDownloadErrorProps = (err: string): CardProps => {
   return {
     title: '',
-    description: formatMessage(`Orchestrator: ${err}`),
+    description: err,
     type: 'error',
     onRenderCardContent: (props) => (
       <div css={cardContent}>

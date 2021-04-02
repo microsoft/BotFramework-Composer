@@ -14,9 +14,9 @@ import httpClient from '../../utils/httpUtil';
 import { dispatcherState } from '../../../src/recoilModel';
 import { recognizersSelectorFamily } from '../selectors/recognizers';
 import { Locales } from '../../locales';
+import { settingsState } from '../atoms';
 
 import { createNotification, updateNotificationInternal } from './notification';
-import { settingsState } from '../atoms';
 
 interface IModelQueueItem {
   type: 'en_intent' | 'multilingual_intent';
