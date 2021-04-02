@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-export const createActionFromManifest = (manifest) => {
+export const createActionFromManifest = (manifest, selectEndpointIndex: number) => {
   console.log(manifest);
   return {
     $kind: 'Microsoft.BeginSkill',
@@ -19,8 +19,8 @@ export const createActionFromManifest = (manifest) => {
     skillHostEndpoint: '=settings.skillHostEndpoint',
     connectionName: '=settings.connectionName',
     allowInterruptions: true,
-    skillEndpoint: `=settings.skill['${manifest.name}'].endpointUrl`,
-    skillAppId: `=settings.skill['${manifest.name}'].msAppId`,
+    skillEndpoint: manifest.endpoints.length > 0 ? manifest.endpoints?.[selectEndpointIndex].endpointUrl : '',
+    skillAppId: manifest.endpoints.length > 0 ? manifest.endpoints?.[selectEndpointIndex].msAppId : '',
   };
 };
 

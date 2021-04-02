@@ -128,9 +128,9 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
       )}
       {showAddSkillDialogModal && (
         <CreateSkillModal
-          addRemoteSkill={(manifestUrl, endpointName) => {
+          addRemoteSkill={async (manifestUrl, endpointName) => {
             setAddSkillDialogModalVisibility(false);
-            addRemoteSkillToBotProject(manifestUrl, endpointName);
+            await addRemoteSkillToBotProject(manifestUrl, endpointName);
           }}
           addTriggerToRoot={(dialogId, formData, actions) => {
             console.log(actions);
