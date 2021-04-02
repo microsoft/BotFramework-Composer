@@ -282,16 +282,16 @@ export class AssetManager {
             },
           } as BotTemplate;
           if (isArray(keywords)) {
-            if (keywords.includes('bf-dotnet-functions') || keywords.indexOf('bf-dotnet-webapp') != -1) {
+            if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
               templateToReturn.dotnetSupport = {
-                functionsSupported: keywords.indexOf('bf-dotnet-functions') != -1,
-                webAppSupported: keywords.indexOf('bf-dotnet-webapp') != -1,
+                functionsSupported: keywords.includes('bf-dotnet-functions'),
+                webAppSupported: keywords.includes('bf-dotnet-webapp'),
               };
             }
-            if (keywords.includes('bf-js-functions') || keywords.indexOf('bf-js-webapp') != -1) {
+            if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
               templateToReturn.nodeSupport = {
-                functionsSupported: keywords.indexOf('bf-js-functions') != -1,
-                webAppSupported: keywords.indexOf('bf-js-webapp') != -1,
+                functionsSupported: keywords.includes('bf-js-functions'),
+                webAppSupported: keywords.includes('bf-js-webapp'),
               };
             }
           }
