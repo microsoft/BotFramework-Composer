@@ -341,7 +341,7 @@ export function isShowAuthDialog(needGraph: boolean): boolean {
   }
 }
 
-export function isGetTokenFromUser(): boolean {
+export function userShouldProvideTokens(): boolean {
   if (isElectron()) {
     return false;
   } else if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId) {
