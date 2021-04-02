@@ -131,7 +131,7 @@ export type PublishPlugin<Config = any> = {
 export type IPublishConfig = {
   luis: ILuisConfig;
   qna: IQnAConfig;
-  orchestrator: IOrchestratorConfig;
+  orchestrator?: IOrchestratorConfig;
 };
 
 export type PublishTarget = {

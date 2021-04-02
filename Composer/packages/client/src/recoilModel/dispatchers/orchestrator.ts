@@ -47,7 +47,7 @@ export const downloadModel = async (addr: string, model: IModelQueueItem, notifi
 
   notificationStartCallback();
 
-  return await pollUntilDone(async () => (await httpClient.get(resp.data)).data < 2, 5000);
+  return await pollUntilDone(async () => (await httpClient.get(resp.data)).data !== 'DOWNLOADING', 5000);
 };
 
 export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSettings: DialogSetting) => {

@@ -60,7 +60,7 @@ async function status(req: Request, res: Response) {
     res.status(400).send(errorMsg);
     return;
   }
-  res.status(200).send(state.toString());
+  res.status(200).send(DownloadState[state]);
 }
 
 async function downloadLanguageModel(req: Request, res: Response) {
