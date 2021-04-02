@@ -38,7 +38,7 @@ export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A
 
 export interface CreateSkillModalProps {
   projectId: string;
-  addRemoteSkill: (manifestUrl: string, endpointName: string) => void;
+  addRemoteSkill: (manifestUrl: string, endpointName: string) => Promise<void>;
   addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, action) => void;
   onDismiss: () => void;
 }
@@ -127,14 +127,15 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
 
   const handleSubmit = (event, content: string, enable: boolean) => {
     event.preventDefault();
+    const skillEndpointIndex = 0;
     // add skill to appsetting
-    setSkillAndAllowCaller(projectId, skillManifest, 0);
+    setSkillAndAllowCaller(projectId, skillManifest, skillEndpointIndex);
     // add a remote skill
     const triggerFormData = getTriggerFormData(skillManifest.name, content);
     addRemoteSkill(formData.manifestUrl, formData.endpointName);
     TelemetryClient.track('AddNewSkillCompleted');
     // add trigger to root bot
-    const action = createActionFromManifest(skillManifest);
+    const action = createActionFromManifest(skillManifest, skillEndpointIndex);
     addTriggerToRoot(dialogId, triggerFormData, [action]);
     TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
     if (enable) {
