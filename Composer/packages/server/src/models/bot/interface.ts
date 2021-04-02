@@ -13,7 +13,7 @@ export interface LocationRef {
 export interface IBuildConfig {
   luisConfig: ILuisConfig;
   qnaConfig: IQnAConfig;
-  orchestratorConfig: IOrchestratorConfig;
+  orchestratorConfig?: IOrchestratorConfig;
   luResource: Resource[];
   qnaResource: Resource[];
 }
