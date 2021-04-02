@@ -21,7 +21,7 @@ import { OpenConfirmModal } from '@bfc/ui-shared';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { navigateTo } from '../../../utils/navigation';
-import { settingsState } from '../../../recoilModel';
+import { botDisplayNameState, settingsState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';
 import { armScopes } from '../../../constants';
@@ -40,6 +40,7 @@ import {
   errorTextStyle,
   columnSizes,
 } from '../styles';
+import { TeamsManifestGeneratorModal } from '../../../components/Adapters/TeamsManifestGeneratorModal';
 
 import ABSChannelSpeechModal from './ABSChannelSpeechModal';
 
@@ -62,6 +63,7 @@ type AzureResourcePointer = {
   alternateSubscriptionId?: string | undefined;
   resourceName: string;
   resourceGroupName: string;
+  microsoftAppId: string;
 };
 
 type AzureChannelStatus = {
@@ -86,12 +88,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [currentResource, setCurrentResource] = useState<AzureResourcePointer | undefined>();
   const [channelStatus, setChannelStatus] = useState<AzureChannelsStatus | undefined>();
   const { publishTargets } = useRecoilValue(settingsState(projectId));
+  const botDisplayName = useRecoilValue(botDisplayNameState(projectId));
   const [token, setToken] = useState<string | undefined>();
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoading, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
+  const [showTeamsManifestModal, setShowTeamsManifestModal] = useState<boolean>(false);
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -134,6 +138,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       if (profile) {
         const config = JSON.parse(profile.configuration);
         setCurrentResource({
+          microsoftAppId: config?.settings?.MicrosoftAppId,
           resourceName: config.name,
           resourceGroupName: config.name,
           subscriptionId: config.subscriptionId,
@@ -241,7 +246,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           };
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
-
+      if (channelId === CHANNELS.TEAMS) {
+        setShowTeamsManifestModal(true);
+      }
       // success!!
       setChannelStatus({
         ...channelStatus,
@@ -494,6 +501,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           <Spinner />
         </Stack.Item>
       )}
+      {key === CHANNELS.TEAMS && channelStatus?.[key].enabled && !channelStatus?.[key].loading && (
+        <Stack.Item>
+          <Link
+            styles={{ root: { marginTop: '7px' } }}
+            onClick={() => {
+              setShowTeamsManifestModal(true);
+            }}
+          >
+            {formatMessage('Open Manifest')}
+          </Link>
+        </Stack.Item>
+      )}
     </Stack>
   );
 
@@ -581,6 +600,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}
+        <TeamsManifestGeneratorModal
+          botAppId={currentResource?.microsoftAppId ? currentResource.microsoftAppId : ''}
+          botDisplayName={botDisplayName}
+          hidden={!showTeamsManifestModal}
+          onDismiss={() => {
+            setShowTeamsManifestModal(false);
+          }}
+        />
       </div>
     </React.Fragment>
   );
