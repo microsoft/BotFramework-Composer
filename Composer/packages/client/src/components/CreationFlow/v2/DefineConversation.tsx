@@ -122,7 +122,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     if (templateId) {
       // use almost the same patterns as in assetManager.ts
       return templateId
-        .replace(/^@microsoft\/generator-microsoft-bot-/, '') // clean up our complex package names
+        .replace(/^@microsoft\/generator-bot-/, '') // clean up our complex package names
         .replace(/^generator-/, '') // clean up other package names too
         .trim()
         .replace(/-/, '_')
