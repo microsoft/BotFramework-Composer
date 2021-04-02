@@ -4,6 +4,7 @@
 import * as path from 'path';
 
 import axios from 'axios';
+import formatMessage from 'format-message';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
@@ -57,8 +58,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
     },
     getFeeds: async function (req, res) {
-      // read the list of sources from the config file.
-      let packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
+      // Read the list of sources from the config file.
+      const userStoredSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
       // if no sources are in the config file, set the default list to our 1st party feed.
       if (!packageSources) {
