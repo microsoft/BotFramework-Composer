@@ -15,7 +15,7 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
+import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType, FEEDVERSION } from '../../constants';
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
@@ -63,9 +63,10 @@ export const recentProjectsState = atom<any[]>({
   default: [],
 });
 
-export const feedState = atom<{ tabs: any[]; whatsNewLinks: any[] }>({
+export const feedState = atom<{ tabs: any[]; whatsNewLinks: any[]; version: number }>({
   key: getFullyQualifiedKey('feed'),
   default: {
+    version: FEEDVERSION,
     tabs: [],
     whatsNewLinks: [],
   },

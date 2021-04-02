@@ -8,7 +8,7 @@ import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus } from '../../constants';
+import { BotStatus, FEEDVERSION } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -478,7 +478,12 @@ export const projectDispatcher = () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/projects/feed`);
-      set(feedState, response.data);
+      // feed version control
+      if (response.data.version === FEEDVERSION) {
+        set(feedState, response.data);
+      } else {
+        logMessage(callbackHelpers, `Feed version expired`);
+      }
     } catch (ex) {
       logMessage(callbackHelpers, `Error in fetching feed projects: ${ex}`);
     }

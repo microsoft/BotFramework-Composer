@@ -8,6 +8,8 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 
+export const FEEDVERSION = 1;
+
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
 
