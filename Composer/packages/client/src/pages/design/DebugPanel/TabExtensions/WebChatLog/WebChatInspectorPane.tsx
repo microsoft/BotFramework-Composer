@@ -11,8 +11,6 @@ import { Resizable } from 're-resizable';
 
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 
-type ActivityType = 'conversationUpdate' | 'message' | 'trace';
-
 const editorStyles = css`
   border: none;
 `;
@@ -26,7 +24,7 @@ type WebChatInspectorPaneProps = {
   onSetInspectionData: (data: WebChatInspectionData) => void;
 };
 
-const getUserFriendlyActivityType = (type: ActivityType | undefined) => {
+const getUserFriendlyActivityType = (type: string | undefined) => {
   switch (type) {
     case 'conversationUpdate':
       return 'Conversation update';

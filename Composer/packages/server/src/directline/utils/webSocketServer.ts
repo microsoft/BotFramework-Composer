@@ -33,9 +33,11 @@ export class WebSocketServer {
     if (this.queuedMessages[conversationId]) {
       while (this.queuedMessages[conversationId].length > 0) {
         const activity: Activity | undefined = this.queuedMessages[conversationId].shift();
-        const payload = { activities: [activity] };
-        socket.send(JSON.stringify(payload));
-        this.sendTrafficToSubscribers({ ...payload, trafficType: 'activity' });
+        if (activity) {
+          const payload = { activities: [activity] };
+          socket.send(JSON.stringify(payload));
+          this.sendTrafficToSubscribers({ ...payload, trafficType: 'activity' });
+        }
       }
     }
   }

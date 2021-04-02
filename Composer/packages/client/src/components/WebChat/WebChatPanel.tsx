@@ -79,7 +79,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
                   projectId,
                   data.activities.map((a) => ({
                     activity: a,
-                    timestamp: new Date(a.timestamp).getTime(),
+                    timestamp: new Date(a.timestamp || Date.now()).getTime(),
                     trafficType: data.trafficType,
                   }))
                 );
