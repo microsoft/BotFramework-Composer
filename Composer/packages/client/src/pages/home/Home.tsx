@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment } from 'react';
+import React from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
@@ -29,6 +29,7 @@ import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 
 import { RecentBotList } from './RecentBotList';
+import { WhatsNewsList } from './WhatsNewsList';
 import { CardWidget } from './CardWidget';
 import * as home from './styles';
 
@@ -227,23 +228,7 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
-          <div aria-label={formatMessage("What's new list")} css={home.rightPage} role="region">
-            <h3 css={home.subtitle}>{formatMessage("What's new")}</h3>
-            <div css={home.whatsNewsContainer}>
-              {feed.whatsNewLinks.map(({ title, description, url }, index) => {
-                return (
-                  <Fragment key={index}>
-                    <Link css={home.bluetitle} href={url}>
-                      {title}
-                    </Link>
-                    <p css={home.newsDescription}>{description}</p>
-                  </Fragment>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        {!featureFlags?.NEW_CREATION_FLOW?.enabled && <WhatsNewsList newsList={feed.whatsNewLinks} />}
       </div>
     </div>
   );
