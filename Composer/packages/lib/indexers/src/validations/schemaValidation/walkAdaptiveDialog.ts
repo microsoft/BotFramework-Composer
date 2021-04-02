@@ -12,7 +12,12 @@ import {
 import { discoverNestedProperties } from './schemaUtils';
 
 // returns true to continue the visit.
-type VisitAdaptiveComponentFn = ($kind: SDKKinds | string, data: BaseSchema, path: string) => boolean;
+type VisitAdaptiveComponentFn = (
+  $kind: SDKKinds | string,
+  data: BaseSchema,
+  currentPath: string,
+  parentPath: string
+) => boolean;
 
 export const walkAdaptiveDialog = (
   adaptiveDialog: MicrosoftAdaptiveDialog,
@@ -37,8 +42,8 @@ const joinPath = (parentPath: string, currentKey: string | number): string => {
 const walkWithPath = (
   adaptiveData: BaseSchema,
   sdkSchema: SchemaDefinitions,
+  currentPath: string,
   parentPath: string,
-  currentKey: string | number,
   fn: VisitAdaptiveComponentFn
 ): boolean => {
   const { $kind } = adaptiveData;
@@ -46,12 +51,11 @@ const walkWithPath = (
   // SwitchCondition needs to be handled specially due to 'CaseCondition' doesn't conains a $kind property but is iterable.
   // Reference: https://github.com/microsoft/botbuilder-dotnet/blob/main/libraries/Microsoft.Bot.Builder.Dialogs.Adaptive/Actions/Case.cs
   if ($kind === SDKKinds.SwitchCondition) {
-    return walkSwitchCondition(adaptiveData, sdkSchema, parentPath, currentKey, fn);
+    return walkSwitchCondition(adaptiveData, sdkSchema, currentPath, parentPath, fn);
   }
 
   // Visit current data before schema validation to make sure all $kind blocks are visited.
-  const currentPath = joinPath(parentPath, currentKey);
-  fn($kind, adaptiveData, currentPath);
+  fn($kind, adaptiveData, currentPath, parentPath);
 
   const schema = sdkSchema[$kind];
   const nestedProperties = schema ? discoverNestedProperties(schema) : adaptiveData.actions ? ['actions'] : [];
@@ -77,8 +81,13 @@ const walkWithPath = (
      *  3. Actions under Action.
      */
     for (let i = 0; i < childElements.length; i++) {
-      const arrayPath = joinPath(currentPath, propName);
-      const shouldContinue = walkWithPath(childElements[i], sdkSchema, arrayPath, i, fn);
+      const shouldContinue = walkWithPath(
+        childElements[i],
+        sdkSchema,
+        joinPath(currentPath, `${propName}[${i}]`),
+        currentPath,
+        fn
+      );
       if (!shouldContinue) return false;
     }
   }
@@ -90,19 +99,24 @@ const walkWithPath = (
 const walkSwitchCondition = (
   switchConditionData: SwitchCondition,
   sdkSchema: SchemaDefinitions,
+  currentPath: string,
   parrentPath: string,
-  currentKey: string | number,
   fn: VisitAdaptiveComponentFn
 ): boolean => {
-  const currentPath = joinPath(parrentPath, currentKey);
-  fn(SDKKinds.SwitchCondition, switchConditionData, currentPath);
+  fn(SDKKinds.SwitchCondition, switchConditionData, currentPath, parrentPath);
 
   const defaultActions = switchConditionData.default;
 
   // Visit the 'default' properties
   if (Array.isArray(defaultActions)) {
     for (let i = 0; i < defaultActions.length; i++) {
-      const shouldContinue = walkWithPath(defaultActions[i], sdkSchema, joinPath(currentPath, 'default'), i, fn);
+      const shouldContinue = walkWithPath(
+        defaultActions[i],
+        sdkSchema,
+        joinPath(currentPath, `default[${i}]`),
+        currentPath,
+        fn
+      );
       if (!shouldContinue) return false;
     }
   }
@@ -116,7 +130,13 @@ const walkSwitchCondition = (
 
       // Expand actions under a case.
       for (let i = 0; i < caseActions.length; i++) {
-        const shouldContinue = walkWithPath(caseActions[i], sdkSchema, `${currentPath}.cases[${iCase}].actions`, i, fn);
+        const shouldContinue = walkWithPath(
+          caseActions[i],
+          sdkSchema,
+          `${currentPath}.cases[${iCase}].actions[${i}]`,
+          currentPath,
+          fn
+        );
         if (!shouldContinue) return false;
       }
     }
