@@ -38,6 +38,8 @@ export class LUServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LUDocuments: LUDocument[] = [];
   private luParser = new LuParser();
+  private _curFileId = '';
+  private _curProjectId = '';
 
   constructor(
     protected readonly connection: IConnection,
@@ -117,16 +119,16 @@ export class LUServer {
     if (importRegex.test(curLine)) {
       const importedFile = curLine.match(importRegex);
       if (importedFile) {
-        const source = importedFile[2];
+        const target = importedFile[2];
         const intent = importedFile[4];
-        const utterance = importedFile[6];
-        const fileId = path.parse(source).name;
-
-        this.connection.sendNotification('LuGotoDefinition', {
-          fileId: fileId,
-          intent: intent,
-          utterance: utterance,
-        });
+        const fileId = path.parse(target).name;
+        const targetFile = this.importResolver?.(this._curFileId, target, this._curProjectId);
+        if (targetFile) {
+          this.connection.sendNotification('LuGotoDefinition', {
+            fileId: fileId,
+            intent: intent,
+          });
+        }
 
         return;
       }
@@ -225,6 +227,8 @@ export class LUServer {
       }
 
       const id = fileId || uri;
+      this._curFileId = id;
+      this._curProjectId = projectId || '';
       const { intents: sections, diagnostics } = await this.luParser.parse(content, id, luFeatures);
 
       return { sections, diagnostics, content };
