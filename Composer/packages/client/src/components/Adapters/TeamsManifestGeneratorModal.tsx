@@ -14,8 +14,10 @@ import { useRef } from 'react';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { useRecoilValue } from 'recoil';
 
 import { defaultTeamsManifest } from '../../constants';
+import { dispatcherState } from '../../recoilModel';
 
 const iconButtonStyle: IButtonStyles = {
   root: {
@@ -48,6 +50,7 @@ type TeamsManifestGeneratorModalProps = {
 
 export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalProps) => {
   const textFieldRef = useRef<ITextField>(null);
+  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
 
   const copyCodeToClipboard = () => {
     try {
@@ -58,7 +61,7 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
         textFieldRef.current.blur();
       }
     } catch (e) {
-      console.error('Something went wrong when trying to copy manifest content to clipboard.', e);
+      setApplicationLevelError(e);
     }
   };
 
