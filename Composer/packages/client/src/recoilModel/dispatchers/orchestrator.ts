@@ -50,7 +50,7 @@ export const downloadModel = async (addr: string, model: IModelQueueItem, notifi
   return await pollUntilDone(async () => (await httpClient.get(resp.data)).data !== 'DOWNLOADING', 5000);
 };
 
-export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSettings: DialogSetting) => {
+export const availableLanguageModels = (recognizerFiles: RecognizerFile[], botSettings?: DialogSetting) => {
   const dialogsUsingOrchestrator = recognizerFiles.filter(
     ({ content }) => content.$kind === SDKKinds.OrchestratorRecognizer
   );
