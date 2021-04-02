@@ -26,11 +26,10 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
-import defaultArticleCover from '../../images/defaultArticleCover.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 
 import { RecentBotList } from './RecentBotList';
-import { ItemContainer } from './ItemContainer';
+import { CardWidget } from './CardWidget';
 import * as home from './styles';
 
 const resources = [
@@ -167,17 +166,18 @@ const Home: React.FC<RouteComponentProps> = () => {
                   src={noRecentBotsCover}
                 />
                 <div css={home.noRecentBotsDescription}>
-                  {' '}
-                  {formatMessage('You don’t have any bot yet. Start to ')}
-                  <Link
-                    onClick={() => {
-                      onClickNewBot();
-                      TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
-                    }}
-                  >
-                    {' '}
-                    {formatMessage('create a new bot')}{' '}
-                  </Link>
+                  {formatMessage.rich('You don’t have any bot yet. Start to <Link>create a new bot</Link>', {
+                    Link: ({ children }) => (
+                      <Link
+                        onClick={() => {
+                          onClickNewBot();
+                          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+                        }}
+                      >
+                        {children}
+                      </Link>
+                    ),
+                  })}
                 </div>
               </div>
             )}
@@ -186,15 +186,15 @@ const Home: React.FC<RouteComponentProps> = () => {
             <h2 css={home.subtitle}>{formatMessage('Resources')}&nbsp;</h2>
             <div css={home.rowContainer}>
               {resources.map((item, index) => (
-                <ItemContainer
+                <CardWidget
                   key={index}
                   ariaLabel={item.title}
+                  cardType={'resource'}
                   content={item.description}
                   href={item.url}
                   imageCover={item.imageCover}
                   moreLinkText={item.moreText}
                   rel="noopener nofollow"
-                  styles={home.cardItem}
                   target="_blank"
                   title={item.title}
                 />
@@ -208,14 +208,14 @@ const Home: React.FC<RouteComponentProps> = () => {
                   <PivotItem key={index} headerText={tab.title}>
                     <div css={home.rowContainer}>
                       {tab.cards.map((card, index) => (
-                        <ItemContainer
+                        <CardWidget
                           key={index}
                           ariaLabel={card.title}
+                          cardType={tab.title === 'Videos' ? 'video' : 'article'}
                           content={card.description}
                           href={card.url}
-                          imageCover={card.image ?? defaultArticleCover}
+                          imageCover={card.image}
                           rel="noopener nofollow"
-                          styles={home.articleCardItem}
                           target="_blank"
                           title={card.title}
                         />
@@ -228,8 +228,8 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
         </div>
         {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
-          <div aria-label={formatMessage(`What's new list`)} css={home.rightPage} role="region">
-            <h3 css={home.subtitle}>{formatMessage(`What's new`)}</h3>
+          <div aria-label={formatMessage("What's new list")} css={home.rightPage} role="region">
+            <h3 css={home.subtitle}>{formatMessage("What's new")}</h3>
             <div css={home.whatsNewsContainer}>
               {feed.whatsNewLinks.map(({ title, description, url }, index) => {
                 return (
@@ -241,7 +241,6 @@ const Home: React.FC<RouteComponentProps> = () => {
                   </Fragment>
                 );
               })}
-              <Link css={home.bluetitle}>{formatMessage(`More...`)}</Link>
             </div>
           </div>
         )}

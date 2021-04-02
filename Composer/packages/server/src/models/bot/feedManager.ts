@@ -16,7 +16,7 @@ const creds = new msRest.TokenCredentials(token);
 const client = new msRest.ServiceClient(creds, clientOptions);
 
 // TODO: update feed url to main
-const feedUrl = 'https://raw.githubusercontent.com/microsoft/BotFramework-Composer/zhixzhan/homepage-refine/feeds.json';
+const feedUrl = 'https://api.jsonbin.io/b/6066712c7474c23d9027bf10/1';
 
 export const getFeedUrl = async (): Promise<any> => {
   const { bodyAsText: content } = await client.sendRequest({

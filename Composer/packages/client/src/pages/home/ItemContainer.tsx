@@ -5,13 +5,13 @@
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
+import { Image } from 'office-ui-fabric-react/lib/Image';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { itemContainerWrapper } from './styles';
 
-interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
+export interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
   imageCover: string;
   title: string | JSX.Element;
@@ -51,7 +51,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           alt={formatMessage('Composer Logo')}
           aria-label={formatMessage('Composer Logo')}
           css={styles.imageCover}
-          imageFit={ImageFit.centerCover}
           src={imageCover}
         />
 
@@ -73,6 +72,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       }}
       {...rest}
       disabled={disabled}
+      styles={{ flexContainer: { display: 'block' } }}
       onRenderChildren={onRenderChildren}
     />
   );

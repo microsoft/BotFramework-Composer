@@ -80,8 +80,8 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   border-width: 0;
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
-  min-width: 210px;
-  height: 183px;
+  min-width: 244px;
+  height: 185px;
   width: 17vw;
   margin-right: 12px;
   padding: 0;
@@ -152,7 +152,7 @@ export const botContainer = css`
 
 const baseBotItem = {
   container: css`
-    padding: 9px;
+    padding: 8px;
     text-align: left;
     border: 1px #efedeb solid;
     box-shadow: ${Depths.depth4};
@@ -182,6 +182,7 @@ export const cardItem = {
   `,
   content: css`
     color: ${NeutralColors.gray140};
+    font-size: ${fonts.small.fontSize};
     display: -webkit-box;
     -webkit-line-clamp: 2;
     overflow: hidden;
@@ -194,17 +195,27 @@ export const cardItem = {
   `,
 };
 
-export const articleCardItem = {
+export const mediaCardItem = {
   ...cardItem,
   title: css`
-    font-weight: ${FontWeights.semibold};
-    color: ${NeutralColors.gray160};
+    ${cardItem.title};
     margin-bottom: 6px;
   `,
   imageCover: css`
     width: 100%;
     height: 95px;
-    margin: 9px 0 4px 0;
+    margin: 4px 0 12px 0;
+    display: flex;
+  `,
+};
+
+export const meidiaCardNoCoverItem = {
+  ...mediaCardItem,
+  imageCover: css`
+    align-items: center;
+    justify-content: center;
+    ${mediaCardItem.imageCover};
+    background: ${NeutralColors.gray160};
   `,
 };
 
