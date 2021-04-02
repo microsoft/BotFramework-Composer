@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { discoverNestedProperties, isTrigger } from '../../../src/validations/schemaValidation/schemaUtils';
+import { discoverNestedPaths, isTrigger } from '../../../src/validations/schemaValidation/schemaUtils';
 
+import { onConversationUpdateActivityStub, simpleGreetingDialog, switchConditionStub } from './__mocks__/dialogMocks';
 import {
   AdaptiveDialogSchema,
   IfConditionSchema,
+  OnConvUpdateSchema,
   OnDialogEventSchema,
   SwitchConditionSchema,
 } from './__mocks__/sdkSchemaMocks';
@@ -18,9 +20,14 @@ describe('#schemaUtils', () => {
   });
 
   it('discoverNestedProperties() should find correct property names.', () => {
-    expect(discoverNestedProperties(AdaptiveDialogSchema)).toEqual(expect.arrayContaining(['triggers', 'dialogs']));
-    expect(discoverNestedProperties(OnDialogEventSchema)).toEqual(expect.arrayContaining(['actions']));
-    expect(discoverNestedProperties(IfConditionSchema)).toEqual(expect.arrayContaining(['actions', 'elseActions']));
-    expect(discoverNestedProperties(SwitchConditionSchema)).toEqual(expect.arrayContaining(['cases', 'default']));
+    expect(discoverNestedPaths(simpleGreetingDialog, AdaptiveDialogSchema)).toEqual(
+      expect.arrayContaining(['triggers'])
+    );
+    expect(discoverNestedPaths(onConversationUpdateActivityStub, OnConvUpdateSchema)).toEqual(
+      expect.arrayContaining(['actions'])
+    );
+    expect(discoverNestedPaths(switchConditionStub, SwitchConditionSchema)).toEqual(
+      expect.arrayContaining(['cases[0].actions', 'default'])
+    );
   });
 });
