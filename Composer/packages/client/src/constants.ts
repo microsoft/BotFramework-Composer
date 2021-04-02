@@ -227,7 +227,7 @@ export const DialogCreationCopy = {
   get SELECT_LOCATION() {
     return {
       title: formatMessage('Select a Bot'),
-      subText: formatMessage('Which bot do you want to open?'),
+      subText: formatMessage('Specify an existing bot to connect to your Azure Bot resource.'),
     };
   },
   get SELECT_DESTINATION() {
