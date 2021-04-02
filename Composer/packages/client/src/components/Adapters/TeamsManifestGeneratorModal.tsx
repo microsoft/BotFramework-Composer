@@ -41,6 +41,8 @@ const iconButtonStyle: IButtonStyles = {
   },
 };
 
+const teamsAppStudioDeepLink = 'https://aka.ms/AppStudioTeamsLink';
+
 type TeamsManifestGeneratorModalProps = {
   hidden: boolean;
   botAppId: string;
@@ -121,11 +123,7 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
             props.onDismiss();
           }}
         />
-        <PrimaryButton
-          href="https://teams.microsoft.com/l/app/0c5cfdbb-596f-4d39-b557-5d9516c94107"
-          target="_blank"
-          text={formatMessage('Open Teams')}
-        />
+        <PrimaryButton href={teamsAppStudioDeepLink} target="_blank" text={formatMessage('Open Teams')} />
       </DialogFooter>
     </DialogWrapper>
   );
