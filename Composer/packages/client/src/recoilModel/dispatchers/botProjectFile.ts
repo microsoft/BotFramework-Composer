@@ -114,6 +114,9 @@ export const botProjectFileDispatcher = () => {
       skillsData: Skill,
       selectedEndpointIndex: number
     ) => {
+      console.log(skillNameIdentifier);
+      console.log(skillsData);
+      console.log(selectedEndpointIndex);
       const { set, snapshot } = callbackHelpers;
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (!rootBotProjectId) {

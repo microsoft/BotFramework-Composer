@@ -13,8 +13,8 @@ import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { settingsState, luFilesState, designPageLocationState } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
@@ -22,6 +22,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
+
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
 import { createActionFromManifest } from './helper';
@@ -83,7 +84,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { languages, luFeatures, runtime } = useRecoilValue(settingsState(projectId));
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
-  const { updateRecognizer } = useRecoilValue(dispatcherState);
+  const { updateRecognizer, setSkillAndAllowCaller } = useRecoilValue(dispatcherState);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -126,6 +127,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
 
   const handleSubmit = (event, content: string, enable: boolean) => {
     event.preventDefault();
+    // add skill to appsetting
+    setSkillAndAllowCaller(projectId, skillManifest, 0);
     // add a remote skill
     const triggerFormData = getTriggerFormData(skillManifest.name, content);
     addRemoteSkill(formData.manifestUrl, formData.endpointName);
