@@ -10,7 +10,7 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
+import { getTokenFromCache, userShouldProvideTokens, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
@@ -91,8 +91,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         graphToken: getTokenFromCache('graphToken'),
       };
     };
+    /** @deprecated use `userShouldProvideTokens` instead */
     PluginAPI.publish.isGetTokenFromUser = () => {
-      return isGetTokenFromUser();
+      return userShouldProvideTokens();
+    };
+    PluginAPI.publish.userShouldProvideTokens = () => {
+      return userShouldProvideTokens();
     };
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
@@ -160,7 +164,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
       const fullConfig = { ...config, name: name, type: targetType };
 
       let arm, graph;
-      if (!isGetTokenFromUser()) {
+      if (!userShouldProvideTokens()) {
         const tenantId = getTenantIdFromCache();
         // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {

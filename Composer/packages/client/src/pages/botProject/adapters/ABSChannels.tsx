@@ -25,7 +25,7 @@ import { settingsState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';
 import { armScopes } from '../../../constants';
-import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../../utils/auth';
+import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
 import {
@@ -119,7 +119,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       navigateTo(`/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`);
     } else {
       let newtoken = '';
-      if (isGetTokenFromUser()) {
+      if (userShouldProvideTokens()) {
         if (isShowAuthDialog(false)) {
           setShowAuthDialog(true);
         }
@@ -315,7 +315,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const hasAuth = async () => {
     let newtoken = '';
-    if (isGetTokenFromUser()) {
+    if (userShouldProvideTokens()) {
       if (isShowAuthDialog(false)) {
         setShowAuthDialog(true);
       }
