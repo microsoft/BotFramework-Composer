@@ -77,7 +77,11 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
               case 'activity': {
                 appendWebChatTraffic(
                   projectId,
-                  data.activities.map((a) => ({ activity: a, timestamp: a.timestamp, trafficType: data.trafficType }))
+                  data.activities.map((a) => ({
+                    activity: a,
+                    timestamp: new Date(a.timestamp).getTime(),
+                    trafficType: data.trafficType,
+                  }))
                 );
                 break;
               }
@@ -102,7 +106,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           },
           request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
           response: { payload: response.data, statusCode: response.status },
-          timestamp: new Date().toISOString(),
+          timestamp: Date.now(),
           trafficType: 'networkError',
         };
         appendWebChatTraffic(projectId, err);
@@ -209,7 +213,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         },
         request: { route: 'saveTranscripts/', method: '', payload: {} },
         response: { payload: ex, statusCode: 400 },
-        timestamp: new Date().toISOString(),
+        timestamp: Date.now(),
         trafficType: 'networkError',
       };
       appendWebChatTraffic(projectId, err);

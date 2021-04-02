@@ -100,7 +100,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
 
   const displayedTraffic = useMemo(() => {
     const sortedTraffic = [...rawWebChatTraffic]
-      .sort((t1, t2) => new Date(t1.timestamp).getTime() - new Date(t2.timestamp).getTime())
+      .sort((t1, t2) => t1.timestamp - t2.timestamp)
       .map((t, i) => renderLogItem(t, i));
     setLogItemCount(sortedTraffic.length);
     return sortedTraffic;

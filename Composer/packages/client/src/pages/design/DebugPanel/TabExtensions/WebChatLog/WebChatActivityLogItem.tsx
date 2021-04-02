@@ -5,8 +5,10 @@
 import { css, jsx } from '@emotion/core';
 import { ConversationActivityTrafficItem } from '@botframework-composer/types';
 import { useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
+import { userSettingsState } from '../../../../../recoilModel';
 
 import { renderTimeStamp } from './LogItemHelpers';
 import { clickableSegment, emphasizedText, hoverItem, logItem } from './logItemStyles';
@@ -31,6 +33,7 @@ type WebChatActivityLogItemProps = {
 
 export const WebChatActivityLogItem: React.FC<WebChatActivityLogItemProps> = (props) => {
   const { index, item, isSelected = false, onClickTraffic } = props;
+  const { appLocale } = useRecoilValue(userSettingsState);
 
   const onClick = useCallback(() => {
     onClickTraffic({ item });
@@ -38,7 +41,7 @@ export const WebChatActivityLogItem: React.FC<WebChatActivityLogItemProps> = (pr
 
   return (
     <span key={`webchat-activity-item-${index}`} css={[clickable, hoverItem(isSelected), logItem]} onClick={onClick}>
-      {renderTimeStamp(item.timestamp)}
+      {renderTimeStamp(item.timestamp, appLocale)}
       {renderActivityArrow(item.activity)}
       <span css={clickableSegment}>{item.activity.type || 'unknown'}</span>
       {item.activity.type === 'message' ? <span css={emphasizedText}>{item.activity.text}</span> : null}

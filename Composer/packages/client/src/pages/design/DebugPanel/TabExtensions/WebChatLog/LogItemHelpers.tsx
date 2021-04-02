@@ -21,11 +21,11 @@ export const renderActivityArrow = (activity) => {
   return <span>{'<-'}</span>;
 };
 
-export const renderTimeStamp = (timestamp: string) => {
+export const renderTimeStamp = (timestamp: number, appLocale: string) => {
   return (
     <span css={timestampStyle}>
       <span css={timestampBracket}>[</span>
-      {new Date(timestamp).toTimeString().substring(0, 8)}
+      {new Intl.DateTimeFormat(appLocale, { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)}
       <span css={timestampBracket}>]</span>
     </span>
   );

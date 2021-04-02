@@ -30,7 +30,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
           payload: JSON.parse((res as any).sentData || '{}'),
           statusCode: res.statusCode,
         },
-        timestamp: new Date().toISOString(),
+        timestamp: Date.now(),
         trafficType: 'networkError',
       };
     } else {
@@ -41,7 +41,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
           payload: JSON.parse((res as any).sentData || '{}'),
           statusCode: res.statusCode,
         },
-        timestamp: new Date().toISOString(),
+        timestamp: Date.now(),
         trafficType: 'network',
       };
     }

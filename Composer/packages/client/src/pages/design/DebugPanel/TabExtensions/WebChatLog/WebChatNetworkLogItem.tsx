@@ -6,7 +6,9 @@ import { ConversationNetworkErrorItem, ConversationNetworkTrafficItem } from '@b
 import { css, jsx } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme';
 import React, { useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
 
+import { userSettingsState } from '../../../../../recoilModel';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 
 import { renderTimeStamp } from './LogItemHelpers';
@@ -30,6 +32,7 @@ type WebChatNetworkLogItemProps = {
 
 export const WebChatNetworkLogItem: React.FC<WebChatNetworkLogItemProps> = (props) => {
   const { index, item, isSelected = false, onClickTraffic } = props;
+  const { appLocale } = useRecoilValue(userSettingsState);
   const onClickRequest = useCallback(() => {
     onClickTraffic({ item, mode: 'request' });
   }, []);
@@ -48,7 +51,7 @@ export const WebChatNetworkLogItem: React.FC<WebChatNetworkLogItemProps> = (prop
   return (
     <div key={`webchat-network-item-${index}`} css={[logItem, hoverItem(isSelected), networkItem]}>
       <span>
-        {renderTimeStamp(item.timestamp)}
+        {renderTimeStamp(item.timestamp, appLocale)}
         <span css={[clickableSegment]} onClick={onClickRequest}>
           {`${item.request.method}`}
         </span>

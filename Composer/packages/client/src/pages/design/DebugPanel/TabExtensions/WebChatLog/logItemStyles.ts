@@ -28,6 +28,7 @@ export const hoverItem = (isActive: boolean) => css`
 
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 export const logItem = css`
-  fontSize: ${DEFAULT_FONT_SETTINGS.fontSize},
-  fontFamily: ${DEFAULT_FONT_SETTINGS.fontFamily},
+  font-size: ${DEFAULT_FONT_SETTINGS.fontSize};
+  font-family: ${DEFAULT_FONT_SETTINGS.fontFamily};
+  word-break: break-all;
 `;
