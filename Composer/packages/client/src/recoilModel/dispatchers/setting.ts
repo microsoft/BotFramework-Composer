@@ -166,6 +166,66 @@ export const settingsDispatcher = () => {
     setRuntimeField(projectId, 'customRuntime', isOn);
   });
 
+  const setSkillAndAllowCaller = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (
+      projectId: string,
+      manifest: any,
+      selectedEndpointIndex: number
+    ) => {
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (!rootBotProjectId) {
+        return;
+      }
+
+      const settings = await snapshot.getPromise(settingsState(rootBotProjectId));
+
+      let msAppId = '',
+        endpointUrl = '',
+        endpointName = '';
+
+      console.log(manifest);
+      if (selectedEndpointIndex !== -1 && manifest) {
+        const data = manifest.endpoints[selectedEndpointIndex];
+        msAppId = data.msAppId;
+        endpointUrl = data.endpointUrl;
+        endpointName = data.name;
+      }
+      // set(botProjectFileState(rootBotProjectId), (current) => {
+      //   const result = produce(current, (draftState) => {
+      //     draftState.content.skills[skillNameIdentifier].endpointName = endpointName;
+      //   });
+      //   return result;
+      // });
+
+      // else {
+      // set(botProjectFileState(rootBotProjectId), (current) => {
+      //   const result = produce(current, (draftState) => {
+      //     delete draftState.content.skills[skillNameIdentifier].endpointName;
+      //   });
+      //   return result;
+      // });
+      // }
+      if (settings.skill) {
+        set(settingsState(projectId), (currentValue) => ({
+          ...currentValue,
+          skill: {
+            ...settings.skill,
+            [manifest.name]: {
+              endpointUrl,
+              msAppId,
+            },
+          },
+          runtimeSettings: {
+            ...settings.runtimeSettings,
+            skills: {
+              allowedCallers: [...settings.runtimeSettings?.skills?.allowedCallers, msAppId],
+            },
+          },
+        }));
+      }
+    }
+  );
+
   const setQnASettings = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, subscriptionKey: string) => {
       const { set } = callbackHelpers;
@@ -196,5 +256,6 @@ export const settingsDispatcher = () => {
     setImportedLibraries,
     setCustomRuntime,
     setQnASettings,
+    setSkillAndAllowCaller,
   };
 };

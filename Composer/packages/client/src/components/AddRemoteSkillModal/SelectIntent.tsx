@@ -4,7 +4,7 @@
 import { jsx, css } from '@emotion/core';
 import React, { Fragment, useState, useMemo, useEffect, useCallback } from 'react';
 import formatMessage from 'format-message';
-import { DetailsList, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, SelectionMode, CheckboxVisibility } from 'office-ui-fabric-react/lib/DetailsList';
 import { Selection } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -198,6 +198,8 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         })
         .join('\n');
       setDisplayContent(intentsValue);
+    } else {
+      setDisplayContent('');
     }
   }, [selectedIntents, currentLuFile]);
 
@@ -225,6 +227,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <div css={detailListContainer} data-is-scrollable="true">
                 <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
                   <DetailsList
+                    checkboxVisibility={CheckboxVisibility.always}
                     columns={columns}
                     isHeaderVisible={false}
                     items={intentItems}
