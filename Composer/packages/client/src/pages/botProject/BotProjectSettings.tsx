@@ -10,8 +10,6 @@ import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DialogSetting } from '@bfc/shared';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
