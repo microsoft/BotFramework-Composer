@@ -21,7 +21,7 @@ import { authConfig, ResourcesItem } from '../types';
 
 import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
-import { BotProjectDeploy, getAbsSettings, isProfileComplete } from './deploy';
+import { BotProjectDeploy, getAbsSettings } from './deploy';
 import { BotProjectProvision } from './provision';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
