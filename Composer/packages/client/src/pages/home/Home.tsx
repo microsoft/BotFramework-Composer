@@ -79,7 +79,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const onItemChosen = async (item) => {
     if (item?.path) {
-      await openProject(item.path, 'default', true, (projectId) => {
+      await openProject(item.path, 'default', true, null, (projectId) => {
         TelemetryClient.track('BotProjectOpened', { method: 'list', projectId });
       });
     }
@@ -188,7 +188,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={async () => {
-                  await openProject(recentProjects[0].path, 'default', true, (projectId) => {
+                  await openProject(recentProjects[0].path, 'default', true, null, (projectId) => {
                     TelemetryClient.track('BotProjectOpened', { method: 'callToAction', projectId });
                   });
                 }}
