@@ -62,7 +62,7 @@ export class BotProjectDeploy {
 
       const skillManifestPath = path.join(this.projPath, 'ComposerDialogs', 'manifests');
       const msAppId = settings.MicrosoftAppId;
-      await this.updateSkillSettings(profileName, hostname, msAppId, skillManifestPath);
+      await this.updateSkillSettings(profileName, hostname, msAppId, skillManifestPath, settings);
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -155,7 +155,13 @@ export class BotProjectDeploy {
    * @param msAppId microsoft app id
    * @param skillSettingsPath the path of skills manifest settings
    */
-  private async updateSkillSettings(profileName: string, hostname: string, msAppId: string, skillSettingsPath: string) {
+  private async updateSkillSettings(
+    profileName: string,
+    hostname: string,
+    msAppId: string,
+    skillSettingsPath: string,
+    settings: any
+  ) {
     const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
     if (manifestFiles.length === 0) {
       this.logger({
@@ -184,6 +190,11 @@ export class BotProjectDeploy {
       });
 
       await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest);
+
+      // update skill host endpoint
+      if (settings.skillHostEndpoint) {
+        settings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
+      }
     }
   }
 
