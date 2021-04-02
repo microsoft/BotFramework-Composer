@@ -35,7 +35,7 @@ describe('<DebugPanel />', () => {
               error: {
                 message: 'Error validating Microsoft App ID and Password',
               },
-              timestamp: '2021-03-01 13:21:16',
+              timestamp: Date.now(),
               trafficType: 'networkError',
               request: {
                 method: 'POST',
@@ -61,7 +61,7 @@ describe('<DebugPanel />', () => {
               error: {
                 message: 'Error validating Microsoft App ID and Password',
               },
-              timestamp: '2021-03-01 13:21:16',
+              timestamp: Date.now(),
               trafficType: 'networkError',
               request: {
                 method: 'POST',
@@ -88,7 +88,7 @@ describe('<DebugPanel />', () => {
             error: {
               message: 'Error validating Microsoft App ID and Password',
             },
-            timestamp: '2021-03-01 13:21:16',
+            timestamp: Date.now(),
             trafficType: 'networkError',
             request: {
               method: 'POST',

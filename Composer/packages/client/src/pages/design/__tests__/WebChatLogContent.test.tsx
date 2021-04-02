@@ -33,7 +33,7 @@ describe('<DebugPanel />', () => {
           {
             trafficType: 'activity',
             activity: {},
-            timestamp: new Date().toISOString(),
+            timestamp: Date.now(),
           },
         ]);
       });
@@ -51,7 +51,7 @@ describe('<DebugPanel />', () => {
           {
             trafficType: 'activity',
             activity: {},
-            timestamp: new Date().toISOString(),
+            timestamp: Date.now(),
           },
         ]);
       });
