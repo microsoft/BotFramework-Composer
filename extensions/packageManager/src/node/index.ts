@@ -4,6 +4,7 @@
 import * as path from 'path';
 
 import axios from 'axios';
+import formatMessage from 'format-message';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
@@ -57,46 +58,49 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
     },
     getFeeds: async function (req, res) {
-      // read the list of sources from the config file.
-      let packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
+      // Read the list of sources from the config file.
+      const userStoredSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      // if no sources are in the config file, set the default list to our 1st party feed.
-      if (!packageSources) {
-        packageSources = [
-          // TODO: Re-enable the NPM feed when we have a JS runtime
-          // {
-          //   key: 'npm',
-          //   text: 'npm',
-          //   url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
-          //   searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bf-component&size=100&from=0',
-          //   readonly: true,
-          // },
-          {
-            key: 'nuget',
-            text: 'nuget',
-            url: 'https://api.nuget.org/v3/index.json',
-            readonly: true,
-            defaultQuery: {
-              prerelease: true,
-              semVerLevel: '2.0.0',
-              query: 'microsoft.bot.components+tags:bf-component',
-            },
-            type: PackageSourceType.NuGet,
+      const botComponentTag = 'msbot-component';
+
+      // Default sources
+      let packageSources: IPackageSource[] = [
+        {
+          key: 'nuget',
+          text: formatMessage('nuget'),
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: `microsoft.bot.components+tags:${botComponentTag}`,
           },
-          {
-            key: 'nuget-community',
-            text: 'community packages',
-            url: 'https://api.nuget.org/v3/index.json',
-            defaultQuery: {
-              prerelease: true,
-              semVerLevel: '2.0.0',
-              query: 'tags:bf-component',
-            },
-            type: PackageSourceType.NuGet,
+          type: PackageSourceType.NuGet,
+        },
+        {
+          key: 'nuget-community',
+          text: formatMessage('community packages'),
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: `tags:${botComponentTag}`,
           },
-        ];
-        composer.store.write('feeds', packageSources);
+          type: PackageSourceType.NuGet,
+        },
+      ];
+
+      // If there are package sources stored in the user profile
+      if (userStoredSources) {
+        // Extract list of read-only sources
+        const readOnlyKeys = packageSources.map((s) => s.key);
+
+        // Add user sources to the package sources, excluding modifications of the read-only ones
+        packageSources = packageSources.concat(userStoredSources.filter((s) => !readOnlyKeys.includes(s.key)));
       }
+
+      composer.store.write('feeds', packageSources);
 
       res.json(packageSources);
     },
@@ -154,7 +158,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           const packageQuery: IPackageQuery = {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: 'tags:bf-component',
+            query: 'tags:msbot-component',
           };
 
           const packages = await feed.getPackages(packageSource.defaultQuery ?? packageQuery);
