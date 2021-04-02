@@ -18,6 +18,7 @@ const container = css`
   position: absolute;
   right: 0px;
   padding: 6px;
+  z-index: 1;
 `;
 
 // -------------------- NotificationContainer -------------------- //

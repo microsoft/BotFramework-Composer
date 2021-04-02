@@ -16,7 +16,15 @@ import {
 } from '@bfc/shared';
 
 import { BotIndexer } from '../src/botIndexer';
-const { checkManifest, checkSetting, checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotIndexer;
+const {
+  checkManifest,
+  checkSetting,
+  checkSkillSetting,
+  checkLUISLocales,
+  checkQnALocales,
+  filterLUISFilesToPublish,
+  filterQnAFilesToPublish,
+} = BotIndexer;
 
 const botAssets: BotAssets = {
   projectId: 'test',
@@ -63,7 +71,7 @@ const botAssets: BotAssets = {
     } as DialogInfo,
   ],
   setting: {
-    languages: ['en-us', 'zh-cn', 'ar'],
+    languages: ['en-us', 'zh-cn', 'af'],
     defaultLanguage: 'en-us',
     botId: '',
     skillHostEndpoint: '',
@@ -149,6 +157,16 @@ describe('checkLUISLocales', () => {
   });
 });
 
+describe('checkQnALocales', () => {
+  it('should check qna not supported locales', () => {
+    const diagnostics = checkQnALocales(botAssets);
+    const errors = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Error);
+    const warnings = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Warning);
+    expect(errors.length).toEqual(0);
+    expect(warnings.length).toEqual(1);
+  });
+});
+
 describe('checkSkillSetting', () => {
   it('should check skill are missing', () => {
     const diagnostics = checkSkillSetting(botAssets);
@@ -164,7 +182,7 @@ describe('filterLUISFilesToPublish', () => {
     const luFilesToPublish = filterLUISFilesToPublish(botAssets.luFiles, botAssets.dialogs);
     expect(luFilesToPublish.length).toEqual(2);
     expect(luFilesToPublish).not.toContain({
-      id: 'a.ar',
+      id: 'a.af',
     });
   });
 
@@ -202,6 +220,15 @@ describe('filterLUISFilesToPublish', () => {
     expect(luFilesToPublish).toContainEqual({
       id: 'a.es',
       empty: false,
+    });
+  });
+  describe('filterQnAFilesToPublish', () => {
+    it('should filter qnaFiles left QnA supported locale file', () => {
+      const qnaFilesToPublish = filterQnAFilesToPublish(botAssets.qnaFiles, botAssets.dialogs);
+      expect(qnaFilesToPublish.length).toEqual(2);
+      expect(qnaFilesToPublish).not.toContain({
+        id: 'a.af',
+      });
     });
   });
 });
