@@ -601,7 +601,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           </Fragment>
         )}
         <TeamsManifestGeneratorModal
-          botAppId={currentResource?.microsoftAppId}
+          botAppId={currentResource?.microsoftAppId ? currentResource.microsoftAppId : ''}
           botDisplayName={botDisplayName}
           hidden={!showTeamsManifestModal}
           onDismiss={() => {
