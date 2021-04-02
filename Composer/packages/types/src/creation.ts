@@ -7,40 +7,9 @@ export const defaultFeeds = [nodeFeedKey, csharpFeedKey] as const;
 export type FeedName = typeof defaultFeeds[number];
 export type FeedType = 'npm' | 'nuget';
 
-export type TeamsManifest = {
-  $schema: string;
-  manifestVersion: string;
-  version: string;
-  id: string;
-  packageName: string;
-  developer: Developer;
-  icons: Icons;
-  name: Name;
-  description: Name;
-  accentColor: string;
-  bots: Bot[];
-  permissions: string[];
-  validDomains: string[];
-  webApplicationInfo?: WebApplicationInfo;
-  devicePermissions?: string[];
-};
-
 type WebApplicationInfo = {
   id: string;
   resource: string;
-};
-
-type Bot = {
-  botId: string;
-  scopes: string[];
-  commandList?: CommandList[];
-  supportsFiles?: boolean;
-  isNotificationOnly?: boolean;
-};
-
-type CommandList = {
-  scopes: string[];
-  commands: Command[];
 };
 
 type Command = {
@@ -63,4 +32,35 @@ type Developer = {
   websiteUrl: string;
   privacyUrl: string;
   termsOfUseUrl: string;
+};
+
+type CommandList = {
+  scopes: string[];
+  commands: Command[];
+};
+
+type Bot = {
+  botId: string;
+  scopes: string[];
+  commandList?: CommandList[];
+  supportsFiles?: boolean;
+  isNotificationOnly?: boolean;
+};
+
+export type TeamsManifest = {
+  $schema: string;
+  manifestVersion: string;
+  version: string;
+  id: string;
+  packageName: string;
+  developer: Developer;
+  icons: Icons;
+  name: Name;
+  description: Name;
+  accentColor: string;
+  bots: Bot[];
+  permissions: string[];
+  validDomains: string[];
+  webApplicationInfo?: WebApplicationInfo;
+  devicePermissions?: string[];
 };

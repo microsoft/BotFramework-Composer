@@ -40,7 +40,7 @@ import {
   errorTextStyle,
   columnSizes,
 } from '../styles';
-import { TeamsManifestGenerator } from '../../../components/Adapters/TeamsManifestGenerator';
+import { TeamsManifestGeneratorModal } from '../../../components/Adapters/TeamsManifestGeneratorModal';
 
 import ABSChannelSpeechModal from './ABSChannelSpeechModal';
 
@@ -600,7 +600,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}
-        <TeamsManifestGenerator
+        <TeamsManifestGeneratorModal
           botAppId={currentResource?.microsoftAppId}
           botDisplayName={botDisplayName}
           hidden={!showTeamsManifestModal}

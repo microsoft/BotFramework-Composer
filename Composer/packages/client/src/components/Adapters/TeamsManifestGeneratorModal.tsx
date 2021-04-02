@@ -39,23 +39,24 @@ const iconButtonStyle: IButtonStyles = {
   },
 };
 
-type TeamsManifestGeneratorProps = {
+type TeamsManifestGeneratorModalProps = {
   hidden: boolean;
-  botAppId?: string;
-  botDisplayName?: string;
+  botAppId: string;
+  botDisplayName: string;
   onDismiss: () => void;
 };
 
-export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
+export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalProps) => {
   const textFieldRef = useRef<ITextField>(null);
 
   const copyCodeToClipboard = () => {
     try {
-      textFieldRef.current?.select;
-      textFieldRef.current?.select();
-      document.execCommand('copy');
-      textFieldRef.current?.setSelectionRange(0, 0);
-      textFieldRef.current?.blur();
+      if (textFieldRef.current) {
+        textFieldRef.current.select();
+        document.execCommand('copy');
+        textFieldRef.current.setSelectionRange(0, 0);
+        textFieldRef.current.blur();
+      }
     } catch (e) {
       console.error('Something went wrong when trying to copy manifest content to clipboard.', e);
     }
@@ -66,8 +67,8 @@ export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
     const botName = props.botDisplayName ? props.botDisplayName : '{AddBotDisplayName}';
     const result = defaultTeamsManifest;
     result.id = uuidv4().toString();
-    result.description.short = `short description for ${botName}`;
-    result.description.full = `full description for ${botName}`;
+    result.description.short = `${formatMessage('short description for')} ${botName}`;
+    result.description.full = `${formatMessage('full description for')} ${botName}`;
     result.packageName = botName;
     result.name.short = botName;
     result.name.full = botName;
@@ -87,16 +88,13 @@ export const TeamsManifestGenerator = (props: TeamsManifestGeneratorProps) => {
     >
       <div>
         <Text style={{ fontWeight: 700 }}>{formatMessage('Teams manifest for your bot:')}</Text>
-        <a
+        <IconButton
+          ariaLabel={formatMessage('Download Icon')}
           download={'teamsManifest.json'}
           href={'data:text/plain;charset=utf-8,' + encodeURIComponent(generateTeamsManifest())}
-        >
-          <IconButton
-            ariaLabel={formatMessage('Download Icon')}
-            menuIconProps={{ iconName: 'Download' }}
-            styles={iconButtonStyle}
-          />
-        </a>
+          menuIconProps={{ iconName: 'Download' }}
+          styles={iconButtonStyle}
+        />
         <IconButton
           ariaLabel={formatMessage('Copy Icon')}
           menuIconProps={{ iconName: 'Copy' }}
