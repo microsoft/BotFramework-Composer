@@ -95,7 +95,7 @@
       "prettier --write",
       "git add"
     ],
-    "../extensions/**/*.{ts,tsx,js,jsx}": [
+    "../extensions/**/*": [
       "prettier --write",
       "git add"
     ]
