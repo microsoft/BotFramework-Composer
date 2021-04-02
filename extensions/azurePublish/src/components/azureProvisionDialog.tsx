@@ -49,7 +49,7 @@ import { getExistResources, removePlaceholder, decodeToken, defaultExtensionStat
 import { ResourceGroupPicker } from './ResourceGroupPicker';
 
 type ProvisionFormData = {
-  choice: string;
+  creationType: string;
   tenantId: string;
   subscriptionId: string;
   resourceGroup: string;
@@ -231,7 +231,7 @@ const getHostname = (config) => {
 
 const getDefaultFormData = (currentProfile, defaults) => {
   return {
-    choice: defaults.choice ?? 'create',
+    creationType: defaults.creationType ?? 'create',
     tenantId: currentProfile?.tenantId ?? defaults.tenantId,
     subscriptionId: currentProfile?.subscriptionId ?? defaults.subscriptionId,
     resourceGroup: currentProfile?.resourceGroup ?? defaults.resourceGroup,
@@ -666,14 +666,14 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ flex: '0 0 auto', marginRight: '2rem' }}>
           <ChoiceGroup
             options={choiceOptions}
-            selectedKey={formData.choice || 'create'}
+            selectedKey={formData.creationType || 'create'}
             onChange={(_e, option) => {
-              updateFormData('choice', option.key);
+              updateFormData('creationType', option.key);
             }}
           />
         </div>
         <div style={{ flex: 1, height: '100%' }}>
-          {formData.choice === 'create' && (
+          {formData.creationType === 'create' && (
             <form style={{ width: '100%' }}>
               <Dropdown
                 ariaLabel={formatMessage(
@@ -754,7 +754,7 @@ export const AzureProvisionDialog: React.FC = () => {
               />
             </form>
           )}
-          {formData.choice === 'import' && (
+          {formData.creationType === 'import' && (
             <div style={{ width: '100%', height: '100%' }}>
               <div
                 style={{
@@ -869,7 +869,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 onBack();
               }}
             />
-            {formData.choice === 'create' && (
+            {formData.creationType === 'create' && (
               <PrimaryButton
                 disabled={isNextDisabled}
                 style={{ margin: '0 4px' }}
@@ -879,14 +879,14 @@ export const AzureProvisionDialog: React.FC = () => {
                 }}
               />
             )}
-            {formData.choice === 'generate' && (
+            {formData.creationType === 'generate' && (
               <PrimaryButton
                 style={{ margin: '0 4px' }}
                 text={formatMessage('Generate resource request')}
                 onClick={() => onNext(formData.hostname)}
               />
             )}
-            {formData.choice === 'import' && (
+            {formData.creationType === 'import' && (
               <PrimaryButton
                 disabled={isEditorError}
                 style={{ margin: '0 4px' }}
@@ -922,7 +922,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Next')}
               onClick={() => {
-                if (formData.choice === 'generate') {
+                if (formData.creationType === 'generate') {
                   setShowHandoff(true);
                 } else {
                   setPage(PageTypes.ReviewResource);

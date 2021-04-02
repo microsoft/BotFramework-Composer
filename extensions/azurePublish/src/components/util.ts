@@ -69,5 +69,5 @@ export const defaultExtensionState = {
   luisLocation: '',
   enabledResources: [],
   requiredResources: [],
-  choice: 'create',
+  creationType: 'create',
 };
