@@ -149,8 +149,8 @@ export function CreateBotV2(props: CreateBotProps) {
 
   const handleJumpToNext = () => {
     TelemetryClient.track('CreateNewBotProjectNextButton', { template: currentTemplateId });
+    const runtimeLanguage = selectedProgLang?.props?.itemKey ?? csharpFeedKey;
 
-    const runtimeLanguage = selectedProgLang?.props?.itemKey ? selectedProgLang.props.itemKey : csharpFeedKey;
     if (location?.search) {
       onNext(currentTemplateId, runtimeLanguage, location.search);
     } else {
@@ -199,20 +199,17 @@ export function CreateBotV2(props: CreateBotProps) {
   };
 
   useEffect(() => {
-    const itemKey = selectedProgLang?.props?.itemKey;
-
-    if (itemKey) {
-      if (itemKey === csharpFeedKey) {
-        const newTemplates = templates.filter((template) => {
-          return template.dotnetSupport;
-        });
-        setDisplayedTemplates(newTemplates);
-      } else if (itemKey === nodeFeedKey) {
-        const newTemplates = templates.filter((template) => {
-          return template.nodeSupport;
-        });
-        setDisplayedTemplates(newTemplates);
-      }
+    const itemKey = selectedProgLang.props.itemKey;
+    if (itemKey === csharpFeedKey) {
+      const newTemplates = templates.filter((template) => {
+        return template.dotnetSupport;
+      });
+      setDisplayedTemplates(newTemplates);
+    } else if (itemKey === nodeFeedKey) {
+      const newTemplates = templates.filter((template) => {
+        return template.nodeSupport;
+      });
+      setDisplayedTemplates(newTemplates);
     }
   }, [templates, selectedProgLang]);
 

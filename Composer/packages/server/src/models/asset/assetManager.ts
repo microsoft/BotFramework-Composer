@@ -282,13 +282,13 @@ export class AssetManager {
             },
           } as BotTemplate;
           if (isArray(keywords)) {
-            if (keywords.indexOf('bf-dotnet-functions') != -1 || keywords.indexOf('bf-dotnet-webapp') != -1) {
+            if (keywords.includes('bf-dotnet-functions') || keywords.indexOf('bf-dotnet-webapp') != -1) {
               templateToReturn.dotnetSupport = {
                 functionsSupported: keywords.indexOf('bf-dotnet-functions') != -1,
                 webAppSupported: keywords.indexOf('bf-dotnet-webapp') != -1,
               };
             }
-            if (keywords.indexOf('bf-js-functions') != -1 || keywords.indexOf('bf-js-webapp') != -1) {
+            if (keywords.includes('bf-js-functions') || keywords.indexOf('bf-js-webapp') != -1) {
               templateToReturn.nodeSupport = {
                 functionsSupported: keywords.indexOf('bf-js-functions') != -1,
                 webAppSupported: keywords.indexOf('bf-js-webapp') != -1,
