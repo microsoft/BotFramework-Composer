@@ -58,6 +58,10 @@ export function usePublishApi() {
   function userShouldProvideTokens(): boolean {
     return window[ComposerGlobalName].userShouldProvideTokens();
   }
+  /** @deprecated use `userShouldProvideTokens` instead */
+  function isGetTokenFromUser(): boolean {
+    return window[ComposerGlobalName].userShouldProvideTokens();
+  }
   return {
     publishConfig: getPublishConfig(),
     startProvision,
@@ -70,6 +74,7 @@ export function usePublishApi() {
     getName,
     savePublishConfig,
     getTokenFromCache,
+    isGetTokenFromUser,
     userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,

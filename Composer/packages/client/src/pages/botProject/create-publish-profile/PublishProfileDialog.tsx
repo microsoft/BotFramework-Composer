@@ -91,6 +91,10 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         graphToken: getTokenFromCache('graphToken'),
       };
     };
+    /** @deprecated use `userShouldProvideTokens` instead */
+    PluginAPI.publish.isGetTokenFromUser = () => {
+      return userShouldProvideTokens();
+    };
     PluginAPI.publish.userShouldProvideTokens = () => {
       return userShouldProvideTokens();
     };
