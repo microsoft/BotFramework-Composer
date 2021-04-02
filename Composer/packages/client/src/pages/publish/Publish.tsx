@@ -142,7 +142,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       const currentBotStatus = botStatusList.find((bot) => bot.id === projectId);
       changePublishTarget(publishTargetName, currentBotStatus);
       setCheckedSkillIds([projectId]);
-      setPublishDialogVisiblity(true);
+      onPublish();
     }
   }, [publishTargetName, botStatusList]);
 
@@ -265,6 +265,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const isPublishingToAzure = (target?: PublishTarget) => {
     return target?.type === 'azurePublish' || target?.type === 'azureFunctionsPublish';
+  };
+
+  const onPublish = () => {
+    if (isShowAuthDialog(false)) {
+      setShowAuthDialog(true);
+    } else {
+      setPublishDialogVisiblity(true);
+    }
+    TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
   };
 
   const publish = async (items: BotStatus[]) => {
@@ -431,14 +440,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <PublishToolbar
         canPublish={canPublish}
         canPull={canPull}
-        onPublish={() => {
-          if (isShowAuthDialog(false)) {
-            setShowAuthDialog(true);
-          } else {
-            setPublishDialogVisiblity(true);
-          }
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
-        }}
+        onPublish={onPublish}
         onPull={() => {
           setPullDialogVisiblity(true);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'pullFromProfile' });
