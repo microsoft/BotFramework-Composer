@@ -232,7 +232,7 @@ const getHostname = (config) => {
 const getDefaultFormData = (currentProfile, defaults) => {
   return {
     creationType: defaults.creationType ?? 'create',
-    tenantId: currentProfile?.tenantId ?? defaults.tenantId,
+    tenantId: currentProfile?.tenantId,
     subscriptionId: currentProfile?.subscriptionId ?? defaults.subscriptionId,
     resourceGroup: currentProfile?.resourceGroup ?? defaults.resourceGroup,
     hostname: getHostname(currentProfile) ?? defaults.hostname,
