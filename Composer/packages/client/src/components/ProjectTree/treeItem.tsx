@@ -385,6 +385,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   isChildSelected = false,
   itemType,
+  dialogName,
   onSelect,
   textWidth = 100,
   hasChildren = false,
@@ -397,7 +398,9 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   showErrors = true,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
+
   const a11yLabel = `${itemType} ${link.displayName}`;
+  const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
@@ -441,7 +444,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           <div css={projectTreeItem} role="presentation" tabIndex={-1}>
             {item.itemType != null && (
               <Icon
-                iconName={item.icon}
+                iconName={icons[item.itemType]}
                 styles={{
                   root: {
                     width: '12px',
@@ -533,7 +536,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         padLeft,
         marginLeft
       )}
-      data-testid={a11yLabel}
+      data-testid={dataTestId}
       role="treeitem"
       tabIndex={0}
       onClick={() => {

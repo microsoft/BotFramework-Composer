@@ -49,7 +49,7 @@ describe('<ProjectTree/>', () => {
       />,
       initRecoilState
     );
-    const node = await findByTestId('trigger Greeting');
+    const node = await findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });

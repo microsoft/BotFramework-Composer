@@ -58,7 +58,7 @@ describe('<ProjectTree/>', () => {
     const mockFileSelect = jest.fn(() => null);
     const component = renderWithRecoil(<ProjectTree onSelect={mockFileSelect} />, initRecoilState);
 
-    const node = await component.findByTestId('trigger Greeting');
+    const node = await component.findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
     expect(mockFileSelect).toHaveBeenCalledTimes(1);
   });
