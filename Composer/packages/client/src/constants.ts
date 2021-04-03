@@ -6,7 +6,6 @@ import {
   functionsRuntimeKey,
   csharpFeedKey,
   nodeFeedKey,
-  FeedName,
   TeamsManifest,
 } from '@botframework-composer/types';
 import formatMessage from 'format-message';
