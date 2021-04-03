@@ -177,7 +177,7 @@ export async function writeSnapshot(output: IOrchestratorBuildOutput, generatedF
   return snapshots;
 }
 
-process.on('message', async (msg: RequestMsg) => {
+const handleMessage = async (msg: RequestMsg) => {
   const { payload } = msg;
   try {
     switch (payload.type) {
@@ -196,6 +196,14 @@ process.on('message', async (msg: RequestMsg) => {
       }
     }
   } catch (error) {
-    process.send?.({ id: msg.id, error: { message: error?.message, stack: error?.stack } });
+    return { id: msg.id, error };
+  }
+};
+
+process.on('message', async (msg: RequestMsg) => {
+  try {
+    handleMessage(msg);
+  } catch (error) {
+    process.send?.({ id: msg.id, error });
   }
 });
