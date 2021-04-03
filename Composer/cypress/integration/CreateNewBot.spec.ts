@@ -15,7 +15,7 @@ context('Creating a new bot', () => {
     cy.findByTestId('NextStepButton').click();
     cy.enterTextAndSubmit('NewDialogName', '__TestNewProject', 'SubmitNewBotBtn');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(100000);
+    cy.wait(200000);
     cy.findByTestId('ProjectTree').within(() => {
       cy.findAllByText('__TestNewProject').should('exist');
     });
