@@ -8,8 +8,7 @@ context('Navigate Url', () => {
 
   it('should open Select Template window from a url', () => {
     cy.visit('/projects/create');
-    cy.get('[data-testid="dotnetFeed"]').should('be.visible');
-    cy.get('[data-testid="nodeFeed"]').should('be.visible');
+    cy.findAllByTestId('dotnetFeed').should('exist');
   });
 
   it('should open Define Conversations window from a url', () => {
