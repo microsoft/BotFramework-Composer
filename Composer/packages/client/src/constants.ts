@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { webAppRuntimeKey, functionsRuntimeKey, csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
+import {
+  webAppRuntimeKey,
+  functionsRuntimeKey,
+  csharpFeedKey,
+  nodeFeedKey,
+  FeedName,
+  TeamsManifest,
+} from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -418,3 +425,38 @@ export const runtimeOptions: IDropdownOption[] = [
 ];
 
 export const onboardingDisabled = false;
+
+export const defaultTeamsManifest: TeamsManifest = {
+  $schema: 'https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json',
+  manifestVersion: '1.9',
+  version: '1.0.0',
+  id: '',
+  packageName: '',
+  developer: {
+    name: 'contoso',
+    websiteUrl: 'https://contoso.com',
+    privacyUrl: 'https://cotoso.com/privacy',
+    termsOfUseUrl: 'https://contoso.com/terms',
+  },
+  icons: {
+    color: '',
+    outline: '',
+  },
+  name: {
+    short: '',
+    full: '',
+  },
+  description: {
+    short: '',
+    full: '',
+  },
+  accentColor: '#FFFFFF',
+  bots: [
+    {
+      botId: '',
+      scopes: ['personal'],
+    },
+  ],
+  permissions: ['identity', 'messageTeamMembers'],
+  validDomains: ['token.botframework.com'],
+};
