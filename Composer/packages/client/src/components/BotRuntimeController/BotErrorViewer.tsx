@@ -7,6 +7,7 @@ import { Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { CommunicationColors } from '@uifabric/fluent-theme';
 
 import { botRuntimeErrorState, dispatcherState } from '../../recoilModel';
 
@@ -29,7 +30,7 @@ export const BotErrorViewer: React.FC<BotErrorViewerProps> = ({ projectId }) => 
         <ActionButton
           styles={{
             root: {
-              color: '#0078d4',
+              color: `${CommunicationColors.primary}`,
               height: '20px',
             },
           }}

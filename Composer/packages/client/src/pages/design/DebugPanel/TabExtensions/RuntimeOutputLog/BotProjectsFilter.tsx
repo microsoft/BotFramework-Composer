@@ -30,8 +30,7 @@ export const BotProjectsFilter = ({ currentProjectId, onChangeProject }) => {
             key={projectData.projectId}
             styles={{
               root: {
-                height: '24px',
-                padding: '0 10px',
+                padding: '5px 10px',
                 width: '100%',
                 border: 'none',
                 textAlign: 'left',

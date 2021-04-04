@@ -8,7 +8,7 @@ import { css, jsx } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { default as AnsiUp } from 'ansi_up';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { botRuntimeErrorState, botRuntimeLogsState } from '../../../../../recoilModel';
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';

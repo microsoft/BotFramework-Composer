@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
