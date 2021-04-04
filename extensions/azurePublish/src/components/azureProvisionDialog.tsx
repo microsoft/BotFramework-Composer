@@ -268,6 +268,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const currentConfig = removePlaceholder(publishConfig);
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
+  const [isManualToken, setIsManualToken] = useState<boolean>();
   const [token, setToken] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentUser, setCurrentUser] = useState<any>(undefined);
@@ -379,7 +380,9 @@ export const AzureProvisionDialog: React.FC = () => {
     if (userShouldProvideTokens()) {
       const { accessToken } = getTokenFromCache();
 
+      setIsManualToken(true);
       setToken(accessToken);
+
       // decode token
       const decoded = decodeToken(accessToken);
       if (decoded) {
@@ -393,6 +396,7 @@ export const AzureProvisionDialog: React.FC = () => {
         });
       }
     } else {
+      setIsManualToken(false);
       getTenants().then((tenants) => {
         if (isMounted.current) {
           setAllTenants(tenants);
@@ -423,7 +427,9 @@ export const AzureProvisionDialog: React.FC = () => {
         }));
       }
 
-      getTokenForTenant(formData.tenantId);
+      if (!isManualToken) {
+        getTokenForTenant(formData.tenantId);
+      }
     }
   }, [formData.tenantId]);
 
