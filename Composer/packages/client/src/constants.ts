@@ -160,7 +160,7 @@ export const BotStatusesCopy = {
     return formatMessage('Inactive');
   },
   get failed() {
-    return formatMessage('Failed to start');
+    return formatMessage('Failed');
   },
   get loading() {
     return formatMessage('Building');

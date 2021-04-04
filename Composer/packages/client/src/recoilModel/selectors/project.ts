@@ -5,9 +5,10 @@ import { BotIndexer } from '@bfc/indexers';
 import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqBy from 'lodash/uniqBy';
-import { selector, selectorFamily } from 'recoil';
+import { selector, selectorFamily, useRecoilValue } from 'recoil';
 
 import { LanguageFileImport } from '../../../../types/src';
+import { BotStatus } from '../../constants';
 import {
   botDisplayNameState,
   botErrorState,
@@ -55,6 +56,15 @@ export type TreeDataPerProject = {
   isPvaSchema: boolean;
   formDialogSchemas: FormDialogSchema[];
   botError: any;
+};
+
+type WebChatEssentials = {
+  projectId: string;
+  botName: string;
+  secrets: { msAppId: string; msPassword: string };
+  botUrl: string;
+  activeLocale: string;
+  botStatus: BotStatus;
 };
 
 // Actions
@@ -341,13 +351,9 @@ export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
   },
 });
 
-export const webChatEssentialsSelector = selector({
+export const webChatEssentialsSelector = selectorFamily<WebChatEssentials, string>({
   key: 'webChatEssentialsSelector',
-  get: ({ get }) => {
-    const projectId = get(rootBotProjectIdSelector);
-    if (!projectId) {
-      return undefined;
-    }
+  get: (projectId: string) => ({ get }) => {
     const settings = get(settingsState(projectId));
     const secrets = {
       msAppId: settings.MicrosoftAppId || '',
@@ -367,5 +373,16 @@ export const webChatEssentialsSelector = selector({
       activeLocale,
       botStatus,
     };
+  },
+});
+
+export const outputsDebugPanelSelector = selector<WebChatEssentials[]>({
+  key: 'outputsDebugPanelSelector',
+  get: ({ get }) => {
+    const projects: string[] = get(botProjectIdsState);
+    return projects.map((projectId) => {
+      const data = get(webChatEssentialsSelector(projectId));
+      return data;
+    });
   },
 });

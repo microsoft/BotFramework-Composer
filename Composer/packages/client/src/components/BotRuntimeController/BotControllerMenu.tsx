@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -14,6 +14,7 @@ import formatMessage from 'format-message';
 
 import { BotRuntimeOperations } from './BotRuntimeOperations';
 import { BotStatusIndicator } from './BotStatusIndicator';
+import { BotErrorViewer } from './BotErrorViewer';
 import { OpenEmulatorButton } from './OpenEmulatorButton';
 import { OpenWebChatButton } from './OpenWebChatButton';
 
@@ -69,10 +70,18 @@ const tableColumns: IColumn[] = [
       setGlobalErrorCalloutVisibility: (isVisible: boolean) => void;
     }) => {
       return (
-        <BotStatusIndicator
-          projectId={item.projectId}
-          setGlobalErrorCalloutVisibility={item.setGlobalErrorCalloutVisibility}
-        />
+        <div
+          css={{
+            display: 'flex',
+            flex: '1 1 auto',
+          }}
+        >
+          <BotStatusIndicator
+            projectId={item.projectId}
+            setGlobalErrorCalloutVisibility={item.setGlobalErrorCalloutVisibility}
+          />
+          <BotErrorViewer projectId={item.projectId} />
+        </div>
       );
     },
   },

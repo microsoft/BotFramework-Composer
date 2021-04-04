@@ -29,8 +29,9 @@ interface RunningBot {
   process?: ChildProcess;
   port?: number;
   status: number;
-  result: {
+  result?: {
     message: string;
+    runtimeLogs?: string;
   };
 }
 interface PublishConfig {
@@ -54,6 +55,9 @@ const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
 
 const stringifyError = (error: any): string => {
   if (typeof error === 'object') {
+    if (error.stdout) {
+      return error.stdout;
+    }
     return JSON.stringify(error, Object.getOwnPropertyNames(error));
   } else {
     return error.toString();
@@ -71,17 +75,43 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     this.composer = composer;
   }
 
-  private setBotStatus = (botId: string, status: RunningBot) => {
-    this.composer.log(`SETTING STATUS OF ${botId} to port ${status.port} and status ${status.status}`);
+  private setBotStatus = (botId: string, data: RunningBot) => {
+    const updateBotData: RunningBot = {
+      ...LocalPublisher.runningBots[botId],
+    };
+
+    updateBotData.status = data.status;
+
+    this.composer.log(`SETTING STATUS OF ${botId} to port ${data.port} and status ${data.status}`);
     // preserve the pid and port if one is available
-    if (!status.process && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].process) {
-      status.process = LocalPublisher.runningBots[botId].process;
-    }
-    if (!status.port && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].port) {
-      status.port = LocalPublisher.runningBots[botId].port;
+    if (data.process && !LocalPublisher.runningBots[botId]?.process) {
+      updateBotData.process = data.process;
     }
 
-    LocalPublisher.runningBots[botId] = status;
+    if (data.port && !LocalPublisher.runningBots[botId]?.port) {
+      updateBotData.port = data.port;
+    }
+
+    if (data.result?.message) {
+      updateBotData.result = {
+        ...updateBotData.result,
+        message: data.result?.message,
+      };
+    }
+
+    LocalPublisher.runningBots[botId] = updateBotData;
+  };
+
+  private appendRuntimeLogs = (botId: string, newContent: string) => {
+    const botData = LocalPublisher.runningBots[botId];
+    const runtimeLogs = botData.result?.runtimeLogs ? botData.result?.runtimeLogs + newContent : newContent;
+    LocalPublisher.runningBots[botId] = {
+      ...botData,
+      result: {
+        ...botData.result,
+        runtimeLogs,
+      },
+    };
   };
 
   private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
@@ -171,6 +201,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           result: {
             message: 'Running',
             endpointURL: url,
+            runtimeLogs: LocalPublisher.runningBots[botId].result.runtimeLogs,
           },
         };
       } else {
@@ -370,7 +401,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       try {
         spawnProcess = spawn(
           startCommand,
-          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config],
+          [...commandAndArgs, '--port', port, '--color=false', `--urls`, `http://0.0.0.0:${port}`, ...config],
           {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
@@ -400,7 +431,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
               status: 200,
               result: { message: 'Runtime started' },
             });
-            resolve();
+            resolve('Runtime started');
           },
           (err) => {
             reject(`Bot on localhost:${port} not working, error message: ${err.message}`);
@@ -454,6 +485,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
+        const runtimeData = data.toString();
+        this.appendRuntimeLogs(botId, runtimeData);
         logger('%s', data.toString());
       });
 
@@ -465,6 +498,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     child.on('exit', (code) => {
       if (code !== 0) {
         logger('error on exit: %s, exit code %d', erroutput, code);
+        this.appendRuntimeLogs(botId, erroutput);
         this.setBotStatus(botId, {
           status: 500,
           result: { message: erroutput },
@@ -540,7 +574,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             .then(() => {
               this.removeListener(proc);
               delete LocalPublisher.runningBots[botId];
-              resolve();
+              resolve('Stopped');
             })
             .catch((err) => {
               reject(err);
