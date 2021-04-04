@@ -101,7 +101,6 @@ export function CreateOptions(props: CreateOptionsProps) {
     },
     modal: {
       main: {
-        // maxWidth: '416px !important',
         maxWidth: '80% !important',
         width: '480px !important',
       },
@@ -112,8 +111,8 @@ export function CreateOptions(props: CreateOptionsProps) {
       <DialogWrapper
         isOpen={isOpenOptionsModal}
         {...dialogWrapperProps}
-        dialogType={DialogTypes.Customer}
         customerStyle={customerStyle}
+        dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
       >
         <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
