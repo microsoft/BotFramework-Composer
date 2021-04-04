@@ -416,6 +416,7 @@ export const Header = () => {
           requiresLUIS={requiresLUIS}
           requiresQNA={requiresQNA}
           showTeachingBubble={showGetStartedTeachingBubble}
+          projectId={projectId}
           onBotReady={() => {
             setShowTeachingBubble(true);
           }}
