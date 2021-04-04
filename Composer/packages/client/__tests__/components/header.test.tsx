@@ -18,7 +18,7 @@ describe('<Header />', () => {
     expect(container).toHaveTextContent('Bot Framework Composer');
   });
 
-  fit('should not show the start bots widget in Home page', async () => {
+  it('should not show the start bots widget in Home page', async () => {
     (useLocation as jest.Mock).mockImplementation(() => {
       return { location: { pathname: 'http://server/home' } };
     });
