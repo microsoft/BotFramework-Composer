@@ -46,6 +46,7 @@ type ResourceGroupItemChoice = {
 };
 
 type Props = {
+  disabled: boolean;
   /**
    * The resource groups to choose from.
    * Set to undefined to disable this picker.
@@ -93,6 +94,7 @@ const onRenderLabel = (props) => {
 };
 
 export const ResourceGroupPicker = ({
+  disabled,
   resourceGroupNames,
   selectedResourceGroupName: controlledSelectedName,
   newResourceGroupName: controlledNewName,
@@ -169,7 +171,7 @@ export const ResourceGroupPicker = ({
         ariaLabel={formatMessage(
           'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
         )}
-        disabled={loading}
+        disabled={loading || disabled}
         label={formatMessage('Resource group')}
         options={options}
         placeholder={formatMessage('Select one')}
