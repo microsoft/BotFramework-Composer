@@ -4,6 +4,7 @@
 import { Orchestrator } from '@microsoft/bf-orchestrator';
 import { Request, Response } from 'express';
 import { pathExists } from 'fs-extra';
+import { IOrchestratorModelRequest } from '@bfc/shared';
 
 import { IOrchestratorNLRList } from '../models/bot/interface';
 import { Path } from '../utility/path';
@@ -13,6 +14,8 @@ enum DownloadState {
   ALREADYDOWNLOADED,
   DOWNLOADING,
 }
+
+let errorMsg: any;
 
 async function getModelBasePath() {
   let appDataPath = '';
@@ -26,7 +29,7 @@ async function getModelBasePath() {
   return baseModelPath;
 }
 
-async function getModelPath(modelName) {
+async function getModelPath(modelName: string) {
   return Path.resolve(await getModelBasePath(), modelName.replace('.onnx', ''));
 }
 
@@ -36,28 +39,38 @@ async function getModelList(): Promise<IOrchestratorNLRList> {
 
 let state: DownloadState = DownloadState.STOPPED;
 
-interface DefaultModelRequest {
-  language: 'en' | 'multilang';
-}
-
-function isDefaultModelRequest(arg: any): arg is DefaultModelRequest {
-  return arg !== undefined;
+function isValidModelRequest(arg: any): arg is IOrchestratorModelRequest {
+  return arg.type !== undefined && arg.name !== undefined;
 }
 
 async function status(req: Request, res: Response) {
-  res.send(200, state);
+  if (errorMsg) {
+    res.status(400).send(errorMsg);
+    return;
+  }
+  res.send(DownloadState[state]);
 }
 
-async function downloadDefaultModel(req: Request, res: Response) {
-  const lang = req.body;
+async function downloadLanguageModel(req: Request, res: Response) {
+  const modelData = req.body?.modelData;
+  errorMsg = null;
 
-  if (!isDefaultModelRequest(lang)) {
-    res.sendStatus(400);
-    return;
+  if (!isValidModelRequest(modelData)) {
+    return res.sendStatus(400);
   }
 
   const modelList = await getModelList();
-  const modelName = lang.language === 'en' ? modelList.defaults?.en_intent : modelList.defaults?.multilingual_intent;
+  let modelName: string;
+
+  if (modelData?.name === 'default') {
+    modelName = modelList.defaults[modelData.type];
+  } else {
+    if (!(modelData.name in modelList.models)) {
+      throw new Error(`Invalid Model: ${modelData.name}`);
+    }
+    modelName = modelData.name;
+  }
+
   const modelPath = await getModelPath(modelName);
 
   if (await pathExists(modelPath)) {
@@ -66,25 +79,25 @@ async function downloadDefaultModel(req: Request, res: Response) {
   }
 
   const onProgress = (msg: string) => {
-    setTimeout(() => {
-      state = DownloadState.DOWNLOADING;
-    }, 20000);
+    state = DownloadState.DOWNLOADING;
   };
 
   const onFinish = (msg: string) => {
     state = DownloadState.STOPPED;
   };
 
-  state = DownloadState.DOWNLOADING;
+  res.send('/orchestrator/status');
 
-  setTimeout(async () => {
+  try {
+    state = DownloadState.DOWNLOADING;
     await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
-  }, 0);
-
-  return res.send(200, '/orchestrator/status');
+  } catch (err) {
+    errorMsg = err;
+    state = DownloadState.STOPPED;
+  }
 }
 
 export const OrchestratorController = {
-  downloadDefaultModel,
+  downloadLanguageModel,
   status,
 };

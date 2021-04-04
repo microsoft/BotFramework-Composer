@@ -137,7 +137,7 @@ router.post('/settings', SettingsController.updateUserSettings);
 router.post('/telemetry/events', TelemetryController.track);
 
 // Orchestrator Specific API
-router.post('/orchestrator/download', OrchestratorController.downloadDefaultModel);
+router.post('/orchestrator/download', OrchestratorController.downloadLanguageModel);
 router.get('/orchestrator/status', OrchestratorController.status);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
