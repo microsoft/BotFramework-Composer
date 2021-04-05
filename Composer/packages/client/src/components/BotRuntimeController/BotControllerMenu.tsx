@@ -64,11 +64,7 @@ const tableColumns: IColumn[] = [
     minWidth: 150,
     isResizable: true,
     isRowHeader: true,
-    onRender: (item: {
-      displayName: string;
-      projectId: string;
-      setGlobalErrorCalloutVisibility: (isVisible: boolean) => void;
-    }) => {
+    onRender: (item: { displayName: string; projectId: string }) => {
       return (
         <div
           css={{
