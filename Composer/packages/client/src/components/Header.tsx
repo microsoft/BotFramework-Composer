@@ -176,7 +176,7 @@ export const Header = () => {
   // this data is passed into the GetStarted widget
   // ... if the get started widget moves, this code should too!
   const requiredStuff = useRecoilValue(allRequiredRecognizersSelector);
-  const requiresLUIS = requiredStuff.filter((p) => p.requiresLUIS)?.length ? true : false;
+  const requiresLUIS = requiredStuff.some((p) => p.requiresLUIS);
   const requiresQNA = requiredStuff.filter((p) => p.requiresQNA)?.length ? true : false;
   // ... end of get started stuff
 
