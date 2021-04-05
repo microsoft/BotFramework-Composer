@@ -8,8 +8,8 @@ import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 export const title = css`
   font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
   margin-top: 6px;
+  margin-bottom: 12px;
 `;
 
 export const subtitle = css`
@@ -18,6 +18,7 @@ export const subtitle = css`
   & > h1 {
     margin-top: 0;
   }
+  margin-bottom: 12px;
 `;
 
 export const sectionHeader = css`

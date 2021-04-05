@@ -8,11 +8,7 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { BotSchemas, DialogSetting } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { JSONSchema7 } from '@botframework-composer/types';
 
 import { useRouterCache } from '../../../utils/hooks';
@@ -40,21 +36,19 @@ const ExternalAdapterSettings = (props: Props) => {
   const { definitions: schemaDefinitions } = schemas?.sdk?.content ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
 
-  const [currentModalProps, setModalProps] = useState<
-    { key: string; packageName: string; firstTime: boolean } | undefined
-  >();
+  const [currentModalProps, setModalProps] = useState<{ key: string; packageName: string } | undefined>();
 
-  const openModal = (key?: string, firstTime?: boolean, packageName?: string) => {
-    if (key == null || packageName == null || firstTime == null) {
+  const openModal = (key?: string, packageName?: string) => {
+    if (key == null || packageName == null) {
       setModalProps(undefined);
     } else {
-      setModalProps({ key, packageName, firstTime });
+      setModalProps({ key, packageName });
     }
   };
 
   if (schemaDefinitions == null) return null;
 
-  const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string; firstTime?: boolean })[]) => (
+  const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string })[]) => (
     <div role="table">
       <div key={'subtitle'} css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>the package manager</a>.', {
@@ -70,10 +64,10 @@ const ExternalAdapterSettings = (props: Props) => {
           {formatMessage('Name')}
         </div>
         <div css={tableColumnHeader(columnSizes[1])} role="columnheader">
-          {formatMessage('Configured')}
+          {formatMessage('Enabled')}
         </div>
         <div css={tableColumnHeader(columnSizes[2])} role="columnheader">
-          {formatMessage('Enabled')}
+          {formatMessage('Configuration')}
         </div>
       </div>
 
@@ -90,19 +84,6 @@ const ExternalAdapterSettings = (props: Props) => {
           <div key={key} css={tableRow} role="row">
             <div css={tableRowItem(columnSizes[0])} role="cell">
               {title}
-            </div>
-            <div css={tableRowItem(columnSizes[1])} role="cell">
-              {keyConfigured ? (
-                <Icon
-                  aria-label={formatMessage('Configured')}
-                  iconName="CheckMark"
-                  styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }}
-                />
-              ) : (
-                <Link key={key} onClick={() => openModal(key, true, packageName)}>
-                  {formatMessage('Configure')}
-                </Link>
-              )}
             </div>
             <div css={tableRowItem(columnSizes[2])} role="cell">
               <Toggle
@@ -129,31 +110,12 @@ const ExternalAdapterSettings = (props: Props) => {
                 }}
               />
             </div>
-            <TooltipHost content={formatMessage('Actions')} directionalHint={DirectionalHint.rightCenter}>
-              <IconButton
-                ariaLabel={formatMessage('Actions')}
-                className="dialog-more-btn"
-                data-testid="dialogMoreButton"
-                menuIconProps={{ iconName: 'MoreVertical' }}
-                menuProps={{
-                  items: [
-                    {
-                      key: 'edit',
-                      text: formatMessage('Edit'),
-                      iconProps: { iconName: 'Edit' },
-                      onClick: () => openModal(key, false, packageName),
-                    },
-                  ],
-                }}
-                role="cell"
-                styles={{ root: { paddingTop: '10px', paddingBottom: '10px' } }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.stopPropagation();
-                  }
-                }}
-              />
-            </TooltipHost>
+
+            <div css={tableRowItem(columnSizes[1])} role="cell">
+              <Link key={key} onClick={() => openModal(key, packageName)}>
+                {formatMessage('Configure')}
+              </Link>
+            </div>
           </div>
         );
       })}
@@ -175,7 +137,6 @@ const ExternalAdapterSettings = (props: Props) => {
         <AdapterModal
           isOpen
           adapterKey={currentKey}
-          isFirstTime={currentModalProps?.firstTime ?? false}
           packageName={currentPackageName}
           projectId={projectId}
           schema={schemaDefinitions[currentKey]}

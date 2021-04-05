@@ -6,7 +6,6 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -32,9 +31,6 @@ import {
   tableRow,
   tableRowItem,
   tableColumnHeader,
-  labelContainer,
-  customerLabel,
-  unknownIconStyle,
   errorContainer,
   errorIcon,
   errorTextStyle,
@@ -412,17 +408,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const onRenderLabel = (props) => {
-    return (
-      <div css={labelContainer}>
-        <div css={customerLabel}> {props.label} </div>
-        <TooltipHost content={props.label}>
-          <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-        </TooltipHost>
-      </div>
-    );
-  };
-
   /* Copied from BotStatusList.tx */
   const renderDropdownOption = (option?: IDropdownOption): JSX.Element | null => {
     if (!option) return null;
@@ -548,16 +533,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       />
       <div>
         <Dropdown
-          label={formatMessage('Publish profile to configure:')}
           options={publishTargetOptions}
-          placeholder={formatMessage('Choose publishing profile')}
+          placeholder={formatMessage('Select publishing profile')}
           styles={{
             root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
             label: { width: 200 },
             dropdown: { width: 300 },
           }}
           onChange={onSelectProfile}
-          onRenderLabel={onRenderLabel}
           onRenderOption={renderDropdownOption}
         />
 
@@ -571,14 +554,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                   return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
                 }) ?? []
             }
-            placeholder={formatMessage('Choose subscription')}
+            placeholder={formatMessage('Select publishing profile')}
             styles={{
               root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
               label: { width: 200 },
               dropdown: { width: 300 },
             }}
             onChange={onChangeSubscription}
-            onRenderLabel={onRenderLabel}
           />
         )}
         {isLoading && <LoadingSpinner />}
