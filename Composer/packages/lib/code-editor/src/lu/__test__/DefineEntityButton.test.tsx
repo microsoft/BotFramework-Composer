@@ -6,7 +6,13 @@ import React from 'react';
 
 import { DefineEntityButton } from '../DefineEntityButton';
 
-jest.useFakeTimers();
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
+});
 
 describe('<DefineEntityButton />', () => {
   it('Should call onDefineEntity callback when a menu item is clicked', () => {
