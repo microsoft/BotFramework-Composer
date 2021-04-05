@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogSetting, PublishResult, PublishTarget } from '@bfc/shared';
+import { DialogSetting, PublishResult, PublishTarget, SkillManifestFile } from '@bfc/shared';
 
 import { PublishType } from '../../recoilModel/types';
 
@@ -16,6 +16,10 @@ export type BotStatus = {
   status?: number;
   message?: string;
   comment?: string;
+  /**
+   * The skill manifest URL associated with the current publishTarget.
+   */
+  skillManifestUrl?: string;
 };
 
 export type Bot = {
@@ -28,6 +32,7 @@ type BotProperty = {
   setting: DialogSetting;
   publishTargets: PublishTarget[];
   publishTypes: PublishType[];
+  skillManifests: SkillManifestFile[];
 };
 
 export type BotProjectType = {
