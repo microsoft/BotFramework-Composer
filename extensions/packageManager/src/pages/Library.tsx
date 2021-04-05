@@ -621,6 +621,7 @@ const Library: React.FC = () => {
               <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }}>
                 <Stack.Item>
                   <Dropdown
+                    ariaLabel={formatMessage('Feeds')}
                     hidden={currentTab !== TABS.BROWSE}
                     options={feeds}
                     placeholder="Format"
