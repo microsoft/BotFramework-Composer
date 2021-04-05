@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { DialogFactory, JSONSchema7 } from '@bfc/shared';
+import { DialogFactory, JSONSchema7, DialogInfo } from '@bfc/shared';
 
 export interface NodeRendererContextValue {
   focusedId?: string;
@@ -11,6 +11,8 @@ export interface NodeRendererContextValue {
   clipboardActions: any[];
   dialogFactory: DialogFactory;
   customSchemas: JSONSchema7[];
+  dialogs: DialogInfo[];
+  topics: DialogInfo[];
 }
 
 export const defaultRendererContextValue = {
@@ -20,5 +22,7 @@ export const defaultRendererContextValue = {
   clipboardActions: [],
   dialogFactory: new DialogFactory({}),
   customSchemas: [],
+  dialogs: [],
+  topics: [],
 };
 export const NodeRendererContext = React.createContext<NodeRendererContextValue>(defaultRendererContextValue);
