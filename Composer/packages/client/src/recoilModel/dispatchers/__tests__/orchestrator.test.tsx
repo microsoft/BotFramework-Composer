@@ -31,11 +31,11 @@ describe('Orchestrator model picking logic', () => {
       { id: 'test.en-sg.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
     ];
     expect(availableLanguageModels(recognizerFiles)).toHaveLength(1);
-    expect(availableLanguageModels(recognizerFiles)).toEqual([{ type: 'en_intent', name: 'default' }]);
+    expect(availableLanguageModels(recognizerFiles)).toEqual([{ kind: 'en_intent', name: 'default' }]);
   });
 
   it('return en model under correct circumstances', () => {
-    const enModel = { type: 'en_intent', name: 'default' };
+    const enModel = { kind: 'en_intent', name: 'default' };
     expect(
       availableLanguageModels([{ id: 'test.en-us.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toEqual([enModel]);
@@ -54,7 +54,7 @@ describe('Orchestrator model picking logic', () => {
   });
 
   it('return multilang model under correct circumstances', () => {
-    const multilingualModel = { type: 'multilingual_intent', name: 'default' };
+    const multilingualModel = { kind: 'multilingual_intent', name: 'default' };
     expect(
       availableLanguageModels([{ id: 'test.it.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } }])
     ).toEqual([multilingualModel]);
@@ -95,8 +95,8 @@ describe('Orchestrator model picking logic', () => {
     ];
     expect(availableLanguageModels(recognizerFiles)).toHaveLength(2);
     expect(availableLanguageModels(recognizerFiles)).toEqual([
-      { type: 'en_intent', name: 'default' },
-      { type: 'multilingual_intent', name: 'default' },
+      { kind: 'en_intent', name: 'default' },
+      { kind: 'multilingual_intent', name: 'default' },
     ]);
   });
 });
