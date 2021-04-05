@@ -36,11 +36,7 @@ const formatErrorDetail = (error: StateError): React.ReactElement => {
   return (
     <section>
       {helpText}
-      {message && (
-        <p>
-          {message} : {error.summary}
-        </p>
-      )}
+      {message && <details>{message}</details>}
     </section>
   );
 };
