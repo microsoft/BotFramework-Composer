@@ -36,7 +36,7 @@ jobs:
             
             yo @microsoft/bot-empty testBot
             
-            cd testBot/testBot
+            cd testBot
 
             dotnet user-secrets init --project testBot.csproj
             
