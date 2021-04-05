@@ -56,11 +56,7 @@ export const BotProjectsFilter = ({ currentProjectId, onChangeProject }) => {
             >
               {projectData.botName}
             </span>
-            <BotStatusIndicator
-              hideErrorDetails
-              projectId={projectData.projectId}
-              setGlobalErrorCalloutVisibility={() => {}}
-            />
+            <BotStatusIndicator projectId={projectData.projectId} />
           </DefaultButton>
         );
       })}

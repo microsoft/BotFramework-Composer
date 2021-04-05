@@ -76,10 +76,7 @@ const tableColumns: IColumn[] = [
             flex: '1 1 auto',
           }}
         >
-          <BotStatusIndicator
-            projectId={item.projectId}
-            setGlobalErrorCalloutVisibility={item.setGlobalErrorCalloutVisibility}
-          />
+          <BotStatusIndicator projectId={item.projectId} />
           <BotErrorViewer projectId={item.projectId} />
         </div>
       );

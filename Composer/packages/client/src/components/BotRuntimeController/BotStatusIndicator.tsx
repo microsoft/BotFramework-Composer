@@ -18,8 +18,6 @@ const botStatusContainer = css`
 
 type BotStatusIndicatorProps = {
   projectId: string;
-  setGlobalErrorCalloutVisibility: (isVisible: boolean) => void;
-  hideErrorDetails?: boolean;
 };
 
 export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectId }) => {
