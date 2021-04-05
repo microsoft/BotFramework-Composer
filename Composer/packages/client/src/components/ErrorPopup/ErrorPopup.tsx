@@ -36,7 +36,7 @@ const formatErrorDetail = (error: StateError): React.ReactElement => {
   return (
     <section>
       {helpText}
-      {message && <details>{message}</details>}
+      {message && <p>{message}</p>}
     </section>
   );
 };
