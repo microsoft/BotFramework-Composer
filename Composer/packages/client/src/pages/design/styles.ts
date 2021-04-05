@@ -143,7 +143,7 @@ export const middleTriggerElements = css`
   align-items: center;
   font-size: 18px;
   line-height: 24px;
-  color: #828282;
+  color: #6e6e6e;
 `;
 
 export const triggerButton = css`
