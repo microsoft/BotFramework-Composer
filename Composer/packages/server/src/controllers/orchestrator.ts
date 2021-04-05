@@ -9,7 +9,7 @@ import { OrchestratorModelRequest, DownloadState } from '@bfc/shared';
 import { IOrchestratorNLRList } from '../models/bot/interface';
 import { Path } from '../utility/path';
 
-export class OrchestratorController {
+class OrchestratorController {
   private errorMsg: any;
   private state: DownloadState = DownloadState.STOPPED;
 
