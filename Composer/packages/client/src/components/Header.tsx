@@ -169,6 +169,7 @@ export const Header = () => {
   const { showing, status } = appUpdate;
   const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector(rootBotId));
+
   const { setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
   const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
@@ -406,7 +407,7 @@ export const Header = () => {
           TelemetryClient.track('WebChatPaneClosed');
         }}
       >
-        {webchatEssentials ? (
+        {webchatEssentials?.projectId ? (
           <WebChatPanel
             botData={{ ...webchatEssentials }}
             directlineHostUrl={BASEPATH}
