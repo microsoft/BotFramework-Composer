@@ -31,6 +31,7 @@ jobs:
           targetType: 'inline'
           script: |
             # Write your commands here
+            dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json
             
             npm install -g yo @microsoft/generator-bot-empty
             
