@@ -28,6 +28,19 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   },
 });
 
+export const topicsSelectorFamily = selectorFamily<DialogInfo[], string>({
+  key: 'topics',
+  get: (projectId: string) => ({ get }) => {
+    const dialogIds = get(dialogIdsState(projectId));
+
+    return dialogIds
+      .map((dialogId) => {
+        return get(dialogState({ projectId, dialogId }));
+      })
+      .filter((d) => d.isTopic);
+  },
+});
+
 export const currentDialogState = selectorFamily<DialogInfo | undefined, { projectId: string; dialogId?: string }>({
   key: 'currentDialog',
   get: ({ projectId, dialogId }) => ({ get }) => {
