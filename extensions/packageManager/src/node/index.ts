@@ -61,51 +61,60 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // Read the list of sources from the config file.
       const userStoredSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      // if no sources are in the config file, set the default list to our 1st party feed.
-      if (!packageSources) {
-        packageSources = [
-          // TODO: Re-enable the NPM feed when we have a JS runtime
-          {
-            key: 'nuget',
-            text: 'nuget',
-            url: 'https://api.nuget.org/v3/index.json',
-            readonly: true,
-            defaultQuery: {
-              prerelease: true,
-              semVerLevel: '2.0.0',
-              query: 'microsoft.bot.components+tags:msbot-component',
-            },
-            type: PackageSourceType.NuGet,
+      const botComponentTag = 'msbot-component';
+
+      // Default sources
+      let packageSources: IPackageSource[] = [
+        {
+          key: 'nuget',
+          text: formatMessage('nuget'),
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: `microsoft.bot.components+tags:${botComponentTag}`,
           },
-          {
-            key: 'nuget-community',
-            text: 'C# community packages',
-            url: 'https://api.nuget.org/v3/index.json',
-            defaultQuery: {
-              prerelease: true,
-              semVerLevel: '2.0.0',
-              query: 'tags:msbot-component',
-            },
-            type: PackageSourceType.NuGet,
+          type: PackageSourceType.NuGet,
+        },
+        {
+          key: 'nuget-community',
+          text: formatMessage('community packages'),
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: `tags:${botComponentTag}`,
           },
-          {
-            key: 'npm',
-            text: 'npm',
-            url: 'https://registry.npmjs.org/-/v1/search?text=keywords:msbot-component+scope:microsoft&size=100&from=0',
-            searchUrl:
-              'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:msbot-component&size=100&from=0',
-            readonly: true,
-          },
-          {
-            key: 'npm-community',
-            text: 'JS community packages',
-            url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bot-component&size=100&from=0',
-            searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bot-component&size=100&from=0',
-            readonly: true,
-          },
-        ];
-        composer.store.write('feeds', packageSources);
+          type: PackageSourceType.NuGet,
+        },
+        {
+          key: 'npm',
+          text: formatMessage('npm'),
+          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}+scope:microsoft&size=100&from=0`,
+          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
+          readonly: true,
+        },
+        {
+          key: 'npm-community',
+          text: formatMessage('JS community packages'),
+          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}&size=100&from=0`,
+          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
+          readonly: true,
+        },
+      ];
+
+      // If there are package sources stored in the user profile
+      if (userStoredSources) {
+        // Extract list of read-only sources
+        const readOnlyKeys = packageSources.map((s) => s.key);
+
+        // Add user sources to the package sources, excluding modifications of the read-only ones
+        packageSources = packageSources.concat(userStoredSources.filter((s) => !readOnlyKeys.includes(s.key)));
       }
+
+      composer.store.write('feeds', packageSources);
 
       res.json(packageSources);
     },
