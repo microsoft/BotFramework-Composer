@@ -1,6 +1,7 @@
-trigger:
-  - main
-
+- task: UseDotNet@2
+  inputs:
+    packageType: 'runtime'
+    version: '5.0.4'
 pr:
   autoCancel: true
   branches:
