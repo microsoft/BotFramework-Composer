@@ -32,7 +32,7 @@ jobs:
           script: |
             # Write your commands here
             
-            npm install -g yeoman @microsoft/generator-bot-empty
+            npm install -g yo @microsoft/generator-bot-empty
             
             yo @microsoft/bot-empty testBot
             
