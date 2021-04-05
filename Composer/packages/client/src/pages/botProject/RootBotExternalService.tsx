@@ -331,7 +331,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-label={formatMessage('LUIS application name')}
+          ariaLabel={formatMessage('LUIS application name')}
           data-testid={'rootLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('LUIS application name')}
@@ -343,7 +343,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <div ref={luisKeyFieldRef}>
           <TextField
-            aria-label={formatMessage('LUIS authoring key')}
+            ariaLabel={formatMessage('LUIS authoring key')}
             data-testid={'rootLUISAuthoringKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             id={'luisAuthoringKey'}
@@ -359,7 +359,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={luisEndpointKeyFieldRef}>
           <TextField
-            aria-label={formatMessage('LUIS endpoint key')}
+            ariaLabel={formatMessage('LUIS endpoint key')}
             data-testid={'rootLUISEndpointKey'}
             id={'luisEndpointKey'}
             label={formatMessage('LUIS endpoint key')}
@@ -373,7 +373,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={luisRegionFieldRef}>
           <Dropdown
-            aria-label={formatMessage('LUIS region')}
+            ariaLabel={formatMessage('LUIS region')}
             data-testid={'rootLUISRegion'}
             id={'luisRegion'}
             label={formatMessage('LUIS region')}
@@ -395,7 +395,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={qnaKeyFieldRef}>
           <TextField
-            aria-label={formatMessage('QnA Maker Subscription key')}
+            ariaLabel={formatMessage('QnA Maker Subscription key')}
             data-testid={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             id={'qnaKey'}
