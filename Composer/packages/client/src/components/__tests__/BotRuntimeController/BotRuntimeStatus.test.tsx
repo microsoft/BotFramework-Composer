@@ -45,6 +45,7 @@ describe('<BotRuntimeStatus />', () => {
       jest.useFakeTimers();
     });
     afterAll(() => {
+      jest.runOnlyPendingTimers();
       jest.useRealTimers();
     });
 

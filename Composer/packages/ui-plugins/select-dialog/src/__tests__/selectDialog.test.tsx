@@ -44,6 +44,7 @@ describe('Select Dialog', () => {
     jest.useFakeTimers();
   });
   afterAll(() => {
+    jest.runOnlyPendingTimers();
     jest.useRealTimers();
   });
 

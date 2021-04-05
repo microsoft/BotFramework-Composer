@@ -46,6 +46,7 @@ describe('getMacAddress', () => {
       jest.advanceTimersToNextTimer(10001);
       expect(macAddress).rejects.toEqual('Timeout: Unable to retrieve mac address');
     } finally {
+      jest.runOnlyPendingTimers();
       jest.useRealTimers();
     }
   });

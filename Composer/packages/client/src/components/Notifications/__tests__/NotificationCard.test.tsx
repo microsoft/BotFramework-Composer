@@ -11,6 +11,7 @@ beforeAll(() => {
   jest.useFakeTimers();
 });
 afterAll(() => {
+  jest.runOnlyPendingTimers();
   jest.useRealTimers();
 });
 

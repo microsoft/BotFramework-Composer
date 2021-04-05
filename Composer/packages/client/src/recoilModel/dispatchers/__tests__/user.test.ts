@@ -31,6 +31,7 @@ beforeAll(() => {
 
 afterAll(() => {
   global.Date.now = realDate;
+  jest.runOnlyPendingTimers();
   jest.useRealTimers();
 });
 

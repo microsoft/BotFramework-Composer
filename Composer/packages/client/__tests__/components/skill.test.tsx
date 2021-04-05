@@ -73,6 +73,7 @@ describe('<SkillForm />', () => {
       });
       expect(onSubmit).not.toBeCalled();
     } finally {
+      jest.runOnlyPendingTimers();
       jest.useRealTimers();
     }
   });
