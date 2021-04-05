@@ -1,6 +1,9 @@
-import { getMac, getMacAddress } from '../../src/utility/getMacAddress';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 import { networkInterfaces } from 'os';
+
+import { getMac, getMacAddress } from '../../src/utility/getMacAddress';
 
 jest.mock('os');
 
@@ -35,10 +38,16 @@ describe('getMacAddress', () => {
   });
 
   it('throws timeout error', async () => {
-    (networkInterfaces as jest.Mock).mockReturnValue({});
-    jest.useFakeTimers();
-    const macAddress = getMacAddress();
-    jest.advanceTimersToNextTimer(10001);
-    expect(macAddress).rejects.toEqual('Timeout: Unable to retrieve mac address');
+    try {
+      jest.useFakeTimers();
+      (networkInterfaces as jest.Mock).mockReturnValue({});
+
+      const macAddress = getMacAddress();
+      jest.advanceTimersToNextTimer(10001);
+      expect(macAddress).rejects.toEqual('Timeout: Unable to retrieve mac address');
+    } finally {
+      jest.runOnlyPendingTimers();
+      jest.useRealTimers();
+    }
   });
 });
