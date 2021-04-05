@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
+import * as fs from 'fs';
 
 import axios from 'axios';
 import formatMessage from 'format-message';
@@ -25,6 +26,45 @@ const hasSchema = (c) => {
 
 const isAdaptiveComponent = (c) => {
   return hasSchema(c) || c.includesExports;
+};
+
+const readFileAsync = async (path, encoding) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    fs.readFile(path, { encoding }, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
+const loadPackageAssets = async (components) => {
+  const variants = ['readme.md', 'README.md', 'README.MD'];
+  for (const c in components) {
+    if (components[c].path) {
+      const rootFolder = path.dirname(components[c].path);
+      for (const v in variants) {
+        const readmePath = path.join(rootFolder, variants[v]);
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        if (fs.existsSync(readmePath)) {
+          components[c].readme = await readFileAsync(readmePath, 'utf-8');
+          continue;
+        }
+      }
+
+      if (components[c].icon) {
+        const iconPath = path.resolve(rootFolder, components[c].icon);
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        if (fs.existsSync(iconPath)) {
+          components[c].iconUrl = 'data:image/png;base64,' + (await readFileAsync(iconPath, 'base64'));
+        }
+      }
+    }
+  }
+
+  return components;
 };
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
@@ -220,7 +260,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (dryRunMergeResults) {
           res.json({
             projectId,
-            components: dryRunMergeResults.components.filter(isAdaptiveComponent),
+            components: await loadPackageAssets(dryRunMergeResults.components.filter(isAdaptiveComponent)),
           });
         } else {
           res.status(500).json({
@@ -308,7 +348,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
-            const installedComponents = mergeResults.components.filter(isAdaptiveComponent);
+            const installedComponents = await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent));
             if (mergeResults) {
               res.json({
                 success: true,
@@ -410,7 +450,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           res.json({
             success: true,
-            components: mergeResults.components.filter(isAdaptiveComponent),
+            components: await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent)),
           });
 
           // update the settings.components array
