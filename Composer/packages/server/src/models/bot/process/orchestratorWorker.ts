@@ -5,8 +5,8 @@ import { FileInfo } from '@bfc/shared';
 import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
 import { writeFile, readdir, readFile, pathExists, readJson } from 'fs-extra';
 import partition from 'lodash/partition';
-import { TelemetryService } from '../../../services/telemetry';
 
+import { TelemetryService } from '../../../services/telemetry';
 import { Path } from '../../../utility/path';
 import { IOrchestratorBuildOutput, IOrchestratorSettings } from '../interface';
 
