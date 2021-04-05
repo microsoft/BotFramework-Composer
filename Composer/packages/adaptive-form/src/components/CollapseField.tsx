@@ -48,6 +48,7 @@ export const CollapseField: React.FC<CollapseField> = ({ children, description, 
         }}
       >
         <IconButton
+          ariaLabel={isOpen ? formatMessage('Collapse') : formatMessage('Expand')}
           iconProps={{ iconName: isOpen ? 'ChevronDown' : 'ChevronRight' }}
           styles={{
             root: { color: NeutralColors.gray150 },
