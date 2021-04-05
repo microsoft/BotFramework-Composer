@@ -77,6 +77,9 @@
   "action_unfocused_18a2800e": {
     "message": "Action unfocused"
   },
+  "actions_are_the_main_component_of_a_trigger_they_a_767485a9": {
+    "message": "Actions are the main component of a trigger, they are what enable your bot to take action whether in response to user input or any other event that may occur."
+  },
   "actions_copied_2821ab27": {
     "message": "Actions copied"
   },
@@ -85,9 +88,6 @@
   },
   "actions_cut_929f4c37": {
     "message": "Actions cut"
-  },
-  "actions_define_how_the_bot_responds_to_a_certain_t_1bb0181": {
-    "message": "Actions define how the bot responds to a certain trigger, for example, the bot logics and responses are defined here. Click the + button to add an action."
   },
   "actions_deleted_355c359a": {
     "message": "Actions deleted"
@@ -2186,9 +2186,6 @@
   "manage_connections_442f1693": {
     "message": "Manage connections"
   },
-  "manage_intents_here_each_intent_describes_a_partic_9aa0f2be": {
-    "message": "Manage intents here. Each intent describes a particular user intention through utterances (i.e. user says). "
-  },
   "manage_profiles_715c2092": {
     "message": "Manage profiles"
   },
@@ -3440,6 +3437,9 @@
   "tag_entity_5ae99194": {
     "message": "Tag entity"
   },
+  "take_a_product_tour_a2892d17": {
+    "message": "Take a product tour"
+  },
   "target_da92f4e6": {
     "message": "Target"
   },
@@ -3482,6 +3482,9 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
   },
+  "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
+    "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
+  },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
@@ -3500,8 +3503,8 @@
   "the_following_qna_key_has_been_successfully_added__7c97bbc0": {
     "message": "The following QnA key has been successfully added to your bot project:"
   },
-  "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
-    "message": "The main dialog is named after your bot. It is the root and entry point of a bot."
+  "the_main_dialog_is_the_foundation_of_every_bot_cre_d4a938ff": {
+    "message": "The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "The manifest can be edited and refined manually if and where needed."
@@ -3526,6 +3529,9 @@
   },
   "the_target_where_you_publish_your_bot_3132ef47": {
     "message": "The target where you publish your bot"
+  },
+  "the_user_input_page_is_where_the_language_understa_c9262f3f": {
+    "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."
   },
   "there_are_no_kind_properties_e299287e": {
     "message": "There are no { kind } properties."
@@ -3695,14 +3701,14 @@
   "train_your_language_model_ee4cec6a": {
     "message": "Train your language model"
   },
-  "trigger_connects_user_intent_with_bot_responses_th_57279180": {
-    "message": "Trigger connects user intent with bot responses. Think of a trigger as one capability of your bot. So a dialog contains a collection of triggers. To add a new trigger from the dialog menu."
-  },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
     "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
   },
   "trigger_phrases_f6754fa": {
     "message": "Trigger phrases"
+  },
+  "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
+    "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
   },
   "true_1900d7ae": {
     "message": "true"
@@ -4015,9 +4021,6 @@
   },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "You can create a new bot from scratch with Composer, or start with a template."
-  },
-  "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
-    "message": "You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs."
   },
   "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
     "message": "You can only connect to a skill in the root bot."
