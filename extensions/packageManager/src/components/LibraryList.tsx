@@ -26,7 +26,7 @@ export interface LibraryRef {
   license?: string;
   repository?: string;
   copyright?: string;
-  icon?: string;
+  iconUrl?: string;
   description: string;
   type?: string;
   category?: string;
@@ -84,7 +84,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       isResizable: false,
       data: 'string',
       onRender: (item: LibraryRef) => {
-        if (item.icon) return <img alt="icon" height="32" src={item.icon} width="32" />;
+        if (item.iconUrl) return <img alt="icon" height="32" src={item.iconUrl} width="32" />;
         return <LetterIcon letter={item.name[0]} />;
       },
     },

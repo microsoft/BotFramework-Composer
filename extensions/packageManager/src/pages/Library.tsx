@@ -732,8 +732,8 @@ const Library: React.FC = () => {
             <Fragment>
               <Stack horizontal tokens={{ childrenGap: 10 }}>
                 <Stack.Item align="center" grow={0} styles={{ root: { width: 32 } }}>
-                  {selectedItem.icon ? (
-                    <img alt="icon" height="32" src={selectedItem.icon} width="32" />
+                  {selectedItem.iconUrl ? (
+                    <img alt="icon" height="32" src={selectedItem.iconUrl} width="32" />
                   ) : (
                     <LetterIcon letter={selectedItem.name[0]} />
                   )}
