@@ -29,7 +29,7 @@ interface RunningBot {
   process?: ChildProcess;
   port?: number;
   status: number;
-  result?: {
+  result: {
     message: string;
     runtimeLogs?: string;
   };
@@ -76,35 +76,34 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   }
 
   private setBotStatus = (botId: string, data: RunningBot) => {
-    const updateBotData: RunningBot = {
+    const updatedBotData: RunningBot = {
       ...LocalPublisher.runningBots[botId],
+      status: data.status,
     };
-
-    updateBotData.status = data.status;
 
     this.composer.log(`SETTING STATUS OF ${botId} to port ${data.port} and status ${data.status}`);
     // preserve the pid and port if one is available
     if (data.process && !LocalPublisher.runningBots[botId]?.process) {
-      updateBotData.process = data.process;
+      updatedBotData.process = data.process;
     }
 
     if (data.port && !LocalPublisher.runningBots[botId]?.port) {
-      updateBotData.port = data.port;
+      updatedBotData.port = data.port;
     }
 
-    if (data.result?.message) {
-      updateBotData.result = {
-        ...updateBotData.result,
-        message: data.result?.message,
+    if (data.result.message) {
+      updatedBotData.result = {
+        ...updatedBotData.result,
+        message: data.result.message,
       };
     }
 
-    LocalPublisher.runningBots[botId] = updateBotData;
+    LocalPublisher.runningBots[botId] = updatedBotData;
   };
 
   private appendRuntimeLogs = (botId: string, newContent: string) => {
     const botData = LocalPublisher.runningBots[botId];
-    const runtimeLogs = botData.result?.runtimeLogs ? botData.result?.runtimeLogs + newContent : newContent;
+    const runtimeLogs = botData.result.runtimeLogs ? botData.result.runtimeLogs + newContent : newContent;
     LocalPublisher.runningBots[botId] = {
       ...botData,
       result: {
@@ -401,7 +400,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       try {
         spawnProcess = spawn(
           startCommand,
-          [...commandAndArgs, '--port', port, '--color=false', `--urls`, `http://0.0.0.0:${port}`, ...config],
+          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config],
           {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],

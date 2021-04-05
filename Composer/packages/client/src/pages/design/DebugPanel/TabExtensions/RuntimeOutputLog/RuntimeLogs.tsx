@@ -1,7 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -25,7 +23,6 @@ const errorTextStyle = css`
 `;
 
 const ansiUp = new AnsiUp();
-
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 const createMarkup = (txt: string) => {
@@ -33,19 +30,19 @@ const createMarkup = (txt: string) => {
 };
 
 export const RuntimeLogs: React.FC<{ projectId: string }> = ({ projectId }) => {
-  const logs = useRecoilValue(botRuntimeLogsState(projectId));
+  const runtimeLogs = useRecoilValue(botRuntimeLogsState(projectId));
   const botRuntimeErrors = useRecoilValue(botRuntimeErrorState(projectId));
-  const logRef = useRef<HTMLDivElement | null>(null);
+  const runtimeLogsContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (logRef?.current) {
-      logRef.current.scrollTop = logRef.current.scrollHeight;
+    if (runtimeLogsContainerRef?.current) {
+      runtimeLogsContainerRef.current.scrollTop = runtimeLogsContainerRef.current.scrollHeight;
     }
-  }, [logs, botRuntimeErrors]);
+  }, [runtimeLogs, botRuntimeErrors]);
 
   return (
     <div
-      ref={logRef}
+      ref={runtimeLogsContainerRef}
       css={{
         height: 'calc(100% - 25px)',
         display: 'flex',
@@ -63,7 +60,7 @@ export const RuntimeLogs: React.FC<{ projectId: string }> = ({ projectId }) => {
       <div
         css={stdOutStreamStyle}
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={createMarkup(logs)}
+        dangerouslySetInnerHTML={createMarkup(runtimeLogs)}
       />
       <div
         css={[stdOutStreamStyle, errorTextStyle]}

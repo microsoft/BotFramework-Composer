@@ -23,7 +23,7 @@ export const RuntimeOutputLogContent: React.FC<DebugPanelTabHeaderProps> = ({ is
     <div
       css={{
         height: '100%',
-        display: !isActive ? 'none' : 'block',
+        display: isActive ? 'block' : 'none',
         overflow: 'auto',
       }}
     >

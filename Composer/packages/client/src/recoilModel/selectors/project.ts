@@ -382,8 +382,7 @@ export const outputsDebugPanelSelector = selector<WebChatEssentials[]>({
   get: ({ get }) => {
     const projects: string[] = get(botProjectIdsState);
     return projects.map((projectId) => {
-      const data = get(webChatEssentialsSelector(projectId));
-      return data;
+      return get(webChatEssentialsSelector(projectId));
     });
   },
 });
