@@ -23,14 +23,16 @@ jest.mock('../../../utils/auth', () => {
   };
 });
 jest.mock('jwt-decode');
-jest.useFakeTimers();
 
 beforeAll(() => {
+  jest.useFakeTimers();
   global.Date.now = jest.fn(() => 10000000);
 });
 
 afterAll(() => {
   global.Date.now = realDate;
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
 });
 
 const mockGetUserToken = getUserTokenFromCache as jest.Mock;
