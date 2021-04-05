@@ -6,6 +6,7 @@ import { Request, Response } from 'express';
 import { pathExists } from 'fs-extra';
 
 import { IOrchestratorNLRList } from '../models/bot/interface';
+import { TelemetryService } from '../services/telemetry';
 import { Path } from '../utility/path';
 
 enum DownloadState {
@@ -72,12 +73,14 @@ async function downloadDefaultModel(req: Request, res: Response) {
   };
 
   const onFinish = (msg: string) => {
+    TelemetryService.trackEvent('OrchestratorDownloadCompleted');
     state = DownloadState.STOPPED;
   };
 
   state = DownloadState.DOWNLOADING;
 
   setTimeout(async () => {
+    TelemetryService.trackEvent('OrchestratorDownloadStarted');
     await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
   }, 0);
 
