@@ -503,9 +503,6 @@
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
     "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
   },
-  "bot_handle_d2abece6": {
-    "message": "Bot Handle"
-  },
   "bot_is_botname_c5af0c89": {
     "message": "Bot is { botName }"
   },
@@ -517,6 +514,9 @@
   },
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
+  },
+  "bot_name_bbd0779d": {
+    "message": "Bot Name"
   },
   "bot_name_cannot_not_start_with_a_number_d70239": {
     "message": "Bot name cannot not start with a number"
@@ -2921,6 +2921,9 @@
   "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
     "message": "Re-prompt for input (Reprompt dialog event)"
   },
+  "read_me_4734ca1": {
+    "message": "Read Me"
+  },
   "recent_bots_53585911": {
     "message": "Recent Bots"
   },
@@ -3478,9 +3481,6 @@
   },
   "teams_manifest_for_your_bot_7d0ec7ea": {
     "message": "Teams manifest for your bot:"
-  },
-  "template_2885424a": {
-    "message": "Template"
   },
   "template_name_c37cf8d9": {
     "message": "Template name: "
