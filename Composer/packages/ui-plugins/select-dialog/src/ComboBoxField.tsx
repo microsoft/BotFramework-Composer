@@ -8,6 +8,7 @@ import { FieldProps } from '@bfc/extension-client';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { Icons } from '@bfc/shared';
 
 export const ADD_DIALOG = 'ADD_DIALOG';
 
@@ -17,13 +18,15 @@ interface ComboBoxFieldProps extends FieldProps {
   onChange: any;
 }
 
-const getIconName = (key: string) => {
-  if (key === ADD_DIALOG) {
+const getIconName = (option: IComboBoxOption) => {
+  if (option.key === ADD_DIALOG) {
     return 'Add';
-  } else if (key === 'expression') {
+  } else if (option.key === 'expression') {
     return 'CalculatorEqualTo';
+  } else if (option.data?.isTopic) {
+    return Icons.TOPIC;
   } else {
-    return 'OpenSource';
+    return Icons.DIALOG;
   }
 };
 
@@ -44,7 +47,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
   const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
       <div>
-        <Icon aria-hidden="true" iconName={getIconName(option.key as string)} style={{ marginRight: '8px' }} />
+        <Icon aria-hidden="true" iconName={getIconName(option)} style={{ marginRight: '8px' }} />
         <span>{option.text}</span>
       </div>
     ) : null;

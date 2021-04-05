@@ -17,6 +17,7 @@ export const SelectDialog: React.FC<FieldProps> = (props) => {
   const {
     currentDialog: { id: currentDialogId },
     dialogs,
+    topics,
     shellApi,
   } = useShellApi();
   const { createDialog, navTo } = shellApi;
@@ -24,11 +25,13 @@ export const SelectDialog: React.FC<FieldProps> = (props) => {
   const [showIntellisenseField, setShowIntellisenseField] = useState(!dialogs.find(({ id }) => id !== value));
 
   const options: IComboBoxOption[] = dialogs
+    .concat(topics)
     .filter(({ id }) => id !== currentDialogId)
-    .map(({ displayName, id }) => ({
-      key: id,
-      text: displayName,
-      isSelected: value === displayName,
+    .map((d) => ({
+      key: d.isTopic ? d.content?.id : d.id,
+      text: d.displayName,
+      isSelected: value === d.displayName,
+      data: d,
     }));
 
   options.push(
