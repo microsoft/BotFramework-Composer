@@ -55,8 +55,12 @@ export function usePublishApi() {
   function setTenantId(value): void {
     window[ComposerGlobalName].setTenantId(value);
   }
+  function userShouldProvideTokens(): boolean {
+    return window[ComposerGlobalName].userShouldProvideTokens();
+  }
+  /** @deprecated use `userShouldProvideTokens` instead */
   function isGetTokenFromUser(): boolean {
-    return window[ComposerGlobalName].isGetTokenFromUser();
+    return window[ComposerGlobalName].userShouldProvideTokens();
   }
   return {
     publishConfig: getPublishConfig(),
@@ -71,6 +75,7 @@ export function usePublishApi() {
     savePublishConfig,
     getTokenFromCache,
     isGetTokenFromUser,
+    userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
   };
