@@ -60,7 +60,6 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   const botProjects = useRecoilValue(localBotsDataSelector);
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
-  const useAdapters = useFeatureFlag('NEW_CREATION_FLOW');
   const [selectedKey, setSelectedKey] = useState(PivotItemKey.Basics);
 
   useEffect(() => {
@@ -97,7 +96,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         >
           <div css={publishTargetsWrap(!isRootBot)}>
             <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
-            {isRootBot && useAdapters && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
+            {isRootBot && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
           </div>
         </PivotItem>
         <PivotItem
