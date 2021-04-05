@@ -413,6 +413,7 @@ export const Header = () => {
         ) : null}
         <GetStarted
           isOpen={showGetStarted}
+          projectId={projectId}
           requiresLUIS={requiresLUIS}
           requiresQNA={requiresQNA}
           showTeachingBubble={showGetStartedTeachingBubble}
