@@ -15,11 +15,11 @@ context('Creating a new bot', () => {
     cy.wait(3000);
     cy.findByTestId('@microsoft/generator-bot-empty').click();
     cy.findByTestId('NextStepButton').click();
-    cy.enterTextAndSubmit('NewDialogName', '__TestNewProject3', 'SubmitNewBotBtn');
+    cy.enterTextAndSubmit('NewDialogName', 'TestNewProject3', 'SubmitNewBotBtn');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(150000);
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestNewProject3').should('exist');
+      cy.findAllByText('TestNewProject3').should('exist');
     });
   });
 });
