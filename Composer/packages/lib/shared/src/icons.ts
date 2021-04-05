@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const icons = {
+export const Icons = {
   TRIGGER: 'LightningBolt',
   DIALOG: 'Org',
   FORM_DIALOG: 'Table',
@@ -10,4 +10,8 @@ export const icons = {
   FILTER: 'Filter',
   LG: 'Robot',
   LU: 'People',
+  BOT: 'CubeShape',
+  EXTERNAL_SKILL: 'Globe',
+  EXPRESSION: 'CalculatorEqualTo',
+  TOPIC: 'CannedChat',
 };

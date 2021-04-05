@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { Diagnostic } from '@bfc/shared';
+import { Diagnostic, Icons } from '@bfc/shared';
 
 import { BotStatus } from '../../constants';
 import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSelector } from '../../recoilModel';
@@ -17,11 +17,6 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
 import { ProjectTreeOptions, TreeLink } from './types';
-
-const icons = {
-  BOT: 'CubeShape',
-  EXTERNAL_SKILL: 'Globe',
-};
 
 const headerCSS = (label: string) => css`
   margin-top: -6px;
@@ -159,7 +154,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`} role="grid">
       <TreeItem
         hasChildren={!isRemote}
-        icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
+        icon={isRemote ? Icons.EXTERNAL_SKILL : Icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
         isChildSelected={isChildDialogLinkSelected(link, selectedLink)}
         isMenuOpen={isMenuOpen}

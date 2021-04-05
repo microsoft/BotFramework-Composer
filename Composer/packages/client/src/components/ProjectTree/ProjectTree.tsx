@@ -14,7 +14,7 @@ import {
   DiagnosticSeverity,
   LanguageFileImport,
   getFriendlyName,
-  icons,
+  Icons,
 } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
@@ -285,7 +285,7 @@ export const ProjectTree: React.FC<Props> = ({
         >
           <TreeItem
             hasChildren
-            icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
+            icon={isFormDialog ? Icons.FORM_DIALOG : Icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
@@ -318,7 +318,7 @@ export const ProjectTree: React.FC<Props> = ({
       <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`} role="grid">
         <TreeItem
           hasChildren
-          icon={icons.DIALOG}
+          icon={Icons.DIALOG}
           isActive={doesLinkMatch(dialogLink, selectedLink)}
           isMenuOpen={isMenuOpen}
           link={dialogLink}
@@ -361,7 +361,7 @@ export const ProjectTree: React.FC<Props> = ({
         key={`${item.id}_${item.index}`}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.TRIGGER}
+        icon={Icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
@@ -513,7 +513,7 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lg_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
+        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
@@ -542,7 +542,7 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lg_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
+        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
@@ -578,7 +578,7 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lu_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
+        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
@@ -607,7 +607,7 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lu_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
+        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         link={link}
