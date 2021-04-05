@@ -55,9 +55,12 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
   const {
     shellApi: { addCoachMarkRef },
   } = useShellApi();
-  const actionRef = useCallback((action) => {
-    addCoachMarkRef({ action });
-  }, []);
+  const actionRef = useCallback(
+    (action) => {
+      nodeFocused && addCoachMarkRef({ action });
+    },
+    [nodeFocused]
+  );
 
   useEffect(() => {
     if (nodeSelected || nodeDoubleSelected) {
