@@ -815,6 +815,9 @@
   "copy_project_location_to_clipboard_eb85c474": {
     "message": "Copy project location to clipboard"
   },
+  "copy_skill_manifest_url_217975ba": {
+    "message": "Copy Skill Manifest URL"
+  },
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
   },
@@ -1204,6 +1207,9 @@
   },
   "done_54e3d4b6": {
     "message": "Done"
+  },
+  "download_icon_2e0d10": {
+    "message": "Download Icon"
   },
   "download_now_and_install_when_you_close_composer_e241ed74": {
     "message": "Download now and install when you close Composer."
@@ -1639,6 +1645,9 @@
   },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "fromTemplateName does not exist"
+  },
+  "full_description_for_fd03dbf8": {
+    "message": "full description for"
   },
   "gb_7570760e": {
     "message": "GB"
@@ -2543,11 +2552,17 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
+  "open_manifest_ffb556af": {
+    "message": "Open Manifest"
+  },
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
   "open_start_bots_panel_f7f87200": {
     "message": "Open start bots panel"
+  },
+  "open_teams_416aae5c": {
+    "message": "Open Teams"
   },
   "open_web_chat_23601990": {
     "message": "Open Web Chat"
@@ -3242,6 +3257,9 @@
   "share_resource_request_afc3e465": {
     "message": "Share resource request"
   },
+  "short_description_for_6abb9a1b": {
+    "message": "short description for"
+  },
   "show_all_diagnostics_c11f4e09": {
     "message": "Show All Diagnostics"
   },
@@ -3427,6 +3445,12 @@
   },
   "tb_149f379c": {
     "message": "TB"
+  },
+  "teams_manifest_59d7fb0e": {
+    "message": "Teams Manifest"
+  },
+  "teams_manifest_for_your_bot_7d0ec7ea": {
+    "message": "Teams manifest for your bot:"
   },
   "template_name_c37cf8d9": {
     "message": "Template name: "
@@ -4021,6 +4045,9 @@
   },
   "your_new_bot_is_almost_ready_1bb596e": {
     "message": "Your new bot is almost ready!"
+  },
+  "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
+    "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
   },
   "your_template_requires_qna_maker_to_access_content_a4ca6f76": {
     "message": "Your template requires QnA Maker to access content for your bot."
