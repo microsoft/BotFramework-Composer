@@ -43,7 +43,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
       <h3 css={headerStyle}>{formatMessage('Bot Details')}</h3>
       <Stack tokens={{ childrenGap: 10 }}>
         <StackItem>
-          <div css={labelStyle}>{formatMessage('Bot Handle')}</div>
+          <div css={labelStyle}>{formatMessage('Bot Name')}</div>
           <div css={valueStyle}>{botProject?.name}</div>
         </StackItem>
         <StackItem>
@@ -51,8 +51,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
           <div css={valueStyle}>{location}</div>
         </StackItem>
         <StackItem styles={{ root: { marginBottom: '10px' } }}>
-          <div css={labelStyle}>{formatMessage('Template')}</div>
-          <div css={valueStyle}>Need To Add</div>
+          <div css={labelStyle}>{formatMessage('Read Me')}</div>
           {readme && (
             <Fragment>
               <Link

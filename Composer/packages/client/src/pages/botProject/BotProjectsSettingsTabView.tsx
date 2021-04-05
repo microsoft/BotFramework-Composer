@@ -82,24 +82,32 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           item?.props.itemKey && setSelectedKey(item.props.itemKey as PivotItemKey);
         }}
       >
-        <PivotItem headerText={formatMessage('Basics')} itemKey={PivotItemKey.Basics}>
+        <PivotItem data-testid="basicsTab" headerText={formatMessage('Basics')} itemKey={PivotItemKey.Basics}>
           <BotProjectInfo projectId={projectId} />
           <AppIdAndPassword projectId={projectId} />
           <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('LUIS and QnA')} itemKey={PivotItemKey.LuisQna}>
+        <PivotItem data-testid="luisQnaTab" headerText={formatMessage('LUIS and QnA')} itemKey={PivotItemKey.LuisQna}>
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('Connections')} itemKey={PivotItemKey.Connections}>
+        <PivotItem
+          data-testid="connectionsTab"
+          headerText={formatMessage('Connections')}
+          itemKey={PivotItemKey.Connections}
+        >
           <div css={publishTargetsWrap(!isRootBot)}>
             <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
             {isRootBot && useAdapters && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
           </div>
         </PivotItem>
-        <PivotItem headerText={formatMessage('Skill Configuration')} itemKey={PivotItemKey.SkillConfig}>
+        <PivotItem
+          data-testid="skillsTab"
+          headerText={formatMessage('Skill Configuration')}
+          itemKey={PivotItemKey.SkillConfig}
+        >
           {isRootBot && <SkillHostEndPoint projectId={projectId} />}
         </PivotItem>
-        <PivotItem headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
+        <PivotItem data-testid="languageTab" headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
           <BotLanguage projectId={projectId} />
         </PivotItem>
       </Pivot>
