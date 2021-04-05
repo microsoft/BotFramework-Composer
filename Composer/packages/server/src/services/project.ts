@@ -511,7 +511,10 @@ export class BotProjectService {
             : undefined,
           luis: { ...originalProject.settings.luis },
           luFeatures: { ...originalProject.settings.luFeatures },
-          publishTargets: originalProject.settings.publishTargets,
+          publishTargets: originalProject.settings.publishTargets?.map((target) => {
+            if (target.type === 'azureFunctionsPublish') target.type = 'azurePublish';
+            return target;
+          }),
           qna: { ...originalProject.settings.qna },
           downsampling: { ...originalProject.settings.downsampling },
           skill: { ...originalProject.settings.skill },
