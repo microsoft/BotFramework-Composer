@@ -38,7 +38,7 @@ export class NuGetFeed implements IFeed {
       // Is the seed data a search result? Note that ideally we want to remove this codepath since we cannot
       // do paging or other more advanced operations. Since this path is very inflexible, also
       // ignores the query provided in the package query.
-      // Example url that ends up in this path: https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true
+      // Example url that ends up in this path: https://azuresearch-usnc.nuget.org/query?q=Tags:%22msbot-component%22&prerelease=true
       const searchResult = this.data as INuGetSearchResult;
       if (searchResult.data) {
         return this.asPackageDefinition(searchResult);

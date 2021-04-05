@@ -12,11 +12,11 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { getBaseName } from '../../utils/fileUtil';
+import { getKBName } from '../../utils/fileUtil';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 
 import { validateName, validateUrl } from './constants';
-import { styles, dialogWindow, textField } from './styles';
+import { styles, dialogWindow, textFieldKBNameFromScratch } from './styles';
 
 type EditQnAFromUrlModalProps = {
   qnaFiles: QnAFile[];
@@ -26,11 +26,15 @@ type EditQnAFromUrlModalProps = {
 };
 
 export type EditQnAFromUrlFormData = {
+  preName: string;
   name: string;
   url: string;
 };
 
 const formConfig: FieldConfig<EditQnAFromUrlFormData> = {
+  preName: {
+    defaultValue: '',
+  },
   name: {
     required: true,
     defaultValue: '',
@@ -49,10 +53,10 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
   const { onDismiss, onSubmit, qnaFiles, qnaFile } = props;
 
   formConfig.name.validate = validateName(qnaFiles.filter(({ id }) => qnaFile.id !== id));
-  formConfig.name.defaultValue = getBaseName(qnaFile.id);
+  formConfig.name.defaultValue = getKBName(qnaFile.id);
   formConfig.url.validate = validateUrl;
   formConfig.url.defaultValue = getQnAFileUrlOption(qnaFile);
-
+  formConfig.preName.defaultValue = getKBName(qnaFile.id);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors;
 
@@ -66,14 +70,14 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
   return (
     <Dialog
       dialogContentProps={{
-        type: DialogType.normal,
+        type: DialogType.close,
         title: <DialogTitle />,
         styles: styles.dialog,
       }}
       hidden={false}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: styles.modalCreateFromScratch,
       }}
       onDismiss={onDismiss}
     >
@@ -84,7 +88,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
             placeholder={formatMessage('Type a name that describes this content')}
-            styles={textField}
+            styles={textFieldKBNameFromScratch}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
           />
@@ -96,7 +100,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
             errorMessage={formErrors.url}
             label={formatMessage('Knowledge source')}
             placeholder={formatMessage('Enter a URL or browse to upload a file ')}
-            styles={textField}
+            styles={textFieldKBNameFromScratch}
             value={formData.url}
             onChange={(e, url) => updateUrl(url)}
           />

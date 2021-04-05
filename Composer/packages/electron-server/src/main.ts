@@ -181,10 +181,6 @@ async function main(show = false) {
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   initAppMenu(mainWindow);
   if (mainWindow) {
-    if (process.env.COMPOSER_DEV_TOOLS) {
-      mainWindow.webContents.openDevTools();
-    }
-
     await mainWindow.loadURL(getBaseUrl());
 
     if (show) {
@@ -296,6 +292,10 @@ async function run() {
 
     const mainWindow = getMainWindow();
     mainWindow?.webContents.send('session-update', 'session-started');
+
+    if (process.env.COMPOSER_DEV_TOOLS) {
+      mainWindow?.webContents.openDevTools();
+    }
   });
 
   // Quit when all windows are closed.
