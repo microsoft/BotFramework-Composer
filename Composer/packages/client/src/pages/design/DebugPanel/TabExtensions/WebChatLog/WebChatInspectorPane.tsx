@@ -10,6 +10,9 @@ import { useCallback } from 'react';
 import { Resizable } from 're-resizable';
 
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
+import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
+
+const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 const editorStyles = css`
   border: none;
@@ -133,12 +136,16 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
       >
         {renderHeader(inspectionData)}
         <JsonEditor
-          editorSettings={{ fadedWhenReadOnly: false }}
+          editorSettings={{
+            fadedWhenReadOnly: false,
+            fontSettings: { fontFamily: DEFAULT_FONT_SETTINGS.fontFamily, fontSize: '12px', fontWeight: 'normal' },
+          }}
           options={{
             folding: true,
             minimap: { enabled: false, showSlider: 'mouseover' },
             showFoldingControls: 'always',
             readOnly: true,
+            lineHeight: 16,
           }}
           styleOverrides={[editorStyles]}
           value={getInspectedData(inspectionData)}
