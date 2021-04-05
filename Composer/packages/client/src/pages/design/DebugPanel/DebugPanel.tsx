@@ -90,9 +90,6 @@ export const DebugPanel: React.FC = () => {
                   fontSize: FontSizes.size12,
                   cursor: 'pointer',
                 }}
-                onClick={() => {
-                  onExpandPanel(key);
-                }}
               >
                 {element}
               </Label>
@@ -116,6 +113,9 @@ export const DebugPanel: React.FC = () => {
             lineHeight: computedPivotHeight,
             fontSize: FontSizes.size14,
           },
+        }}
+        onLinkClick={(pivotItem) => {
+          if (pivotItem?.props.itemKey != null) onExpandPanel(pivotItem?.props.itemKey as DebugDrawerKeys);
         }}
       >
         {tabTitles}
