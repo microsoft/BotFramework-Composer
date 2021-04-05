@@ -55,8 +55,13 @@ const NotificationButton: React.FC<NotificationButtonProps> = ({ buttonStyles })
   };
 
   return (
-    <div aria-label={formatMessage('Open notification panel')}>
-      <IconButton iconProps={{ iconName: 'Ringer' }} styles={buttonStyles} onClick={toggleIsOpen}>
+    <div>
+      <IconButton
+        aria-label={formatMessage('Open notification panel')}
+        iconProps={{ iconName: 'Ringer' }}
+        styles={buttonStyles}
+        onClick={toggleIsOpen}
+      >
         <div css={styles.container}>
           <div aria-hidden css={styles.count(!isOpen && !!unreadNotification.length)}>
             {unreadNotification.length}

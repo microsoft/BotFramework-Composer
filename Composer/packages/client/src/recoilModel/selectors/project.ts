@@ -181,6 +181,7 @@ export const botProjectSpaceSelector = selector({
         buildEssentials,
         isPvaSchema,
         publishTypes,
+        skillManifests,
       };
     });
     return result;

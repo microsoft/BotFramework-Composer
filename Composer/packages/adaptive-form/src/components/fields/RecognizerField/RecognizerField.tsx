@@ -44,6 +44,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <Dropdown
+        ariaLabel={formatMessage('Recognizer Type')}
         data-testid="recognizerTypeDropdown"
         label={formatMessage('Recognizer Type')}
         options={dropdownOptions}
