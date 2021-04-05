@@ -43,7 +43,12 @@ const luFile: LuFile = {
   isContentUnparsed: false,
 };
 
-jest.useFakeTimers();
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 describe('<InsertEntityButton />', () => {
   it('Should call onInsertEntity callback when a menu item is clicked', () => {

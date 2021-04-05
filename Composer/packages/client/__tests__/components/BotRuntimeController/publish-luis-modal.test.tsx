@@ -6,7 +6,13 @@ import { fireEvent } from '@botframework-composer/test-utils';
 import { PublishDialog } from '../../../src/components/BotRuntimeController/publishDialog';
 import { botDisplayNameState, settingsState, dispatcherState, currentProjectIdState } from '../../../src/recoilModel';
 import { renderWithRecoil } from '../../testUtils';
-jest.useFakeTimers();
+
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 const projectId = '12abvc.as324';
 const luisConfig = {

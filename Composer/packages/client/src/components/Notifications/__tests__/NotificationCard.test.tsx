@@ -7,7 +7,12 @@ import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithReco
 import { NotificationCard, CardProps } from '../NotificationCard';
 import Timer from '../../../utils/timer';
 
-jest.useFakeTimers();
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 describe('<NotificationCard />', () => {
   it('should render the NotificationCard', () => {

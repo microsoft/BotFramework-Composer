@@ -18,8 +18,11 @@ function renderSubject(overrides = {}) {
 }
 
 describe('<LoadingTimeout />', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.useFakeTimers();
+  });
+  afterAll(() => {
+    jest.useRealTimers();
   });
 
   it('renders a spinner with "Loading"', () => {

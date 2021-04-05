@@ -41,6 +41,13 @@ describe('<BotRuntimeStatus />', () => {
   });
 
   describe('<Poll Operations />', () => {
+    beforeAll(() => {
+      jest.useFakeTimers();
+    });
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
     const updatePublishStatusMock = jest.fn();
     (httpClient.get as jest.Mock).mockImplementation(() => {
       updatePublishStatusMock();
@@ -53,13 +60,9 @@ describe('<BotRuntimeStatus />', () => {
         });
       });
     });
-    beforeEach(() => {
-      jest.useFakeTimers();
-      updatePublishStatusMock.mockClear();
-    });
 
-    afterEach(() => {
-      jest.useRealTimers();
+    beforeEach(() => {
+      updatePublishStatusMock.mockClear();
     });
 
     it('should not poll if bot is started', async () => {

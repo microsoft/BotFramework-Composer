@@ -14,7 +14,12 @@ import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload } from '../.
   getRandomValues: (arr: any[]) => crypto.randomBytes(arr.length),
 };
 
-jest.useFakeTimers();
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 const templatePayload: TemplateRefPayload = {
   kind: 'template',
