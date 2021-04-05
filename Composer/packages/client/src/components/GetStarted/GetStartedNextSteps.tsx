@@ -73,26 +73,26 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   };
 
   const updateLuisSettings = (newLuisSettings) => {
-    setSettings(projectId, {
+    setSettings(rootBotProjectId, {
       ...mergedSettings,
       luis: { ...mergedSettings.luis, ...newLuisSettings },
     });
   };
 
   const updateQNASettings = (newQNASettings) => {
-    setSettings(projectId, {
+    setSettings(rootBotProjectId, {
       ...mergedSettings,
       qna: { ...mergedSettings.qna, ...newQNASettings },
     });
   };
 
-  const linkToPackageManager = `/bot/${projectId}/plugin/package-manager/package-manager`;
-  const linkToConnections = `/bot/${projectId}/botProjectsSettings/#connections`;
-  const linkToPublishProfile = `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`;
-  const linkToLUISSettings = `/bot/${projectId}/botProjectsSettings/#luisKey`;
-  const linktoQNASettings = `/bot/${projectId}/botProjectsSettings/#qnaKey`;
-  const linkToLGEditor = `/bot/${projectId}/language-generation`;
-  const linkToLUEditor = `/bot/${projectId}/language-understanding`;
+  const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
+  const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
+  const linkToPublishProfile = `/bot/${rootBotProjectId}/botProjectsSettings/#addNewPublishProfile`;
+  const linkToLUISSettings = `/bot/${rootBotProjectId}/botProjectsSettings/#luisKey`;
+  const linktoQNASettings = `/bot/${rootBotProjectId}/botProjectsSettings/#qnaKey`;
+  const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
+  const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
 
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
