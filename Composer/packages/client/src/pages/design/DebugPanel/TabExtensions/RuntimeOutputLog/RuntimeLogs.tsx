@@ -10,16 +10,13 @@ import { useEffect, useRef } from 'react';
 
 import { botRuntimeErrorState, botRuntimeLogsState } from '../../../../../recoilModel';
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
+import { ErrorCallout } from '../../../../../components/BotRuntimeController/ErrorCallout';
 
 const stdOutStreamStyle = css`
   margin: 0;
   word-break: break-word;
   white-space: pre-wrap;
   line-height: 20px;
-`;
-
-const errorTextStyle = css`
-  color: ${SharedColors.red10};
 `;
 
 const ansiUp = new AnsiUp();
@@ -63,10 +60,12 @@ export const RuntimeLogs: React.FC<{ projectId: string }> = ({ projectId }) => {
         dangerouslySetInnerHTML={createMarkup(runtimeLogs)}
       />
       <div
-        css={[stdOutStreamStyle, errorTextStyle]}
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={createMarkup(botRuntimeErrors.message)}
-      />
+        css={{
+          color: `${SharedColors.red10}`,
+        }}
+      >
+        <ErrorCallout error={botRuntimeErrors} />
+      </div>
     </div>
   );
 };
