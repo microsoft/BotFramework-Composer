@@ -37,7 +37,7 @@ const infoType = css`
 `;
 
 const errorIcon = css`
-  color: '#A80000',
+  color: ${SharedColors.red10},
   marginRight: 8,
   paddingLeft: 12,
   fontSize: ${FontSizes.mediumPlus},
@@ -46,7 +46,7 @@ const errorIcon = css`
 export const orchestratorDownloadNotificationProps = (): CardProps => {
   return {
     title: '',
-    description: formatMessage('Orchestrator: Downloading Language Model'),
+    description: formatMessage('Orchestrator: Downloading language model'),
     type: 'pending',
     onRenderCardContent: (props) => (
       <div css={cardContent}>

@@ -20,7 +20,7 @@ import { ImportController } from '../controllers/import';
 import { StatusController } from '../controllers/status';
 import { SettingsController } from '../controllers/settings';
 import { TelemetryController } from '../controllers/telemetry';
-import { OrchestratorController } from '../controllers/orchestrator';
+import OrchestratorController from '../controllers/orchestrator';
 
 import { UtilitiesController } from './../controllers/utilities';
 
