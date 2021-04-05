@@ -16,6 +16,7 @@ import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import {
   dispatcherState,
@@ -30,6 +31,8 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
+import { ManageLuis } from '../../components/ManageLuis/ManageLuis';
+import { ManageQNA } from '../../components/ManageQNA/ManageQNA';
 
 import { title } from './styles';
 
@@ -184,6 +187,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
   const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
+  const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
+  const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
@@ -327,6 +332,20 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
+  const updateLuisSettings = (newLuisSettings) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, ...newLuisSettings },
+    });
+  };
+
+  const updateQNASettings = (newQNASettings) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      qna: { ...mergedSettings.qna, ...newQNASettings },
+    });
+  };
+
   return (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
       <div css={externalServiceContainerStyle}>
@@ -393,6 +412,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             </div>
           )}
         </div>
+        <PrimaryButton
+          styles={{ root: { width: '130px', marginTop: '15px' } }}
+          text={formatMessage('Get LUIS keys')}
+          onClick={() => {
+            setDisplayManageLuis(true);
+          }}
+        />
         <div ref={qnaKeyFieldRef}>
           <TextField
             ariaLabel={formatMessage('QnA Maker Subscription key')}
@@ -409,6 +435,35 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             onRenderLabel={onRenderLabel}
           />
         </div>
+        <PrimaryButton
+          styles={{ root: { width: '130px', marginTop: '15px' } }}
+          text={formatMessage('Get QnA key')}
+          onClick={() => {
+            setDisplayManageQNA(true);
+          }}
+        />
+        <ManageLuis
+          hidden={!displayManageLuis}
+          setDisplayManageLuis={setDisplayManageLuis}
+          onDismiss={() => {
+            setDisplayManageLuis(false);
+          }}
+          onGetKey={updateLuisSettings}
+          onNext={() => {
+            setDisplayManageLuis(false);
+          }}
+        />
+        <ManageQNA
+          hidden={!displayManageQNA}
+          setDisplayManageQna={setDisplayManageQNA}
+          onDismiss={() => {
+            setDisplayManageQNA(false);
+          }}
+          onGetKey={updateQNASettings}
+          onNext={() => {
+            setDisplayManageQNA(false);
+          }}
+        />
       </div>
     </CollapsableWrapper>
   );

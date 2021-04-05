@@ -178,6 +178,13 @@ export const locationState = atomFamily<string, string>({
   },
 });
 
+export const projectReadmeState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('readme'),
+  default: (id) => {
+    return '';
+  },
+});
+
 export const botEnvironmentState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botEnvironment'),
   default: (id) => {

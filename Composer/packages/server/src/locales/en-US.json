@@ -413,6 +413,9 @@
   "back_2900f52a": {
     "message": "Back"
   },
+  "basics_75016d2a": {
+    "message": "Basics"
+  },
   "been_used_5daccdb2": {
     "message": "Been used"
   },
@@ -473,6 +476,9 @@
   "bot_controller_319b408d": {
     "message": "Bot Controller"
   },
+  "bot_details_1995d4fe": {
+    "message": "Bot Details"
+  },
   "bot_endpoint_not_available_in_the_request_43c381f8": {
     "message": "Bot endpoint not available in the request"
   },
@@ -508,6 +514,9 @@
   },
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
+  },
+  "bot_name_bbd0779d": {
+    "message": "Bot Name"
   },
   "bot_name_cannot_not_start_with_a_number_d70239": {
     "message": "Bot name cannot not start with a number"
@@ -769,6 +778,9 @@
   },
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
     "message": "Connecting to <b>{ targetName }</b> to import bot content..."
+  },
+  "connections_917ef4e4": {
+    "message": "Connections"
   },
   "continue_ac067716": {
     "message": "Continue"
@@ -1568,6 +1580,9 @@
   "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
     "message": "fields must be either all strings or all fieldset objects"
   },
+  "file_location_9258afd3": {
+    "message": "File Location"
+  },
   "file_name_8fd421ff": {
     "message": "File name"
   },
@@ -1684,6 +1699,12 @@
   },
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
+  },
+  "get_luis_keys_4cbb975c": {
+    "message": "Get LUIS keys"
+  },
+  "get_qna_key_583b2548": {
+    "message": "Get QnA key"
   },
   "get_started_76ed4cb9": {
     "message": "Get started"
@@ -1964,6 +1985,9 @@
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
   },
+  "language_6b3e2c7c": {
+    "message": "Language"
+  },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
@@ -2143,6 +2167,9 @@
   },
   "luis_add4bbe3": {
     "message": "LUIS"
+  },
+  "luis_and_qna_7df3ee36": {
+    "message": "LUIS and QnA"
   },
   "luis_application_name_1530d3aa": {
     "message": "LUIS application name"
@@ -2891,6 +2918,9 @@
   "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
     "message": "Re-prompt for input (Reprompt dialog event)"
   },
+  "read_me_4734ca1": {
+    "message": "Read Me"
+  },
   "recent_bots_53585911": {
     "message": "Recent Bots"
   },
@@ -3034,9 +3064,6 @@
   },
   "root_bot_7bb35314": {
     "message": "Root bot."
-  },
-  "root_bot_da9de71c": {
-    "message": "Root Bot"
   },
   "root_bot_luis_authoring_key_is_empty_aec2634e": {
     "message": "Root Bot LUIS authoring key is empty"
@@ -3280,6 +3307,9 @@
   },
   "skill_9b084d2e": {
     "message": "Skill"
+  },
+  "skill_configuration_ed35b038": {
+    "message": "Skill Configuration"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "Skill Dialog Name"
@@ -3889,6 +3919,9 @@
   },
   "view_on_npm_2051324d": {
     "message": "View on npm"
+  },
+  "view_project_readme_ff079d2e": {
+    "message": "View project readme"
   },
   "vishwac_sena_45910bf0": {
     "message": "Vishwac Sena"
