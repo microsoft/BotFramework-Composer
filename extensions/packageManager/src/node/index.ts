@@ -52,6 +52,14 @@ const loadReadme = async (components) => {
           continue;
         }
       }
+
+      if (components[c].icon) {
+        const iconPath = path.resolve(rootFolder, components[c].icon);
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        if (fs.existsSync(iconPath)) {
+          components[c].iconUrl = 'data:image/png;base64' + (await readFileAsync(iconPath, 'base64'));
+        }
+      }
     }
   }
 
