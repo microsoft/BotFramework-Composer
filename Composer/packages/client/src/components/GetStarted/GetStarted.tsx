@@ -16,6 +16,7 @@ type GetStartedProps = {
   showTeachingBubble: boolean;
   requiresLUIS: boolean;
   requiresQNA: boolean;
+  projectId: string;
   onDismiss: () => void;
   onBotReady: () => void;
 };
@@ -33,6 +34,8 @@ const panelStyles = {
 const pivotStyles = { root: { paddingLeft: 20, paddingTop: 10, width: '100%' } } as IPivotStyles;
 
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
+  const { projectId, onDismiss } = props;
+
   const renderTabs = () => {
     return (
       <Pivot styles={pivotStyles}>
@@ -40,7 +43,7 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
           <GetStartedNextSteps {...props} />
         </PivotItem>
         <PivotItem headerText={formatMessage('Learning')}>
-          <GetStartedLearn />
+          <GetStartedLearn projectId={projectId} onDismiss={onDismiss} />
         </PivotItem>
       </Pivot>
     );
