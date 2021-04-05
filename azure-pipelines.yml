@@ -37,8 +37,10 @@ jobs:
             yo @microsoft/bot-empty testBot
             
             cd testBot/testBot
+
+            dotnet user-secrets init --project testBot.csproj
             
-            dotnet build --propject testBot.csproj
+            dotnet build testBot.csproj
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
