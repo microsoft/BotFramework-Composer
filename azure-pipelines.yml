@@ -26,17 +26,19 @@ jobs:
         displayName: "Use Node 14.15.5"
         inputs:
           versionSpec: 14.15.5
-      - task: DotNetCoreCLI@2
+      - task: Bash@3
         inputs:
-          command: 'build'
-          projects: './test.csproj'
-      # - task: Cache@2
-      #   inputs:
-      #     key: yarn | $(Agent.OS) | Composer/yarn.lock
-      #     path: $(YARN_CACHE_FOLDER)
-      #     restoreKeys: |
-      #       yarn | $(Agent.OS)
-      #   displayName: Cache Yarn packages
+          targetType: 'inline'
+          script: |
+            # Write your commands here
+            
+            npm install -g yeoman @microsoft/generator-bot-empty
+            
+            yo @microsoft/bot-empty testBot
+            
+            cd testBot/testBot
+            
+            dotnet build --propject testBot.csproj
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
