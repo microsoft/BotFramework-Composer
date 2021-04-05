@@ -39,17 +39,15 @@ class Indexer {
 
   private separateDialogsAndRecognizers = (files: FileInfo[]) => {
     return files.reduce(
-      (result: { dialogs: FileInfo[]; recognizers: FileInfo[]; topics: FileInfo[] }, file) => {
+      (result: { dialogs: FileInfo[]; recognizers: FileInfo[] }, file) => {
         if (file.name.endsWith('.lu.dialog') || file.name.endsWith('.qna.dialog')) {
           result.recognizers.push(file);
-        } else if (file.relativePath.startsWith('topics/')) {
-          result.topics.push(file);
         } else {
           result.dialogs.push(file);
         }
         return result;
       },
-      { dialogs: [], recognizers: [], topics: [] }
+      { dialogs: [], recognizers: [] }
     );
   };
 
@@ -76,12 +74,11 @@ class Indexer {
 
   public index(files: FileInfo[], botName: string) {
     const result = this.classifyFile(files);
-    const { dialogs, recognizers, topics } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
+    const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
     const { skillManifestFiles, crossTrainConfigs } = this.separateConfigAndManifests(result[FileExtensions.Manifest]);
 
     const assets = {
       dialogs: dialogIndexer.index(dialogs, botName),
-      topics: dialogIndexer.index(topics, botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgResources: this.getResources(result[FileExtensions.lg], FileExtensions.lg),
       luResources: this.getResources(result[FileExtensions.Lu], FileExtensions.Lu),
