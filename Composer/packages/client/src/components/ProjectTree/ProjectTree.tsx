@@ -7,7 +7,15 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { jsx, css } from '@emotion/core';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
+import {
+  DialogInfo,
+  ITrigger,
+  Diagnostic,
+  DiagnosticSeverity,
+  LanguageFileImport,
+  getFriendlyName,
+  icons,
+} from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
@@ -52,17 +60,6 @@ const focusStyle = css`
   height: 100%;
   position: relative;
 `;
-
-const icons = {
-  TRIGGER: 'LightningBolt',
-  DIALOG: 'Org',
-  FORM_DIALOG: 'Table',
-  FORM_FIELD: 'Variable2', // x in parentheses
-  FORM_TRIGGER: 'TriggerAuto', // lightning bolt with gear
-  FILTER: 'Filter',
-  LG: 'Robot',
-  LU: 'People',
-};
 
 const tree = css`
   height: calc(100% - 45px);
