@@ -9,9 +9,17 @@ import { AddLanguageModal, DeleteLanguageModal } from '../../../src/components/M
 const defaultLanguage = 'en-us';
 const languages = ['en-us', 'zh-cn'];
 const locale = 'zh-cn';
+
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
+});
+
 describe('<AddLanguageModal />', () => {
   it('should render the AddLanguageModal form, and do add language', () => {
-    jest.useFakeTimers();
     const onSubmit = jest.fn(() => {});
     const onDismiss = jest.fn(() => {});
     const { getByText } = render(
@@ -40,7 +48,6 @@ describe('<AddLanguageModal />', () => {
 
 describe('<DeleteLanguageModal />', () => {
   it('should render the DeleteLanguageModal form, and do add language', () => {
-    jest.useFakeTimers();
     const onSubmit = jest.fn(() => {});
     const onDismiss = jest.fn(() => {});
     const { getByText } = render(
