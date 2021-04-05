@@ -177,7 +177,7 @@ export const Header = () => {
   // ... if the get started widget moves, this code should too!
   const requiredStuff = useRecoilValue(allRequiredRecognizersSelector);
   const requiresLUIS = requiredStuff.some((p) => p.requiresLUIS);
-  const requiresQNA = requiredStuff.filter((p) => p.requiresQNA)?.length ? true : false;
+  const requiresQNA = requiredStuff.some((p) => p.requiresQNA);
   // ... end of get started stuff
 
   const isShow = useBotControllerBar();
