@@ -44,7 +44,7 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'actions',
         location: 'visualEditor',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]&focused=triggers[0].actions[0]`,
         targetId: 'action',
       },
     ],
