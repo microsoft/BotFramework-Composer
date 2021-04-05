@@ -7,15 +7,16 @@ import moment from 'moment';
 import formatMessage from 'format-message';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import React, { useState, Fragment, useMemo } from 'react';
+import React, { useState, Fragment, useMemo, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishResult } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
+import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
@@ -48,6 +49,25 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
 }) => {
   const [expandedBotIds, setExpandedBotIds] = useState<Record<string, boolean>>({});
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
+  const [clipboardText, setClipboardText] = useState('');
+  const clipboardTextFieldRef = useRef<ITextField>(null);
+
+  const copyStringToClipboard = (value?: string) => {
+    try {
+      if (clipboardTextFieldRef.current) {
+        setClipboardText(value || '');
+        setTimeout(() => {
+          if (clipboardTextFieldRef.current) {
+            clipboardTextFieldRef.current.select();
+            document.execCommand('copy');
+          }
+        }, 10);
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Something went wrong when copying to the clipboard.', e, location);
+    }
+  };
 
   const displayedItems: BotStatus[] = useMemo(() => {
     if (currentSort.key !== 'Bot') return botStatusList;
@@ -245,6 +265,30 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       isPadded: true,
     },
     {
+      key: 'SkillManifest',
+      name: '',
+      className: 'skillManifest',
+      fieldName: 'skillManifestUrl',
+      minWidth: 114,
+      maxWidth: 134,
+      data: 'string',
+      onRender: (item: BotStatus) => {
+        return (
+          item?.skillManifestUrl && (
+            <ActionButton
+              title={item.skillManifestUrl}
+              onClick={() => {
+                copyStringToClipboard(item.skillManifestUrl);
+              }}
+            >
+              {formatMessage('Copy Skill Manifest URL')}
+            </ActionButton>
+          )
+        );
+      },
+      isPadded: true,
+    },
+    {
       key: 'ShowPublishHistory',
       name: '',
       className: 'showHistory',
@@ -321,6 +365,12 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
           onRenderRow={renderTableRow}
         />
       </div>
+      <TextField
+        readOnly
+        componentRef={clipboardTextFieldRef}
+        styles={{ root: { display: 'none' } }}
+        value={clipboardText}
+      />
     </div>
   );
 };
