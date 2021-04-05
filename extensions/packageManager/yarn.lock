@@ -82,6 +82,7 @@
     "@emotion/core" "^10.0.27"
     "@emotion/styled" "^10.0.27"
     office-ui-fabric-react "7.71.0"
+    react-markdown "^5.0.3"
 
 "@botframework-composer/types@*", "@botframework-composer/types@file:../../Composer/packages/types":
   version "0.0.2"
