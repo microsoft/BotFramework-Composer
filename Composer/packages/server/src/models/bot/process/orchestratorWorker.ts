@@ -108,7 +108,7 @@ export async function warmUpCache(generatedFolderPath: string, projectId: string
         new Map(snapshotData),
         false
       );
-      if (labelResolverMap?.entries) {
+      if (labelResolverMap) {
         for (const [key, labelResolver] of labelResolverMap.entries()) {
           mergedLabelResolverMap.set(key, labelResolver);
         }
@@ -189,7 +189,7 @@ export const handleMessage = async (msg: RequestMsg) => {
       }
     }
   } catch (error) {
-    process.send?.({ id: msg.id, error: { message: error?.message, stack: error?.stack } });
+    process.send?.({ id: msg.id, error: error ? { message: error.message, stack: error.stack } : undefined });
   }
 };
 
