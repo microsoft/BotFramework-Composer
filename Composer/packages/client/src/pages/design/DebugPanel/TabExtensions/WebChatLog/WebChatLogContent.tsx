@@ -11,8 +11,8 @@ import formatMessage from 'format-message';
 import {
   dispatcherState,
   rootBotProjectIdSelector,
-  webChatTraffic,
-  webChatInspectionData,
+  webChatTrafficState,
+  webChatInspectionDataState,
 } from '../../../../../recoilModel';
 import { DebugPanelTabHeaderProps } from '../types';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
@@ -45,8 +45,8 @@ const logPane = css`
 // R12: We are showing Errors from the root bot only.
 export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
-  const rawWebChatTraffic = useRecoilValue(webChatTraffic(currentProjectId ?? ''));
-  const inspectionData = useRecoilValue(webChatInspectionData(currentProjectId ?? ''));
+  const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
+  const inspectionData = useRecoilValue(webChatInspectionDataState(currentProjectId ?? ''));
   const [navigateToLatestEntry, navigateToLatestEntryWhenActive] = useState(false);
   const [currentLogItemCount, setLogItemCount] = useState<number>(0);
   const webChatContainerRef = useRef<HTMLDivElement | null>(null);

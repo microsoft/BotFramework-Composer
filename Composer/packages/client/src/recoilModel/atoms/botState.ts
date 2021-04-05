@@ -423,12 +423,12 @@ export const canRedoState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const webChatTraffic = atomFamily<ConversationTrafficItem[], string>({
+export const webChatTrafficState = atomFamily<ConversationTrafficItem[], string>({
   key: getFullyQualifiedKey('webChatTraffic'),
   default: [],
 });
 
-export const webChatInspectionData = atomFamily<WebChatInspectionData | undefined, string>({
+export const webChatInspectionDataState = atomFamily<WebChatInspectionData | undefined, string>({
   key: getFullyQualifiedKey('webChatInspectionData'),
   default: undefined,
 });

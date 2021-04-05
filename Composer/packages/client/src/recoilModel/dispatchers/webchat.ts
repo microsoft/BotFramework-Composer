@@ -5,13 +5,13 @@
 import { ConversationTrafficItem } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import { webChatTraffic, webChatInspectionData, isWebChatPanelVisibleState } from '../atoms';
+import { webChatTrafficState, webChatInspectionDataState, isWebChatPanelVisibleState } from '../atoms';
 import { WebChatInspectionData } from '../types';
 
 export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
     const { set } = callbackHelpers;
-    set(webChatTraffic(projectId), []);
+    set(webChatTrafficState(projectId), []);
   });
 
   const setWebChatPanelVisibility = useRecoilCallback((callbackHelpers: CallbackInterface) => (value: boolean) => {
@@ -25,7 +25,7 @@ export const webChatLogDispatcher = () => {
       traffic: ConversationTrafficItem | ConversationTrafficItem[]
     ) => {
       const { set } = callbackHelpers;
-      set(webChatTraffic(projectId), (currentTraffic) => {
+      set(webChatTrafficState(projectId), (currentTraffic) => {
         if (Array.isArray(traffic)) {
           return [...currentTraffic, ...traffic];
         } else {
@@ -38,7 +38,7 @@ export const webChatLogDispatcher = () => {
   const setWebChatInspectionData = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (projectId: string, inspectionData: WebChatInspectionData) => {
       const { set } = callbackHelpers;
-      set(webChatInspectionData(projectId), inspectionData);
+      set(webChatInspectionDataState(projectId), inspectionData);
     }
   );
 

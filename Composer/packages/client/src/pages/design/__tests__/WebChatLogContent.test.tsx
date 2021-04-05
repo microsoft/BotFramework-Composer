@@ -4,7 +4,7 @@
 import * as React from 'react';
 
 import { renderWithRecoil, wrapWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
-import { botProjectIdsState, projectMetaDataState, webChatTraffic } from '../../../recoilModel';
+import { botProjectIdsState, projectMetaDataState, webChatTrafficState } from '../../../recoilModel';
 import { WebChatLogContent } from '../DebugPanel/TabExtensions/WebChatLog/WebChatLogContent';
 
 const rootBotId = '123-adc';
@@ -29,7 +29,7 @@ describe('<DebugPanel />', () => {
           isRemote: false,
           isRootBot: true,
         });
-        set(webChatTraffic(rootBotId), [
+        set(webChatTrafficState(rootBotId), [
           {
             trafficType: 'activity',
             activity: {} as any,
@@ -47,7 +47,7 @@ describe('<DebugPanel />', () => {
           isRemote: false,
           isRootBot: true,
         });
-        set(webChatTraffic(rootBotId), [
+        set(webChatTrafficState(rootBotId), [
           {
             trafficType: 'activity',
             activity: {} as any,

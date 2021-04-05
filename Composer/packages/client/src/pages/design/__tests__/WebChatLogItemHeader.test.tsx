@@ -4,7 +4,7 @@
 import * as React from 'react';
 
 import { renderWithRecoil, wrapWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
-import { botProjectIdsState, projectMetaDataState, webChatTraffic } from '../../../recoilModel';
+import { botProjectIdsState, projectMetaDataState, webChatTrafficState } from '../../../recoilModel';
 import { WebChatLogItemHeader } from '../DebugPanel/TabExtensions/WebChatLog/WebChatLogItemHeader';
 
 const rootBotId = '123-adc';
@@ -16,7 +16,7 @@ describe('<DebugPanel />', () => {
     it('should render Webchat inspector header', async () => {
       const { findByText } = renderWithRecoil(<WebChatLogItemHeader isActive />, ({ set }) => {
         set(botProjectIdsState, [rootBotId]);
-        set(webChatTraffic(rootBotId), []);
+        set(webChatTrafficState(rootBotId), []);
       });
       await findByText('Web Chat');
     });
@@ -30,7 +30,7 @@ describe('<DebugPanel />', () => {
             isRootBot: true,
             isRemote: false,
           });
-          set(webChatTraffic(rootBotId), [
+          set(webChatTrafficState(rootBotId), [
             {
               error: {
                 message: 'Error validating Microsoft App ID and Password',
@@ -56,7 +56,7 @@ describe('<DebugPanel />', () => {
             isRootBot: true,
             isRemote: false,
           });
-          set(webChatTraffic(rootBotId), [
+          set(webChatTrafficState(rootBotId), [
             {
               error: {
                 message: 'Error validating Microsoft App ID and Password',
@@ -83,7 +83,7 @@ describe('<DebugPanel />', () => {
           isRootBot: true,
           isRemote: false,
         });
-        set(webChatTraffic(rootBotId), [
+        set(webChatTrafficState(rootBotId), [
           {
             error: {
               message: 'Error validating Microsoft App ID and Password',
