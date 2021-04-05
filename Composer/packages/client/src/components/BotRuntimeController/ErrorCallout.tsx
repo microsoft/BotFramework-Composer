@@ -137,7 +137,7 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   };
 
   return (
-    <div css={calloutContainer}>
+    <div css={calloutContainer} data-testid="errorCallout">
       <p css={calloutLabel} id="callout-label-id">
         {error.title}
       </p>
