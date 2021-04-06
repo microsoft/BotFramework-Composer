@@ -5,6 +5,7 @@ import { css } from '@emotion/core';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations, NeutralColors } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 const theme: ITheme = getTheme();
 const { fonts } = theme;
 
@@ -31,6 +32,7 @@ export const leftPage = css`
 export const rightPage = css`
   flex: 1;
   padding: 25px;
+  margin-bottom: 55px;
   display: flex;
   flex-direction: column;
   background: #f6f6f6;
@@ -112,6 +114,21 @@ export const recentBotsTitle = css`
   ${subtitle};
   padding: 18px 0;
 `;
+
+export const toolbar = css`
+  border-bottom: none;
+  button: {
+    font-size: ${fonts.medium.fontSize};
+  }
+`;
+
+export const toolbarButtonStyles: IButtonStyles = {
+  root: { fontSize: '14px', marginTop: '2px', marginLeft: '15px' },
+};
+
+export const toolbarFirstButtonStyles: IButtonStyles = {
+  root: { fontSize: '14px', marginTop: '2px', marginLeft: '0' },
+};
 
 export const noRecentBotsContainer = css`
   height: 227px;
@@ -236,6 +253,9 @@ export const detailListContainer = css`
   min-height: 250px;
   .ms-DetailsHeader {
     padding-top: 0;
+  }
+  .ms-DetailsHeader-cellName {
+    font-weight: 400;
   }
 `;
 

@@ -36,10 +36,6 @@ export const defaultToolbarButtonStyles: IButtonStyles = {
   root: { fontSize: '16px', marginTop: '2px', marginLeft: '15px' },
 };
 
-export const defaultFirstToolbarButtonStyles: IButtonStyles = {
-  root: { fontSize: '16px', marginTop: '2px' },
-};
-
 // -------------------- IToolbarItem -------------------- //
 
 export type IToolbarItem = {

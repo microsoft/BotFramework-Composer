@@ -11,7 +11,7 @@ import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivo
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { Toolbar, IToolbarItem, defaultToolbarButtonStyles, defaultFirstToolbarButtonStyles } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState } from '../../recoilModel';
@@ -97,7 +97,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           onClickNewBot();
           TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
         },
-        styles: defaultFirstToolbarButtonStyles,
+        styles: home.toolbarFirstButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-New',
@@ -115,7 +115,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/open`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'openBot' });
         },
-        styles: defaultToolbarButtonStyles,
+        styles: home.toolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-Open',
@@ -133,7 +133,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/${projectId}/${templateId}/save`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
         },
-        styles: defaultToolbarButtonStyles,
+        styles: home.toolbarButtonStyles,
       },
       align: 'left',
       disabled: botName ? false : true,
@@ -146,7 +146,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         <div css={home.leftPage} role="main">
           <div css={home.leftContainer}>
             <h2 css={home.recentBotsTitle}>{formatMessage(`Recent Bots`)}</h2>
-            <Toolbar css={{ borderBottom: 'none' }} toolbarItems={toolbarItems} />
+            <Toolbar css={home.toolbar} toolbarItems={toolbarItems} />
             {recentProjects.length > 0 ? (
               <RecentBotList
                 recentProjects={recentProjects}
@@ -225,7 +225,9 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        <WhatsNewsList newsList={feed.whatsNewLinks} />
+        <div css={home.rightPage}>
+          <WhatsNewsList newsList={feed.whatsNewLinks} />
+        </div>
       </div>
     </div>
   );
