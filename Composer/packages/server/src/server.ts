@@ -34,7 +34,6 @@ import DLServerContext from './directline/store/dlServerState';
 import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
-import { logNetworkTraffic } from './middleware/logNetworkTraffic';
 import { cleanHostedBots } from './utility/cleanHostedBots';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -145,7 +144,6 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   [conversationRouter, directlineRouter, attachmentsRouter].forEach((router) => {
     app.use(`${BASEURL}`, router);
     router.use((req, res, next) => addCORSHeaders(req, res, next));
-    router.use(logNetworkTraffic);
   });
 
   // next needs to be an arg in order for express to recognize this as the error handler

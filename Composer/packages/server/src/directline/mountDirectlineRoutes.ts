@@ -3,6 +3,8 @@
 import * as express from 'express';
 import { StatusCodes } from 'http-status-codes';
 
+import { logNetworkTraffic } from '../middleware/logNetworkTraffic';
+
 import {
   createGetConversationHandler,
   createGetEndpointHandler,
@@ -24,6 +26,7 @@ export const mountDirectLineRoutes = (dLServerContext: DLServerContext): express
 
   router.post(
     '/v3/directline/conversations/:conversationId/activities',
+    logNetworkTraffic,
     getBotEndpoint,
     getConversation,
     createPostActivityHandler(state)
@@ -31,6 +34,7 @@ export const mountDirectLineRoutes = (dLServerContext: DLServerContext): express
 
   router.post(
     '/v3/directline/conversations/:conversationId/upload',
+    logNetworkTraffic,
     getBotEndpoint,
     getConversation,
     createUploadHandler(state)
