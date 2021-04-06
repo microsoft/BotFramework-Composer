@@ -18,6 +18,7 @@ import {
   BotDiagnostic,
   SettingDiagnostic,
   SkillSettingDiagnostic,
+  SchemaDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
@@ -196,7 +197,7 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
     botAssets.dialogs.forEach((dialog) => {
       const diagnostics = validateSchema(dialog.id, dialog.content, sdkSchemaContent);
       fullDiagnostics.push(
-        ...diagnostics.map((d) => new DialogDiagnostic(rootProjectId, projectId, dialog.id, `${dialog.id}.dialog`, d))
+        ...diagnostics.map((d) => new SchemaDiagnostic(rootProjectId, projectId, dialog.id, `${dialog.id}.dialog`, d))
       );
     });
     return fullDiagnostics;
