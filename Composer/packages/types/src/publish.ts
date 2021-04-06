@@ -170,6 +170,10 @@ export type PublishProfile = {
       endpoint: string;
       region: string;
     };
+    qna?: {
+      subscriptionKey: string;
+      qnaRegion: string;
+    };
     MicrosoftAppId: string;
     MicrosoftAppPassword: string;
   };

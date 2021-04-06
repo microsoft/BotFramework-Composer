@@ -322,7 +322,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         environment,
         hostname,
         luisResource,
-        settings,
+        settings, // these are the settings from inside the publishing profile
         accessToken,
         luResources,
         qnaResources,
@@ -350,7 +350,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // Merge all the settings
         // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
         // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-        const mergedSettings = mergeDeep(fullSettings, settings, { luResources, qnaResources });
+        const mergedSettings = mergeDeep(applyPublishingProfileToSettings(fullSettings, config), {
+          luResources,
+          qnaResources,
+        });
 
         // Prepare parameters and then perform the actual deployment action
         const customizeConfiguration: DeployResources = {
