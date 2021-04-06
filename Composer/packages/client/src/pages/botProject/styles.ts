@@ -25,13 +25,21 @@ export const sectionHeader = css`
   padding: 6px 0;
 `;
 
-export const tableRow = css`
+export const tableHeaderRow = css`
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 42px;
   width: 750px;
   border-bottom: 1px solid ${NeutralColors.gray30};
+`;
+
+export const tableRow = css`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 42px;
+  width: 750px;
 `;
 
 export const tableRowItem = (width?: string) => css`

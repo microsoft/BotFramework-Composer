@@ -13,7 +13,7 @@ import { JSONSchema7 } from '@botframework-composer/types';
 
 import { useRouterCache } from '../../../utils/hooks';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
-import { subtitle, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
+import { subtitle, tableHeaderRow, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
 
 import AdapterModal, { AdapterRecord, hasRequired } from './ExternalAdapterModal';
 
@@ -50,7 +50,7 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string })[]) => (
     <div role="table">
-      <div css={tableRow} role="row">
+      <div css={tableHeaderRow} role="row">
         <div css={tableColumnHeader(columnSizes[0])} role="columnheader">
           {formatMessage('Name')}
         </div>

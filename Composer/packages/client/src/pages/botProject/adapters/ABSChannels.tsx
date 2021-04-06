@@ -28,6 +28,7 @@ import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '..
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
 import {
+  tableHeaderRow,
   tableRow,
   tableRowItem,
   tableColumnHeader,
@@ -504,12 +505,12 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const absTableRow = (channel: string, name: string, link: string) => (
     <div key={channel} css={tableRow}>
       <div css={tableRowItem(columnSizes[0])}>{name}</div>
-      <div css={tableRowItem(columnSizes[1])}>
+      <div css={tableRowItem(columnSizes[1])}>{absTableToggle(channel)}</div>
+      <div css={tableRowItem(columnSizes[2])}>
         <Link href={link} target="_docs">
           {formatMessage('Learn more')}
         </Link>
       </div>
-      <div css={tableRowItem(columnSizes[2])}>{absTableToggle(channel)}</div>
     </div>
   );
 
@@ -572,10 +573,10 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         )}
         {currentResource && channelStatus && (
           <Fragment>
-            <div css={tableRow}>
+            <div css={tableHeaderRow}>
               <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
-              <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Documentation')}</div>
-              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
+              <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Enabled')}</div>
+              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Documentation')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
             {absTableRow(CHANNELS.WEBCHAT, formatMessage('Web Chat'), webchatHelpLink)}
