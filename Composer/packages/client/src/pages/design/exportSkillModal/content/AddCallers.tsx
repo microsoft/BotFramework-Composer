@@ -60,7 +60,7 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
               <TextField
                 value={caller}
                 onChange={(e, newValue) => {
-                  var currentCallers = callers.slice();
+                  const currentCallers = callers.slice();
                   currentCallers[index] = newValue ?? '';
                   setCallers(currentCallers);
                 }}
@@ -82,7 +82,7 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
           handleAdd();
         }}
       >
-        {formatMessage('Add allowd callers')}
+        {formatMessage('Add allowed callers')}
       </ActionButton>
     </div>
   );

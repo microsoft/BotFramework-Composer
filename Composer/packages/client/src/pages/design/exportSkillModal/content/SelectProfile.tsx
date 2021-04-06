@@ -37,8 +37,14 @@ const onRenderLabel = (props) => {
           fontSize: '14px',
         }}
       >
-        {' '}
-        {props.label}{' '}
+        <div
+          style={{
+            paddingLeft: '5px',
+            paddingRight: '5px',
+          }}
+        >
+          {props.label}
+        </div>
       </div>
       <TooltipHost content={props.ariaLabel}>
         <Icon iconName="Info" styles={iconStyle(props.required)} />
