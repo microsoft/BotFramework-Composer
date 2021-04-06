@@ -47,6 +47,7 @@ import {
 import { ChooseResourcesList } from './ChooseResourcesList';
 import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
+import { ChooseProvisionActionStep } from './ChooseProvisionActionStep';
 
 type ProvisionFormData = {
   creationType: string;
@@ -94,6 +95,7 @@ const choiceOptions: IChoiceGroupOption[] = [
 
 const PageTypes = {
   SelectTenant: 'tenant',
+  ChooseAction: 'chooseAction',
   ConfigProvision: 'config',
   AddResources: 'add',
   ReviewResource: 'review',
@@ -293,7 +295,7 @@ export const AzureProvisionDialog: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [importConfig, setImportConfig] = useState<any>();
 
-  const [page, setPage] = useState<string>(PageTypes.ConfigProvision);
+  const [page, setPage] = useState<string>(PageTypes.ChooseAction);
   const [listItems, setListItems] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
   const isMounted = useRef<boolean>();
@@ -372,7 +374,7 @@ export const AzureProvisionDialog: React.FC = () => {
   };
 
   useEffect(() => {
-    setPage(PageTypes.ConfigProvision);
+    setPage(PageTypes.ChooseAction);
     // TODO: need to get the tenant id from the auth config when running as web app,
     // for electron we will always fetch tenants.
     if (userShouldProvideTokens()) {
@@ -390,7 +392,7 @@ export const AzureProvisionDialog: React.FC = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
-        setPage(PageTypes.ConfigProvision);
+        setPage(PageTypes.ChooseAction);
         setTitle(DialogTitle.CONFIG_RESOURCES);
         setLoginErrorMsg(undefined);
       }
@@ -1035,6 +1037,7 @@ export const AzureProvisionDialog: React.FC = () => {
       />
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div style={{ flex: 1 }}>
+          {page === PageTypes.ChooseAction && <ChooseProvisionActionStep choice="create" onChoiceChanged={() => {}} />}
           {page === PageTypes.ConfigProvision && PageFormConfig}
           {page === PageTypes.AddResources && PageAddResources()}
           {page === PageTypes.ReviewResource && PageReview}
