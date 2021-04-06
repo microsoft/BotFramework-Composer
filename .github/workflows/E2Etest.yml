@@ -3,7 +3,7 @@ name: Composer E2E test
 on:
   push:
     branches:
-      - main
+      - hond/dailyCI
   #schedule:
     #- cron: "0 0 * * *"
 
