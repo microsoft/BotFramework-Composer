@@ -8,7 +8,6 @@ import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export const createActionFromManifest = (manifest, selectEndpointIndex: number) => {
-  console.log(manifest);
   return {
     $kind: 'Microsoft.BeginSkill',
     $designer: {

@@ -475,6 +475,12 @@ export const lgDispatcher = () => {
     }
   );
 
+  const updateAllLgFiles = useRecoilCallback(
+    ({ set }: CallbackInterface) => ({ projectId, lgFiles }: { projectId: string; lgFiles: LgFile[] }) => {
+      set(lgFilesSelectorFamily(projectId), lgFiles);
+    }
+  );
+
   return {
     updateLgFile,
     createLgFile,
@@ -486,5 +492,6 @@ export const lgDispatcher = () => {
     removeLgTemplates,
     copyLgTemplate,
     reparseAllLgFiles,
+    updateAllLgFiles,
   };
 };

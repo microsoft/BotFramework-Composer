@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { luUtil } from '@bfc/indexers';
+import { luImportResolverGenerator } from '@bfc/shared';
 
 import {
   LuActionType,
@@ -11,6 +12,7 @@ import {
   LuUpdateIntentPayload,
   LuAddIntentsPayload,
   LuAddIntentPayload,
+  LuParseAllPayload,
 } from '../types';
 const ctx: Worker = self as any;
 
@@ -50,44 +52,67 @@ interface RemoveIntentsMessage {
   payload: LuRemoveIntentsPayload;
 }
 
-type LuMessageEvent = ParseMessage | AddMessage | AddsMessage | UpdateMessage | RemoveMessage | RemoveIntentsMessage;
+type ParseAllMessage = {
+  id: string;
+  type: LuActionType.ParseAll;
+  payload: LuParseAllPayload;
+};
+
+type LuMessageEvent =
+  | ParseMessage
+  | AddMessage
+  | AddsMessage
+  | UpdateMessage
+  | RemoveMessage
+  | RemoveIntentsMessage
+  | ParseAllMessage;
+
+const luFileResolver = (luFiles) => {
+  return luImportResolverGenerator(luFiles, '.lu');
+};
 
 export const handleMessage = (msg: LuMessageEvent) => {
   let result: any = null;
   switch (msg.type) {
     case LuActionType.Parse: {
-      const { id, content, luFeatures } = msg.payload;
-      result = luUtil.parse(id, content, luFeatures);
+      const { id, content, luFeatures, luFiles } = msg.payload;
+      result = luUtil.parse(id, content, luFeatures, luFiles);
+      break;
+    }
+
+    case LuActionType.ParseAll: {
+      const { luResources, luFeatures } = msg.payload;
+      result = luResources.map(({ id, content }) => luUtil.parse(id, content, luFeatures, luResources));
       break;
     }
 
     case LuActionType.AddIntent: {
-      const { luFile, intent, luFeatures } = msg.payload;
-      result = luUtil.addIntent(luFile, intent, luFeatures);
+      const { luFile, intent, luFeatures, luFiles } = msg.payload;
+      result = luUtil.addIntent(luFile, intent, luFeatures, luFileResolver(luFiles));
       break;
     }
 
     case LuActionType.AddIntents: {
-      const { luFile, intents, luFeatures } = msg.payload;
-      result = luUtil.addIntents(luFile, intents, luFeatures);
+      const { luFile, intents, luFeatures, luFiles } = msg.payload;
+      result = luUtil.addIntents(luFile, intents, luFeatures, luFileResolver(luFiles));
       break;
     }
 
     case LuActionType.UpdateIntent: {
-      const { luFile, intentName, intent, luFeatures } = msg.payload;
-      result = luUtil.updateIntent(luFile, intentName, intent || null, luFeatures);
+      const { luFile, intentName, intent, luFeatures, luFiles } = msg.payload;
+      result = luUtil.updateIntent(luFile, intentName, intent || null, luFeatures, luFileResolver(luFiles));
       break;
     }
 
     case LuActionType.RemoveIntent: {
-      const { luFile, intentName, luFeatures } = msg.payload;
-      result = luUtil.removeIntent(luFile, intentName, luFeatures);
+      const { luFile, intentName, luFeatures, luFiles } = msg.payload;
+      result = luUtil.removeIntent(luFile, intentName, luFeatures, luFileResolver(luFiles));
       break;
     }
 
     case LuActionType.RemoveIntents: {
-      const { luFile, intentNames, luFeatures } = msg.payload;
-      result = luUtil.removeIntents(luFile, intentNames, luFeatures);
+      const { luFile, intentNames, luFeatures, luFiles } = msg.payload;
+      result = luUtil.removeIntents(luFile, intentNames, luFeatures, luFileResolver(luFiles));
       break;
     }
   }

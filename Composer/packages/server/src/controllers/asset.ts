@@ -41,6 +41,14 @@ export async function getProjTemplatesV2(req: any, res: any) {
         id: QnABotTemplateId,
         name: 'QNA',
         description: formatMessage('Empty bot template that routes to qna configuration'),
+        dotnetSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
+        nodeSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
         package: {
           packageName: emptyBotNpmTemplateName,
           packageSource: 'npm',
