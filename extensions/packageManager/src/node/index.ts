@@ -129,6 +129,20 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           },
           type: PackageSourceType.NuGet,
         },
+        {
+          key: 'npm',
+          text: formatMessage('npm'),
+          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}+scope:microsoft&size=100&from=0`,
+          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
+          readonly: true,
+        },
+        {
+          key: 'npm-community',
+          text: formatMessage('JS community packages'),
+          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}&size=100&from=0`,
+          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
+          readonly: true,
+        },
       ];
 
       // If there are package sources stored in the user profile
@@ -200,6 +214,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             semVerLevel: '2.0.0',
             query: 'tags:msbot-component',
           };
+
+          composer.log('GETTING FEED', packageSource, packageSource.defaultQuery ?? packageQuery);
 
           const packages = await feed.getPackages(packageSource.defaultQuery ?? packageQuery);
 
@@ -348,6 +364,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
+
+            composer.log(
+              'MERGE RESULTS',
+              path.join(currentProject.dataDir, 'dialogs/imported'),
+              JSON.stringify(mergeResults, null, 2)
+            );
+
             const installedComponents = await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent));
             if (mergeResults) {
               res.json({
@@ -356,7 +379,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               });
 
               let runtimeLanguage = 'c#';
-              if (currentProject.settings.runtime.key === 'node-azurewebapp') {
+              if (
+                currentProject.settings.runtime.key === 'node-azurewebapp' ||
+                currentProject.settings.runtime.key.startsWith('adaptive-runtime-js')
+              ) {
                 runtimeLanguage = 'js';
               }
 
