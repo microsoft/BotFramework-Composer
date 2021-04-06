@@ -410,6 +410,12 @@
   "azure_bot_service_channels_5b358c1c": {
     "message": "Azure Bot Service channels"
   },
+  "azure_functions_5e23be5c": {
+    "message": "Azure Functions"
+  },
+  "azure_web_app_d834cb4c": {
+    "message": "Azure Web App"
+  },
   "back_2900f52a": {
     "message": "Back"
   },
@@ -1505,9 +1511,6 @@
   "events_cf7a8c50": {
     "message": "Events"
   },
-  "example_bot_list_9be1d563": {
-    "message": "Example bot list"
-  },
   "examples_c435f08c": {
     "message": "Examples"
   },
@@ -2402,9 +2405,6 @@
   "new_13daf639": {
     "message": "New"
   },
-  "new_creation_experience_29591aca": {
-    "message": "New Creation Experience"
-  },
   "new_template_49e6f0f2": {
     "message": "New template"
   },
@@ -2704,9 +2704,6 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
-  },
-  "preview_the_new_bot_creation_experience_create_new_e0b7150f": {
-    "message": "Preview the new bot creation experience. Create new bots that use the Adaptive Runtime, and can be enhanced using Package Manager."
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -3088,6 +3085,9 @@
   },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
+  },
+  "runtime_type_f9e2419b": {
+    "message": "Runtime type"
   },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
@@ -3592,9 +3592,6 @@
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "There was error creating your KB"
-  },
-  "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
-    "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
