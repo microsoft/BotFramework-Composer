@@ -14,6 +14,9 @@
   "ErrorInfo_part3": {
     "message": "Try navigating to another node in the visual editor."
   },
+  "a_add_from_package_manager_a_4515cfc2": {
+    "message": "<a>Add from package manager</a>."
+  },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "a dialog file must have a name"
   },
@@ -407,8 +410,8 @@
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
     "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
-  "azure_bot_service_channels_5b358c1c": {
-    "message": "Azure Bot Service channels"
+  "azure_connections_9e63f716": {
+    "message": "Azure connections"
   },
   "azure_functions_5e23be5c": {
     "message": "Azure Functions"
@@ -632,12 +635,6 @@
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
-  "choose_publishing_profile_ee7ecc78": {
-    "message": "Choose publishing profile"
-  },
-  "choose_subscription_3d78d10d": {
-    "message": "Choose subscription"
-  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -722,6 +719,9 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
+  "configuration_e186200": {
+    "message": "Configuration"
+  },
   "configure_adapter_2f621249": {
     "message": "Configure adapter"
   },
@@ -733,9 +733,6 @@
   },
   "configure_ecb97e30": {
     "message": "Configure"
-  },
-  "configured_8d0f4dc8": {
-    "message": "Configured"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
@@ -773,8 +770,8 @@
   "connect_to_speech_service_9d877e37": {
     "message": "Connect to Speech Service"
   },
-  "connect_your_bot_to_other_messaging_services_c7f6aed6": {
-    "message": "Connect your bot to other messaging services."
+  "connect_your_bot_to_microsoft_teams_and_webchat_or_8ab9201": {
+    "message": "Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections. <a>Learn more</a>"
   },
   "connect_your_bot_to_teams_external_channels_or_ena_8b4fc9f0": {
     "message": "Connect your bot to Teams, external channels, or enable speech. Learn more"
@@ -1547,8 +1544,8 @@
   "extension_settings_899ccb55": {
     "message": "Extension Settings"
   },
-  "external_service_adapters_5218e6a3": {
-    "message": "External service adapters"
+  "external_connections_3415fea5": {
+    "message": "External connections"
   },
   "external_services_da7820ce": {
     "message": "External services"
@@ -1565,8 +1562,8 @@
   "fail_to_save_bot_578fa8aa": {
     "message": "Fail to save bot"
   },
-  "failed_to_start_1edb0dbe": {
-    "message": "Failed to start"
+  "failed_276786d": {
+    "message": "Failed"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1603,6 +1600,12 @@
   },
   "filter_by_file_name_fa3d33b5": {
     "message": "Filter by file name"
+  },
+  "filter_e3398407": {
+    "message": "Filter"
+  },
+  "find_and_install_more_external_services_in_the_pac_b0cc58c6": {
+    "message": "Find and install more external services in the package manager. For further guidance, see the documentation for <a>adding external connections.</a>"
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
@@ -1879,9 +1882,6 @@
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
-  },
-  "install_more_adapters_in_a_the_package_manager_a_156fb028": {
-    "message": "Install more adapters in <a>the package manager</a>."
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
@@ -2396,9 +2396,6 @@
   "navigation_path_8b299e64": {
     "message": "Navigation Path"
   },
-  "navigation_to_see_actions_3be545c9": {
-    "message": "navigation to see actions"
-  },
   "need_another_template_send_us_a_request_5cf2a4d5": {
     "message": "Need another template? Send us a request"
   },
@@ -2636,6 +2633,9 @@
   "output_5023cf84": {
     "message": "Output"
   },
+  "outputs_e6f0bfbe": {
+    "message": "Outputs"
+  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2815,9 +2815,6 @@
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
-  },
-  "publish_profile_to_configure_ca758e68": {
-    "message": "Publish profile to configure:"
   },
   "publish_profiles_36fb522d": {
     "message": "Publish profiles"
@@ -3026,6 +3023,9 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | Priority: { priority }"
   },
+  "reset_view_d5f8245a": {
+    "message": "Reset view"
+  },
   "resource_group_41fc9245": {
     "message": "Resource group:"
   },
@@ -3086,6 +3086,9 @@
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
   },
+  "runtime_log_9069fda7": {
+    "message": "Runtime log."
+  },
   "runtime_type_f9e2419b": {
     "message": "Runtime type"
   },
@@ -3143,8 +3146,8 @@
   "search_templates_669eab41": {
     "message": "Search templates"
   },
-  "see_details_da74090e": {
-    "message": "See Details"
+  "see_details_15c93092": {
+    "message": "See details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
@@ -3155,8 +3158,8 @@
   "select_a_template_874fe803": {
     "message": "Select a template"
   },
-  "select_a_trigger_on_the_left_a4b41558": {
-    "message": "Select a trigger on the left"
+  "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
+    "message": "Select a trigger in the left<br />navigation to see actions"
   },
   "select_a_trigger_type_219bb52f": {
     "message": "Select a trigger type"
@@ -3196,6 +3199,9 @@
   },
   "select_property_type_45c6e68e": {
     "message": "Select property type"
+  },
+  "select_publishing_profile_a3f478e2": {
+    "message": "Select publishing profile"
   },
   "select_qna_keys_29abf5cb": {
     "message": "Select QNA keys"
@@ -3665,9 +3671,6 @@
   "title_ee03d132": {
     "message": "Title"
   },
-  "title_msg_ee91458d": {
-    "message": "{ title }. { msg }"
-  },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
   },
@@ -3745,9 +3748,6 @@
   },
   "trueselector_40702dda": {
     "message": "TrueSelector"
-  },
-  "try_again_ad656c3c": {
-    "message": "Try again"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
@@ -4084,5 +4084,11 @@
   },
   "your_template_requires_qna_maker_to_access_content_a4ca6f76": {
     "message": "Your template requires QnA Maker to access content for your bot."
+  },
+  "zoom_in_3205e865": {
+    "message": "Zoom in"
+  },
+  "zoom_out_e4302632": {
+    "message": "Zoom out"
   }
 }
