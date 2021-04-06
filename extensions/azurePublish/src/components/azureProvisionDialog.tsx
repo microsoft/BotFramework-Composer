@@ -268,7 +268,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const currentConfig = removePlaceholder(publishConfig);
   const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
-  const [isManualToken, setIsManualToken] = useState<boolean>();
   const [token, setToken] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentUser, setCurrentUser] = useState<any>(undefined);
@@ -287,7 +286,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
-  const [isNewResourceGroupName, setIsNewResourceGroupName] = useState<boolean>(true);
   const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
   const [errorHostName, setErrorHostName] = useState('');
 
@@ -380,7 +378,6 @@ export const AzureProvisionDialog: React.FC = () => {
     if (userShouldProvideTokens()) {
       const { accessToken } = getTokenFromCache();
 
-      setIsManualToken(true);
       setToken(accessToken);
 
       // decode token
@@ -394,9 +391,11 @@ export const AzureProvisionDialog: React.FC = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
+        setPage(PageTypes.ConfigProvision);
+        setTitle(DialogTitle.CONFIG_RESOURCES);
+        setLoginErrorMsg(undefined);
       }
     } else {
-      setIsManualToken(false);
       getTenants().then((tenants) => {
         if (isMounted.current) {
           setAllTenants(tenants);
@@ -427,7 +426,7 @@ export const AzureProvisionDialog: React.FC = () => {
         }));
       }
 
-      if (!isManualToken) {
+      if (!userShouldProvideTokens()) {
         getTokenForTenant(formData.tenantId);
       }
     }
@@ -478,9 +477,6 @@ export const AzureProvisionDialog: React.FC = () => {
         const resourceGroups = await getResourceGroups(token, formData.subscriptionId);
         if (isMounted.current) {
           setResourceGroups(resourceGroups);
-
-          // After the resource groups load, isNewResourceGroupName can be determined
-          setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === formData.resourceGroup));
         }
       } catch (err) {
         // todo: how do we handle API errors in this component
@@ -662,6 +658,8 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
+  const isNewResourceGroupName = !resourceGroupNames.includes(formData.resourceGroup);
+
   const PageFormConfig = (
     <ScrollablePane
       data-is-scrollable="true"
@@ -717,7 +715,6 @@ export const AzureProvisionDialog: React.FC = () => {
                 resourceGroupNames={resourceGroupNames}
                 selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
                 onChange={(choice) => {
-                  setIsNewResourceGroupName(choice.isNew);
                   updateFormData('resourceGroup', choice.name);
                   setErrorResourceGroupName(choice.errorMessage);
                 }}
@@ -1024,51 +1021,55 @@ export const AzureProvisionDialog: React.FC = () => {
   }
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-      <div style={{ flex: 1 }}>
-        {page === PageTypes.ConfigProvision && PageFormConfig}
-        {page === PageTypes.AddResources && PageAddResources()}
-        {page === PageTypes.ReviewResource && PageReview}
-        {page === PageTypes.EditJson && (
-          <JsonEditor
-            height={400}
-            id={publishType}
-            schema={getSchema()}
-            value={currentConfig || importConfig}
-            onChange={(value) => {
-              setEditorError(false);
-              setImportConfig(value);
-            }}
-            onError={() => {
-              setEditorError(true);
-            }}
-          />
-        )}
-      </div>
-      <div
-        style={{
-          flex: 'auto',
-          flexGrow: 0,
-          background: '#FFFFFF',
-          borderTop: '1px solid #EDEBE9',
-          width: '100%',
-          textAlign: 'right',
-          height: 'fit-content',
-          padding: '24px 0px 0px',
-        }}
-      >
-        {PageFooter}
-      </div>
+    <Fragment>
       <ProvisionHandoff
         developerInstructions={formatMessage('Send this to your IT admin')}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
         title={formatMessage('Generate a provisioning request')}
-        onDismiss={() => {
-          closeDialog();
+        onBack={() => {
           setShowHandoff(false);
         }}
+        onDismiss={() => {
+          closeDialog();
+        }}
       />
-    </div>
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1 }}>
+          {page === PageTypes.ConfigProvision && PageFormConfig}
+          {page === PageTypes.AddResources && PageAddResources()}
+          {page === PageTypes.ReviewResource && PageReview}
+          {page === PageTypes.EditJson && (
+            <JsonEditor
+              height={400}
+              id={publishType}
+              schema={getSchema()}
+              value={currentConfig || importConfig}
+              onChange={(value) => {
+                setEditorError(false);
+                setImportConfig(value);
+              }}
+              onError={() => {
+                setEditorError(true);
+              }}
+            />
+          )}
+        </div>
+        <div
+          style={{
+            flex: 'auto',
+            flexGrow: 0,
+            background: '#FFFFFF',
+            borderTop: '1px solid #EDEBE9',
+            width: '100%',
+            textAlign: 'right',
+            height: 'fit-content',
+            padding: '24px 0px 0px',
+          }}
+        >
+          {PageFooter}
+        </div>
+      </div>
+    </Fragment>
   );
 };
