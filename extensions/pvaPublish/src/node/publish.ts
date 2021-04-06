@@ -260,11 +260,13 @@ export const pull = async (
     const accessToken = await getAccessToken(creds);
 
     // fetch zip containing bot content
-    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content`;
+    const query = process.env.COMPOSER_PVA_TOPICS === 'true' ? '?includeTopics=true' : '';
+    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content${query}`;
     const options: RequestInit = {
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
     };
+    logger.log('Fetching from PVA: %s', url);
     const result = await fetch(url, options);
 
     const eTag = result.headers.get('etag') || '';
