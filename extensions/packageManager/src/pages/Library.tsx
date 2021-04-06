@@ -32,7 +32,7 @@ import {
   useTelemetryClient,
   TelemetryClient,
 } from '@bfc/extension-client';
-import { Toolbar, IToolbarItem, LoadingSpinner } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem, LoadingSpinner, DisplayMarkdownDialog } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
 import { ContentHeaderStyle, HeaderText } from '../components/styles';
@@ -78,6 +78,7 @@ const Library: React.FC = () => {
   const [readmeContent, setReadmeContent] = useState<string>('');
   const [versionOptions, setVersionOptions] = useState<IContextualMenuProps | undefined>(undefined);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
   const httpClient = useHttpClient();
   const API_ROOT = '';
   const TABS = {
@@ -209,7 +210,7 @@ const Library: React.FC = () => {
       setEjectedRuntime(true);
       // detect programming language.
       // should one day be a dynamic property of the runtime or at least stored in the settings?
-      if (settings.runtime.key === 'node-azurewebapp') {
+      if (settings.runtime.key === 'node-azurewebapp' || settings.runtime.key.startsWith('adaptive-runtime-js')) {
         setRuntimeLanguage('js');
       } else {
         setRuntimeLanguage('c#');
@@ -399,6 +400,14 @@ const Library: React.FC = () => {
         setWorking('');
         updateInstalledComponents(results.data.components);
 
+        // find newly installed item
+        // and pop up the readme if one exists.
+        const newItem = results.data.components.find((i) => i.name === packageName);
+        if (newItem?.readme) {
+          setSelectedItem(newItem);
+          setReadmeHidden(false);
+        }
+
         // reload modified content
         await reloadProject();
       }
@@ -571,6 +580,16 @@ const Library: React.FC = () => {
         hidden={!isModalVisible}
         onUpdateFeed={updateFeed}
       />
+      {selectedItem && (
+        <DisplayMarkdownDialog
+          content={selectedItem?.readme}
+          hidden={readmeHidden}
+          title={'Project Readme'}
+          onDismiss={() => {
+            setReadmeHidden(true);
+          }}
+        />
+      )}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
@@ -621,6 +640,7 @@ const Library: React.FC = () => {
               <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }}>
                 <Stack.Item>
                   <Dropdown
+                    ariaLabel={formatMessage('Feeds')}
                     hidden={currentTab !== TABS.BROWSE}
                     options={feeds}
                     placeholder="Format"
@@ -732,8 +752,8 @@ const Library: React.FC = () => {
             <Fragment>
               <Stack horizontal tokens={{ childrenGap: 10 }}>
                 <Stack.Item align="center" grow={0} styles={{ root: { width: 32 } }}>
-                  {selectedItem.icon ? (
-                    <img alt="icon" height="32" src={selectedItem.icon} width="32" />
+                  {selectedItem.iconUrl ? (
+                    <img alt="icon" height="32" src={selectedItem.iconUrl} width="32" />
                   ) : (
                     <LetterIcon letter={selectedItem.name[0]} />
                   )}
@@ -826,6 +846,16 @@ const Library: React.FC = () => {
                 </p>
               )}
 
+              {selectedItem.readme && (
+                <DefaultButton
+                  styles={{ root: { marginRight: 20 } }}
+                  onClick={() => {
+                    setReadmeHidden(false);
+                  }}
+                >
+                  {formatMessage('View readme')}
+                </DefaultButton>
+              )}
               {isInstalled(selectedItem) && <DefaultButton onClick={removeComponent}>Uninstall</DefaultButton>}
             </Fragment>
           ) : (

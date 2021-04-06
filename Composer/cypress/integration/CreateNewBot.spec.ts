@@ -11,25 +11,15 @@ context('Creating a new bot', () => {
   });
 
   it('can create a new bot', () => {
-    cy.findByTestId('Create from scratch').click();
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(3000);
+    cy.findByTestId('@microsoft/generator-bot-empty').click();
     cy.findByTestId('NextStepButton').click();
-    cy.enterTextAndSubmit('NewDialogName', '__TestNewProject', 'SubmitNewBotBtn');
+    cy.enterTextAndSubmit('NewDialogName', 'TestNewProject3', 'SubmitNewBotBtn');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(150000);
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestNewProject').should('exist');
-    });
-  });
-
-  it('can create a bot from the ToDo template', () => {
-    cy.findByTestId('Create from template').click();
-    cy.findByTestId('TodoSample').click({ force: true });
-    cy.findByTestId('NextStepButton').click();
-    cy.enterTextAndSubmit('NewDialogName', '__TestNewProject2', 'SubmitNewBotBtn');
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestNewProject2').should('exist');
-      cy.findByText('addtodo').should('exist');
-      cy.findByText('cleartodos').should('exist');
-      cy.findByText('deletetodo').should('exist');
-      cy.findByText('showtodos').should('exist');
+      cy.findAllByText('TestNewProject3').should('exist');
     });
   });
 });

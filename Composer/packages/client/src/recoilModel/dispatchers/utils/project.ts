@@ -53,6 +53,7 @@ import {
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
+  projectReadmeState,
   currentProjectIdState,
   dialogSchemasState,
   dialogState,
@@ -436,7 +437,7 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
 
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { set } = callbackHelpers;
-  const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
+  const { botName, botEnvironment, location, readme, schemas, settings, id: projectId, diagnostics } = data;
   const {
     dialogs,
     dialogSchemas,
@@ -503,6 +504,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(botDiagnosticsState(projectId), diagnostics);
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
+  set(projectReadmeState(projectId), readme);
 
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
@@ -631,37 +633,6 @@ export const createNewBotFromTemplate = async (
   }
 
   return { projectId, mainDialog };
-};
-
-export const createNewBotFromTemplateV2 = async (
-  callbackHelpers,
-  templateId: string,
-  templateVersion: string,
-  name: string,
-  description: string,
-  location: string,
-  schemaUrl?: string,
-  locale?: string,
-  templateDir?: string,
-  eTag?: string,
-  alias?: string,
-  preserveRoot?: boolean
-) => {
-  const jobId = await httpClient.post(`/v2/projects`, {
-    storageId: 'default',
-    templateId,
-    templateVersion,
-    name,
-    description,
-    location,
-    schemaUrl,
-    locale,
-    templateDir,
-    eTag,
-    alias,
-    preserveRoot,
-  });
-  return jobId;
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
