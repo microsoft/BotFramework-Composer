@@ -23,7 +23,7 @@ import { CreateBotV2 } from './CreateBot';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onNext: (data: string) => void;
+  onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};

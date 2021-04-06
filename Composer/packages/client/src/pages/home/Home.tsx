@@ -20,7 +20,6 @@ import {
   feedState,
   templateIdState,
   currentProjectIdState,
-  featureFlagsState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
@@ -72,8 +71,6 @@ const Home: React.FC<RouteComponentProps> = () => {
   const templateId = useRecoilValue(templateIdState);
   const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
 
-  const featureFlags = useRecoilValue(featureFlagsState);
-
   const onItemChosen = async (item) => {
     if (item?.path) {
       await openProject(item.path, 'default', true, null, (projectId) => {
@@ -85,7 +82,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const onClickNewBot = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
-    featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
+    navigate(`v2/projects/create`);
   };
 
   const toolbarItems: IToolbarItem[] = [
@@ -228,7 +225,7 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        {!featureFlags?.NEW_CREATION_FLOW?.enabled && <WhatsNewsList newsList={feed.whatsNewLinks} />}
+        <WhatsNewsList newsList={feed.whatsNewLinks} />
       </div>
     </div>
   );
