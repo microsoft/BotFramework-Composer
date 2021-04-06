@@ -445,3 +445,8 @@ export const projectIndexingState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('projectIndexing'),
   default: false,
 });
+
+export const botRuntimeLogState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botRuntimeLogState'),
+  default: '',
+});

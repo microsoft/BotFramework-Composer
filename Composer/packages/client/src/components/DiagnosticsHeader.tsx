@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil';
 
 import { allDiagnosticsSelectorFamily } from '../recoilModel';
 
-import { ErrorInfo } from './BotRuntimeController/errorInfo';
+import { ErrorInfo } from './BotRuntimeController/ErrorInfo';
 import { WarningInfo } from './BotRuntimeController/warningInfo';
 
 const iconPosition = css`
