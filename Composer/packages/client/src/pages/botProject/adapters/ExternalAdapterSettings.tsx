@@ -50,15 +50,6 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string })[]) => (
     <div role="table">
-      <div key={'subtitle'} css={subtitle}>
-        {formatMessage.rich('Install more adapters in <a>the package manager</a>.', {
-          a: ({ children }) => (
-            <Link key="link" href={packageManagerLink}>
-              {children}
-            </Link>
-          ),
-        })}
-      </div>
       <div css={tableRow} role="row">
         <div css={tableColumnHeader(columnSizes[0])} role="columnheader">
           {formatMessage('Name')}
@@ -133,6 +124,15 @@ const ExternalAdapterSettings = (props: Props) => {
   return (
     <Fragment>
       <div data-testid="adapterSettings">{externalServices(adapterSchemas)}</div>
+      <div key={'subtitle'} css={subtitle}>
+        {formatMessage.rich('<a>Add from package manager</a>.', {
+          a: ({ children }) => (
+            <Link key="link" href={packageManagerLink}>
+              {children}
+            </Link>
+          ),
+        })}
+      </div>
       {currentKey != null && currentPackageName != null && schemaDefinitions[currentKey] != null && (
         <AdapterModal
           isOpen

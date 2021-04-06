@@ -53,14 +53,9 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
           <div css={title}>{formatMessage('External connections')}</div>
           <div css={subtitle}>
             {formatMessage.rich(
-              'Find and install more external services in <a1>the package manager</a1>. For further guidance, see the documentation for <a2>adding external connections.</a2>',
+              'Find and install more external services in the package manager. For further guidance, see the documentation for <a>adding external connections.</a>',
               {
-                a1: ({ children }) => (
-                  <Link href="http://" target="_blank">
-                    {children}
-                  </Link>
-                ),
-                a2: ({ children }) => (
+                a: ({ children }) => (
                   <Link href="http://" target="_blank">
                     {children}
                   </Link>
