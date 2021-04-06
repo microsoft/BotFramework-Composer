@@ -28,7 +28,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
 
   return (
     <div ref={containerRef}>
-      <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
+      <CollapsableWrapper title={formatMessage('Connections')} titleStyle={title}>
         <Stack
           tokens={{
             padding: '6px 0 6px 0',
@@ -36,33 +36,15 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
         >
           <div css={title}>{formatMessage('Azure connections')}</div>
           <div css={subtitle}>
-            {formatMessage.rich(
-              'Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections. <a>Learn more</a>',
-              {
-                a: ({ children }) => (
-                  <Link href="http://" target="_blank">
-                    {children}
-                  </Link>
-                ),
-              }
+            {formatMessage(
+              'Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections.'
             )}
           </div>
           <ABSChannels projectId={projectId} />
         </Stack>
         <Stack>
           <div css={title}>{formatMessage('External connections')}</div>
-          <div css={subtitle}>
-            {formatMessage.rich(
-              'Find and install more external services in the package manager. For further guidance, see the documentation for <a>adding external connections.</a>',
-              {
-                a: ({ children }) => (
-                  <Link href="http://" target="_blank">
-                    {children}
-                  </Link>
-                ),
-              }
-            )}
-          </div>
+          <div css={subtitle}>{formatMessage('Find and install more external services in the package manager.')}</div>
           <ExternalAdapterSettings projectId={projectId} />
         </Stack>
       </CollapsableWrapper>
