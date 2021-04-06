@@ -12,6 +12,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
 import { rootBotProjectIdSelector, botProjectSpaceSelector } from '../selectors/project';
+import { skillsStateSelector } from '../selectors';
+import { botNameIdentifierState } from '../atoms';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
@@ -167,50 +169,28 @@ export const settingsDispatcher = () => {
   });
 
   const setSkillAndAllowCaller = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (
-      projectId: string,
-      manifest: any,
-      selectedEndpointIndex: number
-    ) => {
+    ({ set, snapshot }: CallbackInterface) => async (projectId: string, skillId: string, endpointName: string) => {
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (!rootBotProjectId) {
         return;
       }
-
+      const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(skillId));
       const settings = await snapshot.getPromise(settingsState(rootBotProjectId));
+      const skills = await snapshot.getPromise(skillsStateSelector);
+      const manifest = skills[manifestIdentifier]?.manifest;
+      let msAppId, endpointUrl;
 
-      let msAppId = '',
-        endpointUrl = '',
-        endpointName = '';
-
-      console.log(manifest);
-      if (selectedEndpointIndex !== -1 && manifest) {
-        const data = manifest.endpoints[selectedEndpointIndex];
-        msAppId = data.msAppId;
-        endpointUrl = data.endpointUrl;
-        endpointName = data.name;
+      if (manifest?.endpoints) {
+        const cur = manifest.endpoints.find((item) => item.name === endpointName);
+        endpointUrl = cur?.endpointUrl || '';
+        msAppId = cur?.msAppId || '';
       }
-      // set(botProjectFileState(rootBotProjectId), (current) => {
-      //   const result = produce(current, (draftState) => {
-      //     draftState.content.skills[skillNameIdentifier].endpointName = endpointName;
-      //   });
-      //   return result;
-      // });
-
-      // else {
-      // set(botProjectFileState(rootBotProjectId), (current) => {
-      //   const result = produce(current, (draftState) => {
-      //     delete draftState.content.skills[skillNameIdentifier].endpointName;
-      //   });
-      //   return result;
-      // });
-      // }
       if (settings.skill) {
         set(settingsState(projectId), (currentValue) => ({
           ...currentValue,
           skill: {
             ...settings.skill,
-            [manifest.name]: {
+            [manifestIdentifier]: {
               endpointUrl,
               msAppId,
             },

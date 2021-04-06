@@ -43,7 +43,6 @@ const text = css`
 `;
 export const SkillDetail: React.FC<SkillDetailProps> = (props) => {
   const { manifest } = props;
-  console.log(manifest);
   return (
     <div css={container}>
       <div css={title}>{formatMessage(manifest?.name || '')}</div>
