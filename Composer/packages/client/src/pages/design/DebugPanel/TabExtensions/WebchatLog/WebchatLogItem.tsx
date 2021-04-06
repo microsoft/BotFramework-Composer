@@ -12,8 +12,9 @@ export interface WebchatLogItemProps {
   item: DirectLineLog;
 }
 
+const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
+
 export const WebchatLogItem: React.FC<WebchatLogItemProps> = ({ item }) => {
-  const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
   return (
     <div
       css={{
