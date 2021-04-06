@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { MicrosoftAdaptiveDialog, BaseSchema, SchemaDefinitions, SDKKinds } from '@botframework-composer/types';
+import { BaseSchema, SchemaDefinitions, SDKKinds } from '@botframework-composer/types';
 import get from 'lodash/get';
 
 import { discoverNestedPaths } from './schemaUtils';
@@ -15,7 +15,7 @@ type VisitAdaptiveComponentFn = (
 ) => boolean;
 
 export const walkAdaptiveDialog = (
-  adaptiveDialog: MicrosoftAdaptiveDialog,
+  adaptiveDialog: BaseSchema,
   sdkSchema: SchemaDefinitions,
   fn: VisitAdaptiveComponentFn
 ): boolean => {

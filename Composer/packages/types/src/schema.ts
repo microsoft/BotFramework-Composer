@@ -149,7 +149,7 @@ interface AdaptiveSchema extends Omit<JSONSchema7, 'definitions' | 'properties' 
   $copy?: string;
   $id?: string;
   $kind?: string;
-  $role?: string | string[];
+  $role?: string;
   $designer?: {
     id: string;
     [key: string]: any;
