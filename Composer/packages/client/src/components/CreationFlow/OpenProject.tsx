@@ -35,6 +35,8 @@ interface OpenProjectProps extends RouteComponentProps<{}> {
 
 export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   const { onOpen, onDismiss, onCurrentPathUpdate, focusedStorageFolder, location } = props;
+  const titleInfo =
+    location && location.search ? DialogCreationCopy.SELECT_LOCATION_ABS : DialogCreationCopy.SELECT_LOCATION;
   const handleOpen = async (path: string, storage: string) => {
     const dataToOpen: OpenProjectFormData = { path, storage };
     dataToOpen.path = path;
@@ -51,12 +53,7 @@ export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   };
 
   return (
-    <DialogWrapper
-      {...DialogCreationCopy.SELECT_LOCATION}
-      isOpen
-      dialogType={DialogTypes.CreateFlow}
-      onDismiss={onDismiss}
-    >
+    <DialogWrapper {...titleInfo} isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
       <div data-testid="SelectLocation">
         <LocationSelectContent
           focusedStorageFolder={focusedStorageFolder}
