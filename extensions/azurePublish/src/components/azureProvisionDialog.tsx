@@ -286,7 +286,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
-  const [isNewResourceGroupName, setIsNewResourceGroupName] = useState<boolean>(true);
   const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
   const [errorHostName, setErrorHostName] = useState('');
 
@@ -426,7 +425,9 @@ export const AzureProvisionDialog: React.FC = () => {
         }));
       }
 
-      getTokenForTenant(formData.tenantId);
+      if (!userShouldProvideTokens()) {
+        getTokenForTenant(formData.tenantId);
+      }
     }
   }, [formData.tenantId]);
 
@@ -475,9 +476,6 @@ export const AzureProvisionDialog: React.FC = () => {
         const resourceGroups = await getResourceGroups(token, formData.subscriptionId);
         if (isMounted.current) {
           setResourceGroups(resourceGroups);
-
-          // After the resource groups load, isNewResourceGroupName can be determined
-          setIsNewResourceGroupName(!resourceGroups?.some((r) => r.name === formData.resourceGroup));
         }
       } catch (err) {
         // todo: how do we handle API errors in this component
@@ -659,6 +657,8 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
+  const isNewResourceGroupName = !resourceGroupNames.includes(formData.resourceGroup);
+
   const PageFormConfig = (
     <ScrollablePane
       data-is-scrollable="true"
@@ -714,7 +714,6 @@ export const AzureProvisionDialog: React.FC = () => {
                 resourceGroupNames={resourceGroupNames}
                 selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
                 onChange={(choice) => {
-                  setIsNewResourceGroupName(choice.isNew);
                   updateFormData('resourceGroup', choice.name);
                   setErrorResourceGroupName(choice.errorMessage);
                 }}
