@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+import { ILuisConfig, IQnAConfig, IOrchestratorConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
 import * as qnaUtil from '../../utils/qnaUtil';
@@ -23,7 +23,8 @@ export const builderDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (
       projectId: string,
       luisConfig: ILuisConfig,
-      qnaConfig: IQnAConfig
+      qnaConfig: IQnAConfig,
+      orchestratorConfig: IOrchestratorConfig
     ) => {
       const { set, snapshot } = callbackHelpers;
       const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
@@ -53,6 +54,7 @@ export const builderDispatcher = () => {
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
+          orchestratorConfig,
           projectId,
           luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           qnaFiles: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
