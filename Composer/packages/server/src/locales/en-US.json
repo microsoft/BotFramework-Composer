@@ -2840,8 +2840,8 @@
   "published_4bb5209e": {
     "message": "Published"
   },
-  "publishing_count_bots_b2a7f564": {
-    "message": "Publishing { count } bots"
+  "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
+    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Publishing"
@@ -3337,6 +3337,9 @@
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "Skill manifest endpoint is configured improperly"
+  },
+  "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
+    "message": "Skill manifest URL was copied to the clipboard"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
