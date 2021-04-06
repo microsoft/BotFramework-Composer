@@ -47,7 +47,7 @@ import {
 import { ChooseResourcesList } from './ChooseResourcesList';
 import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
-import { ChooseProvisionActionStep } from './ChooseProvisionActionStep';
+import { ChooseProvisionAction } from './ChooseProvisionAction';
 
 type ProvisionFormData = {
   creationType: string;
@@ -103,6 +103,10 @@ const PageTypes = {
 };
 
 const DialogTitle = {
+  CHOOSE_ACTION: {
+    title: formatMessage('Configure resources'),
+    subText: formatMessage('How you would like to provision Azure resources to your publishing profile?'),
+  },
   CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
@@ -393,7 +397,7 @@ export const AzureProvisionDialog: React.FC = () => {
           sessionExpired: false,
         });
         setPage(PageTypes.ChooseAction);
-        setTitle(DialogTitle.CONFIG_RESOURCES);
+        setTitle(DialogTitle.CHOOSE_ACTION);
         setLoginErrorMsg(undefined);
       }
     } else {
@@ -661,119 +665,105 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const isNewResourceGroupName = !resourceGroupNames.includes(formData.resourceGroup);
 
+  const PageChooseAction = (
+    <ScrollablePane
+      data-is-scrollable="true"
+      scrollbarVisibility={ScrollbarVisibility.auto}
+      style={{ height: 'calc(100vh - 64px)' }}
+    >
+      <ChooseProvisionAction
+        choice="create"
+        onChoiceChanged={(choice) => {
+          updateFormData('creationType', choice);
+        }}
+      />
+    </ScrollablePane>
+  );
+
   const PageFormConfig = (
     <ScrollablePane
       data-is-scrollable="true"
       scrollbarVisibility={ScrollbarVisibility.auto}
       style={{ height: 'calc(100vh - 64px)' }}
     >
-      <div style={{ display: 'flex', height: '100%' }}>
-        <div style={{ flex: '0 0 auto', marginRight: '2rem' }}>
-          <ChoiceGroup
-            options={choiceOptions}
-            selectedKey={formData.creationType || 'create'}
-            onChange={(_e, option) => {
-              updateFormData('creationType', option.key);
-            }}
-          />
-        </div>
-        <div style={{ flex: 1, height: '100%' }}>
-          {formData.creationType === 'create' && (
-            <form style={{ width: '100%' }}>
-              <Dropdown
-                ariaLabel={formatMessage(
-                  'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
-                )}
-                disabled={allTenants.length === 1 || currentConfig?.tenantId}
-                errorMessage={loginErrorMsg}
-                label={formatMessage('Azure Directory')}
-                options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-                selectedKey={formData.tenantId}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={(_e, o) => {
-                  updateFormData('tenantId', o.key as string);
-                }}
-                onRenderLabel={onRenderLabel}
-              />
-              <Dropdown
-                required
-                ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-                disabled={currentConfig?.subscriptionId}
-                errorMessage={subscriptionsErrorMessage}
-                label={formatMessage('Subscription')}
-                options={subscriptionOptions}
-                placeholder={formatMessage('Select one')}
-                selectedKey={formData.subscriptionId}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={(_e, o) => {
-                  updateFormData('subscriptionId', o.key as string);
-                }}
-                onRenderLabel={onRenderLabel}
-              />
-              <ResourceGroupPicker
-                disabled={currentConfig?.resourceGroup}
-                newResourceGroupName={isNewResourceGroupName ? formData.resourceGroup : undefined}
-                resourceGroupNames={resourceGroupNames}
-                selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
-                onChange={(choice) => {
-                  updateFormData('resourceGroup', choice.name);
-                  setErrorResourceGroupName(choice.errorMessage);
-                }}
-              />
-              <TextField
-                required
-                ariaLabel={formatMessage(
-                  'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
-                )}
-                disabled={currentConfig?.hostname || currentConfig?.name}
-                errorMessage={errorHostName}
-                label={formatMessage('Resource name')}
-                placeholder={formatMessage('Name of your services')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                value={formData.hostname}
-                onChange={newHostName}
-                onRenderLabel={onRenderLabel}
-              />
-              <Dropdown
-                required
-                disabled={currentConfig?.region}
-                label={formatMessage('Region')}
-                options={deployLocationsOption}
-                placeholder={formatMessage('Select one')}
-                selectedKey={formData.region}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={updateCurrentLocation}
-                onRenderLabel={onRenderLabel}
-              />
-              <Dropdown
-                required
-                disabled={currentConfig?.settings?.luis?.region}
-                label={formatMessage('Region for Luis')}
-                options={luisLocationsOption}
-                placeholder={formatMessage('Select one')}
-                selectedKey={formData.luisLocation}
-                onChange={(e, o) => {
-                  updateFormData('luisLocation', o.key as string);
-                }}
-              />
-            </form>
+      <form style={{ width: '100%' }}>
+        <Dropdown
+          ariaLabel={formatMessage(
+            'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
           )}
-          {formData.creationType === 'import' && (
-            <div style={{ width: '100%', height: '100%' }}>
-              <div
-                style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: '#323130',
-                  padding: '5px 0px',
-                }}
-              >
-                {formatMessage('Publish Configuration')}
-              </div>
-            </div>
+          disabled={allTenants.length === 1 || currentConfig?.tenantId}
+          errorMessage={loginErrorMsg}
+          label={formatMessage('Azure Directory')}
+          options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+          selectedKey={formData.tenantId}
+          styles={{ root: { paddingBottom: '8px' } }}
+          onChange={(_e, o) => {
+            updateFormData('tenantId', o.key as string);
+          }}
+          onRenderLabel={onRenderLabel}
+        />
+        <Dropdown
+          required
+          ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
+          disabled={currentConfig?.subscriptionId}
+          errorMessage={subscriptionsErrorMessage}
+          label={formatMessage('Subscription')}
+          options={subscriptionOptions}
+          placeholder={formatMessage('Select one')}
+          selectedKey={formData.subscriptionId}
+          styles={{ root: { paddingBottom: '8px' } }}
+          onChange={(_e, o) => {
+            updateFormData('subscriptionId', o.key as string);
+          }}
+          onRenderLabel={onRenderLabel}
+        />
+        <ResourceGroupPicker
+          disabled={currentConfig?.resourceGroup}
+          newResourceGroupName={isNewResourceGroupName ? formData.resourceGroup : undefined}
+          resourceGroupNames={resourceGroupNames}
+          selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
+          onChange={(choice) => {
+            updateFormData('resourceGroup', choice.name);
+            setErrorResourceGroupName(choice.errorMessage);
+          }}
+        />
+        <TextField
+          required
+          ariaLabel={formatMessage(
+            'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
           )}
-        </div>
-      </div>
+          disabled={currentConfig?.hostname || currentConfig?.name}
+          errorMessage={errorHostName}
+          label={formatMessage('Resource name')}
+          placeholder={formatMessage('Name of your services')}
+          styles={{ root: { paddingBottom: '8px' } }}
+          value={formData.hostname}
+          onChange={newHostName}
+          onRenderLabel={onRenderLabel}
+        />
+        <Dropdown
+          required
+          disabled={currentConfig?.region}
+          label={formatMessage('Region')}
+          options={deployLocationsOption}
+          placeholder={formatMessage('Select one')}
+          selectedKey={formData.region}
+          styles={{ root: { paddingBottom: '8px' } }}
+          onChange={updateCurrentLocation}
+          onRenderLabel={onRenderLabel}
+        />
+        <Dropdown
+          required
+          disabled={currentConfig?.settings?.luis?.region}
+          label={formatMessage('Region for Luis')}
+          options={luisLocationsOption}
+          placeholder={formatMessage('Select one')}
+          selectedKey={formData.luisLocation}
+          onChange={(e, o) => {
+            updateFormData('luisLocation', o.key as string);
+          }}
+        />
+      </form>
     </ScrollablePane>
   );
 
@@ -841,7 +831,7 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
-    if (page === PageTypes.ConfigProvision) {
+    if (page === PageTypes.ChooseAction) {
       return (
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
@@ -871,6 +861,61 @@ export const AzureProvisionDialog: React.FC = () => {
                 clearAll();
                 setItem(profileName, formData);
                 onBack();
+              }}
+            />
+            <PrimaryButton
+              disabled={!formData.creationType}
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Next')}
+              onClick={() => {
+                switch (formData.creationType) {
+                  case 'import':
+                    setPage(PageTypes.EditJson);
+                    setTitle(DialogTitle.EDIT);
+                    break;
+                  case 'create':
+                  case 'generate':
+                  default:
+                    setPage(PageTypes.ConfigProvision);
+                    setTitle(DialogTitle.CONFIG_RESOURCES);
+                    break;
+                }
+              }}
+            />
+          </div>
+        </div>
+      );
+    } else if (page === PageTypes.ConfigProvision) {
+      return (
+        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
+          {currentUser ? (
+            <Persona
+              secondaryText={formatMessage('Sign out')}
+              size={PersonaSize.size40}
+              text={currentUser.name}
+              onRenderSecondaryText={onRenderSecondaryText}
+            />
+          ) : (
+            <div
+              style={{ color: 'blue', cursor: 'pointer' }}
+              onClick={() => {
+                clearAll();
+                closeDialog();
+                logOut();
+              }}
+            >
+              Sign out
+            </div>
+          )}
+          <div>
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Back')}
+              onClick={() => {
+                clearAll();
+                setItem(profileName, formData);
+                setPage(PageTypes.ChooseAction);
+                setTitle(DialogTitle.CHOOSE_ACTION);
               }}
             />
             {formData.creationType === 'create' && (
@@ -1037,7 +1082,7 @@ export const AzureProvisionDialog: React.FC = () => {
       />
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div style={{ flex: 1 }}>
-          {page === PageTypes.ChooseAction && <ChooseProvisionActionStep choice="create" onChoiceChanged={() => {}} />}
+          {page === PageTypes.ChooseAction && PageChooseAction}
           {page === PageTypes.ConfigProvision && PageFormConfig}
           {page === PageTypes.AddResources && PageAddResources()}
           {page === PageTypes.ReviewResource && PageReview}

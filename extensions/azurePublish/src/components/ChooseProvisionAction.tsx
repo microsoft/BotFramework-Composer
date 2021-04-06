@@ -225,7 +225,7 @@ type Props = {
 /**
  * Provides the step where the user can choose a provisioning action.
  */
-export const ChooseProvisionActionStep = ({ choice: controlledChoice, onChoiceChanged }) => {
+export const ChooseProvisionAction = ({ choice: controlledChoice, onChoiceChanged }) => {
   const [choice, setChoice] = React.useState(controlledChoice || 'create');
 
   React.useEffect(() => {
