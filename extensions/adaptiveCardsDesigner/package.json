@@ -4,7 +4,7 @@
   "description": "The Microsoft Adaptive Cards design as a customized Composer extension.",
   "main": "dist/extension.js",
   "scripts": {
-    "build": "node ../build.js",
+    "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
   "keywords": [],
