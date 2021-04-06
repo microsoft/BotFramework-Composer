@@ -110,7 +110,7 @@ const CreateActionContent = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink>{formatMessage('Learn More')}</LearnMoreLink>
+      <LearnMoreLink href="https://aka.ms/composer-provision-create">{formatMessage('Learn More')}</LearnMoreLink>
     </Content>
   );
 };
@@ -133,31 +133,31 @@ const ImportActionContent = () => {
       </Summary>
       <Details>
         <ResourceTitle>
-          <Text>Microsoft Application Registration</Text>
+          <Text>{formatMessage('Microsoft Application Registration')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>Azure Hosting</Text>
+          <Text>{formatMessage('Azure Hosting')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>Microsoft Bot Channels Registration </Text>
+          <Text>{formatMessage('Microsoft Bot Channels Registration')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>Azure Cosmos DB </Text>
+          <Text>{formatMessage('Azure Cosmos DB')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>Application Insights </Text>
+          <Text>{formatMessage('Application Insights')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>Azure Blob Storage </Text>
+          <Text>{formatMessage('Azure Blob Storage')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>Microsoft Language Understanding (LUIS)</Text>
+          <Text>{formatMessage('Microsoft Language Understanding (LUIS)')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>Microsoft QnA Maker </Text>
+          <Text>{formatMessage('Microsoft QnA Maker')}</Text>
         </ResourceTitle>
       </Details>
-      <LearnMoreLink>{formatMessage('Learn More')}</LearnMoreLink>
+      <LearnMoreLink href="https://aka.ms/composer-provision-import">{formatMessage('Learn More')}</LearnMoreLink>
     </Content>
   );
 };
@@ -195,7 +195,7 @@ const GenerateActionContent = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink>{formatMessage('Learn More')}</LearnMoreLink>
+      <LearnMoreLink href="https://aka.ms/composer-provision-handoff">{formatMessage('Learn More')}</LearnMoreLink>
     </Content>
   );
 };

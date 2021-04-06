@@ -14,8 +14,6 @@ import { LoadingSpinner, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
-  ChoiceGroup,
-  IChoiceGroupOption,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
@@ -87,14 +85,7 @@ const iconStyle = (required) => {
   };
 };
 
-const choiceOptions: IChoiceGroupOption[] = [
-  { key: 'create', text: 'Create new Azure resources' },
-  { key: 'import', text: 'Import existing Azure resources' },
-  { key: 'generate', text: 'Generate resource request' },
-];
-
 const PageTypes = {
-  SelectTenant: 'tenant',
   ChooseAction: 'chooseAction',
   ConfigProvision: 'config',
   AddResources: 'add',
@@ -338,6 +329,27 @@ export const AzureProvisionDialog: React.FC = () => {
     setHandoffInstructions(instructions);
   };
 
+  const setPageAndTitle = (page: string) => {
+    setPage(page);
+    switch (page) {
+      case PageTypes.AddResources:
+        setTitle(DialogTitle.ADD_RESOURCES);
+        break;
+      case PageTypes.ChooseAction:
+        setTitle(DialogTitle.CHOOSE_ACTION);
+        break;
+      case PageTypes.ConfigProvision:
+        setTitle(DialogTitle.CONFIG_RESOURCES);
+        break;
+      case PageTypes.EditJson:
+        setTitle(DialogTitle.EDIT);
+        break;
+      case PageTypes.ReviewResource:
+        setTitle(DialogTitle.REVIEW);
+        break;
+    }
+  };
+
   function updateFormData<K extends keyof ProvisionFormData>(field: K, value: ProvisionFormData[K]) {
     setFormData((current) => ({ ...current, [field]: value }));
   }
@@ -396,8 +408,7 @@ export const AzureProvisionDialog: React.FC = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
-        setPage(PageTypes.ChooseAction);
-        setTitle(DialogTitle.CHOOSE_ACTION);
+        setPageAndTitle(PageTypes.ChooseAction);
         setLoginErrorMsg(undefined);
       }
     } else {
@@ -602,8 +613,7 @@ export const AzureProvisionDialog: React.FC = () => {
       const items = requireList.concat(optionalList);
       setListItems(items);
 
-      setPage(PageTypes.AddResources);
-      setTitle(DialogTitle.ADD_RESOURCES);
+      setPageAndTitle(PageTypes.AddResources);
     },
     [extensionResourceOptions]
   );
@@ -769,8 +779,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   useEffect(() => {
     if (listItems?.length === 0) {
-      setTitle(DialogTitle.EDIT);
-      setPage(PageTypes.EditJson);
+      setPageAndTitle(PageTypes.EditJson);
     }
   }, [listItems]);
 
@@ -870,14 +879,12 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 switch (formData.creationType) {
                   case 'import':
-                    setPage(PageTypes.EditJson);
-                    setTitle(DialogTitle.EDIT);
+                    setPageAndTitle(PageTypes.EditJson);
                     break;
                   case 'create':
                   case 'generate':
                   default:
-                    setPage(PageTypes.ConfigProvision);
-                    setTitle(DialogTitle.CONFIG_RESOURCES);
+                    setPageAndTitle(PageTypes.ConfigProvision);
                     break;
                 }
               }}
@@ -904,7 +911,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 logOut();
               }}
             >
-              Sign out
+              {formatMessage('Sign out')}
             </div>
           )}
           <div>
@@ -914,8 +921,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 clearAll();
                 setItem(profileName, formData);
-                setPage(PageTypes.ChooseAction);
-                setTitle(DialogTitle.CHOOSE_ACTION);
+                setPageAndTitle(PageTypes.ChooseAction);
               }}
             />
             {formData.creationType === 'create' && (
@@ -962,8 +968,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
-                setPage(PageTypes.ConfigProvision);
-                setTitle(DialogTitle.CONFIG_RESOURCES);
+                setPageAndTitle(PageTypes.ConfigProvision);
               }}
             />
             <PrimaryButton
@@ -974,8 +979,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 if (formData.creationType === 'generate') {
                   setShowHandoff(true);
                 } else {
-                  setPage(PageTypes.ReviewResource);
-                  setTitle(DialogTitle.REVIEW);
+                  setPageAndTitle(PageTypes.ReviewResource);
                   let selectedResources = formData.requiredResources.concat(formData.enabledResources);
                   selectedResources = selectedResources.map((item) => {
                     let region = currentConfig?.region || formData.region;
@@ -1011,8 +1015,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
-                setPage(PageTypes.AddResources);
-                setTitle(DialogTitle.ADD_RESOURCES);
+                setPageAndTitle(PageTypes.AddResources);
               }}
             />
             <PrimaryButton
