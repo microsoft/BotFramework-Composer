@@ -47,6 +47,14 @@ export const DebugPanel: React.FC = () => {
     TelemetryClient.track('DrawerPaneClosed');
   }, []);
 
+  const onDebugPaneClick = () => {
+    if (!isPanelExpanded) {
+      onExpandPanel('Diagnostics');
+    } else {
+      onCollapsePanel();
+    }
+  };
+
   const buildTabTitle = (tabKey: DebugDrawerKeys, TabHeaderWidget: React.FC<DebugPanelTabHeaderProps> | string) => {
     if (!TabHeaderWidget) return { key: tabKey, element: null };
 
@@ -80,6 +88,7 @@ export const DebugPanel: React.FC = () => {
                   background: 'transparent',
                   padding: 0,
                   fontSize: FontSizes.size12,
+                  cursor: 'pointer',
                 }}
               >
                 {element}
@@ -148,13 +157,12 @@ export const DebugPanel: React.FC = () => {
           {headerPivot}
         </div>
         <div
-          css={{ flexGrow: 1 }}
+          css={{ flexGrow: 1, cursor: 'pointer', outline: 'none' }}
           data-testid="header__blank"
-          onClick={() => {
-            if (!isPanelExpanded) {
-              onExpandPanel('Diagnostics');
-            }
-          }}
+          role="button"
+          tabIndex={0}
+          onClick={onDebugPaneClick}
+          onKeyPress={onDebugPaneClick}
         ></div>
         <div css={rightBarStyle} data-testid="header__right">
           <IconButton

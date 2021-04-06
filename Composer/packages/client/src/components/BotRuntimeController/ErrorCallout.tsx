@@ -3,11 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import formatMessage from 'format-message';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
@@ -19,7 +15,6 @@ const calloutLabel = css`
 `;
 
 const calloutContainer = css`
-  width: 400px;
   padding: 10px;
 `;
 
@@ -54,10 +49,6 @@ const descriptionHide = css`
 // -------------------- ErrorCallout -------------------- //
 
 export interface IErrorCalloutProps {
-  onDismiss: () => void;
-  onTry: () => void;
-  target: React.RefObject<Element> | null;
-  visible: boolean;
   error: {
     title: string;
     message: string;
@@ -91,7 +82,7 @@ fieldsWhiteList.set('signal', { visible: false, name: 'signal' });
 fieldsWhiteList.set('stderr', { visible: false, name: 'stderr' });
 
 export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
-  const { onDismiss, onTry, target, visible, error } = props;
+  const { error } = props;
 
   const convertToJson = function (item): any {
     if (typeof item === 'object') {
@@ -104,6 +95,7 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
       return null;
     }
   };
+
   const parseObject = function (map): IErrorMessage[] {
     return Object.keys(map)
       .map((k) => {
@@ -123,6 +115,7 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
         return left.order - right.order;
       });
   };
+
   const renderRow = function (obj: IErrorMessage) {
     return (
       <div css={obj.visible ? descriptionShow : descriptionHide}>
@@ -144,44 +137,23 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   };
 
   return (
-    <Callout
-      setInitialFocus
-      ariaLabel={formatMessage(`{title}. {msg}`, { title: error.title, msg: error.message })}
-      data-testid={'errorCallout'}
-      gapSpace={0}
-      hidden={!visible}
-      target={target}
-      onDismiss={onDismiss}
-    >
-      <div css={calloutContainer}>
-        <p css={calloutLabel} id="callout-label-id">
-          {error.title}
-        </p>
-        <p css={calloutDescription} id="callout-description-id">
-          {buildErrorMessage(error)}
-          {error.linkAfterMessage != null && (
-            <Link href={error.linkAfterMessage.url} target={'_blank'}>
-              {error.linkAfterMessage.text}
-            </Link>
-          )}
-        </p>
-        {error.link != null && (
-          <p css={calloutLink}>
-            <Link href={error.link.url} target={'_blank'}>
-              {error.link.text}
-            </Link>
-          </p>
+    <div css={calloutContainer} data-testid="runtime-error-callout">
+      <p css={calloutLabel}>{error.title}</p>
+      <p css={calloutDescription}>
+        {buildErrorMessage(error)}
+        {error.linkAfterMessage != null && (
+          <Link href={error.linkAfterMessage.url} target={'_blank'}>
+            {error.linkAfterMessage.text}
+          </Link>
         )}
-        <Stack
-          horizontal
-          tokens={{
-            childrenGap: 'm',
-          }}
-        >
-          <PrimaryButton text={formatMessage('Try again')} onClick={onTry} />
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-        </Stack>
-      </div>
-    </Callout>
+      </p>
+      {error.link != null && (
+        <p css={calloutLink}>
+          <Link href={error.link.url} target={'_blank'}>
+            {error.link.text}
+          </Link>
+        </p>
+      )}
+    </div>
   );
 };

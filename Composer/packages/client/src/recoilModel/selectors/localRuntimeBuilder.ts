@@ -46,6 +46,7 @@ export const buildEssentialsSelector = selectorFamily({
     const configuration = {
       luis: settings.luis,
       qna: settings.qna,
+      orchestrator: settings.orchestrator,
     };
     const dialogs = get(dialogsSelectorFamily(projectId));
     const luFiles = get(luFilesSelectorFamily(projectId));
@@ -115,7 +116,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
       if (config) {
         await dispatcher.downloadLanguageModels(projectId);
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
-        await dispatcher.build(projectId, config.luis, config.qna);
+        await dispatcher.build(projectId, config.luis, config.qna, config.orchestrator);
       }
     },
     startBot: async (projectId: string, sensitiveSettings) => {
