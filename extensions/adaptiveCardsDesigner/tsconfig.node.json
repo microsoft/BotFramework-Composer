@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "typeRoots": ["./node_modules/@types"],
+    "esModuleInterop": true
+  },
+  "include": ["src/node/**/*"]
+}
