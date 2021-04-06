@@ -122,9 +122,6 @@
   "activity_received_2f20fa9d": {
     "message": "Activity received"
   },
-  "adapters_fd4173b1": {
-    "message": "Adapters"
-  },
   "adaptive_card_785723e3": {
     "message": "Adaptive card"
   },
@@ -770,8 +767,8 @@
   "connect_to_speech_service_9d877e37": {
     "message": "Connect to Speech Service"
   },
-  "connect_your_bot_to_microsoft_teams_and_webchat_or_8ab9201": {
-    "message": "Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections. <a>Learn more</a>"
+  "connect_your_bot_to_microsoft_teams_and_webchat_or_e1cc2567": {
+    "message": "Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_8b4fc9f0": {
     "message": "Connect your bot to Teams, external channels, or enable speech. Learn more"
@@ -1232,9 +1229,6 @@
   "downloading_bb6fb34b": {
     "message": "Downloading..."
   },
-  "downloading_language_model_9d40c817": {
-    "message": "Downloading Language Model"
-  },
   "due_to_the_following_error_we_were_unable_to_succe_5ca033c7": {
     "message": "Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:"
   },
@@ -1604,8 +1598,8 @@
   "filter_e3398407": {
     "message": "Filter"
   },
-  "find_and_install_more_external_services_in_the_pac_b0cc58c6": {
-    "message": "Find and install more external services in the package manager. For further guidance, see the documentation for <a>adding external connections.</a>"
+  "find_and_install_more_external_services_in_the_pac_9a7cbe7f": {
+    "message": "Find and install more external services in the package manager."
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
@@ -2615,6 +2609,9 @@
   "or_4f7d4edb": {
     "message": "Or: "
   },
+  "orchestrator_downloading_language_model_e785be44": {
+    "message": "Orchestrator: Downloading language model"
+  },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator recognizer"
   },
@@ -2834,8 +2831,8 @@
   "published_4bb5209e": {
     "message": "Published"
   },
-  "publishing_count_bots_b2a7f564": {
-    "message": "Publishing { count } bots"
+  "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
+    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Publishing"
