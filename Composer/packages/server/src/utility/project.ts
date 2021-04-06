@@ -71,6 +71,20 @@ export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
           log('Eject skipped for project with invalid runtime setting');
         }
       }
+
+      // TO-DO: Remove this once the SDK packages are public on Nuget instad of Myget
+      // Inject a Nuget.config file into the project so that pre-release packages can be resolved.
+      fs.writeFileSync(
+        Path.join(runtimePath, 'Nuget.config'),
+        `<?xml version="1.0" encoding="utf-8"?>
+      <configuration>
+        <packageSources>
+          <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+          <add key="BotBuilder.myget.org" value="https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json" protocolVersion="3" />
+        </packageSources>
+      </configuration>`
+      );
+
       // install all dependencies and build the app
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
       await runtime.build(runtimePath, currentProject);
