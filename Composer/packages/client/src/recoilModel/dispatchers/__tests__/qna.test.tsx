@@ -45,6 +45,7 @@ jest.mock('../../parsers/qnaWorker', () => {
 
 const projectId = '123asad.123sad';
 const locale = 'en-us';
+const filteredLocales = ['ar', 'af'];
 
 const content = `# ? What's your name?
 \`\`\`
@@ -202,6 +203,8 @@ describe('QnA dispatcher', () => {
         id: 'guide',
         content: '> guide',
         projectId,
+        locale,
+        filteredLocales,
       });
     });
 
@@ -224,13 +227,13 @@ describe('QnA dispatcher', () => {
   it('should create qna kb from scratch and auto create import', async () => {
     await act(async () => {
       await dispatcher.createQnAKBFromScratch({
-        id: 'common.en-us',
+        id: 'common',
         name: 'guide',
         projectId,
       });
     });
 
-    const createdFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide.source');
+    const createdFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide.source.en-us');
     expect(createdFile).not.toBeFalsy();
 
     const commonFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'common.en-us');
@@ -240,19 +243,19 @@ describe('QnA dispatcher', () => {
   it('should rename qna kb and re-create import', async () => {
     await act(async () => {
       await dispatcher.createQnAKBFromScratch({
-        id: 'common.en-us',
+        id: 'common',
         name: 'guide',
         projectId,
       });
 
       await dispatcher.renameQnAKB({
-        id: 'guide.source',
-        name: 'guide2.source',
+        id: 'guide.source.en-us',
+        name: 'guide2',
         projectId,
       });
 
-      await dispatcher.removeQnAImport({
-        id: 'common.en-us',
+      await dispatcher.removeQnAImportOnAllLocales({
+        id: 'common',
         sourceId: 'guide.source',
         projectId,
       });
@@ -264,14 +267,14 @@ describe('QnA dispatcher', () => {
       });
     });
 
-    const createdFile1 = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide.source');
+    const createdFile1 = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide.source.en-us');
     expect(createdFile1).toBeFalsy();
 
-    const createdFile2 = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide2.source');
+    const createdFile2 = renderedComponent.current.qnaFiles.find(({ id }) => id === 'guide2.source.en-us');
     expect(createdFile2).not.toBeFalsy();
 
     const commonFile = renderedComponent.current.qnaFiles.find(({ id }) => id === 'common.en-us');
-    expect(commonFile?.content).toContain('[import](guide2.source.qna)');
     expect(commonFile?.content).not.toContain('[import](guide.source.qna)');
+    expect(commonFile?.content).toContain('[import](guide2.source.qna)');
   });
 });

@@ -65,6 +65,7 @@ const emptyLu: LuFile = {
   content: '',
   diagnostics: [],
   intents: [],
+  allIntents: [],
   empty: true,
   resource: {
     Sections: [],
@@ -173,6 +174,13 @@ export const botDisplayNameState = atomFamily<string, string>({
 
 export const locationState = atomFamily<string, string>({
   key: getFullyQualifiedKey('location'),
+  default: (id) => {
+    return '';
+  },
+});
+
+export const projectReadmeState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('readme'),
   default: (id) => {
     return '';
   },

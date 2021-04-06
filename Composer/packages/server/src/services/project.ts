@@ -109,6 +109,9 @@ export class BotProjectService {
       'turn.recognized.intent',
       'turn.recognized.score',
       'turn.recognized.text',
+      'turn.recognized.alteredText',
+      'turn.recognized.entities',
+      'turn.recognized.intents',
       'turn.unrecognizedText',
       'turn.recognizedEntities',
       'turn.interrupted',
@@ -446,7 +449,10 @@ export class BotProjectService {
       alias,
       locale,
       schemaUrl,
+      runtimeType,
+      runtimeLanguage,
     } = req.body;
+
     // get user from request
     const user = await ExtensionContext.getUserFromRequest(req);
 
@@ -473,6 +479,8 @@ export class BotProjectService {
             name,
             locationRef,
             jobId,
+            runtimeType,
+            runtimeLanguage,
             user
           );
 

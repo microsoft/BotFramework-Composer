@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { FieldLabel } from '../FieldLabel';
 
 const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
-  const { expression, onChange, value, label, id, schema, required, uiOptions } = props;
+  const { hasIcon, expression, onChange, value, label, id, schema, required, uiOptions } = props;
   const { description } = schema;
 
   const options: IDropdownOption[] = [
@@ -78,6 +78,9 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
         selectedKey={selectedKey}
         styles={{
           root: { width: '100%' },
+          title: {
+            borderRadius: hasIcon ? '0 2px 2px 0' : undefined,
+          },
           errorMessage: { display: 'none' },
         }}
         onChange={handleChange}

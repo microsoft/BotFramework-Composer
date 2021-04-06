@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FeedName } from '@botframework-composer/types/src';
+import {
+  webAppRuntimeKey,
+  functionsRuntimeKey,
+  csharpFeedKey,
+  nodeFeedKey,
+  TeamsManifest,
+} from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -399,25 +405,57 @@ export const triggerNotSupportedWarning = () =>
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
 
-export const feedDictionary: { [key in FeedName]: string } = {
-  firstPartyCsharp:
-    'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-  firstPartyNode: '',
-};
+export const firstPartyTemplateFeed =
+  'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template+scope:microsoft'; // +maintainer:botframework
 
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)
 export const defaultPrimaryLanguage = 'english';
 
-export const mockLanguageOptions: IDropdownOption[] = [
-  { key: defaultPrimaryLanguage, text: 'English' },
-  { key: 'spanish', text: 'Spanish' },
+export const runtimeLanguageOptions: IDropdownOption[] = [
+  { key: nodeFeedKey, text: 'Node' },
+  { key: csharpFeedKey, text: 'Dot Net' },
 ];
 
 export const defaultRuntime = 'azureWebApp';
 
 export const runtimeOptions: IDropdownOption[] = [
-  { key: defaultRuntime, text: 'Azure Web App' },
-  { key: 'azureFunctions', text: 'Azure Functions' },
+  { key: webAppRuntimeKey, text: 'Azure Web App' },
+  { key: functionsRuntimeKey, text: 'Azure Functions' },
 ];
 
 export const onboardingDisabled = false;
+
+export const defaultTeamsManifest: TeamsManifest = {
+  $schema: 'https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json',
+  manifestVersion: '1.9',
+  version: '1.0.0',
+  id: '',
+  packageName: '',
+  developer: {
+    name: 'contoso',
+    websiteUrl: 'https://contoso.com',
+    privacyUrl: 'https://cotoso.com/privacy',
+    termsOfUseUrl: 'https://contoso.com/terms',
+  },
+  icons: {
+    color: '',
+    outline: '',
+  },
+  name: {
+    short: '',
+    full: '',
+  },
+  description: {
+    short: '',
+    full: '',
+  },
+  accentColor: '#FFFFFF',
+  bots: [
+    {
+      botId: '',
+      scopes: ['personal'],
+    },
+  ],
+  permissions: ['identity', 'messageTeamMembers'],
+  validDomains: ['token.botframework.com'],
+};
