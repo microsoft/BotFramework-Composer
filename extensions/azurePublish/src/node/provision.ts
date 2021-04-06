@@ -49,6 +49,8 @@ export class BotProjectProvision {
     this.graphToken = config.graphToken;
   }
 
+  private sleep = (waitTimeInMs) => new Promise((resolve) => setTimeout(resolve, waitTimeInMs));
+
   /*******************************************************************************************************************************/
   /* This section has to do with creating new Azure resources
   /*******************************************************************************************************************************/
@@ -101,19 +103,29 @@ export class BotProjectProvision {
     // documented here: https://docs.microsoft.com/en-us/graph/api/resources/application?view=graph-rest-1.0#properties
     // we need the `appId` and `id` fields - appId is part of our configuration, and the `id` is used to set the password.
     let appCreated;
-    try {
-      appCreated = await rp.post(applicationUri, appCreateOptions);
-    } catch (err) {
+    let retryCount = 3;
+    while (retryCount >= 0) {
+      try {
+        appCreated = await rp.post(applicationUri, appCreateOptions);
+      } catch (err) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `App create failed: ${JSON.stringify(err, null, 4)}, retrying ...`,
+        });
+        if (retryCount == 0) {
+          throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'App create failed!');
+        } else {
+          await this.sleep(3000);
+          retryCount--;
+          continue;
+        }
+      }
       this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `App create failed: ${JSON.stringify(err, null, 4)}`,
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `Start to add password for App, Id : ${appCreated.appId}`,
       });
-      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'App create failed!');
+      break;
     }
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `Start to add password for App, Id : ${appCreated.appId}`,
-    });
 
     const appId = appCreated.appId;
 
@@ -131,16 +143,25 @@ export class BotProjectProvision {
     } as rp.RequestPromiseOptions;
 
     let passwordSet;
-    try {
-      passwordSet = await rp.post(addPasswordUri, setSecretOptions);
-    } catch (err) {
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `Add application password failed: ${JSON.stringify(err, null, 4)}`,
-      });
-      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'Add application password failed!');
+    retryCount = 3;
+    while (retryCount >= 0) {
+      try {
+        passwordSet = await rp.post(addPasswordUri, setSecretOptions);
+      } catch (err) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `Add application password failed: ${JSON.stringify(err, null, 4)}, retrying ...`,
+        });
+        if (retryCount == 0) {
+          throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'Add application password failed!');
+        } else {
+          await this.sleep(3000);
+          retryCount--;
+          continue;
+        }
+      }
+      break;
     }
-
     const appPassword = passwordSet.secretText;
 
     this.logger({
