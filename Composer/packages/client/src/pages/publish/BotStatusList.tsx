@@ -17,8 +17,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
 import { useCopyToClipboard } from '@bfc/ui-shared';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Callout } from 'office-ui-fabric-react';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
@@ -41,13 +40,13 @@ const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
 
   const calloutTarget = useRef<EventTarget>();
   return (
-    <Stack>
+    <Fragment>
       <ActionButton
         className="skill-manifest-copy-button"
         title={url}
         onClick={(e) => {
           calloutTarget.current = e.target;
-          copyTextToClipboard?.();
+          copyTextToClipboard();
         }}
       >
         {formatMessage('Copy Skill Manifest URL')}
@@ -63,7 +62,7 @@ const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
           {formatMessage('Skill manifest URL was copied to the clipboard')}
         </Callout>
       )}
-    </Stack>
+    </Fragment>
   );
 };
 

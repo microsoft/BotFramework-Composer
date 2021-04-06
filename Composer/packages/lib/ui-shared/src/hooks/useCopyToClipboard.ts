@@ -10,8 +10,8 @@ import * as React from 'react';
 
 export const copyToClipboard = (text: string) => {
   // Remember the current selection
-  const rangeCount = document?.getSelection()?.rangeCount || 0;
-  const selected = rangeCount > 0 ? document?.getSelection()?.getRangeAt(0) : false;
+  const rangeCount = document.getSelection()?.rangeCount || 0;
+  const selected = rangeCount > 0 ? document.getSelection()?.getRangeAt(0) : false;
 
   // Create an offscreen textarea and copy the text
   const element = document.createElement('textarea');
@@ -25,9 +25,9 @@ export const copyToClipboard = (text: string) => {
   document.body.removeChild(element);
 
   // Restore the previous selection
-  if (document?.getSelection() && selected) {
-    document?.getSelection()?.removeAllRanges();
-    document?.getSelection()?.addRange(selected);
+  if (selected) {
+    document.getSelection()?.removeAllRanges();
+    document.getSelection()?.addRange(selected);
   }
 
   if (!success) {
@@ -46,7 +46,7 @@ export const useCopyToClipboard = (text: string) => {
     setIsCopiedToClipboard(true);
   }, [text]);
 
-  const resetIsCopiedToClipboard = () => setIsCopiedToClipboard(false);
+  const resetIsCopiedToClipboard = React.useCallback(() => setIsCopiedToClipboard(false), []);
 
   // When the text changes, reset copied.
   React.useEffect(() => () => resetIsCopiedToClipboard(), [text]);
