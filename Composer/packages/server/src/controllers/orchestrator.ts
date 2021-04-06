@@ -52,7 +52,7 @@ async function downloadDefaultModel(req: Request, res: Response) {
   const lang = req.body;
 
   if (!isDefaultModelRequest(lang)) {
-    res.send(400);
+    res.sendStatus(400);
     return;
   }
 
@@ -62,7 +62,7 @@ async function downloadDefaultModel(req: Request, res: Response) {
 
   if (await pathExists(modelPath)) {
     state = DownloadState.ALREADYDOWNLOADED;
-    return res.send(201);
+    return res.sendStatus(201);
   }
 
   const onProgress = (msg: string) => {

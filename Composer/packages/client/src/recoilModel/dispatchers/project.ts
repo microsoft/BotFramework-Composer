@@ -43,7 +43,6 @@ import { logMessage, setError } from './../dispatchers/shared';
 import {
   checkIfBotExistsInBotProjectFile,
   createNewBotFromTemplate,
-  createNewBotFromTemplateV2,
   fetchProjectDataById,
   flushExistingTasks,
   getSkillNameIdentifier,
@@ -386,11 +385,13 @@ export const projectDispatcher = () => {
         preserveRoot,
         profile,
         source,
+        runtimeType,
+        runtimeLanguage,
       } = newProjectData;
 
       // starts the creation process and stores the jobID in state for tracking
-      const response = await createNewBotFromTemplateV2(
-        callbackHelpers,
+      const response = await httpClient.post(`/v2/projects`, {
+        storageId: 'default',
         templateId,
         templateVersion,
         name,
@@ -401,8 +402,10 @@ export const projectDispatcher = () => {
         templateDir,
         eTag,
         alias,
-        preserveRoot
-      );
+        preserveRoot,
+        runtimeType,
+        runtimeLanguage,
+      });
 
       if (response.data.jobId) {
         dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix, profile, source);
@@ -533,7 +536,7 @@ export const projectDispatcher = () => {
             const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
 
             callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
-            const { botFiles, projectData } = loadProjectData(response.data.result);
+            const { botFiles, projectData } = await loadProjectData(response.data.result);
             const projectId = response.data.result.id;
 
             if (creationFlowType === 'Skill') {

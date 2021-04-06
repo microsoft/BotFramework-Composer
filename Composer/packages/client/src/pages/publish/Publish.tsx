@@ -7,7 +7,7 @@ import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { PublishResult } from '@bfc/shared';
+import { PublishResult, PublishTarget } from '@bfc/shared';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -17,7 +17,7 @@ import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/proj
 import {
   getTokenFromCache,
   isShowAuthDialog,
-  isGetTokenFromUser,
+  userShouldProvideTokens,
   setTenantId,
   getTenantIdFromCache,
 } from '../../utils/auth';
@@ -234,40 +234,63 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     navigateTo(url);
   };
 
-  const isPublishingToAzure = (items: BotStatus[]) => {
-    for (const bot of items) {
-      const setting = botPropertyData[bot.id].setting;
-      const publishTargets = botPropertyData[bot.id].publishTargets;
-      if (!(bot.publishTarget && publishTargets && setting)) {
-        continue;
-      }
-      if (bot.publishTarget && publishTargets) {
-        const selectedTarget = publishTargets.find((target) => target.name === bot.publishTarget);
-        if (selectedTarget?.type === 'azurePublish' || selectedTarget?.type === 'azureFunctionsPublish') {
-          return true;
-        }
-      }
-    }
-    return false;
+  const isPublishingToAzure = (target?: PublishTarget) => {
+    return target?.type === 'azurePublish' || target?.type === 'azureFunctionsPublish';
   };
 
   const publish = async (items: BotStatus[]) => {
+    const tenantTokenMap = new Map<string, string>();
     // get token
-    let token = '';
-    if (isPublishingToAzure(items)) {
-      // TODO: this logic needs to be moved into the Azure publish extensions
-      if (isGetTokenFromUser()) {
-        token = getTokenFromCache('accessToken');
-      } else {
-        let tenant = getTenantIdFromCache();
-        if (!tenant) {
-          const tenants = await AuthClient.getTenants();
-          tenant = tenants?.[0]?.tenantId;
-          setTenantId(tenant);
+    const getTokenForTarget = async (target?: PublishTarget) => {
+      let token = '';
+      if (target && isPublishingToAzure(target)) {
+        const { tenantId } = JSON.parse(target.configuration);
+
+        if (userShouldProvideTokens()) {
+          token = getTokenFromCache('accessToken');
+        } else if (tenantId) {
+          token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));
+          tenantTokenMap.set(tenantId, token);
+        } else {
+          // old publish profile without tenant id
+          let tenant = getTenantIdFromCache();
+          let tenants;
+          if (!tenant) {
+            try {
+              tenants = await AuthClient.getTenants();
+
+              tenant = tenants?.[0]?.tenantId;
+              setTenantId(tenant);
+
+              token = tenantTokenMap.get(tenant) ?? (await AuthClient.getARMTokenForTenant(tenant));
+            } catch (err) {
+              let notification;
+              if (err?.message.includes('does not exist in tenant') && tenants.length > 1) {
+                notification = createNotification({
+                  type: 'error',
+                  title: formatMessage('Unsupported publishing profile'),
+                  description: formatMessage(
+                    "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it's configuration or create a new one.",
+                    { profileName: target.name }
+                  ),
+                });
+              } else {
+                notification = createNotification({
+                  type: 'error',
+                  title: formatMessage('Authentication Error'),
+                  description: formatMessage('There was an error accessing your Azure account: {errorMsg}', {
+                    errorMsg: err.message,
+                  }),
+                });
+              }
+              addNotification(notification);
+            }
+          }
         }
-        token = await AuthClient.getARMTokenForTenant(tenant);
       }
-    }
+
+      return token;
+    };
 
     setPublishDialogVisiblity(false);
     // notifications
@@ -286,11 +309,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       if (!(bot.publishTarget && publishTargets && setting)) {
         return;
       }
-      if (bot.publishTarget && publishTargets) {
-        const selectedTarget = publishTargets.find((target) => target.name === bot.publishTarget);
+      const selectedTarget = publishTargets.find((target) => target.name === bot.publishTarget);
+      if (selectedTarget) {
         const botProjectId = bot.id;
         setting.qna.subscriptionKey && (await setQnASettings(botProjectId, setting.qna.subscriptionKey));
         const sensitiveSettings = getSensitiveProperties(setting);
+        const token = await getTokenForTarget(selectedTarget);
         await publishToTarget(botProjectId, selectedTarget, { comment: bot.comment }, sensitiveSettings, token);
 
         // update the target with a lastPublished date

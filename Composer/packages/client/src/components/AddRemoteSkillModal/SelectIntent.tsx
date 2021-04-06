@@ -15,10 +15,12 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import { selectIntentDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luWorker from '../../recoilModel/parsers/luWorker';
 import { localeState, dispatcherState } from '../../recoilModel';
+import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { Orchestractor } from './Orchestractor';
 
@@ -89,9 +91,9 @@ const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: strin
   }
 };
 
-const getParsedLuFiles = async (files: { id: string; content: string }[], luFeatures) => {
+const getParsedLuFiles = async (files: { id: string; content: string }[], luFeatures, lufiles) => {
   const promises = files?.map((item) => {
-    return luWorker.parse(item.id, item.content, luFeatures) as Promise<LuFile>;
+    return luWorker.parse(item.id, item.content, luFeatures, lufiles) as Promise<LuFile>;
   });
   const luFiles: LuFile[] = await Promise.all(promises);
   return luFiles;
@@ -123,6 +125,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const locale = useRecoilValue(localeState(projectId));
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
+  const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
+  const hasOrchestractor = useMemo(() => {
+    const fileName = `${dialogId}.${locale}.lu.dialog`;
+    for (const file of curRecognizers) {
+      if (file.id === fileName) {
+        return true;
+      }
+    }
+    return false;
+  }, [curRecognizers, dialogId, locale]);
 
   const selection = useMemo(() => {
     return new Selection({
@@ -166,7 +178,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       getRemoteLuFiles(skillLanguages, languages)
         .then((items) => {
           items &&
-            getParsedLuFiles(items, luFeatures).then((files) => {
+            getParsedLuFiles(items, luFeatures, []).then((files) => {
               setLufile(files);
               files.map((file) => {
                 if (file.id.includes(locale)) {
@@ -203,6 +215,13 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     }
   }, [selectedIntents, currentLuFile]);
 
+  const handleSubmit = (ev, enableOchestractor) => {
+    // append remote lufile into root lu file
+    updateLuFile(displayContent);
+    // add trigger to root
+    onSubmit(ev, displayContent, enableOchestractor);
+  };
+
   return (
     <Fragment>
       {showOrchestratorDialog ? (
@@ -212,12 +231,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
             setShowOrchestratorDialog(false);
           }}
-          onSubmit={(ev, enable) => {
-            // append remote lufile into root lu file
-            updateLuFile(displayContent);
-            // add trigger to root
-            onSubmit(ev, displayContent, enable);
-          }}
+          onSubmit={handleSubmit}
         />
       ) : (
         <Stack>
@@ -239,7 +253,12 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             </StackItem>
           ) : (
             <StackItem>
-              <LuEditor height={400} value={displayContent} onChange={setDisplayContent} />
+              <LuEditor
+                height={400}
+                telemetryClient={TelemetryClient}
+                value={displayContent}
+                onChange={setDisplayContent}
+              />
             </StackItem>
           )}
           <Separator />
@@ -259,11 +278,18 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
                 styles={{ root: { marginLeft: '8px' } }}
-                text={formatMessage('Next')}
-                onClick={() => {
+                text={page === 1 && hasOrchestractor ? formatMessage('Done') : formatMessage('Next')}
+                onClick={(ev) => {
                   if (page === 1) {
-                    setShowOrchestratorDialog(true);
+                    if (hasOrchestractor) {
+                      // skip orchestractor modal
+                      handleSubmit(ev, true);
+                    } else {
+                      // show orchestractor
+                      setShowOrchestratorDialog(true);
+                    }
                   } else {
+                    // show next page
                     setPage(page + 1);
                     setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
                   }
