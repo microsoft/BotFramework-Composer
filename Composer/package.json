@@ -17,31 +17,39 @@
     "axios": "^0.21.1",
     "y18n": "^5.0.5",
     "immer": "^8.0.1",
-    "url-parse": "^1.5.1"
+    "url-parse": "^1.5.1",
+    "underscore": "^1.12.1"
   },
   "engines": {
     "node": ">=12"
   },
-  "workspaces": [
-    "packages/adaptive-flow",
-    "packages/adaptive-form",
-    "packages/client",
-    "packages/electron-server",
-    "packages/extension",
-    "packages/extension-client",
-    "packages/form-dialogs",
-    "packages/intellisense",
-    "packages/lib/*",
-    "packages/server",
-    "packages/test-utils",
-    "packages/tools/built-in-functions",
-    "packages/tools/language-servers/*",
-    "packages/types",
-    "packages/ui-plugins/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/adaptive-flow",
+      "packages/adaptive-form",
+      "packages/client",
+      "packages/electron-server",
+      "packages/extension",
+      "packages/extension-client",
+      "packages/form-dialogs",
+      "packages/intellisense",
+      "packages/lib/*",
+      "packages/server",
+      "packages/server-workers",
+      "packages/test-utils",
+      "packages/tools/built-in-functions",
+      "packages/tools/language-servers/*",
+      "packages/types",
+      "packages/ui-plugins/*"
+    ],
+    "nohoist": [
+      "**/server-workers/**"
+    ]
+  },
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
     "build:prod": "yarn build:dev && yarn build:client && yarn build:server && yarn build:electron",
+    "build:ci": "yarn l10n:check && yarn build:dev",
     "build:dev": "yarn build:libs && yarn build:extensions",
     "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
     "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @botframework-composer/* -p @bfc/* -c build",
@@ -67,6 +75,7 @@
     "test:integration:clean": "node scripts/clean-e2e.js",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
+    "lint:extensions": "cd ../extensions && yarn lint",
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
     "typecheck:server": "yarn workspace @bfc/server typecheck",
     "typecheck:client": "yarn workspace @bfc/client typecheck",
@@ -84,7 +93,11 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,jsx}": [
+    "**/*.{ts,tsx,js,jsx,json}": [
+      "prettier --write",
+      "git add"
+    ],
+    "../extensions/**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ]

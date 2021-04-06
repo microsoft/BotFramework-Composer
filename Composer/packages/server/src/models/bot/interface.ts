@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, ILuisConfig, IQnAConfig } from '@bfc/shared';
+import { BaseSchema, ILuisConfig, IQnAConfig, IOrchestratorConfig } from '@bfc/shared';
 
 export type Resource = { id: string; isEmpty: boolean };
 
@@ -13,6 +13,7 @@ export interface LocationRef {
 export interface IBuildConfig {
   luisConfig: ILuisConfig;
   qnaConfig: IQnAConfig;
+  orchestratorConfig?: IOrchestratorConfig;
   luResource: Resource[];
   qnaResource: Resource[];
 }
@@ -60,6 +61,7 @@ export interface IOrchestratorNLRList {
 export interface IOrchestratorProgress {
   (status: string): void;
 }
+
 export interface IOrchestratorBuildOutput {
   outputs: [{ id: string; snapshot: Uint8Array; recognizer: Record<string, BaseSchema> }];
   settings: {
@@ -67,5 +69,15 @@ export interface IOrchestratorBuildOutput {
       modelPath: string;
       snapshots: Map<string, string>;
     };
+  };
+}
+
+export interface IOrchestratorSettings {
+  orchestrator: {
+    models: {
+      en?: string;
+      multilang?: string;
+    };
+    snapshots: Record<string, string>;
   };
 }

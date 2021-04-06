@@ -16,12 +16,13 @@ import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import {
   dispatcherState,
   settingsState,
-  luFilesState,
-  qnaFilesState,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
   botDisplayNameState,
   dialogsWithLuProviderSelectorFamily,
 } from '../../recoilModel';
@@ -30,6 +31,8 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
+import { ManageLuis } from '../../components/ManageLuis/ManageLuis';
+import { ManageQNA } from '../../components/ManageQNA/ManageQNA';
 
 import { title } from './styles';
 
@@ -141,10 +144,10 @@ const onRenderLabel = (props) => {
 const errorElement = (errorText: string) => {
   if (!errorText) return '';
   return (
-    <div css={errorContainer}>
+    <span css={errorContainer}>
       <Icon iconName="ErrorBadge" styles={errorIcon} />
-      <div css={errorTextStyle}>{errorText}</div>
-    </div>
+      <span css={errorTextStyle}>{errorText}</span>
+    </span>
   );
 };
 
@@ -167,8 +170,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const rootqnaKey = groupQnAKey.root;
 
   const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const isLUISKeyNeeded = BotIndexer.shouldUseLuis(dialogs, luFiles);
   const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
@@ -184,6 +187,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
   const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
+  const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
+  const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
@@ -327,11 +332,25 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
+  const updateLuisSettings = (newLuisSettings) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, ...newLuisSettings },
+    });
+  };
+
+  const updateQNASettings = (newQNASettings) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      qna: { ...mergedSettings.qna, ...newQNASettings },
+    });
+  };
+
   return (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-label={formatMessage('LUIS application name')}
+          ariaLabel={formatMessage('LUIS application name')}
           data-testid={'rootLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('LUIS application name')}
@@ -343,7 +362,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <div ref={luisKeyFieldRef}>
           <TextField
-            aria-label={formatMessage('LUIS authoring key')}
+            ariaLabel={formatMessage('LUIS authoring key')}
             data-testid={'rootLUISAuthoringKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             id={'luisAuthoringKey'}
@@ -359,7 +378,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={luisEndpointKeyFieldRef}>
           <TextField
-            aria-label={formatMessage('LUIS endpoint key')}
+            ariaLabel={formatMessage('LUIS endpoint key')}
             data-testid={'rootLUISEndpointKey'}
             id={'luisEndpointKey'}
             label={formatMessage('LUIS endpoint key')}
@@ -373,7 +392,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={luisRegionFieldRef}>
           <Dropdown
-            aria-label={formatMessage('LUIS region')}
+            ariaLabel={formatMessage('LUIS region')}
             data-testid={'rootLUISRegion'}
             id={'luisRegion'}
             label={formatMessage('LUIS region')}
@@ -393,9 +412,16 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             </div>
           )}
         </div>
+        <PrimaryButton
+          styles={{ root: { width: '130px', marginTop: '15px' } }}
+          text={formatMessage('Get LUIS keys')}
+          onClick={() => {
+            setDisplayManageLuis(true);
+          }}
+        />
         <div ref={qnaKeyFieldRef}>
           <TextField
-            aria-label={formatMessage('QnA Maker Subscription key')}
+            ariaLabel={formatMessage('QnA Maker Subscription key')}
             data-testid={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             id={'qnaKey'}
@@ -409,6 +435,35 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             onRenderLabel={onRenderLabel}
           />
         </div>
+        <PrimaryButton
+          styles={{ root: { width: '130px', marginTop: '15px' } }}
+          text={formatMessage('Get QnA key')}
+          onClick={() => {
+            setDisplayManageQNA(true);
+          }}
+        />
+        <ManageLuis
+          hidden={!displayManageLuis}
+          setDisplayManageLuis={setDisplayManageLuis}
+          onDismiss={() => {
+            setDisplayManageLuis(false);
+          }}
+          onGetKey={updateLuisSettings}
+          onNext={() => {
+            setDisplayManageLuis(false);
+          }}
+        />
+        <ManageQNA
+          hidden={!displayManageQNA}
+          setDisplayManageQna={setDisplayManageQNA}
+          onDismiss={() => {
+            setDisplayManageQNA(false);
+          }}
+          onGetKey={updateQNASettings}
+          onNext={() => {
+            setDisplayManageQNA(false);
+          }}
+        />
       </div>
     </CollapsableWrapper>
   );

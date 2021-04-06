@@ -261,7 +261,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'locale?: string'],
       ReturnType.String,
-      'Convert a string to all upper case characters.'
+      'Convert a string to all lower case characters.'
     ),
   ],
   [
@@ -269,7 +269,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     new FunctionEntity(
       ['text: string', 'locale?: string'],
       ReturnType.String,
-      'Convert a string to all lower case characters.'
+      'Convert a string to all upper case characters.'
     ),
   ],
   [
@@ -287,7 +287,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'contains',
     new FunctionEntity(
-      ['collection: stirng|Array|Map', 'value: stirng|Array|Map'],
+      ['collection: string|Array|Map', 'value: string|Array|Map'],
       ReturnType.Boolean,
       'Works to find an item in a string or to find an item in an array or to find a parameter in a complex object. E.g. contains(‘hello world, ‘hello); contains([‘1’, ‘2’], ‘1’); contains({“foo”:”bar”}, “foo”).'
     ),
@@ -502,7 +502,6 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return string version of the specified value.'
     ),
   ],
-  ['jsonStringfy', new FunctionEntity(['value: any'], ReturnType.String, 'Return the string version of a value.')],
   ['EOL', new FunctionEntity([], ReturnType.String, 'Return the end of line (EOL) sequence text.')],
   [
     'bool',
@@ -754,7 +753,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
-    'convertFromUtc',
+    'convertFromUTC',
     new FunctionEntity(
       ['timestamp: string', 'destinationTimeZone: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
@@ -762,7 +761,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
-    'convertToUtc',
+    'convertToUTC',
     new FunctionEntity(
       ['timestamp: string', 'sourceTimeZone: string', 'format?: string', 'locale?: string'],
       ReturnType.String,
@@ -880,7 +879,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'where',
     new FunctionEntity(
-      ['collection: Array | Object', 'iteratorName: string', 'confitionFunction: any'],
+      ['collection: Array | Object', 'iteratorName: string', 'conditionFunction: any'],
       ReturnType.Object,
       'Filter on each element and return the new collection of filtered elements which match specific condition.'
     ),
@@ -891,6 +890,15 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       ['collection: Array', 'property: string'],
       ReturnType.Object,
       'Sort elements in the collection with ascending order and return the sorted collection.'
+    ),
+  ],
+  ['unique', new FunctionEntity(['collection: Array'], ReturnType.Array, 'Remove all duplicates from an array.')],
+  [
+    'flatten',
+    new FunctionEntity(
+      ['collection: Array', 'depth: Number'],
+      ReturnType.Object,
+      'Flatten an array into non-array values. You can optionally set the maximum depth to flatten to.'
     ),
   ],
   [
@@ -918,6 +926,14 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
+    'xPath',
+    new FunctionEntity(
+      ['xml: any', 'xPath: any'],
+      ReturnType.Object,
+      'C# only. Check XML for nodes or values that match an XPath (XML Path Language) expression, and return the matching nodes or values. An XPath expression (referred to as XPath) helps you navigate an XML document structure so that you can select nodes or compute values in the XML content.'
+    ),
+  ],
+  [
     'setPathToValue',
     new FunctionEntity(
       ['path: any', 'value: Object'],
@@ -934,7 +950,7 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
 
-  //type checing functions
+  //type checking functions
   [
     'isInteger',
     new FunctionEntity(['input: any'], ReturnType.Boolean, 'determine whether a given input is an integer number.'),
@@ -991,6 +1007,62 @@ export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       ['templateName: string'],
       ReturnType.Boolean,
       'Return whether a given template name is included in the evaluator.'
+    ),
+  ],
+  [
+    'isDate',
+    new FunctionEntity(
+      ['input: string|object'],
+      ReturnType.Boolean,
+      'Return true if a given TimexProperty or Timex expression refers to a valid date. Valid dates contain the month and dayOfMonth, or contain the dayOfWeek.'
+    ),
+  ],
+  [
+    'isDateRange',
+    new FunctionEntity(
+      ['input: string|object'],
+      ReturnType.Boolean,
+      'Return true if a given TimexProperty or Timex expression refers to a valid date range.'
+    ),
+  ],
+  [
+    'isDefinite',
+    new FunctionEntity(
+      ['input: string|object'],
+      ReturnType.Boolean,
+      'Return true if a given TimexProperty or Timex expression refers to a valid date. Valid dates contain the year, month and dayOfMonth.'
+    ),
+  ],
+  [
+    'isDuration',
+    new FunctionEntity(
+      ['input: string|object'],
+      ReturnType.Boolean,
+      'Return true if a given TimexProperty or Timex expression refers to a valid duration.'
+    ),
+  ],
+  [
+    'isPresent',
+    new FunctionEntity(
+      ['input: string|object'],
+      ReturnType.Boolean,
+      'Return true if a given TimexProperty or Timex expression refers to the present.'
+    ),
+  ],
+  [
+    'isTime',
+    new FunctionEntity(
+      ['input: string|object'],
+      ReturnType.Boolean,
+      'Return true if a given TimexProperty or Timex expression refers to a valid time. Valid time contains hours, minutes and seconds.'
+    ),
+  ],
+  [
+    'isTimeRange',
+    new FunctionEntity(
+      ['input: string|object'],
+      ReturnType.Boolean,
+      'Return true if a given TimexProperty or Timex expression refers to a valid time range Valid time ranges contain partOfDay.'
     ),
   ],
   [

@@ -132,6 +132,41 @@ async function getProjectByAlias(req: Request, res: Response) {
   }
 }
 
+async function setProjectAlias(req: Request, res: Response) {
+  const { alias } = req.body;
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  if (!alias) {
+    res.status(400).json({
+      message: 'Parameters not provided, requires "alias" parameter',
+    });
+    return;
+  }
+
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    if (currentProject !== undefined) {
+      try {
+        await BotProjectService.setProjectAlias(projectId, alias);
+        res.status(200).json({ id: currentProject.id, name: currentProject.name, alias: alias });
+      } catch (error) {
+        res.status(400).json({
+          message: error instanceof Error ? error.message : error,
+        });
+      }
+    } else {
+      res.status(404).json({
+        message: `No matching bot project found for projectId ${projectId}`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 async function removeProject(req: Request, res: Response) {
   const projectId = req.params.projectId;
   if (!projectId) {
@@ -158,7 +193,7 @@ async function removeProject(req: Request, res: Response) {
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
@@ -195,7 +230,7 @@ async function openProject(req: Request, res: Response) {
 async function saveProjectAs(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.name) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
@@ -369,10 +404,11 @@ async function build(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const { luisConfig, qnaConfig, luFiles, qnaFiles } = req.body;
+      const { luisConfig, qnaConfig, orchestratorConfig, luFiles, qnaFiles } = req.body;
       const files = await currentProject.buildFiles({
         luisConfig,
         qnaConfig,
+        orchestratorConfig,
         luResource: luFiles,
         qnaResource: qnaFiles,
       });
@@ -559,6 +595,7 @@ export const ProjectController = {
   checkBoilerplateVersion,
   generateProjectId,
   getProjectByAlias,
+  setProjectAlias,
   backupProject,
   copyTemplateToExistingProject,
   getVariablesByProjectId,

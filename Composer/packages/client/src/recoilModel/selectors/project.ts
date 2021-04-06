@@ -4,9 +4,11 @@
 import { BotIndexer } from '@bfc/indexers';
 import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
+import uniqBy from 'lodash/uniqBy';
 import { selector, selectorFamily } from 'recoil';
 
 import { LanguageFileImport } from '../../../../types/src';
+import { BotStatus } from '../../constants';
 import {
   botDisplayNameState,
   botErrorState,
@@ -15,8 +17,6 @@ import {
   botProjectIdsState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
-  luFilesState,
-  qnaFilesState,
   skillManifestsState,
   dialogSchemasState,
   jsonSchemaFilesState,
@@ -33,9 +33,12 @@ import {
 } from '../atoms';
 import {
   dialogsSelectorFamily,
+  botAssetsSelectFamily,
   buildEssentialsSelector,
   lgImportsSelectorFamily,
   luImportsSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
   dialogsWithLuProviderSelectorFamily,
 } from '../selectors';
 
@@ -48,10 +51,21 @@ export type TreeDataPerProject = {
   sortedDialogs: DialogInfo[];
   lgImports: Record<string, LanguageFileImport[]>;
   luImports: Record<string, LanguageFileImport[]>;
+  lgImportsList: LanguageFileImport[]; // all imported file exclude form diloag
+  luImportsList: LanguageFileImport[];
   name: string;
   isPvaSchema: boolean;
   formDialogSchemas: FormDialogSchema[];
   botError: any;
+};
+
+type WebChatEssentials = {
+  projectId: string;
+  botName: string;
+  secrets: { msAppId: string; msPassword: string };
+  botUrl: string;
+  activeLocale: string;
+  botStatus: BotStatus;
 };
 
 // Actions
@@ -129,9 +143,9 @@ export const botProjectSpaceSelector = selector({
     const result = botProjects.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
-      const luFiles = get(luFilesState(projectId));
+      const luFiles = get(luFilesSelectorFamily(projectId));
       const lgFiles = get(lgFilesSelectorFamily(projectId));
-      const qnaFiles = get(qnaFilesState(projectId));
+      const qnaFiles = get(qnaFilesSelectorFamily(projectId));
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
       const botProjectFile = get(botProjectFileState(projectId));
       const metaData = get(projectMetaDataState(projectId));
@@ -178,6 +192,7 @@ export const botProjectSpaceSelector = selector({
         buildEssentials,
         isPvaSchema,
         publishTypes,
+        skillManifests,
       };
     });
     return result;
@@ -218,12 +233,12 @@ export const perProjectDiagnosticsSelectorFamily = selectorFamily({
     const rootSetting = get(settingsState(rootBotId));
     const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
-    const luFiles = get(luFilesState(projectId));
+    const luFiles = get(luFilesSelectorFamily(projectId));
     const lgFiles = get(lgFilesSelectorFamily(projectId));
     const setting = get(settingsState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
-    const qnaFiles = get(qnaFilesState(projectId));
+    const qnaFiles = get(qnaFilesSelectorFamily(projectId));
     const botProjectFile = get(botProjectFileState(projectId));
     const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
     const botAssets: BotAssets = {
@@ -271,12 +286,9 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
   },
 });
 
-export const projectTreeSelectorFamily = selectorFamily<
-  TreeDataPerProject[],
-  { showLgImports: boolean; showLuImports: boolean }
->({
+export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
   key: 'projectTreeSelectorFamily',
-  get: (options) => ({ get }) => {
+  get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
     return projectIds.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
@@ -293,23 +305,35 @@ export const projectTreeSelectorFamily = selectorFamily<
 
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
+      const dialogIds = get(dialogIdsState(projectId));
 
       const lgImports: Record<string, LanguageFileImport[]> = {};
       const luImports: Record<string, LanguageFileImport[]> = {};
 
+      // flatten imported file list
+      let lgImportsList: LanguageFileImport[] = [];
+      let luImportsList: LanguageFileImport[] = [];
+
       dialogs.forEach((d) => {
-        if (options.showLgImports) {
-          lgImports[d.id] = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        const currentLgImports = get(lgImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        lgImports[d.id] = currentLgImports;
+        if (!d.isFormDialog) {
+          lgImportsList.push(...currentLgImports);
         }
 
-        if (options.showLuImports) {
-          luImports[d.id] = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        const currentLuImports = get(luImportsSelectorFamily({ projectId, dialogId: d.id })) ?? [];
+        luImports[d.id] = currentLuImports;
+        if (!d.isFormDialog) {
+          luImportsList.push(...currentLuImports);
         }
       });
 
       const schemas = get(schemasState(projectId));
       const isPvaSchema = schemas && checkForPVASchema(schemas.sdk);
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+
+      lgImportsList = uniqBy(lgImportsList, 'id').filter((item) => !dialogIds.includes(item.displayName) && item.id);
+      luImportsList = uniqBy(luImportsList, 'id').filter((item) => !dialogIds.includes(item.displayName) && item.id);
 
       return {
         projectId,
@@ -318,6 +342,8 @@ export const projectTreeSelectorFamily = selectorFamily<
         sortedDialogs,
         luImports,
         lgImports,
+        lgImportsList,
+        luImportsList,
         name,
         isPvaSchema,
         formDialogSchemas,
@@ -327,13 +353,9 @@ export const projectTreeSelectorFamily = selectorFamily<
   },
 });
 
-export const webChatEssentialsSelector = selector({
+export const webChatEssentialsSelector = selectorFamily<WebChatEssentials, string>({
   key: 'webChatEssentialsSelector',
-  get: ({ get }) => {
-    const projectId = get(rootBotProjectIdSelector);
-    if (!projectId) {
-      return undefined;
-    }
+  get: (projectId: string) => ({ get }) => {
     const settings = get(settingsState(projectId));
     const secrets = {
       msAppId: settings.MicrosoftAppId || '',
@@ -353,5 +375,32 @@ export const webChatEssentialsSelector = selector({
       activeLocale,
       botStatus,
     };
+  },
+});
+
+export const allRequiredRecognizersSelector = selector({
+  key: 'allRequiredRecognizersSelector',
+  get: ({ get }) => {
+    const ids = get(botProjectIdsState);
+    return ids.reduce((result: { projectId: string; requiresLUIS: boolean; requiresQNA: boolean }[], id: string) => {
+      const botAssets = get(botAssetsSelectFamily(id));
+      if (botAssets) {
+        const { dialogs, luFiles, qnaFiles } = botAssets;
+        const requiresLUIS = BotIndexer.shouldUseLuis(dialogs, luFiles);
+        const requiresQNA = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
+        result.push({ projectId: id, requiresLUIS, requiresQNA });
+      }
+      return result;
+    }, []);
+  },
+});
+
+export const outputsDebugPanelSelector = selector<WebChatEssentials[]>({
+  key: 'outputsDebugPanelSelector',
+  get: ({ get }) => {
+    const projectIds: string[] = get(botProjectIdsState);
+    return projectIds.map((projectId) => {
+      return get(webChatEssentialsSelector(projectId));
+    });
   },
 });

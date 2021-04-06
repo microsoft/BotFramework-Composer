@@ -32,9 +32,14 @@ interface PublishAPI {
   setTitle?: (value) => void;
   getSchema?: () => any;
   getType?: () => string;
+  getName?: () => string;
   savePublishConfig?: (config: PublishConfig) => void;
   getTokenFromCache?: () => { accessToken: string; graphToken: string };
+  /** @deprecated use `userShouldProvideTokens` instead */
   isGetTokenFromUser?: () => boolean;
+  userShouldProvideTokens?: () => boolean;
+  getTenantIdFromCache?: () => string;
+  setTenantId?: (value: string) => void;
 }
 
 class API implements IAPI {
@@ -59,6 +64,9 @@ class API implements IAPI {
       savePublishConfig: undefined,
       getTokenFromCache: undefined,
       isGetTokenFromUser: undefined,
+      userShouldProvideTokens: undefined,
+      getTenantIdFromCache: undefined,
+      setTenantId: undefined,
     };
   }
 }

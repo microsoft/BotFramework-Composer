@@ -55,9 +55,9 @@ const ExternalAdapterSettings = (props: Props) => {
   if (schemaDefinitions == null) return null;
 
   const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string; firstTime?: boolean })[]) => (
-    <div>
+    <div role="table">
       <div key={'subtitle'} css={subtitle}>
-        {formatMessage.rich('Install more adapters in <a>Package Settings</a>.', {
+        {formatMessage.rich('Install more adapters in <a>the package manager</a>.', {
           a: ({ children }) => (
             <Link key="link" href={packageManagerLink}>
               {children}
@@ -65,10 +65,16 @@ const ExternalAdapterSettings = (props: Props) => {
           ),
         })}
       </div>
-      <div css={tableRow}>
-        <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
-        <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Configured')}</div>
-        <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
+      <div css={tableRow} role="row">
+        <div css={tableColumnHeader(columnSizes[0])} role="columnheader">
+          {formatMessage('Name')}
+        </div>
+        <div css={tableColumnHeader(columnSizes[1])} role="columnheader">
+          {formatMessage('Configured')}
+        </div>
+        <div css={tableColumnHeader(columnSizes[2])} role="columnheader">
+          {formatMessage('Enabled')}
+        </div>
       </div>
 
       {schemas.map((schema) => {
@@ -81,19 +87,26 @@ const ExternalAdapterSettings = (props: Props) => {
         const keyEnabled = adapters.some((ad) => ad.name === key && ad.enabled);
 
         return (
-          <div key={key} css={tableRow}>
-            <div css={tableRowItem(columnSizes[0])}>{title}</div>
-            <div css={tableRowItem(columnSizes[1])}>
+          <div key={key} css={tableRow} role="row">
+            <div css={tableRowItem(columnSizes[0])} role="cell">
+              {title}
+            </div>
+            <div css={tableRowItem(columnSizes[1])} role="cell">
               {keyConfigured ? (
-                <Icon iconName="CheckMark" styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }} />
+                <Icon
+                  aria-label={formatMessage('Configured')}
+                  iconName="CheckMark"
+                  styles={{ root: { color: SharedColors.green10, fontSize: '18px' } }}
+                />
               ) : (
                 <Link key={key} onClick={() => openModal(key, true, packageName)}>
                   {formatMessage('Configure')}
                 </Link>
               )}
             </div>
-            <div css={tableRowItem(columnSizes[2])}>
+            <div css={tableRowItem(columnSizes[2])} role="cell">
               <Toggle
+                ariaLabel={formatMessage('Enable')}
                 checked={keyEnabled}
                 data-testid={`toggle_${key}`}
                 disabled={!keyConfigured}

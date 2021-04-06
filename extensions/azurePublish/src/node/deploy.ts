@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable no-underscore-dangle */
 
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 import archiver from 'archiver';
+import { AzureBotService } from '@azure/arm-botservice';
+import { TokenCredentials } from '@azure/ms-rest-js';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
-import { AzureBotService } from '@azure/arm-botservice';
-import { TokenCredentials } from '@azure/ms-rest-js';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
 
@@ -92,7 +93,8 @@ export class BotProjectDeploy {
         settings.luis,
         luisResource,
         this.projPath,
-        this.logger
+        this.logger,
+        settings?.runtime
       );
 
       const qnaConfig = await project.builder.getQnaConfig();
@@ -145,6 +147,7 @@ export class BotProjectDeploy {
   }
 
   private async zipDirectory(source: string, out: string) {
+    console.log(`Zip the files in ${source} into a zip file ${out}`);
     try {
       const archive = archiver('zip', { zlib: { level: 9 } });
       // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -154,7 +157,7 @@ export class BotProjectDeploy {
           .glob('**/*', {
             cwd: source,
             dot: true,
-            ignore: ['**/code.zip', 'node_modules/**/*'],
+            ignore: ['**/code.zip'], // , 'node_modules/**/*'
           })
           .on('error', (err) => reject(err))
           .pipe(stream);
@@ -172,11 +175,13 @@ export class BotProjectDeploy {
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Uploading zip file...',
+      message: `Uploading zip file... to ${hostname ? hostname : name + (env ? '-' + env : '')}`,
     });
 
-    const publishEndpoint = `https://${hostname ? hostname : name + (env ? '-' + env : '')
-      }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    const publishEndpoint = `https://${
+      hostname ? hostname : name + (env ? '-' + env : '')
+    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
     fileReadStream.on('error', function (err) {
       this.logger('%O', err);
@@ -204,7 +209,10 @@ export class BotProjectDeploy {
           `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
         );
       } else {
-        throw createCustomizeError(AzurePublishErrors.DEPLOY_ZIP_ERROR, `The hostname is invalid, please check if hostname/name-environment matches your target resource(webapp/function) name`);
+        throw createCustomizeError(
+          AzurePublishErrors.DEPLOY_ZIP_ERROR,
+          `The hostname is invalid, please check if hostname/name-environment matches your target resource(webapp/function) name`
+        );
       }
     }
   }
@@ -225,20 +233,19 @@ export class BotProjectDeploy {
           subscriptionId = absSettings.resourceId.match(/subscriptions\/([\w-]*)\//)[1];
         }
         if (!resourceGroupName) {
-          resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^\/]*)/)[1];
+          resourceGroupName = absSettings.resourceId.match(/resourceGroups\/([^/]*)/)[1];
         }
         if (!botName) {
-          botName = absSettings.resourceId.match(/botServices\/([^\/]*)/)[1];
+          botName = absSettings.resourceId.match(/botServices\/([^/]*)/)[1];
         }
       } catch (error) {
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: 'Abs settings resourceId is incomplete, skip linking bot with webapp ...'
+          message: 'Abs settings resourceId is incomplete, skip linking bot with webapp ...',
         });
         return;
       }
-    }
-    else {
+    } else {
       subscriptionId = settings.subscriptionId;
       resourceGroupName = settings.resourceGroup;
       botName = settings.botName;
@@ -247,14 +254,14 @@ export class BotProjectDeploy {
     if (!subscriptionId || !hostname || !resourceGroupName || !botName) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Abs settings incomplete, skip linking bot with webapp ...'
+        message: 'Abs settings incomplete, skip linking bot with webapp ...',
       });
       return;
     }
 
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Linking bot with webapp ...'
+      message: 'Linking bot with webapp ...',
     });
 
     const creds = new TokenCredentials(this.accessToken);
@@ -274,9 +281,9 @@ export class BotProjectDeploy {
 
     const botUpdateResult = await azureBotSerivce.bots.update(resourceGroupName, botName, {
       tags: {
-        webapp: hostname
+        webapp: hostname,
       },
-      properties: bot.properties
+      properties: bot.properties,
     });
 
     if (botUpdateResult?._response?.status >= 300) {
@@ -296,9 +303,9 @@ export class BotProjectDeploy {
     if (!hostname) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'hostname incomplete, return ...'
+        message: 'hostname incomplete, return ...',
       });
-      return
+      return;
     }
 
     const webAppName = hostname;
@@ -306,14 +313,14 @@ export class BotProjectDeploy {
     if (!hint) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'appPasswordHint incomplete, return ...'
+        message: 'appPasswordHint incomplete, return ...',
       });
-      return
+      return;
     }
-    const vaultName = hint.match(/vaults\/([^\/]*)/)[1];
-    const secretName = hint.match(/secrets\/([^\/]*)/)[1];
+    const vaultName = hint.match(/vaults\/([^/]*)/)[1];
+    const secretName = hint.match(/secrets\/([^/]*)/)[1];
     const subscriptionId = hint.match(/subscriptions\/([\w-]*)\//)[1];
-    const resourceGroupName = hint.match(/resourceGroups\/([^\/]*)/)[1];
+    const resourceGroupName = hint.match(/resourceGroups\/([^/]*)/)[1];
 
     const email = absSettings.email;
 
@@ -321,7 +328,7 @@ export class BotProjectDeploy {
 
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Binding Key Vault ...'
+      message: 'Binding Key Vault ...',
     });
 
     const creds = new TokenCredentials(this.accessToken);
@@ -329,7 +336,7 @@ export class BotProjectDeploy {
     const keyVaultApiConfig = {
       creds: creds,
       logger: this.logger,
-      subscriptionId: subscriptionId
+      subscriptionId: subscriptionId,
     } as KeyVaultApiConfig;
     const keyVaultApi = new KeyVaultApi(keyVaultApiConfig);
 
@@ -341,7 +348,7 @@ export class BotProjectDeploy {
     const tenantId = await this.getTenantId(this.accessToken, subscriptionId);
     await keyVaultApi.KeyVaultSetPolicy(resourceGroupName, vaultName, email, principalId, tenantId);
 
-    this.logger('getting secret ...')
+    this.logger('getting secret ...');
     const secret = await keyVaultApi.KeyVaultGetSecret(resourceGroupName, vaultName, secretName);
 
     // const secret = await keyVaultApi.KeyVaultGetSecretValue(resourceGroupName, vaultName, secretName);
@@ -383,12 +390,12 @@ export const isProfileComplete = (profile) => {
     throw new Error('Required field `settings` is missing from publishing profile.');
   }
   if (!profile.hostname && !profile.name) {
-    throw new Error("Required field `name` or `hostname` is missing from publishing profile.");
+    throw new Error('Required field `name` or `hostname` is missing from publishing profile.');
   }
   if (!profile.settings?.MicrosoftAppId) {
     throw Error('Required field `MicrosoftAppId` is missing from publishing profile.');
   }
-}
+};
 
 export const getAbsSettings = (config) => {
   return {
@@ -396,6 +403,6 @@ export const getAbsSettings = (config) => {
     subscriptionId: config.subscriptionId,
     resourceGroup: config.resourceGroup,
     resourceId: config.resourceId,
-    botName: config.botName
+    botName: config.botName,
   };
-}
+};

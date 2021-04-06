@@ -38,8 +38,12 @@ const Input = styled(TextField)({
   padding: '8px 0 8px 4px',
   width: '100%',
   position: 'relative',
-  '& input': {
+  '& input::placeholder, & textarea::placeholder': {
     fontSize: FluentTheme.fonts.small.fontSize,
+  },
+  '& input, & textarea': {
+    fontSize: FluentTheme.fonts.small.fontSize,
+    maxHeight: '97px',
   },
   '& .ms-TextField-fieldGroup::after': {
     content: '""',
@@ -98,105 +102,116 @@ type Props = {
   value: string;
   codeEditorSettings?: Partial<CodeEditorSettings>;
   telemetryClient: TelemetryClient;
+  removeTooltipTextContent?: string;
   onRenderDisplayText?: () => React.ReactNode;
   onBlur?: () => void;
   onJumpTo?: (direction: 'next' | 'previous') => void;
   onRemove: () => void;
   onFocus: () => void;
-  onChange?: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => void;
+  onChange?: (event: React.FormEvent<HTMLTextAreaElement | HTMLInputElement>, value?: string) => void;
   onLgChange?: (value: string) => void;
-  onShowCallout?: (target: HTMLInputElement) => void;
+  onShowCallout?: (target: HTMLTextAreaElement) => void;
+  onEditorPopToggle?: (expanded: boolean) => void;
 };
 
-type TextViewItemProps = Pick<Props, 'value' | 'onRemove' | 'onFocus' | 'onRenderDisplayText' | 'codeEditorSettings'>;
+type TextViewItemProps = Pick<
+  Props,
+  'value' | 'onRemove' | 'onFocus' | 'onRenderDisplayText' | 'codeEditorSettings' | 'removeTooltipTextContent'
+>;
 
-const TextViewItem = React.memo(({ value, onRemove, onFocus, onRenderDisplayText }: TextViewItemProps) => {
-  const remove = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      e.stopPropagation();
-      e.preventDefault();
-      onRemove();
-    },
-    [onRemove]
-  );
+const TextViewItem = React.memo(
+  ({ removeTooltipTextContent, value, onRemove, onFocus, onRenderDisplayText }: TextViewItemProps) => {
+    const remove = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.stopPropagation();
+        e.preventDefault();
+        onRemove();
+      },
+      [onRemove]
+    );
 
-  const focus = React.useCallback(
-    (e: React.FocusEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      onFocus();
-    },
-    [onFocus]
-  );
+    const focus = React.useCallback(
+      (e: React.FocusEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        onFocus();
+      },
+      [onFocus]
+    );
 
-  const click = React.useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      onFocus();
-    },
-    [onFocus]
-  );
+    const click = React.useCallback(
+      (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        onFocus();
+      },
+      [onFocus]
+    );
 
-  const RemoveIcon = React.useMemo(() => withTooltip({ content: formatMessage('Remove variation') }, IconButton), []);
+    const RemoveIcon = React.useMemo(
+      () => withTooltip({ content: removeTooltipTextContent ?? formatMessage('Remove variation') }, IconButton),
+      [removeTooltipTextContent]
+    );
 
-  return (
-    <TextViewItemRoot horizontal tokens={textViewRootTokens} verticalAlign="center">
-      <Stack grow styles={textViewContainerStyles} tabIndex={0} verticalAlign="center" onClick={click} onFocus={focus}>
-        <Text styles={displayTextStyles} variant="small">
-          {onRenderDisplayText?.() ?? value}
-        </Text>
-      </Stack>
-      <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
-    </TextViewItemRoot>
-  );
-});
+    return (
+      <TextViewItemRoot horizontal tokens={textViewRootTokens} verticalAlign="center">
+        <Stack
+          grow
+          styles={textViewContainerStyles}
+          tabIndex={0}
+          verticalAlign="center"
+          onClick={click}
+          onFocus={focus}
+        >
+          <Text styles={displayTextStyles} variant="small">
+            {onRenderDisplayText?.() ?? value.replace(/\r?\n/g, '↵')}
+          </Text>
+        </Stack>
+        <RemoveIcon className={removeIconClassName} iconProps={{ iconName: 'Trash' }} tabIndex={-1} onClick={remove} />
+      </TextViewItemRoot>
+    );
+  }
+);
 
 type TextFieldItemProps = Omit<Props, 'onRemove' | 'mode' | 'onFocus' | 'telemetryClient'>;
 
 const TextFieldItem = React.memo(({ value, onShowCallout, onChange }: TextFieldItemProps) => {
   const itemRef = useRef<ITextField | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     itemRef.current?.focus();
     if (containerRef.current) {
-      inputRef.current = containerRef.current.querySelector('input');
+      inputRef.current = containerRef.current.querySelector('textarea');
     }
   }, []);
 
   const focus = React.useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
+    (e: React.FocusEvent<HTMLTextAreaElement>) => {
       e.stopPropagation();
-      onShowCallout?.(e.target as HTMLInputElement);
+      onShowCallout?.(e.target as HTMLTextAreaElement);
     },
     [onShowCallout]
   );
 
   const click = React.useCallback(
-    (e: React.MouseEvent<HTMLInputElement>) => {
+    (e: React.MouseEvent<HTMLTextAreaElement>) => {
       e.stopPropagation();
-      onShowCallout?.(e.target as HTMLInputElement);
+      onShowCallout?.(e.target as HTMLTextAreaElement);
     },
     [onShowCallout]
   );
 
-  React.useEffect(() => {
-    if (inputRef.current && inputRef.current.value !== value) {
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-      if (nativeInputValueSetter) {
-        nativeInputValueSetter.call(inputRef.current, value);
-        const inputEvent = new Event('input', { bubbles: true });
-        inputRef.current.dispatchEvent(inputEvent);
-      }
-    }
-  }, [value]);
-
   return (
     <div ref={containerRef}>
       <Input
+        autoAdjustHeight
+        multiline
         componentRef={(ref) => (itemRef.current = ref)}
         defaultValue={value}
+        placeholder={formatMessage('Press Shift+Enter to insert a new line')}
+        resizable={false}
         styles={textFieldStyles}
+        value={value}
         onChange={onChange}
         onClick={click}
         onFocus={focus}
@@ -218,9 +233,11 @@ export const StringArrayItem = (props: Props) => {
     onShowCallout,
     onRemove,
     onFocus,
+    onEditorPopToggle,
     value,
     telemetryClient,
     codeEditorSettings,
+    removeTooltipTextContent,
   } = props;
 
   const onEditorDidMount = React.useCallback(
@@ -231,6 +248,10 @@ export const StringArrayItem = (props: Props) => {
     },
     [editorMode]
   );
+
+  const popExpandOptions = React.useMemo(() => ({ onEditorPopToggle, popExpandTitle: formatMessage('Attachment') }), [
+    onEditorPopToggle,
+  ]);
 
   return (
     <Root verticalAlign="center">
@@ -247,6 +268,7 @@ export const StringArrayItem = (props: Props) => {
               lgTemplates={lgTemplates}
               memoryVariables={memoryVariables}
               options={{ folding: false }}
+              popExpandOptions={popExpandOptions}
               telemetryClient={telemetryClient}
               value={value}
               onChange={onLgChange}
@@ -254,7 +276,13 @@ export const StringArrayItem = (props: Props) => {
           </LgCodeEditorContainer>
         )
       ) : (
-        <TextViewItem value={value} onFocus={onFocus} onRemove={onRemove} onRenderDisplayText={onRenderDisplayText} />
+        <TextViewItem
+          removeTooltipTextContent={removeTooltipTextContent}
+          value={value}
+          onFocus={onFocus}
+          onRemove={onRemove}
+          onRenderDisplayText={onRenderDisplayText}
+        />
       )}
     </Root>
   );

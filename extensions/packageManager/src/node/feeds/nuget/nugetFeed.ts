@@ -2,17 +2,19 @@
 // Licensed under the MIT License.
 
 import { IExtensionRegistration } from '@bfc/extension-client';
-import { IFeed, IPackageQuery, IPackageDefinition, IPackageSource } from '../feedInterfaces';
-import { INuGetSearchResult, INuGetServiceIndex } from './nugetInterfaces';
 import axios from 'axios';
 import * as semverSort from 'semver-sort';
+
+import { IFeed, IPackageQuery, IPackageDefinition, IPackageSource } from '../feedInterfaces';
+
+import { INuGetSearchResult, INuGetServiceIndex } from './nugetInterfaces';
 
 /**
  * NuGet v3 feed.
  */
 export class NuGetFeed implements IFeed {
-  private language: string = 'c#';
-  private source: string = 'nuget';
+  private language = 'c#';
+  private source = 'nuget';
 
   /**
    * Creates a NuGet v3 feed
@@ -36,7 +38,7 @@ export class NuGetFeed implements IFeed {
       // Is the seed data a search result? Note that ideally we want to remove this codepath since we cannot
       // do paging or other more advanced operations. Since this path is very inflexible, also
       // ignores the query provided in the package query.
-      // Example url that ends up in this path: https://azuresearch-usnc.nuget.org/query?q=Tags:%22bf-component%22&prerelease=true
+      // Example url that ends up in this path: https://azuresearch-usnc.nuget.org/query?q=Tags:%22msbot-component%22&prerelease=true
       const searchResult = this.data as INuGetSearchResult;
       if (searchResult.data) {
         return this.asPackageDefinition(searchResult);
@@ -83,7 +85,7 @@ export class NuGetFeed implements IFeed {
    */
   private asPackageDefinition(searchResult: INuGetSearchResult): IPackageDefinition[] {
     return searchResult.data.map((i) => {
-      return <IPackageDefinition>{
+      return {
         name: i.id,
         version: i.version,
         versions: i.versions ? semverSort.desc(i.versions.map((v) => v.version)) : [i.version],
@@ -93,7 +95,7 @@ export class NuGetFeed implements IFeed {
         description: i.description,
         language: this.language,
         source: this.source,
-      };
+      } as IPackageDefinition;
     });
   }
 
@@ -106,7 +108,7 @@ export class NuGetFeed implements IFeed {
    * package query plus the specified query parameters.
    */
   private buildNuGetSearchUrl(baseUrl: string, query?: IPackageQuery): string {
-    let url: string = `${baseUrl}?prerelease=${query?.prerelease ?? true}&semVerLevel=${query?.semVerLevel ?? '2.0.0'}`;
+    let url = `${baseUrl}?prerelease=${query?.prerelease ?? true}&semVerLevel=${query?.semVerLevel ?? '2.0.0'}`;
 
     if (query?.query) {
       url = `${url}&q=${query.query}`;

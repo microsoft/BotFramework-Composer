@@ -16,10 +16,11 @@ import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'reac
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
-import { localeState, settingsState } from '../../recoilModel/atoms/botState';
+import { dialogState, localeState, settingsState } from '../../recoilModel/atoms/botState';
 import { getMemoryVariables } from '../../recoilModel/dispatchers/utils/project';
 import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { navigateTo } from '../../utils/navigation';
 import { DiffCodeEditor } from '../language-understanding/diff-editor';
 
 const lspServerPath = '/lg-language-server';
@@ -29,16 +30,18 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   projectId: string;
   skillId?: string;
   lgFileId?: string;
+  file?: LgFile;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { dialogId, projectId, skillId, lgFileId } = props;
+  const { dialogId, projectId, skillId, lgFileId, file } = props;
   const actualProjectId = skillId ?? projectId;
 
   const userSettings = useRecoilValue(userSettingsState);
   const locale = useRecoilValue(localeState(actualProjectId));
   const lgFiles = useRecoilValue(lgFilesSelectorFamily(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
+  const currentDialog = useRecoilValue(dialogState({ projectId: actualProjectId, dialogId }));
 
   const { languages, defaultLanguage } = settings;
 
@@ -48,10 +51,6 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-
-  const file: LgFile | undefined = lgFileId
-    ? lgFiles.find(({ id }) => id === lgFileId)
-    : lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
 
   const defaultLangFile = lgFileId
     ? lgFiles.find(({ id }) => id === lgFileId)
@@ -177,6 +176,24 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     templateId: template?.name,
   };
 
+  const navigateToLgPage = useCallback(
+    (lgFileId: string, options?: { templateId?: string; line?: number }) => {
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      const pattern = new RegExp(`.${locale}`, 'g');
+      const fileId = currentDialog.isFormDialog ? lgFileId : lgFileId.replace(pattern, '');
+      let url = currentDialog.isFormDialog
+        ? `/bot/${actualProjectId}/language-generation/${currentDialog.id}/item/${fileId}`
+        : `/bot/${actualProjectId}/language-generation/${fileId}`;
+      if (options?.line) {
+        url = url + `/edit#L=${options.line}`;
+      } else if (options?.templateId) {
+        url = url + `/edit?t=${options.templateId}`;
+      }
+      navigateTo(url);
+    },
+    [actualProjectId, locale]
+  );
+
   const currentLanguageFileEditor = useMemo(() => {
     return (
       <LgCodeEditor
@@ -195,6 +212,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         value={content}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
+        onNavigateToLgPage={navigateToLgPage}
       />
     );
   }, [lgOption, userSettings.codeEditor]);

@@ -9,6 +9,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "type": "node",
+      "request": "attach",
+      "name": "Server: Attach",
+      "port": 9228,
+      "sourceMaps": true
+    },
+    {
       "name": "LU LSP Server",
       "type": "node",
       "request": "launch",
@@ -83,7 +90,8 @@
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "composer*",
-        "COMPOSER_ENABLE_ONEAUTH": "false"
+        "COMPOSER_DEV_TOOLS": "true",
+        "COMPOSER_ENABLE_ONEAUTH": "true"
       },
       "outputCapture": "std",
       "preLaunchTask": "electron: build",

@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { BotTemplateV2, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
+import { sortTemplates } from '../utility/creation';
 
 async function getProjTemplates(req: Request, res: Response) {
   try {
@@ -22,7 +23,7 @@ async function getProjTemplates(req: Request, res: Response) {
 
 export async function getProjTemplatesV2(req: any, res: any) {
   try {
-    let templates: BotTemplateV2[] = [];
+    let templates: BotTemplate[] = [];
 
     // Get FeedUrl
     const { feedUrls, getFirstPartyNpm } = req.body;
@@ -30,15 +31,28 @@ export async function getProjTemplatesV2(req: any, res: any) {
     // Grab templates from FeedURls
     if (feedUrls) {
       const feedTemplates = await AssetService.manager.getCustomFeedTemplates(feedUrls);
+      const emptyBot = feedTemplates.filter((template) => {
+        return template.id === emptyBotNpmTemplateName;
+      });
+      const qnaTemplateVersion =
+        emptyBot.length > 0 && emptyBot[0].package?.packageVersion ? emptyBot[0].package.packageVersion : '*';
       templates = templates.concat(feedTemplates);
       templates.push({
         id: QnABotTemplateId,
-        name: 'generator-qna-bot',
+        name: 'QNA',
         description: formatMessage('Empty bot template that routes to qna configuration'),
+        dotnetSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
+        nodeSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
         package: {
-          packageName: 'generator-empty-bot',
+          packageName: emptyBotNpmTemplateName,
           packageSource: 'npm',
-          packageVersion: '0.0.1',
+          packageVersion: qnaTemplateVersion,
         },
       });
     }
@@ -48,8 +62,10 @@ export async function getProjTemplatesV2(req: any, res: any) {
       templates = templates.concat(await getNpmTemplates());
     }
 
+    const sortedTemplateList = sortTemplates(templates);
+
     // return templates
-    res.status(200).json(templates);
+    res.status(200).json(sortedTemplateList);
   } catch (error) {
     res.status(400).json({
       message: error instanceof Error ? error.message : error,

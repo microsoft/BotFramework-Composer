@@ -88,41 +88,53 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navContainer = (isAnyMenuOpen: boolean, isActive: boolean, menuOpenHere: boolean, textWidth: number) => css`
+const navContainer = (
+  isAnyMenuOpen: boolean,
+  isActive: boolean,
+  menuOpenHere: boolean,
+  textWidth: number,
+  isBroken: boolean,
+  padLeft: number,
+  marginLeft: number
+) => css`
   ${isAnyMenuOpen
     ? ''
-    : `&:hover {
-  background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+    : `
+    &:hover {
+        background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
 
-  .dialog-more-btn {
-    visibility: visible;
-  }
-  .action-btn {
-    visibility: visible;
-  }
-  .treeItem-text {
-    max-width: ${textWidth}px;
-  }
-  }`};
+        .dialog-more-btn {
+          visibility: visible;
+        }
+        .action-btn {
+          visibility: visible;
+        }
+        .treeItem-text {
+          max-width: ${textWidth}px;
+        }
+        }`};
+
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
-`;
 
-const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
+  display: inline-flex;
+  flex-direction: row;
+
   label: navItem;
-  position: relative;
+
   height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
   margin-left: ${marginLeft}px;
+  min-width: calc(100% - ${padLeft + 24}px);
   opacity: ${isBroken ? 0.5 : 1};
-  display: flex;
-  flex-direction: row;
   align-items: center;
+
+  position: relative;
+  top: -4px;
 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
   }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 
   &:focus {
     outline: none;
@@ -155,7 +167,7 @@ export const overflowSet = (isBroken: boolean) => css`
   height: 100%;
   box-sizing: border-box;
   justify-content: space-between;
-  display: flex;
+  display: inline-flex;
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
   }
@@ -232,6 +244,7 @@ type ITreeItemProps = {
   menuOpenCallback?: (cb: boolean) => void;
   isMenuOpen?: boolean;
   showErrors?: boolean;
+  role?: string;
 };
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -371,6 +384,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
+  role,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
@@ -410,7 +424,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           data-is-focusable
           aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
           css={projectTreeItemContainer}
-          role="cell"
           tabIndex={0}
           onBlur={item.onBlur}
           onFocus={item.onFocus}
@@ -479,7 +492,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                   menuOpenCallback(false);
                 },
               }}
-              role="cell"
               styles={moreButton(isActive || isChildSelected)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -496,57 +508,55 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   return (
     <div
+      aria-label={a11yLabel}
       css={navContainer(
         isMenuOpen,
         isActive,
         thisItemSelected,
-        textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover
+        textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover,
+        isBroken,
+        padLeft,
+        marginLeft
       )}
-    >
-      <div
-        aria-label={a11yLabel}
-        css={navItem(isBroken, padLeft, marginLeft, isActive)}
-        data-testid={a11yLabel}
-        role="gridcell"
-        tabIndex={0}
-        onClick={() => {
+      data-testid={a11yLabel}
+      role={role}
+      tabIndex={0}
+      onClick={() => {
+        onSelect?.(link);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
           onSelect?.(link);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            onSelect?.(link);
-          }
-        }}
-      >
-        <div style={{ minWidth: `${spacerWidth}px` }}></div>
-        <OverflowSet
-          //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
-          //remove this at that time
-          doNotContainWithinFocusZone
-          css={overflowSet(isBroken)}
-          data-testid={linkString}
-          items={[
-            {
-              key: linkString,
-              icon: isBroken ? 'RemoveLink' : icon,
-              ...link,
-            },
-          ]}
-          overflowItems={overflowMenu}
-          role="row"
-          styles={{ item: { flex: 1 } }}
-          onRenderItem={onRenderItem(
-            textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
-            showErrors
-          )}
-          onRenderOverflowButton={onRenderOverflowButton(
-            !!isActive,
-            isChildSelected,
-            menuOpenCallback,
-            setThisItemSelected
-          )}
-        />
-      </div>
+        }
+      }}
+    >
+      <div style={{ minWidth: `${spacerWidth}px` }}></div>
+      <OverflowSet
+        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
+        //remove this at that time
+        doNotContainWithinFocusZone
+        css={overflowSet(isBroken)}
+        data-testid={linkString}
+        items={[
+          {
+            key: linkString,
+            icon: isBroken ? 'RemoveLink' : icon,
+            ...link,
+          },
+        ]}
+        overflowItems={overflowMenu}
+        styles={{ item: { flex: 1 } }}
+        onRenderItem={onRenderItem(
+          textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
+          showErrors
+        )}
+        onRenderOverflowButton={onRenderOverflowButton(
+          !!isActive,
+          isChildSelected,
+          menuOpenCallback,
+          setThisItemSelected
+        )}
+      />
     </div>
   );
 };

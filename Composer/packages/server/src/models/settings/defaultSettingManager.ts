@@ -66,6 +66,7 @@ export class DefaultSettingManager extends FileSettingManager {
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
+        directVersionPublish: true,
       },
       luFeatures: {
         enablePattern: true,
@@ -144,6 +145,6 @@ export class DefaultSettingManager extends FileSettingManager {
     // remove sensitive values before saving to disk
     const settingsWithoutSensitive = omit(settings, SensitiveProperties);
 
-    await this.storage.writeFile(path, JSON.stringify(settingsWithoutSensitive, null, 2));
+    this.storage.writeFileSync(path, JSON.stringify(settingsWithoutSensitive, null, 2));
   };
 }

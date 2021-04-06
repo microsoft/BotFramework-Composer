@@ -8,12 +8,27 @@
  */
 
 import { Templates, Template, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
-import { LgTemplate, lgImportResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
+import {
+  LgTemplate,
+  lgImportResolverGenerator,
+  TextFile,
+  Diagnostic,
+  Position,
+  Range,
+  LgFile,
+  DiagnosticSeverity,
+} from '@bfc/shared';
 import formatMessage from 'format-message';
 import isEmpty from 'lodash/isEmpty';
+import cloneDeep from 'lodash/cloneDeep';
 import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
 
 import { lgIndexer } from '../lgIndexer';
+import {
+  builtInFunctionErrorMessage,
+  BUILT_IN_FUNCTION_ERROR,
+  checkCustomFunctions,
+} from '../validations/expressionValidation/validation';
 
 import { getFileName } from './help';
 
@@ -69,7 +84,17 @@ export function convertTemplatesToLgFile(id = '', content: string, parseResult: 
     };
   });
 
-  return { id, content, templates, allTemplates, diagnostics, imports, options: parseResult.options, parseResult };
+  return {
+    id,
+    content,
+    templates,
+    allTemplates,
+    diagnostics,
+    imports,
+    options: parseResult.options,
+    parseResult,
+    isContentUnparsed: false,
+  };
 }
 
 export function increaseNameUtilNotExist(templates: LgTemplate[], name: string): string {
@@ -268,6 +293,24 @@ export function extractOptionByKey(nameOfKey: string, options: string[]): string
     }
   }
   return result;
+}
+
+export function filterCustomFunctionError(diagnostics: Diagnostic[] = [], customFunctions: string[] = []) {
+  return diagnostics.reduce((result: Diagnostic[], d: Diagnostic) => {
+    //If the custom functions are defined in runtime, use the field from settings to filter
+    if (d.message.endsWith(BUILT_IN_FUNCTION_ERROR)) {
+      const pattern = /'.*'/;
+      const currentFunction = pattern.exec(d.message)?.[0];
+      if (currentFunction && customFunctions.some((item) => checkCustomFunctions(currentFunction, item))) {
+        return result;
+      }
+      d = cloneDeep(d);
+      d.message = builtInFunctionErrorMessage(d.message);
+      d.severity = DiagnosticSeverity.Warning;
+    }
+    result.push(d);
+    return result;
+  }, []);
 }
 
 export function parse(id: string, content: string, lgFiles: TextFile[]): LgFile {

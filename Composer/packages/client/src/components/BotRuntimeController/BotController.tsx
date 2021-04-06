@@ -67,7 +67,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
-  const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
 
@@ -131,23 +130,26 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
       return;
     }
 
-    if (botOperationsCompleted && runningBots.projectIds.length) {
+    if (botOperationsCompleted) {
       if (statusIconClass !== 'Refresh') {
         onHideController(false);
       }
-      setStatusIconClass('Refresh');
 
-      setStartPanelButtonText(
-        formatMessage(
-          `{
+      if (runningBots.projectIds.length) {
+        setStatusIconClass('Refresh');
+
+        setStartPanelButtonText(
+          formatMessage(
+            `{
           total, plural,
             =1 {Restart bot}
           other {Restart all bots ({running}/{total} running)}
         }`,
-          { running: runningBots.projectIds.length, total: runningBots.totalBots }
-        )
-      );
-      return;
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+        return;
+      }
     }
 
     setStatusIconClass('Play');
@@ -164,7 +166,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   }, [runningBots, startAllBotsOperationQueued]);
 
   useClickOutsideOutsideTarget(
-    isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
+    isControllerHidden ? null : [startPanelTarget, botControllerMenuTarget],
     (event: React.MouseEvent<HTMLElement>) => {
       onHideController(true);
       event.stopPropagation();
@@ -196,7 +198,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         key: projectId,
         displayName,
         projectId,
-        setGlobalErrorCalloutVisibility,
         isRootBot,
       };
     });
@@ -221,6 +222,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
               },
             },
           }}
+          id={'startbot'}
           menuAs={() => null}
           styles={{
             root: {

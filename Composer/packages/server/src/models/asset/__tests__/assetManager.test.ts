@@ -3,28 +3,16 @@
 
 import rimraf from 'rimraf';
 import { enableFetchMocks } from 'jest-fetch-mock';
-import { BotTemplateV2 } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 
 import { ExtensionContext } from '../../../models/extension/extensionContext';
 import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
 import StorageService from '../../../services/storage';
 
-const mockchdir = jest.spyOn(process, 'chdir').mockImplementation(() => {});
-
 jest.mock('azure-storage', () => {
   return {};
 });
-
-jest.mock('yeoman-environment', () => ({
-  createEnv: jest.fn().mockImplementation(() => {
-    return {
-      lookupLocalPackages: jest.fn(),
-      installLocalGenerators: jest.fn().mockReturnValue(true),
-      run: jest.fn(),
-    };
-  }),
-}));
 
 jest.mock('fs-extra', () => {
   return {
@@ -32,12 +20,20 @@ jest.mock('fs-extra', () => {
   };
 });
 
-jest.mock('../../../models/extension/extensionContext', () => {
+jest.mock('@bfc/extension', () => {
   return {
     ExtensionContext: {
       extensions: {
         botTemplates: [],
       },
+    },
+  };
+});
+
+jest.mock('@bfc/server-workers', () => {
+  return {
+    ServerWorker: {
+      execute: jest.fn(),
     },
   };
 });
@@ -139,14 +135,13 @@ describe('assetManager', () => {
           id: 'generator-conversational-core',
           name: 'Conversational Core',
           description: 'Preview conversational core package for TESTING ONLY',
-          keywords: ['conversationalcore', 'yeoman-generator'],
           package: {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',
             packageVersion: '1.0.3',
           },
         },
-      ] as BotTemplateV2[]);
+      ] as BotTemplate[]);
     });
   });
 
@@ -158,13 +153,15 @@ describe('assetManager', () => {
         'generator-conversational-core',
         '1.0.3',
         'sampleConversationalCore',
-        mockLocRef
+        mockLocRef,
+        '0',
+        'webapp',
+        'dotnet'
       );
       expect(newBotLocationRef).toStrictEqual({
-        path: '/path/to/npmbot/sampleConversationalCore',
+        path: '/path/to/npmbot',
         storageId: 'default',
       });
-      expect(mockchdir).toBeCalledWith('/path/to/npmbot');
     });
   });
 });

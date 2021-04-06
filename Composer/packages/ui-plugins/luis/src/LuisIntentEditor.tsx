@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { filterSectionDiagnostics } from '@bfc/indexers';
@@ -31,14 +31,39 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
   }
 
   const luIntent = useMemo(() => {
-    return (
-      luFile?.intents.find((intent) => intent.Name === intentName) ||
-      ({
-        Name: intentName,
-        Body: '',
-      } as LuIntentSection)
-    );
-  }, [intentName]);
+    /**
+     * if intent is referenced from imported files, use origin intent.
+     * because update on origin file won't reparse current file, so the `allIntent` may out of date.
+     */
+    const intentInCurrentFile = luFile?.allIntents.find((intent) => intent.Name === intentName);
+    if (intentInCurrentFile) {
+      if (intentInCurrentFile.fileId === luFile?.id) {
+        return intentInCurrentFile;
+      } else {
+        const intentInOriginFile = luFiles
+          .find(({ id }) => id === intentInCurrentFile.fileId)
+          ?.intents?.find((intent) => intent.Name === intentName);
+        if (intentInOriginFile) return intentInOriginFile;
+      }
+    }
+    return {
+      Name: intentName,
+      Body: '',
+    } as LuIntentSection;
+  }, [intentName, luFiles]);
+
+  const navigateToLuPage = useCallback(
+    (luFileId: string, sectionId?: string) => {
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      const pattern = new RegExp(`.${locale}`, 'g');
+      const fileId = currentDialog.isFormDialog ? luFileId : luFileId.replace(pattern, '');
+      const url = currentDialog.isFormDialog
+        ? `/bot/${projectId}/language-understanding/${currentDialog.id}/item/${fileId}`
+        : `/bot/${projectId}/language-understanding/${fileId}${sectionId ? `/edit?t=${sectionId}` : ''}`;
+      shellApi.navigateTo(url);
+    },
+    [shellApi, projectId, locale, currentDialog]
+  );
 
   if (!luFile || !intentName) {
     return null;
@@ -50,7 +75,9 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     }
 
     const newIntent = { Name: intentName, Body: newValue };
-    shellApi.debouncedUpdateLuIntent(luFile.id, intentName, newIntent)?.then(shellApi.commitChanges);
+    shellApi
+      .debouncedUpdateLuIntent(luIntent?.fileId ?? luFile.id, intentName, newIntent)
+      ?.then(shellApi.commitChanges);
     onChange(intentName);
   };
 
@@ -65,11 +92,14 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
       height={225}
+      luFile={luFile}
       luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId, luFeatures }}
       placeholder={placeholder || inlineModePlaceholder}
+      telemetryClient={shellApi.telemetryClient}
       value={luIntent.Body}
       onChange={commitChanges}
       onChangeSettings={handleSettingsChange}
+      onNavigateToLuPage={navigateToLuPage}
     />
   );
 };

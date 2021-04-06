@@ -13,7 +13,6 @@ import {
   extractLUISContent,
   getSuggestionEntities,
   suggestionAllEntityTypes,
-  getLineByIndex,
   generateDiagnostic,
   convertDiagnostics,
   convertSeverity,
@@ -70,7 +69,7 @@ const lgDiagnostics = [
 describe('LG LSP Server Function Unit Tests', () => {
   it('Test getRangeAtPosition function', () => {
     const result = getRangeAtPosition(textDoc, Position.create(0, 3));
-    expect(result).toEqual({ end: { character: 5, line: 0 }, start: { character: 0, line: 0 } });
+    expect(result).toEqual({ end: { character: 5, line: 0 }, start: { character: 1, line: 0 } });
   });
 
   it('Test getEntityRangeAtPosition function', () => {
@@ -88,11 +87,6 @@ describe('LG LSP Server Function Unit Tests', () => {
   it('Test getSuggestionEntities function', () => {
     const result = getSuggestionEntities(luisObj, suggestionAllEntityTypes);
     expect(result).toEqual(['name', 'zipcode']);
-  });
-
-  it('Test getLineByIndex function', () => {
-    const result = getLineByIndex(textDoc2, 2);
-    expect(result).toEqual('line2');
   });
 
   it('Test generateDiagnostic function', () => {

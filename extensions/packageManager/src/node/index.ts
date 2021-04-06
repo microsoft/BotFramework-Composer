@@ -2,9 +2,13 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
+import * as fs from 'fs';
+
 import axios from 'axios';
+import formatMessage from 'format-message';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
+
 import { IFeed, IPackageDefinition, IPackageQuery, IPackageSource, PackageSourceType } from './feeds/feedInterfaces';
 import { FeedFactory } from './feeds/feedFactory';
 
@@ -22,6 +26,45 @@ const hasSchema = (c) => {
 
 const isAdaptiveComponent = (c) => {
   return hasSchema(c) || c.includesExports;
+};
+
+const readFileAsync = async (path, encoding) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    fs.readFile(path, { encoding }, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
+const loadPackageAssets = async (components) => {
+  const variants = ['readme.md', 'README.md', 'README.MD'];
+  for (const c in components) {
+    if (components[c].path) {
+      const rootFolder = path.dirname(components[c].path);
+      for (const v in variants) {
+        const readmePath = path.join(rootFolder, variants[v]);
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        if (fs.existsSync(readmePath)) {
+          components[c].readme = await readFileAsync(readmePath, 'utf-8');
+          continue;
+        }
+      }
+
+      if (components[c].icon) {
+        const iconPath = path.resolve(rootFolder, components[c].icon);
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        if (fs.existsSync(iconPath)) {
+          components[c].iconUrl = 'data:image/png;base64,' + (await readFileAsync(iconPath, 'base64'));
+        }
+      }
+    }
+  }
+
+  return components;
 };
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
@@ -55,53 +98,68 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
     },
     getFeeds: async function (req, res) {
-      // read the list of sources from the config file.
-      let packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
+      // Read the list of sources from the config file.
+      const userStoredSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      // if no sources are in the config file, set the default list to our 1st party feed.
-      if (!packageSources) {
-        packageSources = [
-          {
-            key: 'npm',
-            text: 'npm',
-            url: 'https://registry.npmjs.org/-/v1/search?text=keywords:bf-component&size=100&from=0',
-            searchUrl: 'https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:bf-component&size=100&from=0',
-            readonly: true,
+      const botComponentTag = 'msbot-component';
+
+      // Default sources
+      let packageSources: IPackageSource[] = [
+        {
+          key: 'nuget',
+          text: formatMessage('nuget'),
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: `microsoft.bot.components+tags:${botComponentTag}`,
           },
-          {
-            key: 'nuget',
-            text: 'nuget',
-            url: 'https://api.nuget.org/v3/index.json',
-            readonly: true,
-            defaultQuery: {
-              prerelease: true,
-              semVerLevel: '2.0.0',
-              query: 'microsoft.bot.components+tags:bf-component',
-            },
-            type: PackageSourceType.NuGet,
+          type: PackageSourceType.NuGet,
+        },
+        {
+          key: 'nuget-community',
+          text: formatMessage('community packages'),
+          url: 'https://api.nuget.org/v3/index.json',
+          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            semVerLevel: '2.0.0',
+            query: `tags:${botComponentTag}`,
           },
-        ];
-        composer.store.write('feeds', packageSources);
+          type: PackageSourceType.NuGet,
+        },
+        {
+          key: 'npm',
+          text: formatMessage('npm'),
+          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}+scope:microsoft&size=100&from=0`,
+          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
+          readonly: true,
+        },
+        {
+          key: 'npm-community',
+          text: formatMessage('JS community packages'),
+          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}&size=100&from=0`,
+          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
+          readonly: true,
+        },
+      ];
+
+      // If there are package sources stored in the user profile
+      if (userStoredSources) {
+        // Extract list of read-only sources
+        const readOnlyKeys = packageSources.map((s) => s.key);
+
+        // Add user sources to the package sources, excluding modifications of the read-only ones
+        packageSources = packageSources.concat(userStoredSources.filter((s) => !readOnlyKeys.includes(s.key)));
       }
+
+      composer.store.write('feeds', packageSources);
 
       res.json(packageSources);
     },
     updateFeeds: async function (req, res) {
-      const { key, updatedItem } = req.body;
-
-      let feeds = composer.store.read('feeds') as IPackageSource[];
-
-      if (!updatedItem) {
-        // update component state
-        feeds = feeds.filter((f) => f.key !== key);
-      } else if (feeds.filter((f) => f.key === key).length) {
-        // item found
-        feeds = feeds.map((f) => (f.key === key ? updatedItem : f));
-      } else {
-        // new item to be appended
-        feeds = feeds.concat([updatedItem]);
-      }
-
+      const { feeds } = req.body;
       composer.store.write('feeds', feeds);
       res.json(feeds);
     },
@@ -142,21 +200,22 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     getFeed: async function (req, res) {
       // We receive an array of urls for the package sources to retrieve.
       // Why an array? In the future it is feasible we would want to mix several feeds together...
-      const packageSourceUrls: string[] = [req.query.url];
-      let packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      // Get package sources that match a url in the feed query received.
-      packageSources = packageSources.filter((f) => f.url != null && packageSourceUrls.includes(f.url));
+      const packageSources: IPackageSource[] = composer.store.read('feeds') as IPackageSource[];
 
-      let combined: IPackageDefinition[] = [];
-      for (const packageSource of packageSources) {
+      const packageSource = packageSources.find((source) => source.key === req.query.key);
+      const combined: IPackageDefinition[] = [];
+
+      if (packageSource) {
         try {
           const feed: IFeed = await new FeedFactory(composer).build(packageSource);
           const packageQuery: IPackageQuery = {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: 'tags:bf-component',
+            query: 'tags:msbot-component',
           };
+
+          composer.log('GETTING FEED', packageSource, packageSource.defaultQuery ?? packageQuery);
 
           const packages = await feed.getPackages(packageSource.defaultQuery ?? packageQuery);
 
@@ -172,6 +231,10 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             message: `Could not load feed from URL ${packageSource.url}. Please check the feed URL and format. Error message: ${err.message}`,
           });
         }
+      } else {
+        return res.status(500).json({
+          message: `Could not find feed with key ${req.query.key}`,
+        });
       }
 
       const recentlyUsed = (composer.store.read('recentlyUsed') as any[]) || [];
@@ -213,7 +276,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (dryRunMergeResults) {
           res.json({
             projectId,
-            components: dryRunMergeResults.components.filter(isAdaptiveComponent),
+            components: await loadPackageAssets(dryRunMergeResults.components.filter(isAdaptiveComponent)),
           });
         } else {
           res.status(500).json({
@@ -301,7 +364,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             );
 
             const mergeResults = await realMerge.merge();
-            const installedComponents = mergeResults.components.filter(isAdaptiveComponent);
+
+            composer.log(
+              'MERGE RESULTS',
+              path.join(currentProject.dataDir, 'dialogs/imported'),
+              JSON.stringify(mergeResults, null, 2)
+            );
+
+            const installedComponents = await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent));
             if (mergeResults) {
               res.json({
                 success: true,
@@ -309,23 +379,26 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               });
 
               let runtimeLanguage = 'c#';
-              if (currentProject.settings.runtime.key === 'node-azurewebapp') {
+              if (
+                currentProject.settings.runtime.key === 'node-azurewebapp' ||
+                currentProject.settings.runtime.key.startsWith('adaptive-runtime-js')
+              ) {
                 runtimeLanguage = 'js';
               }
 
-              // update the settings.plugins array
+              // update the settings.components array
               const newlyInstalledPlugin = installedComponents.find((c) => hasSchema(c) && c.name == packageName);
               if (
                 newlyInstalledPlugin &&
-                !currentProject.settings.runtimeSettings?.plugins?.find((p) => p.name === newlyInstalledPlugin.name)
+                !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
               ) {
                 const newSettings = currentProject.settings;
                 if (!newSettings.runtimeSettings) {
                   newSettings.runtimeSettings = {
-                    plugins: [],
+                    components: [],
                   };
                 }
-                newSettings.runtimeSettings.plugins.push({
+                newSettings.runtimeSettings.components.push({
                   name: newlyInstalledPlugin.name,
                   settingsPrefix: newlyInstalledPlugin.name,
                 });
@@ -403,13 +476,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           res.json({
             success: true,
-            components: mergeResults.components.filter(isAdaptiveComponent),
+            components: await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent)),
           });
 
-          // update the settings.plugins array
-          if (currentProject.settings.runtimeSettings?.plugins?.find((p) => p.name === packageName)) {
+          // update the settings.components array
+          if (currentProject.settings.runtimeSettings?.components?.find((p) => p.name === packageName)) {
             const newSettings = currentProject.settings;
-            newSettings.runtimeSettings.plugins = newSettings.runtimeSettings.plugins.filter(
+            newSettings.runtimeSettings.components = newSettings.runtimeSettings.components.filter(
               (p) => p.name !== packageName
             );
             currentProject.updateEnvSettings(newSettings);

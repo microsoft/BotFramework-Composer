@@ -6,9 +6,10 @@ import uniqBy from 'lodash/uniqBy';
 import { selectorFamily } from 'recoil';
 
 import { getBaseName } from '../../utils/fileUtil';
-import { localeState, luFilesState } from '../atoms';
+import { localeState } from '../atoms';
 
 import { lgFilesSelectorFamily } from './lg';
+import { luFilesSelectorFamily } from './lu';
 
 // Finds all the file imports starting from a given dialog file.
 export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
@@ -36,10 +37,12 @@ export const getLanguageFileImports = <T extends LgFile | LuFile | QnAFile>(
       continue;
     }
     const currentImports = file.imports.map((item) => {
+      const importedFile = getFile(getBaseName(item.id));
+      const displayName = item.id.substring(0, item.id.indexOf('.'));
       return {
-        displayName: item.description,
+        displayName,
         importPath: item.path,
-        id: getBaseName(item.id),
+        id: importedFile ? importedFile.id : '',
       };
     });
 
@@ -62,7 +65,7 @@ export const lgImportsSelectorFamily = selectorFamily<LanguageFileImport[], { pr
       get(lgFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
 
     // Have to exclude common as a special case
-    return getLanguageFileImports(dialogId, getFile).filter((i) => i.id !== 'common');
+    return getLanguageFileImports(dialogId, getFile).filter((i) => getBaseName(i.id) !== 'common');
   },
 });
 
@@ -73,7 +76,7 @@ export const luImportsSelectorFamily = selectorFamily<LanguageFileImport[], { pr
     const locale = get(localeState(projectId));
 
     const getFile = (fileId: string) =>
-      get(luFilesState(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LuFile;
+      get(luFilesSelectorFamily(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LuFile;
 
     return getLanguageFileImports(dialogId, getFile);
   },

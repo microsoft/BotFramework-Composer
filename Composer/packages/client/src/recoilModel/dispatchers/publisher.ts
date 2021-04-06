@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig, isSkillHostUpdateRequired, PublishResult } from '@bfc/shared';
+import { defaultPublishConfig, isSkillHostUpdateRequired, PublishResult, PublishTarget } from '@bfc/shared';
 
 import {
   publishTypesState,
@@ -14,13 +14,18 @@ import {
   isEjectRuntimeExistState,
   filePersistenceState,
   settingsState,
-  luFilesState,
-  qnaFilesState,
+  botRuntimeLogState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
-import { rootBotProjectIdSelector, dialogsSelectorFamily } from '../selectors';
+import {
+  rootBotProjectIdSelector,
+  dialogsSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
+} from '../selectors';
 import * as luUtil from '../../utils/luUtil';
+import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
 
 import { BotStatus, Text } from './../../constants';
@@ -112,6 +117,9 @@ export const publisherDispatcher = () => {
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
+      if (data.runtimeLog) {
+        set(botRuntimeLogState(projectId), data.runtimeLog);
+      }
       if (status === PUBLISH_SUCCESS && endpointURL) {
         const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
         if (rootBotId === projectId) {
@@ -179,7 +187,7 @@ export const publisherDispatcher = () => {
   const publishToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       projectId: string,
-      target: any,
+      target: PublishTarget,
       metadata: any,
       sensitiveSettings,
       token = ''
@@ -187,15 +195,16 @@ export const publisherDispatcher = () => {
       try {
         const { snapshot } = callbackHelpers;
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-        const luFiles = await snapshot.getPromise(luFilesState(projectId));
-        const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+        const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
+        const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           accessToken: token,
           metadata: {
             ...metadata,
             luResources: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-            qnaResources: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+            qnaResources: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           },
           sensitiveSettings,
         });
@@ -248,6 +257,7 @@ export const publisherDispatcher = () => {
         const response = await httpClient.get(
           `/publish/${projectId}/status/${target.name}${currentJobId ? '/' + currentJobId : ''}`
         );
+
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
@@ -303,6 +313,7 @@ export const publisherDispatcher = () => {
   const resetBotRuntimeError = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { reset } = callbackHelpers;
     reset(botRuntimeErrorState(projectId));
+    reset(botRuntimeLogState(projectId));
   });
 
   const openBotInEmulator = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {

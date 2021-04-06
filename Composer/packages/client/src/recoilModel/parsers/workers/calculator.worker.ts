@@ -17,9 +17,18 @@ type MessageEvent = DifferenceMessage;
 
 const ctx: Worker = self as any;
 
+const getCompareFields = (value: FileAsset) => {
+  const { id, content } = value;
+  return { id, content };
+};
+
+const comparator = (value: FileAsset, other: FileAsset) => {
+  return isEqual(getCompareFields(value), getCompareFields(other));
+};
+
 export function getDifferenceItems(target: FileAsset[], origin: FileAsset[]) {
-  const changes1 = differenceWith(target, origin, isEqual);
-  const changes2 = differenceWith(origin, target, isEqual);
+  const changes1 = differenceWith(target, origin, comparator);
+  const changes2 = differenceWith(origin, target, comparator);
   const deleted = changes2.filter((change) => !target.some((file) => change.id === file.id));
   const { updated, added } = changes1.reduce(
     (result: { updated: FileAsset[]; added: FileAsset[] }, change) => {

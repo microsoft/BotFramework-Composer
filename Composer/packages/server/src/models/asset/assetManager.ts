@@ -5,12 +5,11 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, FileExtensions, BotTemplateV2, FeedType } from '@bfc/extension';
+import { UserIdentity, FileExtensions, FeedType, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import yeoman from 'yeoman-environment';
-import Environment from 'yeoman-environment';
-import TerminalAdapter from 'yeoman-environment/lib/adapter';
-import { QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from '@bfc/shared';
+import { ServerWorker } from '@bfc/server-workers';
+import isArray from 'lodash/isArray';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -22,6 +21,7 @@ import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
+import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -96,6 +96,9 @@ export class AssetManager {
     templateVersion: string,
     projectName: string,
     ref: LocationRef,
+    jobId: string,
+    runtimeType: RuntimeType,
+    runtimeLanguage: FeedName,
     user?: UserIdentity
   ): Promise<LocationRef> {
     try {
@@ -110,33 +113,23 @@ export class AssetManager {
       log('About to create folder', dstDir);
       mkdirSync(dstDir, { recursive: true });
 
-      // find selected template
-      const npmPackageName = templateId === QnABotTemplateId ? 'generator-empty-bot' : templateId;
-      const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+      const npmPackageName = templateId === QnABotTemplateId ? emptyBotNpmTemplateName : templateId;
 
-      // create yeoman environment
-      const yeomanEnv = yeoman.createEnv(
-        '',
-        { yeomanRepository: templateGeneratorPath },
-        new TerminalAdapter({ console: console })
+      await ServerWorker.execute(
+        'templateInstallation',
+        {
+          npmPackageName,
+          templateVersion,
+          dstDir,
+          projectName,
+          templateGeneratorPath,
+          runtimeType,
+          runtimeLanguage,
+        },
+        (status, msg) => {
+          BackgroundProcessManager.updateProcess(jobId, status, msg);
+        }
       );
-      yeomanEnv.lookupLocalPackages();
-
-      const remoteTemplateAvailable = await this.installRemoteTemplate(
-        yeomanEnv,
-        generatorName,
-        npmPackageName,
-        templateVersion
-      );
-
-      if (remoteTemplateAvailable) {
-        await this.instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName);
-      } else {
-        throw new Error(`error hit when installing remote template`);
-      }
-
-      ref.path = `${ref.path}/${projectName}`;
-
       return ref;
     } catch (err) {
       if (err?.message.match(/npm/)) {
@@ -147,42 +140,6 @@ export class AssetManager {
         throw new Error(`Error hit when instantiating remote template: ${err?.message}`);
       }
     }
-  }
-
-  private async installRemoteTemplate(
-    yeomanEnv: Environment,
-    generatorName: string,
-    npmPackageName: string,
-    templateVersion: string
-  ): Promise<boolean> {
-    yeomanEnv.cwd = templateGeneratorPath;
-    try {
-      log('Installing generator', npmPackageName);
-      templateVersion = templateVersion ? templateVersion : '*';
-      await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
-
-      log('Looking up local packages');
-      await yeomanEnv.lookupLocalPackages();
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  private async instantiateRemoteTemplate(
-    yeomanEnv: Environment,
-    generatorName: string,
-    dstDir: string,
-    projectName: string
-  ): Promise<boolean> {
-    log('About to instantiate a template!', dstDir, generatorName, projectName);
-    yeomanEnv.cwd = dstDir;
-    process.chdir(dstDir);
-
-    await yeomanEnv.run([generatorName, projectName], {}, () => {
-      log('Template successfully instantiated', dstDir, generatorName, projectName);
-    });
-    return true;
   }
 
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
@@ -304,26 +261,41 @@ export class AssetManager {
     }
   }
 
-  private async getFeedContents(feedUrl: string): Promise<BotTemplateV2[] | undefined | null> {
+  private async getFeedContents(feedUrl: string): Promise<BotTemplate[] | undefined | null> {
     try {
       const res = await fetch(feedUrl);
       const data = await res.json();
       const feedType = this.getFeedType();
+
       if (feedType === 'npm') {
         return data.objects.map((result) => {
-          const { name, version, description = '', keywords = [] } = result.package;
+          const { name, version, keywords, description = '' } = result.package;
           const displayName = this.getPackageDisplayName(name);
-          return {
+          const templateToReturn = {
             id: name,
             name: displayName,
             description: description,
-            keywords: keywords,
             package: {
               packageName: name,
               packageSource: 'npm',
               packageVersion: version,
             },
-          } as BotTemplateV2;
+          } as BotTemplate;
+          if (isArray(keywords)) {
+            if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
+              templateToReturn.dotnetSupport = {
+                functionsSupported: keywords.includes('bf-dotnet-functions'),
+                webAppSupported: keywords.includes('bf-dotnet-webapp'),
+              };
+            }
+            if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
+              templateToReturn.nodeSupport = {
+                functionsSupported: keywords.includes('bf-js-functions'),
+                webAppSupported: keywords.includes('bf-js-webapp'),
+              };
+            }
+          }
+          return templateToReturn;
         });
       } else if (feedType === 'nuget') {
         // TODO: handle nuget processing
@@ -335,8 +307,8 @@ export class AssetManager {
     }
   }
 
-  public async getCustomFeedTemplates(feedUrls: string[]): Promise<BotTemplateV2[]> {
-    let templates: BotTemplateV2[] = [];
+  public async getCustomFeedTemplates(feedUrls: string[]): Promise<BotTemplate[]> {
+    let templates: BotTemplate[] = [];
     const invalidFeedUrls: string[] = [];
 
     for (const feed of feedUrls) {

@@ -13,6 +13,11 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Environment',
     },
+    tenantId: {
+      type: 'string',
+      title: 'Tenant Id',
+      description: 'The tenant id of Azure account.',
+    },
     hostname: {
       type: 'string',
       title: 'Custom webapp hostname (if not <name>-<env>)',
@@ -32,19 +37,19 @@ const schema: JSONSchema7 = {
     },
     botName: {
       type: 'string',
-      title: 'Name of your bot channel registration service'
+      title: 'Name of your bot channel registration service',
     },
     resourceGroup: {
       type: 'string',
-      title: 'the name of your resource group'
+      title: 'the name of your resource group',
     },
     subscriptionId: {
       type: 'string',
-      title: 'the id of your subscription'
+      title: 'the id of your subscription',
     },
     region: {
       type: 'string',
-      title: 'region of your resource group'
+      title: 'region of your resource group',
     },
     settings: {
       type: 'object',
@@ -113,13 +118,13 @@ const schema: JSONSchema7 = {
           type: 'object',
           properties: {
             subscriptionKey: {
-              type: 'string'
+              type: 'string',
             },
             endpoint: {
-              type: 'string'
-            }
+              type: 'string',
+            },
           },
-          required: ['subscriptionKey', 'endpoint']
+          required: ['subscriptionKey', 'endpoint'],
         },
         MicrosoftAppId: {
           type: 'string',
@@ -135,6 +140,7 @@ const schema: JSONSchema7 = {
   default: {
     name: '<unique name in your subscription>',
     environment: 'dev',
+    tenantId: '<tenant id of your azure account>',
     runtimeIdentifier: 'win-x64',
     resourceGroup: '<name of your resource group>',
     botName: '<name of your bot channel registration>',
@@ -163,7 +169,7 @@ const schema: JSONSchema7 = {
       },
       qna: {
         subscriptionKey: '<subscription key>',
-        endpoint: '<endpoint>'
+        endpoint: '<endpoint>',
       },
       MicrosoftAppId: '<app id from Bot Framework registration>',
       MicrosoftAppPassword: '<app password from Bot Framework registration>',

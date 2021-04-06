@@ -61,13 +61,12 @@ export const provisionDispatcher = () => {
     ) => {
       try {
         TelemetryClient.track('NewPublishingProfileStarted');
-        const result = await httpClient.post(
-          `/provision/${projectId}/${type}`,
-          { ...config, graphToken: graphToken, currentProfile },
-          {
-            headers: { Authorization: `Bearer ${armToken}` },
-          }
-        );
+        const result = await httpClient.post(`/provision/${projectId}/${type}`, {
+          ...config,
+          graphToken: graphToken,
+          currentProfile,
+          accessToken: armToken,
+        });
         // set notification
         const notification = createNotification(getProvisionPendingNotification(result.data.message));
         addNotificationInternal(callbackHelpers, notification);
@@ -138,7 +137,11 @@ export const provisionDispatcher = () => {
             };
           });
 
-          TelemetryClient.track('NewPublishingProfileSaved', { type: targetType });
+          TelemetryClient.track('NewPublishingProfileSaved', {
+            type: targetType,
+            msAppId: response.data.config.settings?.MicrosoftAppId,
+            subscriptionId: response.data.config.subscriptionId,
+          });
 
           notification = getProvisionSuccessNotification(response.data.message);
           isCleanTimer = true;

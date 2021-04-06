@@ -104,10 +104,10 @@ type Props = {
 const errorElement = (errorText: string) => {
   if (!errorText) return '';
   return (
-    <div css={errorContainer}>
+    <span css={errorContainer}>
       <Icon iconName="ErrorBadge" styles={errorIcon} />
-      <div css={errorTextStyle}>{errorText}</div>
-    </div>
+      <span css={errorTextStyle}>{errorText}</span>
+    </span>
   );
 };
 
@@ -156,7 +156,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     id,
     label,
     required,
-    'aria-label': ariaLabel,
+    ariaLabel,
   };
   const commonDisabledProps = {
     disabled: true,

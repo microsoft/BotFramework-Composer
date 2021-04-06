@@ -10,9 +10,9 @@ import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DialogSetting } from '@bfc/shared';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
@@ -21,9 +21,9 @@ import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { useFeatureFlag } from '../../utils/hooks';
 
-import BotProjectSettingsTableView from './BotProjectSettingsTableView';
+import { openDeleteBotModal } from './DeleteBotButton';
+import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 
 // -------------------- Styles -------------------- //
 
@@ -43,18 +43,6 @@ const container = css`
   height: 100%;
 `;
 
-const botNameStyle = css`
-  font-size: ${FontSizes.xLarge};
-  font-weight: ${FontWeights.semibold};
-  color: ${NeutralColors.black};
-`;
-
-const mainContentHeader = css`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-`;
-
 // -------------------- BotProjectSettings -------------------- //
 
 const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
@@ -64,16 +52,84 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const userSettings = useRecoilValue(userSettingsState);
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
-  const newCreationFlowFlag = useFeatureFlag('NEW_CREATION_FLOW');
+  const { deleteBot } = useRecoilValue(dispatcherState);
 
-  const isRootBot = !!botProject?.isRootBot;
-  const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
 
   const [isAdvancedSettingsEnabled, setAdvancedSettingsEnabled] = useState<boolean>(false);
 
   const { setSettings } = useRecoilValue(dispatcherState);
+
+  const buttonClick = (link) => {
+    TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
+    navigateTo(link);
+  };
+
+  const toolbarItems = useMemo(() => {
+    const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
+    const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
+    const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
+    const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
+
+    return [
+      {
+        text: formatMessage('Add a package'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'Package' },
+          onClick: () => buttonClick(linkToPackageManager),
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+      {
+        text: formatMessage('Edit LG'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'Robot' },
+          onClick: () => buttonClick(linkToLGEditor),
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+      {
+        text: formatMessage('Edit LU'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'People' },
+          onClick: () => buttonClick(linkToLUEditor),
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+      {
+        text: formatMessage('Manage connections'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'PlugConnected' },
+          onClick: () => buttonClick(linkToConnections),
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+      {
+        text: formatMessage('Delete bot'),
+        type: 'action',
+        buttonProps: {
+          iconProps: { iconName: 'Trash' },
+          onClick: () => {
+            openDeleteBotModal(async () => {
+              await deleteBot(projectId);
+              navigateTo('home');
+            });
+          },
+          styles: defaultToolbarButtonStyles,
+        },
+        align: 'left',
+      },
+    ];
+  }, [projectId, rootBotProjectId]);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const localBotProjects = botProjects.filter((b) => !b.isRemote);
@@ -128,25 +184,11 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       pageMode={'botProjectsSettings'}
       shouldShowEditorError={false}
       title={formatMessage('Bot management and configurations')}
-      toolbarItems={[]}
-      useGettingStarted={newCreationFlowFlag} // when this feature flag is deprecated, this should always be set to true
+      toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
-          <div css={mainContentHeader}>
-            <div css={botNameStyle}>
-              {`${botName} (${isRootBot ? formatMessage('Root Bot') : formatMessage('Skill')})`}
-            </div>
-            <Toggle
-              inlineLabel
-              checked={isAdvancedSettingsEnabled}
-              className={'advancedSettingsView'}
-              defaultChecked={false}
-              label={formatMessage('Advanced Settings View (json)')}
-              onChange={() => setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled)}
-            />
-          </div>
           {isAdvancedSettingsEnabled ? (
             <JsonEditor
               key={'settingsjson'}
@@ -156,8 +198,19 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               onChange={handleChange}
             />
           ) : (
-            <BotProjectSettingsTableView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
+            <BotProjectSettingsTabView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
           )}
+          <Toggle
+            inlineLabel
+            checked={isAdvancedSettingsEnabled}
+            className={'advancedSettingsView'}
+            defaultChecked={false}
+            label={formatMessage('Advanced Settings View (json)')}
+            styles={{ root: { position: 'absolute', left: '700px', top: '30px' } }}
+            onChange={() => {
+              setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
+            }}
+          />
         </div>
       </Suspense>
     </Page>

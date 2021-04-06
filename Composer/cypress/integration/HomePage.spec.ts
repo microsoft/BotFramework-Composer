@@ -9,7 +9,6 @@ context('Home Page ', () => {
   it('can open buttons in home page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-Toolbar-New').click();
-    cy.findByText('Create bot from template or scratch?').should('exist');
     cy.findByText('Cancel').should('exist');
     cy.findByText('Cancel').click();
     cy.findByTestId('homePage-Toolbar-Open').click();
@@ -17,6 +16,5 @@ context('Home Page ', () => {
     cy.findByText('Cancel').should('exist');
     cy.findByText('Cancel').click();
     cy.findByTestId('homePage-body-New').click();
-    cy.findByText('Create bot from template or scratch?').should('exist');
   });
 });

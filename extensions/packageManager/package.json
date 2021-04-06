@@ -7,7 +7,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "build": "node ../build.js",
+    "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
   "composer": {
@@ -50,7 +50,7 @@
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/ui-shared": "file:../../Composer/packages/lib/ui-shared",
     "@emotion/core": "^10.0.35",
-    "@microsoft/bf-dialog": "4.11.0",
+    "@microsoft/bf-dialog": "4.13.0-dev.20210401.8dc6ffe",
     "@uifabric/fluent-theme": "^7.1.4",
     "axios": "^0.19.2",
     "date-fns": "^2.16.1",

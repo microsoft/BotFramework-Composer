@@ -13,19 +13,13 @@ import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
-import {
-  recentProjectsState,
-  templateIdState,
-  currentProjectIdState,
-  featureFlagsState,
-} from '../../recoilModel/atoms/appState';
+import { dispatcherState, botDisplayNameState } from '../../recoilModel';
+import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
-import { ExampleList } from './ExampleList';
 
 const linksBottom = [
   {
@@ -74,12 +68,9 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowType,
   } = useRecoilValue(dispatcherState);
 
-  const featureFlags = useRecoilValue(featureFlagsState);
-  const botTemplates = useRecoilValue(templateProjectsState);
-
   const onItemChosen = async (item) => {
     if (item?.path) {
-      await openProject(item.path, 'default', true, (projectId) => {
+      await openProject(item.path, 'default', true, null, (projectId) => {
         TelemetryClient.track('BotProjectOpened', { method: 'list', projectId });
       });
     }
@@ -99,7 +90,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const onClickNewBot = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
-    featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
+    navigate(`v2/projects/create`);
   };
 
   const toolbarItems: IToolbarItem[] = [
@@ -188,7 +179,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={async () => {
-                  await openProject(recentProjects[0].path, 'default', true, (projectId) => {
+                  await openProject(recentProjects[0].path, 'default', true, null, (projectId) => {
                     TelemetryClient.track('BotProjectOpened', { method: 'callToAction', projectId });
                   });
                 }}
@@ -257,17 +248,6 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
-          <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
-            <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
-            <p css={home.examplesDescription}>
-              {formatMessage(
-                "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
-              )}
-            </p>
-            <ExampleList examples={botTemplates} onClick={onClickTemplate} />
-          </div>
-        )}
       </div>
     </div>
   );

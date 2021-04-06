@@ -7,6 +7,10 @@ import { DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 import { offsetRange } from '@bfc/indexers';
+import { FoldingRange } from 'vscode-languageserver';
+import { LGResource, Templates } from 'botbuilder-lg';
+import { Expression } from 'adaptive-expressions';
+import uniq from 'lodash/uniq';
 
 const { parseFile } = parser;
 
@@ -45,13 +49,17 @@ export interface LGDocument {
 
 export type LGFileResolver = (id: string) => LgFile | undefined;
 
-export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
+export function getRangeAtPosition(
+  document: TextDocument,
+  position: Position,
+  includesDotAndAt?: boolean
+): Range | undefined {
   const text = document.getText();
   const line = position.line;
   const pos = position.character;
   const lineText = text.split(/\r?\n/g)[line];
   let match: RegExpMatchArray | null;
-  const wordDefinition = /[a-zA-Z0-9_/.-]+/g;
+  const wordDefinition = includesDotAndAt ? /[a-zA-Z0-9_.@]+/g : /[a-zA-Z0-9_]+/g;
   while ((match = wordDefinition.exec(lineText))) {
     const matchIndex = match.index || 0;
     if (matchIndex > pos) {
@@ -218,9 +226,104 @@ export const suggestionAllEntityTypes = [
   'composites',
 ];
 
-export function getLineByIndex(document: TextDocument, line: number) {
-  const lineCount = document.lineCount;
-  if (line >= lineCount || line < 0) return null;
+export function createFoldingRanges(lines: string[], prefix: string) {
+  const items: FoldingRange[] = [];
 
-  return document.getText().split(/\r?\n/g)[line];
+  if (!lines || lines.length === 0) {
+    return items;
+  }
+
+  const lineCount = lines.length;
+  let startIdx = -1;
+
+  for (let i = 0; i < lineCount; i++) {
+    if (lines[i].trim().startsWith(prefix)) {
+      if (startIdx !== -1) {
+        items.push(FoldingRange.create(startIdx, i - 1));
+      }
+
+      startIdx = i;
+    }
+  }
+
+  if (startIdx !== -1) {
+    items.push(FoldingRange.create(startIdx, lineCount - 1));
+  }
+
+  return items;
+}
+
+function findExpr(pst: any, result: string[]): void {
+  const exprRegex = /\$\{.*\}/;
+  if (pst.childCount === 0) {
+    if (exprRegex.test(pst.text)) {
+      result.push(pst.text.substr(2, pst.text.length - 3));
+    }
+  } else {
+    const count = pst.childCount;
+    for (let i = 0; i < count; i++) {
+      const child = pst.getChild(i);
+      findExpr(child, result);
+    }
+  }
+}
+
+function findAllExprs(contents: string | string[]): string[] {
+  const result = [];
+  if (typeof contents === 'string') {
+    try {
+      const templates = Templates.parseResource(new LGResource('id', 'name', contents));
+      templates.allTemplates.forEach((t) => {
+        const parseTree = t.templateBodyParseTree;
+        findExpr(parseTree, result);
+      });
+    } catch (e) {
+      // do nothing
+    }
+  } else {
+    for (const lg of contents) {
+      try {
+        const templates = Templates.parseResource(new LGResource('id', 'name', lg));
+        templates.allTemplates.forEach((t) => {
+          const parseTree = t.templateBodyParseTree;
+          findExpr(parseTree, result);
+        });
+      } catch (e) {
+        // do nothing
+      }
+    }
+  }
+
+  return uniq(result);
+}
+
+function findVariables(expr: Expression, result: string[]) {
+  if (expr.type === 'Accessor') {
+    result.push(expr.toString());
+  } else {
+    if (expr.children.length >= 1) {
+      for (const child of expr.children) {
+        if (child.type === 'Accessor') {
+          result.push(child.toString());
+        } else {
+          findVariables(child, result);
+        }
+      }
+    }
+  }
+}
+
+export function findAllVariables(contents: string | string[]) {
+  const exprs = findAllExprs(contents);
+  const result = [];
+  for (const expr of exprs) {
+    try {
+      const exp = Expression.parse(expr);
+      findVariables(exp, result);
+    } catch (e) {
+      // do nothing
+    }
+  }
+
+  return uniq(result);
 }

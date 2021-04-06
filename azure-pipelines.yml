@@ -1,6 +1,3 @@
-trigger:
-  - main
-
 pr:
   autoCancel: true
   branches:
@@ -20,17 +17,23 @@ jobs:
       vmImage: ubuntu-latest
 
     steps:
+
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'runtime'
+          version: '3.1.x'
       - task: NodeTool@0
         displayName: "Use Node 14.15.5"
         inputs:
           versionSpec: 14.15.5
-      # - task: Cache@2
-      #   inputs:
-      #     key: yarn | $(Agent.OS) | Composer/yarn.lock
-      #     path: $(YARN_CACHE_FOLDER)
-      #     restoreKeys: |
-      #       yarn | $(Agent.OS)
-      #   displayName: Cache Yarn packages
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script:
+            # Write your commands here
+            dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json
+
+            npm install -g @microsoft/generator-bot-empty
       - task: Cache@2
         displayName: Cache Cypress binary
         inputs:
@@ -72,7 +75,7 @@ jobs:
       - task: UseDotNet@2
         inputs:
           version: "3.1.x"
-          packageType: runtime
+          packageType: sdk
       - task: DotNetCoreCLI@2
         displayName: "dotnet build"
         inputs:

@@ -67,6 +67,16 @@ export const customerLabel = css`
   margin-right: 5px;
 `;
 
+export const customError = {
+  root: {
+    selectors: {
+      'p > span': {
+        width: '100%',
+      },
+    },
+  },
+};
+
 // These bg and icon colors are the standard Fluent ones for Messaging, which
 // aren't exported anywhere they can easily be reached
 // Docs: https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/messaging
@@ -74,10 +84,10 @@ export const customerLabel = css`
 export const errorContainer = css`
   display: flex;
   width: 100%;
-  line-height: 24px;
+  line-height: 20px;
   padding-top: 12px;
   padding-bottom: 12px;
-  background: '#fde7e9';
+  background: #fed9cc;
   color: ${NeutralColors.black};
 `;
 
@@ -111,3 +121,13 @@ export const unknownIconStyle = (required: boolean) => {
 };
 
 export const columnSizes = ['300px', '150px', '150px'];
+
+export const actionButton = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    marginLeft: 5,
+  },
+};

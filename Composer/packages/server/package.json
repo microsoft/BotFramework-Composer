@@ -23,13 +23,14 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --max-http-header-size=16000 --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "yarn build && yarn start",
     "watch": [
       "src",
-      "../extension/lib"
+      "../extension/lib",
+      "../../../extensions/**/dist/extension.js"
     ],
-    "ext": "ts",
-    "delay": 2
+    "ext": "ts,js",
+    "delay": 2.5
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "7.8.3",
@@ -74,13 +75,14 @@
     "@bfc/intellisense-languageserver": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
+    "@bfc/server-workers": "*",
     "@bfc/shared": "*",
     "@botframework-composer/types": "*",
     "@microsoft/bf-dialog": "4.11.0-dev.20201025.69cf2b9",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
     "@microsoft/bf-generate-library": "^4.10.0-daily.20210225.217555",
     "@microsoft/bf-lu": "4.12.0-rc0",
-    "@microsoft/bf-orchestrator": "4.12.0-beta.20210218.668cdac",
+    "@microsoft/bf-orchestrator": "4.13.0-rc0",
     "applicationinsights": "^1.8.7",
     "archiver": "^5.0.2",
     "axios": "^0.21.1",
