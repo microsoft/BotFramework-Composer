@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useState, Fragment, useEffect, useMemo } from 'react';
-import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -17,18 +16,18 @@ import {
   CheckboxVisibility,
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { WindowLocation } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { csharpFeedKey } from '@botframework-composer/types';
+import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import msftIcon from '../../../images/msftIcon.svg';
-import { DialogCreationCopy, feedDictionary } from '../../../constants';
+import { DialogCreationCopy } from '../../../constants';
 import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
@@ -112,15 +111,13 @@ const optionKeys = {
 const templateRequestUrl =
   'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
 
-const defaultTemplateId = '@microsoft/generator-microsoft-bot-empty';
-
 // -------------------- CreateOptions -------------------- //
 type CreateBotProps = {
   isOpen: boolean;
   templates: BotTemplate[];
   location?: WindowLocation | undefined;
   onDismiss: () => void;
-  onNext: (templateName: string, urlData?: string) => void;
+  onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 };
@@ -129,9 +126,11 @@ export function CreateBotV2(props: CreateBotProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
   const { isOpen, templates, onDismiss, onNext } = props;
-  const [currentTemplateId, setCurrentTemplateId] = useState(defaultTemplateId);
-  const [emptyBotKey, setEmptyBotKey] = useState('');
-  const [selectedFeed, setSelectedFeed] = useState<{ props: IPivotItemProps }>({ props: { itemKey: csharpFeedKey } });
+  const [currentTemplateId, setCurrentTemplateId] = useState('');
+  const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
+    props: { itemKey: csharpFeedKey },
+  });
+  const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -140,6 +139,7 @@ export function CreateBotV2(props: CreateBotProps) {
     return new Selection({
       onSelectionChanged: () => {
         const t = selectedTemplate.getSelection()[0] as BotTemplate;
+
         if (t) {
           setCurrentTemplateId(t.id);
         }
@@ -148,21 +148,13 @@ export function CreateBotV2(props: CreateBotProps) {
   }, []);
 
   const handleJumpToNext = () => {
-    let routeToTemplate = emptyBotKey;
-    if (option === optionKeys.createFromTemplate) {
-      routeToTemplate = currentTemplateId;
-    }
-
-    if (option === optionKeys.createFromQnA) {
-      routeToTemplate = QnABotTemplateId;
-    }
-
-    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: currentTemplateId });
+    const runtimeLanguage = selectedProgLang?.props?.itemKey ?? csharpFeedKey;
 
     if (location?.search) {
-      onNext(routeToTemplate, location.search);
+      onNext(currentTemplateId, runtimeLanguage, location.search);
     } else {
-      onNext(routeToTemplate);
+      onNext(currentTemplateId, runtimeLanguage);
     }
   };
 
@@ -200,27 +192,32 @@ export function CreateBotV2(props: CreateBotProps) {
   };
 
   const getTemplate = (): BotTemplate | undefined => {
-    const currentTemplate = templates.find((t) => {
-      return t.id === currentTemplateId;
+    const currentTemplate = displayedTemplates.find((t) => {
+      return t?.id === currentTemplateId;
     });
     return currentTemplate;
   };
 
   useEffect(() => {
-    if (templates.length > 1) {
-      const emptyBotTemplate = find(templates, ['id', defaultTemplateId]);
-      if (emptyBotTemplate) {
-        setCurrentTemplateId(emptyBotTemplate.id);
-        setEmptyBotKey(emptyBotTemplate.id);
-      }
+    const itemKey = selectedProgLang.props.itemKey;
+    if (itemKey === csharpFeedKey) {
+      const newTemplates = templates.filter((template) => {
+        return template.dotnetSupport;
+      });
+      setDisplayedTemplates(newTemplates);
+    } else if (itemKey === nodeFeedKey) {
+      const newTemplates = templates.filter((template) => {
+        return template.nodeSupport;
+      });
+      setDisplayedTemplates(newTemplates);
     }
-  }, [templates]);
+  }, [templates, selectedProgLang]);
 
   useEffect(() => {
-    if (selectedFeed?.props?.itemKey) {
-      props.fetchTemplates([feedDictionary[selectedFeed.props.itemKey]]);
+    if (displayedTemplates?.[0]?.id) {
+      setCurrentTemplateId(displayedTemplates[0].id);
     }
-  }, [selectedFeed]);
+  }, [displayedTemplates]);
 
   useEffect(() => {
     if (currentTemplateId) {
@@ -238,11 +235,12 @@ export function CreateBotV2(props: CreateBotProps) {
           defaultSelectedKey={csharpFeedKey}
           onLinkClick={(item) => {
             if (item) {
-              setSelectedFeed(item);
+              setSelectedProgLang(item);
             }
           }}
         >
-          <PivotItem headerText="C#" itemKey={csharpFeedKey}></PivotItem>
+          <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
+          <PivotItem data-testid="nodeFeed" headerText="Node" itemKey={nodeFeedKey}></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
@@ -256,7 +254,7 @@ export function CreateBotV2(props: CreateBotProps) {
                 compact={false}
                 getKey={(item) => item.name}
                 isHeaderVisible={false}
-                items={templates}
+                items={displayedTemplates}
                 layoutMode={DetailsListLayoutMode.justified}
                 selection={selectedTemplate}
                 selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
