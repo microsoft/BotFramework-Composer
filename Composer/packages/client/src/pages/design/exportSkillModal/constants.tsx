@@ -131,7 +131,6 @@ interface EditorStep {
 }
 
 export enum ManifestEditorSteps {
-  // ENDPOINTS = 'ENDPOINTS',
   FETCH_MANIFEST_SCHEMA = 'FETCH_MANIFEST_SCHEMA',
   MANIFEST_DESCRIPTION = 'MANIFEST_DESCRIPTION',
   MANIFEST_REVIEW = 'MANIFEST_REVIEW',
@@ -151,8 +150,6 @@ export const order: ManifestEditorSteps[] = [
   ManifestEditorSteps.SELECT_TRIGGERS,
   ManifestEditorSteps.ADD_CALLERS,
   ManifestEditorSteps.SELECT_PROFILE,
-  // ManifestEditorSteps.MANIFEST_REVIEW,
-  // ManifestEditorSteps.SAVE_MANIFEST,
 ];
 
 const cancelButton: Button = {
