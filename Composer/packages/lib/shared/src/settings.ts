@@ -11,18 +11,17 @@ import { DialogSetting, PublishProfile } from '@botframework-composer/types';
  * @returns
  */
 export const applyPublishingProfileToSettings = (settings: DialogSetting, profile: PublishProfile): DialogSetting => {
-
   // ensure the runtimeSettings key exists
   settings.runtimeSettings = {
     ...settings.runtimeSettings,
-  }
+  };
 
   // apply the application insights resource from the publish profile
   // to the telemetry setting
   if (profile.settings.applicationInsights?.InstrumentationKey) {
     settings.runtimeSettings.telemetry = {
       instrumentationKey: profile.settings.applicationInsights.InstrumentationKey,
-    }
+    };
   }
 
   // apply the blob storage resource from the publish profile
@@ -32,31 +31,31 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
       ...settings.runtimeSettings.features,
       blobTranscript: {
         connectionString: profile.settings.blobStorage.connectionString,
-        containerName: profile.settings.blobStorage.container
-      }
-    }
+        containerName: profile.settings.blobStorage.container,
+      },
+    };
   }
 
   // apply the cosmosDb resource to the storage setting
   if (profile.settings.cosmosDb?.authKey) {
     settings.runtimeSettings.storage = 'CosmosDbPartitionedStorage';
-    settings.CosmosDbPartitionedStorage = {...profile.settings.cosmosDb};
+    settings.CosmosDbPartitionedStorage = { ...profile.settings.cosmosDb };
   }
 
   // apply LUIS settings
   if (profile.settings.luis) {
     settings.luis = {
       ...settings.luis,
-      ...profile.settings.luis
-    }
+      ...profile.settings.luis,
+    };
   }
 
   // apply QNA settings
   if (profile.settings.qna) {
     settings.qna = {
       ...settings.qna,
-      ...profile.settings.qna
-    }
+      ...profile.settings.qna,
+    };
   }
 
   // apply the app id and password
@@ -64,5 +63,4 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
   settings.MicrosoftAppPassword = profile.settings.MicrosoftAppPassword;
 
   return settings;
-
-}
+};
