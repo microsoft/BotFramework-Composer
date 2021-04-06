@@ -27,6 +27,7 @@ describe('<CreationFlowV2/>', () => {
       onboardingAddCoachMarkRef: jest.fn(),
       fetchRecentProjects: jest.fn(),
       fetchTemplates: jest.fn(),
+      fetchTemplatesV2: jest.fn(),
       setCreationFlowStatus: jest.fn(),
       navTo: jest.fn(),
       saveTemplateId: jest.fn(),
@@ -71,7 +72,7 @@ describe('<CreationFlowV2/>', () => {
       </RecoilRoot>
     );
 
-    navigate('create/generator-conversational-core');
+    navigate('create/dotnet/generator-conversational-core');
     const node = await findByText('OK');
 
     act(() => {
@@ -94,8 +95,13 @@ describe('<CreationFlowV2/>', () => {
       eTag: undefined,
       preserveRoot: undefined,
       qnqKbUrls: undefined,
+      runtimeType: 'webapp',
       templateDir: undefined,
       urlSuffix: undefined,
+      profile: undefined,
+      qnaKbUrls: undefined,
+      runtimeLanguage: 'dotnet',
+      source: undefined,
     });
   });
 });

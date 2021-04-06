@@ -31,27 +31,21 @@ describe('<BotStatusIndicator />', () => {
   });
 
   it('should render the Local Bot Runtime with publishing status', async () => {
-    const { findAllByText } = renderWithRecoil(
-      <BotStatusIndicator projectId={projectId} setGlobalErrorCalloutVisibility={jest.fn()} />,
-      ({ set }) => {
-        set(botStatusState(projectId), BotStatus.publishing);
-      }
-    );
+    const { findAllByText } = renderWithRecoil(<BotStatusIndicator projectId={projectId} />, ({ set }) => {
+      set(botStatusState(projectId), BotStatus.publishing);
+    });
     const element = await findAllByText(BotStatusesCopy.publishing);
     expect(element).toBeDefined();
   });
 
   it('should show error if bot start failed', async () => {
-    const { findByText } = renderWithRecoil(
-      <BotStatusIndicator projectId={projectId} setGlobalErrorCalloutVisibility={jest.fn()} />,
-      ({ set }) => {
-        set(botStatusState(projectId), BotStatus.failed);
-        set(botRuntimeErrorState(projectId), {
-          title: 'Error',
-          message: 'Failed to bind to port 3979',
-        });
-      }
-    );
+    const { findByText } = renderWithRecoil(<BotStatusIndicator projectId={projectId} />, ({ set }) => {
+      set(botStatusState(projectId), BotStatus.failed);
+      set(botRuntimeErrorState(projectId), {
+        title: 'Error',
+        message: 'Failed to bind to port 3979',
+      });
+    });
     expect(findByText('See Details')).toBeDefined();
   });
 });

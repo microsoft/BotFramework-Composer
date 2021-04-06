@@ -477,7 +477,13 @@ export class BotProject implements IBotProject {
     return createdFiles;
   };
 
-  public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
+  public buildFiles = async ({
+    luisConfig,
+    qnaConfig,
+    orchestratorConfig,
+    luResource = [],
+    qnaResource = [],
+  }: IBuildConfig) => {
     if (this.settings) {
       const luFiles: FileInfo[] = [];
       const emptyFiles = {};
@@ -501,7 +507,12 @@ export class BotProject implements IBotProject {
 
       this.builder.rootDir = this.dir;
       this.builder.setBuildConfig(
-        { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey ?? '', qnaRegion: qnaConfig.qnaRegion ?? '' },
+        {
+          ...luisConfig,
+          subscriptionKey: qnaConfig.subscriptionKey ?? '',
+          qnaRegion: qnaConfig.qnaRegion ?? '',
+          ...orchestratorConfig,
+        },
         this.settings.downsampling
       );
       await this.builder.build(

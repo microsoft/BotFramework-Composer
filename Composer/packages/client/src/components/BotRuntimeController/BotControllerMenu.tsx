@@ -14,6 +14,7 @@ import formatMessage from 'format-message';
 
 import { BotRuntimeOperations } from './BotRuntimeOperations';
 import { BotStatusIndicator } from './BotStatusIndicator';
+import { BotErrorViewer } from './BotErrorViewer';
 import { OpenEmulatorButton } from './OpenEmulatorButton';
 import { OpenWebChatButton } from './OpenWebChatButton';
 
@@ -63,16 +64,17 @@ const tableColumns: IColumn[] = [
     minWidth: 150,
     isResizable: true,
     isRowHeader: true,
-    onRender: (item: {
-      displayName: string;
-      projectId: string;
-      setGlobalErrorCalloutVisibility: (isVisible: boolean) => void;
-    }) => {
+    onRender: (item: { displayName: string; projectId: string }) => {
       return (
-        <BotStatusIndicator
-          projectId={item.projectId}
-          setGlobalErrorCalloutVisibility={item.setGlobalErrorCalloutVisibility}
-        />
+        <div
+          css={{
+            display: 'flex',
+            flex: '1 1 auto',
+          }}
+        >
+          <BotStatusIndicator projectId={item.projectId} />
+          <BotErrorViewer projectId={item.projectId} />
+        </div>
       );
     },
   },
