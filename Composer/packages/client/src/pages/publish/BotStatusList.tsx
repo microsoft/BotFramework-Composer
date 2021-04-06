@@ -38,14 +38,14 @@ type SkillManifestUrlFieldProps = {
 const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
   const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(url);
 
-  const calloutTarget = useRef<EventTarget>();
+  const calloutTarget = useRef<HTMLElement>();
   return (
     <Fragment>
       <ActionButton
         className="skill-manifest-copy-button"
         title={url}
         onClick={(e) => {
-          calloutTarget.current = e.target;
+          calloutTarget.current = e.target as HTMLElement;
           copyTextToClipboard();
         }}
       >
