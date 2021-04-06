@@ -227,12 +227,16 @@ export const childrenContainer = css`
 `;
 
 export const detailListContainer = css`
+  border-top: 1px solid ${NeutralColors.gray30};
   position: relative;
   max-height: 40vh;
   padding-top: 10px;
   overflow: hidden;
   flex-grow: 1;
   min-height: 250px;
+  .ms-DetailsHeader {
+    padding-top: 0;
+  }
 `;
 
 export const whatsNewsContainer = css`
