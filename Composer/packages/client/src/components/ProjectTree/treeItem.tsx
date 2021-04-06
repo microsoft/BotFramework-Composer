@@ -402,6 +402,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
 
   const a11yLabel = `${itemType} ${link.displayName}`;
+  const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
@@ -537,7 +538,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         padLeft,
         marginLeft
       )}
-      data-testid={a11yLabel}
+      data-testid={dataTestId}
       role={role}
       tabIndex={0}
       onClick={() => {
