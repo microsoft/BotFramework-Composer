@@ -63,10 +63,11 @@ export const recentProjectsState = atom<any[]>({
   default: [],
 });
 
-export const feedState = atom<{ tabs: any[]; whatsNewLinks: any[]; version: number }>({
+export const feedState = atom<{ tabs: any[]; whatsNewLinks: any[]; version: number; fetched: boolean }>({
   key: getFullyQualifiedKey('feed'),
   default: {
     version: FEEDVERSION,
+    fetched: false,
     tabs: [],
     whatsNewLinks: [],
   },

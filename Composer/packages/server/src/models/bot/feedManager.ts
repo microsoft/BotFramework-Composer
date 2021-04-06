@@ -16,7 +16,7 @@ const creds = new msRest.TokenCredentials(token);
 const client = new msRest.ServiceClient(creds, clientOptions);
 
 // TODO: update feed url to main
-const feedUrl = 'https://api.jsonbin.io/b/6066712c7474c23d9027bf10/1';
+const feedUrl = 'https://api.jsonbin.io/b/6066712c7474c23d9027bf10/3';
 
 export const getFeedUrl = async (): Promise<any> => {
   const { bodyAsText: content } = await client.sendRequest({
@@ -24,5 +24,5 @@ export const getFeedUrl = async (): Promise<any> => {
     method: 'GET',
   });
 
-  return typeof content === 'string' ? JSON.parse(content) : {};
+  return content && typeof content === 'string' ? JSON.parse(content) : {};
 };

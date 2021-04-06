@@ -475,12 +475,15 @@ export const projectDispatcher = () => {
   });
 
   const fetchFeed = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
+    const { fetched } = await snapshot.getPromise(feedState);
+    if (fetched) return;
+
     try {
       const response = await httpClient.get(`/projects/feed`);
       // feed version control
       if (response.data.version === FEEDVERSION) {
-        set(feedState, response.data);
+        set(feedState, { ...response.data, fetched: true });
       } else {
         logMessage(callbackHelpers, `Feed version expired`);
       }
