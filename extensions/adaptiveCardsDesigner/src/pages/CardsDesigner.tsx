@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import styled from '@emotion/styled'
 import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import formatMessage from 'format-message';
@@ -15,15 +16,21 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import querystring from 'query-string';
 
-const Library: React.FC = (props) => {
+const AdaptiveCardDesignerContainer = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100vh'
+});
+
+const Library: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const { projectId, projectCollection } = useProjectApi();
-  const [currentProjectId] = useState<string>(projectId);
-  const { addLgTemplate } = useLgApi(currentProjectId);
   const [shouldShowModal, setShouldShowModal] = useState(false);
   const [lgTemplateName, setLgTemplateName] = useState('');
   const [designer, setDesigner] = useState(undefined);
   const [selectedBotKey, setSelectedBotKey] = useState<number | null>(null);
+
+  const { projectId, projectCollection } = useProjectApi();
+  const { addLgTemplate } = useLgApi(projectId);
 
   const ACDesignerRef = useRef(null);
   const start = '- ```\n';
@@ -31,7 +38,7 @@ const Library: React.FC = (props) => {
 
   const handleCreateLGTemplateSubmit = () => {
     // todo: not sure how to write to a specific project's common file. gap in api?
-    addLgTemplate('common', lgTemplateName, `${start}${JSON.stringify(designer.getCard(), null, 3)}${end}`);
+    addLgTemplate('common', lgTemplateName, `${start}${JSON.stringify(designer?.getCard() || {}, null, 3)}${end}`);
     setShouldShowModal(false);
   };
 
@@ -108,7 +115,7 @@ const Library: React.FC = (props) => {
       if (templateBody && typeof templateBody === 'string') {
         designer.setCard(JSON.parse(templateBody));
       } // else {
-      // todo: add default BF card (recieve from Thomas Chung)
+      // todo: add default BF card (receive from Thomas Chung)
       //}
       setDesigner(designer);
     }
@@ -168,7 +175,9 @@ const Library: React.FC = (props) => {
           </Stack>
         </DialogWrapper>
       )}
-      <div ref={ACDesignerRef} />
+      <AdaptiveCardDesignerContainer>
+        <div ref={ACDesignerRef} />
+      </AdaptiveCardDesignerContainer>
     </React.Fragment>
   );
 };
