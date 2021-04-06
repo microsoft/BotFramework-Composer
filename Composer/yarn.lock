@@ -4015,14 +4015,12 @@
     tslib "^2.0.3"
     xml2js "^0.4.19"
 
-"@microsoft/bf-dispatcher@4.13.0-beta.20210316.e8ec340":
-  version "4.13.0-beta.20210316.e8ec340"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.13.0-beta.20210316.e8ec340.tgz#de2024f41b217c0aa937807855ff519ea1dc370f"
-  integrity sha512-meLDe5MKbXdnPYBy+pXHhH6k/cdGs7zW3Vw9Powf+OfX+oBEgxo8xlfa/J1rIBsleIiGWU9reU+D6gKK/16Uyg==
+"@microsoft/bf-dispatcher@4.13.0-rc0":
+  version "4.13.0-rc0"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.13.0-rc0.tgz#d4f68846130f224c6dcb5520e3b601691b100ae4"
+  integrity sha512-kdHPNWUDWpziWGVMYIS+sfBiuNojgmswFOQ4PzIEc4YXbDFJCVNL2GPcND9aD/zGrilUWyufZxWU14Z2E1o2Kg==
   dependencies:
-    "@microsoft/bf-lu" next
-    "@oclif/command" "~1.5.19"
-    "@oclif/config" "~1.13.3"
+    "@microsoft/bf-lu" "4.13.0-rc0"
     argparse "~1.0.10"
     readline-sync "^1.4.10"
     ts-md5 "^1.2.6"
@@ -4063,6 +4061,28 @@
   version "4.12.0-rc0"
   resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-rc0.tgz#9c1aa4cb7d22a0a49d4c16eb1bce5d5e222c40b1"
   integrity sha512-bz5BPQsIh+BwXZ+YAMG15wTndF/Ug3EviSjOs0GtryRSkgJkmAqAhdpU0SRjVAVuy7XzTRpltxbMmSoiYVnHtA==
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "~4.8.0"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
+"@microsoft/bf-lu@4.13.0-rc0":
+  version "4.13.0-rc0"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.13.0-rc0.tgz#117c6f86fc40e4afa022d48fe2050678e02084b3"
+  integrity sha512-JP105CuKZdCSevkKov183c1tJ1cyAjPv/X2TT6rTmzWq00sJcvBU1sv/k2Vg4MAVLO3RsJZbYixfOxKQ/s/bew==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -4125,21 +4145,21 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-orchestrator@4.13.0-beta.20210316.e8ec340":
-  version "4.13.0-beta.20210316.e8ec340"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.13.0-beta.20210316.e8ec340.tgz#74ae2b91cedc292e19ac33d3f974d1d4c70874ad"
-  integrity sha512-WdWKQkOev4mX1bdk002UsD3DU9jdQms0X4c+wyawgX8XEWFJSNT42EKfKea9jbP5DtiXhwRjzeaDIOpuTgHIFw==
+"@microsoft/bf-orchestrator@4.13.0-rc0":
+  version "4.13.0-rc0"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.13.0-rc0.tgz#e313a4837bfadb9b3977c49b9b126b05e505cd4f"
+  integrity sha512-6zM8baQ/hZLVTEDL6TgETO+M8UP0adIwPN4255EzlIRXyRXI/5cwLFWW7AR4xmQBtlR4NaTFxqMFYHMfGQLDDw==
   dependencies:
-    "@microsoft/bf-dispatcher" "4.13.0-beta.20210316.e8ec340"
-    "@microsoft/bf-lu" next
+    "@microsoft/bf-dispatcher" "4.13.0-rc0"
+    "@microsoft/bf-lu" "4.13.0-rc0"
     "@types/fs-extra" "~8.1.0"
     "@types/node-fetch" "~2.5.5"
     fast-text-encoding "^1.0.3"
     fs-extra "~9.0.0"
     node-fetch "~2.6.0"
-    orchestrator-core beta
+    orchestrator-core rc
     read-text-file "~1.1.0"
-    tslib "^1.10.0"
+    tslib "^2.0.3"
     unzip-stream "^0.3.1"
 
 "@microsoft/load-themed-styles@^1.10.26":
@@ -17448,10 +17468,10 @@ optionator@^0.9.1:
     type-check "^0.4.0"
     word-wrap "^1.2.3"
 
-orchestrator-core@beta:
-  version "4.13.0-dev.20210319.e772326h"
-  resolved "https://registry.yarnpkg.com/orchestrator-core/-/orchestrator-core-4.13.0-dev.20210319.e772326h.tgz#eb358c8b937dc4b6b9a5bb6aba4273a62d9349cf"
-  integrity sha512-LFXyhZAQB+xyvmz9oWFpR/5tItKu2C4HCVez61VPsTrP+K2f7WjFoUBVuq+NQU8MPpnFJkS1wVv7nmwk9pYw9Q==
+orchestrator-core@rc:
+  version "4.13.0-rc0"
+  resolved "https://registry.yarnpkg.com/orchestrator-core/-/orchestrator-core-4.13.0-rc0.tgz#0277d3b3ac5c4317f15640b42760e2e5714b1bf8"
+  integrity sha512-0YbzNF8OQ8r0CSRDvcezRK8V6dFOh8jdVkfC+3JM+k7rotLrSMf0EI+UTGJUnSv9tI4roIfo5IM4AHT+KJ8l2A==
   dependencies:
     bindings "1.2.1"
     node-addon-api "^3.0.0"
