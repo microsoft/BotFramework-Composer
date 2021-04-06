@@ -1,8 +1,11 @@
 name: Composer E2E test
 
 on:
-  schedule:
-    - cron: "0 0 * * *"
+  push:
+    branches:
+      - main
+  #schedule:
+    #- cron: "0 0 * * *"
 
 jobs:
   Build-And-Test:
