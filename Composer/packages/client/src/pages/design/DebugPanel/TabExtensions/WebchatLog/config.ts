@@ -10,7 +10,7 @@ import { WebChatLogItemHeader } from './WebchatLogItemHeader';
 
 export const WebchatLogTabConfig: TabExtensionConfig = {
   key: WebChatInspectorTabKey,
-  description: formatMessage('Webchat log.'),
+  description: () => formatMessage('Webchat log.'),
   HeaderWidget: WebChatLogItemHeader,
   ContentWidget: WebchatLogContent,
 };

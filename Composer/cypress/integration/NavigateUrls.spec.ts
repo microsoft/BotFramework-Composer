@@ -6,10 +6,9 @@ context('Navigate Url', () => {
     cy.visit('/home');
   });
 
-  it('should open Create From Scratch/Template window from a url', () => {
+  it('should open Select Template window from a url', () => {
     cy.visit('/projects/create');
-    cy.get('[data-testid="Create from scratch"]').should('be.visible');
-    cy.get('[data-testid="Create from template"]').should('be.visible');
+    cy.findAllByTestId('dotnetFeed').should('exist');
   });
 
   it('should open Define Conversations window from a url', () => {
