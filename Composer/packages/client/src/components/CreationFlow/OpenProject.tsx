@@ -35,8 +35,14 @@ interface OpenProjectProps extends RouteComponentProps<{}> {
 
 export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   const { onOpen, onDismiss, onCurrentPathUpdate, focusedStorageFolder, location } = props;
-  const titleInfo =
-    location && location.search ? DialogCreationCopy.SELECT_LOCATION_ABS : DialogCreationCopy.SELECT_LOCATION;
+  let titleInfo = DialogCreationCopy.SELECT_LOCATION;
+  if (location?.search) {
+    const decoded = decodeURIComponent(location.search);
+    const { source } = querystring.parse(decoded);
+    if (source === 'abs') {
+      titleInfo = DialogCreationCopy.SELECT_LOCATION_ABS;
+    }
+  }
   const handleOpen = async (path: string, storage: string) => {
     const dataToOpen: OpenProjectFormData = { path, storage };
     dataToOpen.path = path;
