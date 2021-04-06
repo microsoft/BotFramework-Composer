@@ -4,7 +4,7 @@
 import { TabExtensionConfig } from './types';
 import { DiagnosticsTabConfig } from './DiagnosticsTab';
 import { WebchatLogTabConfig } from './WebchatLog/config';
-import { RuntimeOutputTabConfig } from './RuntimeOutputLog/config';
+import { RuntimeOutputTabConfig } from './RuntimeOutputLog';
 
 const implementedDebugExtensions: TabExtensionConfig[] = [
   DiagnosticsTabConfig,

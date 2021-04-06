@@ -2,32 +2,26 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { default as AnsiUp } from 'ansi_up';
 import { useEffect, useRef } from 'react';
+import sanitizeHtml from 'sanitize-html';
 
-import { botRuntimeErrorState, botRuntimeLogsState } from '../../../../../recoilModel';
+import { botRuntimeErrorState, botRuntimeLogState } from '../../../../../recoilModel';
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 import { ErrorCallout } from '../../../../../components/BotRuntimeController/ErrorCallout';
-
-const stdOutStreamStyle = css`
-  margin: 0;
-  word-break: break-word;
-  white-space: pre-wrap;
-  line-height: 20px;
-`;
 
 const ansiUp = new AnsiUp();
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 const createMarkup = (txt: string) => {
-  return { __html: ansiUp.ansi_to_html(txt) };
+  return { __html: sanitizeHtml(ansiUp.ansi_to_html(txt)) };
 };
 
-export const RuntimeLogs: React.FC<{ projectId: string }> = ({ projectId }) => {
-  const runtimeLogs = useRecoilValue(botRuntimeLogsState(projectId));
+export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId }) => {
+  const runtimeLogs = useRecoilValue(botRuntimeLogState(projectId));
   const botRuntimeErrors = useRecoilValue(botRuntimeErrorState(projectId));
   const runtimeLogsContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -55,7 +49,12 @@ export const RuntimeLogs: React.FC<{ projectId: string }> = ({ projectId }) => {
       data-testid="Runtime-Output-Logs"
     >
       <div
-        css={stdOutStreamStyle}
+        css={{
+          margin: 0,
+          wordBreak: 'break-all',
+          whiteSpace: 'pre-wrap',
+          lineHeight: '20px',
+        }}
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={createMarkup(runtimeLogs)}
       />

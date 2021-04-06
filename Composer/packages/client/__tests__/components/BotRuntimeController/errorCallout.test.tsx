@@ -10,7 +10,8 @@ describe('<ErrorCallout />', () => {
   it('should render the <ErrorCallout />', () => {
     render(<ErrorCallout error={{ title: 'title test', message: 'message test' }} />);
 
-    const container = document.querySelector('[data-testid="errorCallout"]');
+    const container = document.querySelector('[data-testid="runtime-error-callout"]');
     expect(container).toHaveTextContent('title test');
+    expect(container).toHaveTextContent('message test');
   });
 });

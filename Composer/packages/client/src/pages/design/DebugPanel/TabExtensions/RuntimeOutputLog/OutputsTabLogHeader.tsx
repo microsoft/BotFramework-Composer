@@ -2,25 +2,25 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 
 import { DebugPanelTabHeaderProps } from '../types';
 
-export const RuntimeOutputLogHeader: React.FC<DebugPanelTabHeaderProps> = () => {
+export const OutputsTabLogHeader: React.FC<DebugPanelTabHeaderProps> = () => {
   return (
     <div
-      css={css`
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      `}
+      css={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
       data-testid="Runtime-Logs"
     >
       <div
-        css={css`
-          margin-right: 4px;
-        `}
+        css={{
+          marginRight: '4px',
+        }}
       >
         {formatMessage('Outputs')}
       </div>

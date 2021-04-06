@@ -14,9 +14,9 @@ import { rootBotProjectIdSelector } from '../../../../../recoilModel';
 import { DebugPanelTabHeaderProps } from '../types';
 
 import { BotProjectsFilter } from './BotProjectsFilter';
-import { RuntimeLogs } from './RuntimeLogs';
+import { RuntimeOutputLog } from './RuntimeOutputLog';
 
-export const RuntimeOutputLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
+export const OutputsTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [currentProjectId, setProjectId] = useState(rootBotId ?? '');
   return (
@@ -36,7 +36,7 @@ export const RuntimeOutputLogContent: React.FC<DebugPanelTabHeaderProps> = ({ is
         splitterSize="5px"
       >
         <BotProjectsFilter currentProjectId={currentProjectId} onChangeProject={setProjectId} />
-        <RuntimeLogs projectId={currentProjectId} />
+        <RuntimeOutputLog projectId={currentProjectId} />
       </Split>
     </div>
   );

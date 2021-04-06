@@ -2,19 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { useRef, useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { botStatusState } from '../../recoilModel';
 import { BotStatus, BotStatusesCopy } from '../../constants';
-
-const botStatusContainer = css`
-  display: flex;
-  align-items: center;
-  margin-right: 5px;
-`;
 
 type BotStatusIndicatorProps = {
   projectId: string;
@@ -44,7 +38,14 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
   }, [botStatus]);
 
   return (
-    <div ref={botActionRef} css={botStatusContainer}>
+    <div
+      ref={botActionRef}
+      css={{
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: '5px',
+      }}
+    >
       <span aria-live={'assertive'} style={botStatusStyle}>
         {botStatusText}
       </span>

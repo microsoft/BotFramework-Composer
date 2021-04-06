@@ -31,7 +31,7 @@ interface RunningBot {
   status: number;
   result: {
     message: string;
-    runtimeLogs?: string;
+    runtimeLog?: string;
   };
 }
 interface PublishConfig {
@@ -100,12 +100,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private appendRuntimeLogs = (botId: string, newContent: string) => {
     const botData = LocalPublisher.runningBots[botId];
-    const runtimeLogs = botData.result.runtimeLogs ? botData.result.runtimeLogs + newContent : newContent;
+    const runtimeLog = botData.result.runtimeLog ? botData.result.runtimeLog + newContent : newContent;
     LocalPublisher.runningBots[botId] = {
       ...botData,
       result: {
         ...botData.result,
-        runtimeLogs,
+        runtimeLog,
       },
     };
   };
@@ -197,7 +197,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           result: {
             message: 'Running',
             endpointURL: url,
-            runtimeLogs: LocalPublisher.runningBots[botId].result.runtimeLogs,
+            runtimeLog: LocalPublisher.runningBots[botId].result.runtimeLog,
           },
         };
       } else {
@@ -478,7 +478,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logger: (...args: any[]) => void
   ) => {
-    let erroutput = '';
+    let errOutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
         const runtimeData = data.toString();
@@ -488,16 +488,16 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     child.stderr &&
       child.stderr.on('data', (err: any) => {
-        erroutput += err.toString();
+        errOutput += err.toString();
       });
 
     child.on('exit', (code) => {
       if (code !== 0) {
-        logger('error on exit: %s, exit code %d', erroutput, code);
-        this.appendRuntimeLogs(botId, erroutput);
+        logger('error on exit: %s, exit code %d', errOutput, code);
+        this.appendRuntimeLogs(botId, errOutput);
         this.setBotStatus(botId, {
           status: 500,
-          result: { message: erroutput },
+          result: { message: errOutput },
         });
       }
     });

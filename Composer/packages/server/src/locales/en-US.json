@@ -3065,8 +3065,8 @@
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
   },
-  "runtime_logs_f0184505": {
-    "message": "Runtime logs."
+  "runtime_log_9069fda7": {
+    "message": "Runtime log."
   },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
@@ -3122,8 +3122,8 @@
   "search_templates_669eab41": {
     "message": "Search templates"
   },
-  "see_details_da74090e": {
-    "message": "See Details"
+  "see_details_15c93092": {
+    "message": "See details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
@@ -3644,9 +3644,6 @@
   "title_ee03d132": {
     "message": "Title"
   },
-  "title_msg_ee91458d": {
-    "message": "{ title }. { msg }"
-  },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
   },
@@ -3724,9 +3721,6 @@
   },
   "trueselector_40702dda": {
     "message": "TrueSelector"
-  },
-  "try_again_ad656c3c": {
-    "message": "Try again"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."

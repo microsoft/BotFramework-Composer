@@ -137,11 +137,9 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   };
 
   return (
-    <div css={calloutContainer} data-testid="errorCallout">
-      <p css={calloutLabel} id="callout-label-id">
-        {error.title}
-      </p>
-      <p css={calloutDescription} id="callout-description-id">
+    <div css={calloutContainer} data-testid="runtime-error-callout">
+      <p css={calloutLabel}>{error.title}</p>
+      <p css={calloutDescription}>
         {buildErrorMessage(error)}
         {error.linkAfterMessage != null && (
           <Link href={error.linkAfterMessage.url} target={'_blank'}>

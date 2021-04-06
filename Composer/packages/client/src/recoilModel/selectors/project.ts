@@ -380,8 +380,8 @@ export const webChatEssentialsSelector = selectorFamily<WebChatEssentials, strin
 export const outputsDebugPanelSelector = selector<WebChatEssentials[]>({
   key: 'outputsDebugPanelSelector',
   get: ({ get }) => {
-    const projects: string[] = get(botProjectIdsState);
-    return projects.map((projectId) => {
+    const projectIds: string[] = get(botProjectIdsState);
+    return projectIds.map((projectId) => {
       return get(webChatEssentialsSelector(projectId));
     });
   },

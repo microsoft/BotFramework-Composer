@@ -19,10 +19,10 @@ export const BotErrorViewer: React.FC<BotErrorViewerProps> = ({ projectId }) => 
   const { setActiveTabInDebugPanel, setDebugPanelExpansion } = useRecoilValue(dispatcherState);
   const botRuntimeErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
 
-  function openErrorDialog() {
-    setActiveTabInDebugPanel('RuntimeLogs');
+  const openErrorDialog = () => {
+    setActiveTabInDebugPanel('RuntimeLog');
     setDebugPanelExpansion(true);
-  }
+  };
 
   return (
     <Fragment>
@@ -38,7 +38,7 @@ export const BotErrorViewer: React.FC<BotErrorViewerProps> = ({ projectId }) => 
             openErrorDialog();
           }}
         >
-          <span>{formatMessage('See Details')}</span>
+          <span>{formatMessage('See details')}</span>
         </ActionButton>
       )}
     </Fragment>
