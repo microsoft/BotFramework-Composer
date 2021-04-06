@@ -32,6 +32,7 @@ import {
 } from '../atoms';
 import {
   dialogsSelectorFamily,
+  botAssetsSelectFamily,
   buildEssentialsSelector,
   lgImportsSelectorFamily,
   luImportsSelectorFamily,
@@ -181,6 +182,7 @@ export const botProjectSpaceSelector = selector({
         buildEssentials,
         isPvaSchema,
         publishTypes,
+        skillManifests,
       };
     });
     return result;
@@ -367,5 +369,22 @@ export const webChatEssentialsSelector = selector({
       activeLocale,
       botStatus,
     };
+  },
+});
+
+export const allRequiredRecognizersSelector = selector({
+  key: 'allRequiredRecognizersSelector',
+  get: ({ get }) => {
+    const ids = get(botProjectIdsState);
+    return ids.reduce((result: { projectId: string; requiresLUIS: boolean; requiresQNA: boolean }[], id: string) => {
+      const botAssets = get(botAssetsSelectFamily(id));
+      if (botAssets) {
+        const { dialogs, luFiles, qnaFiles } = botAssets;
+        const requiresLUIS = BotIndexer.shouldUseLuis(dialogs, luFiles);
+        const requiresQNA = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
+        result.push({ projectId: id, requiresLUIS, requiresQNA });
+      }
+      return result;
+    }, []);
   },
 });
