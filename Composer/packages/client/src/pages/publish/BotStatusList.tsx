@@ -56,7 +56,7 @@ const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
           setInitialFocus
           calloutMaxWidth={200}
           styles={copiedCalloutStyles}
-          target={calloutTarget}
+          target={calloutTarget.current}
           onDismiss={resetIsCopiedToClipboard}
         >
           {formatMessage('Skill manifest URL was copied to the clipboard')}
