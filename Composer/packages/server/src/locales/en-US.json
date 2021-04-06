@@ -410,8 +410,17 @@
   "azure_bot_service_channels_5b358c1c": {
     "message": "Azure Bot Service channels"
   },
+  "azure_functions_5e23be5c": {
+    "message": "Azure Functions"
+  },
+  "azure_web_app_d834cb4c": {
+    "message": "Azure Web App"
+  },
   "back_2900f52a": {
     "message": "Back"
+  },
+  "basics_75016d2a": {
+    "message": "Basics"
   },
   "been_used_5daccdb2": {
     "message": "Been used"
@@ -473,6 +482,9 @@
   "bot_controller_319b408d": {
     "message": "Bot Controller"
   },
+  "bot_details_1995d4fe": {
+    "message": "Bot Details"
+  },
   "bot_endpoint_not_available_in_the_request_43c381f8": {
     "message": "Bot endpoint not available in the request"
   },
@@ -508,6 +520,9 @@
   },
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
+  },
+  "bot_name_bbd0779d": {
+    "message": "Bot Name"
   },
   "bot_name_cannot_not_start_with_a_number_d70239": {
     "message": "Bot name cannot not start with a number"
@@ -769,6 +784,9 @@
   },
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
     "message": "Connecting to <b>{ targetName }</b> to import bot content..."
+  },
+  "connections_917ef4e4": {
+    "message": "Connections"
   },
   "continue_ac067716": {
     "message": "Continue"
@@ -1493,9 +1511,6 @@
   "events_cf7a8c50": {
     "message": "Events"
   },
-  "example_bot_list_9be1d563": {
-    "message": "Example bot list"
-  },
   "examples_c435f08c": {
     "message": "Examples"
   },
@@ -1550,8 +1565,8 @@
   "fail_to_save_bot_578fa8aa": {
     "message": "Fail to save bot"
   },
-  "failed_to_start_1edb0dbe": {
-    "message": "Failed to start"
+  "failed_276786d": {
+    "message": "Failed"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1567,6 +1582,9 @@
   },
   "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
     "message": "fields must be either all strings or all fieldset objects"
+  },
+  "file_location_9258afd3": {
+    "message": "File Location"
   },
   "file_name_8fd421ff": {
     "message": "File name"
@@ -1585,6 +1603,9 @@
   },
   "filter_by_file_name_fa3d33b5": {
     "message": "Filter by file name"
+  },
+  "filter_e3398407": {
+    "message": "Filter"
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
@@ -1684,6 +1705,12 @@
   },
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
+  },
+  "get_luis_keys_4cbb975c": {
+    "message": "Get LUIS keys"
+  },
+  "get_qna_key_583b2548": {
+    "message": "Get QnA key"
   },
   "get_started_76ed4cb9": {
     "message": "Get started"
@@ -1964,6 +1991,9 @@
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
   },
+  "language_6b3e2c7c": {
+    "message": "Language"
+  },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
@@ -2143,6 +2173,9 @@
   },
   "luis_add4bbe3": {
     "message": "LUIS"
+  },
+  "luis_and_qna_7df3ee36": {
+    "message": "LUIS and QnA"
   },
   "luis_application_name_1530d3aa": {
     "message": "LUIS application name"
@@ -2366,17 +2399,11 @@
   "navigation_path_8b299e64": {
     "message": "Navigation Path"
   },
-  "navigation_to_see_actions_3be545c9": {
-    "message": "navigation to see actions"
-  },
   "need_another_template_send_us_a_request_5cf2a4d5": {
     "message": "Need another template? Send us a request"
   },
   "new_13daf639": {
     "message": "New"
-  },
-  "new_creation_experience_29591aca": {
-    "message": "New Creation Experience"
   },
   "new_template_49e6f0f2": {
     "message": "New template"
@@ -2609,6 +2636,9 @@
   "output_5023cf84": {
     "message": "Output"
   },
+  "outputs_e6f0bfbe": {
+    "message": "Outputs"
+  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2677,9 +2707,6 @@
   },
   "preview_features_e279bac5": {
     "message": "Preview features"
-  },
-  "preview_the_new_bot_creation_experience_create_new_e0b7150f": {
-    "message": "Preview the new bot creation experience. Create new bots that use the Adaptive Runtime, and can be enhanced using Package Manager."
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -2813,8 +2840,8 @@
   "published_4bb5209e": {
     "message": "Published"
   },
-  "publishing_count_bots_b2a7f564": {
-    "message": "Publishing { count } bots"
+  "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
+    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Publishing"
@@ -2890,6 +2917,9 @@
   },
   "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
     "message": "Re-prompt for input (Reprompt dialog event)"
+  },
+  "read_me_4734ca1": {
+    "message": "Read Me"
   },
   "recent_bots_53585911": {
     "message": "Recent Bots"
@@ -2999,6 +3029,9 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | Priority: { priority }"
   },
+  "reset_view_d5f8245a": {
+    "message": "Reset view"
+  },
   "resource_group_41fc9245": {
     "message": "Resource group:"
   },
@@ -3035,9 +3068,6 @@
   "root_bot_7bb35314": {
     "message": "Root bot."
   },
-  "root_bot_da9de71c": {
-    "message": "Root Bot"
-  },
   "root_bot_luis_authoring_key_is_empty_aec2634e": {
     "message": "Root Bot LUIS authoring key is empty"
   },
@@ -3061,6 +3091,12 @@
   },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
+  },
+  "runtime_log_9069fda7": {
+    "message": "Runtime log."
+  },
+  "runtime_type_f9e2419b": {
+    "message": "Runtime type"
   },
   "sample_phrases_5d78fa35": {
     "message": "Sample Phrases"
@@ -3116,8 +3152,8 @@
   "search_templates_669eab41": {
     "message": "Search templates"
   },
-  "see_details_da74090e": {
-    "message": "See Details"
+  "see_details_15c93092": {
+    "message": "See details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
@@ -3128,8 +3164,8 @@
   "select_a_template_874fe803": {
     "message": "Select a template"
   },
-  "select_a_trigger_on_the_left_a4b41558": {
-    "message": "Select a trigger on the left"
+  "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
+    "message": "Select a trigger in the left<br />navigation to see actions"
   },
   "select_a_trigger_type_219bb52f": {
     "message": "Select a trigger type"
@@ -3280,6 +3316,9 @@
   },
   "skill_9b084d2e": {
     "message": "Skill"
+  },
+  "skill_configuration_ed35b038": {
+    "message": "Skill Configuration"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "Skill Dialog Name"
@@ -3563,9 +3602,6 @@
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "There was error creating your KB"
   },
-  "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
-    "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
-  },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
   },
@@ -3637,9 +3673,6 @@
   },
   "title_ee03d132": {
     "message": "Title"
-  },
-  "title_msg_ee91458d": {
-    "message": "{ title }. { msg }"
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
@@ -3718,9 +3751,6 @@
   },
   "trueselector_40702dda": {
     "message": "TrueSelector"
-  },
-  "try_again_ad656c3c": {
-    "message": "Try again"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
@@ -3890,6 +3920,9 @@
   "view_on_npm_2051324d": {
     "message": "View on npm"
   },
+  "view_project_readme_ff079d2e": {
+    "message": "View project readme"
+  },
   "vishwac_sena_45910bf0": {
     "message": "Vishwac Sena"
   },
@@ -4054,5 +4087,11 @@
   },
   "your_template_requires_qna_maker_to_access_content_a4ca6f76": {
     "message": "Your template requires QnA Maker to access content for your bot."
+  },
+  "zoom_in_3205e865": {
+    "message": "Zoom in"
+  },
+  "zoom_out_e4302632": {
+    "message": "Zoom out"
   }
 }
