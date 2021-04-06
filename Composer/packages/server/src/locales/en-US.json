@@ -1565,8 +1565,8 @@
   "fail_to_save_bot_578fa8aa": {
     "message": "Fail to save bot"
   },
-  "failed_to_start_1edb0dbe": {
-    "message": "Failed to start"
+  "failed_276786d": {
+    "message": "Failed"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1603,6 +1603,9 @@
   },
   "filter_by_file_name_fa3d33b5": {
     "message": "Filter by file name"
+  },
+  "filter_e3398407": {
+    "message": "Filter"
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
@@ -2396,9 +2399,6 @@
   "navigation_path_8b299e64": {
     "message": "Navigation Path"
   },
-  "navigation_to_see_actions_3be545c9": {
-    "message": "navigation to see actions"
-  },
   "need_another_template_send_us_a_request_5cf2a4d5": {
     "message": "Need another template? Send us a request"
   },
@@ -2635,6 +2635,9 @@
   },
   "output_5023cf84": {
     "message": "Output"
+  },
+  "outputs_e6f0bfbe": {
+    "message": "Outputs"
   },
   "page_number_cdee4179": {
     "message": "Page number"
@@ -3026,6 +3029,9 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | Priority: { priority }"
   },
+  "reset_view_d5f8245a": {
+    "message": "Reset view"
+  },
   "resource_group_41fc9245": {
     "message": "Resource group:"
   },
@@ -3086,6 +3092,9 @@
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
   },
+  "runtime_log_9069fda7": {
+    "message": "Runtime log."
+  },
   "runtime_type_f9e2419b": {
     "message": "Runtime type"
   },
@@ -3143,8 +3152,8 @@
   "search_templates_669eab41": {
     "message": "Search templates"
   },
-  "see_details_da74090e": {
-    "message": "See Details"
+  "see_details_15c93092": {
+    "message": "See details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
@@ -3155,8 +3164,8 @@
   "select_a_template_874fe803": {
     "message": "Select a template"
   },
-  "select_a_trigger_on_the_left_a4b41558": {
-    "message": "Select a trigger on the left"
+  "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
+    "message": "Select a trigger in the left<br />navigation to see actions"
   },
   "select_a_trigger_type_219bb52f": {
     "message": "Select a trigger type"
@@ -3665,9 +3674,6 @@
   "title_ee03d132": {
     "message": "Title"
   },
-  "title_msg_ee91458d": {
-    "message": "{ title }. { msg }"
-  },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
   },
@@ -3745,9 +3751,6 @@
   },
   "trueselector_40702dda": {
     "message": "TrueSelector"
-  },
-  "try_again_ad656c3c": {
-    "message": "Try again"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
@@ -4084,5 +4087,11 @@
   },
   "your_template_requires_qna_maker_to_access_content_a4ca6f76": {
     "message": "Your template requires QnA Maker to access content for your bot."
+  },
+  "zoom_in_3205e865": {
+    "message": "Zoom in"
+  },
+  "zoom_out_e4302632": {
+    "message": "Zoom out"
   }
 }
