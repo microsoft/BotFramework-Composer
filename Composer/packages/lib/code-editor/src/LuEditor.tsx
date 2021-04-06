@@ -154,6 +154,16 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   const [labelingMenuVisible, setLabelingMenuVisible] = useState(false);
   const editorDomRef = useRef<HTMLElement | null>(null);
 
+  const onLuNavigationMsg = (languageClient: MonacoLanguageClient, onNavigateToLuPage:((luFileId: string, luSectionId?: string | undefined) => void) | undefined) => {
+    return languageClient.onReady().then(() =>
+    languageClient.onNotification('LuGotoDefinition', (result) => {
+      if (luOption?.projectId) {
+        onNavigateToLuPage?.(result.fileId, result.intent);
+      }
+    })
+  )
+  }
+
   useEffect(() => {
     if (props.options?.readOnly) {
       return;
@@ -174,14 +184,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         webSocket,
         onConnection: (connection: MessageConnection) => {
           const languageClient = createLanguageClient(formatMessage('LU Language Client'), ['lu'], connection);
-          languageClient.onReady().then(() =>
-            languageClient.onNotification('LuGotoDefinition', (result) => {
-              if (luOption?.projectId) {
-                onNavigateToLuPage?.(result.fileId, result.intent);
-              }
-            })
-          );
-
+          onLuNavigationMsg(languageClient, onNavigateToLuPage);
           const m = monacoRef.current;
           if (m) {
             // this is the correct way to combine key codes in Monaco
@@ -202,6 +205,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
               editor.executeEdits(uri, edits);
             })
           );
+
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLUEditorInstance = languageClient;
@@ -210,13 +214,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     } else {
       const m = monacoRef.current;
       const languageClient = window.monacoLUEditorInstance;
-      languageClient.onReady().then(() =>
-        languageClient.onNotification('LuGotoDefinition', (result) => {
-          if (luOption?.projectId) {
-            onNavigateToLuPage?.(result.fileId, result.intent);
-          }
-        })
-      );
+      onLuNavigationMsg(languageClient, onNavigateToLuPage);
 
       if (m) {
         // this is the correct way to combine keycodes in Monaco

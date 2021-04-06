@@ -13,7 +13,6 @@ import {
   Range,
   DiagnosticSeverity,
   TextEdit,
-  Location,
 } from 'vscode-languageserver-types';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
@@ -107,7 +106,7 @@ export class LUServer {
     this.connection.listen();
   }
 
-  protected definitionHandler(params: TextDocumentPositionParams): Location | undefined {
+  protected definitionHandler(params: TextDocumentPositionParams): undefined {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return;
