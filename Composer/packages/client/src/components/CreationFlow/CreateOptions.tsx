@@ -13,12 +13,10 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { RouteComponentProps, navigate } from '@reach/router';
-import { useRecoilValue } from 'recoil';
 import querystring from 'query-string';
 import axios from 'axios';
 
 import { DialogCreationCopy } from '../../constants';
-import { featureFlagsState } from '../../recoilModel';
 import { getAliasFromPayload } from '../../utils/electronUtil';
 
 import { CreateBot } from './CreateBot';
@@ -36,11 +34,8 @@ export function CreateOptions(props: CreateOptionsProps) {
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const { templates, onDismiss, onNext, onJumpToOpenModal } = props;
-  const featureFlags = useRecoilValue(featureFlagsState);
   useEffect(() => {
-    if (featureFlags.NEW_CREATION_FLOW?.enabled) {
-      navigate(`/v2/projects/create${props?.location?.search}`);
-    }
+    navigate(`/v2/projects/create${props?.location?.search}`);
   });
 
   useEffect(() => {
