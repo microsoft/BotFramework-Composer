@@ -41,7 +41,7 @@ const ABSChannelSpeechModal = (props: Props) => {
           </Link>
         </p>
         <TextField
-          aria-label={formatMessage('Cognitive services key')}
+          ariaLabel={formatMessage('Cognitive services key')}
           data-testid={'absChannelsSpeechModalKey'}
           id={'speechKey'}
           label={formatMessage('Cognitive services key')}
@@ -50,7 +50,7 @@ const ABSChannelSpeechModal = (props: Props) => {
           onChange={(e, newvalue) => setValue(newvalue)}
         />
         <TextField
-          aria-label={formatMessage('Cognitive Service Region')}
+          ariaLabel={formatMessage('Cognitive Service Region')}
           data-testid={'absChannelsSpeechModalRegion'}
           id={'speechRegion'}
           label={formatMessage('Cognitive Service Region')}
