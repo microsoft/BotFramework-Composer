@@ -152,7 +152,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-label={formatMessage('LUIS application name')}
+          ariaLabel={formatMessage('LUIS application name')}
           data-testid={'skillLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('LUIS application name')}
