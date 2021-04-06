@@ -15,7 +15,7 @@ import {
   PublishResponse,
   PublishResult,
 } from '@botframework-composer/types';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, applyPublishingProfileToSettings } from '@bfc/shared';
 
 import { authConfig, ResourcesItem } from '../types';
 
