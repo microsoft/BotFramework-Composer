@@ -154,15 +154,18 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   const [labelingMenuVisible, setLabelingMenuVisible] = useState(false);
   const editorDomRef = useRef<HTMLElement | null>(null);
 
-  const onLuNavigationMsg = (languageClient: MonacoLanguageClient, onNavigateToLuPage:((luFileId: string, luSectionId?: string | undefined) => void) | undefined) => {
+  const onLuNavigationMsg = (
+    languageClient: MonacoLanguageClient,
+    onNavigateToLuPage: ((luFileId: string, luSectionId?: string | undefined) => void) | undefined
+  ) => {
     return languageClient.onReady().then(() =>
-    languageClient.onNotification('LuGotoDefinition', (result) => {
-      if (luOption?.projectId) {
-        onNavigateToLuPage?.(result.fileId, result.intent);
-      }
-    })
-  )
-  }
+      languageClient.onNotification('LuGotoDefinition', (result) => {
+        if (luOption?.projectId) {
+          onNavigateToLuPage?.(result.fileId, result.intent);
+        }
+      })
+    );
+  };
 
   useEffect(() => {
     if (props.options?.readOnly) {
