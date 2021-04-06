@@ -6,7 +6,7 @@ import { BaseSchema, deleteActions, ITriggerCondition, LgTemplate, LgTemplateSam
 import get from 'lodash/get';
 
 import { schemasState, dialogState, localeState } from '../atoms/botState';
-import { dialogsSelectorFamily, luFilesSelectorFamily } from '../selectors';
+import { dialogsSelectorFamily, luFilesSelectorFamily, skillNameIdentifierByProjectIdSelector } from '../selectors';
 import {
   onChooseIntentKey,
   generateNewDialog,
@@ -16,6 +16,7 @@ import {
 } from '../../utils/dialogUtil';
 import { lgFilesSelectorFamily } from '../selectors/lg';
 import { dispatcherState } from '../atoms';
+import { createActionFromManifest } from '../utils/skill';
 
 import { setError } from './shared';
 
@@ -195,12 +196,12 @@ export const triggerDispatcher = () => {
     }
   );
 
-  const createTriggerWithAction = useRecoilCallback(
+  const createTriggerForRemoteSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       projectId: string,
       dialogId: string,
       formData: TriggerFormData,
-      actions: object,
+      skillId: string,
       autoSelected = true
     ) => {
       try {
@@ -216,6 +217,12 @@ export const triggerDispatcher = () => {
           createLgTemplates
         );
         const index = get(dialogPayload.content, 'triggers', []).length - 1;
+        const skillsByProjectId = await snapshot.getPromise(skillNameIdentifierByProjectIdSelector);
+        console.log(skillsByProjectId);
+        const skillIdentifier = skillsByProjectId[skillId];
+        console.log(skillIdentifier);
+        const actions: any = [];
+        actions.push(createActionFromManifest(skillIdentifier));
         dialogPayload.content.triggers[index].actions = actions;
 
         await updateDialog(dialogPayload);
@@ -231,6 +238,6 @@ export const triggerDispatcher = () => {
     createTrigger,
     deleteTrigger,
     createQnATrigger,
-    createTriggerWithAction,
+    createTriggerForRemoteSkill,
   };
 };

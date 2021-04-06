@@ -1,32 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { generateDesignerId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-export const createActionFromManifest = (manifest, selectEndpointIndex: number) => {
-  return {
-    $kind: 'Microsoft.BeginSkill',
-    $designer: {
-      id: `${generateDesignerId()}`,
-    },
-    activityProcessed: true,
-    botId: '=settings.MicrosoftAppId',
-    skillHostEndpoint: '=settings.skillHostEndpoint',
-    connectionName: '=settings.connectionName',
-    allowInterruptions: true,
-    skillEndpoint: manifest.endpoints.length > 0 ? manifest.endpoints?.[selectEndpointIndex].endpointUrl : '',
-    skillAppId: manifest.endpoints.length > 0 ? manifest.endpoints?.[selectEndpointIndex].msAppId : '',
-  };
-};
-
 export const importOrchestractor = async (projectId: string, reloadProject, setApplicationLevelError) => {
   const reqBody = {
     package: 'Microsoft.Bot.Components.Orchestrator',
-    version: '1.0.0-preview.20210310.a7ff2d0',
+    version: '',
     source: 'https://api.nuget.org/v3/index.json',
     isUpdating: false,
   };

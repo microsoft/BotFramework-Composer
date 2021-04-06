@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useRef, useState, useCallback } from 'react';
+import React, { Fragment, useRef, useState, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 // import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -15,17 +15,16 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { settingsState, luFilesState, designPageLocationState } from '../../recoilModel';
+import { settingsState, designPageLocationState, dispatcherState, luFilesSelectorFamily } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
-import { dispatcherState } from '../../recoilModel';
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
-import { createActionFromManifest } from './helper';
+
 export interface SkillFormDataErrors {
   endpoint?: string;
   manifestUrl?: string;
@@ -39,7 +38,7 @@ export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A
 export interface CreateSkillModalProps {
   projectId: string;
   addRemoteSkill: (manifestUrl: string, endpointName: string) => Promise<void>;
-  addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, action) => void;
+  addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, skillId: string) => void;
   onDismiss: () => void;
 }
 
@@ -83,8 +82,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
 
   const { languages, luFeatures, runtime } = useRecoilValue(settingsState(projectId));
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const { updateRecognizer, setSkillAndAllowCaller } = useRecoilValue(dispatcherState);
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+  const { updateRecognizer } = useRecoilValue(dispatcherState);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -127,22 +126,33 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
 
   const handleSubmit = (event, content: string, enable: boolean) => {
     event.preventDefault();
-    const skillEndpointIndex = 0;
-    // add skill to appsetting
-    setSkillAndAllowCaller(projectId, skillManifest, skillEndpointIndex);
-    // add a remote skill
-    const triggerFormData = getTriggerFormData(skillManifest.name, content);
-    addRemoteSkill(formData.manifestUrl, formData.endpointName);
-    TelemetryClient.track('AddNewSkillCompleted');
-    // add trigger to root bot
-    const action = createActionFromManifest(skillManifest, skillEndpointIndex);
-    addTriggerToRoot(dialogId, triggerFormData, [action]);
-    TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
+    // add a remote skill, add skill identifier into botProj file
+    addRemoteSkill(formData.manifestUrl, formData.endpointName).then(() => {
+      TelemetryClient.track('AddNewSkillCompleted');
+      const result = location.href.split('/');
+      let skillId = '';
+      if (result.length > 0) skillId = result[result.length - 1];
+      console.log(skillId);
+      // add trigger with connect to skill action to root bot
+      const triggerFormData = getTriggerFormData(skillManifest.name, content);
+      addTriggerToRoot(dialogId, triggerFormData, skillId);
+      TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
+    });
+
     if (enable) {
       // update recognizor type to orchestrator
       updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
     }
   };
+
+  useEffect(() => {
+    if (skillManifest?.endpoints) {
+      setFormData({
+        ...formData,
+        endpointName: skillManifest.endpoints[0].name,
+      });
+    }
+  }, [skillManifest]);
 
   return (
     <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss} {...title}>
