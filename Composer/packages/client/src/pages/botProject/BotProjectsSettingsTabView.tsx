@@ -10,7 +10,6 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
-import { useFeatureFlag } from '../../utils/hooks';
 
 import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { BotProjectInfo } from './BotProjectInfo';
