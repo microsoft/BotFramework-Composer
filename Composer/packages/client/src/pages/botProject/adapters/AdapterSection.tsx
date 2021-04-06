@@ -5,7 +5,6 @@ import { jsx } from '@emotion/core';
 import { useEffect, useRef } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
 import { title, subtitle } from '../styles';
