@@ -178,6 +178,13 @@ export const locationState = atomFamily<string, string>({
   },
 });
 
+export const projectReadmeState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('readme'),
+  default: (id) => {
+    return '';
+  },
+});
+
 export const botEnvironmentState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botEnvironment'),
   default: (id) => {
@@ -436,4 +443,9 @@ export const webChatInspectionDataState = atomFamily<WebChatInspectionData | und
 export const projectIndexingState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('projectIndexing'),
   default: false,
+});
+
+export const botRuntimeLogState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botRuntimeLogState'),
+  default: '',
 });

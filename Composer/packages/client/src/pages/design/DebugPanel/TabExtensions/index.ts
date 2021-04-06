@@ -3,8 +3,13 @@
 
 import { TabExtensionConfig } from './types';
 import { DiagnosticsTabConfig } from './DiagnosticsTab';
-import { WebChatLogTabConfig } from './WebChatLog';
+import { WebChatLogTabConfig } from './WebChatLog/config';
+import { RuntimeOutputTabConfig } from './RuntimeOutputLog';
 
-const implementedDebugExtensions: TabExtensionConfig[] = [DiagnosticsTabConfig, WebChatLogTabConfig];
+const implementedDebugExtensions: TabExtensionConfig[] = [
+  DiagnosticsTabConfig,
+  WebChatLogTabConfig,
+  RuntimeOutputTabConfig,
+];
 
 export default implementedDebugExtensions;
