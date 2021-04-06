@@ -285,7 +285,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey, this.mode),
+        projPath: project.getRuntimePath(), // this.getProjectFolder(resourcekey, this.mode),
         runtime: runtime,
       });
 
@@ -345,7 +345,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
         // Prepare the temporary project
         // this writes all the settings to the root settings/appsettings.json file
-        await this.init(project, runtimeCodePath, resourcekey, runtime);
+        // await this.init(project, runtimeCodePath, resourcekey, runtime);
 
         // Merge all the settings
         // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
