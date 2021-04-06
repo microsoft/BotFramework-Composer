@@ -48,6 +48,7 @@ export type DialogSetting = {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  orchestrator?: IOrchestratorConfig;
   luFeatures: ILUFeaturesConfig;
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
@@ -100,10 +101,15 @@ export type IQnAConfig = {
   hostname?: string;
 };
 
-export type IConfig = ILuisConfig & {
-  subscriptionKey: string;
-  qnaRegion: string | 'westus';
+export type IOrchestratorConfig = {
+  model?: Record<'en_intent' | 'multilingual_intent', string>;
 };
+
+export type IConfig = ILuisConfig &
+  IOrchestratorConfig & {
+    subscriptionKey: string;
+    qnaRegion: string | 'westus';
+  };
 
 export type LgOptions = {
   customFunctions: string[];
