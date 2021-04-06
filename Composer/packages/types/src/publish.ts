@@ -5,7 +5,7 @@ import type { JSONSchema7 } from 'json-schema';
 
 import type { IBotProject } from './server';
 import type { UserIdentity } from './user';
-import type { ILuisConfig, IQnAConfig } from './settings';
+import type { ILuisConfig, IOrchestratorConfig, IQnAConfig } from './settings';
 import { AuthParameters } from './auth';
 
 export type PublishResult = {
@@ -133,6 +133,7 @@ export type PublishPlugin<Config = any> = {
 export type IPublishConfig = {
   luis: ILuisConfig;
   qna: IQnAConfig;
+  orchestrator?: IOrchestratorConfig;
 };
 
 export type PublishTarget = {
