@@ -120,7 +120,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Creating build artifact...',
       });
-      await this.zipDirectory(pathToArtifacts, this.zipPath);
+      await this.zipDirectory(pathToArtifacts, settings, this.zipPath);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Build artifact ready!',
@@ -146,7 +146,7 @@ export class BotProjectDeploy {
     }
   }
 
-  private async zipDirectory(source: string, out: string) {
+  private async zipDirectory(source: string, settings: any, out: string) {
     console.log(`Zip the files in ${source} into a zip file ${out}`);
     try {
       const archive = archiver('zip', { zlib: { level: 9 } });
@@ -157,12 +157,15 @@ export class BotProjectDeploy {
           .glob('**/*', {
             cwd: source,
             dot: true,
-            ignore: ['**/code.zip'], // , 'node_modules/**/*'
+            ignore: ['**/code.zip', '**/settings/appsettings.json'],
           })
           .on('error', (err) => reject(err))
           .pipe(stream);
 
         stream.on('close', () => resolve());
+
+        // write the merged settings to the deploy artifact
+        archive.append(JSON.stringify(settings, null, 2), { name: 'settings/appsettings.json' });
         archive.finalize();
       });
     } catch (error) {

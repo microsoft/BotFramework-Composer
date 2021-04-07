@@ -431,13 +431,6 @@ export default async (composer: any): Promise<void> => {
         return;
       }
 
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(publishFolder, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       // return the location of the build artifiacts
       return publishFolder;
     },
@@ -569,14 +562,6 @@ export default async (composer: any): Promise<void> => {
         throw err;
         return;
       }
-
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(publishFolder, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       // return the location of the build artifiacts
       return publishFolder;
     },
@@ -669,13 +654,6 @@ export default async (composer: any): Promise<void> => {
       if (installErr) {
         composer.log(installErr);
       }
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(runtimePath, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '.');
     },
@@ -750,13 +728,6 @@ export default async (composer: any): Promise<void> => {
       if (installErr) {
         composer.log(installErr);
       }
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(runtimePath, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '.');
     },
