@@ -154,7 +154,9 @@ describe('assetManager', () => {
         '1.0.3',
         'sampleConversationalCore',
         mockLocRef,
-        '0'
+        '0',
+        'webapp',
+        'dotnet'
       );
       expect(newBotLocationRef).toStrictEqual({
         path: '/path/to/npmbot',

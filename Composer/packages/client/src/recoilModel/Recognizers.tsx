@@ -65,6 +65,8 @@ export const OrchestratorRecognizerTemplate = (target: string, fileName: string)
     $kind: SDKKinds.OrchestratorRecognizer,
     modelFolder: `=settings.orchestrator.models.${locale}`,
     snapshotFile: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
+    detectAmbiguousIntents: true,
+    disambiguationScoreThreshold: 0.05,
   };
 };
 
