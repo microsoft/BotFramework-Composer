@@ -1571,8 +1571,8 @@
   "fail_to_save_bot_578fa8aa": {
     "message": "Fail to save bot"
   },
-  "failed_to_start_1edb0dbe": {
-    "message": "Failed to start"
+  "failed_276786d": {
+    "message": "Failed"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -2660,6 +2660,9 @@
   "output_5023cf84": {
     "message": "Output"
   },
+  "outputs_e6f0bfbe": {
+    "message": "Outputs"
+  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2858,11 +2861,8 @@
   "published_4bb5209e": {
     "message": "Published"
   },
-  "publisher_bf6195cf": {
-    "message": "Publisher"
-  },
-  "publishing_count_bots_b2a7f564": {
-    "message": "Publishing { count } bots"
+  "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
+    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Publishing"
@@ -3113,6 +3113,9 @@
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
   },
+  "runtime_log_9069fda7": {
+    "message": "Runtime log."
+  },
   "runtime_type_f9e2419b": {
     "message": "Runtime type"
   },
@@ -3170,8 +3173,8 @@
   "search_templates_669eab41": {
     "message": "Search templates"
   },
-  "see_details_da74090e": {
-    "message": "See Details"
+  "see_details_15c93092": {
+    "message": "See details"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
@@ -3355,6 +3358,9 @@
   },
   "skill_manifest_url_be7ef8d0": {
     "message": "Skill Manifest Url"
+  },
+  "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
+    "message": "Skill manifest URL was copied to the clipboard"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
@@ -3698,9 +3704,6 @@
   "title_ee03d132": {
     "message": "Title"
   },
-  "title_msg_ee91458d": {
-    "message": "{ title }. { msg }"
-  },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
   },
@@ -3781,9 +3784,6 @@
   },
   "trueselector_40702dda": {
     "message": "TrueSelector"
-  },
-  "try_again_ad656c3c": {
-    "message": "Try again"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
