@@ -146,7 +146,7 @@ export const generateDispatchModels = (
     const currentFileName = `skill-${rootLuFile.id}`;
     const parsedLuFile = luIndexer.parse(rootLuFile.content, rootLuFile.id, {});
     const contents = parsedLuFile.intents.map((x) => {
-      if (intents.find((intent) => intent == x.Name) != -1) {
+      if (intents.findIndex((intent) => intent == x.Name) !== -1) {
         return [`# ${x.Name}`, x.Body].join('\n');
       }
     });
