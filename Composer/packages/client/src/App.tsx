@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { useRecoilValue } from 'recoil';
 

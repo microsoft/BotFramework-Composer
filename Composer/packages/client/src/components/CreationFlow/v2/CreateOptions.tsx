@@ -18,7 +18,7 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy } from '../../../constants';
-import { getAliasFromPayload } from '../../../utils/electronUtil';
+import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
 import { userHasNodeInstalledState } from '../../../recoilModel';
 
 import { CreateBotV2 } from './CreateBot';
@@ -135,7 +135,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         onDismiss={onDismiss}
         onNext={onNext}
       />
-      {showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
+      {isElectron() && showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
     </Fragment>
   );
 }
