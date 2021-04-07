@@ -397,6 +397,7 @@ export const AzureProvisionDialog: React.FC = () => {
       const { accessToken } = getTokenFromCache();
 
       setToken(accessToken);
+
       // decode token
       const decoded = decodeToken(accessToken);
       if (decoded) {
