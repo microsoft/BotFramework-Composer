@@ -8,10 +8,9 @@ import { useRecoilValue } from 'recoil';
 import { Header } from './components/Header';
 import { Announcement } from './components/AppComponents/Announcement';
 import { MainContainer } from './components/AppComponents/MainContainer';
-import { dispatcherState, userHasNodeInstalledState, userSettingsState } from './recoilModel';
+import { dispatcherState, userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
-import { NodeModal } from './components/CreationFlow/v2/NodeModal';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -22,10 +21,9 @@ const Logger = () => {
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
-  const userHasNode = useRecoilValue(userHasNodeInstalledState);
 
   const { fetchExtensions, fetchFeatureFlags, checkNodeVersion } = useRecoilValue(dispatcherState);
-  const [showNodeModal, setShowNodeModal] = useState(false);
+
   useEffect(() => {
     loadLocale(appLocale);
   }, [appLocale]);
@@ -36,15 +34,8 @@ export const App: React.FC = () => {
     fetchFeatureFlags();
   }, []);
 
-  useEffect(() => {
-    if (!userHasNode) {
-      setShowNodeModal(true);
-    }
-  }, [userHasNode]);
-
   return (
     <Fragment key={appLocale}>
-      {showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
       <Logger />
       <Announcement />
       <Header />

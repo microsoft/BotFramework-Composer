@@ -33,7 +33,7 @@ export const NodeModal: React.FC<NodeModalProps> = (props) => {
     >
       <Text>
         {formatMessage(
-          'Bot Framework Composer requires Node.js in order to run. Click “Install Node.js” to install the latest version'
+          'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version'
         )}
       </Text>
       <DialogFooter className={dialogFooterClass}>

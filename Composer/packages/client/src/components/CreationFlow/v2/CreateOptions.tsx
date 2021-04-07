@@ -13,11 +13,14 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy } from '../../../constants';
 import { getAliasFromPayload } from '../../../utils/electronUtil';
+import { userHasNodeInstalledState } from '../../../recoilModel';
 
 import { CreateBotV2 } from './CreateBot';
+import { NodeModal } from './NodeModal';
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
@@ -34,6 +37,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const { templates, onDismiss, onNext, onJumpToOpenModal, fetchTemplates, fetchReadMe } = props;
+  const [showNodeModal, setShowNodeModal] = useState(false);
+  const userHasNode = useRecoilValue(userHasNodeInstalledState);
 
   useEffect(() => {
     // open bot directly if alias exist.
@@ -78,6 +83,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     }
   };
 
+  useEffect(() => {
+    if (!userHasNode) {
+      setShowNodeModal(true);
+    }
+  }, [userHasNode]);
+
   return (
     <Fragment>
       <DialogWrapper
@@ -101,6 +112,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         onDismiss={onDismiss}
         onNext={onNext}
       />
+      {showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
     </Fragment>
   );
 }

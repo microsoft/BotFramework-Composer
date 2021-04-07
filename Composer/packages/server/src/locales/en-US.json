@@ -1445,6 +1445,9 @@
   "error_afac7133": {
     "message": "Error:"
   },
+  "error_checking_node_version_98bfbf4c": {
+    "message": "Error checking node version"
+  },
   "error_encountered_when_getting_template_readme_17dcbc61": {
     "message": "### Error encountered when getting template readMe"
   },
