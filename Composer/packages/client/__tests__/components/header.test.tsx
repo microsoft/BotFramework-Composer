@@ -39,6 +39,6 @@ describe('<Header />', () => {
       return { location: { pathname: 'http://server/bot/1234/settings' } };
     });
     const result = renderWithRecoil(<Header />);
-    expect(result.findAllByDisplayValue('Start all bots')).not.toBeNull();
+    expect(result.findAllByDisplayValue('Start bot')).not.toBeNull();
   });
 });

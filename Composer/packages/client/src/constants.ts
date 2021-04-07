@@ -1,12 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FeedName, TeamsManifest } from '@botframework-composer/types/src';
+import {
+  webAppRuntimeKey,
+  functionsRuntimeKey,
+  csharpFeedKey,
+  nodeFeedKey,
+  TeamsManifest,
+} from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
+
+export const FEEDVERSION = 1;
 
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
@@ -161,7 +169,7 @@ export const BotStatusesCopy = {
     return formatMessage('Inactive');
   },
   get failed() {
-    return formatMessage('Failed to start');
+    return formatMessage('Failed');
   },
   get loading() {
     return formatMessage('Building');
@@ -229,6 +237,12 @@ export const DialogCreationCopy = {
     return {
       title: formatMessage('Select a Bot'),
       subText: formatMessage('Which bot do you want to open?'),
+    };
+  },
+  get SELECT_LOCATION_ABS() {
+    return {
+      title: formatMessage('Select a Bot'),
+      subText: formatMessage('Specify an existing bot to connect to your Azure Bot resource.'),
     };
   },
   get SELECT_DESTINATION() {
@@ -400,25 +414,22 @@ export const triggerNotSupportedWarning = () =>
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
 
-export const feedDictionary: { [key in FeedName]: string } = {
-  firstPartyCsharp:
-    'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-  firstPartyNode: '',
-};
+export const firstPartyTemplateFeed =
+  'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template+scope:microsoft'; // +maintainer:botframework
 
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)
 export const defaultPrimaryLanguage = 'english';
 
-export const mockLanguageOptions: IDropdownOption[] = [
-  { key: defaultPrimaryLanguage, text: 'English' },
-  { key: 'spanish', text: 'Spanish' },
+export const runtimeLanguageOptions: IDropdownOption[] = [
+  { key: nodeFeedKey, text: 'Node' },
+  { key: csharpFeedKey, text: 'Dot Net' },
 ];
 
 export const defaultRuntime = 'azureWebApp';
 
 export const runtimeOptions: IDropdownOption[] = [
-  { key: defaultRuntime, text: 'Azure Web App' },
-  { key: 'azureFunctions', text: 'Azure Functions' },
+  { key: webAppRuntimeKey, text: 'Azure Web App' },
+  { key: functionsRuntimeKey, text: 'Azure Functions' },
 ];
 
 export const onboardingDisabled = false;
