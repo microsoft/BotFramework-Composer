@@ -24,16 +24,33 @@ export const DiagnosticsStatus = () => {
 
   if (!errorsCount && !warningsCount) return null;
 
+  const errorLabel = formatMessage(
+    `{
+    errorsCount, plural,
+        =0 {No errors}
+        =1 {One error}
+      other {# errors}
+    }`,
+    { errorsCount }
+  );
+
+  const warningLabel = formatMessage(
+    `{
+    warningsCount, plural,
+        =0 {No warnings}
+        =1 {One warning}
+      other {# warnings}
+    }`,
+    { warningsCount }
+  );
+
   return (
     <div
       css={{ height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '8px' }}
       data-testid="diagnostics-tab-header--collapsed"
     >
       <DefaultButton
-        ariaLabel={formatMessage('{ errors } errors, { warnings } warnings', {
-          errors: errorsCount,
-          warnings: warningsCount,
-        })}
+        ariaLabel={`${errorLabel} ${warningLabel}`}
         styles={{
           root: {
             height: '36px',
