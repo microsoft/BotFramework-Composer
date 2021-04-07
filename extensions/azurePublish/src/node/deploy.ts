@@ -9,10 +9,12 @@ import * as rp from 'request-promise';
 import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
+import { composeRenderFunction } from '@uifabric/utilities';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
+import { copyDir } from './utils/copyDir';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
 
@@ -113,6 +115,17 @@ export class BotProjectDeploy {
       // run any platform specific build steps.
       // this returns a pathToArtifacts where the deployable version lives.
       const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, settings, profileName);
+
+      // COPY MANIFESTS TO wwwroot/manifests
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      if (await project.fileStorage.exists(path.join(pathToArtifacts, 'manifests'))) {
+        await copyDir(
+          path.join(pathToArtifacts, 'manifests'),
+          project.fileStorage,
+          path.join(pathToArtifacts, 'wwwroot', 'manifests'),
+          project.fileStorage
+        );
+      }
 
       // STEP 4: ZIP THE ASSETS
       // Build a zip file of the project
