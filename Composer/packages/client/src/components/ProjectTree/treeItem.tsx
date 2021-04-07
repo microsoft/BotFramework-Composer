@@ -225,17 +225,39 @@ const calloutRootStyle = css`
   padding: 11px;
 `;
 
-const icons = {
+type TreeObject =
+  | 'bot'
+  | 'dialog'
+  | 'trigger' // basic ProjectTree elements
+  | 'form dialog'
+  | 'form field'
+  | 'form trigger' // used with form dialogs
+  | 'lg'
+  | 'lu' // used on other pages
+  | 'external skill'; // used with multi-bot authoring
+
+const icons: { [key in TreeObject]: string } = {
   trigger: 'LightningBolt',
   dialog: 'Org',
   'form dialog': 'Table',
   'form field': 'Variable2', // x in parentheses
   'form trigger': 'TriggerAuto', // lightning bolt with gear
-  filter: 'Filter',
   lg: 'Robot',
   lu: 'People',
   bot: 'CubeShape',
   'external skill': 'Globe',
+};
+
+const objectNames: { [key in TreeObject]: () => string } = {
+  trigger: () => formatMessage('Trigger'),
+  dialog: () => formatMessage('Dialog'),
+  'form dialog': () => formatMessage('Form dialog'),
+  'form field': () => formatMessage('Form field'),
+  'form trigger': () => formatMessage('Form trigger'),
+  lg: () => formatMessage('LG'),
+  lu: () => formatMessage('LU'),
+  bot: () => formatMessage('Bot'),
+  'external skill': () => formatMessage('External skill'),
 };
 
 // -------------------- TreeItem -------------------- //
@@ -246,7 +268,7 @@ type ITreeItemProps = {
   isChildSelected?: boolean;
   isSubItemActive?: boolean;
   onSelect?: (link: TreeLink) => void;
-  itemType: 'bot' | 'dialog' | 'trigger' | 'form dialog' | 'trigger group' | 'bot' | 'external skill';
+  itemType: TreeObject;
   dialogName?: string;
   textWidth?: number;
   extraSpace?: number;
@@ -401,7 +423,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
 
-  const a11yLabel = `${itemType} ${link.displayName}`;
+  const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
   const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
@@ -528,7 +550,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   return (
     <div
-      aria-label={a11yLabel}
+      aria-label={ariaLabel}
       css={navContainer(
         isMenuOpen,
         isActive,
