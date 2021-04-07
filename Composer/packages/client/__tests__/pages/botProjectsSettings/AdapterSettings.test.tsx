@@ -117,7 +117,7 @@ describe('ExternalAdapterSettings', () => {
 
     await act(async () => {
       await userEvent.type(getByLabelText('Example Name'), 'test text 12345', { delay: 50 });
-      userEvent.click(getByText('Create'));
+      userEvent.click(getByText('Configure'));
     });
 
     const modal = queryByTestId('adapterModal');
