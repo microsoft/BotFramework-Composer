@@ -7,6 +7,7 @@ import { useRef, useEffect, ReactNode } from 'react';
 import { ZoomInfo } from '@bfc/shared';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
 import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
 import { AttrNames } from '../constants/ElementAttributes';
@@ -104,18 +105,21 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ flowZoomRate, focusedId, upd
     return (
       <div css={buttonBoxStyle}>
         <IconButton
+          ariaLabel={formatMessage('Zoom in')}
           disabled={currentRate === maxRate}
           iconProps={iconStyle('in')}
           styles={buttonStyle}
           onClick={() => handleZoom(-100)}
         ></IconButton>
         <IconButton
+          ariaLabel={formatMessage('Zoom out')}
           disabled={currentRate === minRate}
           iconProps={iconStyle('out')}
           styles={buttonStyle}
           onClick={() => handleZoom(100)}
         ></IconButton>
         <IconButton
+          ariaLabel={formatMessage('Reset view')}
           styles={buttonStyle}
           onClick={() => {
             handleZoom(0);

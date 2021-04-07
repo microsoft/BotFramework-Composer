@@ -9,6 +9,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "type": "node",
+      "request": "attach",
+      "name": "Server: Attach",
+      "port": 9228,
+      "sourceMaps": true
+    },
+    {
       "name": "LU LSP Server",
       "type": "node",
       "request": "launch",

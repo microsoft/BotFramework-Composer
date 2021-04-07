@@ -151,7 +151,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
   const menu = generateMenuItems();
 
   return (
-    <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`} role="grid">
+    <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`}>
       <TreeItem
         hasChildren={!isRemote}
         icon={isRemote ? Icons.EXTERNAL_SKILL : Icons.BOT}

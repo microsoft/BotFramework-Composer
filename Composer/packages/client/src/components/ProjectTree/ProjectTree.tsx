@@ -281,7 +281,6 @@ export const ProjectTree: React.FC<Props> = ({
           ref={dialog.isRoot ? addMainDialogRef : null}
           css={headerCSS('dialog-header', doesLinkMatch(dialogLink, selectedLink))}
           data-testid={`DialogHeader-${dialog.displayName}`}
-          role="grid"
         >
           <TreeItem
             hasChildren
@@ -315,7 +314,7 @@ export const ProjectTree: React.FC<Props> = ({
     };
 
     return (
-      <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`} role="grid">
+      <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`}>
         <TreeItem
           hasChildren
           icon={Icons.DIALOG}
@@ -380,6 +379,7 @@ export const ProjectTree: React.FC<Props> = ({
             : []
         }
         menuOpenCallback={setMenuOpen}
+        role="treeitem"
         showErrors={options.showErrors}
         textWidth={leftSplitWidth - TREE_PADDING}
         onSelect={handleOnSelect}
@@ -432,7 +432,7 @@ export const ProjectTree: React.FC<Props> = ({
       isRemote: false,
     };
     return (
-      <span css={headerCSS('trigger-group-header')} role="grid">
+      <span css={headerCSS('trigger-group-header')}>
         <TreeItem
           hasChildren
           isMenuOpen={isMenuOpen}
@@ -473,7 +473,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
+        <div role="group">{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
       </ExpandableNode>
     );
   };
@@ -782,7 +782,6 @@ export const ProjectTree: React.FC<Props> = ({
       className="ProjectTree"
       css={root}
       data-testid="ProjectTree"
-      role="region"
     >
       <ProjectTreeHeader
         ariaLabel={headerAriaLabel}

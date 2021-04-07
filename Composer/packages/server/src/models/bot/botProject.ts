@@ -61,6 +61,7 @@ export class BotProject implements IBotProject {
   public id: string | undefined;
   public name: string;
   public dir: string;
+  public readme: string;
   public dataDir: string;
   public eTag?: string;
   public fileStorage: IFileStorage;
@@ -90,6 +91,7 @@ export class BotProject implements IBotProject {
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+    this.readme = '';
   }
 
   public get dialogFiles() {
@@ -188,12 +190,14 @@ export class BotProject implements IBotProject {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
+    this.readme = await this._getReadme();
   };
 
   public getProject = () => {
     return {
       botName: this.name,
       files: Array.from(this.files.values()),
+      readme: this.readme,
       location: this.dir,
       schemas: this.getSchemas(),
       diagnostics: this.diagnostics,
@@ -480,7 +484,13 @@ export class BotProject implements IBotProject {
     return createdFiles;
   };
 
-  public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
+  public buildFiles = async ({
+    luisConfig,
+    qnaConfig,
+    orchestratorConfig,
+    luResource = [],
+    qnaResource = [],
+  }: IBuildConfig) => {
     if (this.settings) {
       const luFiles: FileInfo[] = [];
       const emptyFiles = {};
@@ -504,7 +514,12 @@ export class BotProject implements IBotProject {
 
       this.builder.rootDir = this.dir;
       this.builder.setBuildConfig(
-        { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey ?? '', qnaRegion: qnaConfig.qnaRegion ?? '' },
+        {
+          ...luisConfig,
+          subscriptionKey: qnaConfig.subscriptionKey ?? '',
+          qnaRegion: qnaConfig.qnaRegion ?? '',
+          ...orchestratorConfig,
+        },
         this.settings.downsampling
       );
       await this.builder.build(
@@ -778,6 +793,19 @@ export class BotProject implements IBotProject {
     if (paths.length) {
       this.fileStorage.rmrfDirSync(Path.join(this.dataDir, 'recognizers'));
     }
+  };
+
+  private _getReadme = async (): Promise<string> => {
+    const variants = ['readme.md', 'README.md', 'README.MD'];
+
+    for (const v in variants) {
+      const readmePath = Path.join(this.dir, variants[v]);
+      if (await this.fileStorage.exists(readmePath)) {
+        return await this.fileStorage.readFile(readmePath);
+      }
+    }
+
+    return '';
   };
 
   private _getFiles = async () => {
