@@ -47,7 +47,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
-  const [editingId, setEditingId] = useState<string>();
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [schema, setSchema] = useState<JSONSchema7>({});
@@ -136,13 +135,11 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   };
 
   const handleNext = (options?: { dismiss?: boolean; id?: string; save?: boolean }) => {
-    const validated =
-      typeof validate === 'function' ? validate({ content, editingId, id, schema, skillManifests }) : errors;
+    const validated = typeof validate === 'function' ? validate({ content, id, schema, skillManifests }) : errors;
 
     if (!Object.keys(validated).length) {
       setCurrentStep((current) => (current + 1 < order.length ? current + 1 : current));
       options?.save && handleSave();
-      options?.id && setEditingId(options.id);
       options?.dismiss && handleDismiss();
       setErrors({});
     } else {

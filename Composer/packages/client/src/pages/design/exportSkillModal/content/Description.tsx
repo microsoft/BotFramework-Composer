@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, Fragment, useState } from 'react';
 import AdaptiveForm, { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -12,6 +12,17 @@ import { v4 as uuid } from 'uuid';
 
 import { ContentProps } from '../constants';
 import { botDisplayNameState } from '../../../../recoilModel';
+import { Label } from 'office-ui-fabric-react/lib/Label';
+import formatMessage from 'format-message';
+import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { LoadingSpinner } from '@bfc/ui-shared/lib/components/LoadingSpinner';
+
+export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
+
+export const SCHEMA_URIS = [
+  'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
+  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
+];
 
 const styles = {
   row: css`
@@ -25,6 +36,12 @@ const styles = {
   `,
 };
 
+const chooseVersion = css`
+  display: flex;
+  width: 72%;
+  margin: 10px 18px;
+  justify-content: space-between;
+`;
 const InlineLabelField: React.FC<FieldProps> = (props) => {
   const { id, placeholder, rawErrors, value = '', onChange } = props;
 
@@ -50,39 +67,86 @@ const InlineLabelField: React.FC<FieldProps> = (props) => {
   );
 };
 
-export const Description: React.FC<ContentProps> = ({ errors, value, schema, onChange, projectId }) => {
+export const Description: React.FC<ContentProps> = ({
+  errors,
+  value,
+  schema,
+  skillManifests,
+  onChange,
+  projectId,
+  setSchema,
+  setSkillManifest,
+  editJson,
+}) => {
   const botName = useRecoilValue(botDisplayNameState(projectId));
+  const [isFetchCompleted, setIsFetchCompleted] = useState<boolean>(false);
   const { $schema, ...rest } = value;
 
-  const { hidden, properties } = useMemo(
+  const { hidden, properties } = useMemo(() => {
+    if (!schema.properties) return { hidden: [], properties: {} } as any;
+    return Object.entries(schema.properties as JSONSchema7).reduce(
+      ({ hidden, properties }, [key, property]) => {
+        if (property.type === 'object' || (property.type === 'array' && property?.items?.type !== 'string')) {
+          return { hidden: [...hidden, key], properties };
+        }
+
+        const itemSchema = property?.items as JSONSchema7;
+        const serializer =
+          itemSchema?.type === 'string'
+            ? {
+                get: (value) => (Array.isArray(value) ? value.join(',') : value),
+                set: (value) => (typeof value === 'string' ? value.split(/\s*,\s*/) : value),
+              }
+            : null;
+
+        return {
+          hidden,
+          properties: { ...properties, [key]: { field: InlineLabelField, hideError: true, serializer } },
+        };
+      },
+      { hidden: [], properties: {} } as any
+    );
+  }, [schema]);
+
+  const options: IDropdownOption[] = useMemo(
     () =>
-      Object.entries(schema?.properties as JSONSchema7).reduce(
-        ({ hidden, properties }, [key, property]) => {
-          if (property.type === 'object' || (property.type === 'array' && property?.items?.type !== 'string')) {
-            return { hidden: [...hidden, key], properties };
-          }
+      SCHEMA_URIS.map((key, index) => {
+        const [version] = VERSION_REGEX.exec(key) || [];
 
-          const itemSchema = property?.items as JSONSchema7;
-          const serializer =
-            itemSchema?.type === 'string'
-              ? {
-                  get: (value) => (Array.isArray(value) ? value.join(',') : value),
-                  set: (value) => (typeof value === 'string' ? value.split(/\s*,\s*/) : value),
-                }
-              : null;
-
-          return {
-            hidden,
-            properties: { ...properties, [key]: { field: InlineLabelField, hideError: true, serializer } },
-          };
-        },
-        { hidden: [], properties: {} } as any
-      ),
+        return {
+          text: formatMessage('Version {version}', { version }),
+          key,
+          selected: !index,
+        };
+      }),
     []
   );
 
   useEffect(() => {
-    if (!value.$id) {
+    if (!$schema) {
+      const skillManifest = skillManifests.find((manifest) => manifest.content.$schema === SCHEMA_URIS[0]) || {
+        content: { $schema: SCHEMA_URIS[0] },
+      };
+      setSkillManifest(skillManifest);
+    }
+    (async function () {
+      try {
+        if ($schema) {
+          const res = await fetch($schema);
+          const schema = await res.json();
+          setSchema(schema);
+          setIsFetchCompleted(true);
+        } else {
+          editJson();
+        }
+      } catch (error) {
+        editJson();
+      }
+    })();
+  }, [$schema]);
+
+  useEffect(() => {
+    if (!value.$id && value.$schema) {
       onChange({ $schema, $id: `${botName}-${uuid()}`, endpoints: [{}], name: botName, ...rest });
     }
   }, []);
@@ -96,5 +160,45 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
     properties,
   };
 
-  return <AdaptiveForm errors={errors} formData={value} schema={schema} uiOptions={uiOptions} onChange={onChange} />;
+  const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
+    if (option) {
+      const skillManifest = skillManifests.find((manifest) => manifest.content.$schema === option.key) || {
+        content: { $schema: option.key as string },
+      };
+      setIsFetchCompleted(false);
+      setSkillManifest(skillManifest);
+    }
+  };
+
+  return (
+    <Fragment>
+      <div css={chooseVersion}>
+        <Label
+          required
+          styles={{
+            root: { fontWeight: '400' },
+          }}
+        >
+          {formatMessage('Manifest Version')}
+        </Label>
+        <Dropdown
+          errorMessage={errors?.version}
+          options={options}
+          disabled={!isFetchCompleted}
+          responsiveMode={ResponsiveMode.large}
+          styles={{
+            root: {
+              width: '350px',
+            },
+          }}
+          onChange={handleChange}
+        />
+      </div>
+      {isFetchCompleted ? (
+        <AdaptiveForm errors={errors} formData={value} schema={schema} uiOptions={uiOptions} onChange={onChange} />
+      ) : (
+        <LoadingSpinner />
+      )}
+    </Fragment>
+  );
 };
