@@ -537,7 +537,7 @@ export class AzureResourceMananger {
     try {
       appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
         config.resourceGroupName,
-        config.resourceGroupName,
+        config.name,
         apiKeyOptions
       );
 

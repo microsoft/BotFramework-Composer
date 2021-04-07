@@ -14,6 +14,7 @@ import {
   isEjectRuntimeExistState,
   filePersistenceState,
   settingsState,
+  botRuntimeLogState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
@@ -116,6 +117,9 @@ export const publisherDispatcher = () => {
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
+      if (data.runtimeLog) {
+        set(botRuntimeLogState(projectId), data.runtimeLog);
+      }
       if (status === PUBLISH_SUCCESS && endpointURL) {
         const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
         if (rootBotId === projectId) {
@@ -253,6 +257,7 @@ export const publisherDispatcher = () => {
         const response = await httpClient.get(
           `/publish/${projectId}/status/${target.name}${currentJobId ? '/' + currentJobId : ''}`
         );
+
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
@@ -308,6 +313,7 @@ export const publisherDispatcher = () => {
   const resetBotRuntimeError = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { reset } = callbackHelpers;
     reset(botRuntimeErrorState(projectId));
+    reset(botRuntimeLogState(projectId));
   });
 
   const openBotInEmulator = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
