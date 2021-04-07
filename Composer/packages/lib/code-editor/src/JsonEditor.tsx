@@ -22,6 +22,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
     onError,
     schema,
     id,
+    styleOverrides = [],
     ...rest
   } = props;
 
@@ -107,6 +108,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
       id={id}
       language="json"
       options={options}
+      styleOverrides={styleOverrides}
       value={JSON.stringify(json, null, 2)}
       onChange={handleChange}
       onInit={onInit}
