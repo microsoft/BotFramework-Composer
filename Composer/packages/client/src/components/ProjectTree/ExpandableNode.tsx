@@ -64,19 +64,25 @@ export const ExpandableNode = ({
   }
 
   return (
-    <details ref={detailsRef} css={nodeStyle} data-testid="dialog" open={isExpanded}>
+    <details
+      ref={detailsRef}
+      aria-expanded={isExpanded}
+      css={nodeStyle}
+      data-testid="dialog"
+      open={isExpanded}
+      role="tree"
+    >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
       <summary
         css={summaryStyle(depth, isActive, isExpanded)}
         data-testid={'summaryTag'}
-        role="button"
         tabIndex={0}
         onClick={handleClick}
         onKeyUp={handleKey}
       >
         {summary}
       </summary>
-      {children}
+      <div role="group">{children}</div>
     </details>
   );
 };
