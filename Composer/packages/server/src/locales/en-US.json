@@ -1235,9 +1235,6 @@
   "downloading_bb6fb34b": {
     "message": "Downloading..."
   },
-  "downloading_language_model_9d40c817": {
-    "message": "Downloading Language Model"
-  },
   "due_to_the_following_error_we_were_unable_to_succe_5ca033c7": {
     "message": "Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:"
   },
@@ -2617,6 +2614,9 @@
   },
   "or_4f7d4edb": {
     "message": "Or: "
+  },
+  "orchestrator_downloading_language_model_e785be44": {
+    "message": "Orchestrator: Downloading language model"
   },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator recognizer"

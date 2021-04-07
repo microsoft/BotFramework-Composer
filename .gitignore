@@ -399,3 +399,4 @@ Composer/.vscode/
 docker-compose.override.yml
 
 *.tsbuildinfo
+Composer/packages/server/src/locales/en-US.csv

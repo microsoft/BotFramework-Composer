@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { keep, transFn } = require('./l10nUtils');
+const { keep, transFn, objectToPathCSV } = require('./l10nUtils');
 
 const L10N_FIELDS = ['label', 'description', 'title', 'subtitle'];
 
@@ -30,6 +30,8 @@ const outputFilename = path.join(schemaDir, 'sdk.en-US.schema');
 const outputFilenameTrans = path.join(schemaDir, 'sdk.en-US-pseudo.schema');
 const uiOutputFilename = path.join(schemaDir, 'sdk.en-US.uischema');
 const uiOutputFilenameTrans = path.join(schemaDir, 'sdk.en-US-pseudo.uischema');
+const csvOutputFilename = path.join(schemaDir, 'sdk.en-US.schema.csv');
+const csvUIOutputFilename = path.join(schemaDir, 'sdk.en-US.uischema.csv');
 
 console.log('writing', outputFilename);
 fs.writeFileSync(outputFilename, JSON.stringify(output, null, 4));
@@ -39,3 +41,7 @@ console.log('writing', uiOutputFilename);
 fs.writeFileSync(uiOutputFilename, JSON.stringify(uiOutput, null, 4));
 console.log('writing', uiOutputFilenameTrans);
 fs.writeFileSync(uiOutputFilenameTrans, JSON.stringify(uiOutputTransformed, null, 4));
+console.log('writing', csvOutputFilename);
+fs.writeFileSync(csvOutputFilename, objectToPathCSV(output));
+console.log('writing', csvUIOutputFilename);
+fs.writeFileSync(csvUIOutputFilename, objectToPathCSV(uiOutput));

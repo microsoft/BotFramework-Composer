@@ -44,7 +44,31 @@ function transFn(str) {
   }
 }
 
+function objectToPathHelper(obj, path) {
+  let out = [];
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'object') {
+      const subObject = objectToPathHelper(value, `${path}~${key}`);
+      out = out.concat(subObject);
+    } else {
+      try {
+        out.push(`${path}~${key}, "${('' + value).replace(/[\n\r]+/g, ' ').replace(/"/g, '""')}"`);
+      } catch (e) {
+        console.log(e, value);
+      }
+    }
+  }
+
+  return out;
+}
+
+function objectToPathCSV(obj) {
+  return objectToPathHelper(obj, '').join('\n');
+}
+
 module.exports = {
   transFn: transFn,
   keep: keep,
+  objectToPathCSV: objectToPathCSV,
 };
