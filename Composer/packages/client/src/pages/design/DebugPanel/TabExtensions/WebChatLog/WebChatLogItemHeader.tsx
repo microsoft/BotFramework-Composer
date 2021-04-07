@@ -8,19 +8,19 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import isEqual from 'lodash/isEqual';
 
-import { rootBotProjectIdSelector, webChatLogsState } from '../../../../../recoilModel';
+import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
 import { DebugPanelErrorIndicator } from '../DebugPanelErrorIndicator';
 import { DebugPanelTabHeaderProps } from '../types';
 
 export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
-  const logItems = useRecoilValue(webChatLogsState(rootBotId ?? ''));
+  const logItems = useRecoilValue(webChatTrafficState(rootBotId ?? ''));
 
   const [hasUnreadLogs, setHasUnreadLogs] = useState(false);
-  const [lastReadLogIds, setLastReadLogIds] = useState<string[]>([]);
+  const [lastReadLogIds, setLastReadLogIds] = useState<number[]>([]);
 
   useEffect(() => {
-    const newLogIds = logItems.map((item) => item.timestamp);
+    const newLogIds = logItems.filter((item) => item.trafficType === 'networkError').map((item) => item.timestamp);
     const areLogsSame = isEqual(newLogIds, lastReadLogIds);
 
     if (!areLogsSame) {
@@ -49,7 +49,7 @@ export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isAct
           margin-right: 4px;
         `}
       >
-        {formatMessage('Webchat Inspector')}
+        {formatMessage('Web Chat')}
       </div>
       <DebugPanelErrorIndicator hasError={hasUnreadLogs} />
     </div>
