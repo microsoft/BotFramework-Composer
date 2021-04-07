@@ -4,7 +4,11 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rimraf ./lib && tsc --build tsconfig.build.json"
+    "build": "rimraf ./lib && tsc --build tsconfig.build.json",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@botframework-composer/test-utils": "*"
   },
   "author": "Microsoft",
   "license": "MIT"

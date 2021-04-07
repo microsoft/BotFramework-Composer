@@ -14,7 +14,6 @@ import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@ui
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { BotIndexer } from '@bfc/indexers';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { useLocation } from '../utils/hooks';
@@ -26,12 +25,11 @@ import {
   botDisplayNameState,
   localeState,
   currentProjectIdState,
+  rootBotProjectIdSelector,
   settingsState,
   webChatEssentialsSelector,
   isWebChatPanelVisibleState,
-  dialogsWithLuProviderSelectorFamily,
-  luFilesSelectorFamily,
-  qnaFilesSelectorFamily,
+  allRequiredRecognizersSelector,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
@@ -155,6 +153,7 @@ const calloutDescription = css`
 export const Header = () => {
   const { setAppUpdateShowing, setLocale } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || projectId;
   const projectName = useRecoilValue(botDisplayNameState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
@@ -166,7 +165,9 @@ export const Header = () => {
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
-  const webchatEssentials = useRecoilValue(webChatEssentialsSelector);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
+  const webchatEssentials = useRecoilValue(webChatEssentialsSelector(rootBotId));
+
   const { setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
   const [hideBotController, hideBotStartController] = useState(true);
   const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
@@ -176,11 +177,9 @@ export const Header = () => {
   // These are needed to determine if the bot needs LUIS or QNA
   // this data is passed into the GetStarted widget
   // ... if the get started widget moves, this code should too!
-  const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
-  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
-  const requiresLUIS = BotIndexer.shouldUseLuis(dialogs, luFiles);
-  const requiresQNA = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
+  const requiredStuff = useRecoilValue(allRequiredRecognizersSelector);
+  const requiresLUIS = requiredStuff.some((p) => p.requiresLUIS);
+  const requiresQNA = requiredStuff.some((p) => p.requiresQNA);
   // ... end of get started stuff
 
   const isShow = useBotControllerBar();
@@ -404,7 +403,7 @@ export const Header = () => {
           TelemetryClient.track('WebChatPaneClosed');
         }}
       >
-        {webchatEssentials ? (
+        {webchatEssentials?.projectId ? (
           <WebChatPanel
             botData={{ ...webchatEssentials }}
             directlineHostUrl={BASEPATH}
@@ -413,6 +412,7 @@ export const Header = () => {
         ) : null}
         <GetStarted
           isOpen={showGetStarted}
+          projectId={rootBotProjectId}
           requiresLUIS={requiresLUIS}
           requiresQNA={requiresQNA}
           showTeachingBubble={showGetStartedTeachingBubble}

@@ -10,8 +10,6 @@ import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DialogSetting } from '@bfc/shared';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -25,7 +23,7 @@ import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 import { openDeleteBotModal } from './DeleteBotButton';
-import BotProjectSettingsTableView from './BotProjectSettingsTableView';
+import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 
 // -------------------- Styles -------------------- //
 
@@ -45,18 +43,6 @@ const container = css`
   height: 100%;
 `;
 
-const botNameStyle = css`
-  font-size: ${FontSizes.xLarge};
-  font-weight: ${FontWeights.semibold};
-  color: ${NeutralColors.black};
-`;
-
-const mainContentHeader = css`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-`;
-
 // -------------------- BotProjectSettings -------------------- //
 
 const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
@@ -68,8 +54,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
   const { deleteBot } = useRecoilValue(dispatcherState);
 
-  const isRootBot = !!botProject?.isRootBot;
-  const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
 
@@ -205,19 +189,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     >
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
-          <div css={mainContentHeader}>
-            <div css={botNameStyle}>
-              {`${botName} (${isRootBot ? formatMessage('Root Bot') : formatMessage('Skill')})`}
-            </div>
-            <Toggle
-              inlineLabel
-              checked={isAdvancedSettingsEnabled}
-              className={'advancedSettingsView'}
-              defaultChecked={false}
-              label={formatMessage('Advanced Settings View (json)')}
-              onChange={() => setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled)}
-            />
-          </div>
           {isAdvancedSettingsEnabled ? (
             <JsonEditor
               key={'settingsjson'}
@@ -227,8 +198,19 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               onChange={handleChange}
             />
           ) : (
-            <BotProjectSettingsTableView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
+            <BotProjectSettingsTabView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
           )}
+          <Toggle
+            inlineLabel
+            checked={isAdvancedSettingsEnabled}
+            className={'advancedSettingsView'}
+            defaultChecked={false}
+            label={formatMessage('Advanced Settings View (json)')}
+            styles={{ root: { position: 'absolute', left: '700px', top: '30px' } }}
+            onChange={() => {
+              setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
+            }}
+          />
         </div>
       </Suspense>
     </Page>

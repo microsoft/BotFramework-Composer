@@ -147,6 +147,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
           <StackItem grow={0}>
             <Label>{MultiLanguagesDialog.ADD_DIALOG.selectDefaultLangTitle}</Label>
             <Dropdown
+              ariaLabel={formatMessage('Default language')}
               disabled={defalutLanguageListOptions.length === 1}
               options={defalutLanguageListOptions}
               placeholder="Select an option"
