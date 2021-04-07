@@ -8,6 +8,8 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -17,16 +19,18 @@ import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/proj
 import {
   getTokenFromCache,
   isShowAuthDialog,
-  isGetTokenFromUser,
+  userShouldProvideTokens,
   setTenantId,
   getTenantIdFromCache,
 } from '../../utils/auth';
 // import { vaultScopes } from '../../constants';
+import { useLocation } from '../../utils/hooks';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
-import { navigateTo } from '../../utils/navigation';
+import { PublishTargets } from '../botProject/PublishTargets';
 
+import { ProjectList } from './components/projectList/ProjectList';
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { BotStatusList } from './BotStatusList';
@@ -43,7 +47,6 @@ import {
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
-
   const botProjectData = useRecoilValue(localBotsDataSelector);
   const publishHistoryList = useRecoilValue(localBotPublishHistorySelector);
   const {
@@ -57,10 +60,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     addNotification,
     deleteNotification,
   } = useRecoilValue(dispatcherState);
+  const { location } = useLocation();
 
   const pendingNotificationRef = useRef<Notification>();
   const showNotificationsRef = useRef<Record<string, boolean>>({});
 
+  const [activeTab, setActiveTab] = useState<string>('publish');
+  const [provisionProject, setProvisionProject] = useState(projectId);
   const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
@@ -227,12 +233,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const manageSkillPublishProfile = (skillId: string) => {
-    const url =
-      skillId === projectId
-        ? `/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`
-        : `bot/${projectId}/skill/${skillId}/botProjectsSettings/#addNewPublishProfile`;
-    navigateTo(url);
+    setActiveTab('provision');
+    setProvisionProject(skillId);
   };
+
+  // pop out get started if #getstarted is in the URL
+  useEffect(() => {
+    if (location.hash === '#addNewPublishProfile') {
+      setActiveTab('provision');
+    }
+  }, [location]);
 
   const isPublishingToAzure = (target?: PublishTarget) => {
     return target?.type === 'azurePublish' || target?.type === 'azureFunctionsPublish';
@@ -246,13 +256,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       if (target && isPublishingToAzure(target)) {
         const { tenantId } = JSON.parse(target.configuration);
 
-        if (tenantId) {
+        if (userShouldProvideTokens()) {
+          token = getTokenFromCache('accessToken');
+        } else if (tenantId) {
           token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));
           tenantTokenMap.set(tenantId, token);
-        } else if (isGetTokenFromUser()) {
-          token = getTokenFromCache('accessToken');
-          // old publish profile without tenant id
         } else {
+          // old publish profile without tenant id
           let tenant = getTenantIdFromCache();
           let tenants;
           if (!tenant) {
@@ -412,20 +422,45 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Publish your bots')}</h1>
       </div>
-      <div css={ContentStyle} data-testid="Publish" role="main">
-        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          <BotStatusList
-            botPublishHistoryList={publishHistoryList}
-            botStatusList={botStatusList}
-            checkedIds={checkedSkillIds}
-            disableCheckbox={isPublishPending}
-            onChangePublishTarget={changePublishTarget}
-            onCheck={updateCheckedSkills}
-            onManagePublishProfile={manageSkillPublishProfile}
-            onRollbackClick={onRollbackToVersion}
-          />
-        </div>
-      </div>
+
+      <Pivot
+        selectedKey={activeTab}
+        styles={{ root: { marginLeft: 12 } }}
+        onLinkClick={(link) => setActiveTab(link?.props?.itemKey || '')}
+      >
+        <PivotItem headerText={formatMessage('Publish')} itemKey={'publish'}>
+          <div css={ContentStyle} data-testid="Publish" role="main">
+            <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
+              <BotStatusList
+                botPublishHistoryList={publishHistoryList}
+                botStatusList={botStatusList}
+                checkedIds={checkedSkillIds}
+                disableCheckbox={isPublishPending}
+                onChangePublishTarget={changePublishTarget}
+                onCheck={updateCheckedSkills}
+                onManagePublishProfile={manageSkillPublishProfile}
+                onRollbackClick={onRollbackToVersion}
+              />
+            </div>
+          </div>
+        </PivotItem>
+        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'provision'}>
+          <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
+            {botProjectData && botProjectData.length > 1 && (
+              <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
+                <ProjectList
+                  defaultSelected={provisionProject}
+                  projectCollection={botProjectData}
+                  onSelect={(link) => setProvisionProject(link.projectId)}
+                />
+              </Stack.Item>
+            )}
+            <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflow: 'auto', maxHeight: '100%' } }}>
+              <PublishTargets projectId={provisionProject} />
+            </Stack.Item>
+          </Stack>
+        </PivotItem>
+      </Pivot>
     </Fragment>
   );
 };
