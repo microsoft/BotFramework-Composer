@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -29,7 +29,7 @@ import { dispatcherState } from '../../recoilModel/atoms';
 type ManageSpeechProps = {
   hidden: boolean;
   onDismiss: () => void;
-  setVisibility: (boolean) => void;
+  setVisibility: (visible: boolean) => void;
   onGetKey: (settings: { subscriptionKey: string; region: string }) => void;
   onNext?: () => void;
 };
@@ -42,14 +42,11 @@ type KeyRec = {
 };
 
 const dropdownStyles = { dropdown: { width: '100%' } };
-const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: '14' };
+const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 const mainElementStyle = { marginBottom: 20 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
-
-const handoffInstructions = formatMessage(
-  'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
-);
+const iconStyles = { marginRight: '8px' };
 
 export const ManageSpeech = (props: ManageSpeechProps) => {
   const [localKey, setLocalKey] = useState<string>('');
@@ -58,7 +55,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
   const [token, setToken] = useState<string | undefined>();
 
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
-  const [subscriptionId, setSubscription] = useState<string>('');
+  const [subscriptionId, setSubscriptionId] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
   const [createResourceGroup, setCreateResourceGroup] = useState<boolean>(false);
   const [newResourceGroupName, setNewResourceGroupName] = useState<string>('');
@@ -78,8 +75,12 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
-  const [outcomeSummary, setOutcomeSummary] = useState<any>();
+  const [outcomeSummary, setOutcomeSummary] = useState<React.ReactNode>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
+
+  const handoffInstructions = formatMessage(
+    'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
+  );
 
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -119,7 +120,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
 
   useEffect(() => {
     // reset the ui
-    setSubscription('');
+    setSubscriptionId('');
     setKeys([]);
     setCurrentPage(1);
     setActionOptions([
@@ -132,8 +133,8 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
     }
   }, [props.hidden]);
 
-  const handleRegionOnChange = (e, value: IDropdownOption | undefined) => {
-    if (value != null) {
+  const handleRegionOnChange = (e, value?: IDropdownOption) => {
+    if (value) {
       setLocalRegion(value.key as string);
     } else {
       setLocalRegion('');
@@ -173,7 +174,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
         accounts.filter((a) => a.kind === 'SpeechServices')
       );
       setLoading(false);
-      if (keys.length == 0) {
+      if (keys.length === 0) {
         setNoKeys(true);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new Speech resource') },
@@ -312,7 +313,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
       // ALL DONE!
       // this will pass the new values back to the caller
       // have to wait a second for the key to be available to use
-      // otherwise the ARM api will thrown an "unknown error"
+      // otherwise the ARM api will throw an "unknown error"
       setTimeout(() => {
         setLoading(false);
 
@@ -329,7 +330,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
   // allow a user to provide a subscription id if one is missing
   const onChangeSubscription = async (_, opt) => {
     // get list of keys for this subscription
-    setSubscription(opt.key);
+    setSubscriptionId(opt.key);
     fetchLocations(opt.key);
     fetchAccounts(opt.key);
     fetchResourceGroups(opt.key);
@@ -384,13 +385,10 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
     }
   };
 
-  const iconStyles = { marginRight: '8px' };
   const onRenderOption = (option) => {
     return (
       <div>
-        {option.data && option.data.icon && (
-          <Icon aria-hidden="true" iconName={option.data.icon} style={iconStyles} title={option.data.icon} />
-        )}
+        {option.data?.icon && <Icon aria-hidden="true" iconName={option.data.icon} style={iconStyles} />}
         <span>{option.text}</span>
       </div>
     );
@@ -466,7 +464,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
                   {noKeys && subscriptionId && (
                     <span style={{ color: 'rgb(161, 159, 157)' }}>
                       {formatMessage(
-                        'No existing Speech resource found in this subscription. Click “Next” to create new.'
+                        'No existing Speech resource found in this subscription. Click “Next” to create a new one.'
                       )}
                     </span>
                   )}
@@ -490,7 +488,11 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
               </div>
               <DialogFooter>
                 {loading && (
-                  <Spinner label="Loading keys..." labelPosition="right" styles={{ root: { float: 'left' } }} />
+                  <Spinner
+                    label={formatMessage('Loading keys...')}
+                    labelPosition="right"
+                    styles={{ root: { float: 'left' } }}
+                  />
                 )}
                 <PrimaryButton
                   disabled={
@@ -516,8 +518,8 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
                   )}
                 </p>
                 <Dropdown
-                  disabled={resourceGroups.length === 0 || loading}
-                  label={formatMessage('Resource group:')}
+                  disabled={!resourceGroups.length || loading}
+                  label={formatMessage('Resource group')}
                   options={
                     resourceGroups.map((p) => {
                       return { key: p.id, text: p.name, data: p.data };
@@ -535,7 +537,6 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
                     aria-label={formatMessage('Resource group name')}
                     data-testid={'resourceGroupName'}
                     disabled={loading}
-                    id={'resourceGroupName'}
                     label={formatMessage('Resource group name')}
                     placeholder={formatMessage('Enter name for new resource group')}
                     styles={{ root: { marginTop: 10 } }}
@@ -550,7 +551,6 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
                   aria-label={formatMessage('Speech region')}
                   data-testid={'rootRegion'}
                   disabled={loading || !locationList}
-                  id={'region'}
                   label={formatMessage('Speech region')}
                   options={locationList}
                   placeholder={formatMessage('Enter Speech region')}
@@ -563,7 +563,6 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
                   aria-label={formatMessage('Resource name')}
                   data-testid={'resourceName'}
                   disabled={loading}
-                  id={'resourceName'}
                   label={formatMessage('Resource name')}
                   placeholder={formatMessage('Enter name for new Speech resources')}
                   styles={{ root: { marginTop: 10 } }}
@@ -573,7 +572,11 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
               </div>
               <DialogFooter>
                 {loading && (
-                  <Spinner label="Creating resources..." labelPosition="right" styles={{ root: { float: 'left' } }} />
+                  <Spinner
+                    label={formatMessage('Creating resources...')}
+                    labelPosition="right"
+                    styles={{ root: { float: 'left' } }}
+                  />
                 )}
                 <DefaultButton disabled={loading} text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
                 <PrimaryButton
