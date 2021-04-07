@@ -8,6 +8,8 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { navigate, RouteComponentProps } from '@reach/router';
@@ -23,7 +25,7 @@ import { CreateBotV2 } from './CreateBot';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onNext: (data: string) => void;
+  onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
   fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
@@ -61,6 +63,26 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   }, [props.location?.search]);
   const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
 
+  const customerStyle = {
+    dialog: {
+      title: {
+        fontWeight: FontWeights.bold,
+        fontSize: FontSizes.size20,
+        paddingTop: '14px',
+        paddingBottom: '11px',
+      },
+      subText: {
+        fontSize: FontSizes.size14,
+      },
+    },
+    modal: {
+      main: {
+        maxWidth: '80% !important',
+        width: '480px !important',
+      },
+    },
+  };
+
   const options: IChoiceGroupOption[] = [
     { key: 'Create', text: formatMessage('Create a new bot') },
     { key: 'Connect', text: formatMessage('Connect to an existing bot') },
@@ -83,7 +105,8 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       <DialogWrapper
         isOpen={isOpenOptionsModal}
         {...dialogWrapperProps}
-        dialogType={DialogTypes.CreateFlow}
+        customerStyle={customerStyle}
+        dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
       >
         <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
