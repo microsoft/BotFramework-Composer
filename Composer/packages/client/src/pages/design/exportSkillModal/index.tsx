@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -173,7 +173,12 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             </React.Fragment>
           )}
         </p>
-        <div css={styles.content}>
+        <div
+          css={{
+            ...styles.content,
+            overflow: order[currentStep] === ManifestEditorSteps.MANIFEST_DESCRIPTION ? 'auto' : 'hidden',
+          }}
+        >
           <Content
             completeStep={handleNext}
             editJson={handleEditJson}

@@ -80,7 +80,7 @@ export const Description: React.FC<ContentProps> = ({
 }) => {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const [isFetchCompleted, setIsFetchCompleted] = useState<boolean>(false);
-  const { $schema, ...rest } = value;
+  const { $id, $schema, ...rest } = value;
 
   const { hidden, properties } = useMemo(() => {
     if (!schema.properties) return { hidden: [], properties: {} } as any;
@@ -123,12 +123,18 @@ export const Description: React.FC<ContentProps> = ({
   );
 
   useEffect(() => {
-    if (!$schema) {
-      const skillManifest = skillManifests.find((manifest) => manifest.content.$schema === SCHEMA_URIS[0]) || {
-        content: { $schema: SCHEMA_URIS[0] },
-      };
-      setSkillManifest(skillManifest);
-    }
+    const skillManifest = skillManifests.find(
+      (manifest) => manifest.content.$schema === ($schema || SCHEMA_URIS[0])
+    ) || {
+      content: {
+        $schema: $schema || SCHEMA_URIS[0],
+        $id: `${botName}-${uuid()}`,
+        endpoints: [{}],
+        name: botName,
+        ...rest,
+      },
+    };
+    setSkillManifest(skillManifest);
     (async function () {
       try {
         if ($schema) {
@@ -144,12 +150,6 @@ export const Description: React.FC<ContentProps> = ({
       }
     })();
   }, [$schema]);
-
-  useEffect(() => {
-    if (!value.$id && value.$schema) {
-      onChange({ $schema, $id: `${botName}-${uuid()}`, endpoints: [{}], name: botName, ...rest });
-    }
-  }, []);
 
   const required = schema?.required || [];
 
