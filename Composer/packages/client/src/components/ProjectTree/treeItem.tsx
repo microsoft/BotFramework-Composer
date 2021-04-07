@@ -238,14 +238,15 @@ type TreeObject =
   | 'external skill'; // used with multi-bot authoring
 
 const icons: { [key in TreeObject]: string } = {
-  trigger: 'LightningBolt',
+  bot: 'CubeShape',
   dialog: 'Org',
+  trigger: 'LightningBolt',
+  'trigger group': '',
   'form dialog': 'Table',
   'form field': 'Variable2', // x in parentheses
   'form trigger': 'TriggerAuto', // lightning bolt with gear
   lg: 'Robot',
   lu: 'People',
-  bot: 'CubeShape',
   'external skill': 'Globe',
 };
 
