@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 
 import { DiagnosticType, SchemaDiagnostic } from '../../../../diagnostics/types';
 import { botProjectSpaceSelector, dispatcherState } from '../../../../../recoilModel';
-import { dialogsDispatcher } from '../../../../../recoilModel/dispatchers/dialogs';
 
 import { useDiagnosticsData } from './useDiagnostics';
 
