@@ -3,6 +3,7 @@
 
 import path from 'path';
 
+import formatMessage from 'format-message';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 import { Debugger } from 'debug';
@@ -14,13 +15,13 @@ import {
   PublishResponse,
   PublishResult,
 } from '@botframework-composer/types';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, parseRuntimeKey } from '@bfc/shared';
 
 import { authConfig, ResourcesItem } from '../types';
 
 import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
-import { BotProjectDeploy, getAbsSettings, isProfileComplete } from './deploy';
+import { BotProjectDeploy, getAbsSettings } from './deploy';
 import { BotProjectProvision } from './provision';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
@@ -87,7 +88,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     private historyFilePath: string;
     private publishHistories: Record<string, Record<string, PublishResult[]>>; // use botId profileName as key
     private provisionHistories: Record<string, Record<string, ProcessStatus>>;
-    private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
     public name: string;
@@ -96,14 +96,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     public hasView = true;
     public bundleId = 'publish'; /** host custom UI */
 
-    constructor(mode: string, name: string, description: string, bundleId: string) {
+    constructor(name: string, description: string, bundleId: string) {
       this.publishHistories = {};
       this.provisionHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
       }
-      this.mode = mode || 'azurewebapp';
       this.schema = schema;
       this.instructions = instructions;
       this.name = name;
@@ -117,6 +116,12 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /*******************************************************************************************************************************/
     /* These methods generate all the necessary paths to various files  */
     /*******************************************************************************************************************************/
+
+    private getRuntimeTemplateMode = (runtimeKey?: string): string => {
+      // The "mode" is kept the same for backward compatibility with original folder names
+      const { runtimeType } = parseRuntimeKey(runtimeKey);
+      return runtimeType === 'functions' ? 'azurefunctions' : 'azurewebapp';
+    };
 
     // path to working folder containing all the assets
     private getRuntimeFolder = (key: string) => {
@@ -188,11 +193,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // point to the declarative assets (possibly in remote storage)
         const botFiles = project.getProject().files;
 
+        const mode = this.getRuntimeTemplateMode(runtime?.key);
+
         // include both pre-release and release identifiers here
         // TODO: eventually we can clean this up when the "old" runtime is deprecated
         // (old runtime support is the else block below)
         if (isUsingAdaptiveRuntime(runtime)) {
-          const buildFolder = this.getProjectFolder(resourcekey, this.mode);
+          const buildFolder = this.getProjectFolder(resourcekey, mode);
 
           // clean up from any previous deploys
           await this.cleanup(resourcekey);
@@ -200,7 +207,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           // copy bot and runtime into projFolder
           await copy(srcTemplate, buildFolder);
         } else {
-          const botFolder = this.getBotFolder(resourcekey, this.mode);
+          const botFolder = this.getBotFolder(resourcekey, mode);
           const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
           // clean up from any previous deploys
@@ -227,7 +234,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
 
           // save manifest
-          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
+          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, mode);
 
           // copy bot and runtime into projFolder
           await copy(srcTemplate, runtimeFolder);
@@ -275,6 +282,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       customizeConfiguration: DeployResources
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
+
+      const mode = this.getRuntimeTemplateMode(runtime?.key);
+
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -284,7 +294,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey, this.mode),
+        projPath: this.getProjectFolder(resourcekey, mode),
         runtime: runtime,
       });
 
@@ -505,6 +515,36 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const resourcekey = md5([project.name, name, environment].join());
 
       try {
+        // verify the profile has been provisioned at least once
+        if (!this.isProfileProvisioned(config)) {
+          throw new Error(
+            formatMessage(
+              'There was a problem publishing {projectName}/{profileName}. The profile has not been provisioned yet.',
+              { projectName: project.name, profileName }
+            )
+          );
+        }
+
+        // verify the publish profile has the required resources configured
+        const resources = await this.getResources(project, user);
+
+        const missingResourceNames = resources.reduce((result, resource) => {
+          if (resource.required && !this.isResourceProvisionedInProfile(resource, config)) {
+            result.push(resource.text);
+          }
+          return result;
+        }, []);
+
+        if (missingResourceNames.length > 0) {
+          const missingResourcesText = missingResourceNames.join(',');
+          throw new Error(
+            formatMessage(
+              'There was a problem publishing {projectName}/{profileName}. These required resources have not been provisioned: {missingResourcesText}',
+              { projectName: project.name, profileName, missingResourcesText }
+            )
+          );
+        }
+
         // authenticate with azure
         const accessToken = config.accessToken || (await getAccessToken(authConfig.arm));
 
@@ -515,8 +555,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (!settings) {
           throw new Error('Required field `settings` is missing from publishing profile.');
         }
-        // verify publish profile
-        isProfileComplete(config);
 
         this.asyncPublish({ ...config, accessToken, luResources, qnaResources, abs }, project, resourcekey, jobId);
 
@@ -610,6 +648,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
       const recommendedResources: ResourcesItem[] = [];
 
+      const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
+
       // add in the ALWAYS REQUIRED options
 
       // Always need an app registration (app id and password)
@@ -619,14 +659,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       // always need hosting compute - either web app or functions
-      if (this.mode === 'azurewebapp') {
+      if (runtimeType === 'functions') {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
+          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
           required: true,
         });
       } else {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
+          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
           required: true,
         });
       }
@@ -673,6 +713,54 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       return recommendedResources;
     };
 
+    private isProfileProvisioned = (profile: PublishConfig): boolean => {
+      //TODO: Post-migration we can check for profile?.tenantId
+      return profile?.resourceGroup && profile?.subscriptionId && profile?.region;
+    };
+
+    // While the provisioning process may return more information for various resources than is checked here,
+    // this tries to verify the minimum settings are present and that cannot be empty strings.
+    private isResourceProvisionedInProfile = (resource: ResourcesItem, profile: PublishConfig): boolean => {
+      switch (resource.key) {
+        case AzureResourceTypes.APPINSIGHTS:
+          // InstrumentationKey is Pascal-cased for some unknown reason
+          return profile?.settings?.applicationInsights?.InstrumentationKey;
+        case AzureResourceTypes.APP_REGISTRATION:
+          // MicrosoftAppId and MicrosoftAppPassword are Pascal-cased for some unknown reason
+          return profile?.settings?.MicrosoftAppId && profile?.settings?.MicrosoftAppPassword;
+        case AzureResourceTypes.BLOBSTORAGE:
+          // name is not checked (not in schema.ts)
+          // container property is not checked (empty may be a valid value)
+          return profile?.settings?.blobStorage?.connectionString;
+        case AzureResourceTypes.BOT_REGISTRATION:
+          return profile?.botName;
+        case AzureResourceTypes.COSMOSDB:
+          // collectionId is not checked (not in schema.ts)
+          // databaseId and containerId are not checked (empty may be a valid value)
+          return profile?.settings?.cosmosDB?.authKey && profile?.settings?.cosmosDB?.cosmosDBEndpoint;
+        case AzureResourceTypes.LUIS_AUTHORING:
+          // region is not checked (empty may be a valid value)
+          return profile?.settings?.luis?.authoringKey && profile?.settings?.luis?.authoringEndpoint;
+        case AzureResourceTypes.LUIS_PREDICTION:
+          // region is not checked (empty may be a valid value)
+          return profile?.settings?.luis?.endpointKey && profile?.settings?.luis?.endpoint;
+        case AzureResourceTypes.QNA:
+          // endpoint is not checked (it is in schema.ts and provision() returns the value, but it is not set in the config)
+          // qnaRegion is not checked (empty may be a valid value)
+          return profile?.settings?.qna?.subscriptionKey;
+        case AzureResourceTypes.SERVICE_PLAN:
+          // no settings exist to verify the service plan was created
+          return true;
+        case AzureResourceTypes.AZUREFUNCTIONS:
+        case AzureResourceTypes.WEBAPP:
+          return profile?.hostname;
+        default:
+          throw new Error(
+            formatMessage('Azure resource type {resourceKey} is not handled.', { resourceKey: resource.key })
+          );
+      }
+    };
+
     private addProvisionHistory = (botId: string, profileName: string, newValue: ProcessStatus) => {
       if (!this.provisionHistories[botId]) {
         this.provisionHistories[botId] = {};
@@ -696,19 +784,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher(
-    'azurewebapp',
-    'azurePublish',
-    'Publish bot to Azure Web App (Preview)',
-    'azurePublish'
-  );
-  const azureFunctionsPublish = new AzurePublisher(
-    'azurefunctions',
-    'azureFunctionsPublish',
-    'Publish bot to Azure Functions (Preview)',
-    'azureFunctionsPublish'
-  );
+  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure (Preview)', 'azurePublish');
 
   await composer.addPublishMethod(azurePublish);
-  await composer.addPublishMethod(azureFunctionsPublish);
 };

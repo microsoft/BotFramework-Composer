@@ -26,7 +26,7 @@ import { ProvisionHandoff } from '@bfc/ui-shared';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { armScopes } from '../../constants';
-import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../utils/auth';
+import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { dispatcherState } from '../../recoilModel/atoms';
 
 type ManageQNAProps = {
@@ -102,7 +102,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
 
   const hasAuth = async () => {
     let newtoken = '';
-    if (isGetTokenFromUser()) {
+    if (userShouldProvideTokens()) {
       if (isShowAuthDialog(false)) {
         setShowAuthDialog(true);
       }
@@ -616,7 +616,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   )}
                 </p>
                 <Dropdown
-                  disabled={resourceGroups.length === 0}
+                  disabled={resourceGroups.length === 0 || loadingQNA}
                   label={formatMessage('Resource group:')}
                   options={
                     resourceGroups.map((p) => {
@@ -634,6 +634,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                     required
                     aria-label={formatMessage('Resource group name')}
                     data-testid={'qnaResourceGroupName'}
+                    disabled={loadingQNA}
                     id={'qnaResourceGroupName'}
                     label={formatMessage('Resource group name')}
                     placeholder={formatMessage('Enter name for new resource group')}
@@ -648,6 +649,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   required
                   aria-label={formatMessage('QnA region')}
                   data-testid={'rootqnaRegion'}
+                  disabled={loadingQNA}
                   id={'qnaRegion'}
                   label={formatMessage('QnA region')}
                   options={QNA_REGIONS}
@@ -660,6 +662,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   required
                   aria-label={formatMessage('Resource name')}
                   data-testid={'qnaResourceName'}
+                  disabled={loadingQNA}
                   id={'qnaResourceName'}
                   label={formatMessage('Resource name')}
                   placeholder={formatMessage('Enter name for new QnA resources')}
@@ -669,9 +672,13 @@ export const ManageQNA = (props: ManageQNAProps) => {
                 />
               </div>
               <DialogFooter>
-                <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
+                {loadingQNA && (
+                  <Spinner label="Creating resources..." labelPosition="right" styles={{ root: { float: 'left' } }} />
+                )}
+                <DefaultButton disabled={loadingQNA} text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
                 <PrimaryButton
                   disabled={
+                    loadingQNA ||
                     !qnaResourceName ||
                     !resourceGroupKey ||
                     (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
@@ -679,7 +686,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   text={formatMessage('Next')}
                   onClick={createQNA}
                 />
-                <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+                <DefaultButton disabled={loadingQNA} text={formatMessage('Cancel')} onClick={props.onDismiss} />
               </DialogFooter>
             </div>
           )}
