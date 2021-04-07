@@ -132,7 +132,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       const result = location.href.split('/');
       let skillId = '';
       if (result.length > 0) skillId = result[result.length - 1];
-      console.log(skillId);
       // add trigger with connect to skill action to root bot
       const triggerFormData = getTriggerFormData(skillManifest.name, content);
       addTriggerToRoot(dialogId, triggerFormData, skillId);
