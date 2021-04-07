@@ -85,7 +85,7 @@ export const publish = async (
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
         'Content-Length': botContent.buffer.byteLength.toString(),
-        'If-Match': process.env.COMPOSER_PVA_TOPICS === 'true' ? '*' : project.eTag,
+        'If-Match': project.eTag,
       },
     });
     if (res.status === 202) {
