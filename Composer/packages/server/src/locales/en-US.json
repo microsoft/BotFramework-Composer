@@ -3332,6 +3332,9 @@
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "Skill manifest endpoint is configured improperly"
   },
+  "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
+    "message": "Skill manifest URL was copied to the clipboard"
+  },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
