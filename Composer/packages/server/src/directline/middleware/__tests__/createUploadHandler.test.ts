@@ -4,7 +4,6 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { BotErrorCodes } from '../../utils/apiErrorException';
-import { textItem } from '../../utils/helpers';
 import { createUploadAttachmentHandler, createUploadHandler } from '../createUploadHandler';
 
 let res;
@@ -72,11 +71,10 @@ describe('uploadAttachment handler', () => {
     const uploadAttachment = createUploadAttachmentHandler(state);
     uploadAttachment(req, res);
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      logType: 'Error',
-      message: "'You must specify type property for the attachment'. MissingProperty",
-      route: 'POST v3/uploads',
-      status: StatusCodes.BAD_REQUEST,
-      timestamp: '2021-02-19 00:00:00',
+      error: {
+        message: "'You must specify type property for the attachment'. MissingProperty",
+        status: StatusCodes.BAD_REQUEST,
+      },
     });
   });
 });
@@ -93,12 +91,9 @@ describe('upload handler', () => {
   });
 
   it('should send a 404 if there is no conversation attached to the request', () => {
-    const mockLogToDoc = jest.fn();
     const serverContext: any = {
       state: {
-        dispatchers: {
-          logToDocument: mockLogToDoc,
-        },
+        dispatchers: {},
       },
     };
     const req: any = {
@@ -112,8 +107,6 @@ describe('upload handler', () => {
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockSend).toHaveBeenCalledWith('Cannot upload file. Conversation not found.');
     expect(mockEnd).toHaveBeenCalled();
-    const logItem = textItem('Error', 'Cannot upload file. Conversation not found.');
-    expect(mockLogToDoc).toHaveBeenCalledWith('conversation1', logItem);
   });
 
   it('should short circuit if the request content is not form data', () => {
