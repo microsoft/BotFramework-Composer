@@ -3,7 +3,6 @@
 
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension-client';
-import { resolveRef } from '@bfc/adaptive-form';
 import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
@@ -12,7 +11,6 @@ import { nameRegex } from '../../../constants';
 
 import {
   Description,
-  Endpoints,
   FetchManifestSchema,
   ReviewManifest,
   SaveManifest,
@@ -143,8 +141,8 @@ export enum ManifestEditorSteps {
 }
 
 export const order: ManifestEditorSteps[] = [
-  ManifestEditorSteps.SELECT_MANIFEST,
-  ManifestEditorSteps.FETCH_MANIFEST_SCHEMA,
+  // ManifestEditorSteps.SELECT_MANIFEST,
+  // ManifestEditorSteps.FETCH_MANIFEST_SCHEMA,
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
   ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
