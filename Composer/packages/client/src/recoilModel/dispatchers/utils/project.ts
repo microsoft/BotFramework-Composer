@@ -439,6 +439,10 @@ export const isAdaptiveRuntime = (settings): boolean => {
   return settings?.runtime?.key?.match(/^adaptive-runtime/) ? true : false;
 };
 
+export const isPVA = (settings): boolean => {
+  return settings?.publishTargets?.some((target) => target.type === 'pva-publish-composer');
+};
+
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { set } = callbackHelpers;
   const { botName, botEnvironment, location, readme, schemas, settings, id: projectId, diagnostics } = data;
@@ -799,7 +803,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
   return {
     mainDialog,
     projectId: rootBotProjectId,
-    requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings),
+    requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings) && !isPVA(botFiles.mergedSettings),
   };
 };
 
