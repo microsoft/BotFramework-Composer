@@ -229,6 +229,7 @@ type TreeObject =
   | 'bot'
   | 'dialog'
   | 'trigger' // basic ProjectTree elements
+  | 'trigger group'
   | 'form dialog'
   | 'form field'
   | 'form trigger' // used with form dialogs
@@ -251,6 +252,7 @@ const icons: { [key in TreeObject]: string } = {
 const objectNames: { [key in TreeObject]: () => string } = {
   trigger: () => formatMessage('Trigger'),
   dialog: () => formatMessage('Dialog'),
+  'trigger group': () => formatMessage('Trigger group'),
   'form dialog': () => formatMessage('Form dialog'),
   'form field': () => formatMessage('Form field'),
   'form trigger': () => formatMessage('Form trigger'),
