@@ -20,7 +20,7 @@ import { ImportController } from '../controllers/import';
 import { StatusController } from '../controllers/status';
 import { SettingsController } from '../controllers/settings';
 import { TelemetryController } from '../controllers/telemetry';
-import { OrchestratorController } from '../controllers/orchestrator';
+import OrchestratorController from '../controllers/orchestrator';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -137,7 +137,7 @@ router.post('/settings', SettingsController.updateUserSettings);
 router.post('/telemetry/events', TelemetryController.track);
 
 // Orchestrator Specific API
-router.post('/orchestrator/download', OrchestratorController.downloadDefaultModel);
+router.post('/orchestrator/download', OrchestratorController.downloadLanguageModel);
 router.get('/orchestrator/status', OrchestratorController.status);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
