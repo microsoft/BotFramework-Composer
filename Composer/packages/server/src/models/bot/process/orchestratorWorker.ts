@@ -86,26 +86,36 @@ export async function warmUpCache(generatedFolderPath: string, projectId: string
     { model: orchestratorSettings?.orchestrator?.models?.multilang, lang: 'multilang', luFiles: multiLangLuFiles },
   ];
 
-  const [enMap, multilangMap] = await Promise.all(
-    modelDatas.map(async (modelData) => {
-      const snapshotData = await Promise.all(
-        modelData.luFiles.map(
-          async (f) =>
-            [f.replace('.blu', '.lu'), new Uint8Array(await readFile(Path.join(generatedFolderPath, f)))] as [
-              string,
-              Uint8Array
-            ]
-        )
+  const mergedLabelResolverMap: Map<string, LabelResolver> = new Map();
+
+  for (const modelData of modelDatas) {
+    const snapshotData: [string, Uint8Array][] = await Promise.all(
+      modelData.luFiles.map(
+        async (f) =>
+          [f.replace('.blu', '.lu'), new Uint8Array(await readFile(Path.join(generatedFolderPath, f)))] as [
+            string,
+            Uint8Array
+          ]
+      )
+    );
+
+    if (modelData.model && snapshotData.length) {
+      //getLabelResolversAsync cannot be run concurrently. Do not wrap in promise.all, it crashes
+      //the worker and there is no recovery from this.
+      const labelResolverMap = await Orchestrator.getLabelResolversAsync(
+        modelData.model,
+        '',
+        new Map(snapshotData),
+        false
       );
-
-      return modelData.model && snapshotData.length
-        ? await Orchestrator.getLabelResolversAsync(modelData.model, '', new Map(snapshotData), false)
-        : new Map<string, LabelResolver>();
-    })
-  );
-
-  cache.set(projectId, new Map([...enMap, ...multilangMap]));
-
+      if (labelResolverMap) {
+        for (const [key, labelResolver] of labelResolverMap.entries()) {
+          mergedLabelResolverMap.set(key, labelResolver);
+        }
+      }
+    }
+  }
+  cache.set(projectId, mergedLabelResolverMap);
   return true;
 }
 
@@ -177,7 +187,7 @@ export async function writeSnapshot(output: IOrchestratorBuildOutput, generatedF
   return snapshots;
 }
 
-const handleMessage = async (msg: RequestMsg) => {
+export const handleMessage = async (msg: RequestMsg) => {
   const { payload } = msg;
   try {
     switch (payload.type) {
@@ -196,14 +206,10 @@ const handleMessage = async (msg: RequestMsg) => {
       }
     }
   } catch (error) {
-    return { id: msg.id, error };
+    process.send?.({ id: msg.id, error: error ? { message: error.message, stack: error.stack } : undefined });
   }
 };
 
 process.on('message', async (msg: RequestMsg) => {
-  try {
-    handleMessage(msg);
-  } catch (error) {
-    process.send?.({ id: msg.id, error });
-  }
+  handleMessage(msg);
 });
