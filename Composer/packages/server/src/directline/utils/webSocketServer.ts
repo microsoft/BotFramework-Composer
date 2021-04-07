@@ -7,11 +7,15 @@ import portfinder from 'portfinder';
 import express, { Response } from 'express';
 import { Activity } from 'botframework-schema';
 import { Server as WSServer } from 'ws';
-import { DirectLineLog } from '@botframework-composer/types';
+import {
+  ConversationActivityTraffic,
+  ConversationNetworkErrorItem,
+  ConversationNetworkTrafficItem,
+} from '@botframework-composer/types';
 
 import log from './logger';
 
-const socketErrorChannelKey = 'DL_ERROR_SOCKET';
+const socketTrafficChannelKey = 'DL_TRAFFIC_SOCKET';
 interface WebSocket {
   close(): void;
   send(data: any, cb?: (err?: Error) => void): void;
@@ -20,7 +24,7 @@ interface WebSocket {
 export class WebSocketServer {
   private static restServer: http.Server;
   private static servers: Record<string, WSServer> = {};
-  private static dLErrorsServer: WSServer | null = null;
+  private static trafficServer: WSServer | null = null;
   private static sockets: Record<string, WebSocket> = {};
 
   private static queuedMessages: { [conversationId: string]: Activity[] } = {};
@@ -29,8 +33,11 @@ export class WebSocketServer {
     if (this.queuedMessages[conversationId]) {
       while (this.queuedMessages[conversationId].length > 0) {
         const activity: Activity | undefined = this.queuedMessages[conversationId].shift();
-        const payload = { activities: [activity] };
-        socket.send(JSON.stringify(payload));
+        if (activity) {
+          const payload = { activities: [activity] };
+          socket.send(JSON.stringify(payload));
+          this.sendTrafficToSubscribers({ ...payload, trafficType: 'activity' });
+        }
       }
     }
   }
@@ -54,6 +61,7 @@ export class WebSocketServer {
       const payload = { activities: [activity] };
       this.sendBackedUpMessages(conversationId, socket);
       socket.send(JSON.stringify(payload));
+      this.sendTrafficToSubscribers({ ...payload, trafficType: 'activity' });
     } else {
       this.queueActivities(conversationId, activity);
     }
@@ -108,12 +116,12 @@ export class WebSocketServer {
         }
       });
 
-      app.use('/ws/errors/createErrorChannel', (req: express.Request, res: express.Response) => {
+      app.use('/ws/traffic', (req: express.Request, res: express.Response) => {
         if (!(req as any).claimUpgrade) {
           return res.status(426).send('Connection must upgrade for web sockets.');
         }
 
-        if (!this.dLErrorsServer) {
+        if (!this.trafficServer) {
           const { head, socket } = (req as any).claimUpgrade();
 
           const wsServer = new WSServer({
@@ -121,18 +129,18 @@ export class WebSocketServer {
           });
 
           wsServer.on('connection', (socket, req) => {
-            this.sockets[socketErrorChannelKey] = socket;
+            this.sockets[socketTrafficChannelKey] = socket;
 
             socket.on('close', () => {
-              this.dLErrorsServer = null;
-              delete this.sockets[socketErrorChannelKey];
+              this.trafficServer = null;
+              delete this.sockets[socketTrafficChannelKey];
             });
           });
 
           wsServer.handleUpgrade(req as any, socket, head, (socket) => {
             wsServer.emit('connection', socket, req);
           });
-          this.dLErrorsServer = wsServer;
+          this.trafficServer = wsServer;
         }
       });
 
@@ -141,8 +149,10 @@ export class WebSocketServer {
     }
   }
 
-  public static sendDLErrorsToSubscribers(logItem: DirectLineLog): void {
-    this.sockets[socketErrorChannelKey]?.send(JSON.stringify(logItem));
+  public static sendTrafficToSubscribers(
+    data: Partial<ConversationActivityTraffic> | ConversationNetworkTrafficItem | ConversationNetworkErrorItem
+  ): void {
+    this.sockets[socketTrafficChannelKey]?.send(JSON.stringify(data));
   }
 
   public static cleanUpConversation(conversationId: string): void {
@@ -160,9 +170,8 @@ export class WebSocketServer {
       this.cleanUpConversation(conversationId);
     }
 
-    if (this.dLErrorsServer) {
-      this.sockets.errorSocket?.close();
-      this.dLErrorsServer?.close();
+    if (this.trafficServer) {
+      this.trafficServer.close();
     }
 
     if (this.restServer) {

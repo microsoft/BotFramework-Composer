@@ -188,12 +188,11 @@ describe('postActivityToBot handler', () => {
 
     expect(mockStatus).toHaveBeenCalledWith(400);
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      logType: 'Error',
-      message:
-        '{"code":"ServiceError","exception":{"response":{"status":400,"data":{"error":"The bot cannot accept messages at this time","errorCode":["123Z-4","989-Az"]}}}}',
-      route: 'POST v3/directine/conv-123',
-      status: 400,
-      timestamp: '2021-02-19 00:00:00',
+      error: {
+        message:
+          '{"code":"ServiceError","exception":{"response":{"status":400,"data":{"error":"The bot cannot accept messages at this time","errorCode":["123Z-4","989-Az"]}}}}',
+        status: 400,
+      },
     });
   });
 });

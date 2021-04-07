@@ -18,7 +18,7 @@ describe('<DebugPanel />', () => {
   describe('<DebugPanel />', () => {
     it('should render Debug Panel', async () => {
       const { findByText } = renderWithRecoil(<DebugPanel />, () => {});
-      await findByText('Webchat Inspector');
+      await findByText('Web Chat');
       await findByText('Problems');
     });
 
@@ -29,7 +29,7 @@ describe('<DebugPanel />', () => {
       };
 
       const { findByText } = renderWithRecoil(<DebugPanel />, initRecoilState);
-      const element = await findByText('Webchat Inspector');
+      const element = await findByText('Web Chat');
       act(() => {
         fireEvent.click(element);
 
