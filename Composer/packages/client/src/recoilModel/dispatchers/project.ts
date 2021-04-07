@@ -487,7 +487,12 @@ export const projectDispatcher = () => {
   );
 
   const migrateProjectTo = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (oldProjectId, name, description, location) => {
+    (callbackHelpers: CallbackInterface) => async (
+      oldProjectId: string,
+      name: string,
+      description: string,
+      location: string
+    ) => {
       const { set, snapshot } = callbackHelpers;
       try {
         const dispatcher = await snapshot.getPromise(dispatcherState);
