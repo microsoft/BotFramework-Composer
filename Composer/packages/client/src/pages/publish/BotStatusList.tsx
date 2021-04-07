@@ -49,20 +49,10 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
 }) => {
   const [expandedBotIds, setExpandedBotIds] = useState<Record<string, boolean>>({});
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
-  const [clipboardText, setClipboardText] = useState('');
-  const clipboardTextFieldRef = useRef<ITextField>(null);
 
   const copyStringToClipboard = (value?: string) => {
     try {
-      if (clipboardTextFieldRef.current) {
-        setClipboardText(value || '');
-        setTimeout(() => {
-          if (clipboardTextFieldRef.current) {
-            clipboardTextFieldRef.current.select();
-            document.execCommand('copy');
-          }
-        }, 10);
-      }
+      value && navigator.clipboard.writeText(value);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Something went wrong when copying to the clipboard.', e, location);
@@ -270,8 +260,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       name: '',
       className: 'skillManifest',
       fieldName: 'skillManifestUrl',
-      minWidth: 114,
-      maxWidth: 134,
+      minWidth: 134,
+      maxWidth: 150,
       data: 'string',
       onRender: (item: BotStatus) => {
         return (
@@ -366,12 +356,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
           onRenderRow={renderTableRow}
         />
       </div>
-      <TextField
-        readOnly
-        componentRef={clipboardTextFieldRef}
-        styles={{ root: { display: 'none' } }}
-        value={clipboardText}
-      />
     </div>
   );
 };

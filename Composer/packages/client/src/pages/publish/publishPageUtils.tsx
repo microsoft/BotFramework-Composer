@@ -31,11 +31,11 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
   return { botPropertyData, botList };
 };
 
-const findSkillManifestUrl = (skillManifests: SkillManifestFile[], appId: string) => {
+const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string) => {
   for (const skillManifest of skillManifests || []) {
     for (const endpoint of skillManifest?.content?.endpoints || []) {
       if (endpoint?.msAppId === appId) {
-        return endpoint?.endpointUrl;
+        return `https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`;
       }
     }
   }
@@ -67,7 +67,11 @@ export const generateBotStatusList = (
         const config = JSON.parse(currentPublishTarget.configuration);
         const appId = config?.settings?.MicrosoftAppId;
         if (appId) {
-          botStatus.skillManifestUrl = findSkillManifestUrl(botPropertyData[bot.id].skillManifests, appId);
+          botStatus.skillManifestUrl = findSkillManifestUrl(
+            botPropertyData[bot.id].skillManifests,
+            config.hostname,
+            appId
+          );
         }
       }
     }
