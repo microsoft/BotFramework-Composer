@@ -602,9 +602,6 @@
   "cannot_parse_attachment_c3e552a5": {
     "message": "Cannot parse attachment."
   },
-  "cannot_post_activity_conversation_not_found_c1e26d2d": {
-    "message": "Cannot post activity. Conversation not found."
-  },
   "cannot_upload_file_conversation_not_found_8a983504": {
     "message": "Cannot upload file. Conversation not found."
   },
@@ -1234,9 +1231,6 @@
   },
   "downloading_bb6fb34b": {
     "message": "Downloading..."
-  },
-  "downloading_language_model_9d40c817": {
-    "message": "Downloading Language Model"
   },
   "due_to_the_following_error_we_were_unable_to_succe_5ca033c7": {
     "message": "Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:"
@@ -2507,6 +2501,9 @@
   "no_uploads_were_attached_as_a_part_of_the_request_63e92f54": {
     "message": "No uploads were attached as a part of the request."
   },
+  "no_web_chat_activity_yet_4227dc1a": {
+    "message": "No Web Chat activity yet."
+  },
   "no_wildcard_ff439e76": {
     "message": "no wildcard"
   },
@@ -2641,6 +2638,9 @@
   },
   "or_4f7d4edb": {
     "message": "Or: "
+  },
+  "orchestrator_downloading_language_model_e785be44": {
+    "message": "Orchestrator: Downloading language model"
   },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator recognizer"
@@ -2860,6 +2860,9 @@
   },
   "published_4bb5209e": {
     "message": "Published"
+  },
+  "publisher_bf6195cf": {
+    "message": "Publisher"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
     "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
@@ -3985,9 +3988,6 @@
   },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
-  },
-  "webchat_inspector_4d0dfeb7": {
-    "message": "Webchat Inspector"
   },
   "webchat_log_b7213a9e": {
     "message": "Webchat log."

@@ -3,7 +3,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, RootBotManagedProperties, DialogSetting, PublishTarget, LibraryRef } from '@bfc/shared';
+import {
+  SensitiveProperties,
+  RootBotManagedProperties,
+  DialogSetting,
+  PublishTarget,
+  LibraryRef,
+  isUsingAdaptiveRuntime,
+} from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
@@ -17,7 +24,6 @@ import { botNameIdentifierState } from '../atoms';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
-
 export const setRootBotSettingState = async (
   callbackHelpers: CallbackInterface,
   projectId: string,
@@ -185,24 +191,43 @@ export const settingsDispatcher = () => {
         endpointUrl = cur?.endpointUrl || '';
         msAppId = cur?.msAppId || '';
       }
-      if (settings.skill) {
-        set(settingsState(projectId), (currentValue) => ({
-          ...currentValue,
-          skill: {
-            ...settings.skill,
-            [manifestIdentifier]: {
-              endpointUrl,
-              msAppId,
+
+      const v2 = isUsingAdaptiveRuntime(settings.runtime);
+      set(settingsState(projectId), (currentValue) => {
+        if (v2) {
+          return {
+            ...currentValue,
+            skill: {
+              ...settings.skill,
+              [manifestIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
             },
-          },
-          runtimeSettings: {
-            ...settings.runtimeSettings,
-            skills: {
-              allowedCallers: [...settings.runtimeSettings?.skills?.allowedCallers, msAppId],
+            skillConfiguration: {
+              ...settings.skillConfiguration,
+              allowedCallers: [...settings.skillConfiguration?.allowedCallers, msAppId],
             },
-          },
-        }));
-      }
+          };
+        } else {
+          return {
+            ...currentValue,
+            skill: {
+              ...settings.skill,
+              [manifestIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
+            },
+            runtimeSettings: {
+              ...settings.runtimeSettings,
+              skills: {
+                allowedCallers: [...settings.runtimeSettings?.skills?.allowedCallers, msAppId],
+              },
+            },
+          };
+        }
+      });
     }
   );
 
