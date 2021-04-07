@@ -4,9 +4,17 @@
 
 import { ConversationTrafficItem } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
+import { v4 as uuid } from 'uuid';
 
 import { webChatTrafficState, webChatInspectionDataState, isWebChatPanelVisibleState } from '../atoms';
 import { WebChatInspectionData } from '../types';
+
+const addIdToTrafficItem = (item: ConversationTrafficItem) => {
+  if (!item.id) {
+    item.id = uuid();
+  }
+  return item;
+};
 
 export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
@@ -27,9 +35,9 @@ export const webChatLogDispatcher = () => {
       const { set } = callbackHelpers;
       set(webChatTrafficState(projectId), (currentTraffic) => {
         if (Array.isArray(traffic)) {
-          return [...currentTraffic, ...traffic];
+          return [...currentTraffic, ...traffic.map((item) => addIdToTrafficItem(item))];
         } else {
-          return [...currentTraffic, traffic];
+          return [...currentTraffic, addIdToTrafficItem(traffic)];
         }
       });
     }
