@@ -78,9 +78,11 @@ const CreateActionContent = () => {
       <Summary>
         <Text>
           {formatMessage(
-            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to Microsoft Azure is required.'
+            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to '
           )}
         </Text>
+        <LearnMoreLink href="https://azure.microsoft.com/free/">{formatMessage('Microsoft Azure')}</LearnMoreLink>
+        <Text>{formatMessage(' isrequired')}</Text>
       </Summary>
       <Details>
         <Instruction>
@@ -110,7 +112,9 @@ const CreateActionContent = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-provision-create">{formatMessage('Learn More')}</LearnMoreLink>
+      <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources">
+        {formatMessage('Learn More')}
+      </LearnMoreLink>
     </Content>
   );
 };
@@ -157,7 +161,9 @@ const ImportActionContent = () => {
           <Text>{formatMessage('Microsoft QnA Maker')}</Text>
         </ResourceTitle>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-provision-import">{formatMessage('Learn More')}</LearnMoreLink>
+      <LearnMoreLink href="https://aka.ms/composer-publish-bot#import-existing-azure-resources">
+        {formatMessage('Learn More')}
+      </LearnMoreLink>
     </Content>
   );
 };
@@ -195,7 +201,9 @@ const GenerateActionContent = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-provision-handoff">{formatMessage('Learn More')}</LearnMoreLink>
+      <LearnMoreLink href="https://aka.ms/composer-publish-bot#handoff-to-admin">
+        {formatMessage('Learn More')}
+      </LearnMoreLink>
     </Content>
   );
 };
