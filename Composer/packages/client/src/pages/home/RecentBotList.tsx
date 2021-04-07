@@ -58,29 +58,6 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     },
     {
       key: 'column2',
-      name: formatMessage('Date modified'),
-      fieldName: 'dateModifiedValue',
-      minWidth: 60,
-      maxWidth: 70,
-      isResizable: true,
-      data: 'number',
-      onRender: (item) => {
-        return (
-          <div data-is-focusable css={tableCell}>
-            <div
-              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
-              css={content}
-              tabIndex={-1}
-            >
-              {calculateTimeDiff(item.dateModified)}
-            </div>
-          </div>
-        );
-      },
-      isPadded: true,
-    },
-    {
-      key: 'column3',
       name: formatMessage('Location'),
       fieldName: 'path',
       minWidth: 200,
@@ -96,6 +73,29 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
               tabIndex={-1}
             >
               {item.path}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'column3',
+      name: formatMessage('Date modified'),
+      fieldName: 'dateModifiedValue',
+      minWidth: 60,
+      maxWidth: 70,
+      isResizable: true,
+      data: 'number',
+      onRender: (item) => {
+        return (
+          <div data-is-focusable css={tableCell}>
+            <div
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
+              css={content}
+              tabIndex={-1}
+            >
+              {calculateTimeDiff(item.dateModified)}
             </div>
           </div>
         );

@@ -12,6 +12,7 @@ import { BotProjectService } from '../services/project';
 import AssetService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
+import { getFeedUrl } from '../models/bot/feedManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 import { getLocationRef, getNewProjRef } from '../utility/project';
@@ -279,6 +280,16 @@ async function getRecentProjects(req: Request, res: Response) {
   return res.status(200).json(projects);
 }
 
+async function getFeed(req: Request, res: Response) {
+  try {
+    const content = await getFeedUrl();
+    res.status(200).json(content);
+  } catch (err) {
+    res.status(404).json({
+      message: err.message,
+    });
+  }
+}
 async function generateProjectId(req: Request, res: Response) {
   try {
     const location = req.query.location;
@@ -591,6 +602,7 @@ export const ProjectController = {
   createProjectV2,
   getAllProjects,
   getRecentProjects,
+  getFeed,
   updateBoilerplate,
   checkBoilerplateVersion,
   generateProjectId,
