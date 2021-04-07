@@ -15,7 +15,7 @@ import {
   PublishResponse,
   PublishResult,
 } from '@botframework-composer/types';
-import { isUsingAdaptiveRuntime, applyPublishingProfileToSettings } from '@bfc/shared';
+import { isUsingAdaptiveRuntime, parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
 
 import { authConfig, ResourcesItem } from '../types';
 
@@ -88,7 +88,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     private historyFilePath: string;
     private publishHistories: Record<string, Record<string, PublishResult[]>>; // use botId profileName as key
     private provisionHistories: Record<string, Record<string, ProcessStatus>>;
-    private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
     public name: string;
@@ -97,14 +96,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     public hasView = true;
     public bundleId = 'publish'; /** host custom UI */
 
-    constructor(mode: string, name: string, description: string, bundleId: string) {
+    constructor(name: string, description: string, bundleId: string) {
       this.publishHistories = {};
       this.provisionHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
       }
-      this.mode = mode || 'azurewebapp';
       this.schema = schema;
       this.instructions = instructions;
       this.name = name;
@@ -118,6 +116,12 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /*******************************************************************************************************************************/
     /* These methods generate all the necessary paths to various files  */
     /*******************************************************************************************************************************/
+
+    private getRuntimeTemplateMode = (runtimeKey?: string): string => {
+      // The "mode" is kept the same for backward compatibility with original folder names
+      const { runtimeType } = parseRuntimeKey(runtimeKey);
+      return runtimeType === 'functions' ? 'azurefunctions' : 'azurewebapp';
+    };
 
     // path to working folder containing all the assets
     private getRuntimeFolder = (key: string) => {
@@ -189,11 +193,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // point to the declarative assets (possibly in remote storage)
         const botFiles = project.getProject().files;
 
+        const mode = this.getRuntimeTemplateMode(runtime?.key);
+
         // include both pre-release and release identifiers here
         // TODO: eventually we can clean this up when the "old" runtime is deprecated
         // (old runtime support is the else block below)
         if (isUsingAdaptiveRuntime(runtime)) {
-          const buildFolder = this.getProjectFolder(resourcekey, this.mode);
+          const buildFolder = this.getProjectFolder(resourcekey, mode);
 
           // clean up from any previous deploys
           await this.cleanup(resourcekey);
@@ -201,7 +207,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           // copy bot and runtime into projFolder
           await copy(srcTemplate, buildFolder);
         } else {
-          const botFolder = this.getBotFolder(resourcekey, this.mode);
+          const botFolder = this.getBotFolder(resourcekey, mode);
           const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
           // clean up from any previous deploys
@@ -228,7 +234,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
 
           // save manifest
-          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
+          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, mode);
 
           // copy bot and runtime into projFolder
           await copy(srcTemplate, runtimeFolder);
@@ -276,6 +282,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       customizeConfiguration: DeployResources
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
+
+      const mode = this.getRuntimeTemplateMode(runtime?.key);
+
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -285,7 +294,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey, this.mode),
+        projPath: this.getProjectFolder(resourcekey, mode),
         runtime: runtime,
       });
 
@@ -642,6 +651,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
       const recommendedResources: ResourcesItem[] = [];
 
+      const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
+
       // add in the ALWAYS REQUIRED options
 
       // Always need an app registration (app id and password)
@@ -651,14 +662,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       // always need hosting compute - either web app or functions
-      if (this.mode === 'azurewebapp') {
+      if (runtimeType === 'functions') {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
+          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
           required: true,
         });
       } else {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
+          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
           required: true,
         });
       }
@@ -776,19 +787,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher(
-    'azurewebapp',
-    'azurePublish',
-    'Publish bot to Azure Web App (Preview)',
-    'azurePublish'
-  );
-  const azureFunctionsPublish = new AzurePublisher(
-    'azurefunctions',
-    'azureFunctionsPublish',
-    'Publish bot to Azure Functions (Preview)',
-    'azureFunctionsPublish'
-  );
+  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure (Preview)', 'azurePublish');
 
   await composer.addPublishMethod(azurePublish);
-  await composer.addPublishMethod(azureFunctionsPublish);
 };
