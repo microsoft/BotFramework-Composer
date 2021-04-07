@@ -147,8 +147,15 @@ export type PublishTarget = {
 export type PublishProfile = {
   name?: string;
   environment?: string;
+  tenantId?: string;
   hostname?: string;
+  luisResource?: string;
+  language?: string;
   runtimeIdentifier: string;
+  botName?: string;
+  resourceGroup?: string;
+  subscriptionId?: string;
+  region?: string;
   settings: {
     applicationInsights?: {
       InstrumentationKey: string;
@@ -173,6 +180,7 @@ export type PublishProfile = {
     qna?: {
       subscriptionKey: string;
       qnaRegion: string;
+      endpoint: string;
     };
     MicrosoftAppId: string;
     MicrosoftAppPassword: string;

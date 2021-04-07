@@ -12,9 +12,7 @@ import { DialogSetting, PublishProfile } from '@botframework-composer/types';
  */
 export const applyPublishingProfileToSettings = (settings: DialogSetting, profile: PublishProfile): DialogSetting => {
   // ensure the runtimeSettings key exists
-  settings.runtimeSettings = {
-    ...settings.runtimeSettings,
-  };
+  settings.runtimeSettings = settings.runtimeSettings || {}
 
   // apply the application insights resource from the publish profile
   // to the telemetry setting
