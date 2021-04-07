@@ -37,6 +37,7 @@ export const useAutoFix = () => {
      */
     const aggregatedPaths: { [projectId: string]: { [dialogId: string]: string[] } } = {};
 
+    // Aggregates schema diagnostics by projectId, dialogId
     schemaDiagnostics.forEach((d) => {
       const { projectId, id: dialogId, dialogPath } = d;
       if (!dialogPath) return;
@@ -48,6 +49,7 @@ export const useAutoFix = () => {
       }
     });
 
+    // Consumes aggregatedPaths to update dialogs in recoil store
     for (const [projectId, pathsByDialogId] of Object.entries(aggregatedPaths)) {
       // Locates dialogs in current project
       const dialogsInProject = botProjectSpace.find((bot) => bot.projectId === projectId)?.dialogs;
