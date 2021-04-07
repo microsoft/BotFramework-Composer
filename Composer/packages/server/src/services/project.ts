@@ -449,7 +449,10 @@ export class BotProjectService {
       alias,
       locale,
       schemaUrl,
+      runtimeType,
+      runtimeLanguage,
     } = req.body;
+
     // get user from request
     const user = await ExtensionContext.getUserFromRequest(req);
 
@@ -476,6 +479,8 @@ export class BotProjectService {
             name,
             locationRef,
             jobId,
+            runtimeType,
+            runtimeLanguage,
             user
           );
 
