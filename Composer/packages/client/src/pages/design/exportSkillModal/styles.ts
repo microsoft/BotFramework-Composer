@@ -32,11 +32,11 @@ export const styles = {
 
     label: ContentContainer;
   `,
-  content: css`
-    flex: 1;
+  content: {
+    flex: 1,
 
-    label: Content;
-  `,
+    label: 'Content',
+  },
   buttonContainer: css`
     display: flex;
     flex-direction: row-reverse;
