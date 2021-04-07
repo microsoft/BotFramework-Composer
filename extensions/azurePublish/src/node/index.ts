@@ -15,6 +15,7 @@ import {
   PublishResponse,
   PublishResult,
 } from '@botframework-composer/types';
+import { isUsingAdaptiveRuntime, parseRuntimeKey } from '@bfc/shared';
 
 import { authConfig, ResourcesItem } from '../types';
 
@@ -81,7 +82,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     private historyFilePath: string;
     private publishHistories: Record<string, Record<string, PublishResult[]>>; // use botId profileName as key
     private provisionHistories: Record<string, Record<string, ProcessStatus>>;
-    private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
     public name: string;
@@ -90,14 +90,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     public hasView = true;
     public bundleId = 'publish'; /** host custom UI */
 
-    constructor(mode: string, name: string, description: string, bundleId: string) {
+    constructor(name: string, description: string, bundleId: string) {
       this.publishHistories = {};
       this.provisionHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
       }
-      this.mode = mode || 'azurewebapp';
       this.schema = schema;
       this.instructions = instructions;
       this.name = name;
@@ -105,6 +104,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       this.logger = composer.log;
       this.bundleId = bundleId;
     }
+
 
     /*******************************************************************************************************************************/
     /* These methods deal with the publishing history displayed in the Composer UI */
@@ -151,6 +151,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /* These methods implement the publish actions */
     /*******************************************************************************************************************************/
     /**
+
+    /**
      * Take the project from a given folder, build it, and push it to Azure.
      * @param project
      * @param runtime
@@ -171,6 +173,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       customizeConfiguration: DeployResources
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
+
+      const mode = this.getRuntimeTemplateMode(runtime?.key);
+
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -515,6 +520,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
       const recommendedResources: ResourcesItem[] = [];
 
+      const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
+
       // add in the ALWAYS REQUIRED options
 
       // Always need an app registration (app id and password)
@@ -524,14 +531,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       // always need hosting compute - either web app or functions
-      if (this.mode === 'azurewebapp') {
+      if (runtimeType === 'functions') {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
+          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
           required: true,
         });
       } else {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
+          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
           required: true,
         });
       }
@@ -649,19 +656,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher(
-    'azurewebapp',
-    'azurePublish',
-    'Publish bot to Azure Web App (Preview)',
-    'azurePublish'
-  );
-  const azureFunctionsPublish = new AzurePublisher(
-    'azurefunctions',
-    'azureFunctionsPublish',
-    'Publish bot to Azure Functions (Preview)',
-    'azureFunctionsPublish'
-  );
+  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure (Preview)', 'azurePublish');
 
   await composer.addPublishMethod(azurePublish);
-  await composer.addPublishMethod(azureFunctionsPublish);
 };
