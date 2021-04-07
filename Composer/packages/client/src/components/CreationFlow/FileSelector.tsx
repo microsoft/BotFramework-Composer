@@ -480,6 +480,13 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       setCurrentPath(value as string);
     }
   };
+
+  const updatePathPending = (option?: IComboBoxOption, index?: number, value?: string) => {
+    if (!option && value) {
+      setCurrentPath(value as string);
+    }
+  };
+
   return (
     <Fragment>
       <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
@@ -498,6 +505,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             options={breadcrumbItems}
             selectedKey={currentPath}
             onChange={updatePath}
+            onPendingValueChanged={updatePathPending}
           />
         </StackItem>
         {operationMode.write && (
