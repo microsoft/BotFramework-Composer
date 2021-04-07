@@ -459,7 +459,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       return (
         <div
           data-is-focusable
-          aria-label={`${item.itemType} ${item.displayName} ${warningContent} ${errorContent}`}
+          aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
           css={projectTreeItemContainer}
           tabIndex={0}
           onBlur={item.onBlur}
