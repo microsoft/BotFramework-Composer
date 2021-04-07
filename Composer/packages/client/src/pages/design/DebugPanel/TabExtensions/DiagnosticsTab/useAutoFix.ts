@@ -37,6 +37,7 @@ export const useAutoFix = () => {
      * }
      */
     const aggregatedPaths: { [projectId: string]: { [dialogId: string]: string[] } } = {};
+
     schemaDiagnostics.forEach((d) => {
       const { projectId, id: dialogId, dialogPath } = d;
       if (!dialogPath) return;
@@ -48,22 +49,24 @@ export const useAutoFix = () => {
       }
     });
 
-    // Manipulate dialog contnent
     for (const [projectId, pathsByDialogId] of Object.entries(aggregatedPaths)) {
-      const projectDialogs = botProjectSpace.find((bot) => bot.projectId === projectId)?.dialogs;
-      if (!Array.isArray(projectDialogs)) continue;
+      // Locates dialogs in current project
+      const dialogsInProject = botProjectSpace.find((bot) => bot.projectId === projectId)?.dialogs;
+      if (!Array.isArray(dialogsInProject)) continue;
 
       for (const [dialogId, paths] of Object.entries(pathsByDialogId)) {
-        const dialogData = projectDialogs.find((dialog) => dialog.id === dialogId)?.content;
+        // Queries out current dialog data
+        const dialogData = dialogsInProject.find((dialog) => dialog.id === dialogId)?.content;
         if (!dialogData) continue;
 
+        // Filters out those paths where action exists and action.disabled !== true
         const pathsToUpdate = paths.filter((p) => {
-          // Filters out those paths where action exists and action.disabled !== true
           const data = get(dialogData, p);
           return data && !get(data, 'disabled');
         });
         if (!pathsToUpdate.length) continue;
 
+        // Manipulates the 'disabled' property and then submit to Recoil store.
         const copy = cloneDeep(dialogData);
         for (const p of pathsToUpdate) {
           set(copy, `${p}.disabled`, true);
