@@ -27,6 +27,7 @@ jobs:
         inputs:
           versionSpec: 14.15.5
       - task: Bash@3
+        displayName: "Adding myGet source"
         inputs:
           targetType: 'inline'
           script:
