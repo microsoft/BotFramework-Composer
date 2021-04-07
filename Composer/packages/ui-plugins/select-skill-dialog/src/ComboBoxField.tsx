@@ -7,6 +7,7 @@ import { FieldLabel } from '@bfc/adaptive-form';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 export const ADD_DIALOG = 'ADD_DIALOG';
 
@@ -37,7 +38,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
         <Icon
           aria-hidden="true"
           iconName={option.key === ADD_DIALOG ? 'Add' : 'OpenSource'}
-          style={{ marginRight: '8px' }}
+          style={{ marginRight: '5px', marginTop: '2px', color: SharedColors.cyanBlue10 }}
         />
         <span>{option.text}</span>
       </div>

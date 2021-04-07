@@ -6,6 +6,7 @@ import { css, jsx } from '@emotion/core';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import React from 'react';
 import formatMessage from 'format-message';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 const styles = {
   fieldTypeText: css`
@@ -29,6 +30,9 @@ const styles = {
   `,
   icon: css`
     margin-right: 5px;
+    // center icon with text
+    margin-top: 2px;
+    color: ${SharedColors.cyanBlue10};
   `,
 };
 
@@ -43,7 +47,7 @@ export const ExpressionSwitchWindow = (props: ExpressionSwitchWindowProps) => {
 
       <div css={styles.switchToExpressionText} onClick={onSwitchToExpression}>
         <FontIcon css={styles.icon} iconName={'CalculatorEqualTo'} />
-        {formatMessage(`Write an expression`)}
+        <span>{formatMessage(`Write an expression`)}</span>
       </div>
     </React.Fragment>
   );

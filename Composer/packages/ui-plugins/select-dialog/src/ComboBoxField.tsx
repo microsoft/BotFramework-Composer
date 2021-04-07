@@ -9,6 +9,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { Icons } from '@bfc/shared';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 export const ADD_DIALOG = 'ADD_DIALOG';
 
@@ -30,6 +31,14 @@ const getIconName = (option: IComboBoxOption) => {
   }
 };
 
+const getIconStyles = (option: IComboBoxOption) => {
+  if ([ADD_DIALOG, 'expression'].includes(option.key as string)) {
+    return { color: SharedColors.cyanBlue10 };
+  }
+
+  return {};
+};
+
 export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
   const {
     comboboxTitle,
@@ -46,10 +55,14 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
   } = props;
   const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
-      <div>
-        <Icon aria-hidden="true" iconName={getIconName(option)} style={{ marginRight: '8px' }} />
+      <React.Fragment>
+        <Icon
+          aria-hidden="true"
+          iconName={getIconName(option)}
+          style={{ marginRight: '5px', marginTop: '2px', ...getIconStyles(option) }}
+        />
         <span>{option.text}</span>
-      </div>
+      </React.Fragment>
     ) : null;
 
   return (
