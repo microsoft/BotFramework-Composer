@@ -237,11 +237,11 @@ type TreeObject =
   | 'lu' // used on other pages
   | 'external skill'; // used with multi-bot authoring
 
-const icons: { [key in TreeObject]: string } = {
+const icons: { [key in TreeObject]: string | null } = {
   bot: 'CubeShape',
   dialog: 'Org',
   trigger: 'LightningBolt',
-  'trigger group': '',
+  'trigger group': null,
   'form dialog': 'Table',
   'form field': 'Variable2', // x in parentheses
   'form trigger': 'TriggerAuto', // lightning bolt with gear
@@ -469,7 +469,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           onFocus={item.onFocus}
         >
           <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.itemType != null && (
+            {item.itemType != null && icons[item.itemType] != null && (
               <Icon
                 iconName={icons[item.itemType]}
                 styles={{
