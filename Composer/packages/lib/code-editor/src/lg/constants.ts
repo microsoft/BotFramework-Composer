@@ -5,6 +5,8 @@ export const activityTemplateType = 'Activity';
 
 export const jsLgToolbarMenuClassName = 'js-lg-toolbar-menu';
 
+export const defaultMenuHeight = 32;
+
 export const lgCardAttachmentTemplates = [
   'adaptive',
   'hero',

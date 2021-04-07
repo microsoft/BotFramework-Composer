@@ -148,6 +148,7 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
     resource: { Sections, Errors, Content },
     imports,
     options,
+    isContentUnparsed: false,
   };
 }
 

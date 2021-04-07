@@ -36,6 +36,8 @@ export type BotTemplate = {
   id: string;
   name: string;
   description: string;
+  nodeSupport?: EnvSupport;
+  dotnetSupport?: EnvSupport;
   /* absolute path */
   path?: string;
   /* tags for further grouping and search secenario */
@@ -48,6 +50,11 @@ export type BotTemplate = {
     packageVersion: string;
   };
   index?: number;
+};
+
+export type EnvSupport = {
+  webAppSupported: boolean;
+  functionsSupported: boolean;
 };
 
 export type RuntimeTemplate = {

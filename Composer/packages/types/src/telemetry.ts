@@ -59,7 +59,7 @@ type PackageManagerEvents = {
 };
 
 type SessionEvents = {
-  SessionStarted: { os: string };
+  SessionStarted: { os: string; height: number; width: number; devicePixelRatio: number };
   SessionEnded: undefined;
   NavigateTo: { sectionName: string; url: string };
 };
@@ -135,13 +135,18 @@ type LgEditorEvents = {
   };
 };
 
+type LuEditorEvents = {
+  LUEditorToolbarEntityTagAdded: { entityType: string; source: 'toolbar' | 'floatingMenu' };
+  LUEditorToolbarEntityDefinitionAdded: { entityType: string };
+};
+
 type WebChatEvents = {
   WebChatPaneOpened: undefined;
   WebChatPaneClosed: undefined;
   WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
   DrawerPaneOpened: undefined;
   DrawerPaneClosed: undefined;
-  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' };
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' };
   SaveTranscriptClicked: undefined;
 };
 
@@ -185,7 +190,8 @@ export type TelemetryEvents = ApplicationEvents &
   AppSettingsEvents &
   PageView &
   LgEditorEvents &
-  WebChatEvents;
+  WebChatEvents &
+  LuEditorEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

@@ -7,7 +7,6 @@ import formatMessage from 'format-message';
 
 import { DLServerState } from '../store/dlServerState';
 import { Conversation } from '../store/entities/conversation';
-import { textItem } from '../utils/helpers';
 import { writeFile, mkdirp } from '../utils/fileOperations';
 import logger from '../utils/logger';
 
@@ -18,8 +17,6 @@ export const saveTranscriptHandler = (state: DLServerState) => {
     if (!conversation) {
       const message = formatMessage('Cannot find a matching conversation.');
       res.status(StatusCodes.NOT_FOUND).send(message);
-      const logItem = textItem('Error', message);
-      state.dispatchers.logToDocument(req.params.conversationId, logItem);
       return;
     }
 
@@ -44,14 +41,12 @@ export const saveTranscriptHandler = (state: DLServerState) => {
   };
 };
 
-export const getTranscriptHandler = (state: DLServerState) => {
+export const getTranscriptHandler = () => {
   return async (req: express.Request, res: express.Response): Promise<any> => {
     const conversation: Conversation = (req as any).conversation;
     if (!conversation) {
       const message = formatMessage('Cannot find a matching conversation.');
       res.status(StatusCodes.NOT_FOUND).send(message);
-      const logItem = textItem('Error', message);
-      state.dispatchers.logToDocument(req.params.conversationId, logItem);
       return;
     }
 

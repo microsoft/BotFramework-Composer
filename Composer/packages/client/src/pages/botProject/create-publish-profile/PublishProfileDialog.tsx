@@ -10,7 +10,7 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
+import { getTokenFromCache, userShouldProvideTokens, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
@@ -19,6 +19,7 @@ import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { AuthClient } from '../../../utils/authClient';
 import { graphScopes } from '../../../constants';
 import { dispatcherState } from '../../../recoilModel';
+import { createNotification } from '../../../recoilModel/dispatchers/notification';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
 
@@ -43,7 +44,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
-  const { provisionToTarget } = useRecoilValue(dispatcherState);
+  const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
 
   const [dialogTitle, setTitle] = useState({
     title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
@@ -90,8 +91,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         graphToken: getTokenFromCache('graphToken'),
       };
     };
+    /** @deprecated use `userShouldProvideTokens` instead */
     PluginAPI.publish.isGetTokenFromUser = () => {
-      return isGetTokenFromUser();
+      return userShouldProvideTokens();
+    };
+    PluginAPI.publish.userShouldProvideTokens = () => {
+      return userShouldProvideTokens();
     };
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
@@ -157,15 +162,24 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     };
     PluginAPI.publish.startProvision = async (config) => {
       const fullConfig = { ...config, name: name, type: targetType };
+
       let arm, graph;
-      if (!isGetTokenFromUser()) {
-        // login or get token implicit
-        let tenantId = getTenantIdFromCache();
+      if (!userShouldProvideTokens()) {
+        const tenantId = getTenantIdFromCache();
+        // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {
-          const tenants = await AuthClient.getTenants();
-          tenantId = tenants?.[0]?.tenantId;
-          setTenantId(tenantId);
+          const notification = createNotification({
+            type: 'error',
+            title: formatMessage('Error provisioning.'),
+            description: formatMessage(
+              'An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again.'
+            ),
+          });
+          addNotification(notification);
+          return;
         }
+
+        // login or get token implicit
         arm = await AuthClient.getARMTokenForTenant(tenantId);
         graph = await AuthClient.getAccessToken(graphScopes);
       } else {

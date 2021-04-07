@@ -7,21 +7,15 @@ import { checkForPVASchema } from '@bfc/shared';
 
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
-import {
-  botDisplayNameState,
-  botStatusState,
-  dispatcherState,
-  luFilesState,
-  qnaFilesState,
-  schemasState,
-  settingsState,
-} from '../atoms';
+import { botDisplayNameState, botStatusState, dispatcherState, schemasState, settingsState } from '../atoms';
 import { Dispatcher } from '../dispatchers';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 import { getSensitiveProperties } from '../dispatchers/utils/project';
 
 import { dialogsSelectorFamily } from './dialogs';
 import { localBotsWithoutErrorsSelector, rootBotProjectIdSelector } from './project';
+import { luFilesSelectorFamily } from './lu';
+import { qnaFilesSelectorFamily } from './qna';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',
@@ -52,10 +46,11 @@ export const buildEssentialsSelector = selectorFamily({
     const configuration = {
       luis: settings.luis,
       qna: settings.qna,
+      orchestrator: settings.orchestrator,
     };
     const dialogs = get(dialogsSelectorFamily(projectId));
-    const luFiles = get(luFilesState(projectId));
-    const qnaFiles = get(qnaFilesState(projectId));
+    const luFiles = get(luFilesSelectorFamily(projectId));
+    const qnaFiles = get(qnaFilesSelectorFamily(projectId));
     const buildRequired = get(botBuildRequiredSelector(projectId));
     const status = get(botStatusState(projectId));
 
@@ -121,7 +116,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
       if (config) {
         await dispatcher.downloadLanguageModels(projectId);
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
-        await dispatcher.build(projectId, config.luis, config.qna);
+        await dispatcher.build(projectId, config.luis, config.qna, config.orchestrator);
       }
     },
     startBot: async (projectId: string, sensitiveSettings) => {

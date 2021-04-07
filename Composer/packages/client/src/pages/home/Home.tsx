@@ -3,61 +3,63 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback } from 'react';
+import React from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
+import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { Toolbar, IToolbarItem, defaultToolbarButtonStyles } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState, templateProjectsState } from '../../recoilModel';
+import { dispatcherState, botDisplayNameState } from '../../recoilModel';
 import {
   recentProjectsState,
+  feedState,
   templateIdState,
   currentProjectIdState,
-  featureFlagsState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
+import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
+import githubIcon from '../../images/githubIcon.svg';
+import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 
-import * as home from './styles';
-import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
-import { ExampleList } from './ExampleList';
+import { WhatsNewsList } from './WhatsNewsList';
+import { CardWidget } from './CardWidget';
+import * as home from './styles';
 
-const linksBottom = [
+const resources = [
   {
-    to: 'https://aka.ms/BF-Composer-Getting-Started',
-    text: formatMessage('Getting Started'),
-    css: home.linkInfo,
+    imageCover: composerDocumentIcon,
+    title: formatMessage('Composer documentation'),
+    description: formatMessage('Find tutorials, step-by-step guides. Discover what you can build with Composer.'),
+    moreText: formatMessage('Read documentation'),
+    url: 'https://docs.microsoft.com/en-us/composer/',
   },
   {
-    to: 'https://aka.ms/bf-composer-docs-create-first-bot',
-    text: formatMessage('Build your first bot'),
-    css: home.linkInfo,
-  },
-];
-
-const tutorials = [
-  {
-    title: formatMessage('5 Minute Intro'),
-    content: formatMessage('Chris Whitten'),
-    subContent: formatMessage('Apr 9, 2020'),
-    href: 'https://aka.ms/bf-composer-tutorial-chris',
+    imageCover: githubIcon,
+    title: formatMessage('Composer on GitHub'),
+    description: formatMessage('Check out the resources on GitHub.'),
+    moreText: formatMessage('Go to Composer repository'),
+    url: 'https://github.com/microsoft/BotFramework-Composer',
   },
   {
-    title: formatMessage('Weather Bot'),
-    content: formatMessage('Ben Brown'),
-    subContent: formatMessage('Nov 12, 2019'),
-    href: 'https://aka.ms/bf-composer-tutorial-ben',
+    imageCover: githubIcon,
+    title: formatMessage('Bot Framework Emulator'),
+    description: formatMessage('Test and debug bots built using the Bot Framework SDK. Available on GitHub.'),
+    moreText: formatMessage('Download Emulator'),
+    url: 'https://github.com/microsoft/BotFramework-Emulator/releases',
   },
   {
-    title: formatMessage('MSFT Ignite AI Show'),
-    content: formatMessage('Vishwac Sena'),
-    subContent: formatMessage('Jan 28, 2020'),
-    href: 'https://aka.ms/bf-composer-tutorial-vishwac',
+    imageCover: stackoverflowIcon,
+    title: formatMessage('Stack Overflow'),
+    description: formatMessage('Engage with other bot builders. Ask and answer questions.'),
+    moreText: formatMessage('Go to Stack Overflow'),
+    url: 'https://stackoverflow.com/questions/tagged/botframework',
   },
 ];
 
@@ -65,41 +67,22 @@ const Home: React.FC<RouteComponentProps> = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
+  const feed = useRecoilValue(feedState);
   const templateId = useRecoilValue(templateIdState);
-  const {
-    openProject,
-    setCreationFlowStatus,
-    onboardingAddCoachMarkRef,
-    saveTemplateId,
-    setCreationFlowType,
-  } = useRecoilValue(dispatcherState);
-
-  const featureFlags = useRecoilValue(featureFlagsState);
-  const botTemplates = useRecoilValue(templateProjectsState);
+  const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
-      await openProject(item.path, 'default', true, (projectId) => {
+      await openProject(item.path, 'default', true, null, (projectId) => {
         TelemetryClient.track('BotProjectOpened', { method: 'list', projectId });
       });
     }
   };
 
-  const onClickTemplate = async (id: string) => {
-    saveTemplateId(id);
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-    TelemetryClient.track('CreateNewBotProject', { method: 'luisCallToAction' });
-    navigate(`projects/create/${id}`);
-  };
-
-  const addButton = <Icon iconName="Add" styles={home.button} />;
-
-  const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
-
   const onClickNewBot = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
-    featureFlags?.NEW_CREATION_FLOW?.enabled ? navigate(`v2/projects/create`) : navigate(`projects/create`);
+    navigate(`v2/projects/create`);
   };
 
   const toolbarItems: IToolbarItem[] = [
@@ -108,13 +91,13 @@ const Home: React.FC<RouteComponentProps> = () => {
       text: formatMessage('New'),
       buttonProps: {
         iconProps: {
-          iconName: 'CirclePlus',
+          iconName: 'Add',
         },
         onClick: () => {
           onClickNewBot();
           TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
         },
-        styles: defaultToolbarButtonStyles,
+        styles: home.toolbarFirstButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-New',
@@ -132,7 +115,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/open`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'openBot' });
         },
-        styles: defaultToolbarButtonStyles,
+        styles: home.toolbarButtonStyles,
       },
       align: 'left',
       dataTestid: 'homePage-Toolbar-Open',
@@ -150,7 +133,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           navigate(`projects/${projectId}/${templateId}/save`);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
         },
-        styles: defaultToolbarButtonStyles,
+        styles: home.toolbarButtonStyles,
       },
       align: 'left',
       disabled: botName ? false : true,
@@ -158,116 +141,93 @@ const Home: React.FC<RouteComponentProps> = () => {
   ];
   return (
     <div css={home.outline}>
-      <Toolbar toolbarItems={toolbarItems} />
+      <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
       <div css={home.page}>
         <div css={home.leftPage} role="main">
-          <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
-          <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
-            {formatMessage(
-              'Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation.'
-            )}
-          </div>
-          <div css={home.newBotContainer}>
-            <div data-testid={'homePage-body-New'}>
-              <ItemContainer
-                ariaLabel={formatMessage('Create new empty bot')}
-                content={formatMessage('New')}
-                styles={home.newBotItem}
-                title={addButton}
-                onClick={() => {
-                  onClickNewBot();
-                  TelemetryClient.track('CreateNewBotProject', { method: 'toolbar' });
-                }}
-              />
-            </div>
+          <div css={home.leftContainer}>
+            <h2 css={home.recentBotsTitle}>{formatMessage(`Recent Bots`)}</h2>
+            <Toolbar css={home.toolbar} toolbarItems={toolbarItems} />
             {recentProjects.length > 0 ? (
-              <ItemContainer
-                ariaLabel={recentProjects[0].name}
-                content={recentProjects[0].name}
-                forwardedRef={addRef}
-                styles={home.latestBotItem}
-                title={''}
-                onClick={async () => {
-                  await openProject(recentProjects[0].path, 'default', true, (projectId) => {
-                    TelemetryClient.track('BotProjectOpened', { method: 'callToAction', projectId });
-                  });
-                }}
-              />
-            ) : (
-              <ItemContainer
-                ariaLabel={'ToDo bot with LUIS'}
-                content={'ToDoBotWithLuis'}
-                forwardedRef={addRef}
-                styles={home.latestBotItem}
-                title={''}
-                onClick={() => {
-                  onClickTemplate('ToDoBotWithLuisSample');
-                }}
-              />
-            )}
-          </div>
-          {recentProjects.length > 0 && (
-            <div css={home.leftContainer}>
-              <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
                 onItemChosen={async (item) => {
                   await onItemChosen(item);
                 }}
               />
-            </div>
-          )}
-          <div css={home.leftContainer}>
-            <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
-            <div css={home.newBotContainer}>
-              {tutorials.map((item, index) => (
-                <ItemContainer
+            ) : (
+              <div css={home.noRecentBotsContainer}>
+                <Image
+                  alt={formatMessage('No recent bots')}
+                  aria-label={formatMessage('No recent bots')}
+                  css={home.noRecentBotsCover}
+                  imageFit={ImageFit.centerCover}
+                  src={noRecentBotsCover}
+                />
+                <div css={home.noRecentBotsDescription}>
+                  {formatMessage.rich('You don’t have any bot yet. Start to <Link>create a new bot</Link>', {
+                    Link: ({ children }) => (
+                      <Link
+                        onClick={() => {
+                          onClickNewBot();
+                          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+                        }}
+                      >
+                        {children}
+                      </Link>
+                    ),
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+          <div css={[home.leftContainer, home.gap40]}>
+            <h2 css={home.subtitle}>{formatMessage('Resources')}&nbsp;</h2>
+            <div css={home.rowContainer}>
+              {resources.map((item, index) => (
+                <CardWidget
                   key={index}
                   ariaLabel={item.title}
-                  content={item.content}
-                  href={item.href}
+                  cardType={'resource'}
+                  content={item.description}
+                  href={item.url}
+                  imageCover={item.imageCover}
+                  moreLinkText={item.moreText}
                   rel="noopener nofollow"
-                  styles={home.tutorialTile}
-                  subContent={item.subContent}
                   target="_blank"
                   title={item.title}
                 />
               ))}
-              <div css={home.linkContainer}>
-                <div>
-                  {formatMessage(
-                    'Bot Framework provides the most comprehensive experience for building conversational applications.'
-                  )}
-                </div>
-                {linksBottom.map((link) => {
-                  return (
-                    <Link
-                      key={'homePageLeftLinks-' + link.text}
-                      href={link.to}
-                      rel="noopener noreferrer"
-                      style={{ width: '150px' }}
-                      tabIndex={0}
-                      target="_blank"
-                    >
-                      <div css={link.css}>{link.text}</div>
-                    </Link>
-                  );
-                })}
-              </div>
+            </div>
+          </div>
+          <div css={[home.leftContainer, home.gap40]}>
+            <div css={home.rowContainer}>
+              <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
+                {feed.tabs.map((tab, index) => (
+                  <PivotItem key={index} headerText={tab.title}>
+                    <div css={home.rowContainer}>
+                      {tab.cards.map((card, index) => (
+                        <CardWidget
+                          key={index}
+                          ariaLabel={card.title}
+                          cardType={tab.title === 'Videos' ? 'video' : 'article'}
+                          content={card.description}
+                          href={card.url}
+                          imageCover={card.image}
+                          rel="noopener nofollow"
+                          target="_blank"
+                          title={card.title}
+                        />
+                      ))}
+                    </div>
+                  </PivotItem>
+                ))}
+              </Pivot>
             </div>
           </div>
         </div>
-        {!featureFlags?.NEW_CREATION_FLOW?.enabled && (
-          <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
-            <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
-            <p css={home.examplesDescription}>
-              {formatMessage(
-                "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
-              )}
-            </p>
-            <ExampleList examples={botTemplates} onClick={onClickTemplate} />
-          </div>
-        )}
+        <div css={home.rightPage}>
+          <WhatsNewsList newsList={feed.whatsNewLinks} />
+        </div>
       </div>
     </div>
   );

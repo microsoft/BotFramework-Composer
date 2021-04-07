@@ -20,7 +20,7 @@ import { ImportController } from '../controllers/import';
 import { StatusController } from '../controllers/status';
 import { SettingsController } from '../controllers/settings';
 import { TelemetryController } from '../controllers/telemetry';
-import { OrchestratorController } from '../controllers/orchestrator';
+import OrchestratorController from '../controllers/orchestrator';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -30,6 +30,7 @@ router.post('/projects', ProjectController.createProject);
 router.post('/v2/projects', ProjectController.createProjectV2);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
+router.get('/projects/feed', ProjectController.getFeed);
 router.get('/projects/generateProjectId', ProjectController.generateProjectId);
 
 router.get('/projects/:projectId', ProjectController.getProjectById);
@@ -44,6 +45,7 @@ router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASett
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 router.get('/projects/alias/:alias', ProjectController.getProjectByAlias);
+router.post('/projects/:projectId/alias/set', ProjectController.setProjectAlias);
 router.post('/projects/:projectId/backup', ProjectController.backupProject);
 router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
 router.get('/projects/:projectId/variables', ProjectController.getVariablesByProjectId);
@@ -122,6 +124,8 @@ router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 // importing
 router.post('/import/:source', ImportController.startImport);
 router.post('/import/:source/authenticate', ImportController.authenticate);
+router.post('/import/:source/generateProfile', ImportController.generateProfile);
+router.post('/import/:source/getAlias', ImportController.getAlias);
 
 // Process status
 router.get('/status/:jobId', StatusController.getStatus);
@@ -134,7 +138,7 @@ router.post('/settings', SettingsController.updateUserSettings);
 router.post('/telemetry/events', TelemetryController.track);
 
 // Orchestrator Specific API
-router.post('/orchestrator/download', OrchestratorController.downloadDefaultModel);
+router.post('/orchestrator/download', OrchestratorController.downloadLanguageModel);
 router.get('/orchestrator/status', OrchestratorController.status);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {

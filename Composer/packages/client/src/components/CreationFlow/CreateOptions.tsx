@@ -11,12 +11,10 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { RouteComponentProps, navigate } from '@reach/router';
-import { useRecoilValue } from 'recoil';
 import querystring from 'query-string';
 import axios from 'axios';
 
 import { DialogCreationCopy } from '../../constants';
-import { featureFlagsState } from '../../recoilModel';
 import { getAliasFromPayload } from '../../utils/electronUtil';
 
 import { CreateBot } from './CreateBot';
@@ -25,7 +23,7 @@ import { CreateBot } from './CreateBot';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   onDismiss: () => void;
-  onJumpToOpenModal: () => void;
+  onJumpToOpenModal: (search?: string) => void;
   onNext: (data: string) => void;
 } & RouteComponentProps<{}>;
 
@@ -34,11 +32,8 @@ export function CreateOptions(props: CreateOptionsProps) {
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const { templates, onDismiss, onNext, onJumpToOpenModal } = props;
-  const featureFlags = useRecoilValue(featureFlagsState);
   useEffect(() => {
-    if (featureFlags.NEW_CREATION_FLOW?.enabled) {
-      navigate(`/v2/projects/create${props?.location?.search}`);
-    }
+    navigate(`/v2/projects/create${props?.location?.search}`);
   });
 
   useEffect(() => {
@@ -47,19 +42,20 @@ export function CreateOptions(props: CreateOptionsProps) {
       const decoded = decodeURIComponent(props.location.search);
       const { source, payload } = querystring.parse(decoded);
       if (typeof source === 'string' && typeof payload === 'string') {
-        const alias = getAliasFromPayload(source, payload);
-        // check to see if Composer currently has a bot project corresponding to the alias
-        axios
-          .get<any>(`/api/projects/alias/${alias}`)
-          .then((aliasRes) => {
-            if (aliasRes.status === 200) {
+        getAliasFromPayload(source, payload).then((alias) => {
+          // check to see if Composer currently has a bot project corresponding to the alias
+          axios
+            .get<any>(`/api/projects/alias/${alias}`)
+            .then((aliasRes) => {
+              if (aliasRes.status === 200) {
+                navigate(`/bot/${aliasRes.data.id}`);
+                return;
+              }
+            })
+            .catch((e) => {
               setIsOpenOptionsModal(true);
-              return;
-            }
-          })
-          .catch((e) => {
-            setIsOpenCreateModal(true);
-          });
+            });
+        });
         return;
       }
     }
@@ -80,7 +76,7 @@ export function CreateOptions(props: CreateOptionsProps) {
     if (option === 'Create') {
       setIsOpenCreateModal(true);
     } else {
-      onJumpToOpenModal();
+      onJumpToOpenModal(props.location?.search);
     }
   };
 
@@ -98,7 +94,13 @@ export function CreateOptions(props: CreateOptionsProps) {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </DialogWrapper>
-      <CreateBot isOpen={isOpenCreateModal} templates={templates} onDismiss={onDismiss} onNext={onNext} />
+      <CreateBot
+        isOpen={isOpenCreateModal}
+        location={props.location}
+        templates={templates}
+        onDismiss={onDismiss}
+        onNext={onNext}
+      />
     </Fragment>
   );
 }
