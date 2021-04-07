@@ -110,10 +110,13 @@ export class BotProjectProvision {
       } catch (err) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: `App create failed: ${JSON.stringify(err, null, 4)}, retrying ...`,
+          message: `App create failed, retrying ...`,
         });
         if (retryCount == 0) {
-          throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'App create failed!');
+          throw createCustomizeError(
+            ProvisionErrors.CREATE_APP_REGISTRATION,
+            'App create failed! Please file an issue on Github.'
+          );
         } else {
           await this.sleep(3000);
           retryCount--;
@@ -150,10 +153,13 @@ export class BotProjectProvision {
       } catch (err) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: `Add application password failed: ${JSON.stringify(err, null, 4)}, retrying ...`,
+          message: `Add application password failed, retrying ...`,
         });
         if (retryCount == 0) {
-          throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'Add application password failed!');
+          throw createCustomizeError(
+            ProvisionErrors.CREATE_APP_REGISTRATION,
+            'Add application password failed! Please file an issue on Github.'
+          );
         } else {
           await this.sleep(3000);
           retryCount--;
