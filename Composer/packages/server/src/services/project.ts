@@ -460,6 +460,8 @@ export class BotProjectService {
         name,
         locationRef,
         jobId,
+        'webapp',
+        'dotnet',
         user
       );
 
