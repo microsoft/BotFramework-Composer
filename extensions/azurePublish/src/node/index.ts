@@ -5,7 +5,7 @@ import path from 'path';
 
 import formatMessage from 'format-message';
 import md5 from 'md5';
-import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
+import { readJson, pathExists, writeJson } from 'fs-extra';
 import { Debugger } from 'debug';
 import {
   IBotProject,
@@ -15,7 +15,6 @@ import {
   PublishResponse,
   PublishResult,
 } from '@botframework-composer/types';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 
 import { authConfig, ResourcesItem } from '../types';
 
@@ -26,7 +25,7 @@ import { BotProjectProvision } from './provision';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
 import schema from './schema';
-import { stringifyError, AzurePublishErrors, createCustomizeError } from './utils/errorHandler';
+import { stringifyError } from './utils/errorHandler';
 import { ProcessStatus } from './types';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
@@ -49,12 +48,6 @@ interface DeployResources {
 interface PublishConfig {
   fullSettings: any;
   profileName: string; //profile name
-  [key: string]: any;
-}
-
-interface ResourceType {
-  key: string;
-  // other keys TBD
   [key: string]: any;
 }
 
@@ -113,26 +106,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       this.bundleId = bundleId;
     }
 
-    private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../../publishBots`);
-
-    /*******************************************************************************************************************************/
-    /* These methods generate all the necessary paths to various files  */
-    /*******************************************************************************************************************************/
-
-    // path to working folder containing all the assets
-    private getRuntimeFolder = (key: string) => {
-      return path.resolve(this.baseRuntimeFolder, `${key}`);
-    };
-
-    // path to the runtime code inside the working folder
-    private getProjectFolder = (key: string, template: string) => {
-      return path.resolve(this.baseRuntimeFolder, `${key}/${template}`);
-    };
-
-    // path to the declarative assets
-    private getBotFolder = (key: string, template: string) =>
-      path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
-
     /*******************************************************************************************************************************/
     /* These methods deal with the publishing history displayed in the Composer UI */
     /*******************************************************************************************************************************/
@@ -178,84 +151,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /* These methods implement the publish actions */
     /*******************************************************************************************************************************/
     /**
-     * Prepare a bot to be built and deployed by copying the runtime and declarative assets into a temporary folder
-     * @param project
-     * @param settings
-     * @param srcTemplate
-     * @param resourcekey
-     */
-    private init = async (project: any, srcTemplate: string, resourcekey: string, runtime: any) => {
-      try {
-        // point to the declarative assets (possibly in remote storage)
-        const botFiles = project.getProject().files;
-
-        // include both pre-release and release identifiers here
-        // TODO: eventually we can clean this up when the "old" runtime is deprecated
-        // (old runtime support is the else block below)
-        if (isUsingAdaptiveRuntime(runtime)) {
-          const buildFolder = this.getProjectFolder(resourcekey, this.mode);
-
-          // clean up from any previous deploys
-          await this.cleanup(resourcekey);
-
-          // copy bot and runtime into projFolder
-          await copy(srcTemplate, buildFolder);
-        } else {
-          const botFolder = this.getBotFolder(resourcekey, this.mode);
-          const runtimeFolder = this.getRuntimeFolder(resourcekey);
-
-          // clean up from any previous deploys
-          await this.cleanup(resourcekey);
-
-          // create the temporary folder to contain this project
-          mkdirSync(runtimeFolder, { recursive: true });
-
-          // create the ComposerDialogs/ folder
-          mkdirSync(botFolder, { recursive: true });
-
-          let manifestPath;
-          for (const file of botFiles) {
-            const pattern = /manifests\/[0-9A-z-]*.json/;
-            if (file.relativePath.match(pattern)) {
-              manifestPath = path.dirname(file.path);
-            }
-            // save bot files
-            const filePath = path.resolve(botFolder, file.relativePath);
-            if (!(await pathExists(path.dirname(filePath)))) {
-              mkdirSync(path.dirname(filePath), { recursive: true });
-            }
-            writeFileSync(filePath, file.content);
-          }
-
-          // save manifest
-          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
-
-          // copy bot and runtime into projFolder
-          await copy(srcTemplate, runtimeFolder);
-        }
-      } catch (error) {
-        throw createCustomizeError(
-          AzurePublishErrors.INITIALIZE_ERROR,
-          `Error during init publish folder, ${error.message}`
-        );
-      }
-    };
-
-    /**
-     * Remove any previous version of a project's working files
-     * @param resourcekey
-     */
-    private async cleanup(resourcekey: string) {
-      try {
-        const projFolder = this.getRuntimeFolder(resourcekey);
-        await emptyDir(projFolder);
-        await rmdir(projFolder);
-      } catch (error) {
-        this.logger('$O', error);
-      }
-    }
-
-    /**
      * Take the project from a given folder, build it, and push it to Azure.
      * @param project
      * @param runtime
@@ -285,7 +180,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
         },
         accessToken: accessToken,
-        projPath: project.getRuntimePath(), // this.getProjectFolder(resourcekey, this.mode),
+        projPath: project.getRuntimePath(),
         runtime: runtime,
       });
 
@@ -302,8 +197,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       await this.updateHistory(botId, profileName, publishResultFromStatus(status).result);
       // clean up the background process
       BackgroundProcessManager.removeProcess(jobId);
-      // clean up post-deploy
-      await this.cleanup(resourcekey);
     };
 
     /*******************************************************************************************************************************/
@@ -332,20 +225,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // get the appropriate runtime template which contains methods to build and configure the runtime
         const runtime = composer.getRuntimeByProject(project);
         // set runtime code path as runtime template folder path
-        let runtimeCodePath = runtime.path;
-
-        // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
-        if (
-          project.settings &&
-          project.settings.runtime &&
-          project.settings.runtime.customRuntime === true &&
-          project.settings.runtime.path
-        )
-          runtimeCodePath = project.getRuntimePath(); // get computed absolute path
-
-        // Prepare the temporary project
-        // this writes all the settings to the root settings/appsettings.json file
-        // await this.init(project, runtimeCodePath, resourcekey, runtime);
 
         // Merge all the settings
         // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
@@ -381,7 +260,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           publishResultFromStatus(BackgroundProcessManager.getStatus(jobId)).result
         );
         BackgroundProcessManager.removeProcess(jobId);
-        this.cleanup(resourcekey);
       }
     };
 
@@ -557,8 +435,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const status = publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
         await this.updateHistory(botId, profileName, status.result);
         BackgroundProcessManager.removeProcess(jobId);
-        this.cleanup(resourcekey as string);
-
         return status;
       }
     };
