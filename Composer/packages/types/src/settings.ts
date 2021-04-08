@@ -67,6 +67,29 @@ export type DialogSetting = {
   botId?: string;
   skillHostEndpoint?: string;
   customFunctions: string[];
+  defaultLocale?: string;
+  runtimeSettings?: {
+    features?: {
+      removeRecipientMentions?: boolean;
+      showTyping?: boolean;
+      traceTranscript?: boolean;
+      useInspection?: boolean;
+      setSpeak: {
+        voiceFontName?: string;
+        fallbackToTextForSpeechIfEmpty?: true;
+      };
+    };
+    components?: [];
+    skills?: {
+      allowedCallers?: string[];
+    };
+    storage?: string;
+    telemetry?: {
+      instrumentationKey?: string;
+      logActivities?: boolean;
+      logPersonalInformation?: boolean;
+    };
+  };
   [key: string]: any;
 };
 
