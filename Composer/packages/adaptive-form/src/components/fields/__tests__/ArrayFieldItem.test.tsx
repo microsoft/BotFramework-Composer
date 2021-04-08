@@ -30,7 +30,7 @@ describe('<ArrayFieldItem />', () => {
   describe('context menu', () => {
     it('disables the action if prop is false', () => {
       const { getByLabelText } = renderSubject();
-      const menu = getByLabelText('Item Actions');
+      const menu = getByLabelText('Item actions');
       fireEvent.click(menu);
       const items = screen.getAllByRole('menuitem');
       expect(items).toHaveLength(3);
@@ -51,7 +51,7 @@ describe('<ArrayFieldItem />', () => {
         onReorder,
       });
 
-      const menu = getByLabelText('Item Actions');
+      const menu = getByLabelText('Item actions');
       fireEvent.click(menu);
       const moveUp = screen.getByText('Move Up');
       fireEvent.click(moveUp);
