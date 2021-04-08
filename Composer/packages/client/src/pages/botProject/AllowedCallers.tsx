@@ -112,43 +112,45 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const { skillConfiguration } = mergedSettings;
+  const { runtimeSettings } = mergedSettings;
 
   const updateAllowedCallers = React.useCallback(
     (allowedCallers: string[] = []) => {
       const updatedSetting = {
         ...cloneDeep(mergedSettings),
-        skillConfiguration: { ...skillConfiguration, allowedCallers },
+        runtimeSettings: { ...runtimeSettings, skills: { ...runtimeSettings?.skills, allowedCallers } },
       };
       setSettings(projectId, updatedSetting);
     },
-    [mergedSettings, projectId, skillConfiguration]
+    [mergedSettings, projectId, runtimeSettings?.skills]
   );
 
   const onBlur = React.useCallback(() => {
-    updateAllowedCallers(skillConfiguration?.allowedCallers?.filter(Boolean));
-  }, [skillConfiguration?.allowedCallers, updateAllowedCallers]);
+    updateAllowedCallers(runtimeSettings?.skills?.allowedCallers?.filter(Boolean));
+  }, [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]);
 
   const onChange = React.useCallback(
     (index: number) => (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
-      const updatedAllowedCallers = [...(skillConfiguration?.allowedCallers || [])];
+      const updatedAllowedCallers = [...(runtimeSettings?.skills?.allowedCallers || [])];
       updatedAllowedCallers[index] = newValue;
       updateAllowedCallers(updatedAllowedCallers);
     },
-    [skillConfiguration?.allowedCallers, updateAllowedCallers]
+    [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]
   );
 
   const onRemove = React.useCallback(
     (index: number) => () => {
-      const updatedAllowedCallers = skillConfiguration?.allowedCallers?.filter((_, itemIndex) => itemIndex !== index);
+      const updatedAllowedCallers = runtimeSettings?.skills?.allowedCallers?.filter(
+        (_, itemIndex) => itemIndex !== index
+      );
       updateAllowedCallers(updatedAllowedCallers);
     },
-    [skillConfiguration?.allowedCallers, updateAllowedCallers]
+    [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]
   );
 
   const onAddNewAllowedCaller = React.useCallback(() => {
-    updateAllowedCallers([...skillConfiguration?.allowedCallers, '']);
-  }, [skillConfiguration?.allowedCallers, updateAllowedCallers]);
+    updateAllowedCallers([...runtimeSettings?.skills?.allowedCallers, '']);
+  }, [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]);
 
   return (
     <CollapsableWrapper title={formatMessage('Allowed callers')} titleStyle={title}>
@@ -156,7 +158,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
         {formatMessage('List of app ids for bots that are allowed to use this skill')}
       </div>
       <ItemContainer>
-        {skillConfiguration?.allowedCallers?.map((caller, index) => {
+        {runtimeSettings?.skills?.allowedCallers?.map((caller, index) => {
           return (
             <Item key={index} value={caller} onBlur={onBlur} onChange={onChange(index)} onRemove={onRemove(index)} />
           );
@@ -165,7 +167,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       <ActionButton data-testid={'addNewAllowedCaller'} styles={actionButton} onClick={onAddNewAllowedCaller}>
         {formatMessage('Add caller')}
       </ActionButton>
-      {!skillConfiguration?.allowedCallers?.length && (
+      {!runtimeSettings?.skills?.allowedCallers?.length && (
         <MessageBar messageBarType={MessageBarType.warning}>
           {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
         </MessageBar>
