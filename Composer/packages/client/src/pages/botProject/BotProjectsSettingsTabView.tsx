@@ -19,6 +19,7 @@ import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
 import AdapterSection from './adapters/AdapterSection';
+import { AllowedCallers } from './AllowedCallers';
 
 // -------------------- Styles -------------------- //
 
@@ -104,6 +105,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           itemKey={PivotItemKey.SkillConfig}
         >
           {isRootBot && <SkillHostEndPoint projectId={projectId} />}
+          <AllowedCallers projectId={projectId} />
         </PivotItem>
         <PivotItem data-testid="languageTab" headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
           <BotLanguage projectId={projectId} />
