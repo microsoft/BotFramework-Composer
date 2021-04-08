@@ -141,7 +141,7 @@ export const ResourceGroupPicker = ({
         errorMessage: isNew ? newNameErrorMessage : undefined,
       });
     }
-  }, [selectedName, debouncedNewName, newNameErrorMessage]);
+  }, [disabled, selectedName, debouncedNewName, newNameErrorMessage]);
 
   const options = React.useMemo(() => {
     const optionsList: IDropdownOption[] =
