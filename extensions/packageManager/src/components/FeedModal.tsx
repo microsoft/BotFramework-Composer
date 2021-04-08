@@ -186,6 +186,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       onRender: (item: PackageSourceFeed) => {
         return (
           <Toggle
+            ariaLabel={formatMessage('Include prerelease versions')}
             checked={item ? item.defaultQuery?.prerelease : false}
             disabled={!selectedItem || selectedItem.readonly}
             onChange={updateSelectedDefaultQuery('prerelease')}
