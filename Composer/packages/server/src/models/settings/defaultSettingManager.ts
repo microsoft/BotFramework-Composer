@@ -32,6 +32,28 @@ export class DefaultSettingManager extends FileSettingManager {
 
   protected createDefaultSettings = (): DialogSetting => {
     return {
+      runtimeSettings: {
+        features: {
+          removeRecipientMentions: false,
+          showTyping: false,
+          traceTranscript: false,
+          useInspection: false,
+          setSpeak: {
+            voiceFontName: 'en-US-AriaNeural',
+            fallbackToTextForSpeechIfEmpty: true,
+          },
+        },
+        components: [],
+        skills: {
+          allowedCallers: [],
+        },
+        storage: '',
+        telemetry: {
+          instrumentationKey: '',
+          logActivities: true,
+          logPersonalInformation: false,
+        },
+      },
       feature: {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
@@ -97,11 +119,6 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       downsampling: {
         maxImbalanceRatio: -1,
-      },
-      skillConfiguration: {
-        // TODO: Setting isSkill property to true for now. A runtime change is required to remove dependancy on isSkill prop #4501
-        isSkill: true,
-        allowedCallers: [],
       },
       skill: {},
       defaultLanguage: 'en-us',
