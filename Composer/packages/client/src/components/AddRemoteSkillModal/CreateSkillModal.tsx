@@ -193,7 +193,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           </div>
           <Separator />
           <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
-            <div style={{ width: '70%' }}>
+            <div style={{ width: '50%' }}>
               <TextField
                 required
                 errorMessage={formDataErrors.manifestUrl}
@@ -238,7 +238,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                 <PrimaryButton
                   disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
                   styles={{ root: { marginLeft: '8px' } }}
-                  text={formatMessage('Valify Url')}
+                  text={formatMessage('Next')}
                   onClick={validateUrl}
                 />
               )}
