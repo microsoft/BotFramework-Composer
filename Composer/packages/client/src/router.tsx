@@ -44,8 +44,7 @@ const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFl
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
 const modalControlGroup = css`
-  border: 1px solid rgb(237, 235, 233);
-  padding: 0.5rem 1rem 1rem 1rem;
+  padding: 10px;
 `;
 
 const Routes = (props) => {
