@@ -21,7 +21,7 @@ import { Text } from '../../../../../constants';
 const genericErrorMessage = () => {
   return {
     message: 'Runtime Log',
-    summary: formatMessage('Error occured trying to fetch runtime standard output'),
+    summary: formatMessage('Error occurred trying to fetch runtime standard output'),
   };
 };
 

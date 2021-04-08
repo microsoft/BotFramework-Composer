@@ -334,7 +334,6 @@ export const projectMetaDataState = atomFamily<{ isRootBot: boolean; isRemote: b
     return {
       isRootBot: false,
       isRemote: false,
-      runtimeLogStreamingUrl: '',
     };
   },
 });

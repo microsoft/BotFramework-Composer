@@ -206,7 +206,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
-    const runtimeLogStreamingUrl = WebSocketServer.getRuntimeLogStreamingUrl(botId);
     if (LocalPublisher.runningBots[botId]) {
       if (LocalPublisher.runningBots[botId].status === 200) {
         const port = LocalPublisher.runningBots[botId].port;
@@ -216,14 +215,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           result: {
             message: 'Running',
             endpointURL: url,
-            runtimeLogStreamingUrl,
           },
         };
       } else {
         const publishResult = {
           status: LocalPublisher.runningBots[botId].status,
           result: LocalPublisher.runningBots[botId].result,
-          runtimeLogStreamingUrl,
         };
         if (LocalPublisher.runningBots[botId].status === 500) {
           // after we return the 500 status once, delete it out of the running bots list.

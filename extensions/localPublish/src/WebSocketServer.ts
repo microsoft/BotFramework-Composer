@@ -44,7 +44,7 @@ export class WebSocketServer {
         }
 
         const projectId = (req as any).params.projectId;
-        // initialize a new web socket server for each new conversation
+        // initialize a new web socket server for each new projectId
         if (projectId && !this.servers[projectId]) {
           const { head, socket } = (req as any).claimUpgrade();
 
@@ -75,8 +75,8 @@ export class WebSocketServer {
   public static sendRuntimeLogToSubscribers(projectId: string, standardOutput: string, standardError: string): void {
     this.sockets[projectId]?.send(
       JSON.stringify({
-        standardOutput: standardOutput,
-        standardError: standardError,
+        standardOutput,
+        standardError,
       })
     );
   }

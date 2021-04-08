@@ -125,7 +125,7 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.starting);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botBuildTimeErrorState(projectId), { ...data, title: formatMessage('Error occured building the bot') });
+        set(botBuildTimeErrorState(projectId), { ...data, title: formatMessage('Error occurred building the bot') });
       }
     }
 
