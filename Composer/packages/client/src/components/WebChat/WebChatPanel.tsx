@@ -3,7 +3,11 @@
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { DirectLineLog } from '@botframework-composer/types';
+import {
+  ConversationActivityTraffic,
+  ConversationNetworkTrafficItem,
+  ConversationNetworkErrorItem,
+} from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 
@@ -11,7 +15,7 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 
-import { ConversationService, ChatData, BotSecrets, getDateTimeFormatted } from './utils/conversationService';
+import { ConversationService, ChatData, BotSecrets } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChatContainer } from './WebChatContainer';
 import { RestartOption } from './type';
@@ -39,7 +43,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 }) => {
   const {
     openBotInEmulator,
-    appendLogToWebChatInspector,
+    appendWebChatTraffic,
     clearWebChatLogs,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
@@ -50,35 +54,62 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
-  const directLineErrorChannel = useRef<WebSocket>();
+  const webChatTrafficChannel = useRef<WebSocket>();
 
   useEffect(() => {
     const bootstrapChat = async () => {
       const conversationServerPort = await conversationService.setUpConversationServer();
       try {
-        directLineErrorChannel.current = new WebSocket(
-          `ws://localhost:${conversationServerPort}/ws/errors/createErrorChannel`
-        );
-        if (directLineErrorChannel.current) {
-          directLineErrorChannel.current.onmessage = (event) => {
-            const data: DirectLineLog = JSON.parse(event.data);
-            appendLogToWebChatInspector(projectId, data);
-            setTimeout(() => {
-              setActiveTabInDebugPanel('WebChatInspector');
-              setDebugPanelExpansion(true);
-            }, 300);
+        // set up Web Chat traffic listener
+        webChatTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic`);
+        if (webChatTrafficChannel.current) {
+          webChatTrafficChannel.current.onmessage = (event) => {
+            const data:
+              | ConversationActivityTraffic
+              | ConversationNetworkTrafficItem
+              | ConversationNetworkErrorItem = JSON.parse(event.data);
+
+            switch (data.trafficType) {
+              case 'network': {
+                appendWebChatTraffic(projectId, data);
+                break;
+              }
+              case 'activity': {
+                appendWebChatTraffic(
+                  projectId,
+                  data.activities.map((a) => ({
+                    activity: a,
+                    timestamp: new Date(a.timestamp || Date.now()).getTime(),
+                    trafficType: data.trafficType,
+                  }))
+                );
+                break;
+              }
+              case 'networkError': {
+                appendWebChatTraffic(projectId, data);
+                setTimeout(() => {
+                  setActiveTabInDebugPanel('WebChatInspector');
+                  setDebugPanelExpansion(true);
+                }, 300);
+                break;
+              }
+              default:
+                break;
+            }
           };
         }
       } catch (ex) {
         const response: AxiosResponse = ex.response;
-        const err: DirectLineLog = {
-          timestamp: getDateTimeFormatted(),
-          route: 'conversations/ws/port',
-          status: response.status,
-          logType: 'Error',
-          message: formatMessage('An error occurred connecting initializing the DirectLine server'),
+        const err: ConversationNetworkErrorItem = {
+          error: {
+            message: formatMessage('An error occurred connecting initializing the DirectLine server'),
+          },
+          request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
+          response: { payload: response.data, statusCode: response.status },
+          timestamp: Date.now(),
+          trafficType: 'networkError',
         };
-        appendLogToWebChatInspector(projectId, err);
+        appendWebChatTraffic(projectId, err);
         setActiveTabInDebugPanel('WebChatInspector');
         setDebugPanelExpansion(true);
       }
@@ -87,7 +118,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     bootstrapChat();
 
     return () => {
-      directLineErrorChannel.current?.close();
+      webChatTrafficChannel.current?.close();
     };
   }, []);
 
@@ -176,15 +207,16 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
       TelemetryClient.track('SaveTranscriptClicked');
       webChatPanelRef.current?.removeChild(downloadLink);
     } catch (ex) {
-      const err: DirectLineLog = {
-        timestamp: getDateTimeFormatted(),
-        route: 'saveTranscripts/',
-        status: 400,
-        logType: 'Error',
-        message: formatMessage('An error occurred saving transcripts'),
-        details: ex.message,
+      const err: ConversationNetworkErrorItem = {
+        error: {
+          message: formatMessage('An error occurred saving transcripts'),
+        },
+        request: { route: 'saveTranscripts/', method: '', payload: {} },
+        response: { payload: ex, statusCode: 400 },
+        timestamp: Date.now(),
+        trafficType: 'networkError',
       };
-      appendLogToWebChatInspector(projectId, err);
+      appendWebChatTraffic(projectId, err);
     }
   };
 

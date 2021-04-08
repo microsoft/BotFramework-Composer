@@ -177,8 +177,12 @@ export class Builder {
     const nlrList = await this.runOrchestratorNlrList();
 
     const modelDatas = [
-      { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
-      { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
+      { model: this.config?.model?.en_intent ?? nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
+      {
+        model: this.config?.model?.multilingual_intent ?? nlrList?.defaults?.multilingual_intent,
+        lang: 'multilang',
+        luFiles: multiLangLuFiles,
+      },
     ];
 
     for (const modelData of modelDatas) {
@@ -187,13 +191,13 @@ export class Builder {
           throw new Error('Model not set');
         }
         const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
-        await this.runOrchestratorNlrGet(modelPath, modelData.model);
+        if (!(await pathExists(modelPath))) {
+          throw new Error('Orchestrator Model missing: ' + modelPath);
+        }
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
         this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
-        for (const snap in snapshotData) {
-          this.orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
-        }
+        this.orchestratorSettings.orchestrator.snapshots = snapshotData;
       }
     }
 
@@ -215,7 +219,7 @@ export class Builder {
     luFiles: FileInfo[],
     emptyFiles: { [key: string]: boolean }
   ) => {
-    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
+    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return {};
     // build snapshots from LU files
     return await orchestratorBuilder.build(this.botDir, luFiles, modelPath, this.generatedFolderPath);
   };

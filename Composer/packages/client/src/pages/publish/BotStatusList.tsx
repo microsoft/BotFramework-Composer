@@ -16,13 +16,55 @@ import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
-import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
+import { useCopyToClipboard } from '@bfc/ui-shared';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
+
+const copiedCalloutStyles = {
+  root: {
+    padding: '10px',
+  },
+};
+
+type SkillManifestUrlFieldProps = {
+  url: string;
+};
+
+const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
+  const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(url);
+
+  const calloutTarget = useRef<HTMLElement>();
+  return (
+    <Fragment>
+      <ActionButton
+        className="skill-manifest-copy-button"
+        title={url}
+        onClick={(e) => {
+          calloutTarget.current = e.target as HTMLElement;
+          copyTextToClipboard();
+        }}
+      >
+        {formatMessage('Copy Skill Manifest URL')}
+      </ActionButton>
+      {isCopiedToClipboard && (
+        <Callout
+          setInitialFocus
+          calloutMaxWidth={200}
+          styles={copiedCalloutStyles}
+          target={calloutTarget.current}
+          onDismiss={resetIsCopiedToClipboard}
+        >
+          {formatMessage('Skill manifest URL was copied to the clipboard')}
+        </Callout>
+      )}
+    </Fragment>
+  );
+};
 
 export type BotStatusListProps = {
   botStatusList: BotStatus[];
@@ -49,15 +91,6 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
 }) => {
   const [expandedBotIds, setExpandedBotIds] = useState<Record<string, boolean>>({});
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
-
-  const copyStringToClipboard = (value?: string) => {
-    try {
-      value && navigator.clipboard.writeText(value);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error('Something went wrong when copying to the clipboard.', e, location);
-    }
-  };
 
   const displayedItems: BotStatus[] = useMemo(() => {
     if (currentSort.key !== 'Bot') return botStatusList;
@@ -264,18 +297,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       maxWidth: 150,
       data: 'string',
       onRender: (item: BotStatus) => {
-        return (
-          item?.skillManifestUrl && (
-            <ActionButton
-              title={item.skillManifestUrl}
-              onClick={() => {
-                copyStringToClipboard(item.skillManifestUrl);
-              }}
-            >
-              {formatMessage('Copy Skill Manifest URL')}
-            </ActionButton>
-          )
-        );
+        return item?.skillManifestUrl && <SkillManifestUrlField url={item.skillManifestUrl} />;
       },
       isPadded: true,
     },
