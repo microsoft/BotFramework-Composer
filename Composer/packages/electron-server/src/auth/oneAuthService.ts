@@ -273,6 +273,8 @@ export class OneAuthInstance extends OneAuthBase {
   public signOut() {
     log('Signing out user...');
     this.signedInAccount = undefined;
+    this.signedInARMAccount = undefined;
+    this.tenantToken = undefined;
     log('Signed out user.');
   }
 
