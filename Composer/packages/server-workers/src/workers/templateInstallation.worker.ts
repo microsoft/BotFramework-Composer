@@ -20,12 +20,9 @@ const installRemoteTemplate = async (
     log('Installing generator', npmPackageName);
     templateVersion = templateVersion ? templateVersion : '*';
     await yeomanEnv.installLocalGenerators({ [npmPackageName]: templateVersion });
-
-    // log('Looking up local packages');
-    // await yeomanEnv.lookupLocalPackages();
-    return true;
-  } catch {
-    return false;
+  } catch (err) {
+    log('Template failed to install', npmPackageName, templateVersion, templateGeneratorPath);
+    throw err;
   }
 };
 
@@ -75,21 +72,11 @@ const yeomanWork = async (
   log('Installing Yeoman template');
   parentPort?.postMessage({ status: 'Installing Yeoman template' });
 
-  const remoteTemplateAvailable = await installRemoteTemplate(
-    yeomanEnv,
-    templateGeneratorPath,
-    npmPackageName,
-    templateVersion
-  );
-  if (remoteTemplateAvailable) {
-    log('Instantiating Yeoman template');
-    parentPort?.postMessage({ status: 'Instantiating Yeoman template' });
+  await installRemoteTemplate(yeomanEnv, templateGeneratorPath, npmPackageName, templateVersion);
+  log('Instantiating Yeoman template');
+  parentPort?.postMessage({ status: 'Instantiating Yeoman template' });
 
-    await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeType, runtimeLanguage);
-  } else {
-    // handle error
-    throw new Error(`error hit when installing remote template`);
-  }
+  await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeType, runtimeLanguage);
 };
 
 export type TemplateInstallationArgs = {

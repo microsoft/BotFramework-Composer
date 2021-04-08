@@ -23,6 +23,11 @@ export interface ProvisionConfig {
   logger?: (string) => any;
   name: string; // profile name
   type: string; // webapp or function
+  /**
+   * The worker runtime language for Azure functions.
+   * Currently documented values: dotnet, node, java, python, or powershell
+   */
+  workerRuntime?: string;
   choice?: string;
   [key: string]: any;
 }
@@ -326,6 +331,7 @@ export class BotProjectProvision {
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname,
+              workerRuntime: config.workerRuntime,
             });
             provisionResults.webApp = {
               hostname: functionsHostName,
