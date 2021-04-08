@@ -59,6 +59,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const openLink = (link) => {
     TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: link });
     if (link.startsWith('http')) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       window.open(link, '_blank');
     } else {
       navigateTo(link);
