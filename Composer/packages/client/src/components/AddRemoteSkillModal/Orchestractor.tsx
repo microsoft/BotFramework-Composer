@@ -16,7 +16,7 @@ import { importOrchestractor } from './helper';
 
 export const Orchestractor = (props) => {
   const { projectId, onSubmit, onBack } = props;
-  const [enable, setEnable] = useState(false);
+  const [enable, setEnable] = useState(true);
   const { setApplicationLevelError, reloadProject } = useRecoilValue(dispatcherState);
   const onChange = (ev, check) => {
     setEnable(check);
@@ -32,6 +32,7 @@ export const Orchestractor = (props) => {
             </Link>
           </div>
           <Checkbox
+            defaultChecked
             label="Make Orchestrator my preferred recognizer for multi-bot projects"
             styles={{ root: { margin: '20px 0' } }}
             onChange={onChange}

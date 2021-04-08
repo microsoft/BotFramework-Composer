@@ -16,7 +16,7 @@ import { LuFile, LuIntentSection, SDKKinds } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { selectIntentDialog } from '../../constants';
+import { selectIntentDialog, enableOrchestratorDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luWorker from '../../recoilModel/parsers/luWorker';
 import { localeState, dispatcherState } from '../../recoilModel';
@@ -26,7 +26,7 @@ import { Orchestractor } from './Orchestractor';
 
 const detailListContainer = css`
   width: 100%;
-  height: 400px;
+  height: 300px;
   position: relative;
   overflow: hidden;
   flex-grow: 1;
@@ -121,7 +121,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   // selected current locale intents
   const [displayIntents, setDisplayIntent] = useState<Array<LuIntentSection>>([]);
   const [displayContent, setDisplayContent] = useState<string>('');
-  // const [luFileError, setError] = useState();
+  // const [diagnostics, setDiagnostics] = useState([]);
   const locale = useRecoilValue(localeState(projectId));
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
@@ -254,7 +254,14 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           ) : (
             <StackItem>
               <LuEditor
-                height={400}
+                toolbarHidden
+                height={300}
+                luOption={{
+                  projectId,
+                  fileId: dialogId,
+                  sectionId: manifest.name,
+                  luFeatures: {},
+                }}
                 telemetryClient={TelemetryClient}
                 value={displayContent}
                 onChange={setDisplayContent}
@@ -286,6 +293,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                       handleSubmit(ev, true);
                     } else {
                       // show orchestractor
+                      setTitle(enableOrchestratorDialog);
                       setShowOrchestratorDialog(true);
                     }
                   } else {
