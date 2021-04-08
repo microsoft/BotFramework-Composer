@@ -6,7 +6,6 @@ import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
 import { writeFile, readdir, readFile, pathExists, readJson } from 'fs-extra';
 import partition from 'lodash/partition';
 
-import { TelemetryService } from '../../../services/telemetry';
 import { Path } from '../../../utility/path';
 import { IOrchestratorBuildOutput, IOrchestratorSettings } from '../interface';
 
@@ -163,10 +162,6 @@ export async function orchestratorBuilder(
       content: fi.content,
     }));
 
-  TelemetryService.trackEvent('OrchestratorBuildStarted', {
-    baseModel: Path.basename(modelPath),
-    firstBuild: !!orchestratorLabelResolvers.size,
-  });
   const result = await Orchestrator.buildAsync(
     modelPath,
     luObjects,
@@ -176,10 +171,6 @@ export async function orchestratorBuilder(
     null,
     fullEmbedding
   );
-  TelemetryService.trackEvent('OrchestratorBuildCompleted', {
-    baseModel: Path.basename(modelPath),
-    firstBuild: !!orchestratorLabelResolvers.size,
-  });
   cache.set(projectId, orchestratorLabelResolvers);
   return result;
 }

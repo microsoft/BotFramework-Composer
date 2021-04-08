@@ -75,7 +75,7 @@ class OrchestratorController {
     };
 
     const onFinish = (msg: string) => {
-      TelemetryService.trackEvent('OrchestratorDownloadCompleted');
+      TelemetryService.endEvent('OrchestratorDownloadCompleted', 'OrchestratorDownloader');
       this.state = DownloadState.STOPPED;
     };
 
@@ -83,7 +83,7 @@ class OrchestratorController {
 
     try {
       this.state = DownloadState.DOWNLOADING;
-      TelemetryService.trackEvent('OrchestratorDownloadStarted');
+      TelemetryService.startEvent('OrchestratorDownloadStarted', 'OrchestratorDownloader');
       await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
     } catch (err) {
       this.errorMsg = err;
