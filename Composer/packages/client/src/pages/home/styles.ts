@@ -75,6 +75,21 @@ export const gap40 = css`
 export const tabRowContainer = css`
   flex-wrap: wrap;
   display: flex;
+  clear: both;
+`;
+
+export const tabRowViewMore = css`
+  float: right;
+  position: relative;
+  top: -24px;
+  font-size: ${fonts.medium.fontSize};
+  margin-bottom: -40px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  i {
+    margin: 4px 0 0 5px;
+  }
 `;
 
 export const itemContainerWrapper = (disabled?: boolean) => css`
@@ -191,6 +206,10 @@ export const cardItem = {
     font-weight: ${FontWeights.semibold};
     color: ${NeutralColors.gray160};
     margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   `,
   imageCover: css`
     width: 53px;

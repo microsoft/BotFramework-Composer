@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
 import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
@@ -204,6 +205,11 @@ const Home: React.FC<RouteComponentProps> = () => {
               <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
+                    {tab.viewAllLinkText && (
+                      <Link css={home.tabRowViewMore} href={tab.viewAllLinkUrl} target={'_blank'}>
+                        {tab.viewAllLinkText} <Icon iconName={'OpenInNewWindow'}></Icon>{' '}
+                      </Link>
+                    )}
                     <div css={home.tabRowContainer}>
                       {tab.cards.map((card, index) => (
                         <CardWidget
