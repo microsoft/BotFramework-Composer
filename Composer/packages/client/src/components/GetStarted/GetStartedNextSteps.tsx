@@ -88,7 +88,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
-  const linkToPublishProfile = `/bot/${rootBotProjectId}/botProjectsSettings/#addNewPublishProfile`;
+  const linkToPublishProfile = `/bot/${rootBotProjectId}/publish/all#addNewPublishProfile`;
   const linkToLUISSettings = `/bot/${rootBotProjectId}/botProjectsSettings/#luisKey`;
   const linktoQNASettings = `/bot/${rootBotProjectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
