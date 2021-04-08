@@ -9,6 +9,12 @@ export interface LibraryRef {
   location: string;
 }
 
+export type AdapterRecord = {
+  name: string;
+  route: string;
+  enabled: boolean;
+};
+
 export type CodeEditorSettings = {
   lineNumbers: boolean;
   wordWrap: boolean;
@@ -69,6 +75,7 @@ export type DialogSetting = {
   customFunctions: string[];
   defaultLocale?: string;
   runtimeSettings?: {
+    adapters?: AdapterRecord[];
     features?: {
       removeRecipientMentions?: boolean;
       showTyping?: boolean;
