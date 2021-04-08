@@ -38,6 +38,8 @@ import {
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
+import { projectDialogsMapSelector } from '../../recoilModel';
+import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -68,8 +70,25 @@ export const projectDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
 
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
+        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(projectIdToRemove));
+        const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
+        // remove the same identifier trigger in root bot
+        if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
+          const index = rootDialog.triggers.findIndex((item) => item.displayName === manifestIdentifier);
+          const content = DialogdeleteTrigger(
+            projectDialogsMap[rootBotProjectId],
+            rootDialog?.id,
+            index,
+            async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
+          );
+          if (content) {
+            await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
+          }
+        }
+
+        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
         set(botProjectIdsState, (currentProjects) => {
@@ -172,6 +191,7 @@ export const projectDispatcher = () => {
         navigateToSkillBot(rootBotProjectId, projectId);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
+        throw ex;
       } finally {
         set(botOpeningState, false);
       }

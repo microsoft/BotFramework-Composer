@@ -218,9 +218,7 @@ export const triggerDispatcher = () => {
         );
         const index = get(dialogPayload.content, 'triggers', []).length - 1;
         const skillsByProjectId = await snapshot.getPromise(skillNameIdentifierByProjectIdSelector);
-        console.log(skillsByProjectId);
         const skillIdentifier = skillsByProjectId[skillId];
-        console.log(skillIdentifier);
         const actions: any = [];
         actions.push(createActionFromManifest(skillIdentifier));
         dialogPayload.content.triggers[index].actions = actions;
