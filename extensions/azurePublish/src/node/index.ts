@@ -105,7 +105,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       this.bundleId = bundleId;
     }
 
-
     /*******************************************************************************************************************************/
     /* These methods deal with the publishing history displayed in the Composer UI */
     /*******************************************************************************************************************************/
