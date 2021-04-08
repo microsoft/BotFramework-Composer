@@ -214,6 +214,22 @@ export const projectDispatcher = () => {
     }
   );
 
+  const forceMigrate = async (projectId: string) => {
+    if (
+      await OpenConfirmModal(
+        formatMessage('Convert your project to the latest format'),
+        formatMessage(
+          'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
+        ),
+        { confirmText: formatMessage('Convert') }
+      )
+    ) {
+      navigateTo(`/v2/projects/migrate/${projectId}`);
+    } else {
+      navigateTo(`/home`);
+    }
+  };
+
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       path: string,
@@ -234,19 +250,7 @@ export const projectDispatcher = () => {
         );
 
         if (requiresMigrate) {
-          if (
-            await OpenConfirmModal(
-              formatMessage('Convert your project to the latest format'),
-              formatMessage(
-                'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
-              ),
-              { confirmText: formatMessage('Convert') }
-            )
-          ) {
-            navigateTo(`/v2/projects/migrate/${projectId}`);
-          } else {
-            navigateTo(`/home`);
-          }
+          await forceMigrate(projectId);
           return;
         }
 
@@ -306,19 +310,7 @@ export const projectDispatcher = () => {
       set(botOpeningState, true);
       const { requiresMigrate } = await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
       if (requiresMigrate) {
-        if (
-          await OpenConfirmModal(
-            formatMessage('Convert your project to the latest format'),
-            formatMessage(
-              'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
-            ),
-            { confirmText: formatMessage('Convert') }
-          )
-        ) {
-          navigateTo(`/v2/projects/migrate/${projectId}`);
-        } else {
-          navigateTo(`/home`);
-        }
+        await forceMigrate(projectId);
         return;
       }
       // Post project creation
@@ -502,7 +494,7 @@ export const projectDispatcher = () => {
         const response = await migrateToV2(callbackHelpers, oldProjectId, name, description, location);
 
         if (response.data.jobId) {
-          dispatcher.updateCreationMessage(response.data.jobId, '', '', '', '');
+          dispatcher.updateCreationMessage(response.data.jobId);
         }
       } catch (ex) {
         set(botProjectIdsState, []);
@@ -605,10 +597,10 @@ export const projectDispatcher = () => {
   const updateCreationMessage = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       jobId: string,
-      templateId: string,
-      urlSuffix: string,
-      profile: any,
-      source: any
+      templateId?: string,
+      urlSuffix?: string,
+      profile?: any,
+      source?: any
     ) => {
       const timer = setInterval(async () => {
         try {

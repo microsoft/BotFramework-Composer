@@ -495,7 +495,9 @@ export class BotProjectService {
               showTyping: originalProject.settings?.feature?.UseShowTypingMiddleware || false,
               useInspection: originalProject.settings?.feature?.UseInspectionMiddleware || false,
               removeRecipientMentions: originalProject.settings?.feature?.RemoveRecipientMention || false,
-              setSpeak: originalProject.settings?.feature?.useSetSpeakMiddleware || false,
+              setSpeak: originalProject.settings?.feature?.useSetSpeakMiddleware
+                ? { voiceFontName: 'en-US-AriaNeural', fallbackToTextForSpeechIfEmpty: true }
+                : undefined,
               blobTranscript: originalProject.settings?.blobStorage?.connectionString
                 ? originalProject.settings?.blobStorage
                 : {},
