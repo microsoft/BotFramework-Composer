@@ -42,7 +42,8 @@ export class NpmFeed implements IFeed {
       throw new Error('Package source or data should be provided');
     }
 
-    const httpResponse = await axios.get(this.packageSource.url);
+    const npmGetSearchUrl = this.buildNPMGetSearchUrl(this.packageSource.url, query);
+    const httpResponse = await axios.get(npmGetSearchUrl);
     const feed = httpResponse?.data;
 
     if (!feed) {
@@ -71,5 +72,34 @@ export class NpmFeed implements IFeed {
         source: this.source,
       };
     });
+  }
+
+  /**
+   * Build npm search url based on the NuGet search spec.
+   * Spec: https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md#get-v1search
+   * @param baseUrl The NPM search service url.
+   * @param query The desired query parameters. Note that if a package source provides a query, that query will be prioritized.
+   * @todo Eventually que parameter query should augment the package query to support paging and further filtering. So the effective query will be a combination of the
+   * package query plus the specified query parameters.
+   */
+  private buildNPMGetSearchUrl(baseUrl: string, query?: IPackageQuery): string {
+    let url = `${baseUrl}?`;
+
+    if (query?.query) {
+      url = `${url}&text=${query.query}`;
+      if (!query?.prerelease) {
+        url = `${url}+not:unstable`;
+      }
+    }
+
+    if (query?.take) {
+      url = `${url}&size=${query.take}`;
+    }
+
+    if (query?.skip) {
+      url = `${url}&from=${query.skip}`;
+    }
+
+    return url;
   }
 }
