@@ -50,7 +50,7 @@ export const PullFailedDialog: React.FC<PulledFailedDialogProps> = (props) => {
       </p>
       <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('Kk')} onClick={onDismiss} />
+        <PrimaryButton text={formatMessage('OK')} onClick={onDismiss} />
       </DialogFooter>
     </Dialog>
   );
