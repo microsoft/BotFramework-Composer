@@ -10,19 +10,12 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
 
-import { ContentProps } from '../constants';
+import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
 import { botDisplayNameState } from '../../../../recoilModel';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { LoadingSpinner } from '@bfc/ui-shared/lib/components/LoadingSpinner';
-
-export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
-
-export const SCHEMA_URIS = [
-  'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
-  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
-];
 
 const styles = {
   row: css`

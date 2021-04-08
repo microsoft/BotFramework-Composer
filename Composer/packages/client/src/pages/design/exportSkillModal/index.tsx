@@ -27,7 +27,7 @@ import {
 
 import { styles } from './styles';
 import { generateSkillManifest } from './generateSkillManifest';
-import { editorSteps, ManifestEditorSteps, order } from './constants';
+import { editorSteps, ManifestEditorSteps, order, VERSION_REGEX } from './constants';
 import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
 import { cloneDeep } from 'lodash';
 
@@ -138,7 +138,18 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     const validated = typeof validate === 'function' ? validate({ content, id, schema, skillManifests }) : errors;
 
     if (!Object.keys(validated).length) {
-      setCurrentStep((current) => (current + 1 < order.length ? current + 1 : current));
+      setCurrentStep((current) => {
+        if (current === 1) {
+          const [version] = VERSION_REGEX.exec(content.$schema) || [];
+          if (current + 1 === order.length) {
+            return current;
+          } else {
+            return version === '2.0.0' ? current + 2 : current + 1;
+          }
+        } else {
+          return current + 1 < order.length ? current + 1 : current;
+        }
+      });
       options?.save && handleSave();
       options?.dismiss && handleDismiss();
       setErrors({});
