@@ -149,7 +149,9 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   );
 
   const onAddNewAllowedCaller = React.useCallback(() => {
-    updateAllowedCallers([...runtimeSettings?.skills?.allowedCallers, '']);
+    runtimeSettings?.skills?.allowedCallers
+      ? updateAllowedCallers([...runtimeSettings?.skills?.allowedCallers, ''])
+      : updateAllowedCallers(['']);
   }, [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]);
 
   return (
