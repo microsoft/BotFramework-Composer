@@ -30,8 +30,8 @@ const container = css`
 
 const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
-  LuisQna: [],
-  Connections: ['connections', 'addNewPublishProfile'],
+  LuisQna: ['luisKey', 'qnaKey'],
+  Connections: ['connections'],
   SkillConfig: [],
   Language: [],
 };
