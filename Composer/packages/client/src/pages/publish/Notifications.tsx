@@ -162,26 +162,17 @@ export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: st
 export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = false): CardProps => {
   const description = isSkill
     ? 'Publishing your skill...'
-    : formatMessage(`Publishing {count} bots`, { count: items.length });
+    : formatMessage(
+        `Publishing {
+      count, plural,
+        =1 {one bot}
+        other {# bots}
+    }`,
+        { count: items.length }
+      );
   return {
     title: '',
     description,
-    type: 'pending',
-    onRenderCardContent: (props) => (
-      <div css={cardContent}>
-        <Icon css={infoType} iconName="CloudUpload" />
-        <div css={cardDetail}>
-          <ProgressIndicator label={props.description} />
-        </div>
-      </div>
-    ),
-  };
-};
-
-export const getPendingNotificationSkillCardProps = (): CardProps => {
-  return {
-    title: '',
-    description: formatMessage(`Publishing skill`),
     type: 'pending',
     onRenderCardContent: (props) => (
       <div css={cardContent}>

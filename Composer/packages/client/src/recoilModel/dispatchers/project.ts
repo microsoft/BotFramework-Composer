@@ -8,7 +8,7 @@ import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus } from '../../constants';
+import { BotStatus, FEEDVERSION } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -30,6 +30,7 @@ import {
   currentProjectIdState,
   currentTargetState,
   dispatcherState,
+  feedState,
   fetchReadMePendingState,
   filePersistenceState,
   projectMetaDataState,
@@ -477,6 +478,24 @@ export const projectDispatcher = () => {
     }
   });
 
+  const fetchFeed = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    const { set, snapshot } = callbackHelpers;
+    const { fetched } = await snapshot.getPromise(feedState);
+    if (fetched) return;
+
+    try {
+      const response = await httpClient.get(`/projects/feed`);
+      // feed version control
+      if (response.data.version === FEEDVERSION) {
+        set(feedState, { ...response.data, fetched: true });
+      } else {
+        logMessage(callbackHelpers, `Feed version expired`);
+      }
+    } catch (ex) {
+      logMessage(callbackHelpers, `Error in fetching feed projects: ${ex}`);
+    }
+  });
+
   const setBotStatus = useRecoilCallback<[string, BotStatus], void>(
     ({ set }: CallbackInterface) => (projectId: string, status: BotStatus) => {
       set(botStatusState(projectId), status);
@@ -624,6 +643,7 @@ export const projectDispatcher = () => {
     fetchProjectById,
     fetchRecentProjects,
     updateCurrentTarget,
+    fetchFeed,
     setBotStatus,
     saveTemplateId,
     updateBoilerplate,

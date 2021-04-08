@@ -9,7 +9,6 @@ import formatMessage from 'format-message';
 
 import { DLServerState } from '../store/dlServerState';
 import { Conversation } from '../store/entities/conversation';
-import { textItem } from '../utils/helpers';
 import { readFile } from '../utils/fileOperations';
 import { handleDirectLineErrors } from '../utils/apiErrorException';
 
@@ -33,14 +32,12 @@ export const createUploadHandler = (state: DLServerState) => {
     if (!conversation) {
       const message = formatMessage('Cannot upload file. Conversation not found.');
       res.status(StatusCodes.NOT_FOUND).send(message).end();
-      state.dispatchers.logToDocument(req.params.conversationId, textItem('Error', message));
       return;
     }
 
     if (!req.is('multipart/form-data') || Number(req.headers['content-length']) === 0) {
       const message = formatMessage('Cannot parse attachment.');
       res.status(StatusCodes.NOT_FOUND).send(message).end();
-      state.dispatchers.logToDocument(req.params.conversationId, textItem('Error', message));
       return;
     }
 
@@ -61,7 +58,6 @@ export const createUploadHandler = (state: DLServerState) => {
         if (!uploads?.length) {
           const message = formatMessage('No uploads were attached as a part of the request.');
           res.status(StatusCodes.BAD_REQUEST).send(message).end();
-          state.dispatchers.logToDocument(req.params.conversationId, textItem('Error', message));
           return;
         }
 
