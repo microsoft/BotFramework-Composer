@@ -48,7 +48,7 @@ const LuSectionLink = withTooltip(
   {
     content: (
       <Text variant="small">
-        {formatMessage.rich('Edit this intent in<a>User Input view</a>', {
+        {formatMessage.rich('Edit this intent in<a>User input view</a>', {
           a: ({ children }) => (
             <Text key="pageLink" variant="small">
               <Icon iconName="People" styles={botIconStyles} />

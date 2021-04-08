@@ -81,7 +81,7 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     >
       <div css={consoleStyle}>{detail}</div>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('Ok')} onClick={closeDialog} />
+        <PrimaryButton text={formatMessage('OK')} onClick={closeDialog} />
       </DialogFooter>
     </Dialog>
   );

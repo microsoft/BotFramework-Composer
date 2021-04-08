@@ -142,7 +142,7 @@ const DefaultFormSchema: FormUISchema = {
     helpLink: 'https://aka.ms/bfc-using-http',
   },
   [SDKKinds.IfCondition]: {
-    label: () => formatMessage('Branch: If/Else'),
+    label: () => formatMessage('Branch: If/else'),
     subtitle: () => formatMessage('If Condition'),
     hidden: ['actions', 'elseActions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',

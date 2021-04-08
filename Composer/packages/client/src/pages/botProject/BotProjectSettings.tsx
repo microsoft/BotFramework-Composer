@@ -137,7 +137,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       return {
         id: b.projectId,
         name: b.name,
-        ariaLabel: formatMessage('bot'),
+        ariaLabel: formatMessage('Bot'),
         url: createBotSettingUrl(rootBotProjectId ?? '', b.projectId),
         isRootBot: b.isRootBot,
       };

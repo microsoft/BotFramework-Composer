@@ -31,10 +31,10 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
     case BotStatus.connected:
       return (
         <IconButton
-          aria-label={formatMessage('Stop Bot')}
+          aria-label={formatMessage('Stop bot')}
           iconProps={{ iconName: 'CircleStopSolid' }}
           styles={{ root: { height: '20px' } }}
-          title={formatMessage('Stop Bot')}
+          title={formatMessage('Stop bot')}
           onClick={() => {
             stopSingleBot(projectId);
             TelemetryClient.track('StopBotButtonClicked', { isRoot, projectId, location: 'botController' });
@@ -45,10 +45,10 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
     case BotStatus.failed:
       return (
         <IconButton
-          aria-label={formatMessage('Start Bot')}
+          aria-label={formatMessage('Start bot')}
           iconProps={{ iconName: 'Play' }}
           styles={{ root: { height: '20px' } }}
-          title={formatMessage('Start Bot')}
+          title={formatMessage('Start bot')}
           onClick={() => {
             startSingleBot(projectId);
             TelemetryClient.track('StartBotButtonClicked', { isRoot, projectId, location: 'botController' });

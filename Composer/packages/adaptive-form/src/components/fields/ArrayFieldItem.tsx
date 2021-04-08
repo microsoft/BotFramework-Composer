@@ -101,7 +101,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
         />
       </div>
       <IconButton
-        ariaLabel={formatMessage('Item Actions')}
+        ariaLabel={formatMessage('Item actions')}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: contextItems }}
         styles={{

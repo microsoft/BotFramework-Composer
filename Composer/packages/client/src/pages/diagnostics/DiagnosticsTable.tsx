@@ -55,7 +55,7 @@ export const DiagnosticsTable: React.FC<IDiagnosticListProps> = (props) => {
 
   return (
     <div css={listRoot} data-testid="diagnostics-table-view" role="main">
-      <div aria-label={formatMessage('Diagnostic list')} css={tableView} role="region">
+      <div aria-label={formatMessage('Diagnostic List')} css={tableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DiagnosticList diagnosticItems={showItems} onItemClick={onItemClick} />
         </ScrollablePane>

@@ -50,9 +50,9 @@ const InternalPropertyList = React.memo((props: Props) => (
     ) : (
       <EmptyMessage horizontal horizontalAlign="center" verticalAlign="center">
         <Text styles={{ root: { color: NeutralColors.gray80 } }} variant="medium">
-          {formatMessage('There are no {kind} properties.', {
-            kind: props.kind === 'required' ? formatMessage('required') : formatMessage('optional'),
-          })}
+          {props.kind === 'required'
+            ? formatMessage('There are no required properties.')
+            : formatMessage('There are no optional properties.')}
         </Text>
       </EmptyMessage>
     )}

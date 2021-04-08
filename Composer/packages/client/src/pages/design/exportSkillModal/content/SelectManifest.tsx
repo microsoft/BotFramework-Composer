@@ -91,7 +91,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
     },
     {
       key: 'column2',
-      name: formatMessage('Date Modified'),
+      name: formatMessage('Date modified'),
       fieldName: 'lastModified',
       minWidth: 60,
       maxWidth: 70,

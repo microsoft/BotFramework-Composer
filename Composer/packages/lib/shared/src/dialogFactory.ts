@@ -67,12 +67,12 @@ const initialDialogShape = () => ({
     actions: [
       {
         $kind: SDKKinds.Foreach,
-        ...getNewDesigner(formatMessage('Loop: for each item'), ''),
+        ...getNewDesigner(formatMessage('Loop: For each item'), ''),
         itemsProperty: 'turn.Activity.membersAdded',
         actions: [
           {
             $kind: SDKKinds.IfCondition,
-            ...getNewDesigner(formatMessage('Branch: if/else'), ''),
+            ...getNewDesigner(formatMessage('Branch: If/else'), ''),
             condition: 'string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)',
             actions: [
               {

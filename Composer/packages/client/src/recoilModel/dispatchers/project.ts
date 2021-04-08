@@ -616,7 +616,7 @@ export const projectDispatcher = () => {
       handleProjectFailure(callbackHelpers, err);
       callbackHelpers.set(
         selectedTemplateReadMeState,
-        formatMessage('### Error encountered when getting template readMe')
+        `### ${formatMessage('Error encountered when getting template readme')}`
       );
     } finally {
       callbackHelpers.set(fetchReadMePendingState, false);

@@ -35,7 +35,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
   const [newValue, setNewValue] = useState<string>();
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
 
-  const moreLabel = formatMessage('Item Actions');
+  const moreLabel = formatMessage('Item actions');
 
   const handleNewChange = (_e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) =>
     setNewValue(newValue || '');
