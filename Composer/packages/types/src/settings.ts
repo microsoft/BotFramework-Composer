@@ -81,6 +81,10 @@ export type DialogSetting = {
       showTyping?: boolean;
       traceTranscript?: boolean;
       useInspection?: boolean;
+      blobTranscript?: {
+        connectionString?: string;
+        containerName?: string;
+      };
       setSpeak: {
         voiceFontName?: string;
         fallbackToTextForSpeechIfEmpty?: true;
