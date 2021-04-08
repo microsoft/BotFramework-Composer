@@ -21,13 +21,15 @@ const Logger = () => {
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
-  const { fetchExtensions, fetchFeatureFlags } = useRecoilValue(dispatcherState);
+
+  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     loadLocale(appLocale);
   }, [appLocale]);
 
   useEffect(() => {
+    checkNodeVersion();
     fetchExtensions();
     fetchFeatureFlags();
   }, []);
