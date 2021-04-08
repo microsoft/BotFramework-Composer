@@ -204,9 +204,11 @@ export const settingsDispatcher = () => {
                 msAppId,
               },
             },
-            skillConfiguration: {
-              ...settings.skillConfiguration,
-              allowedCallers: [...settings.skillConfiguration?.allowedCallers, msAppId],
+            runtimeSettings: {
+              ...settings.runtimeSettings,
+              skills: {
+                allowedCallers: [...settings.runtimeSettings?.skills?.allowedCallers, msAppId],
+              },
             },
           };
         } else {
@@ -219,11 +221,9 @@ export const settingsDispatcher = () => {
                 msAppId,
               },
             },
-            runtimeSettings: {
-              ...settings.runtimeSettings,
-              skills: {
-                allowedCallers: [...settings.runtimeSettings?.skills?.allowedCallers, msAppId],
-              },
+            skillConfiguration: {
+              ...settings.skillConfiguration,
+              allowedCallers: [...settings.skillConfiguration?.allowedCallers, msAppId],
             },
           };
         }

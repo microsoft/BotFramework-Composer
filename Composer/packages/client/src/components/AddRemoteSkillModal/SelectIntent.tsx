@@ -12,7 +12,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { LuEditor } from '@bfc/code-editor';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { LuFile, LuIntentSection } from '@bfc/shared';
+import { LuFile, LuIntentSection, SDKKinds } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -127,9 +127,12 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const hasOrchestractor = useMemo(() => {
+    console.log(curRecognizers);
+
     const fileName = `${dialogId}.${locale}.lu.dialog`;
+    console.log(fileName);
     for (const file of curRecognizers) {
-      if (file.id === fileName) {
+      if (file.id === fileName && file.content.$kind === SDKKinds.OrchestratorRecognizer) {
         return true;
       }
     }
