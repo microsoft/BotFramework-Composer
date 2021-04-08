@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
@@ -149,7 +149,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       changePublishTarget(publishTargetName, currentBotStatus);
       setCheckedSkillIds([projectId]);
       onPublish();
-      window.history.replaceState(null, '', props.location?.pathname);
+      props.location && navigate(props.location?.pathname, { replace: true });
     }
   }, [publishTargetName, botStatusList]);
 
