@@ -80,8 +80,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   const inspectLatestLogMessage = () => {
     // inspect latest log message if nothing is being inspected
     if (!inspectionData && currentProjectId) {
-      const sortedTraffic = [...rawWebChatTraffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
-      const latestTrafficItem = sortedTraffic.pop();
+      const latestTrafficItem = [...rawWebChatTraffic].pop();
       if (latestTrafficItem) {
         performInspection(latestTrafficItem);
       }
@@ -150,11 +149,9 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   );
 
   const displayedTraffic = useMemo(() => {
-    const sortedTraffic = [...rawWebChatTraffic]
-      .sort((t1, t2) => t1.timestamp - t2.timestamp)
-      .map((t, i) => renderLogItem(t, i, inspectionData));
-    setLogItemCount(sortedTraffic.length);
-    return sortedTraffic;
+    const renderedTraffic = [...rawWebChatTraffic].map((t, i) => renderLogItem(t, i, inspectionData));
+    setLogItemCount(renderedTraffic.length);
+    return renderedTraffic;
   }, [inspectionData, rawWebChatTraffic, renderLogItem]);
 
   const setInspectionData = (data: WebChatInspectionData) => {

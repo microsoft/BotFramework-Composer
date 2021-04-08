@@ -36,9 +36,11 @@ export const webChatLogDispatcher = () => {
       const { set } = callbackHelpers;
       set(webChatTrafficState(projectId), (currentTraffic) => {
         if (Array.isArray(traffic)) {
-          return [...currentTraffic, ...traffic.map((item) => addIdToTrafficItem(item))];
+          return [...currentTraffic, ...traffic.map((item) => addIdToTrafficItem(item))].sort(
+            (t1, t2) => t1.timestamp - t2.timestamp
+          );
         } else {
-          return [...currentTraffic, addIdToTrafficItem(traffic)];
+          return [...currentTraffic, addIdToTrafficItem(traffic)].sort((t1, t2) => t1.timestamp - t2.timestamp);
         }
       });
     }
