@@ -20,6 +20,7 @@ export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
     const { set } = callbackHelpers;
     set(webChatTrafficState(projectId), []);
+    set(webChatInspectionDataState(projectId), undefined); // clear the inspection panel
   });
 
   const setWebChatPanelVisibility = useRecoilCallback((callbackHelpers: CallbackInterface) => (value: boolean) => {

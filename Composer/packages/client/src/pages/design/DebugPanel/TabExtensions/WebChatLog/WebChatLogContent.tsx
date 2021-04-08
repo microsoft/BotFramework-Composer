@@ -7,6 +7,7 @@ import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react'
 import { useRecoilValue } from 'recoil';
 import { ConversationTrafficItem } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
+import debounce from 'lodash/debounce';
 
 import {
   dispatcherState,
@@ -63,9 +64,34 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     }
   };
 
+  const performInspection = useRef(
+    debounce((trafficItem: ConversationTrafficItem) => {
+      if (currentProjectId) {
+        if (trafficItem?.trafficType === 'network') {
+          // default to inspecting the request body
+          setWebChatInspectionData(currentProjectId, { item: trafficItem, mode: 'request' });
+        } else {
+          setWebChatInspectionData(currentProjectId, { item: trafficItem });
+        }
+      }
+    }, 500)
+  ).current;
+
+  const inspectLatestLogMessage = () => {
+    // inspect latest log message if nothing is being inspected
+    if (!inspectionData && currentProjectId) {
+      const sortedTraffic = [...rawWebChatTraffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
+      const latestTrafficItem = sortedTraffic.pop();
+      if (latestTrafficItem) {
+        performInspection(latestTrafficItem);
+      }
+    }
+  };
+
   useEffect(() => {
     if (navigateToLatestEntry && isActive) {
       navigateToNewestLogEntry();
+      inspectLatestLogMessage();
       navigateToLatestEntryWhenActive(false);
     }
   }, [isActive, navigateToLatestEntry]);
