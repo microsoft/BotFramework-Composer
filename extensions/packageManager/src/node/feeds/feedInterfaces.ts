@@ -32,10 +32,9 @@ export interface IPackageSource {
   key: string;
   text: string;
   url: string;
-  searchUrl?: string;
   readonly?: boolean;
-  defaultQuery?: IPackageQuery;
-  type?: PackageSourceType.NuGet | PackageSourceType.NPM;
+  defaultQuery: IPackageQuery;
+  type: PackageSourceType.NuGet | PackageSourceType.NPM;
 }
 
 /**
