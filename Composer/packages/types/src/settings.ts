@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { JSONSchema7Type } from 'json-schema';
+
 import type { PublishTarget } from './publish';
 
 export interface LibraryRef {
@@ -11,7 +13,7 @@ export interface LibraryRef {
 
 export type AdapterRecord = {
   name: string;
-  route: string;
+  route?: JSONSchema7Type;
   enabled: boolean;
 };
 
