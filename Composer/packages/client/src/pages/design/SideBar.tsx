@@ -77,7 +77,6 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const { commitChanges } = undoFunction;
-
   const {
     removeDialog,
     updateDialog,
@@ -247,6 +246,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   async function handleRemoveSkill(skillId: string) {
     // check if skill used in current project workspace
     const usedInBots = skillUsedInBotsMap[skillId];
+
     const confirmRemove = usedInBots.length
       ? await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subText, {
           onRenderContent: () => {

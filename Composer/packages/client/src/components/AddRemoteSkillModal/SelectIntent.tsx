@@ -127,10 +127,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const hasOrchestractor = useMemo(() => {
-    console.log(curRecognizers);
-
     const fileName = `${dialogId}.${locale}.lu.dialog`;
-    console.log(fileName);
     for (const file of curRecognizers) {
       if (file.id === fileName && file.content.$kind === SDKKinds.OrchestratorRecognizer) {
         return true;

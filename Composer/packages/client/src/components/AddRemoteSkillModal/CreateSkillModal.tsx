@@ -127,16 +127,20 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const handleSubmit = (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
-    addRemoteSkill(formData.manifestUrl, formData.endpointName).then(() => {
-      TelemetryClient.track('AddNewSkillCompleted');
-      const result = location.href.split('/');
-      let skillId = '';
-      if (result.length > 0) skillId = result[result.length - 1];
-      // add trigger with connect to skill action to root bot
-      const triggerFormData = getTriggerFormData(skillManifest.name, content);
-      addTriggerToRoot(dialogId, triggerFormData, skillId);
-      TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
-    });
+    addRemoteSkill(formData.manifestUrl, formData.endpointName)
+      .then(() => {
+        TelemetryClient.track('AddNewSkillCompleted');
+        const result = location.href.split('/');
+        let skillId = '';
+        if (result.length > 0) skillId = result[result.length - 1];
+        // add trigger with connect to skill action to root bot
+        const triggerFormData = getTriggerFormData(skillManifest.name, content);
+        addTriggerToRoot(dialogId, triggerFormData, skillId);
+        TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     if (enable) {
       // update recognizor type to orchestrator
