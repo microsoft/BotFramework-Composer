@@ -111,7 +111,7 @@ const AdapterModal = (props: Props) => {
                       ...currentSettings.runtimeSettings,
                       adapters: [
                         ...currentAdapters.filter((a) => a.name != adapterKey),
-                        { name: adapterKey, enabled: true, route: value.route },
+                        { name: adapterKey, enabled: true, route: value.route, type: value.type ?? adapterKey },
                       ],
                     },
                   });
