@@ -398,10 +398,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /* These methods provision resources to azure async */
     /*******************************************************************************************************************************/
     asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user): Promise<void> => {
-      const { subscription, name } = config;
+      const { runtimeLanguage } = parseRuntimeKey(project.settings?.runtime?.key);
+      const provisionConfig: ProvisionConfig = { ...config, workerRuntime: runtimeLanguage };
+
+      const { name } = provisionConfig;
+
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
-        ...config,
+        ...provisionConfig,
         logger: (msg: any) => {
           this.logger(msg);
           BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
@@ -411,26 +415,28 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // perform the provision using azureProvisioner.create.
       // this will start the process, then return.
       // However, the process will continue in the background
-      const provisionResults = await azureProvisioner.create(config);
+      const provisionResults = await azureProvisioner.create(provisionConfig);
 
       // cast this into the right form for a publish profile
       let currentProfile = null;
-      if (config.currentProfile) {
-        currentProfile = JSON.parse(config.currentProfile.configuration);
+      if (provisionConfig.currentProfile) {
+        currentProfile = JSON.parse(provisionConfig.currentProfile.configuration);
       }
       const currentSettings = currentProfile?.settings;
 
       const publishProfile = {
-        name: currentProfile?.name ?? config.hostname,
+        name: currentProfile?.name ?? provisionConfig.hostname,
         environment: currentProfile?.environment ?? 'composer',
         tenantId: provisionResults?.tenantId ?? currentProfile?.tenantId,
         subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
         resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
         botName: currentProfile?.botName ?? provisionResults.botName,
-        hostname: config.hostname ?? currentProfile?.hostname,
-        luisResource: provisionResults.luisPrediction ? `${config.hostname}-luis` : currentProfile?.luisResource,
+        hostname: provisionConfig.hostname ?? currentProfile?.hostname,
+        luisResource: provisionResults.luisPrediction
+          ? `${provisionConfig.hostname}-luis`
+          : currentProfile?.luisResource,
         runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
-        region: config.location,
+        region: provisionConfig.location,
         settings: {
           applicationInsights: {
             InstrumentationKey:
@@ -479,7 +485,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
 
       // add in history
-      this.addProvisionHistory(project.id, config.name, BackgroundProcessManager.getStatus(jobId));
+      this.addProvisionHistory(project.id, provisionConfig.name, BackgroundProcessManager.getStatus(jobId));
       BackgroundProcessManager.removeProcess(jobId);
     };
 
