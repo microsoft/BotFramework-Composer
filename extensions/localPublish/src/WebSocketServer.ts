@@ -75,8 +75,8 @@ export class WebSocketServer {
   public static sendRuntimeLogToSubscribers(projectId: string, standardOutput: string, standardError: string): void {
     this.sockets[projectId]?.send(
       JSON.stringify({
-        standardOutput: standardOutput ?? '',
-        standardError: standardError ?? '',
+        standardOutput: standardOutput,
+        standardError: standardError,
       })
     );
   }

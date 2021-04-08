@@ -123,8 +123,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
     WebSocketServer.sendRuntimeLogToSubscribers(
       botId,
-      LocalPublisher.runningBots[botId].result.runtimeLog,
-      LocalPublisher.runningBots[botId].result.runtimeError
+      LocalPublisher.runningBots[botId].result.runtimeLog ?? '',
+      LocalPublisher.runningBots[botId].result.runtimeError ?? ''
     );
   };
 
