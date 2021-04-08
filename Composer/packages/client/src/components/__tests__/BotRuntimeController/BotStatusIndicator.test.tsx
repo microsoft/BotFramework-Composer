@@ -4,7 +4,7 @@
 import * as React from 'react';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
-import { botRuntimeErrorState, botStatusState } from '../../../recoilModel';
+import { botBuildTimeErrorState, botStatusState } from '../../../recoilModel';
 import { BotStatus, BotStatusesCopy } from '../../../constants';
 import { BotStatusIndicator } from '../../BotRuntimeController/BotStatusIndicator';
 
@@ -41,7 +41,7 @@ describe('<BotStatusIndicator />', () => {
   it('should show error if bot start failed', async () => {
     const { findByText } = renderWithRecoil(<BotStatusIndicator projectId={projectId} />, ({ set }) => {
       set(botStatusState(projectId), BotStatus.failed);
-      set(botRuntimeErrorState(projectId), {
+      set(botBuildTimeErrorState(projectId), {
         title: 'Error',
         message: 'Failed to bind to port 3979',
       });

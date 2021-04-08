@@ -602,9 +602,6 @@
   "cannot_parse_attachment_c3e552a5": {
     "message": "Cannot parse attachment."
   },
-  "cannot_post_activity_conversation_not_found_c1e26d2d": {
-    "message": "Cannot post activity. Conversation not found."
-  },
   "cannot_upload_file_conversation_not_found_8a983504": {
     "message": "Cannot upload file. Conversation not found."
   },
@@ -2483,6 +2480,9 @@
   "no_uploads_were_attached_as_a_part_of_the_request_63e92f54": {
     "message": "No uploads were attached as a part of the request."
   },
+  "no_web_chat_activity_yet_4227dc1a": {
+    "message": "No Web Chat activity yet."
+  },
   "no_wildcard_ff439e76": {
     "message": "no wildcard"
   },
@@ -3955,9 +3955,6 @@
   },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
-  },
-  "webchat_inspector_4d0dfeb7": {
-    "message": "Webchat Inspector"
   },
   "webchat_log_b7213a9e": {
     "message": "Webchat log."

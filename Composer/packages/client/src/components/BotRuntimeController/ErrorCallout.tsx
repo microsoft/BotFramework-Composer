@@ -3,19 +3,16 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
+import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
+
+import { getDefaultFontSettings } from '../../recoilModel/utils/fontUtil';
 
 // -------------------- Styles -------------------- //
 
 const calloutLabel = css`
-  font-size: ${FontSizes.size18};
   font-weight: ${FontWeights.bold};
-`;
-
-const calloutContainer = css`
-  padding: 10px;
 `;
 
 const calloutDescription = css`
@@ -81,6 +78,8 @@ fieldsWhiteList.set('code', { visible: false, name: 'code' });
 fieldsWhiteList.set('signal', { visible: false, name: 'signal' });
 fieldsWhiteList.set('stderr', { visible: false, name: 'stderr' });
 
+const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
+
 export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   const { error } = props;
 
@@ -137,7 +136,15 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   };
 
   return (
-    <div css={calloutContainer} data-testid="runtime-error-callout">
+    <div
+      css={{
+        padding: '10px',
+        fontSize: `${DEFAULT_FONT_SETTINGS.fontSize}`,
+        fontFamily: `${DEFAULT_FONT_SETTINGS.fontSize}`,
+        color: `${SharedColors.red10}`,
+      }}
+      data-testid="runtime-error-callout"
+    >
       <p css={calloutLabel}>{error.title}</p>
       <p css={calloutDescription}>
         {buildErrorMessage(error)}

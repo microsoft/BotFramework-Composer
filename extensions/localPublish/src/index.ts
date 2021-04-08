@@ -18,6 +18,8 @@ import killPort from 'kill-port';
 import map from 'lodash/map';
 import * as tcpPortUsed from 'tcp-port-used';
 
+import { WebSocketServer } from './WebSocketServer';
+
 const removeDirAndFiles = promisify(rimraf);
 const mkdir = promisify(fs.mkdir);
 const readFile = promisify(fs.readFile);
@@ -32,6 +34,7 @@ interface RunningBot {
   result: {
     message: string;
     runtimeLog?: string;
+    runtimeError?: string;
   };
 }
 interface PublishConfig {
@@ -94,20 +97,35 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         message: data.result.message,
       };
     }
-
     LocalPublisher.runningBots[botId] = updatedBotData;
   };
 
-  private appendRuntimeLogs = (botId: string, newContent: string) => {
+  private appendRuntimeLogs = (botId: string, newContent: string, logType: 'stdout' | 'stderr' = 'stdout') => {
     const botData = LocalPublisher.runningBots[botId];
-    const runtimeLog = botData.result.runtimeLog ? botData.result.runtimeLog + newContent : newContent;
-    LocalPublisher.runningBots[botId] = {
-      ...botData,
-      result: {
-        ...botData.result,
-        runtimeLog,
-      },
-    };
+    if (logType === 'stdout') {
+      const runtimeLog = botData.result.runtimeLog ? botData.result.runtimeLog + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeLog,
+        },
+      };
+    } else {
+      const runtimeError = botData.result.runtimeError ? botData.result.runtimeError + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeError: runtimeError,
+        },
+      };
+    }
+    WebSocketServer.sendRuntimeLogToSubscribers(
+      botId,
+      LocalPublisher.runningBots[botId].result.runtimeLog,
+      LocalPublisher.runningBots[botId].result.runtimeError
+    );
   };
 
   private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
@@ -188,6 +206,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
+    const runtimeLogStreamingUrl = WebSocketServer.getRuntimeLogStreamingUrl(botId);
     if (LocalPublisher.runningBots[botId]) {
       if (LocalPublisher.runningBots[botId].status === 200) {
         const port = LocalPublisher.runningBots[botId].port;
@@ -197,13 +216,14 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           result: {
             message: 'Running',
             endpointURL: url,
-            runtimeLog: LocalPublisher.runningBots[botId].result.runtimeLog,
+            runtimeLogStreamingUrl,
           },
         };
       } else {
         const publishResult = {
           status: LocalPublisher.runningBots[botId].status,
           result: LocalPublisher.runningBots[botId].result,
+          runtimeLogStreamingUrl,
         };
         if (LocalPublisher.runningBots[botId].status === 500) {
           // after we return the 500 status once, delete it out of the running bots list.
@@ -232,6 +252,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
     }
+  };
+
+  setupRuntimeLogServer = async (projectId: string) => {
+    await WebSocketServer.init();
+    return WebSocketServer.getRuntimeLogStreamingUrl(projectId);
   };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
@@ -494,7 +519,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     child.on('exit', (code) => {
       if (code !== 0) {
         logger('error on exit: %s, exit code %d', errOutput, code);
-        this.appendRuntimeLogs(botId, errOutput);
+        this.appendRuntimeLogs(botId, errOutput, 'stderr');
         this.setBotStatus(botId, {
           status: 500,
           result: { message: errOutput },

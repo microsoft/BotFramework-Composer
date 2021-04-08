@@ -51,11 +51,8 @@ export const BotRuntimeStatus = React.memo((props: BotRuntimeStatusProps) => {
 
       case BotStatus.connected: {
         if (isRunning) {
-          setTimeout(() => {
-            getPublishStatus(projectId, defaultPublishConfig);
-          }, pollingInterval);
+          return;
         }
-        setIntervalRunning(false);
         TelemetryClient.track('StartBotCompleted', { projectId, status: currentBotStatus });
         break;
       }

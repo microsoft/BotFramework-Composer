@@ -16,9 +16,11 @@ export function useBotOperations() {
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [trackedProjectIds, setProjectsToTrack] = useState<string[]>([]);
-  const { updateSettingsForSkillsWithoutManifest, resetBotRuntimeError, setBotStatus } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    updateSettingsForSkillsWithoutManifest,
+    resetBotRuntimeLog: resetBotRuntimeError,
+    setBotStatus,
+  } = useRecoilValue(dispatcherState);
 
   const handleBotStart = async (
     projectId: string,

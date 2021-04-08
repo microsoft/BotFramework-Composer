@@ -4,7 +4,7 @@
 import * as React from 'react';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
-import { botRuntimeErrorState, botRuntimeLogState } from '../../../recoilModel';
+import { botBuildTimeErrorState } from '../../../recoilModel';
 import { RuntimeOutputLog } from '../DebugPanel/TabExtensions/RuntimeOutputLog/RuntimeOutputLog';
 const projectId = '123-avw';
 
@@ -21,7 +21,7 @@ describe('<RuntimeLog />', () => {
 
     it('should render Runtime errors', async () => {
       const { findByText } = renderWithRecoil(<RuntimeOutputLog projectId={projectId} />, ({ set }) => {
-        set(botRuntimeErrorState(projectId), {
+        set(botBuildTimeErrorState(projectId), {
           message: '.NET 3.1 needs to be installed',
           title: '.NET runtime error',
         });
