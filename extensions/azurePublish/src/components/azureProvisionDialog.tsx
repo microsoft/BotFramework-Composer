@@ -367,10 +367,10 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const getTokenForTenant = (tenantId: string) => {
-    // set tenantId in cache.
-    setTenantId(tenantId);
     getARMTokenForTenant(tenantId)
       .then((token) => {
+        // set tenantId in cache only after a token is received
+        setTenantId(tenantId);
         setToken(token);
         const decoded = decodeToken(token);
         setCurrentUser({
