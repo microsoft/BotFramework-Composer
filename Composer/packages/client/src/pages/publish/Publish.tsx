@@ -143,6 +143,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       changePublishTarget(publishTargetName, currentBotStatus);
       setCheckedSkillIds([projectId]);
       onPublish();
+      window.history.replaceState(null, '', props.location?.pathname);
     }
   }, [publishTargetName, botStatusList]);
 
