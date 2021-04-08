@@ -8,7 +8,7 @@ import { BotProjectDeployLoggerType } from './types';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
 import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
 import { AzureResourceTypes } from './resourceTypes';
-import { createCustomizeError, ProvisionErrors, stringifyError } from './utils/errorHandler';
+import { createCustomizeError, ProvisionErrors } from './utils/errorHandler';
 
 export interface ProvisionConfig {
   accessToken: string;
@@ -242,7 +242,7 @@ export class BotProjectProvision {
     try {
       // ensure a tenantId is available.
       if (!this.tenantId) {
-        this.tenantId = await this.getTenantId();
+        this.tenantId = config.tenantId ?? (await this.getTenantId());
       }
 
       // tokenCredentials is used for authentication across the API calls

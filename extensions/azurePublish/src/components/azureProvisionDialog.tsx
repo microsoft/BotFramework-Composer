@@ -1032,6 +1032,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
                 onSubmit({
+                  tenantId: formData.tenantId,
                   subscription: formData.subscriptionId,
                   resourceGroup: formData.resourceGroup,
                   hostname: formData.hostname,
