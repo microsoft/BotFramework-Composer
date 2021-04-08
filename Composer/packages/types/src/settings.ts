@@ -14,6 +14,7 @@ export interface LibraryRef {
 export type AdapterRecord = {
   name: string;
   route?: JSONSchema7Type;
+  type?: JSONSchema7Type;
   enabled: boolean;
 };
 
