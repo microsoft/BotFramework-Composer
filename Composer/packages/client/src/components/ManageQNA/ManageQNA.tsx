@@ -526,7 +526,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         hidden={props.hidden}
         minWidth={480}
         modalProps={{
-          isBlocking: false,
+          isBlocking: true,
         }}
         onDismiss={props.onDismiss}
       >

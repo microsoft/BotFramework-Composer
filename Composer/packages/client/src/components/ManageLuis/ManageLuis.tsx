@@ -599,7 +599,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
         hidden={props.hidden}
         minWidth={480}
         modalProps={{
-          isBlocking: false,
+          isBlocking: true,
         }}
         onDismiss={props.onDismiss}
       >
