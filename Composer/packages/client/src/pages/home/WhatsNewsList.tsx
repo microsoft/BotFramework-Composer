@@ -17,7 +17,7 @@ export function WhatsNewsList({ newsList }: WhatsNewsListProps): JSX.Element {
   return (
     <div aria-label={formatMessage("What's new list")} css={home.whatsNewsContainer} role="region">
       <h3 css={home.subtitle}>{formatMessage("What's new")}</h3>
-      <div css={home.whatsNewsContainer}>
+      <div css={home.whatsNewsList}>
         {newsList.map(({ title, description, url }, index) => {
           return (
             <Fragment key={index}>

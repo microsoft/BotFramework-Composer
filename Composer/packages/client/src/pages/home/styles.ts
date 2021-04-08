@@ -31,14 +31,9 @@ export const leftPage = css`
 
 export const rightPage = css`
   flex: 1;
-  padding: 25px;
-  margin-bottom: 55px;
+  padding-right: 25px;
   display: flex;
   flex-direction: column;
-  background: #f6f6f6;
-  @media (max-width: 1366px) {
-    background: none;
-  }
 `;
 
 export const title = css`
@@ -77,16 +72,24 @@ export const gap40 = css`
   margin-top: 40px;
 `;
 
+export const tabRowContainer = css`
+  flex-wrap: wrap;
+  display: flex;
+`;
+
 export const itemContainerWrapper = (disabled?: boolean) => css`
   border-radius: 2px;
   border-width: 0;
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
   min-width: 244px;
-  height: 185px;
+  height: auto;
   width: 17vw;
   margin-right: 12px;
   padding: 0;
+  @media (max-width: 1366px) {
+    width: 22vw;
+  }
 `;
 
 export const itemContainer = css`
@@ -167,9 +170,10 @@ export const botContainer = css`
   margin-top: 24px;
 `;
 
-const baseBotItem = {
+export const cardItem = {
   container: css`
-    padding: 8px;
+    margin: 12px 0 12px 12px;
+    padding: 12px;
     text-align: left;
     border: 1px #efedeb solid;
     box-shadow: ${Depths.depth4};
@@ -183,19 +187,22 @@ const baseBotItem = {
       box-shadow: ${Depths.depth0};
     }
   `,
-};
-
-export const cardItem = {
-  ...baseBotItem,
   title: css`
     font-weight: ${FontWeights.semibold};
     color: ${NeutralColors.gray160};
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   `,
   imageCover: css`
     width: 53px;
     height: 48px;
-    margin: 2px 0 12px 0;
+    margin-bottom: 12px;
+    position: relative;
+    .image-cover-img {
+      display: flex;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
   `,
   content: css`
     color: ${NeutralColors.gray140};
@@ -205,34 +212,51 @@ export const cardItem = {
     overflow: hidden;
     min-height: 34px;
     -webkit-box-orient: vertical;
-    margin-bottom: 16px;
   `,
   moreLink: css`
+    margin-top: 12px;
     color: #0078d4;
   `,
 };
 
 export const mediaCardItem = {
   ...cardItem,
-  title: css`
-    ${cardItem.title};
-    margin-bottom: 6px;
-  `,
   imageCover: css`
+    ${cardItem.imageCover}
     width: 100%;
     height: 95px;
-    margin: 4px 0 12px 0;
+    margin-bottom: 12px;
+    overflow: hidden;
     display: flex;
+    .image-cover-background {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: blur(5px);
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.7;
+    }
   `,
 };
 
 export const meidiaCardNoCoverItem = {
   ...mediaCardItem,
   imageCover: css`
+    ${mediaCardItem.imageCover};
+
+    position: relative;
     align-items: center;
     justify-content: center;
-    ${mediaCardItem.imageCover};
     background: ${NeutralColors.gray160};
+    .image-cover-background {
+      display: none;
+    }
+    .image-cover-img {
+      width: 53px;
+      height: 48px;
+    }
   `,
 };
 
@@ -261,7 +285,18 @@ export const detailListContainer = css`
 
 export const whatsNewsContainer = css`
   position: relative;
-  min-width: 200px;
+  flex: 1;
+  padding: 25px;
+  border-radius: 5px;
+  margin-bottom: 55px;
+  background: #f6f6f6;
+  @media (max-width: 1366px) {
+    background: none;
+    min-width: 200px;
+  }
+`;
+
+export const whatsNewsList = css`
   flex: 1;
 `;
 

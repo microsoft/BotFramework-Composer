@@ -141,8 +141,8 @@ const Home: React.FC<RouteComponentProps> = () => {
   ];
   return (
     <div css={home.outline}>
-      <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
       <div css={home.page}>
+        <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
         <div css={home.leftPage} role="main">
           <div css={home.leftContainer}>
             <h2 css={home.recentBotsTitle}>{formatMessage(`Recent Bots`)}</h2>
@@ -204,7 +204,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
-                    <div css={home.rowContainer}>
+                    <div css={home.tabRowContainer}>
                       {tab.cards.map((card, index) => (
                         <CardWidget
                           key={index}
