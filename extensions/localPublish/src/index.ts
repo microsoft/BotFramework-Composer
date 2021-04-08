@@ -402,6 +402,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
             detached: !isWin, // detach in non-windows
+            shell: isWin, // shell is required to spawn `.bat` and `.cmd` files on Windows
           }
         );
         this.composer.log('Started process %d', spawnProcess.pid);
