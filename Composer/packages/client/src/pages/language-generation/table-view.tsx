@@ -36,6 +36,8 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   file?: LgFile;
 }
 
+const adaptiveCardRegex = /-\s*```\s*.*([\s\S]*)\)\s*```/;
+
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, lgFileId, file } = props;
 
@@ -59,6 +61,21 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
+
+  const isAdaptiveCard = (item) => {
+    const capturedJSON = adaptiveCardRegex.exec(item.body);
+    let payload;
+    if (capturedJSON) {
+      try {
+        payload = JSON.parse(capturedJSON[1]);
+        if (payload.type === 'AdaptiveCard') {
+          return true;
+        }
+      } catch {
+        return false;
+      }
+    }
+  };
 
   //const [focusedIndex, setFocusedIndex] = useState(0);
 
@@ -180,6 +197,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
           },
         },
       ];
+
+      if (isAdaptiveCard(item)) {
+        buttons.push({
+          key: 'edit_adaptive_card',
+          name: formatMessage('Edit in Adaptive Cards Designer'),
+          onClick: () => {
+            navigateTo(
+              `/bot/${actualProjectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${item.name}`
+            );
+          },
+        });
+      }
 
       return buttons;
     },
