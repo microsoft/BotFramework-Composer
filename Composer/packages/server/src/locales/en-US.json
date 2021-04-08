@@ -458,9 +458,6 @@
   "boolean_value_98d39ea1": {
     "message": "Boolean value."
   },
-  "bot_416bf08d": {
-    "message": "bot"
-  },
   "bot_7926b66d": {
     "message": "Bot"
   },
@@ -544,12 +541,6 @@
   },
   "branch_if_else_391e5681": {
     "message": "Branch: If/else"
-  },
-  "branch_if_else_992cf9bf": {
-    "message": "Branch: If/Else"
-  },
-  "branch_if_else_f6a36f1d": {
-    "message": "Branch: if/else"
   },
   "branch_switch_multiple_options_95c6a326": {
     "message": "Branch: Switch (multiple options)"
@@ -863,9 +854,6 @@
   "create_a_new_luis_resource_b590482f": {
     "message": "Create a new LUIS resource"
   },
-  "create_a_new_qna_maker_resource_3f7da56b": {
-    "message": "Create a new QnA MAker resource"
-  },
   "create_a_new_qna_maker_resource_8c03ee9e": {
     "message": "Create a new QnA Maker resource"
   },
@@ -935,9 +923,6 @@
   "create_new_knowledge_base_d15d6873": {
     "message": "Create new knowledge base"
   },
-  "create_new_knowledge_base_e14d07a5": {
-    "message": "Create New Knowledge Base"
-  },
   "create_new_knowledge_base_from_scratch_638c4fd2": {
     "message": "Create new knowledge base from scratch"
   },
@@ -1001,9 +986,6 @@
   "date_modified_18beced9": {
     "message": "Date modified"
   },
-  "date_modified_e1c8ac8f": {
-    "message": "Date Modified"
-  },
   "date_or_time_d30bcc7d": {
     "message": "Date or time"
   },
@@ -1027,9 +1009,6 @@
   },
   "default_language_a976938d": {
     "message": "DEFAULT LANGUAGE"
-  },
-  "default_language_b11c37db": {
-    "message": "Default Language"
   },
   "default_recognizer_9c06c1a3": {
     "message": "Default recognizer"
@@ -1108,9 +1087,6 @@
   },
   "diagnostic_links_228dc6fe": {
     "message": "diagnostic links"
-  },
-  "diagnostic_list_29813310": {
-    "message": "Diagnostic list"
   },
   "diagnostic_list_89b39c2e": {
     "message": "Diagnostic List"
@@ -1310,8 +1286,8 @@
   "edit_source_45af68b4": {
     "message": "Edit source"
   },
-  "edit_this_intent_in_a_user_input_view_a_a3b304b": {
-    "message": "Edit this intent in<a>User Input view</a>"
+  "edit_this_intent_in_a_user_input_view_a_c75f4893": {
+    "message": "Edit this intent in<a>User input view</a>"
   },
   "edit_this_template_in_a_bot_response_view_a_7236985f": {
     "message": "Edit this template in<a>Bot Response view</a>"
@@ -1348,9 +1324,6 @@
   },
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
-  },
-  "enable_speech_e30d6a2a": {
-    "message": "Enable Speech"
   },
   "enable_speech_e4a16f1c": {
     "message": "Enable speech"
@@ -1469,8 +1442,8 @@
   "error_afac7133": {
     "message": "Error:"
   },
-  "error_encountered_when_getting_template_readme_17dcbc61": {
-    "message": "### Error encountered when getting template readMe"
+  "error_encountered_when_getting_template_readme_50d9abc": {
+    "message": "Error encountered when getting template readme"
   },
   "error_event_c079b608": {
     "message": "Error event"
@@ -1979,9 +1952,6 @@
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
   },
-  "item_actions_22d0242": {
-    "message": "Item Actions"
-  },
   "item_actions_cd903bde": {
     "message": "Item actions"
   },
@@ -2005,6 +1975,9 @@
   },
   "keys_must_be_unique_2028cef3": {
     "message": "Keys must be unique"
+  },
+  "kk_9b77a16e": {
+    "message": "Kk"
   },
   "knowledge_base_31e6868e": {
     "message": "Knowledge base"
@@ -2041,9 +2014,6 @@
   },
   "learn_about_adaptive_expressions_fb1b6c3c": {
     "message": "Learn about Adaptive expressions"
-  },
-  "learn_more_14816ec": {
-    "message": "Learn More."
   },
   "learn_more_a79a7918": {
     "message": "Learn more"
@@ -2177,9 +2147,6 @@
   "login_to_azure_c0cb057e": {
     "message": "Login to Azure"
   },
-  "loop_for_each_item_53eb7c5b": {
-    "message": "Loop: for each item"
-  },
   "loop_for_each_item_e09537ae": {
     "message": "Loop: For each item"
   },
@@ -2219,17 +2186,17 @@
   "luis_application_name_1530d3aa": {
     "message": "LUIS application name"
   },
+  "luis_authoring_key_2cfdf05": {
+    "message": "LUIS authoring key:"
+  },
   "luis_authoring_key_c8414499": {
     "message": "LUIS authoring key"
-  },
-  "luis_authoring_key_cfaba7dd": {
-    "message": "LUIS Authoring key:"
   },
   "luis_authoring_key_is_required_with_the_current_re_464f655e": {
     "message": "LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish"
   },
-  "luis_authoring_region_b142f97b": {
-    "message": "Luis Authoring Region"
+  "luis_authoring_region_a1d18730": {
+    "message": "Luis authoring region"
   },
   "luis_endpoint_key_c685e219": {
     "message": "LUIS endpoint key"
@@ -2588,9 +2555,6 @@
   "ok_c47544a2": {
     "message": "OK"
   },
-  "ok_ff1b646a": {
-    "message": "Ok"
-  },
   "okay_1772bbeb": {
     "message": "Okay"
   },
@@ -2777,8 +2741,8 @@
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
   },
-  "project_settings_bb885d3e": {
-    "message": "Project Settings"
+  "project_settings_42fe3f68": {
+    "message": "Project settings"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "Prompt Configurations"
@@ -2930,14 +2894,11 @@
   "qna_navigation_pane_b79ebcbf": {
     "message": "Qna Navigation Pane"
   },
-  "qna_region_5a864ef8": {
-    "message": "QnA Region"
-  },
   "qna_region_5d2a4bce": {
     "message": "QnA region"
   },
-  "qna_subscription_key_ed72a47": {
-    "message": "QNA Subscription key:"
+  "qna_subscription_key_207418bd": {
+    "message": "QNA subscription key:"
   },
   "question_9121487": {
     "message": "Question"
@@ -3067,9 +3028,6 @@
   },
   "required_5f7ef8c0": {
     "message": "Required"
-  },
-  "required_a6089a96": {
-    "message": "required"
   },
   "required_properties_dfb0350d": {
     "message": "Required properties"
@@ -3250,9 +3208,6 @@
   },
   "select_manifest_version_4f5b1230": {
     "message": "Select manifest version"
-  },
-  "select_one_8e0af564": {
-    "message": "Select One"
   },
   "select_one_b647b384": {
     "message": "Select one"
@@ -3476,9 +3431,6 @@
   "start_bot_1da1ebf4": {
     "message": "Start bot"
   },
-  "start_bot_25ecad14": {
-    "message": "Start Bot"
-  },
   "start_bot_failed_d75647d5": {
     "message": "Start bot failed"
   },
@@ -3505,9 +3457,6 @@
   },
   "step_of_setlength_43c73821": {
     "message": "{ step } of { setLength }"
-  },
-  "stop_bot_866e8976": {
-    "message": "Stop Bot"
   },
   "stop_bot_be23cf96": {
     "message": "Stop bot"
@@ -3662,14 +3611,17 @@
   "the_user_input_page_is_where_the_language_understa_c9262f3f": {
     "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."
   },
-  "there_are_no_kind_properties_e299287e": {
-    "message": "There are no { kind } properties."
-  },
   "there_are_no_notifications_e81eab8d": {
     "message": "There are no notifications."
   },
+  "there_are_no_optional_properties_b664c20f": {
+    "message": "There are no optional properties."
+  },
   "there_are_no_preview_features_at_this_time_a5c40953": {
     "message": "There are no preview features at this time."
+  },
+  "there_are_no_required_properties_ba214ac5": {
+    "message": "There are no required properties."
   },
   "there_is_no_original_view_63a2eaed": {
     "message": "There is no original view"
@@ -3929,9 +3881,6 @@
   "update_scripts_a3a483e": {
     "message": "Update scripts"
   },
-  "update_scripts_c58771a2": {
-    "message": "Update Scripts"
-  },
   "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
     "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
   },
@@ -3967,9 +3916,6 @@
   },
   "user_input_673e4a89": {
     "message": "User input"
-  },
-  "user_input_a6ff658d": {
-    "message": "User Input"
   },
   "user_input_and_bot_responses_2a9b67b1": {
     "message": "User input and bot responses"
