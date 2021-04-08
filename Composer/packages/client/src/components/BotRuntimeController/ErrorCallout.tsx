@@ -134,11 +134,9 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
       return <div>{parsed.map(renderRow)}</div>;
     }
   };
-
   return (
     <div
       css={{
-        padding: '10px',
         fontSize: `${DEFAULT_FONT_SETTINGS.fontSize}`,
         fontFamily: `${DEFAULT_FONT_SETTINGS.fontSize}`,
         color: `${SharedColors.red10}`,

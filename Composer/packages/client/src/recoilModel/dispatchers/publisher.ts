@@ -27,7 +27,6 @@ import {
 import * as luUtil from '../../utils/luUtil';
 import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
-import { checkIfDotnetVersionMissing, missingDotnetVersionError } from '../../utils/runtimeErrors';
 import { RuntimeOutputData } from '../types';
 
 import { BotStatus, Text } from './../../constants';
@@ -126,7 +125,7 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.starting);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botBuildTimeErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
+        set(botBuildTimeErrorState(projectId), { ...data, title: formatMessage('Error occured building the bot') });
       }
     }
 
@@ -196,11 +195,7 @@ export const publisherDispatcher = () => {
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
-        if (checkIfDotnetVersionMissing(err?.response?.data)) {
-          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, missingDotnetVersionError, target, projectId);
-        } else {
-          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
-        }
+        await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
       }
     }
   );

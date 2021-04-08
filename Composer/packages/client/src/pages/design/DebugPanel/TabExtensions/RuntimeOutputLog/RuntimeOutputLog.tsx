@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { default as AnsiUp } from 'ansi_up';
 import { useEffect, useRef } from 'react';
 import sanitizeHtml from 'sanitize-html';
+import formatMessage from 'format-message';
 
 import { botBuildTimeErrorState, dispatcherState, runtimeStandardOutputDataState } from '../../../../../recoilModel';
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
@@ -16,6 +17,13 @@ import { ErrorCallout } from '../../../../../components/BotRuntimeController/Err
 import { checkIfDotnetVersionMissing, missingDotnetVersionError } from '../../../../../utils/runtimeErrors';
 import { BotStartError } from '../../../../../recoilModel/types';
 import { Text } from '../../../../../constants';
+
+const genericErrorMessage = () => {
+  return {
+    message: 'Runtime Log',
+    summary: formatMessage('Error occured trying to fetch runtime standard output'),
+  };
+};
 
 const ansiUp = new AnsiUp();
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
@@ -27,7 +35,7 @@ const createMarkup = (txt: string) => {
 export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId }) => {
   const runtimeData = useRecoilValue(runtimeStandardOutputDataState(projectId));
   const botBuildErrors = useRecoilValue(botBuildTimeErrorState(projectId));
-  const { setRuntimeStandardOutputData } = useRecoilValue(dispatcherState);
+  const { setRuntimeStandardOutputData, setApplicationLevelError } = useRecoilValue(dispatcherState);
 
   const runtimeLogsContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,7 +51,9 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
     const setupLogConnection = async () => {
       try {
         const runtimeStreamUrl = await httpClient.get(`/publish/runtimeLogUrl/${projectId}`);
+
         runtimeTrafficChannel.current = new WebSocket(runtimeStreamUrl.data);
+
         if (runtimeTrafficChannel.current) {
           runtimeTrafficChannel.current.onmessage = (event) => {
             try {
@@ -72,12 +82,12 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
                 standardOutput: data.standardOutput,
               });
             } catch (ex) {
-              // // No need handle the exception here. The old state can continue to exist.
+              setApplicationLevelError(genericErrorMessage());
             }
           };
         }
       } catch (ex) {
-        // No need handle the exception here. The Outputs window would be empty
+        setApplicationLevelError(genericErrorMessage());
       }
     };
 
@@ -98,7 +108,7 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
         height: 'calc(100% - 25px)',
         display: 'flex',
         flexDirection: 'column',
-        padding: '15px 24px',
+        padding: '10px 16px',
         fontSize: DEFAULT_FONT_SETTINGS.fontSize,
         fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
         color: `${NeutralColors.black}`,
@@ -106,7 +116,7 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
         overflowY: 'auto',
         overflowX: 'hidden',
       }}
-      data-testid="Runtime-Output-Logs"
+      data-testid="runtime-output-logs"
     >
       {runtimeData.standardOutput && (
         <div
@@ -118,10 +128,11 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
           }}
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={createMarkup(runtimeData.standardOutput)}
+          data-testid="runtime-standard-output"
         />
       )}
       {botBuildErrors && <ErrorCallout error={botBuildErrors} />}
-      {runtimeData.standardError && <ErrorCallout error={botBuildErrors} />}
+      {runtimeData.standardError && <ErrorCallout error={runtimeData.standardError} />}
     </div>
   );
 };

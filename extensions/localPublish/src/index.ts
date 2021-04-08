@@ -519,7 +519,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     child.on('exit', (code) => {
       if (code !== 0) {
         logger('error on exit: %s, exit code %d', errOutput, code);
-        this.appendRuntimeLogs(botId, errOutput, 'stderr');
+        if (LocalPublisher.runningBots[botId].status === 200) {
+          this.appendRuntimeLogs(botId, errOutput, 'stderr');
+        }
         this.setBotStatus(botId, {
           status: 500,
           result: { message: errOutput },
