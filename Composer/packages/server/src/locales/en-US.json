@@ -1130,6 +1130,9 @@
   "dialog_cancelled_cancel_dialog_event_3eba3d7e": {
     "message": "Dialog cancelled (Cancel dialog event)"
   },
+  "dialog_d99c0378": {
+    "message": "Dialog"
+  },
   "dialog_data_61d5539b": {
     "message": "Dialog data"
   },
@@ -1172,8 +1175,8 @@
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
   },
-  "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  other {# bots}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
+    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
     "message": "Dialogs, triggers, and actions"
@@ -1487,6 +1490,9 @@
   "error_provisioning_25835400": {
     "message": "Error provisioning."
   },
+  "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
+    "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
+  },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
   },
@@ -1549,6 +1555,9 @@
   },
   "external_services_da7820ce": {
     "message": "External services"
+  },
+  "external_skill_73e16d25": {
+    "message": "External skill"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs."
@@ -1646,6 +1655,9 @@
   "form_b674666c": {
     "message": "form"
   },
+  "form_dialog_7327a4ff": {
+    "message": "Form dialog"
+  },
   "form_dialog_error_ba7c37fe": {
     "message": "Form dialog error"
   },
@@ -1658,8 +1670,14 @@
   "form_editor_7c2b02f0": {
     "message": "form editor"
   },
+  "form_field_8566629d": {
+    "message": "Form field"
+  },
   "form_title_baf85c7e": {
     "message": "form title"
+  },
+  "form_trigger_e8828303": {
+    "message": "Form trigger"
   },
   "form_wide_operations_1c1a73eb": {
     "message": "form-wide operations"
@@ -2051,6 +2069,9 @@
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
   },
+  "lg_e6ee5b4a": {
+    "message": "LG"
+  },
   "lg_editor_ee0184e6": {
     "message": "LG editor"
   },
@@ -2158,6 +2179,9 @@
   },
   "looping_ddae56ff": {
     "message": "Looping"
+  },
+  "lu_15572a02": {
+    "message": "LU"
   },
   "lu_editor_d09fb2b0": {
     "message": "LU editor"
@@ -2815,6 +2839,9 @@
   },
   "provision_failure_983d3844": {
     "message": "Provision failure"
+  },
+  "provision_partially_completed_b0120a72": {
+    "message": "Provision partially completed"
   },
   "provision_success_d6a6e437": {
     "message": "Provision success"
@@ -3722,6 +3749,9 @@
   "tips_80d0da2b": {
     "message": "tips"
   },
+  "title_connection_eaec11f8": {
+    "message": "{ title } connection"
+  },
   "title_ee03d132": {
     "message": "Title"
   },
@@ -3784,6 +3814,12 @@
   },
   "train_your_language_model_ee4cec6a": {
     "message": "Train your language model"
+  },
+  "trigger_f0ee1fbf": {
+    "message": "Trigger"
+  },
+  "trigger_group_79a00ac6": {
+    "message": "Trigger group"
   },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
     "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
@@ -3985,6 +4021,9 @@
   },
   "warning_aacb8c24": {
     "message": "Warning"
+  },
+  "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
+    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"

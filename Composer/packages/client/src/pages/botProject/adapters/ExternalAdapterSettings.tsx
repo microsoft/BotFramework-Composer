@@ -76,9 +76,9 @@ const ExternalAdapterSettings = (props: Props) => {
             <div css={tableRowItem(columnSizes[0])} role="cell">
               {title}
             </div>
-            <div css={tableRowItem(columnSizes[2])} role="cell">
+            <div css={tableRowItem(columnSizes[1])} role="cell">
               <Toggle
-                ariaLabel={formatMessage('Enable')}
+                ariaLabel={formatMessage('{title} connection', { title })}
                 checked={keyEnabled}
                 data-testid={`toggle_${key}`}
                 disabled={!keyConfigured}
@@ -101,8 +101,7 @@ const ExternalAdapterSettings = (props: Props) => {
                 }}
               />
             </div>
-
-            <div css={tableRowItem(columnSizes[1])} role="cell">
+            <div css={tableRowItem(columnSizes[2])} role="cell">
               <Link key={key} onClick={() => openModal(key, packageName)}>
                 {formatMessage('Configure')}
               </Link>

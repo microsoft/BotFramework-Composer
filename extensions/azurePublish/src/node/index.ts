@@ -411,72 +411,73 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // perform the provision using azureProvisioner.create.
       // this will start the process, then return.
       // However, the process will continue in the background
-      try {
-        const provisionResults = await azureProvisioner.create(config);
-        // GOT PROVISION RESULTS!
-        // cast this into the right form for a publish profile
+      const provisionResults = await azureProvisioner.create(config);
 
-        let currentProfile = null;
-        if (config.currentProfile) {
-          currentProfile = JSON.parse(config.currentProfile.configuration);
-        }
-        const currentSettings = currentProfile?.settings;
-
-        const publishProfile = {
-          name: currentProfile?.name ?? config.hostname,
-          environment: currentProfile?.environment ?? 'composer',
-          tenantId: provisionResults?.tenantId ?? currentProfile?.tenantId,
-          subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
-          resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
-          botName: currentProfile?.botName ?? provisionResults.botName,
-          hostname: config.hostname ?? currentProfile?.hostname,
-          luisResource: provisionResults.luisPrediction ? `${config.hostname}-luis` : currentProfile?.luisResource,
-          runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
-          region: config.location,
-          settings: {
-            applicationInsights: {
-              InstrumentationKey:
-                provisionResults.appInsights?.instrumentationKey ??
-                currentSettings?.applicationInsights?.InstrumentationKey,
-            },
-            cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
-            blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
-            luis: {
-              authoringKey: provisionResults.luisAuthoring?.authoringKey ?? currentSettings?.luis?.authoringKey,
-              authoringEndpoint:
-                provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
-              endpointKey: provisionResults.luisPrediction?.endpointKey ?? currentSettings?.luis?.endpointKey,
-              endpoint: provisionResults.luisPrediction?.endpoint ?? currentSettings?.luis?.endpoint,
-              region: provisionResults.luisPrediction?.location ?? currentSettings?.luis?.region,
-            },
-            qna: {
-              subscriptionKey: provisionResults.qna?.subscriptionKey ?? currentSettings?.qna?.subscriptionKey,
-              qnaRegion: provisionResults.qna?.region ?? currentSettings?.qna?.qnaRegion,
-            },
-            MicrosoftAppId: provisionResults.appId ?? currentSettings?.MicrosoftAppId,
-            MicrosoftAppPassword: provisionResults.appPassword ?? currentSettings?.MicrosoftAppPassword,
-          },
-        };
-        for (const configUnit in currentProfile) {
-          if (!(configUnit in publishProfile)) {
-            publishProfile[configUnit] = currentProfile[configUnit];
-          }
-        }
-
-        this.logger(publishProfile);
-
-        BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!', publishProfile);
-      } catch (error) {
-        BackgroundProcessManager.updateProcess(
-          jobId,
-          500,
-          `${stringifyError(error)}
-        detail message can see ${getProvisionLogName(name)} in your bot folder`
-        );
-        // save provision history to log file.
-        const provisionHistoryPath = path.resolve(project.dataDir, getProvisionLogName(name));
-        await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
+      // cast this into the right form for a publish profile
+      let currentProfile = null;
+      if (config.currentProfile) {
+        currentProfile = JSON.parse(config.currentProfile.configuration);
       }
+      const currentSettings = currentProfile?.settings;
+
+      const publishProfile = {
+        name: currentProfile?.name ?? config.hostname,
+        environment: currentProfile?.environment ?? 'composer',
+        tenantId: provisionResults?.tenantId ?? currentProfile?.tenantId,
+        subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
+        resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
+        botName: currentProfile?.botName ?? provisionResults.botName,
+        hostname: config.hostname ?? currentProfile?.hostname,
+        luisResource: provisionResults.luisPrediction ? `${config.hostname}-luis` : currentProfile?.luisResource,
+        runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
+        region: config.location,
+        settings: {
+          applicationInsights: {
+            InstrumentationKey:
+              provisionResults.appInsights?.instrumentationKey ??
+              currentSettings?.applicationInsights?.InstrumentationKey,
+          },
+          cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
+          blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
+          luis: {
+            authoringKey: provisionResults.luisAuthoring?.authoringKey ?? currentSettings?.luis?.authoringKey,
+            authoringEndpoint:
+              provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
+            endpointKey: provisionResults.luisPrediction?.endpointKey ?? currentSettings?.luis?.endpointKey,
+            endpoint: provisionResults.luisPrediction?.endpoint ?? currentSettings?.luis?.endpoint,
+            region: provisionResults.luisPrediction?.location ?? currentSettings?.luis?.region,
+          },
+          qna: {
+            subscriptionKey: provisionResults.qna?.subscriptionKey ?? currentSettings?.qna?.subscriptionKey,
+            qnaRegion: provisionResults.qna?.region ?? currentSettings?.qna?.qnaRegion,
+          },
+          MicrosoftAppId: provisionResults.appId ?? currentSettings?.MicrosoftAppId,
+          MicrosoftAppPassword: provisionResults.appPassword ?? currentSettings?.MicrosoftAppPassword,
+        },
+      };
+      for (const configUnit in currentProfile) {
+        if (!(configUnit in publishProfile)) {
+          publishProfile[configUnit] = currentProfile[configUnit];
+        }
+      }
+
+      this.logger(publishProfile);
+
+      if (provisionResults.success) {
+        BackgroundProcessManager.updateProcess(jobId, 200, 'Provisioning completed successfully!', publishProfile);
+      } else {
+        const partialSuccess = provisionResults.provisionedCount > 0;
+        const errorCode = partialSuccess ? 206 : 500;
+        let message = `${provisionResults.errorMessage}. See ${getProvisionLogName(name)} in your bot folder`;
+        if (partialSuccess) {
+          message = `Provisioning completed ${provisionResults.provisionedCount} items before encountering a problem. ${message}`;
+        }
+        BackgroundProcessManager.updateProcess(jobId, errorCode, message, partialSuccess ? publishProfile : undefined);
+      }
+      // save provision history to log file.
+      const provisionHistoryPath = path.resolve(project.dataDir, getProvisionLogName(name));
+      await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
+
       // add in history
       this.addProvisionHistory(project.id, config.name, BackgroundProcessManager.getStatus(jobId));
       BackgroundProcessManager.removeProcess(jobId);
