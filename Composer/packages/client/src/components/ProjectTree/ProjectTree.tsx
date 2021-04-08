@@ -7,15 +7,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { jsx, css } from '@emotion/core';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
-import {
-  DialogInfo,
-  ITrigger,
-  Diagnostic,
-  DiagnosticSeverity,
-  LanguageFileImport,
-  getFriendlyName,
-  Icons,
-} from '@bfc/shared';
+import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity, LanguageFileImport, getFriendlyName } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
@@ -284,10 +276,10 @@ export const ProjectTree: React.FC<Props> = ({
         >
           <TreeItem
             hasChildren
-            icon={isFormDialog ? Icons.FORM_DIALOG : Icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
+            itemType={isFormDialog ? 'form dialog' : 'dialog'}
             link={dialogLink}
             menu={options.showMenu ? menu : options.showQnAMenu ? [QnAMenuItem] : []}
             menuOpenCallback={setMenuOpen}
@@ -317,9 +309,9 @@ export const ProjectTree: React.FC<Props> = ({
       <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`}>
         <TreeItem
           hasChildren
-          icon={Icons.DIALOG}
           isActive={doesLinkMatch(dialogLink, selectedLink)}
           isMenuOpen={isMenuOpen}
+          itemType={'dialog'}
           link={dialogLink}
           menuOpenCallback={setMenuOpen}
           padLeft={depth * LEVEL_PADDING}
@@ -360,9 +352,9 @@ export const ProjectTree: React.FC<Props> = ({
         key={`${item.id}_${item.index}`}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
-        icon={Icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'trigger'}
         link={link}
         marginLeft={depth * INDENT_PER_LEVEL}
         menu={
@@ -437,6 +429,7 @@ export const ProjectTree: React.FC<Props> = ({
           hasChildren
           isMenuOpen={isMenuOpen}
           isSubItemActive={false}
+          itemType={'trigger group'}
           link={link}
           menuOpenCallback={setMenuOpen}
           showErrors={options.showErrors}
@@ -513,9 +506,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lg_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -542,9 +535,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lg_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -578,9 +571,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lu_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -607,9 +600,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lu_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={Icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -794,10 +787,10 @@ export const ProjectTree: React.FC<Props> = ({
           aria-label={formatMessage(
             `{
             dialogNum, plural,
-                =0 {No bots}
-                =1 {One bot}
-              other {# bots}
-            } have been found.
+                =0 {No bots have}
+                =1 {One bot has}
+              other {# bots have}
+            } been found.
             {
               dialogNum, select,
                   0 {}

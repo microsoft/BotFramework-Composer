@@ -24,6 +24,7 @@ export * from './luNameBuilder';
 export * from './promptTabs';
 export * from './resolverFactory';
 export * from './schemaUtils';
+export * from './settings';
 export * from './skillsUtils';
 export * from './viewUtils';
 export * from './walkerUtils';

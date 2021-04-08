@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { Diagnostic, Icons } from '@bfc/shared';
+import { Diagnostic } from '@bfc/shared';
 
 import { BotStatus } from '../../constants';
 import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSelector } from '../../recoilModel';
@@ -154,10 +154,10 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`}>
       <TreeItem
         hasChildren={!isRemote}
-        icon={isRemote ? Icons.EXTERNAL_SKILL : Icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
         isChildSelected={isChildDialogLinkSelected(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={isRemote ? 'external skill' : 'bot'}
         link={link}
         menu={options.showMenu ? menu : []}
         menuOpenCallback={setMenuOpen}
