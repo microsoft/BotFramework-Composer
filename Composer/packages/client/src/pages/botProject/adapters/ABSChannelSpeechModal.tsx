@@ -72,7 +72,7 @@ const ABSChannelSpeechModal = (props: Props) => {
               }
             }}
           >
-            {formatMessage('Enable speech')}
+            {formatMessage('Enable Speech')}
           </PrimaryButton>
           <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
         </DialogFooter>
