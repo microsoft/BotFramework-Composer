@@ -31,16 +31,17 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
   return { botPropertyData, botList };
 };
 
-const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string) => {
+const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string): string[] => {
+  const urls: string[] = [];
   for (const skillManifest of skillManifests || []) {
     for (const endpoint of skillManifest?.content?.endpoints || []) {
       if (endpoint?.msAppId === appId) {
-        return `https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`;
+        urls.push(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`);
       }
     }
   }
 
-  return undefined;
+  return urls;
 };
 
 export const generateBotStatusList = (
@@ -49,7 +50,7 @@ export const generateBotStatusList = (
   botPublishHistoryList: BotPublishHistory
 ): BotStatus[] => {
   const bots = botList.map((bot) => {
-    const botStatus: BotStatus = Object.assign({}, bot);
+    const botStatus: BotStatus = Object.assign({ skillManifestUrls: [] }, bot);
     const publishTargets: PublishTarget[] = botPropertyData[bot.id].publishTargets;
     const publishHistory = botPublishHistoryList[bot.id];
     if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
@@ -67,7 +68,7 @@ export const generateBotStatusList = (
         const config = JSON.parse(currentPublishTarget.configuration);
         const appId = config?.settings?.MicrosoftAppId;
         if (appId) {
-          botStatus.skillManifestUrl = findSkillManifestUrl(
+          botStatus.skillManifestUrls = findSkillManifestUrl(
             botPropertyData[bot.id].skillManifests,
             config.hostname,
             appId
