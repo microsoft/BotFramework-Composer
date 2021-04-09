@@ -147,6 +147,10 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     }
   };
 
+  const handleBack = () => {
+    setCurrentStep((current) => (current > 0 ? current - 1 : current));
+  };
+
   return (
     <Dialog
       dialogContentProps={{
@@ -186,6 +190,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             manifest={skillManifest}
             projectId={projectId}
             schema={schema}
+            selectedDialogs={selectedDialogs}
+            selectedTriggers={selectedTriggers}
             setErrors={setErrors}
             setSchema={setSchema}
             setSelectedDialogs={setSelectedDialogs}
@@ -217,6 +223,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                       manifest: skillManifest,
                       onDismiss: handleDismiss,
                       onNext: handleNext,
+                      onBack: handleBack,
                       onSave: handleSave,
                       onPublish: handleTriggerPublish,
                       onSubmit,

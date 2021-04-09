@@ -107,7 +107,7 @@ export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: st
   `;
 
   const linkButton = css`
-    color: #0078d4;
+    color: #323130;
     float: right;
     font-size: 12px;
     height: auto;
@@ -136,7 +136,7 @@ export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: st
                   {url}
                   <IconButton
                     iconProps={{ iconName: 'copy' }}
-                    styles={{ icon: { fontSize: '12px' } }}
+                    styles={{ icon: { fontSize: '12px', color: '#0078D4' } }}
                     onClick={() => navigator.clipboard.writeText(url)}
                   />
                 </div>

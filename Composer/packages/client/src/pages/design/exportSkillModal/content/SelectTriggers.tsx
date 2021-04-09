@@ -20,7 +20,7 @@ const getLabel = (kind: SDKKinds, uiSchema) => {
   return label || kind.replace('Microsoft.', '');
 };
 
-export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers, projectId }) => {
+export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSelectedTriggers, projectId }) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
@@ -80,16 +80,17 @@ export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers, pr
     },
   ];
 
-  const selection = useMemo(
-    () =>
-      new Selection({
-        onSelectionChanged: () => {
-          const selectedItems = selection.getSelection();
-          setSelectedTriggers(selectedItems);
-        },
-      }),
-    []
-  );
+  const selection = useMemo(() => {
+    const listSelection = new Selection({
+      onSelectionChanged: () => {
+        const selectedItems = listSelection.getSelection();
+        setSelectedTriggers(selectedItems);
+      },
+    });
+    listSelection.setItems(selectedTriggers);
+    listSelection.setAllSelected(true);
+    return listSelection;
+  }, []);
 
   return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
 };

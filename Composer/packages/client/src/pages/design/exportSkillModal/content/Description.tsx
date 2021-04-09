@@ -105,11 +105,16 @@ export const Description: React.FC<ContentProps> = ({
     () =>
       SCHEMA_URIS.map((key, index) => {
         const [version] = VERSION_REGEX.exec(key) || [];
-
+        let selected = false;
+        if ($schema) {
+          selected = $schema && key === $schema;
+        } else {
+          selected = !index;
+        }
         return {
           text: formatMessage('Version {version}', { version }),
           key,
-          selected: !index,
+          selected,
         };
       }),
     []
