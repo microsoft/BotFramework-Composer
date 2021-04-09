@@ -122,6 +122,10 @@ class StorageService {
     return this.storageConnections;
   };
 
+  public validatePath = (path: string) => {
+    return Path.isAbsolute(path) && fs.existsSync(path);
+  };
+
   public createFolder = (path: string) => {
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);

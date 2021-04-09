@@ -30,6 +30,7 @@ import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FileTypes, nameRegex } from '../../constants';
 import { StorageFolder, File } from '../../recoilModel/types';
 import { getFileIconName, calculateTimeDiff } from '../../utils/fileUtil';
+import httpClient from '../../utils/httpUtil';
 
 // -------------------- Styles -------------------- //
 
@@ -173,6 +174,17 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const [folderName, setFolderName] = useState('');
   const [editMode, setEditMode] = useState(EditMode.NONE);
   const [nameError, setNameError] = useState('');
+  const [pathError, setPathError] = useState('');
+
+  const validate = async (path) => {
+    const response = await httpClient.get(`/storages/validate/${encodeURI(path)}`);
+    console.log(response);
+    if (!response.data) {
+      setPathError('Invalid path');
+    } else {
+      setPathError('');
+    }
+  };
 
   useEffect(() => {
     setCurrentPath(initialPath);
@@ -475,16 +487,27 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     if (option) {
       onCurrentPathUpdate(option.key as string, storageId);
       setCurrentPath(option.key as string);
+      setPathError('');
     } else {
       onCurrentPathUpdate(value as string, storageId);
       setCurrentPath(value as string);
+      setPathError('');
     }
   };
 
   const updatePathPending = (option?: IComboBoxOption, index?: number, value?: string) => {
     if (!option && value) {
+      validate(value);
       setCurrentPath(value as string);
     }
+  };
+
+  const checkPath = () => {
+    return pathError
+      ? pathError
+      : operationMode.write && !focusedStorageFolder.writable
+      ? formatMessage('You do not have permission to save bots here')
+      : '';
   };
 
   return (
@@ -496,11 +519,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             useComboBoxAsMenuWidth
             autoComplete={'on'}
             data-testid={'FileSelectorComboBox'}
-            errorMessage={
-              operationMode.write && !focusedStorageFolder.writable
-                ? formatMessage('You do not have permission to save bots here')
-                : ''
-            }
+            errorMessage={checkPath()}
             label={formatMessage('Location')}
             options={breadcrumbItems}
             selectedKey={currentPath}
