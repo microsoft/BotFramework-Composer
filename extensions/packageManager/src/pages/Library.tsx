@@ -48,7 +48,12 @@ export interface PackageSourceFeed extends IDropdownOption {
   name: string;
   key: string;
   url: string;
-  searchUrl?: string;
+  type: string;
+  defaultQuery?: {
+    prerelease: boolean;
+    semVerLevel: string;
+    query: string;
+  };
   readonly?: boolean;
 }
 
@@ -444,10 +449,8 @@ const Library: React.FC = () => {
         telemetryClient.track('PackageSearch', { term: searchTerm });
 
         const response = await getSearchResults();
-        // if we are searching, but there is not a searchUrl, apply a local filter
-        if (!feeds.find((f) => f.key === feed)?.searchUrl) {
-          response.data.available = response.data.available.filter(applySearchTerm);
-        }
+        // if we are searching, apply a local filter
+        response.data.available = response.data.available.filter(applySearchTerm);
         updateAvailableLibraries(response.data.available);
         setRecentlyUsed(response.data.recentlyUsed);
       } else {

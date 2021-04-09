@@ -359,7 +359,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         await cognitiveServicesManagementClient.accounts.create(resourceGroupName, qnaMakerServiceName, {
           kind: 'QnAMaker',
           sku: {
-            name: 'S0',
+            name: 'F0',
           },
           location: localRootQNARegion,
           properties: {
@@ -526,7 +526,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         hidden={props.hidden}
         minWidth={480}
         modalProps={{
-          isBlocking: false,
+          isBlocking: true,
         }}
         onDismiss={props.onDismiss}
       >
