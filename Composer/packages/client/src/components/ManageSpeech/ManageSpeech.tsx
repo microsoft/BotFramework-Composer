@@ -440,7 +440,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
               </p>
               <div css={mainElementStyle}>
                 <Dropdown
-                  disabled={!!availableSubscriptions?.length}
+                  disabled={!availableSubscriptions?.length}
                   label={formatMessage('Select subscription')}
                   options={
                     availableSubscriptions
@@ -471,7 +471,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
                   {!noKeys && subscriptionId && (
                     <div>
                       <Dropdown
-                        disabled={!!keys?.length || nextAction !== 'choose'}
+                        disabled={!keys?.length || nextAction !== 'choose'}
                         label={formatMessage('Speech key')}
                         options={
                           keys.map((p) => {
