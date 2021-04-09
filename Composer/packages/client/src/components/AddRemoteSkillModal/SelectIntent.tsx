@@ -72,7 +72,7 @@ const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: strin
         value.map((item) => {
           // get lu file
           luFilePromise.push(
-            httpClient.get(`/skill/retrieveRemoteFile`, {
+            httpClient.get(`/utilities/retrieveRemoteFile`, {
               params: {
                 url: item.url,
               },
