@@ -6,7 +6,10 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import httpClient from '../../src/utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';
-import CreateSkillModal, { validateEndpoint, validateManifestUrl } from '../../src/components/CreateSkillModal';
+import CreateSkillModal, {
+  validateEndpoint,
+  validateManifestUrl,
+} from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
 import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
