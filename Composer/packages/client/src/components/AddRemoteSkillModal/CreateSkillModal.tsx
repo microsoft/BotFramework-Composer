@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useRef, useState, useCallback, useEffect } from 'react';
+import React, { Fragment, useRef, useState, useCallback, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 // import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -13,6 +13,7 @@ import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { settingsState, designPageLocationState, dispatcherState, luFilesSelectorFamily } from '../../recoilModel';
@@ -91,6 +92,15 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     formDataErrors,
     setFormDataErrors,
   };
+
+  const options: IDropdownOption[] = useMemo(() => {
+    return skillManifest?.endpoints?.map((item) => {
+      return {
+        key: item.msAppId,
+        text: formatMessage(item.name),
+      };
+    });
+  }, [skillManifest]);
 
   const handleManifestUrlChange = (_, currentManifestUrl = '') => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -201,6 +211,22 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                 value={formData.manifestUrl || ''}
                 onChange={handleManifestUrlChange}
               />
+              {skillManifest?.endpoints?.length > 1 && (
+                <Dropdown
+                  label={formatMessage('Endpoints')}
+                  options={options}
+                  defaultSelectedKey={skillManifest.endpoints[0].msAppId}
+                  responsiveMode={ResponsiveMode.large}
+                  onChange={(e, option?: IDropdownOption) => {
+                    if (option) {
+                      setFormData({
+                        ...formData,
+                        endpointName: option.text,
+                      });
+                    }
+                  }}
+                />
+              )}
             </div>
             {showDetail && (
               <Fragment>

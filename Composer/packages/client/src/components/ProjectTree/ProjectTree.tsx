@@ -364,7 +364,6 @@ export const ProjectTree: React.FC<Props> = ({
                   label: formatMessage('Remove this trigger'),
                   icon: 'Delete',
                   onClick: (link) => {
-                    console.log(projectId, link.dialogId);
                     onDialogDeleteTrigger?.(projectId, link.dialogId ?? '', link.trigger ?? 0);
                   },
                 },
