@@ -410,6 +410,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
             detached: !isWin, // detach in non-windows
+            shell: isWin, // run in a shell on windows so `npm start` doesn't need to be `npm.cmd start`
           }
         );
         this.composer.log('Started process %d', spawnProcess.pid);
