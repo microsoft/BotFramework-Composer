@@ -83,6 +83,6 @@ export interface IOrchestratorSettings {
 }
 
 export type CrossTrainingSetting = {
-  inner: boolean; //Only performs the inner dialog cross train
+  inter: boolean; //Only performs the inner dialog cross train
   intra: boolean; //Only performs the intra dialog cross train
 };

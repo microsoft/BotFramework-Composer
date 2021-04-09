@@ -61,7 +61,7 @@ export class Builder {
   public storage: IFileStorage;
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
-  public crossTrainingSetting: CrossTrainingSetting = { inner: true, intra: true };
+  public crossTrainingSetting: CrossTrainingSetting = { inter: true, intra: true };
   private _locale: string;
   private orchestratorCachedBuild = false;
   private orchestratorSettings: IOrchestratorSettings = {
@@ -389,9 +389,10 @@ export class Builder {
     });
 
     const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
+    const { inter, intra } = this.crossTrainingSetting;
     const result = await crossTrainer.crossTrain(luContents, qnaContents, crossTrainConfig, {
       importResolver,
-      trainingOpt: this.crossTrainingSetting,
+      trainingOpt: { inner: inter, intra },
     });
 
     await this.writeFiles(result.luResult, 'lu');
