@@ -470,7 +470,9 @@ export class AzureResourceMananger {
    * Deploy application insights
    * @param config
    */
-  public async deployAppInsightsResource(config: ApplicationInsightsConfig): Promise<{ instrumentationKey: string }> {
+  public async deployAppInsightsResource(
+    config: ApplicationInsightsConfig
+  ): Promise<{ instrumentationKey: string; connectionString: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -500,6 +502,7 @@ export class AzureResourceMananger {
       // Update output and status
       return {
         instrumentationKey: deployResult.instrumentationKey,
+        connectionString: deployResult.connectionString,
       };
     } catch (err) {
       this.logger({
