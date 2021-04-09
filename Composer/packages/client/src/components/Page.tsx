@@ -69,6 +69,7 @@ export const main = (hasRenderHeaderContent) => css`
   flex-grow: 1;
   border-top: 1px solid #dddddd;
   position: relative;
+  overflow: auto;
   nav {
     ul {
       margin-top: 0px;
