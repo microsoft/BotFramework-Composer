@@ -38,7 +38,7 @@ import {
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
-import { projectDialogsMapSelector } from '../../recoilModel';
+import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
 import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
@@ -72,11 +72,12 @@ export const projectDispatcher = () => {
         const dispatcher = await snapshot.getPromise(dispatcherState);
         const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(projectIdToRemove));
+        // const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(projectIdToRemove));
+        const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
         const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
         // remove the same identifier trigger in root bot
         if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
-          const index = rootDialog.triggers.findIndex((item) => item.displayName === manifestIdentifier);
+          const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
           const content = DialogdeleteTrigger(
             projectDialogsMap[rootBotProjectId],
             rootDialog?.id,

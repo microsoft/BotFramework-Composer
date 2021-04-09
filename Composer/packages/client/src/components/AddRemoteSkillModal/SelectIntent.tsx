@@ -175,10 +175,17 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   useEffect(() => {
     if (locale) {
       const skillLanguages = manifest.dispatchModels?.languages;
+      const luFeaturesTemp = {
+        enableMLEntities: false,
+        enableListEntities: false,
+        enableCompositeEntities: false,
+        enablePrebuiltEntities: false,
+        enableRegexEntities: false,
+      };
       getRemoteLuFiles(skillLanguages, languages)
         .then((items) => {
           items &&
-            getParsedLuFiles(items, luFeatures, []).then((files) => {
+            getParsedLuFiles(items, luFeaturesTemp, []).then((files) => {
               setLufile(files);
               files.map((file) => {
                 if (file.id.includes(locale)) {
@@ -260,7 +267,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                   projectId,
                   fileId: dialogId,
                   sectionId: manifest.name,
-                  luFeatures: {},
+                  luFeatures: luFeatures,
                 }}
                 telemetryClient={TelemetryClient}
                 value={displayContent}
