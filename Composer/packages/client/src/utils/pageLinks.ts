@@ -118,7 +118,7 @@ export const bottomLinks: PageLink[] = [
   {
     to: `/settings`,
     iconName: 'Settings',
-    labelName: formatMessage('Composer Settings'),
+    labelName: formatMessage('Composer settings'),
     disabled: false,
   },
   // {

@@ -26,7 +26,7 @@ context('Luis Deploy', () => {
       status: 400,
       response: 'fixture:luPublish/failure',
     });
-    cy.findByTitle(/^Start bot/).click();
+    cy.findByText(/^Start bot/).click();
     cy.findByTestId('runtime-logs-sidebar');
 
     cy.route({
@@ -35,7 +35,7 @@ context('Luis Deploy', () => {
       status: 200,
       response: 'fixture:luPublish/success',
     });
-    cy.findByTitle(/^Start bot/).click();
+    cy.findByText(/^Start bot/).click();
     cy.findByTitle(/^Starting bot../);
   });
 });
