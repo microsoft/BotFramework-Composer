@@ -60,9 +60,11 @@ export class BotProjectDeploy {
         await this.BindKeyVault(absSettings, hostname);
       }
 
-      const skillManifestPath = path.join(this.projPath, 'ComposerDialogs', 'manifests');
-      const msAppId = settings.MicrosoftAppId;
-      await this.updateSkillSettings(profileName, hostname, msAppId, skillManifestPath, settings);
+      const skillManifestPath = path.join(this.projPath, 'wwwroot', 'manifests');
+      if (await fs.pathExists(skillManifestPath)) {
+        await this.updateSkillSettings(profileName, hostname, settings.MicrosoftAppId, skillManifestPath, settings);
+      }
+
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -171,6 +173,11 @@ export class BotProjectDeploy {
       return;
     }
 
+    // update skill host endpoint
+    if (settings.skillHostEndpoint) {
+      settings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
+    }
+
     for (const manifestFile of manifestFiles) {
       const hostEndpoint = `https://${hostname}.azurewebsites.net/api/messages`;
 
@@ -190,11 +197,6 @@ export class BotProjectDeploy {
       });
 
       await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest);
-
-      // update skill host endpoint
-      if (settings.skillHostEndpoint) {
-        settings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
-      }
     }
   }
 
