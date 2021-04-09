@@ -21,7 +21,7 @@ export function WhatsNewsList({ newsList }: WhatsNewsListProps): JSX.Element {
         {newsList.map(({ title, description, url }, index) => {
           return (
             <Fragment key={index}>
-              <Link css={home.bluetitle} href={url}>
+              <Link css={home.bluetitle} href={url} target={'_blank'}>
                 {title}
               </Link>
               <p css={home.newsDescription}>{description}</p>

@@ -38,7 +38,7 @@ export const rightPage = css`
 
 export const title = css`
   display: block;
-  padding: 25px 25px 0px 25px;
+  padding-top: 25px;
   font-size: ${FontSizes.xxLarge};
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
@@ -63,9 +63,6 @@ export const rowContainer = css`
 
 export const leftContainer = css`
   margin-bottom: 10px;
-  flex: auto;
-  display: flex;
-  flex-direction: column;
 `;
 
 export const gap40 = css`
@@ -123,7 +120,7 @@ export const subtitle = css`
 export const bluetitle = css`
   line-height: 20px;
   font-size: ${fonts.medium.fontSize};
-  display: flex;
+  display: inline-block;
   color: #0078d4;
   margin: 16px 0 0 0;
 `;
@@ -288,18 +285,20 @@ export const childrenContainer = css`
 
 export const detailListContainer = css`
   border-top: 1px solid ${NeutralColors.gray30};
-  position: relative;
-  max-height: 40vh;
   padding-top: 10px;
-  overflow: hidden;
-  flex-grow: 1;
-  min-height: 250px;
   .ms-DetailsHeader {
     padding-top: 0;
   }
   .ms-DetailsHeader-cellName {
     font-weight: 400;
   }
+`;
+
+export const detailListScrollWrapper = css`
+  position: relative;
+  max-height: 40vh;
+  overflow: hidden;
+  min-height: 250px;
 `;
 
 export const whatsNewsContainer = css`
