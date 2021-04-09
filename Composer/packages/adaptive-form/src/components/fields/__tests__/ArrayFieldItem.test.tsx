@@ -53,12 +53,12 @@ describe('<ArrayFieldItem />', () => {
 
       const menu = getByLabelText('Item actions');
       fireEvent.click(menu);
-      const moveUp = screen.getByText('Move Up');
+      const moveUp = screen.getByText('Move up');
       fireEvent.click(moveUp);
       expect(onReorder).toHaveBeenCalledWith(1);
 
       fireEvent.click(menu);
-      const moveDown = screen.getByText('Move Down');
+      const moveDown = screen.getByText('Move down');
       fireEvent.click(moveDown);
       expect(onReorder).toHaveBeenCalledWith(3);
 

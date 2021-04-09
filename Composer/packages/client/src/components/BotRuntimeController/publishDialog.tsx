@@ -259,7 +259,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
               <TextField
                 data-testid="SubscriptionKeyInput"
                 errorMessage={formErrors.subscriptionKey}
-                label={formatMessage('QNA subscription key:')}
+                label={formatMessage('QnA Maker subscription key:')}
                 value={formData.subscriptionKey}
                 onChange={(_e, val) => updateField('subscriptionKey', val)}
                 onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
