@@ -7,8 +7,6 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
-import { getDefaultFontSettings } from '../../recoilModel/utils/fontUtil';
-
 // -------------------- Styles -------------------- //
 
 const calloutLabel = css`
@@ -78,8 +76,6 @@ fieldsWhiteList.set('code', { visible: false, name: 'code' });
 fieldsWhiteList.set('signal', { visible: false, name: 'signal' });
 fieldsWhiteList.set('stderr', { visible: false, name: 'stderr' });
 
-const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
-
 export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   const { error } = props;
 
@@ -137,8 +133,6 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   return (
     <div
       css={{
-        fontSize: `${DEFAULT_FONT_SETTINGS.fontSize}`,
-        fontFamily: `${DEFAULT_FONT_SETTINGS.fontSize}`,
         color: `${SharedColors.red10}`,
       }}
       data-testid="runtime-error-callout"
