@@ -3,7 +3,7 @@
 
 import { TabExtensionConfig } from './types';
 import { DiagnosticsTabConfig } from './DiagnosticsTab';
-import { WebChatLogTabConfig } from './WebchatLog/config';
+import { WebChatLogTabConfig } from './WebChatLog/config';
 import { RuntimeOutputTabConfig } from './RuntimeOutputLog';
 
 const implementedDebugExtensions: TabExtensionConfig[] = [
