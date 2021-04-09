@@ -42,7 +42,7 @@ const root = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: auto;
   .ms-List-cell {
     min-height: 36px;
   }

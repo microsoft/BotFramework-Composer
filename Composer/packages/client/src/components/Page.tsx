@@ -64,7 +64,7 @@ export const headerContent = css`
 
 export const main = (hasRenderHeaderContent) => css`
   margin-left: 2px;
-  height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
+  max-height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
@@ -220,10 +220,10 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {useDebugPane ? <DebugPanel /> : null}
             </div>
           </Split>
         </div>
+        {useDebugPane ? <DebugPanel /> : null}
       </div>
     </div>
   );
