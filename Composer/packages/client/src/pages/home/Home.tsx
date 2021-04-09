@@ -193,7 +193,6 @@ const Home: React.FC<RouteComponentProps> = () => {
                   href={item.url}
                   imageCover={item.imageCover}
                   moreLinkText={item.moreText}
-                  rel="noopener nofollow"
                   target="_blank"
                   title={item.title}
                 />
@@ -219,7 +218,6 @@ const Home: React.FC<RouteComponentProps> = () => {
                           content={card.description}
                           href={card.url}
                           imageCover={card.image}
-                          rel="noopener nofollow"
                           target="_blank"
                           title={card.title}
                         />

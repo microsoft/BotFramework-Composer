@@ -95,6 +95,7 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
   height: auto;
+  text-decoration-line: none;
   margin-right: 12px;
   padding: 0;
 `;
@@ -310,7 +311,7 @@ export const whatsNewsContainer = css`
   flex: 1;
   padding: 25px;
   border-radius: 5px;
-  margin-bottom: 55px;
+  margin: 68px 0 55px 0;
   background: #f6f6f6;
   @media (max-width: 1366px) {
     background: none;

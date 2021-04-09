@@ -17,6 +17,8 @@ export interface CardWidgetProps {
   onClick?: () => void | Promise<void>;
   cardType: 'resource' | 'video' | 'article';
   imageCover: string;
+  href?: string;
+  target?: string;
   title: string | JSX.Element;
   subContent?: string;
   content: string;
@@ -36,6 +38,8 @@ export interface CardWidgetProps {
 
 export const CardWidget: React.FC<CardWidgetProps> = ({
   onClick = undefined,
+  href,
+  target = '_blank',
   title,
   content,
   subContent,
@@ -64,10 +68,6 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     }
   };
 
-  // const onImageLoadError = () => {
-  //     setUsedImageCover(defaultImageCover);
-  // };
-
   // detect image cover dimention to decide apply blur background or not.
   const onImgLoaded = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -78,8 +78,10 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
   };
 
   return (
-    <div
+    <a
       css={[itemContainerWrapper(disabled), styles.container]}
+      href={href}
+      target={target}
       onClick={async (e) => {
         if (onClick != null) {
           e.preventDefault();
@@ -107,6 +109,6 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
         <div css={styles.content}>{content}</div>
         {moreLinkText && <Link css={styles.moreLink}> {moreLinkText} </Link>}
       </div>
-    </div>
+    </a>
   );
 };
