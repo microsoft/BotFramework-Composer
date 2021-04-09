@@ -2,9 +2,6 @@
   "0_bytes_a1e1cdb3": {
     "message": "0 Bytes"
   },
-  "5_minute_intro_7ea06d2b": {
-    "message": "5 Minute Intro"
-  },
   "ErrorInfo_part1": {
     "message": "An error occurred in the form editor!"
   },
@@ -317,9 +314,6 @@
   "application_updates_bdf5f8b6": {
     "message": "Application Updates"
   },
-  "apr_9_2020_3c8b47d7": {
-    "message": "Apr 9, 2020"
-  },
   "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
     "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
   },
@@ -440,9 +434,6 @@
   "begindialog_a5594562": {
     "message": "BeginDialog"
   },
-  "ben_brown_99c12d19": {
-    "message": "Ben Brown"
-  },
   "boolean_6000988a": {
     "message": "Boolean"
   },
@@ -506,8 +497,14 @@
   "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
     "message": "Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation."
   },
+  "bot_framework_composer_requires_node_js_in_order_t_a1d3dfb": {
+    "message": "Bot Framework Composer requires Node.js in order to run. Click “Install Node.js” to install the latest version"
+  },
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
     "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
+  },
+  "bot_framework_emulator_fefd4a59": {
+    "message": "Bot Framework Emulator"
   },
   "bot_is_botname_c5af0c89": {
     "message": "Bot is { botName }"
@@ -569,9 +566,6 @@
   "break_out_of_loop_ab30157c": {
     "message": "Break out of loop"
   },
-  "build_your_first_bot_f9c3e427": {
-    "message": "Build your first bot"
-  },
   "building_5e8a3c1d": {
     "message": "Building"
   },
@@ -602,9 +596,6 @@
   "cannot_parse_attachment_c3e552a5": {
     "message": "Cannot parse attachment."
   },
-  "cannot_post_activity_conversation_not_found_c1e26d2d": {
-    "message": "Cannot post activity. Conversation not found."
-  },
   "cannot_upload_file_conversation_not_found_8a983504": {
     "message": "Cannot upload file. Conversation not found."
   },
@@ -616,6 +607,9 @@
   },
   "check_for_updates_and_install_them_automatically_50337340": {
     "message": "Check for updates and install them automatically."
+  },
+  "check_out_the_resources_on_github_4d73792a": {
+    "message": "Check out the resources on GitHub."
   },
   "choice_input_f75a2353": {
     "message": "Choice Input"
@@ -637,9 +631,6 @@
   },
   "choose_subscription_3d78d10d": {
     "message": "Choose subscription"
-  },
-  "chris_whitten_11df1f35": {
-    "message": "Chris Whitten"
   },
   "clear_all_da755751": {
     "message": "Clear all"
@@ -686,11 +677,11 @@
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
   },
+  "composer_documentation_60a27d37": {
+    "message": "Composer documentation"
+  },
   "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
     "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
-  },
-  "composer_introduction_98a93701": {
-    "message": "Composer introduction"
   },
   "composer_is_up_to_date_9118257d": {
     "message": "Composer is up to date."
@@ -703,6 +694,9 @@
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer needs .NET Core SDK"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "Composer on GitHub"
   },
   "composer_settings_31b04099": {
     "message": "Composer Settings"
@@ -932,9 +926,6 @@
   "create_new_e0946c49": {
     "message": "Create new"
   },
-  "create_new_empty_bot_21cf0ea3": {
-    "message": "Create new empty bot"
-  },
   "create_new_folder_19d3faa4": {
     "message": "Create new folder"
   },
@@ -1100,6 +1091,9 @@
   "deleting_dialogid_failed_1d7cc05a": {
     "message": "Deleting \"{ dialogId }\" failed."
   },
+  "deleting_one_source_file_will_also_delete_qna_file_f3afd698": {
+    "message": "Deleting one source file will also delete qna files with the same name on other locales"
+  },
   "describe_your_skill_88554792": {
     "message": "Describe your skill"
   },
@@ -1225,6 +1219,9 @@
   },
   "done_54e3d4b6": {
     "message": "Done"
+  },
+  "download_emulator_c8fb3403": {
+    "message": "Download Emulator"
   },
   "download_icon_2e0d10": {
     "message": "Download Icon"
@@ -1376,11 +1373,14 @@
   "endpoints_ff946539": {
     "message": "Endpoints"
   },
+  "engage_with_other_bot_builders_ask_and_answer_ques_550d86bc": {
+    "message": "Engage with other bot builders. Ask and answer questions."
+  },
   "ensure_your_bot_can_understand_your_users_by_frequ_c3f5c722": {
     "message": "Ensure your bot can understand your users by frequently training your LUIS model."
   },
-  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
-    "message": "Enter a manifest url to add a new skill to your bot."
+  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
+    "message": "Enter a manifest URL to add a new skill to your bot."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "Enter a max value"
@@ -1436,8 +1436,8 @@
   "enter_qna_region_4dae87f5": {
     "message": "Enter QnA region"
   },
-  "enter_skill_host_endpoint_url_e22eeab5": {
-    "message": "Enter Skill host endpoint url"
+  "enter_skill_host_endpoint_url_7489a83f": {
+    "message": "Enter Skill host endpoint URL"
   },
   "entities_ef09392c": {
     "message": "Entities"
@@ -1456,6 +1456,9 @@
   },
   "error_afac7133": {
     "message": "Error:"
+  },
+  "error_checking_node_version_98bfbf4c": {
+    "message": "Error checking node version"
   },
   "error_encountered_when_getting_template_readme_17dcbc61": {
     "message": "### Error encountered when getting template readMe"
@@ -1607,6 +1610,9 @@
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
   },
+  "find_tutorials_step_by_step_guides_discover_what_y_8f3e3863": {
+    "message": "Find tutorials, step-by-step guides. Discover what you can build with Composer."
+  },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
   },
@@ -1718,14 +1724,17 @@
   "getting_help_ab6811b0": {
     "message": "Getting Help"
   },
-  "getting_started_f45a7e87": {
-    "message": "Getting Started"
-  },
   "getting_template_910a4116": {
     "message": "Getting template"
   },
+  "go_to_composer_repository_cba5d3d2": {
+    "message": "Go to Composer repository"
+  },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Go to QnA all-up view page."
+  },
+  "go_to_stack_overflow_e525148": {
+    "message": "Go to Stack Overflow"
   },
   "got_it_2c06b54a": {
     "message": "Got it!"
@@ -1799,14 +1808,14 @@
   "import_as_new_35630827": {
     "message": "Import as new"
   },
-  "import_new_url_and_overwrite_ef1f405e": {
-    "message": "Import new url and overwrite"
+  "import_new_url_and_overwrite_5e463747": {
+    "message": "Import new URL and overwrite"
   },
   "import_schema_75659c5f": {
     "message": "Import schema"
   },
-  "import_url_ccaa2f16": {
-    "message": "Import Url"
+  "import_url_62402b7c": {
+    "message": "Import URL"
   },
   "import_your_bot_to_new_project_8751d82f": {
     "message": "Import your bot to new project"
@@ -1883,6 +1892,9 @@
   "install_more_adapters_in_a_the_package_manager_a_156fb028": {
     "message": "Install more adapters in <a>the package manager</a>."
   },
+  "install_node_js_1857298c": {
+    "message": "Install Node.js"
+  },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
   },
@@ -1955,9 +1967,6 @@
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
     "message": "{ itemCount, plural,\n     =0 {No schemas}\n     =1 {One schema}\n  other {# schemas}\n} have been found.\n            { itemCount, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
-  "jan_28_2020_8beb36dc": {
-    "message": "Jan 28, 2020"
-  },
   "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__d18758bb": {
     "message": "Just add a QnA key and you’ll be ready to talk to your bot."
   },
@@ -1979,8 +1988,8 @@
   "knowledge_base_name_7d83bbe4": {
     "message": "Knowledge base name"
   },
-  "knowledge_qna_7a4e84f7": {
-    "message": "Knowledge(QnA)"
+  "knowledge_qna_1a599dcf": {
+    "message": "Knowledge (QnA)"
   },
   "knowledge_source_dd66f38f": {
     "message": "Knowledge source"
@@ -2228,11 +2237,11 @@
   "manifest_editor_1426637": {
     "message": "manifest editor"
   },
-  "manifest_url_30824e88": {
-    "message": "Manifest url"
+  "manifest_url_a6250c02": {
+    "message": "Manifest URL"
   },
-  "manifest_url_can_not_be_accessed_a7f147b2": {
-    "message": "Manifest url can not be accessed"
+  "manifest_url_can_not_be_accessed_ba43fc31": {
+    "message": "Manifest URL can not be accessed"
   },
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
@@ -2344,9 +2353,6 @@
   },
   "ms_teams_15993b97": {
     "message": "MS Teams"
-  },
-  "msft_ignite_ai_show_e131edef": {
-    "message": "MSFT Ignite AI Show"
   },
   "msg_bf173fef": {
     "message": "{ msg }"
@@ -2468,6 +2474,9 @@
   "no_qna_file_with_name_id_7cb89755": {
     "message": "NO QNA FILE WITH NAME { id }"
   },
+  "no_recent_bots_f4cf7d0a": {
+    "message": "No recent bots"
+  },
   "no_search_results_1ba50423": {
     "message": "No search results"
   },
@@ -2479,6 +2488,9 @@
   },
   "no_uploads_were_attached_as_a_part_of_the_request_63e92f54": {
     "message": "No uploads were attached as a part of the request."
+  },
+  "no_web_chat_activity_yet_4227dc1a": {
+    "message": "No Web Chat activity yet."
   },
   "no_wildcard_ff439e76": {
     "message": "no wildcard"
@@ -2497,9 +2509,6 @@
   },
   "notifications_cbfa7704": {
     "message": "Notifications"
-  },
-  "nov_12_2019_96ec5473": {
-    "message": "Nov 12, 2019"
   },
   "number_a6dc44e": {
     "message": "Number"
@@ -2660,8 +2669,8 @@
   "please_enter_an_event_name_a148275a": {
     "message": "Please enter an event name"
   },
-  "please_input_a_manifest_url_d726edbf": {
-    "message": "Please input a manifest Url"
+  "please_input_a_manifest_url_79cce9d5": {
+    "message": "Please input a manifest URL"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Please input regEx pattern"
@@ -2804,6 +2813,9 @@
   "provision_failure_983d3844": {
     "message": "Provision failure"
   },
+  "provision_partially_completed_b0120a72": {
+    "message": "Provision partially completed"
+  },
   "provision_success_d6a6e437": {
     "message": "Provision success"
   },
@@ -2917,6 +2929,9 @@
   },
   "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
     "message": "Re-prompt for input (Reprompt dialog event)"
+  },
+  "read_documentation_d5df5d59": {
+    "message": "Read documentation"
   },
   "read_me_4734ca1": {
     "message": "Read Me"
@@ -3043,6 +3058,9 @@
   },
   "resource_name_817b6e75": {
     "message": "Resource name"
+  },
+  "resources_ccefab27": {
+    "message": "Resources"
   },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
@@ -3332,11 +3350,14 @@
   "skill_host_endpoint_4118a173": {
     "message": "Skill host endpoint"
   },
-  "skill_host_endpoint_url_e68b65f6": {
-    "message": "Skill host endpoint url"
+  "skill_host_endpoint_url_702c277c": {
+    "message": "Skill host endpoint URL"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "Skill manifest endpoint is configured improperly"
+  },
+  "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
+    "message": "Skill manifest URL was copied to the clipboard"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
@@ -3380,6 +3401,9 @@
   "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
     "message": "Specify an attachment layout when there are more than one."
   },
+  "specify_an_existing_bot_to_connect_to_your_azure_b_3c632ffa": {
+    "message": "Specify an existing bot to connect to your Azure Bot resource."
+  },
   "speech_16063aed": {
     "message": "Speech"
   },
@@ -3388,6 +3412,9 @@
   },
   "ssml_tag_981a8aac": {
     "message": "SSML tag"
+  },
+  "stack_overflow_de80008e": {
+    "message": "Stack Overflow"
   },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Start and stop local bot runtimes individually."
@@ -3499,6 +3526,9 @@
   },
   "terms_of_use_6542769b": {
     "message": "Terms of Use"
+  },
+  "test_and_debug_bots_built_using_the_bot_framework__fa382385": {
+    "message": "Test and debug bots built using the Bot Framework SDK. Available on GitHub."
   },
   "test_in_emulator_b1b3c278": {
     "message": "Test in Emulator"
@@ -3839,11 +3869,11 @@
   "updating_scripts_e17a5722": {
     "message": "Updating scripts... "
   },
-  "url_8c4ff7d2": {
-    "message": "Url"
+  "url_22a5f3b8": {
+    "message": "URL"
   },
-  "url_should_start_with_http_s_9ca55d94": {
-    "message": "Url should start with http[s]://"
+  "url_should_start_with_http_or_https_c34632bb": {
+    "message": "URL should start with http:// or https://"
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Use custom LUIS authoring key"
@@ -3905,9 +3935,6 @@
   "video_card_cda18e03": {
     "message": "Video card"
   },
-  "video_tutorials_79eb26ca": {
-    "message": "Video tutorials:"
-  },
   "view_dialog_f5151228": {
     "message": "View dialog"
   },
@@ -3922,9 +3949,6 @@
   },
   "view_project_readme_ff079d2e": {
     "message": "View project readme"
-  },
-  "vishwac_sena_45910bf0": {
-    "message": "Vishwac Sena"
   },
   "visit_a_this_page_a_to_learn_more_about_entity_def_c7c862a9": {
     "message": "Visit <a>this page</a> to learn more about entity definition."
@@ -3947,14 +3971,8 @@
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
   },
-  "weather_bot_c38920cd": {
-    "message": "Weather Bot"
-  },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
-  },
-  "webchat_inspector_4d0dfeb7": {
-    "message": "Webchat Inspector"
   },
   "webchat_log_b7213a9e": {
     "message": "Webchat log."
@@ -3991,6 +4009,12 @@
   },
   "what_is_the_type_of_this_trigger_d2701744": {
     "message": "What is the type of this trigger?"
+  },
+  "what_s_new_a9752a8e": {
+    "message": "What''s new"
+  },
+  "what_s_new_list_6fe719cb": {
+    "message": "What''s new list"
   },
   "what_you_need_to_know_to_get_started_e2ab837a": {
     "message": "What you need to know to get started"
@@ -4063,6 +4087,9 @@
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "You do not have permission to save bots here"
+  },
+  "you_don_t_have_any_bot_yet_start_to_link_create_a__ccacc2d6": {
+    "message": "You don’t have any bot yet. Start to <Link>create a new bot</Link>"
   },
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
     "message": "You have successfully published { name } to { publishTarget }"

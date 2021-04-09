@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7 } from '@bfc/extension-client';
-import { AppUpdaterSettings, CodeEditorSettings, PromptTab, TelemetrySettings } from '@bfc/shared';
+import {
+  AppUpdaterSettings,
+  CodeEditorSettings,
+  ConversationTrafficItem,
+  PromptTab,
+  TelemetrySettings,
+} from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
@@ -109,3 +115,15 @@ export type BoilerplateVersion = {
 };
 
 export type Notification = CardProps & { id: string };
+
+/**
+ * Used to determine what "part" of the traffic item to inspect.
+ * Ex. When inspecting an activity, we want to inspect the entire item. When we
+ * inspect a network item, we want to inspect either the request or response.
+ */
+type TrafficInspectionMode = 'request' | 'response';
+
+export type WebChatInspectionData = {
+  item: ConversationTrafficItem;
+  mode?: TrafficInspectionMode;
+};

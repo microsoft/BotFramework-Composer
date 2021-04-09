@@ -26,6 +26,7 @@ describe('<CreationFlow/>', () => {
       fetchTemplateProjects: jest.fn(),
       onboardingAddCoachMarkRef: jest.fn(),
       fetchRecentProjects: jest.fn(),
+      fetchFeed: jest.fn(),
       fetchTemplates: jest.fn(),
       fetchTemplatesV2: jest.fn(),
       setCreationFlowStatus: jest.fn(),

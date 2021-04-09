@@ -5,12 +5,12 @@ import formatMessage from 'format-message';
 
 import { TabExtensionConfig, WebChatInspectorTabKey } from '../types';
 
-import { WebchatLogContent } from './WebchatLogContent';
-import { WebChatLogItemHeader } from './WebchatLogItemHeader';
+import { WebChatLogContent } from './WebChatLogContent';
+import { WebChatLogItemHeader } from './WebChatLogItemHeader';
 
-export const WebchatLogTabConfig: TabExtensionConfig = {
+export const WebChatLogTabConfig: TabExtensionConfig = {
   key: WebChatInspectorTabKey,
   description: () => formatMessage('Webchat log.'),
   HeaderWidget: WebChatLogItemHeader,
-  ContentWidget: WebchatLogContent,
+  ContentWidget: WebChatLogContent,
 };

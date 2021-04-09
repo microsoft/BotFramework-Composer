@@ -18,10 +18,10 @@ import {
   SkillManifestFile,
   RecognizerFile,
 } from '@bfc/shared';
-import { DirectLineLog } from '@botframework-composer/types/src';
+import { ConversationTrafficItem } from '@botframework-composer/types';
 import { atomFamily } from 'recoil';
 
-import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
+import { BotRuntimeError, DesignPageLocation, WebChatInspectionData } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -430,9 +430,14 @@ export const canRedoState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const webChatLogsState = atomFamily<DirectLineLog[], string>({
-  key: getFullyQualifiedKey('webChatLogs'),
+export const webChatTrafficState = atomFamily<ConversationTrafficItem[], string>({
+  key: getFullyQualifiedKey('webChatTraffic'),
   default: [],
+});
+
+export const webChatInspectionDataState = atomFamily<WebChatInspectionData | undefined, string>({
+  key: getFullyQualifiedKey('webChatInspectionData'),
+  default: undefined,
 });
 
 export const projectIndexingState = atomFamily<boolean, string>({

@@ -41,8 +41,7 @@ import {
   columnSizes,
 } from '../styles';
 import { TeamsManifestGeneratorModal } from '../../../components/Adapters/TeamsManifestGeneratorModal';
-
-import ABSChannelSpeechModal from './ABSChannelSpeechModal';
+import { ManageSpeech } from '../../../components/ManageSpeech/ManageSpeech';
 
 const teamsHelpLink = 'https://aka.ms/composer-channel-teams';
 const webchatHelpLink = 'https://aka.ms/composer-channel-webchat';
@@ -370,7 +369,11 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     };
   };
 
-  const toggleSpeechOn = async (key: string, region: string, isDefault: boolean) => {
+  const toggleSpeechOn = async (
+    settings: { subscriptionKey: string; region: string },
+    isDefault: boolean,
+    attempt = 0
+  ) => {
     setChannelStatus({
       ...channelStatus,
       [CHANNELS.SPEECH]: {
@@ -381,8 +384,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
     try {
       await createChannelService(CHANNELS.SPEECH, {
-        cognitiveServiceSubscriptionKey: key,
-        cognitiveServiceRegion: region,
+        cognitiveServiceSubscriptionKey: settings.subscriptionKey,
+        cognitiveServiceRegion: settings.region,
         isDefaultBotForCogSvcAccount: isDefault,
       });
     } catch (err) {
@@ -395,8 +398,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           loading: false,
         },
       });
-
-      if (err?.response?.data?.error.code === 'InvalidChannelData') {
+      if (err?.response?.data?.error.code === 'UnknownError' && attempt < 5) {
+        console.error(err);
+        console.log('Retrying...');
+        setTimeout(() => {
+          toggleSpeechOn(settings, isDefault, attempt + 1);
+        }, 3000);
+      } else if (err?.response?.data?.error.code === 'InvalidChannelData') {
         const result = await OpenConfirmModal(
           formatMessage('Enable speech'),
           formatMessage(
@@ -404,7 +412,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           )
         );
         if (result) {
-          toggleSpeechOn(key, region, false);
+          toggleSpeechOn(settings, false);
         }
       } else {
         setApplicationLevelError(err);
@@ -539,12 +547,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
         />
       )}
-      <ABSChannelSpeechModal
-        isOpen={showSpeechModal}
-        onClose={() => {
+      <ManageSpeech
+        hidden={!showSpeechModal}
+        setVisibility={setShowSpeechModal}
+        onDismiss={() => {
           setShowSpeechModal(false);
         }}
-        onUpdateKey={toggleSpeechOn}
+        onGetKey={(settings) => {
+          toggleSpeechOn(settings, true);
+        }}
+        onNext={() => {
+          setShowSpeechModal(false);
+        }}
       />
       <div>
         <Dropdown

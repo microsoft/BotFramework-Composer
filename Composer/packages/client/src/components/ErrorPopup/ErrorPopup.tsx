@@ -27,7 +27,12 @@ const formatErrorTitle = (error: StateError): string => {
 const formatErrorDetail = (error: StateError): React.ReactElement => {
   const helpText = formatMessage.rich('If this problem persists, please file an issue on <a>GitHub</a>', {
     a: ({ children }) => (
-      <a href={'https://github.com/microsoft/BotFramework-Composer/issues'} rel="noopener noreferrer" target="_blank">
+      <a
+        key="composer-github-issues-page"
+        href={'https://github.com/microsoft/BotFramework-Composer/issues'}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
         {children}
       </a>
     ),

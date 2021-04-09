@@ -537,7 +537,7 @@ export class AzureResourceMananger {
     try {
       appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
         config.resourceGroupName,
-        config.resourceGroupName,
+        config.name,
         apiKeyOptions
       );
 
@@ -883,7 +883,7 @@ export class AzureResourceMananger {
               },
               {
                 name: 'FUNCTIONS_WORKER_RUNTIME',
-                value: 'dotnet',
+                value: config.workerRuntime || 'dotnet',
               },
               {
                 name: 'APPINSIGHTS_INSTRUMENTATIONKEY',
