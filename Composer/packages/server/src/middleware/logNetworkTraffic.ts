@@ -25,6 +25,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
           details: error.details,
           message: error.message,
         },
+        id: '',
         request: { method: req.method, payload: req.body, route: req.originalUrl },
         response: {
           payload: JSON.parse((res as any).sentData || '{}'),
@@ -36,6 +37,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
     } else {
       // a successful response was sent to the client
       data = {
+        id: '',
         request: { method: req.method, payload: req.body, route: req.originalUrl },
         response: {
           payload: JSON.parse((res as any).sentData || '{}'),

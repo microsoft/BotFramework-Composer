@@ -43,7 +43,7 @@ const logPane = css`
   box-sizing: border-box;
 `;
 
-const itemIsSelected = (item: ConversationTrafficItem, currentInspectionData: WebChatInspectionData | undefined) => {
+const itemIsSelected = (item: ConversationTrafficItem, currentInspectionData?: WebChatInspectionData) => {
   return item.id === currentInspectionData?.item?.id;
 };
 
@@ -109,7 +109,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   );
 
   const renderLogItem = useCallback(
-    (item: ConversationTrafficItem, index: number, inspectionData: WebChatInspectionData | undefined) => {
+    (item: ConversationTrafficItem, index: number, inspectionData?: WebChatInspectionData) => {
       switch (item.trafficType) {
         case 'activity':
           return (

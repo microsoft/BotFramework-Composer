@@ -65,7 +65,7 @@ export type NetworkTrafficResponse = {
 };
 
 export type ConversationNetworkTrafficItem = {
-  id?: string;
+  id: string;
   request: NetworkTrafficRequest;
   response: NetworkTrafficResponse;
   timestamp: number;
@@ -79,13 +79,13 @@ export type ConversationActivityTraffic = {
 
 export type ConversationActivityTrafficItem = {
   activity: Activity;
-  id?: string;
+  id: string;
   timestamp: number;
   trafficType: 'activity';
 };
 
 export type ConversationNetworkErrorItem = {
-  id?: string;
+  id: string;
   error: {
     message: string;
     details?: string;
