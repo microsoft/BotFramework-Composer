@@ -4,17 +4,9 @@
 
 import { ConversationTrafficItem } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { v4 as uuid } from 'uuid';
 
 import { webChatTrafficState, webChatInspectionDataState, isWebChatPanelVisibleState } from '../atoms';
 import { WebChatInspectionData } from '../types';
-
-const addIdToTrafficItem = (item: ConversationTrafficItem) => {
-  if (!item.id) {
-    item.id = uuid();
-  }
-  return item;
-};
 
 export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
@@ -36,11 +28,9 @@ export const webChatLogDispatcher = () => {
       const { set } = callbackHelpers;
       set(webChatTrafficState(projectId), (currentTraffic) => {
         if (Array.isArray(traffic)) {
-          return [...currentTraffic, ...traffic.map((item) => addIdToTrafficItem(item))].sort(
-            (t1, t2) => t1.timestamp - t2.timestamp
-          );
+          return [...currentTraffic, ...traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
         } else {
-          return [...currentTraffic, addIdToTrafficItem(traffic)].sort((t1, t2) => t1.timestamp - t2.timestamp);
+          return [...currentTraffic, traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
         }
       });
     }

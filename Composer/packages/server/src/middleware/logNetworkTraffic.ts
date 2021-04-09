@@ -3,6 +3,7 @@
 
 import { NextFunction, Request, Response } from 'express';
 import { ConversationNetworkErrorItem, ConversationNetworkTrafficItem } from '@botframework-composer/types';
+import { v4 as uuid } from 'uuid';
 
 import { WebSocketServer } from '../directline/utils/webSocketServer';
 
@@ -25,7 +26,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
           details: error.details,
           message: error.message,
         },
-        id: '',
+        id: uuid(),
         request: { method: req.method, payload: req.body, route: req.originalUrl },
         response: {
           payload: JSON.parse((res as any).sentData || '{}'),
@@ -37,7 +38,7 @@ export function logNetworkTraffic(req: Request, res: Response, next?: NextFuncti
     } else {
       // a successful response was sent to the client
       data = {
-        id: '',
+        id: uuid(),
         request: { method: req.method, payload: req.body, route: req.originalUrl },
         response: {
           payload: JSON.parse((res as any).sentData || '{}'),
