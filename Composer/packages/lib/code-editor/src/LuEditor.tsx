@@ -124,7 +124,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     lightbulb: {
       enabled: true,
     },
-    contextmenu: false,
+    contextmenu: true,
     ...props.options,
   };
 
