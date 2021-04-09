@@ -206,6 +206,17 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           // copy bot and runtime into projFolder
           await copy(srcTemplate, buildFolder);
+
+          let manifestPath;
+          for (const file of botFiles) {
+            const pattern = /manifests\/[0-9A-z-]*.json/;
+            if (file.relativePath.match(pattern)) {
+              manifestPath = path.dirname(file.path);
+            }
+          }
+
+          // save manifest
+          runtime.setSkillManifest(buildFolder, project.fileStorage, manifestPath, project.fileStorage, mode);
         } else {
           const botFolder = this.getBotFolder(resourcekey, mode);
           const runtimeFolder = this.getRuntimeFolder(resourcekey);

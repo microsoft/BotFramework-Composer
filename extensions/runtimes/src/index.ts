@@ -450,7 +450,7 @@ export default async (composer: any): Promise<void> => {
     ) => {
       // update manifst into runtime wwwroot
       if (mode === 'azurewebapp') {
-        const manifestDstDir = path.resolve(dstRuntimePath, 'azurewebapp', 'wwwroot', 'manifests');
+        const manifestDstDir = path.resolve(dstRuntimePath, 'wwwroot', 'manifests');
 
         if (await fs.pathExists(manifestDstDir)) {
           await removeDirAndFiles(manifestDstDir);
