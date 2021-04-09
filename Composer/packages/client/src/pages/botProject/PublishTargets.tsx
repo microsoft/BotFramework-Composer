@@ -13,17 +13,17 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
+import { tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
 
 // -------------------- Styles -------------------- //
 
 const publishTargetsContainer = css`
   display: flex;
+  padding: 20px;
   flex-direction: column;
 `;
 
@@ -93,65 +93,63 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={title}>
-        <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
-          <div css={publishTargetsHeader}>
-            <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')} </div>
-            <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Target')} </div>
-            <div css={tableColumnHeader(columnSizes[2])}> </div>
-          </div>
-          {publishTargets?.map((p, index) => {
-            return (
-              <div key={index} css={tableRow}>
-                <div css={tableRowItem(columnSizes[0])} title={p.name}>
-                  {p.name}
-                </div>
-                <div css={tableRowItem(columnSizes[1])} title={p.type}>
-                  {p.type}
-                </div>
-                <div css={tableRowItem(columnSizes[2])}>
-                  <ActionButton
-                    data-testid={'editPublishProfile'}
-                    styles={editPublishProfile}
-                    onClick={() => {
-                      setCurrent({ item: p, index: index });
-                      if (isShowAuthDialog(true)) {
-                        setShowAuthDialog(true);
-                      } else {
-                        setDialogHidden(false);
-                      }
-                    }}
-                  >
-                    {formatMessage('Edit')}
-                  </ActionButton>
-                </div>
-                <div css={tableRowItem(columnSizes[2])}>
-                  <ActionButton
-                    data-testid={'deletePublishProfile'}
-                    styles={editPublishProfile}
-                    onClick={() => onDeletePublishTarget(p)}
-                  >
-                    {formatMessage('Delete')}
-                  </ActionButton>
-                </div>
-              </div>
-            );
-          })}
-          <ActionButton
-            data-testid={'addNewPublishProfile'}
-            styles={actionButton}
-            onClick={() => {
-              if (isShowAuthDialog(true)) {
-                setShowAuthDialog(true);
-              } else {
-                setDialogHidden(false);
-              }
-            }}
-          >
-            {formatMessage('Add new')}
-          </ActionButton>
+      <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
+        <div css={publishTargetsHeader}>
+          <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')} </div>
+          <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Target')} </div>
+          <div css={tableColumnHeader(columnSizes[2])}> </div>
         </div>
-      </CollapsableWrapper>
+        {publishTargets?.map((p, index) => {
+          return (
+            <div key={index} css={tableRow}>
+              <div css={tableRowItem(columnSizes[0])} title={p.name}>
+                {p.name}
+              </div>
+              <div css={tableRowItem(columnSizes[1])} title={p.type}>
+                {p.type}
+              </div>
+              <div css={tableRowItem(columnSizes[2])}>
+                <ActionButton
+                  data-testid={'editPublishProfile'}
+                  styles={editPublishProfile}
+                  onClick={() => {
+                    setCurrent({ item: p, index: index });
+                    if (isShowAuthDialog(true)) {
+                      setShowAuthDialog(true);
+                    } else {
+                      setDialogHidden(false);
+                    }
+                  }}
+                >
+                  {formatMessage('Edit')}
+                </ActionButton>
+              </div>
+              <div css={tableRowItem(columnSizes[2])}>
+                <ActionButton
+                  data-testid={'deletePublishProfile'}
+                  styles={editPublishProfile}
+                  onClick={() => onDeletePublishTarget(p)}
+                >
+                  {formatMessage('Delete')}
+                </ActionButton>
+              </div>
+            </div>
+          );
+        })}
+        <ActionButton
+          data-testid={'addNewPublishProfile'}
+          styles={actionButton}
+          onClick={() => {
+            if (isShowAuthDialog(true)) {
+              setShowAuthDialog(true);
+            } else {
+              setDialogHidden(false);
+            }
+          }}
+        >
+          {formatMessage('Add new')}
+        </ActionButton>
+      </div>
       {showAuthDialog && (
         <AuthDialog
           needGraph

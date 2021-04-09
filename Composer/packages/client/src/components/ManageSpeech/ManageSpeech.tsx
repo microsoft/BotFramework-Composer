@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -16,24 +16,21 @@ import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
-import { SearchManagementClient } from '@azure/arm-search';
 import { ResourceManagementClient } from '@azure/arm-resources';
-import { WebSiteManagementClient } from '@azure/arm-appservice';
-import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
 
 import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
+import { AuthDialog } from '../Auth/AuthDialog';
 import { armScopes } from '../../constants';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { dispatcherState } from '../../recoilModel/atoms';
 
-type ManageQNAProps = {
+type ManageSpeechProps = {
   hidden: boolean;
-  setDisplayManageQna: (value: any) => void;
   onDismiss: () => void;
-  onGetKey: (settings: { subscriptionKey: string }) => void;
+  setVisibility: (visible: boolean) => void;
+  onGetKey: (settings: { subscriptionKey: string; region: string }) => void;
   onNext?: () => void;
 };
 
@@ -44,47 +41,46 @@ type KeyRec = {
   key: string;
 };
 
-// QnA is only available in westus
-const QNA_REGIONS = [{ key: 'westus', text: 'westus' }];
-
 const dropdownStyles = { dropdown: { width: '100%' } };
-const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: '14' };
+const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 const mainElementStyle = { marginBottom: 20 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
+const iconStyles = { marginRight: '8px' };
 
-const handoffInstructions = formatMessage(
-  'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
-);
-
-export const ManageQNA = (props: ManageQNAProps) => {
-  const [localRootQNAKey, setLocalRootQNAKey] = useState<string>('');
+export const ManageSpeech = (props: ManageSpeechProps) => {
+  const [localKey, setLocalKey] = useState<string>('');
 
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [token, setToken] = useState<string | undefined>();
 
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
-  const [subscriptionId, setSubscription] = useState<string>('');
+  const [subscriptionId, setSubscriptionId] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
   const [createResourceGroup, setCreateResourceGroup] = useState<boolean>(false);
   const [newResourceGroupName, setNewResourceGroupName] = useState<string>('');
   const [resourceGroupKey, setResourceGroupKey] = useState<string>('');
   const [resourceGroup, setResourceGroup] = useState<string>('');
+  const [locationList, setLocationList] = useState<{ key: string; text: string }[]>([]);
 
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
-  const [qnaResourceName, setQNAResourceName] = useState<string>('');
-  const [loadingQNA, setLoadingQNA] = useState<boolean>(false);
+  const [resourceName, setResourceName] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [noKeys, setNoKeys] = useState<boolean>(false);
   const [nextAction, setNextAction] = useState<string>('create');
   const [actionOptions, setActionOptions] = useState<IChoiceGroupOption[]>([]);
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
-  const [qnaKeys, setQNAKeys] = useState<KeyRec[]>([]);
-  const [localRootQNARegion, setLocalRootQNARegion] = useState<string>('westus');
+  const [keys, setKeys] = useState<KeyRec[]>([]);
+  const [localRegion, setLocalRegion] = useState<string>('westus');
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
-  const [outcomeSummary, setOutcomeSummary] = useState<any>();
+  const [outcomeSummary, setOutcomeSummary] = useState<React.ReactNode>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
+
+  const handoffInstructions = formatMessage(
+    'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
+  );
 
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -124,11 +120,11 @@ export const ManageQNA = (props: ManageQNAProps) => {
 
   useEffect(() => {
     // reset the ui
-    setSubscription('');
-    setQNAKeys([]);
+    setSubscriptionId('');
+    setKeys([]);
     setCurrentPage(1);
     setActionOptions([
-      { key: 'create', text: formatMessage('Create a new QnA MAker resource'), disabled: true },
+      { key: 'create', text: formatMessage('Create a new Speech resource'), disabled: true },
       { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: true },
       { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
     ]);
@@ -137,11 +133,11 @@ export const ManageQNA = (props: ManageQNAProps) => {
     }
   }, [props.hidden]);
 
-  const handleRootQNARegionOnChange = (e, value: IDropdownOption | undefined) => {
-    if (value != null) {
-      setLocalRootQNARegion(value.key as string);
+  const handleRegionOnChange = (e, value?: IDropdownOption) => {
+    if (value) {
+      setLocalRegion(value.key as string);
     } else {
-      setLocalRootQNARegion('');
+      setLocalRegion('');
     }
   };
 
@@ -165,9 +161,9 @@ export const ManageQNA = (props: ManageQNAProps) => {
     return keyList;
   };
 
-  const fetchQNA = async (subscriptionId) => {
+  const fetchAccounts = async (subscriptionId) => {
     if (token) {
-      setLoadingQNA(true);
+      setLoading(true);
       setNoKeys(false);
       const tokenCredentials = new TokenCredentials(token);
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
@@ -175,25 +171,38 @@ export const ManageQNA = (props: ManageQNAProps) => {
 
       const keys: KeyRec[] = await fetchKeys(
         cognitiveServicesManagementClient,
-        accounts.filter((a) => a.kind === 'QnAMaker')
+        accounts.filter((a) => a.kind === 'SpeechServices')
       );
-      setLoadingQNA(false);
-      if (keys.length == 0) {
+      setLoading(false);
+      if (keys.length === 0) {
         setNoKeys(true);
         setActionOptions([
-          { key: 'create', text: formatMessage('Create a new QnA Maker resource') },
+          { key: 'create', text: formatMessage('Create a new Speech resource') },
           { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
         ]);
       } else {
         setNoKeys(false);
-        setQNAKeys(keys);
+        setKeys(keys);
         setActionOptions([
-          { key: 'create', text: formatMessage('Create a new QnA Maker resource') },
+          { key: 'create', text: formatMessage('Create a new Speech resource') },
           { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: false },
         ]);
       }
+    }
+  };
+
+  const fetchLocations = async (subscriptionId) => {
+    if (token) {
+      const tokenCredentials = new TokenCredentials(token);
+      const subscriptionClient = new SubscriptionClient(tokenCredentials);
+      const locations = await subscriptionClient.subscriptions.listLocations(subscriptionId);
+      setLocationList(
+        locations.map((location) => {
+          return { key: location.name || '', text: location.displayName || '' };
+        })
+      );
     }
   };
 
@@ -214,10 +223,12 @@ export const ManageQNA = (props: ManageQNAProps) => {
     }
   };
 
-  const createQNA = async () => {
-    let qnaKey = '';
+  const createResources = async () => {
+    let key = '';
+    const serviceName = `${resourceName}`;
+
     if (token) {
-      setLoadingQNA(true);
+      setLoading(true);
       const tokenCredentials = new TokenCredentials(token);
 
       const resourceGroupName = resourceGroupKey === CREATE_NEW_KEY ? newResourceGroupName : resourceGroup;
@@ -225,174 +236,57 @@ export const ManageQNA = (props: ManageQNAProps) => {
         try {
           const resourceClient = new ResourceManagementClient(tokenCredentials, subscriptionId);
           await resourceClient.resourceGroups.createOrUpdate(resourceGroupName, {
-            location: localRootQNARegion,
+            location: localRegion,
           });
         } catch (err) {
           setOutcomeDescription(
             formatMessage(
-              'Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:'
+              'Due to the following error, we were unable to successfully add your selected Speech keys to your bot project:'
             )
           );
           setOutcomeSummary(<p>{err.message}</p>);
           setOutcomeError(true);
           setCurrentPage(3);
-          setLoadingQNA(false);
+          setLoading(false);
           return;
         }
       }
 
       try {
-        const qnaMakerSearchName = `${qnaResourceName}-search`.toLowerCase().replace('_', '');
-        const qnaMakerWebAppName = `${qnaResourceName}-qnahost`.toLowerCase().replace('_', '');
-        const qnaMakerServiceName = `${qnaResourceName}-qna`;
-
-        const searchManagementClient = new SearchManagementClient(tokenCredentials as any, subscriptionId);
-        await searchManagementClient.services.createOrUpdate(resourceGroupName, qnaMakerSearchName, {
-          location: localRootQNARegion,
-          sku: {
-            name: 'standard',
-          },
-          replicaCount: 1,
-          partitionCount: 1,
-          hostingMode: 'default',
-        });
-
-        const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
-        await webSiteManagementClient.appServicePlans.createOrUpdate(resourceGroupName, resourceGroupName, {
-          location: localRootQNARegion,
-          sku: {
-            name: 'S1',
-            tier: 'Standard',
-            size: 'S1',
-            family: 'S',
-            capacity: 1,
-          },
-        });
-        // deploy or update exisiting app insights component
-        const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
-          tokenCredentials,
-          subscriptionId
-        );
-        await applicationInsightsManagementClient.components.createOrUpdate(resourceGroupName, resourceGroupName, {
-          location: localRootQNARegion,
-          applicationType: 'web',
-          kind: 'web',
-        });
-        // deploy qna host webapp
-        const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
-          resourceGroupName,
-          qnaMakerWebAppName,
-          {
-            name: qnaMakerWebAppName,
-            serverFarmId: resourceGroupName,
-            location: localRootQNARegion,
-            siteConfig: {
-              cors: {
-                allowedOrigins: ['*'],
-              },
-            },
-            enabled: true,
-          }
-        );
-
-        // add web config for websites
-        const azureSearchAdminKey = (await searchManagementClient.adminKeys.get(resourceGroupName, qnaMakerSearchName))
-          .primaryKey;
-        const appInsightsComponent = await applicationInsightsManagementClient.components.get(
-          resourceGroupName,
-          resourceGroupName
-        );
-        const userAppInsightsKey = appInsightsComponent.instrumentationKey;
-        const userAppInsightsName = resourceGroupName;
-        const userAppInsightsAppId = appInsightsComponent.appId;
-        const primaryEndpointKey = `${qnaMakerWebAppName}-PrimaryEndpointKey`;
-        const secondaryEndpointKey = `${qnaMakerWebAppName}-SecondaryEndpointKey`;
-        const defaultAnswer = 'No good match found in KB.';
-        const QNAMAKER_EXTENSION_VERSION = 'latest';
-
-        await webSiteManagementClient.webApps.createOrUpdateConfiguration(resourceGroupName, qnaMakerWebAppName, {
-          appSettings: [
-            {
-              name: 'AzureSearchName',
-              value: qnaMakerSearchName,
-            },
-            {
-              name: 'AzureSearchAdminKey',
-              value: azureSearchAdminKey,
-            },
-            {
-              name: 'UserAppInsightsKey',
-              value: userAppInsightsKey,
-            },
-            {
-              name: 'UserAppInsightsName',
-              value: userAppInsightsName,
-            },
-            {
-              name: 'UserAppInsightsAppId',
-              value: userAppInsightsAppId,
-            },
-            {
-              name: 'PrimaryEndpointKey',
-              value: primaryEndpointKey,
-            },
-            {
-              name: 'SecondaryEndpointKey',
-              value: secondaryEndpointKey,
-            },
-            {
-              name: 'DefaultAnswer',
-              value: defaultAnswer,
-            },
-            {
-              name: 'QNAMAKER_EXTENSION_VERSION',
-              value: QNAMAKER_EXTENSION_VERSION,
-            },
-          ],
-        });
-
-        // Create qna account
         const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
           tokenCredentials,
           subscriptionId
         );
-        await cognitiveServicesManagementClient.accounts.create(resourceGroupName, qnaMakerServiceName, {
-          kind: 'QnAMaker',
+        await cognitiveServicesManagementClient.accounts.create(resourceGroupName, serviceName, {
+          kind: 'SpeechServices',
           sku: {
-            name: 'F0',
+            name: 'S0',
           },
-          location: localRootQNARegion,
-          properties: {
-            apiProperties: {
-              qnaRuntimeEndpoint: `https://${webAppResult.hostNames?.[0]}`,
-            },
-          },
+          location: localRegion,
         });
 
-        const keys = await cognitiveServicesManagementClient.accounts.listKeys(resourceGroupName, qnaMakerServiceName);
+        const keys = await cognitiveServicesManagementClient.accounts.listKeys(resourceGroupName, serviceName);
         if (!keys?.key1) {
           throw new Error('No key found for newly created authoring resource');
         } else {
-          qnaKey = keys.key1;
-          setLocalRootQNAKey(keys.key1);
+          key = keys.key1;
+          setLocalKey(keys.key1);
         }
       } catch (err) {
         setOutcomeDescription(
           formatMessage(
-            'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
+            'Due to the following error, we were unable to successfully add your selected Speech keys to your bot project:'
           )
         );
         setOutcomeSummary(<p>{err.message}</p>);
         setOutcomeError(true);
         setCurrentPage(3);
-        setLoadingQNA(false);
+        setLoading(false);
         return;
       }
 
-      setLoadingQNA(false);
-
       setOutcomeDescription(
-        formatMessage('The following LUIS resource was successfully created and added to your bot project:')
+        formatMessage('The following Speech resource was successfully created and added to your bot project:')
       );
       setOutcomeSummary(
         <div>
@@ -406,11 +300,11 @@ export const ManageQNA = (props: ManageQNAProps) => {
           </p>
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Region')}</label>
-            {localRootQNARegion}
+            {localRegion}
           </p>
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Resource name')}</label>
-            {qnaResourceName}
+            {resourceName}
           </p>
         </div>
       );
@@ -418,25 +312,33 @@ export const ManageQNA = (props: ManageQNAProps) => {
 
       // ALL DONE!
       // this will pass the new values back to the caller
-      props.onGetKey({
-        subscriptionKey: qnaKey,
-      });
+      // have to wait a second for the key to be available to use
+      // otherwise the ARM api will throw an "unknown error"
+      setTimeout(() => {
+        setLoading(false);
 
-      setCurrentPage(3);
+        props.onGetKey({
+          subscriptionKey: key,
+          region: localRegion,
+        });
+
+        setCurrentPage(3);
+      }, 3000);
     }
   };
 
   // allow a user to provide a subscription id if one is missing
   const onChangeSubscription = async (_, opt) => {
-    // get list of qna keys for this subscription
-    setSubscription(opt.key);
-    fetchQNA(opt.key);
+    // get list of keys for this subscription
+    setSubscriptionId(opt.key);
+    fetchLocations(opt.key);
+    fetchAccounts(opt.key);
     fetchResourceGroups(opt.key);
   };
 
-  const onChangeQNAKey = async (_, opt) => {
-    // get list of luis keys for this subscription
-    setLocalRootQNAKey(opt.key);
+  const onChangeKey = async (_, opt) => {
+    setLocalKey(opt.key);
+    setLocalRegion(opt.data.region);
   };
 
   const onChangeAction = async (_, opt) => {
@@ -456,18 +358,19 @@ export const ManageQNA = (props: ManageQNAProps) => {
   const performNextAction = () => {
     if (nextAction === 'choose') {
       props.onGetKey({
-        subscriptionKey: localRootQNAKey,
+        subscriptionKey: localKey,
+        region: localRegion,
       });
-      setOutcomeDescription(formatMessage('The following QnA key has been successfully added to your bot project:'));
+      setOutcomeDescription(formatMessage('The following Speech key has been successfully added to your bot project:'));
       setOutcomeSummary(
         <div>
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Key')}</label>
-            {localRootQNAKey}
+            {localKey}
           </p>
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Region')}</label>
-            {localRootQNARegion}
+            {localRegion}
           </p>
         </div>
       );
@@ -482,13 +385,10 @@ export const ManageQNA = (props: ManageQNAProps) => {
     }
   };
 
-  const iconStyles = { marginRight: '8px' };
   const onRenderOption = (option) => {
     return (
       <div>
-        {option.data && option.data.icon && (
-          <Icon aria-hidden="true" iconName={option.data.icon} style={iconStyles} title={option.data.icon} />
-        )}
+        {option.data?.icon && <Icon aria-hidden="true" iconName={option.data.icon} style={iconStyles} />}
         <span>{option.text}</span>
       </div>
     );
@@ -507,21 +407,21 @@ export const ManageQNA = (props: ManageQNAProps) => {
       )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share this information with your Azure admin. After your QNA key is provisioned, you will be ready to test your bot with qna.'
+          'Copy and share this information with your Azure admin. After your Speech key is provisioned, you will be ready to test your bot with speech.'
         )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
         title={formatMessage('Share resource request')}
         onBack={() => {
           setShowHandoff(false);
-          props.setDisplayManageQna(true);
+          props.setVisibility(true);
         }}
         onDismiss={() => setShowHandoff(false)}
       />
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
-          title: currentPage === 2 ? formatMessage('Create new QNA resources') : formatMessage('Select QNA keys'),
+          title: currentPage === 2 ? formatMessage('Create new Speech resources') : formatMessage('Select Speech keys'),
         }}
         hidden={props.hidden}
         minWidth={480}
@@ -535,12 +435,12 @@ export const ManageQNA = (props: ManageQNAProps) => {
             <div>
               <p>
                 {formatMessage(
-                  'Select your Azure subscription and choose from existing QNA keys, or create a new QNA resource. Learn more'
+                  'Select your Azure subscription and choose from existing Speech keys, or create a new Speech resource. Learn more'
                 )}
               </p>
               <div css={mainElementStyle}>
                 <Dropdown
-                  disabled={!(availableSubscriptions?.length > 0)}
+                  disabled={!availableSubscriptions?.length}
                   label={formatMessage('Select subscription')}
                   options={
                     availableSubscriptions
@@ -564,43 +464,45 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   {noKeys && subscriptionId && (
                     <span style={{ color: 'rgb(161, 159, 157)' }}>
                       {formatMessage(
-                        'No existing QNA resource found in this subscription. Click “Next” to create new.'
+                        'No existing Speech resource found in this subscription. Click “Next” to create a new one.'
                       )}
                     </span>
                   )}
                   {!noKeys && subscriptionId && (
                     <div>
                       <Dropdown
-                        disabled={!(qnaKeys?.length > 0) || nextAction !== 'choose'}
-                        label={formatMessage('QnA Maker key')}
+                        disabled={!keys?.length || nextAction !== 'choose'}
+                        label={formatMessage('Speech key')}
                         options={
-                          qnaKeys.map((p) => {
-                            return { text: p.name, ...p };
+                          keys.map((p) => {
+                            return { text: p.name, ...p, data: p };
                           }) ?? []
                         }
                         placeholder={formatMessage('Select one')}
                         styles={dropdownStyles}
-                        onChange={onChangeQNAKey}
+                        onChange={onChangeKey}
                       />
                     </div>
                   )}
                 </div>
               </div>
               <DialogFooter>
-                {loadingQNA && (
-                  <Spinner label="Loading keys..." labelPosition="right" styles={{ root: { float: 'left' } }} />
+                {loading && (
+                  <Spinner
+                    label={formatMessage('Loading keys...')}
+                    labelPosition="right"
+                    styles={{ root: { float: 'left' } }}
+                  />
                 )}
                 <PrimaryButton
                   disabled={
-                    loadingQNA ||
-                    (nextAction === 'choose' && !localRootQNAKey) ||
-                    (nextAction === 'create' && !subscriptionId)
+                    loading || (nextAction === 'choose' && !localKey) || (nextAction === 'create' && !subscriptionId)
                   }
                   text={formatMessage('Next')}
                   onClick={performNextAction}
                 />
                 <DefaultButton
-                  disabled={loadingQNA || showAuthDialog}
+                  disabled={loading || showAuthDialog}
                   text={formatMessage('Cancel')}
                   onClick={props.onDismiss}
                 />
@@ -612,12 +514,12 @@ export const ManageQNA = (props: ManageQNAProps) => {
               <div css={mainElementStyle}>
                 <p>
                   {formatMessage(
-                    'Input your details below to create a new QNA resource. You will be able to manage your new resource in the Azure portal. Learn more'
+                    'Input your details below to create a new Speech resource. You will be able to manage your new resource in the Azure portal. Learn more'
                   )}
                 </p>
                 <Dropdown
-                  disabled={resourceGroups.length === 0 || loadingQNA}
-                  label={formatMessage('Resource group:')}
+                  disabled={!resourceGroups.length || loading}
+                  label={formatMessage('Resource group')}
                   options={
                     resourceGroups.map((p) => {
                       return { key: p.id, text: p.name, data: p.data };
@@ -633,9 +535,8 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   <TextField
                     required
                     aria-label={formatMessage('Resource group name')}
-                    data-testid={'qnaResourceGroupName'}
-                    disabled={loadingQNA}
-                    id={'qnaResourceGroupName'}
+                    data-testid={'resourceGroupName'}
+                    disabled={loading}
                     label={formatMessage('Resource group name')}
                     placeholder={formatMessage('Enter name for new resource group')}
                     styles={{ root: { marginTop: 10 } }}
@@ -647,46 +548,48 @@ export const ManageQNA = (props: ManageQNAProps) => {
                 )}
                 <Dropdown
                   required
-                  aria-label={formatMessage('QnA region')}
-                  data-testid={'rootqnaRegion'}
-                  disabled={loadingQNA}
-                  id={'qnaRegion'}
-                  label={formatMessage('QnA region')}
-                  options={QNA_REGIONS}
-                  placeholder={formatMessage('Enter QnA region')}
-                  selectedKey={localRootQNARegion}
+                  aria-label={formatMessage('Speech region')}
+                  data-testid={'rootRegion'}
+                  disabled={loading || !locationList}
+                  label={formatMessage('Speech region')}
+                  options={locationList}
+                  placeholder={formatMessage('Enter Speech region')}
+                  selectedKey={localRegion}
                   styles={dropdownStyles}
-                  onChange={handleRootQNARegionOnChange}
+                  onChange={handleRegionOnChange}
                 />
                 <TextField
                   required
                   aria-label={formatMessage('Resource name')}
-                  data-testid={'qnaResourceName'}
-                  disabled={loadingQNA}
-                  id={'qnaResourceName'}
+                  data-testid={'resourceName'}
+                  disabled={loading}
                   label={formatMessage('Resource name')}
-                  placeholder={formatMessage('Enter name for new QnA resources')}
+                  placeholder={formatMessage('Enter name for new Speech resources')}
                   styles={{ root: { marginTop: 10 } }}
-                  value={qnaResourceName}
-                  onChange={(e, val) => setQNAResourceName(val || '')}
+                  value={resourceName}
+                  onChange={(e, val) => setResourceName(val || '')}
                 />
               </div>
               <DialogFooter>
-                {loadingQNA && (
-                  <Spinner label="Creating resources..." labelPosition="right" styles={{ root: { float: 'left' } }} />
+                {loading && (
+                  <Spinner
+                    label={formatMessage('Creating resources...')}
+                    labelPosition="right"
+                    styles={{ root: { float: 'left' } }}
+                  />
                 )}
-                <DefaultButton disabled={loadingQNA} text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
+                <DefaultButton disabled={loading} text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />
                 <PrimaryButton
                   disabled={
-                    loadingQNA ||
-                    !qnaResourceName ||
+                    loading ||
+                    !resourceName ||
                     !resourceGroupKey ||
                     (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
                   }
                   text={formatMessage('Next')}
-                  onClick={createQNA}
+                  onClick={createResources}
                 />
-                <DefaultButton disabled={loadingQNA} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+                <DefaultButton disabled={loading} text={formatMessage('Cancel')} onClick={props.onDismiss} />
               </DialogFooter>
             </div>
           )}

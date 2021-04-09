@@ -17,7 +17,6 @@ import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
 import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
-import { PublishTargets } from './PublishTargets';
 import AdapterSection from './adapters/AdapterSection';
 
 // -------------------- Styles -------------------- //
@@ -29,13 +28,9 @@ const container = css`
   height: 100%;
 `;
 
-const publishTargetsWrap = (isLastComponent) => css`
-  margin-bottom: ${isLastComponent ? '120px' : 0};
-`;
-
 const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
-  LuisQna: [],
+  LuisQna: ['luisKey', 'qnaKey'],
   Connections: ['connections', 'addNewPublishProfile'],
   SkillConfig: [],
   Language: [],
@@ -93,10 +88,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           headerText={formatMessage('Connections')}
           itemKey={PivotItemKey.Connections}
         >
-          <div css={publishTargetsWrap(!isRootBot)}>
-            <PublishTargets projectId={projectId} scrollToSectionId={scrollToSectionId} />
-            {isRootBot && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
-          </div>
+          {isRootBot && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
         </PivotItem>
         <PivotItem
           data-testid="skillsTab"

@@ -162,8 +162,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
-  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
-  const rootLuisEndpointKey = groupLUISEndpointKey.root;
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
@@ -183,7 +181,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [qnaKeyErrorMsg, setQnAKeyErrorMsg] = useState<string>('');
 
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
-  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>(rootLuisEndpointKey ?? '');
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
   const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
@@ -191,7 +188,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
-  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
@@ -257,10 +253,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
-  const handleRootLUISEndpointKeyOnChange = (e, value) => {
-    setLocalRootLuisEndpointKey(value);
-  };
-
   const handleRootQnAKeyOnChange = (e, value) => {
     if (value) {
       setQnAKeyErrorMsg('');
@@ -300,13 +292,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     setSettings(projectId, {
       ...mergedSettings,
       luis: { ...mergedSettings.luis, authoringKey: localRootLuisKey },
-    });
-  };
-
-  const handleRootLuisEndpointKeyOnBlur = () => {
-    setSettings(projectId, {
-      ...mergedSettings,
-      luis: { ...mergedSettings.luis, endpointKey: localRootLuisEndpointKey },
     });
   };
 
@@ -373,20 +358,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             value={localRootLuisKey}
             onBlur={handleRootLuisAuthoringKeyOnBlur}
             onChange={handleRootLUISKeyOnChange}
-            onRenderLabel={onRenderLabel}
-          />
-        </div>
-        <div ref={luisEndpointKeyFieldRef}>
-          <TextField
-            ariaLabel={formatMessage('LUIS endpoint key')}
-            data-testid={'rootLUISEndpointKey'}
-            id={'luisEndpointKey'}
-            label={formatMessage('LUIS endpoint key')}
-            placeholder={formatMessage('Enter LUIS endpoint key')}
-            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-            value={localRootLuisEndpointKey}
-            onBlur={handleRootLuisEndpointKeyOnBlur}
-            onChange={handleRootLUISEndpointKeyOnChange}
             onRenderLabel={onRenderLabel}
           />
         </div>

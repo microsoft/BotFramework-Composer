@@ -53,17 +53,6 @@ const focusStyle = css`
   position: relative;
 `;
 
-const icons = {
-  TRIGGER: 'LightningBolt',
-  DIALOG: 'Org',
-  FORM_DIALOG: 'Table',
-  FORM_FIELD: 'Variable2', // x in parentheses
-  FORM_TRIGGER: 'TriggerAuto', // lightning bolt with gear
-  FILTER: 'Filter',
-  LG: 'Robot',
-  LU: 'People',
-};
-
 const tree = css`
   height: calc(100% - 45px);
   overflow-y: auto;
@@ -287,10 +276,10 @@ export const ProjectTree: React.FC<Props> = ({
         >
           <TreeItem
             hasChildren
-            icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             isChildSelected={isChildTriggerLinkSelected(dialogLink, selectedLink)}
             isMenuOpen={isMenuOpen}
+            itemType={isFormDialog ? 'form dialog' : 'dialog'}
             link={dialogLink}
             menu={options.showMenu ? menu : options.showQnAMenu ? [QnAMenuItem] : []}
             menuOpenCallback={setMenuOpen}
@@ -320,9 +309,9 @@ export const ProjectTree: React.FC<Props> = ({
       <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`}>
         <TreeItem
           hasChildren
-          icon={icons.DIALOG}
           isActive={doesLinkMatch(dialogLink, selectedLink)}
           isMenuOpen={isMenuOpen}
+          itemType={'dialog'}
           link={dialogLink}
           menuOpenCallback={setMenuOpen}
           padLeft={depth * LEVEL_PADDING}
@@ -363,9 +352,9 @@ export const ProjectTree: React.FC<Props> = ({
         key={`${item.id}_${item.index}`}
         dialogName={dialog.displayName}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'trigger'}
         link={link}
         marginLeft={depth * INDENT_PER_LEVEL}
         menu={
@@ -440,6 +429,7 @@ export const ProjectTree: React.FC<Props> = ({
           hasChildren
           isMenuOpen={isMenuOpen}
           isSubItemActive={false}
+          itemType={'trigger group'}
           link={link}
           menuOpenCallback={setMenuOpen}
           showErrors={options.showErrors}
@@ -516,9 +506,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lg_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -545,9 +535,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lg_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -581,9 +571,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lu_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -610,9 +600,9 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`lu_${item.id}`}
         extraSpace={INDENT_PER_LEVEL}
-        icon={icons.DIALOG}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={'dialog'}
         link={link}
         menu={[]}
         menuOpenCallback={setMenuOpen}
@@ -797,10 +787,10 @@ export const ProjectTree: React.FC<Props> = ({
           aria-label={formatMessage(
             `{
             dialogNum, plural,
-                =0 {No bots}
-                =1 {One bot}
-              other {# bots}
-            } have been found.
+                =0 {No bots have}
+                =1 {One bot has}
+              other {# bots have}
+            } been found.
             {
               dialogNum, select,
                   0 {}

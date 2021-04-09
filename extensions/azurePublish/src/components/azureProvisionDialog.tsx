@@ -397,6 +397,7 @@ export const AzureProvisionDialog: React.FC = () => {
       const { accessToken } = getTokenFromCache();
 
       setToken(accessToken);
+
       // decode token
       const decoded = decodeToken(accessToken);
       if (decoded) {
@@ -450,16 +451,18 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const getResources = async () => {
     try {
-      if (isMounted.current) {
-        const resources = await getResourceList(currentProjectId(), publishType);
-        setExtensionResourceOptions(resources);
-      }
+      const resources = await getResourceList(currentProjectId(), publishType);
+      setExtensionResourceOptions(resources);
     } catch (err) {
       // todo: how do we handle API errors in this component
       // eslint-disable-next-line no-console
       console.log('ERROR', err);
     }
   };
+
+  useEffect(() => {
+    getResources();
+  }, [publishType]);
 
   useEffect(() => {
     if (token) {
@@ -482,8 +485,6 @@ export const AzureProvisionDialog: React.FC = () => {
             setSubscriptionsErrorMessage(err.message);
           }
         });
-
-      getResources();
     }
   }, [token]);
 
@@ -673,7 +674,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
-  const isNewResourceGroupName = !resourceGroupNames.includes(formData.resourceGroup);
+  const isNewResourceGroupName = !currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup);
 
   const PageChooseAction = (
     <ScrollablePane
@@ -682,7 +683,7 @@ export const AzureProvisionDialog: React.FC = () => {
       style={{ height: 'calc(100vh - 64px)' }}
     >
       <ChooseProvisionAction
-        choice="create"
+        choice={formData.creationType}
         onChoiceChanged={(choice) => {
           updateFormData('creationType', choice);
         }}
@@ -881,8 +882,10 @@ export const AzureProvisionDialog: React.FC = () => {
                   case 'import':
                     setPageAndTitle(PageTypes.EditJson);
                     break;
-                  case 'create':
                   case 'generate':
+                    onNext(formData.hostname);
+                    break;
+                  case 'create':
                   default:
                     setPageAndTitle(PageTypes.ConfigProvision);
                     break;
@@ -968,7 +971,11 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Back')}
               onClick={() => {
-                setPageAndTitle(PageTypes.ConfigProvision);
+                if (formData.creationType === 'generate') {
+                  setPageAndTitle(PageTypes.ChooseAction);
+                } else {
+                  setPageAndTitle(PageTypes.ConfigProvision);
+                }
               }}
             />
             <PrimaryButton
@@ -1025,6 +1032,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
                 onSubmit({
+                  tenantId: formData.tenantId,
                   subscription: formData.subscriptionId,
                   resourceGroup: formData.resourceGroup,
                   hostname: formData.hostname,
