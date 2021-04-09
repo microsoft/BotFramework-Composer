@@ -1,7 +1,7 @@
 {
   "name": "azurePublish",
   "version": "1.0.0",
-  "description": "Publish bot to an Azure Web App (Preview)",
+  "description": "Publish bot to an Azure Web App",
   "main": "dist/extension.js",
   "license": "MIT",
   "scripts": {
