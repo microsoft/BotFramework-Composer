@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import path from 'path';
 
 import URI from 'vscode-uri';
 import { FoldingRangeParams, IConnection, TextDocuments } from 'vscode-languageserver';
@@ -36,6 +37,8 @@ export class LUServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LUDocuments: LUDocument[] = [];
   private luParser = new LuParser();
+  private _curFileId = '';
+  private _curProjectId = '';
 
   constructor(
     protected readonly connection: IConnection,
@@ -66,6 +69,7 @@ export class LUServer {
         capabilities: {
           textDocumentSync: this.documents.syncKind,
           codeActionProvider: false,
+          definitionProvider: true,
           completionProvider: {
             resolveProvider: true,
             triggerCharacters: ['@', ' ', '{', ':', '[', '('],
@@ -79,6 +83,7 @@ export class LUServer {
     });
     this.connection.onCompletion((params) => this.completion(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onDefinition((params: TextDocumentPositionParams) => this.definitionHandler(params));
     this.connection.onFoldingRanges((foldingRangeParams: FoldingRangeParams) =>
       this.foldingRangeHandler(foldingRangeParams)
     );
@@ -99,6 +104,36 @@ export class LUServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected definitionHandler(params: TextDocumentPositionParams): undefined {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return;
+    }
+
+    const curLine = document.getText().split(/\r?\n/g)[params.position.line];
+    // eslint-disable-next-line security/detect-unsafe-regex
+    const importRegex = /^\s*-?\s*\[[^[\]]+\](\(([^()#]+)(#([a-zA-Z0-9_-]*))?(\*([a-zA-Z0-9_-]+)\*)?\))/;
+    if (importRegex.test(curLine)) {
+      const importedFile = curLine.match(importRegex);
+      if (importedFile) {
+        const target = importedFile[2];
+        const intent = importedFile[4];
+        const fileId = path.parse(target).name;
+        const targetFile = this.importResolver?.(this._curFileId, target, this._curProjectId);
+        if (targetFile) {
+          this.connection.sendNotification('LuGotoDefinition', {
+            fileId: fileId,
+            intent: intent,
+          });
+        }
+
+        return;
+      }
+    }
+
+    return;
   }
 
   protected async foldingRangeHandler(params: FoldingRangeParams): Promise<FoldingRange[]> {
@@ -191,6 +226,8 @@ export class LUServer {
       }
 
       const id = fileId || uri;
+      this._curFileId = id;
+      this._curProjectId = projectId || '';
       const { intents: sections, diagnostics } = await this.luParser.parse(content, id, luFeatures);
 
       return { sections, diagnostics, content };
