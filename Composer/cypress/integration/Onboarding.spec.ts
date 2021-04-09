@@ -9,7 +9,7 @@ context('Onboarding', () => {
     //enable onboarding setting
     cy.visitPage('Composer Settings');
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('Application Settings').click();
+      cy.findByText('Application settings').click();
     });
     cy.findByTestId('onboardingToggle').click();
     cy.visitPage('Design');
