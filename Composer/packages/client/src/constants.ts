@@ -95,6 +95,9 @@ export const Text = {
   get DOTNETFAILURE() {
     return formatMessage('Composer needs .NET Core SDK');
   },
+  get BOTRUNTIMEERROR() {
+    return formatMessage('Composer Runtime Error');
+  },
 };
 
 export enum LuisConfig {

@@ -3,19 +3,14 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
+import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes } from '@uifabric/fluent-theme';
 
 // -------------------- Styles -------------------- //
 
 const calloutLabel = css`
-  font-size: ${FontSizes.size18};
   font-weight: ${FontWeights.bold};
-`;
-
-const calloutContainer = css`
-  padding: 10px;
 `;
 
 const calloutDescription = css`
@@ -135,9 +130,13 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
       return <div>{parsed.map(renderRow)}</div>;
     }
   };
-
   return (
-    <div css={calloutContainer} data-testid="runtime-error-callout">
+    <div
+      css={{
+        color: `${SharedColors.red10}`,
+      }}
+      data-testid="runtime-error-callout"
+    >
       <p css={calloutLabel}>{error.title}</p>
       <p css={calloutDescription}>
         {buildErrorMessage(error)}
