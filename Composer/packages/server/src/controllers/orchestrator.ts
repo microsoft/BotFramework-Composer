@@ -7,6 +7,7 @@ import { pathExists } from 'fs-extra';
 import { OrchestratorModelRequest, DownloadState } from '@bfc/shared';
 
 import { IOrchestratorNLRList } from '../models/bot/interface';
+import { TelemetryService } from '../services/telemetry';
 import { Path } from '../utility/path';
 
 class OrchestratorController {
@@ -74,6 +75,7 @@ class OrchestratorController {
     };
 
     const onFinish = (msg: string) => {
+      TelemetryService.endEvent('OrchestratorDownloadCompleted', 'OrchestratorDownloader');
       this.state = DownloadState.STOPPED;
     };
 
@@ -81,6 +83,7 @@ class OrchestratorController {
 
     try {
       this.state = DownloadState.DOWNLOADING;
+      TelemetryService.startEvent('OrchestratorDownloadStarted', 'OrchestratorDownloader');
       await Orchestrator.baseModelGetAsync(modelPath, modelName, onProgress, onFinish);
     } catch (err) {
       this.errorMsg = err;

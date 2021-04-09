@@ -33,7 +33,7 @@ class OrchestratorBuilder {
     });
   }
 
-  public async warmupCache(projectId: string, generatedFolderPath: string) {
+  public async warmupCache(projectId: string, generatedFolderPath: string): Promise<boolean> {
     const msgId = uniqueId();
     const msg = { id: msgId, payload: { type: 'warmup', projectId, generatedFolderPath } };
 
