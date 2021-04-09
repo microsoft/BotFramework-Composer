@@ -674,7 +674,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
-  const isNewResourceGroupName = !resourceGroupNames.includes(formData.resourceGroup);
+  const isNewResourceGroupName = !currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup);
 
   const PageChooseAction = (
     <ScrollablePane
@@ -1032,6 +1032,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
                 onSubmit({
+                  tenantId: formData.tenantId,
                   subscription: formData.subscriptionId,
                   resourceGroup: formData.resourceGroup,
                   hostname: formData.hostname,
