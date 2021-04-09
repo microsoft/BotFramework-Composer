@@ -94,14 +94,9 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   border-width: 0;
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
-  min-width: 244px;
   height: auto;
-  width: 17vw;
   margin-right: 12px;
   padding: 0;
-  @media (max-width: 1366px) {
-    width: 22vw;
-  }
 `;
 
 export const itemContainer = css`
@@ -186,6 +181,11 @@ export const cardItem = {
   container: css`
     margin: 12px 0 12px 12px;
     padding: 12px;
+    min-width: 244px;
+    width: 17vw;
+    @media (max-width: 1366px) {
+      width: 20vw;
+    }
     text-align: left;
     border: 1px #efedeb solid;
     box-shadow: ${Depths.depth4};
@@ -240,7 +240,11 @@ export const mediaCardItem = {
   imageCover: css`
     ${cardItem.imageCover}
     width: 100%;
-    height: 95px;
+    min-height: 95px;
+    height: calc(17vw * 95 / 244);
+    @media (max-width: 1366px) {
+      height: calc(20vw * 95 / 244);
+    }
     margin-bottom: 12px;
     overflow: hidden;
     display: flex;
