@@ -686,6 +686,9 @@
   "composer_on_github_1e3782ef": {
     "message": "Composer on GitHub"
   },
+  "composer_runtime_error_b0efe05": {
+    "message": "Composer Runtime Error"
+  },
   "composer_settings_31b04099": {
     "message": "Composer Settings"
   },
@@ -1466,11 +1469,17 @@
   "error_occurred_5549a6b4": {
     "message": "Error occurred"
   },
+  "error_occurred_building_the_bot_7425aa09": {
+    "message": "Error occurred building the bot"
+  },
   "error_occurred_ejecting_runtime_8512129e": {
     "message": "Error occurred ejecting runtime!"
   },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
+  },
+  "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
+    "message": "Error occurred trying to fetch runtime standard output"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Please add unknown functions to setting''s customFunctions field."
@@ -2354,11 +2363,11 @@
   "move_abf00365": {
     "message": "Move"
   },
-  "move_down_eaae3426": {
-    "message": "Move Down"
+  "move_down_4a9c9b18": {
+    "message": "Move down"
   },
-  "move_up_b1c4d3a5": {
-    "message": "Move Up"
+  "move_up_2440f707": {
+    "message": "Move up"
   },
   "ms_teams_15993b97": {
     "message": "MS Teams"
@@ -2654,9 +2663,6 @@
   "output_5023cf84": {
     "message": "Output"
   },
-  "outputs_e6f0bfbe": {
-    "message": "Outputs"
-  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2894,6 +2900,9 @@
   "qna_maker_key_eef1f214": {
     "message": "QnA Maker key"
   },
+  "qna_maker_subscription_key_a645be58": {
+    "message": "QnA Maker subscription key:"
+  },
   "qna_maker_subscription_key_e009c9d9": {
     "message": "QnA Maker Subscription key"
   },
@@ -2905,9 +2914,6 @@
   },
   "qna_region_5d2a4bce": {
     "message": "QnA region"
-  },
-  "qna_subscription_key_207418bd": {
-    "message": "QNA subscription key:"
   },
   "question_9121487": {
     "message": "Question"
@@ -3439,9 +3445,6 @@
   },
   "start_bot_1da1ebf4": {
     "message": "Start bot"
-  },
-  "start_bot_failed_d75647d5": {
-    "message": "Start bot failed"
   },
   "start_command_a085f2ec": {
     "message": "Start command"
