@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
-    "build":" cp data.json ../packages/server/",
+    "build": " cp data.json ../packages/server/",
     "gen": "jest --runInBand --coverage && istanbul report --include coverage/coverage-final.json html > coverage.html",
     "mail": "node mail.js"
   },
@@ -14,10 +14,10 @@
   "dependencies": {
     "@types/node": "^14.14.13",
     "axios": "^0.21.1",
+    "botframework-schema": "^4.12.0",
     "fs-extra": "^9.0.1",
     "jest-html-reporter": "^3.3.0",
-    "nodemailer": "^6.4.17",
-    "uuid": "^8.3.2"
+    "nodemailer": "^6.4.17"
   },
   "jest": {
     "collectCoverage": true,
