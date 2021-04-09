@@ -24,7 +24,7 @@ import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { ITooltipHostStyles, ITooltipStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { flexContentSpaceBetween } from '../language-understanding/styles';
 
 const copiedCalloutStyles = {
@@ -41,12 +41,13 @@ const SkillManifestUrlField = ({ urls }: SkillManifestUrlFieldProps) => {
   const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(urls[0]);
 
   const calloutTarget = useRef<HTMLElement>();
+  const clipUrl = (url) => url.replace('azurewebsites.net/manifests/', 'azureweb...');
   return (
     <Fragment>
       <TooltipHost
         content={urls.map((url) => (
           <div key={url} style={{ display: 'flex' }}>
-            {url}
+            {clipUrl(url)}
             <IconButton iconProps={{ iconName: 'copy' }} onClick={() => navigator.clipboard.writeText(url)} />
           </div>
         ))}

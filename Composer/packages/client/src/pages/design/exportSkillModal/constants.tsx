@@ -95,6 +95,8 @@ export interface ContentProps {
   setSelectedTriggers: (selectedTriggers: any[]) => void;
   setSkillManifest: (_: Partial<SkillManifestFile>) => void;
   schema: JSONSchema7;
+  selectedDialogs: any[];
+  selectedTriggers: any[];
   skillManifests: SkillManifestFile[];
   value: { [key: string]: any };
   onChange: (_: any) => void;
@@ -161,6 +163,12 @@ const nextButton: Button = {
   onClick: ({ onNext }) => onNext,
 };
 
+const backButton: Button = {
+  primary: true,
+  text: () => formatMessage('Back'),
+  onClick: ({ onBack }) => onBack,
+};
+
 const validate = ({ content, schema }) => {
   const required = schema?.required || [];
 
@@ -212,6 +220,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.SELECT_PROFILE]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Generate and Publish'),
@@ -231,6 +240,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.ADD_CALLERS]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Next'),
@@ -251,6 +261,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Next'),
@@ -264,6 +275,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.SELECT_DIALOGS]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Next'),
@@ -281,6 +293,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.SELECT_TRIGGERS]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Next'),
@@ -301,6 +314,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.SAVE_MANIFEST]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Save'),
