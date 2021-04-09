@@ -82,6 +82,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </div>
         </Split>
         <Modals projectId={activeBot} />
+        <div
+          css={{
+            height: '100%',
+            width: '200px',
+            float: 'right',
+            background: 'black',
+          }}
+        >
+          WEBCHAT
+        </div>
         <DebugPanel />
       </div>
     </div>
