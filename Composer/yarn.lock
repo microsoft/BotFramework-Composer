@@ -4057,10 +4057,10 @@
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
 
-"@microsoft/bf-lu@4.12.0-rc0":
-  version "4.12.0-rc0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-rc0.tgz#9c1aa4cb7d22a0a49d4c16eb1bce5d5e222c40b1"
-  integrity sha512-bz5BPQsIh+BwXZ+YAMG15wTndF/Ug3EviSjOs0GtryRSkgJkmAqAhdpU0SRjVAVuy7XzTRpltxbMmSoiYVnHtA==
+"@microsoft/bf-lu@4.13.0-rc0":
+  version "4.13.0-rc0"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.13.0-rc0.tgz#117c6f86fc40e4afa022d48fe2050678e02084b3"
+  integrity sha512-JP105CuKZdCSevkKov183c1tJ1cyAjPv/X2TT6rTmzWq00sJcvBU1sv/k2Vg4MAVLO3RsJZbYixfOxKQ/s/bew==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -4079,15 +4079,15 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-lu@4.13.0-rc0":
-  version "4.13.0-rc0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.13.0-rc0.tgz#117c6f86fc40e4afa022d48fe2050678e02084b3"
-  integrity sha512-JP105CuKZdCSevkKov183c1tJ1cyAjPv/X2TT6rTmzWq00sJcvBU1sv/k2Vg4MAVLO3RsJZbYixfOxKQ/s/bew==
+"@microsoft/bf-lu@4.14.0-dev.20210408.1a5070e":
+  version "4.14.0-dev.20210408.1a5070e"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.14.0-dev.20210408.1a5070e.tgz#fb4b9f0d8e79c4f7f6bd90d3f40c8920250fc7c0"
+  integrity sha512-eqV0xvBAciD9bAgFe9GHK4wt9z/p0ZmhIG46MsyY7bN92N0/TKG+IQy9fxnz/zv9ssqap5gpO+qdOzXEVReg6A==
   dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
     "@types/node-fetch" "~2.5.5"
     antlr4 "~4.8.0"
+    axios "~0.21.1"
+    axios-https-proxy "^0.1.1"
     chalk "2.4.1"
     console-stream "^0.1.1"
     deep-equal "^1.0.1"
@@ -6722,7 +6722,14 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
   integrity sha512-ReZxvNHIOv88FlT7rxcXIIC0fPt4KZqZbOlivyWtXLt8ESx84zd3kMC6iK5jVeS2qt+g7ftS7ye4fi06X5rtRQ==
 
-axios@^0.18.0, axios@^0.19.2, axios@^0.21.1:
+axios-https-proxy@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/axios-https-proxy/-/axios-https-proxy-0.1.1.tgz#929ce6bbd669c940b025e0c7258318a63d66d5c4"
+  integrity sha512-slFaor1FTRhO6V6r2ewuWLBRIF33Lkg+wRmUVJPWRe0JRgBKevBSlgjDInp+AeKGKZjyT7k3l44l67CvEme1Cg==
+  dependencies:
+    https-proxy-agent "^2.2.1"
+
+axios@^0.18.0, axios@^0.19.2, axios@^0.21.1, axios@~0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
