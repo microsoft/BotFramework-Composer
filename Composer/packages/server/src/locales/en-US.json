@@ -494,6 +494,15 @@
   "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
     "message": "Bot Framework Composer is a visual authoring canvas for building bots and other types of conversational application with the Microsoft Bot Framework technology stack. With Composer you will find everything you need to build a modern, state-of-the-art conversational experience."
   },
+  "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
+    "message": "Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation."
+  },
+  "bot_framework_composer_requires_node_js_in_order_t_a1d3dfb": {
+    "message": "Bot Framework Composer requires Node.js in order to run. Click “Install Node.js” to install the latest version"
+  },
+  "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
+    "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
+  },
   "bot_framework_emulator_fefd4a59": {
     "message": "Bot Framework Emulator"
   },
@@ -1451,6 +1460,9 @@
   "error_afac7133": {
     "message": "Error:"
   },
+  "error_checking_node_version_98bfbf4c": {
+    "message": "Error checking node version"
+  },
   "error_encountered_when_getting_template_readme_17dcbc61": {
     "message": "### Error encountered when getting template readMe"
   },
@@ -1882,6 +1894,9 @@
   },
   "install_more_adapters_in_a_the_package_manager_a_156fb028": {
     "message": "Install more adapters in <a>the package manager</a>."
+  },
+  "install_node_js_1857298c": {
+    "message": "Install Node.js"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
