@@ -36,7 +36,7 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   file?: LgFile;
 }
 
-const adaptiveCardRegex = /-\s*```\s*.*([\s\S]*)\)\s*```/;
+const adaptiveCardRegex = /-\s*```\$\{\s*.*([\s\S]*)\)}\s*/;
 
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, lgFileId, file } = props;

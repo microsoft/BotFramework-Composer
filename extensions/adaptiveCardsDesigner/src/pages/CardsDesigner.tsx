@@ -13,6 +13,7 @@ import { CreateTemplateModal } from './CreateTemplateModal';
 import { useLgTemplates } from './useLgTemplates';
 import { getAdaptiveCard, toCardJson } from './utils';
 import { ParsedLgTemplate } from './types';
+import { LoadingSpinner } from '@bfc/ui-shared';
 
 const AdaptiveCardDesignerContainer = styled.div({
   display: 'flex',
@@ -101,15 +102,16 @@ const Library: React.FC = () => {
   );
 
   return (
-    <React.Fragment>
-      <AdaptiveCardDesignerContainer>
-        <div ref={ACDesignerRef} />
-      </AdaptiveCardDesignerContainer>
-      <CreateTemplateModal
-        hidden={monacoStatus === 'loading' || templatesStatus === 'loading' || !!selectedTemplate}
-        onSelectTemplate={onSelectTemplate}
-      />
-    </React.Fragment>
+    <AdaptiveCardDesignerContainer>
+      {monacoStatus === 'loading' || templatesStatus === 'loading' ? (
+        <LoadingSpinner />
+      ) : (
+        <React.Fragment>
+          <div ref={ACDesignerRef} />
+          <CreateTemplateModal hidden={!!selectedTemplate} onSelectTemplate={onSelectTemplate} />
+        </React.Fragment>
+      )}
+    </AdaptiveCardDesignerContainer>
   );
 };
 

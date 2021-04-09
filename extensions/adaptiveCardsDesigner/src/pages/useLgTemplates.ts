@@ -26,8 +26,8 @@ export const useLgTemplates = () => {
           setTemplateStatus('loaded');
           setLgTemplates(templates);
           clearInterval(interval);
-        } else if (Date.now() - start.current > 5000) {
-          // Stop polling after 5000ms
+        } else if (Date.now() - start.current > 3000) {
+          // Stop polling after 3000ms
           setTemplateStatus('loaded');
           clearInterval(interval);
         }

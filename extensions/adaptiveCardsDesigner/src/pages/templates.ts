@@ -1,6 +1,6 @@
-export const cardTemples = [
+export const cardTemplates = [
   {
-    name: 'Flight itinerary',
+    displayName: 'Flight itinerary',
     body: {
       $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
       version: '1.0',
@@ -256,7 +256,7 @@ export const cardTemples = [
     },
   },
   {
-    name: 'Inputs',
+    displayName: 'Inputs',
     body: {
       $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
       type: 'AdaptiveCard',
