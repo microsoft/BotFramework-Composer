@@ -18,7 +18,7 @@ import killPort from 'kill-port';
 import map from 'lodash/map';
 import * as tcpPortUsed from 'tcp-port-used';
 
-import { WebSocketServer } from './WebSocketServer';
+import { RuntimeLogServer } from './runtimeLogServer';
 
 const removeDirAndFiles = promisify(rimraf);
 const mkdir = promisify(fs.mkdir);
@@ -121,7 +121,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         },
       };
     }
-    WebSocketServer.sendRuntimeLogToSubscribers(
+    RuntimeLogServer.sendRuntimeLogToSubscribers(
       botId,
       LocalPublisher.runningBots[botId].result.runtimeLog ?? '',
       LocalPublisher.runningBots[botId].result.runtimeError ?? ''
@@ -238,8 +238,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   setupRuntimeLogServer = async (projectId: string) => {
-    await WebSocketServer.init();
-    return WebSocketServer.getRuntimeLogStreamingUrl(projectId);
+    await RuntimeLogServer.init();
+    return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
   };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');

@@ -448,7 +448,7 @@ export const projectIndexingState = atomFamily<boolean, string>({
 export const runtimeStandardOutputDataState = atomFamily<RuntimeOutputData, string>({
   key: getFullyQualifiedKey('runtimeStandardOutputData'),
   default: {
-    standardError: '',
+    standardError: null,
     standardOutput: '',
   },
 });

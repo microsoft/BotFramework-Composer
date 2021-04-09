@@ -56,34 +56,30 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
 
         if (runtimeTrafficChannel.current) {
           runtimeTrafficChannel.current.onmessage = (event) => {
-            try {
-              const data: { standardError: string; standardOutput: string } = JSON.parse(event.data);
+            const data: { standardError: string; standardOutput: string } = JSON.parse(event.data);
 
-              let standardError: BotStartError | null = null;
-              if (data.standardError) {
-                const isDotnetError = checkIfDotnetVersionMissing({
-                  message: data.standardError ?? '',
-                });
-
-                if (isDotnetError) {
-                  standardError = {
-                    title: Text.DOTNETFAILURE,
-                    ...missingDotnetVersionError,
-                  };
-                } else {
-                  standardError = {
-                    title: Text.BOTRUNTIMEERROR,
-                    message: data.standardError,
-                  };
-                }
-              }
-              setRuntimeStandardOutputData(projectId, {
-                standardError,
-                standardOutput: data.standardOutput,
+            let standardError: BotStartError | null = null;
+            if (data.standardError) {
+              const isDotnetError = checkIfDotnetVersionMissing({
+                message: data.standardError ?? '',
               });
-            } catch (ex) {
-              setApplicationLevelError(genericErrorMessage());
+
+              if (isDotnetError) {
+                standardError = {
+                  title: Text.DOTNETFAILURE,
+                  ...missingDotnetVersionError,
+                };
+              } else {
+                standardError = {
+                  title: Text.BOTRUNTIMEERROR,
+                  message: data.standardError,
+                };
+              }
             }
+            setRuntimeStandardOutputData(projectId, {
+              standardError,
+              standardOutput: data.standardOutput,
+            });
           };
         }
       } catch (ex) {
