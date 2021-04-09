@@ -169,22 +169,13 @@ export const newsDescription = css`
   -webkit-box-orient: vertical;
 `;
 
-export const botContainer = css`
-  display: flex;
-  flex-wrap: wrap;
-  line-height: 32px;
-  margin-left: 33px;
-  margin-right: 33px;
-  margin-top: 24px;
-`;
-
 export const cardItem = {
   container: css`
     margin: 12px 0 12px 12px;
     padding: 12px;
     min-width: 244px;
     width: 17vw;
-    @media (max-width: 1366px) {
+    @media (max-width: 1416px) {
       width: 20vw;
     }
     text-align: left;
@@ -243,7 +234,7 @@ export const mediaCardItem = {
     width: 100%;
     min-height: 95px;
     height: calc(17vw * 95 / 244);
-    @media (max-width: 1366px) {
+    @media (max-width: 1416px) {
       height: calc(20vw * 95 / 244);
     }
     margin-bottom: 12px;
@@ -309,13 +300,14 @@ export const detailListScrollWrapper = css`
 export const whatsNewsContainer = css`
   position: relative;
   flex: 1;
-  padding: 25px;
+  padding: 20px 25px 25px 25px;
   border-radius: 5px;
   margin: 68px 0 55px 0;
   background: #f6f6f6;
-  @media (max-width: 1366px) {
+  @media (max-width: 1416px) {
     background: none;
     min-width: 200px;
+    margin: 15px 0 0 0;
   }
 `;
 

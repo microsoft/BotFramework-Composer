@@ -54,7 +54,8 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
 }) => {
   const defaultImageCover = cardType === 'video' ? defaultVideoCardCover : defaultArticleCardCover;
   const [usedImageCover, setUsedImageCover] = useState(imageCover || defaultImageCover);
-  const [useImageBackground, setUseImageBackground] = useState(false);
+  const [usedImageBackground, setUsedImageBackground] = useState(false);
+  const [usedImageFit, setUsedImageFit] = useState(ImageFit.centerContain);
   const styles =
     rest.styles || cardType === 'resource'
       ? home.cardItem
@@ -72,8 +73,10 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
   const onImgLoaded = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const whRatio = rect.width / rect.height;
-    if (whRatio > 260 / 100 || whRatio < 240 / 100) {
-      setUseImageBackground(true);
+    if (whRatio < 1.5) {
+      setUsedImageBackground(true);
+    } else {
+      setUsedImageFit(ImageFit.cover);
     }
   };
 
@@ -92,14 +95,14 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     >
       <div ref={forwardedRef} aria-label={ariaLabel}>
         <div css={styles.imageCover}>
-          {useImageBackground && (
+          {usedImageBackground && (
             <div className={'image-cover-background'} style={{ backgroundImage: `url(${usedImageCover})` }}></div>
           )}
           <Image
             alt={ariaLabel}
             aria-label={ariaLabel}
             className={'image-cover-img'}
-            imageFit={ImageFit.centerContain}
+            imageFit={usedImageFit}
             src={usedImageCover}
             onLoad={onImgLoaded}
             onLoadingStateChange={onImageLoading}
