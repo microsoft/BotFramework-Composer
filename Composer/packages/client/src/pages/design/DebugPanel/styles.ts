@@ -35,7 +35,9 @@ export const debugPaneBarStyle = css`
   background: #faf9f8;
 `;
 
-export const leftBarStyle = css``;
+export const leftBarStyle = css`
+  padding: 0 16px;
+`;
 
 export const rightBarStyle = css`
   display: flex;

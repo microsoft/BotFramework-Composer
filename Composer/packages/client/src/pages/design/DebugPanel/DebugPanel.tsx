@@ -67,7 +67,7 @@ export const DebugPanel: React.FC = () => {
     return { key: tabKey, element };
   };
 
-  const computedPivotHeight = isPanelExpanded ? 36 : 24;
+  const computedPivotHeight = isPanelExpanded ? 36 : 32;
 
   const headerPivot = useMemo(() => {
     const tabTitles = debugExtensions
