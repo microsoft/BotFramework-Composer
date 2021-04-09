@@ -15,6 +15,6 @@ context('Home Page ', () => {
     cy.findByText('Select a Bot').should('exist');
     cy.findByText('Cancel').should('exist');
     cy.findByText('Cancel').click();
-    cy.findByTestId('homePage-body-New').click();
+    cy.findByTestId('homePage-Toolbar-New').click();
   });
 });

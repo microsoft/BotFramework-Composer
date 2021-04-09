@@ -40,6 +40,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     updateFolder,
     saveTemplateId,
     fetchRecentProjects,
+    fetchFeed,
     openProject,
     saveProjectAs,
     fetchProjectById,
@@ -76,7 +77,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     }
     await fetchStorages();
     await fetchTemplatesV2([firstPartyTemplateFeed]);
-
+    fetchFeed();
     fetchRecentProjects();
   };
 

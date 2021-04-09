@@ -114,6 +114,11 @@ export interface AzureFunctionsConfig {
   appId?: string;
   appPwd?: string;
   instrumentationKey?: string;
+  /**
+   * The worker runtime language.
+   * Currently documented values: dotnet, node, java, python, or powershell
+   */
+  workerRuntime?: string;
 }
 
 export interface DeploymentsConfig {

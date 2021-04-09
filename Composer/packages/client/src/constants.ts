@@ -14,6 +14,8 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 
+export const FEEDVERSION = 1;
+
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
 
@@ -234,6 +236,12 @@ export const DialogCreationCopy = {
     return {
       title: formatMessage('Select a Bot'),
       subText: formatMessage('Which bot do you want to open?'),
+    };
+  },
+  get SELECT_LOCATION_ABS() {
+    return {
+      title: formatMessage('Select a Bot'),
+      subText: formatMessage('Specify an existing bot to connect to your Azure Bot resource.'),
     };
   },
   get SELECT_DESTINATION() {

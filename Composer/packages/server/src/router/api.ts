@@ -30,6 +30,7 @@ router.post('/projects', ProjectController.createProject);
 router.post('/v2/projects', ProjectController.createProjectV2);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
+router.get('/projects/feed', ProjectController.getFeed);
 router.get('/projects/generateProjectId', ProjectController.generateProjectId);
 
 router.get('/projects/:projectId', ProjectController.getProjectById);
@@ -97,6 +98,8 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', '
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.get('/utilities/checkNode', UtilitiesController.checkNodeVersion);
+
 // extensions
 router.get('/extensions', ExtensionsController.listExtensions);
 router.post('/extensions', ExtensionsController.addExtension);

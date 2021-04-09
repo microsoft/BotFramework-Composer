@@ -30,7 +30,7 @@ import { dispatcherState } from '../../recoilModel/atoms';
 type ManageLuisProps = {
   hidden: boolean;
   onDismiss: () => void;
-  onGetKey: (settings: { authoringKey: string; endpointKey: string; authoringRegion: string }) => void;
+  onGetKey: (settings: { authoringKey: string; authoringRegion: string }) => void;
   onNext?: () => void;
   setDisplayManageLuis: (value: any) => void;
 };
@@ -67,10 +67,8 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [nextAction, setNextAction] = useState<string>('create');
   const [actionOptions, setActionOptions] = useState<IChoiceGroupOption[]>([]);
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>('');
-  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>('');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>('');
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
-  const [predictionKeys, setPredictionKeys] = useState<KeyRec[]>([]);
   const [authoringKeys, setAuthoringKeys] = useState<KeyRec[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -118,7 +116,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
     // reset the ui
     setSubscription('');
     setAuthoringKeys([]);
-    setPredictionKeys([]);
     setCurrentPage(1);
     setActionOptions([
       { key: 'create', text: formatMessage('Create a new LUIS resource'), disabled: true },
@@ -170,12 +167,8 @@ export const ManageLuis = (props: ManageLuisProps) => {
         cognitiveServicesManagementClient,
         accounts.filter((a) => a.kind === 'LUIS.Authoring')
       );
-      const prediction: KeyRec[] = await fetchKeys(
-        cognitiveServicesManagementClient,
-        accounts.filter((a) => a.kind === 'LUIS')
-      );
       setLoadingLUIS(false);
-      if (authoring.length == 0 || prediction.length == 0) {
+      if (authoring.length == 0) {
         setNoKeys(true);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new LUIS resource') },
@@ -185,7 +178,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
       } else {
         setNoKeys(false);
         setAuthoringKeys(authoring);
-        setPredictionKeys(prediction);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new LUIS resource') },
           { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
@@ -213,7 +205,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
   };
 
   const createLUIS = async () => {
-    let endpointKey = '';
     let authoringKey = '';
     if (token) {
       setLoadingLUIS(true);
@@ -280,41 +271,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
         setLoadingLUIS(false);
         return;
       }
-      try {
-        await cognitiveServicesManagementClient.accounts.create(resourceGroupName, `${luisResourceName}`, {
-          kind: 'LUIS',
-          sku: {
-            name: 'S0',
-          },
-          location: localRootLuisRegion,
-        });
-
-        const keys = await cognitiveServicesManagementClient.accounts.listKeys(
-          resourceGroupName,
-          `${luisResourceName}`
-        );
-        if (!keys?.key1) {
-          throw new Error('No key found for newly created authoring resource');
-        } else {
-          endpointKey = keys.key1;
-          setLocalRootLuisEndpointKey(keys.key1);
-        }
-      } catch (err) {
-        setOutcomeDescription(
-          formatMessage(
-            'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
-          )
-        );
-        setOutcomeSummary(
-          <div>
-            <p>{err.message}</p>
-          </div>
-        );
-        setOutcomeError(true);
-        setCurrentPage(3);
-        setLoadingLUIS(false);
-        return;
-      }
 
       setLoadingLUIS(false);
 
@@ -347,7 +303,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
       // this will pass the new values back to the caller
       props.onGetKey({
         authoringKey: authoringKey,
-        endpointKey: endpointKey,
         authoringRegion: localRootLuisRegion,
       });
 
@@ -367,10 +322,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
     // get list of luis keys for this subscription
     setLocalRootLuisKey(opt.key);
     setLocalRootLuisRegion(opt.region);
-  };
-  const onChangeLUISPrediction = async (_, opt) => {
-    // get list of luis keys for this subscription
-    setLocalRootLuisEndpointKey(opt.key);
   };
 
   const onChangeAction = async (_, opt) => {
@@ -392,7 +343,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
       // close the modal!
       props.onGetKey({
         authoringKey: localRootLuisKey,
-        endpointKey: localRootLuisEndpointKey,
         authoringRegion: localRootLuisRegion,
       });
       setOutcomeDescription(formatMessage('The following LUIS keys have been successfully added to your bot project:'));
@@ -401,10 +351,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Authoring key')}</label>
             {localRootLuisKey}
-          </p>
-          <p>
-            <label css={summaryLabelStyles}>{formatMessage('Endpoint Key')}</label>
-            {localRootLuisEndpointKey}
           </p>
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Region')}</label>
@@ -483,18 +429,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
                   styles={dropdownStyles}
                   onChange={onChangeLUISAuthoring}
                 />
-                <Dropdown
-                  disabled={!(predictionKeys?.length > 0) || nextAction !== 'choose'}
-                  label={formatMessage('Prediction key')}
-                  options={
-                    predictionKeys.map((p) => {
-                      return { text: p.name, ...p };
-                    }) ?? []
-                  }
-                  placeholder={formatMessage('Select one')}
-                  styles={dropdownStyles}
-                  onChange={onChangeLUISPrediction}
-                />
               </div>
             )}
           </div>
@@ -506,7 +440,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
           <PrimaryButton
             disabled={
               loadingLUIS ||
-              (nextAction === 'choose' && !(localRootLuisRegion && localRootLuisKey && localRootLuisEndpointKey)) ||
+              (nextAction === 'choose' && !(localRootLuisRegion && localRootLuisKey)) ||
               (nextAction === 'create' && !subscriptionId)
             }
             text={formatMessage('Next')}
@@ -665,7 +599,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
         hidden={props.hidden}
         minWidth={480}
         modalProps={{
-          isBlocking: false,
+          isBlocking: true,
         }}
         onDismiss={props.onDismiss}
       >
