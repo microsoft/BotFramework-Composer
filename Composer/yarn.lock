@@ -4079,10 +4079,10 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-lu@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.6.2.tgz":
-  version "1.6.2"
-  uid "37195603e3dc94a599fefe84d672e2b31676ffb6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.6.2.tgz#37195603e3dc94a599fefe84d672e2b31676ffb6"
+"@microsoft/bf-lu@4.14.0-dev.20210408.1a5070e":
+  version "4.14.0-dev.20210408.1a5070e"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.14.0-dev.20210408.1a5070e.tgz#fb4b9f0d8e79c4f7f6bd90d3f40c8920250fc7c0"
+  integrity sha512-eqV0xvBAciD9bAgFe9GHK4wt9z/p0ZmhIG46MsyY7bN92N0/TKG+IQy9fxnz/zv9ssqap5gpO+qdOzXEVReg6A==
   dependencies:
     "@types/node-fetch" "~2.5.5"
     antlr4 "~4.8.0"
