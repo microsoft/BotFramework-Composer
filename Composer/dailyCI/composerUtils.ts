@@ -49,7 +49,7 @@ export class ComposerUtils {
     publishProfile.accessToken = token;
     const publishProfileStr = JSON.stringify(publishProfile);
 
-    const defaultSettingsPath = path.resolve(__dirname, 'defaultSettings.json');
+    const defaultSettingsPath = path.resolve(__dirname, 'defaultPublishSettings.json');
     const defaultSettings = await fs.readJSON(defaultSettingsPath);
     defaultSettings.luis.name = this.botName;
     defaultSettings.publishTargets = [

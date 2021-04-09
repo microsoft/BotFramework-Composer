@@ -76,7 +76,6 @@ export async function startPublish(token: string, botId: string, targetName: str
     data: {
       accessToken: token,
       metadata: {
-        comment: '',
         luResources: [],
         qnaResources: [],
       },

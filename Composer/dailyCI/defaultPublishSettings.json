@@ -1,0 +1,85 @@
+{
+  "customFunctions": [],
+  "defaultLanguage": "en-us",
+  "defaultLocale": "en-US",
+  "downsampling": {
+    "maxImbalanceRatio": -1
+  },
+  "importedLibraries": [],
+  "languages": ["en-us"],
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "luFeatures": {
+    "enableCompositeEntities": true,
+    "enableListEntities": true,
+    "enableMLEntities": true,
+    "enablePattern": true,
+    "enablePhraseLists": true,
+    "enablePrebuiltEntities": true,
+    "enableRegexEntities": true
+  },
+  "luis": {
+    "authoringEndpoint": "",
+    "authoringRegion": "westus",
+    "defaultLanguage": "en-us",
+    "endpoint": "",
+    "environment": "composer",
+    "name": "",
+    "authoringKey": "",
+    "endpointKey": ""
+  },
+  "MicrosoftAppId": "",
+  "publishTargets": [
+    {
+      "configuration": "",
+      "name": "",
+      "type": ""
+    }
+  ],
+  "qna": {
+    "hostname": "",
+    "knowledgebaseid": "",
+    "qnaRegion": "westus",
+    "endpointKey": "",
+    "subscriptionKey": ""
+  },
+  "runtime": {
+    "command": "dotnet run --project testBot.csproj",
+    "customRuntime": true,
+    "key": "adaptive-runtime-dotnet-webapp",
+    "path": "../"
+  },
+  "runtimeSettings": {
+    "adapters": [],
+    "features": {
+      "removeRecipientMentions": false,
+      "showTyping": false,
+      "traceTranscript": false,
+      "useInspection": false,
+      "setSpeak": {
+        "voiceFontName": "en-US-AriaNeural",
+        "fallbackToTextForSpeechIfEmpty": true
+      }
+    },
+    "components": [],
+    "skills": {
+      "allowedCallers": []
+    },
+    "storage": "",
+    "telemetry": {
+      "instrumentationKey": "",
+      "logActivities": true,
+      "logPersonalInformation": false
+    }
+  },
+  "skillConfiguration": {
+    "isSkill": true,
+    "allowedCallers": []
+  },
+  "MicrosoftAppPassword": ""
+}
