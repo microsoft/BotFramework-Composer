@@ -5,12 +5,11 @@
 import styled from '@emotion/styled';
 import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { LgTemplate, render, useLgApi } from '@bfc/extension-client';
+import { LgFile, LgTemplate, render, useLgApi, useProjectApi } from '@bfc/extension-client';
 import * as ACDesigner from 'adaptivecards-designer';
 import querystring from 'query-string';
 
 import { CreateTemplateModal } from './CreateTemplateModal';
-import { useLgTemplates } from './useLgTemplates';
 import { getAdaptiveCard, toCardJson } from './utils';
 import { ParsedLgTemplate } from './types';
 import { LoadingSpinner } from '@bfc/ui-shared';
@@ -27,22 +26,28 @@ ACDesigner.GlobalSettings.enableDataBindingSupport = true;
 ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
 ACDesigner.Strings.toolboxes.sampleDataEditor.title = 'Data editor (use to test dynamic data binding to a template)';
 
-const getTemplate = (templates: LgTemplate[]): LgTemplate => {
+const getTemplate = (lgFiles: LgFile[]): LgTemplate | undefined => {
   const decoded = decodeURIComponent(window.parent.location.search);
-  const { templateName } = querystring.parse(decoded);
+  const { templateName, lgFileId } = querystring.parse(decoded);
   const lgTemplateName = Array.isArray(templateName) ? templateName[0] : templateName;
-  return templates.find(({ name }) => name === lgTemplateName);
+  const fileId = Array.isArray(lgFileId) ? lgFileId[0] : lgFileId;
+
+  const lgFile = lgFiles.find(({ id }) => id === fileId);
+  const template = lgFile?.templates.find(({ name }) => name === lgTemplateName);
+
+  return template;
 };
 
 const defaultAdaptiveCard = {};
 
 const Library: React.FC = () => {
   const ACDesignerRef = useRef(null);
+  const { lgFiles } = useProjectApi();
   const { updateLgTemplate } = useLgApi();
-  const { status: templatesStatus, lgTemplates } = useLgTemplates();
 
   const [monacoStatus, setMonacoStatus] = useState<'loading' | 'loaded'>('loading');
   const [designer, setDesigner] = useState<ACDesigner.CardDesigner>();
+  const [lgFileId, setLgFileId] = useState<string>();
   const [selectedTemplate, setSelectedTemplate] = useState<ParsedLgTemplate | undefined>();
 
   useEffect(() => {
@@ -56,7 +61,7 @@ const Library: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (monacoStatus === 'loaded' && templatesStatus === 'loaded' && ACDesignerRef.current) {
+    if (monacoStatus === 'loaded' && ACDesignerRef.current) {
       const designer = new ACDesigner.CardDesigner(ACDesigner.defaultMicrosoftHosts);
 
       designer.assetPath = 'https://unpkg.com/adaptivecards-designer@latest/dist';
@@ -64,7 +69,7 @@ const Library: React.FC = () => {
       designer.monacoModuleLoaded();
 
       try {
-        const template = getTemplate(lgTemplates);
+        const template = getTemplate(lgFiles);
         const body = getAdaptiveCard(template.body);
         if (body?.type === 'AdaptiveCard') {
           setSelectedTemplate({ ...template, body });
@@ -80,14 +85,14 @@ const Library: React.FC = () => {
 
       setDesigner(designer);
     }
-  }, [monacoStatus, templatesStatus, lgTemplates]);
+  }, [monacoStatus, lgFiles]);
 
   useEffect(() => {
     if (designer) {
       designer.onCardPayloadChanged = (cardDesigner: ACDesigner.CardDesigner) => {
-        if (selectedTemplate?.name) {
+        if (selectedTemplate?.name && lgFileId) {
           const card = cardDesigner.getCard();
-          updateLgTemplate('common', selectedTemplate.name, toCardJson(card));
+          updateLgTemplate(lgFileId, selectedTemplate.name, toCardJson(card));
         }
       };
     }
@@ -98,17 +103,25 @@ const Library: React.FC = () => {
       designer?.setCard(template.body);
       setSelectedTemplate(template);
     },
-    [designer]
+    [designer, lgFileId]
   );
+
+  const onSelectLgFile = useCallback((fileId: string) => {
+    setLgFileId(fileId);
+  }, []);
 
   return (
     <AdaptiveCardDesignerContainer>
-      {monacoStatus === 'loading' || templatesStatus === 'loading' ? (
+      {monacoStatus === 'loading' ? (
         <LoadingSpinner />
       ) : (
         <React.Fragment>
           <div ref={ACDesignerRef} />
-          <CreateTemplateModal hidden={!!selectedTemplate} onSelectTemplate={onSelectTemplate} />
+          <CreateTemplateModal
+            hidden={!!selectedTemplate}
+            onSelectTemplate={onSelectTemplate}
+            onSelectLgFile={onSelectLgFile}
+          />
         </React.Fragment>
       )}
     </AdaptiveCardDesignerContainer>

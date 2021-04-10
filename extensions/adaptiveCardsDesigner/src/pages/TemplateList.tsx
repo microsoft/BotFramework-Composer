@@ -11,6 +11,7 @@ import {
   CheckboxVisibility,
   SelectionMode,
   Selection,
+  IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import formatMessage from 'format-message';
@@ -21,7 +22,7 @@ const Container = styled.div({
   paddingTop: '8px',
 });
 
-const tableColumns = [
+const tableColumns: IColumn[] = [
   {
     key: 'name',
     name: formatMessage('Name'),
@@ -29,6 +30,9 @@ const tableColumns = [
     minWidth: 150,
     maxWidth: 200,
     data: 'string',
+    onRender: (item) => {
+      return item.name ?? item.displayName;
+    },
   },
 ];
 

@@ -8,25 +8,43 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { useApplicationApi, useLgApi, useProjectApi } from '@bfc/extension-client';
+import { LgFile, useApplicationApi, useLgApi, useProjectApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { Mode } from './types';
 import { TemplatePicker } from './TemplatePicker';
 import { ParsedLgTemplate } from './types';
-import { toCardJson } from './utils';
+import { getAdaptiveCard, toCardJson } from './utils';
+import { cardTemplates } from './templates';
 
 type Props = {
   hidden: boolean;
+  onSelectLgFile: (fileId: string) => void;
   onSelectTemplate: (template: ParsedLgTemplate) => void;
 };
 
-export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate }) => {
+export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate, onSelectLgFile }) => {
   const { navigateTo } = useApplicationApi();
+  const { lgFiles, projectId } = useProjectApi();
   const { addLgTemplate } = useLgApi();
-  const { projectId } = useProjectApi();
   const [mode, setMode] = useState<Mode>('create');
+  const [selectedLgFile, setSelectedLgFile] = useState<LgFile | undefined>(lgFiles?.[0]);
   const [selectedTemplate, setSelectedTemplate] = useState<ParsedLgTemplate | undefined>();
+
+  const userLgTemplates = useMemo<ParsedLgTemplate[]>(() => {
+    return selectedLgFile?.templates.reduce((allTemplates, template) => {
+      try {
+        const body = getAdaptiveCard(template.body);
+        return body?.type === 'AdaptiveCard' ? [...allTemplates, { ...template, body }] : allTemplates;
+      } catch (error) {
+        return allTemplates;
+      }
+    }, []);
+  }, [selectedLgFile.allTemplates]);
+
+  const templates = useMemo(() => {
+    return mode === 'create' ? cardTemplates : userLgTemplates;
+  }, [mode, userLgTemplates]);
 
   const choices = useMemo<IChoiceGroupOption[]>(
     () => [
@@ -53,16 +71,28 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate 
     setSelectedTemplate(template);
   }, []);
 
+  const onLgFileChanged = useCallback(
+    (lgFile: LgFile) => {
+      onSelectLgFile(lgFile.id);
+      setSelectedLgFile(lgFile);
+      if (mode === 'edit') {
+        setSelectedTemplate(undefined);
+      }
+    },
+    [mode, onSelectLgFile]
+  );
+
   const onClick = useCallback(() => {
-    if (mode === 'create') {
-      addLgTemplate('common', selectedTemplate.name, toCardJson(selectedTemplate.body));
+    if (mode === 'create' && selectedLgFile?.id) {
+      addLgTemplate(selectedLgFile.id, selectedTemplate.name, toCardJson(selectedTemplate.body));
     }
 
+    onSelectLgFile(selectedLgFile?.id);
     onSelectTemplate(selectedTemplate);
     navigateTo(
-      `/bot/${projectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${selectedTemplate.name}`
+      `/bot/${projectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${selectedTemplate.name}&lgFileId=${selectedLgFile.id}`
     );
-  }, [mode, projectId, selectedTemplate, navigateTo, addLgTemplate, onSelectTemplate]);
+  }, [mode, projectId, selectedLgFile, selectedTemplate, navigateTo, addLgTemplate, onSelectTemplate, onSelectLgFile]);
 
   return (
     !hidden && (
@@ -73,12 +103,19 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate 
         minWidth={850}
         title={formatMessage('Create a new LG Template or edit an existing LG Template')}
       >
-        <ChoiceGroup options={choices} defaultSelectedKey={mode} onChange={onSelectChoice} />
-        <TemplatePicker mode={mode} selectedTemplate={selectedTemplate} onTemplateUpdated={onTemplateUpdated} />
-
+        <ChoiceGroup defaultSelectedKey={mode} options={choices} onChange={onSelectChoice} />
+        <TemplatePicker
+          lgFiles={lgFiles}
+          mode={mode}
+          selectedLgFileId={selectedLgFile?.id}
+          selectedTemplate={selectedTemplate}
+          templates={templates}
+          onLgFileChanged={onLgFileChanged}
+          onTemplateUpdated={onTemplateUpdated}
+        />
         <DialogFooter>
           <PrimaryButton
-            disabled={!selectedTemplate?.name || !selectedTemplate.body}
+            disabled={!selectedTemplate?.name || !selectedTemplate.body || !selectedLgFile}
             text={mode === 'create' ? formatMessage('Create') : formatMessage('Edit')}
             onClick={onClick}
           />
