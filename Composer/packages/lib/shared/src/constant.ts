@@ -3,7 +3,7 @@
 
 export const QnABotTemplateId = 'QnASample';
 
-export const emptyBotNpmTemplateName = '@microsoft/generator-microsoft-bot-empty';
+export const emptyBotNpmTemplateName = '@microsoft/generator-bot-empty';
 
 export const SensitiveProperties = [
   'MicrosoftAppPassword',

@@ -9,7 +9,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { CommunicationColors } from '@uifabric/fluent-theme';
 
-import { botRuntimeErrorState, dispatcherState } from '../../recoilModel';
+import { botBuildTimeErrorState, dispatcherState } from '../../recoilModel';
 
 type BotErrorViewerProps = {
   projectId: string;
@@ -17,7 +17,7 @@ type BotErrorViewerProps = {
 
 export const BotErrorViewer: React.FC<BotErrorViewerProps> = ({ projectId }) => {
   const { setActiveTabInDebugPanel, setDebugPanelExpansion } = useRecoilValue(dispatcherState);
-  const botRuntimeErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
+  const botBuildTimeError = useRecoilValue(botBuildTimeErrorState(projectId));
 
   const openErrorDialog = () => {
     setActiveTabInDebugPanel('RuntimeLog');
@@ -26,7 +26,7 @@ export const BotErrorViewer: React.FC<BotErrorViewerProps> = ({ projectId }) => 
 
   return (
     <Fragment>
-      {botRuntimeErrorMsg?.message && (
+      {botBuildTimeError?.message && (
         <ActionButton
           styles={{
             root: {

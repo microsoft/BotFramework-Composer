@@ -15,6 +15,8 @@ import {
   IconButton,
   ActionButton,
   TextField,
+  Toggle,
+  Dropdown,
 } from 'office-ui-fabric-react';
 import { useState, useEffect, Fragment } from 'react';
 import { useApplicationApi, useTelemetryClient, TelemetryClient } from '@bfc/extension-client';
@@ -42,6 +44,18 @@ export interface WorkingModalProps {
   closeDialog: any;
   onUpdateFeed: any;
 }
+
+const FEED_TYPES = [
+  {
+    key: 'npm',
+    text: 'npm',
+  },
+  {
+    key: 'nuget',
+    text: 'NuGet',
+  },
+];
+
 export const FeedModal: React.FC<WorkingModalProps> = (props) => {
   const [selectedItem, setSelectedItem] = useState<PackageSourceFeed | undefined>(undefined);
   const [items, setItems] = useState<PackageSourceFeed[]>(props.feeds);
@@ -99,10 +113,32 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       },
     },
     {
+      key: 'column1',
+      name: 'Type',
+      fieldName: 'text',
+      minWidth: 75,
+      maxWidth: 75,
+      height: 32,
+      isResizable: false,
+      onRender: (item: PackageSourceFeed) => {
+        if (!selectedItem || item.key !== selectedItem.key || !editRow) return <DisplayField text={item.type} />;
+        return (
+          <Dropdown
+            disabled={!selectedItem || selectedItem.readonly}
+            options={FEED_TYPES}
+            selectedKey={selectedItem?.type}
+            onChange={(event, item) => {
+              updateSelected('type')(event, item.key);
+            }}
+          />
+        );
+      },
+    },
+    {
       key: 'column2',
       name: 'URL',
       fieldName: 'url',
-      minWidth: 300,
+      minWidth: 200,
       isResizable: false,
       height: 32,
       onRender: (item: PackageSourceFeed) => {
@@ -120,6 +156,46 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     },
     {
       key: 'column3',
+      name: 'Filter',
+      fieldName: 'defaultQuery.query',
+      minWidth: 200,
+      isResizable: false,
+      height: 32,
+      onRender: (item: PackageSourceFeed) => {
+        if (!selectedItem || item.key !== selectedItem.key || !editRow)
+          return <DisplayField text={item.defaultQuery?.query} />;
+        return (
+          <TextField
+            disabled={!selectedItem || selectedItem.readonly}
+            placeholder={formatMessage('Default Query')}
+            styles={{ field: { fontSize: 12 } }}
+            value={selectedItem ? selectedItem.defaultQuery?.query : ''}
+            onChange={updateSelectedDefaultQuery('query')}
+          />
+        );
+      },
+    },
+    {
+      key: 'column4',
+      name: 'Prerelease',
+      fieldName: 'defaultQuery.prerelease',
+      minWidth: 40,
+      maxWidth: 40,
+      isResizable: false,
+      height: 32,
+      onRender: (item: PackageSourceFeed) => {
+        return (
+          <Toggle
+            ariaLabel={formatMessage('Include prerelease versions')}
+            checked={item ? item.defaultQuery?.prerelease : false}
+            disabled={!selectedItem || selectedItem.readonly}
+            onChange={updateSelectedDefaultQuery('prerelease')}
+          />
+        );
+      },
+    },
+    {
+      key: 'column5',
       minWidth: 40,
       maxWidth: 40,
       isResizable: false,
@@ -150,6 +226,20 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     };
   };
 
+  const updateSelectedDefaultQuery = (field: string) => {
+    return (evt, val) => {
+      const newSelection = {
+        ...selectedItem,
+        defaultQuery: {
+          ...selectedItem.defaultQuery,
+          [field]: val,
+        },
+      };
+      setSelectedItem(newSelection);
+      setItems(items.map((i) => (i.key === newSelection.key ? newSelection : i)));
+    };
+  };
+
   const savePendingEdits = () => {
     props.onUpdateFeed(items);
   };
@@ -159,6 +249,11 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       key: uuid(),
       text: '',
       url: '',
+      defaultQuery: {
+        semVerLevel: '2.0.0',
+        prerelease: false,
+        query: '',
+      },
     } as PackageSourceFeed;
 
     const newItems = items.concat([newItem]);
