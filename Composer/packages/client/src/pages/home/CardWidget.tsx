@@ -95,9 +95,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     >
       <div ref={forwardedRef} aria-label={ariaLabel}>
         <div css={styles.imageCover}>
-          {usedImageBackground && (
-            <div className={'image-cover-background'} style={{ backgroundImage: `url(${usedImageCover})` }}></div>
-          )}
+          {usedImageBackground && <div className={'image-cover-background'}></div>}
           <Image
             alt={ariaLabel}
             aria-label={ariaLabel}

@@ -85,7 +85,7 @@ export const tabRowViewMore = css`
   display: flex;
   align-items: center;
   i {
-    margin: 4px 0 0 5px;
+    margin: 0 0 0 5px;
   }
 `;
 
@@ -174,6 +174,7 @@ export const cardItem = {
     margin: 12px 0 12px 12px;
     padding: 12px;
     min-width: 244px;
+    max-width: 450px;
     width: 17vw;
     @media (max-width: 1416px) {
       width: 20vw;
@@ -203,6 +204,7 @@ export const cardItem = {
   imageCover: css`
     width: 53px;
     height: 48px;
+    max-height: 175px;
     margin-bottom: 12px;
     position: relative;
     .image-cover-img {
@@ -241,14 +243,10 @@ export const mediaCardItem = {
     overflow: hidden;
     display: flex;
     .image-cover-background {
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      filter: blur(5px);
+      background: #323130;
       position: absolute;
       width: 100%;
       height: 100%;
-      opacity: 0.7;
     }
   `,
 };
