@@ -63,7 +63,7 @@ class LuParserWithWorker {
     luFeatures: ILUFeaturesConfig
   ): Promise<LuFile> {
     const msgId = uniqueId();
-    const msg = { id: msgId, type: 'updateTemplate', payload: { luFile, intentName, intent, luFeatures } };
+    const msg = { id: msgId, type: 'updateIntent', payload: { luFile, intentName, intent, luFeatures } };
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
@@ -73,7 +73,7 @@ class LuParserWithWorker {
 
   public async parseFile(text: string, log, locale: string): Promise<any> {
     const msgId = uniqueId();
-    const msg = { id: msgId, type: 'updateTemplate', payload: { text, log, locale } };
+    const msg = { id: msgId, type: 'parseFile', payload: { text, log, locale } };
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
