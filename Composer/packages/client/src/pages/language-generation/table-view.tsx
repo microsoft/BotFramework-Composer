@@ -36,7 +36,7 @@ interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId
   file?: LgFile;
 }
 
-const adaptiveCardRegex = /-\s*```\$\{\s*.*([\s\S]*)\)}\s*/;
+const adaptiveCardRegex = /-\s*```\$\{\s*.*(\{[\s\S]*)\)}\s*/;
 
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId, projectId, skillId, lgFileId, file } = props;
@@ -198,13 +198,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
         },
       ];
 
-      if (isAdaptiveCard(item)) {
+      if (isAdaptiveCard(item) && file?.id) {
         buttons.push({
           key: 'edit_adaptive_card',
           name: formatMessage('Edit in Adaptive Cards Designer'),
           onClick: () => {
             navigateTo(
-              `/bot/${actualProjectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${item.name}&lgFileId=${lgFileId}`
+              `/bot/${actualProjectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${item.name}&lgFileId=${file.id}`
             );
           },
         });
@@ -212,7 +212,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       return buttons;
     },
-    [activeDialog, lgFileId, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]
+    [activeDialog, file, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]
   );
 
   const getTableColums = useCallback((): IColumn[] => {

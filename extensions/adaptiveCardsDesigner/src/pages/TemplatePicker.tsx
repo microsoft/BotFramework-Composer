@@ -5,16 +5,16 @@
 import styled from '@emotion/styled';
 import { jsx } from '@emotion/core';
 import React, { useCallback, useMemo } from 'react';
-import { Mode, ParsedLgTemplate } from './types';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
+import { LgFile } from '@botframework-composer/types';
 
 import { TemplateList } from './TemplateList';
 import { AdaptiveCardRenderer } from './AdaptiveCardRenderer';
-import { LgFile } from '@botframework-composer/types';
+import { Mode, ParsedLgTemplate } from './types';
 
 const Container = styled.div({
   paddingTop: '8px',
@@ -59,7 +59,7 @@ export const TemplatePicker: React.FC<Props> = ({
   );
 
   const onChange = useCallback(
-    (_, name: string = '') => {
+    (_, name = '') => {
       onTemplateUpdated({ ...selectedTemplate, name });
     },
     [selectedTemplate, onTemplateUpdated]
@@ -70,7 +70,7 @@ export const TemplatePicker: React.FC<Props> = ({
       <Stack horizontal horizontalAlign="space-between">
         <Stack>
           <Label required>{formatMessage('Lg file')}</Label>
-          <Dropdown options={lgFileOptions} defaultSelectedKey={selectedLgFileId} onChange={onDropdownChange} />
+          <Dropdown defaultSelectedKey={selectedLgFileId} options={lgFileOptions} onChange={onDropdownChange} />
           {mode === 'create' && (
             <React.Fragment>
               <Label required>{formatMessage('Template name')}</Label>

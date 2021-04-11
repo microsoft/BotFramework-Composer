@@ -67,13 +67,13 @@ export const TemplateList: React.FC<Props> = ({ mode, selectedTemplate, template
         styles={{ root: { minHeight: '250px', position: 'relative', width: '300px' } }}
       >
         <DetailsList
-          selection={selection}
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={tableColumns}
           compact={false}
           isHeaderVisible={false}
           items={templates}
           layoutMode={DetailsListLayoutMode.justified}
+          selection={selection}
           selectionMode={SelectionMode.single}
         />
       </ScrollablePane>

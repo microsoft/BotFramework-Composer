@@ -99,8 +99,8 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
       <DialogWrapper
         isOpen
         dialogType={DialogTypes.DesignFlow}
-        subText={formatMessage("Card will be written to the root bot's common templates")}
         minWidth={850}
+        subText={formatMessage("Card will be written to the root bot's common templates")}
         title={formatMessage('Create a new LG Template or edit an existing LG Template')}
       >
         <ChoiceGroup defaultSelectedKey={mode} options={choices} onChange={onSelectChoice} />
