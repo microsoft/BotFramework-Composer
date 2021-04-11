@@ -3,6 +3,127 @@
 
 export const cardTemplates = [
   {
+    displayName: 'Empty card',
+    body: {
+      $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
+      type: 'AdaptiveCard',
+      version: '1.0',
+    },
+  },
+  {
+    displayName: 'Activity update',
+    body: {
+      $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
+      type: 'AdaptiveCard',
+      version: '1.0',
+      body: [
+        {
+          type: 'TextBlock',
+          text: 'Publish Adaptive Card Schema',
+          weight: 'bolder',
+          size: 'medium',
+          wrap: true,
+        },
+        {
+          type: 'ColumnSet',
+          columns: [
+            {
+              type: 'Column',
+              width: 'auto',
+              items: [
+                {
+                  type: 'Image',
+                  url: 'https://pbs.twimg.com/profile_images/3647943215/d7f12830b3c17a5a9e4afcc370e3a37e_400x400.jpeg',
+                  size: 'small',
+                  style: 'person',
+                },
+              ],
+            },
+            {
+              type: 'Column',
+              width: 'stretch',
+              items: [
+                {
+                  type: 'TextBlock',
+                  text: 'Matt Hidinger',
+                  weight: 'bolder',
+                  wrap: true,
+                },
+                {
+                  type: 'TextBlock',
+                  spacing: 'none',
+                  text: 'Created {{DATE(2017-02-14T06:08:39Z, SHORT)}}',
+                  isSubtle: true,
+                  wrap: true,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'TextBlock',
+          text:
+            'Now that we have defined the main rules and features of the format, we need to produce a schema and publish it to GitHub. The schema will be the starting point of our reference documentation.',
+          wrap: true,
+        },
+        {
+          type: 'FactSet',
+          facts: [
+            {
+              title: 'Board:',
+              value: 'Adaptive Cards',
+            },
+            {
+              title: 'List:',
+              value: 'Backlog',
+            },
+            {
+              title: 'Assigned to:',
+              value: 'Matt Hidinger',
+            },
+            {
+              title: 'Due date:',
+              value: 'Not set',
+            },
+          ],
+        },
+      ],
+      actions: [
+        {
+          type: 'Action.ShowCard',
+          title: 'Set due date',
+          card: {
+            type: 'AdaptiveCard',
+            body: [
+              {
+                type: 'Input.Date',
+                id: 'dueDate',
+              },
+              {
+                type: 'Input.Text',
+                id: 'comment',
+                placeholder: 'Add a comment',
+                isMultiline: true,
+              },
+            ],
+            actions: [
+              {
+                type: 'Action.Submit',
+                title: 'OK',
+              },
+            ],
+            $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
+          },
+        },
+        {
+          type: 'Action.OpenUrl',
+          title: 'View',
+          url: 'https://adaptivecards.io',
+        },
+      ],
+    },
+  },
+  {
     displayName: 'Flight itinerary',
     body: {
       $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
@@ -494,6 +615,93 @@ export const cardTemplates = [
               },
             ],
           },
+        },
+      ],
+    },
+  },
+  {
+    displayName: 'Stock update',
+    body: {
+      $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
+      type: 'AdaptiveCard',
+      version: '1.0',
+      speak: 'Microsoft stock is trading at $62.30 a share, which is down .32%',
+      body: [
+        {
+          type: 'Container',
+          items: [
+            {
+              type: 'TextBlock',
+              text: 'Microsoft Corporation',
+              size: 'Medium',
+              wrap: true,
+            },
+            {
+              type: 'TextBlock',
+              text: 'Nasdaq Global Select: MSFT',
+              isSubtle: true,
+              spacing: 'None',
+              wrap: true,
+            },
+            {
+              type: 'TextBlock',
+              text: 'Fri, May 3, 2019 1:00 PM',
+              wrap: true,
+            },
+          ],
+        },
+        {
+          type: 'Container',
+          spacing: 'none',
+          items: [
+            {
+              type: 'ColumnSet',
+              columns: [
+                {
+                  type: 'Column',
+                  width: 'stretch',
+                  items: [
+                    {
+                      type: 'TextBlock',
+                      text: '128.90',
+                      size: 'extraLarge',
+                      wrap: true,
+                    },
+                    {
+                      type: 'TextBlock',
+                      text: '▲ 2.69 USD (2.13%)',
+                      color: 'good',
+                      spacing: 'none',
+                      wrap: true,
+                    },
+                  ],
+                },
+                {
+                  type: 'Column',
+                  width: 'auto',
+                  items: [
+                    {
+                      type: 'FactSet',
+                      facts: [
+                        {
+                          title: 'Open',
+                          value: '127.42',
+                        },
+                        {
+                          title: 'High',
+                          value: '129.43',
+                        },
+                        {
+                          title: 'Low',
+                          value: '127.25',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
     },

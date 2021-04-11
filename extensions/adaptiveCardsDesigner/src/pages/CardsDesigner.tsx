@@ -4,15 +4,16 @@
 /** @jsx jsx */
 import styled from '@emotion/styled';
 import { jsx } from '@emotion/core';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { LgFile, LgTemplate, render, useLgApi, useProjectApi } from '@bfc/extension-client';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { LgFile, LgTemplate, render, useLgApi } from '@bfc/extension-client';
 import * as ACDesigner from 'adaptivecards-designer';
 import querystring from 'query-string';
+import { LoadingSpinner } from '@bfc/ui-shared';
 
 import { CreateTemplateModal } from './CreateTemplateModal';
 import { getAdaptiveCard, toCardJson } from './utils';
 import { ParsedLgTemplate } from './types';
-import { LoadingSpinner } from '@bfc/ui-shared';
+import { useLgFiles } from './useLgFiles';
 
 const AdaptiveCardDesignerContainer = styled.div({
   display: 'flex',
@@ -26,7 +27,7 @@ ACDesigner.GlobalSettings.enableDataBindingSupport = true;
 ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
 ACDesigner.Strings.toolboxes.sampleDataEditor.title = 'Data editor (use to test dynamic data binding to a template)';
 
-const getTemplate = (lgFiles: LgFile[]): LgTemplate | undefined => {
+const getTemplate = (lgFiles: LgFile[]): { template?: LgTemplate; lgFileId?: string } => {
   const decoded = decodeURIComponent(window.parent.location.search);
   const { templateName, lgFileId } = querystring.parse(decoded);
   const lgTemplateName = Array.isArray(templateName) ? templateName[0] : templateName;
@@ -35,14 +36,14 @@ const getTemplate = (lgFiles: LgFile[]): LgTemplate | undefined => {
   const lgFile = lgFiles.find(({ id }) => id === fileId);
   const template = lgFile?.templates.find(({ name }) => name === lgTemplateName);
 
-  return template;
+  return { template, lgFileId: lgFile?.id };
 };
 
 const defaultAdaptiveCard = {};
 
 const Library: React.FC = () => {
   const ACDesignerRef = useRef(null);
-  const { lgFiles } = useProjectApi();
+  const { lgFilesStatus, lgFiles } = useLgFiles();
   const { updateLgTemplate } = useLgApi();
 
   const [monacoStatus, setMonacoStatus] = useState<'loading' | 'loaded'>('loading');
@@ -61,7 +62,7 @@ const Library: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (monacoStatus === 'loaded' && ACDesignerRef.current) {
+    if (monacoStatus === 'loaded' && lgFilesStatus === 'loaded' && ACDesignerRef.current) {
       const designer = new ACDesigner.CardDesigner(ACDesigner.defaultMicrosoftHosts);
 
       designer.assetPath = 'https://unpkg.com/adaptivecards-designer@latest/dist';
@@ -69,10 +70,12 @@ const Library: React.FC = () => {
       designer.monacoModuleLoaded();
 
       try {
-        const template = getTemplate(lgFiles);
+        const { template, lgFileId } = getTemplate(lgFiles);
         const body = getAdaptiveCard(template.body);
+
         if (body?.type === 'AdaptiveCard') {
           setSelectedTemplate({ ...template, body });
+          setLgFileId(lgFileId);
           designer.setCard(body);
         } else {
           throw Error('Template is not an Adaptive Card');
@@ -85,7 +88,7 @@ const Library: React.FC = () => {
 
       setDesigner(designer);
     }
-  }, [monacoStatus, lgFiles]);
+  }, [monacoStatus, lgFilesStatus]);
 
   useEffect(() => {
     if (designer) {
@@ -96,7 +99,7 @@ const Library: React.FC = () => {
         }
       };
     }
-  }, [designer, selectedTemplate?.name, updateLgTemplate]);
+  }, [designer, lgFileId, selectedTemplate?.name, updateLgTemplate]);
 
   const onSelectTemplate = useCallback(
     (template: ParsedLgTemplate) => {
@@ -112,15 +115,15 @@ const Library: React.FC = () => {
 
   return (
     <AdaptiveCardDesignerContainer>
-      {monacoStatus === 'loading' ? (
+      {monacoStatus === 'loading' || lgFilesStatus === 'loading' ? (
         <LoadingSpinner />
       ) : (
         <React.Fragment>
           <div ref={ACDesignerRef} />
           <CreateTemplateModal
             hidden={!!selectedTemplate}
-            onSelectTemplate={onSelectTemplate}
             onSelectLgFile={onSelectLgFile}
+            onSelectTemplate={onSelectTemplate}
           />
         </React.Fragment>
       )}

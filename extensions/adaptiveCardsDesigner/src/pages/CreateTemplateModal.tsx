@@ -30,6 +30,7 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
   const [mode, setMode] = useState<Mode>('create');
   const [selectedLgFile, setSelectedLgFile] = useState<LgFile | undefined>(lgFiles?.[0]);
   const [selectedTemplate, setSelectedTemplate] = useState<ParsedLgTemplate | undefined>();
+  const [templateName, setTemplateName] = useState('');
 
   const userLgTemplates = useMemo<ParsedLgTemplate[]>(() => {
     return selectedLgFile?.templates.reduce((allTemplates, template) => {
@@ -84,7 +85,8 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
 
   const onClick = useCallback(() => {
     if (mode === 'create' && selectedLgFile?.id) {
-      addLgTemplate(selectedLgFile.id, selectedTemplate.name, toCardJson(selectedTemplate.body));
+      selectedTemplate.name = templateName;
+      addLgTemplate(selectedLgFile.id, templateName, toCardJson(selectedTemplate.body));
     }
 
     onSelectLgFile(selectedLgFile?.id);
@@ -92,7 +94,17 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
     navigateTo(
       `/bot/${projectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${selectedTemplate.name}&lgFileId=${selectedLgFile.id}`
     );
-  }, [mode, projectId, selectedLgFile, selectedTemplate, navigateTo, addLgTemplate, onSelectTemplate, onSelectLgFile]);
+  }, [
+    mode,
+    projectId,
+    selectedLgFile,
+    selectedTemplate,
+    templateName,
+    navigateTo,
+    addLgTemplate,
+    onSelectTemplate,
+    onSelectLgFile,
+  ]);
 
   return (
     !hidden && (
@@ -109,13 +121,15 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
           mode={mode}
           selectedLgFileId={selectedLgFile?.id}
           selectedTemplate={selectedTemplate}
+          templateName={templateName}
           templates={templates}
           onLgFileChanged={onLgFileChanged}
+          onTemplateNameChanged={setTemplateName}
           onTemplateUpdated={onTemplateUpdated}
         />
         <DialogFooter>
           <PrimaryButton
-            disabled={!selectedTemplate?.name || !selectedTemplate?.body || !selectedLgFile}
+            disabled={!(selectedTemplate?.name || templateName) || !selectedTemplate?.body || !selectedLgFile}
             text={mode === 'create' ? formatMessage('Create') : formatMessage('Edit')}
             onClick={onClick}
           />

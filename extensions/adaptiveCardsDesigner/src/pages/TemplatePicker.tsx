@@ -24,9 +24,11 @@ type Props = {
   lgFiles: LgFile[];
   templates: ParsedLgTemplate[];
   mode: Mode;
+  templateName?: string;
   selectedLgFileId: string;
   selectedTemplate?: ParsedLgTemplate;
   onLgFileChanged: (file: LgFile) => void;
+  onTemplateNameChanged: (templateName: string) => void;
   onTemplateUpdated: (template: ParsedLgTemplate) => void;
 };
 
@@ -36,7 +38,9 @@ export const TemplatePicker: React.FC<Props> = ({
   mode,
   selectedLgFileId,
   selectedTemplate,
+  templateName = '',
   onLgFileChanged,
+  onTemplateNameChanged,
   onTemplateUpdated,
 }) => {
   const lgFileOptions = useMemo(() => {
@@ -60,9 +64,9 @@ export const TemplatePicker: React.FC<Props> = ({
 
   const onChange = useCallback(
     (_, name = '') => {
-      onTemplateUpdated({ ...selectedTemplate, name });
+      onTemplateNameChanged(name);
     },
-    [selectedTemplate, onTemplateUpdated]
+    [onTemplateNameChanged]
   );
 
   return (
@@ -74,7 +78,7 @@ export const TemplatePicker: React.FC<Props> = ({
           {mode === 'create' && (
             <React.Fragment>
               <Label required>{formatMessage('Template name')}</Label>
-              <TextField onChange={onChange} />
+              <TextField value={templateName} onChange={onChange} />
             </React.Fragment>
           )}
           <TemplateList mode={mode} templates={templates} onTemplateSelected={onTemplateUpdated} />

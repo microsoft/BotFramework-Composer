@@ -43,22 +43,18 @@ type Props = {
   onTemplateSelected: (template: ParsedLgTemplate) => void;
 };
 
-export const TemplateList: React.FC<Props> = ({ mode, selectedTemplate, templates, onTemplateSelected }) => {
+export const TemplateList: React.FC<Props> = ({ templates, onTemplateSelected }) => {
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
         const template = selection.getSelection()[0] as ParsedLgTemplate;
 
         if (template) {
-          if (mode === 'create') {
-            onTemplateSelected({ name: selectedTemplate?.name || template.name, body: template.body });
-          } else {
-            onTemplateSelected(template);
-          }
+          onTemplateSelected(template);
         }
       },
     });
-  }, [selectedTemplate, onTemplateSelected]);
+  }, [onTemplateSelected]);
 
   return (
     <Container>
