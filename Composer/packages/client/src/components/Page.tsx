@@ -11,14 +11,20 @@ import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import formatMessage from 'format-message';
 
 import { navigateTo, buildURL } from '../utils/navigation';
-import { dispatcherState, PageMode } from '../recoilModel';
+import {
+  dispatcherState,
+  PageMode,
+  webChatEssentialsSelector,
+  isWebChatPanelVisibleState,
+  rootBotProjectIdSelector,
+} from '../recoilModel';
 import { DebugPanel } from '../pages/design/DebugPanel/DebugPanel';
 import implementedDebugExtensions from '../pages/design/DebugPanel/TabExtensions';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
 import { renderThinSplitter } from './Split/ThinSplitter';
-
+import { WebChatContainer } from './WebChat/WebChatContainer';
 // -------------------- Styles -------------------- //
 
 export const root = css`
@@ -27,6 +33,15 @@ export const root = css`
   flex-direction: row;
 
   label: Page;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  position: relative;
+  label: DesignPageContent;
 `;
 
 export const pageWrapper = css`
@@ -51,7 +66,6 @@ export const header = css`
 export const headerTitle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
-
   label: PageHeaderTitle;
 `;
 
@@ -146,6 +160,9 @@ const Page: React.FC<IPageProps> = (props) => {
   } = props;
 
   const { setPageElementState } = useRecoilValue(dispatcherState);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
+  const webchatEssentials = useRecoilValue(webChatEssentialsSelector(rootBotId));
+  const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState(pageMode, { leftSplitWidth: sizes.primary });
@@ -170,12 +187,13 @@ const Page: React.FC<IPageProps> = (props) => {
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
-        <Toolbar toolbarItems={displayedToolbarItems} />
-        <div css={headerStyle}>
-          <h1 css={headerTitle}>{title}</h1>
-          {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
-        </div>
-        <div css={main(!!onRenderHeaderContent)} role="main">
+        <div css={contentWrapper} role="main">
+          <Toolbar toolbarItems={displayedToolbarItems} />
+          <div css={headerStyle}>
+            <h1 css={headerTitle}>{title}</h1>
+            {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
+          </div>
+          <WebChatContainer />
           <Split
             resetOnDoubleClick
             initialPrimarySize="20%"

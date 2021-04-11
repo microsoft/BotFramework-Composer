@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
@@ -11,9 +11,15 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import { Resizable } from 're-resizable';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { useRecoilValue } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { debugPanelExpansionState, debugPanelActiveTabState, dispatcherState } from '../../../recoilModel';
+import {
+  debugPanelExpansionState,
+  debugPanelActiveTabState,
+  dispatcherState,
+  debugPaneHeight,
+} from '../../../recoilModel';
 
 import {
   debugPaneContainerStyle,
@@ -36,6 +42,8 @@ export const DebugPanel: React.FC = () => {
   const { setActiveTabInDebugPanel, setDebugPanelExpansion } = useRecoilValue(dispatcherState);
   const isPanelExpanded = useRecoilValue(debugPanelExpansionState);
   const activeTab = useRecoilValue(debugPanelActiveTabState);
+  const refElement = useRef<HTMLDivElement>(null);
+  const setDebugPanelHeight = useSetRecoilState(debugPaneHeight);
 
   const onExpandPanel = useCallback((activeTabKey: DebugDrawerKeys) => {
     setDebugPanelExpansion(true);
@@ -129,7 +137,12 @@ export const DebugPanel: React.FC = () => {
   }, [isPanelExpanded, activeTab]);
 
   return (
-    <div>
+    <div
+      ref={refElement}
+      css={{
+        zIndex: 2,
+      }}
+    >
       <Resizable
         css={css`
           ${debugPaneContainerStyle}
@@ -151,6 +164,12 @@ export const DebugPanel: React.FC = () => {
         }}
         maxHeight={isPanelExpanded ? debugPanelMaxExpandedHeight : computedPivotHeight}
         minHeight={isPanelExpanded ? debugPanelMinHeight : computedPivotHeight}
+        onResize={() => {
+          console.log('Height', refElement.current?.offsetHeight);
+          if (refElement.current?.offsetHeight) {
+            setDebugPanelHeight(refElement.current?.offsetHeight);
+          }
+        }}
       >
         <div
           css={css`

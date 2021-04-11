@@ -381,7 +381,7 @@ export const Header = () => {
         customWidth={'395px'}
         headerText={projectName}
         isBlocking={false}
-        isOpen={isWebChatPanelVisible}
+        isOpen={false}
         styles={{
           root: {
             marginTop: '50px',

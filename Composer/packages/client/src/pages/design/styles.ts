@@ -18,6 +18,7 @@ export const contentWrapper = css`
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
+  position: relative;
   label: DesignPageContent;
 `;
 

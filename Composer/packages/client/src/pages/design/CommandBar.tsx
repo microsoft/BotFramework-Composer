@@ -190,7 +190,7 @@ const CommandBar: React.FC<CommandBarProps> = React.memo(({ projectId }) => {
     <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
       <span
         ref={addNewBtnRef}
-        css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
+        css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden', zIndex: 1 }}
         data-testid="CoachmarkRef-AddNew"
       />
       <Toolbar toolbarItems={toolbarItems} />

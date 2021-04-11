@@ -349,3 +349,8 @@ export const userHasNodeInstalledState = atom<boolean>({
   key: getFullyQualifiedKey('userHasNodeInstalled'),
   default: true,
 });
+
+export const debugPaneHeight = atom<number>({
+  key: getFullyQualifiedKey('debugPaneHeight'),
+  default: 0,
+});

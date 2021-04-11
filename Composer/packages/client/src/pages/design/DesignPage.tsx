@@ -10,6 +10,7 @@ import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import { dispatcherState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
+import { WebChatContainer } from '../../components/WebChat/WebChatContainer';
 
 import SideBar from './SideBar';
 import CommandBar from './CommandBar';
@@ -64,6 +65,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         >
           <SideBar projectId={activeBot} />
           <div css={contentWrapper} role="main">
+            <WebChatContainer />
             <CommandBar projectId={activeBot} />
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
@@ -82,16 +84,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </div>
         </Split>
         <Modals projectId={activeBot} />
-        <div
-          css={{
-            height: '100%',
-            width: '200px',
-            float: 'right',
-            background: 'black',
-          }}
-        >
-          WEBCHAT
-        </div>
         <DebugPanel />
       </div>
     </div>

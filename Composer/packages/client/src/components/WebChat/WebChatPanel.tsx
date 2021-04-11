@@ -17,7 +17,7 @@ import { dispatcherState } from '../../recoilModel';
 
 import { ConversationService, ChatData, BotSecrets } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
-import { WebChatContainer } from './WebChatContainer';
+import { WebChat } from './WebChat';
 import { RestartOption } from './type';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
@@ -100,18 +100,20 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         }
       } catch (ex) {
         const response: AxiosResponse = ex.response;
-        const err: ConversationNetworkErrorItem = {
-          error: {
-            message: formatMessage('An error occurred connecting initializing the DirectLine server'),
-          },
-          request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
-          response: { payload: response.data, statusCode: response.status },
-          timestamp: Date.now(),
-          trafficType: 'networkError',
-        };
-        appendWebChatTraffic(projectId, err);
-        setActiveTabInDebugPanel('WebChatInspector');
-        setDebugPanelExpansion(true);
+        if (response) {
+          const err: ConversationNetworkErrorItem = {
+            error: {
+              message: formatMessage('An error occurred connecting initializing the DirectLine server'),
+            },
+            request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
+            response: { payload: response.data, statusCode: response.status },
+            timestamp: Date.now(),
+            trafficType: 'networkError',
+          };
+          appendWebChatTraffic(projectId, err);
+          setActiveTabInDebugPanel('WebChatInspector');
+          setDebugPanelExpansion(true);
+        }
       }
     };
 
@@ -120,7 +122,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     return () => {
       webChatTrafficChannel.current?.close();
     };
-  }, []);
+  }, [projectId]);
 
   useEffect(() => {
     if (botUrl) {
@@ -221,8 +223,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   };
 
   return (
-    <div ref={webChatPanelRef} style={{ height: 'calc(100% - 38px)' }}>
+    <div ref={webChatPanelRef} style={{ height: 'calc(100% - 85px)', zIndex: 1 }}>
       <WebChatHeader
+        botName={botData.botName}
         conversationId={currentConversation}
         currentRestartOption={currentRestartOption}
         openBotInEmulator={() => {
@@ -233,7 +236,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         onSaveTranscript={onSaveTranscriptClick}
         onSetRestartOption={onSetRestartOption}
       />
-      <WebChatContainer
+      <WebChat
         activeLocale={activeLocale}
         botUrl={botUrl}
         chatData={chats[currentConversation]}
