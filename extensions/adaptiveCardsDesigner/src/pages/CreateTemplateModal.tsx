@@ -115,7 +115,7 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
         />
         <DialogFooter>
           <PrimaryButton
-            disabled={!selectedTemplate?.name || !selectedTemplate.body || !selectedLgFile}
+            disabled={!selectedTemplate?.name || !selectedTemplate?.body || !selectedLgFile}
             text={mode === 'create' ? formatMessage('Create') : formatMessage('Edit')}
             onClick={onClick}
           />

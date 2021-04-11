@@ -204,7 +204,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           name: formatMessage('Edit in Adaptive Cards Designer'),
           onClick: () => {
             navigateTo(
-              `/bot/${actualProjectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${item.name}`
+              `/bot/${actualProjectId}/plugin/composer-adaptive-card-designer/adaptive-cards-designer?templateName=${item.name}&lgFileId=${lgFileId}`
             );
           },
         });
@@ -212,7 +212,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       return buttons;
     },
-    [activeDialog, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]
+    [activeDialog, lgFileId, templates, onClickEdit, onRemoveTemplate, onCopyTemplate, setMessage]
   );
 
   const getTableColums = useCallback((): IColumn[] => {
