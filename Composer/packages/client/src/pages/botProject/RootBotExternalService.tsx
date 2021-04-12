@@ -191,6 +191,28 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
+  const handleRootLUISKeyOnChange = (e, value) => {
+    if (value) {
+      setLuisKeyErrorMsg('');
+      setLocalRootLuisKey(value);
+    } else {
+      setLuisKeyErrorMsg(
+        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
+      );
+      setLocalRootLuisKey('');
+    }
+  };
+
+  const handleRootQnAKeyOnChange = (e, value) => {
+    if (value) {
+      setQnAKeyErrorMsg('');
+      setLocalRootQnAKey(value);
+    } else {
+      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
+      setLocalRootQnAKey('');
+    }
+  };
+
   useEffect(() => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
@@ -214,21 +236,13 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   }, [projectId]);
 
-  const handleRootLUISKeyOnChange = (e, value) => {
-    if (value) {
-      setLuisKeyErrorMsg('');
-      setLocalRootLuisKey(value);
-    } else {
-      setLuisKeyErrorMsg(
-        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
-      );
-      setLocalRootLuisKey('');
-    }
-  };
-
   useEffect(() => {
     handleRootLUISKeyOnChange(null, rootLuisKey);
   }, [rootLuisKey]);
+
+  useEffect(() => {
+    handleRootQnAKeyOnChange(null, rootqnaKey);
+  }, [rootqnaKey]);
 
   useEffect(() => {
     if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
@@ -251,16 +265,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       ...mergedSettings,
       luis: { ...mergedSettings.luis, name: localRootLuisName },
     });
-  };
-
-  const handleRootQnAKeyOnChange = (e, value) => {
-    if (value) {
-      setQnAKeyErrorMsg('');
-      setLocalRootQnAKey(value);
-    } else {
-      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
-      setLocalRootQnAKey('');
-    }
   };
 
   const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
