@@ -66,7 +66,7 @@ const updateLuFiles = (
   }
 };
 const getRelatedLuFileChanges = async (
-  luFiles: LuFile[],
+  originLuFiles: LuFile[],
   updatedLuFile: LuFile,
   projectId: string,
   luFeatures: ILUFeaturesConfig
@@ -74,6 +74,7 @@ const getRelatedLuFileChanges = async (
   const { id } = updatedLuFile;
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
+  const luFiles = originLuFiles.map((file) => (file.id === updatedLuFile.id ? updatedLuFile : file));
   const originLuFile = luFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = luFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
