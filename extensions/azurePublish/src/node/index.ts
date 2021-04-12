@@ -173,8 +173,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
 
-      const mode = this.getRuntimeTemplateMode(runtime?.key);
-
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -665,7 +663,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure (Preview)', 'azurePublish');
+  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure', 'azurePublish');
 
   await composer.addPublishMethod(azurePublish);
 };

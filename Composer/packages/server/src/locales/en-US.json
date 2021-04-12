@@ -494,6 +494,9 @@
   "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
     "message": "Bot Framework Composer is a visual authoring canvas for building bots and other types of conversational application with the Microsoft Bot Framework technology stack. With Composer you will find everything you need to build a modern, state-of-the-art conversational experience."
   },
+  "bot_framework_composer_requires_node_js_in_order_t_9c45c226": {
+    "message": "Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version"
+  },
   "bot_framework_emulator_fefd4a59": {
     "message": "Bot Framework Emulator"
   },
@@ -617,12 +620,6 @@
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
-  "choose_publishing_profile_ee7ecc78": {
-    "message": "Choose publishing profile"
-  },
-  "choose_subscription_3d78d10d": {
-    "message": "Choose subscription"
-  },
   "clear_all_da755751": {
     "message": "Clear all"
   },
@@ -647,11 +644,14 @@
   "collapse_34080b4d": {
     "message": "Collapse"
   },
-  "collapse_debug_panel_6f1c5869": {
-    "message": "Collapse debug panel"
+  "collapse_debug_panel_2841f8ba": {
+    "message": "Collapse Debug Panel"
   },
   "collapse_navigation_17228b95": {
     "message": "Collapse Navigation"
+  },
+  "collect_service_level_and_conversation_level_data__d486b519": {
+    "message": "Collect service-level and conversation-level data to help gauge the performance and efficacy of your bot."
   },
   "comment_7ef1428e": {
     "message": "Comment"
@@ -688,6 +688,9 @@
   },
   "composer_on_github_1e3782ef": {
     "message": "Composer on GitHub"
+  },
+  "composer_runtime_error_b0efe05": {
+    "message": "Composer Runtime Error"
   },
   "composer_settings_31b04099": {
     "message": "Composer Settings"
@@ -1091,9 +1094,6 @@
   "deleting_dialogid_failed_1d7cc05a": {
     "message": "Deleting \"{ dialogId }\" failed."
   },
-  "deleting_one_source_file_will_also_delete_qna_file_f3afd698": {
-    "message": "Deleting one source file will also delete qna files with the same name on other locales"
-  },
   "describe_your_skill_88554792": {
     "message": "Describe your skill"
   },
@@ -1139,6 +1139,9 @@
   "dialog_cancelled_cancel_dialog_event_3eba3d7e": {
     "message": "Dialog cancelled (Cancel dialog event)"
   },
+  "dialog_d99c0378": {
+    "message": "Dialog"
+  },
   "dialog_data_61d5539b": {
     "message": "Dialog data"
   },
@@ -1181,8 +1184,8 @@
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
   },
-  "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  other {# bots}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
+    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
     "message": "Dialogs, triggers, and actions"
@@ -1340,6 +1343,9 @@
   "enable_6f5d1328": {
     "message": "Enable"
   },
+  "enable_insights_e339cf40": {
+    "message": "Enable Insights"
+  },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Enable line numbers to refer to code lines by number."
   },
@@ -1370,9 +1376,6 @@
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation activity"
   },
-  "endpoint_key_933b60ae": {
-    "message": "Endpoint Key"
-  },
   "endpoints_ff946539": {
     "message": "Endpoints"
   },
@@ -1382,8 +1385,8 @@
   "ensure_your_bot_can_understand_your_users_by_frequ_c3f5c722": {
     "message": "Ensure your bot can understand your users by frequently training your LUIS model."
   },
-  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
-    "message": "Enter a manifest URL to add a new skill to your bot."
+  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
+    "message": "Enter a manifest url to add a new skill to your bot."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "Enter a max value"
@@ -1412,9 +1415,6 @@
   "enter_luis_authoring_key_c59f8f1f": {
     "message": "Enter LUIS authoring key"
   },
-  "enter_luis_endpoint_key_f8eb30f5": {
-    "message": "Enter LUIS endpoint key"
-  },
   "enter_luis_region_2316eceb": {
     "message": "Enter LUIS region"
   },
@@ -1442,8 +1442,8 @@
   "enter_qna_region_4dae87f5": {
     "message": "Enter QnA region"
   },
-  "enter_skill_host_endpoint_url_7489a83f": {
-    "message": "Enter Skill host endpoint URL"
+  "enter_skill_host_endpoint_url_e22eeab5": {
+    "message": "Enter Skill host endpoint url"
   },
   "enter_speech_region_7e86bace": {
     "message": "Enter Speech region"
@@ -1466,6 +1466,9 @@
   "error_afac7133": {
     "message": "Error:"
   },
+  "error_checking_node_version_98bfbf4c": {
+    "message": "Error checking node version"
+  },
   "error_encountered_when_getting_template_readme_17dcbc61": {
     "message": "### Error encountered when getting template readMe"
   },
@@ -1481,11 +1484,17 @@
   "error_occurred_5549a6b4": {
     "message": "Error occurred"
   },
+  "error_occurred_building_the_bot_7425aa09": {
+    "message": "Error occurred building the bot"
+  },
   "error_occurred_ejecting_runtime_8512129e": {
     "message": "Error occurred ejecting runtime!"
   },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
+  },
+  "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
+    "message": "Error occurred trying to fetch runtime standard output"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Please add unknown functions to setting''s customFunctions field."
@@ -1495,6 +1504,9 @@
   },
   "error_provisioning_25835400": {
     "message": "Error provisioning."
+  },
+  "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
+    "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -1525,6 +1537,9 @@
   },
   "expand_2f2fadbd": {
     "message": "Expand"
+  },
+  "expand_debug_panel_6f04e9f2": {
+    "message": "Expand Debug Panel"
   },
   "expand_navigation_20330d1d": {
     "message": "Expand Navigation"
@@ -1558,6 +1573,9 @@
   },
   "external_services_da7820ce": {
     "message": "External services"
+  },
+  "external_skill_73e16d25": {
+    "message": "External skill"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs."
@@ -1655,6 +1673,9 @@
   "form_b674666c": {
     "message": "form"
   },
+  "form_dialog_7327a4ff": {
+    "message": "Form dialog"
+  },
   "form_dialog_error_ba7c37fe": {
     "message": "Form dialog error"
   },
@@ -1667,8 +1688,14 @@
   "form_editor_7c2b02f0": {
     "message": "form editor"
   },
+  "form_field_8566629d": {
+    "message": "Form field"
+  },
   "form_title_baf85c7e": {
     "message": "form title"
+  },
+  "form_trigger_e8828303": {
+    "message": "Form trigger"
   },
   "form_wide_operations_1c1a73eb": {
     "message": "form-wide operations"
@@ -1817,14 +1844,14 @@
   "import_as_new_35630827": {
     "message": "Import as new"
   },
-  "import_new_url_and_overwrite_5e463747": {
-    "message": "Import new URL and overwrite"
+  "import_new_url_and_overwrite_ef1f405e": {
+    "message": "Import new url and overwrite"
   },
   "import_schema_75659c5f": {
     "message": "Import schema"
   },
-  "import_url_62402b7c": {
-    "message": "Import URL"
+  "import_url_ccaa2f16": {
+    "message": "Import Url"
   },
   "import_your_bot_to_new_project_8751d82f": {
     "message": "Import your bot to new project"
@@ -1900,6 +1927,9 @@
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
+  },
+  "install_node_js_1857298c": {
+    "message": "Install Node.js"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
@@ -1994,8 +2024,8 @@
   "knowledge_base_name_7d83bbe4": {
     "message": "Knowledge base name"
   },
-  "knowledge_qna_1a599dcf": {
-    "message": "Knowledge (QnA)"
+  "knowledge_qna_7a4e84f7": {
+    "message": "Knowledge(QnA)"
   },
   "knowledge_source_dd66f38f": {
     "message": "Knowledge source"
@@ -2023,6 +2053,9 @@
   },
   "learn_about_adaptive_expressions_fb1b6c3c": {
     "message": "Learn about Adaptive expressions"
+  },
+  "learn_how_to_publish_to_a_dev_ops_pipeline_using_c_9b4577be": {
+    "message": "Learn how to publish to a Dev Ops pipeline using CI / CD."
   },
   "learn_more_14816ec": {
     "message": "Learn More."
@@ -2059,6 +2092,9 @@
   },
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
+  },
+  "lg_e6ee5b4a": {
+    "message": "LG"
   },
   "lg_editor_ee0184e6": {
     "message": "LG editor"
@@ -2168,6 +2204,9 @@
   "looping_ddae56ff": {
     "message": "Looping"
   },
+  "lu_15572a02": {
+    "message": "LU"
+  },
   "lu_editor_d09fb2b0": {
     "message": "LU editor"
   },
@@ -2207,9 +2246,6 @@
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
   },
-  "luis_endpoint_key_c685e219": {
-    "message": "LUIS endpoint key"
-  },
   "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
     "message": "LUIS key is required with the current recognizer setting to start your bot locally, and publish"
   },
@@ -2246,11 +2282,11 @@
   "manifest_editor_1426637": {
     "message": "manifest editor"
   },
-  "manifest_url_a6250c02": {
-    "message": "Manifest URL"
+  "manifest_url_30824e88": {
+    "message": "Manifest url"
   },
-  "manifest_url_can_not_be_accessed_ba43fc31": {
-    "message": "Manifest URL can not be accessed"
+  "manifest_url_can_not_be_accessed_a7f147b2": {
+    "message": "Manifest url can not be accessed"
   },
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
@@ -2657,9 +2693,6 @@
   "output_5023cf84": {
     "message": "Output"
   },
-  "outputs_e6f0bfbe": {
-    "message": "Outputs"
-  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2681,8 +2714,8 @@
   "please_enter_an_event_name_a148275a": {
     "message": "Please enter an event name"
   },
-  "please_input_a_manifest_url_79cce9d5": {
-    "message": "Please input a manifest URL"
+  "please_input_a_manifest_url_d726edbf": {
+    "message": "Please input a manifest Url"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Please input regEx pattern"
@@ -2713,9 +2746,6 @@
   },
   "prebuilt_entity_21ebcdc6": {
     "message": "Prebuilt entity"
-  },
-  "prediction_key_200e158b": {
-    "message": "Prediction key"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
@@ -2848,6 +2878,9 @@
   },
   "publish_target_388f6adf": {
     "message": "Publish target"
+  },
+  "publish_to_dev_ops_3b8f5a2f": {
+    "message": "Publish to Dev Ops"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
     "message": "Publish your bot to Azure and manage published bots here."
@@ -3371,8 +3404,8 @@
   "skill_host_endpoint_4118a173": {
     "message": "Skill host endpoint"
   },
-  "skill_host_endpoint_url_702c277c": {
-    "message": "Skill host endpoint URL"
+  "skill_host_endpoint_url_e68b65f6": {
+    "message": "Skill host endpoint url"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
     "message": "Skill manifest endpoint is configured improperly"
@@ -3451,9 +3484,6 @@
   },
   "start_bot_25ecad14": {
     "message": "Start Bot"
-  },
-  "start_bot_failed_d75647d5": {
-    "message": "Start bot failed"
   },
   "start_command_a085f2ec": {
     "message": "Start command"
@@ -3734,6 +3764,9 @@
   "tips_80d0da2b": {
     "message": "tips"
   },
+  "title_connection_eaec11f8": {
+    "message": "{ title } connection"
+  },
   "title_ee03d132": {
     "message": "Title"
   },
@@ -3796,6 +3829,12 @@
   },
   "train_your_language_model_ee4cec6a": {
     "message": "Train your language model"
+  },
+  "trigger_f0ee1fbf": {
+    "message": "Trigger"
+  },
+  "trigger_group_79a00ac6": {
+    "message": "Trigger group"
   },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
     "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
@@ -3902,17 +3941,14 @@
   "updating_scripts_e17a5722": {
     "message": "Updating scripts... "
   },
-  "url_22a5f3b8": {
-    "message": "URL"
+  "url_8c4ff7d2": {
+    "message": "Url"
   },
-  "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+  "url_should_start_with_http_s_9ca55d94": {
+    "message": "Url should start with http[s]://"
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Use custom LUIS authoring key"
-  },
-  "use_custom_luis_endpoint_key_572e2c29": {
-    "message": "Use custom LUIS endpoint key"
   },
   "use_custom_luis_region_49d31dbf": {
     "message": "Use custom LUIS region"
@@ -3997,6 +4033,9 @@
   },
   "warning_aacb8c24": {
     "message": "Warning"
+  },
+  "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
+    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"
