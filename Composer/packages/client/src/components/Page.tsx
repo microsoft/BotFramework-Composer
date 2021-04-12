@@ -62,6 +62,7 @@ export const headerContent = css`
   label: PageHeaderContent;
 `;
 
+// TODO: https://github.com/microsoft/BotFramework-Composer/issues/6873. Investigate static numbers
 export const main = (hasRenderHeaderContent) => css`
   margin-left: 2px;
   max-height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
