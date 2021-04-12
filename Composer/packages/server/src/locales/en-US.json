@@ -134,6 +134,9 @@
   "add_a_luis_key_7702f550": {
     "message": "Add a LUIS key"
   },
+  "add_a_new_bot_d7af2391": {
+    "message": "Add a new bot"
+  },
   "add_a_new_key_5c208c29": {
     "message": "Add a new key"
   },
@@ -160,6 +163,9 @@
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
+  },
+  "add_an_existing_bot_5a9cc5b1": {
+    "message": "Add an existing bot"
   },
   "add_caller_5c12aa5b": {
     "message": "Add caller"
@@ -752,9 +758,6 @@
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Congratulations! Your model is successfully published."
   },
-  "connect_a_remote_skill_10cf0724": {
-    "message": "Connect a remote skill"
-  },
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
   },
@@ -874,9 +877,6 @@
   },
   "create_a_new_qna_maker_resource_8c03ee9e": {
     "message": "Create a new QnA Maker resource"
-  },
-  "create_a_new_skill_e961ff28": {
-    "message": "Create a new skill"
   },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Create a new skill manifest or select which one you want to edit"
@@ -2641,9 +2641,6 @@
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
-  },
-  "open_an_existing_skill_fbd87273": {
-    "message": "Open an existing skill"
   },
   "open_e0beb7b9": {
     "message": "Open"
