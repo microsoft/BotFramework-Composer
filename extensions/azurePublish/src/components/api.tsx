@@ -45,7 +45,11 @@ export const getSubscriptions = async (token: string): Promise<Array<Subscriptio
       });
       throw new Error(subscriptionsResult._response.bodyAsText);
     }
-    return subscriptionsResult._response.parsedBody;
+    return subscriptionsResult._response.parsedBody.sort((a, b) => {
+      const nameA = a.displayName.toUpperCase();
+      const nameB = b.displayName.toUpperCase();
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    });
   } catch (err) {
     let message = JSON.stringify(err, Object.getOwnPropertyNames(err));
     if (err?.code === 12 && err?.message?.match(/Bearer/gi)) {
@@ -81,7 +85,11 @@ export const getResourceGroups = async (token: string, subscriptionId: string): 
       });
       return [];
     }
-    return resourceGroupsResult._response.parsedBody;
+    return resourceGroupsResult._response.parsedBody.sort((a, b) => {
+      const nameA = a.name.toUpperCase();
+      const nameB = b.name.toUpperCase();
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    });
   } catch (err) {
     logger({
       status: AzureAPIStatus.ERROR,
