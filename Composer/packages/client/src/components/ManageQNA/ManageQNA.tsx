@@ -93,7 +93,15 @@ export const ManageQNA = (props: ManageQNAProps) => {
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
-      return subscriptionsResult._response.parsedBody;
+      return subscriptionsResult._response.parsedBody.sort((a, b) => {
+        if (a?.displayName && b.displayName) {
+          const nameA = a.displayName.toUpperCase();
+          const nameB = b.displayName.toUpperCase();
+          return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        } else {
+          return 0;
+        }
+      });
     } catch (err) {
       setApplicationLevelError(err);
       return [];
