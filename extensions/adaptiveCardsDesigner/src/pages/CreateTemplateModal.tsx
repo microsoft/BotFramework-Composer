@@ -28,24 +28,30 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
   const { lgFiles, projectId } = useProjectApi();
   const { addLgTemplate } = useLgApi();
   const [mode, setMode] = useState<Mode>('create');
-  const [selectedLgFile, setSelectedLgFile] = useState<LgFile | undefined>(lgFiles?.[0]);
+
+  const filteredLgFiles = useMemo<LgFile[]>(() => {
+    return lgFiles
+      .map((lgFile) => {
+        const templates = lgFile.templates.reduce((allTemplates, template) => {
+          try {
+            const body = getAdaptiveCard(template.body);
+            return body?.type === 'AdaptiveCard' ? [...allTemplates, { ...template, body }] : allTemplates;
+          } catch (error) {
+            return allTemplates;
+          }
+        }, []);
+        return { ...lgFile, templates };
+      })
+      .filter(({ templates }) => templates.length);
+  }, [lgFiles]);
+
+  const [selectedLgFile, setSelectedLgFile] = useState<LgFile | undefined>(filteredLgFiles?.[0]);
   const [selectedTemplate, setSelectedTemplate] = useState<ParsedLgTemplate | undefined>();
   const [templateName, setTemplateName] = useState('');
 
-  const userLgTemplates = useMemo<ParsedLgTemplate[]>(() => {
-    return selectedLgFile?.templates.reduce((allTemplates, template) => {
-      try {
-        const body = getAdaptiveCard(template.body);
-        return body?.type === 'AdaptiveCard' ? [...allTemplates, { ...template, body }] : allTemplates;
-      } catch (error) {
-        return allTemplates;
-      }
-    }, []);
-  }, [selectedLgFile.allTemplates]);
-
   const templates = useMemo(() => {
-    return mode === 'create' ? cardTemplates : userLgTemplates;
-  }, [mode, userLgTemplates]);
+    return mode === 'create' ? cardTemplates : selectedLgFile?.templates;
+  }, [mode, selectedLgFile]);
 
   const choices = useMemo<IChoiceGroupOption[]>(
     () => [
@@ -56,9 +62,10 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
       {
         key: 'edit',
         text: formatMessage('Edit an existing template'),
+        disabled: !filteredLgFiles.some(({ templates }) => templates.length),
       },
     ],
-    []
+    [filteredLgFiles]
   );
 
   const onSelectChoice = useCallback((_, option?: IChoiceGroupOption) => {
@@ -117,12 +124,12 @@ export const CreateTemplateModal: React.FC<Props> = ({ hidden, onSelectTemplate,
       >
         <ChoiceGroup defaultSelectedKey={mode} options={choices} onChange={onSelectChoice} />
         <TemplatePicker
-          lgFiles={lgFiles}
+          lgFiles={mode === 'create' ? lgFiles : filteredLgFiles}
           mode={mode}
           selectedLgFileId={selectedLgFile?.id}
           selectedTemplate={selectedTemplate}
           templateName={templateName}
-          templates={templates}
+          templates={templates as ParsedLgTemplate[]}
           onLgFileChanged={onLgFileChanged}
           onTemplateNameChanged={setTemplateName}
           onTemplateUpdated={onTemplateUpdated}
