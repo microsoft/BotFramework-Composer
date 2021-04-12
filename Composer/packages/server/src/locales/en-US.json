@@ -701,6 +701,9 @@
   "composer_on_github_1e3782ef": {
     "message": "Composer on GitHub"
   },
+  "composer_runtime_error_b0efe05": {
+    "message": "Composer Runtime Error"
+  },
   "composer_settings_31b04099": {
     "message": "Composer Settings"
   },
@@ -1496,11 +1499,17 @@
   "error_occurred_5549a6b4": {
     "message": "Error occurred"
   },
+  "error_occurred_building_the_bot_7425aa09": {
+    "message": "Error occurred building the bot"
+  },
   "error_occurred_ejecting_runtime_8512129e": {
     "message": "Error occurred ejecting runtime!"
   },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
+  },
+  "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
+    "message": "Error occurred trying to fetch runtime standard output"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Please add unknown functions to setting''s customFunctions field."
@@ -2711,9 +2720,6 @@
   "output_5023cf84": {
     "message": "Output"
   },
-  "outputs_e6f0bfbe": {
-    "message": "Outputs"
-  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -3511,9 +3517,6 @@
   },
   "start_bot_25ecad14": {
     "message": "Start Bot"
-  },
-  "start_bot_failed_d75647d5": {
-    "message": "Start bot failed"
   },
   "start_command_a085f2ec": {
     "message": "Start command"

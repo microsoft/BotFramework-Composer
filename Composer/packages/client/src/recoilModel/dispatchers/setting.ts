@@ -195,6 +195,10 @@ export const settingsDispatcher = () => {
       const v2 = isUsingAdaptiveRuntime(settings.runtime);
       set(settingsState(projectId), (currentValue) => {
         if (v2) {
+          const callers = [...settings.runtimeSettings?.skills?.allowedCallers];
+          if (!callers?.find((item) => item === msAppId)) {
+            callers.push(msAppId);
+          }
           return {
             ...currentValue,
             skill: {
@@ -207,11 +211,15 @@ export const settingsDispatcher = () => {
             runtimeSettings: {
               ...settings.runtimeSettings,
               skills: {
-                allowedCallers: [...settings.runtimeSettings?.skills?.allowedCallers, msAppId],
+                allowedCallers: callers,
               },
             },
           };
         } else {
+          const callers = [...settings.skillConfiguration?.allowedCallers];
+          if (!callers?.find((item) => item === msAppId)) {
+            callers.push(msAppId);
+          }
           return {
             ...currentValue,
             skill: {
@@ -223,7 +231,7 @@ export const settingsDispatcher = () => {
             },
             skillConfiguration: {
               ...settings.skillConfiguration,
-              allowedCallers: [...settings.skillConfiguration?.allowedCallers, msAppId],
+              allowedCallers: callers,
             },
           };
         }
