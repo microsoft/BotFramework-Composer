@@ -53,6 +53,34 @@ export type SkillSetting = {
   endpointUrl: string;
 };
 
+export type RuntimeSettings = {
+  adapters?: AdapterRecord[];
+  features?: {
+    removeRecipientMentions?: boolean;
+    showTyping?: boolean;
+    traceTranscript?: boolean;
+    useInspection?: boolean;
+    blobTranscript?: {
+      connectionString?: string;
+      containerName?: string;
+    };
+    setSpeak?: {
+      voiceFontName?: string;
+      fallbackToTextForSpeechIfEmpty?: true;
+    };
+  };
+  components?: [];
+  skills?: {
+    allowedCallers?: string[];
+  };
+  storage?: string;
+  telemetry?: {
+    instrumentationKey?: string;
+    logActivities?: boolean;
+    logPersonalInformation?: boolean;
+  };
+};
+
 export type DialogSetting = {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
@@ -77,33 +105,7 @@ export type DialogSetting = {
   skillHostEndpoint?: string;
   customFunctions: string[];
   defaultLocale?: string;
-  runtimeSettings?: {
-    adapters?: AdapterRecord[];
-    features?: {
-      removeRecipientMentions?: boolean;
-      showTyping?: boolean;
-      traceTranscript?: boolean;
-      useInspection?: boolean;
-      blobTranscript?: {
-        connectionString?: string;
-        containerName?: string;
-      };
-      setSpeak: {
-        voiceFontName?: string;
-        fallbackToTextForSpeechIfEmpty?: true;
-      };
-    };
-    components?: [];
-    skills?: {
-      allowedCallers?: string[];
-    };
-    storage?: string;
-    telemetry?: {
-      instrumentationKey?: string;
-      logActivities?: boolean;
-      logPersonalInformation?: boolean;
-    };
-  };
+  runtimeSettings?: RuntimeSettings;
   [key: string]: any;
 };
 
