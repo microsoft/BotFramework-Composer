@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-
+import { luIndexer, combineMessage } from '@bfc/indexers';
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -33,4 +33,16 @@ export const importOrchestractor = async (projectId: string, reloadProject, setA
       summary: formatMessage('Install Error'),
     });
   }
+};
+
+export const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
+  const content = `#${intent}\n${triggerPhrases}`;
+  const { diagnostics } = luIndexer.parse(content, '', {
+    enableListEntities: false,
+    enableCompositeEntities: false,
+    enableMLEntities: false,
+    enablePrebuiltEntities: false,
+    enableRegexEntities: false,
+  });
+  return combineMessage(diagnostics);
 };

@@ -23,6 +23,7 @@ import { localeState, dispatcherState } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { Orchestractor } from './Orchestractor';
+import { getLuDiagnostics } from './helper';
 
 const detailListContainer = css`
   width: 100%;
@@ -126,6 +127,8 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
   const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
+  const [triggerErrorMessage, setTriggerErrorMsg] = useState('');
+
   const hasOrchestractor = useMemo(() => {
     const fileName = `${dialogId}.${locale}.lu.dialog`;
     for (const file of curRecognizers) {
@@ -222,6 +225,13 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     }
   }, [selectedIntents, currentLuFile]);
 
+  useEffect(() => {
+    if (displayContent) {
+      const error = getLuDiagnostics('manifestName', displayContent);
+      setTriggerErrorMsg(error);
+    }
+  }, [displayContent]);
+
   const handleSubmit = (ev, enableOchestractor) => {
     // append remote lufile into root lu file
     updateLuFile(displayContent);
@@ -269,6 +279,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                   sectionId: manifest.name,
                   luFeatures: luFeatures,
                 }}
+                errorMessage={triggerErrorMessage}
                 telemetryClient={TelemetryClient}
                 value={displayContent}
                 onChange={setDisplayContent}
