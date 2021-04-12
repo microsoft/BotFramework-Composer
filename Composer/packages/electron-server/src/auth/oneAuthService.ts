@@ -193,10 +193,20 @@ export class OneAuthInstance extends OneAuthBase {
       }
 
       if (!this.signedInARMAccount || !this.tenantToken) {
+        const accounts = await this._oneAuth?.readAllAccounts();
+        log('\n\n accounts \n\n');
+        log(accounts);
+        log('\n\n');
+        const accHint = accounts ? accounts[accounts.length - 1]?.accountHints[0] : undefined;
+        log('using accHint %s', accHint);
         // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
         log('Logging user into ARM...');
         const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
-        const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+        const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(
+          accHint,
+          accHint ? undefined : signInParams,
+          ''
+        );
         this.signedInARMAccount = result.account;
         this.tenantToken = result.credential.value;
       }
@@ -221,7 +231,7 @@ export class OneAuthInstance extends OneAuthBase {
     // sign in arm account.
     if (!this.signedInARMAccount) {
       const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
-      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, signInParams, '');
       this.signedInARMAccount = result.account;
     }
     if (this.signedInARMAccount) {
@@ -284,7 +294,7 @@ export class OneAuthInstance extends OneAuthBase {
   private async signIn(): Promise<void> {
     try {
       log('Signing in...');
-      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', undefined, '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, undefined, '');
       this.signedInAccount = result.account;
       log('Signed in successfully. Got account: %O', result.account);
     } catch (e) {
@@ -307,7 +317,7 @@ export class OneAuthInstance extends OneAuthBase {
         '',
         ''
       );
-      const result = await this.oneAuth.signInInteractively('', reqParams, '');
+      const result = await this.oneAuth.signInInteractively(undefined, reqParams, '');
       if (result?.credential?.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
