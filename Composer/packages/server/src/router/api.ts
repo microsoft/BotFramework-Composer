@@ -74,6 +74,7 @@ router.get('/provision/:projectId/:type/resources', ProvisionController.getResou
 router.post('/provision/:projectId/:type', ProvisionController.provision);
 
 // publishing
+router.get('/publish/runtimeLogUrl/:projectId', PublishController.setupRuntimeLogForBot);
 router.get('/publish/types', PublishController.getTypes);
 router.get('/publish/:projectId/status/:target/:jobId', PublishController.status);
 router.get('/publish/:projectId/status/:target', PublishController.status);
@@ -98,6 +99,8 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', '
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.get('/utilities/checkNode', UtilitiesController.checkNodeVersion);
+
 // extensions
 router.get('/extensions', ExtensionsController.listExtensions);
 router.post('/extensions', ExtensionsController.addExtension);
