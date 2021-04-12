@@ -156,10 +156,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           activeLocale
         );
         if (mounted) {
-          setChatData({
-            [chatData.conversationId]: chatData,
-          });
-          setCurrentConversation(chatData.conversationId);
           setConversationData(chatData);
           sendInitialActivities(chatData);
         }

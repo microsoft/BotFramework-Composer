@@ -374,56 +374,6 @@ export const Header = () => {
           </FocusTrapZone>
         </Callout>
       )}
-
-      <Panel
-        isHiddenOnDismiss
-        closeButtonAriaLabel={formatMessage('Close')}
-        customWidth={'395px'}
-        headerText={projectName}
-        isBlocking={false}
-        isOpen={false}
-        styles={{
-          root: {
-            marginTop: '50px',
-          },
-          scrollableContent: {
-            width: '100%',
-            height: '100%',
-          },
-          content: {
-            width: '100%',
-            height: '100%',
-            padding: 0,
-            margin: 0,
-          },
-        }}
-        type={PanelType.custom}
-        onDismiss={() => {
-          setWebChatPanelVisibility(false);
-          TelemetryClient.track('WebChatPaneClosed');
-        }}
-      >
-        {webchatEssentials?.projectId ? (
-          <WebChatPanel
-            botData={{ ...webchatEssentials }}
-            directlineHostUrl={BASEPATH}
-            isWebChatPanelVisible={isWebChatPanelVisible}
-          />
-        ) : null}
-        <GetStarted
-          isOpen={showGetStarted}
-          projectId={rootBotProjectId}
-          requiresLUIS={requiresLUIS}
-          requiresQNA={requiresQNA}
-          showTeachingBubble={showGetStartedTeachingBubble}
-          onBotReady={() => {
-            setShowTeachingBubble(true);
-          }}
-          onDismiss={() => {
-            toggleGetStarted(false);
-          }}
-        />
-      </Panel>
     </div>
   );
 };

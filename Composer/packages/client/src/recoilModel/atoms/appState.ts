@@ -359,6 +359,7 @@ export const debugPaneHeight = atom<number>({
 export const webChatDataState = atom<Record<string, ChatData>>({
   key: getFullyQualifiedKey('webChatData'),
   default: {},
+  dangerouslyAllowMutability: true,
 });
 
 export const currentWebChatConversationState = atom<string>({

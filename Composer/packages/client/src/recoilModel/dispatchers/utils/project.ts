@@ -73,6 +73,8 @@ import {
   createQnAOnState,
   botEndpointsState,
   dispatcherState,
+  webChatDataState,
+  currentWebChatConversationState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -102,6 +104,8 @@ export const resetBotStates = async ({ reset }: CallbackInterface, projectId: st
     reset(currentRecoilAtom(projectId));
   });
   reset(botEndpointsState);
+  reset(webChatDataState);
+  reset(currentWebChatConversationState);
 };
 
 export const setErrorOnBotProject = async (
