@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { DialogInfo, ITrigger, SDKKinds, getFriendlyName } from '@bfc/shared';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
@@ -80,16 +80,18 @@ export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSe
     },
   ];
 
-  const selection = useMemo(() => {
-    const listSelection = new Selection({
-      onSelectionChanged: () => {
-        const selectedItems = listSelection.getSelection();
-        setSelectedTriggers(selectedItems);
-      },
-    });
-    listSelection.setItems(selectedTriggers);
-    listSelection.setAllSelected(true);
-    return listSelection;
+  const selection = new Selection({
+    getKey: (item) => item.id,
+    onSelectionChanged: () => {
+      const selectedItems = selection.getSelection();
+      setSelectedTriggers(selectedItems);
+    },
+  });
+
+  useEffect(() => {
+    for (const item of selectedTriggers) {
+      selection.setKeySelected(selection.getKey(item), true, false);
+    }
   }, []);
 
   return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
