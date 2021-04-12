@@ -64,7 +64,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const settings = useRecoilValue(settingsState(projectId));
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const { skillConfiguration, runtime, runtimeSettings } = mergedSettings;
+  const { skillConfiguration, runtime, runtimeSettings, publishTargets } = mergedSettings;
   const { setSettings } = useRecoilValue(dispatcherState);
   const isAdaptive = isUsingAdaptiveRuntime(runtime);
   const [callers, setCallers] = useState<string[]>(
@@ -218,7 +218,16 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             <div>
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
                 const Button = primary ? PrimaryButton : DefaultButton;
-                const isDisabled = typeof disabled === 'function' ? disabled({ manifest: skillManifest }) : !!disabled;
+
+                let isDisabled = false;
+                if (typeof disabled === 'function') {
+                  isDisabled =
+                    editorStep === ManifestEditorSteps.SELECT_MANIFEST
+                      ? disabled({ manifest: skillManifest })
+                      : disabled({ publishTargets });
+                } else {
+                  isDisabled = !!disabled;
+                }
 
                 return (
                   <Button
