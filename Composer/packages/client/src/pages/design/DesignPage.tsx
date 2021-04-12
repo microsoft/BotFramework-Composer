@@ -51,7 +51,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const activeBot = skillId ?? projectId;
 
   return (
-    <div css={root} data-testid={props['data-testid']}>
+    <div css={root} data-testid="DesignPage">
       <div css={pageWrapper}>
         <Split
           resetOnDoubleClick
