@@ -213,6 +213,16 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   };
 
+  const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
+    if (value != null) {
+      setLuisRegionErrorMsg('');
+      setLocalRootLuisRegion(value.key as string);
+    } else {
+      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
+      setLocalRootLuisRegion('');
+    }
+  };
+
   useEffect(() => {
     if (!localRootLuisKey) {
       setLuisKeyErrorMsg(
@@ -245,6 +255,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   }, [rootqnaKey]);
 
   useEffect(() => {
+    handleRootLuisRegionOnChange(null, { key: rootLuisRegion, text: '' });
+  }, [rootLuisRegion]);
+
+  useEffect(() => {
     if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
       luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -265,16 +279,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       ...mergedSettings,
       luis: { ...mergedSettings.luis, name: localRootLuisName },
     });
-  };
-
-  const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
-    if (value != null) {
-      setLuisRegionErrorMsg('');
-      setLocalRootLuisRegion(value.key as string);
-    } else {
-      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
-      setLocalRootLuisRegion('');
-    }
   };
 
   const handleRootLuisRegionOnBlur = () => {
