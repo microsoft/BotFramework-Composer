@@ -117,19 +117,7 @@ const Routes = (props) => {
         <div
           css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)' }}
         >
-          <Dialog
-            dialogContentProps={{
-              type: DialogType.normal,
-            }}
-            hidden={!botOpening}
-            modalProps={{
-              isBlocking: false,
-            }}
-          >
-            <div css={modalControlGroup}>
-              <LoadingSpinner message={spinnerText} />
-            </div>
-          </Dialog>
+          <LoadingSpinner inModal message={spinnerText} />
         </div>
       )}
     </div>
