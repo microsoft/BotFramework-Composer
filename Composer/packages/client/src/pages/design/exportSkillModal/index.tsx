@@ -30,6 +30,7 @@ import { generateSkillManifest } from './generateSkillManifest';
 import { editorSteps, ManifestEditorSteps, order, VERSION_REGEX } from './constants';
 import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
 import { cloneDeep } from 'lodash';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -63,19 +64,27 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const settings = useRecoilValue(settingsState(projectId));
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const { skillConfiguration } = mergedSettings;
+  const { skillConfiguration, runtime, runtimeSettings } = mergedSettings;
   const { setSettings } = useRecoilValue(dispatcherState);
-  const [callers, setCallers] = useState<string[]>(skillConfiguration?.allowedCallers ?? []);
+  const isAdaptive = isUsingAdaptiveRuntime(runtime);
+  const [callers, setCallers] = useState<string[]>(
+    !isAdaptive ? skillConfiguration?.allowedCallers : runtimeSettings?.skills?.allowedCallers ?? []
+  );
 
   const updateAllowedCallers = React.useCallback(
     (allowedCallers: string[] = []) => {
-      const updatedSetting = {
-        ...cloneDeep(mergedSettings),
-        skillConfiguration: { ...skillConfiguration, allowedCallers },
-      };
+      const updatedSetting = isAdaptive
+        ? {
+            ...cloneDeep(mergedSettings),
+            runtimeSettings: { skills: { allowedCallers } },
+          }
+        : {
+            ...cloneDeep(mergedSettings),
+            skillConfiguration: { ...skillConfiguration, allowedCallers },
+          };
       setSettings(projectId, updatedSetting);
     },
-    [mergedSettings, projectId, skillConfiguration]
+    [mergedSettings, projectId, isAdaptive, skillConfiguration, runtimeSettings]
   );
 
   const handleGenerateManifest = () => {
