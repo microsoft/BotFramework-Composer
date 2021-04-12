@@ -80,13 +80,17 @@ export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSe
     },
   ];
 
-  const selection = new Selection({
-    getKey: (item) => item.id,
-    onSelectionChanged: () => {
-      const selectedItems = selection.getSelection();
-      setSelectedTriggers(selectedItems);
-    },
-  });
+  const selection = useMemo(
+    () =>
+      new Selection({
+        getKey: (item) => item.id,
+        onSelectionChanged: () => {
+          const selectedItems = selection.getSelection();
+          setSelectedTriggers(selectedItems);
+        },
+      }),
+    []
+  );
 
   useEffect(() => {
     for (const item of selectedTriggers) {

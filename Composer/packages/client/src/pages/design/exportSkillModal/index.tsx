@@ -27,7 +27,7 @@ import {
 
 import { styles } from './styles';
 import { generateSkillManifest } from './generateSkillManifest';
-import { editorSteps, ManifestEditorSteps, order, VERSION_REGEX } from './constants';
+import { editorSteps, ManifestEditorSteps, order } from './constants';
 import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
 import { cloneDeep } from 'lodash';
 import { isUsingAdaptiveRuntime } from '@bfc/shared';
