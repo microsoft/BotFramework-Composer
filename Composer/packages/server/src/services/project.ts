@@ -562,6 +562,10 @@ export class BotProjectService {
         throw new Error('Could not find root bot');
       }
     } catch (err) {
+      // Clean up failed projects
+      log('Cleaning up failed project at ', locationRef.path);
+      const storage = StorageService.getStorageClient(locationRef.storageId, user);
+      await storage.rmrfDir(locationRef.path);
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
       TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
     }

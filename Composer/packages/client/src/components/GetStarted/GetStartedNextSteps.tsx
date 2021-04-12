@@ -58,7 +58,12 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   const openLink = (link) => {
     TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: link });
-    navigateTo(link);
+    if (link.startsWith('http')) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      window.open(link, '_blank');
+    } else {
+      navigateTo(link);
+    }
   };
 
   const doNextStep = (currentStep) => {
@@ -93,6 +98,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const linktoQNASettings = `/bot/${rootBotProjectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
   const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
+  const linkToAppInsights = 'http://aka.ms/botinsights';
+  const linkToDevOps = 'https://aka.ms/bfcomposercicd';
 
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
@@ -192,6 +199,28 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         checked: false,
         onClick: () => {
           openLink(linkToLUEditor);
+        },
+      },
+      {
+        key: 'insights',
+        label: formatMessage('Enable Insights'),
+        description: formatMessage(
+          'Collect service-level and conversation-level data to help gauge the performance and efficacy of your bot.'
+        ),
+        learnMore: '',
+        checked: false,
+        onClick: () => {
+          openLink(linkToAppInsights);
+        },
+      },
+      {
+        key: 'devops',
+        label: formatMessage('Publish to Dev Ops'),
+        description: formatMessage('Learn how to publish to a Dev Ops pipeline using CI / CD.'),
+        learnMore: '',
+        checked: false,
+        onClick: () => {
+          openLink(linkToDevOps);
         },
       },
     ];

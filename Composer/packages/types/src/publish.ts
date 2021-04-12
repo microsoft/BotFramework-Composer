@@ -10,8 +10,6 @@ import { AuthParameters } from './auth';
 
 export type PublishResult = {
   message: string;
-  /** for local runtime output */
-  runtimeLog?: string;
   /** for azure or pva publish */
   comment?: string;
   eTag?: string;
@@ -147,8 +145,15 @@ export type PublishTarget = {
 export type PublishProfile = {
   name?: string;
   environment?: string;
+  tenantId?: string;
   hostname?: string;
+  luisResource?: string;
+  language?: string;
   runtimeIdentifier: string;
+  botName?: string;
+  resourceGroup?: string;
+  subscriptionId?: string;
+  region?: string;
   settings: {
     applicationInsights?: {
       InstrumentationKey: string;
@@ -169,6 +174,11 @@ export type PublishProfile = {
       endpointKey: string;
       endpoint: string;
       region: string;
+    };
+    qna?: {
+      subscriptionKey: string;
+      qnaRegion: string;
+      endpoint: string;
     };
     MicrosoftAppId: string;
     MicrosoftAppPassword: string;

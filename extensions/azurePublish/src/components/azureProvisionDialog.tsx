@@ -27,6 +27,7 @@ import {
   Stack,
   Text,
 } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -279,6 +280,9 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [formData, setFormData] = useState<ProvisionFormData>(getDefaultFormData(currentConfig, extensionState));
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
+
   // null = loading
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
@@ -366,29 +370,6 @@ export const AzureProvisionDialog: React.FC = () => {
     };
   }, []);
 
-  const getTokenForTenant = (tenantId: string) => {
-    // set tenantId in cache.
-    setTenantId(tenantId);
-    getARMTokenForTenant(tenantId)
-      .then((token) => {
-        setToken(token);
-        const decoded = decodeToken(token);
-        setCurrentUser({
-          token: token,
-          email: decoded.upn,
-          name: decoded.name,
-          expiration: (decoded.exp || 0) * 1000, // convert to ms,
-          sessionExpired: false,
-        });
-        setLoginErrorMsg(undefined);
-      })
-      .catch((err) => {
-        setTenantId(undefined);
-        setCurrentUser(undefined);
-        setLoginErrorMsg(err.message || err.toString());
-      });
-  };
-
   useEffect(() => {
     setPage(PageTypes.ChooseAction);
     // TODO: need to get the tenant id from the auth config when running as web app,
@@ -411,6 +392,12 @@ export const AzureProvisionDialog: React.FC = () => {
         });
         setPageAndTitle(PageTypes.ChooseAction);
         setLoginErrorMsg(undefined);
+      } else {
+        setLoadingErrorMessage(
+          formatMessage(
+            'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
+          )
+        );
       }
     } else {
       getTenants().then((tenants) => {
@@ -427,7 +414,32 @@ export const AzureProvisionDialog: React.FC = () => {
         }
       });
     }
+
+    setIsLoading(false);
   }, []);
+
+  const getTokenForTenant = (tenantId: string) => {
+    // set tenantId in cache.
+    setTenantId(tenantId);
+    getARMTokenForTenant(tenantId)
+      .then((token) => {
+        setToken(token);
+        const decoded = decodeToken(token);
+        setCurrentUser({
+          token: token,
+          email: decoded.upn,
+          name: decoded.name,
+          expiration: (decoded.exp || 0) * 1000, // convert to ms,
+          sessionExpired: false,
+        });
+        setLoginErrorMsg(undefined);
+      })
+      .catch((err) => {
+        setTenantId(undefined);
+        setCurrentUser(undefined);
+        setLoginErrorMsg(err.message || err.toString());
+      });
+  };
 
   useEffect(() => {
     if (formData.tenantId) {
@@ -674,7 +686,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
-  const isNewResourceGroupName = !resourceGroupNames.includes(formData.resourceGroup);
+  const isNewResourceGroupName = !currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup);
 
   const PageChooseAction = (
     <ScrollablePane
@@ -1032,6 +1044,7 @@ export const AzureProvisionDialog: React.FC = () => {
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
                 onSubmit({
+                  tenantId: formData.tenantId,
                   subscription: formData.subscriptionId,
                   resourceGroup: formData.resourceGroup,
                   hostname: formData.hostname,
@@ -1068,10 +1081,20 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // if we haven't loaded the token yet, show a loading spinner
   // unless we need to select the tenant first
-  if (!token) {
+  if (isLoading) {
     return (
       <div style={{ height: '100vh' }}>
         <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (loadingErrorMessage) {
+    return (
+      <div style={{ height: '100vh' }}>
+        <MessageBar isMultiline messageBarType={MessageBarType.error}>
+          {loadingErrorMessage}
+        </MessageBar>
       </div>
     );
   }

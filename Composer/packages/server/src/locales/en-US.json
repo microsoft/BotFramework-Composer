@@ -494,6 +494,15 @@
   "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
     "message": "Bot Framework Composer is a visual authoring canvas for building bots and other types of conversational application with the Microsoft Bot Framework technology stack. With Composer you will find everything you need to build a modern, state-of-the-art conversational experience."
   },
+  "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
+    "message": "Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation."
+  },
+  "bot_framework_composer_requires_node_js_in_order_t_a1d3dfb": {
+    "message": "Bot Framework Composer requires Node.js in order to run. Click “Install Node.js” to install the latest version"
+  },
+  "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
+    "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
+  },
   "bot_framework_emulator_fefd4a59": {
     "message": "Bot Framework Emulator"
   },
@@ -719,6 +728,9 @@
   "configure_ecb97e30": {
     "message": "Configure"
   },
+  "configure_title_1a4383b7": {
+    "message": "Configure { title }"
+  },
   "configured_8d0f4dc8": {
     "message": "Configured"
   },
@@ -809,6 +821,9 @@
   "copy_and_share_this_information_with_your_azure_ad_2ec77eeb": {
     "message": "Copy and share this information with your Azure admin. After your Luis key is provisioned, you will be ready to test your bot."
   },
+  "copy_and_share_this_information_with_your_azure_ad_a41b99ea": {
+    "message": "Copy and share this information with your Azure admin. After your Speech key is provisioned, you will be ready to test your bot with speech."
+  },
   "copy_content_for_translation_7affbcbb": {
     "message": "Copy content for translation"
   },
@@ -868,6 +883,9 @@
   },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Create a new skill manifest or select which one you want to edit"
+  },
+  "create_a_new_speech_resource_c3c8fe60": {
+    "message": "Create a new Speech resource"
   },
   "create_a_publishing_profile_a79c6808": {
     "message": "Create a publishing profile"
@@ -937,6 +955,9 @@
   },
   "create_new_qna_resources_ea2f7b37": {
     "message": "Create new QNA resources"
+  },
+  "create_new_speech_resources_73a921be": {
+    "message": "Create new Speech resources"
   },
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
@@ -1127,6 +1148,9 @@
   "dialog_cancelled_cancel_dialog_event_3eba3d7e": {
     "message": "Dialog cancelled (Cancel dialog event)"
   },
+  "dialog_d99c0378": {
+    "message": "Dialog"
+  },
   "dialog_data_61d5539b": {
     "message": "Dialog data"
   },
@@ -1169,8 +1193,8 @@
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
   },
-  "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  other {# bots}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
+    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
     "message": "Dialogs, triggers, and actions"
@@ -1225,6 +1249,9 @@
   },
   "due_to_the_following_error_we_were_unable_to_succe_897e7abb": {
     "message": "Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:"
+  },
+  "due_to_the_following_error_we_were_unable_to_succe_9e2dcd4a": {
+    "message": "Due to the following error, we were unable to successfully add your selected Speech keys to your bot project:"
   },
   "duplicate_31cec192": {
     "message": "Duplicate"
@@ -1418,6 +1445,9 @@
   "enter_name_for_new_resource_group_96fe8ea8": {
     "message": "Enter name for new resource group"
   },
+  "enter_name_for_new_speech_resources_d4cd8f5d": {
+    "message": "Enter name for new Speech resources"
+  },
   "enter_qna_maker_subscription_key_d26b4bad": {
     "message": "Enter QnA Maker Subscription key"
   },
@@ -1426,6 +1456,9 @@
   },
   "enter_skill_host_endpoint_url_e22eeab5": {
     "message": "Enter Skill host endpoint url"
+  },
+  "enter_speech_region_7e86bace": {
+    "message": "Enter Speech region"
   },
   "entities_ef09392c": {
     "message": "Entities"
@@ -1444,6 +1477,9 @@
   },
   "error_afac7133": {
     "message": "Error:"
+  },
+  "error_checking_node_version_98bfbf4c": {
+    "message": "Error checking node version"
   },
   "error_encountered_when_getting_template_readme_17dcbc61": {
     "message": "### Error encountered when getting template readMe"
@@ -1474,6 +1510,9 @@
   },
   "error_provisioning_25835400": {
     "message": "Error provisioning."
+  },
+  "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
+    "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -1537,6 +1576,9 @@
   },
   "external_services_da7820ce": {
     "message": "External services"
+  },
+  "external_skill_73e16d25": {
+    "message": "External skill"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs."
@@ -1631,6 +1673,9 @@
   "form_b674666c": {
     "message": "form"
   },
+  "form_dialog_7327a4ff": {
+    "message": "Form dialog"
+  },
   "form_dialog_error_ba7c37fe": {
     "message": "Form dialog error"
   },
@@ -1643,8 +1688,14 @@
   "form_editor_7c2b02f0": {
     "message": "form editor"
   },
+  "form_field_8566629d": {
+    "message": "Form field"
+  },
   "form_title_baf85c7e": {
     "message": "form title"
+  },
+  "form_trigger_e8828303": {
+    "message": "Form trigger"
   },
   "form_wide_operations_1c1a73eb": {
     "message": "form-wide operations"
@@ -1844,6 +1895,9 @@
   "input_your_details_below_to_create_a_new_qna_resou_82b28d39": {
     "message": "Input your details below to create a new QNA resource. You will be able to manage your new resource in the Azure portal. Learn more"
   },
+  "input_your_details_below_to_create_a_new_speech_re_51b79b16": {
+    "message": "Input your details below to create a new Speech resource. You will be able to manage your new resource in the Azure portal. Learn more"
+  },
   "insert_a_property_reference_in_memory_95d27746": {
     "message": "Insert a property reference in memory"
   },
@@ -1876,6 +1930,9 @@
   },
   "install_more_adapters_in_a_the_package_manager_a_156fb028": {
     "message": "Install more adapters in <a>the package manager</a>."
+  },
+  "install_node_js_1857298c": {
+    "message": "Install Node.js"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
@@ -2036,6 +2093,9 @@
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
   },
+  "lg_e6ee5b4a": {
+    "message": "LG"
+  },
   "lg_editor_ee0184e6": {
     "message": "LG editor"
   },
@@ -2099,6 +2159,9 @@
   "loading_bde52856": {
     "message": "Loading"
   },
+  "loading_keys_22ceedc": {
+    "message": "Loading keys..."
+  },
   "local_bot_runtime_manager_812cbd0c": {
     "message": "Local bot runtime manager"
   },
@@ -2140,6 +2203,9 @@
   },
   "looping_ddae56ff": {
     "message": "Looping"
+  },
+  "lu_15572a02": {
+    "message": "LU"
   },
   "lu_editor_d09fb2b0": {
     "message": "LU editor"
@@ -2425,6 +2491,9 @@
   },
   "no_existing_qna_resource_found_in_this_subscriptio_a547349b": {
     "message": "No existing QNA resource found in this subscription. Click “Next” to create new."
+  },
+  "no_existing_speech_resource_found_in_this_subscrip_4bc27bc3": {
+    "message": "No existing Speech resource found in this subscription. Click “Next” to create a new one."
   },
   "no_extensions_installed_4b925277": {
     "message": "No extensions installed"
@@ -2816,9 +2885,6 @@
   "publish_profile_to_configure_ca758e68": {
     "message": "Publish profile to configure:"
   },
-  "publish_profiles_36fb522d": {
-    "message": "Publish profiles"
-  },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
   },
@@ -2842,6 +2908,9 @@
   },
   "publishing_name_to_publishtarget_failed_8677b68d": {
     "message": "Publishing { name } to { publishTarget } failed."
+  },
+  "publishing_profile_6d7064ce": {
+    "message": "Publishing Profile"
   },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
@@ -3032,6 +3101,9 @@
   "resource_group_41fc9245": {
     "message": "Resource group:"
   },
+  "resource_group_59eac426": {
+    "message": "Resource group"
+  },
   "resource_group_982beb22": {
     "message": "Resource Group"
   },
@@ -3212,6 +3284,9 @@
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
   },
+  "select_speech_keys_3a21b942": {
+    "message": "Select Speech keys"
+  },
   "select_subscription_c5678611": {
     "message": "Select subscription"
   },
@@ -3223,6 +3298,9 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
+  },
+  "select_your_azure_subscription_and_choose_from_exi_1e05256f": {
+    "message": "Select your Azure subscription and choose from existing Speech keys, or create a new Speech resource. Learn more"
   },
   "select_your_azure_subscription_and_choose_from_exi_73b6e4d6": {
     "message": "Select your Azure subscription and choose from existing QNA keys, or create a new QNA resource. Learn more"
@@ -3389,6 +3467,12 @@
   "speech_16063aed": {
     "message": "Speech"
   },
+  "speech_key_1ab3f84a": {
+    "message": "Speech key"
+  },
+  "speech_region_864a8a83": {
+    "message": "Speech region"
+  },
   "spoken_text_used_by_the_channel_to_render_audibly_d07c7427": {
     "message": "Spoken text used by the channel to render audibly."
   },
@@ -3554,6 +3638,12 @@
   "the_following_qna_key_has_been_successfully_added__7c97bbc0": {
     "message": "The following QnA key has been successfully added to your bot project:"
   },
+  "the_following_speech_key_has_been_successfully_add_4bf0b587": {
+    "message": "The following Speech key has been successfully added to your bot project:"
+  },
+  "the_following_speech_resource_was_successfully_cre_c4037861": {
+    "message": "The following Speech resource was successfully created and added to your bot project:"
+  },
   "the_main_dialog_is_the_foundation_of_every_bot_cre_d4a938ff": {
     "message": "The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot."
   },
@@ -3683,6 +3773,9 @@
   "tips_80d0da2b": {
     "message": "tips"
   },
+  "title_connection_eaec11f8": {
+    "message": "{ title } connection"
+  },
   "title_ee03d132": {
     "message": "Title"
   },
@@ -3745,6 +3838,12 @@
   },
   "train_your_language_model_ee4cec6a": {
     "message": "Train your language model"
+  },
+  "trigger_f0ee1fbf": {
+    "message": "Trigger"
+  },
+  "trigger_group_79a00ac6": {
+    "message": "Trigger group"
   },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
     "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
@@ -3946,6 +4045,9 @@
   },
   "warning_aacb8c24": {
     "message": "Warning"
+  },
+  "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
+    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"

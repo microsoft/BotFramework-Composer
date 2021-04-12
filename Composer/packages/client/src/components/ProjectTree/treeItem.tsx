@@ -225,6 +225,44 @@ const calloutRootStyle = css`
   padding: 11px;
 `;
 
+type TreeObject =
+  | 'bot'
+  | 'dialog'
+  | 'trigger' // basic ProjectTree elements
+  | 'trigger group'
+  | 'form dialog'
+  | 'form field'
+  | 'form trigger' // used with form dialogs
+  | 'lg'
+  | 'lu' // used on other pages
+  | 'external skill'; // used with multi-bot authoring
+
+const icons: { [key in TreeObject]: string | null } = {
+  bot: 'CubeShape',
+  dialog: 'Org',
+  trigger: 'LightningBolt',
+  'trigger group': null,
+  'form dialog': 'Table',
+  'form field': 'Variable2', // x in parentheses
+  'form trigger': 'TriggerAuto', // lightning bolt with gear
+  lg: 'Robot',
+  lu: 'People',
+  'external skill': 'Globe',
+};
+
+const objectNames: { [key in TreeObject]: () => string } = {
+  trigger: () => formatMessage('Trigger'),
+  dialog: () => formatMessage('Dialog'),
+  'trigger group': () => formatMessage('Trigger group'),
+  'form dialog': () => formatMessage('Form dialog'),
+  'form field': () => formatMessage('Form field'),
+  'form trigger': () => formatMessage('Form trigger'),
+  lg: () => formatMessage('LG'),
+  lu: () => formatMessage('LU'),
+  bot: () => formatMessage('Bot'),
+  'external skill': () => formatMessage('External skill'),
+};
+
 // -------------------- TreeItem -------------------- //
 
 type ITreeItemProps = {
@@ -233,7 +271,7 @@ type ITreeItemProps = {
   isChildSelected?: boolean;
   isSubItemActive?: boolean;
   onSelect?: (link: TreeLink) => void;
-  icon?: string;
+  itemType: TreeObject;
   dialogName?: string;
   textWidth?: number;
   extraSpace?: number;
@@ -372,7 +410,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   link,
   isActive = false,
   isChildSelected = false,
-  icon,
+  itemType,
   dialogName,
   onSelect,
   textWidth = 100,
@@ -387,7 +425,9 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   role,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
-  const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
+
+  const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
+  const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
@@ -422,16 +462,16 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       return (
         <div
           data-is-focusable
-          aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
+          aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
           css={projectTreeItemContainer}
           tabIndex={0}
           onBlur={item.onBlur}
           onFocus={item.onFocus}
         >
           <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.icon != null && (
+            {item.itemType != null && icons[item.itemType] != null && (
               <Icon
-                iconName={item.icon}
+                iconName={icons[item.itemType]}
                 styles={{
                   root: {
                     width: '12px',
@@ -471,7 +511,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       return (overflowItems: IContextualMenuItem[] | undefined) => {
         if (overflowItems == null) return null;
         return (
-          <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
+          <TooltipHost
+            content={moreLabel}
+            directionalHint={DirectionalHint.rightCenter}
+            styles={moreButtonContainer}
+            tabIndex={0}
+          >
             <IconButton
               ariaLabel={moreLabel}
               className="dialog-more-btn"
@@ -508,7 +553,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   return (
     <div
-      aria-label={a11yLabel}
+      aria-label={ariaLabel}
       css={navContainer(
         isMenuOpen,
         isActive,
@@ -518,7 +563,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         padLeft,
         marginLeft
       )}
-      data-testid={a11yLabel}
+      data-testid={dataTestId}
       role={role}
       tabIndex={0}
       onClick={() => {
@@ -530,7 +575,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         }
       }}
     >
-      <div style={{ minWidth: `${spacerWidth}px` }}></div>
+      <div style={{ minWidth: `${spacerWidth}px` }} />
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
@@ -540,7 +585,8 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         items={[
           {
             key: linkString,
-            icon: isBroken ? 'RemoveLink' : icon,
+            icon: isBroken ? 'RemoveLink' : icons[itemType],
+            itemType,
             ...link,
           },
         ]}
