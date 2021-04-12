@@ -76,7 +76,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       const updatedSetting = isAdaptive
         ? {
             ...cloneDeep(mergedSettings),
-            runtimeSettings: { skills: { allowedCallers } },
+            runtimeSettings: { ...runtimeSettings, skills: { ...runtimeSettings.skills, allowedCallers } },
           }
         : {
             ...cloneDeep(mergedSettings),
