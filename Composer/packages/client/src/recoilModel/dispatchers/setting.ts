@@ -3,7 +3,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, RootBotManagedProperties, DialogSetting, PublishTarget, LibraryRef } from '@bfc/shared';
+import {
+  SensitiveProperties,
+  RootBotManagedProperties,
+  DialogSetting,
+  PublishTarget,
+  LibraryRef,
+  isUsingAdaptiveRuntime,
+} from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
@@ -12,10 +19,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
 import { rootBotProjectIdSelector, botProjectSpaceSelector } from '../selectors/project';
+import { skillsStateSelector } from '../selectors';
+import { botNameIdentifierState } from '../atoms';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
-
 export const setRootBotSettingState = async (
   callbackHelpers: CallbackInterface,
   projectId: string,
@@ -166,6 +174,71 @@ export const settingsDispatcher = () => {
     setRuntimeField(projectId, 'customRuntime', isOn);
   });
 
+  const setSkillAndAllowCaller = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (projectId: string, skillId: string, endpointName: string) => {
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (!rootBotProjectId) {
+        return;
+      }
+      const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(skillId));
+      const settings = await snapshot.getPromise(settingsState(rootBotProjectId));
+      const skills = await snapshot.getPromise(skillsStateSelector);
+      const manifest = skills[manifestIdentifier]?.manifest;
+      let msAppId, endpointUrl;
+
+      if (manifest?.endpoints) {
+        const cur = manifest.endpoints.find((item) => item.name === endpointName);
+        endpointUrl = cur?.endpointUrl || '';
+        msAppId = cur?.msAppId || '';
+      }
+
+      const v2 = isUsingAdaptiveRuntime(settings.runtime);
+      set(settingsState(projectId), (currentValue) => {
+        if (v2) {
+          const callers = [...settings.runtimeSettings?.skills?.allowedCallers];
+          if (!callers?.find((item) => item === msAppId)) {
+            callers.push(msAppId);
+          }
+          return {
+            ...currentValue,
+            skill: {
+              ...settings.skill,
+              [manifestIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
+            },
+            runtimeSettings: {
+              ...settings.runtimeSettings,
+              skills: {
+                allowedCallers: callers,
+              },
+            },
+          };
+        } else {
+          const callers = [...settings.skillConfiguration?.allowedCallers];
+          if (!callers?.find((item) => item === msAppId)) {
+            callers.push(msAppId);
+          }
+          return {
+            ...currentValue,
+            skill: {
+              ...settings.skill,
+              [manifestIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
+            },
+            skillConfiguration: {
+              ...settings.skillConfiguration,
+              allowedCallers: callers,
+            },
+          };
+        }
+      });
+    }
+  );
+
   const setQnASettings = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, subscriptionKey: string) => {
       const { set } = callbackHelpers;
@@ -196,5 +269,6 @@ export const settingsDispatcher = () => {
     setImportedLibraries,
     setCustomRuntime,
     setQnASettings,
+    setSkillAndAllowCaller,
   };
 };

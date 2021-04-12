@@ -77,7 +77,6 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const { commitChanges } = undoFunction;
-
   const {
     removeDialog,
     updateDialog,
@@ -136,8 +135,16 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
 
   const projectTreeHeaderMenuItems = [
     {
+      key: 'ConnectRemoteSkill',
+      label: formatMessage('Add a skill'),
+      onClick: () => {
+        setAddSkillDialogModalVisibility(true);
+        TelemetryClient.track('AddNewSkillStarted', { method: 'remoteSkill' });
+      },
+    },
+    {
       key: 'CreateNewSkill',
-      label: formatMessage('Create a new skill'),
+      label: formatMessage('Add a new bot'),
       onClick: () => {
         setCreationFlowType('Skill');
         setCreationFlowStatus(CreationFlowStatus.NEW);
@@ -146,19 +153,11 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
     },
     {
       key: 'OpenSkill',
-      label: formatMessage('Open an existing skill'),
+      label: formatMessage('Add an existing bot'),
       onClick: () => {
         setCreationFlowType('Skill');
         setCreationFlowStatus(CreationFlowStatus.OPEN);
         TelemetryClient.track('AddNewSkillStarted', { method: 'existingSkill' });
-      },
-    },
-    {
-      key: 'ConnectRemoteSkill',
-      label: formatMessage('Connect a remote skill'),
-      onClick: () => {
-        setAddSkillDialogModalVisibility(true);
-        TelemetryClient.track('AddNewSkillStarted', { method: 'remoteSkill' });
       },
     },
   ];
@@ -247,6 +246,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   async function handleRemoveSkill(skillId: string) {
     // check if skill used in current project workspace
     const usedInBots = skillUsedInBotsMap[skillId];
+
     const confirmRemove = usedInBots.length
       ? await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subText, {
           onRenderContent: () => {
