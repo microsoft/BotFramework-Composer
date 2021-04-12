@@ -235,9 +235,6 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             // Expose static files in manifests folder for skill scenarios.
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.WebRootPath, "manifests")),
-                RequestPath = "/manifests",
                 ContentTypeProvider = provider
             });
 
