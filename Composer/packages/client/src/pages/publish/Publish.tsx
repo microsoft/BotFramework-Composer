@@ -141,6 +141,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [skillPublishStatus, setSkillPublishStatus] = useState(SKILL_PUBLISH_STATUS.INITIAL);
   const decoded = props.location?.search ? decodeURIComponent(props.location.search) : '';
   const { publishTargetName, url } = querystring.parse(decoded);
+  const [skillManifestUrl, setSkillManifestUrl] = useState('');
 
   useEffect(() => {
     if (publishTargetName && botStatusList.length > 0 && skillPublishStatus === SKILL_PUBLISH_STATUS.INITIAL) {
@@ -149,6 +150,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       changePublishTarget(publishTargetName, currentBotStatus);
       setCheckedSkillIds([projectId]);
       onPublish();
+      setSkillManifestUrl(url as string);
       props.location && navigate(props.location?.pathname, { replace: true });
     }
   }, [publishTargetName, botStatusList]);
@@ -229,7 +231,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       if (displayedNotifications[botProjectId]) {
         const notificationCard =
           skillPublishStatus !== SKILL_PUBLISH_STATUS.INITIAL
-            ? getSkillPublishedNotificationCardProps({ ...updatedBot, status: responseData.status }, url as string)
+            ? getSkillPublishedNotificationCardProps({ ...updatedBot, status: responseData.status }, skillManifestUrl)
             : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status });
         const resultNotification = createNotification(notificationCard);
         addNotification(resultNotification);
