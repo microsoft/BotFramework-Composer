@@ -229,6 +229,8 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     if (displayContent) {
       const error = getLuDiagnostics('manifestName', displayContent);
       setTriggerErrorMsg(error);
+    } else {
+      setTriggerErrorMsg('');
     }
   }, [displayContent]);
 
