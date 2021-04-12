@@ -31,8 +31,9 @@ describe('<DebugPanel />', () => {
         });
         set(webChatTrafficState(rootBotId), [
           {
-            trafficType: 'activity',
             activity: {} as any,
+            id: '',
+            trafficType: 'activity',
             timestamp: Date.now(),
           },
         ]);
@@ -49,8 +50,9 @@ describe('<DebugPanel />', () => {
         });
         set(webChatTrafficState(rootBotId), [
           {
-            trafficType: 'activity',
             activity: {} as any,
+            id: '',
+            trafficType: 'activity',
             timestamp: Date.now(),
           },
         ]);
