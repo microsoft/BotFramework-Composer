@@ -16,9 +16,7 @@ export function useBotOperations() {
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [trackedProjectIds, setProjectsToTrack] = useState<string[]>([]);
-  const { updateSettingsForSkillsWithoutManifest, resetBotRuntimeError, setBotStatus } = useRecoilValue(
-    dispatcherState
-  );
+  const { updateSettingsForSkillsWithoutManifest, resetBotRuntimeLog, setBotStatus } = useRecoilValue(dispatcherState);
 
   const handleBotStart = async (
     projectId: string,
@@ -26,7 +24,7 @@ export function useBotOperations() {
     sensitiveSettings,
     botBuildRequired: boolean
   ) => {
-    resetBotRuntimeError(projectId);
+    resetBotRuntimeLog(projectId);
     setBotStatus(projectId, BotStatus.pending);
     if (botBuildRequired) {
       // Default recognizer
