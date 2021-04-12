@@ -90,33 +90,36 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
       const target = publishingTargets.find((t) => {
         return t.name === option?.key;
       });
-      if (target) {
-        setCurrentTarget(target);
-        updateCurrentTarget(projectId, target);
-        const config = JSON.parse(target.configuration);
-        setEndpointUrl(`https://${config.hostname}.azurewebsites.net/api/messages`);
-        setAppId(config.settings.MicrosoftAppId);
-
-        setSkillManifest({
-          content: {
-            ...rest,
-            endpoints: [
-              {
-                protocol: 'BotFrameworkV3',
-                name: option?.key,
-                endpointUrl: `https://${config.hostname}.azurewebsites.net/api/messages`,
-                description: '<description>',
-                msAppId: config.settings.MicrosoftAppId,
-              },
-            ],
-          },
-          id: id,
-        });
-      }
+      setCurrentTarget(target);
     },
     [publishingTargets]
   );
 
+  useEffect(() => {
+    if (currentTarget) {
+      setCurrentTarget(currentTarget);
+      updateCurrentTarget(projectId, currentTarget);
+      const config = JSON.parse(currentTarget.configuration);
+      setEndpointUrl(`https://${config.hostname}.azurewebsites.net/api/messages`);
+      setAppId(config.settings.MicrosoftAppId);
+
+      setSkillManifest({
+        content: {
+          ...rest,
+          endpoints: [
+            {
+              protocol: 'BotFrameworkV3',
+              name: currentTarget.name,
+              endpointUrl: `https://${config.hostname}.azurewebsites.net/api/messages`,
+              description: '<description>',
+              msAppId: config.settings.MicrosoftAppId,
+            },
+          ],
+        },
+        id: id,
+      });
+    }
+  }, [currentTarget]);
   const isProfileValid = useMemo(
     () => () => {
       if (!publishingTargets) {
@@ -147,6 +150,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
 
   useEffect(() => {
     setPublishingTargets(settings.publishTargets || []);
+    setCurrentTarget(settings.publishTargets[0]);
   }, [settings]);
 
   useEffect(() => {
