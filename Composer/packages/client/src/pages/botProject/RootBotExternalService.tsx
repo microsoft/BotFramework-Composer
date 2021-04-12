@@ -214,8 +214,20 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     }
   }, [projectId]);
 
+  const handleRootLUISKeyOnChange = (e, value) => {
+    if (value) {
+      setLuisKeyErrorMsg('');
+      setLocalRootLuisKey(value);
+    } else {
+      setLuisKeyErrorMsg(
+        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
+      );
+      setLocalRootLuisKey('');
+    }
+  };
+
   useEffect(() => {
-    setLocalRootLuisKey(rootLuisKey);
+    handleRootLUISKeyOnChange(null, rootLuisKey);
   }, [rootLuisKey]);
 
   useEffect(() => {
@@ -239,18 +251,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       ...mergedSettings,
       luis: { ...mergedSettings.luis, name: localRootLuisName },
     });
-  };
-
-  const handleRootLUISKeyOnChange = (e, value) => {
-    if (value) {
-      setLuisKeyErrorMsg('');
-      setLocalRootLuisKey(value);
-    } else {
-      setLuisKeyErrorMsg(
-        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
-      );
-      setLocalRootLuisKey('');
-    }
   };
 
   const handleRootQnAKeyOnChange = (e, value) => {
