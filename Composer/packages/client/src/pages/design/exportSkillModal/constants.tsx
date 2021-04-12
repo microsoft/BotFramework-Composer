@@ -222,6 +222,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       backButton,
       {
+        disabled: ({ publishTargets }) => publishTargets.length === 0,
         primary: true,
         text: () => formatMessage('Generate and Publish'),
         onClick: ({ generateManifest, onNext, onPublish }) => () => {
