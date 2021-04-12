@@ -39,7 +39,7 @@ const Title = styled(Text)`
   margin: 8px 0;
 `;
 
-const Summary = styled(Stack)`
+const Summary = styled.div`
   margin: 8px 0;
 `;
 
@@ -82,7 +82,7 @@ const CreateActionContent = () => {
           )}
         </Text>
         <LearnMoreLink href="https://azure.microsoft.com/free/">{formatMessage('Microsoft Azure')}</LearnMoreLink>
-        <Text>{formatMessage(' isrequired')}</Text>
+        <Text>{formatMessage(' is required.')}</Text>
       </Summary>
       <Details>
         <Instruction>
