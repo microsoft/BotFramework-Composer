@@ -10,7 +10,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
-import { PublishTargets } from '../../../botProject/PublishTargets';
+import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
 import { ContentProps, VERSION_REGEX } from '../constants';
 
@@ -150,7 +150,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
 
   useEffect(() => {
     setPublishingTargets(settings.publishTargets || []);
-    setCurrentTarget(settings.publishTargets[0]);
+    setCurrentTarget((settings.publishTargets || [])[0]);
   }, [settings]);
 
   useEffect(() => {
@@ -195,7 +195,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
     </div>
   ) : (
     <div>
-      <PublishTargets projectId={projectId}></PublishTargets>
+      <CreatePublishProfileDialog projectId={projectId}></CreatePublishProfileDialog>
     </div>
   );
 };
