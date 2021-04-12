@@ -56,12 +56,12 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'userInput',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navUserInput',
+        targetId: 'navUserinput',
       },
       {
         id: 'botResponses',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navBotResponses',
+        targetId: 'navBotresponses',
       },
     ],
     title: formatMessage('User input and bot responses'),
@@ -83,7 +83,7 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'projectSettings',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navProjectSettings',
+        targetId: 'navProjectsettings',
       },
     ],
     title: formatMessage('Configure and publish'),
