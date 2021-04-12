@@ -93,8 +93,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
 
   const displayedItems: BotStatus[] = useMemo(() => {
-    if (currentSort.key !== 'Bot') return botStatusList;
-    if (currentSort.descending) return botStatusList;
+    if (currentSort.key !== 'Bot' || currentSort.descending) {
+      return botStatusList.slice();
+    }
     return botStatusList.slice().reverse();
   }, [botStatusList, currentSort]);
 
