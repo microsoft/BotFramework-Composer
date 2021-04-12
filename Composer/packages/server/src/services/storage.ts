@@ -112,7 +112,7 @@ class StorageService {
     if (path?.endsWith(':')) {
       path = path + '/';
     }
-    if (Path.isAbsolute(path) && fs.existsSync(path)) {
+    if (Path.isAbsolute(path) && fs.existsSync(path) && fs.statSync(path).isDirectory()) {
       const storage = this.storageConnections.find((s) => s.id === storageId);
       if (storage) {
         storage.path = path;
@@ -123,7 +123,13 @@ class StorageService {
   };
 
   public validatePath = (path: string) => {
-    return Path.isAbsolute(path) && fs.existsSync(path);
+    if (!fs.existsSync(path)) {
+      return 'The path does not exist';
+    } else if (!fs.statSync(path).isDirectory()) {
+      return 'This is not a directory';
+    } else {
+      return '';
+    }
   };
 
   public createFolder = (path: string) => {

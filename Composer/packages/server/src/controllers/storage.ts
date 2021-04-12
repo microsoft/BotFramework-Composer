@@ -21,8 +21,7 @@ function updateCurrentPath(req: Request, res: Response) {
 }
 
 function validatePath(req: Request, res: Response) {
-  console.log(req);
-  res.status(200).json(StorageService.validatePath(req.params.path));
+  res.status(200).json({ errorMsg: StorageService.validatePath(req.params.path) });
 }
 
 async function createFolder(req: Request, res: Response) {

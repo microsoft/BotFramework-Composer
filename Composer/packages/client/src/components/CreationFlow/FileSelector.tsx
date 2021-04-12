@@ -26,6 +26,7 @@ import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import moment from 'moment';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import debounce from 'lodash/debounce';
 
 import { FileTypes, nameRegex } from '../../constants';
 import { StorageFolder, File } from '../../recoilModel/types';
@@ -176,19 +177,20 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const [nameError, setNameError] = useState('');
   const [pathError, setPathError] = useState('');
 
-  const validate = async (path) => {
+  const validate = debounce(async (path) => {
     const response = await httpClient.get(`/storages/validate/${encodeURI(path)}`);
-    console.log(response);
-    if (!response.data) {
-      setPathError('Invalid path');
-    } else {
-      setPathError('');
-    }
-  };
+    setPathError(response.data.errorMsg);
+  }, 300);
 
   useEffect(() => {
     setCurrentPath(initialPath);
   }, [focusedStorageFolder]);
+
+  useEffect(() => {
+    if (initialPath === currentPath) {
+      setPathError('');
+    }
+  }, [initialPath, currentPath]);
 
   const createOrUpdateFolder = async (index: number) => {
     const isValid = nameRegex.test(folderName);
@@ -487,18 +489,17 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     if (option) {
       onCurrentPathUpdate(option.key as string, storageId);
       setCurrentPath(option.key as string);
-      setPathError('');
     } else {
       onCurrentPathUpdate(value as string, storageId);
       setCurrentPath(value as string);
-      setPathError('');
     }
   };
 
   const updatePathPending = (option?: IComboBoxOption, index?: number, value?: string) => {
     if (!option && value) {
+      const path = value.replace(/\\/g, '/');
       validate(value);
-      setCurrentPath(value as string);
+      setCurrentPath(path as string);
     }
   };
 
