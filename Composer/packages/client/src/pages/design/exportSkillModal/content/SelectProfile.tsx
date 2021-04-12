@@ -137,10 +137,9 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
   );
 
   const publishingOptions = useMemo(() => {
-    return publishingTargets.map((t, index) => ({
+    return publishingTargets.map((t) => ({
       key: t.name,
       text: t.name,
-      selected: !index,
     }));
   }, [publishingTargets]);
 
@@ -165,6 +164,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
         label={formatMessage('Publishing Profile')}
         options={publishingOptions}
         placeholder={'Select one'}
+        selectedKey={publishingOptions[0].key}
         styles={{ root: { paddingBottom: '8px' } }}
         onChange={updateCurrentProfile}
       />
