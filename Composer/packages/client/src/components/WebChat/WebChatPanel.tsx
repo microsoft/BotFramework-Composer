@@ -13,12 +13,13 @@ import formatMessage from 'format-message';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
-import { dispatcherState } from '../../recoilModel';
+import { currentWebChatConversationState, dispatcherState, webChatDataState } from '../../recoilModel';
 
-import { ConversationService, ChatData, BotSecrets } from './utils/conversationService';
+import { ConversationService } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChat } from './WebChat';
 import { RestartOption } from './type';
+import { BotSecrets, ChatData } from './types';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
 
@@ -47,10 +48,15 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     clearWebChatLogs,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setWebChatData: setChatData,
+    setCurrentConversation,
   } = useRecoilValue(dispatcherState);
+
+  const currentConversation = useRecoilValue(currentWebChatConversationState);
+  const chats = useRecoilValue(webChatDataState);
+
   const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
-  const [chats, setChatData] = useState<Record<string, ChatData>>({});
-  const [currentConversation, setCurrentConversation] = useState<string>('');
+
   const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
@@ -122,13 +128,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     return () => {
       webChatTrafficChannel.current?.close();
     };
-  }, [projectId]);
-
-  useEffect(() => {
-    if (botUrl) {
-      setCurrentConversation('');
-    }
-  }, [botUrl]);
+  }, []);
 
   const sendInitialActivities = async (chatData: ChatData) => {
     try {

@@ -4,8 +4,9 @@ import React from 'react';
 import ReactWebChat, { createStyleSet } from 'botframework-webchat';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import { ConversationService, ActivityType, ChatData } from './utils/conversationService';
+import { ConversationService } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
+import { ChatData, ActivityType } from './types';
 
 export type WebChatProps = {
   currentConversation: string;
