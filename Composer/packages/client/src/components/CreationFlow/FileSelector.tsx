@@ -186,6 +186,9 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     setCurrentPath(initialPath);
   }, [focusedStorageFolder]);
 
+  //there is a network delay on the path validation. The error may not exist.
+  //the initialPath is always a valid directory
+  //so check and clear path error
   useEffect(() => {
     if (initialPath === currentPath) {
       setPathError('');
