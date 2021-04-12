@@ -248,6 +248,7 @@ export class BotProjectProvision {
       // ensure a tenantId is available.
       if (!this.tenantId) {
         this.tenantId = config.tenantId ?? (await this.getTenantId());
+        provisionResults.tenantId = this.tenantId;
       }
 
       // tokenCredentials is used for authentication across the API calls

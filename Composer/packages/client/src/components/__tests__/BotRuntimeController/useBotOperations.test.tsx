@@ -16,7 +16,7 @@ const state = {
 };
 
 const mocks = {
-  resetBotRuntimeError: jest.fn(),
+  resetBotRuntimeLog: jest.fn(),
   publishToTarget: jest.fn(),
   setBotStatus: jest.fn(),
   stopBot: jest.fn(),
@@ -32,7 +32,7 @@ const initRecoilState = ({ set }) => {
   });
 
   set(dispatcherState, {
-    resetBotRuntimeError: mocks.resetBotRuntimeError,
+    resetBotRuntimeLog: mocks.resetBotRuntimeLog,
     publishToTarget: mocks.publishToTarget,
     setBotStatus: mocks.setBotStatus,
     stopPublishBot: mocks.stopBot,
@@ -42,7 +42,7 @@ const initRecoilState = ({ set }) => {
 // TODO: An integration test needs to be added to test this component better.
 describe('useBotOperations', () => {
   afterEach(() => {
-    mocks.resetBotRuntimeError.mockReset();
+    mocks.resetBotRuntimeLog.mockReset();
     mocks.publishToTarget.mockReset();
     mocks.setBotStatus.mockReset();
     mocks.stopBot.mockReset();
@@ -61,7 +61,7 @@ describe('useBotOperations', () => {
     await act(async () => {
       result.current.startSingleBot(state.skillId);
     });
-    expect(mocks.resetBotRuntimeError).toHaveBeenLastCalledWith(state.skillId);
+    expect(mocks.resetBotRuntimeLog).toHaveBeenLastCalledWith(state.skillId);
     expect(mocks.publishToTarget).toHaveBeenLastCalledWith(
       state.skillId,
       defaultPublishConfig,
