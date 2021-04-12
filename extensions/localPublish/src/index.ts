@@ -18,6 +18,8 @@ import killPort from 'kill-port';
 import map from 'lodash/map';
 import * as tcpPortUsed from 'tcp-port-used';
 
+import { RuntimeLogServer } from './runtimeLogServer';
+
 const removeDirAndFiles = promisify(rimraf);
 const mkdir = promisify(fs.mkdir);
 const readFile = promisify(fs.readFile);
@@ -32,6 +34,7 @@ interface RunningBot {
   result: {
     message: string;
     runtimeLog?: string;
+    runtimeError?: string;
   };
 }
 interface PublishConfig {
@@ -94,20 +97,35 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         message: data.result.message,
       };
     }
-
     LocalPublisher.runningBots[botId] = updatedBotData;
   };
 
-  private appendRuntimeLogs = (botId: string, newContent: string) => {
+  private appendRuntimeLogs = (botId: string, newContent: string, logType: 'stdout' | 'stderr' = 'stdout') => {
     const botData = LocalPublisher.runningBots[botId];
-    const runtimeLog = botData.result.runtimeLog ? botData.result.runtimeLog + newContent : newContent;
-    LocalPublisher.runningBots[botId] = {
-      ...botData,
-      result: {
-        ...botData.result,
-        runtimeLog,
-      },
-    };
+    if (logType === 'stdout') {
+      const runtimeLog = botData.result.runtimeLog ? botData.result.runtimeLog + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeLog,
+        },
+      };
+    } else {
+      const runtimeError = botData.result.runtimeError ? botData.result.runtimeError + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeError: runtimeError,
+        },
+      };
+    }
+    RuntimeLogServer.sendRuntimeLogToSubscribers(
+      botId,
+      LocalPublisher.runningBots[botId].result.runtimeLog ?? '',
+      LocalPublisher.runningBots[botId].result.runtimeError ?? ''
+    );
   };
 
   private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
@@ -183,7 +201,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           result: {
             message: 'Running',
             endpointURL: url,
-            runtimeLog: LocalPublisher.runningBots[botId].result.runtimeLog,
           },
         };
       } else {
@@ -218,6 +235,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
     }
+  };
+
+  setupRuntimeLogServer = async (projectId: string) => {
+    await RuntimeLogServer.init();
+    return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
   };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
@@ -388,6 +410,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
             detached: !isWin, // detach in non-windows
+            shell: isWin, // run in a shell on windows so `npm start` doesn't need to be `npm.cmd start`
           }
         );
         this.composer.log('Started process %d', spawnProcess.pid);
@@ -480,7 +503,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     child.on('exit', (code) => {
       if (code !== 0) {
         logger('error on exit: %s, exit code %d', errOutput, code);
-        this.appendRuntimeLogs(botId, errOutput);
+        if (LocalPublisher.runningBots[botId].status === 200) {
+          this.appendRuntimeLogs(botId, errOutput, 'stderr');
+        }
         this.setBotStatus(botId, {
           status: 500,
           result: { message: errOutput },
