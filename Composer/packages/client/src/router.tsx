@@ -7,7 +7,6 @@ import React, { useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
@@ -42,10 +41,6 @@ const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
-
-const modalControlGroup = css`
-  padding: 10px;
-`;
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
