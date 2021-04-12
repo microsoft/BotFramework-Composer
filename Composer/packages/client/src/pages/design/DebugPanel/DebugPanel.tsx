@@ -174,7 +174,7 @@ export const DebugPanel: React.FC = () => {
             <IconButton
               iconProps={{ iconName: isPanelExpanded ? 'ChevronDown' : 'ChevronUp' }}
               styles={{ root: { height: '100%' } }}
-              title={formatMessage('Collapse debug panel')}
+              title={isPanelExpanded ? formatMessage('Collapse Debug Panel') : formatMessage('Expand Debug Panel')}
               onClick={() => {
                 if (isPanelExpanded) {
                   onCollapsePanel();
