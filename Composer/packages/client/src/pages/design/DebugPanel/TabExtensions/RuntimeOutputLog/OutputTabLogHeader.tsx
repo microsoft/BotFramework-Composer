@@ -22,7 +22,7 @@ export const OutputsTabLogHeader: React.FC<DebugPanelTabHeaderProps> = () => {
           marginRight: '4px',
         }}
       >
-        {formatMessage('Outputs')}
+        {formatMessage('Output')}
       </div>
     </div>
   );

@@ -45,6 +45,7 @@ export const WebChatActivityLogItem: React.FC<WebChatActivityLogItemProps> = (pr
       {renderActivityArrow(item.activity)}
       <span css={clickableSegment}>{item.activity.type || 'unknown'}</span>
       {item.activity.type === 'message' ? <span css={emphasizedText}>{item.activity.text}</span> : null}
+      {item.activity.type === 'trace' ? <span css={emphasizedText}>{item.activity.label}</span> : null}
     </span>
   );
 };
