@@ -400,16 +400,23 @@ export const AzureProvisionDialog: React.FC = () => {
         );
       }
     } else {
+      // TODO: handle when existing profile is being edited
+      // We should get an ARM token for the tenant in the profile and then fetch
+      // tenant details after to show in the UI.
       getTenants().then((tenants) => {
         if (isMounted.current) {
           setAllTenants(tenants);
-          if (!getTenantIdFromCache()) {
+          const cachedTenantId = getTenantIdFromCache();
+
+          // default to the last used tenant only if it is in the account's tenants
+          if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+            updateFormData('tenantId', cachedTenantId);
+          } else {
+            setTenantId(undefined);
             if (tenants?.length > 0) {
               // seed tenant selection with 1st tenant
               updateFormData('tenantId', tenants[0].tenantId);
             }
-          } else {
-            updateFormData('tenantId', getTenantIdFromCache());
           }
         }
       });
@@ -419,10 +426,10 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const getTokenForTenant = (tenantId: string) => {
-    // set tenantId in cache.
-    setTenantId(tenantId);
     getARMTokenForTenant(tenantId)
       .then((token) => {
+        // set tenantId in cache only after a token is received
+        setTenantId(tenantId);
         setToken(token);
         const decoded = decodeToken(token);
         setCurrentUser({
