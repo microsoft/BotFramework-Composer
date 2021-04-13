@@ -349,18 +349,6 @@ export const ManageQNA = (props: ManageQNAProps) => {
           }
         );
 
-        // const webAppUpdateResult = await webSiteManagementClient.webApps.updateConfiguration(
-        //   resourceGroupName,
-        //   qnaMakerWebAppName,
-        //   {}
-        // );
-
-        // console.log('WEB APP UPDATE RESULT:', webAppUpdateResult);
-        // // eslint-disable-next-line no-underscore-dangle
-        // console.log('STATUS', webAppUpdateResult._response.status);
-        // // eslint-disable-next-line no-underscore-dangle
-        // console.log('RESPONSE', webAppUpdateResult._response);
-
         // Create qna account
         const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
           tokenCredentials,
