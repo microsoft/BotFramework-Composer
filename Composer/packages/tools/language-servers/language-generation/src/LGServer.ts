@@ -345,7 +345,7 @@ export class LGServer {
       const hoveritem: Hover = {
         contents: {
           kind: MarkupKind.Markdown,
-          value: this.buildHoverTemplateInfo(matchItem),
+          value: `~~~\n${this.buildHoverTemplateInfo(matchItem)}\n~~~`,
         },
       };
       return Promise.resolve(hoveritem);
@@ -376,13 +376,13 @@ export class LGServer {
   private buildHoverTemplateInfo(template: LgTemplate) {
     let templateName = '';
     if (template.parameters.length > 0) {
-      templateName = `\\# ${template.name}(${template.parameters.join(', ')})`;
+      templateName = `# ${template.name}(${template.parameters.join(', ')})`;
     } else {
-      templateName = `\\# ${template.name}`;
+      templateName = `# ${template.name}`;
     }
 
-    const templateBody = template.body.replace(/-/g, '\\-').replace(/\r?\n/g, '\n\n');
-    return [templateName, templateBody].join('\n\n');
+    const templateBody = template.body;
+    return [templateName, templateBody].join('\n');
   }
 
   private getExplicitReturnType(numReturnType: number): string[] {
