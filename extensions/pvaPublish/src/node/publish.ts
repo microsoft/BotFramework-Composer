@@ -7,7 +7,7 @@ import stream from 'stream';
 
 import { IBotProject, PublishResponse, PublishResult } from '@botframework-composer/types';
 import { ensureDirSync } from 'fs-extra';
-import fetch, { RequestInit } from 'node-fetch';
+import fetch, { RequestInit } from 'node-fetch-with-proxy';
 
 import { PVAPublishJob, PublishConfig, UserIdentity, PublishState, PublishHistory, PullResponse } from './types';
 import { getAuthCredentials, getBaseUrl } from './utils';

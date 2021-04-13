@@ -54,6 +54,7 @@
     "@microsoft/bf-dialog": "4.13.1",
     "@uifabric/fluent-theme": "^7.1.4",
     "axios": "^0.21.1",
+    "axios-https-proxy": "^0.1.1",
     "date-fns": "^2.16.1",
     "format-message": "^6.2.3",
     "office-ui-fabric-react": "7.71.0",

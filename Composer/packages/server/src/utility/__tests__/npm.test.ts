@@ -3,7 +3,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Readable, Writable } from 'stream';
 
-import fetch from 'node-fetch';
+import fetch from 'node-fetch-with-proxy';
 import { mkdir, remove } from 'fs-extra';
 import tar from 'tar';
 
@@ -26,7 +26,7 @@ class MockExtractor extends Writable {
   }
 }
 
-jest.mock('node-fetch', () => jest.fn());
+jest.mock('node-fetch-with-proxy', () => jest.fn());
 jest.mock('fs-extra', () => ({
   mkdir: jest.fn(),
   remove: jest.fn(),

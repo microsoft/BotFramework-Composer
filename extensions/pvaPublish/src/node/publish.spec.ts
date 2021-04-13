@@ -4,7 +4,7 @@
 import { publish } from './publish';
 
 const mockFetch = jest.fn();
-jest.mock('node-fetch', () => {
+jest.mock('node-fetch-with-proxy', () => {
   return async (...args) => await mockFetch(args);
 });
 

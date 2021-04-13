@@ -4,7 +4,7 @@ import path from 'path';
 
 import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
-import fetch from 'node-fetch';
+import fetch from 'node-fetch-with-proxy';
 
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac } from '../utility/platform';

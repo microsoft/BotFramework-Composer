@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import axios from 'axios';
+import axios from '../../utility/httpClient';
 
 // TODO: update feed url
 const feedUrl = 'https://aka.ms/bf-composer-home-feed-v1';

@@ -29,7 +29,7 @@ jest.mock('../../services/auth/auth', () => ({
 }));
 
 const mockFetch = jest.fn();
-jest.mock('node-fetch', () => async (...args) => await mockFetch(...args));
+jest.mock('node-fetch-with-proxy', () => async (...args) => await mockFetch(...args));
 
 describe('Power Virtual Agents provider', () => {
   const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
