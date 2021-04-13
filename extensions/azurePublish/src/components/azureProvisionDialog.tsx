@@ -312,21 +312,15 @@ export const AzureProvisionDialog: React.FC = () => {
     const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
 
     const provisionComposer = `node provisionComposer.js --subscriptionId ${
-      formData.subscriptionId ?? '<YOUR SUBSCRIPTION ID>'
-    } --name ${formData.hostname ?? '<RESOURCE NAME>'}
-    --appPassword=<16 CHAR PASSWORD>
-    --location=${formData.region || 'westus'}
-    --resourceGroup=${formData.resourceGroup || '<RESOURCE GROUP NAME>'}
-    --createLuisResource=${createLuisResource}
-    --createLuisAuthoringResource=${createLuisAuthoringResource}
-    --createCosmosDb=${createCosmosDb}
-    --createStorage=${createStorage}
-    --createAppInsights=${createAppInsights}
-    --createQnAResource=${createQnAResource}
-    `;
+      formData.subscriptionId || '<YOUR SUBSCRIPTION ID>'
+    } --name ${formData.hostname || '<RESOURCE NAME>'} --appPassword=<16 CHAR PASSWORD> --location=${
+      formData.region || 'westus'
+    } --resourceGroup=${
+      formData.resourceGroup || '<RESOURCE GROUP NAME>'
+    } --createLuisResource=${createLuisResource} --createLuisAuthoringResource=${createLuisAuthoringResource} --createCosmosDb=${createCosmosDb} --createStorage=${createStorage} --createAppInsights=${createAppInsights} --createQnAResource=${createQnAResource}`;
 
     const instructions = formatMessage(
-      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Follow the instructions at the link below to run the provisioning command (seen below)\n2. Copy and paste the resulting JSON and securely share it with me.\n\nProvisoning Command:\n{command}\n\nDetailed instructions:\nhttps://aka.ms/how-to-complete-provision-handoff',
       { command: provisionComposer }
     );
 
@@ -1102,10 +1096,12 @@ export const AzureProvisionDialog: React.FC = () => {
   return (
     <Fragment>
       <ProvisionHandoff
-        developerInstructions={formatMessage('Send this to your IT admin')}
+        developerInstructions={formatMessage(
+          'Copy and share the following information with your Azure admin to provision resources on your behalf.'
+        )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
-        title={formatMessage('Generate a provisioning request')}
+        title={formatMessage('Share resource request')}
         onBack={() => {
           setShowHandoff(false);
         }}
