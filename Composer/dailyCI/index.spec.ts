@@ -35,7 +35,7 @@ async function getPublishProfile() {
 
 async function setAppSettings(token: string, botId: string, botName: string) {
   const publishProfile = await getPublishProfile();
-
+  console.log('getPublishProfile');
   publishProfile.accessToken = token;
   const publishProfileStr = JSON.stringify(publishProfile);
 
@@ -61,10 +61,11 @@ async function setAppSettings(token: string, botId: string, botName: string) {
 async function createTemplateProject(templateName: string, templateVersion: string) {
   let retryCount = 10;
   const response = await createSampleBot(templateName, templateVersion);
+  console.log('createSampleBot');
   let responseData = undefined;
   while (retryCount > 0) {
     responseData = await getJobStatus(response.jobId);
-
+    console.log('getJobStatus');
     if (responseData.statusCode === 200 && responseData.message === 'Created Successfully') {
       break;
     }
@@ -82,17 +83,20 @@ async function createTemplateProject(templateName: string, templateVersion: stri
 
 async function publishBot(botId: string, botName: string, metadata): Promise<boolean> {
   const tokenResponse = await getAccessToken();
+  console.log('get access token');
   const jsonResult = JSON.parse(tokenResponse);
   const token = jsonResult.accessToken;
 
   const updateSettingsResult = await setAppSettings(token, botId, botName);
-
+  console.log('setAppSettings');
   if (!updateSettingsResult) {
     return false;
   }
 
   const publishFile = await getPublishProfile();
+  console.log('getPublishProfile');
   const startPublishResult = await startPublish(token, botId, publishTarget, metadata, publishFile, botName);
+  console.log('startPublish');
   if (!startPublishResult) {
     return false;
   }
@@ -100,6 +104,7 @@ async function publishBot(botId: string, botName: string, metadata): Promise<boo
   let message = undefined;
   while (message !== 'Success') {
     const statusResult = await getPublishStatus(botId, publishTarget, startPublishResult.id);
+    console.log('getPublishStatus');
     if (!statusResult) {
       return false;
     }
@@ -112,6 +117,7 @@ async function publishBot(botId: string, botName: string, metadata): Promise<boo
 describe('test sample bot', () => {
   it('run test', async () => {
     const templates = await getProjectTemplates();
+    console.log('get project templates');
     if (!Array.isArray(templates)) {
       throw new Error('templates is not array.');
     }
@@ -130,12 +136,14 @@ describe('test sample bot', () => {
 
       const templatesetting = templateSettings[0];
       const projectInfo = await createTemplateProject(packageName, packageVersion);
+      console.log('create template project');
 
       const botId = projectInfo.result.id;
       const botName = projectInfo.result.botName;
 
       // publish test
       const publishResult = await publishBot(botId, botName, templatesetting.metadata);
+      console.log('publish bot');
       expect(publishResult).toBeTruthy();
 
       // flow test
@@ -143,6 +151,7 @@ describe('test sample bot', () => {
       const tests = templatesetting.testdata;
       for (const test of tests) {
         const results = await tester.sendAndGetMessages(test.sendMessage);
+        console.log('publish bot');
         const expectedResults = test.expectedResults;
         expect(expectedResults).toContain(results[0].trim());
       }

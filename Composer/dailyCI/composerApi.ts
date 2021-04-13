@@ -40,7 +40,7 @@ export async function createSampleBot(packageName: string, packageVersion: strin
     method: 'POST',
     data: {
       description: 'description',
-      location: 'D:/Bots', // TODO
+      location: __dirname, // TODO
       name: 'testBot' + uuidv4().replace(/-/g, ''),
       runtimeLanguage: 'dotnet',
       runtimeType: 'webapp',
