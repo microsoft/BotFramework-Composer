@@ -80,16 +80,16 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const updateLuisSettings = (newLuisSettings) => {
     setSettings(rootBotProjectId, {
       ...mergedSettings,
-      luis: { ...mergedSettings.luis, ...newLuisSettings },
+      luis: { ...mergedSettings.luis, authoringKey: newLuisSettings.key, authoringRegion: newLuisSettings.region },
     });
   };
 
   const updateQNASettings = (newQNASettings) => {
     setSettings(rootBotProjectId, {
       ...mergedSettings,
-      qna: { ...mergedSettings.qna, ...newQNASettings },
+      qna: { ...mergedSettings.qna, subscriptionKey: newQNASettings.key },
     });
-    setQnASettings(rootBotProjectId, newQNASettings.subscriptionKey);
+    setQnASettings(rootBotProjectId, newQNASettings.key);
   };
 
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
@@ -247,7 +247,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
         <ManageLuis
           hidden={!displayManageLuis}
-          setDisplayManageLuis={setDisplayManageLuis}
+          setVisible={setDisplayManageLuis}
           onDismiss={hideManageLuis}
           onGetKey={updateLuisSettings}
           onNext={() => {
@@ -257,7 +257,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         />
         <ManageQNA
           hidden={!displayManageQNA}
-          setDisplayManageQna={setDisplayManageQNA}
+          setVisible={setDisplayManageQNA}
           onDismiss={hideManageQNA}
           onGetKey={updateQNASettings}
           onNext={() => {
