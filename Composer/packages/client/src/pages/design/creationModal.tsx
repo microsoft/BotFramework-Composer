@@ -29,7 +29,6 @@ interface CreationModalProps {
 export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const {
     fetchStorages,
-    fetchTemplates,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
     createFolder,
@@ -66,7 +65,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const fetchResources = async () => {
     await fetchStorages();
-    fetchTemplates();
+    fetchTemplatesV2();
   };
 
   useEffect(() => {
@@ -103,6 +102,8 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         description: formData.description,
         location: formData.location,
         schemaUrl: formData.schemaUrl,
+        runtimeType: formData.runtimeType,
+        runtimeLanguage: formData.runtimeLanguage,
         appLocale,
         templateDir: formData?.pvaData?.templateDir,
         eTag: formData?.pvaData?.eTag,
@@ -124,14 +125,14 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     props.onDismiss?.();
   };
 
-  const handleDefineConversationSubmit = async (formData, templateId: string) => {
-    handleSubmit(formData, templateId);
-  };
-
   const handleSubmit = async (formData, templateId: string) => {
     handleDismiss();
     saveTemplateId(templateId);
     await handleCreateNew(formData, templateId);
+  };
+
+  const handleDefineConversationSubmit = async (formData, templateId: string) => {
+    handleSubmit(formData, templateId);
   };
 
   const handleCreateNext = async (templateId: string) => {
@@ -142,10 +143,10 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const openBot = async (botFolder) => {
     handleDismiss();
     if (creationFlowType === 'Skill') {
-      addExistingSkillToBotProject(botFolder);
+      addExistingSkillToBotProject(botFolder.path, botFolder.storage);
       TelemetryClient.track('AddNewSkillCompleted');
     } else {
-      openProject(botFolder);
+      openProject(botFolder.path, botFolder.storage);
     }
   };
 
