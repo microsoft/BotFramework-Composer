@@ -375,7 +375,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       } catch (err) {
         setOutcomeDescription(
           formatMessage(
-            'Due to the following error, we were unable to successfully add your selected QNA keys to your bot project:'
+            'Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:'
           )
         );
         setOutcomeSummary(<p>{err.message}</p>);
@@ -388,7 +388,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       setLoadingQNA(false);
 
       setOutcomeDescription(
-        formatMessage('The following QNA resource was successfully created and added to your bot project:')
+        formatMessage('The following QnA resource was successfully created and added to your bot project:')
       );
       setOutcomeSummary(
         <div>
@@ -519,7 +519,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
-          title: currentPage === 2 ? formatMessage('Create new QNA resources') : formatMessage('Select QNA keys'),
+          title: currentPage === 2 ? formatMessage('Create new QnA resources') : formatMessage('Select QnA keys'),
         }}
         hidden={props.hidden}
         minWidth={480}
@@ -558,7 +558,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   {noKeys && subscriptionId && (
                     <span style={{ color: 'rgb(161, 159, 157)' }}>
                       {formatMessage(
-                        'No existing QNA resource found in this subscription. Click “Next” to create new.'
+                        'No existing QnA resource found in this subscription. Click “Next” to create new.'
                       )}
                     </span>
                   )}
@@ -606,7 +606,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
               <div css={mainElementStyle}>
                 <p>
                   {formatMessage(
-                    'Input your details below to create a new QNA resource. You will be able to manage your new resource in the Azure portal. Learn more'
+                    'Input your details below to create a new QnA resource. You will be able to manage your new resource in the Azure portal. Learn more'
                   )}
                 </p>
                 <Dropdown
