@@ -11,19 +11,6 @@ export function isSuccessful(code: number) {
 }
 
 /**
- * Get publish file string from env.
- * @returns Publish file string content.
- */
-export function getPublishProfile(): Record<string, unknown> {
-  const publishFile = process.env.DAILY_CI_PUBLISH_FILE;
-  if (!publishFile) {
-    throw Error('Could not find publish file.');
-  }
-
-  return JSON.parse(publishFile.trim());
-}
-
-/**
  * sleep certain milliseconds.
  * @param ms Milliseconds of sleep time.
  */

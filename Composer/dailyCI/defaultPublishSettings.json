@@ -1,85 +1,71 @@
 {
-  "customFunctions": [],
-  "defaultLanguage": "en-us",
-  "defaultLocale": "en-US",
-  "downsampling": {
-    "maxImbalanceRatio": -1
+  "feature": {
+    "UseShowTypingMiddleware": false,
+    "UseInspectionMiddleware": false,
+    "RemoveRecipientMention": false
   },
-  "importedLibraries": [],
-  "languages": ["en-us"],
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft": "Warning",
-      "Microsoft.Hosting.Lifetime": "Information"
-    }
+  "MicrosoftAppPassword": "",
+  "MicrosoftAppId": "",
+  "cosmosDb": {
+    "authKey": "",
+    "containerId": "botstate-container",
+    "cosmosDBEndpoint": "",
+    "databaseId": "botstate-db"
   },
-  "luFeatures": {
-    "enableCompositeEntities": true,
-    "enableListEntities": true,
-    "enableMLEntities": true,
-    "enablePattern": true,
-    "enablePhraseLists": true,
-    "enablePrebuiltEntities": true,
-    "enableRegexEntities": true
+  "applicationInsights": {
+    "InstrumentationKey": ""
+  },
+  "blobStorage": {
+    "connectionString": "",
+    "container": "transcripts"
   },
   "luis": {
-    "authoringEndpoint": "",
-    "authoringRegion": "westus",
-    "defaultLanguage": "en-us",
-    "endpoint": "",
-    "environment": "composer",
     "name": "",
     "authoringKey": "",
-    "endpointKey": ""
-  },
-  "MicrosoftAppId": "",
-  "publishTargets": [
-    {
-      "configuration": "",
-      "name": "",
-      "type": ""
-    }
-  ],
-  "qna": {
-    "hostname": "",
-    "knowledgebaseid": "",
-    "qnaRegion": "westus",
+    "authoringEndpoint": "",
     "endpointKey": "",
-    "subscriptionKey": ""
+    "endpoint": "",
+    "authoringRegion": "",
+    "defaultLanguage": "en-us",
+    "environment": "composer"
+  },
+  "luFeatures": {
+    "enablePattern": true,
+    "enableMLEntities": true,
+    "enableListEntities": true,
+    "enableCompositeEntities": true,
+    "enablePrebuiltEntities": true,
+    "enableRegexEntities": true,
+    "enablePhraseLists": true
+  },
+  "publishTargets": [],
+  "qna": {
+    "subscriptionKey": "",
+    "knowledgebaseid": "",
+    "endpointKey": "",
+    "hostname": "",
+    "qnaRegion": "westus"
+  },
+  "telemetry": {
+    "logPersonalInformation": false,
+    "logActivities": true
   },
   "runtime": {
-    "command": "dotnet run --project testBot.csproj",
-    "customRuntime": true,
-    "key": "adaptive-runtime-dotnet-webapp",
-    "path": "../"
+    "customRuntime": false,
+    "path": "",
+    "command": "",
+    "key": ""
   },
-  "runtimeSettings": {
-    "adapters": [],
-    "features": {
-      "removeRecipientMentions": false,
-      "showTyping": false,
-      "traceTranscript": false,
-      "useInspection": false,
-      "setSpeak": {
-        "voiceFontName": "en-US-AriaNeural",
-        "fallbackToTextForSpeechIfEmpty": true
-      }
-    },
-    "components": [],
-    "skills": {
-      "allowedCallers": []
-    },
-    "storage": "",
-    "telemetry": {
-      "instrumentationKey": "",
-      "logActivities": true,
-      "logPersonalInformation": false
-    }
+  "downsampling": {
+    "maxImbalanceRatio": -1
   },
   "skillConfiguration": {
     "isSkill": true,
     "allowedCallers": []
   },
-  "MicrosoftAppPassword": ""
+  "skill": {},
+  "defaultLanguage": "en-us",
+  "languages": ["en-us"],
+  "customFunctions": [],
+  "importedLibraries": []
 }

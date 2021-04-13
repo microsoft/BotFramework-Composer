@@ -1,13 +1,10 @@
 {
-  "name": "e2e",
+  "name": "composer_e2e",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
-    "build": " cp data.json ../packages/server/",
-    "gen": "jest --runInBand --coverage && istanbul report --include coverage/coverage-final.json html > coverage.html",
-    "mail": "node mail.js"
+    "test": "jest --detectOpenHandles"
   },
   "author": "",
   "license": "MIT",
@@ -17,7 +14,8 @@
     "botframework-schema": "^4.12.0",
     "fs-extra": "^9.0.1",
     "jest-html-reporter": "^3.3.0",
-    "nodemailer": "^6.4.17"
+    "nodemailer": "^6.4.17",
+    "uuid": "^8.3.2"
   },
   "jest": {
     "collectCoverage": true,

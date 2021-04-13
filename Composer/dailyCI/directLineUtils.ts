@@ -13,32 +13,16 @@ export class DirectLineUtils {
     this.token = token;
   }
 
-  private messagesEqual(messages1: string[], messages2: string[]) {
-    if (!messages1 || !messages2) {
-      return false;
-    }
-    if (messages1.length !== messages2.length) {
-      return false;
-    }
-    for (let i = 0; i < messages1.length; i++) {
-      if (messages1[i] !== messages2[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   public async sendMessage(text: string) {
     let retryCount = 3;
     while (retryCount > 0) {
       try {
         if (!this.conversationId) {
-          await createConversation(this.token);
+          const res = await createConversation(this.token);
+          this.conversationId = res.conversationId;
         }
         return await directLineSendMessage(text, this.conversationId, this.token);
       } catch (error) {
-        console.log('comething is error while send message.');
-        console.log(`Left try number: ${retryCount}.`);
         retryCount--;
         await sleep(20000);
       }
@@ -73,10 +57,5 @@ export class DirectLineUtils {
       })
       .map((element) => element.text);
     return replyToActivities;
-  }
-
-  public async sendAndAssert(messageToSend: string, messagesToReceive: string[]) {
-    const replyToActivities = await this.sendAndGetMessages(messageToSend);
-    return this.messagesEqual(messagesToReceive, replyToActivities);
   }
 }

@@ -31,7 +31,7 @@ export async function directLineSendMessage(content: string, conversationId: str
       Authorization: `Bearer ${token}`,
     },
     data: {
-      locale: 'en-EN',
+      locale: 'en-us',
       type: 'message',
       from: {
         id: 'test_user',
