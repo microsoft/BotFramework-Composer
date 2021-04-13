@@ -503,7 +503,7 @@ export class BotProjectService {
                 : {},
             },
             telemetry: {
-              instrumentationKey: originalProject.settings?.applicationInsights?.InstrumentationKey,
+              options: { instrumentationKey: originalProject.settings?.applicationInsights?.InstrumentationKey },
             },
             skills: {
               allowedCallers: originalProject.settings?.skillConfiguration?.allowedCallers,
