@@ -157,6 +157,7 @@ export type PublishProfile = {
   settings: {
     applicationInsights?: {
       InstrumentationKey: string;
+      connectionString?: string;
     };
     cosmosDb?: {
       cosmosDBEndpoint: string;
