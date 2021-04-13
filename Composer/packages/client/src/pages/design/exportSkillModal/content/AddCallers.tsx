@@ -38,8 +38,7 @@ const removeCaller = {
 
 export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCallers }) => {
   const handleRemove = (index) => {
-    const currentCallers = callers.splice(index, 1);
-    setCallers(currentCallers);
+    setCallers(callers.filter((_, i) => i !== index));
   };
   const handleAddNewAllowedCallerClick = () => {
     var currentCallers = callers.slice();
