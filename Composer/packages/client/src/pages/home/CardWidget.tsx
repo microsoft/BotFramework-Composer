@@ -55,7 +55,6 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
   const defaultImageCover = cardType === 'video' ? defaultVideoCardCover : defaultArticleCardCover;
   const [usedImageCover, setUsedImageCover] = useState(imageCover || defaultImageCover);
   const [usedImageBackground, setUsedImageBackground] = useState(false);
-  const [usedImageFit, setUsedImageFit] = useState(ImageFit.centerContain);
   const styles =
     rest.styles || cardType === 'resource'
       ? home.cardItem
@@ -75,8 +74,6 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     const whRatio = rect.width / rect.height;
     if (whRatio < 1.5) {
       setUsedImageBackground(true);
-    } else {
-      setUsedImageFit(ImageFit.cover);
     }
   };
 
@@ -100,7 +97,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
             alt={ariaLabel}
             aria-label={ariaLabel}
             className={'image-cover-img'}
-            imageFit={usedImageFit}
+            imageFit={ImageFit.centerContain}
             src={usedImageCover}
             onLoad={onImgLoaded}
             onLoadingStateChange={onImageLoading}
