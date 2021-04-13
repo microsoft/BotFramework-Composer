@@ -61,6 +61,9 @@ const schema: JSONSchema7 = {
             InstrumentationKey: {
               type: 'string',
             },
+            connectionString: {
+              type: 'string',
+            },
           },
         },
         cosmosDb: {
@@ -149,6 +152,7 @@ const schema: JSONSchema7 = {
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
+        connectionString: '<connection string>',
       },
       cosmosDb: {
         cosmosDBEndpoint: '<endpoint url>',
