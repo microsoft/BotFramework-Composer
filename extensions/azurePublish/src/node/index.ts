@@ -327,6 +327,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             InstrumentationKey:
               provisionResults.appInsights?.instrumentationKey ??
               currentSettings?.applicationInsights?.InstrumentationKey,
+            connectionString:
+              provisionResults.appInsights?.connectionString ?? currentSettings?.applicationInsights?.connectionString,
           },
           cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
           blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
