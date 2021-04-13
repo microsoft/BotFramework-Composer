@@ -75,6 +75,10 @@ export type RuntimeSettings = {
   };
   storage?: string;
   telemetry?: {
+    options?: {
+      connectionString?: string;
+      instrumentationKey?: string;
+    };
     instrumentationKey?: string;
     logActivities?: boolean;
     logPersonalInformation?: boolean;
