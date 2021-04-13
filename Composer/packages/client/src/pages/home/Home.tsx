@@ -168,6 +168,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                   {formatMessage.rich('You don’t have any bot yet. Start to <Link>create a new bot</Link>', {
                     Link: ({ children }) => (
                       <Link
+                        key="create-new-bot-link"
                         onClick={() => {
                           onClickNewBot();
                           TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
