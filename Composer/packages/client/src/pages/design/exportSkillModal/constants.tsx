@@ -9,15 +9,7 @@ import { SDKKinds } from '@bfc/shared';
 
 import { nameRegex } from '../../../constants';
 
-import {
-  Description,
-  FetchManifestSchema,
-  ReviewManifest,
-  SaveManifest,
-  SelectDialogs,
-  SelectManifest,
-  SelectTriggers,
-} from './content';
+import { Description, ReviewManifest, SaveManifest, SelectDialogs, SelectTriggers } from './content';
 import { SelectProfile } from './content/SelectProfile';
 import { AddCallers } from './content/AddCallers';
 
@@ -131,11 +123,9 @@ interface EditorStep {
 }
 
 export enum ManifestEditorSteps {
-  FETCH_MANIFEST_SCHEMA = 'FETCH_MANIFEST_SCHEMA',
   MANIFEST_DESCRIPTION = 'MANIFEST_DESCRIPTION',
   MANIFEST_REVIEW = 'MANIFEST_REVIEW',
   SAVE_MANIFEST = 'SAVE_MANIFEST',
-  SELECT_MANIFEST = 'SELECT_MANIFEST',
   SELECT_DIALOGS = 'SELECT_DIALOGS',
   SELECT_TRIGGERS = 'SELECT_TRIGGERS',
   SELECT_PROFILE = 'SELECT_PROFILE',
@@ -143,8 +133,6 @@ export enum ManifestEditorSteps {
 }
 
 export const order: ManifestEditorSteps[] = [
-  // ManifestEditorSteps.SELECT_MANIFEST,
-  // ManifestEditorSteps.FETCH_MANIFEST_SCHEMA,
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
   ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
@@ -187,28 +175,6 @@ const validate = ({ content, schema }) => {
 };
 
 export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
-  [ManifestEditorSteps.SELECT_MANIFEST]: {
-    buttons: [
-      cancelButton,
-      {
-        disabled: ({ manifest }) => !manifest?.id,
-        primary: true,
-        text: () => formatMessage('Edit'),
-        onClick: ({ onNext, manifest }) => () => {
-          onNext({ id: manifest?.id });
-        },
-      },
-    ],
-    content: SelectManifest,
-    editJson: false,
-    subText: () => formatMessage('Create a new skill manifest or select which one you want to edit'),
-    title: () => formatMessage('Create or edit skill manifest'),
-  },
-  [ManifestEditorSteps.FETCH_MANIFEST_SCHEMA]: {
-    content: FetchManifestSchema,
-    editJson: false,
-    title: () => formatMessage('Select manifest version'),
-  },
   [ManifestEditorSteps.MANIFEST_DESCRIPTION]: {
     buttons: [cancelButton, nextButton],
     content: Description,
