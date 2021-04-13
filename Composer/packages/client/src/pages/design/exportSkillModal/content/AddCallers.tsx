@@ -5,8 +5,11 @@
 import { jsx } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { ActionButton, css, FontWeights, TextField } from 'office-ui-fabric-react';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
+
 import { tableColumnHeader, tableRow, tableRowItem } from '../../../botProject/styles';
 import { ContentProps } from '../constants';
 
@@ -38,12 +41,10 @@ const removeCaller = {
 
 export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCallers }) => {
   const handleRemove = (index) => {
-    var currentCallers = callers.slice();
-    currentCallers?.splice(index, 1);
-    setCallers(currentCallers);
+    setCallers(callers.filter((_, i) => i !== index));
   };
-  const handleAdd = () => {
-    var currentCallers = callers.slice();
+  const handleAddNewAllowedCallerClick = () => {
+    const currentCallers = callers.slice();
     currentCallers?.push('0000-11111-00000-11111');
     setCallers(currentCallers);
   };
@@ -58,14 +59,14 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
           <div key={index} css={tableRow}>
             <div css={tableRowItem('90%')} title={caller}>
               <TextField
+                borderless
                 value={caller}
                 onChange={(e, newValue) => {
                   const currentCallers = callers.slice();
                   currentCallers[index] = newValue ?? '';
                   setCallers(currentCallers);
                 }}
-                borderless
-              ></TextField>
+              />
             </div>
             <div css={tableRowItem('10%')}>
               <ActionButton styles={removeCaller} onClick={() => handleRemove(index)}>
@@ -76,10 +77,9 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
         );
       })}
       <ActionButton
-        data-testid={'addNew'}
         styles={addNewAllowCallers}
         onClick={() => {
-          handleAdd();
+          handleAddNewAllowedCallerClick();
         }}
       >
         {formatMessage('Add allowed callers')}

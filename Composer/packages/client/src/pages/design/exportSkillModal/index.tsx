@@ -12,6 +12,8 @@ import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 import { SkillManifestFile } from '@bfc/shared';
 import { navigate } from '@reach/router';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
+import cloneDeep from 'lodash/cloneDeep';
 
 import {
   dispatcherState,
@@ -24,13 +26,11 @@ import {
   settingsState,
   rootBotProjectIdSelector,
 } from '../../../recoilModel';
+import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
 
 import { styles } from './styles';
 import { generateSkillManifest } from './generateSkillManifest';
 import { editorSteps, ManifestEditorSteps, order } from './constants';
-import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
-import { cloneDeep } from 'lodash';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -193,6 +193,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           }}
         >
           <Content
+            callers={callers}
             completeStep={handleNext}
             editJson={handleEditJson}
             errors={errors}
@@ -201,6 +202,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             schema={schema}
             selectedDialogs={selectedDialogs}
             selectedTriggers={selectedTriggers}
+            setCallers={setCallers}
             setErrors={setErrors}
             setSchema={setSchema}
             setSelectedDialogs={setSelectedDialogs}
@@ -208,8 +210,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             setSkillManifest={setSkillManifest}
             skillManifests={skillManifests}
             value={content}
-            callers={callers}
-            setCallers={setCallers}
             onChange={(manifestContent) => setSkillManifest({ ...skillManifest, content: manifestContent })}
           />
         </div>
@@ -219,15 +219,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
                 const Button = primary ? PrimaryButton : DefaultButton;
 
-                let isDisabled = false;
-                if (typeof disabled === 'function') {
-                  isDisabled =
-                    editorStep === ManifestEditorSteps.SELECT_MANIFEST
-                      ? disabled({ manifest: skillManifest })
-                      : disabled({ publishTargets });
-                } else {
-                  isDisabled = !!disabled;
-                }
+                const isDisabled = typeof disabled === 'function' ? disabled({ publishTargets }) : !!disabled;
 
                 return (
                   <Button
