@@ -56,10 +56,10 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string; firstTime?: boolean })[]) => (
     <div role="table">
-      <div key={'subtitle'} css={subtitle}>
+      <div css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>the package manager</a>.', {
           a: ({ children }) => (
-            <Link key="link" href={packageManagerLink}>
+            <Link key="subtitle-link" href={packageManagerLink}>
               {children}
             </Link>
           ),
