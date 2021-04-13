@@ -320,7 +320,13 @@ export const AzureProvisionDialog: React.FC = () => {
     } --createLuisResource=${createLuisResource} --createLuisAuthoringResource=${createLuisAuthoringResource} --createCosmosDb=${createCosmosDb} --createStorage=${createStorage} --createAppInsights=${createAppInsights} --createQnAResource=${createQnAResource}`;
 
     const instructions = formatMessage(
-      'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Follow the instructions at the link below to run the provisioning command (seen below)\n2. Copy and paste the resulting JSON and securely share it with me.\n\nProvisoning Command:\n{command}\n\nDetailed instructions:\nhttps://aka.ms/how-to-complete-provision-handoff',
+      'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created.' +
+        ' Please follow the instructions below to create these resources and provide them to me.\n\n' +
+        '1. Follow the instructions at the link below to run the provisioning command (seen below)\n' +
+        '2. Copy and paste the resulting JSON and securely share it with me.\n\n' +
+        'Provisoning Command:\n' +
+        '{command}\n\n' +
+        'Detailed instructions:\nhttps://aka.ms/how-to-complete-provision-handoff',
       { command: provisionComposer }
     );
 
@@ -1108,6 +1114,7 @@ export const AzureProvisionDialog: React.FC = () => {
         )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
+        learnMoreLink="https://aka.ms/how-to-complete-provision-handoff"
         title={formatMessage('Share resource request')}
         onBack={() => {
           setShowHandoff(false);
