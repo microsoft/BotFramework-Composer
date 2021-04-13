@@ -603,6 +603,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                 <PrimaryButton
                   disabled={
                     loadingQNA ||
+                    showAuthDialog ||
                     (nextAction === 'choose' && !localRootQNAKey) ||
                     (nextAction === 'create' && !subscriptionId)
                   }
