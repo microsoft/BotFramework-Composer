@@ -124,6 +124,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
             />
           ) : null}
           <CommandButton
+            ariaLabel={formatMessage('Filter')}
             css={buttonStyle}
             iconProps={{ iconName: 'Filter' }}
             tabIndex={0}

@@ -71,7 +71,14 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
 export const getPendingNotificationCardProps = (items: BotStatus[]): CardProps => {
   return {
     title: '',
-    description: formatMessage(`Publishing {count} bots`, { count: items.length }),
+    description: formatMessage(
+      `Publishing {
+      count, plural,
+        =1 {one bot}
+        other {# bots}
+    }`,
+      { count: items.length }
+    ),
     type: 'pending',
     onRenderCardContent: (props) => (
       <div css={cardContent}>

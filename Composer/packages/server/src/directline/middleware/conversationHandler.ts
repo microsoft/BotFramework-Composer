@@ -12,7 +12,6 @@ import { DLServerState } from '../store/dlServerState';
 import { User } from '../store/types';
 import { Conversation } from '../store/entities/conversation';
 import { WebSocketServer } from '../utils/webSocketServer';
-import { textItem } from '../utils/helpers';
 import logger from '../utils/logger';
 import { AttachmentContentTypes } from '../utils/constants';
 
@@ -53,14 +52,10 @@ export const createReplyToActivityHandler = (req: express.Request, res: express.
 };
 
 export const createPostActivityHandler = (state: DLServerState): any => {
-  const { logToDocument } = state.dispatchers;
-
   return async (req: express.Request, res: express.Response): Promise<void> => {
     const conversation: Conversation = (req as any).conversation;
     if (!conversation) {
       res.status(StatusCodes.NOT_FOUND).send('Conversation not found.').end();
-      const logItem = textItem('Error', formatMessage('Cannot post activity. Conversation not found.'));
-      logToDocument(req.params.conversationId, logItem);
       return;
     }
 

@@ -64,10 +64,10 @@ export const getExistResources = (config) => {
 export const defaultExtensionState = {
   subscriptionId: '',
   resourceGroup: '',
-  hostName: '',
-  location: '',
+  hostname: '',
+  region: '',
   luisLocation: '',
   enabledResources: [],
   requiredResources: [],
-  choice: { key: 'create', text: 'Create new Azure resources' },
+  creationType: 'create',
 };

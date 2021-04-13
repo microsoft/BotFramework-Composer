@@ -17,7 +17,8 @@
     "axios": "^0.21.1",
     "y18n": "^5.0.5",
     "immer": "^8.0.1",
-    "url-parse": "^1.5.1"
+    "url-parse": "^1.5.1",
+    "underscore": "^1.12.1"
   },
   "engines": {
     "node": ">=12"
@@ -41,7 +42,9 @@
       "packages/types",
       "packages/ui-plugins/*"
     ],
-    "nohoist": ["**/server-workers/**"]
+    "nohoist": [
+      "**/server-workers/**"
+    ]
   },
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
@@ -63,7 +66,7 @@
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
-    "test": "yarn typecheck && jest",
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
     "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default",
     "test:integration": "cypress run --browser edge",
@@ -90,11 +93,11 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,jsx}": [
+    "**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ],
-    "../extensions/**/*": [
+    "../extensions/**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ]

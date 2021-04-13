@@ -7,7 +7,6 @@ import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@botframework-composer/types';
 
 import { OpenProject } from '../../components/CreationFlow/OpenProject';
-import DefineConversation from '../../components/CreationFlow/DefineConversation';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -16,13 +15,11 @@ import {
   creationFlowTypeState,
   userSettingsState,
   templateProjectsState,
-  featureFlagsState,
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
 import { CreateBotV2 } from '../../components/CreationFlow/v2/CreateBot';
-import { CreateBot } from '../../components/CreationFlow/CreateBot';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -32,7 +29,6 @@ interface CreationModalProps {
 export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const {
     fetchStorages,
-    fetchTemplates,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
     createFolder,
@@ -42,7 +38,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     createNewBot,
     createNewBotV2,
     openProject,
-    addNewSkillToBotProject,
     addExistingSkillToBotProject,
     fetchTemplatesV2,
     fetchReadMe,
@@ -51,7 +46,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
-  const featureFlags = useRecoilValue(featureFlagsState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
   const storages = useRecoilValue(storagesState);
@@ -71,7 +65,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const fetchResources = async () => {
     await fetchStorages();
-    fetchTemplates();
+    fetchTemplatesV2();
   };
 
   useEffect(() => {
@@ -98,30 +92,28 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       appLocale,
     };
     if (creationFlowType === 'Skill') {
-      if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
-        const templateVersion = templateProjects.find((template: BotTemplate) => {
-          return template.id == templateId;
-        })?.package?.packageVersion;
-        const newCreationBotData = {
-          templateId: templateId || '',
-          templateVersion: templateVersion || '',
-          name: formData.name,
-          description: formData.description,
-          location: formData.location,
-          schemaUrl: formData.schemaUrl,
-          appLocale,
-          templateDir: formData?.pvaData?.templateDir,
-          eTag: formData?.pvaData?.eTag,
-          urlSuffix: formData?.pvaData?.urlSuffix,
-          preserveRoot: formData?.pvaData?.preserveRoot,
-          alias: formData?.alias,
-          profile: formData?.profile,
-          source: formData?.source,
-        };
-        createNewBotV2(newCreationBotData);
-      } else {
-        addNewSkillToBotProject(newBotData);
-      }
+      const templateVersion = templateProjects.find((template: BotTemplate) => {
+        return template.id == templateId;
+      })?.package?.packageVersion;
+      const newCreationBotData = {
+        templateId: templateId || '',
+        templateVersion: templateVersion || '',
+        name: formData.name,
+        description: formData.description,
+        location: formData.location,
+        schemaUrl: formData.schemaUrl,
+        runtimeType: formData.runtimeType,
+        runtimeLanguage: formData.runtimeLanguage,
+        appLocale,
+        templateDir: formData?.pvaData?.templateDir,
+        eTag: formData?.pvaData?.eTag,
+        urlSuffix: formData?.pvaData?.urlSuffix,
+        preserveRoot: formData?.pvaData?.preserveRoot,
+        alias: formData?.alias,
+        profile: formData?.profile,
+        source: formData?.source,
+      };
+      createNewBotV2(newCreationBotData);
     } else {
       createNewBot(newBotData);
     }
@@ -133,14 +125,14 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     props.onDismiss?.();
   };
 
-  const handleDefineConversationSubmit = async (formData, templateId: string) => {
-    handleSubmit(formData, templateId);
-  };
-
   const handleSubmit = async (formData, templateId: string) => {
     handleDismiss();
     saveTemplateId(templateId);
     await handleCreateNew(formData, templateId);
+  };
+
+  const handleDefineConversationSubmit = async (formData, templateId: string) => {
+    handleSubmit(formData, templateId);
   };
 
   const handleCreateNext = async (templateId: string) => {
@@ -151,56 +143,38 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const openBot = async (botFolder) => {
     handleDismiss();
     if (creationFlowType === 'Skill') {
-      addExistingSkillToBotProject(botFolder);
+      addExistingSkillToBotProject(botFolder.path, botFolder.storage);
       TelemetryClient.track('AddNewSkillCompleted');
     } else {
-      openProject(botFolder);
+      openProject(botFolder.path, botFolder.storage);
     }
   };
 
   const renderDefineConversation = () => {
-    if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
-      return (
-        <DefineConversationV2
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          templateId={templateId}
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleDefineConversationSubmit}
-        />
-      );
-    } else {
-      return (
-        <DefineConversation
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          templateId={templateId}
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleDefineConversationSubmit}
-        />
-      );
-    }
+    return (
+      <DefineConversationV2
+        createFolder={createFolder}
+        focusedStorageFolder={focusedStorageFolder}
+        templateId={templateId}
+        updateFolder={updateFolder}
+        onCurrentPathUpdate={updateCurrentPath}
+        onDismiss={handleDismiss}
+        onSubmit={handleDefineConversationSubmit}
+      />
+    );
   };
 
   const renderCreateOptions = () => {
-    if (featureFlags?.NEW_CREATION_FLOW?.enabled) {
-      return (
-        <CreateBotV2
-          isOpen
-          fetchReadMe={fetchReadMe}
-          fetchTemplates={fetchTemplatesV2}
-          templates={templateProjects}
-          onDismiss={handleDismiss}
-          onNext={handleCreateNext}
-        />
-      );
-    } else {
-      return <CreateBot isOpen templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />;
-    }
+    return (
+      <CreateBotV2
+        isOpen
+        fetchReadMe={fetchReadMe}
+        fetchTemplates={fetchTemplatesV2}
+        templates={templateProjects}
+        onDismiss={handleDismiss}
+        onNext={handleCreateNext}
+      />
+    );
   };
 
   return (

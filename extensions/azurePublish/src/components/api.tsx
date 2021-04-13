@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable no-underscore-dangle */
 import axios from 'axios';
+import formatMessage from 'format-message';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceManagementClient } from '@azure/arm-resources';
@@ -27,6 +28,11 @@ import * as Images from './images';
 
 const logger = debug('composer:extension:azureProvision');
 
+/**
+ * Retrieves the list of subscriptions from Azure
+ * @param token The authentication token
+ * @returns The list of subscriptions or throws
+ */
 export const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
   const tokenCredentials = new TokenCredentials(token);
   try {
@@ -37,15 +43,22 @@ export const getSubscriptions = async (token: string): Promise<Array<Subscriptio
         status: AzureAPIStatus.ERROR,
         message: subscriptionsResult._response.bodyAsText,
       });
-      return [];
+      throw new Error(subscriptionsResult._response.bodyAsText);
     }
     return subscriptionsResult._response.parsedBody;
   } catch (err) {
+    let message = JSON.stringify(err, Object.getOwnPropertyNames(err));
+    if (err?.code === 12 && err?.message?.match(/Bearer/gi)) {
+      message = formatMessage(
+        'There was an authentication problem retrieving subscriptions. Verify your login session has not expired and you have permission to list subscriptions in this account.'
+      );
+    }
+
     logger({
       status: AzureAPIStatus.ERROR,
-      message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+      message,
     });
-    return [];
+    throw new Error(message);
   }
 };
 

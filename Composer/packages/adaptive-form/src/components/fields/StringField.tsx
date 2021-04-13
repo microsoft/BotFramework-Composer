@@ -25,6 +25,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     required,
     focused,
     cursorPosition,
+    hasIcon,
   } = props;
 
   const textFieldRef = React.createRef<ITextField>();
@@ -73,6 +74,9 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         readOnly={readonly}
         styles={{
           root: { width: '100%' },
+          fieldGroup: {
+            borderRadius: hasIcon ? '0 2px 2px 0' : undefined,
+          },
           errorMessage: { display: 'none' },
         }}
         value={value}

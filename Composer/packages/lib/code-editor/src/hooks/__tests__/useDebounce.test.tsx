@@ -6,7 +6,13 @@ import React from 'react';
 
 import { useDebounce } from '../useDebounce';
 
-jest.useFakeTimers();
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
+});
 
 describe('useDebounce', () => {
   it('put initialized value in first render', () => {

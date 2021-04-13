@@ -47,8 +47,11 @@ type ResourceGroupItemChoice = {
 
 type Props = {
   /**
+   * If this picker should be disabled.
+   */
+  disabled?: boolean;
+  /**
    * The resource groups to choose from.
-   * Set to undefined to disable this picker.
    */
   resourceGroupNames?: string[];
   /**
@@ -93,6 +96,7 @@ const onRenderLabel = (props) => {
 };
 
 export const ResourceGroupPicker = ({
+  disabled,
   resourceGroupNames,
   selectedResourceGroupName: controlledSelectedName,
   newResourceGroupName: controlledNewName,
@@ -129,13 +133,15 @@ export const ResourceGroupPicker = ({
   }, [debouncedNewName, resourceGroupNames]);
 
   React.useEffect(() => {
-    const isNew = selectedName === CREATE_NEW_KEY;
-    onChange({
-      isNew,
-      name: isNew ? debouncedNewName : selectedName,
-      errorMessage: isNew ? newNameErrorMessage : undefined,
-    });
-  }, [selectedName, debouncedNewName, newNameErrorMessage]);
+    if (!disabled) {
+      const isNew = selectedName === CREATE_NEW_KEY;
+      onChange({
+        isNew,
+        name: isNew ? debouncedNewName : selectedName,
+        errorMessage: isNew ? newNameErrorMessage : undefined,
+      });
+    }
+  }, [disabled, selectedName, debouncedNewName, newNameErrorMessage]);
 
   const options = React.useMemo(() => {
     const optionsList: IDropdownOption[] =
@@ -148,8 +154,6 @@ export const ResourceGroupPicker = ({
   }, [resourceGroupNames]);
 
   // ----- Render -----//
-
-  const loading = resourceGroupNames === undefined;
 
   const onRenderOption = (option) => {
     return (
@@ -169,7 +173,7 @@ export const ResourceGroupPicker = ({
         ariaLabel={formatMessage(
           'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
         )}
-        disabled={loading}
+        disabled={disabled}
         label={formatMessage('Resource group')}
         options={options}
         placeholder={formatMessage('Select one')}
@@ -186,7 +190,7 @@ export const ResourceGroupPicker = ({
           required
           ariaLabel={formatMessage('Enter a name for the new resource group')}
           data-testid={'newResourceGroupName'}
-          disabled={loading}
+          disabled={disabled}
           errorMessage={newNameErrorMessage}
           id={'newResourceGroupName'}
           label={formatMessage('Resource group name')}

@@ -81,6 +81,9 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     value,
     expression,
   });
+
+  const label = getUiLabel({ ...props, uiOptions });
+
   const fieldProps: FieldProps = {
     ...rest,
     ...customProps,
@@ -90,7 +93,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     description: getUiDescription({ ...props, uiOptions }),
     enumOptions: schema.enum as string[],
     error: error || undefined,
-    label: getUiLabel({ ...props, uiOptions }),
+    label,
     name,
     onChange: handleChange,
     placeholder: getUiPlaceholder({ ...props, uiOptions }),

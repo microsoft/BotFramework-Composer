@@ -36,6 +36,7 @@ export interface FieldProps<T = any> {
   style?: React.CSSProperties;
   cursorPosition?: number;
   isRoot?: boolean;
+  hasIcon?: boolean;
 
   onChange: ChangeHandler<T>;
   onFocus?: (id: string, value?: T, event?: React.FocusEvent<any>) => void;

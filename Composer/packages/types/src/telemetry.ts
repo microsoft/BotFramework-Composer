@@ -146,7 +146,7 @@ type WebChatEvents = {
   WebChatConversationRestarted: { restartType: 'SameUserId' | 'NewUserId' };
   DrawerPaneOpened: undefined;
   DrawerPaneClosed: undefined;
-  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' };
+  DrawerPaneTabOpened: { tabType: 'Diagnostics' | 'WebChatInspector' | 'RuntimeLog' };
   SaveTranscriptClicked: undefined;
 };
 
@@ -156,6 +156,13 @@ type ABSChannelsEvents = {
   ConnectionsChannelStatusError: { error: string };
   ConnectionsToggleChannel: { channel: string; enabled: boolean };
   ConnectionsToggleChannelFailed: { channel: string; enabled: boolean };
+};
+
+type OrchestratorEvents = {
+  OrchestratorDownloadStarted: undefined;
+  OrchestratorDownloadCompleted: undefined;
+  OrchestratorBuildStarted: { baseModel: string; firstBuild: boolean };
+  OrchestratorBuildCompleted: { baseModel: string; firstBuild: boolean };
 };
 
 type OtherEvents = {};
@@ -191,7 +198,8 @@ export type TelemetryEvents = ApplicationEvents &
   PageView &
   LgEditorEvents &
   WebChatEvents &
-  LuEditorEvents;
+  LuEditorEvents &
+  OrchestratorEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

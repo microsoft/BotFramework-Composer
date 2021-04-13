@@ -39,6 +39,7 @@ const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
       </div>
       {!hideToggle && (
         <Toggle
+          ariaLabel={`${title} ${description}`}
           checked={!!checked}
           data-testid={id}
           id={id || uniqueId}

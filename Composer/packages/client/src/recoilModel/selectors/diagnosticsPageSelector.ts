@@ -144,8 +144,13 @@ export const settingDiagnosticsSelectorFamily = selectorFamily({
     //files meet LUIS/QnA requirments.
     //appsettings.json
     const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
+    const qnaLocaleDiagnostics = BotIndexer.checkQnALocales(botAssets);
 
     luisLocaleDiagnostics.forEach((item) => {
+      diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
+    });
+
+    qnaLocaleDiagnostics.forEach((item) => {
       diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
 

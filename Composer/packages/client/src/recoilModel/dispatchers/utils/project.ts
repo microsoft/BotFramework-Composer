@@ -42,7 +42,7 @@ import luFileStatusStorage from '../../../utils/luFileStatusStorage';
 import { getReferredLuFiles } from '../../../utils/luUtil';
 import { navigateTo } from '../../../utils/navigation';
 import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
-import { getReferredQnaFiles, reformQnAToContainerKB } from '../../../utils/qnaUtil';
+import { getReferredQnaFiles, migrateQnAFiles } from '../../../utils/qnaUtil';
 import {
   botDiagnosticsState,
   botDisplayNameState,
@@ -53,6 +53,7 @@ import {
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
+  projectReadmeState,
   currentProjectIdState,
   dialogSchemasState,
   dialogState,
@@ -315,7 +316,8 @@ export const loadProjectData = async (data) => {
   const mergedSettings = getMergedSettings(projectId, settings, botName);
   const indexedFiles = indexer.index(files, botName);
 
-  const { lgResources, luResources, qnaResources } = indexedFiles;
+  const { lgResources, luResources, qnaResources, dialogs } = indexedFiles;
+  const locales = settings.languages;
 
   //parse all resources with worker
   lgWorker.addProject(projectId);
@@ -323,11 +325,12 @@ export const loadProjectData = async (data) => {
   const lgFiles = lgResources.map(({ id, content }) => emptyLgFile(id, content));
   const luFiles = luResources.map(({ id, content }) => emptyLuFile(id, content));
   const qnaFiles = qnaResources.map(({ id, content }) => emptyQnaFile(id, content));
+  const dialogIds = dialogs.map((d) => d.id);
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
-  const updateQnAFiles = reformQnAToContainerKB(projectId, qnaFiles);
+  const updatedQnAFiles = migrateQnAFiles(projectId, dialogIds, qnaFiles, locales);
 
-  const assets = { ...indexedFiles, lgFiles, luFiles, qnaFiles: updateQnAFiles };
+  const assets = { ...indexedFiles, lgFiles, luFiles, qnaFiles: updatedQnAFiles };
   //Validate all files
   const diagnostics = BotIndexer.validate({
     ...assets,
@@ -434,7 +437,7 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
 
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { set } = callbackHelpers;
-  const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
+  const { botName, botEnvironment, location, readme, schemas, settings, id: projectId, diagnostics } = data;
   const {
     dialogs,
     dialogSchemas,
@@ -501,6 +504,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(botDiagnosticsState(projectId), diagnostics);
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
+  set(projectReadmeState(projectId), readme);
 
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
@@ -629,37 +633,6 @@ export const createNewBotFromTemplate = async (
   }
 
   return { projectId, mainDialog };
-};
-
-export const createNewBotFromTemplateV2 = async (
-  callbackHelpers,
-  templateId: string,
-  templateVersion: string,
-  name: string,
-  description: string,
-  location: string,
-  schemaUrl?: string,
-  locale?: string,
-  templateDir?: string,
-  eTag?: string,
-  alias?: string,
-  preserveRoot?: boolean
-) => {
-  const jobId = await httpClient.post(`/v2/projects`, {
-    storageId: 'default',
-    templateId,
-    templateVersion,
-    name,
-    description,
-    location,
-    schemaUrl,
-    locale,
-    templateDir,
-    eTag,
-    alias,
-    preserveRoot,
-  });
-  return jobId;
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
@@ -814,7 +787,7 @@ export const postRootBotCreation = async (
   projectIdCache.set(projectId);
 
   // navigate to the new get started section
-  navigateToBot(callbackHelpers, projectId, undefined, btoa('botProjectsSettings#getstarted'));
+  navigateToBot(callbackHelpers, projectId, undefined, btoa('dialogs#getstarted'));
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {

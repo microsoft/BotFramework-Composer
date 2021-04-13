@@ -181,10 +181,6 @@ async function main(show = false) {
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   initAppMenu(mainWindow);
   if (mainWindow) {
-    if (process.env.COMPOSER_DEV_TOOLS) {
-      mainWindow.webContents.openDevTools();
-    }
-
     await mainWindow.loadURL(getBaseUrl());
 
     if (show) {
@@ -296,6 +292,10 @@ async function run() {
 
     const mainWindow = getMainWindow();
     mainWindow?.webContents.send('session-update', 'session-started');
+
+    if (process.env.COMPOSER_DEV_TOOLS) {
+      mainWindow?.webContents.openDevTools();
+    }
   });
 
   // Quit when all windows are closed.
@@ -321,24 +321,20 @@ async function run() {
     }
   });
 
-  app.on('will-finish-launching', () => {
-    // Protocol handler for osx
-    app.on('open-url', (event, url) => {
-      event.preventDefault();
-      if (ElectronWindow.isBrowserWindowCreated) {
-        waitForMainWindowToShow
-          .then(() => {
-            log('[Mac] Main window is now showing. Processing deep link if any.');
-            const deeplinkUrl = parseDeepLinkUrl(url);
-            log('[Mac] Loading deeplink: %s', deeplinkUrl);
-            const mainWindow = ElectronWindow.getInstance().browserWindow;
-            mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
-          })
-          .catch((e) =>
-            console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
-          );
-      }
-    });
+  // Protocol handler for osx
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    waitForMainWindowToShow
+      .then(() => {
+        log('[Mac] Main window is now showing. Processing deep link if any.');
+        const deeplinkUrl = parseDeepLinkUrl(url);
+        log('[Mac] Loading deeplink: %s', deeplinkUrl);
+        const mainWindow = ElectronWindow.getInstance().browserWindow;
+        mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
+      })
+      .catch((e) =>
+        console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
+      );
   });
 }
 

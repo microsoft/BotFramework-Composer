@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { PublishTarget, SkillManifestFile } from '@bfc/shared';
+
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { Bot, BotStatus, BotPublishHistory, BotProjectType, BotPropertyType } from './type';
@@ -18,6 +20,7 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
       setting: bot.setting,
       publishTargets,
       publishTypes: bot.publishTypes,
+      skillManifests: bot.skillManifests,
     };
     const tmpBot = { id: bot.projectId, name: bot.name, publishTarget: '' };
     if (publishTargets.length > 0) {
@@ -28,6 +31,18 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
   return { botPropertyData, botList };
 };
 
+const findSkillManifestUrl = (skillManifests: SkillManifestFile[], appId: string) => {
+  for (const skillManifest of skillManifests || []) {
+    for (const endpoint of skillManifest?.content?.endpoints || []) {
+      if (endpoint?.msAppId === appId) {
+        return endpoint?.endpointUrl;
+      }
+    }
+  }
+
+  return undefined;
+};
+
 export const generateBotStatusList = (
   botList: Bot[],
   botPropertyData: BotPropertyType,
@@ -35,7 +50,7 @@ export const generateBotStatusList = (
 ): BotStatus[] => {
   const bots = botList.map((bot) => {
     const botStatus: BotStatus = Object.assign({}, bot);
-    const publishTargets = botPropertyData[bot.id].publishTargets;
+    const publishTargets: PublishTarget[] = botPropertyData[bot.id].publishTargets;
     const publishHistory = botPublishHistoryList[bot.id];
     if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
       botStatus.publishTargets = publishTargets;
@@ -46,7 +61,17 @@ export const generateBotStatusList = (
         botStatus.message = history.message;
         botStatus.status = history.status;
       }
+
+      const currentPublishTarget = publishTargets.find((pt) => pt.name === botStatus.publishTarget);
+      if (currentPublishTarget) {
+        const config = JSON.parse(currentPublishTarget.configuration);
+        const appId = config?.settings?.MicrosoftAppId;
+        if (appId) {
+          botStatus.skillManifestUrl = findSkillManifestUrl(botPropertyData[bot.id].skillManifests, appId);
+        }
+      }
     }
+
     return botStatus;
   });
   return bots;

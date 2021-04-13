@@ -73,16 +73,10 @@ describe('Bot structure file path', () => {
     expect(targetPath).toEqual('knowledge-base/en-us/mybot.en-us.qna');
   });
 
-  // entry dialog's source qna
-  it('should get entry dialog.source.qna file path', async () => {
-    const targetPath = defaultFilePath(botName, defaultLocale, 'mybot.myimport1.source.qna', {});
-    expect(targetPath).toEqual('knowledge-base/source/myimport1.source.qna');
-  });
-
   // shared source qna
   it('should get shared <name>.source.qna file path', async () => {
-    const targetPath = defaultFilePath(botName, defaultLocale, 'myimport1.source.qna', {});
-    expect(targetPath).toEqual('knowledge-base/source/myimport1.source.qna');
+    const targetPath = defaultFilePath(botName, defaultLocale, 'myimport1.source.en-us.qna', {});
+    expect(targetPath).toEqual('knowledge-base/source/myimport1.source.en-us.qna');
   });
 
   // child dialog's lg
@@ -101,12 +95,6 @@ describe('Bot structure file path', () => {
   it('should get child dialog-qna file path', async () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'greeting.en-us.qna', {});
     expect(targetPath).toEqual('dialogs/greeting/knowledge-base/en-us/greeting.en-us.qna');
-  });
-
-  // child dialog's source qna
-  it('should get child dialog.source.qna file path', async () => {
-    const targetPath = defaultFilePath(botName, defaultLocale, 'greeting.myimport1.source.qna', {});
-    expect(targetPath).toEqual('dialogs/greeting/knowledge-base/source/myimport1.source.qna');
   });
 
   // customized endpoint
@@ -149,20 +137,11 @@ describe('Parse file name', () => {
     expect(fileType).toEqual('.qna');
   });
 
-  // entry dialog's source qna
-  it('should parse entry dialog.qna file name', async () => {
-    const { fileId, dialogId, fileType } = parseFileName('mybot.myimport1.source.qna', defaultLocale);
-    expect(dialogId).toEqual('mybot');
-    expect(fileId).toEqual('myimport1');
-    expect(fileType).toEqual('.source.qna');
-  });
-
   // all shared source qna
   it('should parse <name>.source.qna file name', async () => {
-    const { fileId, dialogId, fileType } = parseFileName('myimport1.source.qna', defaultLocale);
-    expect(dialogId).toEqual('');
-    expect(fileId).toEqual('myimport1');
-    expect(fileType).toEqual('.source.qna');
+    const { fileId, fileType } = parseFileName('kb.source.en-us.qna', defaultLocale);
+    expect(fileId).toEqual('kb');
+    expect(fileType).toEqual('.source.en-us.qna');
   });
 
   // child dialog
@@ -195,13 +174,5 @@ describe('Parse file name', () => {
     expect(fileId).toEqual('greeting');
     expect(locale).toEqual('en-us');
     expect(fileType).toEqual('.qna');
-  });
-
-  // child dialog's source qna
-  it('should parse child dialog.qna file name', async () => {
-    const { fileId, dialogId, fileType } = parseFileName('greeting.myimport1.source.qna', defaultLocale);
-    expect(dialogId).toEqual('greeting');
-    expect(fileId).toEqual('myimport1');
-    expect(fileType).toEqual('.source.qna');
   });
 });

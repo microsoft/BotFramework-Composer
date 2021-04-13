@@ -18,10 +18,10 @@ import {
   SkillManifestFile,
   RecognizerFile,
 } from '@bfc/shared';
-import { DirectLineLog } from '@botframework-composer/types/src';
+import { ConversationTrafficItem } from '@botframework-composer/types';
 import { atomFamily } from 'recoil';
 
-import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
+import { BotStartError, DesignPageLocation, WebChatInspectionData, RuntimeOutputData } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -178,6 +178,13 @@ export const locationState = atomFamily<string, string>({
   },
 });
 
+export const projectReadmeState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('readme'),
+  default: (id) => {
+    return '';
+  },
+});
+
 export const botEnvironmentState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botEnvironment'),
   default: (id) => {
@@ -207,7 +214,7 @@ export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
   },
 });
 
-export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
+export const botBuildTimeErrorState = atomFamily<BotStartError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };
@@ -423,12 +430,25 @@ export const canRedoState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const webChatLogsState = atomFamily<DirectLineLog[], string>({
-  key: getFullyQualifiedKey('webChatLogs'),
+export const webChatTrafficState = atomFamily<ConversationTrafficItem[], string>({
+  key: getFullyQualifiedKey('webChatTraffic'),
   default: [],
+});
+
+export const webChatInspectionDataState = atomFamily<WebChatInspectionData | undefined, string>({
+  key: getFullyQualifiedKey('webChatInspectionData'),
+  default: undefined,
 });
 
 export const projectIndexingState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('projectIndexing'),
   default: false,
+});
+
+export const runtimeStandardOutputDataState = atomFamily<RuntimeOutputData, string>({
+  key: getFullyQualifiedKey('runtimeStandardOutputData'),
+  default: {
+    standardError: null,
+    standardOutput: '',
+  },
 });

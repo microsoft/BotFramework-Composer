@@ -23,6 +23,11 @@ export interface ProvisionConfig {
   logger?: (string) => any;
   name: string; // profile name
   type: string; // webapp or function
+  /**
+   * The worker runtime language for Azure functions.
+   * Currently documented values: dotnet, node, java, python, or powershell
+   */
+  workerRuntime?: string;
   choice?: string;
   [key: string]: any;
 }
@@ -48,6 +53,8 @@ export class BotProjectProvision {
     this.accessToken = config.accessToken;
     this.graphToken = config.graphToken;
   }
+
+  private sleep = (waitTimeInMs) => new Promise((resolve) => setTimeout(resolve, waitTimeInMs));
 
   /*******************************************************************************************************************************/
   /* This section has to do with creating new Azure resources
@@ -101,19 +108,32 @@ export class BotProjectProvision {
     // documented here: https://docs.microsoft.com/en-us/graph/api/resources/application?view=graph-rest-1.0#properties
     // we need the `appId` and `id` fields - appId is part of our configuration, and the `id` is used to set the password.
     let appCreated;
-    try {
-      appCreated = await rp.post(applicationUri, appCreateOptions);
-    } catch (err) {
+    let retryCount = 3;
+    while (retryCount >= 0) {
+      try {
+        appCreated = await rp.post(applicationUri, appCreateOptions);
+      } catch (err) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `App create failed, retrying ...`,
+        });
+        if (retryCount == 0) {
+          throw createCustomizeError(
+            ProvisionErrors.CREATE_APP_REGISTRATION,
+            'App create failed! Please file an issue on Github.'
+          );
+        } else {
+          await this.sleep(3000);
+          retryCount--;
+          continue;
+        }
+      }
       this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `App create failed: ${JSON.stringify(err, null, 4)}`,
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `Start to add password for App, Id : ${appCreated.appId}`,
       });
-      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'App create failed!');
+      break;
     }
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `Start to add password for App, Id : ${appCreated.appId}`,
-    });
 
     const appId = appCreated.appId;
 
@@ -131,16 +151,28 @@ export class BotProjectProvision {
     } as rp.RequestPromiseOptions;
 
     let passwordSet;
-    try {
-      passwordSet = await rp.post(addPasswordUri, setSecretOptions);
-    } catch (err) {
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `Add application password failed: ${JSON.stringify(err, null, 4)}`,
-      });
-      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION, 'Add application password failed!');
+    retryCount = 3;
+    while (retryCount >= 0) {
+      try {
+        passwordSet = await rp.post(addPasswordUri, setSecretOptions);
+      } catch (err) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `Add application password failed, retrying ...`,
+        });
+        if (retryCount == 0) {
+          throw createCustomizeError(
+            ProvisionErrors.CREATE_APP_REGISTRATION,
+            'Add application password failed! Please file an issue on Github.'
+          );
+        } else {
+          await this.sleep(3000);
+          retryCount--;
+          continue;
+        }
+      }
+      break;
     }
-
     const appPassword = passwordSet.secretText;
 
     this.logger({
@@ -192,31 +224,35 @@ export class BotProjectProvision {
    * Provision a set of Azure resources for use with a bot
    */
   public async create(config: ProvisionConfig) {
+    // this object collects all of the various configuration output
+    const provisionResults = {
+      success: false,
+      provisionedCount: 0,
+      errorMessage: null,
+      subscriptionId: null,
+      appId: null,
+      appPassword: null,
+      resourceGroup: null,
+      webApp: null,
+      luisPrediction: null,
+      luisAuthoring: null,
+      blobStorage: null,
+      cosmosDB: null,
+      appInsights: null,
+      qna: null,
+      botName: null,
+      tenantId: this.tenantId,
+    };
+
     try {
       // ensure a tenantId is available.
       if (!this.tenantId) {
         this.tenantId = await this.getTenantId();
+        provisionResults.tenantId = this.tenantId;
       }
 
       // tokenCredentials is used for authentication across the API calls
       const tokenCredentials = new TokenCredentials(this.accessToken);
-
-      // this object collects all of the various configuration output
-      const provisionResults = {
-        subscriptionId: null,
-        appId: null,
-        appPassword: null,
-        resourceGroup: null,
-        webApp: null,
-        luisPrediction: null,
-        luisAuthoring: null,
-        blobStorage: null,
-        cosmosDB: null,
-        appInsights: null,
-        qna: null,
-        botName: null,
-        tenantId: this.tenantId,
-      };
 
       const resourceGroupName = config.resourceGroup ?? config.hostname;
 
@@ -296,6 +332,7 @@ export class BotProjectProvision {
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname,
+              workerRuntime: config.workerRuntime,
             });
             provisionResults.webApp = {
               hostname: functionsHostName,
@@ -377,22 +414,30 @@ export class BotProjectProvision {
               name: `${config.hostname}-qna`,
             });
             break;
+
+          default:
+            continue;
         }
+
+        provisionResults.provisionedCount += 1;
       }
+
+      provisionResults.success = true;
 
       // TODO: NOT SURE WHAT THIS DOES! Something about tracking what deployments happen because of composer?
       // await this.azureResourceManagementClient.deployDeploymentCounter({
       //   resourceGroupName: resourceGroupName,
       //   name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb', // WHAT IS THIS CONSTANT???
       // });
-
-      return provisionResults;
     } catch (err) {
+      const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+        message: errorMessage,
       });
-      throw stringifyError(err);
+      provisionResults.errorMessage = errorMessage;
     }
+
+    return provisionResults;
   }
 }

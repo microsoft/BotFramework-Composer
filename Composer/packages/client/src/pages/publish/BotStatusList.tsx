@@ -7,21 +7,64 @@ import moment from 'moment';
 import formatMessage from 'format-message';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import React, { useState, Fragment, useMemo } from 'react';
+import React, { useState, Fragment, useMemo, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishResult } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
+import { useCopyToClipboard } from '@bfc/ui-shared';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
+
+const copiedCalloutStyles = {
+  root: {
+    padding: '10px',
+  },
+};
+
+type SkillManifestUrlFieldProps = {
+  url: string;
+};
+
+const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
+  const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(url);
+
+  const calloutTarget = useRef<HTMLElement>();
+  return (
+    <Fragment>
+      <ActionButton
+        className="skill-manifest-copy-button"
+        title={url}
+        onClick={(e) => {
+          calloutTarget.current = e.target as HTMLElement;
+          copyTextToClipboard();
+        }}
+      >
+        {formatMessage('Copy Skill Manifest URL')}
+      </ActionButton>
+      {isCopiedToClipboard && (
+        <Callout
+          setInitialFocus
+          calloutMaxWidth={200}
+          styles={copiedCalloutStyles}
+          target={calloutTarget.current}
+          onDismiss={resetIsCopiedToClipboard}
+        >
+          {formatMessage('Skill manifest URL was copied to the clipboard')}
+        </Callout>
+      )}
+    </Fragment>
+  );
+};
 
 export type BotStatusListProps = {
   botStatusList: BotStatus[];
@@ -50,8 +93,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
 
   const displayedItems: BotStatus[] = useMemo(() => {
-    if (currentSort.key !== 'Bot') return botStatusList;
-    if (currentSort.descending) return botStatusList;
+    if (currentSort.key !== 'Bot' || currentSort.descending) {
+      return botStatusList.slice();
+    }
     return botStatusList.slice().reverse();
   }, [botStatusList, currentSort]);
 
@@ -241,6 +285,19 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       data: 'string',
       onRender: (item: BotStatus) => {
         return <span>{item.comment}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'SkillManifest',
+      name: '',
+      className: 'skillManifest',
+      fieldName: 'skillManifestUrl',
+      minWidth: 114,
+      maxWidth: 134,
+      data: 'string',
+      onRender: (item: BotStatus) => {
+        return item?.skillManifestUrl && <SkillManifestUrlField url={item.skillManifestUrl} />;
       },
       isPadded: true,
     },

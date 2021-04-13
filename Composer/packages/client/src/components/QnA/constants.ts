@@ -5,24 +5,44 @@ import { QnAFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { FieldValidator } from '../../hooks/useForm';
+import { getBaseName } from '../../utils/fileUtil';
 
 export type CreateQnAFromScratchFormData = {
   name: string;
 };
+
 export type CreateQnAFromUrlFormData = {
-  url: string;
+  urls: string[];
+  locales: string[];
   name: string;
   multiTurn: boolean;
 };
 
+export type CreateQnAFromUrlFormDataErrors = {
+  urls: string[];
+  name: string;
+};
+
 export type CreateQnAFormData = {
-  url?: string;
+  urls?: string[];
+  locales?: string[];
   name: string;
   multiTurn?: boolean;
 };
 
 export type CreateQnAFromModalProps = {
   projectId: string;
+  dialogId: string;
+  qnaFiles: QnAFile[];
+  subscriptionKey?: string;
+  onDismiss?: () => void;
+  onSubmit: (formData: CreateQnAFormData) => void;
+};
+
+export type CreateQnAFromUrlModalProps = {
+  projectId: string;
+  locales: string[];
+  defaultLocale: string;
   dialogId: string;
   qnaFiles: QnAFile[];
   subscriptionKey?: string;
@@ -52,7 +72,9 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
         );
       }
 
-      const duplicatedItemIndex = sources.findIndex((item) => item.id.toLowerCase() === `${name.toLowerCase()}.source`);
+      const duplicatedItemIndex = sources.findIndex(
+        (item) => getBaseName(item.id.toLowerCase()) === `${name.toLowerCase()}.source`
+      );
       if (duplicatedItemIndex > -1) {
         currentError = formatMessage('You already have a KB with that name. Choose another name and try again.');
       }

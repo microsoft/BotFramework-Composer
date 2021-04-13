@@ -8,7 +8,7 @@ import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
 
-import { CreationFlowStatus } from '../../../constants';
+import { CreationFlowStatus, firstPartyTemplateFeed } from '../../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -40,6 +40,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     updateFolder,
     saveTemplateId,
     fetchRecentProjects,
+    fetchFeed,
     openProject,
     saveProjectAs,
     fetchProjectById,
@@ -75,7 +76,8 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
-
+    await fetchTemplatesV2([firstPartyTemplateFeed]);
+    fetchFeed();
     fetchRecentProjects();
   };
 
@@ -127,6 +129,8 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       description: formData.description,
       location: formData.location,
       schemaUrl: formData.schemaUrl,
+      runtimeType: formData.runtimeType,
+      runtimeLanguage: formData.runtimeLanguage,
       appLocale,
       qnaKbUrls,
       templateDir: formData?.pvaData?.templateDir,
@@ -159,11 +163,11 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (templateName: string, urlData?: string) => {
+  const handleCreateNext = async (templateName: string, runtimeLanguage: string, urlData?: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     const navString = urlData
-      ? `./create/${encodeURIComponent(templateName)}${urlData}`
-      : `./create/${encodeURIComponent(templateName)}`;
+      ? `./create/${runtimeLanguage}/${encodeURIComponent(templateName)}${urlData}`
+      : `./create/${runtimeLanguage}/${encodeURIComponent(templateName)}`;
     navigate(navString);
   };
 
@@ -174,7 +178,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
         <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
-          path="create/:templateId"
+          path="create/:runtimeLanguage/:templateId"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}

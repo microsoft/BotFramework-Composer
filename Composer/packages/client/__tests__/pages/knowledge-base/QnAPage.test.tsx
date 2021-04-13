@@ -6,6 +6,7 @@ import React from 'react';
 import QnAPage from '../../../src/pages/knowledge-base/QnAPage';
 import TableView from '../../../src/pages/knowledge-base/table-view';
 import CodeEditor from '../../../src/pages/knowledge-base/code-editor';
+import { TabHeader } from '../../../src/pages/knowledge-base/TabHeader';
 import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
@@ -49,7 +50,7 @@ const state = {
   ],
   settings: {
     defaultLanguage: 'en-us',
-    languages: ['en-us', 'fr-fr'],
+    languages: ['en-us', 'zh-cn'],
   },
 };
 
@@ -70,7 +71,7 @@ const initRecoilState = ({ set }) => {
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
     const { getByTestId, getByText } = renderWithRecoil(
-      <TableView dialogId={'a'} projectId={state.projectId} skillId={state.skillId} />,
+      <TableView dialogId={'a'} locale={state.locale} projectId={state.projectId} skillId={state.skillId} />,
       initRecoilState
     );
     getByTestId('table-view');
@@ -79,7 +80,7 @@ describe('QnA page all up view', () => {
 
   it('should render QnA page code editor', () => {
     renderWithRecoil(
-      <CodeEditor dialogId={'a'} projectId={state.projectId} skillId={state.skillId} />,
+      <CodeEditor dialogId={'a'} locale={state.locale} projectId={state.projectId} skillId={state.skillId} />,
       initRecoilState
     );
   });
@@ -87,5 +88,19 @@ describe('QnA page all up view', () => {
   it('should render QnA page', () => {
     const { getByTestId } = renderWithRecoil(<QnAPage dialogId={'a'} projectId={state.projectId} />, initRecoilState);
     getByTestId('QnAPage');
+  });
+
+  it('should render QnA page TabHeader', () => {
+    const { getByText } = renderWithRecoil(
+      <TabHeader
+        defaultLanguage={state.settings.defaultLanguage}
+        languages={state.settings.languages}
+        locale={'en-us'}
+        onChangeLocale={() => {}}
+      />,
+      initRecoilState
+    );
+    getByText('English (United States)(Default)');
+    getByText('Chinese (Simplified, China)');
   });
 });

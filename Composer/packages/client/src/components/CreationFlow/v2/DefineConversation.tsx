@@ -15,14 +15,16 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
+import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage, defaultRuntime } from '../../../constants';
+import { DialogCreationCopy, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
-import { dispatcherState } from '../../../recoilModel';
+import { dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
 
@@ -70,8 +72,8 @@ type DefineConversationFormData = {
   name: string;
   description: string;
   schemaUrl: string;
-  primaryLanguage: string;
-  runtimeChoice: string;
+  runtimeLanguage: string;
+  runtimeType: RuntimeType;
   location?: string;
   templateVersion?: string;
   profile?: Profile; // abs payload to create bot
@@ -96,6 +98,7 @@ type DefineConversationProps = {
   focusedStorageFolder: StorageFolder;
 } & RouteComponentProps<{
   templateId: string;
+  runtimeLanguage: string;
   location: string;
 }>;
 
@@ -111,13 +114,15 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   } = props;
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
+  const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
+  const templateProjects = useRecoilValue(templateProjectsState);
 
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = (templateId?: string) => {
     if (templateId) {
       // use almost the same patterns as in assetManager.ts
       return templateId
-        .replace(/^@microsoft\/generator-microsoft-bot-/, '') // clean up our complex package names
+        .replace(/^@microsoft\/generator-bot-/, '') // clean up our complex package names
         .replace(/^generator-/, '') // clean up other package names too
         .trim()
         .replace(/-/, '_')
@@ -171,10 +176,10 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     description: {
       required: false,
     },
-    primaryLanguage: {
+    runtimeLanguage: {
       required: false,
     },
-    runtimeChoice: {
+    runtimeType: {
       required: false,
     },
     schemaUrl: {
@@ -201,8 +206,8 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
-      primaryLanguage: defaultPrimaryLanguage,
-      runtimeChoice: defaultRuntime,
+      runtimeLanguage: runtimeLanguage,
+      runtimeType: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
       location:
@@ -278,7 +283,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = await getAliasFromPayload(source, payload);
         }
       }
-
       onSubmit({ ...dataToSubmit }, templateId || '');
     },
     [hasErrors, formData]
@@ -287,6 +291,30 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const onCurrentPathUpdateWrap = (newPath: string, storageId?: string) => {
     onCurrentPathUpdate(newPath, storageId);
     updateField('location', newPath);
+  };
+
+  const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
+    const result: IDropdownOption[] = [];
+    const currentTemplate = templateProjects.find((t) => {
+      if (t?.id) {
+        return t.id === templateId;
+      }
+    });
+
+    if (currentTemplate) {
+      if (runtimeLanguage === csharpFeedKey) {
+        currentTemplate.dotnetSupport?.functionsSupported &&
+          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+        currentTemplate.dotnetSupport?.webAppSupported &&
+          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+      } else if (runtimeLanguage === nodeFeedKey) {
+        currentTemplate.nodeSupport?.functionsSupported &&
+          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+        currentTemplate.nodeSupport?.webAppSupported &&
+          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+      }
+    }
+    return result;
   };
 
   useEffect(() => {
@@ -311,6 +339,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
 
   return (
+    // TODO remove runtime language drop down prior to merging as that data is indicated by the tab chosen
     <Fragment>
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
@@ -336,6 +365,17 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 styles={description}
                 value={formData.description}
                 onChange={(_e, val) => updateField('description', val)}
+              />
+            </StackItem>
+          </Stack>
+          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+            <StackItem grow={0} styles={halfstack}>
+              <Dropdown
+                data-testid="NewDialogRuntimeType"
+                label={formatMessage('Runtime type')}
+                options={getSupportedRuntimesForTemplate()}
+                selectedKey={formData.runtimeType}
+                onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
               />
             </StackItem>
           </Stack>

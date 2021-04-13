@@ -102,12 +102,11 @@ describe('getAttachment handler', () => {
     getAttachmentHandler(req, res);
 
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      errorDetails: 'There is no original view',
-      logType: 'Error',
-      message: 'Unable to fetch attachment data. BadArgument',
-      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
-      status: 404,
-      timestamp: '2021-02-19 00:00:00',
+      error: {
+        errorDetails: 'There is no original view',
+        message: 'Unable to fetch attachment data. BadArgument',
+        status: 404,
+      },
     });
   });
 
@@ -125,12 +124,11 @@ describe('getAttachment handler', () => {
     getAttachmentHandler(req, res);
 
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      errorDetails: 'There is no thumbnail view',
-      logType: 'Error',
-      message: 'Unable to fetch attachment data. BadArgument',
-      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
-      status: 404,
-      timestamp: '2021-02-19 00:00:00',
+      error: {
+        errorDetails: 'There is no thumbnail view',
+        message: 'Unable to fetch attachment data. BadArgument',
+        status: 404,
+      },
     });
   });
 
@@ -148,11 +146,10 @@ describe('getAttachment handler', () => {
     getAttachmentHandler(req, res);
 
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      logType: 'Error',
-      message: 'attachment[attach1] not found. BadArgument',
-      status: 404,
-      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
-      timestamp: '2021-02-19 00:00:00',
+      error: {
+        message: 'attachment[attach1] not found. BadArgument',
+        status: 404,
+      },
     });
   });
 
@@ -170,11 +167,10 @@ describe('getAttachment handler', () => {
     getAttachmentHandler(req, res);
 
     expect(mockJsonResponse).toHaveBeenCalledWith({
-      logType: 'Error',
-      message: 'attachment[undefined] not found. BadArgument',
-      status: 404,
-      route: 'GET /v3/attachments/:attachmentId/views/:viewId',
-      timestamp: '2021-02-19 00:00:00',
+      error: {
+        message: 'attachment[undefined] not found. BadArgument',
+        status: 404,
+      },
     });
   });
 });

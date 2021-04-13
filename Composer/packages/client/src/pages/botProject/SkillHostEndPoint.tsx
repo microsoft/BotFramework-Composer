@@ -72,7 +72,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   return (
     <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={title}>
       <TextField
-        aria-label={formatMessage('Skill host endpoint')}
+        ariaLabel={formatMessage('Skill host endpoint url')}
         data-testid={'SkillHostEndPointTextField'}
         label={formatMessage('Skill host endpoint url')}
         placeholder={formatMessage('Enter Skill host endpoint url')}

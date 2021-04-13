@@ -55,9 +55,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
   const skillLuisKey = groupLUISAuthoringKey[projectId];
-  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
-  const rootLuisEndpointKey = groupLUISEndpointKey.root;
-  const skillLuisEndpointKey = groupLUISEndpointKey[projectId];
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const skillLuisRegion = groupLUISRegion[projectId];
@@ -73,7 +70,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
-  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
@@ -141,18 +137,11 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
     });
   };
 
-  const handleLUISEndpointKeyOnBlur = (value) => {
-    setSettings(projectId, {
-      ...mergedSettings,
-      luis: { ...mergedSettings.luis, endpointKey: value ?? '' },
-    });
-  };
-
   return (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-label={formatMessage('LUIS application name')}
+          ariaLabel={formatMessage('LUIS application name')}
           data-testid={'skillLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('LUIS application name')}
@@ -174,18 +163,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             required={isLUISKeyNeeded}
             value={skillLuisKey}
             onBlur={handleLUISKeyOnBlur}
-          />
-        </div>
-        <div ref={luisEndpointKeyFieldRef}>
-          <FieldWithCustomButton
-            ariaLabel={formatMessage('LUIS endpoint key')}
-            buttonText={formatMessage('Use custom LUIS endpoint key')}
-            id={'luisEndpointKey'}
-            label={formatMessage('LUIS endpoint key')}
-            placeholder={formatMessage('Enter LUIS endpoint key')}
-            placeholderOnDisable={rootLuisEndpointKey}
-            value={skillLuisEndpointKey}
-            onBlur={handleLUISEndpointKeyOnBlur}
           />
         </div>
         <div ref={luisRegionFieldRef}>

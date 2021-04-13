@@ -5,10 +5,11 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, FileExtensions, FeedType } from '@bfc/extension';
+import { UserIdentity, FileExtensions, FeedType, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
-import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from '@bfc/shared';
 import { ServerWorker } from '@bfc/server-workers';
+import isArray from 'lodash/isArray';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -96,6 +97,8 @@ export class AssetManager {
     projectName: string,
     ref: LocationRef,
     jobId: string,
+    runtimeType: RuntimeType,
+    runtimeLanguage: FeedName,
     user?: UserIdentity
   ): Promise<LocationRef> {
     try {
@@ -120,12 +123,13 @@ export class AssetManager {
           dstDir,
           projectName,
           templateGeneratorPath,
+          runtimeType,
+          runtimeLanguage,
         },
         (status, msg) => {
           BackgroundProcessManager.updateProcess(jobId, status, msg);
         }
       );
-
       return ref;
     } catch (err) {
       if (err?.message.match(/npm/)) {
@@ -262,11 +266,12 @@ export class AssetManager {
       const res = await fetch(feedUrl);
       const data = await res.json();
       const feedType = this.getFeedType();
+
       if (feedType === 'npm') {
         return data.objects.map((result) => {
-          const { name, version, description = '' } = result.package;
+          const { name, version, keywords, description = '' } = result.package;
           const displayName = this.getPackageDisplayName(name);
-          return {
+          const templateToReturn = {
             id: name,
             name: displayName,
             description: description,
@@ -276,6 +281,21 @@ export class AssetManager {
               packageVersion: version,
             },
           } as BotTemplate;
+          if (isArray(keywords)) {
+            if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
+              templateToReturn.dotnetSupport = {
+                functionsSupported: keywords.includes('bf-dotnet-functions'),
+                webAppSupported: keywords.includes('bf-dotnet-webapp'),
+              };
+            }
+            if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
+              templateToReturn.nodeSupport = {
+                functionsSupported: keywords.includes('bf-js-functions'),
+                webAppSupported: keywords.includes('bf-js-webapp'),
+              };
+            }
+          }
+          return templateToReturn;
         });
       } else if (feedType === 'nuget') {
         // TODO: handle nuget processing

@@ -6,7 +6,6 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { createDirectLine } from 'botframework-webchat';
 import moment from 'moment';
-import { DirectLineLog } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 export type User = {
@@ -255,7 +254,7 @@ export class ConversationService {
       });
     } catch (ex) {
       const response: AxiosResponse = ex.response;
-      const err: DirectLineLog = {
+      const err = {
         timestamp: getDateTimeFormatted(),
         route: 'conversations/ws/port',
         status: response.status,
@@ -277,7 +276,7 @@ export class ConversationService {
       });
     } catch (ex) {
       const response: AxiosResponse = ex.response;
-      const err: DirectLineLog = {
+      const err = {
         timestamp: getDateTimeFormatted(),
         route: response.request?.path ?? '',
         status: response.status,

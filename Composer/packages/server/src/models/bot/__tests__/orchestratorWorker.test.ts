@@ -4,7 +4,7 @@
 import { LabelResolver, Utility, Orchestrator } from '@microsoft/bf-orchestrator';
 import { pathExists, readdir, readJson } from 'fs-extra';
 
-import { cache, warmUpCache } from '../process/orchestratorWorker';
+import { cache, handleMessage, warmUpCache } from '../process/orchestratorWorker';
 
 jest.mock('@microsoft/bf-orchestrator');
 jest.mock('fs-extra', () => ({
@@ -157,5 +157,29 @@ describe('Orchestrator Warmup Cache', () => {
       ]),
       false
     );
+  });
+
+  it('process.send is called with error message back to orchestratorBuilder', () => {
+    (Orchestrator.getLabelResolversAsync as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('Something bad happened');
+    });
+
+    const processSpy = jest.spyOn(process, 'send');
+
+    return handleMessage({
+      id: '1',
+      payload: {
+        type: 'warmup',
+        projectId: 'abc',
+        modelPath: './modelPath',
+        files: [],
+        generatedFolderPath: './generatedFolder',
+      },
+    }).then(() => {
+      expect(processSpy).toHaveBeenCalledWith({
+        error: { message: 'Something bad happened', stack: expect.anything() },
+        id: '1',
+      });
+    });
   });
 });

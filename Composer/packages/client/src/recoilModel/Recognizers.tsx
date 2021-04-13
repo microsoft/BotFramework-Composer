@@ -1,7 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, LuFile, QnAFile, SDKKinds, RecognizerFile, LuProviderType } from '@bfc/shared';
+import {
+  DialogInfo,
+  LuFile,
+  QnAFile,
+  SDKKinds,
+  RecognizerFile,
+  LuProviderType,
+  QnALocales,
+  LUISLocales,
+} from '@bfc/shared';
 import React, { useEffect, useRef } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useRecoilValue } from 'recoil';
@@ -56,6 +65,8 @@ export const OrchestratorRecognizerTemplate = (target: string, fileName: string)
     $kind: SDKKinds.OrchestratorRecognizer,
     modelFolder: `=settings.orchestrator.models.${locale}`,
     snapshotFile: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
+    detectAmbiguousIntents: true,
+    disambiguationScoreThreshold: 0.05,
   };
 };
 
@@ -63,15 +74,22 @@ export const getMultiLanguagueRecognizerDialog = (
   target: string,
   files: { empty: boolean; id: string }[],
   fileType: 'lu' | 'qna',
+  supportedLanguages: string[] = [],
   defaultLanguage = 'en-us'
 ) => {
   const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target, fileType);
-
+  const defaultLanguageFile = files.find((f) => getExtension(f.id) === defaultLanguage);
+  if (!defaultLanguageFile) throw new Error('default language file not found');
   files.forEach((item) => {
     if (item.empty || getBaseName(item.id) !== target) return;
     const locale = getExtension(item.id);
     const fileName = `${item.id}.${fileType}`;
-    multiLanguageRecognizer.recognizers[locale] = fileName;
+    if (supportedLanguages.includes(locale)) {
+      multiLanguageRecognizer.recognizers[locale] = fileName;
+    } else {
+      multiLanguageRecognizer.recognizers[locale] = `${defaultLanguageFile.id}.${fileType}`;
+    }
+
     if (locale === defaultLanguage) {
       multiLanguageRecognizer.recognizers[''] = fileName;
     }
@@ -125,17 +143,30 @@ export const generateRecognizers = (
   dialog: DialogInfo,
   luFiles: LuFile[],
   qnaFiles: QnAFile[],
-  luProvide?: LuProviderType
+  luProvide?: LuProviderType,
+  defaultLanguage = 'en-us'
 ) => {
   const isCrossTrain = isCrossTrainedRecognizerSet(dialog);
   const luisRecognizers =
     luProvide === SDKKinds.OrchestratorRecognizer
       ? getOrchestratorRecognizerDialogs(dialog.id, luFiles)
       : getLuisRecognizerDialogs(dialog.id, luFiles);
-  const luMultiLanguageRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu');
+  const luMultiLanguageRecognizer = getMultiLanguagueRecognizerDialog(
+    dialog.id,
+    luFiles,
+    'lu',
+    LUISLocales,
+    defaultLanguage
+  );
 
   const crossTrainedRecognizer = getCrossTrainedRecognizerDialog(dialog.id, luFiles, qnaFiles);
-  const qnaMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, qnaFiles, 'qna');
+  const qnaMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(
+    dialog.id,
+    qnaFiles,
+    'qna',
+    QnALocales,
+    defaultLanguage
+  );
   const qnaMakeRecognizers = getQnAMakerRecognizerDialogs(dialog.id, qnaFiles);
 
   return {
@@ -167,6 +198,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const settings = useRecoilValue(settingsState(projectId));
+  const defaultLanguage = settings.defaultLanguage;
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const curRecognizersRef = useRef(curRecognizers);
   const filePersistence = useRecoilValue(filePersistenceState(projectId));
@@ -189,7 +221,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
           crossTrainedRecognizer,
           qnaMultiLanguagueRecognizer,
           qnaMakeRecognizers,
-        } = generateRecognizers(dialog, filteredLus, filteredQnas, luProvide);
+        } = generateRecognizers(dialog, filteredLus, filteredQnas, luProvide, defaultLanguage);
 
         if (luisRecognizers.length) {
           recognizers.push(luMultiLanguageRecognizer);
@@ -206,7 +238,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
     if (!isEqual([...recognizers].sort(), [...curRecognizersRef.current].sort())) {
       setRecognizers(recognizers);
     }
-  }, [dialogs, luFiles, qnaFiles, filePersistence]);
+  }, [dialogs, luFiles, qnaFiles, filePersistence, defaultLanguage]);
 
   useEffect(() => {
     try {

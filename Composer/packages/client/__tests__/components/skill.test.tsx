@@ -44,33 +44,38 @@ describe('Skill page', () => {
 
 describe('<SkillForm />', () => {
   it('should render the skill form, and update skill manifest url', () => {
-    jest.useFakeTimers();
+    try {
+      jest.useFakeTimers();
 
-    (httpClient.get as jest.Mock).mockResolvedValue({ endpoints: [] });
+      (httpClient.get as jest.Mock).mockResolvedValue({ endpoints: [] });
 
-    const onDismiss = jest.fn();
-    const onSubmit = jest.fn();
-    const { getByLabelText, getByText } = renderWithRecoil(
-      <CreateSkillModal projectId={projectId} onDismiss={onDismiss} onSubmit={onSubmit} />,
-      recoilInitState
-    );
+      const onDismiss = jest.fn();
+      const onSubmit = jest.fn();
+      const { getByLabelText, getByText } = renderWithRecoil(
+        <CreateSkillModal projectId={projectId} onDismiss={onDismiss} onSubmit={onSubmit} />,
+        recoilInitState
+      );
 
-    const urlInput = getByLabelText('Manifest url');
-    act(() => {
-      fireEvent.change(urlInput, {
-        target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
+      const urlInput = getByLabelText('Manifest url');
+      act(() => {
+        fireEvent.change(urlInput, {
+          target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
+        });
       });
-    });
 
-    expect(urlInput.getAttribute('value')).toBe(
-      'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
-    );
+      expect(urlInput.getAttribute('value')).toBe(
+        'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
+      );
 
-    const submitButton = getByText('Confirm');
-    act(() => {
-      fireEvent.click(submitButton);
-    });
-    expect(onSubmit).not.toBeCalled();
+      const submitButton = getByText('Confirm');
+      act(() => {
+        fireEvent.click(submitButton);
+      });
+      expect(onSubmit).not.toBeCalled();
+    } finally {
+      jest.runOnlyPendingTimers();
+      jest.useRealTimers();
+    }
   });
 
   let formDataErrors;

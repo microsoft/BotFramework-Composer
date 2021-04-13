@@ -156,7 +156,7 @@ export const FieldWithCustomButton: React.FC<Props> = (props) => {
     id,
     label,
     required,
-    'aria-label': ariaLabel,
+    ariaLabel,
   };
   const commonDisabledProps = {
     disabled: true,
