@@ -14,6 +14,7 @@ import { CheckNameAvailabilityResponseBody } from '@azure/arm-botservice/esm/mod
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
+import sortBy from 'lodash/sortBy';
 
 import { AzureResourceTypes } from '../types';
 import {
@@ -45,11 +46,7 @@ export const getSubscriptions = async (token: string): Promise<Array<Subscriptio
       });
       throw new Error(subscriptionsResult._response.bodyAsText);
     }
-    return subscriptionsResult._response.parsedBody.sort((a, b) => {
-      const nameA = a.displayName.toUpperCase();
-      const nameB = b.displayName.toUpperCase();
-      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-    });
+    return sortBy(subscriptionsResult._response.parsedBody, ['displayName']);
   } catch (err) {
     let message = JSON.stringify(err, Object.getOwnPropertyNames(err));
     if (err?.code === 12 && err?.message?.match(/Bearer/gi)) {
@@ -85,11 +82,7 @@ export const getResourceGroups = async (token: string, subscriptionId: string): 
       });
       return [];
     }
-    return resourceGroupsResult._response.parsedBody.sort((a, b) => {
-      const nameA = a.name.toUpperCase();
-      const nameB = b.name.toUpperCase();
-      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-    });
+    return sortBy(resourceGroupsResult._response.parsedBody, ['name']);
   } catch (err) {
     logger({
       status: AzureAPIStatus.ERROR,

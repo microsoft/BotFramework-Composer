@@ -31,7 +31,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
   const renderLoadingSpinner = () => {
     return (
       <div css={container}>
-        <Spinner label={message || formatMessage('Loading')} />
+        <Spinner label={message ?? formatMessage('Loading')} />
       </div>
     );
   };
