@@ -8,6 +8,8 @@ import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ActionButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { useBoolean } from '@uifabric/react-hooks';
+import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -15,8 +17,6 @@ import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 import { actionButton } from './styles';
-import { useBoolean } from '@uifabric/react-hooks';
-import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
 // -------------------- CreatePublishProfileDialog -------------------- //
 
@@ -82,7 +82,7 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
           </ActionButton>
         </div>
         <DialogFooter>
-          <DefaultButton onClick={toggleHideDialog} text={formatMessage('Cancel')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={toggleHideDialog} />
         </DialogFooter>
       </Dialog>
       {showAuthDialog && (

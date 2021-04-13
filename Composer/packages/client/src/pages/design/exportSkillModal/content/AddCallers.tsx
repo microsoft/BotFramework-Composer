@@ -5,8 +5,11 @@
 import { jsx } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { ActionButton, css, FontWeights, TextField } from 'office-ui-fabric-react';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
+
 import { tableColumnHeader, tableRow, tableRowItem } from '../../../botProject/styles';
 import { ContentProps } from '../constants';
 
@@ -41,7 +44,7 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
     setCallers(callers.filter((_, i) => i !== index));
   };
   const handleAddNewAllowedCallerClick = () => {
-    var currentCallers = callers.slice();
+    const currentCallers = callers.slice();
     currentCallers?.push('0000-11111-00000-11111');
     setCallers(currentCallers);
   };
@@ -56,13 +59,13 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
           <div key={index} css={tableRow}>
             <div css={tableRowItem('90%')} title={caller}>
               <TextField
+                borderless
                 value={caller}
                 onChange={(e, newValue) => {
                   const currentCallers = callers.slice();
                   currentCallers[index] = newValue ?? '';
                   setCallers(currentCallers);
                 }}
-                borderless
               />
             </div>
             <div css={tableRowItem('10%')}>
