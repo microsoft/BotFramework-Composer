@@ -51,6 +51,7 @@ describe('web chat dispatcher', () => {
   it('should append a single web chat traffic item to the log', async () => {
     const trafficItem = {
       activity: {} as any,
+      id: '',
       timestamp: Date.now(),
       trafficType: 'activity' as 'activity',
     };
@@ -64,11 +65,13 @@ describe('web chat dispatcher', () => {
   it('should append multiple web chat traffic items to the log', async () => {
     const trafficItem1 = {
       activity: {} as any,
+      id: '',
       timestamp: Date.now(),
       trafficType: 'activity' as 'activity',
     };
     const trafficItem2 = {
       activity: {} as any,
+      id: '',
       timestamp: Date.now() + 5,
       trafficType: 'activity' as 'activity',
     };
@@ -82,6 +85,7 @@ describe('web chat dispatcher', () => {
   it('should clear traffic from the log', async () => {
     const trafficItem = {
       activity: {} as any,
+      id: '',
       timestamp: Date.now(),
       trafficType: 'activity' as 'activity',
     };
