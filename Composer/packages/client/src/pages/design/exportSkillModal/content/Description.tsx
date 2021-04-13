@@ -9,13 +9,13 @@ import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
-
-import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
-import { botDisplayNameState } from '../../../../recoilModel';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { LoadingSpinner } from '@bfc/ui-shared/lib/components/LoadingSpinner';
+
+import { botDisplayNameState } from '../../../../recoilModel';
+import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
 
 const styles = {
   row: css`
@@ -180,9 +180,9 @@ export const Description: React.FC<ContentProps> = ({
           {formatMessage('Manifest Version')}
         </Label>
         <Dropdown
+          disabled={!isFetchCompleted}
           errorMessage={errors?.version}
           options={options}
-          disabled={!isFetchCompleted}
           responsiveMode={ResponsiveMode.large}
           styles={{
             root: {

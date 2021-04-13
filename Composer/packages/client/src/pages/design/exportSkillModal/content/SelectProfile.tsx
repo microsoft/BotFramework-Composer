@@ -2,12 +2,15 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { css, Dropdown, Icon, IDropdownOption, TextField, TooltipHost } from 'office-ui-fabric-react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';

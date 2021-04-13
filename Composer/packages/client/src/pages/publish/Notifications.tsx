@@ -5,12 +5,12 @@ import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
 import { BotStatus } from './type';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes } from '@uifabric/fluent-theme';
 
 const cardContent = css`
   display: flex;

@@ -18,14 +18,14 @@ import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
 import { useCopyToClipboard } from '@bfc/ui-shared';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { ITooltipHostStyles, ITooltipStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+import { flexContentSpaceBetween } from '../language-understanding/styles';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
-import { ITooltipHostStyles, ITooltipStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { flexContentSpaceBetween } from '../language-understanding/styles';
 
 const copiedCalloutStyles = {
   root: {
@@ -197,8 +197,8 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
-            disabled={disableCheckbox}
             checked={checkedIds.includes(item.id)}
+            disabled={disableCheckbox}
             label={item.name}
             styles={{
               label: { width: '100%' },
