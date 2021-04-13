@@ -3,7 +3,7 @@
 
 import { Activity } from 'botframework-schema';
 
-import { createConversation, directLineGetLastResponse, directLineSendMessage } from './directLineAPI';
+import { createConversation, directLineGetLastResponse, directLineSendMessage } from './directLineApi';
 import { sleep } from './uitils';
 
 export class DirectLineUtils {
