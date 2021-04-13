@@ -11,15 +11,9 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import { Resizable } from 're-resizable';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { useRecoilValue } from 'recoil';
-import { useSetRecoilState } from 'recoil';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import {
-  debugPanelExpansionState,
-  debugPanelActiveTabState,
-  dispatcherState,
-  debugPaneHeight,
-} from '../../../recoilModel';
+import { debugPanelExpansionState, debugPanelActiveTabState, dispatcherState } from '../../../recoilModel';
 
 import {
   debugPaneContainerStyle,
@@ -43,7 +37,6 @@ export const DebugPanel: React.FC = () => {
   const isPanelExpanded = useRecoilValue(debugPanelExpansionState);
   const activeTab = useRecoilValue(debugPanelActiveTabState);
   const refElement = useRef<HTMLDivElement>(null);
-  const setDebugPanelHeight = useSetRecoilState(debugPaneHeight);
 
   const onExpandPanel = useCallback((activeTabKey: DebugDrawerKeys) => {
     setDebugPanelExpansion(true);
@@ -164,12 +157,6 @@ export const DebugPanel: React.FC = () => {
         }}
         maxHeight={isPanelExpanded ? debugPanelMaxExpandedHeight : computedPivotHeight}
         minHeight={isPanelExpanded ? debugPanelMinHeight : computedPivotHeight}
-        onResize={() => {
-          console.log('Height', refElement.current?.offsetHeight);
-          if (refElement.current?.offsetHeight) {
-            setDebugPanelHeight(refElement.current?.offsetHeight);
-          }
-        }}
       >
         <div
           css={css`

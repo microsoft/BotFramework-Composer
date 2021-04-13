@@ -351,11 +351,6 @@ export const userHasNodeInstalledState = atom<boolean>({
   default: true,
 });
 
-export const debugPaneHeight = atom<number>({
-  key: getFullyQualifiedKey('debugPaneHeight'),
-  default: 0,
-});
-
 export const webChatDataState = atom<Record<string, ChatData>>({
   key: getFullyQualifiedKey('webChatData'),
   default: {},
