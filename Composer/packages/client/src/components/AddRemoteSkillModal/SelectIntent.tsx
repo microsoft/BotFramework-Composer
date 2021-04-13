@@ -60,7 +60,7 @@ const columns = [
     minWidth: 300,
     isResizable: false,
     onRender: (item: string) => {
-      return <div>{item}</div>;
+      return <Fragment>{item}</Fragment>;
     },
   },
 ];
@@ -73,11 +73,15 @@ const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: strin
         value.map((item) => {
           // get lu file
           luFilePromise.push(
-            httpClient.get(`/utilities/retrieveRemoteFile`, {
-              params: {
-                url: item.url,
-              },
-            })
+            httpClient
+              .get(`/utilities/retrieveRemoteFile`, {
+                params: {
+                  url: item.url,
+                },
+              })
+              .catch((err) => {
+                console.error(err);
+              })
           );
         });
       }
@@ -129,7 +133,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const [triggerErrorMessage, setTriggerErrorMsg] = useState('');
 
-  const hasOrchestractor = useMemo(() => {
+  const hasOrchestrator = useMemo(() => {
     const fileName = `${dialogId}.${locale}.lu.dialog`;
     for (const file of curRecognizers) {
       if (file.id === fileName && file.content.$kind === SDKKinds.OrchestratorRecognizer) {
@@ -305,10 +309,10 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
                 styles={{ root: { marginLeft: '8px' } }}
-                text={page === 1 && hasOrchestractor ? formatMessage('Done') : formatMessage('Next')}
+                text={page === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
                 onClick={(ev) => {
                   if (page === 1) {
-                    if (hasOrchestractor) {
+                    if (hasOrchestrator) {
                       // skip orchestractor modal
                       handleSubmit(ev, true);
                     } else {

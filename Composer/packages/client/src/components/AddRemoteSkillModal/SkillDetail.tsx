@@ -13,7 +13,12 @@ interface SkillDetailProps {
       languages: object;
     };
     version: string;
-    activities: object;
+    activities: {
+      [key: string]: {
+        type: string;
+        name: string;
+      };
+    };
     publisherName: string;
     description: string;
     name: string;

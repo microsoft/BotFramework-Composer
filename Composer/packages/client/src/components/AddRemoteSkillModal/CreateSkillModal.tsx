@@ -192,12 +192,12 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
         <Fragment>
           <div style={{ marginBottom: '16px' }}>
             {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-              {formatMessage(' Get an overview ')}
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank" style={{ padding: '0 5px' }}>
+              {formatMessage('Get an overview')}
             </Link>
             or
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-              {formatMessage(' learn how to build a skill ')}
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank" style={{ padding: '0 5px' }}>
+              {formatMessage('learn how to build a skill')}
             </Link>
             {addSkillDialog.SKILL_MANIFEST_FORM.afterSubText}
           </div>
