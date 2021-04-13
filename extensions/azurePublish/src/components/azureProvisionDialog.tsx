@@ -326,7 +326,12 @@ export const AzureProvisionDialog: React.FC = () => {
     `;
 
     const instructions = formatMessage(
-      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      '1. Run the following command and provision Azure resources on my behalf.\n' +
+        '2. Copy and paste the output JSON file, and securely share with me.\n\n' +
+        'PROVISIONING COMMAND\n' +
+        '{command}' +
+        '\n\n' +
+        'Learn more: https://aka.ms/how-to-complete-provision-handoff',
       { command: provisionComposer }
     );
 
@@ -1102,10 +1107,13 @@ export const AzureProvisionDialog: React.FC = () => {
   return (
     <Fragment>
       <ProvisionHandoff
-        developerInstructions={formatMessage('Send this to your IT admin')}
+        developerInstructions={formatMessage(
+          'Copy and share this information with your Azure admin. After your publishing profile is provisioned, you will be able to publish your bot.'
+        )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
-        title={formatMessage('Generate a provisioning request')}
+        learnMoreLink="https://aka.ms/how-to-complete-provision-handoff"
+        title={formatMessage('Share resource request')}
         onBack={() => {
           setShowHandoff(false);
         }}
