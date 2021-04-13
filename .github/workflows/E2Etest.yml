@@ -1,9 +1,9 @@
 name: Composer E2E test
 
 on:
-  #push:
-  #  branches:
-  #    - hond/dailyCI
+  push:
+    branches:
+      - hond/dailyCI
   #schedule:
     #- cron: "0 0 * * *"
 
@@ -39,6 +39,5 @@ jobs:
       run: |
         sleep 30
         npm install
-        npm run build
         npm test
       working-directory: Composer/dailyCI

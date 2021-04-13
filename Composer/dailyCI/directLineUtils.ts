@@ -13,7 +13,24 @@ export class DirectLineUtils {
     this.token = token;
   }
 
-  public async sendMessage(text: string) {
+  /**
+   * Send message by directline.
+   * @param messageToSend Message to send.
+   * @returns Reply activities.
+   */
+  public async sendAndGetMessages(messageToSend: string): Promise<string[]> {
+    const messageId = await this.sendMessage(messageToSend);
+    const allActivitiesResult = await this.getLatestResponse();
+    const activities = allActivitiesResult.activities as Partial<Activity>[];
+    const replyToActivities = activities
+      .filter((element) => {
+        return element.replyToId === messageId.id;
+      })
+      .map((element) => element.text);
+    return replyToActivities;
+  }
+
+  private async sendMessage(text: string) {
     let retryCount = 3;
     while (retryCount > 0) {
       try {
@@ -30,7 +47,7 @@ export class DirectLineUtils {
     throw new Error(`sendMessage failed after 3 try times.`);
   }
 
-  public async getLatestResponse() {
+  private async getLatestResponse() {
     let responseMsg = undefined;
     let retryCount = 3;
     while (!responseMsg && retryCount > 0) {
@@ -45,17 +62,5 @@ export class DirectLineUtils {
       }
     }
     return responseMsg;
-  }
-
-  public async sendAndGetMessages(messageToSend: string): Promise<string[]> {
-    const messageId = await this.sendMessage(messageToSend);
-    const allActivitiesResult = await this.getLatestResponse();
-    const activities = allActivitiesResult.activities as Partial<Activity>[];
-    const replyToActivities = activities
-      .filter((element) => {
-        return element.replyToId === messageId.id;
-      })
-      .map((element) => element.text);
-    return replyToActivities;
   }
 }

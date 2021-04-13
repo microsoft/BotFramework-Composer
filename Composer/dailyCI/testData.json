@@ -1,0 +1,63 @@
+[
+  {
+    "packageName": "@microsoft/generator-bot-conversational-core",
+    "packageVersion": "1.0.0-rc3",
+    "metadata": {
+      "luResources": [
+        {
+          "id": "CancelDialog.en-us",
+          "isEmpty": true
+        },
+        {
+          "id": "HelpDialog.en-us",
+          "isEmpty": true
+        },
+        {
+          "id": "WelcomeDialog.en-us",
+          "isEmpty": true
+        },
+        {
+          "id": "",
+          "isEmpty": false
+        }
+      ],
+      "qnaResources": [
+        {
+          "id": "CancelDialog.en-us",
+          "isEmpty": true
+        },
+        {
+          "id": "HelpDialog.en-us",
+          "isEmpty": true
+        },
+        {
+          "id": "WelcomeDialog.en-us",
+          "isEmpty": true
+        },
+        {
+          "id": "",
+          "isEmpty": true
+        }
+      ]
+    },
+    "testdata": [
+      {
+        "sendMessage": "help",
+        "expectedResults": [
+          "I'm here to help with simple asks. I'm just a basic bot for now.",
+          "I'm a simple bot, I can help you with minimal requests.",
+          "For now, I can only help you with simple questions."
+        ]
+      },
+      {
+        "sendMessage": "balabala",
+        "expectedResults": [
+          "Sorry, I didn't get that",
+          "I'm not sure I understand. Can you please try again?",
+          "Hmm, I don't understand. Can you try to ask me in a different way.",
+          "I didn't get that. Would you mind rephrasing and try it again."
+        ]
+      }
+    ]
+  }
+]

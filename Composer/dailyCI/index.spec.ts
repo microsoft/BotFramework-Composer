@@ -19,31 +19,36 @@ import { DirectLineUtils } from './directLineUtils';
 
 jest.setTimeout(1000 * 60 * 10);
 
-const directlineToken = process.env.DAILY_CI_DIRECTLINE_TOKEN ?? '';
+const publishTarget = 'publish';
 
-function getPublishProfile(): Record<string, unknown> {
-  const publishFile = process.env.DAILY_CI_PUBLISH_FILE;
-  if (!publishFile) {
-    return undefined;
+const directlineToken = process.env.DAILY_CI_DIRECTLINE_TOKEN;
+
+async function getPublishProfile() {
+  const publishFileStr = process.env.DAILY_CI_PUBLISH_FILE;
+  if (!publishFileStr) {
+    const publishFilePath = path.resolve(__dirname, 'publishFile.json');
+    return await fs.readJSON(publishFilePath);
+  } else {
+    return JSON.parse(publishFileStr.trim());
   }
-
-  return JSON.parse(publishFile.trim());
 }
 
-async function setAppSettings(token: string, botId: string, botName: string, testPublishFile) {
-  let publishProfile = getPublishProfile();
-  if (!publishProfile) {
-    publishProfile = testPublishFile;
-  }
+async function setAppSettings(token: string, botId: string, botName: string) {
+  const publishProfile = await getPublishProfile();
+
   publishProfile.accessToken = token;
   const publishProfileStr = JSON.stringify(publishProfile);
 
-  const defaultSettingsPath = path.resolve(__dirname, 'defaultPublishSettings.json');
+  const defaultSettingsPath = path.resolve(__dirname, 'defaultSettings.json');
   const defaultSettings = await fs.readJSON(defaultSettingsPath);
   defaultSettings.luis.name = botName;
+  defaultSettings.luis.authoringKey = publishProfile.settings.luis.authoringKey;
+  defaultSettings.luis.endpointKey = publishProfile.settings.luis.endpointKey;
+  defaultSettings.qna.subscriptionKey = publishProfile.settings.qna.subscriptionKey;
+  defaultSettings.runtime.command = `dotnet run --project ${botName}.csproj`;
   defaultSettings.publishTargets = [
     {
-      name: botName,
+      name: publishTarget,
       type: 'azurePublish',
       configuration: publishProfileStr,
       lastPublished: Date.now(),
@@ -75,25 +80,26 @@ async function createTemplateProject(templateName: string, templateVersion: stri
   return responseData;
 }
 
-async function publishBot(botId: string, botName: string, testPublishFile, metadata): Promise<boolean> {
+async function publishBot(botId: string, botName: string, metadata): Promise<boolean> {
   const tokenResponse = await getAccessToken();
   const jsonResult = JSON.parse(tokenResponse);
   const token = jsonResult.accessToken;
 
-  const updateSettingsResult = await setAppSettings(token, botId, botName, testPublishFile);
+  const updateSettingsResult = await setAppSettings(token, botId, botName);
 
   if (!updateSettingsResult) {
     return false;
   }
 
-  const startPublishResult = await startPublish(token, botId, botName, metadata);
+  const publishFile = await getPublishProfile();
+  const startPublishResult = await startPublish(token, botId, publishTarget, metadata, publishFile, botName);
   if (!startPublishResult) {
     return false;
   }
 
   let message = undefined;
   while (message !== 'Success') {
-    const statusResult = await getPublishStatus(botId, botName);
+    const statusResult = await getPublishStatus(botId, publishTarget, startPublishResult.id);
     if (!statusResult) {
       return false;
     }
@@ -124,16 +130,13 @@ describe('test sample bot', () => {
 
       const templatesetting = templateSettings[0];
       const projectInfo = await createTemplateProject(packageName, packageVersion);
-      console.log('create project successfully.');
-      console.log(projectInfo);
+
       const botId = projectInfo.result.id;
       const botName = projectInfo.result.botName;
 
       // publish test
-      const publishResult = await publishBot(botId, botName, templatesetting.publishFile, templatesetting.metadata);
+      const publishResult = await publishBot(botId, botName, templatesetting.metadata);
       expect(publishResult).toBeTruthy();
-
-      console.log('publish project successfully.');
 
       // flow test
       const tester = new DirectLineUtils(directlineToken);
@@ -143,7 +146,6 @@ describe('test sample bot', () => {
         const expectedResults = test.expectedResults;
         expect(expectedResults).toContain(results[0].trim());
       }
-      console.log('test project successfully.');
     }
   });
 });

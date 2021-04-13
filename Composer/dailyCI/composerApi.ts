@@ -8,8 +8,10 @@ import { isSuccessful } from './uitils';
 
 const host = 'http://localhost:3000';
 
+/**
+ * Get all built-in templates.
+ */
 export async function getProjectTemplates() {
-  console.log('get templates');
   const response = await axios.default({
     url: `${host}/api/v2/assets/projectTemplates`,
     method: 'POST',
@@ -21,12 +23,15 @@ export async function getProjectTemplates() {
   if (!isSuccessful(response.status)) {
     throw new Error('GetProjectTemplates failed.');
   }
-  console.log(response.data);
   return response.data;
 }
 
+/**
+ * Create template bot with package.
+ * @param packageName The package name.
+ * @param packageVersion The package version.
+ */
 export async function createSampleBot(packageName: string, packageVersion: string) {
-  console.log(`create sample bot of template: ${packageName}@${packageVersion}`);
   if (!packageName || !packageVersion) {
     throw new Error('The sample data is not valid.');
   }
@@ -36,7 +41,7 @@ export async function createSampleBot(packageName: string, packageVersion: strin
     data: {
       description: 'description',
       location: 'D:/Bots', // TODO
-      name: 'testBot_' + uuidv4().replace(/-/g, '_'),
+      name: 'testBot' + uuidv4().replace(/-/g, ''),
       runtimeLanguage: 'dotnet',
       runtimeType: 'webapp',
       schemaUrl: '',
@@ -50,10 +55,13 @@ export async function createSampleBot(packageName: string, packageVersion: strin
     throw new Error('CreatesampleBot failed.');
   }
 
-  console.log(`create template job ${packageName}@${packageVersion} successfully.`);
   return response.data;
 }
 
+/**
+ * Get job status of the creation.
+ * @param jobId job id.
+ */
 export async function getJobStatus(jobId: string) {
   if (!jobId) {
     throw new Error('The job ID is not valid.');
@@ -66,12 +74,16 @@ export async function getJobStatus(jobId: string) {
   if (!isSuccessful(response.status)) {
     throw new Error('getJobStatus failed.');
   }
-  console.log(`get job ${jobId} status: ${response?.data?.message}`);
+
   return response.data;
 }
 
+/**
+ * Post app settings.
+ * @param defaultSettings Default app settings.
+ * @param botId Bot id.
+ */
 export async function setAppsettings(defaultSettings, botId: string) {
-  console.log(`set settings for bot: ${botId}`);
   const response = await axios.default({
     url: `${host}/api/projects/${botId}/files/appsettings.json`,
     method: 'PUT',
@@ -85,27 +97,48 @@ export async function setAppsettings(defaultSettings, botId: string) {
     throw new Error('CreatesampleBot failed.');
   }
 
-  console.log(response.data);
   return response.data;
 }
 
-export async function startPublish(token: string, botId: string, targetName: string, metadata) {
-  console.log(`start publish bot: ${botId}`);
+/**
+ * Publish Bot.
+ * @param token Access token.
+ * @param botId Bot id.
+ * @param targetName Publish target name.
+ * @param metadata Publish metadata.
+ * @param publishFile Publish file.
+ * @param botName Bot Name.
+ */
+export async function startPublish(
+  token: string,
+  botId: string,
+  targetName: string,
+  metadata,
+  publishFile,
+  botName: string
+) {
+  const luResources = metadata.luResources;
+  luResources[luResources.length - 1].id = `${botName}.en-us`;
+  const qnaResources = metadata.qnaResources;
+  qnaResources[qnaResources.length - 1].id = `${botName}.en-us`;
   const response = await axios.default({
     url: `${host}/api/publish/${botId}/publish/${targetName}`,
     method: 'POST',
     data: {
       accessToken: token,
-      metadata: metadata,
+      metadata: {
+        luResources: luResources,
+        qnaResources: qnaResources,
+      },
       sensitiveSettings: {
         MicrosoftAppPassword: '',
         luis: {
-          endpointKey: '',
-          authoringKey: '',
+          endpointKey: publishFile.settings.luis.endpointKey,
+          authoringKey: publishFile.settings.luis.authoringKey,
         },
         qna: {
           endpointKey: '',
-          subscriptionKey: '',
+          subscriptionKey: publishFile.settings.qna.subscriptionKey,
         },
       },
     },
@@ -115,21 +148,23 @@ export async function startPublish(token: string, botId: string, targetName: str
     throw new Error('CreatesampleBot failed.');
   }
 
-  console.log(response.data);
-
   return response.data;
 }
 
-export async function getPublishStatus(botId: string, targetName: string) {
-  console.log(`get publish status of bot: ${botId}`);
+/**
+ * Get publish status.
+ * @param botId Bot id.
+ * @param targetName Publish target name.
+ * @param jobId Job id.
+ */
+export async function getPublishStatus(botId: string, targetName: string, jobId: string) {
   const response = await axios.default({
-    url: `${host}/api/publish/${botId}/status/${targetName}`,
+    url: `${host}/api/publish/${botId}/status/${targetName}/${jobId}`,
     method: 'GET',
   });
 
   if (!isSuccessful(response.status)) {
     throw new Error('GetPublishStatus failed.');
   }
-  console.log(response.data);
   return response.data;
 }
