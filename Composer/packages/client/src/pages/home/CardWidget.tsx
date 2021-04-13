@@ -53,8 +53,8 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
   ...rest
 }) => {
   const defaultImageCover = cardType === 'video' ? defaultVideoCardCover : defaultArticleCardCover;
-  const [usedImageCover, setUsedImageCover] = useState(imageCover || defaultImageCover);
-  const [usedImageBackground, setUsedImageBackground] = useState(false);
+  const [appliedImageCover, setAppliedImageCover] = useState<string>(imageCover ?? defaultImageCover);
+  const [useImageBackground, setUseImageBackground] = useState(false);
   const styles =
     rest.styles || cardType === 'resource'
       ? home.cardItem
@@ -64,16 +64,17 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
 
   const onImageLoading = (state: ImageLoadState) => {
     if (state === ImageLoadState.error) {
-      setUsedImageCover(defaultImageCover);
+      setAppliedImageCover(defaultImageCover);
     }
   };
 
-  // detect image cover dimention to decide apply blur background or not.
-  const onImgLoaded = (e) => {
+  // detect image cover dimention to decide apply background or not.
+  // By design standard image width is 244 height is 95, if feed image aspectRatio too far away will be treated as a small image.
+  const onImageLoaded = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const whRatio = rect.width / rect.height;
-    if (whRatio < 1.5) {
-      setUsedImageBackground(true);
+    const aspectRatio = rect.width / rect.height;
+    if (aspectRatio < 1.5) {
+      setUseImageBackground(true);
     }
   };
 
@@ -92,14 +93,12 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     >
       <div ref={forwardedRef} aria-label={ariaLabel}>
         <div css={styles.imageCover}>
-          {usedImageBackground && <div className={'image-cover-background'}></div>}
+          {useImageBackground && <div className={'image-cover-background'} />}
           <Image
-            alt={ariaLabel}
-            aria-label={ariaLabel}
             className={'image-cover-img'}
             imageFit={ImageFit.centerContain}
-            src={usedImageCover}
-            onLoad={onImgLoaded}
+            src={appliedImageCover}
+            onLoad={onImageLoaded}
             onLoadingStateChange={onImageLoading}
           />
         </div>

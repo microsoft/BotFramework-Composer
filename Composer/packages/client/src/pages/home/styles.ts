@@ -38,7 +38,7 @@ export const rightPage = css`
 
 export const title = css`
   display: block;
-  padding-top: 25px;
+  padding: 25px 25px 0px 25px;
   font-size: ${FontSizes.xxLarge};
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
@@ -300,7 +300,7 @@ export const whatsNewsContainer = css`
   flex: 1;
   padding: 20px 25px 25px 25px;
   border-radius: 5px;
-  margin: 68px 0 55px 0;
+  margin: 20px 0 55px 0;
   background: #f6f6f6;
   @media (max-width: 1416px) {
     background: none;

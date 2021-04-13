@@ -52,7 +52,6 @@ const headerContainer = css`
   background: ${SharedColors.cyanBlue10};
   height: 50px;
   display: flex;
-  min-width: 1200px;
   flex-direction: row;
   align-items: center;
 `;
