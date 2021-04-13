@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotIndexer } from '@bfc/indexers';
+import { BotIndexer, validateSchema } from '@bfc/indexers';
 import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
@@ -18,6 +18,7 @@ import {
   BotDiagnostic,
   SettingDiagnostic,
   SkillSettingDiagnostic,
+  SchemaDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
@@ -176,7 +177,30 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
       });
     });
 
-    return [];
+    return diagnosticList;
+  },
+});
+
+export const schemaDiagnosticsSelectorFamily = selectorFamily({
+  key: 'schemaDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    // Why botAssets.dialogSchemas is a list?
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+
+    const sdkSchemaContent = botAssets.dialogSchemas[0]?.content;
+    if (!sdkSchemaContent) return [];
+
+    const fullDiagnostics: DiagnosticInfo[] = [];
+    botAssets.dialogs.forEach((dialog) => {
+      const diagnostics = validateSchema(dialog.id, dialog.content, sdkSchemaContent);
+      fullDiagnostics.push(
+        ...diagnostics.map((d) => new SchemaDiagnostic(rootProjectId, projectId, dialog.id, `${dialog.id}.dialog`, d))
+      );
+    });
+    return fullDiagnostics;
   },
 });
 
@@ -257,6 +281,7 @@ export const diagnosticsSelectorFamily = selectorFamily({
     ...get(luDiagnosticsSelectorFamily(projectId)),
     ...get(lgDiagnosticsSelectorFamily(projectId)),
     ...get(qnaDiagnosticsSelectorFamily(projectId)),
+    ...get(schemaDiagnosticsSelectorFamily(projectId)),
   ],
 });
 
