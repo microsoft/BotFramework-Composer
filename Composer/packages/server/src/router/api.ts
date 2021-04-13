@@ -62,6 +62,7 @@ router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBo
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
+router.get('/storages/validate/:path', StorageController.validatePath);
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
