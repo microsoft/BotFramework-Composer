@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
