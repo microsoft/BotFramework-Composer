@@ -90,6 +90,7 @@ const headerTextContainer = css`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  min-width: 600px;
   width: 50%;
 `;
 
