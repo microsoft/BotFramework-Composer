@@ -4,6 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import fetch from 'node-fetch-with-proxy';
 import find from 'lodash/find';
 import { UserIdentity, FileExtensions, FeedType, RuntimeType } from '@bfc/extension';
 import { mkdirSync, readFile } from 'fs-extra';
