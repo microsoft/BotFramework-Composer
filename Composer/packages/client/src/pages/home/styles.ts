@@ -31,14 +31,9 @@ export const leftPage = css`
 
 export const rightPage = css`
   flex: 1;
-  padding: 25px;
-  margin-bottom: 55px;
+  padding-right: 25px;
   display: flex;
   flex-direction: column;
-  background: #f6f6f6;
-  @media (max-width: 1366px) {
-    background: none;
-  }
 `;
 
 export const title = css`
@@ -68,13 +63,30 @@ export const rowContainer = css`
 
 export const leftContainer = css`
   margin-bottom: 10px;
-  flex: auto;
-  display: flex;
-  flex-direction: column;
 `;
 
 export const gap40 = css`
   margin-top: 40px;
+`;
+
+export const tabRowContainer = css`
+  flex-wrap: wrap;
+  display: flex;
+  clear: both;
+`;
+
+export const tabRowViewMore = css`
+  float: right;
+  position: relative;
+  top: -24px;
+  font-size: ${fonts.medium.fontSize};
+  margin-bottom: -40px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  i {
+    margin: 0 0 0 5px;
+  }
 `;
 
 export const itemContainerWrapper = (disabled?: boolean) => css`
@@ -82,9 +94,8 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
   border-width: 0;
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
-  min-width: 244px;
-  height: 185px;
-  width: 17vw;
+  height: auto;
+  text-decoration-line: none;
   margin-right: 12px;
   padding: 0;
 `;
@@ -105,7 +116,7 @@ export const subtitle = css`
 export const bluetitle = css`
   line-height: 20px;
   font-size: ${fonts.medium.fontSize};
-  display: flex;
+  display: inline-block;
   color: #0078d4;
   margin: 16px 0 0 0;
 `;
@@ -158,18 +169,16 @@ export const newsDescription = css`
   -webkit-box-orient: vertical;
 `;
 
-export const botContainer = css`
-  display: flex;
-  flex-wrap: wrap;
-  line-height: 32px;
-  margin-left: 33px;
-  margin-right: 33px;
-  margin-top: 24px;
-`;
-
-const baseBotItem = {
+export const cardItem = {
   container: css`
-    padding: 8px;
+    margin: 12px 0 12px 12px;
+    padding: 12px;
+    min-width: 244px;
+    max-width: 450px;
+    width: 17vw;
+    @media (max-width: 1416px) {
+      width: 20vw;
+    }
     text-align: left;
     border: 1px #efedeb solid;
     box-shadow: ${Depths.depth4};
@@ -183,19 +192,27 @@ const baseBotItem = {
       box-shadow: ${Depths.depth0};
     }
   `,
-};
-
-export const cardItem = {
-  ...baseBotItem,
   title: css`
     font-weight: ${FontWeights.semibold};
     color: ${NeutralColors.gray160};
-    margin-bottom: 16px;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   `,
   imageCover: css`
     width: 53px;
     height: 48px;
-    margin: 2px 0 12px 0;
+    max-height: 175px;
+    margin-bottom: 12px;
+    position: relative;
+    .image-cover-img {
+      display: flex;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
   `,
   content: css`
     color: ${NeutralColors.gray140};
@@ -205,34 +222,51 @@ export const cardItem = {
     overflow: hidden;
     min-height: 34px;
     -webkit-box-orient: vertical;
-    margin-bottom: 16px;
   `,
   moreLink: css`
+    margin-top: 12px;
     color: #0078d4;
   `,
 };
 
 export const mediaCardItem = {
   ...cardItem,
-  title: css`
-    ${cardItem.title};
-    margin-bottom: 6px;
-  `,
   imageCover: css`
+    ${cardItem.imageCover}
     width: 100%;
-    height: 95px;
-    margin: 4px 0 12px 0;
+    min-height: 95px;
+    height: calc(17vw * 95 / 244);
+    @media (max-width: 1416px) {
+      height: calc(20vw * 95 / 244);
+    }
+    margin-bottom: 12px;
+    overflow: hidden;
     display: flex;
+    .image-cover-background {
+      background: #323130;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
   `,
 };
 
 export const meidiaCardNoCoverItem = {
   ...mediaCardItem,
   imageCover: css`
+    ${mediaCardItem.imageCover};
+
+    position: relative;
     align-items: center;
     justify-content: center;
-    ${mediaCardItem.imageCover};
     background: ${NeutralColors.gray160};
+    .image-cover-background {
+      display: none;
+    }
+    .image-cover-img {
+      width: 53px;
+      height: 48px;
+    }
   `,
 };
 
@@ -245,12 +279,7 @@ export const childrenContainer = css`
 
 export const detailListContainer = css`
   border-top: 1px solid ${NeutralColors.gray30};
-  position: relative;
-  max-height: 40vh;
   padding-top: 10px;
-  overflow: hidden;
-  flex-grow: 1;
-  min-height: 250px;
   .ms-DetailsHeader {
     padding-top: 0;
   }
@@ -259,9 +288,28 @@ export const detailListContainer = css`
   }
 `;
 
+export const detailListScrollWrapper = css`
+  position: relative;
+  max-height: 40vh;
+  overflow: hidden;
+  min-height: 250px;
+`;
+
 export const whatsNewsContainer = css`
   position: relative;
-  min-width: 200px;
+  flex: 1;
+  padding: 20px 25px 25px 25px;
+  border-radius: 5px;
+  margin: 20px 0 55px 0;
+  background: #f6f6f6;
+  @media (max-width: 1416px) {
+    background: none;
+    min-width: 200px;
+    margin: 15px 0 0 0;
+  }
+`;
+
+export const whatsNewsList = css`
   flex: 1;
 `;
 
