@@ -278,6 +278,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             <StackItem>
               <LuEditor
                 toolbarHidden
+                errorMessage={triggerErrorMessage}
                 height={300}
                 luOption={{
                   projectId,
@@ -285,7 +286,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                   sectionId: manifest.name,
                   luFeatures: luFeatures,
                 }}
-                errorMessage={triggerErrorMessage}
                 telemetryClient={TelemetryClient}
                 value={displayContent}
                 onChange={setDisplayContent}

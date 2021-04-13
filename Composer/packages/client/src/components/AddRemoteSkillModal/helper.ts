@@ -3,6 +3,7 @@
 
 import formatMessage from 'format-message';
 import { luIndexer, combineMessage } from '@bfc/indexers';
+
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 

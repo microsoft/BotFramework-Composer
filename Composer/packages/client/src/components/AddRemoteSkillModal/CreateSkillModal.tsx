@@ -4,7 +4,6 @@
 import React, { Fragment, useRef, useState, useCallback, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-// import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
@@ -97,6 +96,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     return skillManifest?.endpoints?.map((item) => {
       return {
         key: item.msAppId,
+        // eslint-disable-next-line format-message/literal-pattern
         text: formatMessage(item.name),
       };
     });
@@ -192,11 +192,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
         <Fragment>
           <div style={{ marginBottom: '16px' }}>
             {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank" style={{ padding: '0 5px' }}>
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" style={{ padding: '0 5px' }} target="_blank">
               {formatMessage('Get an overview')}
             </Link>
             or
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank" style={{ padding: '0 5px' }}>
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" style={{ padding: '0 5px' }} target="_blank">
               {formatMessage('learn how to build a skill')}
             </Link>
             {addSkillDialog.SKILL_MANIFEST_FORM.afterSubText}
@@ -213,9 +213,9 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               />
               {skillManifest?.endpoints?.length > 1 && (
                 <Dropdown
+                  defaultSelectedKey={skillManifest.endpoints[0].msAppId}
                   label={formatMessage('Endpoints')}
                   options={options}
-                  defaultSelectedKey={skillManifest.endpoints[0].msAppId}
                   responsiveMode={ResponsiveMode.large}
                   onChange={(e, option?: IDropdownOption) => {
                     if (option) {
