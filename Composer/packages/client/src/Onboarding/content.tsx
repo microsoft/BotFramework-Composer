@@ -151,6 +151,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
           {
             a: ({ children }) => (
               <a
+                key="start-bot-help-url"
                 href="https://github.com/microsoft/BotFramework-Emulator/releases/latest"
                 rel="noopener noreferrer"
                 target="_blank"

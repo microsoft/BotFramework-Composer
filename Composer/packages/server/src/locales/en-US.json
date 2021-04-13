@@ -641,8 +641,8 @@
   "collapse_34080b4d": {
     "message": "Collapse"
   },
-  "collapse_debug_panel_6f1c5869": {
-    "message": "Collapse debug panel"
+  "collapse_debug_panel_2841f8ba": {
+    "message": "Collapse Debug Panel"
   },
   "collapse_navigation_17228b95": {
     "message": "Collapse Navigation"
@@ -689,8 +689,8 @@
   "composer_runtime_error_b0efe05": {
     "message": "Composer Runtime Error"
   },
-  "composer_settings_31b04099": {
-    "message": "Composer Settings"
+  "composer_settings_c8c622cf": {
+    "message": "Composer settings"
   },
   "composer_tutorials_5e79e495": {
     "message": "Composer tutorials"
@@ -1079,6 +1079,9 @@
   "deleting_dialogid_failed_1d7cc05a": {
     "message": "Deleting \"{ dialogId }\" failed."
   },
+  "deleting_one_source_file_will_also_delete_qna_file_f3afd698": {
+    "message": "Deleting one source file will also delete qna files with the same name on other locales"
+  },
   "describe_your_skill_88554792": {
     "message": "Describe your skill"
   },
@@ -1367,8 +1370,8 @@
   "ensure_your_bot_can_understand_your_users_by_frequ_c3f5c722": {
     "message": "Ensure your bot can understand your users by frequently training your LUIS model."
   },
-  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
-    "message": "Enter a manifest url to add a new skill to your bot."
+  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
+    "message": "Enter a manifest URL to add a new skill to your bot."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "Enter a max value"
@@ -1424,11 +1427,8 @@
   "enter_qna_region_4dae87f5": {
     "message": "Enter QnA region"
   },
-  "enter_skill_host_endpoint_url_e22eeab5": {
-    "message": "Enter Skill host endpoint url"
-  },
-  "enter_speech_region_7e86bace": {
-    "message": "Enter Speech region"
+  "enter_skill_host_endpoint_url_7489a83f": {
+    "message": "Enter Skill host endpoint URL"
   },
   "enter_speech_region_7e86bace": {
     "message": "Enter Speech region"
@@ -1522,6 +1522,9 @@
   },
   "expand_2f2fadbd": {
     "message": "Expand"
+  },
+  "expand_debug_panel_6f04e9f2": {
+    "message": "Expand Debug Panel"
   },
   "expand_navigation_20330d1d": {
     "message": "Expand Navigation"
@@ -1823,14 +1826,14 @@
   "import_as_new_35630827": {
     "message": "Import as new"
   },
-  "import_new_url_and_overwrite_ef1f405e": {
-    "message": "Import new url and overwrite"
+  "import_new_url_and_overwrite_5e463747": {
+    "message": "Import new URL and overwrite"
   },
   "import_schema_75659c5f": {
     "message": "Import schema"
   },
-  "import_url_ccaa2f16": {
-    "message": "Import Url"
+  "import_url_62402b7c": {
+    "message": "Import URL"
   },
   "import_your_bot_to_new_project_8751d82f": {
     "message": "Import your bot to new project"
@@ -2003,8 +2006,8 @@
   "knowledge_base_name_7d83bbe4": {
     "message": "Knowledge base name"
   },
-  "knowledge_qna_7a4e84f7": {
-    "message": "Knowledge(QnA)"
+  "knowledge_qna_1a599dcf": {
+    "message": "Knowledge (QnA)"
   },
   "knowledge_source_dd66f38f": {
     "message": "Knowledge source"
@@ -2255,11 +2258,11 @@
   "manifest_editor_1426637": {
     "message": "manifest editor"
   },
-  "manifest_url_30824e88": {
-    "message": "Manifest url"
+  "manifest_url_a6250c02": {
+    "message": "Manifest URL"
   },
-  "manifest_url_can_not_be_accessed_a7f147b2": {
-    "message": "Manifest url can not be accessed"
+  "manifest_url_can_not_be_accessed_ba43fc31": {
+    "message": "Manifest URL can not be accessed"
   },
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
@@ -2573,6 +2576,9 @@
   "ok_c47544a2": {
     "message": "OK"
   },
+  "ok_ff1b646a": {
+    "message": "Ok"
+  },
   "okay_1772bbeb": {
     "message": "Okay"
   },
@@ -2684,8 +2690,8 @@
   "please_enter_an_event_name_a148275a": {
     "message": "Please enter an event name"
   },
-  "please_input_a_manifest_url_d726edbf": {
-    "message": "Please input a manifest Url"
+  "please_input_a_manifest_url_79cce9d5": {
+    "message": "Please input a manifest URL"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Please input regEx pattern"
@@ -3365,8 +3371,8 @@
   "skill_host_endpoint_4118a173": {
     "message": "Skill host endpoint"
   },
-  "skill_host_endpoint_url_e68b65f6": {
-    "message": "Skill host endpoint url"
+  "skill_host_endpoint_url_702c277c": {
+    "message": "Skill host endpoint URL"
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Skill host endpoint url"
@@ -3899,11 +3905,11 @@
   "updating_scripts_e17a5722": {
     "message": "Updating scripts... "
   },
-  "url_8c4ff7d2": {
-    "message": "Url"
+  "url_22a5f3b8": {
+    "message": "URL"
   },
-  "url_should_start_with_http_s_9ca55d94": {
-    "message": "Url should start with http[s]://"
+  "url_should_start_with_http_or_https_c34632bb": {
+    "message": "URL should start with http:// or https://"
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Use custom LUIS authoring key"
