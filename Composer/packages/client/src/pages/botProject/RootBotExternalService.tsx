@@ -329,6 +329,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       ...mergedSettings,
       qna: { ...mergedSettings.qna, ...newQNASettings },
     });
+    setQnASettings(projectId, newQNASettings.subscriptionKey);
   };
 
   return (
@@ -384,6 +385,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           )}
         </div>
         <PrimaryButton
+          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '130px', marginTop: '15px' } }}
           text={formatMessage('Get LUIS keys')}
           onClick={() => {
@@ -407,6 +409,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           />
         </div>
         <PrimaryButton
+          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '130px', marginTop: '15px' } }}
           text={formatMessage('Get QnA key')}
           onClick={() => {

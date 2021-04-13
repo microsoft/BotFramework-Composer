@@ -85,11 +85,11 @@ const AdapterModal = (props: Props) => {
               if (update != null) setValue({ ...update, $kind: adapterKey });
             }}
           />
-          <Text key="helptext">
+          <Text>
             {formatMessage.rich('To learn more about the { title }, <a>visit its documentation page</a>.', {
               title: schema.title,
               a: ({ children }) => (
-                <Link href={uiSchema.helpLink} target="_blank">
+                <Link key="adapter-help-text-url" href={uiSchema.helpLink} target="_blank">
                   {children}
                 </Link>
               ),
