@@ -49,10 +49,10 @@ function logOut(req, res) {
   try {
     authService.logOut();
     res.status(200).end();
-  } catch (err) {
+  } catch (e) {
     log('Error logging out:');
-    log(err);
-    res.status(500).end();
+    log(e);
+    res.status(500).json(e);
   }
 }
 
