@@ -100,9 +100,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   };
 
   const renderField = () => {
-    if (!selectedSchema || Array.isArray(selectedSchema.type) || !selectedSchema.type) {
-      return null;
-    }
     // attempt to get a placeholder with the selected schema
     const placeholder = getUiPlaceholder({ ...props, schema: selectedSchema }) || props.placeholder;
     const enumOptions = selectedSchema?.enum as string[];
