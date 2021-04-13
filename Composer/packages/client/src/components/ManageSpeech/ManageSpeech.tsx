@@ -78,10 +78,6 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
   const [outcomeSummary, setOutcomeSummary] = useState<React.ReactNode>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
 
-  const handoffInstructions = formatMessage(
-    'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
-  );
-
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
@@ -125,7 +121,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
     setCurrentPage(1);
     setActionOptions([
       { key: 'create', text: formatMessage('Create a new Speech resource'), disabled: true },
-      { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: true },
+      { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: true },
       { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
     ]);
     if (!props.hidden) {
@@ -178,7 +174,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
         setNoKeys(true);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new Speech resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
         ]);
       } else {
@@ -186,7 +182,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
         setKeys(keys);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new Speech resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: false },
         ]);
       }
@@ -407,9 +403,11 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
       )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share this information with your Azure admin. After your Speech key is provisioned, you will be ready to test your bot with speech.'
+          'Copy and share this information with your Azure admin to provision resources on your behalf.'
         )}
-        handoffInstructions={handoffInstructions}
+        handoffInstructions={formatMessage(
+          'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls'
+        )}
         hidden={!showHandoff}
         title={formatMessage('Share resource request')}
         onBack={() => {
