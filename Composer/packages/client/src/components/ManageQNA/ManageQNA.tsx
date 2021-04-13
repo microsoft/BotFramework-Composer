@@ -22,6 +22,7 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
+import sortBy from 'lodash/sortBy';
 
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -89,7 +90,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
-      return subscriptionsResult._response.parsedBody;
+      return sortBy(subscriptionsResult._response.parsedBody, ['displayName']);
     } catch (err) {
       setApplicationLevelError(err);
       return [];
