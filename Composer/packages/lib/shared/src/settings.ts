@@ -16,12 +16,15 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
 
   // apply the application insights resource from the publish profile
   // to the telemetry setting
-  if (profile.settings.applicationInsights?.InstrumentationKey || profile.settings.applicationInsights?.connectionString) {
+  if (
+    profile.settings.applicationInsights?.InstrumentationKey ||
+    profile.settings.applicationInsights?.connectionString
+  ) {
     settings.runtimeSettings.telemetry = {
       options: {
         connectionString: profile.settings.applicationInsights.connectionString,
         instrumentationKey: profile.settings.applicationInsights.InstrumentationKey,
-      }
+      },
     };
   }
 
