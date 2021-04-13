@@ -278,22 +278,6 @@ export const ManageQNA = (props: ManageQNAProps) => {
           applicationType: 'web',
           kind: 'web',
         });
-        // deploy qna host webapp
-        const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
-          resourceGroupName,
-          qnaMakerWebAppName,
-          {
-            name: qnaMakerWebAppName,
-            serverFarmId: resourceGroupName,
-            location: localRootQNARegion,
-            siteConfig: {
-              cors: {
-                allowedOrigins: ['*'],
-              },
-            },
-            enabled: true,
-          }
-        );
 
         // add web config for websites
         const azureSearchAdminKey = (await searchManagementClient.adminKeys.get(resourceGroupName, qnaMakerSearchName))
@@ -310,46 +294,60 @@ export const ManageQNA = (props: ManageQNAProps) => {
         const defaultAnswer = 'No good match found in KB.';
         const QNAMAKER_EXTENSION_VERSION = 'latest';
 
-        await webSiteManagementClient.webApps.createOrUpdateConfiguration(resourceGroupName, qnaMakerWebAppName, {
-          appSettings: [
-            {
-              name: 'AzureSearchName',
-              value: qnaMakerSearchName,
+        // deploy qna host webapp
+        const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
+          resourceGroupName,
+          qnaMakerWebAppName,
+          {
+            name: qnaMakerWebAppName,
+            serverFarmId: resourceGroupName,
+            location: localRootQNARegion,
+            siteConfig: {
+              cors: {
+                allowedOrigins: ['*'],
+              },
+              appSettings: [
+                {
+                  name: 'AzureSearchName',
+                  value: qnaMakerSearchName,
+                },
+                {
+                  name: 'AzureSearchAdminKey',
+                  value: azureSearchAdminKey,
+                },
+                {
+                  name: 'UserAppInsightsKey',
+                  value: userAppInsightsKey,
+                },
+                {
+                  name: 'UserAppInsightsName',
+                  value: userAppInsightsName,
+                },
+                {
+                  name: 'UserAppInsightsAppId',
+                  value: userAppInsightsAppId,
+                },
+                {
+                  name: 'PrimaryEndpointKey',
+                  value: primaryEndpointKey,
+                },
+                {
+                  name: 'SecondaryEndpointKey',
+                  value: secondaryEndpointKey,
+                },
+                {
+                  name: 'DefaultAnswer',
+                  value: defaultAnswer,
+                },
+                {
+                  name: 'QNAMAKER_EXTENSION_VERSION',
+                  value: QNAMAKER_EXTENSION_VERSION,
+                },
+              ],
             },
-            {
-              name: 'AzureSearchAdminKey',
-              value: azureSearchAdminKey,
-            },
-            {
-              name: 'UserAppInsightsKey',
-              value: userAppInsightsKey,
-            },
-            {
-              name: 'UserAppInsightsName',
-              value: userAppInsightsName,
-            },
-            {
-              name: 'UserAppInsightsAppId',
-              value: userAppInsightsAppId,
-            },
-            {
-              name: 'PrimaryEndpointKey',
-              value: primaryEndpointKey,
-            },
-            {
-              name: 'SecondaryEndpointKey',
-              value: secondaryEndpointKey,
-            },
-            {
-              name: 'DefaultAnswer',
-              value: defaultAnswer,
-            },
-            {
-              name: 'QNAMAKER_EXTENSION_VERSION',
-              value: QNAMAKER_EXTENSION_VERSION,
-            },
-          ],
-        });
+            enabled: true,
+          }
+        );
 
         // Create qna account
         const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(
@@ -593,6 +591,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                 <PrimaryButton
                   disabled={
                     loadingQNA ||
+                    showAuthDialog ||
                     (nextAction === 'choose' && !localRootQNAKey) ||
                     (nextAction === 'create' && !subscriptionId)
                   }

@@ -38,7 +38,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
-  const { setSettings } = useRecoilValue(dispatcherState);
+  const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
@@ -89,6 +89,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       ...mergedSettings,
       qna: { ...mergedSettings.qna, ...newQNASettings },
     });
+    setQnASettings(rootBotProjectId, newQNASettings.subscriptionKey);
   };
 
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
