@@ -46,8 +46,12 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     updateUserSettings({ codeEditor: { [key]: value } });
   };
 
-  const onLocaleChange = (appLocale: string) => {
-    updateUserSettings({ appLocale });
+  const onLocaleChange = async (appLocale: string) => {
+    await updateUserSettings({ appLocale });
+
+    setTimeout(() => {
+      document.getElementById('appLanguage')?.focus();
+    }, 100);
   };
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => {
@@ -99,6 +103,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           <h2>{formatMessage('Application Language settings')}</h2>
           <SettingDropdown
             description={formatMessage('This is the language used for Composer’s user interface.')}
+            id={'appLanguage'}
             options={languageOptions}
             selected={userSettings.appLocale}
             title={formatMessage('Application language')}
@@ -202,7 +207,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
         <PreviewFeatureToggle />
       </section>
-      {renderElectronSettings && (
+      {(renderElectronSettings || process.env.NODE_ENV === 'development') && (
         <section css={section}>
           <h2>{formatMessage('Data Collection')}</h2>
           <SettingToggle

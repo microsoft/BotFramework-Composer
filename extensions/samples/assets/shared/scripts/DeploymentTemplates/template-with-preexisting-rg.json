@@ -282,11 +282,11 @@
       "condition": "[parameters('useCosmosDb')]"
     },
     {
-      "apiVersion": "2017-12-01",
+      "apiVersion": "2018-07-12",
       "type": "Microsoft.BotService/botServices",
       "name": "[parameters('botId')]",
       "location": "global",
-      "kind": "bot",
+      "kind": "azurebot",
       "sku": {
         "name": "[parameters('botSku')]"
       },
@@ -295,6 +295,7 @@
         "displayName": "[parameters('botId')]",
         "endpoint": "[variables('botEndpoint')]",
         "msaAppId": "[parameters('appId')]",
+        "openWithHint": "bfcomposer://",
         "developerAppInsightsApplicationId": null,
         "developerAppInsightKey": null,
         "publishingCredentials": null,

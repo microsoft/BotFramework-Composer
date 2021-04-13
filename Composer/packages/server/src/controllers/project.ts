@@ -12,6 +12,7 @@ import { BotProjectService } from '../services/project';
 import AssetService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
+import { getFeedUrl } from '../models/bot/feedManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 import { getLocationRef, getNewProjRef } from '../utility/project';
@@ -132,6 +133,41 @@ async function getProjectByAlias(req: Request, res: Response) {
   }
 }
 
+async function setProjectAlias(req: Request, res: Response) {
+  const { alias } = req.body;
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  if (!alias) {
+    res.status(400).json({
+      message: 'Parameters not provided, requires "alias" parameter',
+    });
+    return;
+  }
+
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    if (currentProject !== undefined) {
+      try {
+        await BotProjectService.setProjectAlias(projectId, alias);
+        res.status(200).json({ id: currentProject.id, name: currentProject.name, alias: alias });
+      } catch (error) {
+        res.status(400).json({
+          message: error instanceof Error ? error.message : error,
+        });
+      }
+    } else {
+      res.status(404).json({
+        message: `No matching bot project found for projectId ${projectId}`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 async function removeProject(req: Request, res: Response) {
   const projectId = req.params.projectId;
   if (!projectId) {
@@ -158,7 +194,7 @@ async function removeProject(req: Request, res: Response) {
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
@@ -195,7 +231,7 @@ async function openProject(req: Request, res: Response) {
 async function saveProjectAs(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.name) {
     res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
+      message: 'parameters not provided, require storage id and path',
     });
     return;
   }
@@ -244,6 +280,16 @@ async function getRecentProjects(req: Request, res: Response) {
   return res.status(200).json(projects);
 }
 
+async function getFeed(req: Request, res: Response) {
+  try {
+    const content = await getFeedUrl();
+    res.status(200).json(content);
+  } catch (err) {
+    res.status(404).json({
+      message: err.message,
+    });
+  }
+}
 async function generateProjectId(req: Request, res: Response) {
   try {
     const location = req.query.location;
@@ -369,10 +415,11 @@ async function build(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const { luisConfig, qnaConfig, luFiles, qnaFiles } = req.body;
+      const { luisConfig, qnaConfig, orchestratorConfig, luFiles, qnaFiles } = req.body;
       const files = await currentProject.buildFiles({
         luisConfig,
         qnaConfig,
+        orchestratorConfig,
         luResource: luFiles,
         qnaResource: qnaFiles,
       });
@@ -555,10 +602,12 @@ export const ProjectController = {
   createProjectV2,
   getAllProjects,
   getRecentProjects,
+  getFeed,
   updateBoilerplate,
   checkBoilerplateVersion,
   generateProjectId,
   getProjectByAlias,
+  setProjectAlias,
   backupProject,
   copyTemplateToExistingProject,
   getVariablesByProjectId,

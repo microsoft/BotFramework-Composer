@@ -15,3 +15,5 @@ export * from './LuEditor';
 export * from './QnAEditor';
 export * from './constants';
 export * from './utils/lgValidate';
+export * from './types';
+export * from './components/toolbar';

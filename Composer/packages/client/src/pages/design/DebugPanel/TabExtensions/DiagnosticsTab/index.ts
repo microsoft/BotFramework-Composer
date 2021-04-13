@@ -11,7 +11,7 @@ import { DiagnosticsStatus } from './DiagnosticsStatus';
 
 export const DiagnosticsTabConfig: TabExtensionConfig = {
   key: DiagnosticsTabKey,
-  description: formatMessage('Diagnostics tab which shows errors and warnings.'),
+  description: () => formatMessage('Diagnostics tab which shows errors and warnings.'),
   HeaderWidget: DiagnosticsHeader,
   ContentWidget: DiagnosticsContent,
   ToolbarWidget: DiagnosticsStatus,

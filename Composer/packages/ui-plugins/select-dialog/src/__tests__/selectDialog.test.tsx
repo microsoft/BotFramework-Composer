@@ -40,8 +40,12 @@ const renderSelectDialog = ({ createDialog, navTo, onChange } = {}) => {
 };
 
 describe('Select Dialog', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.useFakeTimers();
+  });
+  afterAll(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 
   it('should create a new dialog', async () => {

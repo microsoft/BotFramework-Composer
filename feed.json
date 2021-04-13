@@ -1,0 +1,75 @@
+{
+	"version": 1,
+	"whatsNewLinks": [{
+		"title": "Bot Framework Composer 1.3",
+		"description": "Learn about new features in Bot Framework Composer 1.3, including new preview features you can try today.",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/bot-framework-composer-1-3-is-now-available/ba-p/1996923"
+	}, {
+		"title": "Build 2020 updates",
+		"description": "Read all of the updates from this years Build conference, including Composer GA and SDK v4.9.",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/build-2020-conversational-ai-updates/ba-p/1397685"
+	}, {
+		"title": "Power Virtual Agents and Composer integration preview",
+		"description": "We are pleased to announce the Public Preview of Power Virtual Agents integration with Microsoft Bot Framework Composer. Bot makers will now be able to use Bot Framework Composer to create custom content and add it to Power Virtual Agents.",
+		"url": "https://powervirtualagents.microsoft.com/en-us/blog/power-virtual-agents-integration-with-bot-framework-composer-is-available-in-public-preview/"
+	}, {
+		"title": "November 2020 - Conversational AI update",
+		"description": "Updates to the Conversational AI platform, including a new release of Bot Framework Composer and Power Virtual Agents integration.",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/november-2020-conversational-ai-update/ba-p/1892528"
+	}, {
+		"title": "Conversational AI at Microsoft Ignite 2020",
+		"description": "Conversational AI updates from Microsoft Ignite 2020.",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/ignite-2020-conversational-ai-updates/ba-p/1691841"
+	}],
+	"tabs": [{
+		"title": "Latest Videos",
+		"viewAllLinkText": "Visit the Bot Framework Composer YouTube Channel",
+		"viewAllLinkUrl": "https://www.youtube.com/channel/UC8qPRh20PpuxBvxf0w2WrwQ",
+		"cards": [{
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/ai-show.png",
+			"title": "Microsoft AI Show - Building Telephony solutions with Composer",
+			"description": "A look at the new Azure Bot Service Telephony channel preview and Composer updates focused on Speech",
+			"url": "https://channel9.msdn.com/Events/All-Around-Azure/All-Around-Azure-A-Developers-Guide-to-AI/Improve-Customer-Engagement-and-Productivity-with-Conversational-AI"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/all-around-azure.png",
+			"title": "Conversational AI - All Around Azure",
+			"description": "Part of the All Around Azure event. A overview of Conversational AI and a walktrhough of building a bot with Bot Framework Composer.",
+			"url": "https://channel9.msdn.com/Events/All-Around-Azure/All-Around-Azure-A-Developers-Guide-to-AI/Improve-Customer-Engagement-and-Productivity-with-Conversational-AI"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/ignite.png",
+			"title": "Microsoft Ignite - Conversational AI powered Customer and Employee Virtual Assistants",
+			"description": "The Conversational AI session at Microsoft Ignite 2020 covering latest updates from Bot Framework and Azure Bot Service.",
+			"url": "https://channel9.msdn.com/Events/Build/2020/INT139"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/microsoft-build.png",
+			"title": "Microsoft Build 2020 - AI Show",
+			"description": "A special edition of the AI Show, featuring an overview and demo of Bot Framework Composer",
+			"url": "https://channel9.msdn.com/Shows/AI-Show/Bot-Frameworks-new-collaborative-Conversational-AI-development-environment?term=AI%20Show%20Build%202020%20Composer&lang-en=true"
+		}]
+	}, {
+		"title": "Tutorials",
+		"viewAllLinkText": "Visit the Bot Framework Composer YouTube Channel",
+		"viewAllLinkUrl": "https://www.youtube.com/channel/UC8qPRh20PpuxBvxf0w2WrwQ",
+		"cards": [{
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "Using Prompts",
+			"description": "Walkthrough and tips for using Prompts to accept information from users.",
+			"url": "https://www.youtube.com/watch?v=dUT8L4_bVrk"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "LG for Advanced Responses",
+			"description": "How to use LG (Language Generation) to create dynamic responses.",
+			"url": "https://www.youtube.com/watch?v=hiIiZnRcCv0"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "Advanced Prompts",
+			"description": "Implementing more advanced prompts including confirmation and allowing users to correct mistakes.",
+			"url": "https://www.youtube.com/watch?v=vN9dBQj1dOs"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "Build a Weather Bot",
+			"description": "An end to end walkthrough to build a weather bot in Composer.",
+			"url": "https://www.youtube.com/watch?v=P-kKw2HGP3o&t=1282s"
+		}]
+	}]
+}

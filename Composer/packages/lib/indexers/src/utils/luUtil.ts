@@ -11,6 +11,7 @@ import { sectionHandler, parser as BFLUParser } from '@microsoft/bf-lu/lib/parse
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import merge from 'lodash/merge';
+import clone from 'lodash/clone';
 import {
   LuFile,
   LuSectionTypes,
@@ -21,8 +22,13 @@ import {
   DiagnosticSeverity,
   ILUFeaturesConfig,
   LuParseResource,
+  TextFile,
+  luImportResolverGenerator,
+  LUImportResolverDelegate,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
+
+import { luIndexer } from '../luIndexer';
 
 import { buildNewlineText, getFileName, splitNewlineText } from './help';
 import { SectionTypes } from './qnaUtil';
@@ -67,11 +73,13 @@ export function convertLuDiagnostic(d: any, source: string, offset = 0): Diagnos
 export function convertLuParseResultToLuFile(
   id: string,
   resource: LuParseResource,
-  luFeatures: ILUFeaturesConfig
+  luFeatures: ILUFeaturesConfig,
+  importResolver?: LUImportResolverDelegate
 ): LuFile {
   // filter structured-object from LUParser result.
   const { Sections, Errors, Content } = resource;
   const intents: LuIntentSection[] = [];
+  const fileId = id;
   Sections.forEach((section) => {
     const { Name, Body, SectionType } = section;
     const range = new Range(
@@ -79,8 +87,8 @@ export function convertLuParseResultToLuFile(
       new Position(get(section, 'Range.End.Line', 0), get(section, 'Range.End.Character', 0))
     );
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
-      const Entities = section.Entities.map(({ Name }) => Name);
-      intents.push({ Name, Body, Entities, range });
+      const Entities = section.Entities.map(({ Name, Type }) => ({ Name, Type }));
+      intents.push({ Name, Body, Entities, range, fileId });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
       const Children = section.SimpleIntentSections.map((subSection) => {
         const { Name, Body } = subSection;
@@ -88,10 +96,10 @@ export function convertLuParseResultToLuFile(
           new Position(get(section, 'Range.Start.Line', 0), get(subSection, 'Range.Start.Character', 0)),
           new Position(get(section, 'Range.End.Line', 0), get(subSection, 'Range.End.Character', 0))
         );
-        const Entities = subSection.Entities.map(({ Name }) => Name);
-        return { Name, Body, Entities, range };
+        const Entities = subSection.Entities.map(({ Name, Type }) => ({ Name, Type }));
+        return { Name, Body, Entities, range, fileId };
       });
-      intents.push({ Name, Body, Children, range });
+      intents.push({ Name, Body, Children, range, fileId });
       intents.push(
         ...Children.map((subSection) => {
           return {
@@ -120,15 +128,42 @@ export function convertLuParseResultToLuFile(
     }
   );
 
-  const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics);
+  // find all reference and parse them.
+  const allIntents: LuIntentSection[] = clone(intents);
+  const referenceDiagnostics: Diagnostic[] = [];
+  if (importResolver) {
+    Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).forEach((item) => {
+      try {
+        const targetFile = importResolver(id, item.Path);
+        if (targetFile) {
+          const targetFileParsed = luIndexer.parse(targetFile.content, targetFile.id, luFeatures, importResolver);
+          allIntents.push(...targetFileParsed.allIntents);
+        }
+      } catch (_error) {
+        const res = new Diagnostic(_error.message, item.Path, DiagnosticSeverity.Error, item.Path);
+        const start: Position = item.Range
+          ? new Position(item.Range.Start.Line, item.Range.Start.Character)
+          : new Position(0, 0);
+        const end: Position = item.Range
+          ? new Position(item.Range.End.Line, item.Range.End.Character)
+          : new Position(0, 0);
+        res.range = new Range(start, end);
+        referenceDiagnostics.push(res);
+      }
+    });
+  }
+
+  const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics).concat(referenceDiagnostics);
   return {
     id,
     content: Content,
     empty: !Sections.length,
     intents,
+    allIntents,
     diagnostics,
     imports,
     resource: { Sections, Errors, Content },
+    isContentUnparsed: false,
   };
 }
 
@@ -221,7 +256,8 @@ export function updateIntent(
   luFile: LuFile,
   intentName: string,
   intent: { Name?: string; Body?: string } | null,
-  luFeatures: ILUFeaturesConfig
+  luFeatures: ILUFeaturesConfig,
+  importResolver?: LUImportResolverDelegate
 ): LuFile {
   let targetSection;
   let targetSectionContent;
@@ -243,7 +279,7 @@ export function updateIntent(
       const targetSection = Sections.find(({ Name }) => Name === intentName);
       if (targetSection) {
         const result = new sectionOperator(resource).deleteSection(targetSection.Id);
-        return convertLuParseResultToLuFile(id, result, luFeatures);
+        return convertLuParseResultToLuFile(id, result, luFeatures, importResolver);
       }
       return luFile;
     }
@@ -280,7 +316,7 @@ export function updateIntent(
   } else {
     newResource = new sectionOperator(resource).addSection(['', targetSectionContent].join(NEWLINE));
   }
-  return convertLuParseResultToLuFile(id, newResource, luFeatures);
+  return convertLuParseResultToLuFile(id, newResource, luFeatures, importResolver);
 }
 
 /**
@@ -288,20 +324,30 @@ export function updateIntent(
  * @param content origin lu file content
  * @param {Name, Body} intent the adds. Name support subSection naming 'CheckEmail/CheckUnreadEmail', if #CheckEmail not exist will do recursive add.
  */
-export function addIntent(luFile: LuFile, { Name, Body }: LuIntentSection, luFeatures: ILUFeaturesConfig): LuFile {
+export function addIntent(
+  luFile: LuFile,
+  { Name, Body }: LuIntentSection,
+  luFeatures: ILUFeaturesConfig,
+  importResolver?: LUImportResolverDelegate
+): LuFile {
   const intentName = Name;
   if (Name.includes('/')) {
     const [, childName] = Name.split('/');
     Name = childName;
   }
   // If the invoker doesn't want to carry Entities, don't pass Entities in.
-  return updateIntent(luFile, intentName, { Name, Body }, luFeatures);
+  return updateIntent(luFile, intentName, { Name, Body }, luFeatures, importResolver);
 }
 
-export function addIntents(luFile: LuFile, intents: LuIntentSection[], luFeatures: ILUFeaturesConfig): LuFile {
+export function addIntents(
+  luFile: LuFile,
+  intents: LuIntentSection[],
+  luFeatures: ILUFeaturesConfig,
+  importResolver?: LUImportResolverDelegate
+): LuFile {
   let result = luFile;
   for (const intent of intents) {
-    result = addIntent(result, intent, luFeatures);
+    result = addIntent(result, intent, luFeatures, importResolver);
   }
   return result;
 }
@@ -311,21 +357,30 @@ export function addIntents(luFile: LuFile, intents: LuIntentSection[], luFeature
  * @param content origin lu file content
  * @param intentName the remove intentName. Name support subSection naming 'CheckEmail/CheckUnreadEmail', if any of them not exist will do nothing.
  */
-export function removeIntent(luFile: LuFile, intentName: string, luFeatures: ILUFeaturesConfig): LuFile {
-  return updateIntent(luFile, intentName, null, luFeatures);
+export function removeIntent(
+  luFile: LuFile,
+  intentName: string,
+  luFeatures: ILUFeaturesConfig,
+  importResolver?: LUImportResolverDelegate
+): LuFile {
+  return updateIntent(luFile, intentName, null, luFeatures, importResolver);
 }
-export function removeIntents(luFile: LuFile, intentNames: string[], luFeatures: ILUFeaturesConfig): LuFile {
+export function removeIntents(
+  luFile: LuFile,
+  intentNames: string[],
+  luFeatures: ILUFeaturesConfig,
+  importResolver?: LUImportResolverDelegate
+): LuFile {
   let result = luFile;
   for (const intentName of intentNames) {
-    result = removeIntent(result, intentName, luFeatures);
+    result = removeIntent(result, intentName, luFeatures, importResolver);
   }
   return result;
 }
 
-export function parse(id: string, content: string, luFeatures: ILUFeaturesConfig): LuFile {
-  const appliedConfig = merge(defaultLUFeatures, luFeatures || {});
-  const result = luParser.parse(content);
-  return convertLuParseResultToLuFile(id, result, appliedConfig);
+export function parse(id: string, content: string, luFeatures: ILUFeaturesConfig, luFiles: TextFile[]): LuFile {
+  const luImportResolver = luImportResolverGenerator(luFiles, '.lu');
+  return luIndexer.parse(content, id, luFeatures, luImportResolver);
 }
 
 export async function semanticValidate(

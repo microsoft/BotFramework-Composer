@@ -24,6 +24,7 @@ const lgFiles = [
   {
     id: 'common.en-us',
     content: `\r\n# Hello\r\n-hi`,
+    isContentUnparsed: true,
   },
 ] as LgFile[];
 
@@ -35,7 +36,7 @@ const getLgTemplate = (name, body): LgTemplate =>
 
 describe('test lg worker', () => {
   it('cache the new project', async () => {
-    await lgWorker.addProject('test', lgFiles);
+    await lgWorker.addProject('test');
     expect(lgCache.projects.has('test')).toBeTruthy();
   });
 

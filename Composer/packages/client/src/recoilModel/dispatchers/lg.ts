@@ -56,12 +56,12 @@ const updateLgFiles = (
 
   // adds
   if (adds?.length) {
-    set(lgFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
     adds.forEach((lgFile) => {
       set(lgFileState({ projectId, lgFileId: lgFile.id }), (preFile) =>
         needUpdate ? (needUpdate(preFile, lgFile) ? lgFile : preFile) : lgFile
       );
     });
+    set(lgFileIdsState(projectId), (ids) => ids.concat(adds.map((file) => file.id)));
   }
 };
 
@@ -475,6 +475,12 @@ export const lgDispatcher = () => {
     }
   );
 
+  const updateAllLgFiles = useRecoilCallback(
+    ({ set }: CallbackInterface) => ({ projectId, lgFiles }: { projectId: string; lgFiles: LgFile[] }) => {
+      set(lgFilesSelectorFamily(projectId), lgFiles);
+    }
+  );
+
   return {
     updateLgFile,
     createLgFile,
@@ -486,5 +492,6 @@ export const lgDispatcher = () => {
     removeLgTemplates,
     copyLgTemplate,
     reparseAllLgFiles,
+    updateAllLgFiles,
   };
 };

@@ -3,13 +3,26 @@
 
 import { useEffect } from 'react';
 import { globalHistory, WindowLocation } from '@reach/router';
-import { PromptTab } from '@bfc/shared';
-import { useRecoilValue } from 'recoil';
+import { LgFile, LuFile, PromptTab, QnAFile } from '@bfc/shared';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getDialogData } from '../../utils/dialogUtil';
 import { getFocusPath } from '../../utils/navigation';
-import { dispatcherState, currentDialogState } from '../../recoilModel';
+import {
+  dispatcherState,
+  currentDialogState,
+  localeState,
+  lgFileState,
+  lgFilesSelectorFamily,
+  luFileState,
+  qnaFileState,
+  settingsState,
+  luFilesSelectorFamily,
+} from '../../recoilModel';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
+import lgDiagnosticWorker from '../../recoilModel/parsers/lgDiagnosticWorker';
+import luWorker from '../../recoilModel/parsers/luWorker';
+import qnaWorker from '../../recoilModel/parsers/qnaWorker';
 
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
@@ -26,7 +39,19 @@ export const useEmptyPropsHandler = (
   const activeBot = skillId ?? projectId;
 
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId: activeBot }));
-
+  const locale = useRecoilValue(localeState(activeBot));
+  const settings = useRecoilValue(settingsState(activeBot));
+  const [currentLg, setCurrentLg] = useRecoilState(
+    lgFileState({ projectId: activeBot, lgFileId: `${dialogId}.${locale}` })
+  );
+  const [currentLu, setCurrentLu] = useRecoilState(
+    luFileState({ projectId: activeBot, luFileId: `${dialogId}.${locale}` })
+  );
+  const [currentQna, setCurrentQna] = useRecoilState(
+    qnaFileState({ projectId: activeBot, qnaFileId: `${dialogId}.${locale}` })
+  );
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateDialog, setDesignPageLocation, navTo } = useRecoilValue(dispatcherState);
 
   // migration: add id to dialog when dialog doesn't have id
@@ -40,6 +65,49 @@ export const useEmptyPropsHandler = (
       updateDialog({ id, content: dialogContent, projectId });
     }
   }, [currentDialog]);
+
+  useEffect(() => {
+    if (!currentDialog || !currentLg.id) return;
+    let isMounted = true;
+    if (currentLg.isContentUnparsed) {
+      //for current dialog, check the lg file to make sure the file is parsed.
+      lgDiagnosticWorker.parse(activeBot, currentLg.id, currentLg.content, lgFiles).then((result) => {
+        isMounted ? setCurrentLg(result as LgFile) : null;
+      });
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentDialog, currentLg, lgFiles]);
+
+  useEffect(() => {
+    if (!currentDialog || !currentLu.id) return;
+    let isMounted = true;
+    if (currentLu.isContentUnparsed) {
+      //for current dialog, check the lu file to make sure the file is parsed.
+      luWorker.parse(currentLu.id, currentLu.content, settings.luFeatures, luFiles).then((result) => {
+        isMounted ? setCurrentLu(result as LuFile) : null;
+      });
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [currentDialog, currentLu, luFiles]);
+
+  useEffect(() => {
+    if (!currentDialog || !currentQna.id) return;
+    let isMounted = true;
+    if (currentQna.isContentUnparsed) {
+      //for current dialog, check the qna file to make sure the file is parsed.
+      qnaWorker.parse(currentQna.id, currentQna.content).then((result) => {
+        isMounted ? setCurrentQna(result as QnAFile) : null;
+      });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [currentDialog, currentQna]);
 
   useEffect(() => {
     if (!location || !currentDialog || !activeBot) return;

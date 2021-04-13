@@ -60,3 +60,14 @@ export const getExistResources = (config) => {
     return result;
   } else return [];
 };
+
+export const defaultExtensionState = {
+  subscriptionId: '',
+  resourceGroup: '',
+  hostname: '',
+  region: '',
+  luisLocation: '',
+  enabledResources: [],
+  requiredResources: [],
+  creationType: 'create',
+};

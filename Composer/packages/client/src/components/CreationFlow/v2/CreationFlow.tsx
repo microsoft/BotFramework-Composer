@@ -8,7 +8,7 @@ import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
 
-import { CreationFlowStatus } from '../../../constants';
+import { CreationFlowStatus, firstPartyTemplateFeed } from '../../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -40,6 +40,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     updateFolder,
     saveTemplateId,
     fetchRecentProjects,
+    fetchFeed,
     openProject,
     saveProjectAs,
     fetchProjectById,
@@ -75,7 +76,8 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
-
+    await fetchTemplatesV2([firstPartyTemplateFeed]);
+    fetchFeed();
     fetchRecentProjects();
   };
 
@@ -98,11 +100,22 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     navigate(`/home`);
   };
 
-  const openBot = async (botFolder) => {
+  const handleJumpToOpenModal = (search) => {
+    setCreationFlowStatus(CreationFlowStatus.OPEN);
+    navigate(`./open${search}`);
+  };
+
+  const openBot = async (formData) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    await openProject(botFolder, 'default', true, (projectId) => {
-      TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
-    });
+    await openProject(
+      formData.path,
+      'default',
+      true,
+      { profile: formData.profile, source: formData.source, alias: formData.alias },
+      (projectId) => {
+        TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
+      }
+    );
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
@@ -116,13 +129,17 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       description: formData.description,
       location: formData.location,
       schemaUrl: formData.schemaUrl,
+      runtimeType: formData.runtimeType,
+      runtimeLanguage: formData.runtimeLanguage,
       appLocale,
       qnaKbUrls,
       templateDir: formData?.pvaData?.templateDir,
       eTag: formData?.pvaData?.eTag,
       urlSuffix: formData?.pvaData?.urlSuffix,
-      alias: formData?.pvaData?.alias,
       preserveRoot: formData?.pvaData?.preserveRoot,
+      alias: formData?.alias,
+      profile: formData?.profile,
+      source: formData?.source,
     };
     TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
 
@@ -146,9 +163,12 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (data: string) => {
+  const handleCreateNext = async (templateName: string, runtimeLanguage: string, urlData?: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-    navigate(`./create/${encodeURIComponent(data)}`);
+    const navString = urlData
+      ? `./create/${runtimeLanguage}/${encodeURIComponent(templateName)}${urlData}`
+      : `./create/${runtimeLanguage}/${encodeURIComponent(templateName)}`;
+    navigate(navString);
   };
 
   return (
@@ -158,7 +178,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
         <DefineConversationV2
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
-          path="create/:templateId"
+          path="create/:runtimeLanguage/:templateId"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
@@ -170,6 +190,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           path="create"
           templates={templateProjects}
           onDismiss={handleDismiss}
+          onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
         />
         <DefineConversationV2

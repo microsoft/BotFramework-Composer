@@ -34,6 +34,12 @@ const mockSchemas = {
               description: 'Route',
               default: 'mockRoute',
             },
+            type: {
+              type: 'string',
+              title: 'Type',
+              description: 'Fully qualified type for the adapter',
+              default: 'Adapter.Full.Type.Mock',
+            },
           },
         },
       },
@@ -47,6 +53,7 @@ const mockSchemas = {
           subtitle: 'Connect to Fake Chat Client',
           helpLink: 'https://example.com/',
           order: ['route', 'exampleName'],
+          hidden: ['type'],
         },
       },
     },
@@ -78,7 +85,7 @@ describe('ExternalAdapterSettings', () => {
       initRecoilState
     );
 
-    const link = getByText('Package Settings');
+    const link = getByText('the package manager');
 
     expect(link.attributes.getNamedItem('href')?.value).toEqual('plugin/package-manager/package-manager');
   });
@@ -129,20 +136,29 @@ describe('ExternalAdapterSettings', () => {
             name: 'Adapter.Mock',
             route: 'mockRoute',
             enabled: true,
+            type: 'Adapter.Full.Type.Mock',
           },
         ],
       },
-      'Adapter.Mock': { exampleName: 'test text 12345', route: 'mockRoute', $kind: 'Adapter.Mock' },
+      'Adapter.Mock': {
+        exampleName: 'test text 12345',
+        route: 'mockRoute',
+        $kind: 'Adapter.Mock',
+        type: 'Adapter.Full.Type.Mock',
+      },
     });
   });
 
   it('disables an adapter', async () => {
     const initStateWithAdapter = {
-      runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }] },
+      runtimeSettings: {
+        adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+      },
       'Adapter.Mock': {
         exampleName: 'example',
         route: 'mock',
         $kind: 'Adapter.Mock',
+        type: 'Adapter.Full.Type.Mock',
       },
     };
 
@@ -161,17 +177,22 @@ describe('ExternalAdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }] },
+        runtimeSettings: {
+          adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+        },
       })
     );
   });
 
   it('enables an adapter', async () => {
     const initStateWithAdapter = {
-      runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }] },
+      runtimeSettings: {
+        adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+      },
       'Adapter.Mock': {
         exampleName: 'example',
         route: 'mock',
+        type: 'Adapter.Full.Type.Mock',
       },
     };
 
@@ -190,7 +211,9 @@ describe('ExternalAdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }] },
+        runtimeSettings: {
+          adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+        },
       })
     );
   });

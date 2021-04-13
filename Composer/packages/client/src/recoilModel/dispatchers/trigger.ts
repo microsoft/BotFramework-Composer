@@ -5,8 +5,8 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { BaseSchema, deleteActions, ITriggerCondition, LgTemplate, LgTemplateSamples, SDKKinds } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { luFilesState, schemasState, dialogState, localeState } from '../atoms/botState';
-import { dialogsSelectorFamily } from '../selectors';
+import { schemasState, dialogState, localeState } from '../atoms/botState';
+import { dialogsSelectorFamily, luFilesSelectorFamily } from '../selectors';
 import {
   onChooseIntentKey,
   generateNewDialog,
@@ -49,7 +49,7 @@ export const triggerDispatcher = () => {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
         const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-        const luFiles = await snapshot.getPromise(luFilesState(projectId));
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId }));
         const schemas = await snapshot.getPromise(schemasState(projectId));
@@ -130,7 +130,7 @@ export const triggerDispatcher = () => {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
         const locale = await snapshot.getPromise(localeState(projectId));
-        const luFiles = await snapshot.getPromise(luFilesState(projectId));
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const luFile = luFiles.find((file) => file.id === `${dialogId}.${locale}`);
 
         const { removeLuIntent, removeLgTemplates } = dispatcher;

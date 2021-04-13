@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo, buildURL } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { dialogIdsState } from '../../recoilModel';
+import { localeState, luFilesSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 
@@ -24,18 +24,23 @@ const LUPage: React.FC<RouteComponentProps<{
   luFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
-  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId));
+  const actualProjectId = skillId ?? projectId;
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(actualProjectId));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
+  const activeFile = luFileId
+    ? luFiles.find(({ id }) => id === luFileId || id === `${luFileId}.${locale}`)
+    : luFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
+
   useEffect(() => {
-    const activeDialog = dialogs.find((id) => id === dialogId);
-    if (!activeDialog && dialogId !== 'all' && dialogs.length && !luFileId) {
+    if (!activeFile && luFiles.length) {
       navigateTo(buildURL('language-understanding', { projectId, skillId }));
     }
-  }, [dialogId, dialogs, projectId, luFileId]);
+  }, [dialogId, luFiles, projectId, luFileId]);
 
   const onToggleEditMode = useCallback(() => {
     let url = buildURL('language-understanding', { projectId, skillId, dialogId });
@@ -73,8 +78,22 @@ const LUPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} luFileId={luFileId} path="/edit" projectId={projectId} skillId={skillId} />
-          <TableView dialogId={dialogId} luFileId={luFileId} path="/" projectId={projectId} skillId={skillId} />
+          <CodeEditor
+            dialogId={dialogId}
+            file={activeFile}
+            luFileId={luFileId}
+            path="/edit"
+            projectId={projectId}
+            skillId={skillId}
+          />
+          <TableView
+            dialogId={dialogId}
+            file={activeFile}
+            luFileId={luFileId}
+            path="/"
+            projectId={projectId}
+            skillId={skillId}
+          />
         </Router>
       </Suspense>
     </Page>

@@ -5,7 +5,7 @@ import type { JSONSchema7 } from 'json-schema';
 
 import type { IBotProject } from './server';
 import type { UserIdentity } from './user';
-import type { ILuisConfig, IQnAConfig } from './settings';
+import type { ILuisConfig, IOrchestratorConfig, IQnAConfig } from './settings';
 import { AuthParameters } from './auth';
 
 export type PublishResult = {
@@ -131,6 +131,7 @@ export type PublishPlugin<Config = any> = {
 export type IPublishConfig = {
   luis: ILuisConfig;
   qna: IQnAConfig;
+  orchestrator?: IOrchestratorConfig;
 };
 
 export type PublishTarget = {
@@ -144,8 +145,15 @@ export type PublishTarget = {
 export type PublishProfile = {
   name?: string;
   environment?: string;
+  tenantId?: string;
   hostname?: string;
+  luisResource?: string;
+  language?: string;
   runtimeIdentifier: string;
+  botName?: string;
+  resourceGroup?: string;
+  subscriptionId?: string;
+  region?: string;
   settings: {
     applicationInsights?: {
       InstrumentationKey: string;
@@ -166,6 +174,11 @@ export type PublishProfile = {
       endpointKey: string;
       endpoint: string;
       region: string;
+    };
+    qna?: {
+      subscriptionKey: string;
+      qnaRegion: string;
+      endpoint: string;
     };
     MicrosoftAppId: string;
     MicrosoftAppPassword: string;

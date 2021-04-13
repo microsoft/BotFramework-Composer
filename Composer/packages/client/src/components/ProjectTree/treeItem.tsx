@@ -88,41 +88,53 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navContainer = (isAnyMenuOpen: boolean, isActive: boolean, menuOpenHere: boolean, textWidth: number) => css`
+const navContainer = (
+  isAnyMenuOpen: boolean,
+  isActive: boolean,
+  menuOpenHere: boolean,
+  textWidth: number,
+  isBroken: boolean,
+  padLeft: number,
+  marginLeft: number
+) => css`
   ${isAnyMenuOpen
     ? ''
-    : `&:hover {
-  background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+    : `
+    &:hover {
+        background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
 
-  .dialog-more-btn {
-    visibility: visible;
-  }
-  .action-btn {
-    visibility: visible;
-  }
-  .treeItem-text {
-    max-width: ${textWidth}px;
-  }
-  }`};
+        .dialog-more-btn {
+          visibility: visible;
+        }
+        .action-btn {
+          visibility: visible;
+        }
+        .treeItem-text {
+          max-width: ${textWidth}px;
+        }
+        }`};
+
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
-`;
 
-const navItem = (isBroken: boolean, padLeft: number, marginLeft: number, isActive: boolean) => css`
+  display: inline-flex;
+  flex-direction: row;
+
   label: navItem;
-  position: relative;
+
   height: 24px;
   font-size: 12px;
   padding-left: ${padLeft}px;
   margin-left: ${marginLeft}px;
+  min-width: calc(100% - ${padLeft + 24}px);
   opacity: ${isBroken ? 0.5 : 1};
-  display: flex;
-  flex-direction: row;
   align-items: center;
+
+  position: relative;
+  top: -4px;
 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
   }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
 
   &:focus {
     outline: none;
@@ -155,7 +167,7 @@ export const overflowSet = (isBroken: boolean) => css`
   height: 100%;
   box-sizing: border-box;
   justify-content: space-between;
-  display: flex;
+  display: inline-flex;
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
   }
@@ -213,6 +225,44 @@ const calloutRootStyle = css`
   padding: 11px;
 `;
 
+type TreeObject =
+  | 'bot'
+  | 'dialog'
+  | 'trigger' // basic ProjectTree elements
+  | 'trigger group'
+  | 'form dialog'
+  | 'form field'
+  | 'form trigger' // used with form dialogs
+  | 'lg'
+  | 'lu' // used on other pages
+  | 'external skill'; // used with multi-bot authoring
+
+const icons: { [key in TreeObject]: string | null } = {
+  bot: 'CubeShape',
+  dialog: 'Org',
+  trigger: 'LightningBolt',
+  'trigger group': null,
+  'form dialog': 'Table',
+  'form field': 'Variable2', // x in parentheses
+  'form trigger': 'TriggerAuto', // lightning bolt with gear
+  lg: 'Robot',
+  lu: 'People',
+  'external skill': 'Globe',
+};
+
+const objectNames: { [key in TreeObject]: () => string } = {
+  trigger: () => formatMessage('Trigger'),
+  dialog: () => formatMessage('Dialog'),
+  'trigger group': () => formatMessage('Trigger group'),
+  'form dialog': () => formatMessage('Form dialog'),
+  'form field': () => formatMessage('Form field'),
+  'form trigger': () => formatMessage('Form trigger'),
+  lg: () => formatMessage('LG'),
+  lu: () => formatMessage('LU'),
+  bot: () => formatMessage('Bot'),
+  'external skill': () => formatMessage('External skill'),
+};
+
 // -------------------- TreeItem -------------------- //
 
 type ITreeItemProps = {
@@ -221,7 +271,7 @@ type ITreeItemProps = {
   isChildSelected?: boolean;
   isSubItemActive?: boolean;
   onSelect?: (link: TreeLink) => void;
-  icon?: string;
+  itemType: TreeObject;
   dialogName?: string;
   textWidth?: number;
   extraSpace?: number;
@@ -232,6 +282,7 @@ type ITreeItemProps = {
   menuOpenCallback?: (cb: boolean) => void;
   isMenuOpen?: boolean;
   showErrors?: boolean;
+  role?: string;
 };
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -359,7 +410,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   link,
   isActive = false,
   isChildSelected = false,
-  icon,
+  itemType,
   dialogName,
   onSelect,
   textWidth = 100,
@@ -371,9 +422,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
+  role,
 }) => {
   const [thisItemSelected, setThisItemSelected] = useState<boolean>(false);
-  const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
+
+  const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
+  const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
@@ -408,17 +462,16 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       return (
         <div
           data-is-focusable
-          aria-label={`${item.displayName} ${warningContent} ${errorContent}`}
+          aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
           css={projectTreeItemContainer}
-          role="cell"
           tabIndex={0}
           onBlur={item.onBlur}
           onFocus={item.onFocus}
         >
           <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.icon != null && (
+            {item.itemType != null && icons[item.itemType] != null && (
               <Icon
-                iconName={item.icon}
+                iconName={icons[item.itemType]}
                 styles={{
                   root: {
                     width: '12px',
@@ -458,7 +511,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       return (overflowItems: IContextualMenuItem[] | undefined) => {
         if (overflowItems == null) return null;
         return (
-          <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter} styles={moreButtonContainer}>
+          <TooltipHost
+            content={moreLabel}
+            directionalHint={DirectionalHint.rightCenter}
+            styles={moreButtonContainer}
+            tabIndex={0}
+          >
             <IconButton
               ariaLabel={moreLabel}
               className="dialog-more-btn"
@@ -479,7 +537,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
                   menuOpenCallback(false);
                 },
               }}
-              role="cell"
               styles={moreButton(isActive || isChildSelected)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -496,57 +553,56 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   return (
     <div
+      aria-label={ariaLabel}
       css={navContainer(
         isMenuOpen,
         isActive,
         thisItemSelected,
-        textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover
+        textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover,
+        isBroken,
+        padLeft,
+        marginLeft
       )}
-    >
-      <div
-        aria-label={a11yLabel}
-        css={navItem(isBroken, padLeft, marginLeft, isActive)}
-        data-testid={a11yLabel}
-        role="gridcell"
-        tabIndex={0}
-        onClick={() => {
+      data-testid={dataTestId}
+      role={role}
+      tabIndex={0}
+      onClick={() => {
+        onSelect?.(link);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
           onSelect?.(link);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            onSelect?.(link);
-          }
-        }}
-      >
-        <div style={{ minWidth: `${spacerWidth}px` }}></div>
-        <OverflowSet
-          //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
-          //remove this at that time
-          doNotContainWithinFocusZone
-          css={overflowSet(isBroken)}
-          data-testid={linkString}
-          items={[
-            {
-              key: linkString,
-              icon: isBroken ? 'RemoveLink' : icon,
-              ...link,
-            },
-          ]}
-          overflowItems={overflowMenu}
-          role="row"
-          styles={{ item: { flex: 1 } }}
-          onRenderItem={onRenderItem(
-            textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
-            showErrors
-          )}
-          onRenderOverflowButton={onRenderOverflowButton(
-            !!isActive,
-            isChildSelected,
-            menuOpenCallback,
-            setThisItemSelected
-          )}
-        />
-      </div>
+        }
+      }}
+    >
+      <div style={{ minWidth: `${spacerWidth}px` }} />
+      <OverflowSet
+        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
+        //remove this at that time
+        doNotContainWithinFocusZone
+        css={overflowSet(isBroken)}
+        data-testid={linkString}
+        items={[
+          {
+            key: linkString,
+            icon: isBroken ? 'RemoveLink' : icons[itemType],
+            itemType,
+            ...link,
+          },
+        ]}
+        overflowItems={overflowMenu}
+        styles={{ item: { flex: 1 } }}
+        onRenderItem={onRenderItem(
+          textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
+          showErrors
+        )}
+        onRenderOverflowButton={onRenderOverflowButton(
+          !!isActive,
+          isChildSelected,
+          menuOpenCallback,
+          setThisItemSelected
+        )}
+      />
     </div>
   );
 };

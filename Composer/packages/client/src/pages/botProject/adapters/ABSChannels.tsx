@@ -21,11 +21,11 @@ import { OpenConfirmModal } from '@bfc/ui-shared';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { navigateTo } from '../../../utils/navigation';
-import { settingsState } from '../../../recoilModel';
+import { botDisplayNameState, settingsState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';
 import { armScopes } from '../../../constants';
-import { getTokenFromCache, isShowAuthDialog, isGetTokenFromUser } from '../../../utils/auth';
+import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
 import {
@@ -40,8 +40,8 @@ import {
   errorTextStyle,
   columnSizes,
 } from '../styles';
-
-import ABSChannelSpeechModal from './ABSChannelSpeechModal';
+import { TeamsManifestGeneratorModal } from '../../../components/Adapters/TeamsManifestGeneratorModal';
+import { ManageSpeech } from '../../../components/ManageSpeech/ManageSpeech';
 
 const teamsHelpLink = 'https://aka.ms/composer-channel-teams';
 const webchatHelpLink = 'https://aka.ms/composer-channel-webchat';
@@ -62,6 +62,7 @@ type AzureResourcePointer = {
   alternateSubscriptionId?: string | undefined;
   resourceName: string;
   resourceGroupName: string;
+  microsoftAppId: string;
 };
 
 type AzureChannelStatus = {
@@ -86,12 +87,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [currentResource, setCurrentResource] = useState<AzureResourcePointer | undefined>();
   const [channelStatus, setChannelStatus] = useState<AzureChannelsStatus | undefined>();
   const { publishTargets } = useRecoilValue(settingsState(projectId));
+  const botDisplayName = useRecoilValue(botDisplayNameState(projectId));
   const [token, setToken] = useState<string | undefined>();
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoading, setLoadingStatus] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
+  const [showTeamsManifestModal, setShowTeamsManifestModal] = useState<boolean>(false);
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -119,7 +122,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       navigateTo(`/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`);
     } else {
       let newtoken = '';
-      if (isGetTokenFromUser()) {
+      if (userShouldProvideTokens()) {
         if (isShowAuthDialog(false)) {
           setShowAuthDialog(true);
         }
@@ -134,8 +137,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       if (profile) {
         const config = JSON.parse(profile.configuration);
         setCurrentResource({
+          microsoftAppId: config?.settings?.MicrosoftAppId,
           resourceName: config.name,
-          resourceGroupName: config.name,
+          resourceGroupName: config.resourceGroup || config.name,
           subscriptionId: config.subscriptionId,
         });
       }
@@ -241,7 +245,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           };
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
-
+      if (channelId === CHANNELS.TEAMS) {
+        setShowTeamsManifestModal(true);
+      }
       // success!!
       setChannelStatus({
         ...channelStatus,
@@ -315,7 +321,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   const hasAuth = async () => {
     let newtoken = '';
-    if (isGetTokenFromUser()) {
+    if (userShouldProvideTokens()) {
       if (isShowAuthDialog(false)) {
         setShowAuthDialog(true);
       }
@@ -363,7 +369,11 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     };
   };
 
-  const toggleSpeechOn = async (key: string, region: string, isDefault: boolean) => {
+  const toggleSpeechOn = async (
+    settings: { subscriptionKey: string; region: string },
+    isDefault: boolean,
+    attempt = 0
+  ) => {
     setChannelStatus({
       ...channelStatus,
       [CHANNELS.SPEECH]: {
@@ -374,8 +384,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
     try {
       await createChannelService(CHANNELS.SPEECH, {
-        cognitiveServiceSubscriptionKey: key,
-        cognitiveServiceRegion: region,
+        cognitiveServiceSubscriptionKey: settings.subscriptionKey,
+        cognitiveServiceRegion: settings.region,
         isDefaultBotForCogSvcAccount: isDefault,
       });
     } catch (err) {
@@ -388,8 +398,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           loading: false,
         },
       });
-
-      if (err?.response?.data?.error.code === 'InvalidChannelData') {
+      if (err?.response?.data?.error.code === 'UnknownError' && attempt < 5) {
+        console.error(err);
+        console.log('Retrying...');
+        setTimeout(() => {
+          toggleSpeechOn(settings, isDefault, attempt + 1);
+        }, 3000);
+      } else if (err?.response?.data?.error.code === 'InvalidChannelData') {
         const result = await OpenConfirmModal(
           formatMessage('Enable speech'),
           formatMessage(
@@ -397,7 +412,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           )
         );
         if (result) {
-          toggleSpeechOn(key, region, false);
+          toggleSpeechOn(settings, false);
         }
       } else {
         setApplicationLevelError(err);
@@ -494,6 +509,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           <Spinner />
         </Stack.Item>
       )}
+      {key === CHANNELS.TEAMS && channelStatus?.[key].enabled && !channelStatus?.[key].loading && (
+        <Stack.Item>
+          <Link
+            styles={{ root: { marginTop: '7px' } }}
+            onClick={() => {
+              setShowTeamsManifestModal(true);
+            }}
+          >
+            {formatMessage('Open Manifest')}
+          </Link>
+        </Stack.Item>
+      )}
     </Stack>
   );
 
@@ -520,12 +547,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
         />
       )}
-      <ABSChannelSpeechModal
-        isOpen={showSpeechModal}
-        onClose={() => {
+      <ManageSpeech
+        hidden={!showSpeechModal}
+        setVisibility={setShowSpeechModal}
+        onDismiss={() => {
           setShowSpeechModal(false);
         }}
-        onUpdateKey={toggleSpeechOn}
+        onGetKey={(settings) => {
+          toggleSpeechOn(settings, true);
+        }}
+        onNext={() => {
+          setShowSpeechModal(false);
+        }}
       />
       <div>
         <Dropdown
@@ -581,6 +614,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             {absTableRow(CHANNELS.SPEECH, formatMessage('Speech'), speechHelpLink)}
           </Fragment>
         )}
+        <TeamsManifestGeneratorModal
+          botAppId={currentResource?.microsoftAppId ? currentResource.microsoftAppId : ''}
+          botDisplayName={botDisplayName}
+          hidden={!showTeamsManifestModal}
+          onDismiss={() => {
+            setShowTeamsManifestModal(false);
+          }}
+        />
       </div>
     </React.Fragment>
   );

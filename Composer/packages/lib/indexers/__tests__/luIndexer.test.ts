@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo } from '@bfc/shared';
+import { FileInfo, luImportResolverGenerator } from '@bfc/shared';
 
 import { luIndexer } from '../src/luIndexer';
 
@@ -45,13 +45,25 @@ describe('parse', () => {
   });
 
   it('should parse LU file with import', () => {
-    const content = `[import](greating.lu)
+    const content = `[import](greeting.lu)
   [import](../common/aks.lu)
   `;
 
-    const result = parse(content, '', {});
+    const luFiles = [
+      {
+        id: 'greeting',
+        content: '',
+      },
+      {
+        id: 'aks',
+        content: '',
+      },
+    ];
+    const luImportResolver = luImportResolverGenerator(luFiles, '.lu');
+
+    const result = parse(content, 'a.lu', {}, luImportResolver);
     expect(result.imports.length).toEqual(2);
-    expect(result.imports[0]).toEqual({ id: 'greating.lu', path: 'greating.lu', description: 'import' });
+    expect(result.imports[0]).toEqual({ id: 'greeting.lu', path: 'greeting.lu', description: 'import' });
     expect(result.imports[1]).toEqual({ id: 'aks.lu', path: '../common/aks.lu', description: 'import' });
     expect(result.empty).toEqual(false);
     expect(result.intents.length).toEqual(0);

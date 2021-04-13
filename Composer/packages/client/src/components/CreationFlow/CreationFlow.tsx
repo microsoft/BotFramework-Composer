@@ -7,9 +7,8 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey } from '@bfc/shared';
 
-import { CreationFlowStatus, feedDictionary } from '../../constants';
+import { CreationFlowStatus, firstPartyTemplateFeed } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -17,7 +16,6 @@ import {
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
-  featureFlagsState,
   templateProjectsState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
@@ -31,11 +29,11 @@ import DefineConversation from './DefineConversation';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
-const CreationFlow: React.FC<CreationFlowProps> = () => {
+const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => {
   const {
-    fetchTemplates,
     fetchTemplatesV2,
     fetchRecentProjects,
+    fetchFeed,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -51,7 +49,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(templateProjectsState);
-  const featureFlags = useRecoilValue(featureFlagsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
@@ -77,8 +74,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
+    fetchFeed();
     fetchRecentProjects();
-    featureFlags.NEW_CREATION_FLOW?.enabled ? fetchTemplatesV2([feedDictionary[csharpFeedKey]]) : fetchTemplates();
+    fetchTemplatesV2([firstPartyTemplateFeed]);
   };
 
   useEffect(() => {
@@ -100,11 +98,22 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     navigate(`/home`);
   };
 
-  const openBot = async (botFolder) => {
+  const handleJumpToOpenModal = (search) => {
+    setCreationFlowStatus(CreationFlowStatus.OPEN);
+    navigate(`./open${search}`);
+  };
+
+  const openBot = async (formData) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    await openProject(botFolder, 'default', true, (projectId) => {
-      TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
-    });
+    await openProject(
+      formData.path,
+      'default',
+      true,
+      { profile: formData.profile, source: formData.source, alias: formData.alias },
+      (projectId) => {
+        TelemetryClient.track('BotProjectOpened', { method: 'toolbar', projectId });
+      }
+    );
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
@@ -165,7 +174,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
         />
-        <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
+        <CreateOptions
+          path="create"
+          templates={templateProjects}
+          onDismiss={handleDismiss}
+          onJumpToOpenModal={handleJumpToOpenModal}
+          onNext={handleCreateNext}
+        />
         <DefineConversation
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}

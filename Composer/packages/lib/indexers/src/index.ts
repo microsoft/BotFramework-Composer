@@ -1,21 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogSetting, FileInfo, lgImportResolverGenerator } from '@bfc/shared';
+import { FileInfo } from '@bfc/shared';
 
 import { recognizerIndexer } from './recognizerIndexer';
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { jsonSchemaFileIndexer } from './jsonSchemaFileIndexer';
-import { lgIndexer } from './lgIndexer';
-import { luIndexer } from './luIndexer';
-import { qnaIndexer } from './qnaIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
 import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
 import { formDialogSchemaIndexer } from './formDialogSchemaIndexer';
 import { crossTrainConfigIndexer } from './crossTrainConfigIndexer';
-import { BotIndexer } from './botIndexer';
 
 class Indexer {
   private classifyFile(files: FileInfo[]) {
@@ -69,28 +65,23 @@ class Indexer {
     );
   };
 
-  private getLgImportResolver = (files: FileInfo[], locale: string) => {
-    const lgFiles = files.map(({ name, content }) => {
-      return {
-        id: getBaseName(name, '.lg'),
-        content,
-      };
-    });
-
-    return lgImportResolverGenerator(lgFiles, '.lg', locale);
+  private getResources = (files: FileInfo[], extension: string) => {
+    return files.map(({ name, content }) => ({
+      id: getBaseName(name, extension),
+      content,
+    }));
   };
 
-  public index(files: FileInfo[], botName: string, locale: string, settings: DialogSetting) {
+  public index(files: FileInfo[], botName: string) {
     const result = this.classifyFile(files);
-    const luFeatures = settings.luFeatures;
     const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
     const { skillManifestFiles, crossTrainConfigs } = this.separateConfigAndManifests(result[FileExtensions.Manifest]);
     const assets = {
       dialogs: dialogIndexer.index(dialogs, botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
-      lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
-      luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
-      qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
+      lgResources: this.getResources(result[FileExtensions.lg], FileExtensions.lg),
+      luResources: this.getResources(result[FileExtensions.Lu], FileExtensions.Lu),
+      qnaResources: this.getResources(result[FileExtensions.QnA], FileExtensions.QnA),
       skillManifests: skillManifestIndexer.index(skillManifestFiles),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
       jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
@@ -98,9 +89,7 @@ class Indexer {
       recognizers: recognizerIndexer.index(recognizers),
       crossTrainConfig: crossTrainConfigIndexer.index(crossTrainConfigs),
     };
-    const botProjectFile = assets.botProjectSpaceFiles[0];
-    const diagnostics = BotIndexer.validate({ ...assets, setting: settings, botProjectFile });
-    return { ...assets, diagnostics };
+    return { ...assets };
   }
 }
 

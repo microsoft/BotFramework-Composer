@@ -62,9 +62,10 @@ export const headerContent = css`
   label: PageHeaderContent;
 `;
 
+// TODO: https://github.com/microsoft/BotFramework-Composer/issues/6873. Investigate static numbers
 export const main = (hasRenderHeaderContent) => css`
   margin-left: 2px;
-  height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
+  max-height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
   display: flex;
   flex-grow: 1;
   border-top: 1px solid #dddddd;
@@ -88,7 +89,7 @@ export const content = (shouldShowEditorError: boolean) => css`
   box-sizing: border-box;
 `;
 
-const contentStyle = css`
+const defaultContentStyle = css`
   padding: 20px;
   flex-grow: 1;
   height: 0;
@@ -104,6 +105,7 @@ type IPageProps = {
   toolbarItems: IToolbarItem[];
   title: string;
   headerStyle?: SerializedStyles;
+  contentStyle?: SerializedStyles;
   navRegionName: string;
   mainRegionName: string;
   shouldShowEditorError?: boolean;
@@ -131,6 +133,7 @@ const Page: React.FC<IPageProps> = (props) => {
     navRegionName,
     mainRegionName,
     headerStyle = header,
+    contentStyle = defaultContentStyle,
     shouldShowEditorError = false,
     useNewTree,
     useDebugPane,
@@ -193,7 +196,7 @@ const Page: React.FC<IPageProps> = (props) => {
                   showLuImports: pageMode === 'language-understanding',
                   showRemote: false,
                   showMenu: false,
-                  showQnAMenu: title === 'QnA',
+                  showQnAMenu: pageMode === 'knowledge-base',
                   showErrors: false,
                   showCommonLinks,
                 }}
@@ -218,10 +221,10 @@ const Page: React.FC<IPageProps> = (props) => {
               role="region"
             >
               <div css={contentStyle}>{children}</div>
-              {useDebugPane ? <DebugPanel /> : null}
             </div>
           </Split>
         </div>
+        {useDebugPane ? <DebugPanel /> : null}
       </div>
     </div>
   );

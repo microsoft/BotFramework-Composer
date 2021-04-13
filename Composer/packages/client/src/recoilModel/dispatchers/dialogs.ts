@@ -84,7 +84,7 @@ export const dialogsDispatcher = () => {
     const { set, snapshot } = callbackHelpers;
     const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
     const schemas = await snapshot.getPromise(schemasState(projectId));
-    const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
+    const dialog = { isRoot: false, ...dialogIndexer.parse(id, fixedContent) };
 
     if (typeof dialog.content === 'object') {
       dialog.content.id = id;

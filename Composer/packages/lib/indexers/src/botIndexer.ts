@@ -6,6 +6,7 @@
 import get from 'lodash/get';
 import {
   LUISLocales,
+  QnALocales,
   Diagnostic,
   DiagnosticSeverity,
   LuFile,
@@ -122,7 +123,7 @@ const checkSetting = (
 
 /**
  * Check bot settings & dialog
- * files meet LUIS/QnA requirments.
+ * files meet LUIS requirments.
  */
 const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
   const {
@@ -131,7 +132,7 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
   } = assets;
 
   // if use LUIS, continue
-  const useLUIS = dialogs.some((item) => !!item.luFile);
+  const useLUIS = dialogs.some((item) => !!item.luFile && item?.luProvider === SDKKinds.LuisRecognizer);
   if (!useLUIS) return [];
 
   const unsupportedLocales = difference(languages, LUISLocales);
@@ -144,6 +145,29 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
   });
 };
 
+/**
+ * Check bot settings & dialog
+ * files meet QnA requirments.
+ */
+const checkQnALocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
+  const {
+    dialogs,
+    setting: { languages },
+  } = assets;
+
+  // if use LUIS, continue
+  const useQnA = dialogs.some((item) => !!item.qnaFile);
+  if (!useQnA) return [];
+
+  const unsupportedLocales = difference(languages, QnALocales);
+
+  const severity =
+    unsupportedLocales.length === languages.length ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning;
+
+  return unsupportedLocales.map((locale) => {
+    return new Diagnostic(`locale ${locale} is not supported by QnA`, 'appsettings.json', severity);
+  });
+};
 /**
  * Check bot skill & setting
  * 1. used skill not existed in *.botproj
@@ -190,6 +214,7 @@ const validate = (
   const settingDiagnostics = [
     ...checkSetting(assets, rootSetting),
     ...checkLUISLocales(assets),
+    ...checkQnALocales(assets),
     ...checkSkillSetting(assets),
   ];
   if (assets.isRootBot) return settingDiagnostics;
@@ -210,13 +235,22 @@ const filterLUISFilesToPublish = (luFiles: LuFile[], dialogFiles: DialogInfo[]):
   });
 };
 
+const filterQnAFilesToPublish = (qnaFiles: QnAFile[]): QnAFile[] => {
+  return qnaFiles.filter((file) => {
+    const locale = getLocale(file.id);
+    return locale && QnALocales.includes(locale);
+  });
+};
+
 export const BotIndexer = {
   validate,
   checkManifest,
   checkSetting,
   checkLUISLocales,
+  checkQnALocales,
   checkSkillSetting,
   filterLUISFilesToPublish,
+  filterQnAFilesToPublish,
   shouldUseLuis,
   shouldUseQnA,
 };

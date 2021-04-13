@@ -10,33 +10,37 @@ import uniqueId from 'lodash/uniqueId';
 import { ResponseMsg } from './types';
 
 class OrchestratorBuilder {
-  private worker: ChildProcess;
+  private static _worker: ChildProcess;
   private resolves = {};
   private rejects = {};
 
   constructor() {
-    const workerScriptPath = path.join(__dirname, 'orchestratorWorker.ts');
-    if (fs.existsSync(workerScriptPath)) {
-      // set exec arguments to empty, avoid fork nodemon `--inspect` error
-      this.worker = fork(workerScriptPath, [], { execArgv: ['-r', 'ts-node/register'] });
-    } else {
-      // set exec arguments to empty, avoid fork nodemon `--inspect` error
-      this.worker = fork(path.join(__dirname, 'orchestratorWorker.js'), [], { execArgv: [] });
-    }
-    this.worker.on('message', this.handleMsg.bind(this));
+    OrchestratorBuilder.worker.on('message', this.handleMsg.bind(this));
   }
 
   public async build(
+    projectId: string,
     files: FileInfo[],
     modelPath: string,
     generatedFolderPath: string
-  ): Promise<{ [key: string]: string }> {
+  ): Promise<Record<string, string>> {
     const msgId = uniqueId();
-    const msg = { id: msgId, payload: { files, type: 'build', modelPath, generatedFolderPath } };
+    const msg = { id: msgId, payload: { projectId, files, type: 'build', modelPath, generatedFolderPath } };
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
-      this.worker.send(msg);
+      OrchestratorBuilder.worker.send(msg);
+    });
+  }
+
+  public async warmupCache(projectId: string, generatedFolderPath: string): Promise<boolean> {
+    const msgId = uniqueId();
+    const msg = { id: msgId, payload: { type: 'warmup', projectId, generatedFolderPath } };
+
+    return new Promise((resolve, reject) => {
+      this.resolves[msgId] = resolve;
+      this.rejects[msgId] = reject;
+      OrchestratorBuilder.worker.send(msg);
     });
   }
 
@@ -56,9 +60,25 @@ class OrchestratorBuilder {
     delete this.rejects[id];
   }
 
-  public exit() {
-    this.worker.kill();
+  static get worker() {
+    if (this._worker && !this._worker.killed) {
+      return this._worker;
+    }
+
+    const workerScriptPath = path.join(__dirname, 'orchestratorWorker.ts');
+    if (fs.existsSync(workerScriptPath)) {
+      // set exec arguments to empty, avoid fork nodemon `--inspect` error
+      this._worker = fork(workerScriptPath, [], {
+        execArgv: ['-r', 'ts-node/register'],
+        env: { TS_NODE_PROJECT: path.resolve(__dirname, '..', '..', '..', '..', 'tsconfig.json') },
+      });
+    } else {
+      // set exec arguments to empty, avoid fork nodemon `--inspect` error
+      this._worker = fork(path.join(__dirname, 'orchestratorWorker.js'), [], { execArgv: [] });
+    }
+    return this._worker;
   }
 }
 
-export { OrchestratorBuilder };
+const orchestratorBuilder = new OrchestratorBuilder();
+export default orchestratorBuilder;

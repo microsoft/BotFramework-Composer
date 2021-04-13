@@ -5,12 +5,10 @@ import {
   deepCopyActions,
   deleteActions as destructActions,
   FieldProcessorAsync,
-  walkAdaptiveActionList,
-  LgType,
-  LgMetaData,
   LgTemplateRef,
-  LuType,
   LuMetaData,
+  LuType,
+  walkAdaptiveActionList,
 } from '@bfc/shared';
 import { LuIntentSection, MicrosoftIDialog } from '@botframework-composer/types';
 
@@ -18,6 +16,7 @@ import TelemetryClient from '../telemetry/TelemetryClient';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
+import { deserializeLgTemplate, serializeLgTemplate } from './utils';
 
 export const useActionApi = (projectId: string) => {
   const { getLgTemplates, removeLgTemplates, addLgTemplate } = useLgApi(projectId);
@@ -37,20 +36,16 @@ export const useActionApi = (projectId: string) => {
 
   const createLgTemplate = async (
     lgFileId: string,
+    toId: string,
     lgText: string,
-    hostActionId: string,
     hostActionData: MicrosoftIDialog,
     hostFieldName: string
   ): Promise<string> => {
     if (!lgText) return '';
-    const newLgType = new LgType(hostActionData.$kind, hostFieldName).toString();
-    const newLgTemplateName = new LgMetaData(newLgType, hostActionId).toString();
-    const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
-    await addLgTemplate(lgFileId, newLgTemplateName, lgText);
-    return newLgTemplateRefStr;
+    return await deserializeLgTemplate(lgFileId, toId, lgText, hostActionData, hostFieldName, addLgTemplate);
   };
 
-  const readLgTemplate = (lgText: string) => {
+  const readLgTemplate = (lgText: string, fromId: string) => {
     if (!lgText) return '';
 
     const inputLgRef = LgTemplateRef.parse(lgText);
@@ -59,12 +54,13 @@ export const useActionApi = (projectId: string) => {
     const lgTemplates = getLgTemplates(inputLgRef.name);
     if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
 
-    const targetTemplate = lgTemplates.find((x) => x.name === inputLgRef.name);
-    return targetTemplate ? targetTemplate.body : lgText;
+    const serializedLg = serializeLgTemplate(inputLgRef.name, fromId, lgText, lgTemplates);
+
+    return serializedLg;
   };
 
   const createLuIntent = async (
-    luFildId: string,
+    luFileId: string,
     intent: LuIntentSection | undefined,
     hostResourceId: string,
     hostResourceData: MicrosoftIDialog
@@ -74,7 +70,7 @@ export const useActionApi = (projectId: string) => {
     const newLuIntentType = new LuType(hostResourceData.$kind).toString();
     const newLuIntentName = new LuMetaData(newLuIntentType, hostResourceId).toString();
     const newLuIntent: LuIntentSection = { ...intent, Name: newLuIntentName };
-    await addLuIntent(luFildId, newLuIntentName, newLuIntent);
+    await addLuIntent(luFileId, newLuIntentName, newLuIntent);
     return newLuIntentName;
   };
 
@@ -90,7 +86,7 @@ export const useActionApi = (projectId: string) => {
     });
     // '- hi' -> 'SendActivity_1234'
     const referenceLgText: FieldProcessorAsync<string> = async (fromId, fromAction, toId, toAction, lgFieldName) =>
-      createLgTemplate(dialogId, fromAction[lgFieldName] as string, toId, toAction, lgFieldName);
+      createLgTemplate(dialogId, toId, fromAction[lgFieldName] as string, toAction, lgFieldName);
 
     // LuIntentSection -> 'TextInput_Response_1234'
     const referenceLuIntent: FieldProcessorAsync<any> = async (fromId, fromAction, toId, toAction) => {
@@ -106,7 +102,7 @@ export const useActionApi = (projectId: string) => {
   async function copyActions(dialogId: string, actions: MicrosoftIDialog[]) {
     // 'SendActivity_1234' -> '- hi'
     const dereferenceLg: FieldProcessorAsync<string> = async (fromId, fromAction, toId, toAction, lgFieldName) =>
-      readLgTemplate(fromAction[lgFieldName] as string);
+      readLgTemplate(fromAction[lgFieldName] as string, fromId);
 
     // 'TextInput_Response_1234' -> LuIntentSection | undefined
     const dereferenceLu: FieldProcessorAsync<any> = async (fromId, fromAction, toId, toAction) => {
@@ -129,10 +125,6 @@ export const useActionApi = (projectId: string) => {
     return copiedAction;
   }
 
-  async function deleteAction(dialogId: string, action: MicrosoftIDialog) {
-    return deleteActions(dialogId, [action]);
-  }
-
   async function deleteActions(dialogId: string, actions: MicrosoftIDialog[]) {
     actions.forEach(({ $kind }) => {
       TelemetryClient.track('ActionDeleted', { type: $kind });
@@ -142,6 +134,10 @@ export const useActionApi = (projectId: string) => {
       (templates: string[]) => removeLgTemplates(dialogId, templates),
       (luIntents: string[]) => Promise.all(luIntents.map((intent) => removeLuIntent(dialogId, intent)))
     );
+  }
+
+  async function deleteAction(dialogId: string, action: MicrosoftIDialog) {
+    return deleteActions(dialogId, [action]);
   }
 
   return {

@@ -16,7 +16,13 @@ export const styles = {
       fontSize: FontSizes.size14,
     },
   },
-  modal: {
+  modalCreateFromUrl: {
+    main: {
+      maxWidth: '960px !important',
+      width: '960px',
+    },
+  },
+  modalCreateFromScratch: {
     main: {
       maxWidth: '600px !important',
     },
@@ -26,7 +32,6 @@ export const styles = {
 export const dialogWindow = css`
   display: flex;
   flex-direction: column;
-  width: 552px;
   min-height: 254px;
 `;
 
@@ -37,10 +42,44 @@ export const dialogWindowMini = css`
   min-height: 308px;
 `;
 
-export const textField = {
+export const urlPairStyle = css`
+  display: flex;
+  width: 760px;
+`;
+
+export const textFieldKBNameFromUrl = {
   root: {
-    width: '400px',
-    paddingBottom: '20px',
+    width: 760,
+    paddingBottom: 20,
+  },
+};
+
+export const textFieldKBNameFromScratch = {
+  root: {
+    width: 400,
+    paddingBottom: 20,
+  },
+};
+
+export const textFieldLocales = {
+  root: {
+    width: 115,
+    marginRight: 20,
+    paddingBottom: 20,
+    selectors: {
+      '.ms-Label': {
+        color: NeutralColors.gray160,
+      },
+    },
+  },
+};
+
+export const textFieldUrl = {
+  root: {
+    paddingBottom: 12,
+  },
+  fieldGroup: {
+    width: 760,
   },
 };
 
@@ -54,3 +93,17 @@ export const subText = css`
   font-size: 14px;
   font-weight: 400;
 `;
+
+export const knowledgeBaseStyle = {
+  root: {
+    color: NeutralColors.gray160,
+    fontWeight: '600' as '600',
+  },
+};
+
+export const urlStackStyle = {
+  root: {
+    overflowY: 'auto' as 'auto',
+    marginBottom: 10,
+  },
+};

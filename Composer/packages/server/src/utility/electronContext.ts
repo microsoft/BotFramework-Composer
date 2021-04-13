@@ -10,9 +10,14 @@ export type ElectronContext = {
   getARMTokenForTenant: (tenantId: string) => Promise<string>;
   getTenants: () => Promise<AzureTenant[]>;
   logOut: () => void;
-  machineId: string;
-  sessionId: string;
-  composerVersion: string;
+  telemetryData: {
+    composerVersion: string;
+    machineId: string;
+    sessionId: string;
+    architecture: string;
+    cpus: number;
+    memory: number;
+  };
 };
 
 let context;

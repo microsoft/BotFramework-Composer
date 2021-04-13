@@ -11,13 +11,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
 import { jsLgToolbarMenuClassName } from '../constants';
-import { LgEditorToolbar } from '../LgEditorToolbar';
+import { FieldToolbar } from '../../components/toolbar/FieldToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
-import { ToolbarButtonPayload } from '../types';
+import { ToolbarButtonPayload } from '../../types';
 
 import { StringArrayItem } from './StringArrayItem';
 
-const submitKeys = ['Enter', 'Escape'];
+const inputs = ['input', 'textarea'];
 
 const styles: { link: ILinkStyles } = {
   link: {
@@ -77,7 +77,7 @@ export const StringArrayEditor = React.memo(
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [currentIndex, setCurrentIndex] = useState<number | null>(items.length === 1 && items[0] === '' ? 0 : null);
-    const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLInputElement | null>(null);
+    const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLTextAreaElement | null>(null);
 
     const onItemChange = useCallback(
       (index: number) => (_, newValue?: string) => {
@@ -112,23 +112,38 @@ export const StringArrayEditor = React.memo(
       setCurrentIndex(items.length);
     }, [items, onChange]);
 
-    const onShowCallout = useCallback((targetElement: HTMLInputElement) => {
+    const onShowCallout = useCallback((targetElement: HTMLTextAreaElement) => {
       setCalloutTargetElement(targetElement);
     }, []);
 
     useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
-        if (submitKeys.includes(e.key)) {
+        if (
+          e.key === 'Enter' ||
+          (e.key === 'Escape' &&
+            (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase())))
+        ) {
+          // Allow multiline via shift+Enter
+          if (e.key === 'Enter' && e.shiftKey) {
+            return;
+          }
+
           setCalloutTargetElement(null);
-
-          const filteredItems = items.filter(Boolean);
-
-          if (e.key === 'Enter') {
-            onChange([...filteredItems, '']);
-            setCurrentIndex(filteredItems.length);
+          // Filter our empty or newline strings
+          const filteredItems = items.filter((s) => s !== '' && s !== '\n');
+          if (e.key === 'Enter' && containerRef.current?.contains(e.target as Node)) {
+            // If the value is not filtered, go to the next entry
+            // Otherwise cancel editing
+            if (items.length === filteredItems.length) {
+              e.preventDefault();
+              onChange([...filteredItems, '']);
+              setCurrentIndex(filteredItems.length);
+            } else {
+              onChange(filteredItems);
+              setCurrentIndex(null);
+            }
           } else {
             setCurrentIndex(null);
-
             // Remove empty variations only if necessary
             if (items.length !== filteredItems.length) {
               onChange(filteredItems);
@@ -269,7 +284,7 @@ export const StringArrayEditor = React.memo(
             onSelectToolbarMenuItem={onSelectToolbarMenuItem}
           />
         ) : (
-          <LgEditorToolbar
+          <FieldToolbar
             key="lg-toolbar"
             lgTemplates={lgTemplates}
             properties={memoryVariables}
@@ -300,6 +315,7 @@ export const StringArrayEditor = React.memo(
         )}
         {calloutTargetElement && (
           <Callout
+            doNotLayer
             directionalHint={DirectionalHint.topLeftEdge}
             gapSpace={2}
             isBeakVisible={false}

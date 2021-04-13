@@ -151,7 +151,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
         return (
-          <div data-is-focusable css={tableCell}>
+          <div css={tableCell}>
             <Link
               css={content}
               underline="true"

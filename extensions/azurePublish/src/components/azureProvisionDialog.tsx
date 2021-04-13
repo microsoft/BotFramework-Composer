@@ -1,49 +1,76 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import formatMessage from 'format-message';
 import * as React from 'react';
-import { useState, useMemo, useEffect, Fragment, useCallback, useRef, Suspense } from 'react';
+import formatMessage from 'format-message';
+import styled from '@emotion/styled';
+import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { logOut, usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
+import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { DeployLocation } from '@botframework-composer/types';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { DeployLocation, AzureTenant } from '@botframework-composer/types';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { LoadingSpinner, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
-  ChoiceGroup,
-  IChoiceGroupOption,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  IGroup,
-  CheckboxVisibility,
   TooltipHost,
   Icon,
   TextField,
-  Spinner,
   Persona,
   IPersonaProps,
   PersonaSize,
-  Selection,
   SelectionMode,
+  Stack,
+  Text,
 } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { ResourceGroup } from '@azure/arm-resources/esm/models';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
 import {
   getResourceList,
   getSubscriptions,
-  getResourceGroups,
   getDeployLocations,
   getPreview,
   getLuisAuthoringRegions,
   CheckWebAppNameAvailability,
+  getResourceGroups,
 } from './api';
-import { getExistResources, removePlaceholder, decodeToken } from './util';
+import { ChooseResourcesList } from './ChooseResourcesList';
+import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
+import { ResourceGroupPicker } from './ResourceGroupPicker';
+import { ChooseProvisionAction } from './ChooseProvisionAction';
+
+type ProvisionFormData = {
+  creationType: string;
+  tenantId: string;
+  subscriptionId: string;
+  resourceGroup: string;
+  hostname: string;
+  region: string;
+  luisLocation: string;
+  enabledResources: ResourcesItem[];
+  requiredResources: ResourcesItem[];
+};
+
+// ---------- Styles ---------- //
+
+const AddResourcesSectionName = styled(Text)`
+  font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
+`;
+
+const labelTooltipStyles = {
+  root: {
+    userSelect: 'none',
+  },
+};
 
 const iconStyle = (required) => {
   return {
@@ -59,17 +86,19 @@ const iconStyle = (required) => {
   };
 };
 
-const choiceOptions: IChoiceGroupOption[] = [
-  { key: 'create', text: 'Create new Azure resources' },
-  { key: 'import', text: 'Import existing Azure resources' },
-];
 const PageTypes = {
+  ChooseAction: 'chooseAction',
   ConfigProvision: 'config',
   AddResources: 'add',
   ReviewResource: 'review',
   EditJson: 'edit',
 };
+
 const DialogTitle = {
+  CHOOSE_ACTION: {
+    title: formatMessage('Configure resources'),
+    subText: formatMessage('How you would like to provision Azure resources to your publishing profile?'),
+  },
   CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
@@ -111,59 +140,12 @@ const onRenderLabel = (props) => {
         {' '}
         {props.label}{' '}
       </div>
-      <TooltipHost content={props.ariaLabel}>
+      <TooltipHost content={props.ariaLabel} styles={labelTooltipStyles}>
         <Icon iconName="Info" styles={iconStyle(props.required)} />
       </TooltipHost>
     </div>
   );
 };
-
-const columns: IColumn[] = [
-  {
-    key: 'Icon',
-    name: 'File Type',
-    isIconOnly: true,
-    fieldName: 'name',
-    minWidth: 16,
-    maxWidth: 16,
-    onRender: (item: ResourcesItem & { name; icon }) => {
-      return <img src={item.icon} />;
-    },
-  },
-  {
-    key: 'Name',
-    name: formatMessage('Name'),
-    className: 'name',
-    fieldName: 'name',
-    minWidth: 300,
-    isRowHeader: true,
-    data: 'string',
-    onRender: (item: ResourcesItem & { name; icon }) => {
-      return (
-        <div style={{ whiteSpace: 'normal' }}>
-          <div style={{ fontSize: '14px', color: NeutralColors.gray190 }}>{item.text}</div>
-          <div style={{ fontSize: '12px', color: NeutralColors.gray130 }}>{item.tier}</div>
-        </div>
-      );
-    },
-    isPadded: true,
-  },
-  {
-    key: 'Description',
-    name: formatMessage('Description'),
-    className: 'description',
-    fieldName: 'description',
-    minWidth: 380,
-    isRowHeader: true,
-    data: 'string',
-    onRender: (item: ResourcesItem & { name; icon }) => {
-      return (
-        <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>{item.description}</div>
-      );
-    },
-    isPadded: true,
-  },
-];
 
 const reviewCols: IColumn[] = [
   {
@@ -237,6 +219,28 @@ const reviewCols: IColumn[] = [
   },
 ];
 
+const getHostname = (config) => {
+  if (config?.hostname) {
+    return config.hostname;
+  } else if (config?.name) {
+    return config?.environment ? `${config.name}-${config.environment}` : config.name;
+  }
+};
+
+const getDefaultFormData = (currentProfile, defaults) => {
+  return {
+    creationType: defaults.creationType ?? 'create',
+    tenantId: currentProfile?.tenantId,
+    subscriptionId: currentProfile?.subscriptionId ?? defaults.subscriptionId,
+    resourceGroup: currentProfile?.resourceGroup ?? defaults.resourceGroup,
+    hostname: getHostname(currentProfile) ?? defaults.hostname,
+    region: currentProfile?.region ?? defaults.region,
+    luisLocation: currentProfile?.settings?.luis?.region ?? defaults.luisLocation,
+    enabledResources: defaults.enabledResources ?? [],
+    requiredResources: defaults.requireResources ?? [],
+  };
+};
+
 export const AzureProvisionDialog: React.FC = () => {
   const {
     currentProjectId,
@@ -248,54 +252,137 @@ export const AzureProvisionDialog: React.FC = () => {
     setTitle,
     getSchema,
     getType,
+    getName,
     getTokenFromCache,
-    isGetTokenFromUser,
+    userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
+
+  const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
+  const profileName = getName();
   const currentConfig = removePlaceholder(publishConfig);
+  const extensionState = { ...defaultExtensionState, ...getItem(profileName) };
 
+  const [token, setToken] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [currentUser, setCurrentUser] = useState<any>(undefined);
+
+  // form options
+  const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
+  const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [luisLocations, setLuisLocations] = useState<DeployLocation[]>([]);
+  const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
 
-  const [token, setToken] = useState<string>();
-  const [currentUser, setCurrentUser] = useState<any>(undefined);
+  const [formData, setFormData] = useState<ProvisionFormData>(getDefaultFormData(currentConfig, extensionState));
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
+
+  // null = loading
   const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
-  const [choice, setChoice] = useState(choiceOptions[0]);
-  const [currentSubscription, setSubscription] = useState<string>('');
-  const [currentResourceGroup, setResourceGroup] = useState<string>('');
-  const [currentHostName, setHostName] = useState('');
+  const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
+  const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
   const [errorHostName, setErrorHostName] = useState('');
-  const [errorResourceGroupName, setErrorResourceGroupName] = useState('');
-  const [currentLocation, setLocation] = useState<string>(currentConfig?.region);
-  const [currentLuisLocation, setCurrentLuisLocation] = useState<string>(currentConfig?.settings?.luis?.region);
-  const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
-  const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>([]); // create from optional list
-  const [requireResources, setRequireResources] = useState<ResourcesItem[]>([]);
 
   const [isEditorError, setEditorError] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [importConfig, setImportConfig] = useState<any>();
 
-  const [page, setPage] = useState(PageTypes.ConfigProvision);
-  const [group, setGroup] = useState<IGroup[]>();
-  const [listItems, setListItem] = useState<(ResourcesItem & { name; icon })[]>();
+  const [page, setPage] = useState<string>(PageTypes.ChooseAction);
+  const [listItems, setListItems] = useState<(ResourcesItem & { icon?: string })[]>();
   const [reviewListItems, setReviewListItems] = useState<ResourcesItem[]>([]);
+  const isMounted = useRef<boolean>();
 
-  const timerRef = useRef<any>();
+  const timerRef = useRef<NodeJS.Timeout>();
+
+  const [handoffInstructions, setHandoffInstructions] = useState<string>('');
+  const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const updateHandoffInstructions = (resources) => {
+    const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
+    const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
+    const createCosmosDb = resources.filter((r) => r.key === 'cosmosDb').length > 0;
+    const createStorage = resources.filter((r) => r.key === 'blobStorage').length > 0;
+    const createAppInsights = resources.filter((r) => r.key === 'applicationInsights').length > 0;
+    const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
+
+    const provisionComposer = `node provisionComposer.js --subscriptionId ${
+      formData.subscriptionId ?? '<YOUR SUBSCRIPTION ID>'
+    } --name ${formData.hostname ?? '<RESOURCE NAME>'}
+    --appPassword=<16 CHAR PASSWORD>
+    --location=${formData.region || 'westus'}
+    --resourceGroup=${formData.resourceGroup || '<RESOURCE GROUP NAME>'}
+    --createLuisResource=${createLuisResource}
+    --createLuisAuthoringResource=${createLuisAuthoringResource}
+    --createCosmosDb=${createCosmosDb}
+    --createStorage=${createStorage}
+    --createAppInsights=${createAppInsights}
+    --createQnAResource=${createQnAResource}
+    `;
+
+    const instructions = formatMessage(
+      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      { command: provisionComposer }
+    );
+
+    setHandoffInstructions(instructions);
+  };
+
+  const setPageAndTitle = (page: string) => {
+    setPage(page);
+    switch (page) {
+      case PageTypes.AddResources:
+        setTitle(DialogTitle.ADD_RESOURCES);
+        break;
+      case PageTypes.ChooseAction:
+        setTitle(DialogTitle.CHOOSE_ACTION);
+        break;
+      case PageTypes.ConfigProvision:
+        setTitle(DialogTitle.CONFIG_RESOURCES);
+        break;
+      case PageTypes.EditJson:
+        setTitle(DialogTitle.EDIT);
+        break;
+      case PageTypes.ReviewResource:
+        setTitle(DialogTitle.REVIEW);
+        break;
+    }
+  };
+
+  function updateFormData<K extends keyof ProvisionFormData>(field: K, value: ProvisionFormData[K]) {
+    setFormData((current) => ({ ...current, [field]: value }));
+  }
 
   useEffect(() => {
-    setTitle(DialogTitle.CONFIG_RESOURCES);
-    if (isGetTokenFromUser()) {
+    const selectedResources = formData.requiredResources.concat(formData.enabledResources);
+    updateHandoffInstructions(selectedResources);
+  }, [formData.enabledResources]);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    setPage(PageTypes.ChooseAction);
+    // TODO: need to get the tenant id from the auth config when running as web app,
+    // for electron we will always fetch tenants.
+    if (userShouldProvideTokens()) {
       const { accessToken } = getTokenFromCache();
 
       setToken(accessToken);
+
       // decode token
       const decoded = decodeToken(accessToken);
       if (decoded) {
+        updateFormData('tenantId', decoded.tid);
         setCurrentUser({
           token: accessToken,
           email: decoded.upn,
@@ -303,77 +390,76 @@ export const AzureProvisionDialog: React.FC = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
-      }
-    } else {
-      if (!getTenantIdFromCache()) {
-        getTenants().then((tenants) => {
-          if (tenants?.length > 0) {
-            // set tenantId in cache.
-            setTenantId(tenants[0].tenantId);
-            getARMTokenForTenant(tenants[0].tenantId)
-              .then((token) => {
-                setToken(token);
-                const decoded = decodeToken(token);
-                setCurrentUser({
-                  token: token,
-                  email: decoded.upn,
-                  name: decoded.name,
-                  expiration: (decoded.exp || 0) * 1000, // convert to ms,
-                  sessionExpired: false,
-                });
-              })
-              .catch((err) => {
-                setCurrentUser(undefined);
-                setLoginErrorMsg(err.message || err.toString());
-              });
-          }
-        });
+        setPageAndTitle(PageTypes.ChooseAction);
+        setLoginErrorMsg(undefined);
       } else {
-        getARMTokenForTenant(getTenantIdFromCache())
-          .then((token) => {
-            setToken(token);
-            const decoded = decodeToken(token);
-            setCurrentUser({
-              token: token,
-              email: decoded.upn,
-              name: decoded.name,
-              expiration: (decoded.exp || 0) * 1000, // convert to ms,
-              sessionExpired: false,
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            setCurrentUser(undefined);
-            setLoginErrorMsg(err.message || err.toString());
-          });
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currentConfig) {
-      if (currentConfig.subscriptionId) {
-        setSubscription(currentConfig.subscriptionId);
-      }
-      if (currentConfig.resourceGroup) {
-        setResourceGroup(currentConfig.resourceGroup);
-      }
-      if (currentConfig.hostname) {
-        setHostName(currentConfig.hostname);
-      } else if (currentConfig.name) {
-        setHostName(
-          currentConfig.environment ? `${currentConfig.name}-${currentConfig.environment}` : currentConfig.name
+        setLoadingErrorMessage(
+          formatMessage(
+            'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
+          )
         );
       }
+    } else {
+      getTenants().then((tenants) => {
+        if (isMounted.current) {
+          setAllTenants(tenants);
+          if (!getTenantIdFromCache()) {
+            if (tenants?.length > 0) {
+              // seed tenant selection with 1st tenant
+              updateFormData('tenantId', tenants[0].tenantId);
+            }
+          } else {
+            updateFormData('tenantId', getTenantIdFromCache());
+          }
+        }
+      });
     }
-  }, [currentConfig]);
+
+    setIsLoading(false);
+  }, []);
+
+  const getTokenForTenant = (tenantId: string) => {
+    // set tenantId in cache.
+    setTenantId(tenantId);
+    getARMTokenForTenant(tenantId)
+      .then((token) => {
+        setToken(token);
+        const decoded = decodeToken(token);
+        setCurrentUser({
+          token: token,
+          email: decoded.upn,
+          name: decoded.name,
+          expiration: (decoded.exp || 0) * 1000, // convert to ms,
+          sessionExpired: false,
+        });
+        setLoginErrorMsg(undefined);
+      })
+      .catch((err) => {
+        setTenantId(undefined);
+        setCurrentUser(undefined);
+        setLoginErrorMsg(err.message || err.toString());
+      });
+  };
 
   useEffect(() => {
-    if (token) {
-      getSubscriptions(token).then(setSubscriptions);
-      getResources();
+    if (formData.tenantId) {
+      if (formData.tenantId !== currentConfig?.tenantId) {
+        // reset form data when tenant id changes
+        setFormData((current) => ({
+          ...current,
+          subscriptionId: '',
+          resourceGroup: '',
+          hostname: '',
+          region: '',
+          luisLocation: '',
+        }));
+      }
+
+      if (!userShouldProvideTokens()) {
+        getTokenForTenant(formData.tenantId);
+      }
     }
-  }, [token]);
+  }, [formData.tenantId]);
 
   const getResources = async () => {
     try {
@@ -381,32 +467,74 @@ export const AzureProvisionDialog: React.FC = () => {
       setExtensionResourceOptions(resources);
     } catch (err) {
       // todo: how do we handle API errors in this component
+      // eslint-disable-next-line no-console
       console.log('ERROR', err);
     }
   };
 
-  const subscriptionOption = useMemo(() => {
+  useEffect(() => {
+    getResources();
+  }, [publishType]);
+
+  useEffect(() => {
+    if (token) {
+      setSubscriptionsErrorMessage(undefined);
+      getSubscriptions(token)
+        .then((data) => {
+          if (isMounted.current) {
+            setSubscriptions(data);
+            if (data.length === 0) {
+              setSubscriptionsErrorMessage(
+                formatMessage(
+                  'Your subscription list is empty, please add your subscription, or login with another account.'
+                )
+              );
+            }
+          }
+        })
+        .catch((err) => {
+          if (isMounted.current) {
+            setSubscriptionsErrorMessage(err.message);
+          }
+        });
+    }
+  }, [token]);
+
+  const loadResourceGroups = async () => {
+    if (token && formData.subscriptionId) {
+      try {
+        const resourceGroups = await getResourceGroups(token, formData.subscriptionId);
+        if (isMounted.current) {
+          setResourceGroups(resourceGroups);
+        }
+      } catch (err) {
+        // todo: how do we handle API errors in this component
+        // eslint-disable-next-line no-console
+        console.log('ERROR', err);
+        if (isMounted.current) {
+          setResourceGroups(undefined);
+        }
+      }
+    } else {
+      setResourceGroups(undefined);
+    }
+  };
+
+  useEffect(() => {
+    loadResourceGroups();
+  }, [token, formData.subscriptionId]);
+
+  const subscriptionOptions = useMemo(() => {
     return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
   const deployLocationsOption = useMemo((): IDropdownOption[] => {
-    return deployLocations.map((t) => ({ key: t.name, text: t.displayName }));
-  }, [deployLocations]);
+    return (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  }, [token, deployLocations]);
 
   const luisLocationsOption = useMemo((): IDropdownOption[] => {
-    return luisLocations.map((t) => ({ key: t.name, text: t.displayName }));
-  }, [luisLocations]);
-
-  const updateCurrentSubscription = useMemo(
-    () => (_e, option?: IDropdownOption) => {
-      const sub = subscriptionOption?.find((t) => t.key === option?.key);
-
-      if (sub) {
-        setSubscription(sub.key);
-      }
-    },
-    [subscriptionOption]
-  );
+    return (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  }, [token, luisLocations]);
 
   const checkNameAvailability = useCallback(
     (newName: string) => {
@@ -414,89 +542,64 @@ export const AzureProvisionDialog: React.FC = () => {
         clearTimeout(timerRef.current);
       }
       timerRef.current = setTimeout(() => {
-        if (currentSubscription && publishType === 'azurePublish') {
+        if (formData.subscriptionId && publishType === 'azurePublish') {
           // check app name whether exist or not
-          CheckWebAppNameAvailability(token, newName, currentSubscription).then((value) => {
-            if (!value.nameAvailable) {
-              setErrorHostName(value.message);
-            } else {
-              setErrorHostName('');
+          CheckWebAppNameAvailability(token, newName, formData.subscriptionId).then((value) => {
+            if (isMounted.current) {
+              if (!value.nameAvailable) {
+                setErrorHostName(value.message);
+              } else {
+                setErrorHostName('');
+              }
             }
           });
         }
       }, 500);
     },
-    [publishType, currentSubscription, token]
-  );
-
-  const checkResourceGroupName = useCallback((group: string) => {
-    if (group.match(/^[-\w._()]+$/)) {
-      setErrorResourceGroupName('');
-    } else {
-      setErrorResourceGroupName(
-        'Resource group names only allow alphanumeric characters, periods, underscores, hyphens and parenthesis and cannot end in a period.'
-      );
-    }
-  }, []);
-
-  const updateCurrentResourceGroup = useMemo(
-    () => (e, newGroup) => {
-      setResourceGroup(newGroup);
-      // check resource group name
-      checkResourceGroupName(newGroup);
-    },
-    [checkResourceGroupName]
+    [publishType, formData.subscriptionId, token]
   );
 
   const newHostName = useCallback(
     (e, newName) => {
-      setHostName(newName);
+      updateFormData('hostname', newName);
       // debounce name check
       checkNameAvailability(newName);
     },
     [checkNameAvailability]
   );
 
-  const updateCurrentLocation = useMemo(
-    () => (_e, option?: IDropdownOption) => {
+  const updateCurrentLocation = useCallback(
+    (_e, option?: IDropdownOption) => {
       const location = deployLocations.find((t) => t.name === option?.key);
       if (location) {
-        setLocation(location.name);
+        updateFormData('region', location.name);
         const region = luisLocations.find((item) => item.name === location.name);
         if (region) {
-          setCurrentLuisLocation(region.name);
+          updateFormData('luisLocation', region.name);
         } else {
-          setCurrentLuisLocation(luisLocations[0].name);
+          updateFormData('luisLocation', luisLocations[0].name);
         }
       }
     },
     [deployLocations, luisLocations]
   );
 
-  const updateLuisLocation = useMemo(
-    () => (_e, option?: IDropdownOption) => {
-      const location = luisLocations.find((t) => t.name === option?.key);
-      if (location) {
-        setCurrentLuisLocation(location.name);
-      }
-    },
-    [luisLocations]
-  );
-
   useEffect(() => {
-    if (currentSubscription && token) {
+    if (formData.subscriptionId && token) {
       // get resource group under subscription
-      getDeployLocations(token, currentSubscription).then((data: DeployLocation[]) => {
-        setDeployLocations(data);
-        const luRegions = getLuisAuthoringRegions();
-        const region = data.filter((item) => luRegions.includes(item.name));
-        setLuisLocations(region);
+      getDeployLocations(token, formData.subscriptionId).then((data: DeployLocation[]) => {
+        if (isMounted.current) {
+          setDeployLocations(data);
+          const luRegions = getLuisAuthoringRegions();
+          const region = data.filter((item) => luRegions.includes(item.name));
+          setLuisLocations(region);
+        }
       });
     }
-  }, [currentSubscription, token]);
+  }, [formData.subscriptionId, token]);
 
-  const onNext = useMemo(
-    () => (hostname) => {
+  const onNext = useCallback(
+    (hostname) => {
       // get resources already have
       const alreadyHave = getExistResources(currentConfig);
 
@@ -515,56 +618,31 @@ export const AzureProvisionDialog: React.FC = () => {
       }
 
       // set review list
-      const groups: IGroup[] = [];
       const requireList = result.filter((item) => item.required);
-      setRequireResources(requireList);
-      const externalList = result.filter((item) => !item.required);
-      groups.push({
-        key: 'required',
-        name: 'Required',
-        startIndex: 0,
-        count: requireList.length,
-      });
-      groups.push({
-        key: 'optional',
-        name: 'Optional',
-        startIndex: requireList.length,
-        count: externalList.length,
-      });
-      const items = requireList.concat(externalList);
+      const optionalList = result.filter((item) => !item.required);
+      updateFormData('requiredResources', requireList);
+      updateFormData('enabledResources', optionalList);
 
-      setGroup(groups);
-      setListItem(items);
+      const items = requireList.concat(optionalList);
+      setListItems(items);
 
-      setPage(PageTypes.AddResources);
-      setTitle(DialogTitle.ADD_RESOURCES);
+      setPageAndTitle(PageTypes.AddResources);
     },
     [extensionResourceOptions]
   );
 
-  const onSubmit = useMemo(
-    () => async (options) => {
-      // call back to the main Composer API to begin this process...
-      startProvision(options);
-      closeDialog();
-    },
-    []
-  );
+  const onSubmit = useCallback((options) => {
+    // call back to the main Composer API to begin this process...
+    startProvision(options);
+    clearAll();
+    closeDialog();
+  }, []);
 
-  const onSave = useMemo(
-    () => () => {
-      savePublishConfig(importConfig);
-      closeDialog();
-    },
-    [importConfig]
-  );
-
-  const updateChoice = useMemo(
-    () => (ev, option) => {
-      setChoice(option);
-    },
-    []
-  );
+  const onSave = useCallback(() => {
+    savePublishConfig(importConfig);
+    clearAll();
+    closeDialog();
+  }, [importConfig]);
 
   const onRenderSecondaryText = useMemo(
     () => (props: IPersonaProps) => {
@@ -583,189 +661,180 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
-  const isDisAble = useMemo(() => {
-    return (
-      !currentSubscription ||
-      !currentHostName ||
-      errorHostName !== '' ||
-      errorResourceGroupName !== '' ||
-      !currentLocation
+  const isNextDisabled = useMemo(() => {
+    return Boolean(
+      !formData.subscriptionId ||
+        !formData.resourceGroup ||
+        !formData.hostname ||
+        !formData.region ||
+        subscriptionsErrorMessage ||
+        errorResourceGroupName ||
+        errorHostName !== ''
     );
-  }, [currentSubscription, currentHostName, errorHostName, currentLocation, errorResourceGroupName]);
+  }, [
+    formData.subscriptionId,
+    formData.resourceGroup,
+    formData.hostname,
+    formData.region,
+    errorResourceGroupName,
+    errorHostName,
+  ]);
 
   const isSelectAddResources = useMemo(() => {
-    return enabledResources.length > 0 || requireResources.length > 0;
-  }, [enabledResources]);
+    return formData.enabledResources.length > 0 || formData.requiredResources.length > 0;
+  }, [formData.enabledResources]);
+
+  const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
+
+  const isNewResourceGroupName = !currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup);
+
+  const PageChooseAction = (
+    <ScrollablePane
+      data-is-scrollable="true"
+      scrollbarVisibility={ScrollbarVisibility.auto}
+      style={{ height: 'calc(100vh - 64px)' }}
+    >
+      <ChooseProvisionAction
+        choice={formData.creationType}
+        onChoiceChanged={(choice) => {
+          updateFormData('creationType', choice);
+        }}
+      />
+    </ScrollablePane>
+  );
 
   const PageFormConfig = (
-    <Fragment>
-      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} style={{}} onChange={updateChoice} />
-      <Suspense fallback={<Spinner label="Loading" />}>
-        {subscriptionOption?.length > 0 && choice.key === 'create' && (
-          <form style={{ width: '50%', marginTop: '16px' }}>
-            <Dropdown
-              required
-              ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-              defaultSelectedKey={currentSubscription}
-              disabled={currentConfig?.subscriptionId}
-              label={formatMessage('Subscription')}
-              options={subscriptionOption}
-              placeholder={'Select one'}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onChange={updateCurrentSubscription}
-              onRenderLabel={onRenderLabel}
-            />
-            <TextField
-              required
-              ariaLabel={formatMessage(
-                'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
-              )}
-              defaultValue={currentResourceGroup}
-              disabled={currentConfig?.resourceGroup}
-              errorMessage={errorResourceGroupName}
-              label={formatMessage('Resource group name')}
-              placeholder={'Name of your new resource group'}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onChange={updateCurrentResourceGroup}
-              onRenderLabel={onRenderLabel}
-            />
-            <TextField
-              required
-              ariaLabel={formatMessage(
-                'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
-              )}
-              defaultValue={currentHostName}
-              disabled={currentConfig?.hostname || currentConfig?.name}
-              errorMessage={errorHostName}
-              label={formatMessage('Resource name')}
-              placeholder={'Name of your services'}
-              styles={{ root: { paddingBottom: '8px' } }}
-              onChange={newHostName}
-              onRenderLabel={onRenderLabel}
-            />
-            {currentConfig?.region ? (
-              <TextField
-                required
-                defaultValue={currentConfig?.region}
-                disabled={currentConfig?.region}
-                label={formatMessage('Region')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onRenderLabel={onRenderLabel}
-              />
-            ) : (
-              <Dropdown
-                required
-                defaultSelectedKey={currentLocation}
-                label={'Region'}
-                options={deployLocationsOption}
-                placeholder={'Select one'}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onChange={updateCurrentLocation}
-              />
-            )}
-            {currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
-              <TextField
-                disabled
-                required
-                defaultValue={currentConfig?.settings?.luis?.region}
-                label={formatMessage('Region for Luis')}
-                styles={{ root: { paddingBottom: '8px' } }}
-                onRenderLabel={onRenderLabel}
-              />
-            )}
-            {!currentConfig?.settings?.luis?.region && currentLocation !== currentLuisLocation && (
-              <Dropdown
-                required
-                defaultSelectedKey={currentConfig?.settings?.luis?.region || currentLuisLocation}
-                label={'Region for Luis'}
-                options={luisLocationsOption}
-                placeholder={'Select one'}
-                onChange={updateLuisLocation}
-              />
-            )}
-          </form>
-        )}
-        {choice.key === 'create' && loginErrorMsg !== '' && <div style={{ marginTop: '10px' }}> {loginErrorMsg} </div>}
-        {choice.key === 'create' && currentUser && subscriptionOption?.length < 1 && (
-          <div style={{ marginTop: '10px' }}>
-            Your subscription list is empty, please add your subscription, or login with another account.
-          </div>
-        )}
-      </Suspense>
-      {choice.key === 'import' && (
-        <div style={{ width: '50%', marginTop: '10px', height: '100%' }}>
-          <div
-            style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: '#323130',
-              padding: '5px 0px',
-            }}
-          >
-            {formatMessage('Publish Configuration')}
-          </div>
-          <JsonEditor
-            height={300}
-            id={publishType}
-            schema={getSchema()}
-            value={currentConfig || importConfig}
-            onChange={(value) => {
-              setEditorError(false);
-              setImportConfig(value);
-            }}
-            onError={() => {
-              setEditorError(true);
-            }}
-          />
-        </div>
-      )}
-    </Fragment>
+    <ScrollablePane
+      data-is-scrollable="true"
+      scrollbarVisibility={ScrollbarVisibility.auto}
+      style={{ height: 'calc(100vh - 64px)' }}
+    >
+      <form style={{ width: '100%' }}>
+        <Dropdown
+          ariaLabel={formatMessage(
+            'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
+          )}
+          disabled={allTenants.length === 1 || currentConfig?.tenantId}
+          errorMessage={loginErrorMsg}
+          label={formatMessage('Azure Directory')}
+          options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+          selectedKey={formData.tenantId}
+          styles={{ root: { paddingBottom: '8px' } }}
+          onChange={(_e, o) => {
+            updateFormData('tenantId', o.key as string);
+          }}
+          onRenderLabel={onRenderLabel}
+        />
+        <Dropdown
+          required
+          ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
+          disabled={currentConfig?.subscriptionId}
+          errorMessage={subscriptionsErrorMessage}
+          label={formatMessage('Subscription')}
+          options={subscriptionOptions}
+          placeholder={formatMessage('Select one')}
+          selectedKey={formData.subscriptionId}
+          styles={{ root: { paddingBottom: '8px' } }}
+          onChange={(_e, o) => {
+            updateFormData('subscriptionId', o.key as string);
+          }}
+          onRenderLabel={onRenderLabel}
+        />
+        <ResourceGroupPicker
+          disabled={currentConfig?.resourceGroup}
+          newResourceGroupName={isNewResourceGroupName ? formData.resourceGroup : undefined}
+          resourceGroupNames={resourceGroupNames}
+          selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
+          onChange={(choice) => {
+            updateFormData('resourceGroup', choice.name);
+            setErrorResourceGroupName(choice.errorMessage);
+          }}
+        />
+        <TextField
+          required
+          ariaLabel={formatMessage(
+            'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
+          )}
+          disabled={currentConfig?.hostname || currentConfig?.name}
+          errorMessage={errorHostName}
+          label={formatMessage('Resource name')}
+          placeholder={formatMessage('Name of your services')}
+          styles={{ root: { paddingBottom: '8px' } }}
+          value={formData.hostname}
+          onChange={newHostName}
+          onRenderLabel={onRenderLabel}
+        />
+        <Dropdown
+          required
+          disabled={currentConfig?.region}
+          label={formatMessage('Region')}
+          options={deployLocationsOption}
+          placeholder={formatMessage('Select one')}
+          selectedKey={formData.region}
+          styles={{ root: { paddingBottom: '8px' } }}
+          onChange={updateCurrentLocation}
+          onRenderLabel={onRenderLabel}
+        />
+        <Dropdown
+          required
+          disabled={currentConfig?.settings?.luis?.region}
+          label={formatMessage('Region for Luis')}
+          options={luisLocationsOption}
+          placeholder={formatMessage('Select one')}
+          selectedKey={formData.luisLocation}
+          onChange={(e, o) => {
+            updateFormData('luisLocation', o.key as string);
+          }}
+        />
+      </form>
+    </ScrollablePane>
   );
 
   useEffect(() => {
     if (listItems?.length === 0) {
-      setTitle(DialogTitle.EDIT);
-      setPage(PageTypes.EditJson);
+      setPageAndTitle(PageTypes.EditJson);
     }
   }, [listItems]);
 
-  const selection = useMemo(() => {
-    const s = new Selection({
-      onSelectionChanged: () => {
-        const list = s.getSelection();
-        setEnabledResources(list);
-      },
-      canSelectItem: (item, index) => {
-        return item.required === false;
-      },
-    });
-    if (s && listItems) {
-      s.setItems(listItems, false);
-      s.setAllSelected(true);
-    }
-    return s;
-  }, [listItems]);
+  const PageAddResources = () => {
+    if (listItems) {
+      const requiredListItems = listItems.filter((item) => item.required);
+      const optionalListItems = listItems.filter((item) => !item.required);
+      const selectedResourceKeys = formData.enabledResources.map((r) => r.key);
 
-  const PageAddResources = useMemo(() => {
-    return (
-      <Fragment>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 64px)' }}>
-          <DetailsList
-            isHeaderVisible
-            checkboxVisibility={CheckboxVisibility.onHover}
-            columns={columns}
-            getKey={(item) => item.key}
-            groups={group}
-            items={listItems}
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={selection}
-            selectionMode={SelectionMode.multiple}
-            setKey="none"
-          />
+      return (
+        <ScrollablePane
+          data-is-scrollable="true"
+          scrollbarVisibility={ScrollbarVisibility.auto}
+          style={{ height: 'calc(100vh - 64px)' }}
+        >
+          <Stack>
+            {requiredListItems.length > 0 && (
+              <Fragment>
+                <AddResourcesSectionName>{formatMessage('Required')}</AddResourcesSectionName>
+                <ChooseResourcesList items={requiredListItems} />
+              </Fragment>
+            )}
+            {optionalListItems.length > 0 && (
+              <Fragment>
+                <AddResourcesSectionName>{formatMessage('Optional')}</AddResourcesSectionName>
+                <ChooseResourcesList
+                  items={optionalListItems}
+                  selectedKeys={selectedResourceKeys}
+                  onSelectionChanged={(keys) => {
+                    const newSelection = optionalListItems.filter((item) => keys.includes(item.key));
+                    updateFormData('enabledResources', newSelection);
+                  }}
+                />
+              </Fragment>
+            )}
+          </Stack>
         </ScrollablePane>
-      </Fragment>
-    );
-  }, [group, listItems, selection]);
+      );
+    } else {
+      return <Fragment />;
+    }
+  };
 
   const PageReview = (
     <Fragment>
@@ -784,12 +853,12 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
-    if (page === PageTypes.ConfigProvision) {
+    if (page === PageTypes.ChooseAction) {
       return (
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
@@ -798,6 +867,7 @@ export const AzureProvisionDialog: React.FC = () => {
             <div
               style={{ color: 'blue', cursor: 'pointer' }}
               onClick={() => {
+                clearAll();
                 closeDialog();
                 logOut();
               }}
@@ -806,18 +876,93 @@ export const AzureProvisionDialog: React.FC = () => {
             </div>
           )}
           <div>
-            <DefaultButton style={{ margin: '0 4px' }} text={'Back'} onClick={onBack} />
-            {choice.key === 'create' ? (
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Back')}
+              onClick={() => {
+                clearAll();
+                setItem(profileName, formData);
+                onBack();
+              }}
+            />
+            <PrimaryButton
+              disabled={!formData.creationType}
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Next')}
+              onClick={() => {
+                switch (formData.creationType) {
+                  case 'import':
+                    setPageAndTitle(PageTypes.EditJson);
+                    break;
+                  case 'generate':
+                    onNext(formData.hostname);
+                    break;
+                  case 'create':
+                  default:
+                    setPageAndTitle(PageTypes.ConfigProvision);
+                    break;
+                }
+              }}
+            />
+          </div>
+        </div>
+      );
+    } else if (page === PageTypes.ConfigProvision) {
+      return (
+        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
+          {currentUser ? (
+            <Persona
+              secondaryText={formatMessage('Sign out')}
+              size={PersonaSize.size40}
+              text={currentUser.name}
+              onRenderSecondaryText={onRenderSecondaryText}
+            />
+          ) : (
+            <div
+              style={{ color: 'blue', cursor: 'pointer' }}
+              onClick={() => {
+                clearAll();
+                closeDialog();
+                logOut();
+              }}
+            >
+              {formatMessage('Sign out')}
+            </div>
+          )}
+          <div>
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Back')}
+              onClick={() => {
+                clearAll();
+                setItem(profileName, formData);
+                setPageAndTitle(PageTypes.ChooseAction);
+              }}
+            />
+            {formData.creationType === 'create' && (
               <PrimaryButton
-                disabled={isDisAble}
+                disabled={isNextDisabled}
                 style={{ margin: '0 4px' }}
-                text="Next: Review"
+                text={formatMessage('Next: Review')}
                 onClick={() => {
-                  onNext(currentHostName);
+                  onNext(formData.hostname);
                 }}
               />
-            ) : (
-              <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
+            )}
+            {formData.creationType === 'generate' && (
+              <PrimaryButton
+                style={{ margin: '0 4px' }}
+                text={formatMessage('Generate resource request')}
+                onClick={() => onNext(formData.hostname)}
+              />
+            )}
+            {formData.creationType === 'import' && (
+              <PrimaryButton
+                disabled={isEditorError}
+                style={{ margin: '0 4px' }}
+                text={formatMessage('Save')}
+                onClick={onSave}
+              />
             )}
           </div>
         </div>
@@ -827,7 +972,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
@@ -836,32 +981,38 @@ export const AzureProvisionDialog: React.FC = () => {
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
-              text={'Back'}
+              text={formatMessage('Back')}
               onClick={() => {
-                setPage(PageTypes.ConfigProvision);
-                setTitle(DialogTitle.CONFIG_RESOURCES);
+                if (formData.creationType === 'generate') {
+                  setPageAndTitle(PageTypes.ChooseAction);
+                } else {
+                  setPageAndTitle(PageTypes.ConfigProvision);
+                }
               }}
             />
             <PrimaryButton
               disabled={!isSelectAddResources}
               style={{ margin: '0 4px' }}
-              text={'Next'}
+              text={formatMessage('Next')}
               onClick={() => {
-                setPage(PageTypes.ReviewResource);
-                setTitle(DialogTitle.REVIEW);
-                let selectedResources = requireResources.concat(enabledResources);
-                selectedResources = selectedResources.map((item) => {
-                  let region = currentConfig?.region || currentLocation;
-                  if (item.key.includes('luis')) {
-                    region = currentLuisLocation;
-                  }
-                  return {
-                    ...item,
-                    region: region,
-                    resourceGroup: currentConfig?.resourceGroup || currentResourceGroup,
-                  };
-                });
-                setReviewListItems(selectedResources);
+                if (formData.creationType === 'generate') {
+                  setShowHandoff(true);
+                } else {
+                  setPageAndTitle(PageTypes.ReviewResource);
+                  let selectedResources = formData.requiredResources.concat(formData.enabledResources);
+                  selectedResources = selectedResources.map((item) => {
+                    let region = currentConfig?.region || formData.region;
+                    if (item.key.includes('luis')) {
+                      region = formData.luisLocation;
+                    }
+                    return {
+                      ...item,
+                      region: region,
+                      resourceGroup: currentConfig?.resourceGroup || formData.resourceGroup,
+                    };
+                  });
+                  setReviewListItems(selectedResources);
+                }
               }}
             />
           </div>
@@ -872,7 +1023,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
           {currentUser ? (
             <Persona
-              secondaryText={'Sign out'}
+              secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
@@ -881,24 +1032,24 @@ export const AzureProvisionDialog: React.FC = () => {
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
-              text={'Back'}
+              text={formatMessage('Back')}
               onClick={() => {
-                setPage(PageTypes.AddResources);
-                setTitle(DialogTitle.ADD_RESOURCES);
+                setPageAndTitle(PageTypes.AddResources);
               }}
             />
             <PrimaryButton
-              disabled={isDisAble}
+              disabled={isNextDisabled}
               style={{ margin: '0 4px' }}
-              text={'Done'}
-              onClick={async () => {
-                const selectedResources = requireResources.concat(enabledResources);
-                await onSubmit({
-                  subscription: currentSubscription,
-                  resourceGroup: currentResourceGroup,
-                  hostname: currentHostName,
-                  location: currentLocation,
-                  luisLocation: currentLuisLocation || currentLocation,
+              text={formatMessage('Done')}
+              onClick={() => {
+                const selectedResources = formData.requiredResources.concat(formData.enabledResources);
+                onSubmit({
+                  tenantId: formData.tenantId,
+                  subscription: formData.subscriptionId,
+                  resourceGroup: formData.resourceGroup,
+                  hostname: formData.hostname,
+                  location: formData.region,
+                  luisLocation: formData.luisLocation || formData.region,
                   type: publishType,
                   externalResources: selectedResources,
                 });
@@ -912,67 +1063,93 @@ export const AzureProvisionDialog: React.FC = () => {
         <>
           <DefaultButton
             style={{ margin: '0 4px' }}
-            text={'Cancel'}
+            text={formatMessage('Cancel')}
             onClick={() => {
               closeDialog();
             }}
           />
-          <PrimaryButton disabled={isEditorError} style={{ margin: '0 4px' }} text="Save" onClick={onSave} />
+          <PrimaryButton
+            disabled={isEditorError}
+            style={{ margin: '0 4px' }}
+            text={formatMessage('Save')}
+            onClick={onSave}
+          />
         </>
       );
     }
-  }, [
-    onSave,
-    page,
-    choice,
-    isEditorError,
-    isDisAble,
-    currentSubscription,
-    currentResourceGroup,
-    currentHostName,
-    currentLocation,
-    publishType,
-    extensionResourceOptions,
-    currentUser,
-    enabledResources,
-    requireResources,
-    currentLuisLocation,
-  ]);
+  }, [onSave, page, formData, isEditorError, isNextDisabled, publishType, extensionResourceOptions, currentUser]);
+
+  // if we haven't loaded the token yet, show a loading spinner
+  // unless we need to select the tenant first
+  if (isLoading) {
+    return (
+      <div style={{ height: '100vh' }}>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (loadingErrorMessage) {
+    return (
+      <div style={{ height: '100vh' }}>
+        <MessageBar isMultiline messageBarType={MessageBarType.error}>
+          {loadingErrorMessage}
+        </MessageBar>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ height: '100vh' }}>
-      {page === PageTypes.ConfigProvision && PageFormConfig}
-      {page === PageTypes.AddResources && PageAddResources}
-      {page === PageTypes.ReviewResource && PageReview}
-      {page === PageTypes.EditJson && (
-        <JsonEditor
-          height={400}
-          id={publishType}
-          schema={getSchema()}
-          value={currentConfig || importConfig}
-          onChange={(value) => {
-            setEditorError(false);
-            setImportConfig(value);
-          }}
-          onError={() => {
-            setEditorError(true);
-          }}
-        />
-      )}
-      <div
-        style={{
-          background: '#FFFFFF',
-          borderTop: '1px solid #EDEBE9',
-          position: 'fixed',
-          width: '100%',
-          bottom: '0',
-          textAlign: 'right',
-          height: 'fit-content',
-          padding: '24px 0px 0px',
+    <Fragment>
+      <ProvisionHandoff
+        developerInstructions={formatMessage('Send this to your IT admin')}
+        handoffInstructions={handoffInstructions}
+        hidden={!showHandoff}
+        title={formatMessage('Generate a provisioning request')}
+        onBack={() => {
+          setShowHandoff(false);
         }}
-      >
-        {PageFooter}
+        onDismiss={() => {
+          closeDialog();
+        }}
+      />
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1 }}>
+          {page === PageTypes.ChooseAction && PageChooseAction}
+          {page === PageTypes.ConfigProvision && PageFormConfig}
+          {page === PageTypes.AddResources && PageAddResources()}
+          {page === PageTypes.ReviewResource && PageReview}
+          {page === PageTypes.EditJson && (
+            <JsonEditor
+              height={400}
+              id={publishType}
+              schema={getSchema()}
+              value={currentConfig || importConfig}
+              onChange={(value) => {
+                setEditorError(false);
+                setImportConfig(value);
+              }}
+              onError={() => {
+                setEditorError(true);
+              }}
+            />
+          )}
+        </div>
+        <div
+          style={{
+            flex: 'auto',
+            flexGrow: 0,
+            background: '#FFFFFF',
+            borderTop: '1px solid #EDEBE9',
+            width: '100%',
+            textAlign: 'right',
+            height: 'fit-content',
+            padding: '24px 0px 0px',
+          }}
+        >
+          {PageFooter}
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };

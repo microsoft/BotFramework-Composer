@@ -51,6 +51,7 @@ window.CodeEditors = CodeEditors;
 window.UIShared = UIShared;
 window.Composer = {
   __extensionId: '',
+  __bundleId: '',
   __pluginType: '',
   render: (component: React.ReactElement) => {
     ReactDOM.render(component, document.getElementById('root'));

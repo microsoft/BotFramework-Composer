@@ -117,7 +117,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
     <CollapsableWrapper title={formatMessage('App Id / Password')} titleStyle={title}>
       <div css={appIdAndPasswordStyle}>
         <TextField
-          aria-label={formatMessage('Microsoft App Id')}
+          ariaLabel={formatMessage('Microsoft App Id')}
           data-testid={'MicrosoftAppId'}
           label={formatMessage('Microsoft App Id')}
           placeholder={formatMessage('Enter Microsoft App Id')}
@@ -128,7 +128,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           onRenderLabel={onRenderLabel}
         />
         <TextField
-          aria-label={formatMessage('Microsoft App Password')}
+          ariaLabel={formatMessage('Microsoft App Password')}
           data-testid={'MicrosoftPassword'}
           label={formatMessage('Microsoft App Password')}
           placeholder={formatMessage('Enter Microsoft App Password')}

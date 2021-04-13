@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { Fragment, useCallback, Suspense, useEffect } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -12,13 +12,30 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogIdsState, qnaFilesState, dispatcherState, createQnAOnState } from '../../recoilModel';
+import {
+  dialogIdsState,
+  qnaFilesSelectorFamily,
+  dispatcherState,
+  createQnAOnState,
+  localeState,
+  settingsState,
+} from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-import TableView from './table-view';
+import TableView, { qnaSuffix } from './table-view';
+import { TabHeader } from './TabHeader';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
+
+const qnaContentStyle = css`
+  flex-grow: 1;
+  height: 0;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0px;
+`;
 
 const QnAPage: React.FC<RouteComponentProps<{
   dialogId: string;
@@ -33,11 +50,25 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogIdsState(actualProjectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
-  //To do: support other languages
-  const locale = 'en-us';
-  //const locale = useRecoilValue(localeState);
-  const creatQnAOnInfo = useRecoilValue(createQnAOnState);
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(actualProjectId));
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const createQnAOnInfo = useRecoilValue(createQnAOnState);
+  const settings = useRecoilValue(settingsState(actualProjectId));
+  const { defaultLanguage } = settings;
+  const languages = defaultLanguage === locale ? [defaultLanguage] : [locale, defaultLanguage];
+  const [currentLocale, setCurrentLocale] = useState(locale);
+
+  const showTabBar = useMemo(() => {
+    const targetFileId = dialogId.endsWith(qnaSuffix(locale)) ? dialogId : `${dialogId}.${locale}`;
+    const qnaFile = qnaFiles.find(({ id }) => id === qnaFileId ?? targetFileId);
+    return !(defaultLanguage === locale || qnaFile?.empty);
+  }, [defaultLanguage, locale, qnaFiles, dialogId, qnaFileId]);
+
+  useEffect(() => {
+    if (locale !== currentLocale) {
+      setCurrentLocale(locale);
+    }
+  }, [locale]);
 
   const path = props.location?.pathname ?? '';
 
@@ -61,6 +92,10 @@ const QnAPage: React.FC<RouteComponentProps<{
     [dialogId, actualProjectId, edit]
   );
 
+  const onChangeLocale = (locale) => {
+    setCurrentLocale(locale);
+  };
+
   const onRenderHeaderContent = () => {
     if (!isRoot) {
       return (
@@ -72,10 +107,32 @@ const QnAPage: React.FC<RouteComponentProps<{
     return null;
   };
 
+  const onRenderContent = () => (
+    <Router component={Fragment} primary={false}>
+      <CodeEditor
+        dialogId={dialogId}
+        locale={currentLocale}
+        path="/edit"
+        projectId={projectId}
+        qnaFileId={qnaFileId}
+        skillId={skillId}
+      />
+      <TableView
+        dialogId={dialogId}
+        locale={currentLocale}
+        path="/"
+        projectId={projectId}
+        qnaFileId={qnaFileId}
+        skillId={skillId}
+      />
+    </Router>
+  );
+
   return (
     <Page
       useDebugPane
       useNewTree
+      contentStyle={qnaContentStyle}
       data-testid="QnAPage"
       dialogId={dialogId}
       mainRegionName={formatMessage('QnA editor')}
@@ -83,36 +140,38 @@ const QnAPage: React.FC<RouteComponentProps<{
       pageMode={'knowledge-base'}
       projectId={projectId}
       skillId={skillId}
-      title={formatMessage('QnA')}
+      title={formatMessage('Knowledge(QnA)')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
-          <TableView dialogId={dialogId} path="/" projectId={projectId} qnaFileId={qnaFileId} skillId={skillId} />
-        </Router>
+        {showTabBar ? (
+          <TabHeader
+            defaultLanguage={defaultLanguage}
+            languages={languages}
+            locale={currentLocale}
+            onChangeLocale={onChangeLocale}
+          >
+            {onRenderContent()}
+          </TabHeader>
+        ) : (
+          <div css={{ overflowY: 'auto', height: '100%' }}>{onRenderContent()}</div>
+        )}
         <CreateQnAModal
-          dialogId={creatQnAOnInfo.dialogId}
-          projectId={creatQnAOnInfo.projectId}
+          dialogId={createQnAOnInfo.dialogId}
+          projectId={createQnAOnInfo.projectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId: creatQnAOnInfo.projectId });
+            actions.createQnAFromUrlDialogCancel({ projectId: createQnAOnInfo.projectId });
           }}
-          onSubmit={async ({ name, url, multiTurn = false }) => {
-            if (url) {
-              await actions.createQnAKBFromUrl({
-                id: `${creatQnAOnInfo.dialogId}.${locale}`,
-                name,
-                url,
-                multiTurn,
-                projectId: creatQnAOnInfo.projectId,
-              });
+          onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
+            if (urls.length !== 0) {
+              actions.createQnAKBsFromUrls({ id: createQnAOnInfo.dialogId, name, projectId, locales, urls, multiTurn });
             } else {
               await actions.createQnAKBFromScratch({
-                id: `${creatQnAOnInfo.dialogId}.${locale}`,
+                id: createQnAOnInfo.dialogId,
                 name,
-                projectId: creatQnAOnInfo.projectId,
+                projectId: createQnAOnInfo.projectId,
               });
             }
           }}

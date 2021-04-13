@@ -20,6 +20,10 @@ function updateCurrentPath(req: Request, res: Response) {
   res.status(200).json(StorageService.updateCurrentPath(req.body.path, req.body.storageId));
 }
 
+function validatePath(req: Request, res: Response) {
+  res.status(200).json({ errorMsg: StorageService.validatePath(req.params.path) });
+}
+
 async function createFolder(req: Request, res: Response) {
   const path = req.body.path;
   const folderName = req.body.name;
@@ -70,4 +74,5 @@ export const StorageController = {
   updateFolder,
   getBlob,
   updateCurrentPath,
+  validatePath,
 };

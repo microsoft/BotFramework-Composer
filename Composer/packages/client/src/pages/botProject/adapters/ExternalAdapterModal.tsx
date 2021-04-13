@@ -89,7 +89,11 @@ const AdapterModal = (props: Props) => {
           <Text key="helptext">
             {formatMessage.rich('To learn more about the { title }, <a>visit its documentation page</a>.', {
               title: schema.title,
-              a: ({ children }) => <Link href={uiSchema.helpLink}>{children}</Link>,
+              a: ({ children }) => (
+                <Link href={uiSchema.helpLink} target="_blank">
+                  {children}
+                </Link>
+              ),
             })}
           </Text>
           <DialogFooter>
@@ -107,7 +111,7 @@ const AdapterModal = (props: Props) => {
                       ...currentSettings.runtimeSettings,
                       adapters: [
                         ...currentAdapters.filter((a) => a.name != adapterKey),
-                        { name: adapterKey, enabled: true, route: value.route },
+                        { name: adapterKey, enabled: true, route: value.route, type: value.type ?? adapterKey },
                       ],
                     },
                   });

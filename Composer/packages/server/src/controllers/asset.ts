@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import AssetService from '../services/asset';
@@ -31,15 +31,28 @@ export async function getProjTemplatesV2(req: any, res: any) {
     // Grab templates from FeedURls
     if (feedUrls) {
       const feedTemplates = await AssetService.manager.getCustomFeedTemplates(feedUrls);
+      const emptyBot = feedTemplates.filter((template) => {
+        return template.id === emptyBotNpmTemplateName;
+      });
+      const qnaTemplateVersion =
+        emptyBot.length > 0 && emptyBot[0].package?.packageVersion ? emptyBot[0].package.packageVersion : '*';
       templates = templates.concat(feedTemplates);
       templates.push({
         id: QnABotTemplateId,
         name: 'QNA',
         description: formatMessage('Empty bot template that routes to qna configuration'),
+        dotnetSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
+        nodeSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
         package: {
-          packageName: 'generator-empty-bot',
+          packageName: emptyBotNpmTemplateName,
           packageSource: 'npm',
-          packageVersion: '1.0.0',
+          packageVersion: qnaTemplateVersion,
         },
       });
     }

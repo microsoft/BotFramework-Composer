@@ -7,7 +7,7 @@ import React, { useRef, useState } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
 import { ExpressionSwitchWindow } from '../expressions/ExpressionSwitchWindow';
-import { ExpressionsListMenu } from '../expressions/ExpressionsListMenu';
+import { ExpressionFieldToolbar } from '../expressions/ExpressionFieldToolbar';
 
 import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
@@ -68,23 +68,25 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
-  const [expressionsListContainerElements, setExpressionsListContainerElements] = useState<HTMLDivElement[]>([]);
+  const [containerElm, setContainerElm] = useState<HTMLDivElement | null>(null);
+  const [toolbarTargetElm, setToolbarTargetElm] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
-  const completionListOverrideResolver = (value: string) => {
-    return value === '=' ? (
-      <ExpressionsListMenu
-        onExpressionSelected={(expression: string) => onChange(expression)}
-        onMenuMount={(refs) => {
-          setExpressionsListContainerElements(refs);
-        }}
-      />
-    ) : null;
-  };
+  const focus = React.useCallback(
+    (id: string, value?: string, event?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      if (event?.target) {
+        event.stopPropagation();
+        setToolbarTargetElm(event.target as HTMLInputElement | HTMLTextAreaElement);
+      }
+    },
+    []
+  );
+
+  const onClearTarget = React.useCallback(() => {
+    setToolbarTargetElm(null);
+  }, []);
 
   return (
     <Intellisense
-      completionListOverrideContainerElements={expressionsListContainerElements}
-      completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
@@ -102,18 +104,28 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
         onKeyUpTextField,
         onClickTextField,
       }) => (
-        <StringField
-          {...props}
-          cursorPosition={cursorPosition}
-          focused={focused}
-          id={id}
-          value={textFieldValue}
-          onBlur={noop} // onBlur managed by Intellisense
-          onChange={(newValue) => onValueChanged(newValue || '')}
-          onClick={onClickTextField}
-          onKeyDown={onKeyDownTextField}
-          onKeyUp={onKeyUpTextField}
-        />
+        <div ref={setContainerElm}>
+          <StringField
+            {...props}
+            cursorPosition={cursorPosition}
+            focused={focused}
+            id={id}
+            value={textFieldValue}
+            onBlur={noop} // onBlur managed by Intellisense
+            onChange={(newValue) => onValueChanged(newValue || '')}
+            onClick={onClickTextField}
+            onFocus={focus}
+            onKeyDown={onKeyDownTextField}
+            onKeyUp={onKeyUpTextField}
+          />
+          <ExpressionFieldToolbar
+            container={containerElm}
+            target={toolbarTargetElm}
+            value={textFieldValue}
+            onChange={onChange}
+            onClearTarget={onClearTarget}
+          />
+        </div>
       )}
     </Intellisense>
   );

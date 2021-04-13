@@ -9,10 +9,12 @@ import * as rp from 'request-promise';
 import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
+import { composeRenderFunction } from '@uifabric/utilities';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
 import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
+import { copyDir } from './utils/copyDir';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
 
@@ -114,13 +116,24 @@ export class BotProjectDeploy {
       // this returns a pathToArtifacts where the deployable version lives.
       const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, settings, profileName);
 
+      // COPY MANIFESTS TO wwwroot/manifests
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      if (await project.fileStorage.exists(path.join(pathToArtifacts, 'manifests'))) {
+        await copyDir(
+          path.join(pathToArtifacts, 'manifests'),
+          project.fileStorage,
+          path.join(pathToArtifacts, 'wwwroot', 'manifests'),
+          project.fileStorage
+        );
+      }
+
       // STEP 4: ZIP THE ASSETS
       // Build a zip file of the project
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Creating build artifact...',
       });
-      await this.zipDirectory(pathToArtifacts, this.zipPath);
+      await this.zipDirectory(pathToArtifacts, settings, this.zipPath);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Build artifact ready!',
@@ -146,7 +159,8 @@ export class BotProjectDeploy {
     }
   }
 
-  private async zipDirectory(source: string, out: string) {
+  private async zipDirectory(source: string, settings: any, out: string) {
+    console.log(`Zip the files in ${source} into a zip file ${out}`);
     try {
       const archive = archiver('zip', { zlib: { level: 9 } });
       // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -156,12 +170,15 @@ export class BotProjectDeploy {
           .glob('**/*', {
             cwd: source,
             dot: true,
-            ignore: ['**/code.zip', 'node_modules/**/*'],
+            ignore: ['**/code.zip', '**/settings/appsettings.json'],
           })
           .on('error', (err) => reject(err))
           .pipe(stream);
 
         stream.on('close', () => resolve());
+
+        // write the merged settings to the deploy artifact
+        archive.append(JSON.stringify(settings, null, 2), { name: 'settings/appsettings.json' });
         archive.finalize();
       });
     } catch (error) {
@@ -174,7 +191,7 @@ export class BotProjectDeploy {
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Uploading zip file...',
+      message: `Uploading zip file... to ${hostname ? hostname : name + (env ? '-' + env : '')}`,
     });
 
     const publishEndpoint = `https://${

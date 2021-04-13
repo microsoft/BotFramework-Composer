@@ -21,11 +21,13 @@ import {
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 import { WarningMessage } from './WarningMessage';
 import { visualPanel } from './styles';
 import VisualPanelHeader from './VisualPanelHeader';
 import VisualEditorWrapper from './VisualEditorWrapper';
+import useAssetsParsingState from './useAssetsParsingState';
 
 type VisualPanelProps = {
   projectId: string;
@@ -37,7 +39,7 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
   const currentDialog = useRecoilValue(currentDialogState({ dialogId, projectId }));
   const schemas = useRecoilValue(schemasState(projectId));
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(projectId));
-
+  const loading = useAssetsParsingState(projectId);
   const { updateDialog, navTo } = useRecoilValue(dispatcherState);
 
   const selected = decodeDesignerPathToArrayPath(currentDialog?.content, encodedSelected || '');
@@ -76,29 +78,31 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
         />
       )}
 
-      {dialogJsonVisible && currentDialog ? (
-        <JsonEditor
-          key={'dialogjson'}
-          editorSettings={userSettings.codeEditor}
-          id={currentDialog.id}
-          schema={schemas.sdk.content}
-          value={currentDialog.content || undefined}
-          onChange={(data) => {
-            updateDialog({ id: currentDialog.id, content: data, projectId });
-          }}
-        />
-      ) : withWarning ? (
-        <WarningMessage
-          isVisible={warningIsVisible}
-          okText={formatMessage('Change Recognizer')}
-          onCancel={() => {
-            setWarningIsVisible(false);
-          }}
-          onOk={() => navTo(projectId, dialogId ?? null)}
-        />
-      ) : (
-        <VisualEditorWrapper dialogId={dialogId} pluginConfig={pluginConfig} projectId={projectId} />
-      )}
+      {loading && <LoadingSpinner />}
+      {!loading &&
+        (dialogJsonVisible && currentDialog ? (
+          <JsonEditor
+            key={'dialogjson'}
+            editorSettings={userSettings.codeEditor}
+            id={currentDialog.id}
+            schema={schemas.sdk.content}
+            value={currentDialog.content || undefined}
+            onChange={(data) => {
+              updateDialog({ id: currentDialog.id, content: data, projectId });
+            }}
+          />
+        ) : withWarning ? (
+          <WarningMessage
+            isVisible={warningIsVisible}
+            okText={formatMessage('Change Recognizer')}
+            onCancel={() => {
+              setWarningIsVisible(false);
+            }}
+            onOk={() => navTo(projectId, dialogId ?? null)}
+          />
+        ) : (
+          <VisualEditorWrapper dialogId={dialogId} pluginConfig={pluginConfig} projectId={projectId} />
+        ))}
     </div>
   );
 });

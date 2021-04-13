@@ -109,6 +109,9 @@ export class BotProjectService {
       'turn.recognized.intent',
       'turn.recognized.score',
       'turn.recognized.text',
+      'turn.recognized.alteredText',
+      'turn.recognized.entities',
+      'turn.recognized.intents',
       'turn.unrecognizedText',
       'turn.recognizedEntities',
       'turn.interrupted',
@@ -348,6 +351,10 @@ export class BotProjectService {
     }
   };
 
+  public static setProjectAlias = (projectId: string, alias: string): void => {
+    BotProjectService.setProjectLocationData(projectId, { alias });
+  };
+
   private static updateCurrentProjects = (project: BotProject): void => {
     const { id } = project;
     const idx = BotProjectService.currentBotProjects.findIndex((item) => item.id === id);
@@ -442,7 +449,10 @@ export class BotProjectService {
       alias,
       locale,
       schemaUrl,
+      runtimeType,
+      runtimeLanguage,
     } = req.body;
+
     // get user from request
     const user = await ExtensionContext.getUserFromRequest(req);
 
@@ -469,6 +479,8 @@ export class BotProjectService {
             name,
             locationRef,
             jobId,
+            runtimeType,
+            runtimeLanguage,
             user
           );
 
@@ -502,8 +514,8 @@ export class BotProjectService {
               log('Open project', botRef);
               const id = await BotProjectService.openProject(botRef, user);
 
-              // in the case of PVA, we need to update the eTag and alias used by the import mechanism
-              createFromPva && BotProjectService.setProjectLocationData(id, { alias, eTag });
+              // in the case of remote project, we need to update the eTag and alias used by the import mechanism
+              BotProjectService.setProjectLocationData(id, { alias, eTag });
 
               log('Get Project by Id', id);
               const currentProject = await BotProjectService.getProjectById(id, user);
@@ -550,6 +562,10 @@ export class BotProjectService {
         throw new Error('Could not find root bot');
       }
     } catch (err) {
+      // Clean up failed projects
+      log('Cleaning up failed project at ', locationRef.path);
+      const storage = StorageService.getStorageClient(locationRef.storageId, user);
+      await storage.rmrfDir(locationRef.path);
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
       TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
     }

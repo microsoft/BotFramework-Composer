@@ -79,7 +79,7 @@ const languageButton = {
 };
 
 const defaultLanguageTextStyle = css`
-  color: #898989;
+  color: #595959;
   font-size: 8px;
 `;
 

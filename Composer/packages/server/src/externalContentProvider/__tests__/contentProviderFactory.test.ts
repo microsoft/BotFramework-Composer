@@ -3,6 +3,7 @@
 
 import { ExternalContentProviderType } from '@bfc/shared';
 
+import { AzureBotServiceProvider } from '../azureBotServiceProvider';
 import { contentProviderFactory } from '../contentProviderFactory';
 import { PowerVirtualAgentsProvider } from '../powerVirtualAgentsProvider';
 
@@ -18,13 +19,23 @@ describe('contentProviderFactory', () => {
   });
 
   it('should get a PVA content provider', () => {
-    const providerInfo = {
+    const providerInfo: any = {
       kind: 'pva' as ExternalContentProviderType,
       metadata: { baseUrl: '', botId: '', envId: '', name: '', tenantId: '' },
     };
     const provider = contentProviderFactory.getProvider(providerInfo);
 
     expect(provider instanceof PowerVirtualAgentsProvider);
+  });
+
+  it('should get a ABS content provider', () => {
+    const providerInfo: any = {
+      kind: 'abs' as ExternalContentProviderType,
+      metadata: { resourceId: '', botName: '', tenantId: '' },
+    };
+    const provider = contentProviderFactory.getProvider(providerInfo);
+
+    expect(provider instanceof AzureBotServiceProvider);
   });
 
   it('should return undefined for an unrecognized content source', () => {

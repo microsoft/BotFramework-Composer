@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { PublishTarget } from '@bfc/shared';
 
 export interface IContentProviderMetadata {
   [key: string]: any;
@@ -47,10 +48,15 @@ export abstract class ExternalContentProvider<T extends IContentProviderMetadata
    * is being imported. Composer can now prompt the user and ask if they want to save the
    * updated content to the existing project.
    */
-  abstract getAlias?(): Promise<string>;
+  getAlias?(): Promise<string>;
 
   /**
    * (Optional) Performs any necessary authentication for the service and returns an access token.
    */
-  abstract authenticate?(): Promise<string>;
+  authenticate?(): Promise<string>;
+
+  /**
+   * (Optional) Generates a publish profile based on the provider.
+   */
+  generateProfile?(): Promise<PublishTarget>;
 }

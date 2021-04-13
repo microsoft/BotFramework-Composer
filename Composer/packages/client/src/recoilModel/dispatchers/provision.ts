@@ -27,6 +27,13 @@ export const provisionDispatcher = () => {
       type: 'success',
     };
   };
+  const getProvisionPartialSuccessNotification = (value: string): CardProps => {
+    return {
+      title: formatMessage('Provision partially completed'),
+      description: formatMessage('{msg}', { msg: value }),
+      type: 'warning',
+    };
+  };
   const getProvisionFailureNotification = (value: string): CardProps => {
     return {
       title: formatMessage('Provision failure'),
@@ -61,13 +68,12 @@ export const provisionDispatcher = () => {
     ) => {
       try {
         TelemetryClient.track('NewPublishingProfileStarted');
-        const result = await httpClient.post(
-          `/provision/${projectId}/${type}`,
-          { ...config, graphToken: graphToken, currentProfile },
-          {
-            headers: { Authorization: `Bearer ${armToken}` },
-          }
-        );
+        const result = await httpClient.post(`/provision/${projectId}/${type}`, {
+          ...config,
+          graphToken: graphToken,
+          currentProfile,
+          accessToken: armToken,
+        });
         // set notification
         const notification = createNotification(getProvisionPendingNotification(result.data.message));
         addNotificationInternal(callbackHelpers, notification);
@@ -116,7 +122,11 @@ export const provisionDispatcher = () => {
         isCleanTimer = false;
       try {
         const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
-        if (response.data?.status === 200 && response.data.config && response.data.config != {}) {
+        if (
+          (response.data?.status === 200 || response.data?.status === 206) &&
+          response.data.config &&
+          response.data.config != {}
+        ) {
           // delete provisionStatus
           callbackHelpers.set(provisionStatusState(projectId), (status) => {
             const newStatus = { ...status };
@@ -138,9 +148,17 @@ export const provisionDispatcher = () => {
             };
           });
 
-          TelemetryClient.track('NewPublishingProfileSaved', { type: targetType });
+          TelemetryClient.track('NewPublishingProfileSaved', {
+            type: targetType,
+            msAppId: response.data.config.settings?.MicrosoftAppId,
+            subscriptionId: response.data.config.subscriptionId,
+          });
 
-          notification = getProvisionSuccessNotification(response.data.message);
+          if (response.data?.status === 200) {
+            notification = getProvisionSuccessNotification(response.data.message);
+          } else {
+            notification = getProvisionPartialSuccessNotification(response.data.message);
+          }
           isCleanTimer = true;
         } else {
           if (response.data.status !== 500) {

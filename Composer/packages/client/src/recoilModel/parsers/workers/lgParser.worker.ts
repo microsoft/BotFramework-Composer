@@ -14,6 +14,7 @@ import {
   LgCopyTemplatePayload,
   LgNewCachePayload,
   LgCleanCachePayload,
+  LgParseAllPayload,
 } from '../types';
 
 const ctx: Worker = self as any;
@@ -78,6 +79,12 @@ interface CleanCacheMeassage {
   payload: LgCleanCachePayload;
 }
 
+type ParseAllMessage = {
+  id: string;
+  type: LgActionType.ParseAll;
+  payload: LgParseAllPayload;
+};
+
 type LgMessageEvent =
   | NewCacheMessage
   | CleanCacheMeassage
@@ -87,7 +94,8 @@ type LgMessageEvent =
   | UpdateMessage
   | RemoveMessage
   | RemoveAllMessage
-  | CopyMessage;
+  | CopyMessage
+  | ParseAllMessage;
 
 type LgResources = Map<string, LgFile>;
 
@@ -127,11 +135,8 @@ export class LgCache {
     this.projects.delete(projectId);
   }
 
-  public addProject(projectId: string, lgFiles: LgFile[]) {
+  public addProject(projectId: string) {
     const lgResources = new Map();
-    lgFiles.forEach((file) => {
-      lgResources.set(file.id, lgUtil.parse(file.id, file.content, lgFiles));
-    });
     this.projects.set(projectId, lgResources);
   }
 }
@@ -159,8 +164,8 @@ export const handleMessage = (msg: LgMessageEvent) => {
   let payload: any = null;
   switch (msg.type) {
     case LgActionType.NewCache: {
-      const { projectId, lgFiles } = msg.payload;
-      cache.addProject(projectId, lgFiles);
+      const { projectId } = msg.payload;
+      cache.addProject(projectId);
       break;
     }
 
@@ -176,6 +181,18 @@ export const handleMessage = (msg: LgMessageEvent) => {
       const lgFile = lgUtil.parse(id, content, lgFiles);
       cache.set(projectId, lgFile);
       payload = filterParseResult(lgFile);
+      break;
+    }
+
+    case LgActionType.ParseAll: {
+      const { lgResources, projectId } = msg.payload;
+
+      payload = lgResources.map(({ id, content }) => {
+        const lgFile = lgUtil.parse(id, content, lgResources);
+        cache.set(projectId, lgFile);
+        return filterParseResult(lgFile);
+      });
+
       break;
     }
 

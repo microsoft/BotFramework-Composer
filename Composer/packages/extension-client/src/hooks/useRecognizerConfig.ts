@@ -64,7 +64,7 @@ export function useRecognizerConfig(): RecognizerSchemaConfig {
 
     const recognizerWidgets = plugins.widgets?.recognizer ?? {};
     const schemas = Object.entries(plugins.uiSchema)
-      .filter(([_, uiOptions]) => uiOptions && uiOptions.recognizer)
+      .filter(([_, uiOptions]) => uiOptions?.recognizer)
       .map(([$kind, uiOptions]) => {
         const recognizerOptions = uiOptions?.recognizer as RecognizerOptions;
         const intentEditor = resolveRecognizerWidget(recognizerOptions.intentEditor, recognizerWidgets);

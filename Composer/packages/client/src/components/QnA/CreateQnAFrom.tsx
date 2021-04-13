@@ -10,6 +10,7 @@ import {
   createQnAOnState,
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
+  settingsState,
 } from '../../recoilModel';
 
 import CreateQnAFromScratchModal from './CreateQnAFromScratchModal';
@@ -18,13 +19,16 @@ import { CreateQnAFromModalProps } from './constants';
 
 export const CreateQnAModal: React.FC<CreateQnAFromModalProps> = (props) => {
   const { projectId } = useRecoilValue(createQnAOnState);
+  const settings = useRecoilValue(settingsState(projectId));
+  const locales = settings.languages;
+  const defaultLocale = settings.defaultLanguage;
   const showCreateQnAFromScratchDialog = useRecoilValue(showCreateQnAFromScratchDialogState(projectId));
   const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
 
   if (showCreateQnAFromScratchDialog) {
-    return <CreateQnAFromScratchModal {...props}></CreateQnAFromScratchModal>;
+    return <CreateQnAFromScratchModal {...props} />;
   } else if (showCreateQnAFromUrlDialog) {
-    return <CreateQnAFromUrlModal {...props}></CreateQnAFromUrlModal>;
+    return <CreateQnAFromUrlModal {...props} defaultLocale={defaultLocale} locales={locales} />;
   } else {
     return null;
   }

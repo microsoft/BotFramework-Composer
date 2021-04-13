@@ -8,7 +8,7 @@ import { sortTemplates, templateSortOrder } from '../creation';
 describe('templateSort', () => {
   const templates: BotTemplate[] = [
     {
-      id: '@microsoft/generator-microsoft-bot-calendar-assistant',
+      id: '@microsoft/generator-bot-assistant-core',
       name: ' Calendar Assistant',
       description: 'Preview Calendar Assistant template for TESTING ONLY',
       package: {
@@ -18,7 +18,27 @@ describe('templateSort', () => {
       },
     },
     {
-      id: '@microsoft/generator-microsoft-bot-calendar',
+      id: '@microsoft/generator-bot-enterprise-assistant',
+      name: ' Calendar Assistant',
+      description: 'Preview Calendar Assistant template for TESTING ONLY',
+      package: {
+        packageName: '@microsoft/generator-microsoft-bot-calendar-assistant',
+        packageSource: 'npm',
+        packageVersion: '0.0.1-preview-20210302.2eaae0d',
+      },
+    },
+    {
+      id: '@microsoft/generator-bot-people',
+      name: ' Calendar Assistant',
+      description: 'Preview Calendar Assistant template for TESTING ONLY',
+      package: {
+        packageName: '@microsoft/generator-microsoft-bot-calendar-assistant',
+        packageSource: 'npm',
+        packageVersion: '0.0.1-preview-20210302.2eaae0d',
+      },
+    },
+    {
+      id: '@microsoft/generator-bot-calendar',
       name: ' Calendar',
       description: 'Preview calendar bot for TESTING ONLY',
       package: {
@@ -28,7 +48,7 @@ describe('templateSort', () => {
       },
     },
     {
-      id: '@microsoft/generator-microsoft-bot-conversational-core',
+      id: '@microsoft/generator-bot-conversational-core',
       name: ' Conversational Core',
       description: 'Preview conversational core package for TESTING ONLY',
       package: {
@@ -38,7 +58,7 @@ describe('templateSort', () => {
       },
     },
     {
-      id: '@microsoft/generator-microsoft-bot-empty',
+      id: '@microsoft/generator-bot-empty',
       name: ' Empty',
       description:
         'Instantiates a Bot Framework bot using the [component model](https://aka.ms/ComponentTemplateDocumentation). This template instantiates an empty bot with no dependent packages.',
@@ -61,6 +81,7 @@ describe('templateSort', () => {
   ];
 
   it('should return sorted templates per sortOrder obj', async () => {
+    // note - the list in templates has to include all the same items in creation.ts
     const sortedTemplateList = sortTemplates(templates);
     templateSortOrder.forEach((templateSortEntry, index) => {
       if (

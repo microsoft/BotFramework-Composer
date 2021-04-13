@@ -48,16 +48,16 @@ describe('Orchestrator Tests', () => {
   });
 
   it('throws if input empty', () => {
-    expect(orchestratorBuilder([], nlrPath)).rejects.toThrow();
+    expect(orchestratorBuilder('test', [], nlrPath)).rejects.toThrow();
   });
 
   it('throws if NLR path invalid', () => {
     const data: FileInfo[] = [{ name: 'hello', content: 'test', lastModified: '', path: '', relativePath: '' }];
-    expect(orchestratorBuilder(data, 'invalidPath')).rejects.toThrow();
+    expect(orchestratorBuilder('test', data, 'invalidPath')).rejects.toThrow();
   });
 
   it('produces expected snapshot and recognizer shape', async () => {
-    const buildOutput = await orchestratorBuilder(mockLUInput, nlrPath);
+    const buildOutput = await orchestratorBuilder('test', mockLUInput, nlrPath);
 
     expect(buildOutput.outputs.map((o) => o.id)).toContain('additem.en-us.lu');
 
@@ -66,7 +66,7 @@ describe('Orchestrator Tests', () => {
   });
 
   it('produces expected recognizer shape', async () => {
-    const buildOutput = await orchestratorBuilder(mockLUInput, nlrPath);
+    const buildOutput = await orchestratorBuilder('test', mockLUInput, nlrPath);
 
     expect(buildOutput.outputs.map((o) => o.id)).toContain('additem.en-us.lu');
 

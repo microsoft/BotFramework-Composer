@@ -7,6 +7,7 @@ import React, { useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
@@ -42,6 +43,10 @@ const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow
 const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
+const modalControlGroup = css`
+  padding: 10px;
+`;
+
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
@@ -66,13 +71,11 @@ const Routes = (props) => {
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId/skill/:skillId">
             <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/all/*" />
             <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/all/*" />
             <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
             <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/all/*" />
             <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <BotProjectSettings path="botProjectsSettings" />
@@ -81,7 +84,6 @@ const Routes = (props) => {
           </ProjectRouter>
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/all/*" />
             <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/all/*" />
@@ -115,7 +117,19 @@ const Routes = (props) => {
         <div
           css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)' }}
         >
-          <LoadingSpinner message={spinnerText} />
+          <Dialog
+            dialogContentProps={{
+              type: DialogType.normal,
+            }}
+            hidden={!botOpening}
+            modalProps={{
+              isBlocking: false,
+            }}
+          >
+            <div css={modalControlGroup}>
+              <LoadingSpinner message={spinnerText} />
+            </div>
+          </Dialog>
         </div>
       )}
     </div>

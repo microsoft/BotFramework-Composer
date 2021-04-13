@@ -21,3 +21,4 @@ export * from './telemetry';
 export * from './user';
 export * from './featureFlags';
 export * from './creation';
+export * from './orchestrator';

@@ -18,9 +18,10 @@ import log from '../../logger';
 import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
+import { TelemetryService } from '../../services/telemetry';
 
 import { IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
-import { OrchestratorBuilder } from './process/orchestratorBuilder';
+import orchestratorBuilder from './process/orchestratorBuilder';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -62,13 +63,13 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
+  private orchestratorCachedBuild = false;
   private orchestratorSettings: IOrchestratorSettings = {
     orchestrator: {
       models: {},
       snapshots: {},
     },
   };
-  private orchestratorBuilder?: OrchestratorBuilder = undefined;
 
   public luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -103,6 +104,13 @@ export class Builder {
     setEnvDefault('QNA_USER_AGENT', userAgent);
 
     try {
+      //warm up the orchestrator build cache before deleting and recreating the generated folder
+      await orchestratorBuilder.warmupCache(this.botDir, this.generatedFolderPath);
+    } catch (err) {
+      log(err);
+    }
+
+    try {
       await this.createGeneratedDir();
       //do cross train before publish
       await this.crossTrain(luFiles, qnaFiles, allFiles);
@@ -115,11 +123,6 @@ export class Builder {
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
-    } finally {
-      if (this.orchestratorBuilder) {
-        this.orchestratorBuilder.exit();
-        this.orchestratorBuilder = undefined;
-      }
     }
   };
 
@@ -169,10 +172,6 @@ export class Builder {
   public runOrchestratorBuild = async (luFiles: FileInfo[], emptyFiles: { [key: string]: boolean }) => {
     if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
 
-    if (!this.orchestratorBuilder) {
-      this.orchestratorBuilder = new OrchestratorBuilder();
-    }
-
     const [enLuFiles, multiLangLuFiles] = partition(luFiles, (f) =>
       f.name.split('.')?.[1]?.toLowerCase()?.startsWith('en')
     );
@@ -180,8 +179,12 @@ export class Builder {
     const nlrList = await this.runOrchestratorNlrList();
 
     const modelDatas = [
-      { model: nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
-      { model: nlrList?.defaults?.multilingual_intent, lang: 'multilang', luFiles: multiLangLuFiles },
+      { model: this.config?.model?.en_intent ?? nlrList?.defaults?.en_intent, lang: 'en', luFiles: enLuFiles },
+      {
+        model: this.config?.model?.multilingual_intent ?? nlrList?.defaults?.multilingual_intent,
+        lang: 'multilang',
+        luFiles: multiLangLuFiles,
+      },
     ];
 
     for (const modelData of modelDatas) {
@@ -190,13 +193,21 @@ export class Builder {
           throw new Error('Model not set');
         }
         const modelPath = Path.resolve(await this.getModelPathAsync(), modelData.model.replace('.onnx', ''));
-        await this.runOrchestratorNlrGet(modelPath, modelData.model);
+        if (!(await pathExists(modelPath))) {
+          throw new Error('Orchestrator Model missing: ' + modelPath);
+        }
+
+        TelemetryService.startEvent('OrchestratorBuildStarted', 'OrchestratorBuilder', {
+          baseModel: Path.basename(modelPath),
+          firstBuild: !this.orchestratorCachedBuild,
+        });
+
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
 
+        TelemetryService.endEvent('OrchestratorBuildCompleted', 'OrchestratorBuilder');
+
         this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
-        for (const snap in snapshotData) {
-          this.orchestratorSettings.orchestrator.snapshots[snap] = snapshotData[snap];
-        }
+        this.orchestratorSettings.orchestrator.snapshots = snapshotData;
       }
     }
 
@@ -218,10 +229,9 @@ export class Builder {
     luFiles: FileInfo[],
     emptyFiles: { [key: string]: boolean }
   ) => {
-    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return;
+    if (!luFiles.filter((file) => !emptyFiles[file.name]).length) return {};
     // build snapshots from LU files
-    if (!this.orchestratorBuilder) return;
-    return await this.orchestratorBuilder.build(luFiles, modelPath, this.generatedFolderPath);
+    return await orchestratorBuilder.build(this.botDir, luFiles, modelPath, this.generatedFolderPath);
   };
 
   /**

@@ -40,7 +40,7 @@ const commands = css`
   box-sizing: border-box;
   justify-content: space-between;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
 `;
 
 export interface ProjectTreeHeaderMenuItem {
@@ -105,13 +105,6 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
         />
       ) : (
         <div css={commands}>
-          <CommandButton
-            css={buttonStyle}
-            iconProps={{ iconName: 'Filter' }}
-            onClick={() => {
-              setShowFilter(true);
-            }}
-          />
           {overflowMenu.length ? (
             <CommandButton
               data-is-focusable
@@ -121,6 +114,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
               data-testid="projectTreeHeaderMoreButton"
               iconProps={{ iconName: 'Add' }}
               menuProps={{ items: overflowMenu }}
+              tabIndex={0}
               text={formatMessage('Add')}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -129,6 +123,15 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
               }}
             />
           ) : null}
+          <CommandButton
+            ariaLabel={formatMessage('Filter')}
+            css={buttonStyle}
+            iconProps={{ iconName: 'Filter' }}
+            tabIndex={0}
+            onClick={() => {
+              setShowFilter(true);
+            }}
+          />
         </div>
       )}
     </div>

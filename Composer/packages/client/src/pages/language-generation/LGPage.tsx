@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { dialogIdsState } from '../../recoilModel';
+import { lgFilesSelectorFamily, localeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import TableView from './table-view';
@@ -25,19 +25,24 @@ const LGPage: React.FC<RouteComponentProps<{
   lgFileId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId, lgFileId = '' } = props;
-  const dialogs = useRecoilValue(dialogIdsState(skillId ?? projectId));
+  const actualProjectId = skillId ?? projectId;
+  const locale = useRecoilValue(localeState(actualProjectId));
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(skillId ?? projectId));
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
+  const activeFile = lgFileId
+    ? lgFiles.find(({ id }) => id === lgFileId || id === `${lgFileId}.${locale}`)
+    : lgFiles.find(({ id }) => id === dialogId || id === `${dialogId}.${locale}`);
+
   useEffect(() => {
-    const activeDialog = dialogs.find((id) => id === dialogId);
-    if (!activeDialog && dialogs.length && dialogId !== 'common' && !lgFileId) {
+    if (!activeFile && lgFiles.length) {
       navigateTo(`${baseURL}language-generation/common`);
     }
-  }, [dialogId, dialogs, projectId, lgFileId]);
+  }, [dialogId, lgFiles, projectId, lgFileId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
@@ -77,8 +82,22 @@ const LGPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} lgFileId={lgFileId} path="/edit/*" projectId={projectId} skillId={skillId} />
-          <TableView dialogId={dialogId} lgFileId={lgFileId} path="/" projectId={projectId} skillId={skillId} />
+          <CodeEditor
+            dialogId={dialogId}
+            file={activeFile}
+            lgFileId={lgFileId}
+            path="/edit/*"
+            projectId={projectId}
+            skillId={skillId}
+          />
+          <TableView
+            dialogId={dialogId}
+            file={activeFile}
+            lgFileId={lgFileId}
+            path="/"
+            projectId={projectId}
+            skillId={skillId}
+          />
         </Router>
       </Suspense>
     </Page>

@@ -9,6 +9,14 @@
       "command": "yarn build",
       "options": {
         "cwd": "Composer/packages/server"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
       }
     },
     {
@@ -18,7 +26,15 @@
       "options": {
         "cwd": "Composer/packages/electron-server"
       },
-      "dependsOn": ["server: build", "client: ping"]
+      "dependsOn": ["server: build", "client: ping"],
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
     },
     {
       "label": "client: ping",
@@ -27,6 +43,14 @@
       "args": ["-t", "300000", "http://localhost:3000"],
       "options": {
         "cwd": "Composer"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
       }
     }
   ]

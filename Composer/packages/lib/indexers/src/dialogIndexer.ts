@@ -184,7 +184,7 @@ function extractReferredSkills(dialog): string[] {
   return uniq(skills);
 }
 
-function parse(id: string, content: any) {
+function parse(id: string, content: any, botName = '', isRoot = false) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
@@ -194,6 +194,7 @@ function parse(id: string, content: any) {
     id,
     content,
     diagnostics,
+    displayName: get(content, '$designer.name', isRoot && botName ? `${botName}` : id),
     referredDialogs: extractReferredDialogs(content),
     lgTemplates: extractLgTemplates(id, content),
     referredLuIntents: extractLuIntents(content, id),
@@ -222,8 +223,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
           const dialog: DialogInfo = {
             isRoot,
-            displayName: get(dialogJson, '$designer.name', isRoot ? `${botName}` : id),
-            ...parse(id, dialogJson),
+            ...parse(id, dialogJson, botName),
           };
           dialogs.push(dialog);
         }

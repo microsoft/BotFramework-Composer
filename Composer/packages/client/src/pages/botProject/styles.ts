@@ -121,3 +121,13 @@ export const unknownIconStyle = (required: boolean) => {
 };
 
 export const columnSizes = ['300px', '150px', '150px'];
+
+export const actionButton = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    marginLeft: 5,
+  },
+};

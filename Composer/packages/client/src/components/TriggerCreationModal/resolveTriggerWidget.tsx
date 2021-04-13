@@ -6,11 +6,12 @@ import formatMessage from 'format-message';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { UserSettings, DialogInfo, SDKKinds } from '@bfc/shared';
+import { UserSettings, DialogInfo, SDKKinds, LuFile } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { isRegExRecognizerType, isLUISnQnARecognizerType, isPVARecognizerType } from '../../utils/dialogValidator';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { intentStyles } from './styles';
 import { validateEventName, validateIntentName, getLuDiagnostics, validateRegExPattern } from './validators';
@@ -22,7 +23,8 @@ export function resolveTriggerWidget(
   setFormData: (data: TriggerFormData) => void,
   userSettings: UserSettings,
   projectId: string,
-  dialogId: string
+  dialogId: string,
+  luFile?: LuFile
 ) {
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile) || isPVARecognizerType(dialogFile);
@@ -99,6 +101,7 @@ export function resolveTriggerWidget(
         editorSettings={userSettings.codeEditor}
         errorMessage={formData.errors.triggerPhrases}
         height={225}
+        luFile={luFile}
         luOption={{
           projectId,
           fileId: dialogId,
@@ -106,6 +109,7 @@ export function resolveTriggerWidget(
           luFeatures: {},
         }}
         placeholder={inlineModePlaceholder}
+        telemetryClient={TelemetryClient}
         value={formData.triggerPhrases}
         onChange={onTriggerPhrasesChange}
       />
