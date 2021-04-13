@@ -4,11 +4,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-import axios from 'axios';
 import formatMessage from 'format-message';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
+import axios from './feeds/httpClient';
 import { IFeed, IPackageDefinition, IPackageSource, PackageSourceType } from './feeds/feedInterfaces';
 import { FeedFactory } from './feeds/feedFactory';
 
