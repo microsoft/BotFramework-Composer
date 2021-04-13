@@ -17,7 +17,6 @@ import { PublishProfileDialog } from './create-publish-profile/PublishProfileDia
 import { actionButton } from './styles';
 import { useBoolean } from '@uifabric/react-hooks';
 import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { styles } from '../design/styles';
 
 // -------------------- CreatePublishProfileDialog -------------------- //
 
@@ -42,7 +41,9 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
       'To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select.'
     ),
   };
-  const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
+  const [currentPublishProfile, setCurrentPublishProfile] = useState<{ index: number; item: PublishTarget } | null>(
+    null
+  );
 
   useEffect(() => {
     if (projectId) {
@@ -74,13 +75,14 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
               } else {
                 setDialogHidden(false);
               }
+              toggleHideDialog();
             }}
           >
             {formatMessage('Create new publish profile')}
           </ActionButton>
         </div>
         <DialogFooter>
-          <DefaultButton onClick={toggleHideDialog} text="Cancel" />
+          <DefaultButton onClick={toggleHideDialog} text={formatMessage('Cancel')} />
         </DialogFooter>
       </Dialog>
       {showAuthDialog && (
@@ -99,9 +101,10 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
           closeDialog={() => {
             setDialogHidden(true);
             // reset current
-            setCurrent(null);
+            toggleHideDialog();
+            setCurrentPublishProfile(null);
           }}
-          current={current}
+          current={currentPublishProfile}
           projectId={projectId}
           setPublishTargets={setPublishTargets}
           targets={publishTargets || []}

@@ -17,6 +17,7 @@ import { AzurePublishErrors, createCustomizeError, stringifyError } from './util
 import { copyDir } from './utils/copyDir';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
+import { DialogSetting } from '@botframework-composer/types';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -45,7 +46,7 @@ export class BotProjectDeploy {
    */
   public async deploy(
     project: any,
-    settings: any,
+    settings: DialogSetting,
     profileName: string,
     name: string,
     environment: string,
@@ -181,13 +182,13 @@ export class BotProjectDeploy {
     hostname: string,
     msAppId: string,
     skillSettingsPath: string,
-    settings: any
+    settings: DialogSetting
   ) {
     const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
     if (manifestFiles.length === 0) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `The manifest does not exsit on path: ${skillSettingsPath}`,
+        message: `The manifest does not exist on path: ${skillSettingsPath}`,
       });
       return;
     }

@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { css, Dropdown, Icon, IDropdownOption, TextField, TooltipHost } from 'office-ui-fabric-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
@@ -39,8 +39,7 @@ const onRenderLabel = (props) => {
       >
         <div
           style={{
-            paddingLeft: '5px',
-            paddingRight: '5px',
+            padding: '0 5px',
           }}
         >
           {props.label}
@@ -63,7 +62,7 @@ export const getManifestId = (
   let fileId = version ? `${botName}-${version.replace(/\./g, '-')}-manifest` : `${botName}-manifest`;
   let i = -1;
 
-  while (skillManifests.some(({ id }) => id === fileId)) {
+  while (skillManifests.some(({ id }) => id === fileId) && i < skillManifests.length) {
     if (i < 0) {
       fileId = fileId.concat(`-${++i}`);
     } else {
@@ -78,6 +77,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
   const [publishingTargets, setPublishingTargets] = useState<PublishTarget[]>([]);
   const [currentTarget, setCurrentTarget] = useState<PublishTarget>();
   const { updateCurrentTarget } = useRecoilValue(dispatcherState);
+  const settings = useRecoilValue(settingsState(projectId));
   const [endpointUrl, setEndpointUrl] = useState<string>();
   const [appId, setAppId] = useState<string>();
   const { id, content } = manifest;
@@ -85,7 +85,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
   const { ...rest } = content;
-  const updateCurrentProfile = useMemo(
+  const handleCurrentProfileChange = useMemo(
     () => (_e, option?: IDropdownOption) => {
       const target = publishingTargets.find((t) => {
         return t.name === option?.key;
@@ -96,32 +96,36 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
   );
 
   useEffect(() => {
-    if (currentTarget) {
-      setCurrentTarget(currentTarget);
-      updateCurrentTarget(projectId, currentTarget);
-      const config = JSON.parse(currentTarget.configuration);
-      setEndpointUrl(`https://${config.hostname}.azurewebsites.net/api/messages`);
-      setAppId(config.settings.MicrosoftAppId);
+    try {
+      if (currentTarget) {
+        setCurrentTarget(currentTarget);
+        updateCurrentTarget(projectId, currentTarget);
+        const config = JSON.parse(currentTarget.configuration);
+        setEndpointUrl(`https://${config.hostname}.azurewebsites.net/api/messages`);
+        setAppId(config.settings.MicrosoftAppId);
 
-      setSkillManifest({
-        content: {
-          ...rest,
-          endpoints: [
-            {
-              protocol: 'BotFrameworkV3',
-              name: currentTarget.name,
-              endpointUrl: `https://${config.hostname}.azurewebsites.net/api/messages`,
-              description: '<description>',
-              msAppId: config.settings.MicrosoftAppId,
-            },
-          ],
-        },
-        id: id,
-      });
+        setSkillManifest({
+          content: {
+            ...rest,
+            endpoints: [
+              {
+                protocol: 'BotFrameworkV3',
+                name: currentTarget.name,
+                endpointUrl: `https://${config.hostname}.azurewebsites.net/api/messages`,
+                description: '<description>',
+                msAppId: config.settings.MicrosoftAppId,
+              },
+            ],
+          },
+          id: id,
+        });
+      }
+    } catch (err) {
+      console.log(err.message);
     }
   }, [currentTarget]);
-  const isProfileValid = useMemo(
-    () => () => {
+  const isProfileValid = useMemo(() => {
+    try {
       if (!publishingTargets) {
         return false;
       }
@@ -135,9 +139,11 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
         );
       });
       return filteredProfile.length > 0;
-    },
-    [publishingTargets]
-  );
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    }
+  }, [publishingTargets]);
 
   const publishingOptions = useMemo(() => {
     return publishingTargets.map((t) => ({
@@ -145,8 +151,6 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
       text: t.name,
     }));
   }, [publishingTargets]);
-
-  const settings = useRecoilValue(settingsState(projectId));
 
   useEffect(() => {
     setPublishingTargets(settings.publishTargets || []);
@@ -160,24 +164,24 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
     }
   }, []);
 
-  return isProfileValid() ? (
+  return isProfileValid ? (
     <div css={styles.container}>
       <Dropdown
         required
         ariaLabel={formatMessage('Select a publishing profile')}
         label={formatMessage('Publishing Profile')}
         options={publishingOptions}
-        placeholder={'Select one'}
+        placeholder={formatMessage('Select one')}
         selectedKey={publishingOptions[0].key}
         styles={{ root: { paddingBottom: '8px' } }}
-        onChange={updateCurrentProfile}
+        onChange={handleCurrentProfileChange}
       />
       <TextField
         disabled
         required
         ariaLabel={formatMessage('The endpoint url')}
         label={formatMessage('Endpoint Url')}
-        placeholder={'The endpoint url of your web app resource'}
+        placeholder={formatMessage('The endpoint url of your web app resource')}
         styles={{ root: { paddingBottom: '8px' } }}
         value={endpointUrl}
         onRenderLabel={onRenderLabel}
@@ -187,7 +191,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
         required
         ariaLabel={formatMessage('The app id of your application registration')}
         label={formatMessage('Microsoft App Id')}
-        placeholder={'The app id'}
+        placeholder={formatMessage('The app id')}
         styles={{ root: { paddingBottom: '8px' } }}
         value={appId}
         onRenderLabel={onRenderLabel}
