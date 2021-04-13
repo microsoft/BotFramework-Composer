@@ -193,20 +193,10 @@ export class OneAuthInstance extends OneAuthBase {
       }
 
       if (!this.signedInARMAccount || !this.tenantToken) {
-        const accounts = await this._oneAuth?.readAllAccounts();
-        log('\n\n accounts \n\n');
-        log(accounts);
-        log('\n\n');
-        const accHint = accounts ? accounts[accounts.length - 1]?.accountHints[0] : undefined;
-        log('using accHint %s', accHint);
         // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
         log('Logging user into ARM...');
         const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
-        const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(
-          accHint,
-          accHint ? undefined : signInParams,
-          ''
-        );
+        const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, signInParams, '');
         this.signedInARMAccount = result.account;
         this.tenantToken = result.credential.value;
       }
