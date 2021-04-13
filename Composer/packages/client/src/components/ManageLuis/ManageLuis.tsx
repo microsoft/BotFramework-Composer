@@ -120,7 +120,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
     setCurrentPage(1);
     setActionOptions([
       { key: 'create', text: formatMessage('Create a new LUIS resource'), disabled: true },
-      { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: true },
+      { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: true },
       { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
     ]);
     if (!props.hidden) {
@@ -173,7 +173,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
         setNoKeys(true);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new LUIS resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
         ]);
       } else {
@@ -181,7 +181,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
         setAuthoringKeys(authoring);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new LUIS resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: false },
         ]);
       }
@@ -385,11 +385,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const renderPageOne = () => {
     return (
       <div>
-        <p>
-          {formatMessage(
-            'Select your Azure subscription and choose from existing LUIS keys, or create a new LUIS resource. Learn more'
-          )}
-        </p>
+        <p>{formatMessage('How would you like to provision this resource?')}</p>
         <div css={mainElementStyle}>
           <Dropdown
             disabled={!(availableSubscriptions?.length > 0)}
@@ -579,10 +575,10 @@ export const ManageLuis = (props: ManageLuisProps) => {
       )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share this information with your Azure admin. After your Luis key is provisioned, you will be ready to test your bot.'
+          'Copy and share this information with your Azure admin to provision resources on your behalf.'
         )}
         handoffInstructions={formatMessage(
-          'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
+          'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis'
         )}
         hidden={!showHandoff}
         title={formatMessage('Share resource request')}
