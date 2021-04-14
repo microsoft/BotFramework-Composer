@@ -20,6 +20,10 @@ export type TreeLink = {
    * if present, treat tree link as external
    */
   href?: string;
+  /**
+   * content to show in the tooltip
+   */
+  tooltip?: string | JSX.Element | JSX.Element[];
 };
 
 export type TreeMenuItem = {

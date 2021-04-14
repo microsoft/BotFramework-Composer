@@ -21,6 +21,8 @@ type TopicsListProps = {
 };
 
 export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWidth, projectId }) => {
+  const linkTooltip = formatMessage('Open in Power Virtual Agents');
+
   const renderTopic = (topic: DialogInfo) => {
     return (
       <TreeItem
@@ -35,6 +37,7 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
           dialogId: topic.id,
           displayName: topic.displayName,
           href: get(topic.content, '$designer.link'),
+          tooltip: linkTooltip,
         }}
         marginLeft={1 * INDENT_PER_LEVEL}
         role="treeitem"
@@ -62,11 +65,8 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
             isMenuOpen={false}
             itemType="topic"
             link={{
-              displayName: formatMessage('Power Virtual Agent Topics ({count})', { count: topics.length }),
-              isRoot: false,
-              isRemote: false,
-              diagnostics: [],
-              projectId: 'foo',
+              displayName: formatMessage('Power Virtual Agents Topics ({count})', { count: topics.length }),
+              projectId,
             }}
             padLeft={0 * LEVEL_PADDING}
             showErrors={false}

@@ -23,6 +23,7 @@ import uniqueId from 'lodash/uniqueId';
 
 import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
+import { TreeItemContent } from './TreeItemContent';
 
 // -------------------- Styles -------------------- //
 
@@ -467,48 +468,50 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       }
 
       return (
-        <div
-          data-is-focusable
-          aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
-          css={projectTreeItemContainer}
-          tabIndex={0}
-          onBlur={item.onBlur}
-          onFocus={item.onFocus}
-        >
-          <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.itemType != null && TreeIcons[item.itemType] != null && (
-              <Icon
-                iconName={TreeIcons[item.itemType]}
-                styles={{
-                  root: {
-                    width: '12px',
-                    marginRight: '8px',
-                    outline: 'none',
-                  },
-                }}
-                tabIndex={-1}
-              />
-            )}
-            <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
-              {item.displayName}
-            </span>
-            {isExternal && (
-              <Icon
-                className="external-link"
-                iconName="NavigateExternalInline"
-                styles={{ root: { visibility: 'hidden', width: '12px', marginLeft: '4px', outline: 'none' } }}
-              />
-            )}
-            {showErrors && (
-              <DiagnosticIcons
-                diagnostics={diagnostics}
-                projectId={projectId}
-                skillId={skillId}
-                onErrorClick={onErrorClick}
-              />
-            )}
+        <TreeItemContent tooltip={link.tooltip}>
+          <div
+            data-is-focusable
+            aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
+            css={projectTreeItemContainer}
+            tabIndex={0}
+            onBlur={item.onBlur}
+            onFocus={item.onFocus}
+          >
+            <div css={projectTreeItem} role="presentation" tabIndex={-1}>
+              {item.itemType != null && TreeIcons[item.itemType] != null && (
+                <Icon
+                  iconName={TreeIcons[item.itemType]}
+                  styles={{
+                    root: {
+                      width: '12px',
+                      marginRight: '8px',
+                      outline: 'none',
+                    },
+                  }}
+                  tabIndex={-1}
+                />
+              )}
+              <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
+                {item.displayName}
+              </span>
+              {isExternal && (
+                <Icon
+                  className="external-link"
+                  iconName="NavigateExternalInline"
+                  styles={{ root: { visibility: 'hidden', width: '12px', marginLeft: '4px', outline: 'none' } }}
+                />
+              )}
+              {showErrors && (
+                <DiagnosticIcons
+                  diagnostics={diagnostics}
+                  projectId={projectId}
+                  skillId={skillId}
+                  onErrorClick={onErrorClick}
+                />
+              )}
+            </div>
           </div>
-        </div>
+        </TreeItemContent>
       );
     },
     [textWidth, spacerWidth, extraSpace, overflowIconWidthActiveOrChildSelected, showErrors]
