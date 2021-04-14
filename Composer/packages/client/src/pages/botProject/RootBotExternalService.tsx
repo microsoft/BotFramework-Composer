@@ -191,56 +191,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!localRootLuisKey) {
-      setLuisKeyErrorMsg(
-        formatMessage(
-          'LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish'
-        )
-      );
-    } else {
-      setLuisKeyErrorMsg('');
-    }
-    if (!localRootQnAKey) {
-      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
-    } else {
-      setQnAKeyErrorMsg('');
-    }
-
-    if (isLUISKeyNeeded && !localRootLuisRegion) {
-      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
-    } else {
-      setLuisRegionErrorMsg('');
-    }
-  }, [projectId]);
-
-  useEffect(() => {
-    setLocalRootLuisKey(rootLuisKey);
-  }, [rootLuisKey]);
-
-  useEffect(() => {
-    if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
-      luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-    if (luisRegionFieldRef.current && scrollToSectionId === '#luisRegion') {
-      luisRegionFieldRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-    if (qnaKeyFieldRef.current && scrollToSectionId === '#qnaKey') {
-      qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [scrollToSectionId]);
-
-  const handleRootLUISNameOnChange = (e, value) => {
-    setLocalRootLuisName(value);
-  };
-
-  const handleRootLUISNameOnBlur = () => {
-    setSettings(projectId, {
-      ...mergedSettings,
-      luis: { ...mergedSettings.luis, name: localRootLuisName },
-    });
-  };
-
   const handleRootLUISKeyOnChange = (e, value) => {
     if (value) {
       setLuisKeyErrorMsg('');
@@ -271,6 +221,64 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
       setLocalRootLuisRegion('');
     }
+  };
+
+  useEffect(() => {
+    if (!localRootLuisKey) {
+      setLuisKeyErrorMsg(
+        formatMessage(
+          'LUIS authoring key is required with the current recognizer setting to start your bot locally, and publish'
+        )
+      );
+    } else {
+      setLuisKeyErrorMsg('');
+    }
+    if (!localRootQnAKey) {
+      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
+    } else {
+      setQnAKeyErrorMsg('');
+    }
+
+    if (isLUISKeyNeeded && !localRootLuisRegion) {
+      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
+    } else {
+      setLuisRegionErrorMsg('');
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    handleRootLUISKeyOnChange(null, rootLuisKey);
+  }, [rootLuisKey]);
+
+  useEffect(() => {
+    handleRootQnAKeyOnChange(null, rootqnaKey);
+  }, [rootqnaKey]);
+
+  useEffect(() => {
+    handleRootLuisRegionOnChange(null, { key: rootLuisRegion, text: '' });
+  }, [rootLuisRegion]);
+
+  useEffect(() => {
+    if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
+      luisKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (luisRegionFieldRef.current && scrollToSectionId === '#luisRegion') {
+      luisRegionFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (qnaKeyFieldRef.current && scrollToSectionId === '#qnaKey') {
+      qnaKeyFieldRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scrollToSectionId]);
+
+  const handleRootLUISNameOnChange = (e, value) => {
+    setLocalRootLuisName(value);
+  };
+
+  const handleRootLUISNameOnBlur = () => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, name: localRootLuisName },
+    });
   };
 
   const handleRootLuisRegionOnBlur = () => {
@@ -329,6 +337,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       ...mergedSettings,
       qna: { ...mergedSettings.qna, ...newQNASettings },
     });
+    setQnASettings(projectId, newQNASettings.subscriptionKey);
   };
 
   return (
@@ -384,6 +393,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           )}
         </div>
         <PrimaryButton
+          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '130px', marginTop: '15px' } }}
           text={formatMessage('Get LUIS keys')}
           onClick={() => {
@@ -407,6 +417,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           />
         </div>
         <PrimaryButton
+          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '130px', marginTop: '15px' } }}
           text={formatMessage('Get QnA key')}
           onClick={() => {

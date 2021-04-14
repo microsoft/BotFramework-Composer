@@ -68,12 +68,13 @@ const updateLgFiles = (
 // sync lg file structure across locales, it take times, computed changes may be expired at next tick.
 export const getRelatedLgFileChanges = async (
   projectId: string,
-  lgFiles: LgFile[],
+  originLgFiles: LgFile[],
   updatedLgFile: LgFile
 ): Promise<LgFile[]> => {
   const { id } = updatedLgFile;
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
+  const lgFiles = originLgFiles.map((file) => (file.id === updatedLgFile.id ? updatedLgFile : file));
   const originLgFile = lgFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = lgFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
