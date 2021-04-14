@@ -125,7 +125,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
     setQNAKeys([]);
     setCurrentPage(1);
     setActionOptions([
-      { key: 'create', text: formatMessage('Create a new QnA MAker resource'), disabled: true },
+      { key: 'create', text: formatMessage('Create a new QnA Maker resource'), disabled: true },
       { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: true },
       { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
     ]);
