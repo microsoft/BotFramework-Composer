@@ -43,6 +43,7 @@ export const title = css`
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
   margin: 0;
+  width: 100%;
 `;
 
 export const introduction = css`
