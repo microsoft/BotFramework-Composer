@@ -4,9 +4,11 @@
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import union from 'lodash/union';
 
-export const templateSortOrder = [
+import AssetService from '../services/asset';
+
+export const backUpTemplateSortOrder = [
   { generatorName: '@microsoft/generator-bot-empty', displayName: 'Blank bot' },
-  { generatorName: '@microsoft/generator-bot-conversational-core', displayName: 'Basic conversational bot' },
+  { generatorName: '@microsoft/generator-bot-conversational-core', displayName: 'Basic bot' },
   { generatorName: '@microsoft/generator-bot-assistant-core', displayName: 'Basic assistant' },
   { generatorName: '@microsoft/generator-bot-enterprise-assistant', displayName: 'Enterprise assistant' },
   { generatorName: '@microsoft/generator-bot-people', displayName: 'People' },
@@ -14,11 +16,24 @@ export const templateSortOrder = [
   { generatorName: QnABotTemplateId, displayName: 'QnAMaker bot' },
 ];
 
-export const sortTemplates = (templates: BotTemplate[]): BotTemplate[] => {
+export const sortTemplates = async (templates: BotTemplate[]): Promise<BotTemplate[]> => {
   let sortedTemplateList: BotTemplate[] = [];
+  let sortOrder = backUpTemplateSortOrder;
+  try {
+    const templateSortOrder = await AssetService.manager.getRawGithubFileContent(
+      'microsoft',
+      'BotFramework-Composer',
+      'main',
+      'templates.json'
+    );
+    const templateSortOrderObj = JSON.parse(templateSortOrder);
+    sortOrder =
+      templateSortOrderObj && templateSortOrderObj?.length > 0 ? templateSortOrderObj : backUpTemplateSortOrder;
+  } catch {
+    sortOrder = backUpTemplateSortOrder;
+  }
 
-  // Sort incoming template array and reassign display name based on sort list
-  templateSortOrder.forEach((tempSortEntry, index) => {
+  sortOrder.forEach((tempSortEntry) => {
     const templateIndex = templates.findIndex((template) => {
       return template.id === tempSortEntry.generatorName;
     });
