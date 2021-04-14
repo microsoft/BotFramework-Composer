@@ -7,7 +7,6 @@ import React, { useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
@@ -41,10 +40,6 @@ const ExtensionsPage = React.lazy(() => import('./pages/extensions/ExtensionsPag
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
-
-const modalControlGroup = css`
-  padding: 10px;
-`;
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
@@ -115,19 +110,7 @@ const Routes = (props) => {
         <div
           css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)' }}
         >
-          <Dialog
-            dialogContentProps={{
-              type: DialogType.normal,
-            }}
-            hidden={!botOpening}
-            modalProps={{
-              isBlocking: false,
-            }}
-          >
-            <div css={modalControlGroup}>
-              <LoadingSpinner message={spinnerText} />
-            </div>
-          </Dialog>
+          <LoadingSpinner inModal message={spinnerText} />
         </div>
       )}
     </div>
