@@ -83,10 +83,10 @@ export const triggerDispatcher = () => {
           ];
           await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
         } else if (formData.$kind === onChooseIntentKey) {
-          const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[4].prompt`);
+          const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[3].prompt`);
           const designerId2 = getDesignerIdFromDialogPath(
             newDialog,
-            `content.triggers[${index}].actions[5].elseActions[0].activity`
+            `content.triggers[${index}].actions[4].elseActions[0].activity`
           );
           const lgTemplates1: LgTemplate[] = [
             LgTemplateSamples.TextInputPromptForOnChooseIntent(designerId1) as LgTemplate,

@@ -187,86 +187,76 @@ const initialDialogShape = () => ({
         },
         assignments: [
           {
-            value: '=turn.recognized.candidates[0]',
-            property: 'dialog.luisResult',
+            property: "dialog.minThreshold",
+            value: 0.5
           },
           {
-            property: 'dialog.qnaResult',
-            value: '=turn.recognized.candidates[1]',
-          },
+            property: "dialog.candidates",
+            value: "=sortByDescending(where(where(flatten(select(turn.recognized.candidates, x, if (x.intent==\"ChooseIntent\", x.result.candidates, x))), c, not(startsWith(c.intent, \"DeferToRecognizer_QnA\"))), c2, c2.score > dialog.minThreshold), 'score')"
+          }
         ],
       },
       {
-        $kind: SDKKinds.IfCondition,
+        $kind: SDKKinds.SwitchCondition,
         $designer: {
           id: generateDesignerId(),
         },
-        condition: 'dialog.luisResult.score >= 0.9 && dialog.qnaResult.score <= 0.5',
-        actions: [
+        condition: "=count(dialog.candidates)",
+        cases: [
           {
-            $kind: SDKKinds.EmitEvent,
-            $designer: {
-              id: generateDesignerId(),
-            },
-            eventName: 'recognizedIntent',
-            eventValue: '=dialog.luisResult.result',
+            value: "0",
+            actions: [
+              {
+                $kind: SDKKinds.EmitEvent,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+                eventName: "unknownIntent"
+              },
+              {
+                $kind: SDKKinds.EndDialog,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+              }
+            ]
           },
           {
-            $kind: SDKKinds.BreakLoop,
-            $designer: {
-              id: generateDesignerId(),
-            },
-          },
-        ],
+            value: "1",
+            actions: [
+              {
+                $kind: SDKKinds.EmitEvent,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+                eventName: "recognizedIntent",
+                eventValue: "=first(dialog.candidates).result"
+              },
+              {
+                $kind: SDKKinds.EndDialog,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+              }
+            ]
+          }
+        ]
       },
       {
-        $kind: SDKKinds.IfCondition,
+        $kind: SDKKinds.SetProperties,
         $designer: {
           id: generateDesignerId(),
         },
-        condition: 'dialog.luisResult.score <= 0.5 && dialog.qnaResult.score >= 0.9',
-        actions: [
+        assignments: [
           {
-            $kind: SDKKinds.EmitEvent,
-            $designer: {
-              id: generateDesignerId(),
-            },
-            eventName: 'recognizedIntent',
-            eventValue: '=dialog.qnaResult.result',
+            property: "dialog.firstResult",
+            value: "=dialog.candidates[0]"
           },
           {
-            $kind: SDKKinds.BreakLoop,
-            $designer: {
-              id: generateDesignerId(),
-            },
-          },
-        ],
-      },
-      {
-        $kind: SDKKinds.IfCondition,
-        $designer: {
-          id: generateDesignerId(),
-        },
-        condition: 'dialog.qnaResult.score <= 0.05',
-        actions: [
-          {
-            $kind: SDKKinds.EmitEvent,
-            $designer: {
-              id: generateDesignerId(),
-            },
-            eventName: 'recognizedIntent',
-            eventValue: '=dialog.luisResult.result',
-          },
-          {
-            $kind: SDKKinds.BreakLoop,
-            $designer: {
-              id: generateDesignerId(),
-            },
-          },
-        ],
-        top: 3,
-        cardNoMatchResponse: 'Thanks for the feedback.',
-        cardNoMatchText: 'None of the above.',
+            property: "dialog.secondResult",
+            value: "=dialog.candidates[1]"
+          }
+        ]
       },
       {
         $kind: SDKKinds.TextInput,

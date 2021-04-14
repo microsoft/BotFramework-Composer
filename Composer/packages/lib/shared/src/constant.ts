@@ -373,12 +373,12 @@ const adaptiveCardJsonBody =
 \n              "id": "userChosenIntent",\
 \n              "choices": [\
 \n                           {\
-\n                               "title": "${getIntentReadBack()}",\
-\n                               "value": "luisResult"\
+\n                               "title": "${getIntentReadBack(dialog.firstResult.intent)}",\
+\n                               "value": "firstResult"\
 \n                           },\
 \n                           {\
-\n                               "title": "${getAnswerReadBack()}",\
-\n                               "value": "qnaResult"\
+\n                               "title": "${getIntentReadBack(dialog.secondResult.intent)}",\
+\n                               "value": "secondResult"\
 \n                           },\
 \n                           {\
 \n                               "title": "None of the above",\
@@ -415,11 +415,13 @@ const pickOne = `\
 `;
 
 const getIntentReadBack = `\
-- SWITCH : \${toLower(dialog.luisResult.intent)}
+- SWITCH : \${intent}
+- CASE: \${'QnAMatch'}
+    - \${getAnswerReadBack()}
 - CASE : \${'GetUserProfile'}
   - Start filling in your profile(GetUserProfile intent)
 - DEFAULT :
-  - \${dialog.luisResult.intent}
+  - \${intent}
 `;
 
 const getAnswerReadBack = `- See an answer from the Knowledge Base
@@ -444,6 +446,7 @@ export const LgTemplateSamples = {
   },
   ['getIntentReadBack']: {
     name: 'getIntentReadBack',
+    parameters: ['intent'],
     body: getIntentReadBack,
   },
   TextInputPromptForOnChooseIntent: (designerId) => {
