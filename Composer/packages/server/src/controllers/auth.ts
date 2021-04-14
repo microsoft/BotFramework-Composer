@@ -6,6 +6,9 @@ import { Request, Response } from 'express';
 import { authService } from '../services/auth/auth';
 import { useElectronContext } from '../utility/electronContext';
 import { isElectron } from '../utility/isElectron';
+import logger from '../logger';
+
+const log = logger.extend('auth-controller');
 
 type GetAccessTokenRequest = Request & {
   query: {
@@ -42,13 +45,15 @@ async function getAccessToken(req: GetAccessTokenRequest, res: Response) {
   });
 }
 
-async function logOut(req, res) {
+function logOut(req, res) {
   try {
     authService.logOut();
-  } catch {
-    res.status(500);
+    res.status(200).end();
+  } catch (e) {
+    log('Error logging out:');
+    log(e);
+    res.status(500).json(e);
   }
-  res.status(200);
 }
 
 async function getTenants(req: Request, res: Response) {
