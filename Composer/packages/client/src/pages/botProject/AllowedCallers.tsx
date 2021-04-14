@@ -12,6 +12,7 @@ import { Stack } from 'office-ui-fabric-react/lib/components/Stack';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 
 import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
@@ -162,7 +163,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       {!runtimeSettings?.skills?.allowedCallers?.length && (
         <MessageBar messageBarType={MessageBarType.warning}>
           {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
-        </div>
+        </MessageBar>
       )}
       <ActionButton data-testid={'addNewAllowedCaller'} styles={actionButton} onClick={onAddNewAllowedCaller}>
         {formatMessage('Add new caller')}
