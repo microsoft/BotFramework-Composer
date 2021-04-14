@@ -660,7 +660,10 @@ export const ManageService = (props: ManageServiceProps) => {
         developerInstructions={formatMessage(
           'Copy and share this information with your Azure admin to provision resources on your behalf.'
         )}
-        handoffInstructions={props.handoffInstructions}
+        handoffInstructions={formatMessage(
+          'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n{instructions}',
+          { instructions: props.handoffInstructions }
+        )}
         hidden={!showHandoff}
         title={formatMessage('Share resource request')}
         onBack={() => {
