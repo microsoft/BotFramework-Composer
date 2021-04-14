@@ -22,6 +22,7 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
+import sortBy from 'lodash/sortBy';
 
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -52,10 +53,6 @@ const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: '14' 
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 const mainElementStyle = { marginBottom: 20 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
-
-const handoffInstructions = formatMessage(
-  'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
-);
 
 export const ManageQNA = (props: ManageQNAProps) => {
   const [localRootQNAKey, setLocalRootQNAKey] = useState<string>('');
@@ -93,7 +90,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
-      return subscriptionsResult._response.parsedBody;
+      return sortBy(subscriptionsResult._response.parsedBody, ['displayName']);
     } catch (err) {
       setApplicationLevelError(err);
       return [];
@@ -129,7 +126,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
     setCurrentPage(1);
     setActionOptions([
       { key: 'create', text: formatMessage('Create a new QnA Maker resource'), disabled: true },
-      { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: true },
+      { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: true },
       { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
     ]);
     if (!props.hidden) {
@@ -182,7 +179,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         setNoKeys(true);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new QnA Maker resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
         ]);
       } else {
@@ -190,7 +187,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         setQNAKeys(keys);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new QnA Maker resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: false },
         ]);
       }
@@ -377,7 +374,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       } catch (err) {
         setOutcomeDescription(
           formatMessage(
-            'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
+            'Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:'
           )
         );
         setOutcomeSummary(<p>{err.message}</p>);
@@ -390,7 +387,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       setLoadingQNA(false);
 
       setOutcomeDescription(
-        formatMessage('The following LUIS resource was successfully created and added to your bot project:')
+        formatMessage('The following QnA resource was successfully created and added to your bot project:')
       );
       setOutcomeSummary(
         <div>
@@ -433,7 +430,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
   };
 
   const onChangeQNAKey = async (_, opt) => {
-    // get list of luis keys for this subscription
+    // get list of QNA keys for this subscription
     setLocalRootQNAKey(opt.key);
   };
 
@@ -505,9 +502,11 @@ export const ManageQNA = (props: ManageQNAProps) => {
       )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share this information with your Azure admin. After your QNA key is provisioned, you will be ready to test your bot with qna.'
+          'Copy and share this information with your Azure admin to provision resources on your behalf.'
         )}
-        handoffInstructions={handoffInstructions}
+        handoffInstructions={formatMessage(
+          'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker'
+        )}
         hidden={!showHandoff}
         title={formatMessage('Share resource request')}
         onBack={() => {
@@ -519,7 +518,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
-          title: currentPage === 2 ? formatMessage('Create new QNA resources') : formatMessage('Select QNA keys'),
+          title: currentPage === 2 ? formatMessage('Create new QnA resources') : formatMessage('Select QnA keys'),
         }}
         hidden={props.hidden}
         minWidth={480}
@@ -531,11 +530,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         <div>
           {currentPage === 1 && (
             <div>
-              <p>
-                {formatMessage(
-                  'Select your Azure subscription and choose from existing QNA keys, or create a new QNA resource. Learn more'
-                )}
-              </p>
+              <p>{formatMessage('How would you like to provision this resource?')}</p>
               <div css={mainElementStyle}>
                 <Dropdown
                   disabled={!(availableSubscriptions?.length > 0)}
@@ -562,7 +557,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   {noKeys && subscriptionId && (
                     <span style={{ color: 'rgb(161, 159, 157)' }}>
                       {formatMessage(
-                        'No existing QNA resource found in this subscription. Click “Next” to create new.'
+                        'No existing QnA resource found in this subscription. Click “Next” to create new.'
                       )}
                     </span>
                   )}
@@ -611,7 +606,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
               <div css={mainElementStyle}>
                 <p>
                   {formatMessage(
-                    'Input your details below to create a new QNA resource. You will be able to manage your new resource in the Azure portal. Learn more'
+                    'Input your details below to create a new QnA resource. You will be able to manage your new resource in the Azure portal. Learn more'
                   )}
                 </p>
                 <Dropdown
