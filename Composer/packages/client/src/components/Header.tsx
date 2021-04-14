@@ -164,7 +164,7 @@ export const Header = () => {
   const settings = useRecoilValue(settingsState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
-  const everythingLoaded = useRecoilValue(botProjectSpaceLoadedState);
+  const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
@@ -186,11 +186,11 @@ export const Header = () => {
   const requiredStuff = useRecoilValue(allRequiredRecognizersSelector);
 
   useEffect(() => {
-    if (everythingLoaded) {
+    if (botProjectSolutionLoaded) {
       setRequiresLUIS(requiredStuff.some((p) => p.requiresLUIS));
       setRequiresQNA(requiredStuff.some((p) => p.requiresQNA));
     }
-  }, [requiredStuff, everythingLoaded]);
+  }, [requiredStuff, botProjectSolutionLoaded]);
   // ... end of get started stuff
 
   const isShow = useBotControllerBar();
@@ -422,11 +422,11 @@ export const Header = () => {
           />
         ) : null}
         <GetStarted
-          isOpen={everythingLoaded && showGetStarted}
+          isOpen={botProjectSolutionLoaded && showGetStarted}
           projectId={rootBotProjectId}
           requiresLUIS={requiresLUIS}
           requiresQNA={requiresQNA}
-          showTeachingBubble={everythingLoaded && showGetStartedTeachingBubble}
+          showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
           onBotReady={() => {
             setShowTeachingBubble(true);
           }}
