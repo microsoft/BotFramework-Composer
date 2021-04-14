@@ -4,9 +4,10 @@
 import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import union from 'lodash/union';
 
+import logger from '../logger';
 import AssetService from '../services/asset';
 
-export const backUpTemplateSortOrder = [
+export const defaultSortOrder = [
   { generatorName: '@microsoft/generator-bot-empty', displayName: 'Blank bot' },
   { generatorName: '@microsoft/generator-bot-conversational-core', displayName: 'Basic bot' },
   { generatorName: '@microsoft/generator-bot-assistant-core', displayName: 'Basic assistant' },
@@ -18,7 +19,7 @@ export const backUpTemplateSortOrder = [
 
 export const sortTemplates = async (templates: BotTemplate[]): Promise<BotTemplate[]> => {
   let sortedTemplateList: BotTemplate[] = [];
-  let sortOrder = backUpTemplateSortOrder;
+  let sortOrder = defaultSortOrder;
   try {
     const templateSortOrder = await AssetService.manager.getRawGithubFileContent(
       'microsoft',
@@ -27,10 +28,9 @@ export const sortTemplates = async (templates: BotTemplate[]): Promise<BotTempla
       'templates.json'
     );
     const templateSortOrderObj = JSON.parse(templateSortOrder);
-    sortOrder =
-      templateSortOrderObj && templateSortOrderObj?.length > 0 ? templateSortOrderObj : backUpTemplateSortOrder;
-  } catch {
-    sortOrder = backUpTemplateSortOrder;
+    sortOrder = templateSortOrderObj && templateSortOrderObj?.length > 0 ? templateSortOrderObj : defaultSortOrder;
+  } catch (err) {
+    logger(JSON.stringify(err, Object.getOwnPropertyNames(err)));
   }
 
   sortOrder.forEach((tempSortEntry) => {
