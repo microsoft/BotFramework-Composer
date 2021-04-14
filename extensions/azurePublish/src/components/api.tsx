@@ -14,6 +14,7 @@ import { CheckNameAvailabilityResponseBody } from '@azure/arm-botservice/esm/mod
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
+import sortBy from 'lodash/sortBy';
 
 import { AzureResourceTypes } from '../types';
 import {
@@ -45,7 +46,7 @@ export const getSubscriptions = async (token: string): Promise<Array<Subscriptio
       });
       throw new Error(subscriptionsResult._response.bodyAsText);
     }
-    return subscriptionsResult._response.parsedBody;
+    return sortBy(subscriptionsResult._response.parsedBody, ['displayName']);
   } catch (err) {
     let message = JSON.stringify(err, Object.getOwnPropertyNames(err));
     if (err?.code === 12 && err?.message?.match(/Bearer/gi)) {
@@ -81,7 +82,7 @@ export const getResourceGroups = async (token: string, subscriptionId: string): 
       });
       return [];
     }
-    return resourceGroupsResult._response.parsedBody;
+    return sortBy(resourceGroupsResult._response.parsedBody, ['name']);
   } catch (err) {
     logger({
       status: AzureAPIStatus.ERROR,

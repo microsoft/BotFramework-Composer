@@ -10,7 +10,6 @@ import { ActionButton } from 'office-ui-fabric-react/lib/components/Button';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { Stack } from 'office-ui-fabric-react/lib/components/Stack';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 
@@ -54,17 +53,6 @@ const ItemContainer = styled.div({
   marginTop: '4px',
 });
 
-const Row = styled(Stack)({
-  borderBottom: `1px solid ${FluentTheme.palette.neutralLight}`,
-  padding: '4px 0',
-  '& .ms-Button:not(:focus)': {
-    visibility: 'hidden',
-  },
-  '&:hover .ms-Button': {
-    visibility: 'visible',
-  },
-});
-
 const subtitle = css`
   padding: 8px 0;
 `;
@@ -88,7 +76,7 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
   }, []);
 
   return (
-    <Row horizontal verticalAlign={'center'}>
+    <Stack horizontal verticalAlign={'center'}>
       <Input
         componentRef={(ref) => (itemRef.current = ref)}
         styles={textFieldStyles}
@@ -99,7 +87,7 @@ const Item = React.memo(({ value, onBlur, onChange, onRemove }: ItemProps) => {
       <ActionButton aria-label={formatMessage('Remove item')} styles={actionButton} onClick={onRemove}>
         {formatMessage('Remove')}
       </ActionButton>
-    </Row>
+    </Stack>
   );
 });
 
@@ -157,7 +145,9 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   return (
     <CollapsableWrapper title={formatMessage('Allowed callers')} titleStyle={title}>
       <div css={[defaultSubtitle, subtitle]}>
-        {formatMessage('List of app ids for bots that are allowed to use this skill')}
+        {formatMessage(
+          'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below.'
+        )}
       </div>
       <ItemContainer>
         {runtimeSettings?.skills?.allowedCallers?.map((caller, index) => {
@@ -172,8 +162,11 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       {!runtimeSettings?.skills?.allowedCallers?.length && (
         <MessageBar messageBarType={MessageBarType.warning}>
           {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
-        </MessageBar>
+        </div>
       )}
+      <ActionButton data-testid={'addNewAllowedCaller'} styles={actionButton} onClick={onAddNewAllowedCaller}>
+        {formatMessage('Add new caller')}
+      </ActionButton>
     </CollapsableWrapper>
   );
 };

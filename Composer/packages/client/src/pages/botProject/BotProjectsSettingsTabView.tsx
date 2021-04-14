@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 
-import { SkillHostEndPoint } from './SkillHostEndPoint';
+import { BotSkillConfiguration } from './BotSkillConfiguration';
 import { BotProjectInfo } from './BotProjectInfo';
 import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
@@ -96,8 +96,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           headerText={formatMessage('Skill Configuration')}
           itemKey={PivotItemKey.SkillConfig}
         >
-          {isRootBot && <SkillHostEndPoint projectId={projectId} />}
-          <AllowedCallers projectId={projectId} />
+          {isRootBot && <BotSkillConfiguration projectId={projectId} />}
         </PivotItem>
         <PivotItem data-testid="languageTab" headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
           <BotLanguage projectId={projectId} />
