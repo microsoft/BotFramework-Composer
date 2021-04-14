@@ -37,6 +37,9 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
         connectionString: profile.settings.blobStorage.connectionString,
         containerName: profile.settings.blobStorage.container,
       },
+      setSpeak: {
+        ...settings.runtimeSettings.features?.setSpeak,
+      },
     };
   }
 
