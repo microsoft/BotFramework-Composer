@@ -73,7 +73,6 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
             padLeft={0 * LEVEL_PADDING}
             showErrors={false}
             textWidth={textWidth}
-            onSelect={() => {}}
           />
         </span>
       }

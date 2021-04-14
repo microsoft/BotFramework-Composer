@@ -116,7 +116,7 @@ const navContainer = (
         .external-link {
           visibility: visible;
         }
-        }`};
+      }`};
 
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 
@@ -586,15 +586,23 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       data-testid={dataTestId}
       role={role}
       tabIndex={0}
-      onClick={() => {
-        onSelect?.(link);
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          onSelect?.(link);
-          e.stopPropagation();
-        }
-      }}
+      onClick={
+        onSelect
+          ? () => {
+              onSelect(link);
+            }
+          : undefined
+      }
+      onKeyDown={
+        onSelect
+          ? (e) => {
+              if (e.key === 'Enter') {
+                onSelect(link);
+                e.stopPropagation();
+              }
+            }
+          : undefined
+      }
     >
       <div style={{ minWidth: `${spacerWidth}px` }} />
       <OverflowSet
