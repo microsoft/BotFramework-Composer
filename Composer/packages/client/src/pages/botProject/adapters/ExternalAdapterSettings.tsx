@@ -23,6 +23,11 @@ type Props = {
   projectId: string;
 };
 
+type Package = {
+  key: string;
+  packageName?: string;
+};
+
 const ExternalAdapterSettings = (props: Props) => {
   const { projectId } = props;
 
@@ -36,19 +41,19 @@ const ExternalAdapterSettings = (props: Props) => {
   const { definitions: schemaDefinitions } = schemas?.sdk?.content ?? {};
   const uiSchemas = schemas?.ui?.content ?? {};
 
-  const [currentModalProps, setModalProps] = useState<{ key: string; packageName: string } | undefined>();
+  const [currentModalProps, setModalProps] = useState<Package | undefined>();
 
-  const openModal = (key?: string, packageName?: string) => {
-    if (key == null || packageName == null) {
-      setModalProps(undefined);
-    } else {
-      setModalProps({ key, packageName });
-    }
+  const onModalOpen = (pkg: Package) => () => {
+    setModalProps(pkg);
+  };
+
+  const onModalClose = () => {
+    setModalProps(undefined);
   };
 
   if (schemaDefinitions == null) return null;
 
-  const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string })[]) => (
+  const externalServices = (schemas: (JSONSchema7 & Package)[]) => (
     <div role="table">
       <div css={tableHeaderRow} role="row">
         <div css={tableColumnHeader(columnSizes[0])} role="columnheader">
@@ -102,7 +107,7 @@ const ExternalAdapterSettings = (props: Props) => {
               />
             </div>
             <div css={tableRowItem(columnSizes[2])} role="cell">
-              <Link key={key} onClick={() => openModal(key, packageName)}>
+              <Link key={key} onClick={onModalOpen({ key, packageName })}>
                 {formatMessage('Configure')}
               </Link>
             </div>
@@ -141,9 +146,7 @@ const ExternalAdapterSettings = (props: Props) => {
           schema={schemaDefinitions[currentKey]}
           uiSchema={uiSchemas?.[currentKey]?.form}
           value={currentSettings[currentPackageName]}
-          onClose={() => {
-            openModal(undefined);
-          }}
+          onClose={onModalClose}
         />
       )}
     </Fragment>

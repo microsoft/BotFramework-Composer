@@ -30,7 +30,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
       <CollapsableWrapper title={formatMessage('Connections')} titleStyle={title}>
         <Stack
           tokens={{
-            padding: '6px 0 6px 0',
+            padding: '6px 0',
           }}
         >
           <div css={title}>{formatMessage('Azure connections')}</div>

@@ -15,7 +15,6 @@ export const title = css`
 export const subtitle = css`
   color: ${NeutralColors.gray130};
   font-size: ${FontSizes.medium};
-
   padding: 12px 0;
 `;
 
