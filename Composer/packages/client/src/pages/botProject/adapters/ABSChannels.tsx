@@ -119,7 +119,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
-      navigateTo(`/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`);
+      navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
     } else {
       let newtoken = '';
       if (userShouldProvideTokens()) {
