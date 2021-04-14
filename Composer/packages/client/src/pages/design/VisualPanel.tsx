@@ -78,7 +78,7 @@ const VisualPanel: React.FC<VisualPanelProps> = React.memo(({ projectId }) => {
         />
       )}
 
-      {loading && <LoadingSpinner />}
+      {loading && <LoadingSpinner inModal />}
       {!loading &&
         (dialogJsonVisible && currentDialog ? (
           <JsonEditor
