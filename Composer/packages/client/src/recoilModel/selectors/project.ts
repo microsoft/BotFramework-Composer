@@ -50,9 +50,10 @@ export type TreeDataPerProject = {
   isRootBot: boolean;
   projectId: string;
   sortedDialogs: DialogInfo[];
+  topics: DialogInfo[];
   lgImports: Record<string, LanguageFileImport[]>;
   luImports: Record<string, LanguageFileImport[]>;
-  lgImportsList: LanguageFileImport[]; // all imported file exclude form diloag
+  lgImportsList: LanguageFileImport[]; // all imported file exclude form dialog
   luImportsList: LanguageFileImport[];
   name: string;
   isPvaSchema: boolean;
@@ -291,7 +292,7 @@ export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
   key: 'projectTreeSelectorFamily',
   get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
-    return projectIds.map((projectId: string) => {
+    return projectIds.map<TreeDataPerProject>((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(dialogsSelectorFamily(projectId));
       const topics = get(topicsSelectorFamily(projectId));

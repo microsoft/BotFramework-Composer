@@ -214,7 +214,7 @@ const diagnosticWarningIcon = {
   color: '#8A8780',
   background: '#FFF4CE',
 };
-const itemName = (nameWidth: number) => css`
+export const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -228,6 +228,7 @@ const calloutRootStyle = css`
 type TreeObject =
   | 'bot'
   | 'dialog'
+  | 'topic'
   | 'trigger' // basic ProjectTree elements
   | 'trigger group'
   | 'form dialog'
@@ -241,6 +242,7 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
   bot: Icons.BOT,
   dialog: Icons.DIALOG,
   trigger: Icons.TRIGGER,
+  topic: Icons.TOPIC,
   'trigger group': null,
   'form dialog': Icons.FORM_DIALOG,
   'form field': Icons.FORM_FIELD, // x in parentheses
@@ -253,6 +255,7 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
 const objectNames: { [key in TreeObject]: () => string } = {
   trigger: () => formatMessage('Trigger'),
   dialog: () => formatMessage('Dialog'),
+  topic: () => formatMessage('Topic'),
   'trigger group': () => formatMessage('Trigger group'),
   'form dialog': () => formatMessage('Form dialog'),
   'form field': () => formatMessage('Form field'),
@@ -428,6 +431,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
   const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
+  const isExternal = Boolean(link.href);
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
@@ -485,6 +489,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
               {item.displayName}
             </span>
+            {isExternal && (
+              <Icon
+                iconName="NavigateExternalInline"
+                styles={{ root: { width: '12px', marginLeft: '4px', outline: 'none' } }}
+              />
+            )}
             {showErrors && (
               <DiagnosticIcons
                 diagnostics={diagnostics}
@@ -572,6 +582,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onSelect?.(link);
+          e.stopPropagation();
         }
       }}
     >

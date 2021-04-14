@@ -4,9 +4,9 @@ import { Diagnostic } from '@bfc/shared';
 
 export type TreeLink = {
   displayName: string;
-  isRoot: boolean;
-  isRemote: boolean;
-  diagnostics: Diagnostic[];
+  isRoot?: boolean;
+  isRemote?: boolean;
+  diagnostics?: Diagnostic[];
   projectId: string;
   skillId?: string;
   dialogId?: string;
@@ -16,6 +16,10 @@ export type TreeLink = {
   parentLink?: TreeLink;
   onErrorClick?: (projectId: string, skillId: string, diagnostic: Diagnostic) => void;
   botError?: any;
+  /**
+   * if present, treat tree link as external
+   */
+  href?: string;
 };
 
 export type TreeMenuItem = {
