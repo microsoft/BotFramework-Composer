@@ -94,8 +94,7 @@ const navContainer = (
   menuOpenHere: boolean,
   textWidth: number,
   isBroken: boolean,
-  padLeft: number,
-  marginLeft: number
+  padLeft: number
 ) => css`
   ${isAnyMenuOpen
     ? ''
@@ -123,8 +122,6 @@ const navContainer = (
 
   height: 24px;
   font-size: 12px;
-  padding-left: ${padLeft}px;
-  margin-left: ${marginLeft}px;
   min-width: calc(100% - ${padLeft + 24}px);
   opacity: ${isBroken ? 0.5 : 1};
   align-items: center;
@@ -560,8 +557,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         thisItemSelected,
         textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover,
         isBroken,
-        padLeft,
-        marginLeft
+        padLeft
       )}
       data-testid={dataTestId}
       role={role}
@@ -575,7 +571,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         }
       }}
     >
-      <div style={{ minWidth: `${spacerWidth}px` }} />
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
