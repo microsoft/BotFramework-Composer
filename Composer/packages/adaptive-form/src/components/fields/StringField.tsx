@@ -67,6 +67,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         ariaLabel={label || formatMessage('string field')}
         autoComplete="off"
         componentRef={textFieldRef}
+        data-testid="string-field"
         disabled={disabled}
         errorMessage={error}
         id={id}

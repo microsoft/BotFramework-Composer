@@ -197,6 +197,9 @@
   "add_new_knowledge_base_1a3afed3": {
     "message": "Add new knowledge base"
   },
+  "add_new_propertyname_bedf7dc6": {
+    "message": "Add new { propertyName }"
+  },
   "add_new_question_85612b7f": {
     "message": "Add new question"
   },
@@ -2000,6 +2003,9 @@
   "item_actions_22d0242": {
     "message": "Item Actions"
   },
+  "item_actions_cd903bde": {
+    "message": "Item actions"
+  },
   "item_added_f3910bed": {
     "message": "item added"
   },
@@ -2462,6 +2468,9 @@
   "new_update_available_30534ea5": {
     "message": "New update available"
   },
+  "new_value_3c1ce474": {
+    "message": "New value"
+  },
   "newsectionplaceholdersectionname_5fc0d21": {
     "message": "_NewSectionPlaceHolderSectionName"
   },
@@ -2743,6 +2752,12 @@
   },
   "prebuilt_entity_21ebcdc6": {
     "message": "Prebuilt entity"
+  },
+  "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
+    "message": "press Enter to add this item or Tab to move to the next interactive element"
+  },
+  "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
+    "message": "press Enter to add this name and advance to the next row, or press Tab to advance to the value field"
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
     "message": "Press Shift+Enter to insert a new line"
