@@ -65,7 +65,6 @@ export const BotStructureFilesPatterns = [
   templateInterpolate(BotStructureTemplate.dialogs.entry, { DIALOGNAME: '*' }),
   templateInterpolate(BotStructureTemplate.dialogs.dialogSchema, { DIALOGNAME: '*' }),
   templateInterpolate(BotStructureTemplate.dialogs.recognizer, { DIALOGNAME: '*', RECOGNIZERNAME: '*.dialog' }),
-  templateInterpolate(BotStructureTemplate.manifestLu, { FILENAME: '*' }),
 
   templateInterpolate(BotStructureTemplate.formDialogs, { FORMDIALOGNAME: '*.form' }),
   templateInterpolate(BotStructureTemplate.skillManifests, { MANIFESTFILENAME: '*.json' }),
