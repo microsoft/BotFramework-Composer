@@ -10,12 +10,13 @@ import { BotSchemas, DialogSetting } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { JSONSchema7 } from '@botframework-composer/types';
+import { AdapterRecord } from '@botframework-composer/types/src';
 
 import { useRouterCache } from '../../../utils/hooks';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableHeaderRow, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
 
-import AdapterModal, { AdapterRecord, hasRequired } from './ExternalAdapterModal';
+import AdapterModal, { hasRequired } from './ExternalAdapterModal';
 
 //////////
 

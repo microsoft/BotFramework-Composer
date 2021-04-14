@@ -161,9 +161,6 @@
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
-  "add_caller_5c12aa5b": {
-    "message": "Add caller"
-  },
   "add_connections_d720a32e": {
     "message": "Add connections"
   },
@@ -190,6 +187,9 @@
   },
   "add_new_attachment_546a68c": {
     "message": "Add new attachment"
+  },
+  "add_new_caller_4a72bd0c": {
+    "message": "Add new caller"
   },
   "add_new_extension_19b82b77": {
     "message": "Add new extension"
@@ -2141,9 +2141,6 @@
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "List of actions rendered as suggestions to user."
   },
-  "list_of_app_ids_for_bots_that_are_allowed_to_use_t_bee9fea8": {
-    "message": "List of app ids for bots that are allowed to use this skill"
-  },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
   },
@@ -3415,6 +3412,9 @@
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
+  },
+  "skills_can_be_called_by_external_bots_allow_other__aa203913": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below."
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
