@@ -112,6 +112,9 @@ const navContainer = (
         .treeItem-text {
           max-width: ${textWidth}px;
         }
+        .external-link {
+          visibility: visible;
+        }
         }`};
 
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
@@ -491,8 +494,9 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
             </span>
             {isExternal && (
               <Icon
+                className="external-link"
                 iconName="NavigateExternalInline"
-                styles={{ root: { width: '12px', marginLeft: '4px', outline: 'none' } }}
+                styles={{ root: { visibility: 'hidden', width: '12px', marginLeft: '4px', outline: 'none' } }}
               />
             )}
             {showErrors && (
