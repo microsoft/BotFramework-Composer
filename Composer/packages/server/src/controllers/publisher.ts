@@ -73,14 +73,19 @@ export const PublishController = {
         msAppId: configuration.settings?.MicrosoftAppId,
         subscriptionId: configuration.subscriptionId,
       });
+
+      TelemetryService.startEvent('PublishingProfileCompleted', `${target}${projectId}`, {
+        target,
+        projectId,
+        msAppId: configuration.settings?.MicrosoftAppId,
+        subscriptionId: configuration.subscriptionId,
+      });
     } catch (error) {
       TelemetryService.trackEvent('PublishingProfileStarted', {
         target,
         projectId,
       });
     }
-
-    TelemetryService.startEvent('PublishingProfileCompleted', `${target}${projectId}`, { target, projectId });
 
     log('access token retrieved from body: %s', accessToken || 'no token provided');
     if (profile && extensionImplementsMethod(extensionName, 'publish')) {
