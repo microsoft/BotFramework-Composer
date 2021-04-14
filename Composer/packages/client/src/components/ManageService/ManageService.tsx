@@ -88,7 +88,7 @@ export const ManageService = (props: ManageServiceProps) => {
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
-  const [locationList, setLocationList] = useState<{ key: string; text: string }[]>(props.regions || []);
+  const [locationList, setLocationList] = useState<IDropdownOption[]>(props.regions || []);
 
   const actionOptions: IChoiceGroupOption[] = [
     { key: 'choose', text: formatMessage('Choose from existing') },
