@@ -161,9 +161,6 @@
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
-  "add_caller_5c12aa5b": {
-    "message": "Add caller"
-  },
   "add_connections_d720a32e": {
     "message": "Add connections"
   },
@@ -190,6 +187,9 @@
   },
   "add_new_attachment_546a68c": {
     "message": "Add new attachment"
+  },
+  "add_new_caller_4a72bd0c": {
+    "message": "Add new caller"
   },
   "add_new_extension_19b82b77": {
     "message": "Add new extension"
@@ -494,14 +494,8 @@
   "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
     "message": "Bot Framework Composer is a visual authoring canvas for building bots and other types of conversational application with the Microsoft Bot Framework technology stack. With Composer you will find everything you need to build a modern, state-of-the-art conversational experience."
   },
-  "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
-    "message": "Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation."
-  },
-  "bot_framework_composer_requires_node_js_in_order_t_a1d3dfb": {
-    "message": "Bot Framework Composer requires Node.js in order to run. Click “Install Node.js” to install the latest version"
-  },
-  "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
-    "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
+  "bot_framework_composer_requires_node_js_in_order_t_9c45c226": {
+    "message": "Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version"
   },
   "bot_framework_emulator_fefd4a59": {
     "message": "Bot Framework Emulator"
@@ -656,11 +650,14 @@
   "collapse_34080b4d": {
     "message": "Collapse"
   },
-  "collapse_debug_panel_6f1c5869": {
-    "message": "Collapse debug panel"
+  "collapse_debug_panel_2841f8ba": {
+    "message": "Collapse Debug Panel"
   },
   "collapse_navigation_17228b95": {
     "message": "Collapse Navigation"
+  },
+  "collect_service_level_and_conversation_level_data__d486b519": {
+    "message": "Collect service-level and conversation-level data to help gauge the performance and efficacy of your bot."
   },
   "comment_7ef1428e": {
     "message": "Comment"
@@ -697,6 +694,9 @@
   },
   "composer_on_github_1e3782ef": {
     "message": "Composer on GitHub"
+  },
+  "composer_runtime_error_b0efe05": {
+    "message": "Composer Runtime Error"
   },
   "composer_settings_31b04099": {
     "message": "Composer Settings"
@@ -1352,6 +1352,9 @@
   "enable_6f5d1328": {
     "message": "Enable"
   },
+  "enable_insights_e339cf40": {
+    "message": "Enable Insights"
+  },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Enable line numbers to refer to code lines by number."
   },
@@ -1381,9 +1384,6 @@
   },
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation activity"
-  },
-  "endpoint_key_933b60ae": {
-    "message": "Endpoint Key"
   },
   "endpoints_ff946539": {
     "message": "Endpoints"
@@ -1423,9 +1423,6 @@
   },
   "enter_luis_authoring_key_c59f8f1f": {
     "message": "Enter LUIS authoring key"
-  },
-  "enter_luis_endpoint_key_f8eb30f5": {
-    "message": "Enter LUIS endpoint key"
   },
   "enter_luis_region_2316eceb": {
     "message": "Enter LUIS region"
@@ -1496,11 +1493,17 @@
   "error_occurred_5549a6b4": {
     "message": "Error occurred"
   },
+  "error_occurred_building_the_bot_7425aa09": {
+    "message": "Error occurred building the bot"
+  },
   "error_occurred_ejecting_runtime_8512129e": {
     "message": "Error occurred ejecting runtime!"
   },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
+  },
+  "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
+    "message": "Error occurred trying to fetch runtime standard output"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Please add unknown functions to setting''s customFunctions field."
@@ -1543,6 +1546,9 @@
   },
   "expand_2f2fadbd": {
     "message": "Expand"
+  },
+  "expand_debug_panel_6f04e9f2": {
+    "message": "Expand Debug Panel"
   },
   "expand_navigation_20330d1d": {
     "message": "Expand Navigation"
@@ -2057,6 +2063,9 @@
   "learn_about_adaptive_expressions_fb1b6c3c": {
     "message": "Learn about Adaptive expressions"
   },
+  "learn_how_to_publish_to_a_dev_ops_pipeline_using_c_9b4577be": {
+    "message": "Learn how to publish to a Dev Ops pipeline using CI / CD."
+  },
   "learn_more_14816ec": {
     "message": "Learn More."
   },
@@ -2140,9 +2149,6 @@
   },
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "List of actions rendered as suggestions to user."
-  },
-  "list_of_app_ids_for_bots_that_are_allowed_to_use_t_bee9fea8": {
-    "message": "List of app ids for bots that are allowed to use this skill"
   },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
@@ -2245,9 +2251,6 @@
   },
   "luis_authoring_region_b142f97b": {
     "message": "Luis Authoring Region"
-  },
-  "luis_endpoint_key_c685e219": {
-    "message": "LUIS endpoint key"
   },
   "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
     "message": "LUIS key is required with the current recognizer setting to start your bot locally, and publish"
@@ -2696,9 +2699,6 @@
   "output_5023cf84": {
     "message": "Output"
   },
-  "outputs_e6f0bfbe": {
-    "message": "Outputs"
-  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2752,9 +2752,6 @@
   },
   "prebuilt_entity_21ebcdc6": {
     "message": "Prebuilt entity"
-  },
-  "prediction_key_200e158b": {
-    "message": "Prediction key"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
@@ -2890,6 +2887,9 @@
   },
   "publish_target_388f6adf": {
     "message": "Publish target"
+  },
+  "publish_to_dev_ops_3b8f5a2f": {
+    "message": "Publish to Dev Ops"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
     "message": "Publish your bot to Azure and manage published bots here."
@@ -3422,6 +3422,9 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
+  "skills_can_be_called_by_external_bots_allow_other__aa203913": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below."
+  },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
   },
@@ -3490,9 +3493,6 @@
   },
   "start_bot_25ecad14": {
     "message": "Start Bot"
-  },
-  "start_bot_failed_d75647d5": {
-    "message": "Start bot failed"
   },
   "start_command_a085f2ec": {
     "message": "Start command"
@@ -3958,9 +3958,6 @@
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Use custom LUIS authoring key"
-  },
-  "use_custom_luis_endpoint_key_572e2c29": {
-    "message": "Use custom LUIS endpoint key"
   },
   "use_custom_luis_region_49d31dbf": {
     "message": "Use custom LUIS region"
