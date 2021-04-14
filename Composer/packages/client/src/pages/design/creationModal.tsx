@@ -169,7 +169,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       <CreateBotV2
         isOpen
         fetchReadMe={fetchReadMe}
-        fetchTemplates={fetchTemplatesV2}
         templates={templateProjects}
         onDismiss={handleDismiss}
         onNext={handleCreateNext}
