@@ -656,8 +656,8 @@
   "collapse_34080b4d": {
     "message": "Collapse"
   },
-  "collapse_debug_panel_6f1c5869": {
-    "message": "Collapse debug panel"
+  "collapse_debug_panel_2841f8ba": {
+    "message": "Collapse Debug Panel"
   },
   "collapse_navigation_17228b95": {
     "message": "Collapse Navigation"
@@ -1553,6 +1553,9 @@
   "expand_2f2fadbd": {
     "message": "Expand"
   },
+  "expand_debug_panel_6f04e9f2": {
+    "message": "Expand Debug Panel"
+  },
   "expand_navigation_20330d1d": {
     "message": "Expand Navigation"
   },
@@ -2074,9 +2077,6 @@
   },
   "learn_about_adaptive_expressions_fb1b6c3c": {
     "message": "Learn about Adaptive expressions"
-  },
-  "learn_how_to_build_a_skill_dbc58063": {
-    "message": " learn how to build a skill "
   },
   "learn_how_to_publish_to_a_dev_ops_pipeline_using_c_9b4577be": {
     "message": "Learn how to publish to a Dev Ops pipeline using CI / CD."
