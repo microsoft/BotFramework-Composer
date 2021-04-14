@@ -82,7 +82,7 @@ describe('templateSort', () => {
 
   it('should return sorted templates per sortOrder obj', async () => {
     // note - the list in templates has to include all the same items in creation.ts
-    const sortedTemplateList = sortTemplates(templates);
+    const sortedTemplateList = await sortTemplates(templates);
     defaultSortOrder.forEach((templateSortEntry, index) => {
       if (
         templates.findIndex((temp) => {
