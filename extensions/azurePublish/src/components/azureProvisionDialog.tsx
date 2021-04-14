@@ -272,6 +272,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // form options
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
+  const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string>('');
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
@@ -282,9 +283,6 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
-
-  // null = loading
-  const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
   const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
@@ -391,7 +389,6 @@ export const AzureProvisionDialog: React.FC = () => {
           sessionExpired: false,
         });
         setPageAndTitle(PageTypes.ChooseAction);
-        setLoginErrorMsg(undefined);
       } else {
         setLoadingErrorMessage(
           formatMessage(
@@ -399,31 +396,51 @@ export const AzureProvisionDialog: React.FC = () => {
           )
         );
       }
-    } else {
-      // TODO: handle when existing profile is being edited
-      // We should get an ARM token for the tenant in the profile and then fetch
-      // tenant details after to show in the UI.
-      getTenants().then((tenants) => {
-        if (isMounted.current) {
-          setAllTenants(tenants);
-          const cachedTenantId = getTenantIdFromCache();
-
-          // default to the last used tenant only if it is in the account's tenants
-          if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
-            updateFormData('tenantId', cachedTenantId);
-          } else {
-            setTenantId(undefined);
-            if (tenants?.length > 0) {
-              // seed tenant selection with 1st tenant
-              updateFormData('tenantId', tenants[0].tenantId);
-            }
-          }
-        }
-      });
     }
-
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (page === PageTypes.ConfigProvision) {
+      if (!userShouldProvideTokens()) {
+        // TODO: handle when existing profile is being edited
+        // We should get an ARM token for the tenant in the profile and then fetch tenant details after to show in the UI.
+        // Note: For electron, getTenants may cause the sign-in dialog to appear.
+        getTenants()
+          .then((tenants) => {
+            if (isMounted.current) {
+              setAllTenants(tenants);
+
+              if (tenants.length === 0) {
+                setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
+              } else {
+                setTenantsErrorMessage(undefined);
+              }
+
+              const cachedTenantId = getTenantIdFromCache();
+
+              // default to the last used tenant only if it is in the account's tenants
+              if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+                updateFormData('tenantId', cachedTenantId);
+              } else {
+                setTenantId(undefined);
+                if (tenants?.length > 0) {
+                  // seed tenant selection with 1st tenant
+                  updateFormData('tenantId', tenants[0].tenantId);
+                }
+              }
+            }
+          })
+          .catch((err) => {
+            setTenantsErrorMessage(
+              formatMessage('There was a problem loading Azure directories. {errMessage}', {
+                errMessage: err.message || err.toString(),
+              })
+            );
+          });
+      }
+    }
+  }, [page]);
 
   const getTokenForTenant = (tenantId: string) => {
     getARMTokenForTenant(tenantId)
@@ -439,17 +456,22 @@ export const AzureProvisionDialog: React.FC = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
-        setLoginErrorMsg(undefined);
+        setTenantsErrorMessage(undefined);
       })
       .catch((err) => {
         setTenantId(undefined);
         setCurrentUser(undefined);
-        setLoginErrorMsg(err.message || err.toString());
+        setTenantsErrorMessage(
+          formatMessage('There was a problem getting the access token for the current Azure directory. {errMessage}', {
+            errMessage: err.message || err.toString(),
+          })
+        );
+        setTenantsErrorMessage(err.message || err.toString());
       });
   };
 
   useEffect(() => {
-    if (formData.tenantId) {
+    if (formData.tenantId && page === PageTypes.ConfigProvision) {
       if (formData.tenantId !== currentConfig?.tenantId) {
         // reset form data when tenant id changes
         setFormData((current) => ({
@@ -466,7 +488,7 @@ export const AzureProvisionDialog: React.FC = () => {
         getTokenForTenant(formData.tenantId);
       }
     }
-  }, [formData.tenantId]);
+  }, [formData.tenantId, page]);
 
   const getResources = async () => {
     try {
@@ -722,7 +744,7 @@ export const AzureProvisionDialog: React.FC = () => {
             'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
           )}
           disabled={allTenants.length === 1 || currentConfig?.tenantId}
-          errorMessage={loginErrorMsg}
+          errorMessage={tenantsErrorMessage}
           label={formatMessage('Azure Directory')}
           options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
           selectedKey={formData.tenantId}
