@@ -100,6 +100,8 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
         method: 'GET',
         headers: await this.getRequestHeaders(),
       };
+      log('Fetching from PVA: %s', url);
+
       const result = await fetch(url, options);
 
       const eTag = result.headers.get('etag') || '';
@@ -158,7 +160,8 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
 
   private getContentUrl(): string {
     const { envId, baseUrl, botId } = this.metadata;
-    return `${baseUrl || getBaseUrl()}/environments/${envId}/bots/${botId}/composer/content`;
+    const query = process.env.COMPOSER_PVA_TOPICS === 'true' ? '?includeTopics=true' : '';
+    return `${baseUrl || getBaseUrl()}/environments/${envId}/bots/${botId}/composer/content${query}`;
   }
 
   private async getRequestHeaders() {
