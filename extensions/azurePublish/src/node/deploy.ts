@@ -10,6 +10,7 @@ import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { composeRenderFunction } from '@uifabric/utilities';
+import { DialogSetting } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
@@ -17,7 +18,6 @@ import { AzurePublishErrors, createCustomizeError, stringifyError } from './util
 import { copyDir } from './utils/copyDir';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
-import { DialogSetting } from '@botframework-composer/types';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -184,6 +184,7 @@ export class BotProjectDeploy {
     skillSettingsPath: string,
     settings: DialogSetting
   ) {
+    /* eslint-disable-next-line security/detect-non-literal-fs-filename -- Safe as no value holds user input */
     const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
     if (manifestFiles.length === 0) {
       this.logger({
