@@ -175,7 +175,6 @@ export const cardItem = {
     margin: 12px 0 12px 12px;
     padding: 12px;
     min-width: 244px;
-    max-width: 450px;
     width: 17vw;
     @media (max-width: 1416px) {
       width: 20vw;
