@@ -6,6 +6,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
+  height: 95px;
 `;
 export const HeaderText = css`
   font-size: ${FontSizes.xLarge};
@@ -60,6 +61,7 @@ export const targetListTiTle = css`
 `;
 
 export const listRoot = css`
+  height: calc(100% - 48px);
   position: relative;
   overflow-y: auto;
   flex-grow: 1;
