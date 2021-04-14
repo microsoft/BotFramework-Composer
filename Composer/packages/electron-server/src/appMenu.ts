@@ -191,7 +191,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
           },
         },
         {
-          label: formatMessage('Learn More About Bot Framework'),
+          label: formatMessage('Learn more about Bot Framework'),
           click: async () => {
             await shell.openExternal('https://dev.botframework.com/');
           },

@@ -11,6 +11,6 @@ export enum PromptTab {
 
 export const PromptTabTitles = {
   [PromptTab.BOT_ASKS]: () => formatMessage('Bot Asks'),
-  [PromptTab.USER_INPUT]: () => formatMessage('User Input'),
+  [PromptTab.USER_INPUT]: () => formatMessage('User input'),
   [PromptTab.OTHER]: () => formatMessage('Other'),
 };
