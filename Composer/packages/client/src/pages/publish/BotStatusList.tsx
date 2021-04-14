@@ -18,10 +18,9 @@ import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
 import { useCopyToClipboard } from '@bfc/ui-shared';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { ITooltipHostStyles, ITooltipStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
-import { flexContentSpaceBetween } from '../language-understanding/styles';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
