@@ -20,6 +20,7 @@ import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices'
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
+import sortBy from 'lodash/sortBy';
 
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -58,6 +59,7 @@ const dropdownStyles = { dropdown: { width: '100%', marginBottom: 20 } };
 const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 const mainElementStyle = { marginBottom: 20 };
+const dialogBodyStyles = { height: 360 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
 export const ManageService = (props: ManageServiceProps) => {
@@ -117,7 +119,7 @@ export const ManageService = (props: ManageServiceProps) => {
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
-      return subscriptionsResult._response.parsedBody;
+      return sortBy(subscriptionsResult._response.parsedBody, ['displayName']);
     } catch (err) {
       setApplicationLevelError(err);
       return [];
@@ -210,7 +212,7 @@ export const ManageService = (props: ManageServiceProps) => {
     if (token) {
       const tokenCredentials = new TokenCredentials(token);
       const resourceClient = new ResourceManagementClient(tokenCredentials, subscriptionId);
-      const groups = await resourceClient.resourceGroups.list();
+      const groups = sortBy(await resourceClient.resourceGroups.list(), ['name']);
 
       setResourceGroups([
         {
@@ -407,19 +409,21 @@ export const ManageService = (props: ManageServiceProps) => {
   const renderPageOne = () => {
     return (
       <div>
-        <p css={{ marginTop: 0 }}>
-          {formatMessage(
-            'Choose from existing {service} keys, create a new {service} resource, or generate a request to handoff to your Azure admin. ',
-            { service: props.serviceName }
-          )}
-          {props.learnMore ? (
-            <Link href={props.learnMore} target={'_blank'}>
-              {formatMessage('Learn more')}
-            </Link>
-          ) : null}
-        </p>
-        <div css={mainElementStyle}>
-          <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
+        <div css={dialogBodyStyles}>
+          <p css={{ marginTop: 0 }}>
+            {formatMessage(
+              'Choose from existing {service} keys, create a new {service} resource, or generate a request to handoff to your Azure admin. ',
+              { service: props.serviceName }
+            )}
+            {props.learnMore ? (
+              <Link href={props.learnMore} target={'_blank'}>
+                {formatMessage('Learn more')}
+              </Link>
+            ) : null}
+          </p>
+          <div css={mainElementStyle}>
+            <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
+          </div>
         </div>
         <DialogFooter>
           <PrimaryButton disabled={loading !== undefined} text={formatMessage('Next')} onClick={performNextAction} />
@@ -436,61 +440,63 @@ export const ManageService = (props: ManageServiceProps) => {
   const renderPageChoose = () => {
     return (
       <div>
-        <p css={{ marginTop: 0 }}>
-          {formatMessage(
-            'Choose from existing {service} keys, create a new {service} resource, or generate a request to handoff to your Azure admin. ',
-            { service: props.serviceName }
-          )}
-          {props.learnMore ? (
-            <Link href={props.learnMore} target={'_blank'}>
-              {formatMessage('Learn more')}
-            </Link>
-          ) : null}
-        </p>
-        <div css={mainElementStyle}>
-          <Dropdown
-            disabled={!(availableSubscriptions?.length > 0)}
-            label={formatMessage('Select subscription')}
-            options={
-              availableSubscriptions
-                ?.filter((p) => p.subscriptionId && p.displayName)
-                .map((p) => {
-                  return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
-                }) ?? []
-            }
-            placeholder={formatMessage('Select one')}
-            selectedKey={subscriptionId}
-            styles={dropdownStyles}
-            onChange={onChangeSubscription}
-          />
-        </div>
-        <div>
-          {noKeys && subscriptionId && (
-            <span style={{ color: 'rgb(161, 159, 157)' }}>
-              {formatMessage(
-                'No existing {service} resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin.',
-                {
-                  service: props.serviceName,
-                }
-              )}
-            </span>
-          )}
-          {!noKeys && subscriptionId && (
-            <div>
-              <Dropdown
-                disabled={!(keys?.length > 0) || nextAction !== 'choose'}
-                label={formatMessage('{service} Key', { service: props.serviceName })}
-                options={
-                  keys.map((p) => {
-                    return { text: p.name, ...p };
+        <div css={dialogBodyStyles}>
+          <p css={{ marginTop: 0 }}>
+            {formatMessage(
+              'Choose from existing {service} keys, create a new {service} resource, or generate a request to handoff to your Azure admin. ',
+              { service: props.serviceName }
+            )}
+            {props.learnMore ? (
+              <Link href={props.learnMore} target={'_blank'}>
+                {formatMessage('Learn more')}
+              </Link>
+            ) : null}
+          </p>
+          <div css={mainElementStyle}>
+            <Dropdown
+              disabled={!(availableSubscriptions?.length > 0)}
+              label={formatMessage('Select subscription')}
+              options={
+                availableSubscriptions
+                  ?.filter((p) => p.subscriptionId && p.displayName)
+                  .map((p) => {
+                    return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
                   }) ?? []
-                }
-                placeholder={formatMessage('Select one')}
-                styles={dropdownStyles}
-                onChange={onChangeKey}
-              />
-            </div>
-          )}
+              }
+              placeholder={formatMessage('Select one')}
+              selectedKey={subscriptionId}
+              styles={dropdownStyles}
+              onChange={onChangeSubscription}
+            />
+          </div>
+          <div>
+            {noKeys && subscriptionId && (
+              <span style={{ color: 'rgb(161, 159, 157)' }}>
+                {formatMessage(
+                  'No existing {service} resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin.',
+                  {
+                    service: props.serviceName,
+                  }
+                )}
+              </span>
+            )}
+            {!noKeys && subscriptionId && (
+              <div>
+                <Dropdown
+                  disabled={!(keys?.length > 0) || nextAction !== 'choose'}
+                  label={formatMessage('{service} Key', { service: props.serviceName })}
+                  options={
+                    keys.map((p) => {
+                      return { text: p.name, ...p };
+                    }) ?? []
+                  }
+                  placeholder={formatMessage('Select one')}
+                  styles={dropdownStyles}
+                  onChange={onChangeKey}
+                />
+              </div>
+            )}
+          </div>
         </div>
         <DialogFooter>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
@@ -513,84 +519,86 @@ export const ManageService = (props: ManageServiceProps) => {
   const renderPageCreate = () => {
     return (
       <div>
-        <p>
-          {formatMessage(
-            'Input your details below to create a new {service} resource. You will be able to manage your new resource in the Azure portal.',
-            { service: props.serviceName }
-          )}
-        </p>
+        <div css={dialogBodyStyles}>
+          <p>
+            {formatMessage(
+              'Input your details below to create a new {service} resource. You will be able to manage your new resource in the Azure portal.',
+              { service: props.serviceName }
+            )}
+          </p>
 
-        <div css={mainElementStyle}>
-          <Dropdown
-            disabled={loading !== undefined || !(availableSubscriptions?.length > 0)}
-            label={formatMessage('Select subscription')}
-            options={
-              availableSubscriptions
-                ?.filter((p) => p.subscriptionId && p.displayName)
-                .map((p) => {
-                  return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+          <div css={mainElementStyle}>
+            <Dropdown
+              disabled={loading !== undefined || !(availableSubscriptions?.length > 0)}
+              label={formatMessage('Select subscription')}
+              options={
+                availableSubscriptions
+                  ?.filter((p) => p.subscriptionId && p.displayName)
+                  .map((p) => {
+                    return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+                  }) ?? []
+              }
+              placeholder={formatMessage('Select one')}
+              selectedKey={subscriptionId}
+              styles={dropdownStyles}
+              onChange={onChangeSubscription}
+            />
+            <Dropdown
+              disabled={!subscriptionId || resourceGroups.length === 0 || loading !== undefined}
+              label={formatMessage('Resource group')}
+              options={
+                resourceGroups.map((p) => {
+                  return { key: p.id, text: p.name, data: p.data };
                 }) ?? []
-            }
-            placeholder={formatMessage('Select one')}
-            selectedKey={subscriptionId}
-            styles={dropdownStyles}
-            onChange={onChangeSubscription}
-          />
-          <Dropdown
-            disabled={!subscriptionId || resourceGroups.length === 0 || loading !== undefined}
-            label={formatMessage('Resource group')}
-            options={
-              resourceGroups.map((p) => {
-                return { key: p.id, text: p.name, data: p.data };
-              }) ?? []
-            }
-            placeholder={formatMessage('Select one')}
-            selectedKey={resourceGroupKey}
-            styles={dropdownStyles}
-            onChange={onChangeResourceGroup}
-            onRenderOption={onRenderOption}
-          />
-          {createResourceGroup && (
+              }
+              placeholder={formatMessage('Select one')}
+              selectedKey={resourceGroupKey}
+              styles={dropdownStyles}
+              onChange={onChangeResourceGroup}
+              onRenderOption={onRenderOption}
+            />
+            {createResourceGroup && (
+              <TextField
+                required
+                aria-label={formatMessage('Resource group name')}
+                data-testid={'resourceGroupName'}
+                disabled={!subscriptionId || loading !== undefined}
+                id={'resourceGroupName'}
+                label={formatMessage('Resource group name')}
+                placeholder={formatMessage('Enter name for new resource group')}
+                styles={{ root: { marginTop: 10 } }}
+                value={newResourceGroupName}
+                onChange={(e, val) => {
+                  setNewResourceGroupName(val || '');
+                }}
+              />
+            )}
+            <Dropdown
+              required
+              aria-label={formatMessage('Region')}
+              data-testid={'rootRegion'}
+              disabled={!subscriptionId || loading !== undefined}
+              id={'region'}
+              label={formatMessage('Region')}
+              options={locationList}
+              placeholder={formatMessage('Enter region')}
+              selectedKey={region}
+              styles={dropdownStyles}
+              onChange={handleRegionOnChange}
+            />
             <TextField
               required
-              aria-label={formatMessage('Resource group name')}
-              data-testid={'resourceGroupName'}
+              aria-label={formatMessage('Resource name')}
+              data-testid={'resourceName'}
               disabled={!subscriptionId || loading !== undefined}
-              id={'resourceGroupName'}
-              label={formatMessage('Resource group name')}
-              placeholder={formatMessage('Enter name for new resource group')}
+              id={'resourceName'}
+              label={formatMessage('Resource name')}
+              placeholder={formatMessage('Enter name for new resources')}
               styles={{ root: { marginTop: 10 } }}
-              value={newResourceGroupName}
-              onChange={(e, val) => {
-                setNewResourceGroupName(val || '');
-              }}
+              value={resourceName}
+              onChange={(e, val) => setResourceName(val || '')}
             />
-          )}
-          <Dropdown
-            required
-            aria-label={formatMessage('Region')}
-            data-testid={'rootRegion'}
-            disabled={!subscriptionId || loading !== undefined}
-            id={'region'}
-            label={formatMessage('Region')}
-            options={locationList}
-            placeholder={formatMessage('Enter region')}
-            selectedKey={region}
-            styles={dropdownStyles}
-            onChange={handleRegionOnChange}
-          />
-          <TextField
-            required
-            aria-label={formatMessage('Resource name')}
-            data-testid={'resourceName'}
-            disabled={!subscriptionId || loading !== undefined}
-            id={'resourceName'}
-            label={formatMessage('Resource name')}
-            placeholder={formatMessage('Enter name for new resources')}
-            styles={{ root: { marginTop: 10 } }}
-            value={resourceName}
-            onChange={(e, val) => setResourceName(val || '')}
-          />
+          </div>
         </div>
         <DialogFooter>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
@@ -619,13 +627,15 @@ export const ManageService = (props: ManageServiceProps) => {
   const renderPageThree = () => {
     return (
       <div>
-        <p>{outcomeDescription}</p>
-        <div css={summaryStyles}>{outcomeSummary}</div>
-        {outcomeError && (
-          <p>
-            {formatMessage('If you would like to try again, or select from existing resources, please click “Back”.')}
-          </p>
-        )}
+        <div css={dialogBodyStyles}>
+          <p>{outcomeDescription}</p>
+          <div css={summaryStyles}>{outcomeSummary}</div>
+          {outcomeError && (
+            <p>
+              {formatMessage('If you would like to try again, or select from existing resources, please click “Back”.')}
+            </p>
+          )}
+        </div>
         <DialogFooter>
           {outcomeError && <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />}
           <PrimaryButton text={formatMessage('Done')} onClick={props.onNext} />
@@ -671,7 +681,6 @@ export const ManageService = (props: ManageServiceProps) => {
         modalProps={{
           isBlocking: true,
         }}
-        styles={{ main: { height: 510 } }}
         onDismiss={props.onDismiss}
       >
         {currentPage === 1 && renderPageOne()}
