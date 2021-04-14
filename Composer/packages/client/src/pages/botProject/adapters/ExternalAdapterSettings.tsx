@@ -14,12 +14,13 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JSONSchema7 } from '@botframework-composer/types';
+import { AdapterRecord } from '@botframework-composer/types/src';
 
 import { useRouterCache } from '../../../utils/hooks';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
 
-import AdapterModal, { AdapterRecord, hasRequired } from './ExternalAdapterModal';
+import AdapterModal, { hasRequired } from './ExternalAdapterModal';
 
 //////////
 
