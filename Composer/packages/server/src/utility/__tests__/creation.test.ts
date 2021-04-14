@@ -3,7 +3,7 @@
 
 import { BotTemplate } from '@bfc/shared';
 
-import { sortTemplates, templateSortOrder } from '../creation';
+import { sortTemplates, backUpTemplateSortOrder } from '../creation';
 
 describe('templateSort', () => {
   const templates: BotTemplate[] = [
@@ -83,7 +83,7 @@ describe('templateSort', () => {
   it('should return sorted templates per sortOrder obj', async () => {
     // note - the list in templates has to include all the same items in creation.ts
     const sortedTemplateList = sortTemplates(templates);
-    templateSortOrder.forEach((templateSortEntry, index) => {
+    backUpTemplateSortOrder.forEach((templateSortEntry, index) => {
       if (
         templates.findIndex((temp) => {
           temp.id === templateSortEntry.generatorName;
