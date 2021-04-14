@@ -875,6 +875,10 @@ export class AzureResourceMananger {
                 value: config.workerRuntime || 'dotnet',
               },
               {
+                name: 'WEBSITE_NODE_DEFAULT_VERSION',
+                value: '~14',
+              },
+              {
                 name: 'APPINSIGHTS_INSTRUMENTATIONKEY',
                 value: config.instrumentationKey ?? '',
               },

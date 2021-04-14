@@ -273,7 +273,18 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /*******************************************************************************************************************************/
     asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user): Promise<void> => {
       const { runtimeLanguage } = parseRuntimeKey(project.settings?.runtime?.key);
-      const provisionConfig: ProvisionConfig = { ...config, workerRuntime: runtimeLanguage };
+
+      // map runtime language/platform to worker runtime
+      let workerRuntime = runtimeLanguage;
+      switch (runtimeLanguage) {
+        case 'js':
+          workerRuntime = 'node';
+          break;
+        default:
+          break;
+      }
+
+      const provisionConfig: ProvisionConfig = { ...config, workerRuntime };
 
       const { name } = provisionConfig;
 
