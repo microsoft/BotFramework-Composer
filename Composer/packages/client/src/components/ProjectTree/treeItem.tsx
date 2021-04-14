@@ -21,7 +21,7 @@ import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
-import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH } from './constants';
+import { THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
 
 // -------------------- Styles -------------------- //
@@ -96,12 +96,12 @@ const navContainer = (
   isBroken: boolean,
   padLeft: number
 ) => css`
-  ${isAnyMenuOpen
-    ? ''
-    : `
+  ${
+    isAnyMenuOpen
+      ? ''
+      : `
     &:hover {
-        background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
-
+      background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
         .dialog-more-btn {
           visibility: visible;
         }
@@ -111,7 +111,9 @@ const navContainer = (
         .treeItem-text {
           max-width: ${textWidth}px;
         }
-        }`};
+      };
+  `
+  }
 
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 
@@ -120,14 +122,10 @@ const navContainer = (
 
   label: navItem;
 
-  height: 24px;
   font-size: 12px;
-  min-width: calc(100% - ${padLeft + 24}px);
+  min-width: 100%;
   opacity: ${isBroken ? 0.5 : 1};
   align-items: center;
-
-  position: relative;
-  top: -4px;
 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
@@ -411,11 +409,9 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   dialogName,
   onSelect,
   textWidth = 100,
-  hasChildren = false,
   menu = [],
   extraSpace = 0,
   padLeft = 0,
-  marginLeft = 0,
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
@@ -430,7 +426,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
   const isBroken = !!link.botError;
-  const spacerWidth = hasChildren && !isBroken ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
+  const spacerWidth = extraSpace;
 
   const overflowIconWidthOnHover = overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
 
@@ -587,10 +583,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         ]}
         overflowItems={overflowMenu}
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(
-          textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
-          showErrors
-        )}
+        onRenderItem={onRenderItem(textWidth + extraSpace, showErrors)}
         onRenderOverflowButton={onRenderOverflowButton(
           !!isActive,
           isChildSelected,

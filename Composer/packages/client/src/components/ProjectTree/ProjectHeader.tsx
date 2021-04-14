@@ -19,8 +19,6 @@ import { TreeItem } from './treeItem';
 import { ProjectTreeOptions, TreeLink } from './types';
 
 const headerCSS = (label: string) => css`
-  margin-top: -6px;
-  width: 100%;
   label: ${label};
 `;
 

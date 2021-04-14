@@ -60,7 +60,6 @@ const tree = css`
 `;
 
 const headerCSS = (label: string, isActive?: boolean) => css`
-  margin-top: -6px;
   width: 100%;
   label: ${label};
   :hover {
@@ -306,7 +305,7 @@ export const ProjectTree: React.FC<Props> = ({
     };
 
     return (
-      <span key={'common'} ref={null} css={headerCSS('dialog-header')} data-testid={`DialogHeader-Common`}>
+      <span key={'common'} ref={null} css={headerCSS('common-dialog-header')} data-testid={`DialogHeader-Common`}>
         <TreeItem
           hasChildren
           isActive={doesLinkMatch(dialogLink, selectedLink)}
@@ -332,8 +331,7 @@ export const ProjectTree: React.FC<Props> = ({
     },
     dialog: DialogInfo,
     projectId: string,
-    dialogLink: TreeLink,
-    depth: number
+    dialogLink: TreeLink
   ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
@@ -351,12 +349,11 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`${item.id}_${item.index}`}
         dialogName={dialog.displayName}
-        extraSpace={INDENT_PER_LEVEL}
+        extraSpace={0}
         isActive={doesLinkMatch(link, selectedLink)}
         isMenuOpen={isMenuOpen}
         itemType={'trigger'}
         link={link}
-        marginLeft={depth * INDENT_PER_LEVEL}
         menu={
           options.showDelete
             ? [
@@ -389,13 +386,7 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (
-    triggers: ITrigger[],
-    dialog: DialogInfo,
-    projectId: string,
-    dialogLink: TreeLink,
-    depth: number
-  ) => {
+  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -408,8 +399,7 @@ export const ProjectTree: React.FC<Props> = ({
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
           projectId,
-          dialogLink,
-          depth
+          dialogLink
         );
       });
   };
@@ -466,7 +456,7 @@ export const ProjectTree: React.FC<Props> = ({
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div role="group">{renderTriggerList(triggers, dialog, projectId, link, 1)}</div>
+        <div role="group">{renderTriggerList(triggers, dialog, projectId, link)}</div>
       </ExpandableNode>
     );
   };
@@ -487,7 +477,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink: TreeLink) => {
     return dialogIsFormDialog(dialog)
       ? renderDialogTriggersByProperty(dialog, projectId, startDepth + 1)
-      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, 1);
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink);
   };
 
   // flatten lg imports url is same to dialog, to match correct link need render it as dialog
