@@ -21,6 +21,7 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -471,7 +472,7 @@ export const ManageService = (props: ManageServiceProps) => {
           </div>
           <div>
             {noKeys && subscriptionId && (
-              <span style={{ color: 'rgb(161, 159, 157)' }}>
+              <span style={{ color: NeutralColors.gray100 }}>
                 {formatMessage(
                   'No existing {service} resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin.',
                   {
