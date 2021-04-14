@@ -233,6 +233,7 @@ type TreeObject =
   | 'bot'
   | 'dialog'
   | 'topic'
+  | 'system topic'
   | 'trigger' // basic ProjectTree elements
   | 'trigger group'
   | 'form dialog'
@@ -247,6 +248,7 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
   dialog: Icons.DIALOG,
   trigger: Icons.TRIGGER,
   topic: Icons.TOPIC,
+  'system topic': Icons.SYSTEM_TOPIC,
   'trigger group': null,
   'form dialog': Icons.FORM_DIALOG,
   'form field': Icons.FORM_FIELD, // x in parentheses
@@ -259,7 +261,8 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
 const objectNames: { [key in TreeObject]: () => string } = {
   trigger: () => formatMessage('Trigger'),
   dialog: () => formatMessage('Dialog'),
-  topic: () => formatMessage('Topic'),
+  topic: () => formatMessage('User Topic'),
+  'system topic': () => formatMessage('System Topic'),
   'trigger group': () => formatMessage('Trigger group'),
   'form dialog': () => formatMessage('Form dialog'),
   'form field': () => formatMessage('Form field'),

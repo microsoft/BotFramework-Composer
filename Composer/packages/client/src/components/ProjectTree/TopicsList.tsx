@@ -24,6 +24,8 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
   const linkTooltip = formatMessage('Open in Power Virtual Agents');
 
   const renderTopic = (topic: DialogInfo) => {
+    const isSystemTopic = get(topic.content, 'isSystemTopic', false);
+
     return (
       <TreeItem
         key={topic.id}
@@ -31,7 +33,7 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
         extraSpace={INDENT_PER_LEVEL}
         isActive={false}
         isMenuOpen={false}
-        itemType={'topic'}
+        itemType={isSystemTopic ? 'system topic' : 'topic'}
         link={{
           projectId,
           dialogId: topic.id,

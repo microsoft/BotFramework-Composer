@@ -705,6 +705,7 @@ export const ProjectTree: React.FC<Props> = ({
       }),
       filteredTopics.length > 0 && (
         <TopicsList
+          key={`pva-topics-${projectId}`}
           projectId={projectId}
           textWidth={leftSplitWidth - TREE_PADDING}
           topics={filteredTopics}
