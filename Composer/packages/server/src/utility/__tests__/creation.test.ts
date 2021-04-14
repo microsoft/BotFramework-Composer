@@ -5,6 +5,11 @@ import { BotTemplate } from '@bfc/shared';
 
 import { sortTemplates, defaultSortOrder } from '../creation';
 
+jest.mock('../../models/asset/assetManager', () => ({
+  getRawGithubFileContent: jest.fn(),
+  AssetManager: jest.fn(),
+}));
+
 describe('templateSort', () => {
   const templates: BotTemplate[] = [
     {
