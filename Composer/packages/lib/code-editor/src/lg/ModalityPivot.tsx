@@ -169,7 +169,7 @@ const getInitialModalities = (structuredResponse?: PartialStructuredResponse): M
     modalityTypes.includes(m as ModalityType)
   ) as ModalityType[];
 
-  if (structuredResponse?.InputHint  && !structuredResponse.Speak) {
+  if (structuredResponse?.InputHint && !structuredResponse.Speak) {
     modalities.push('Speak');
   }
 
