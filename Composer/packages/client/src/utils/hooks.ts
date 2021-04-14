@@ -66,12 +66,16 @@ export const useRouterCache = (to: string) => {
   const linksRef = useRef(topLinks.concat(bottomLinks));
   linksRef.current = topLinks.concat(bottomLinks);
 
+  // Tracks if the component is mounted.
+  const mountedRef = useRef(false);
+
   useEffect(() => {
     routerCache.cleanAll();
     setState({});
   }, [rootProjectId]);
 
   useEffect(() => {
+    mountedRef.current = true;
     globalHistory.listen(({ location }) => {
       const links = linksRef.current;
       const { href, origin } = location;
@@ -79,9 +83,16 @@ export const useRouterCache = (to: string) => {
       const target = find(links, (link) => uri.startsWith(link.to));
       if (target) {
         routerCache.set(target.to, uri);
-        setState(routerCache.getAll());
+        // Only update local state if the component is still mounted.
+        if (mountedRef.current) {
+          setState(routerCache.getAll());
+        }
       }
     });
+
+    return () => {
+      mountedRef.current = false;
+    };
   }, []);
 
   return state[to] || to;

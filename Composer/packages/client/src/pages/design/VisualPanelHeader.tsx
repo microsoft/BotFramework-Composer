@@ -91,7 +91,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   const triggerIndex = parseTriggerId(selected);
   //make sure focusPath always valid
   const focusPath = getFocusPath(selected, focused);
-  const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
+  const trigger = triggerIndex != null && dialogData?.triggers[triggerIndex];
 
   const initialBreadcrumbArray: Array<BreadcrumbItem> = [];
 
@@ -118,7 +118,7 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
     });
   }
 
-  // getDialogData returns whatever's at the end of the path, which could be a trigger or an action
+  // getDialogData returns whatever is at the end of the path, which could be a trigger or an action
   const possibleAction = getDialogData(dialogMap, dialogId, focusPath);
 
   if (encodedFocused) {
