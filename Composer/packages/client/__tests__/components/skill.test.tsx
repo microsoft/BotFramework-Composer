@@ -6,7 +6,11 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import httpClient from '../../src/utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';
-import CreateSkillModal, { validateManifestUrl } from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
+import CreateSkillModal, {
+  validateManifestUrl,
+  getSkillManifest,
+} from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
+// import {SelectIntent} from '../../src/components/AddRemoteSkillModal/SelectIntent';
 import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
@@ -54,15 +58,15 @@ describe('<SkillForm />', () => {
       const addTriggerToRoot = jest.fn();
       const { getByLabelText, getByText } = renderWithRecoil(
         <CreateSkillModal
-          projectId={projectId}
-          onDismiss={onDismiss}
           addRemoteSkill={addRemoteSkill}
           addTriggerToRoot={addTriggerToRoot}
+          projectId={projectId}
+          onDismiss={onDismiss}
         />,
         recoilInitState
       );
 
-      const urlInput = getByLabelText('Manifest url');
+      const urlInput = getByLabelText('Skill Manifest Url');
       act(() => {
         fireEvent.change(urlInput, {
           target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
@@ -73,11 +77,8 @@ describe('<SkillForm />', () => {
         'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
       );
 
-      const submitButton = getByText('Confirm');
-      act(() => {
-        fireEvent.click(submitButton);
-      });
-      expect(addRemoteSkill).not.toBeCalled();
+      const endpoint = getByText('Endpoints');
+      expect(endpoint).not.toBeUndefined();
     } finally {
       jest.runOnlyPendingTimers();
       jest.useRealTimers();
@@ -85,17 +86,13 @@ describe('<SkillForm />', () => {
   });
 
   let formDataErrors;
-  let validationState;
   let setFormDataErrors;
   let setSkillManifest;
-  let setValidationState;
 
   beforeEach(() => {
     formDataErrors = {};
-    validationState = {};
     setFormDataErrors = jest.fn();
     setSkillManifest = jest.fn();
-    setValidationState = jest.fn();
   });
 
   describe('validateManifestUrl', () => {
@@ -112,7 +109,6 @@ describe('<SkillForm />', () => {
         expect.objectContaining({ manifestUrl: 'Url should start with http[s]://' })
       );
       expect(setSkillManifest).not.toBeCalled();
-      expect(setValidationState).not.toBeCalled();
     });
   });
 
@@ -129,66 +125,32 @@ describe('<SkillForm />', () => {
       expect(setFormDataErrors).toBeCalledWith(expect.objectContaining({ manifestUrl: 'Please input a manifest Url' }));
     });
 
-    it('should try and retrieve manifest if manifest url meets other criteria', async () => {
+    it('should try and retrieve manifest', async () => {
       (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: 'skill manifest' });
 
-      const formData = { manifestUrl: 'https://skill' };
-      const formDataErrors = { manifestUrl: 'error' };
+      const manifestUrl = 'https://skill';
 
-      await validateManifestUrl({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-      });
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validating',
-        })
-      );
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
-          url: formData.manifestUrl,
+          url: manifestUrl,
         },
       });
       expect(setSkillManifest).toBeCalledWith('skill manifest');
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validated',
-        })
-      );
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.not.objectContaining({
-          manifestUrl: 'error',
-        })
-      );
     });
 
     it('should show error when it could not retrieve skill manifest', async () => {
       (httpClient.get as jest.Mock) = jest.fn().mockRejectedValue({ message: 'skill manifest' });
 
-      const formData = { manifestUrl: 'https://skill' };
+      const manifestUrl = 'https://skill';
 
-      await validateManifestUrl({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-      });
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validating',
-        })
-      );
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
-          url: formData.manifestUrl,
+          url: manifestUrl,
         },
       });
       expect(setSkillManifest).not.toBeCalled();
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'NotValidated',
-        })
-      );
       expect(setFormDataErrors).toBeCalledWith(
         expect.objectContaining({
           manifestUrl: 'Manifest url can not be accessed',

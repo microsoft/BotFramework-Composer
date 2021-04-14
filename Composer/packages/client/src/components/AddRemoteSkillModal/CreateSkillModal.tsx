@@ -54,7 +54,21 @@ export const validateManifestUrl = async ({ formData, formDataErrors, setFormDat
     setFormDataErrors({});
   }
 };
-
+export const getSkillManifest = async (projectId: string, manifestUrl: string, setSkillManifest, setFormDataErrors) => {
+  try {
+    const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
+      params: {
+        url: manifestUrl,
+      },
+    });
+    setSkillManifest(data);
+    if (!data.dispatchModels) {
+      setFormDataErrors({ manifestUrl: formatMessage('Miss dispatch modal') });
+    }
+  } catch (error) {
+    setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest url can not be accessed') });
+  }
+};
 const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
   errors: {},
   $kind: 'Microsoft.OnIntent',
@@ -97,7 +111,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const options: IDropdownOption[] = useMemo(() => {
     return skillManifest?.endpoints?.map((item) => {
       return {
-        key: item.msAppId,
+        key: item.name,
         // eslint-disable-next-line format-message/literal-pattern
         text: formatMessage(item.name),
       };
@@ -119,19 +133,10 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const validateUrl = useCallback(
-    async (event) => {
+    (event) => {
       event.preventDefault();
       setShowDetail(true);
-      try {
-        const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
-          params: {
-            url: formData.manifestUrl,
-          },
-        });
-        setSkillManifest(data);
-      } catch (error) {
-        setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest url can not be accessed') });
-      }
+      getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors);
     },
     [projectId, formData]
   );
@@ -211,15 +216,16 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               />
               {skillManifest?.endpoints?.length > 1 && (
                 <Dropdown
-                  defaultSelectedKey={skillManifest.endpoints[0].msAppId}
+                  defaultSelectedKey={skillManifest.endpoints[0].name}
                   label={formatMessage('Endpoints')}
                   options={options}
                   responsiveMode={ResponsiveMode.large}
                   onChange={(e, option?: IDropdownOption) => {
                     if (option) {
+                      console.log(option);
                       setFormData({
                         ...formData,
-                        endpointName: option.text,
+                        endpointName: option.key as string,
                       });
                     }
                   }}
@@ -244,6 +250,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   <PrimaryButton
                     styles={ButtonStyle}
                     text={formatMessage('Next')}
+                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels}
                     onClick={(event) => {
                       setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
                       setShowIntentSelectDialog(true);
