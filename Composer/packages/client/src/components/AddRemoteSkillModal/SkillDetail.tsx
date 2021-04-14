@@ -60,7 +60,7 @@ export const SkillDetail: React.FC<SkillDetailProps> = (props) => {
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Activities')}</div>
-        <div css={text}>{formatMessage(Object.keys(manifest?.activities).join(', '))}</div>
+        <div css={text}>{formatMessage(manifest?.activities ? Object.keys(manifest?.activities).join(', ') : '')}</div>
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Publisher')}</div>

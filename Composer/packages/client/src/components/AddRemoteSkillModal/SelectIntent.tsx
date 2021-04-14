@@ -104,6 +104,15 @@ const getParsedLuFiles = async (files: { id: string; content: string }[], luFeat
   return luFiles;
 };
 
+const mergeIntentsContent = (intents: LuIntentSection[]) => {
+  return (
+    intents
+      ?.map((item) => {
+        return `> ${item.Name}` + '\n' + item.Body;
+      })
+      ?.join('\n') || ''
+  );
+};
 export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const {
     manifest,
@@ -119,12 +128,13 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   } = props;
   const [page, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
-  // luFiles from manifest
+  // luFiles from manifest, language was included in root bot languages
   const [luFiles, setLufile] = useState<Array<LuFile>>([]);
   // current locale Lufile
   const [currentLuFile, setCurrentLuFile] = useState<LuFile>();
-  // selected current locale intents
-  const [displayIntents, setDisplayIntent] = useState<Array<LuIntentSection>>([]);
+  // selected intents in different languages
+  const [multiLanguageIntents, setMultiLanguageIntents] = useState<Record<string, Array<LuIntentSection>>>({});
+  // selected current locale intents content
   const [displayContent, setDisplayContent] = useState<string>('');
   // const [diagnostics, setDiagnostics] = useState([]);
   const locale = useRecoilValue(localeState(projectId));
@@ -163,21 +173,29 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     return res;
   }, [manifest]);
 
-  const updateLuFile = useCallback(
-    (content: string) => {
-      const file = rootLuFiles.find(({ id }) => id.includes(locale));
-      if (!file) return;
-      const { id } = file;
-      file.content;
+  const updateLuFiles = useCallback(() => {
+    rootLuFiles?.map(async (lufile) => {
+      const rootId = lufile.id.split('.');
+      const language = rootId[rootId.length - 1];
+      let append = '';
+      if (language === locale) {
+        append = displayContent;
+      } else {
+        const intents = multiLanguageIntents[language];
+        if (!intents) {
+          return;
+        }
+        append = mergeIntentsContent(intents);
+      }
       const payload = {
-        projectId: projectId,
-        id,
-        content: file.content + `\n # ${manifest.name} \n` + content,
+        projectId,
+        id: lufile.id,
+        content: lufile.content + `\n # ${manifest.name} \n` + append,
       };
-      updateLuFileDispatcher(payload);
-    },
-    [rootLuFiles, projectId, locale]
-  );
+      console.log(payload);
+      await updateLuFileDispatcher(payload);
+    });
+  }, [rootLuFiles, projectId, locale, displayContent, multiLanguageIntents]);
 
   useEffect(() => {
     if (locale) {
@@ -208,26 +226,35 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   }, [manifest.dispatchModels?.languages, languages, locale]);
 
   useEffect(() => {
-    if (selectedIntents.length > 0 && currentLuFile) {
+    if (selectedIntents.length > 0) {
       const intents: LuIntentSection[] = [];
-      currentLuFile.intents.map((intent) => {
+      const multiLanguageIntents: Record<string, LuIntentSection[]> = {};
+      currentLuFile?.intents?.map((intent) => {
         if (selectedIntents.includes(intent.Name)) {
           intents.push(intent);
         }
       });
-      setDisplayIntent(intents);
 
+      luFiles?.map((file) => {
+        const id = file.id.split('.');
+        const language = id[id.length - 1];
+        multiLanguageIntents[language] = [];
+        file.intents?.map((intent) => {
+          if (selectedIntents.includes(intent.Name)) {
+            multiLanguageIntents[language].push(intent);
+          }
+        });
+      });
+      console.log(multiLanguageIntents);
+      setMultiLanguageIntents(multiLanguageIntents);
       // current locale, selected intent value.
-      const intentsValue = intents
-        .map((item) => {
-          return `> ${item.Name}` + '\n' + item.Body;
-        })
-        .join('\n');
+      const intentsValue = mergeIntentsContent(intents);
       setDisplayContent(intentsValue);
     } else {
       setDisplayContent('');
+      setMultiLanguageIntents({});
     }
-  }, [selectedIntents, currentLuFile]);
+  }, [selectedIntents, currentLuFile, luFiles]);
 
   useEffect(() => {
     if (displayContent) {
@@ -240,7 +267,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
 
   const handleSubmit = (ev, enableOchestractor) => {
     // append remote lufile into root lu file
-    updateLuFile(displayContent);
+    updateLuFiles();
     // add trigger to root
     onSubmit(ev, displayContent, enableOchestractor);
   };
