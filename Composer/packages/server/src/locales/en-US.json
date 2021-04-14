@@ -365,8 +365,8 @@
   "attachment_deffe5a9": {
     "message": "Attachment"
   },
-  "attachment_input_e0ece49c": {
-    "message": "Attachment Input"
+  "attachment_input_212dcb98": {
+    "message": "Attachment input"
   },
   "attachment_layout_b42b242": {
     "message": "Attachment layout"
@@ -425,8 +425,8 @@
   "begin_a_remote_skill_dialog_93e47189": {
     "message": "Begin a remote skill dialog."
   },
-  "begin_dialog_12e2becf": {
-    "message": "Begin Dialog"
+  "begin_dialog_154ebbf9": {
+    "message": "Begin dialog"
   },
   "begin_dialog_event_285bc650": {
     "message": "Begin dialog event"
@@ -566,8 +566,8 @@
   "cancel_all_active_dialogs_335b1623": {
     "message": "Cancel all active dialogs"
   },
-  "cancel_all_dialogs_32144c45": {
-    "message": "Cancel All Dialogs"
+  "cancel_all_dialogs_7b35fa0e": {
+    "message": "Cancel all dialogs"
   },
   "cancel_caeb1e68": {
     "message": "Cancel"
@@ -596,8 +596,8 @@
   "check_out_the_resources_on_github_4d73792a": {
     "message": "Check out the resources on GitHub."
   },
-  "choice_input_f75a2353": {
-    "message": "Choice Input"
+  "choice_input_369b0c57": {
+    "message": "Choice input"
   },
   "choice_name_fe8411f4": {
     "message": "Choice Name"
@@ -734,8 +734,8 @@
   "confirm_choices_db8e99fb": {
     "message": "Confirm Choices"
   },
-  "confirm_input_bf996e7a": {
-    "message": "Confirm Input"
+  "confirm_input_7e58417e": {
+    "message": "Confirm input"
   },
   "confirmation_fec87d65": {
     "message": "Confirmation"
@@ -998,8 +998,8 @@
   "date_or_time_d30bcc7d": {
     "message": "Date or time"
   },
-  "date_time_input_2416ffc1": {
-    "message": "Date Time Input"
+  "date_time_input_aa8ad315": {
+    "message": "Date time input"
   },
   "debug_break_46cb5adb": {
     "message": "Debug Break"
@@ -1061,14 +1061,11 @@
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
   },
-  "delete_properties_8bc77b42": {
-    "message": "Delete Properties"
-  },
   "delete_properties_c49a7892": {
     "message": "Delete properties"
   },
-  "delete_property_b3786fa0": {
-    "message": "Delete Property"
+  "delete_property_4a0e0df6": {
+    "message": "Delete property"
   },
   "delete_property_da7646f6": {
     "message": "Delete property?"
@@ -1259,14 +1256,14 @@
   "edit_a_skill_5665d9ac": {
     "message": "Edit a skill"
   },
-  "edit_actions_b38e9fac": {
-    "message": "Edit Actions"
+  "edit_actions_7c33a630": {
+    "message": "Edit actions"
   },
   "edit_an_array_property_5d886011": {
     "message": "Edit an array property"
   },
-  "edit_array_4ab37c8": {
-    "message": "Edit Array"
+  "edit_array_c56a18cc": {
+    "message": "Edit array"
   },
   "edit_c5fbea07": {
     "message": "Edit"
@@ -1316,8 +1313,8 @@
   "emit_a_trace_event_f653ae84": {
     "message": "Emit a trace event"
   },
-  "emit_event_32aa6583": {
-    "message": "Emit Event"
+  "emit_event_f36b4a87": {
+    "message": "Emit event"
   },
   "empty_bot_template_that_routes_to_qna_configuratio_21531414": {
     "message": "Empty bot template that routes to qna configuration"
@@ -1346,14 +1343,11 @@
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
-  "end_dialog_8f562a4c": {
-    "message": "End Dialog"
+  "end_dialog_88fa2f7a": {
+    "message": "End dialog"
   },
   "end_this_dialog_3ed0d50b": {
     "message": "End this dialog"
-  },
-  "end_turn_6ab71cea": {
-    "message": "End Turn"
   },
   "end_turn_ca85b3d4": {
     "message": "End turn"
@@ -1454,8 +1448,8 @@
   "error_checking_node_version_98bfbf4c": {
     "message": "Error checking node version"
   },
-  "error_encountered_when_getting_template_readme_50d9abc": {
-    "message": "Error encountered when getting template readme"
+  "error_encountered_when_getting_template_read_me_fi_b9199689": {
+    "message": "Error encountered when getting template read-me file"
   },
   "error_event_c079b608": {
     "message": "Error event"
@@ -1643,11 +1637,11 @@
   "font_weight_188bb2b9": {
     "message": "Font weight"
   },
-  "for_each_def04c48": {
-    "message": "For Each"
+  "for_each_7ec2e376": {
+    "message": "For each"
   },
-  "for_each_page_3b4d4b69": {
-    "message": "For Each Page"
+  "for_each_page_198e66f4": {
+    "message": "For each page"
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
@@ -1790,8 +1784,8 @@
   "home_351838cd": {
     "message": "Home"
   },
-  "http_request_79847109": {
-    "message": "HTTP Request"
+  "http_request_b6394895": {
+    "message": "HTTP request"
   },
   "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
     "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
@@ -1805,8 +1799,8 @@
   "id_already_exists_please_enter_a_unique_file_name_174913a3": {
     "message": "{ id } already exists. Please enter a unique file name."
   },
-  "if_condition_56c9be4a": {
-    "message": "If Condition"
+  "if_condition_d4383ce9": {
+    "message": "If condition"
   },
   "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
     "message": "If this problem persists, please file an issue on <a>GitHub</a>"
@@ -2900,6 +2894,9 @@
   "qna_intent_recognized_49c3d797": {
     "message": "QnA Intent recognized"
   },
+  "qna_intent_recognized_6760e56d": {
+    "message": "QnA intent recognized"
+  },
   "qna_maker_introduction_c2e426a": {
     "message": "QnA Maker introduction"
   },
@@ -3151,6 +3148,9 @@
   },
   "schema_24739a48": {
     "message": "Schema"
+  },
+  "schema_definition_not_found_in_sdk_schema_1102ce9b": {
+    "message": "Schema definition not found in sdk.schema."
   },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
     "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"

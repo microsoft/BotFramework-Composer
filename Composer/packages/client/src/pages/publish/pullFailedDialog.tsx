@@ -52,7 +52,6 @@ export const PullFailedDialog: React.FC<PulledFailedDialogProps> = (props) => {
       <DialogFooter>
         <PrimaryButton text={formatMessage('Ok')} onClick={onDismiss} />
       </DialogFooter>
-      er.test
     </Dialog>
   );
 };
