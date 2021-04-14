@@ -815,14 +815,8 @@
   "copy_9748f9f": {
     "message": "Copy"
   },
-  "copy_and_share_this_information_with_your_azure_ad_2cb02ba1": {
-    "message": "Copy and share this information with your Azure admin. After your QNA key is provisioned, you will be ready to test your bot with qna."
-  },
-  "copy_and_share_this_information_with_your_azure_ad_2ec77eeb": {
-    "message": "Copy and share this information with your Azure admin. After your Luis key is provisioned, you will be ready to test your bot."
-  },
-  "copy_and_share_this_information_with_your_azure_ad_a41b99ea": {
-    "message": "Copy and share this information with your Azure admin. After your Speech key is provisioned, you will be ready to test your bot with speech."
+  "copy_and_share_this_information_with_your_azure_ad_68be5396": {
+    "message": "Copy and share this information with your Azure admin to provision resources on your behalf."
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Copy content for translation"
@@ -953,8 +947,8 @@
   "create_new_luis_resources_a1a8fad5": {
     "message": "Create new LUIS resources"
   },
-  "create_new_qna_resources_ea2f7b37": {
-    "message": "Create new QNA resources"
+  "create_new_qna_resources_f21ea0cf": {
+    "message": "Create new QnA resources"
   },
   "create_new_speech_resources_73a921be": {
     "message": "Create new Speech resources"
@@ -1724,9 +1718,6 @@
   "generate_44e33e72": {
     "message": "Generate"
   },
-  "generate_a_resource_request_9d5bcacd": {
-    "message": "Generate a resource request"
-  },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
   },
@@ -1793,6 +1784,9 @@
   "handoff_activity_14363a20": {
     "message": "Handoff activity"
   },
+  "handoff_to_admin_c104b028": {
+    "message": "Handoff to admin"
+  },
   "handover_to_human_1a619574": {
     "message": "Handover to human"
   },
@@ -1814,8 +1808,20 @@
   "home_351838cd": {
     "message": "Home"
   },
+  "how_would_you_like_to_provision_this_resource_174f805d": {
+    "message": "How would you like to provision this resource?"
+  },
   "http_request_79847109": {
     "message": "HTTP Request"
+  },
+  "i_am_working_on_a_microsoft_bot_framework_project__12049dd4": {
+    "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
+  },
+  "i_am_working_on_a_microsoft_bot_framework_project__1295ee05": {
+    "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
+  },
+  "i_am_working_on_a_microsoft_bot_framework_project__9b5f3f78": {
+    "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
   },
   "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
     "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
@@ -1898,8 +1904,8 @@
   "input_your_details_below_to_create_a_new_luis_reso_75ca7d17": {
     "message": "Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. Learn more"
   },
-  "input_your_details_below_to_create_a_new_qna_resou_82b28d39": {
-    "message": "Input your details below to create a new QNA resource. You will be able to manage your new resource in the Azure portal. Learn more"
+  "input_your_details_below_to_create_a_new_qna_resou_b32404f2": {
+    "message": "Input your details below to create a new QnA resource. You will be able to manage your new resource in the Azure portal. Learn more"
   },
   "input_your_details_below_to_create_a_new_speech_re_51b79b16": {
     "message": "Input your details below to create a new Speech resource. You will be able to manage your new resource in the Azure portal. Learn more"
@@ -1946,8 +1952,8 @@
   "install_the_update_and_restart_composer_fac30a61": {
     "message": "Install the update and restart Composer."
   },
-  "instructions_for_your_azure_admin_7da1c5aa": {
-    "message": "Instructions for your Azure admin:"
+  "instructions_for_your_azure_admin_aa780628": {
+    "message": "Instructions for your Azure admin"
   },
   "integer_7f378275": {
     "message": "integer"
@@ -2068,6 +2074,9 @@
   },
   "learn_more_14816ec": {
     "message": "Learn More."
+  },
+  "learn_more_7a8d626": {
+    "message": "Learn More"
   },
   "learn_more_a79a7918": {
     "message": "Learn more"
@@ -2492,8 +2501,8 @@
   "no_existing_luis_resource_found_in_this_subscripti_22642816": {
     "message": "No existing LUIS resource found in this subscription. Click “Next” to create new."
   },
-  "no_existing_qna_resource_found_in_this_subscriptio_a547349b": {
-    "message": "No existing QNA resource found in this subscription. Click “Next” to create new."
+  "no_existing_qna_resource_found_in_this_subscriptio_c70e340": {
+    "message": "No existing QnA resource found in this subscription. Click “Next” to create new."
   },
   "no_existing_speech_resource_found_in_this_subscrip_4bc27bc3": {
     "message": "No existing Speech resource found in this subscription. Click “Next” to create a new one."
@@ -3188,6 +3197,9 @@
   "schema_24739a48": {
     "message": "Schema"
   },
+  "schema_definition_not_found_in_sdk_schema_1102ce9b": {
+    "message": "Schema definition not found in sdk.schema."
+  },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
     "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
   },
@@ -3278,8 +3290,8 @@
   "select_property_type_45c6e68e": {
     "message": "Select property type"
   },
-  "select_qna_keys_29abf5cb": {
-    "message": "Select QNA keys"
+  "select_qna_keys_e616cc57": {
+    "message": "Select QnA keys"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
@@ -3301,12 +3313,6 @@
   },
   "select_your_azure_subscription_and_choose_from_exi_1e05256f": {
     "message": "Select your Azure subscription and choose from existing Speech keys, or create a new Speech resource. Learn more"
-  },
-  "select_your_azure_subscription_and_choose_from_exi_73b6e4d6": {
-    "message": "Select your Azure subscription and choose from existing QNA keys, or create a new QNA resource. Learn more"
-  },
-  "select_your_azure_subscription_and_choose_from_exi_ff2b2416": {
-    "message": "Select your Azure subscription and choose from existing LUIS keys, or create a new LUIS resource. Learn more"
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -3637,6 +3643,9 @@
   },
   "the_following_qna_key_has_been_successfully_added__7c97bbc0": {
     "message": "The following QnA key has been successfully added to your bot project:"
+  },
+  "the_following_qna_resource_was_successfully_create_84173ca4": {
+    "message": "The following QnA resource was successfully created and added to your bot project:"
   },
   "the_following_speech_key_has_been_successfully_add_4bf0b587": {
     "message": "The following Speech key has been successfully added to your bot project:"
@@ -3988,9 +3997,6 @@
   },
   "user_is_typing_typing_activity_cd938615": {
     "message": "User is typing (Typing activity)"
-  },
-  "using_the_azure_portal_create_a_language_understan_15e2f51f": {
-    "message": "Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner."
   },
   "validating_35b79a96": {
     "message": "Validating..."
