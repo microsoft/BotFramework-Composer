@@ -15,16 +15,11 @@ import { JSONSchema7 } from '@botframework-composer/types';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import mapValues from 'lodash/mapValues';
 import { JSONSchema7Type } from 'json-schema';
+import { AdapterRecord } from '@botframework-composer/types';
 
 import { settingsState, dispatcherState } from '../../../recoilModel';
 import { useShell } from '../../../shell';
 import plugins, { mergePluginConfigs } from '../../../plugins';
-
-export type AdapterRecord = {
-  name: string;
-  route: string;
-  enabled: boolean;
-};
 
 type Props = {
   adapterKey: string;
