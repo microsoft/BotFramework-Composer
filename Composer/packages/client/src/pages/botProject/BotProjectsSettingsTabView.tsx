@@ -18,7 +18,6 @@ import { ExternalService } from './ExternalService';
 import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import AdapterSection from './adapters/AdapterSection';
-import { AllowedCallers } from './AllowedCallers';
 
 // -------------------- Styles -------------------- //
 
