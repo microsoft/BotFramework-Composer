@@ -192,7 +192,6 @@ export const projectDispatcher = () => {
         navigateToSkillBot(rootBotProjectId, projectId);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
-        throw ex;
       } finally {
         set(botOpeningState, false);
       }

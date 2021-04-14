@@ -10,9 +10,10 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 export const importOrchestractor = async (projectId: string, reloadProject, setApplicationLevelError) => {
   const reqBody = {
     package: 'Microsoft.Bot.Builder.AI.Orchestrator',
-    version: '4.14.0-daily.preview.20210410.233802.009f924',
+    version: '',
     source: 'https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json',
     isUpdating: false,
+    isPreview: true,
   };
   try {
     const results = await httpClient.post(`projects/${projectId}/import`, reqBody);

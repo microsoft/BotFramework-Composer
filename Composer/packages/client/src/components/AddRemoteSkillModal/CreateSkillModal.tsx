@@ -64,6 +64,8 @@ const getTriggerFormData = (intent: string, content: string): TriggerFormData =>
   regEx: '',
 });
 
+const ButtonStyle = { root: { marginLeft: '8px' } };
+
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
 
@@ -137,20 +139,16 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const handleSubmit = (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
-    addRemoteSkill(formData.manifestUrl, formData.endpointName)
-      .then(() => {
-        TelemetryClient.track('AddNewSkillCompleted');
-        const result = location.href.split('/');
-        let skillId = '';
-        if (result.length > 0) skillId = result[result.length - 1];
+    addRemoteSkill(formData.manifestUrl, formData.endpointName).then(() => {
+      TelemetryClient.track('AddNewSkillCompleted');
+      const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
+      if (skillId) {
         // add trigger with connect to skill action to root bot
         const triggerFormData = getTriggerFormData(skillManifest.name, content);
         addTriggerToRoot(dialogId, triggerFormData, skillId);
         TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    });
 
     if (enable) {
       // update recognizor type to orchestrator
@@ -244,7 +242,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               {skillManifest ? (
                 isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
                   <PrimaryButton
-                    styles={{ root: { marginLeft: '8px' } }}
+                    styles={ButtonStyle}
                     text={formatMessage('Next')}
                     onClick={(event) => {
                       setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
@@ -253,7 +251,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   />
                 ) : (
                   <PrimaryButton
-                    styles={{ root: { marginLeft: '8px' } }}
+                    styles={ButtonStyle}
                     text={formatMessage('Done')}
                     onClick={(event) => {
                       addRemoteSkill(formData.manifestUrl, formData.endpointName);
@@ -263,7 +261,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               ) : (
                 <PrimaryButton
                   disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
-                  styles={{ root: { marginLeft: '8px' } }}
+                  styles={ButtonStyle}
                   text={formatMessage('Next')}
                   onClick={validateUrl}
                 />

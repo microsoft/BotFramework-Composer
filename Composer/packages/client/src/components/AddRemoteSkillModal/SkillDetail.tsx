@@ -5,24 +5,23 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
-
 interface SkillDetailProps {
   manifest: {
     dispatchModels: {
       intents: Array<string> | object;
-      languages: object;
+      languages: Record<string, Array<any>>;
     };
     version: string;
-    activities: {
-      [key: string]: {
+    activities: Record<
+      string,
+      {
         type: string;
         name: string;
-      };
-    };
+      }
+    >;
     publisherName: string;
     description: string;
     name: string;
-    [key: string]: any;
   };
 }
 const container = css`
