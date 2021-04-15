@@ -400,7 +400,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (!this.isProfileProvisioned(config)) {
           throw new Error(
             formatMessage(
-              'There was a problem publishing {projectName}/{profileName}. The profile has not been provisioned yet.',
+              `There was a problem publishing {projectName}/{profileName}. The profile has not been provisioned yet.${JSON.stringify(
+                config
+              )}`,
               { projectName: project.name, profileName }
             )
           );

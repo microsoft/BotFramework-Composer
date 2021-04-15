@@ -21,8 +21,7 @@ jest.setTimeout(1000 * 60 * 10);
 
 const publishTarget = 'myPublishProfile';
 
-const directlineToken =
-  process.env.DAILY_CI_DIRECTLINE_TOKEN ?? '6D1fgCTy60c.20i46J2iwNR2RKI9yxsZTcf1YhMKKa4bo-kZtLLPVOQ';
+const directlineToken = process.env.DAILY_CI_DIRECTLINE_TOKEN;
 
 async function getPublishProfile() {
   const publishFileStr = process.env.DAILY_CI_PUBLISH_FILE;
@@ -122,6 +121,7 @@ async function publishBot(botId: string, botName: string, metadata): Promise<boo
   let message = undefined;
   while (message !== 'Success') {
     const statusResult = await getPublishStatus(botId, publishTarget, startPublishResult.id);
+    console.log(statusResult);
     console.log('getPublishStatus');
     if (!statusResult) {
       return false;
