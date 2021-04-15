@@ -17,7 +17,6 @@ export enum DiagnosticType {
   SKILL,
   SETTING,
   GENERAL,
-  SCHEMA,
 }
 
 export interface IDiagnosticInfo {
@@ -93,10 +92,6 @@ export class DialogDiagnostic extends DiagnosticInfo {
     const { rootProjectId, projectId, id, dialogPath = '' } = this;
     return convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, id, dialogPath);
   };
-}
-
-export class SchemaDiagnostic extends DialogDiagnostic {
-  type = DiagnosticType.SCHEMA;
 }
 
 export class SkillSettingDiagnostic extends DiagnosticInfo {

@@ -10,11 +10,11 @@ context('Left Nav Bar', () => {
   it('can expand left Nav Bar', () => {
     cy.findByTestId('LeftNavButton').click();
     cy.findByTestId('LeftNav-CommandBarButtonDesign').should('exist');
-    cy.findByTestId('LeftNav-CommandBarButtonBot Responses').click();
+    cy.findByTestId('LeftNav-CommandBarButtonBot responses').click();
     cy.url().should('include', 'language-generation');
-    cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
+    cy.findByTestId('LeftNav-CommandBarButtonUser input').click();
     cy.url().should('include', 'language-understanding');
-    cy.findByTestId('LeftNav-CommandBarButtonComposer Settings').click();
+    cy.findByTestId('LeftNav-CommandBarButtonComposer settings').click();
     cy.url().should('include', 'setting');
   });
 });

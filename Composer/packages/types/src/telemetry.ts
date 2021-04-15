@@ -111,7 +111,7 @@ type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
   NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
-  PublishingProfileCompleted: { target: string; projectId: string };
+  PublishingProfileCompleted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
 };
 
 type AppSettingsEvents = {

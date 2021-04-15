@@ -172,7 +172,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   };
 
   const callUpdateBoilerplate = async () => {
-    const title = formatMessage('Update Scripts');
+    const title = formatMessage('Update scripts');
     const msg = formatMessage(
       'Existing files in scripts/folder will be overwritten. Are you sure you want to continue?'
     );
