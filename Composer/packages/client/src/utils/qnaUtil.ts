@@ -9,8 +9,6 @@
 import { QnAFile, DialogInfo } from '@bfc/shared';
 import { qnaUtil, BotIndexer } from '@bfc/indexers';
 
-import { createFile, updateFile, deleteFile } from '../recoilModel/persistence/http';
-
 import { getBaseName, getExtension } from './fileUtil';
 
 export const getFileLocale = (fileName: string) => {
@@ -55,14 +53,15 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[], l
     const manualContainerContent = substringTextByLine(content, qnaSectionStartLine - 1);
     let originQnAFile = qnaUtil.parse(id, originQnAFileContent);
 
-    const manualContainerFileId = `${getBaseName(id)}-manual.source`;
-    const manualContainerFullFileId = `${manualContainerFileId}.qna`;
+    const locale = getExtension(id);
+    const manualContainerSourceId = `${getBaseName(id)}-manual.source`;
+    const manualContainerFileId = `${manualContainerSourceId}.${locale}`;
+    const manualContainerImportId = `${manualContainerSourceId}.qna`;
 
     // if container file not be imported, do import
-    if (!originQnAFile.imports.find(({ id }) => manualContainerFullFileId === id)) {
-      originQnAFile = qnaUtil.addImport(originQnAFile, manualContainerFullFileId);
+    if (!originQnAFile.imports.find(({ id }) => manualContainerImportId === id)) {
+      originQnAFile = qnaUtil.addImport(originQnAFile, manualContainerImportId);
     }
-    updateFile(projectId, `${originQnAFile.id}.qna`, originQnAFile.content);
     updatedFiles.push(originQnAFile);
 
     // if container file not exist, create it. if exist, update it
@@ -70,11 +69,9 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[], l
     if (originManualContainerFile) {
       const updatedContent = originManualContainerFile.content + '\n' + manualContainerContent;
       const updatedFile = qnaUtil.parse(manualContainerFileId, updatedContent);
-      updateFile(projectId, `${updatedFile.id}.qna`, updatedFile.content);
       updatedFiles.push(updatedFile);
     } else {
       const createdFile = qnaUtil.parse(manualContainerFileId, manualContainerContent);
-      createFile(projectId, `${createdFile.id}.qna`, createdFile.content);
       createdFiles.push(createdFile);
     }
   });
@@ -103,14 +100,12 @@ export const copyQnAFilesOnOtherLocales = (
     const createdFile = qnaUtil.parse('dummyId', originalSourceQnAFiles[i].content);
     for (let j = 0; j < newSourceQnAFileIds.length; j++) {
       if (!qnaFiles.find((f) => f.id === newSourceQnAFileIds[j])) {
-        createFile(projectId, `${newSourceQnAFileIds[j]}.qna`, createdFile.content);
         createdFiles.push({
           ...createdFile,
           id: newSourceQnAFileIds[j],
         });
       }
     }
-    deleteFile(projectId, `${originalSourceQnAFiles[i].id}.qna`);
   }
 
   for (let i = 0; i < containerKbFiles.length; i++) {
@@ -119,7 +114,6 @@ export const copyQnAFilesOnOtherLocales = (
     const createdFile = qnaUtil.parse('dummyId', containerKbFiles[i].content);
     for (let j = 0; j < newContainerKbFileIds.length; j++) {
       if (!qnaFiles.find((f) => f.id === newContainerKbFileIds[j])) {
-        createFile(projectId, `${newContainerKbFileIds[j]}.qna`, createdFile.content);
         createdFiles.push({
           ...createdFile,
           id: newContainerKbFileIds[j],
