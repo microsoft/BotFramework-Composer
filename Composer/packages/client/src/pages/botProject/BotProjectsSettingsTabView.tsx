@@ -32,6 +32,7 @@ const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
   LuisQna: ['luisKey', 'qnaKey'],
   Connections: ['connections'],
+  LuisQna: ['luisKey', 'qnaKey', 'luisRegion'],
   SkillConfig: [],
   Language: [],
 };

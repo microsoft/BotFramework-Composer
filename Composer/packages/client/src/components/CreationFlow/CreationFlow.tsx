@@ -27,9 +27,7 @@ import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
 
-type CreationFlowProps = RouteComponentProps<{}>;
-
-const CreationFlow: React.FC<CreationFlowProps> = (props: CreationFlowProps) => {
+const CreationFlow: React.FC<RouteComponentProps> = () => {
   const {
     fetchTemplatesV2,
     fetchRecentProjects,
