@@ -423,7 +423,7 @@ const generateChoices = `\
 
 const choice = `\
 -  { "title": "\${getIntentReadBack(title)}", "value": "\${value}" }
-`
+`;
 
 const getAnswerReadBack = `- See an answer from the Knowledge Base
 `;
@@ -432,7 +432,7 @@ export const LgTemplateSamples = {
   ['adaptiveCardJson']: {
     name: 'AdaptiveCardJson',
     body: adaptiveCardJsonBody,
-    parameters: ['candidates']
+    parameters: ['candidates'],
   },
   ['whichOneDidYouMean']: {
     name: `whichOneDidYouMean`,
@@ -459,7 +459,7 @@ export const LgTemplateSamples = {
   ['choice']: {
     name: 'choice',
     parameters: ['title', 'value'],
-    body: choice
+    body: choice,
   },
   TextInputPromptForOnChooseIntent: (designerId) => {
     return {

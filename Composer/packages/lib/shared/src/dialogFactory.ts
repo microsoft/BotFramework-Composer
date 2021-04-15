@@ -187,21 +187,22 @@ const initialDialogShape = () => ({
         },
         assignments: [
           {
-            property: "turn.minThreshold",
-            value: 0.5
+            property: 'turn.minThreshold',
+            value: 0.5,
           },
           {
-            property: "turn.maxChoices",
-            value: 3
+            property: 'turn.maxChoices',
+            value: 3,
           },
           {
-            property: "conversation.lastAmbiguousUtterance",
-            value: "=turn.activity.text"
+            property: 'conversation.lastAmbiguousUtterance',
+            value: '=turn.activity.text',
           },
           {
-            property: "dialog.candidates",
-            value: "=take(sortByDescending(where(flatten(select(turn.recognized.candidates, x, if (x.intent==\"ChooseIntent\", x.result.candidates, x))), c, not(startsWith(c.intent, \"DeferToRecognizer_QnA\")) && c.score > turn.minThreshold), 'score'), turn.maxChoices)"
-          }
+            property: 'dialog.candidates',
+            value:
+              '=take(sortByDescending(where(flatten(select(turn.recognized.candidates, x, if (x.intent=="ChooseIntent", x.result.candidates, x))), c, not(startsWith(c.intent, "DeferToRecognizer_QnA")) && c.score > turn.minThreshold), \'score\'), turn.maxChoices)',
+          },
         ],
       },
       {
@@ -209,46 +210,46 @@ const initialDialogShape = () => ({
         $designer: {
           id: generateDesignerId(),
         },
-        condition: "=count(dialog.candidates)",
+        condition: '=count(dialog.candidates)',
         cases: [
           {
-            value: "0",
+            value: '0',
             actions: [
               {
                 $kind: SDKKinds.EmitEvent,
                 $designer: {
                   id: generateDesignerId(),
                 },
-                eventName: "unknownIntent"
+                eventName: 'unknownIntent',
               },
               {
                 $kind: SDKKinds.EndDialog,
                 $designer: {
                   id: generateDesignerId(),
                 },
-              }
-            ]
+              },
+            ],
           },
           {
-            value: "1",
+            value: '1',
             actions: [
               {
                 $kind: SDKKinds.EmitEvent,
                 $designer: {
                   id: generateDesignerId(),
                 },
-                eventName: "recognizedIntent",
-                eventValue: "=first(dialog.candidates).result"
+                eventName: 'recognizedIntent',
+                eventValue: '=first(dialog.candidates).result',
               },
               {
                 $kind: SDKKinds.EndDialog,
                 $designer: {
                   id: generateDesignerId(),
                 },
-              }
-            ]
-          }
-        ]
+              },
+            ],
+          },
+        ],
       },
       {
         $kind: SDKKinds.TextInput,
