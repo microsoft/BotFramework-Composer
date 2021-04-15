@@ -138,9 +138,23 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
         await this.initBot(project);
         await this.saveContent(botId, version, project.dataDir, user);
+        await runtime.setSkillManifest(
+          project.settings.runtime.path,
+          project.fileStorage,
+          this.getManifestSrcDir(project.dataDir),
+          project.fileStorage,
+          'azurewebapp'
+        );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
         const runtimePath = project.getRuntimePath();
         await runtime.build(runtimePath, project);
+        await runtime.setSkillManifest(
+          this.getBotRuntimeDir(botId),
+          project.fileStorage,
+          this.getManifestSrcDir(project.dataDir),
+          project.fileStorage,
+          'azurewebapp'
+        );
       } else {
         throw new Error('Custom runtime settings are incomplete. Please specify path and command.');
       }
