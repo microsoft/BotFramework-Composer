@@ -150,6 +150,7 @@ export type ProjectContext = {
   projectId: string;
   projectCollection: BotInProject[];
   dialogs: DialogInfo[];
+  topics: DialogInfo[];
   dialogSchemas: DialogSchemaFile[];
   lgFiles: LgFile[];
   luFiles: LuFile[];
