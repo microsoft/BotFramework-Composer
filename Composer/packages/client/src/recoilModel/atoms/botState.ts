@@ -372,7 +372,7 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const currentTargetState = atomFamily<PublishTarget | undefined, string>({
+export const currentPublishTargetState = atomFamily<PublishTarget | undefined, string>({
   key: getFullyQualifiedKey('currentTarget'),
   default: {} as PublishTarget,
 });

@@ -28,7 +28,7 @@ import {
   createQnAOnState,
   creationFlowTypeState,
   currentProjectIdState,
-  currentTargetState,
+  currentPublishTargetState,
   dispatcherState,
   feedState,
   fetchReadMePendingState,
@@ -504,7 +504,7 @@ export const projectDispatcher = () => {
 
   const updateCurrentTarget = useRecoilCallback<[string, PublishTarget], void>(
     ({ set }: CallbackInterface) => (projectId: string, currentTarget) => {
-      set(currentTargetState(projectId), currentTarget);
+      set(currentPublishTargetState(projectId), currentTarget);
     }
   );
 

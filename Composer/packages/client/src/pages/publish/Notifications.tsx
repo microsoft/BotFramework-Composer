@@ -161,7 +161,7 @@ export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: st
 
 export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = false): CardProps => {
   const description = isSkill
-    ? 'Publishing your skill...'
+    ? formatMessage('Publishing your skill...')
     : formatMessage(
         `Publishing {
       count, plural,
