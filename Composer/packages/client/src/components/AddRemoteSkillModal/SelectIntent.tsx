@@ -271,7 +271,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     // append remote lufile into root lu file
     updateLuFiles();
     // add trigger to root
-    // onSubmit(ev, displayContent, enableOchestractor);
+    onSubmit(ev, displayContent, enableOchestractor);
   };
 
   return (
