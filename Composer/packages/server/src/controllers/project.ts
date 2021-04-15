@@ -392,9 +392,22 @@ async function setQnASettings(req: Request, res: Response) {
       const qnaEndpointKey = await currentProject.updateQnaEndpointKey(req.body.subscriptionKey);
       res.status(200).json(qnaEndpointKey);
     } catch (error) {
-      res.status(400).json({
-        message: error instanceof Error ? error.message : error,
-      });
+      // QNA maker will occasionally fail to do this
+      // instead of failing, we need to tell composer to retry
+      if (
+        error.message ===
+          'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.' ||
+        error.message ===
+          'No Endpoint keys found. If this is a new service, please wait a minimum of 10 minutes for the runtime to be ready.'
+      ) {
+        res.status(202).json({
+          message: 'Waiting for QnA Maker',
+        });
+      } else {
+        res.status(400).json({
+          message: error instanceof Error ? error.message : error,
+        });
+      }
     }
   } else {
     res.status(404).json({

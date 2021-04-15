@@ -37,6 +37,7 @@ type ManageServiceProps = {
     resourceName: string,
     region: string
   ) => Promise<string>;
+  createServiceInBackground?: boolean;
   handoffInstructions: string;
   hidden: boolean;
   learnMore?: string;
@@ -259,21 +260,25 @@ export const ManageService = (props: ManageServiceProps) => {
       }
 
       try {
-        const newKey = await props.createService(
-          tokenCredentials,
-          subscriptionId,
-          resourceGroupName,
-          resourceName,
-          region
-        );
+        if (props.createServiceInBackground) {
+          props.createService(tokenCredentials, subscriptionId, resourceGroupName, resourceName, region);
+        } else {
+          const newKey = await props.createService(
+            tokenCredentials,
+            subscriptionId,
+            resourceGroupName,
+            resourceName,
+            region
+          );
 
-        setKey(newKey);
-        // ALL DONE!
-        // this will pass the new values back to the caller
-        props.onGetKey({
-          key: newKey,
-          region: region,
-        });
+          setKey(newKey);
+          // ALL DONE!
+          // this will pass the new values back to the caller
+          props.onGetKey({
+            key: newKey,
+            region: region,
+          });
+        }
       } catch (err) {
         setOutcomeDescription(
           formatMessage(
