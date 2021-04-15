@@ -235,14 +235,14 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
               <TextField
                 data-testid="AuthoringKeyInput"
                 errorMessage={formErrors.authoringKey}
-                label={formatMessage('LUIS Authoring key:')}
+                label={formatMessage('LUIS authoring key:')}
                 value={formData.authoringKey}
                 onChange={(_e, val) => updateField('authoringKey', val)}
                 onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
               />
               <Dropdown
                 data-testid="regionDropdown"
-                label={formatMessage('Luis Authoring Region')}
+                label={formatMessage('Luis authoring region')}
                 options={LUIS_REGIONS}
                 responsiveMode={ResponsiveMode.large}
                 selectedKey={formData.authoringRegion}
@@ -259,7 +259,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
               <TextField
                 data-testid="SubscriptionKeyInput"
                 errorMessage={formErrors.subscriptionKey}
-                label={formatMessage('QNA Subscription key:')}
+                label={formatMessage('QnA Maker subscription key:')}
                 value={formData.subscriptionKey}
                 onChange={(_e, val) => updateField('subscriptionKey', val)}
                 onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
@@ -268,7 +268,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
                 disabled
                 readOnly
                 errorMessage={formErrors.qnaRegion}
-                label={formatMessage('QnA Region')}
+                label={formatMessage('QnA region')}
                 value={formData.qnaRegion}
                 onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
               />
@@ -278,7 +278,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
             disabled
             readOnly
             errorMessage={formErrors.defaultLanguage}
-            label={formatMessage('Default Language')}
+            label={formatMessage('Default language')}
             value={formData.defaultLanguage}
             onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
           />

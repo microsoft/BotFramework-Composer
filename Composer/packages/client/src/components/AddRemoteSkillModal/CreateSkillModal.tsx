@@ -47,9 +47,9 @@ export const validateManifestUrl = async ({ formData, formDataErrors, setFormDat
   const { manifestUrl: _, ...errors } = formDataErrors;
 
   if (!manifestUrl) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest Url') });
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest URL') });
   } else if (!urlRegex.test(manifestUrl)) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Url should start with http[s]://') });
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('URL should start with http:// or https://') });
   } else {
     setFormDataErrors({});
   }
@@ -66,7 +66,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
       setFormDataErrors({ manifestUrl: formatMessage('Miss dispatch modal') });
     }
   } catch (error) {
-    setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest url can not be accessed') });
+    setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest URL can not be accessed') });
   }
 };
 const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
