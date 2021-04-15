@@ -1793,8 +1793,8 @@
   "how_would_you_like_to_provision_this_resource_174f805d": {
     "message": "How would you like to provision this resource?"
   },
-  "http_request_79847109": {
-    "message": "HTTP Request"
+  "http_request_b6394895": {
+    "message": "HTTP request"
   },
   "i_am_working_on_a_microsoft_bot_framework_project__12049dd4": {
     "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
@@ -2059,9 +2059,6 @@
   },
   "learn_how_to_publish_to_a_dev_ops_pipeline_using_c_9b4577be": {
     "message": "Learn how to publish to a Dev Ops pipeline using CI / CD."
-  },
-  "learn_more_7a8d626": {
-    "message": "Learn More"
   },
   "learn_more_7a8d626": {
     "message": "Learn More"
@@ -2368,6 +2365,9 @@
   },
   "minimum_f31b05ab": {
     "message": "Minimum"
+  },
+  "miss_dispatch_modal_cf2d278e": {
+    "message": "Miss dispatch modal"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
@@ -3182,9 +3182,6 @@
   "schema_24739a48": {
     "message": "Schema"
   },
-  "schema_definition_not_found_in_sdk_schema_1102ce9b": {
-    "message": "Schema definition not found in sdk.schema."
-  },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
     "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
   },
@@ -3412,6 +3409,9 @@
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
+  },
+  "skills_can_be_called_by_external_bots_allow_other__aa203913": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below."
   },
   "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
     "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
@@ -3820,6 +3820,9 @@
   },
   "toolbar_bafd4228": {
     "message": "toolbar"
+  },
+  "topic_e820dbbd": {
+    "message": "(Topic)"
   },
   "total_mb_531a3721": {
     "message": "{ total }MB"

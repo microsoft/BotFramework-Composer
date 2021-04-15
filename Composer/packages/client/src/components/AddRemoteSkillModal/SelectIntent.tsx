@@ -337,6 +337,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <PrimaryButton
                 styles={{ root: { marginLeft: '8px' } }}
                 text={page === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
+                disabled={triggerErrorMessage ? true : false}
                 onClick={(ev) => {
                   if (page === 1) {
                     if (hasOrchestrator) {
