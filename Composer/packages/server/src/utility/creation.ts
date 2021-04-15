@@ -5,7 +5,7 @@ import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
 import union from 'lodash/union';
 
 export const templateSortOrder = [
-  { generatorName: '@microsoft/generator-bot-empty', displayName: 'Blank bot' },
+  { generatorName: '@microsoft/generator-bot-empty', displayName: 'Empty bot' },
   { generatorName: '@microsoft/generator-bot-conversational-core', displayName: 'Basic conversational bot' },
   { generatorName: '@microsoft/generator-bot-assistant-core', displayName: 'Basic assistant' },
   { generatorName: '@microsoft/generator-bot-enterprise-assistant', displayName: 'Enterprise assistant' },
