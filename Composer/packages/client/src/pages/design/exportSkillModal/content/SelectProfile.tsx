@@ -87,7 +87,6 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
-  const { ...rest } = content;
   const handleCurrentProfileChange = useMemo(
     () => (_e, option?: IDropdownOption) => {
       const target = publishingTargets.find((t) => {
@@ -101,7 +100,6 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
   useEffect(() => {
     try {
       if (currentTarget) {
-        setCurrentTarget(currentTarget);
         updateCurrentTarget(projectId, currentTarget);
         const config = JSON.parse(currentTarget.configuration);
         setEndpointUrl(`https://${config.hostname}.azurewebsites.net/api/messages`);
@@ -109,7 +107,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
 
         setSkillManifest({
           content: {
-            ...rest,
+            content,
             endpoints: [
               {
                 protocol: 'BotFrameworkV3',

@@ -94,7 +94,7 @@ export interface ContentProps {
   onChange: (_: any) => void;
   projectId: string;
   callers: string[];
-  setCallers: (callers: string[]) => void;
+  onUpdateCallers: (callers: string[]) => void;
 }
 
 interface Button {

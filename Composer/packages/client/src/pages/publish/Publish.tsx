@@ -153,7 +153,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       setSkillManifestUrl(url as string);
       props.location && navigate(props.location?.pathname, { replace: true });
     }
-  }, [publishTargetName, botStatusList]);
+  }, [publishTargetName, botStatusList, skillPublishStatus, props.location]);
 
   useEffect(() => {
     if (currentBotList.length < botList.length) {

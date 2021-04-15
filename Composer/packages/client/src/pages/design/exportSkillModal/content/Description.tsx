@@ -117,7 +117,7 @@ export const Description: React.FC<ContentProps> = ({
           selected,
         };
       }),
-    []
+    [$schema]
   );
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export const Description: React.FC<ContentProps> = ({
         <Label
           required
           styles={{
-            root: { fontWeight: '400' },
+            root: { fontWeight: 400 },
           }}
         >
           {formatMessage('Manifest Version')}
