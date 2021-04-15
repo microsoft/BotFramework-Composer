@@ -193,9 +193,10 @@ export const cardItem = {
     }
   `,
   title: css`
+    font-size: ${fonts.small.fontSize};
     font-weight: ${FontWeights.semibold};
     color: ${NeutralColors.gray160};
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
