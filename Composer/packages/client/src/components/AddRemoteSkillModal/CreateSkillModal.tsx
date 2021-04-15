@@ -248,9 +248,9 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               {skillManifest ? (
                 isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
                   <PrimaryButton
+                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels ? true : false}
                     styles={ButtonStyle}
                     text={formatMessage('Next')}
-                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels ? true : false}
                     onClick={(event) => {
                       setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
                       setShowIntentSelectDialog(true);

@@ -192,7 +192,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         id: lufile.id,
         content: lufile.content + `\n # ${manifest.name} \n` + append,
       };
-      console.log(payload);
+      console.log(lufile.id, projectId, append);
       await updateLuFileDispatcher(payload);
     });
   }, [rootLuFiles, projectId, locale, displayContent, multiLanguageIntents]);
@@ -335,9 +335,9 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             <span>
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
+                disabled={triggerErrorMessage && page === 1 ? true : false}
                 styles={{ root: { marginLeft: '8px' } }}
                 text={page === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
-                disabled={triggerErrorMessage ? true : false}
                 onClick={(ev) => {
                   if (page === 1) {
                     if (hasOrchestrator) {
