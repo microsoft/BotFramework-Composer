@@ -2624,9 +2624,6 @@
   "open_web_chat_23601990": {
     "message": "Open Web Chat"
   },
-  "open_web_chat_7a24d4f8": {
-    "message": "Open web chat"
-  },
   "open_your_azure_bot_resource_9165e3d1": {
     "message": "Open your Azure Bot resource"
   },
@@ -3158,9 +3155,6 @@
   "schema_24739a48": {
     "message": "Schema"
   },
-  "schema_definition_not_found_in_sdk_schema_1102ce9b": {
-    "message": "Schema definition not found in sdk.schema."
-  },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
     "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
   },
@@ -3560,6 +3554,12 @@
   "test_in_emulator_b1b3c278": {
     "message": "Test in Emulator"
   },
+  "test_in_web_chat_57f58838": {
+    "message": "Test in Web Chat"
+  },
+  "test_in_web_chat_eb14550": {
+    "message": "Test in web chat"
+  },
   "test_with_web_chat_and_emulator_d0f87a81": {
     "message": "Test with Web Chat and Emulator"
   },
@@ -3790,6 +3790,9 @@
   },
   "toolbar_bafd4228": {
     "message": "toolbar"
+  },
+  "topic_e820dbbd": {
+    "message": "(Topic)"
   },
   "total_mb_531a3721": {
     "message": "{ total }MB"
