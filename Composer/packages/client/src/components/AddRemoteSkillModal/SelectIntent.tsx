@@ -139,7 +139,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   // const [diagnostics, setDiagnostics] = useState([]);
   const locale = useRecoilValue(localeState(projectId));
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
-  const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
+  const { batchUpdateLuFiles } = useRecoilValue(dispatcherState);
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const [triggerErrorMessage, setTriggerErrorMsg] = useState('');
 
@@ -174,6 +174,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   }, [manifest]);
 
   const updateLuFiles = useCallback(() => {
+    const payloads: { projectId: string; id: string; content: string }[] = [];
     rootLuFiles?.map(async (lufile) => {
       const rootId = lufile.id.split('.');
       const language = rootId[rootId.length - 1];
@@ -187,14 +188,13 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         }
         append = mergeIntentsContent(intents);
       }
-      const payload = {
+      payloads.push({
         projectId,
         id: lufile.id,
         content: lufile.content + `\n # ${manifest.name} \n` + append,
-      };
-      console.log(lufile.id, projectId, append);
-      await updateLuFileDispatcher(payload);
+      });
     });
+    batchUpdateLuFiles(payloads);
   }, [rootLuFiles, projectId, locale, displayContent, multiLanguageIntents]);
 
   useEffect(() => {
@@ -245,7 +245,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           }
         });
       });
-      console.log(multiLanguageIntents);
       setMultiLanguageIntents(multiLanguageIntents);
       // current locale, selected intent value.
       const intentsValue = mergeIntentsContent(intents);
@@ -269,7 +268,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     // append remote lufile into root lu file
     updateLuFiles();
     // add trigger to root
-    onSubmit(ev, displayContent, enableOchestractor);
+    // onSubmit(ev, displayContent, enableOchestractor);
   };
 
   return (
