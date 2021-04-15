@@ -11,9 +11,11 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   get: (projectId: string) => ({ get }) => {
     const dialogIds = get(dialogIdsState(projectId));
 
-    return dialogIds.map((dialogId) => {
-      return get(dialogState({ projectId, dialogId }));
-    });
+    return dialogIds
+      .map((dialogId) => {
+        return get(dialogState({ projectId, dialogId }));
+      })
+      .filter((d) => !d.isTopic);
   },
   set: (projectId: string) => ({ set }, newDialogs) => {
     const newDialogArray = newDialogs as DialogInfo[];
@@ -23,6 +25,19 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
       newDialogArray.map((dialog) => dialog.id)
     );
     newDialogArray.forEach((dialog) => set(dialogState({ projectId, dialogId: dialog.id }), dialog));
+  },
+});
+
+export const topicsSelectorFamily = selectorFamily<DialogInfo[], string>({
+  key: 'topics',
+  get: (projectId: string) => ({ get }) => {
+    const dialogIds = get(dialogIdsState(projectId));
+
+    return dialogIds
+      .map((dialogId) => {
+        return get(dialogState({ projectId, dialogId }));
+      })
+      .filter((d) => d.isTopic);
   },
 });
 

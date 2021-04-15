@@ -8,7 +8,7 @@ context('Notification Page', () => {
 
   it('can show lg syntax error ', () => {
     cy.visitPage('Design');
-    cy.visitPage('Bot Responses');
+    cy.visitPage('Bot responses');
 
     cy.findByTestId('ProjectTree').within(() => {
       cy.findAllByText('__TestToDoBotWithLuisSample').last().click();
@@ -23,12 +23,12 @@ context('Notification Page', () => {
       cy.findAllByText('__TestToDoBotWithLuisSample.en-us.lg').should('exist').first().click();
     });
 
-    cy.findAllByText('Bot Responses').should('exist');
+    cy.findAllByText('Bot responses').should('exist');
   });
 
   it('can show lu syntax error ', () => {
     cy.visitPage('Design');
-    cy.visitPage('User Input');
+    cy.visitPage('User input');
 
     cy.findByTestId('ProjectTree').within(() => {
       cy.findAllByText('__TestToDoBotWithLuisSample').last().click();

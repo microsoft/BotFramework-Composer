@@ -31,6 +31,7 @@ const renderSelectDialog = ({ createDialog, navTo, onChange } = {}) => {
       { id: 'dialog2', displayName: 'dialog2' },
       { id: 'dialog3', displayName: 'dialog3' },
     ],
+    topics: [{ id: 'topic1', displayName: 'topic1', isTopic: true }],
   };
   return render(
     <EditorExtension shell={{ api: shell, data: shellData }}>
