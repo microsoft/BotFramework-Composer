@@ -195,7 +195,9 @@ export const settingsDispatcher = () => {
       const isAdaptiveRuntime = isUsingAdaptiveRuntime(settings.runtime);
       set(settingsState(projectId), (currentValue) => {
         if (isAdaptiveRuntime) {
-          const callers = [...settings.runtimeSettings?.skills?.allowedCallers];
+          const callers = settings.runtimeSettings?.skills?.allowedCallers
+            ? [...settings.runtimeSettings?.skills?.allowedCallers]
+            : [];
           if (!callers?.find((item) => item === msAppId)) {
             callers.push(msAppId);
           }
@@ -216,7 +218,9 @@ export const settingsDispatcher = () => {
             },
           };
         } else {
-          const callers = [...settings.skillConfiguration?.allowedCallers];
+          const callers = settings.skillConfiguration?.allowedCallers
+            ? [...settings.skillConfiguration?.allowedCallers]
+            : [];
           if (!callers?.find((item) => item === msAppId)) {
             callers.push(msAppId);
           }

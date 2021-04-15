@@ -82,12 +82,20 @@ export const botProjectFileDispatcher = () => {
           delete draftState.skill[botNameIdentifier];
         }
         // remove msAppId in allowCallers
-        if (msAppId && draftState?.skillConfiguration?.allowedCallers?.length > 0) {
+        if (
+          msAppId &&
+          draftState?.skillConfiguration?.allowedCallers &&
+          draftState?.skillConfiguration?.allowedCallers.length > 0
+        ) {
           draftState.skillConfiguration.allowedCallers = draftState.skillConfiguration.allowedCallers.filter(
             (item) => item !== msAppId
           );
         }
-        if (msAppId && draftState?.runtimeSettings?.skills?.allowedCallers?.length > 0) {
+        if (
+          msAppId &&
+          draftState?.runtimeSettings?.skills?.allowedCallers &&
+          draftState?.runtimeSettings?.skills?.allowedCallers.length > 0
+        ) {
           draftState.runtimeSettings.skills.allowedCallers = draftState.runtimeSettings.skills.allowedCallers.filter(
             (item) => item !== msAppId
           );
