@@ -44,6 +44,7 @@ import {
 } from '../selectors';
 
 import { lgFilesSelectorFamily } from './lg';
+import { topicsSelectorFamily } from './dialogs';
 // Selector return types
 export type TreeDataPerProject = {
   isRemote: boolean;
@@ -294,6 +295,7 @@ export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
     return projectIds.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(dialogsSelectorFamily(projectId));
+      const topics = get(topicsSelectorFamily(projectId));
       const sortedDialogs = [...dialogs].sort((x, y) => {
         if (x.isRoot) {
           return -1;
@@ -341,6 +343,7 @@ export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
         isRemote,
         isRootBot,
         sortedDialogs,
+        topics,
         luImports,
         lgImports,
         lgImportsList,

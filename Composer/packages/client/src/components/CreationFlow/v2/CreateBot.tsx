@@ -118,7 +118,6 @@ type CreateBotProps = {
   location?: WindowLocation | undefined;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
-  fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 };
 

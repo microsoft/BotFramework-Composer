@@ -62,7 +62,7 @@ export async function getProjTemplatesV2(req: any, res: any) {
       templates = templates.concat(await getNpmTemplates());
     }
 
-    const sortedTemplateList = sortTemplates(templates);
+    const sortedTemplateList = await sortTemplates(templates);
 
     // return templates
     res.status(200).json(sortedTemplateList);
