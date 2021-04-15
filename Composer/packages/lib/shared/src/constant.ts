@@ -352,7 +352,7 @@ export const QnALocales = [
 const adaptiveCardJsonBody =
   '-```\
 \n{\
-\n      "$schema",\
+\n      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",\
 \n      "version": "1.0",\
 \n      "type": "AdaptiveCard",\
 \n      "speak": "",\
