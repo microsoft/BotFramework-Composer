@@ -12,7 +12,6 @@ describe('<CreateOptionsV2/>', () => {
   const handleCreateNextMock = jest.fn();
   const handleJumpToOpenModal = jest.fn();
   const handleFetchReadMeMock = jest.fn();
-  const handleFetchTemplatesMock = jest.fn();
 
   const templates = [
     {
@@ -34,7 +33,6 @@ describe('<CreateOptionsV2/>', () => {
     return renderWithRecoil(
       <CreateOptionsV2
         fetchReadMe={handleFetchReadMeMock}
-        fetchTemplates={handleFetchTemplatesMock}
         path="create"
         templates={templates}
         onDismiss={handleDismissMock}
