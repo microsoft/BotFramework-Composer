@@ -12,7 +12,7 @@ context('Navigate Url', () => {
   });
 
   it('should open Define Conversations window from a url', () => {
-    cy.visit('/projects/create/TodoSample');
+    cy.visit('/projects/create/dotnet/conversationalCore');
     cy.get('[data-testid="NewDialogName"]').should('be.visible');
   });
 
