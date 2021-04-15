@@ -76,7 +76,7 @@
     "@bfc/server-workers": "*",
     "@bfc/shared": "*",
     "@botframework-composer/types": "*",
-    "@microsoft/bf-dialog": "4.13.1",
+    "@microsoft/bf-dialog": "4.14.0-dev.20210415.161c029",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
     "@microsoft/bf-generate-library": "^4.14.0-preview.20210605.ff079e5",
     "@microsoft/bf-lu": "4.14.0-dev.20210602.be805a8",
