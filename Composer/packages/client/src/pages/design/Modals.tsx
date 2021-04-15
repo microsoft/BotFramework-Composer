@@ -81,7 +81,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
     const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+    return mergePluginConfigs(plugins, { uiSchema: sdkUISchema }, { uiSchema: userUISchema });
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   async function handleCreateDialogSubmit(projectId, dialogName, dialogData) {

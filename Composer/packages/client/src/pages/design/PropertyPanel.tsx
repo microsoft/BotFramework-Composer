@@ -48,7 +48,7 @@ const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '',
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
     const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+    return mergePluginConfigs(plugins, { uiSchema: sdkUISchema }, { uiSchema: userUISchema });
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   return (
