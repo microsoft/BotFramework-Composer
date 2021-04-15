@@ -17,7 +17,6 @@ export enum DiagnosticType {
   SKILL,
   SETTING,
   GENERAL,
-  SCHEMA,
 }
 
 export interface IDiagnosticInfo {
@@ -31,7 +30,7 @@ export interface IDiagnosticInfo {
   diagnostic: any;
   dialogPath?: string; //the data path in dialog
   resourceId: string; // id without locale
-  getUrl: () => string;
+  getUrl: (hash?: string) => string;
 }
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
@@ -95,10 +94,6 @@ export class DialogDiagnostic extends DiagnosticInfo {
   };
 }
 
-export class SchemaDiagnostic extends DialogDiagnostic {
-  type = DiagnosticType.SCHEMA;
-}
-
 export class SkillSettingDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.SKILL;
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
@@ -124,8 +119,8 @@ export class SettingDiagnostic extends DiagnosticInfo {
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
-  getUrl = () => {
-    return createBotSettingUrl(this.rootProjectId, this.projectId);
+  getUrl = (hash?: string) => {
+    return createBotSettingUrl(this.rootProjectId, this.projectId, hash);
   };
 }
 
