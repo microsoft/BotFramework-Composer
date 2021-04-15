@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Image, ImageFit, ImageLoadState } from 'office-ui-fabric-react/lib/Image';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
@@ -54,7 +54,6 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
 }) => {
   const defaultImageCover = cardType === 'video' ? defaultVideoCardCover : defaultArticleCardCover;
   const [appliedImageCover, setAppliedImageCover] = useState<string>(imageCover ?? defaultImageCover);
-  const [useImageBackground, setUseImageBackground] = useState(false);
   const [oddImageSize, setOddImageSize] = useState(false);
   const imageContainerEl = useRef<HTMLDivElement>(null);
   const styles =
@@ -78,26 +77,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     if (aspectRatio < 1.5) {
       setOddImageSize(true);
     }
-    caclImageContainerRect();
   };
-
-  // detect image container dimention, if it's too wide, apply background.
-  // Why not always put a background behind image, because when image size is nearly to container size, we don't want see 1px or 5px black line.
-  const caclImageContainerRect = () => {
-    const containerRect = imageContainerEl.current?.getBoundingClientRect();
-    if (containerRect && containerRect.width > 500) {
-      setUseImageBackground(true);
-    } else {
-      setUseImageBackground(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', caclImageContainerRect);
-    return () => {
-      window.removeEventListener('resize', caclImageContainerRect);
-    };
-  });
 
   return (
     <a
@@ -114,7 +94,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
     >
       <div ref={forwardedRef} aria-label={ariaLabel}>
         <div ref={imageContainerEl} css={styles.imageCover}>
-          {(useImageBackground || oddImageSize) && <div className={'image-cover-background'} />}
+          <div className={oddImageSize ? 'image-cover-background odd-image' : 'image-cover-background'} />
           <Image
             className={'image-cover-img'}
             imageFit={ImageFit.centerContain}

@@ -59,14 +59,18 @@ export const introduction = css`
 
 export const rowContainer = css`
   display: flex;
-  margin: 12px 0;
+  margin-top: 12px;
 `;
 
-export const leftContainer = css`
-  margin-bottom: 10px;
+export const recentBotsContainer = css`
+  margin-top: 12px;
 `;
 
-export const gap40 = css`
+export const resourcesContainer = css`
+  margin-top: 40px;
+`;
+
+export const videosContainer = css`
   margin-top: 40px;
 `;
 
@@ -172,7 +176,8 @@ export const newsDescription = css`
 
 export const cardItem = {
   container: css`
-    margin: 12px 0 12px 12px;
+    font-size: ${fonts.medium.fontSize};
+    margin: 12px 0 0 12px;
     padding: 12px;
     min-width: 244px;
     width: 17vw;
@@ -193,9 +198,8 @@ export const cardItem = {
     }
   `,
   title: css`
-    font-size: ${fonts.small.fontSize};
     font-weight: ${FontWeights.semibold};
-    color: ${NeutralColors.gray160};
+    color: #464844;
     margin-bottom: 4px;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -203,8 +207,8 @@ export const cardItem = {
     overflow: hidden;
   `,
   imageCover: css`
-    width: 53px;
-    height: 48px;
+    width: 40px;
+    height: 36px;
     max-height: 175px;
     margin-bottom: 12px;
     position: relative;
@@ -217,7 +221,6 @@ export const cardItem = {
   `,
   content: css`
     color: ${NeutralColors.gray140};
-    font-size: ${fonts.small.fontSize};
     display: -webkit-box;
     -webkit-line-clamp: 2;
     overflow: hidden;
@@ -244,7 +247,13 @@ export const mediaCardItem = {
     overflow: hidden;
     display: flex;
     .image-cover-background {
-      background: #323130;
+      &.odd-image {
+        background: #323130;
+      }
+      @media (min-width: 4000px) {
+        background: #323130;
+      }
+      background: none;
       position: absolute;
       width: 100%;
       height: 100%;
