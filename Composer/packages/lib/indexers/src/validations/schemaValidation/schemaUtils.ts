@@ -22,7 +22,7 @@ const propertyDefinesActionArray = (propertyDefinition: JSONSchema7): boolean =>
   return type === 'array' && Boolean(get(items, '$kind'));
 };
 
-export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): string[] => {
+const discoverNestedSchemaPaths = (data: BaseSchema, schema: JSONSchema7): string[] => {
   if (isTrigger(schema)) return triggerNesterProperties;
   if (!schema.properties) return [];
 
@@ -31,8 +31,6 @@ export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): stri
   const entries = Object.entries(schema.properties);
   for (const entry of entries) {
     const [propertyName, propertyDef] = entry;
-    const { type, items } = propertyDef as any;
-
     /**
      * Discover child elements (triggers, actions). For example:
      * 1. In Microsoft.IfCondition.schema
@@ -75,10 +73,11 @@ export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): stri
     }
 
     /**
-     * Discover skip-level child elements. Currently, this logic is for handling SwitchCondition.
-     * Reference to SwitchCondition.schema: https://github.com/microsoft/botbuilder-dotnet/blob/main/libraries/Microsoft.Bot.Builder.Dialogs.Adaptive/Schemas/Actions/Microsoft.SwitchCondition.schema
+     * Discover skip-level child elements.
+     * Currently, this logic can only handle skip-level child actions under the 'actions' field.
+     * To discover all possible actions under arbitrary levels / field names, needs to traverse the schema tree.
      * 
-     * Example:
+     * Example: (Reference to SwitchCondition.schema: https://github.com/microsoft/botbuilder-dotnet/blob/main/libraries/Microsoft.Bot.Builder.Dialogs.Adaptive/Schemas/Actions/Microsoft.SwitchCondition.schema)
      *  properties.cases.items.properties = {
      *   "value": { ... },
      *   "actions": { // Discover this property
@@ -91,8 +90,8 @@ export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): stri
      *   }
      * }
      */
-    const actionsUnderItems = get(items, 'properties.actions');
-    const schemaHasSkipLevelActions = type === 'array' && Boolean(actionsUnderItems) && propertyDefinesActionArray(actionsUnderItems);
+    const actionsDefUnderItems = get(propertyDef, 'items.properties.actions');
+    const schemaHasSkipLevelActions = propertyDef?.type === 'array' && Boolean(actionsDefUnderItems) && propertyDefinesActionArray(actionsDefUnderItems);
 
     if (schemaHasSkipLevelActions) {
       propertyData.forEach((caseData, caseIndex) => {
@@ -108,3 +107,12 @@ export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): stri
 
   return nestedPaths;
 };
+
+export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): string[] => {
+  try {
+    return discoverNestedSchemaPaths(data, schema);
+  } catch (e) {
+    // Met potential schema visit bugs
+    return [];
+  }
+}
