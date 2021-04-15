@@ -250,7 +250,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   <PrimaryButton
                     styles={ButtonStyle}
                     text={formatMessage('Next')}
-                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels}
+                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels ? true : false}
                     onClick={(event) => {
                       setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
                       setShowIntentSelectDialog(true);

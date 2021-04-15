@@ -10,7 +10,6 @@ import CreateSkillModal, {
   validateManifestUrl,
   getSkillManifest,
 } from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
-// import {SelectIntent} from '../../src/components/AddRemoteSkillModal/SelectIntent';
 import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
