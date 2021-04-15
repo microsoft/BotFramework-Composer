@@ -7,8 +7,8 @@ import fs from 'fs';
 import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import {
+  isUsingAdaptiveRuntime,
   getNewDesigner,
   FileInfo,
   Diagnostic,
@@ -33,11 +33,19 @@ import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
 
-import { BotStructureFilesPatterns, defaultManifestFilePath, isCrossTrainConfig } from './botStructure';
+import {
+  BotStructureFilesPatterns,
+  defaultManifestFilePath,
+  isCrossTrainConfig,
+  PVATopicFilePatterns,
+  defaultFilePath,
+  serializeFiles,
+  parseFileName,
+  isRecognizer,
+} from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -857,7 +865,7 @@ export class BotProject implements IBotProject {
         '!(scripts/**)',
         '!(settings/appsettings.json)',
         '!(**/luconfig.json)',
-      ],
+      ].concat(process.env.COMPOSER_PVA_TOPICS === 'true' ? PVATopicFilePatterns : []),
       root
     );
 

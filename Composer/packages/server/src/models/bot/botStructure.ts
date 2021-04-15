@@ -33,6 +33,13 @@ const BotStructureTemplate = {
   botProject: '${BOTNAME}.botproj',
   recognizer: 'recognizers/${RECOGNIZERNAME}',
   crossTrainConfig: 'settings/${CROSSTRAINCONFIGNAME}',
+  // PVA
+  topics: {
+    entry: 'topics/${DIALOGNAME}/${DIALOGNAME}.dialog',
+    lg: 'topics/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
+    lu: 'topics/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    dialogSchema: 'topics/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
+  },
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -85,6 +92,13 @@ export const BotStructureFilesPatterns = [
   'dialogs/imported/**/knowledge-base/**/*.qna',
   'dialogs/imported/**/*.dialog.schema',
   'dialogs/*/*.json',
+];
+
+export const PVATopicFilePatterns = [
+  templateInterpolate(BotStructureTemplate.topics.entry, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.topics.dialogSchema, { DIALOGNAME: '*' }),
+  'topics/*/language-generation/**/*.lg',
+  'topics/*/language-understanding/**/*.lu',
 ];
 
 // parse file name: [fileId].[locale].[fileType]

@@ -48,6 +48,7 @@ const emptyDialog: DialogInfo = {
   intentTriggers: [],
   skills: [],
   isFormDialog: false,
+  isTopic: false,
 };
 
 const emptyLg: LgFile = {
