@@ -15,6 +15,9 @@ export const isTrigger = (schema: JSONSchema7): boolean => {
 const triggerNesterProperties = ['actions'];
 
 const propertyDefinesActionArray = (propertyDefinition: JSONSchema7): boolean => {
+  if (!propertyDefinition) {
+    return false;
+  }
   const { type, items } = propertyDefinition;
   return type === 'array' && Boolean(get(items, '$kind'));
 };
@@ -71,12 +74,26 @@ export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): stri
       continue;
     }
 
-    const schemaHasSkipLevelActions = type === 'array' && propertyDefinesActionArray(get(items, 'properties.actions'));
-
     /**
      * Discover skip-level child elements. Currently, this logic is for handling SwitchCondition.
      * Reference to SwitchCondition.schema: https://github.com/microsoft/botbuilder-dotnet/blob/main/libraries/Microsoft.Bot.Builder.Dialogs.Adaptive/Schemas/Actions/Microsoft.SwitchCondition.schema
+     * 
+     * Example:
+     *  properties.cases.items.properties = {
+     *   "value": { ... },
+     *   "actions": { // Discover this property
+     *       "type": "array",
+     *       "items": {
+     *           "$kind": "Microsoft.IDialog"
+     *       },
+     *       "title": "Actions",
+     *       "description": "Actions to execute."
+     *   }
+     * }
      */
+    const actionsUnderItems = get(items, 'properties.actions');
+    const schemaHasSkipLevelActions = type === 'array' && Boolean(actionsUnderItems) && propertyDefinesActionArray(actionsUnderItems);
+
     if (schemaHasSkipLevelActions) {
       propertyData.forEach((caseData, caseIndex) => {
         const caseActions = caseData.actions;

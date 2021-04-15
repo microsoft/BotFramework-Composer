@@ -9,6 +9,7 @@ import {
   IfConditionSchema,
   OnConvUpdateSchema,
   OnDialogEventSchema,
+  SetPropertiesSchema,
   SwitchConditionSchema,
 } from './__mocks__/sdkSchemaMocks';
 
@@ -30,4 +31,18 @@ describe('#schemaUtils', () => {
       expect.arrayContaining(['cases[0].actions', 'default'])
     );
   });
+
+  it('disconverNestedProperties() should defense invalid input.', () => {
+    const setPropertiesStub = {
+      $kind: 'Microsoft.SetProperties',
+      $designer: {
+        id: 'sJzdQm',
+      },
+      assignments: [
+        { property: 'username', value: 'test' }
+      ]
+    };
+
+    expect(discoverNestedPaths(setPropertiesStub, SetPropertiesSchema)).toEqual([]);
+  })
 });
