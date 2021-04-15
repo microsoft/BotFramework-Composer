@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { isSuccessful } from './uitils';
 
 const host = 'http://localhost:3000';
-
 /**
  * Get all built-in templates.
  */
@@ -30,8 +29,9 @@ export async function getProjectTemplates() {
  * Create template bot with package.
  * @param packageName The package name.
  * @param packageVersion The package version.
+ * @param botFolder The folder of bot.
  */
-export async function createSampleBot(packageName: string, packageVersion: string) {
+export async function createSampleBot(packageName: string, packageVersion: string, botFolder: string) {
   if (!packageName || !packageVersion) {
     throw new Error('The sample data is not valid.');
   }
@@ -40,7 +40,7 @@ export async function createSampleBot(packageName: string, packageVersion: strin
     method: 'POST',
     data: {
       description: 'description',
-      location: __dirname, // TODO
+      location: botFolder,
       name: 'testBot' + uuidv4().replace(/-/g, ''),
       runtimeLanguage: 'dotnet',
       runtimeType: 'webapp',

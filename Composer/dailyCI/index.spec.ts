@@ -19,9 +19,10 @@ import { DirectLineUtils } from './directLineUtils';
 
 jest.setTimeout(1000 * 60 * 10);
 
-const publishTarget = 'publish';
+const publishTarget = 'myPublishProfile';
 
-const directlineToken = process.env.DAILY_CI_DIRECTLINE_TOKEN;
+const directlineToken =
+  process.env.DAILY_CI_DIRECTLINE_TOKEN ?? '6D1fgCTy60c.20i46J2iwNR2RKI9yxsZTcf1YhMKKa4bo-kZtLLPVOQ';
 
 async function getPublishProfile() {
   const publishFileStr = process.env.DAILY_CI_PUBLISH_FILE;
@@ -58,9 +59,25 @@ async function setAppSettings(token: string, botId: string, botName: string) {
   return await setAppsettings(defaultSettings, botId);
 }
 
+function ensureDir() {
+  const botPath = path.resolve(__dirname, '../../../Bots');
+  if (!fs.pathExistsSync(botPath)) {
+    fs.mkdirSync(botPath);
+  } else {
+    const state = fs.lstatSync(botPath);
+    if (!state.isDirectory()) {
+      fs.mkdirSync(botPath);
+    }
+  }
+  return botPath;
+}
+
 async function createTemplateProject(templateName: string, templateVersion: string) {
+  const botFolder = ensureDir();
+  console.log(botFolder);
+
   let retryCount = 40;
-  const response = await createSampleBot(templateName, templateVersion);
+  const response = await createSampleBot(templateName, templateVersion, botFolder);
   console.log('createSampleBot');
   let responseData = undefined;
   while (retryCount > 0) {
@@ -110,7 +127,7 @@ async function publishBot(botId: string, botName: string, metadata): Promise<boo
       return false;
     }
     message = statusResult?.message;
-    await sleep(1000);
+    await sleep(10000);
   }
   return true;
 }
