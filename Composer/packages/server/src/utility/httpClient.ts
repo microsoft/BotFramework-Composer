@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import axios from 'axios';
-import axiosHttpsProxy from 'axios-https-proxy';
 
-axios.interceptors.request.use(axiosHttpsProxy);
+import httpsProxy from './httpsProxy';
+
+axios.interceptors.request.use(httpsProxy);
 
 export default axios;

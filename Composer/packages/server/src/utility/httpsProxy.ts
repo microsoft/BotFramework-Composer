@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { URL } from 'url';
 
-import axios from 'axios';
 import httpsProxyAgent, { HttpsProxyAgentOptions } from 'https-proxy-agent';
 
 const httpsProxy = (config) => {
@@ -28,6 +26,4 @@ const httpsProxy = (config) => {
   return config;
 };
 
-axios.interceptors.request.use(httpsProxy);
-
-export default axios;
+export default httpsProxy;
