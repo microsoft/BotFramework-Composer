@@ -138,22 +138,20 @@ export const SelectDialogs: React.FC<ContentProps> = ({ selectedDialogs, setSele
     [projectId]
   );
 
-  const selection = useMemo(
-    () =>
-      new Selection({
-        getKey: (item) => item.id,
-        onSelectionChanged: () => {
-          const selectedItems = selection.getSelection();
-          setSelectedDialogs(selectedItems);
-        },
-      }),
-    []
+  const selectionRef = useRef(
+    new Selection({
+      getKey: (item) => item.id,
+      onSelectionChanged: () => {
+        const selectedItems = selectionRef.current.getSelection();
+        setSelectedDialogs(selectedItems);
+      },
+    })
   );
 
   useEffect(() => {
     for (const item of selectedDialogs) {
-      selection.setKeySelected(selection.getKey(item), true, false);
+      selectionRef.current.setKeySelected(selectionRef.current.getKey(item), true, false);
     }
   }, []);
-  return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
+  return <SelectItems items={items} selection={selectionRef.current} tableColumns={tableColumns} />;
 };

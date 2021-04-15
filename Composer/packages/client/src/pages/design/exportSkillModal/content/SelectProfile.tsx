@@ -163,7 +163,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
       const fileId = getManifestId(botName, skillManifests, manifest);
       setSkillManifest({ ...manifest, id: fileId });
     }
-  }, []);
+  }, [id]);
 
   return isProfileValid ? (
     <div css={styles.container}>
