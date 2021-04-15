@@ -60,7 +60,7 @@ async function setAppSettings(token: string, botId: string, botName: string) {
 
 async function createTemplateProject(templateName: string, templateVersion: string) {
   try {
-    let retryCount = 10;
+    let retryCount = 40;
     const response = await createSampleBot(templateName, templateVersion);
     console.log('createSampleBot');
     let responseData = undefined;
@@ -72,7 +72,7 @@ async function createTemplateProject(templateName: string, templateVersion: stri
         break;
       }
 
-      await sleep(5000);
+      await sleep(10000);
       retryCount--;
     }
 

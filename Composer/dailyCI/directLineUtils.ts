@@ -31,7 +31,7 @@ export class DirectLineUtils {
   }
 
   private async sendMessage(text: string) {
-    let retryCount = 3;
+    let retryCount = 10;
     while (retryCount > 0) {
       try {
         if (!this.conversationId) {
@@ -41,7 +41,7 @@ export class DirectLineUtils {
         return await directLineSendMessage(text, this.conversationId, this.token);
       } catch (error) {
         retryCount--;
-        await sleep(20000);
+        await sleep(10000);
       }
     }
     throw new Error(`sendMessage failed after 3 try times.`);
@@ -49,7 +49,7 @@ export class DirectLineUtils {
 
   private async getLatestResponse() {
     let responseMsg = undefined;
-    let retryCount = 3;
+    let retryCount = 10;
     while (!responseMsg && retryCount > 0) {
       if (!this.conversationId) {
         await createConversation(this.token);
@@ -57,7 +57,7 @@ export class DirectLineUtils {
 
       responseMsg = await directLineGetLastResponse(this.conversationId, this.token);
       if (!responseMsg) {
-        await sleep(20000);
+        await sleep(10000);
         retryCount--;
       }
     }
