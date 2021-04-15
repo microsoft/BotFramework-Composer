@@ -149,7 +149,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         const runtimePath = project.getRuntimePath();
         await runtime.build(runtimePath, project);
         await runtime.setSkillManifest(
-          this.getBotRuntimeDir(botId),
+          project.settings.runtime.path,
           project.fileStorage,
           this.getManifestSrcDir(project.dataDir),
           project.fileStorage,
