@@ -26,7 +26,7 @@ import { TreeLink, TreeMenuItem } from './types';
 
 // -------------------- Styles -------------------- //
 
-const projectTreeItemContainer = css`
+const projectTreeItemContainer = (extraSpace: number) => css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
@@ -37,6 +37,8 @@ const projectTreeItemContainer = css`
   overflow: hidden;
   text-align: left;
   cursor: pointer;
+
+  padding-left: ${extraSpace}px;
 
   label: ProjectTreeItemContainer;
 `;
@@ -93,8 +95,7 @@ const navContainer = (
   isActive: boolean,
   menuOpenHere: boolean,
   textWidth: number,
-  isBroken: boolean,
-  padLeft: number
+  isBroken: boolean
 ) => css`
   ${
     isAnyMenuOpen
@@ -209,6 +210,7 @@ const diagnosticWarningIcon = {
   color: '#8A8780',
   background: '#FFF4CE',
 };
+
 const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;
   overflow: hidden;
@@ -270,7 +272,6 @@ type ITreeItemProps = {
   dialogName?: string;
   textWidth?: number;
   extraSpace?: number;
-  padLeft?: number;
   marginLeft?: number;
   hasChildren?: boolean;
   menu?: TreeMenuItem[];
@@ -411,7 +412,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   textWidth = 100,
   menu = [],
   extraSpace = 0,
-  padLeft = 0,
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
@@ -426,7 +426,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
   const isBroken = !!link.botError;
-  const spacerWidth = extraSpace;
 
   const overflowIconWidthOnHover = overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
 
@@ -456,7 +455,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         <div
           data-is-focusable
           aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
-          css={projectTreeItemContainer}
+          css={projectTreeItemContainer(extraSpace)}
           tabIndex={0}
           onBlur={item.onBlur}
           onFocus={item.onFocus}
@@ -490,7 +489,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         </div>
       );
     },
-    [textWidth, spacerWidth, extraSpace, overflowIconWidthActiveOrChildSelected, showErrors]
+    [textWidth, overflowIconWidthActiveOrChildSelected, showErrors]
   );
 
   const onRenderOverflowButton = useCallback(
@@ -547,14 +546,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   return (
     <div
       aria-label={ariaLabel}
-      css={navContainer(
-        isMenuOpen,
-        isActive,
-        thisItemSelected,
-        textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover,
-        isBroken,
-        padLeft
-      )}
+      css={navContainer(isMenuOpen, isActive, thisItemSelected, textWidth - overflowIconWidthOnHover, isBroken)}
       data-testid={dataTestId}
       role={role}
       tabIndex={0}
@@ -583,7 +575,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         ]}
         overflowItems={overflowMenu}
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(textWidth + extraSpace, showErrors)}
+        onRenderItem={onRenderItem(textWidth, showErrors)}
         onRenderOverflowButton={onRenderOverflowButton(
           !!isActive,
           isChildSelected,
