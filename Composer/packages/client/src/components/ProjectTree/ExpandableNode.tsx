@@ -22,7 +22,6 @@ const listItemStyle = (isActive: boolean, isOpen: boolean) => css`
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
   }
   background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
-  ${isOpen ? '' : 'li { display: none };'}
   ${isOpen
     ? `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='10' width='10' viewBox='0 0 16 16'%3E%3Cpath style='fill:black%3B' d='M 0 8 H 16 L 8 16 L 0 8'/%3E%3C/svg%3E");`
     : `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='10' width='10' viewBox='0 0 16 16'%3E%3Cpath style='fill:black%3B' d='M 8 0 V 16 L 16 8 L 8 0'/%3E%3C/svg%3E");`}
@@ -73,12 +72,7 @@ export const ExpandableNode = ({
       onKeyDown={handleKey}
     >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-      <li
-        css={listItemStyle(isActive, isExpanded)}
-        data-testid={'summaryTag'}
-        onClick={handleClick}
-        onKeyUp={handleKey}
-      >
+      <li css={listItemStyle(isActive, isExpanded)} data-testid={'summaryTag'}>
         {summary}
       </li>
       {isExpanded && <div role="group">{children}</div>}
