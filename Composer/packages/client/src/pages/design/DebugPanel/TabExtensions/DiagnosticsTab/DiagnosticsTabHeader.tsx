@@ -5,12 +5,10 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 
-import { useAutoFix } from './useAutoFix';
 import { useDiagnosticsStatistics } from './useDiagnostics';
 
 export const DiagnosticsHeader = () => {
   const { hasError, hasWarning } = useDiagnosticsStatistics();
-  useAutoFix();
 
   return (
     <div
