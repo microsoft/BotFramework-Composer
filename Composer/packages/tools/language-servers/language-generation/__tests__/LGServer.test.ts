@@ -117,7 +117,7 @@ describe('LG LSP server test', () => {
       [
         (response) => {
           expect(response.id).toEqual(2);
-          expect(response.result.contents.value).toContain('~~~\n# Greeting3\n-Good evening\r\n\n~~~');
+          expect(response.result.contents.value).toContain('-Good evening');
         },
       ]
     );
