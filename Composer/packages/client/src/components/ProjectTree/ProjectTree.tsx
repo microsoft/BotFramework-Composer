@@ -111,7 +111,6 @@ type Props = {
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
-const LEVEL_PADDING = 44; // the size of a reveal-triangle and the space around it
 
 export const ProjectTree: React.FC<Props> = ({
   headerMenu = [],
@@ -292,7 +291,7 @@ export const ProjectTree: React.FC<Props> = ({
     };
   };
 
-  const renderCommonDialogHeader = (skillId: string, depth: number) => {
+  const renderCommonDialogHeader = (skillId: string) => {
     const dialogLink: TreeLink = {
       dialogId: 'common',
       displayName: formatMessage('Common'),
@@ -620,7 +619,7 @@ export const ProjectTree: React.FC<Props> = ({
             (dialog) =>
               filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
           );
-    const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId, 1)] : [];
+    const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId)] : [];
 
     const importedLgLinks = options.showLgImports
       ? lgImportsList.map((file) => renderLgImportAsDialog(file, projectId))

@@ -30,8 +30,8 @@ const listItemStyle = (isActive: boolean, isOpen: boolean) => css`
 const listStyle = css`
   label: list;
   margin-top: 4px;
-  margin-left: 8px;
-  padding-inline-start: 12px;
+  margin-left: 16px;
+  padding-inline-start: 6px;
   margin-block-end: 0px;
 `;
 
