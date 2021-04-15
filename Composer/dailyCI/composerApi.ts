@@ -117,38 +117,42 @@ export async function startPublish(
   publishFile,
   botName: string
 ) {
-  const luResources = metadata.luResources;
-  luResources[luResources.length - 1].id = `${botName}.en-us`;
-  const qnaResources = metadata.qnaResources;
-  qnaResources[qnaResources.length - 1].id = `${botName}.en-us`;
-  const response = await axios.default({
-    url: `${host}/api/publish/${botId}/publish/${targetName}`,
-    method: 'POST',
-    data: {
-      accessToken: token,
-      metadata: {
-        luResources: luResources,
-        qnaResources: qnaResources,
-      },
-      sensitiveSettings: {
-        MicrosoftAppPassword: '',
-        luis: {
-          endpointKey: publishFile.settings.luis.endpointKey,
-          authoringKey: publishFile.settings.luis.authoringKey,
+  try {
+    const luResources = metadata.luResources;
+    luResources[luResources.length - 1].id = `${botName}.en-us`;
+    const qnaResources = metadata.qnaResources;
+    qnaResources[qnaResources.length - 1].id = `${botName}.en-us`;
+    const response = await axios.default({
+      url: `${host}/api/publish/${botId}/publish/${targetName}`,
+      method: 'POST',
+      data: {
+        accessToken: token,
+        metadata: {
+          luResources: luResources,
+          qnaResources: qnaResources,
         },
-        qna: {
-          endpointKey: '',
-          subscriptionKey: publishFile.settings.qna.subscriptionKey,
+        sensitiveSettings: {
+          MicrosoftAppPassword: '',
+          luis: {
+            endpointKey: publishFile.settings.luis.endpointKey,
+            authoringKey: publishFile.settings.luis.authoringKey,
+          },
+          qna: {
+            endpointKey: '',
+            subscriptionKey: publishFile.settings.qna.subscriptionKey,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!isSuccessful(response.status)) {
-    throw new Error('CreatesampleBot failed.');
+    if (!isSuccessful(response.status)) {
+      throw new Error('CreatesampleBot failed.');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
-
-  return response.data;
 }
 
 /**

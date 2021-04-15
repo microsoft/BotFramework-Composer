@@ -59,31 +59,27 @@ async function setAppSettings(token: string, botId: string, botName: string) {
 }
 
 async function createTemplateProject(templateName: string, templateVersion: string) {
-  try {
-    let retryCount = 40;
-    const response = await createSampleBot(templateName, templateVersion);
-    console.log('createSampleBot');
-    let responseData = undefined;
-    while (retryCount > 0) {
-      responseData = await getJobStatus(response.jobId);
-      console.log('getJobStatus');
-      console.log(responseData);
-      if (responseData.statusCode === 200 && responseData.message === 'Created Successfully') {
-        break;
-      }
-
-      await sleep(10000);
-      retryCount--;
+  let retryCount = 40;
+  const response = await createSampleBot(templateName, templateVersion);
+  console.log('createSampleBot');
+  let responseData = undefined;
+  while (retryCount > 0) {
+    responseData = await getJobStatus(response.jobId);
+    console.log('getJobStatus');
+    console.log(responseData);
+    if (responseData.statusCode === 200 && responseData.message === 'Created Successfully') {
+      break;
     }
 
-    if (retryCount <= 0) {
-      throw new Error('Get getJobStatus failed.');
-    }
-
-    return responseData;
-  } catch (error) {
-    console.log(error);
+    await sleep(10000);
+    retryCount--;
   }
+
+  if (retryCount <= 0) {
+    throw new Error('Get getJobStatus failed.');
+  }
+
+  return responseData;
 }
 
 async function publishBot(botId: string, botName: string, metadata): Promise<boolean> {
