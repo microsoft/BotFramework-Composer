@@ -185,12 +185,17 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
   key: 'schemaDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
-    // Why botAssets.dialogSchemas is a list?
     if (botAssets === null) return [];
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
 
-    const sdkSchemaContent = botAssets.dialogSchemas[0]?.content;
+    /**
+     * `botAssets.dialogSchema` contains all *.schema files loaded by project indexer. However, it actually messes up sdk.schema and *.dialog.schema.
+     * To get the correct sdk.schema content, current workaround is to filter schema by id.
+     *
+     * TODO: To fix it entirely, we need to differentiate dialog.schema from sdk.schema in indexer.
+     */
+    const sdkSchemaContent = botAssets.dialogSchemas.find((d) => d.id === '')?.content;
     if (!sdkSchemaContent) return [];
 
     const fullDiagnostics: DiagnosticInfo[] = [];
