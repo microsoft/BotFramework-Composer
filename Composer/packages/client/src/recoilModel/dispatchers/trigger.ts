@@ -83,10 +83,10 @@ export const triggerDispatcher = () => {
           ];
           await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
         } else if (formData.$kind === onChooseIntentKey) {
-          const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[3].prompt`);
+          const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[2].prompt`);
           const designerId2 = getDesignerIdFromDialogPath(
             newDialog,
-            `content.triggers[${index}].actions[4].elseActions[0].activity`
+            `content.triggers[${index}].actions[3].elseActions[0].activity`
           );
           const lgTemplates1: LgTemplate[] = [
             LgTemplateSamples.TextInputPromptForOnChooseIntent(designerId1) as LgTemplate,
@@ -99,6 +99,8 @@ export const triggerDispatcher = () => {
             LgTemplateSamples.pickOne as LgTemplate,
             LgTemplateSamples.getAnswerReadBack as LgTemplate,
             LgTemplateSamples.getIntentReadBack as LgTemplate,
+            LgTemplateSamples.generateChoices as LgTemplate,
+            LgTemplateSamples.choice as LgTemplate,
           ];
           const commonlgFile = lgFiles.find(({ id }) => id === `common.${locale}`);
 

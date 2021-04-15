@@ -187,12 +187,20 @@ const initialDialogShape = () => ({
         },
         assignments: [
           {
-            property: "dialog.minThreshold",
+            property: "turn.minThreshold",
             value: 0.5
           },
           {
+            property: "turn.maxChoices",
+            value: 3
+          },
+          {
+            property: "conversation.lastAmbiguousUtterance",
+            value: "=turn.activity.text"
+          },
+          {
             property: "dialog.candidates",
-            value: "=sortByDescending(where(where(flatten(select(turn.recognized.candidates, x, if (x.intent==\"ChooseIntent\", x.result.candidates, x))), c, not(startsWith(c.intent, \"DeferToRecognizer_QnA\"))), c2, c2.score > dialog.minThreshold), 'score')"
+            value: "=take(sortByDescending(where(flatten(select(turn.recognized.candidates, x, if (x.intent==\"ChooseIntent\", x.result.candidates, x))), c, not(startsWith(c.intent, \"DeferToRecognizer_QnA\")) && c.score > turn.minThreshold), 'score'), turn.maxChoices)"
           }
         ],
       },
@@ -243,22 +251,6 @@ const initialDialogShape = () => ({
         ]
       },
       {
-        $kind: SDKKinds.SetProperties,
-        $designer: {
-          id: generateDesignerId(),
-        },
-        assignments: [
-          {
-            property: "dialog.firstResult",
-            value: "=dialog.candidates[0]"
-          },
-          {
-            property: "dialog.secondResult",
-            value: "=dialog.candidates[1]"
-          }
-        ]
-      },
-      {
         $kind: SDKKinds.TextInput,
         $designer: {
           id: generateDesignerId(),
@@ -292,7 +284,7 @@ const initialDialogShape = () => ({
               id: generateDesignerId(),
             },
             eventName: 'recognizedIntent',
-            eventValue: '=dialog[turn.intentChoice].result',
+            eventValue: '=dialog.candidates[int(turn.intentChoice)].result',
           },
         ],
         elseActions: [

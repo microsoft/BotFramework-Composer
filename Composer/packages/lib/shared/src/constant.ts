@@ -372,14 +372,7 @@ const adaptiveCardJsonBody =
 \n              "placeholder": "Placeholder text",\
 \n              "id": "userChosenIntent",\
 \n              "choices": [\
-\n                           {\
-\n                               "title": "${getIntentReadBack(dialog.firstResult.intent)}",\
-\n                               "value": "firstResult"\
-\n                           },\
-\n                           {\
-\n                               "title": "${getIntentReadBack(dialog.secondResult.intent)}",\
-\n                               "value": "secondResult"\
-\n                           },\
+\n                           ${generateChoices(candidates)},\
 \n                           {\
 \n                               "title": "None of the above",\
 \n                               "value": "none"\
@@ -424,6 +417,14 @@ const getIntentReadBack = `\
   - \${intent}
 `;
 
+const generateChoices = `\
+- \${join(foreach(indicesAndValues(candidates), c, choice(c.value.intent, c.index)), ',')}
+`;
+
+const choice = `\
+-  { "title": "\${getIntentReadBack(title)}", "value": "\${value}" }
+`
+
 const getAnswerReadBack = `- See an answer from the Knowledge Base
 `;
 
@@ -431,6 +432,7 @@ export const LgTemplateSamples = {
   ['adaptiveCardJson']: {
     name: 'AdaptiveCardJson',
     body: adaptiveCardJsonBody,
+    parameters: ['candidates']
   },
   ['whichOneDidYouMean']: {
     name: `whichOneDidYouMean`,
@@ -449,11 +451,21 @@ export const LgTemplateSamples = {
     parameters: ['intent'],
     body: getIntentReadBack,
   },
+  ['generateChoices']: {
+    name: 'generateChoices',
+    parameters: ['candidates'],
+    body: generateChoices,
+  },
+  ['choice']: {
+    name: 'choice',
+    parameters: ['title', 'value'],
+    body: choice
+  },
   TextInputPromptForOnChooseIntent: (designerId) => {
     return {
       name: `TextInput_Prompt_${designerId}`,
       body: `[Activity
-    Attachments = \${json(AdaptiveCardJson())}
+    Attachments = \${json(AdaptiveCardJson(dialog.candidates))}
 ]
 `,
     };
