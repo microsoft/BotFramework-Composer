@@ -76,7 +76,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       const updatedSetting = isAdaptive
         ? {
             ...cloneDeep(mergedSettings),
-            runtimeSettings: { ...runtimeSettings, skills: { ...runtimeSettings.skills, allowedCallers } },
+            runtimeSettings: { ...runtimeSettings, skills: { ...runtimeSettings?.skills, allowedCallers } },
           }
         : {
             ...cloneDeep(mergedSettings),
@@ -114,7 +114,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     }
   };
 
-  const handleTriggerPublish = async () => {
+  const handleTriggerPublish = () => {
     const filePath = `https://${JSON.parse(currentTarget.configuration).hostname}.azurewebsites.net/manifests/${
       skillManifest.id
     }.json`;
@@ -202,7 +202,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             schema={schema}
             selectedDialogs={selectedDialogs}
             selectedTriggers={selectedTriggers}
-            setCallers={setCallers}
+            onUpdateCallers={setCallers}
             setErrors={setErrors}
             setSchema={setSchema}
             setSelectedDialogs={setSelectedDialogs}

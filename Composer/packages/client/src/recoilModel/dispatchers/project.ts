@@ -503,7 +503,7 @@ export const projectDispatcher = () => {
   );
 
   const updateCurrentTarget = useRecoilCallback<[string, PublishTarget], void>(
-    ({ set }: CallbackInterface) => async (projectId: string, currentTarget) => {
+    ({ set }: CallbackInterface) => (projectId: string, currentTarget) => {
       set(currentTargetState(projectId), currentTarget);
     }
   );
