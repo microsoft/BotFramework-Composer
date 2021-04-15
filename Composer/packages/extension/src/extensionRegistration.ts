@@ -114,7 +114,7 @@ export class ExtensionRegistration implements IExtensionRegistration {
    * @param plugin
    * Expose a runtime template to the Composer UI. Registered templates will become available in the "Runtime settings" tab.
    * When selected, the full content of the `path` will be copied into the project's `runtime` folder. Then, when a user clicks
-   * `Start Bot`, the `startCommand` will be executed.  The expected result is that a bot application launches and is made available
+   * `Start bot`, the `startCommand` will be executed.  The expected result is that a bot application launches and is made available
    * to communicate with the Bot Framework Emulator.
    * ```ts
    * await composer.addRuntimeTemplate({

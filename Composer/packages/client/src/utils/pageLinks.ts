@@ -45,14 +45,14 @@ export const topLinks = (
     {
       to: linkBase + `language-generation/${openedDialogId}`,
       iconName: 'Robot',
-      labelName: formatMessage('Bot Responses'),
+      labelName: formatMessage('Bot responses'),
       disabled: !botLoaded,
       match: /language-generation\/[a-zA-Z0-9_-]+$/,
     },
     {
       to: linkBase + `language-understanding/${openedDialogId}`,
       iconName: 'People',
-      labelName: formatMessage('User Input'),
+      labelName: formatMessage('User input'),
       disabled: !botLoaded,
       match: /language-understanding\/[a-zA-Z0-9_-]+$/,
     },
@@ -79,7 +79,7 @@ export const topLinks = (
     {
       to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
       iconName: 'BotProjectsSettings',
-      labelName: formatMessage('Project Settings'),
+      labelName: formatMessage('Project settings'),
       disabled: !botLoaded,
       match: /botProjectsSettings/,
     },
@@ -118,7 +118,7 @@ export const bottomLinks: PageLink[] = [
   {
     to: `/settings`,
     iconName: 'Settings',
-    labelName: formatMessage('Composer Settings'),
+    labelName: formatMessage('Composer settings'),
     disabled: false,
   },
   // {
