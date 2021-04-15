@@ -35,7 +35,12 @@ import {
 import { Toolbar, IToolbarItem, LoadingSpinner, DisplayMarkdownDialog } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
-import { ContentHeaderStyle, HeaderText } from '../components/styles';
+import {
+  ContentHeaderStyle,
+  HeaderText,
+  packageScrollContainerStyle,
+  tabAndSearchBarStyles,
+} from '../components/styles';
 import { ImportDialog } from '../components/ImportDialog';
 import { LibraryRef, LibraryList, LetterIcon } from '../components/LibraryList';
 import { WorkingModal } from '../components/WorkingModal';
@@ -603,7 +608,7 @@ const Library: React.FC = () => {
           </Link>
         </p>
       </div>
-      <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC', height: 'calc(100% - 150px)' } }}>
+      <Stack horizontal verticalFill styles={packageScrollContainerStyle}>
         {projectCollection && projectCollection.length > 1 && (
           <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
             <ProjectList
@@ -632,7 +637,7 @@ const Library: React.FC = () => {
            *  This is the top nav that includes the tabs and search bar
            ****************************************************************************/}
 
-          <Stack horizontal styles={{ root: { paddingLeft: '12px', paddingRight: '20px', height: '48px' } }}>
+          <Stack horizontal styles={tabAndSearchBarStyles}>
             <Stack.Item align="stretch">
               <Pivot aria-label="Library Views" onLinkClick={(item: PivotItem) => setCurrentTab(item.props.itemKey)}>
                 <PivotItem headerText={strings.browseHeader} itemKey={TABS.BROWSE} />
