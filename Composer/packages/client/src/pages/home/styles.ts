@@ -126,11 +126,6 @@ export const bluetitle = css`
   margin: 16px 0 0 0;
 `;
 
-export const recentBotsTitle = css`
-  ${subtitle};
-  padding: 18px 0;
-`;
-
 export const toolbar = css`
   border-bottom: none;
   button: {
@@ -310,7 +305,7 @@ export const whatsNewsContainer = css`
   flex: 1;
   padding: 20px 25px 25px 25px;
   border-radius: 5px;
-  margin: 20px 0 55px 0;
+  margin: 20px 0 25px 0;
   background: #f6f6f6;
   @media (max-width: 1416px) {
     background: none;

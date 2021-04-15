@@ -146,7 +146,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
         <div css={home.leftPage} role="main">
           <div css={home.recentBotsContainer}>
-            <h2 css={home.recentBotsTitle}>{formatMessage(`Recent Bots`)}</h2>
+            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
             <Toolbar css={home.toolbar} toolbarItems={toolbarItems} />
             {recentProjects.length > 0 ? (
               <RecentBotList
