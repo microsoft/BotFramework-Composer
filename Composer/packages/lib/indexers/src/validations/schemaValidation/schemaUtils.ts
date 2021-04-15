@@ -91,7 +91,10 @@ const discoverNestedSchemaPaths = (data: BaseSchema, schema: JSONSchema7): strin
      * }
      */
     const actionsDefUnderItems = get(propertyDef, 'items.properties.actions');
-    const schemaHasSkipLevelActions = propertyDef?.type === 'array' && Boolean(actionsDefUnderItems) && propertyDefinesActionArray(actionsDefUnderItems);
+    const schemaHasSkipLevelActions =
+      propertyDef?.type === 'array'
+      && Boolean(actionsDefUnderItems)
+      && propertyDefinesActionArray(actionsDefUnderItems);
 
     if (schemaHasSkipLevelActions) {
       propertyData.forEach((caseData, caseIndex) => {
