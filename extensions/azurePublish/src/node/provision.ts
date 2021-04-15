@@ -8,7 +8,7 @@ import { BotProjectDeployLoggerType } from './types';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
 import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
 import { AzureResourceTypes } from './resourceTypes';
-import { createCustomizeError, ProvisionErrors, stringifyError } from './utils/errorHandler';
+import { createCustomizeError, ProvisionErrors } from './utils/errorHandler';
 
 export interface ProvisionConfig {
   accessToken: string;
@@ -23,6 +23,11 @@ export interface ProvisionConfig {
   logger?: (string) => any;
   name: string; // profile name
   type: string; // webapp or function
+  /**
+   * The worker runtime language for Azure functions.
+   * Currently documented values: dotnet, node, java, python, or powershell
+   */
+  workerRuntime?: string;
   choice?: string;
   [key: string]: any;
 }
@@ -242,7 +247,8 @@ export class BotProjectProvision {
     try {
       // ensure a tenantId is available.
       if (!this.tenantId) {
-        this.tenantId = await this.getTenantId();
+        this.tenantId = config.tenantId ?? (await this.getTenantId());
+        provisionResults.tenantId = this.tenantId;
       }
 
       // tokenCredentials is used for authentication across the API calls
@@ -326,6 +332,7 @@ export class BotProjectProvision {
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname,
+              workerRuntime: config.workerRuntime,
             });
             provisionResults.webApp = {
               hostname: functionsHostName,

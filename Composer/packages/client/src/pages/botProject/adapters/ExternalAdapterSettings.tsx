@@ -14,12 +14,13 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { JSONSchema7 } from '@botframework-composer/types';
+import { AdapterRecord } from '@botframework-composer/types/src';
 
 import { useRouterCache } from '../../../utils/hooks';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
 
-import AdapterModal, { AdapterRecord, hasRequired } from './ExternalAdapterModal';
+import AdapterModal, { hasRequired } from './ExternalAdapterModal';
 
 //////////
 
@@ -56,10 +57,10 @@ const ExternalAdapterSettings = (props: Props) => {
 
   const externalServices = (schemas: (JSONSchema7 & { key: string; packageName?: string; firstTime?: boolean })[]) => (
     <div role="table">
-      <div key={'subtitle'} css={subtitle}>
+      <div css={subtitle}>
         {formatMessage.rich('Install more adapters in <a>the package manager</a>.', {
           a: ({ children }) => (
-            <Link key="link" href={packageManagerLink}>
+            <Link key="subtitle-link" href={packageManagerLink}>
               {children}
             </Link>
           ),

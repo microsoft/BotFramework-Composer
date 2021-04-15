@@ -7,6 +7,7 @@ import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react'
 import { useRecoilValue } from 'recoil';
 import { ConversationTrafficItem } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
+import debounce from 'lodash/debounce';
 
 import {
   dispatcherState,
@@ -42,6 +43,10 @@ const logPane = css`
   box-sizing: border-box;
 `;
 
+const itemIsSelected = (item: ConversationTrafficItem, currentInspectionData?: WebChatInspectionData) => {
+  return item.id === currentInspectionData?.item?.id;
+};
+
 // R12: We are showing Errors from the root bot only.
 export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
@@ -59,9 +64,33 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     }
   };
 
+  const performInspection = useRef(
+    debounce((trafficItem: ConversationTrafficItem) => {
+      if (currentProjectId) {
+        if (trafficItem?.trafficType === 'network') {
+          // default to inspecting the request body
+          setWebChatInspectionData(currentProjectId, { item: trafficItem, mode: 'request' });
+        } else {
+          setWebChatInspectionData(currentProjectId, { item: trafficItem });
+        }
+      }
+    }, 500)
+  ).current;
+
+  const inspectLatestLogMessage = () => {
+    // inspect latest log message if nothing is being inspected
+    if (!inspectionData && currentProjectId) {
+      const latestTrafficItem = [...rawWebChatTraffic].pop();
+      if (latestTrafficItem) {
+        performInspection(latestTrafficItem);
+      }
+    }
+  };
+
   useEffect(() => {
     if (navigateToLatestEntry && isActive) {
       navigateToNewestLogEntry();
+      inspectLatestLogMessage();
       navigateToLatestEntryWhenActive(false);
     }
   }, [isActive, navigateToLatestEntry]);
@@ -80,16 +109,37 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   );
 
   const renderLogItem = useCallback(
-    (item: ConversationTrafficItem, index: number) => {
+    (item: ConversationTrafficItem, index: number, inspectionData?: WebChatInspectionData) => {
       switch (item.trafficType) {
         case 'activity':
-          return <WebChatActivityLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+          return (
+            <WebChatActivityLogItem
+              index={index}
+              isSelected={itemIsSelected(item, inspectionData)}
+              item={item}
+              onClickTraffic={onClickTraffic}
+            />
+          );
 
         case 'network':
-          return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+          return (
+            <WebChatNetworkLogItem
+              index={index}
+              isSelected={itemIsSelected(item, inspectionData)}
+              item={item}
+              onClickTraffic={onClickTraffic}
+            />
+          );
 
         case 'networkError':
-          return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+          return (
+            <WebChatNetworkLogItem
+              index={index}
+              isSelected={itemIsSelected(item, inspectionData)}
+              item={item}
+              onClickTraffic={onClickTraffic}
+            />
+          );
 
         default:
           return null;
@@ -99,12 +149,10 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   );
 
   const displayedTraffic = useMemo(() => {
-    const sortedTraffic = [...rawWebChatTraffic]
-      .sort((t1, t2) => t1.timestamp - t2.timestamp)
-      .map((t, i) => renderLogItem(t, i));
-    setLogItemCount(sortedTraffic.length);
-    return sortedTraffic;
-  }, [rawWebChatTraffic, renderLogItem]);
+    const renderedTraffic = [...rawWebChatTraffic].map((t, i) => renderLogItem(t, i, inspectionData));
+    setLogItemCount(renderedTraffic.length);
+    return renderedTraffic;
+  }, [inspectionData, rawWebChatTraffic, renderLogItem]);
 
   const setInspectionData = (data: WebChatInspectionData) => {
     if (currentProjectId) {

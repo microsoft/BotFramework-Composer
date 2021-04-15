@@ -19,6 +19,7 @@ import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices'
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
+import sortBy from 'lodash/sortBy';
 
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -30,7 +31,7 @@ import { dispatcherState } from '../../recoilModel/atoms';
 type ManageLuisProps = {
   hidden: boolean;
   onDismiss: () => void;
-  onGetKey: (settings: { authoringKey: string; endpointKey: string; authoringRegion: string }) => void;
+  onGetKey: (settings: { authoringKey: string; authoringRegion: string }) => void;
   onNext?: () => void;
   setDisplayManageLuis: (value: any) => void;
 };
@@ -67,10 +68,8 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const [nextAction, setNextAction] = useState<string>('create');
   const [actionOptions, setActionOptions] = useState<IChoiceGroupOption[]>([]);
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>('');
-  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>('');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>('');
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
-  const [predictionKeys, setPredictionKeys] = useState<KeyRec[]>([]);
   const [authoringKeys, setAuthoringKeys] = useState<KeyRec[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -85,7 +84,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const subscriptionsResult = await subscriptionClient.subscriptions.list();
       // eslint-disable-next-line no-underscore-dangle
-      return subscriptionsResult._response.parsedBody;
+      return sortBy(subscriptionsResult._response.parsedBody, ['displayName']);
     } catch (err) {
       setApplicationLevelError(err);
       return [];
@@ -118,11 +117,10 @@ export const ManageLuis = (props: ManageLuisProps) => {
     // reset the ui
     setSubscription('');
     setAuthoringKeys([]);
-    setPredictionKeys([]);
     setCurrentPage(1);
     setActionOptions([
       { key: 'create', text: formatMessage('Create a new LUIS resource'), disabled: true },
-      { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: true },
+      { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: true },
       { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
     ]);
     if (!props.hidden) {
@@ -170,25 +168,20 @@ export const ManageLuis = (props: ManageLuisProps) => {
         cognitiveServicesManagementClient,
         accounts.filter((a) => a.kind === 'LUIS.Authoring')
       );
-      const prediction: KeyRec[] = await fetchKeys(
-        cognitiveServicesManagementClient,
-        accounts.filter((a) => a.kind === 'LUIS')
-      );
       setLoadingLUIS(false);
-      if (authoring.length == 0 || prediction.length == 0) {
+      if (authoring.length == 0) {
         setNoKeys(true);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new LUIS resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: true },
         ]);
       } else {
         setNoKeys(false);
         setAuthoringKeys(authoring);
-        setPredictionKeys(prediction);
         setActionOptions([
           { key: 'create', text: formatMessage('Create a new LUIS resource') },
-          { key: 'handoff', text: formatMessage('Generate a resource request'), disabled: false },
+          { key: 'handoff', text: formatMessage('Handoff to admin'), disabled: false },
           { key: 'choose', text: formatMessage('Choose from existing'), disabled: false },
         ]);
       }
@@ -213,7 +206,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
   };
 
   const createLUIS = async () => {
-    let endpointKey = '';
     let authoringKey = '';
     if (token) {
       setLoadingLUIS(true);
@@ -280,41 +272,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
         setLoadingLUIS(false);
         return;
       }
-      try {
-        await cognitiveServicesManagementClient.accounts.create(resourceGroupName, `${luisResourceName}`, {
-          kind: 'LUIS',
-          sku: {
-            name: 'S0',
-          },
-          location: localRootLuisRegion,
-        });
-
-        const keys = await cognitiveServicesManagementClient.accounts.listKeys(
-          resourceGroupName,
-          `${luisResourceName}`
-        );
-        if (!keys?.key1) {
-          throw new Error('No key found for newly created authoring resource');
-        } else {
-          endpointKey = keys.key1;
-          setLocalRootLuisEndpointKey(keys.key1);
-        }
-      } catch (err) {
-        setOutcomeDescription(
-          formatMessage(
-            'Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:'
-          )
-        );
-        setOutcomeSummary(
-          <div>
-            <p>{err.message}</p>
-          </div>
-        );
-        setOutcomeError(true);
-        setCurrentPage(3);
-        setLoadingLUIS(false);
-        return;
-      }
 
       setLoadingLUIS(false);
 
@@ -347,7 +304,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
       // this will pass the new values back to the caller
       props.onGetKey({
         authoringKey: authoringKey,
-        endpointKey: endpointKey,
         authoringRegion: localRootLuisRegion,
       });
 
@@ -367,10 +323,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
     // get list of luis keys for this subscription
     setLocalRootLuisKey(opt.key);
     setLocalRootLuisRegion(opt.region);
-  };
-  const onChangeLUISPrediction = async (_, opt) => {
-    // get list of luis keys for this subscription
-    setLocalRootLuisEndpointKey(opt.key);
   };
 
   const onChangeAction = async (_, opt) => {
@@ -392,7 +344,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
       // close the modal!
       props.onGetKey({
         authoringKey: localRootLuisKey,
-        endpointKey: localRootLuisEndpointKey,
         authoringRegion: localRootLuisRegion,
       });
       setOutcomeDescription(formatMessage('The following LUIS keys have been successfully added to your bot project:'));
@@ -401,10 +352,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Authoring key')}</label>
             {localRootLuisKey}
-          </p>
-          <p>
-            <label css={summaryLabelStyles}>{formatMessage('Endpoint Key')}</label>
-            {localRootLuisEndpointKey}
           </p>
           <p>
             <label css={summaryLabelStyles}>{formatMessage('Region')}</label>
@@ -438,11 +385,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
   const renderPageOne = () => {
     return (
       <div>
-        <p>
-          {formatMessage(
-            'Select your Azure subscription and choose from existing LUIS keys, or create a new LUIS resource. Learn more'
-          )}
-        </p>
+        <p>{formatMessage('How would you like to provision this resource?')}</p>
         <div css={mainElementStyle}>
           <Dropdown
             disabled={!(availableSubscriptions?.length > 0)}
@@ -483,18 +426,6 @@ export const ManageLuis = (props: ManageLuisProps) => {
                   styles={dropdownStyles}
                   onChange={onChangeLUISAuthoring}
                 />
-                <Dropdown
-                  disabled={!(predictionKeys?.length > 0) || nextAction !== 'choose'}
-                  label={formatMessage('Prediction key')}
-                  options={
-                    predictionKeys.map((p) => {
-                      return { text: p.name, ...p };
-                    }) ?? []
-                  }
-                  placeholder={formatMessage('Select one')}
-                  styles={dropdownStyles}
-                  onChange={onChangeLUISPrediction}
-                />
               </div>
             )}
           </div>
@@ -506,7 +437,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
           <PrimaryButton
             disabled={
               loadingLUIS ||
-              (nextAction === 'choose' && !(localRootLuisRegion && localRootLuisKey && localRootLuisEndpointKey)) ||
+              (nextAction === 'choose' && !(localRootLuisRegion && localRootLuisKey)) ||
               (nextAction === 'create' && !subscriptionId)
             }
             text={formatMessage('Next')}
@@ -644,10 +575,10 @@ export const ManageLuis = (props: ManageLuisProps) => {
       )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share this information with your Azure admin. After your Luis key is provisioned, you will be ready to test your bot.'
+          'Copy and share this information with your Azure admin to provision resources on your behalf.'
         )}
         handoffInstructions={formatMessage(
-          'Using the Azure portal, create a Language Understanding resource. Create these in a subscription that the developer has accesss to. This will result in an authoring key and an endpoint key.  Provide these keys to the developer in a secure manner.'
+          'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis'
         )}
         hidden={!showHandoff}
         title={formatMessage('Share resource request')}
@@ -665,7 +596,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
         hidden={props.hidden}
         minWidth={480}
         modalProps={{
-          isBlocking: false,
+          isBlocking: true,
         }}
         onDismiss={props.onDismiss}
       >

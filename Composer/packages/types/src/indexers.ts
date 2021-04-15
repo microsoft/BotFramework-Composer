@@ -67,6 +67,7 @@ export type DialogInfo = {
   skills: string[];
   luProvider?: LuProviderType;
   isFormDialog: boolean;
+  isTopic: boolean;
 };
 
 export type LgTemplateJsonPath = {

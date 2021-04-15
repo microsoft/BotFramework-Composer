@@ -173,8 +173,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
 
-      const mode = this.getRuntimeTemplateMode(runtime?.key);
-
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -274,10 +272,25 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /* These methods provision resources to azure async */
     /*******************************************************************************************************************************/
     asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user): Promise<void> => {
-      const { subscription, name } = config;
+      const { runtimeLanguage } = parseRuntimeKey(project.settings?.runtime?.key);
+
+      // map runtime language/platform to worker runtime
+      let workerRuntime = runtimeLanguage;
+      switch (runtimeLanguage) {
+        case 'js':
+          workerRuntime = 'node';
+          break;
+        default:
+          break;
+      }
+
+      const provisionConfig: ProvisionConfig = { ...config, workerRuntime };
+
+      const { name } = provisionConfig;
+
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
-        ...config,
+        ...provisionConfig,
         logger: (msg: any) => {
           this.logger(msg);
           BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
@@ -287,31 +300,35 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // perform the provision using azureProvisioner.create.
       // this will start the process, then return.
       // However, the process will continue in the background
-      const provisionResults = await azureProvisioner.create(config);
+      const provisionResults = await azureProvisioner.create(provisionConfig);
 
       // cast this into the right form for a publish profile
       let currentProfile = null;
-      if (config.currentProfile) {
-        currentProfile = JSON.parse(config.currentProfile.configuration);
+      if (provisionConfig.currentProfile) {
+        currentProfile = JSON.parse(provisionConfig.currentProfile.configuration);
       }
       const currentSettings = currentProfile?.settings;
 
       const publishProfile = {
-        name: currentProfile?.name ?? config.hostname,
+        name: currentProfile?.name ?? provisionConfig.hostname,
         environment: currentProfile?.environment ?? 'composer',
         tenantId: provisionResults?.tenantId ?? currentProfile?.tenantId,
         subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
         resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
         botName: currentProfile?.botName ?? provisionResults.botName,
-        hostname: config.hostname ?? currentProfile?.hostname,
-        luisResource: provisionResults.luisPrediction ? `${config.hostname}-luis` : currentProfile?.luisResource,
+        hostname: provisionConfig.hostname ?? currentProfile?.hostname,
+        luisResource: provisionResults.luisPrediction
+          ? `${provisionConfig.hostname}-luis`
+          : currentProfile?.luisResource,
         runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
-        region: config.location,
+        region: provisionConfig.location,
         settings: {
           applicationInsights: {
             InstrumentationKey:
               provisionResults.appInsights?.instrumentationKey ??
               currentSettings?.applicationInsights?.InstrumentationKey,
+            connectionString:
+              provisionResults.appInsights?.connectionString ?? currentSettings?.applicationInsights?.connectionString,
           },
           cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
           blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
@@ -355,7 +372,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
 
       // add in history
-      this.addProvisionHistory(project.id, config.name, BackgroundProcessManager.getStatus(jobId));
+      this.addProvisionHistory(project.id, provisionConfig.name, BackgroundProcessManager.getStatus(jobId));
       BackgroundProcessManager.removeProcess(jobId);
     };
 
@@ -659,7 +676,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure (Preview)', 'azurePublish');
+  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure', 'azurePublish');
 
   await composer.addPublishMethod(azurePublish);
 };
