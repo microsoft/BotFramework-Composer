@@ -65,7 +65,7 @@ const columns = [
   },
 ];
 
-const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: string[]) => {
+const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: string[], setWarningMsg) => {
   const luFilePromise: Promise<any>[] = [];
   try {
     for (const [key, value] of Object.entries(skillLanguages)) {
@@ -81,6 +81,7 @@ const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: strin
               })
               .catch((err) => {
                 console.error(err);
+                setWarningMsg('get remote file fail');
               })
           );
         });
@@ -142,6 +143,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const { batchUpdateLuFiles } = useRecoilValue(dispatcherState);
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const [triggerErrorMessage, setTriggerErrorMsg] = useState('');
+  const [warningMsg, setWarningMsg] = useState('');
 
   const hasOrchestrator = useMemo(() => {
     const fileName = `${dialogId}.${locale}.lu.dialog`;
@@ -207,7 +209,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         enablePrebuiltEntities: false,
         enableRegexEntities: false,
       };
-      getRemoteLuFiles(skillLanguages, languages)
+      getRemoteLuFiles(skillLanguages, languages, setWarningMsg)
         .then((items) => {
           items &&
             getParsedLuFiles(items, luFeaturesTemp, []).then((files) => {
@@ -221,6 +223,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         })
         .catch((e) => {
           console.log(e);
+          setWarningMsg('get remote file fail');
         });
     }
   }, [manifest.dispatchModels?.languages, languages, locale]);
@@ -314,6 +317,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                 }}
                 telemetryClient={TelemetryClient}
                 value={displayContent}
+                warningMessage={warningMsg}
                 onChange={setDisplayContent}
               />
             </StackItem>
