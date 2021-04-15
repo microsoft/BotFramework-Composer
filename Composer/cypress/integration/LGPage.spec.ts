@@ -8,7 +8,7 @@ context('LG Page', () => {
   });
 
   it('can open language generation page', () => {
-    cy.findByTestId('LeftNav-CommandBarButtonBot Responses').click();
+    cy.findByTestId('LeftNav-CommandBarButtonBot responses').click();
     // left nav tree
     cy.contains('TodoSample');
 

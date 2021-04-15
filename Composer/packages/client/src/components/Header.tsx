@@ -28,6 +28,7 @@ import {
   rootBotProjectIdSelector,
   settingsState,
   webChatEssentialsSelector,
+  botProjectSpaceLoadedState,
   isWebChatPanelVisibleState,
   allRequiredRecognizersSelector,
 } from '../recoilModel';
@@ -163,6 +164,7 @@ export const Header = () => {
   const settings = useRecoilValue(settingsState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
+  const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
@@ -173,14 +175,22 @@ export const Header = () => {
   const [hideBotController, hideBotStartController] = useState(true);
   const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
   const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(false);
+  const [requiresLUIS, setRequiresLUIS] = useState<boolean>(false);
+  const [requiresQNA, setRequiresQNA] = useState<boolean>(false);
+
   const { location } = useLocation();
 
   // These are needed to determine if the bot needs LUIS or QNA
   // this data is passed into the GetStarted widget
   // ... if the get started widget moves, this code should too!
   const requiredStuff = useRecoilValue(allRequiredRecognizersSelector);
-  const requiresLUIS = requiredStuff.some((p) => p.requiresLUIS);
-  const requiresQNA = requiredStuff.some((p) => p.requiresQNA);
+
+  useEffect(() => {
+    if (botProjectSolutionLoaded) {
+      setRequiresLUIS(requiredStuff.some((p) => p.requiresLUIS));
+      setRequiresQNA(requiredStuff.some((p) => p.requiresQNA));
+    }
+  }, [requiredStuff, botProjectSolutionLoaded]);
   // ... end of get started stuff
 
   const isShow = useBotControllerBar();
@@ -300,13 +310,13 @@ export const Header = () => {
         )}
         {isShow && (
           <IconButton
-            ariaDescription={formatMessage('Open web chat')}
+            ariaDescription={formatMessage('Test in web chat')}
             disabled={!webchatEssentials?.botUrl}
             iconProps={{
               iconName: 'OfficeChat',
             }}
             styles={buttonStyles}
-            title={formatMessage('Open Web Chat')}
+            title={formatMessage('Test in Web Chat')}
             onClick={() => {
               const currentWebChatVisibility = !isWebChatPanelVisible;
               setWebChatPanelVisibility(currentWebChatVisibility);
@@ -412,11 +422,11 @@ export const Header = () => {
           />
         ) : null}
         <GetStarted
-          isOpen={showGetStarted}
+          isOpen={botProjectSolutionLoaded && showGetStarted}
           projectId={rootBotProjectId}
           requiresLUIS={requiresLUIS}
           requiresQNA={requiresQNA}
-          showTeachingBubble={showGetStartedTeachingBubble}
+          showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
           onBotReady={() => {
             setShowTeachingBubble(true);
           }}

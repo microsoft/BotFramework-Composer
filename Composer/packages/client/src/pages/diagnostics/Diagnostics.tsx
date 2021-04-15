@@ -24,7 +24,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
   const projectId = (props.skillId ?? props.projectId) as string;
 
   const handleItemClick = (item: IDiagnosticInfo) => {
-    navigateTo(item.getUrl());
+    navigateTo(item.getUrl(item.dialogPath));
     if (item.location === 'manifest.json') {
       setExportSkillModalInfo(item.projectId);
     }
