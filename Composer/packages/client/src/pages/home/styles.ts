@@ -207,12 +207,6 @@ export const cardItem = {
     max-height: 175px;
     margin-bottom: 12px;
     position: relative;
-    .image-cover-img {
-      display: flex;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
   `,
   content: css`
     color: ${NeutralColors.gray140};
@@ -233,25 +227,26 @@ export const mediaCardItem = {
   imageCover: css`
     ${cardItem.imageCover}
     width: 100%;
+    margin-bottom: 12px;
+    overflow: hidden;
+    display: flex;
     min-height: 95px;
     height: calc(17vw * 95 / 244);
     @media (max-width: 1416px) {
       height: calc(20vw * 95 / 244);
     }
-    margin-bottom: 12px;
-    overflow: hidden;
-    display: flex;
-    .image-cover-background {
-      &.odd-image {
-        background: #323130;
-      }
-      @media (min-width: 4000px) {
-        background: #323130;
-      }
-      background: none;
-      position: absolute;
+    @media (min-width: 4000px) {
+      background: #323130;
+    }
+    .image-cover-img {
+      display: flex;
       width: 100%;
-      height: 100%;
+      height: auto;
+      img {
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+      }
     }
   `,
 };
@@ -265,12 +260,13 @@ export const meidiaCardNoCoverItem = {
     align-items: center;
     justify-content: center;
     background: ${NeutralColors.gray160};
-    .image-cover-background {
-      display: none;
-    }
     .image-cover-img {
       width: 53px;
       height: 48px;
+      img {
+        width: auto;
+        height: auto;
+      }
     }
   `,
 };
