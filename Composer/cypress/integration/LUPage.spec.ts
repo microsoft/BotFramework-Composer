@@ -8,7 +8,7 @@ context('LU Page', () => {
   });
 
   it('can open language understanding page', () => {
-    cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
+    cy.findByTestId('LeftNav-CommandBarButtonUser input').click();
     // left nav tree
     cy.contains('__TestToDoBotWithLuisSample');
 
@@ -17,7 +17,7 @@ context('LU Page', () => {
     // by default it goes to table view
     cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
 
-    // move away from the User Input button (clicking the logo should do nothing)
+    // move away from the User input button (clicking the logo should do nothing)
     cy.findByAltText('Composer Logo').click();
 
     // nav to ToDoBotWithLuisSample.main dialog

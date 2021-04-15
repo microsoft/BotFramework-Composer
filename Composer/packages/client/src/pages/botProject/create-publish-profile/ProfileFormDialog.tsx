@@ -132,7 +132,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
               defaultSelectedKey={targetType}
               label={formatMessage('Publishing target')}
               options={targetTypes}
-              placeholder={formatMessage('Select One')}
+              placeholder={formatMessage('Select one')}
               onChange={updateType}
               onRenderLabel={onRenderLabel}
             />

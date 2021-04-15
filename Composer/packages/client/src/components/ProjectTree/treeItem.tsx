@@ -17,7 +17,7 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles, Callout } from 'office-ui-fabric-react/lib/Callout';
-import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
+import { DiagnosticSeverity, Diagnostic, Icons } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
@@ -232,17 +232,17 @@ type TreeObject =
   | 'lu' // used on other pages
   | 'external skill'; // used with multi-bot authoring
 
-const icons: { [key in TreeObject]: string | null } = {
-  bot: 'CubeShape',
-  dialog: 'Org',
-  trigger: 'LightningBolt',
+const TreeIcons: { [key in TreeObject]: string | null } = {
+  bot: Icons.BOT,
+  dialog: Icons.DIALOG,
+  trigger: Icons.TRIGGER,
   'trigger group': null,
-  'form dialog': 'Table',
-  'form field': 'Variable2', // x in parentheses
-  'form trigger': 'TriggerAuto', // lightning bolt with gear
-  lg: 'Robot',
-  lu: 'People',
-  'external skill': 'Globe',
+  'form dialog': Icons.FORM_DIALOG,
+  'form field': Icons.FORM_FIELD, // x in parentheses
+  'form trigger': Icons.FORM_TRIGGER, // lightning bolt with gear
+  lg: Icons.LG,
+  lu: Icons.LU,
+  'external skill': Icons.EXTERNAL_SKILL,
 };
 
 const objectNames: { [key in TreeObject]: () => string } = {
@@ -462,9 +462,9 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
           onFocus={item.onFocus}
         >
           <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.itemType != null && icons[item.itemType] != null && (
+            {item.itemType != null && TreeIcons[item.itemType] != null && (
               <Icon
-                iconName={icons[item.itemType]}
+                iconName={TreeIcons[item.itemType]}
                 styles={{
                   root: {
                     width: '12px',
@@ -576,7 +576,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         items={[
           {
             key: linkString,
-            icon: isBroken ? 'RemoveLink' : icons[itemType],
+            icon: isBroken ? 'RemoveLink' : TreeIcons[itemType],
             itemType,
             ...link,
           },
