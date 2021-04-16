@@ -5,6 +5,7 @@ import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
@@ -113,7 +114,7 @@ export const getCompletedQNANotificationCardProps = (opts: { time: number }): Ca
     width: '12px',
     height: '12px',
     fontSize: '12px',
-    color: '#27AE60',
+    color: SharedColors.cyanBlue10,
   });
   return {
     title: '',
