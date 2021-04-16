@@ -117,7 +117,7 @@ export const getCompletedQNANotificationCardProps = (opts: { time: number }): Ca
   });
   return {
     title: '',
-    description: formatMessage(`Your QnA Maker is ready! It took { time } minutes to complete.`, opts),
+    description: formatMessage(`Your QnA Maker is ready! It took { time } minutes to complete.`, { time: opts.time }),
     type: 'pending',
     onRenderCardContent: (props) => (
       <div css={cardContent}>
