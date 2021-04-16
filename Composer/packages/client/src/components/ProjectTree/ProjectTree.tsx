@@ -30,11 +30,12 @@ import { getBaseName } from '../../utils/fileUtil';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
-import { INDENT_PER_LEVEL } from './constants';
+import { INDENT_PER_LEVEL, LEVEL_PADDING, TREE_PADDING } from './constants';
 import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
 import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
 import { ProjectTreeOptions, TreeLink, TreeMenuItem } from './types';
+import { TopicsList } from './TopicsList';
 
 // -------------------- Styles -------------------- //
 
@@ -109,8 +110,6 @@ type Props = {
   headerAriaLabel?: string;
   headerPlaceholder?: string;
 };
-
-const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
 
 export const ProjectTree: React.FC<Props> = ({
   headerMenu = [],
@@ -611,6 +610,7 @@ export const ProjectTree: React.FC<Props> = ({
   const createDetailsTree = (bot: TreeDataPerProject, startDepth: number) => {
     const { projectId, lgImportsList, luImportsList } = bot;
     const dialogs = bot.sortedDialogs;
+    const topics = bot.topics ?? [];
 
     const filteredDialogs =
       filter == null || filter.length === 0
@@ -619,6 +619,9 @@ export const ProjectTree: React.FC<Props> = ({
             (dialog) =>
               filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
           );
+    // eventually we will filter on topic trigger phrases
+    const filteredTopics =
+      filter == null || filter.length === 0 ? topics : topics.filter((topic) => filterMatch(topic.displayName));
     const commonLink = options.showCommonLinks ? [renderCommonDialogHeader(projectId)] : [];
 
     const importedLgLinks = options.showLgImports
@@ -688,6 +691,15 @@ export const ProjectTree: React.FC<Props> = ({
           return renderDialogHeader(projectId, dialog, 1, bot.isPvaSchema).summaryElement;
         }
       }),
+      filteredTopics.length > 0 && (
+        <TopicsList
+          key={`pva-topics-${projectId}`}
+          projectId={projectId}
+          textWidth={leftSplitWidth - TREE_PADDING}
+          topics={filteredTopics}
+          onToggle={(newState) => setPageElement('pva-topics', newState)}
+        />
+      ),
     ];
   };
 

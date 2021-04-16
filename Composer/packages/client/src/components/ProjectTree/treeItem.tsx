@@ -23,6 +23,7 @@ import uniqueId from 'lodash/uniqueId';
 
 import { THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
+import { TreeItemContent } from './TreeItemContent';
 
 // -------------------- Styles -------------------- //
 
@@ -97,10 +98,9 @@ const navContainer = (
   textWidth: number,
   isBroken: boolean
 ) => css`
-  ${
-    isAnyMenuOpen
-      ? ''
-      : `
+  ${isAnyMenuOpen
+    ? ''
+    : `
     &:hover {
       background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
         .dialog-more-btn {
@@ -112,9 +112,10 @@ const navContainer = (
         .treeItem-text {
           max-width: ${textWidth}px;
         }
-      };
-  `
-  }
+        .external-link {
+          visibility: visible;
+        }
+      }`};
 
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 
@@ -210,8 +211,7 @@ const diagnosticWarningIcon = {
   color: '#8A8780',
   background: '#FFF4CE',
 };
-
-const itemName = (nameWidth: number) => css`
+export const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -225,6 +225,8 @@ const calloutRootStyle = css`
 type TreeObject =
   | 'bot'
   | 'dialog'
+  | 'topic'
+  | 'system topic'
   | 'trigger' // basic ProjectTree elements
   | 'trigger group'
   | 'form dialog'
@@ -238,6 +240,8 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
   bot: Icons.BOT,
   dialog: Icons.DIALOG,
   trigger: Icons.TRIGGER,
+  topic: Icons.TOPIC,
+  'system topic': Icons.SYSTEM_TOPIC,
   'trigger group': null,
   'form dialog': Icons.FORM_DIALOG,
   'form field': Icons.FORM_FIELD, // x in parentheses
@@ -250,6 +254,8 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
 const objectNames: { [key in TreeObject]: () => string } = {
   trigger: () => formatMessage('Trigger'),
   dialog: () => formatMessage('Dialog'),
+  topic: () => formatMessage('User Topic'),
+  'system topic': () => formatMessage('System Topic'),
   'trigger group': () => formatMessage('Trigger group'),
   'form dialog': () => formatMessage('Form dialog'),
   'form field': () => formatMessage('Form field'),
@@ -421,6 +427,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
   const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
+  const isExternal = Boolean(link.href);
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
@@ -452,41 +459,51 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       }
 
       return (
-        <div
-          data-is-focusable
-          aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
-          css={projectTreeItemContainer(extraSpace)}
-          tabIndex={0}
-          onBlur={item.onBlur}
-          onFocus={item.onFocus}
-        >
-          <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.itemType != null && TreeIcons[item.itemType] != null && (
-              <Icon
-                iconName={TreeIcons[item.itemType]}
-                styles={{
-                  root: {
-                    width: '12px',
-                    marginRight: '8px',
-                    outline: 'none',
-                  },
-                }}
-                tabIndex={-1}
-              />
-            )}
-            <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
-              {item.displayName}
-            </span>
-            {showErrors && (
-              <DiagnosticIcons
-                diagnostics={diagnostics}
-                projectId={projectId}
-                skillId={skillId}
-                onErrorClick={onErrorClick}
-              />
-            )}
+        // *** THIS IS NEW STUFF, VERIFY IT
+        <TreeItemContent tooltip={link.tooltip}>
+          <div
+            data-is-focusable
+            aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
+            css={projectTreeItemContainer}
+            tabIndex={0}
+            onBlur={item.onBlur}
+            onFocus={item.onFocus}
+          >
+            <div css={projectTreeItem} role="presentation" tabIndex={-1}>
+              {item.itemType != null && TreeIcons[item.itemType] != null && (
+                <Icon
+                  iconName={TreeIcons[item.itemType]}
+                  styles={{
+                    root: {
+                      width: '12px',
+                      marginRight: '8px',
+                      outline: 'none',
+                    },
+                  }}
+                  tabIndex={-1}
+                />
+              )}
+              <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
+                {item.displayName}
+              </span>
+              {isExternal && (
+                <Icon
+                  className="external-link"
+                  iconName="NavigateExternalInline"
+                  styles={{ root: { visibility: 'hidden', width: '12px', marginLeft: '4px', outline: 'none' } }}
+                />
+              )}
+              {showErrors && (
+                <DiagnosticIcons
+                  diagnostics={diagnostics}
+                  projectId={projectId}
+                  skillId={skillId}
+                  onErrorClick={onErrorClick}
+                />
+              )}
+            </div>
           </div>
-        </div>
+        </TreeItemContent>
       );
     },
     [textWidth, overflowIconWidthActiveOrChildSelected, showErrors]
@@ -550,14 +567,23 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       data-testid={dataTestId}
       role={role}
       tabIndex={0}
-      onClick={() => {
-        onSelect?.(link);
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          onSelect?.(link);
-        }
-      }}
+      onClick={
+        onSelect
+          ? () => {
+              onSelect(link);
+            }
+          : undefined
+      }
+      onKeyDown={
+        onSelect
+          ? (e) => {
+              if (e.key === 'Enter') {
+                onSelect(link);
+                e.stopPropagation();
+              }
+            }
+          : undefined
+      }
     >
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone

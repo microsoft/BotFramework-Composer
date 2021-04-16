@@ -4,8 +4,15 @@ import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+export const packageScrollContainerStyle = {
+  root: { borderTop: '1px solid #CCC', height: 'calc(100% - 150px)' },
+};
+
+export const tabAndSearchBarStyles = { root: { paddingLeft: '12px', paddingRight: '20px', height: '48px' } };
+
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
+  height: 95px;
 `;
 export const HeaderText = css`
   font-size: ${FontSizes.xLarge};
@@ -60,6 +67,7 @@ export const targetListTiTle = css`
 `;
 
 export const listRoot = css`
+  height: calc(100% - 48px);
   position: relative;
   overflow-y: auto;
   flex-grow: 1;
