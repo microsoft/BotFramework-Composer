@@ -107,7 +107,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
 
         setSkillManifest({
           content: {
-            content,
+            ...content,
             endpoints: [
               {
                 protocol: 'BotFrameworkV3',
