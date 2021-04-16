@@ -133,6 +133,7 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
       const filteredProfile = publishingTargets.filter((item) => {
         const config = JSON.parse(item.configuration);
         return (
+          config.settings &&
           config.settings.MicrosoftAppId &&
           config.hostname &&
           config.settings.MicrosoftAppId.length > 0 &&

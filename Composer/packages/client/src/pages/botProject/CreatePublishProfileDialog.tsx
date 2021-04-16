@@ -95,8 +95,6 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
         <PublishProfileDialog
           closeDialog={() => {
             setDialogHidden(true);
-            // reset current
-            toggleHideDialog();
             setCurrentPublishProfile(null);
           }}
           current={currentPublishProfile}
