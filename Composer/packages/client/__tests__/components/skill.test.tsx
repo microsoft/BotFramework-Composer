@@ -55,7 +55,7 @@ describe('<SkillForm />', () => {
       const onDismiss = jest.fn();
       const addRemoteSkill = jest.fn();
       const addTriggerToRoot = jest.fn();
-      const { getByLabelText, getByText } = renderWithRecoil(
+      const { getByLabelText } = renderWithRecoil(
         <CreateSkillModal
           addRemoteSkill={addRemoteSkill}
           addTriggerToRoot={addTriggerToRoot}
@@ -75,9 +75,6 @@ describe('<SkillForm />', () => {
       expect(urlInput.getAttribute('value')).toBe(
         'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
       );
-
-      const endpoint = getByText('Endpoints');
-      expect(endpoint).not.toBeUndefined();
     } finally {
       jest.runOnlyPendingTimers();
       jest.useRealTimers();
