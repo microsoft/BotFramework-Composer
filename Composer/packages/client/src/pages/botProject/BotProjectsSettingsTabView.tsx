@@ -10,6 +10,7 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+import { navigateTo } from '../../utils/navigation';
 
 import { BotSkillConfiguration } from './BotSkillConfiguration';
 import { BotProjectInfo } from './BotProjectInfo';
@@ -72,7 +73,10 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
       <Pivot
         selectedKey={String(selectedKey)}
         onLinkClick={(item) => {
-          item?.props.itemKey && setSelectedKey(item.props.itemKey as PivotItemKey);
+          if (item?.props.itemKey) {
+            setSelectedKey(item.props.itemKey as PivotItemKey);
+            navigateTo(`/bot/${projectId}/botProjectsSettings/#${item.props.itemKey}`);
+          }
         }}
       >
         <PivotItem data-testid="basicsTab" headerText={formatMessage('Basics')} itemKey={PivotItemKey.Basics}>
