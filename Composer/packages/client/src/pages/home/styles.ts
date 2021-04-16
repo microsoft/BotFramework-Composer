@@ -207,6 +207,10 @@ export const cardItem = {
     max-height: 175px;
     margin-bottom: 12px;
     position: relative;
+    .image-cover-img {
+      width: 100%;
+      height: 100%;
+    }
   `,
   content: css`
     color: ${NeutralColors.gray140};
@@ -235,7 +239,7 @@ export const mediaCardItem = {
     @media (max-width: 1416px) {
       height: calc(20vw * 95 / 244);
     }
-    @media (min-width: 4000px) {
+    @media (min-width: 2800px) {
       background: #323130;
     }
     .image-cover-img {
