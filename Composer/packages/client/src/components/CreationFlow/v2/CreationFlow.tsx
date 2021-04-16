@@ -186,7 +186,6 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
         />
         <CreateOptionsV2
           fetchReadMe={fetchReadMe}
-          fetchTemplates={fetchTemplatesV2}
           path="create"
           templates={templateProjects}
           onDismiss={handleDismiss}
