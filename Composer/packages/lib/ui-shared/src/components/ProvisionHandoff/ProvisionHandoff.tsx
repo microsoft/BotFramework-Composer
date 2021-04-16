@@ -53,7 +53,7 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
           <Text>{props.developerInstructions}&nbsp;&nbsp;</Text>
           {props.learnMoreLink && (
             <Link href={props.learnMoreLink} target="_blank">
-              {formatMessage('Learn More')}
+              {formatMessage('Learn more')}
             </Link>
           )}
         </div>
