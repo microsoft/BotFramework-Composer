@@ -206,8 +206,9 @@ export const triggerDispatcher = () => {
     ) => {
       try {
         const { snapshot } = callbackHelpers;
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        const { createLuIntent, createLgTemplates, updateDialog, selectTo } = dispatcher;
+        const { createLuIntent, createLgTemplates, updateDialog, selectTo } = await snapshot.getPromise(
+          dispatcherState
+        );
         const dialogPayload = await getNewDialogWithTrigger(
           callbackHelpers,
           projectId,

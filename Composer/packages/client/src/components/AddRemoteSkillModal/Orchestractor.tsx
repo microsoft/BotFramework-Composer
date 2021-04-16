@@ -14,49 +14,49 @@ import { enableOrchestratorDialog } from '../../constants';
 
 import { importOrchestractor } from './helper';
 
+const learnMoreUrl = 'https://aka.ms/bf-composer-docs-publish-bot';
+
 export const Orchestractor = (props) => {
   const { projectId, onSubmit, onBack } = props;
-  const [enable, setEnable] = useState(true);
+  const [enableOrchestrator, setEnableOrchestrator] = useState(true);
   const { setApplicationLevelError, reloadProject } = useRecoilValue(dispatcherState);
   const onChange = (ev, check) => {
-    setEnable(check);
+    setEnableOrchestrator(check);
   };
   return (
-    <Fragment>
-      <Stack>
-        <StackItem styles={{ root: { height: 300, width: '60%' } }}>
-          <div style={{ marginBottom: '16px' }}>
-            {enableOrchestratorDialog.content}
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-              {formatMessage('\n learn more about Orchestractor')}
-            </Link>
-          </div>
-          <Checkbox
-            defaultChecked
-            label="Make Orchestrator my preferred recognizer for multi-bot projects"
-            styles={{ root: { margin: '20px 0' } }}
-            onChange={onChange}
+    <Stack>
+      <StackItem styles={{ root: { height: 300, width: '60%' } }}>
+        <div style={{ marginBottom: '16px' }}>
+          {enableOrchestratorDialog.content}
+          <Link href={learnMoreUrl} target="_blank">
+            <div>{formatMessage('Learn more about Orchestractor')}</div>
+          </Link>
+        </div>
+        <Checkbox
+          defaultChecked
+          label={formatMessage('Make Orchestrator my preferred recognizer for multi-bot projects')}
+          styles={{ root: { margin: '20px 0' } }}
+          onChange={onChange}
+        />
+      </StackItem>
+      <Stack horizontal horizontalAlign="space-between">
+        <DefaultButton text={formatMessage('Back')} onClick={onBack} />
+        <span>
+          <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
+          <PrimaryButton
+            text={formatMessage('Continue')}
+            onClick={(event) => {
+              onSubmit(event, enableOrchestrator);
+              if (enableOrchestrator) {
+                // TODO. show notification
+                // download orchestrator first
+                importOrchestractor(projectId, reloadProject, setApplicationLevelError);
+                // TODO. update notification
+              }
+            }}
           />
-        </StackItem>
-        <Stack horizontal horizontalAlign="space-between">
-          <DefaultButton text={formatMessage('Back')} onClick={onBack} />
-          <span>
-            <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
-            <PrimaryButton
-              text={formatMessage('Continue')}
-              onClick={(event) => {
-                onSubmit(event, enable);
-                if (enable) {
-                  // TODO. show notification
-                  // download orchestrator first
-                  importOrchestractor(projectId, reloadProject, setApplicationLevelError);
-                  // TODO. update notification
-                }
-              }}
-            />
-          </span>
-        </Stack>
+        </span>
       </Stack>
-    </Fragment>
+    </Stack>
   );
 };

@@ -12,7 +12,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { LuEditor } from '@bfc/code-editor';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { LuFile, LuIntentSection, SDKKinds } from '@bfc/shared';
+import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -31,27 +31,26 @@ const detailListContainer = css`
   position: relative;
   overflow: hidden;
   flex-grow: 1;
-  border: 1px solid E5E5E5;
+  border: 1px solid #e5e5e5;
 `;
 
-interface SelectIntentProps {
+type SelectIntentProps = {
   manifest: {
     dispatchModels: {
-      intents: Array<string> | object;
+      intents: string[] | object;
       languages: object;
     };
-    [key: string]: any;
-  };
+  } & Record<string, any>;
   languages: string[];
   projectId: string;
-  luFeatures: any;
+  luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
-  onSubmit: (event, content: string, enable: boolean) => void;
+  onSubmit: (event: Event, content: string, enable: boolean) => void;
   onDismiss: () => void;
-  setTitle: (value) => void;
+  onUpdateTitle: (title: { title: string; subText: string }) => void;
   onBack: () => void;
-}
+} & Record<string, any>;
 
 const columns = [
   {
@@ -60,12 +59,12 @@ const columns = [
     minWidth: 300,
     isResizable: false,
     onRender: (item: string) => {
-      return <div>{item}</div>;
+      return <Fragment>{item}</Fragment>;
     },
   },
 ];
 
-const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: string[]) => {
+const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: string[], setWarningMsg) => {
   const luFilePromise: Promise<any>[] = [];
   try {
     for (const [key, value] of Object.entries(skillLanguages)) {
@@ -73,11 +72,16 @@ const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: strin
         value.map((item) => {
           // get lu file
           luFilePromise.push(
-            httpClient.get(`/utilities/retrieveRemoteFile`, {
-              params: {
-                url: item.url,
-              },
-            })
+            httpClient
+              .get(`/utilities/retrieveRemoteFile`, {
+                params: {
+                  url: item.url,
+                },
+              })
+              .catch((err) => {
+                console.error(err);
+                setWarningMsg('get remote file fail');
+              })
           );
         });
       }
@@ -93,13 +97,22 @@ const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: strin
 };
 
 const getParsedLuFiles = async (files: { id: string; content: string }[], luFeatures, lufiles) => {
-  const promises = files?.map((item) => {
+  const promises = files.map((item) => {
     return luWorker.parse(item.id, item.content, luFeatures, lufiles) as Promise<LuFile>;
   });
   const luFiles: LuFile[] = await Promise.all(promises);
   return luFiles;
 };
 
+const mergeIntentsContent = (intents: LuIntentSection[]) => {
+  return (
+    intents
+      ?.map((item) => {
+        return `> ${item.Name}` + '\n' + item.Body;
+      })
+      ?.join('\n') || ''
+  );
+};
 export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const {
     manifest,
@@ -110,26 +123,28 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     projectId,
     rootLuFiles,
     dialogId,
-    setTitle,
+    onUpdateTitle,
     onBack,
   } = props;
   const [page, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
-  // luFiles from manifest
+  // luFiles from manifest, language was included in root bot languages
   const [luFiles, setLufile] = useState<Array<LuFile>>([]);
   // current locale Lufile
   const [currentLuFile, setCurrentLuFile] = useState<LuFile>();
-  // selected current locale intents
-  const [displayIntents, setDisplayIntent] = useState<Array<LuIntentSection>>([]);
+  // selected intents in different languages
+  const [multiLanguageIntents, setMultiLanguageIntents] = useState<Record<string, Array<LuIntentSection>>>({});
+  // selected current locale intents content
   const [displayContent, setDisplayContent] = useState<string>('');
   // const [diagnostics, setDiagnostics] = useState([]);
   const locale = useRecoilValue(localeState(projectId));
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
-  const { updateLuFile: updateLuFileDispatcher } = useRecoilValue(dispatcherState);
+  const { batchUpdateLuFiles } = useRecoilValue(dispatcherState);
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
   const [triggerErrorMessage, setTriggerErrorMsg] = useState('');
+  const [warningMsg, setWarningMsg] = useState('');
 
-  const hasOrchestractor = useMemo(() => {
+  const hasOrchestrator = useMemo(() => {
     const fileName = `${dialogId}.${locale}.lu.dialog`;
     for (const file of curRecognizers) {
       if (file.id === fileName && file.content.$kind === SDKKinds.OrchestratorRecognizer) {
@@ -159,21 +174,29 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     return res;
   }, [manifest]);
 
-  const updateLuFile = useCallback(
-    (content: string) => {
-      const file = rootLuFiles.find(({ id }) => id.includes(locale));
-      if (!file) return;
-      const { id } = file;
-      file.content;
-      const payload = {
-        projectId: projectId,
-        id,
-        content: file.content + `\n # ${manifest.name} \n` + content,
-      };
-      updateLuFileDispatcher(payload);
-    },
-    [rootLuFiles, projectId, locale]
-  );
+  const updateLuFiles = useCallback(() => {
+    const payloads: { projectId: string; id: string; content: string }[] = [];
+    rootLuFiles?.map(async (lufile) => {
+      const rootId = lufile.id.split('.');
+      const language = rootId[rootId.length - 1];
+      let append = '';
+      if (language === locale) {
+        append = displayContent;
+      } else {
+        const intents = multiLanguageIntents[language];
+        if (!intents) {
+          return;
+        }
+        append = mergeIntentsContent(intents);
+      }
+      payloads.push({
+        projectId,
+        id: lufile.id,
+        content: lufile.content + `\n # ${manifest.name} \n` + append,
+      });
+    });
+    batchUpdateLuFiles(payloads);
+  }, [rootLuFiles, projectId, locale, displayContent, multiLanguageIntents]);
 
   useEffect(() => {
     if (locale) {
@@ -185,7 +208,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         enablePrebuiltEntities: false,
         enableRegexEntities: false,
       };
-      getRemoteLuFiles(skillLanguages, languages)
+      getRemoteLuFiles(skillLanguages, languages, setWarningMsg)
         .then((items) => {
           items &&
             getParsedLuFiles(items, luFeaturesTemp, []).then((files) => {
@@ -199,31 +222,40 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         })
         .catch((e) => {
           console.log(e);
+          setWarningMsg('get remote file fail');
         });
     }
   }, [manifest.dispatchModels?.languages, languages, locale]);
 
   useEffect(() => {
-    if (selectedIntents.length > 0 && currentLuFile) {
+    if (selectedIntents.length > 0) {
       const intents: LuIntentSection[] = [];
-      currentLuFile.intents.map((intent) => {
+      const multiLanguageIntents: Record<string, LuIntentSection[]> = {};
+      currentLuFile?.intents?.map((intent) => {
         if (selectedIntents.includes(intent.Name)) {
           intents.push(intent);
         }
       });
-      setDisplayIntent(intents);
 
+      luFiles?.map((file) => {
+        const id = file.id.split('.');
+        const language = id[id.length - 1];
+        multiLanguageIntents[language] = [];
+        file.intents?.map((intent) => {
+          if (selectedIntents.includes(intent.Name)) {
+            multiLanguageIntents[language].push(intent);
+          }
+        });
+      });
+      setMultiLanguageIntents(multiLanguageIntents);
       // current locale, selected intent value.
-      const intentsValue = intents
-        .map((item) => {
-          return `> ${item.Name}` + '\n' + item.Body;
-        })
-        .join('\n');
+      const intentsValue = mergeIntentsContent(intents);
       setDisplayContent(intentsValue);
     } else {
       setDisplayContent('');
+      setMultiLanguageIntents({});
     }
-  }, [selectedIntents, currentLuFile]);
+  }, [selectedIntents, currentLuFile, luFiles]);
 
   useEffect(() => {
     if (displayContent) {
@@ -236,7 +268,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
 
   const handleSubmit = (ev, enableOchestractor) => {
     // append remote lufile into root lu file
-    updateLuFile(displayContent);
+    updateLuFiles();
     // add trigger to root
     onSubmit(ev, displayContent, enableOchestractor);
   };
@@ -247,7 +279,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         <Orchestractor
           projectId={projectId}
           onBack={() => {
-            setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
+            onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
             setShowOrchestratorDialog(false);
           }}
           onSubmit={handleSubmit}
@@ -274,6 +306,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             <StackItem>
               <LuEditor
                 toolbarHidden
+                errorMessage={triggerErrorMessage}
                 height={300}
                 luOption={{
                   projectId,
@@ -281,9 +314,9 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                   sectionId: manifest.name,
                   luFeatures: luFeatures,
                 }}
-                errorMessage={triggerErrorMessage}
                 telemetryClient={TelemetryClient}
                 value={displayContent}
+                warningMessage={warningMsg}
                 onChange={setDisplayContent}
               />
             </StackItem>
@@ -295,7 +328,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                 text={formatMessage('Back')}
                 onClick={() => {
                   setPage(page - 1);
-                  setTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
+                  onUpdateTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
                 }}
               />
             ) : (
@@ -304,22 +337,23 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             <span>
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
+                disabled={triggerErrorMessage && page === 1 ? true : false}
                 styles={{ root: { marginLeft: '8px' } }}
-                text={page === 1 && hasOrchestractor ? formatMessage('Done') : formatMessage('Next')}
+                text={page === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
                 onClick={(ev) => {
                   if (page === 1) {
-                    if (hasOrchestractor) {
+                    if (hasOrchestrator) {
                       // skip orchestractor modal
                       handleSubmit(ev, true);
                     } else {
                       // show orchestractor
-                      setTitle(enableOrchestratorDialog);
+                      onUpdateTitle(enableOrchestratorDialog);
                       setShowOrchestratorDialog(true);
                     }
                   } else {
                     // show next page
                     setPage(page + 1);
-                    setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
+                    onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
                   }
                 }}
               />

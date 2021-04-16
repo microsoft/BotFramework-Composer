@@ -187,15 +187,17 @@ export const settingsDispatcher = () => {
       let msAppId, endpointUrl;
 
       if (manifest?.endpoints) {
-        const cur = manifest.endpoints.find((item) => item.name === endpointName);
-        endpointUrl = cur?.endpointUrl || '';
-        msAppId = cur?.msAppId || '';
+        const matchedEndpoint = manifest.endpoints.find((item) => item.name === endpointName);
+        endpointUrl = matchedEndpoint?.endpointUrl || '';
+        msAppId = matchedEndpoint?.msAppId || '';
       }
 
-      const v2 = isUsingAdaptiveRuntime(settings.runtime);
+      const isAdaptiveRuntime = isUsingAdaptiveRuntime(settings.runtime);
       set(settingsState(projectId), (currentValue) => {
-        if (v2) {
-          const callers = [...settings.runtimeSettings?.skills?.allowedCallers];
+        if (isAdaptiveRuntime) {
+          const callers = settings.runtimeSettings?.skills?.allowedCallers
+            ? [...settings.runtimeSettings?.skills?.allowedCallers]
+            : [];
           if (!callers?.find((item) => item === msAppId)) {
             callers.push(msAppId);
           }
@@ -216,7 +218,9 @@ export const settingsDispatcher = () => {
             },
           };
         } else {
-          const callers = [...settings.skillConfiguration?.allowedCallers];
+          const callers = settings.skillConfiguration?.allowedCallers
+            ? [...settings.skillConfiguration?.allowedCallers]
+            : [];
           if (!callers?.find((item) => item === msAppId)) {
             callers.push(msAppId);
           }

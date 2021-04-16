@@ -4,7 +4,6 @@
 import React, { Fragment, useRef, useState, useCallback, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-// import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
@@ -48,14 +47,28 @@ export const validateManifestUrl = async ({ formData, formDataErrors, setFormDat
   const { manifestUrl: _, ...errors } = formDataErrors;
 
   if (!manifestUrl) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest Url') });
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest URL') });
   } else if (!urlRegex.test(manifestUrl)) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Url should start with http[s]://') });
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('URL should start with http:// or https://') });
   } else {
     setFormDataErrors({});
   }
 };
-
+export const getSkillManifest = async (projectId: string, manifestUrl: string, setSkillManifest, setFormDataErrors) => {
+  try {
+    const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
+      params: {
+        url: manifestUrl,
+      },
+    });
+    setSkillManifest(data);
+    if (!data.dispatchModels) {
+      setFormDataErrors({ manifestUrl: formatMessage('Miss dispatch modal') });
+    }
+  } catch (error) {
+    setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest URL can not be accessed') });
+  }
+};
 const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
   errors: {},
   $kind: 'Microsoft.OnIntent',
@@ -64,6 +77,8 @@ const getTriggerFormData = (intent: string, content: string): TriggerFormData =>
   triggerPhrases: content,
   regEx: '',
 });
+
+const buttonStyle = { root: { marginLeft: '8px' } };
 
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
@@ -96,7 +111,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const options: IDropdownOption[] = useMemo(() => {
     return skillManifest?.endpoints?.map((item) => {
       return {
-        key: item.msAppId,
+        key: item.name,
+        // eslint-disable-next-line format-message/literal-pattern
         text: formatMessage(item.name),
       };
     });
@@ -117,19 +133,10 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const validateUrl = useCallback(
-    async (event) => {
+    (event) => {
       event.preventDefault();
       setShowDetail(true);
-      try {
-        const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
-          params: {
-            url: formData.manifestUrl,
-          },
-        });
-        setSkillManifest(data);
-      } catch (error) {
-        setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest url can not be accessed') });
-      }
+      getSkillManifest(projectId, formData.manifestUrl, setSkillManifest, setFormDataErrors);
     },
     [projectId, formData]
   );
@@ -137,20 +144,16 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const handleSubmit = (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
-    addRemoteSkill(formData.manifestUrl, formData.endpointName)
-      .then(() => {
-        TelemetryClient.track('AddNewSkillCompleted');
-        const result = location.href.split('/');
-        let skillId = '';
-        if (result.length > 0) skillId = result[result.length - 1];
+    addRemoteSkill(formData.manifestUrl, formData.endpointName).then(() => {
+      TelemetryClient.track('AddNewSkillCompleted');
+      const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
+      if (skillId) {
         // add trigger with connect to skill action to root bot
         const triggerFormData = getTriggerFormData(skillManifest.name, content);
         addTriggerToRoot(dialogId, triggerFormData, skillId);
         TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    });
 
     if (enable) {
       // update recognizor type to orchestrator
@@ -177,7 +180,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           manifest={skillManifest}
           projectId={projectId}
           rootLuFiles={luFiles}
-          setTitle={setTitle}
           onBack={() => {
             setTitle({
               subText: '',
@@ -187,17 +189,18 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           }}
           onDismiss={onDismiss}
           onSubmit={handleSubmit}
+          onUpdateTitle={setTitle}
         />
       ) : (
         <Fragment>
           <div style={{ marginBottom: '16px' }}>
             {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-              {formatMessage(' Get an overview ')}
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" style={{ padding: '0 5px' }} target="_blank">
+              {formatMessage('Get an overview')}
             </Link>
             or
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-              {formatMessage(' learn how to build a skill ')}
+            <Link href="https://aka.ms/bf-composer-docs-publish-bot" style={{ padding: '0 5px' }} target="_blank">
+              {formatMessage('learn how to build a skill')}
             </Link>
             {addSkillDialog.SKILL_MANIFEST_FORM.afterSubText}
           </div>
@@ -213,15 +216,16 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               />
               {skillManifest?.endpoints?.length > 1 && (
                 <Dropdown
+                  defaultSelectedKey={skillManifest.endpoints[0].name}
                   label={formatMessage('Endpoints')}
                   options={options}
-                  defaultSelectedKey={skillManifest.endpoints[0].msAppId}
                   responsiveMode={ResponsiveMode.large}
                   onChange={(e, option?: IDropdownOption) => {
                     if (option) {
+                      console.log(option);
                       setFormData({
                         ...formData,
-                        endpointName: option.text,
+                        endpointName: option.key as string,
                       });
                     }
                   }}
@@ -244,7 +248,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               {skillManifest ? (
                 isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
                   <PrimaryButton
-                    styles={{ root: { marginLeft: '8px' } }}
+                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels ? true : false}
+                    styles={buttonStyle}
                     text={formatMessage('Next')}
                     onClick={(event) => {
                       setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
@@ -253,7 +258,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   />
                 ) : (
                   <PrimaryButton
-                    styles={{ root: { marginLeft: '8px' } }}
+                    styles={buttonStyle}
                     text={formatMessage('Done')}
                     onClick={(event) => {
                       addRemoteSkill(formData.manifestUrl, formData.endpointName);
@@ -263,7 +268,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               ) : (
                 <PrimaryButton
                   disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
-                  styles={{ root: { marginLeft: '8px' } }}
+                  styles={buttonStyle}
                   text={formatMessage('Next')}
                   onClick={validateUrl}
                 />

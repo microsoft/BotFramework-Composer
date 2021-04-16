@@ -3,15 +3,17 @@
 
 import formatMessage from 'format-message';
 import { luIndexer, combineMessage } from '@bfc/indexers';
+
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 export const importOrchestractor = async (projectId: string, reloadProject, setApplicationLevelError) => {
   const reqBody = {
-    package: 'Microsoft.Bot.Components.Orchestrator',
+    package: 'Microsoft.Bot.Builder.AI.Orchestrator',
     version: '',
     source: 'https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json',
     isUpdating: false,
+    isPreview: true,
   };
   try {
     const results = await httpClient.post(`projects/${projectId}/import`, reqBody);
@@ -25,8 +27,6 @@ export const importOrchestractor = async (projectId: string, reloadProject, setA
     }
   } catch (err) {
     TelemetryClient.track('PackageInstallFailed', { ...reqBody, isUpdate: reqBody.isUpdating });
-
-    console.error(err);
     setApplicationLevelError({
       status: err.response.status,
       message: err.response && err.response.data.message ? err.response.data.message : err,

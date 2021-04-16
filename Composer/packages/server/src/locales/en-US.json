@@ -1715,8 +1715,8 @@
   "get_activity_members_11339605": {
     "message": "Get activity members"
   },
-  "get_an_overview_ef09e016": {
-    "message": " Get an overview "
+  "get_an_overview_56c78cc3": {
+    "message": "Get an overview"
   },
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
@@ -2359,6 +2359,9 @@
   },
   "minimum_f31b05ab": {
     "message": "Minimum"
+  },
+  "miss_dispatch_modal_cf2d278e": {
+    "message": "Miss dispatch modal"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
@@ -3395,6 +3398,9 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
+  "skills_can_be_called_by_external_bots_allow_other__aa203913": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below."
+  },
   "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
     "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
   },
@@ -3466,9 +3472,6 @@
   },
   "start_bot_1da1ebf4": {
     "message": "Start bot"
-  },
-  "start_bot_25ecad14": {
-    "message": "Start Bot"
   },
   "start_command_a085f2ec": {
     "message": "Start command"

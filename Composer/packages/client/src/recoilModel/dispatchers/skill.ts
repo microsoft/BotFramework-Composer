@@ -6,7 +6,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SkillManifestFile } from '@bfc/shared';
 import produce from 'immer';
 
-import { rootBotProjectIdSelector, skillsStateSelector, skillNameIdentifierByProjectIdSelector } from '../selectors';
+import { rootBotProjectIdSelector, skillsStateSelector } from '../selectors';
 import {
   skillManifestsState,
   displaySkillManifestState,

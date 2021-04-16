@@ -317,7 +317,10 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      subText: formatMessage('Enter a manifest URL to add a new skill to your bot.'),
+      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
+      afterSubText: formatMessage(
+        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
+      ),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
