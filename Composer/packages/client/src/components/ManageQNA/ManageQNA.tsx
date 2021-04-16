@@ -7,7 +7,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
-import { dispatcherState, settingsState } from '../../recoilModel';
+import { dispatcherState } from '../../recoilModel';
 import { ManageService } from '../ManageService/ManageService';
 import { currentProjectIdState } from '../../recoilModel';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
