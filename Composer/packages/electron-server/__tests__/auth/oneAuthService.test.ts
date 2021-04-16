@@ -17,7 +17,7 @@ jest.mock('../../src/utility/platform', () => ({
 }));
 
 const mockFetch = jest.fn().mockResolvedValue(true);
-jest.mock('node-fetch-with-proxy', () => async (...args) => mockFetch(...args));
+jest.mock('node-fetch', () => async (...args) => mockFetch(...args));
 
 describe('OneAuth Serivce', () => {
   const INTERACTION_REQUIRED = 'interactionRequired';

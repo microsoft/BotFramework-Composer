@@ -4,10 +4,10 @@
 import { promisify } from 'util';
 
 import { mkdir, remove } from 'fs-extra';
-import fetch from 'node-fetch-with-proxy';
 import tar from 'tar';
 import { BotTemplate, ExtensionSearchResult } from '@botframework-composer/types';
 
+import fetch from '../utility/fetch';
 import logger from '../logger';
 
 const streamPipeline = promisify(require('stream').pipeline);

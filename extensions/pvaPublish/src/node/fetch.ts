@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+import fetch, { RequestInfo, RequestInit, Response } from 'node-fetch';
 import httpsProxyAgent, { HttpsProxyAgentOptions } from 'https-proxy-agent';
 
 export const proxyAgent = () => {
@@ -16,22 +16,10 @@ export const proxyAgent = () => {
 
   return httpsProxyAgent(proxyOpt);
 };
-
-const httpsProxy = (config) => {
-  const parsed = new URL(config.url);
-  const protocol = parsed.protocol;
-  if (protocol !== 'https:') {
-    return config;
-  }
-
+const fetchWithProxy = (url: RequestInfo, init?: RequestInit): Promise<Response> => {
   const agent = proxyAgent();
-  if (agent) {
-    config.httpsAgent = agent;
-    //Disable direct proxy
-    config.proxy = false;
-  }
-
-  return config;
+  const options = agent ? { agent, ...init } : init;
+  return fetch(url, options);
 };
 
-export default httpsProxy;
+export default fetchWithProxy;

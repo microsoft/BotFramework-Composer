@@ -114,7 +114,7 @@
     "moment": "^2.29.1",
     "morgan": "^1.9.1",
     "msal": "^1.4.4",
-    "node-fetch-with-proxy": "^0.1.4",
+    "node-fetch": "2.6.1",
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
     "portfinder": "^1.0.28",
