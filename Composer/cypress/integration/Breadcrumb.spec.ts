@@ -3,12 +3,8 @@
 
 context('breadcrumb', () => {
   beforeEach(() => {
-    cy.visit('/home');
-    cy.createBot('TodoSample');
-
-    // Return to Main.dialog
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestTodoSample').last().click();
+    cy.createBotV2('EmptySample', ({ id }) => {
+      cy.visit(`/bot/${id}`);
     });
   });
 
@@ -23,30 +19,16 @@ context('breadcrumb', () => {
       });
   }
 
-  it('can show dialog name in breadcrumb', () => {
+  it('can show dialog, trigger, action in breadcrumb', () => {
     // Should path = main dialog at first render
-    hasBreadcrumbItems(cy, ['__TestTodoSample']);
+    hasBreadcrumbItems(cy, ['__TestEmptySample']);
 
-    // Return to Main.dialog
+    // Click on an trigger
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestTodoSample').last().click();
+      cy.findAllByText('Greeting').last().click();
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample']);
-  });
-
-  it('can show dialog and trigger name in breadcrumb', () => {
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByTestId('addtodo_Dialog started').click();
-    });
-
-    hasBreadcrumbItems(cy, ['addtodo', 'Dialog started']);
-  });
-
-  it('can show action name in breadcrumb', () => {
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('Greeting').click();
-    });
+    hasBreadcrumbItems(cy, ['__TestEmptySample', 'Greeting']);
 
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
@@ -55,6 +37,6 @@ context('breadcrumb', () => {
       });
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample', 'Greeting', 'Send a response']);
+    hasBreadcrumbItems(cy, ['__TestEmptySample', 'Greeting', 'Send a response']);
   });
 });

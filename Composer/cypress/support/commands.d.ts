@@ -14,6 +14,12 @@ declare namespace Cypress {
     createBot(botId: string, botName?: string): void;
 
     /**
+     * Creates a bot based on empty bot.
+     * @example cy.createBot('EmptySample', ()=> {})
+     */
+    createBotV2(botName: string, createdCallback: (bot: any) => void): void;
+
+    /**
      * Visits a page from the left nav bar using the page's testid
      * @example visitPage('Bot Responses');
      */
