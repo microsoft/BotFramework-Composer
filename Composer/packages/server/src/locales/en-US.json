@@ -2594,6 +2594,9 @@
   "open_e0beb7b9": {
     "message": "Open"
   },
+  "open_in_power_virtual_agents_fcd881e6": {
+    "message": "Open in Power Virtual Agents"
+  },
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
@@ -2704,6 +2707,9 @@
   },
   "pop_out_editor_5528a187": {
     "message": "Pop out editor"
+  },
+  "power_virtual_agents_topics_count_9043ab47": {
+    "message": "Power Virtual Agents Topics ({ count })"
   },
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logo"
@@ -3509,6 +3515,9 @@
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
   },
+  "system_topic_44cfbac8": {
+    "message": "System Topic"
+  },
   "tag_entity_5ae99194": {
     "message": "Tag entity"
   },
@@ -3697,6 +3706,9 @@
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
+  },
+  "this_page_contains_detailed_information_about_your_224a2b04": {
+    "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings."
   },
   "this_page_contains_detailed_information_about_your_b2b3413b": {
     "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
@@ -3940,6 +3952,9 @@
   },
   "user_is_typing_typing_activity_cd938615": {
     "message": "User is typing (Typing activity)"
+  },
+  "user_topic_e3978941": {
+    "message": "User Topic"
   },
   "validating_35b79a96": {
     "message": "Validating..."
