@@ -132,6 +132,11 @@ export const navigationDispatcher = () => {
       const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
       const { dialogId, selected } = designPageLocation;
 
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+      const currentDialog = dialogs.find(({ id }) => id === dialogId);
+
+      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selected);
+
       let currentUri =
         skillId == null || skillId === projectId
           ? `/bot/${projectId}/dialogs/${dialogId}`
@@ -146,7 +151,7 @@ export const navigationDispatcher = () => {
 
         currentUri = `${currentUri}?selected=${targetSelected}&focused=${encodedFocusPath}`;
       } else {
-        currentUri = `${currentUri}?selected=${selected}`;
+        currentUri = `${currentUri}?selected=${encodedSelectPath}`;
       }
 
       if (fragment && typeof fragment === 'string') {
@@ -156,7 +161,7 @@ export const navigationDispatcher = () => {
 
       set(designPageLocationState(skillId || projectId), {
         dialogId,
-        selected: getSelected(focusPath) || selected,
+        selected: getSelected(focusPath) || encodedSelectPath,
         focused: focusPath ?? '',
         promptTab: Object.values(PromptTab).find((value) => fragment === value),
       });
