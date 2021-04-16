@@ -86,7 +86,7 @@ export async function getTemplateReadMe(req: any, res: any) {
         'microsoft',
         'botframework-components',
         'main',
-        'docs/qnaTemplateReadMe.md'
+        'generators/generator-bot-qna-maker/README.md'
       );
       res.status(200).json(qnaReadMe);
     } else {
