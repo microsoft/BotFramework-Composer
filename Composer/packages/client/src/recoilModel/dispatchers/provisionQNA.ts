@@ -167,7 +167,7 @@ export const provisionQNADispatcher = () => {
           }
         );
 
-        if (!webAppResult.hostNames?.length) {
+        if (!webAppResult?.hostNames?.length) {
           throw new Error('App service creation failed to return host name.');
         }
 
