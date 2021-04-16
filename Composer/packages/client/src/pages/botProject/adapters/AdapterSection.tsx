@@ -4,11 +4,10 @@
 import { jsx } from '@emotion/core';
 import { useEffect, useRef } from 'react';
 import formatMessage from 'format-message';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { CollapsableWrapper } from '../../../components/CollapsableWrapper';
-import { title, subtitle, sectionHeader } from '../styles';
+import { title, subtitle } from '../styles';
 
 import ExternalAdapterSettings from './ExternalAdapterSettings';
 import ABSChannels from './ABSChannels';
@@ -17,17 +16,6 @@ type Props = {
   projectId: string;
   scrollToSectionId?: string;
 };
-
-const renderSectionHeader = (name: string, tooltip?: string) => (
-  <div css={sectionHeader}>
-    {name}
-    {tooltip != null && (
-      <TooltipHost content={tooltip} styles={{ root: { paddingLeft: '4px' } }}>
-        <Icon iconName="Unknown" />
-      </TooltipHost>
-    )}
-  </div>
-);
 
 const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,12 +27,25 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
 
   return (
     <div ref={containerRef}>
-      <CollapsableWrapper title={formatMessage('Adapters')} titleStyle={title}>
-        <div css={subtitle}>{formatMessage('Connect your bot to other messaging services.')}</div>
-        {renderSectionHeader(formatMessage('Azure Bot Service channels'), '(description of ABS channels)')}
-        <ABSChannels projectId={projectId} />
-        {renderSectionHeader(formatMessage('External service adapters'), '(description of external adapters)')}
-        <ExternalAdapterSettings projectId={projectId} />
+      <CollapsableWrapper title={formatMessage('Connections')} titleStyle={title}>
+        <Stack
+          tokens={{
+            padding: '6px 0',
+          }}
+        >
+          <div css={title}>{formatMessage('Azure connections')}</div>
+          <div css={subtitle}>
+            {formatMessage(
+              'Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections.'
+            )}
+          </div>
+          <ABSChannels projectId={projectId} />
+        </Stack>
+        <Stack>
+          <div css={title}>{formatMessage('External connections')}</div>
+          <div css={subtitle}>{formatMessage('Find and install more external services in the package manager.')}</div>
+          <ExternalAdapterSettings projectId={projectId} />
+        </Stack>
       </CollapsableWrapper>
     </div>
   );

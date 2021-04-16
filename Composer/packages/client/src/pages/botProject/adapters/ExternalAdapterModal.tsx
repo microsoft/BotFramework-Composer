@@ -25,7 +25,6 @@ type Props = {
   adapterKey: string;
   packageName: string;
   isOpen: boolean;
-  isFirstTime: boolean; // true if the user clicked Configure to get here, false if it's from the Edit menu
   onClose: () => void;
   projectId: string;
   schema: JSONSchema7;
@@ -45,7 +44,7 @@ function makeDefault(schema: JSONSchema7) {
 }
 
 const AdapterModal = (props: Props) => {
-  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName, isFirstTime } = props;
+  const { isOpen, onClose, schema, uiSchema, projectId, adapterKey, packageName } = props;
 
   const [value, setValue] = useState(props.value ?? makeDefault(schema));
   const { setSettings } = useRecoilValue(dispatcherState);
@@ -114,7 +113,7 @@ const AdapterModal = (props: Props) => {
                 onClose();
               }}
             >
-              {isFirstTime ? formatMessage('Create') : formatMessage('Confirm')}
+              {formatMessage('Configure')}
             </PrimaryButton>
           </DialogFooter>
         </div>
