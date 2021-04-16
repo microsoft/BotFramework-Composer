@@ -3,7 +3,12 @@
 
 import { BotTemplate } from '@bfc/shared';
 
-import { sortTemplates, templateSortOrder } from '../creation';
+import { sortTemplates, defaultSortOrder } from '../creation';
+
+jest.mock('../../models/asset/assetManager', () => ({
+  getRawGithubFileContent: jest.fn(),
+  AssetManager: jest.fn(),
+}));
 
 describe('templateSort', () => {
   const templates: BotTemplate[] = [
@@ -82,8 +87,8 @@ describe('templateSort', () => {
 
   it('should return sorted templates per sortOrder obj', async () => {
     // note - the list in templates has to include all the same items in creation.ts
-    const sortedTemplateList = sortTemplates(templates);
-    templateSortOrder.forEach((templateSortEntry, index) => {
+    const sortedTemplateList = await sortTemplates(templates);
+    defaultSortOrder.forEach((templateSortEntry, index) => {
       if (
         templates.findIndex((temp) => {
           temp.id === templateSortEntry.generatorName;
