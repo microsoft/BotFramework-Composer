@@ -11,6 +11,9 @@
   "ErrorInfo_part3": {
     "message": "Try navigating to another node in the visual editor."
   },
+  "a_add_from_package_manager_a_4515cfc2": {
+    "message": "<a>Add from package manager</a>."
+  },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "a dialog file must have a name"
   },
@@ -115,9 +118,6 @@
   },
   "activity_received_2f20fa9d": {
     "message": "Activity received"
-  },
-  "adapters_fd4173b1": {
-    "message": "Adapters"
   },
   "adaptive_card_785723e3": {
     "message": "Adaptive card"
@@ -404,8 +404,8 @@
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
     "message": "Automatically generate dialogs that collect information from a user to manage conversations."
   },
-  "azure_bot_service_channels_5b358c1c": {
-    "message": "Azure Bot Service channels"
+  "azure_connections_9e63f716": {
+    "message": "Azure connections"
   },
   "azure_functions_5e23be5c": {
     "message": "Azure Functions"
@@ -614,12 +614,6 @@
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
-  "choose_publishing_profile_ee7ecc78": {
-    "message": "Choose publishing profile"
-  },
-  "choose_subscription_3d78d10d": {
-    "message": "Choose subscription"
-  },
   "clear_all_da755751": {
     "message": "Clear all"
   },
@@ -710,6 +704,9 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
+  "configuration_e186200": {
+    "message": "Configuration"
+  },
   "configure_adapter_2f621249": {
     "message": "Configure adapter"
   },
@@ -721,12 +718,6 @@
   },
   "configure_ecb97e30": {
     "message": "Configure"
-  },
-  "configure_title_1a4383b7": {
-    "message": "Configure { title }"
-  },
-  "configured_8d0f4dc8": {
-    "message": "Configured"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
@@ -767,8 +758,8 @@
   "connect_to_speech_service_9d877e37": {
     "message": "Connect to Speech Service"
   },
-  "connect_your_bot_to_other_messaging_services_c7f6aed6": {
-    "message": "Connect your bot to other messaging services."
+  "connect_your_bot_to_microsoft_teams_and_webchat_or_e1cc2567": {
+    "message": "Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_8b4fc9f0": {
     "message": "Connect your bot to Teams, external channels, or enable speech. Learn more"
@@ -1547,8 +1538,8 @@
   "extension_settings_899ccb55": {
     "message": "Extension Settings"
   },
-  "external_service_adapters_5218e6a3": {
-    "message": "External service adapters"
+  "external_connections_3415fea5": {
+    "message": "External connections"
   },
   "external_services_da7820ce": {
     "message": "External services"
@@ -1609,6 +1600,9 @@
   },
   "filter_e3398407": {
     "message": "Filter"
+  },
+  "find_and_install_more_external_services_in_the_pac_9a7cbe7f": {
+    "message": "Find and install more external services in the package manager."
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
@@ -1915,9 +1909,6 @@
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
-  },
-  "install_more_adapters_in_a_the_package_manager_a_156fb028": {
-    "message": "Install more adapters in <a>the package manager</a>."
   },
   "install_node_js_1857298c": {
     "message": "Install Node.js"
@@ -2627,9 +2618,6 @@
   "open_web_chat_23601990": {
     "message": "Open Web Chat"
   },
-  "open_web_chat_7a24d4f8": {
-    "message": "Open web chat"
-  },
   "open_your_azure_bot_resource_9165e3d1": {
     "message": "Open your Azure Bot resource"
   },
@@ -2851,9 +2839,6 @@
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
-  },
-  "publish_profile_to_configure_ca758e68": {
-    "message": "Publish profile to configure:"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
@@ -3161,9 +3146,6 @@
   "schema_24739a48": {
     "message": "Schema"
   },
-  "schema_definition_not_found_in_sdk_schema_1102ce9b": {
-    "message": "Schema definition not found in sdk.schema."
-  },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
     "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
   },
@@ -3253,6 +3235,9 @@
   },
   "select_property_type_45c6e68e": {
     "message": "Select property type"
+  },
+  "select_publishing_profile_a3f478e2": {
+    "message": "Select publishing profile"
   },
   "select_qna_keys_e616cc57": {
     "message": "Select QnA keys"
@@ -3563,6 +3548,12 @@
   "test_in_emulator_b1b3c278": {
     "message": "Test in Emulator"
   },
+  "test_in_web_chat_57f58838": {
+    "message": "Test in Web Chat"
+  },
+  "test_in_web_chat_eb14550": {
+    "message": "Test in web chat"
+  },
   "test_with_web_chat_and_emulator_d0f87a81": {
     "message": "Test with Web Chat and Emulator"
   },
@@ -3796,6 +3787,9 @@
   },
   "toolbar_bafd4228": {
     "message": "toolbar"
+  },
+  "topic_e820dbbd": {
+    "message": "(Topic)"
   },
   "total_mb_531a3721": {
     "message": "{ total }MB"

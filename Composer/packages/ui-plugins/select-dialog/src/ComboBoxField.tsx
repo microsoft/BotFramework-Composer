@@ -25,7 +25,8 @@ const getIconName = (option: IComboBoxOption) => {
   } else if (option.key === 'expression') {
     return 'CalculatorEqualTo';
   } else if (option.data?.isTopic) {
-    return Icons.TOPIC;
+    const isSystemTopic = option.data.content?.isSystemTopic;
+    return isSystemTopic ? Icons.SYSTEM_TOPIC : Icons.TOPIC;
   } else {
     return Icons.DIALOG;
   }
