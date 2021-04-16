@@ -531,7 +531,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <ManageSpeech
         hidden={!showSpeechModal}
-        setVisible={setShowSpeechModal}
         onDismiss={() => {
           setShowSpeechModal(false);
         }}
@@ -541,6 +540,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         onNext={() => {
           setShowSpeechModal(false);
         }}
+        onToggleVisibility={setShowSpeechModal}
       />
       <div>
         <Dropdown

@@ -15,7 +15,7 @@ type ManageLuisProps = {
   onDismiss: () => void;
   onGetKey: (settings: { key: string; region: string }) => void;
   onNext?: () => void;
-  setVisible: (value: any) => void;
+  onToggleVisibility: (visible: boolean) => void;
 };
 
 export const ManageLuis = (props: ManageLuisProps) => {
@@ -56,10 +56,10 @@ export const ManageLuis = (props: ManageLuisProps) => {
       regions={LUIS_REGIONS}
       serviceKeyType={'LUIS.Authoring'}
       serviceName={'LUIS'}
-      setVisible={props.setVisible}
       onDismiss={props.onDismiss}
       onGetKey={props.onGetKey}
       onNext={props.onNext}
+      onToggleVisibility={props.onToggleVisibility}
     />
   );
 };

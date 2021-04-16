@@ -426,7 +426,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <ManageLuis
           hidden={!displayManageLuis}
-          setVisible={setDisplayManageLuis}
           onDismiss={() => {
             setDisplayManageLuis(false);
           }}
@@ -434,10 +433,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onNext={() => {
             setDisplayManageLuis(false);
           }}
+          onToggleVisibility={setDisplayManageLuis}
         />
         <ManageQNA
           hidden={!displayManageQNA}
-          setVisible={setDisplayManageQNA}
           onDismiss={() => {
             setDisplayManageQNA(false);
           }}
@@ -445,6 +444,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onNext={() => {
             setDisplayManageQNA(false);
           }}
+          onToggleVisibility={setDisplayManageQNA}
         />
       </div>
     </CollapsableWrapper>

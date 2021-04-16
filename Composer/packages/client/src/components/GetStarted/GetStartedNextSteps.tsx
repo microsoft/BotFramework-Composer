@@ -247,23 +247,23 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
         <ManageLuis
           hidden={!displayManageLuis}
-          setVisible={setDisplayManageLuis}
           onDismiss={hideManageLuis}
           onGetKey={updateLuisSettings}
           onNext={() => {
             hideManageLuis();
             doNextStep('luis');
           }}
+          onToggleVisibility={setDisplayManageLuis}
         />
         <ManageQNA
           hidden={!displayManageQNA}
-          setVisible={setDisplayManageQNA}
           onDismiss={hideManageQNA}
           onGetKey={updateQNASettings}
           onNext={() => {
             hideManageQNA();
             doNextStep('qna');
           }}
+          onToggleVisibility={setDisplayManageQNA}
         />
 
         {highlightLUIS && (

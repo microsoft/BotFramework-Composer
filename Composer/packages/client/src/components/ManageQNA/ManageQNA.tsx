@@ -19,7 +19,7 @@ type ManageQNAProps = {
   onDismiss: () => void;
   onGetKey: (settings: { key: string; region: string }) => void;
   onNext?: () => void;
-  setVisible: (value: any) => void;
+  onToggleVisibility: (visible: boolean) => void;
 };
 
 export const ManageQNA = (props: ManageQNAProps) => {
@@ -35,7 +35,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
     region: string
   ): Promise<string> => {
     // hide modal
-    props.setVisible(false);
+    props.onToggleVisibility(false);
 
     // start background QNA
     createQNA(rootBotProjectId, tokenCredentials, subscriptionId, resourceGroupName, resourceName, region);
@@ -53,10 +53,10 @@ export const ManageQNA = (props: ManageQNAProps) => {
       regions={QNA_REGIONS}
       serviceKeyType={'QnAMaker'}
       serviceName={'QnA Maker'}
-      setVisible={props.setVisible}
       onDismiss={props.onDismiss}
       onGetKey={props.onGetKey}
       onNext={props.onNext}
+      onToggleVisibility={props.onToggleVisibility}
     />
   );
 };

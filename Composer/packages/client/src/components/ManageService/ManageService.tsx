@@ -47,7 +47,7 @@ type ManageServiceProps = {
   serviceName: string;
   regions?: IDropdownOption[];
   serviceKeyType: string;
-  setVisible: (value: any) => void;
+  onToggleVisibility: (visible: boolean) => void;
 };
 
 type KeyRec = {
@@ -247,11 +247,7 @@ export const ManageService = (props: ManageServiceProps) => {
               { service: props.serviceName }
             )
           );
-          setOutcomeSummary(
-            <div>
-              <p>{err.message}</p>
-            </div>
-          );
+          setOutcomeSummary(<p>{err.message}</p>);
           setOutcomeError(true);
           setCurrentPage(3);
           setLoading(undefined);
@@ -286,11 +282,7 @@ export const ManageService = (props: ManageServiceProps) => {
             { service: props.serviceName }
           )
         );
-        setOutcomeSummary(
-          <div>
-            <p>{err.message}</p>
-          </div>
-        );
+        setOutcomeSummary(<p>{err.message}</p>);
         setOutcomeError(true);
         setCurrentPage(3);
         setLoading(undefined);
@@ -673,7 +665,7 @@ export const ManageService = (props: ManageServiceProps) => {
         title={formatMessage('Share resource request')}
         onBack={() => {
           setShowHandoff(false);
-          props.setVisible(true);
+          props.onToggleVisibility(true);
         }}
         onDismiss={() => setShowHandoff(false)}
       />

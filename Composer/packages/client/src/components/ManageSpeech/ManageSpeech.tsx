@@ -14,7 +14,7 @@ type ManageSpeechProps = {
   onDismiss: () => void;
   onGetKey: (settings: { key: string; region: string }) => void;
   onNext?: () => void;
-  setVisible: (value: any) => void;
+  onToggleVisibility: (visible: boolean) => void;
 };
 
 export const ManageSpeech = (props: ManageSpeechProps) => {
@@ -51,10 +51,10 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
       hidden={props.hidden}
       serviceKeyType={'SpeechServices'}
       serviceName={'Speech'}
-      setVisible={props.setVisible}
       onDismiss={props.onDismiss}
       onGetKey={props.onGetKey}
       onNext={props.onNext}
+      onToggleVisibility={props.onToggleVisibility}
     />
   );
 };
