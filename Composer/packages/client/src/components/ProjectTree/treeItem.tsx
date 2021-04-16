@@ -459,7 +459,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       }
 
       return (
-        // *** THIS IS NEW STUFF, VERIFY IT
         <TreeItemContent tooltip={link.tooltip}>
           <div
             data-is-focusable
