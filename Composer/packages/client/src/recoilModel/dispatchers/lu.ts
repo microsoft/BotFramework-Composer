@@ -186,7 +186,6 @@ export const luDispatcher = () => {
     ) => {
       const { snapshot } = callbackHelpers;
       payloads.map(async ({ id, content, projectId }) => {
-        // const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
         try {
           const updatedFile = (await luWorker.parse(id, content, luFeatures, [])) as LuFile;

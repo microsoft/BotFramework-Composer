@@ -12,7 +12,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { LuEditor } from '@bfc/code-editor';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { LuFile, LuIntentSection, SDKKinds } from '@bfc/shared';
+import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -31,27 +31,26 @@ const detailListContainer = css`
   position: relative;
   overflow: hidden;
   flex-grow: 1;
-  border: 1px solid E5E5E5;
+  border: 1px solid #e5e5e5;
 `;
 
-interface SelectIntentProps {
+type SelectIntentProps = {
   manifest: {
     dispatchModels: {
-      intents: Array<string> | object;
+      intents: string[] | object;
       languages: object;
     };
-    [key: string]: any;
-  };
+  } & Record<string, any>;
   languages: string[];
   projectId: string;
-  luFeatures: any;
+  luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
-  onSubmit: (event, content: string, enable: boolean) => void;
+  onSubmit: (event: Event, content: string, enable: boolean) => void;
   onDismiss: () => void;
-  setTitle: (value) => void;
+  onUpdateTitle: (title: { title: string; subText: string }) => void;
   onBack: () => void;
-}
+} & Record<string, any>;
 
 const columns = [
   {
@@ -98,7 +97,7 @@ const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: strin
 };
 
 const getParsedLuFiles = async (files: { id: string; content: string }[], luFeatures, lufiles) => {
-  const promises = files?.map((item) => {
+  const promises = files.map((item) => {
     return luWorker.parse(item.id, item.content, luFeatures, lufiles) as Promise<LuFile>;
   });
   const luFiles: LuFile[] = await Promise.all(promises);
@@ -124,7 +123,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     projectId,
     rootLuFiles,
     dialogId,
-    setTitle,
+    onUpdateTitle,
     onBack,
   } = props;
   const [page, setPage] = useState(0);
@@ -280,7 +279,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         <Orchestractor
           projectId={projectId}
           onBack={() => {
-            setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
+            onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
             setShowOrchestratorDialog(false);
           }}
           onSubmit={handleSubmit}
@@ -329,7 +328,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                 text={formatMessage('Back')}
                 onClick={() => {
                   setPage(page - 1);
-                  setTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
+                  onUpdateTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
                 }}
               />
             ) : (
@@ -348,13 +347,13 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                       handleSubmit(ev, true);
                     } else {
                       // show orchestractor
-                      setTitle(enableOrchestratorDialog);
+                      onUpdateTitle(enableOrchestratorDialog);
                       setShowOrchestratorDialog(true);
                     }
                   } else {
                     // show next page
                     setPage(page + 1);
-                    setTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
+                    onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
                   }
                 }}
               />

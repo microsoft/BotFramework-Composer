@@ -27,8 +27,6 @@ export const importOrchestractor = async (projectId: string, reloadProject, setA
     }
   } catch (err) {
     TelemetryClient.track('PackageInstallFailed', { ...reqBody, isUpdate: reqBody.isUpdating });
-
-    console.error(err);
     setApplicationLevelError({
       status: err.response.status,
       message: err.response && err.response.data.message ? err.response.data.message : err,
