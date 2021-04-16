@@ -37,7 +37,17 @@ export const topicsSelectorFamily = selectorFamily<DialogInfo[], string>({
       .map((dialogId) => {
         return get(dialogState({ projectId, dialogId }));
       })
-      .filter((d) => d.isTopic);
+      .filter((d) => d.isTopic)
+      .sort((a, b) => {
+        // sort system topics at the end of the list
+        if (a.content?.isSystemTopic) {
+          return 1;
+        } else if (b.content?.isSystemTopic) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
   },
 });
 
