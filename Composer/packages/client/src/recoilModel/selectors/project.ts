@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { BotIndexer } from '@bfc/indexers';
-import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
+import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile, SDKKinds } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqBy from 'lodash/uniqBy';
 import { selector, selectorFamily } from 'recoil';
@@ -30,6 +30,7 @@ import {
   botEndpointsState,
   localeState,
   botStatusState,
+  botProjectSpaceLoadedState,
 } from '../atoms';
 import {
   dialogsSelectorFamily,
@@ -43,6 +44,7 @@ import {
 } from '../selectors';
 
 import { lgFilesSelectorFamily } from './lg';
+import { topicsSelectorFamily } from './dialogs';
 // Selector return types
 export type TreeDataPerProject = {
   isRemote: boolean;
@@ -293,6 +295,7 @@ export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
     return projectIds.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(dialogsSelectorFamily(projectId));
+      const topics = get(topicsSelectorFamily(projectId));
       const sortedDialogs = [...dialogs].sort((x, y) => {
         if (x.isRoot) {
           return -1;
@@ -340,6 +343,7 @@ export const projectTreeSelectorFamily = selector<TreeDataPerProject[]>({
         isRemote,
         isRootBot,
         sortedDialogs,
+        topics,
         luImports,
         lgImports,
         lgImportsList,
@@ -378,16 +382,37 @@ export const webChatEssentialsSelector = selectorFamily<WebChatEssentials, strin
   },
 });
 
+function getBaseName(filename: string, sep?: string): string {
+  if (sep) return filename.substr(0, filename.lastIndexOf(sep));
+  return filename.substring(0, filename.lastIndexOf('.')) || filename;
+}
+
+const isEmptyFile = (files, fileId) => {
+  const luFileId = fileId.replace(/\.lu$/, '');
+  return (
+    files
+      .find(({ id }) => getBaseName(id) === luFileId)
+      ?.content.trim()
+      .replace(/^>.*$/g, '')
+      .trim() === ''
+  );
+};
+
 export const allRequiredRecognizersSelector = selector({
   key: 'allRequiredRecognizersSelector',
   get: ({ get }) => {
     const ids = get(botProjectIdsState);
+    const loaded = get(botProjectSpaceLoadedState);
+    if (!loaded) return [];
+
     return ids.reduce((result: { projectId: string; requiresLUIS: boolean; requiresQNA: boolean }[], id: string) => {
       const botAssets = get(botAssetsSelectFamily(id));
       if (botAssets) {
         const { dialogs, luFiles, qnaFiles } = botAssets;
-        const requiresLUIS = BotIndexer.shouldUseLuis(dialogs, luFiles);
-        const requiresQNA = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
+        const requiresLUIS = dialogs.some(
+          (dialog) => dialog.luProvider === SDKKinds.LuisRecognizer && !isEmptyFile(luFiles, dialog.luFile)
+        );
+        const requiresQNA = qnaFiles.some((file) => file.content.trim().replace(/^>.*$/g, '').trim() !== '');
         result.push({ projectId: id, requiresLUIS, requiresQNA });
       }
       return result;

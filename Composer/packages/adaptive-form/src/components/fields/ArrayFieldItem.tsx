@@ -50,14 +50,14 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
   const contextItems: IContextualMenuItem[] = [
     {
       key: 'moveUp',
-      text: formatMessage('Move Up'),
+      text: formatMessage('Move up'),
       iconProps: { iconName: 'CaretSolidUp' },
       disabled: !canMoveUp,
       onClick: fabricMenuItemClickHandler(() => onReorder(index - 1)),
     },
     {
       key: 'moveDown',
-      text: formatMessage('Move Down'),
+      text: formatMessage('Move down'),
       iconProps: { iconName: 'CaretSolidDown' },
       disabled: !canMoveDown,
       onClick: fabricMenuItemClickHandler(() => onReorder(index + 1)),
@@ -96,7 +96,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
         />
       </div>
       <IconButton
-        ariaLabel={formatMessage('Item Actions')}
+        ariaLabel={formatMessage('Item actions')}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: contextItems }}
         styles={{
