@@ -60,7 +60,7 @@ const tree = css`
   label: tree;
 `;
 
-const headerCSS = (label: string, isActive?: boolean) => css`
+export const headerCSS = (label: string, isActive?: boolean) => css`
   width: 100%;
   label: ${label};
   :hover {
