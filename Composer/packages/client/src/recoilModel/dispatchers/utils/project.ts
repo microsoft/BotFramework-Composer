@@ -33,6 +33,8 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
+import { checkIfDotnetVersionMissing, missingDotnetVersionError } from '../../../utils/runtimeErrors';
+import { Text } from '../../../constants';
 import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
@@ -377,8 +379,21 @@ export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; 
   }
 };
 
-export const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
-  setError(callbackHelpers, ex);
+export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) => {
+  console.log('HANDLING PROJECT ERROR', error.response?.data?.message);
+  const isDotnetError = checkIfDotnetVersionMissing({
+    message: error.response?.data?.message ?? error.message ?? '',
+  });
+
+  if (isDotnetError) {
+    // standardError = {
+    //   title: Text.DOTNETFAILURE,
+    //   ...missingDotnetVersionError,
+    // };
+    alert('HEY YOU NEED A DOTNET');
+  } else {
+    setError(callbackHelpers, error);
+  }
 };
 
 export const processSchema = (projectId: string, schema: any) => ({
