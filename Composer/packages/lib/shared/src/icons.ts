@@ -14,4 +14,5 @@ export const Icons = {
   EXTERNAL_SKILL: 'Globe',
   EXPRESSION: 'CalculatorEqualTo',
   TOPIC: 'CannedChat',
+  SYSTEM_TOPIC: 'SystemTopic',
 };

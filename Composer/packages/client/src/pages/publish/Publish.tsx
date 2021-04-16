@@ -29,6 +29,7 @@ import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
 import { PublishTargets } from '../botProject/PublishTargets';
+import { navigateTo } from '../../utils/navigation';
 
 import { ProjectList } from './components/projectList/ProjectList';
 import { PublishDialog } from './PublishDialog';
@@ -233,14 +234,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const manageSkillPublishProfile = (skillId: string) => {
-    setActiveTab('provision');
+    setActiveTab('addNewPublishProfile');
     setProvisionProject(skillId);
   };
 
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
     if (location.hash === '#addNewPublishProfile') {
-      setActiveTab('provision');
+      setActiveTab('addNewPublishProfile');
     }
   }, [location]);
 
@@ -426,7 +427,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <Pivot
         selectedKey={activeTab}
         styles={{ root: { marginLeft: 12 } }}
-        onLinkClick={(link) => setActiveTab(link?.props?.itemKey || '')}
+        onLinkClick={(link) => {
+          setActiveTab(link?.props?.itemKey || '');
+          if (link?.props.itemKey) {
+            setActiveTab(link.props.itemKey);
+            navigateTo(`/bot/${projectId}/publish/all/#${link.props.itemKey}`);
+          }
+        }}
       >
         <PivotItem headerText={formatMessage('Publish')} itemKey={'publish'}>
           <div css={ContentStyle} data-testid="Publish" role="main">
@@ -444,7 +451,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             </div>
           </div>
         </PivotItem>
-        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'provision'}>
+        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'addNewPublishProfile'}>
           <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
             {botProjectData && botProjectData.length > 1 && (
               <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
