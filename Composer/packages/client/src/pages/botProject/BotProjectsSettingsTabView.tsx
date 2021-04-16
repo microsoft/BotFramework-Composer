@@ -75,12 +75,16 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           item?.props.itemKey && setSelectedKey(item.props.itemKey as PivotItemKey);
         }}
       >
-        <PivotItem data-testid="basicsTab" headerText={formatMessage('Basics')} itemKey={PivotItemKey.Basics}>
+        <PivotItem data-testid="overviewTab" headerText={formatMessage('Overview')} itemKey={PivotItemKey.Basics}>
           <BotProjectInfo projectId={projectId} />
           <AppIdAndPassword projectId={projectId} />
           <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
-        <PivotItem data-testid="luisQnaTab" headerText={formatMessage('LUIS and QnA')} itemKey={PivotItemKey.LuisQna}>
+        <PivotItem
+          data-testid="developmentResourcesTab"
+          headerText={formatMessage('Development Resources')}
+          itemKey={PivotItemKey.LuisQna}
+        >
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
         <PivotItem
@@ -97,7 +101,11 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         >
           {isRootBot && <BotSkillConfiguration projectId={projectId} />}
         </PivotItem>
-        <PivotItem data-testid="languageTab" headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
+        <PivotItem
+          data-testid="localizationTab"
+          headerText={formatMessage('localization')}
+          itemKey={PivotItemKey.Language}
+        >
           <BotLanguage projectId={projectId} />
         </PivotItem>
       </Pivot>
