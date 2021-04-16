@@ -76,8 +76,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         }}
       >
         <PivotItem data-testid="overviewTab" headerText={formatMessage('Overview')} itemKey={PivotItemKey.Basics}>
-          <BotProjectInfo projectId={projectId} />
-          <AppIdAndPassword projectId={projectId} />
+          <BotProjectInfo isRootBot={isRootBot} projectId={projectId} />
           <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
         <PivotItem
@@ -86,6 +85,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           itemKey={PivotItemKey.LuisQna}
         >
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
+          <AppIdAndPassword projectId={projectId} />
         </PivotItem>
         <PivotItem
           data-testid="connectionsTab"

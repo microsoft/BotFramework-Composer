@@ -6,10 +6,10 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const title = css`
-  font-size: ${FontSizes.medium};
+  font-size: ${FontSizes.large};
   font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
+  margin-top: 13px;
+  margin-bottom: 10px;
 `;
 
 export const subtitle = css`
