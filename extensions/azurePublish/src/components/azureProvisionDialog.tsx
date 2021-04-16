@@ -272,6 +272,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // form options
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
+  const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string>('');
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
@@ -282,9 +283,6 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
-
-  // null = loading
-  const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
   const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
@@ -312,21 +310,21 @@ export const AzureProvisionDialog: React.FC = () => {
     const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
 
     const provisionComposer = `node provisionComposer.js --subscriptionId ${
-      formData.subscriptionId ?? '<YOUR SUBSCRIPTION ID>'
-    } --name ${formData.hostname ?? '<RESOURCE NAME>'}
-    --appPassword=<16 CHAR PASSWORD>
-    --location=${formData.region || 'westus'}
-    --resourceGroup=${formData.resourceGroup || '<RESOURCE GROUP NAME>'}
-    --createLuisResource=${createLuisResource}
-    --createLuisAuthoringResource=${createLuisAuthoringResource}
-    --createCosmosDb=${createCosmosDb}
-    --createStorage=${createStorage}
-    --createAppInsights=${createAppInsights}
-    --createQnAResource=${createQnAResource}
-    `;
+      formData.subscriptionId || '<YOUR SUBSCRIPTION ID>'
+    } --name ${formData.hostname || '<RESOURCE NAME>'} --appPassword=<16 CHAR PASSWORD> --location=${
+      formData.region || 'westus'
+    } --resourceGroup=${
+      formData.resourceGroup || '<RESOURCE GROUP NAME>'
+    } --createLuisResource=${createLuisResource} --createLuisAuthoringResource=${createLuisAuthoringResource} --createCosmosDb=${createCosmosDb} --createStorage=${createStorage} --createAppInsights=${createAppInsights} --createQnAResource=${createQnAResource}`;
 
     const instructions = formatMessage(
-      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created.' +
+        ' Please follow the instructions below to create these resources and provide them to me.\n\n' +
+        '1. Follow the instructions at the link below to run the provisioning command (seen below)\n' +
+        '2. Copy and paste the resulting JSON and securely share it with me.\n\n' +
+        'Provisoning Command:\n' +
+        '{command}\n\n' +
+        'Detailed instructions:\nhttps://aka.ms/how-to-complete-provision-handoff',
       { command: provisionComposer }
     );
 
@@ -391,7 +389,6 @@ export const AzureProvisionDialog: React.FC = () => {
           sessionExpired: false,
         });
         setPageAndTitle(PageTypes.ChooseAction);
-        setLoginErrorMsg(undefined);
       } else {
         setLoadingErrorMessage(
           formatMessage(
@@ -399,30 +396,57 @@ export const AzureProvisionDialog: React.FC = () => {
           )
         );
       }
-    } else {
-      getTenants().then((tenants) => {
-        if (isMounted.current) {
-          setAllTenants(tenants);
-          if (!getTenantIdFromCache()) {
-            if (tenants?.length > 0) {
-              // seed tenant selection with 1st tenant
-              updateFormData('tenantId', tenants[0].tenantId);
-            }
-          } else {
-            updateFormData('tenantId', getTenantIdFromCache());
-          }
-        }
-      });
     }
-
     setIsLoading(false);
   }, []);
 
+  useEffect(() => {
+    if (page === PageTypes.ConfigProvision) {
+      if (!userShouldProvideTokens()) {
+        // TODO: handle when existing profile is being edited
+        // We should get an ARM token for the tenant in the profile and then fetch tenant details after to show in the UI.
+        // Note: For electron, getTenants may cause the sign-in dialog to appear.
+        getTenants()
+          .then((tenants) => {
+            if (isMounted.current) {
+              setAllTenants(tenants);
+
+              if (tenants.length === 0) {
+                setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
+              } else {
+                setTenantsErrorMessage(undefined);
+              }
+
+              const cachedTenantId = getTenantIdFromCache();
+
+              // default to the last used tenant only if it is in the account's tenants
+              if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+                updateFormData('tenantId', cachedTenantId);
+              } else {
+                setTenantId(undefined);
+                if (tenants?.length > 0) {
+                  // seed tenant selection with 1st tenant
+                  updateFormData('tenantId', tenants[0].tenantId);
+                }
+              }
+            }
+          })
+          .catch((err) => {
+            setTenantsErrorMessage(
+              formatMessage('There was a problem loading Azure directories. {errMessage}', {
+                errMessage: err.message || err.toString(),
+              })
+            );
+          });
+      }
+    }
+  }, [page]);
+
   const getTokenForTenant = (tenantId: string) => {
-    // set tenantId in cache.
-    setTenantId(tenantId);
     getARMTokenForTenant(tenantId)
       .then((token) => {
+        // set tenantId in cache only after a token is received
+        setTenantId(tenantId);
         setToken(token);
         const decoded = decodeToken(token);
         setCurrentUser({
@@ -432,17 +456,22 @@ export const AzureProvisionDialog: React.FC = () => {
           expiration: (decoded.exp || 0) * 1000, // convert to ms,
           sessionExpired: false,
         });
-        setLoginErrorMsg(undefined);
+        setTenantsErrorMessage(undefined);
       })
       .catch((err) => {
         setTenantId(undefined);
         setCurrentUser(undefined);
-        setLoginErrorMsg(err.message || err.toString());
+        setTenantsErrorMessage(
+          formatMessage('There was a problem getting the access token for the current Azure directory. {errMessage}', {
+            errMessage: err.message || err.toString(),
+          })
+        );
+        setTenantsErrorMessage(err.message || err.toString());
       });
   };
 
   useEffect(() => {
-    if (formData.tenantId) {
+    if (formData.tenantId && page === PageTypes.ConfigProvision) {
       if (formData.tenantId !== currentConfig?.tenantId) {
         // reset form data when tenant id changes
         setFormData((current) => ({
@@ -459,7 +488,7 @@ export const AzureProvisionDialog: React.FC = () => {
         getTokenForTenant(formData.tenantId);
       }
     }
-  }, [formData.tenantId]);
+  }, [formData.tenantId, page]);
 
   const getResources = async () => {
     try {
@@ -715,7 +744,7 @@ export const AzureProvisionDialog: React.FC = () => {
             'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
           )}
           disabled={allTenants.length === 1 || currentConfig?.tenantId}
-          errorMessage={loginErrorMsg}
+          errorMessage={tenantsErrorMessage}
           label={formatMessage('Azure Directory')}
           options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
           selectedKey={formData.tenantId}
@@ -1102,10 +1131,13 @@ export const AzureProvisionDialog: React.FC = () => {
   return (
     <Fragment>
       <ProvisionHandoff
-        developerInstructions={formatMessage('Send this to your IT admin')}
+        developerInstructions={formatMessage(
+          'Copy and share the following information with your Azure admin to provision resources on your behalf.'
+        )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
-        title={formatMessage('Generate a provisioning request')}
+        learnMoreLink="https://aka.ms/how-to-complete-provision-handoff"
+        title={formatMessage('Share resource request')}
         onBack={() => {
           setShowHandoff(false);
         }}

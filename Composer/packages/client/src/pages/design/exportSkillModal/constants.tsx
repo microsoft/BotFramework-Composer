@@ -94,7 +94,7 @@ export interface ContentProps {
   onChange: (_: any) => void;
   projectId: string;
   callers: string[];
-  setCallers: (callers: string[]) => void;
+  onUpdateCallers: (callers: string[]) => void;
 }
 
 interface Button {
@@ -188,7 +188,26 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       backButton,
       {
-        disabled: ({ publishTargets }) => publishTargets.length === 0,
+        disabled: ({ publishTargets }) => {
+          try {
+            return (
+              publishTargets.findIndex((item) => {
+                const config = JSON.parse(item.configuration);
+                return (
+                  config.settings &&
+                  config.settings.MicrosoftAppId &&
+                  config.hostname &&
+                  config.settings.MicrosoftAppId.length > 0 &&
+                  config.hostname.length > 0
+                );
+              }) < 0
+            );
+          } catch (err) {
+            console.log(err.message);
+            return true;
+          }
+        },
+
         primary: true,
         text: () => formatMessage('Generate and Publish'),
         onClick: ({ generateManifest, onNext, onPublish }) => () => {

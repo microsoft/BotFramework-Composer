@@ -137,7 +137,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       return {
         id: b.projectId,
         name: b.name,
-        ariaLabel: formatMessage('bot'),
+        ariaLabel: formatMessage('Bot'),
         url: createBotSettingUrl(rootBotProjectId ?? '', b.projectId),
         isRootBot: b.isRootBot,
       };
@@ -153,7 +153,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   const onRenderHeaderContent = () => {
     return formatMessage(
-      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'
+      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
     );
   };
 

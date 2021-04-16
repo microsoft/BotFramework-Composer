@@ -46,7 +46,7 @@ describe('Skill page', () => {
 });
 
 describe('<SkillForm />', () => {
-  it('should render the skill form, and update skill manifest url', () => {
+  it('should render the skill form, and update skill manifest URL', () => {
     try {
       jest.useFakeTimers();
 
@@ -59,7 +59,7 @@ describe('<SkillForm />', () => {
         recoilInitState
       );
 
-      const urlInput = getByLabelText('Manifest url');
+      const urlInput = getByLabelText('Manifest URL');
       act(() => {
         fireEvent.change(urlInput, {
           target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
@@ -96,8 +96,8 @@ describe('<SkillForm />', () => {
   });
 
   describe('validateManifestUrl', () => {
-    it('should set the error for an invalid url', async () => {
-      const formData = { manifestUrl: 'invalid url' };
+    it('should set the error for an invalid URL', async () => {
+      const formData = { manifestUrl: 'invalid URL' };
 
       await validateManifestUrl({
         formData,
@@ -110,7 +110,7 @@ describe('<SkillForm />', () => {
       });
 
       expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({ manifestUrl: 'Url should start with http[s]://' })
+        expect.objectContaining({ manifestUrl: 'URL should start with http:// or https://' })
       );
       expect(setSkillManifest).not.toBeCalled();
       expect(setValidationState).not.toBeCalled();
@@ -118,7 +118,7 @@ describe('<SkillForm />', () => {
   });
 
   describe('validateManifestUrl', () => {
-    it('should set an error for a missing manifest url', () => {
+    it('should set an error for a missing manifest URL', () => {
       const formData = {};
 
       validateManifestUrl({
@@ -131,10 +131,10 @@ describe('<SkillForm />', () => {
         validationState,
       });
 
-      expect(setFormDataErrors).toBeCalledWith(expect.objectContaining({ manifestUrl: 'Please input a manifest Url' }));
+      expect(setFormDataErrors).toBeCalledWith(expect.objectContaining({ manifestUrl: 'Please input a manifest URL' }));
     });
 
-    it('should try and retrieve manifest if manifest url meets other criteria', async () => {
+    it('should try and retrieve manifest if manifest URL meets other criteria', async () => {
       (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: 'skill manifest' });
 
       const formData = { manifestUrl: 'https://skill' };
@@ -204,7 +204,7 @@ describe('<SkillForm />', () => {
       );
       expect(setFormDataErrors).toBeCalledWith(
         expect.objectContaining({
-          manifestUrl: 'Manifest url can not be accessed',
+          manifestUrl: 'Manifest URL can not be accessed',
         })
       );
     });

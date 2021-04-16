@@ -48,6 +48,7 @@ const emptyDialog: DialogInfo = {
   intentTriggers: [],
   skills: [],
   isFormDialog: false,
+  isTopic: false,
 };
 
 const emptyLg: LgFile = {
@@ -371,7 +372,7 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const currentTargetState = atomFamily<PublishTarget, string>({
+export const currentPublishTargetState = atomFamily<PublishTarget, string>({
   key: getFullyQualifiedKey('currentTarget'),
   default: {} as PublishTarget,
 });

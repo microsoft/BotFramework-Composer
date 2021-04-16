@@ -255,7 +255,7 @@ export const DialogCreationCopy = {
   },
   get IMPORT_QNA() {
     return {
-      title: formatMessage('Create New Knowledge Base'),
+      title: formatMessage('Create new knowledge base'),
       subText: formatMessage(
         'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
       ),
@@ -317,16 +317,13 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
-      afterSubText: formatMessage(
-        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
-      ),
+      subText: formatMessage('Enter a manifest URL to add a new skill to your bot.'),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
     return {
       title: formatMessage('Edit a skill'),
-      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+      subText: formatMessage('Enter a manifest URL to add a new skill to your bot.'),
     };
   },
 };

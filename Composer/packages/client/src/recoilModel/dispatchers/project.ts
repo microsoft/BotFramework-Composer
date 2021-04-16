@@ -28,7 +28,7 @@ import {
   createQnAOnState,
   creationFlowTypeState,
   currentProjectIdState,
-  currentTargetState,
+  currentPublishTargetState,
   dispatcherState,
   feedState,
   fetchReadMePendingState,
@@ -526,8 +526,8 @@ export const projectDispatcher = () => {
   );
 
   const updateCurrentTarget = useRecoilCallback<[string, PublishTarget], void>(
-    ({ set }: CallbackInterface) => async (projectId: string, currentTarget) => {
-      set(currentTargetState(projectId), currentTarget);
+    ({ set }: CallbackInterface) => (projectId: string, currentTarget) => {
+      set(currentPublishTargetState(projectId), currentTarget);
     }
   );
 
@@ -646,7 +646,7 @@ export const projectDispatcher = () => {
       handleProjectFailure(callbackHelpers, err);
       callbackHelpers.set(
         selectedTemplateReadMeState,
-        formatMessage('### Error encountered when getting template readMe')
+        `### ${formatMessage('Error encountered when getting template read-me file')}`
       );
     } finally {
       callbackHelpers.set(fetchReadMePendingState, false);

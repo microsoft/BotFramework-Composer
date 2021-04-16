@@ -30,4 +30,5 @@ export const mockDialog: (id: string) => DialogInfo = (id: string) => ({
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isTopic: false,
 });

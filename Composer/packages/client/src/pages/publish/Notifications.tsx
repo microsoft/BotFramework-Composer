@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 
@@ -82,11 +82,11 @@ export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: st
     width: '12px',
     height: '12px',
     fontSize: '12px',
-    color: '#D92525',
+    color: SharedColors.red10,
   });
   const errorType = css`
     margin-top: 4px;
-    color: #d92525;
+    color: ${SharedColors.red10};
   `;
   const successType = css`
     margin-top: 4px;
@@ -136,7 +136,7 @@ export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: st
                   {url}
                   <IconButton
                     iconProps={{ iconName: 'copy' }}
-                    styles={{ icon: { fontSize: '12px', color: '#0078D4' } }}
+                    styles={{ icon: { fontSize: '12px', color: CommunicationColors.primary } }}
                     onClick={() => navigator.clipboard.writeText(url)}
                   />
                 </div>
@@ -161,7 +161,7 @@ export const getSkillPublishedNotificationCardProps = (item: BotStatus, url?: st
 
 export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = false): CardProps => {
   const description = isSkill
-    ? 'Publishing your skill...'
+    ? formatMessage('Publishing your skill...')
     : formatMessage(
         `Publishing {
       count, plural,

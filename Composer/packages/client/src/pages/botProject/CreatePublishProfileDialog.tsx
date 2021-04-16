@@ -22,7 +22,6 @@ import { actionButton } from './styles';
 
 type CreatePublishProfileDialogProps = {
   projectId: string;
-  scrollToSectionId?: string;
 };
 
 export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProps> = (props) => {
@@ -70,11 +69,7 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
             data-testid={'addNewPublishProfile'}
             styles={actionButton}
             onClick={() => {
-              if (isShowAuthDialog(true)) {
-                setShowAuthDialog(true);
-              } else {
-                setDialogHidden(false);
-              }
+              isShowAuthDialog(true) ? setShowAuthDialog(true) : setDialogHidden(false);
               toggleHideDialog();
             }}
           >
@@ -100,8 +95,6 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
         <PublishProfileDialog
           closeDialog={() => {
             setDialogHidden(true);
-            // reset current
-            toggleHideDialog();
             setCurrentPublishProfile(null);
           }}
           current={currentPublishProfile}

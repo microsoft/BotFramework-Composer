@@ -10,6 +10,7 @@ import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { composeRenderFunction } from '@uifabric/utilities';
+import { DialogSetting } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
@@ -17,7 +18,6 @@ import { AzurePublishErrors, createCustomizeError, stringifyError } from './util
 import { copyDir } from './utils/copyDir';
 import { KeyVaultApi } from './keyvaultHelper/keyvaultApi';
 import { KeyVaultApiConfig } from './keyvaultHelper/keyvaultApiConfig';
-import { DialogSetting } from '@botframework-composer/types';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -66,12 +66,6 @@ export class BotProjectDeploy {
       // Update skill host endpoint
       if (settings.skillHostEndpoint) {
         settings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
-      }
-
-      // Update endpoints in skill manifests
-      const skillManifestPath = path.join(this.projPath, 'wwwroot', 'manifests');
-      if (await fs.pathExists(skillManifestPath)) {
-        await this.updateSkillSettings(profileName, hostname, settings.MicrosoftAppId, skillManifestPath, settings);
       }
 
       // STEP 1: CLEAN UP PREVIOUS BUILDS
@@ -137,6 +131,13 @@ export class BotProjectDeploy {
           path.join(pathToArtifacts, 'wwwroot', 'manifests'),
           project.fileStorage
         );
+        // Update skill endpoint url in skill manifest.
+        await this.updateSkillSettings(
+          profileName,
+          hostname,
+          settings.MicrosoftAppId,
+          path.join(pathToArtifacts, 'wwwroot', 'manifests')
+        );
       }
 
       // STEP 4: ZIP THE ASSETS
@@ -177,13 +178,8 @@ export class BotProjectDeploy {
    * @param msAppId microsoft app id
    * @param skillSettingsPath the path of skills manifest settings
    */
-  private async updateSkillSettings(
-    profileName: string,
-    hostname: string,
-    msAppId: string,
-    skillSettingsPath: string,
-    settings: DialogSetting
-  ) {
+  private async updateSkillSettings(profileName: string, hostname: string, msAppId: string, skillSettingsPath: string) {
+    /* eslint-disable-next-line security/detect-non-literal-fs-filename -- Safe as no value holds user input */
     const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
     if (manifestFiles.length === 0) {
       this.logger({
@@ -211,7 +207,7 @@ export class BotProjectDeploy {
         msAppId: msAppId,
       });
 
-      await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest);
+      await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest, { spaces: 2 });
     }
   }
 

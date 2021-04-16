@@ -9,7 +9,7 @@ import isEqual from 'lodash/isEqual';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
-import { dialogsSelectorFamily, rootBotProjectIdSelector } from '../selectors';
+import { dialogsSelectorFamily, rootBotProjectIdSelector, topicsSelectorFamily } from '../selectors';
 import { DesignPageLocation } from '../types';
 
 import { getSelected } from './../../utils/dialogUtil';
@@ -52,8 +52,20 @@ export const navigationDispatcher = () => {
       if (rootBotProjectId == null) return;
 
       const projectId = skillId ?? rootBotProjectId;
+      const topics = await snapshot.getPromise(topicsSelectorFamily(projectId));
 
       await setCurrentProjectId(callbackInterface, projectId);
+
+      // check to see if navigating to PVA topic
+      const topic = topics.find((t) => t.content?.id === dialogId);
+      if (topic) {
+        if (topic?.content?.$designer?.link) {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename
+          window.open(topic.content.$designer.link as string, '_blank');
+        }
+        // no-op even if topic has no link
+        return;
+      }
 
       const currentUri =
         trigger == null

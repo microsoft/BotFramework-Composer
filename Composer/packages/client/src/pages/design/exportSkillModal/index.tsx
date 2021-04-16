@@ -21,7 +21,7 @@ import {
   qnaFilesSelectorFamily,
   dialogsSelectorFamily,
   dialogSchemasState,
-  currentTargetState,
+  currentPublishTargetState,
   luFilesSelectorFamily,
   settingsState,
   rootBotProjectIdSelector,
@@ -42,7 +42,7 @@ interface ExportSkillModalProps {
 const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss, projectId }) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-  const currentTarget = useRecoilValue(currentTargetState(projectId));
+  const currentPublishTarget = useRecoilValue(currentPublishTargetState(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
@@ -76,7 +76,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       const updatedSetting = isAdaptive
         ? {
             ...cloneDeep(mergedSettings),
-            runtimeSettings: { ...runtimeSettings, skills: { ...runtimeSettings.skills, allowedCallers } },
+            runtimeSettings: { ...runtimeSettings, skills: { ...runtimeSettings?.skills, allowedCallers } },
           }
         : {
             ...cloneDeep(mergedSettings),
@@ -97,7 +97,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       qnaFiles,
       selectedTriggers,
       selectedDialogs,
-      currentTarget,
+      currentPublishTarget,
       projectId
     );
     setSkillManifest(manifest);
@@ -114,11 +114,11 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     }
   };
 
-  const handleTriggerPublish = async () => {
-    const filePath = `https://${JSON.parse(currentTarget.configuration).hostname}.azurewebsites.net/manifests/${
+  const handleTriggerPublish = () => {
+    const filePath = `https://${JSON.parse(currentPublishTarget.configuration).hostname}.azurewebsites.net/manifests/${
       skillManifest.id
     }.json`;
-    navigate(`/bot/${projectId}/publish/all?publishTargetName=${currentTarget.name}&url=${filePath}`);
+    navigate(`/bot/${projectId}/publish/all?publishTargetName=${currentPublishTarget.name}&url=${filePath}`);
   };
 
   const handleSave = () => {
@@ -131,7 +131,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       qnaFiles,
       selectedTriggers,
       selectedDialogs,
-      currentTarget,
+      currentPublishTarget,
       projectId
     );
     if (manifest.content && manifest.id) {
@@ -202,7 +202,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             schema={schema}
             selectedDialogs={selectedDialogs}
             selectedTriggers={selectedTriggers}
-            setCallers={setCallers}
             setErrors={setErrors}
             setSchema={setSchema}
             setSelectedDialogs={setSelectedDialogs}
@@ -211,6 +210,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             skillManifests={skillManifests}
             value={content}
             onChange={(manifestContent) => setSkillManifest({ ...skillManifest, content: manifestContent })}
+            onUpdateCallers={setCallers}
           />
         </div>
         <DialogFooter>

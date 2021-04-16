@@ -39,14 +39,14 @@ const removeCaller = {
   },
 };
 
-export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCallers }) => {
+export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdateCallers }) => {
   const handleRemove = (index) => {
-    setCallers(callers.filter((_, i) => i !== index));
+    onUpdateCallers(callers.filter((_, i) => i !== index));
   };
   const handleAddNewAllowedCallerClick = () => {
     const currentCallers = callers.slice();
     currentCallers?.push('0000-11111-00000-11111');
-    setCallers(currentCallers);
+    onUpdateCallers(currentCallers);
   };
 
   return (
@@ -64,7 +64,7 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
                 onChange={(e, newValue) => {
                   const currentCallers = callers.slice();
                   currentCallers[index] = newValue ?? '';
-                  setCallers(currentCallers);
+                  onUpdateCallers(currentCallers);
                 }}
               />
             </div>
@@ -76,12 +76,7 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, setCall
           </div>
         );
       })}
-      <ActionButton
-        styles={addNewAllowCallers}
-        onClick={() => {
-          handleAddNewAllowedCallerClick();
-        }}
-      >
+      <ActionButton styles={addNewAllowCallers} onClick={handleAddNewAllowedCallerClick}>
         {formatMessage('Add allowed callers')}
       </ActionButton>
     </div>
