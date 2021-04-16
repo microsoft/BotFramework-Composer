@@ -247,9 +247,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           learnMoreText={formatMessage('Learn more')}
           link={missingDotnetVersionError.link.url}
           linkText={formatMessage('Install .NET Core SDK')}
-          setIsOpen={(open) => {
-            setWarnAboutDotNet(open);
-          }}
+          setIsOpen={setWarnAboutDotNet}
           text={missingDotnetVersionError.message}
           title={formatMessage('.NET required')}
         />
