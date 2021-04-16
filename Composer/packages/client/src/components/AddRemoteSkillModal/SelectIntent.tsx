@@ -100,17 +100,16 @@ const getParsedLuFiles = async (files: { id: string; content: string }[], luFeat
   const promises = files.map((item) => {
     return luWorker.parse(item.id, item.content, luFeatures, lufiles) as Promise<LuFile>;
   });
-  const luFiles: LuFile[] = await Promise.all(promises);
-  return luFiles;
+  return await Promise.all(promises);
 };
 
 const mergeIntentsContent = (intents: LuIntentSection[]) => {
   return (
     intents
-      ?.map((item) => {
-        return `> ${item.Name}` + '\n' + item.Body;
+      .map((item) => {
+        return `> ${item.Name}\n${item.Body}`;
       })
-      ?.join('\n') || ''
+      .join('\n') || ''
   );
 };
 export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
@@ -126,17 +125,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     onUpdateTitle,
     onBack,
   } = props;
-  const [page, setPage] = useState(0);
+  const [pageIndex, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
   // luFiles from manifest, language was included in root bot languages
-  const [luFiles, setLufile] = useState<Array<LuFile>>([]);
+  const [luFiles, setLufiles] = useState<Array<LuFile>>([]);
   // current locale Lufile
   const [currentLuFile, setCurrentLuFile] = useState<LuFile>();
   // selected intents in different languages
   const [multiLanguageIntents, setMultiLanguageIntents] = useState<Record<string, Array<LuIntentSection>>>({});
   // selected current locale intents content
   const [displayContent, setDisplayContent] = useState<string>('');
-  // const [diagnostics, setDiagnostics] = useState([]);
   const locale = useRecoilValue(localeState(projectId));
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
   const { batchUpdateLuFiles } = useRecoilValue(dispatcherState);
@@ -146,12 +144,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
 
   const hasOrchestrator = useMemo(() => {
     const fileName = `${dialogId}.${locale}.lu.dialog`;
-    for (const file of curRecognizers) {
-      if (file.id === fileName && file.content.$kind === SDKKinds.OrchestratorRecognizer) {
-        return true;
-      }
-    }
-    return false;
+    return curRecognizers.some((f) => f.id === fileName && f.content.$kind === SDKKinds.OrchestratorRecognizer);
   }, [curRecognizers, dialogId, locale]);
 
   const selection = useMemo(() => {
@@ -176,7 +169,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
 
   const updateLuFiles = useCallback(() => {
     const payloads: { projectId: string; id: string; content: string }[] = [];
-    rootLuFiles?.map(async (lufile) => {
+    for (const lufile of rootLuFiles) {
       const rootId = lufile.id.split('.');
       const language = rootId[rootId.length - 1];
       let append = '';
@@ -185,16 +178,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       } else {
         const intents = multiLanguageIntents[language];
         if (!intents) {
-          return;
+          continue;
         }
         append = mergeIntentsContent(intents);
       }
       payloads.push({
         projectId,
         id: lufile.id,
-        content: lufile.content + `\n # ${manifest.name} \n` + append,
+        content: `${lufile.content}\n# ${manifest.name}\n${append}`,
       });
-    });
+    }
     batchUpdateLuFiles(payloads);
   }, [rootLuFiles, projectId, locale, displayContent, multiLanguageIntents]);
 
@@ -212,7 +205,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         .then((items) => {
           items &&
             getParsedLuFiles(items, luFeaturesTemp, []).then((files) => {
-              setLufile(files);
+              setLufiles(files);
               files.map((file) => {
                 if (file.id.includes(locale)) {
                   setCurrentLuFile(file);
@@ -222,7 +215,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         })
         .catch((e) => {
           console.log(e);
-          setWarningMsg('get remote file fail');
+          setWarningMsg(formatMessage('get remote file fail'));
         });
     }
   }, [manifest.dispatchModels?.languages, languages, locale]);
@@ -231,22 +224,22 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     if (selectedIntents.length > 0) {
       const intents: LuIntentSection[] = [];
       const multiLanguageIntents: Record<string, LuIntentSection[]> = {};
-      currentLuFile?.intents?.map((intent) => {
-        if (selectedIntents.includes(intent.Name)) {
-          intents.push(intent);
+      currentLuFile?.intents?.forEach((cur) => {
+        if (selectedIntents.includes(cur.Name)) {
+          intents.push(cur);
         }
       });
-
-      luFiles?.map((file) => {
+      for (const file of luFiles) {
         const id = file.id.split('.');
         const language = id[id.length - 1];
         multiLanguageIntents[language] = [];
-        file.intents?.map((intent) => {
+        for (const intent of file.intents) {
           if (selectedIntents.includes(intent.Name)) {
             multiLanguageIntents[language].push(intent);
           }
-        });
-      });
+        }
+      }
+
       setMultiLanguageIntents(multiLanguageIntents);
       // current locale, selected intent value.
       const intentsValue = mergeIntentsContent(intents);
@@ -286,7 +279,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
         />
       ) : (
         <Stack>
-          {page === 0 ? (
+          {pageIndex === 0 ? (
             <StackItem>
               <Label>{formatMessage('Intents')}</Label>
               <div css={detailListContainer} data-is-scrollable="true">
@@ -323,11 +316,11 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           )}
           <Separator />
           <Stack horizontal horizontalAlign="space-between">
-            {page === 1 ? (
+            {pageIndex === 1 ? (
               <DefaultButton
                 text={formatMessage('Back')}
                 onClick={() => {
-                  setPage(page - 1);
+                  setPage(pageIndex - 1);
                   onUpdateTitle(selectIntentDialog.SELECT_INTENT(dialogId, manifest.name));
                 }}
               />
@@ -337,11 +330,11 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             <span>
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
-                disabled={triggerErrorMessage && page === 1 ? true : false}
+                disabled={triggerErrorMessage && pageIndex === 1 ? true : false}
                 styles={{ root: { marginLeft: '8px' } }}
-                text={page === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
+                text={pageIndex === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
                 onClick={(ev) => {
-                  if (page === 1) {
+                  if (pageIndex === 1) {
                     if (hasOrchestrator) {
                       // skip orchestractor modal
                       handleSubmit(ev, true);
@@ -352,7 +345,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                     }
                   } else {
                     // show next page
-                    setPage(page + 1);
+                    setPage(pageIndex + 1);
                     onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
                   }
                 }}

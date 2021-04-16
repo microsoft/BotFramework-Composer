@@ -1,29 +1,28 @@
-/* eslint-disable format-message/literal-pattern */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
-interface SkillDetailProps {
+type SkillDetailProps = {
   manifest: {
-    dispatchModels: {
-      intents: Array<string> | object;
-      languages: Record<string, Array<any>>;
+    dispatchModels?: {
+      intents: string[] | object;
+      languages: Record<string, any>;
     };
-    version: string;
-    activities: Record<
+    version?: string;
+    activities?: Record<
       string,
       {
         type: string;
         name: string;
       }
     >;
-    publisherName: string;
-    description: string;
-    name: string;
+    publisherName?: string;
+    description?: string;
+    name?: string;
   };
-}
+};
 const container = css`
   width: 100%;
   margin: 10px 0px;
@@ -49,22 +48,22 @@ export const SkillDetail: React.FC<SkillDetailProps> = (props) => {
   const { manifest } = props;
   return (
     <div css={container}>
-      <div css={title}>{formatMessage(manifest?.name || '')}</div>
+      <div css={title}>{manifest.name || ''}</div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Description')}</div>
-        <div css={text}>{formatMessage(manifest?.description || '')}</div>
+        <div css={text}>{manifest.description || ''}</div>
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Version')}</div>
-        <div css={text}>{formatMessage(manifest?.version || '')}</div>
+        <div css={text}>{manifest.version || ''}</div>
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Activities')}</div>
-        <div css={text}>{formatMessage(manifest?.activities ? Object.keys(manifest?.activities).join(', ') : '')}</div>
+        <div css={text}>{manifest.activities ? Object.keys(manifest.activities).join(', ') : ''}</div>
       </div>
       <div css={segment}>
         <div css={subTitle}>{formatMessage('Publisher')}</div>
-        <div css={text}>{formatMessage(manifest?.publisherName || '')}</div>
+        <div css={text}>{manifest.publisherName || ''}</div>
       </div>
     </div>
   );
