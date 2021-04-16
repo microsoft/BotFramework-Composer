@@ -82,7 +82,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const botStatusList = useMemo(() => {
     return generateBotStatusList(currentBotList, botPropertyData, publishHistoryList);
-  }, [currentBotList, botPropertyData, publishHistoryList]);
+  }, [currentBotList, botPropertyData, publishHistoryList, botProjectData]);
 
   const isPublishPending = useMemo(() => {
     return Object.values(updaterStatus).some(Boolean);
