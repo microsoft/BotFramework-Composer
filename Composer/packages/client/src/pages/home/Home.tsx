@@ -21,12 +21,15 @@ import {
   feedState,
   templateIdState,
   currentProjectIdState,
+  warnAboutDotNetState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
+import { InstallDepModal } from '../../components/InstallDepModal';
+import { missingDotnetVersionError } from '../../utils/runtimeErrors';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -70,7 +73,10 @@ const Home: React.FC<RouteComponentProps> = () => {
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
   const templateId = useRecoilValue(templateIdState);
-  const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
+    dispatcherState
+  );
+  const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -234,6 +240,20 @@ const Home: React.FC<RouteComponentProps> = () => {
           <WhatsNewsList newsList={feed.whatsNewLinks} />
         </div>
       </div>
+      {warnAboutDotNet && (
+        <InstallDepModal
+          isOpen
+          learnMore={missingDotnetVersionError.linkAfterMessage.url}
+          learnMoreText={formatMessage('Learn more')}
+          link={missingDotnetVersionError.link.url}
+          linkText={formatMessage('Install .NET Core SDK')}
+          setIsOpen={(open) => {
+            setWarnAboutDotNet(open);
+          }}
+          text={missingDotnetVersionError.message}
+          title={formatMessage('.NET required')}
+        />
+      )}
     </div>
   );
 };
