@@ -78,7 +78,7 @@ const getTriggerFormData = (intent: string, content: string): TriggerFormData =>
   regEx: '',
 });
 
-const ButtonStyle = { root: { marginLeft: '8px' } };
+const buttonStyle = { root: { marginLeft: '8px' } };
 
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
@@ -180,7 +180,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           manifest={skillManifest}
           projectId={projectId}
           rootLuFiles={luFiles}
-          setTitle={setTitle}
           onBack={() => {
             setTitle({
               subText: '',
@@ -190,6 +189,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           }}
           onDismiss={onDismiss}
           onSubmit={handleSubmit}
+          onUpdateTitle={setTitle}
         />
       ) : (
         <Fragment>
@@ -249,7 +249,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                 isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
                   <PrimaryButton
                     disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels ? true : false}
-                    styles={ButtonStyle}
+                    styles={buttonStyle}
                     text={formatMessage('Next')}
                     onClick={(event) => {
                       setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
@@ -258,7 +258,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   />
                 ) : (
                   <PrimaryButton
-                    styles={ButtonStyle}
+                    styles={buttonStyle}
                     text={formatMessage('Done')}
                     onClick={(event) => {
                       addRemoteSkill(formData.manifestUrl, formData.endpointName);
@@ -268,7 +268,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               ) : (
                 <PrimaryButton
                   disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
-                  styles={ButtonStyle}
+                  styles={buttonStyle}
                   text={formatMessage('Next')}
                   onClick={validateUrl}
                 />
