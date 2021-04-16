@@ -71,13 +71,13 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <ComboBox
         useComboBoxAsMenuWidth
-        autoComplete="off"
+        autoComplete="on"
         id={id}
         options={options}
         selectedKey={comboboxTitle ? 'customTitle' : value}
         onBlur={() => onBlur?.(id, value)}
+        onChange={onChange}
         onFocus={() => onFocus?.(id, value)}
-        onItemClick={onChange}
         onRenderOption={onRenderOption}
       />
     </React.Fragment>
