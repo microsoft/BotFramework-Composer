@@ -30,7 +30,7 @@ import { getBaseName } from '../../utils/fileUtil';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
-import { INDENT_PER_LEVEL, LEVEL_PADDING, TREE_PADDING } from './constants';
+import { INDENT_PER_LEVEL, TREE_PADDING } from './constants';
 import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
 import { isChildTriggerLinkSelected, doesLinkMatch } from './helpers';
 import { ProjectHeader } from './ProjectHeader';
