@@ -68,12 +68,6 @@ export class BotProjectDeploy {
         settings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
       }
 
-      // Update endpoints in skill manifests
-      const skillManifestPath = path.join(this.projPath, 'wwwroot', 'manifests');
-      if (await fs.pathExists(skillManifestPath)) {
-        await this.updateSkillSettings(profileName, hostname, settings.MicrosoftAppId, skillManifestPath, settings);
-      }
-
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -137,6 +131,13 @@ export class BotProjectDeploy {
           path.join(pathToArtifacts, 'wwwroot', 'manifests'),
           project.fileStorage
         );
+        // Update skill endpoint url in skill manifest.
+        await this.updateSkillSettings(
+          profileName,
+          hostname,
+          settings.MicrosoftAppId,
+          path.join(pathToArtifacts, 'wwwroot', 'manifests')
+        );
       }
 
       // STEP 4: ZIP THE ASSETS
@@ -177,13 +178,7 @@ export class BotProjectDeploy {
    * @param msAppId microsoft app id
    * @param skillSettingsPath the path of skills manifest settings
    */
-  private async updateSkillSettings(
-    profileName: string,
-    hostname: string,
-    msAppId: string,
-    skillSettingsPath: string,
-    settings: DialogSetting
-  ) {
+  private async updateSkillSettings(profileName: string, hostname: string, msAppId: string, skillSettingsPath: string) {
     /* eslint-disable-next-line security/detect-non-literal-fs-filename -- Safe as no value holds user input */
     const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
     if (manifestFiles.length === 0) {
@@ -212,7 +207,7 @@ export class BotProjectDeploy {
         msAppId: msAppId,
       });
 
-      await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest);
+      await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest, { spaces: 2 });
     }
   }
 
