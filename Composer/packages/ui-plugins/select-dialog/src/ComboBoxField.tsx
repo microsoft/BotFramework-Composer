@@ -75,6 +75,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
         id={id}
         options={options}
         selectedKey={comboboxTitle ? 'customTitle' : value}
+        styles={{ optionsContainerWrapper: { maxHeight: '540px' } }}
         onBlur={() => onBlur?.(id, value)}
         onChange={onChange}
         onFocus={() => onFocus?.(id, value)}
