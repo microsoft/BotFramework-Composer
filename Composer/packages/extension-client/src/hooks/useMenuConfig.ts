@@ -2,12 +2,16 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import mapValues from 'lodash/mapValues';
-import { DisabledMenuActions } from '@botframework-composer/types';
+import { DisabledMenuActions, SDKKinds } from '@botframework-composer/types';
 import get from 'lodash/get';
+import mapValues from 'lodash/mapValues';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
 import { MenuUISchema } from '../types';
+
+const implementsIDialog = 'implements(Microsoft.IDialog)';
+const actionImplementsDialog = (action) =>
+  Array.isArray(action.$kind) ? action.$role.includes(implementsIDialog) : action.$role === implementsIDialog;
 
 export function useMenuConfig(): { menuSchema: MenuUISchema; forceDisabledActions: DisabledMenuActions[] } {
   const { plugins, shellData } = useContext(EditorExtensionContext);
@@ -26,6 +30,21 @@ export function useMenuConfig(): { menuSchema: MenuUISchema; forceDisabledAction
     Object.entries(menuSchema).forEach(([$kind, menuOpt]) => {
       if (menuOpt && sdkDefinitions[$kind]) {
         implementedMenuSchema[$kind] = menuOpt;
+      }
+    });
+
+    // Add sdk actions missing in uischema
+    Object.entries(sdkDefinitions).forEach(([$kind, action]) => {
+      if (
+        $kind.startsWith('Microsoft') &&
+        $kind !== SDKKinds.AdaptiveDialog &&
+        !implementedMenuSchema[$kind] &&
+        actionImplementsDialog(action)
+      ) {
+        implementedMenuSchema[$kind] = {
+          label: getFallbackLabel($kind),
+          submenu: ['Other'],
+        };
       }
     });
 
