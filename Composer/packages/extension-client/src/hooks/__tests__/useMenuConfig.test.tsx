@@ -27,6 +27,10 @@ const shellData = {
         definitions: {
           foo: 'foo',
           bar: 'bar',
+          'Microsoft.TestAction': {
+            $role: 'implements(Microsoft.IDialog)',
+            title: 'Test Action',
+          },
         },
       },
     },
@@ -42,9 +46,20 @@ describe('useMenuConfig', () => {
   it('returns a map of sdk kinds to their menu config', () => {
     const { result } = renderHook(() => useMenuConfig(), { wrapper });
 
-    expect(result.current.menuSchema).toEqual({
-      foo: { label: 'foo menu config' },
-      bar: { label: 'bar menu config' },
-    });
+    expect(result.current.menuSchema).toEqual(
+      expect.objectContaining({
+        foo: { label: 'foo menu config' },
+        bar: { label: 'bar menu config' },
+      })
+    );
+  });
+  it('menuSchema includes sdk actions that are missing ui schema', () => {
+    const { result } = renderHook(() => useMenuConfig(), { wrapper });
+
+    expect(result.current.menuSchema).toEqual(
+      expect.objectContaining({
+        'Microsoft.TestAction': { label: 'Test Action', submenu: ['Other'] },
+      })
+    );
   });
 });
