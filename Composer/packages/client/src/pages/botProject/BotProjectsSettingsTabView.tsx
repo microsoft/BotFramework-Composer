@@ -44,7 +44,7 @@ enum PivotItemKey {
   Language = 'Language',
 }
 
-// -------------------- BotProjectSettingsTableView -------------------- //
+// -------------------- BotProjectSettingsTabView -------------------- //
 
 export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   projectId: string;
