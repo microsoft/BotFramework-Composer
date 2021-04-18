@@ -149,7 +149,7 @@ export const triggerDispatcher = () => {
         luFile &&
           deleteActions(
             actions,
-            (templateNames: string[]) => removeLgTemplates({ id: dialogId, templateNames, projectId }),
+            (templateNames: string[]) => removeLgTemplates({ id: `${dialogId}.${locale}`, templateNames, projectId }),
             (intentNames: string[]) =>
               Promise.all(intentNames.map((intentName) => removeLuIntent({ id: luFile.id, intentName, projectId })))
           );
