@@ -28,7 +28,7 @@ import {
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { subtitle, errorContainer, errorTextStyle, errorIcon, customError } from '../styles';
+import { errorContainer, errorTextStyle, errorIcon, subtext, inputFieldStyles } from '../styles';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
@@ -139,7 +139,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   };
 
   const header = () => (
-    <div css={subtitle}>
+    <div css={subtext}>
       {formatMessage(
         'Configure Composer to start your bot using runtime code you can customize and control. Leave the field below blank if you don’t require customization.'
       )}
@@ -239,7 +239,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
             disabled={!settings.runtime || !settings.runtime.customRuntime}
             errorMessage={errorElement(formDataErrors.path)}
             label={formatMessage('Runtime code location')}
-            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            styles={inputFieldStyles}
             value={runtimePath}
             onBlur={() => handleRuntimeSettingOnBlur('path')}
             onChange={handleRuntimeSettingOnChange('path')}
@@ -266,7 +266,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           disabled={!settings.runtime || !settings.runtime.customRuntime}
           errorMessage={errorElement(formDataErrors.command)}
           label={formatMessage('Start command')}
-          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+          styles={inputFieldStyles}
           value={runtimeCommand}
           onBlur={() => handleRuntimeSettingOnBlur('command')}
           onChange={handleRuntimeSettingOnChange('command')}

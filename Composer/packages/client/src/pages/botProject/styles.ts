@@ -3,13 +3,19 @@
 
 import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 export const title = css`
   font-size: ${FontSizes.large};
   font-weight: ${FontWeights.semibold};
-  margin-top: 13px;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+`;
+
+export const subtext = css`
+  color: ${NeutralColors.gray130};
+  font-size: ${FontSizes.medium};
+  padding-bottom: 5px;
 `;
 
 export const subtitle = css`
@@ -137,3 +143,5 @@ export const actionButton = {
     marginLeft: 5,
   },
 };
+
+export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10, width: '50%' } }, customError);

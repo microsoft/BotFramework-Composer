@@ -158,6 +158,9 @@
   "add_a_trigger_c6861401": {
     "message": "Add a trigger"
   },
+  "add_allowed_callers_7188d3d4": {
+    "message": "Add allowed callers"
+  },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
@@ -175,6 +178,9 @@
   },
   "add_entity_5f769994": {
     "message": "Add entity"
+  },
+  "add_microsoft_app_ids_of_bots_that_can_access_this_7d41742c": {
+    "message": "Add Microsoft App Ids of bots that can access this skill. You can skip this step and add this information later from the project settings tab."
   },
   "add_more_to_this_response_d45bdfda": {
     "message": "Add more to this response"
@@ -241,6 +247,9 @@
   },
   "all_4321c3a1": {
     "message": "All"
+  },
+  "allowed_callers_31b26262": {
+    "message": "Allowed Callers"
   },
   "allowed_callers_fe0f5bfe": {
     "message": "Allowed callers"
@@ -416,9 +425,6 @@
   "back_2900f52a": {
     "message": "Back"
   },
-  "basics_75016d2a": {
-    "message": "Basics"
-  },
   "been_used_5daccdb2": {
     "message": "Been used"
   },
@@ -461,6 +467,9 @@
   "boolean_value_98d39ea1": {
     "message": "Boolean value."
   },
+  "bot_416bf08d": {
+    "message": "bot"
+  },
   "bot_7926b66d": {
     "message": "Bot"
   },
@@ -472,9 +481,6 @@
   },
   "bot_controller_319b408d": {
     "message": "Bot Controller"
-  },
-  "bot_details_1995d4fe": {
-    "message": "Bot Details"
   },
   "bot_endpoint_not_available_in_the_request_43c381f8": {
     "message": "Bot endpoint not available in the request"
@@ -511,9 +517,6 @@
   },
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
-  },
-  "bot_name_bbd0779d": {
-    "message": "Bot Name"
   },
   "bot_name_cannot_not_start_with_a_number_d70239": {
     "message": "Bot name cannot not start with a number"
@@ -713,8 +716,8 @@
   "configure_and_publish_7f53bc9a": {
     "message": "Configure and publish"
   },
-  "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
-    "message": "Configure Composer to start your bot using runtime code you can customize and control."
+  "configure_composer_to_start_your_bot_using_runtime_780aa8fa": {
+    "message": "Configure Composer to start your bot using runtime code you can customize and control. Leave the field below blank if you don’t require customization."
   },
   "configure_ecb97e30": {
     "message": "Configure"
@@ -863,11 +866,11 @@
   "create_a_new_skill_e961ff28": {
     "message": "Create a new skill"
   },
-  "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
-    "message": "Create a new skill manifest or select which one you want to edit"
-  },
   "create_a_new_speech_resource_c3c8fe60": {
     "message": "Create a new Speech resource"
+  },
+  "create_a_publish_profile_to_continue_1e2fa5a0": {
+    "message": "Create a publish profile to continue"
   },
   "create_a_publishing_profile_a79c6808": {
     "message": "Create a publishing profile"
@@ -883,9 +886,6 @@
   },
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Create copy to translate bot content"
-  },
-  "create_edit_skill_manifest_1c1b14fe": {
-    "message": "Create/edit skill manifest"
   },
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
@@ -932,14 +932,14 @@
   "create_new_luis_resources_a1a8fad5": {
     "message": "Create new LUIS resources"
   },
+  "create_new_publish_profile_e27c0950": {
+    "message": "Create new publish profile"
+  },
   "create_new_qna_resources_f21ea0cf": {
     "message": "Create new QnA resources"
   },
   "create_new_speech_resources_73a921be": {
     "message": "Create new Speech resources"
-  },
-  "create_or_edit_skill_manifest_8ad98da9": {
-    "message": "Create or edit skill manifest"
   },
   "create_your_first_bot_a23748c1": {
     "message": "Create your first bot"
@@ -1081,6 +1081,9 @@
   },
   "design_51b2812a": {
     "message": "Design"
+  },
+  "development_resources_e5c7c3d5": {
+    "message": "Development Resources"
   },
   "diagnostic_description_msg_9ddd1be": {
     "message": "Diagnostic Description { msg }"
@@ -1357,6 +1360,9 @@
   },
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation activity"
+  },
+  "endpoint_url_eddd8ea9": {
+    "message": "Endpoint Url"
   },
   "endpoints_ff946539": {
     "message": "Endpoints"
@@ -2012,6 +2018,9 @@
   "kb_d9c53902": {
     "message": "KB"
   },
+  "keep_this_url_handy_to_share_it_with_other_develop_bfd51fb0": {
+    "message": "Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab."
+  },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
   },
@@ -2035,9 +2044,6 @@
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
-  },
-  "language_6b3e2c7c": {
-    "message": "Language"
   },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
@@ -2174,6 +2180,9 @@
   "local_skill_6ce0d311": {
     "message": "Local Skill."
   },
+  "localization_36182be6": {
+    "message": "localization"
+  },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Locate the bot file and repair the link"
   },
@@ -2227,9 +2236,6 @@
   },
   "luis_add4bbe3": {
     "message": "LUIS"
-  },
-  "luis_and_qna_7df3ee36": {
-    "message": "LUIS and QnA"
   },
   "luis_application_name_1530d3aa": {
     "message": "LUIS application name"
@@ -2699,6 +2705,9 @@
   "output_5023cf84": {
     "message": "Output"
   },
+  "overview_58268c72": {
+    "message": "Overview"
+  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -2734,9 +2743,6 @@
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "Please select a trigger type"
-  },
-  "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
-    "message": "Please select a version of the manifest schema"
   },
   "pop_out_editor_5528a187": {
     "message": "Pop out editor"
@@ -2909,11 +2915,11 @@
   "publishing_profile_6d7064ce": {
     "message": "Publishing Profile"
   },
-  "publishing_skill_be1b6b96": {
-    "message": "Publishing skill"
-  },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
+  },
+  "publishing_your_skill_b5957f9c": {
+    "message": "Publishing your skill..."
   },
   "pull_d1c3e8fe": {
     "message": "Pull"
@@ -3134,6 +3140,9 @@
   "rollback_26326307": {
     "message": "Rollback"
   },
+  "root_362bb4be": {
+    "message": " (root)"
+  },
   "root_bot_7bb35314": {
     "message": "Root bot."
   },
@@ -3263,9 +3272,6 @@
   "select_luis_keys_1f3fb702": {
     "message": "Select LUIS keys"
   },
-  "select_manifest_version_4f5b1230": {
-    "message": "Select manifest version"
-  },
   "select_one_b647b384": {
     "message": "Select one"
   },
@@ -3358,6 +3364,9 @@
   },
   "setup_language_understanding_so_that_you_can_start_97addd86": {
     "message": "Setup Language Understanding so that you can start and test your bot."
+  },
+  "share_as_a_skill_63554df2": {
+    "message": "Share as a skill"
   },
   "share_resource_request_afc3e465": {
     "message": "Share resource request"
@@ -3620,6 +3629,12 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
   },
+  "the_app_id_9c6d6a9a": {
+    "message": "The app id"
+  },
+  "the_app_id_of_your_application_registration_16fba1a9": {
+    "message": "The app id of your application registration"
+  },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
   },
@@ -3628,6 +3643,9 @@
   },
   "the_endpoint_url_7c04ee13": {
     "message": "The endpoint url"
+  },
+  "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
+    "message": "The endpoint url of your web app resource"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "The file name can not be empty"
@@ -3817,6 +3835,9 @@
   },
   "to_make_sure_the_skill_will_work_correctly_we_perf_8de42615": {
     "message": "To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author."
+  },
+  "to_make_your_bot_available_as_a_remote_skill_you_w_be5a6e3f": {
+    "message": "To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select."
   },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
@@ -4136,6 +4157,9 @@
   "which_bot_do_you_want_to_open_974bb1e5": {
     "message": "Which bot do you want to open?"
   },
+  "which_bots_are_allowed_to_use_this_skill_b908339e": {
+    "message": "Which bots are allowed to use this skill?"
+  },
   "which_event_6e655d2b": {
     "message": "Which event?"
   },
@@ -4204,6 +4228,12 @@
   },
   "your_new_bot_is_almost_ready_1bb596e": {
     "message": "Your new bot is almost ready!"
+  },
+  "your_skill_could_not_be_published_5bee6e6a": {
+    "message": "Your skill could not be published."
+  },
+  "your_skill_is_ready_to_be_shared_6376eb3c": {
+    "message": "Your skill is ready to be shared!"
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
     "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"

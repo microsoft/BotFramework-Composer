@@ -54,7 +54,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
           <div css={labelStyle}>{formatMessage('File Location')}</div>
           <div css={valueStyle}>{location}</div>
         </StackItem>
-        <StackItem styles={{ root: { marginBottom: '10px' } }}>
+        <StackItem>
           <div css={labelStyle}>{formatMessage('Read Me')}</div>
           {readme && (
             <Fragment>
