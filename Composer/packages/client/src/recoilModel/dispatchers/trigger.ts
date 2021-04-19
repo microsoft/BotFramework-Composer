@@ -85,7 +85,7 @@ const getNewDialogWithTrigger = async (
       newDialog,
       `content.triggers[${index}].actions[3].elseActions[0].activity`
     );
-    const lgTemplates1: LgTemplate[] = [
+    const lgTemplates: LgTemplate[] = [
       LgTemplateSamples.textInputPromptForOnChooseIntent(designerId1) as LgTemplate,
       LgTemplateSamples.onChooseIntentAdaptiveCard(designerId1) as LgTemplate,
       LgTemplateSamples.whichOneDidYouMean(designerId1) as LgTemplate,
@@ -94,11 +94,10 @@ const getNewDialogWithTrigger = async (
       LgTemplateSamples.getIntentReadBack(designerId1) as LgTemplate,
       LgTemplateSamples.generateChoices(designerId1) as LgTemplate,
       LgTemplateSamples.choice(designerId1) as LgTemplate,
-
       LgTemplateSamples.SendActivityForOnChooseIntent(designerId2) as LgTemplate,
     ];
 
-    await createLgTemplates({ id: lgFile.id, templates: lgTemplates1, projectId });
+    await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
   }
   return {
     id: newDialog.id,
