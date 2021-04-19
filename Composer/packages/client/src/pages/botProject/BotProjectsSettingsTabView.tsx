@@ -91,13 +91,15 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
           <AppIdAndPassword projectId={projectId} />
         </PivotItem>
-        <PivotItem
-          data-testid="connectionsTab"
-          headerText={formatMessage('Connections')}
-          itemKey={PivotItemKey.Connections}
-        >
-          {isRootBot && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
-        </PivotItem>
+        {isRootBot && (
+          <PivotItem
+            data-testid="connectionsTab"
+            headerText={formatMessage('Connections')}
+            itemKey={PivotItemKey.Connections}
+          >
+            <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />
+          </PivotItem>
+        )}
         <PivotItem
           data-testid="skillsTab"
           headerText={formatMessage('Skill Configuration')}
