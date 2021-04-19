@@ -151,8 +151,8 @@ const Home: React.FC<RouteComponentProps> = () => {
       <div css={home.page}>
         <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
         <div css={home.leftPage} role="main">
-          <div css={home.leftContainer}>
-            <h2 css={home.recentBotsTitle}>{formatMessage(`Recent Bots`)}</h2>
+          <div css={home.recentBotsContainer}>
+            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
             <Toolbar css={home.toolbar} toolbarItems={toolbarItems} />
             {recentProjects.length > 0 ? (
               <RecentBotList
@@ -188,7 +188,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               </div>
             )}
           </div>
-          <div css={[home.leftContainer, home.gap40]}>
+          <div css={home.resourcesContainer}>
             <h2 css={home.subtitle}>{formatMessage('Resources')}&nbsp;</h2>
             <div css={home.rowContainer}>
               {resources.map((item, index) => (
@@ -206,7 +206,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               ))}
             </div>
           </div>
-          <div css={[home.leftContainer, home.gap40]}>
+          <div css={home.videosContainer}>
             <div css={home.rowContainer}>
               <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
