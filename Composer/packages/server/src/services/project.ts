@@ -4,7 +4,7 @@
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
-import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
+import { luImportResolverGenerator, ResolverResource, DialogSetting } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
 import { ensureDir, existsSync, remove } from 'fs-extra';
@@ -488,7 +488,7 @@ export class BotProjectService {
           );
         }
 
-        const newSettings = {
+        const newSettings: DialogSetting = {
           ...currentProject.settings,
           runtimeSettings: {
             features: {
