@@ -9,6 +9,9 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 const theme: ITheme = getTheme();
 const { fonts } = theme;
 
+const ImageCoverWidth = 244;
+const ImageCoverHeight = 95;
+
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -43,6 +46,7 @@ export const title = css`
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
   margin: 0;
+  width: 100%;
 `;
 
 export const introduction = css`
@@ -58,14 +62,18 @@ export const introduction = css`
 
 export const rowContainer = css`
   display: flex;
-  margin: 12px 0;
+  margin-top: 12px;
 `;
 
-export const leftContainer = css`
-  margin-bottom: 10px;
+export const recentBotsContainer = css`
+  margin-top: 12px;
 `;
 
-export const gap40 = css`
+export const resourcesContainer = css`
+  margin-top: 40px;
+`;
+
+export const videosContainer = css`
   margin-top: 40px;
 `;
 
@@ -121,11 +129,6 @@ export const bluetitle = css`
   margin: 16px 0 0 0;
 `;
 
-export const recentBotsTitle = css`
-  ${subtitle};
-  padding: 18px 0;
-`;
-
 export const toolbar = css`
   border-bottom: none;
   button: {
@@ -171,10 +174,10 @@ export const newsDescription = css`
 
 export const cardItem = {
   container: css`
-    margin: 12px 0 12px 12px;
+    font-size: ${fonts.medium.fontSize};
+    margin: 12px 0 0 12px;
     padding: 12px;
-    min-width: 244px;
-    max-width: 450px;
+    min-width: ${ImageCoverWidth}px;
     width: 17vw;
     @media (max-width: 1416px) {
       width: 20vw;
@@ -194,29 +197,26 @@ export const cardItem = {
   `,
   title: css`
     font-weight: ${FontWeights.semibold};
-    color: ${NeutralColors.gray160};
-    margin-bottom: 8px;
+    color: #464844;
+    margin-bottom: 4px;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
   `,
   imageCover: css`
-    width: 53px;
-    height: 48px;
+    width: 40px;
+    height: 36px;
     max-height: 175px;
     margin-bottom: 12px;
     position: relative;
     .image-cover-img {
-      display: flex;
-      position: absolute;
       width: 100%;
       height: 100%;
     }
   `,
   content: css`
     color: ${NeutralColors.gray140};
-    font-size: ${fonts.small.fontSize};
     display: -webkit-box;
     -webkit-line-clamp: 2;
     overflow: hidden;
@@ -234,19 +234,26 @@ export const mediaCardItem = {
   imageCover: css`
     ${cardItem.imageCover}
     width: 100%;
-    min-height: 95px;
-    height: calc(17vw * 95 / 244);
-    @media (max-width: 1416px) {
-      height: calc(20vw * 95 / 244);
-    }
     margin-bottom: 12px;
     overflow: hidden;
     display: flex;
-    .image-cover-background {
-      background: #323130;
-      position: absolute;
+    min-height: ${ImageCoverHeight}px;
+    height: calc(17vw * ${ImageCoverHeight / ImageCoverWidth});
+    @media (max-width: 1416px) {
+      height: calc(20vw * ${ImageCoverHeight / ImageCoverWidth});
+    }
+    @media (min-width: 2800px) {
+      background: ${NeutralColors.gray160};
+    }
+    .image-cover-img {
+      display: flex;
       width: 100%;
-      height: 100%;
+      height: auto;
+      img {
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+      }
     }
   `,
 };
@@ -255,17 +262,17 @@ export const meidiaCardNoCoverItem = {
   ...mediaCardItem,
   imageCover: css`
     ${mediaCardItem.imageCover};
-
     position: relative;
     align-items: center;
     justify-content: center;
     background: ${NeutralColors.gray160};
-    .image-cover-background {
-      display: none;
-    }
     .image-cover-img {
       width: 53px;
       height: 48px;
+      img {
+        width: auto;
+        height: auto;
+      }
     }
   `,
 };
@@ -300,7 +307,7 @@ export const whatsNewsContainer = css`
   flex: 1;
   padding: 20px 25px 25px 25px;
   border-radius: 5px;
-  margin: 20px 0 55px 0;
+  margin: 20px 0 25px 0;
   background: #f6f6f6;
   @media (max-width: 1416px) {
     background: none;
