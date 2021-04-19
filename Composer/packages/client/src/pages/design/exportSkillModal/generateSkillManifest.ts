@@ -2,8 +2,20 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { DialogInfo, DialogSchemaFile, ITrigger, SDKKinds, SkillManifestFile, LuFile, QnAFile } from '@bfc/shared';
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  ITrigger,
+  SDKKinds,
+  SkillManifestFile,
+  LuFile,
+  QnAFile,
+  PublishTarget,
+} from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension-client';
+import { luIndexer } from '@bfc/indexers';
+
+import { createManifestFile } from '../../../utils/manifestFileUtil';
 
 import { Activities, Activity, activityHandlerMap, ActivityTypes, DispatchModels } from './constants';
 
@@ -19,7 +31,9 @@ export const generateSkillManifest = (
   luFiles: LuFile[],
   qnaFiles: QnAFile[],
   selectedTriggers: ITrigger[],
-  selectedDialogs: Partial<DialogInfo>[]
+  selectedDialogs: Partial<DialogInfo>[],
+  currentTarget: PublishTarget,
+  projectId: string
 ) => {
   const {
     activities: previousActivities,
@@ -40,7 +54,7 @@ export const generateSkillManifest = (
   const triggers = selectedTriggers.map((tr) => get(content, tr.id) as ITrigger).filter(Boolean);
 
   const activities = generateActivities(dialogSchemas, triggers, resolvedDialogs);
-  const dispatchModels = generateDispatchModels(schema, dialogs, triggers, luFiles, qnaFiles);
+  const dispatchModels = generateDispatchModels(schema, dialogs, triggers, luFiles, qnaFiles, currentTarget, projectId);
   const definitions = getDefinitions(dialogSchemas, resolvedDialogs);
 
   return {
@@ -104,7 +118,9 @@ export const generateDispatchModels = (
   dialogs: DialogInfo[],
   selectedTriggers: any[],
   luFiles: LuFile[],
-  qnaFiles: QnAFile[]
+  qnaFiles: QnAFile[],
+  target: PublishTarget,
+  projectId: string
 ): { dispatchModels?: DispatchModels } => {
   const intents = selectedTriggers.filter(({ $kind }) => $kind === SDKKinds.OnIntent).map(({ intent }) => intent);
   const { id: rootId } = dialogs.find((dialog) => dialog?.isRoot) || {};
@@ -121,6 +137,21 @@ export const generateDispatchModels = (
 
   if (!schema.properties?.dispatchModels) {
     return {};
+  }
+
+  const config = JSON.parse(target.configuration);
+  const baseEndpointUrl = `https://${config.hostname}.azurewebsites.net/manifests`;
+
+  for (const rootLuFile of rootLuFiles) {
+    const currentFileName = `skill-${rootLuFile.id}`;
+    const parsedLuFile = luIndexer.parse(rootLuFile.content, rootLuFile.id, {});
+    const contents = parsedLuFile.intents.map((x) => {
+      if (intents.findIndex((intent) => intent == x.Name) !== -1) {
+        return [`# ${x.Name}`, x.Body].join('\n');
+      }
+    });
+    const mergedContents = contents.join('\n');
+    createManifestFile(projectId, currentFileName, mergedContents);
   }
 
   const luLanguages = intents.length
@@ -140,7 +171,7 @@ export const generateDispatchModels = (
             {
               name,
               contentType: 'application/lu',
-              url: `<${id}.lu url>`,
+              url: `${baseEndpointUrl}/skill-${id}.lu`,
               description: '<description>',
             },
           ],
@@ -164,7 +195,7 @@ export const generateDispatchModels = (
         {
           name,
           contentType: 'application/qna',
-          url: `<${id}.qna url>`,
+          url: `${baseEndpointUrl}/skill-${id}.qna`,
           description: '<description>',
         },
       ],
