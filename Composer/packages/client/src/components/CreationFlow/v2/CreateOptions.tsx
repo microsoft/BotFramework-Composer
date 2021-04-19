@@ -30,7 +30,6 @@ type CreateOptionsProps = {
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
-  fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
 
@@ -38,7 +37,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchTemplates, fetchReadMe } = props;
+  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchReadMe } = props;
   const [showNodeModal, setShowNodeModal] = useState(false);
   const userHasNode = useRecoilValue(userHasNodeInstalledState);
 
@@ -128,7 +127,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       </DialogWrapper>
       <CreateBotV2
         fetchReadMe={fetchReadMe}
-        fetchTemplates={fetchTemplates}
         isOpen={isOpenCreateModal}
         location={props.location}
         templates={templates}

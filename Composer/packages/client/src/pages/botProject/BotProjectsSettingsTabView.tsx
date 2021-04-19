@@ -10,8 +10,9 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+import { navigateTo } from '../../utils/navigation';
 
-import { SkillHostEndPoint } from './SkillHostEndPoint';
+import { BotSkillConfiguration } from './BotSkillConfiguration';
 import { BotProjectInfo } from './BotProjectInfo';
 import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
@@ -30,7 +31,7 @@ const container = css`
 
 const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
-  LuisQna: ['luisKey', 'qnaKey'],
+  LuisQna: ['luisKey', 'qnaKey', 'luisRegion'],
   Connections: ['connections', 'addNewPublishProfile'],
   SkillConfig: [],
   Language: [],
@@ -72,7 +73,10 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
       <Pivot
         selectedKey={String(selectedKey)}
         onLinkClick={(item) => {
-          item?.props.itemKey && setSelectedKey(item.props.itemKey as PivotItemKey);
+          if (item?.props.itemKey) {
+            setSelectedKey(item.props.itemKey as PivotItemKey);
+            navigateTo(`/bot/${projectId}/botProjectsSettings/#${item.props.itemKey}`);
+          }
         }}
       >
         <PivotItem data-testid="basicsTab" headerText={formatMessage('Basics')} itemKey={PivotItemKey.Basics}>
@@ -95,7 +99,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           headerText={formatMessage('Skill Configuration')}
           itemKey={PivotItemKey.SkillConfig}
         >
-          {isRootBot && <SkillHostEndPoint projectId={projectId} />}
+          {isRootBot && <BotSkillConfiguration projectId={projectId} />}
         </PivotItem>
         <PivotItem data-testid="languageTab" headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
           <BotLanguage projectId={projectId} />
