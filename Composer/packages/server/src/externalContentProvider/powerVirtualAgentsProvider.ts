@@ -160,8 +160,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
 
   private getContentUrl(): string {
     const { envId, baseUrl, botId } = this.metadata;
-    const query = process.env.COMPOSER_PVA_TOPICS === 'true' ? '?includeTopics=true' : '';
-    return `${baseUrl || getBaseUrl()}/environments/${envId}/bots/${botId}/composer/content${query}`;
+    return `${baseUrl || getBaseUrl()}/environments/${envId}/bots/${botId}/composer/content?includeTopics=true`;
   }
 
   private async getRequestHeaders() {
