@@ -11,6 +11,14 @@ import {
   generateDispatchModels,
 } from '../generateSkillManifest';
 
+const projectId = '42345.23432';
+const currentTarget = {
+  configuration:
+    '{\n  "name": "test",\n  "environment": "composer",\n  "tenantId": "aaa",\n  "subscriptionId": "aaa",\n  "resourceGroup": "testGroup",\n  "botName": "test",\n  "hostname": "test",\n  "luisResource": "test",\n  "runtimeIdentifier": "win-x64",\n  "region": "westus",\n  "settings": {\n    "applicationInsights": {},\n    "luis": {"authoringKey":"aaa",      "endpointKey": "aaa",\n      "endpoint": "https://westus.api.cognitive.microsoft.com/"\n    },\n    "qna": {},\n    "MicrosoftAppId": "aaa",\n    "MicrosoftAppPassword": "aaa"\n  }\n}',
+  name: 'test',
+  type: 'azurePublish',
+  lastPublished: new Date('2021-04-08T08:38:17.566Z'),
+};
 const dialogSchema = {
   id: 'test',
   content: {
@@ -188,7 +196,15 @@ describe('generateDispatchModels', () => {
     const selectedTriggers = [];
     const luFiles = [];
     const qnaFiles = [];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
+    const result = generateDispatchModels(
+      schema,
+      dialogs,
+      selectedTriggers,
+      luFiles,
+      qnaFiles,
+      currentTarget,
+      projectId
+    );
     expect(result).toEqual({});
   });
 
@@ -201,7 +217,15 @@ describe('generateDispatchModels', () => {
       { id: 'test.fr-FR', empty: false },
     ];
     const qnaFiles = [];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
+    const result = generateDispatchModels(
+      schema,
+      dialogs,
+      selectedTriggers,
+      luFiles,
+      qnaFiles,
+      currentTarget,
+      projectId
+    );
     expect(result).toEqual({});
   });
 
@@ -214,7 +238,15 @@ describe('generateDispatchModels', () => {
       { id: 'test.fr-FR', empty: false },
     ];
     const qnaFiles = [];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
+    const result = generateDispatchModels(
+      schema,
+      dialogs,
+      selectedTriggers,
+      luFiles,
+      qnaFiles,
+      currentTarget,
+      projectId
+    );
     expect(result).toEqual({});
   });
 
@@ -227,37 +259,45 @@ describe('generateDispatchModels', () => {
       { id: 'test.fr-FR', empty: false },
     ];
     const qnaFiles: any = [{ id: 'test.es-es', empty: false }];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
+    const result = generateDispatchModels(
+      schema,
+      dialogs,
+      selectedTriggers,
+      luFiles,
+      qnaFiles,
+      currentTarget,
+      projectId
+    );
     expect(result).toEqual(
       expect.objectContaining({
         dispatchModels: {
+          intents: ['testIntent'],
           languages: {
             'en-us': [
               {
-                name: 'test',
                 contentType: 'application/lu',
-                url: `<test.en-us.lu url>`,
                 description: '<description>',
-              },
-            ],
-            'fr-FR': [
-              {
                 name: 'test',
-                contentType: 'application/lu',
-                url: `<test.fr-FR.lu url>`,
-                description: '<description>',
+                url: 'https://test.azurewebsites.net/manifests/skill-test.en-us.lu',
               },
             ],
             'es-es': [
               {
-                name: 'test',
                 contentType: 'application/qna',
-                url: `<test.es-es.qna url>`,
                 description: '<description>',
+                name: 'test',
+                url: 'https://test.azurewebsites.net/manifests/skill-test.es-es.qna',
+              },
+            ],
+            'fr-FR': [
+              {
+                contentType: 'application/lu',
+                description: '<description>',
+                name: 'test',
+                url: 'https://test.azurewebsites.net/manifests/skill-test.fr-FR.lu',
               },
             ],
           },
-          intents: ['testIntent'],
         },
       })
     );

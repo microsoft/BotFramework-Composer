@@ -347,6 +347,51 @@ async function removeFile(req: Request, res: Response) {
   }
 }
 
+async function updateManifestFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const lastModified = await currentProject.updateManifestLuFile(req.body.name, req.body.content);
+    res.status(200).json({ lastModified: lastModified });
+  } else {
+    res.status(404).json({
+      message: 'No such bot project found',
+    });
+  }
+}
+
+async function createManifestFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const { name, content } = req.body;
+
+    //dir = id
+    const file = await currentProject.createManifestLuFile(name, content);
+    res.status(200).json(file);
+  } else {
+    res.status(404).json({
+      message: 'No such bot project found',
+    });
+  }
+}
+
+async function removeManifestFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const dialogResources = await currentProject.deleteManifestLuFile(req.params.name);
+    res.status(200).json(dialogResources);
+  } else {
+    res.status(404).json({ error: 'No bot project found' });
+  }
+}
+
 async function getSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
@@ -355,7 +400,7 @@ async function getSkill(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
     if (currentProject === undefined) {
       res.status(404).json({
-        message: 'No such bot project opened',
+        message: 'No such bot project found',
       });
     }
   }
@@ -593,6 +638,9 @@ export const ProjectController = {
   updateFile,
   createFile,
   removeFile,
+  createManifestFile,
+  updateManifestFile,
+  removeManifestFile,
   getSkill,
   build,
   setQnASettings,
