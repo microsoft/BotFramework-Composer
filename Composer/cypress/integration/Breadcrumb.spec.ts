@@ -35,7 +35,7 @@ context('breadcrumb', () => {
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
-  it.only('can show dialog and trigger name in breadcrumb', () => {
+  it('can show dialog and trigger name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByTestId('addtodo_Dialog started').click();
     });
