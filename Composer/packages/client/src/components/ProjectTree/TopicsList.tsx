@@ -10,7 +10,7 @@ import get from 'lodash/get';
 
 import { ExpandableNode } from './ExpandableNode';
 import { TreeItem } from './treeItem';
-import { LEVEL_PADDING, INDENT_PER_LEVEL } from './constants';
+import { INDENT_PER_LEVEL } from './constants';
 import { headerCSS } from './ProjectTree';
 
 type TopicsListProps = {
@@ -69,8 +69,10 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
             link={{
               displayName: formatMessage('Power Virtual Agents Topics ({count})', { count: topics.length }),
               projectId,
+              isRoot: false,
+              isRemote: false,
+              diagnostics: [],
             }}
-            padLeft={0 * LEVEL_PADDING}
             showErrors={false}
             textWidth={textWidth}
           />
