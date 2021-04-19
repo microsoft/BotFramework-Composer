@@ -368,17 +368,19 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
           </Stack>
-          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                data-testid="NewDialogRuntimeType"
-                label={formatMessage('Runtime type')}
-                options={getSupportedRuntimesForTemplate()}
-                selectedKey={formData.runtimeType}
-                onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
-              />
-            </StackItem>
-          </Stack>
+          {!isImported ?? (
+            <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+              <StackItem grow={0} styles={halfstack}>
+                <Dropdown
+                  data-testid="NewDialogRuntimeType"
+                  label={formatMessage('Runtime type')}
+                  options={getSupportedRuntimesForTemplate()}
+                  selectedKey={formData.runtimeType}
+                  onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
+                />
+              </StackItem>
+            </Stack>
+          )}
           {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
