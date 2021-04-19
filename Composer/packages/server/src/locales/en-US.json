@@ -1262,6 +1262,9 @@
   "edit_in_json_75d0d754": {
     "message": "Edit in JSON"
   },
+  "edit_in_power_virtual_agents_56ee7ac2": {
+    "message": "Edit in Power Virtual Agents"
+  },
   "edit_kb_name_5e2d8c5b": {
     "message": "Edit KB name"
   },
@@ -2593,9 +2596,6 @@
   },
   "open_e0beb7b9": {
     "message": "Open"
-  },
-  "open_in_power_virtual_agents_fcd881e6": {
-    "message": "Open in Power Virtual Agents"
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
