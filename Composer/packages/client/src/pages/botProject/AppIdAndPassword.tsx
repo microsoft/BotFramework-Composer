@@ -2,23 +2,22 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { mergeStyleSets } from '@uifabric/styling';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
-import { title } from './styles';
+import { inputFieldStyles, subtext, title } from './styles';
 // -------------------- Styles -------------------- //
 
 const labelContainer = css`
@@ -114,14 +113,23 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
   }, [projectId, mergedSettings, localMicrosoftAppId]);
 
   return (
-    <CollapsableWrapper title={formatMessage('App Id / Password')} titleStyle={title}>
+    <Fragment>
+      <div css={title}>{formatMessage('Microsoft App ID')}</div>
+      <div css={subtext}>
+        {formatMessage(
+          'A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. '
+        )}
+        <Link href="" target="blank">
+          {formatMessage('Learn more.')}
+        </Link>
+      </div>
       <div css={appIdAndPasswordStyle}>
         <TextField
           ariaLabel={formatMessage('Microsoft App Id')}
           data-testid={'MicrosoftAppId'}
           label={formatMessage('Microsoft App Id')}
           placeholder={formatMessage('Enter Microsoft App Id')}
-          styles={customError}
+          styles={inputFieldStyles}
           value={localMicrosoftAppId}
           onBlur={handleAppIdOnBlur}
           onChange={handleAppIdOnChange}
@@ -132,13 +140,13 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           data-testid={'MicrosoftPassword'}
           label={formatMessage('Microsoft App Password')}
           placeholder={formatMessage('Enter Microsoft App Password')}
-          styles={mergeStyleSets({ root: { marginTop: 15 } }, customError)}
+          styles={inputFieldStyles}
           value={localMicrosoftAppPassword}
           onBlur={handleAppPasswordOnBlur}
           onChange={handleAppPasswordOnChange}
           onRenderLabel={onRenderLabel}
         />
       </div>
-    </CollapsableWrapper>
+    </Fragment>
   );
 };
