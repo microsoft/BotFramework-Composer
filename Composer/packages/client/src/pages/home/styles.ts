@@ -240,7 +240,7 @@ export const mediaCardItem = {
       height: calc(20vw * 95 / 244);
     }
     @media (min-width: 2800px) {
-      background: #323130;
+      background: ${NeutralColors.gray160};
     }
     .image-cover-img {
       display: flex;
@@ -259,7 +259,6 @@ export const meidiaCardNoCoverItem = {
   ...mediaCardItem,
   imageCover: css`
     ${mediaCardItem.imageCover};
-
     position: relative;
     align-items: center;
     justify-content: center;
