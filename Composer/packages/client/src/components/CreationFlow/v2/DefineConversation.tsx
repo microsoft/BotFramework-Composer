@@ -154,7 +154,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
         if (!value || !nameRegexV2.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {
-            return formatMessage('Bot name cannot not start with a number or space');
+            return formatMessage('Bot name cannot start with a number or space');
           } else {
             return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, or _.');
           }
