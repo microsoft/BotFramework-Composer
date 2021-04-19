@@ -3,7 +3,7 @@
 
 context('LG Page', () => {
   beforeEach(() => {
-    cy.createBotV2('EmptySample', ({ id }) => {
+    cy.createTestBot('EmptySample', ({ id }) => {
       cy.visit(`/bot/${id}`);
     });
   });

@@ -3,7 +3,7 @@
 
 context('breadcrumb', () => {
   beforeEach(() => {
-    cy.createBotV2('EmptySample', ({ id }) => {
+    cy.createTestBot('EmptySample', ({ id }) => {
       cy.visit(`/bot/${id}`);
     });
   });
@@ -21,14 +21,14 @@ context('breadcrumb', () => {
 
   it('can show dialog, trigger, action in breadcrumb', () => {
     // Should path = main dialog at first render
-    hasBreadcrumbItems(cy, ['__TestEmptySample']);
+    hasBreadcrumbItems(cy, ['TestBot_EmptySample']);
 
     // Click on an trigger
     cy.findByTestId('ProjectTree').within(() => {
       cy.findAllByText('Greeting').last().click();
     });
 
-    hasBreadcrumbItems(cy, ['__TestEmptySample', 'Greeting']);
+    hasBreadcrumbItems(cy, ['TestBot_EmptySample', 'Greeting']);
 
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
@@ -37,6 +37,6 @@ context('breadcrumb', () => {
       });
     });
 
-    hasBreadcrumbItems(cy, ['__TestEmptySample', 'Greeting', 'Send a response']);
+    hasBreadcrumbItems(cy, ['TestBot_EmptySample', 'Greeting', 'Send a response']);
   });
 });

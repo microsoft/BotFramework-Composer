@@ -3,6 +3,12 @@
 
 import './commands';
 
+before(() => {
+  cy.createTemplateBot('EmptySample', ({ id }) => {
+    cy.visit(`/bot/${id}`);
+  });
+});
+
 beforeEach(() => {
   cy.exec('yarn test:integration:clean');
   window.localStorage.setItem('composer:userSettings', JSON.stringify({ telemetry: { allowDataCollection: false } }));
@@ -13,5 +19,5 @@ beforeEach(() => {
 after(() => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(500);
-  cy.exec('yarn test:integration:clean');
+  cy.exec('yarn test:integration:clean-all');
 });

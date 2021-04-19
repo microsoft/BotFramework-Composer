@@ -3,6 +3,8 @@
 
 import '@testing-library/cypress/add-commands';
 
+let TemplateBotProjectId = '';
+
 Cypress.Commands.add('createBot', (botId: string, botName?: string) => {
   const name = `__Test${botName || botId}`;
 
@@ -23,7 +25,7 @@ Cypress.Commands.add('createBotV2', (botName: string, callback: (bot: any) => vo
   const params = {
     description: '',
     location: '',
-    name: `__Test${botName}`,
+    name: botName,
     runtimeLanguage: 'dotnet',
     runtimeType: 'webapp',
     schemaUrl: '',
@@ -53,6 +55,28 @@ Cypress.Commands.add('createBotV2', (botName: string, callback: (bot: any) => vo
     // install package can take a long time.
     cy.wait(20000);
     pollingRequestBotStatus(jobId, (result) => callback(result));
+  });
+});
+
+Cypress.Commands.add('createTemplateBot', (botName: string, callback: (bot: any) => void) => {
+  cy.createBotV2(`TemplateBot_${botName}`, (bot) => {
+    TemplateBotProjectId = bot.id;
+  });
+});
+
+Cypress.Commands.add('createTestBot', (botName: string, callback: (bot: any) => void) => {
+  const name = `TestBot_${botName}`;
+
+  const params = {
+    description: '',
+    location: '/Users/yellowglue/Projects/BotFramework-Composer/MyBotsTest',
+    name,
+    storageId: 'default',
+  };
+
+  cy.request('post', `/api/projects/${TemplateBotProjectId}/project/saveAs`, params).then((res) => {
+    const bot = res.body;
+    callback(bot);
   });
 });
 
