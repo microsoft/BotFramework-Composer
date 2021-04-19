@@ -17,6 +17,7 @@ import {
   Range,
   LgFile,
   DiagnosticSeverity,
+  LgTemplateRef,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import isEmpty from 'lodash/isEmpty';
@@ -238,7 +239,15 @@ export function removeTemplates(
 ): LgFile {
   const { id } = lgFile;
   let resource = getLgResource(lgFile, importResolver);
-  templateNames.forEach((templateName) => {
+
+  const normalizedLgTemplates = templateNames
+    .map((x) => {
+      const lgTemplateRef = LgTemplateRef.parse(x);
+      return lgTemplateRef ? lgTemplateRef.name : x;
+    })
+    .filter((x) => !!x);
+
+  normalizedLgTemplates.forEach((templateName) => {
     resource = resource.deleteTemplate(templateName);
   });
   return convertTemplatesToLgFile(id, resource.toString(), resource);
