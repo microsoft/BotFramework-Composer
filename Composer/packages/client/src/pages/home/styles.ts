@@ -9,6 +9,9 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 const theme: ITheme = getTheme();
 const { fonts } = theme;
 
+const ImageCoverWidth = 244;
+const ImageCoverHeight = 95;
+
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -174,7 +177,7 @@ export const cardItem = {
     font-size: ${fonts.medium.fontSize};
     margin: 12px 0 0 12px;
     padding: 12px;
-    min-width: 244px;
+    min-width: ${ImageCoverWidth}px;
     width: 17vw;
     @media (max-width: 1416px) {
       width: 20vw;
@@ -234,10 +237,10 @@ export const mediaCardItem = {
     margin-bottom: 12px;
     overflow: hidden;
     display: flex;
-    min-height: 95px;
-    height: calc(17vw * 95 / 244);
+    min-height: ${ImageCoverHeight}px;
+    height: calc(17vw * ${ImageCoverHeight / ImageCoverWidth});
     @media (max-width: 1416px) {
-      height: calc(20vw * 95 / 244);
+      height: calc(20vw * ${ImageCoverHeight / ImageCoverWidth});
     }
     @media (min-width: 2800px) {
       background: ${NeutralColors.gray160};
