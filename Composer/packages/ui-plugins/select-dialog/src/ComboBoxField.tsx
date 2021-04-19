@@ -8,6 +8,8 @@ import { FieldProps } from '@bfc/extension-client';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { Icons } from '@bfc/shared';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 export const ADD_DIALOG = 'ADD_DIALOG';
 
@@ -17,14 +19,25 @@ interface ComboBoxFieldProps extends FieldProps {
   onChange: any;
 }
 
-const getIconName = (key: string) => {
-  if (key === ADD_DIALOG) {
+const getIconName = (option: IComboBoxOption) => {
+  if (option.key === ADD_DIALOG) {
     return 'Add';
-  } else if (key === 'expression') {
+  } else if (option.key === 'expression') {
     return 'CalculatorEqualTo';
+  } else if (option.data?.isTopic) {
+    const isSystemTopic = option.data.content?.isSystemTopic;
+    return isSystemTopic ? Icons.SYSTEM_TOPIC : Icons.TOPIC;
   } else {
-    return 'OpenSource';
+    return Icons.DIALOG;
   }
+};
+
+const getIconStyles = (option: IComboBoxOption) => {
+  if ([ADD_DIALOG, 'expression'].includes(option.key as string)) {
+    return { color: SharedColors.cyanBlue10 };
+  }
+
+  return {};
 };
 
 export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
@@ -43,10 +56,14 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
   } = props;
   const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
-      <div>
-        <Icon aria-hidden="true" iconName={getIconName(option.key as string)} style={{ marginRight: '8px' }} />
+      <React.Fragment>
+        <Icon
+          aria-hidden="true"
+          iconName={getIconName(option)}
+          style={{ marginRight: '5px', marginTop: '2px', ...getIconStyles(option) }}
+        />
         <span>{option.text}</span>
-      </div>
+      </React.Fragment>
     ) : null;
 
   return (
@@ -54,13 +71,14 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <ComboBox
         useComboBoxAsMenuWidth
-        autoComplete="off"
+        autoComplete="on"
         id={id}
         options={options}
         selectedKey={comboboxTitle ? 'customTitle' : value}
+        styles={{ optionsContainerWrapper: { maxHeight: '540px' } }}
         onBlur={() => onBlur?.(id, value)}
+        onChange={onChange}
         onFocus={() => onFocus?.(id, value)}
-        onItemClick={onChange}
         onRenderOption={onRenderOption}
       />
     </React.Fragment>

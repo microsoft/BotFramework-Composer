@@ -47,7 +47,9 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger, isRemoteSkill) {
         ) : (
           <React.Fragment>
             <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
-            {formatMessage.rich('Select a trigger in the left<br />navigation to see actions', { br: <br /> })}
+            {formatMessage.rich('Select a trigger in the left<br />navigation to see actions', {
+              br: <br key="break-icon-gray-alt" />,
+            })}
           </React.Fragment>
         )}
       </div>

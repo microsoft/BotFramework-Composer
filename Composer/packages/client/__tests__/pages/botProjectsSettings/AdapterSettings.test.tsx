@@ -85,7 +85,7 @@ describe('ExternalAdapterSettings', () => {
       initRecoilState
     );
 
-    const link = getByText('the package manager');
+    const link = getByText(/from package manager/);
 
     expect(link.attributes.getNamedItem('href')?.value).toEqual('plugin/package-manager/package-manager');
   });
@@ -112,7 +112,7 @@ describe('ExternalAdapterSettings', () => {
   });
 
   it('sets settings on an adapter', async () => {
-    const { getByTestId, getByLabelText, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
+    const { getByTestId, getByLabelText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
@@ -123,8 +123,9 @@ describe('ExternalAdapterSettings', () => {
     });
 
     await act(async () => {
+      const modal = getByTestId('adapterModal');
       await userEvent.type(getByLabelText('Example Name'), 'test text 12345', { delay: 50 });
-      userEvent.click(getByText('Create'));
+      userEvent.click(within(modal).getByText('Configure'));
     });
 
     const modal = queryByTestId('adapterModal');

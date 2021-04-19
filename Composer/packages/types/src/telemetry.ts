@@ -111,7 +111,7 @@ type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
   NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
-  PublishingProfileCompleted: { target: string; projectId: string };
+  PublishingProfileCompleted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
 };
 
 type AppSettingsEvents = {
@@ -158,6 +158,13 @@ type ABSChannelsEvents = {
   ConnectionsToggleChannelFailed: { channel: string; enabled: boolean };
 };
 
+type OrchestratorEvents = {
+  OrchestratorDownloadStarted: undefined;
+  OrchestratorDownloadCompleted: undefined;
+  OrchestratorBuildStarted: { baseModel: string; firstBuild: boolean };
+  OrchestratorBuildCompleted: { baseModel: string; firstBuild: boolean };
+};
+
 type OtherEvents = {};
 
 type PageView = {
@@ -191,7 +198,8 @@ export type TelemetryEvents = ApplicationEvents &
   PageView &
   LgEditorEvents &
   WebChatEvents &
-  LuEditorEvents;
+  LuEditorEvents &
+  OrchestratorEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 
