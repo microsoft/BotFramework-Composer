@@ -227,7 +227,6 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 },
               },
             }}
-            id={'startbot'}
             menuAs={() => null}
             styles={{
               root: {

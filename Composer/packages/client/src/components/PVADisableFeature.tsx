@@ -25,7 +25,7 @@ export const PVADisableFeature: React.FC<{ content?: string; projectId?: string 
     setIsPVABot(checkForPVASchema(schema.sdk));
   }, [rootBotId]);
 
-  const tooltipId = useId('tooltip');
+  const tooltipId = useId('pva-disable-tooltip');
 
   if (!isPVABot) {
     return <>{props.children}</>;
@@ -35,8 +35,6 @@ export const PVADisableFeature: React.FC<{ content?: string; projectId?: string 
     <TooltipHost
       calloutProps={calloutProps}
       content={props.content ?? genericDisableMessage()}
-      // This id is used on the tooltip itself, not the host
-      // (so an element with this id only exists when the tooltip is shown)
       id={tooltipId}
       styles={hostStyles}
     >
