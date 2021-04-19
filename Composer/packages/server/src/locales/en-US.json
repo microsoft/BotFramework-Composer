@@ -134,9 +134,6 @@
   "add_a_luis_key_7702f550": {
     "message": "Add a LUIS key"
   },
-  "add_a_new_bot_d7af2391": {
-    "message": "Add a new bot"
-  },
   "add_a_new_key_5c208c29": {
     "message": "Add a new key"
   },
@@ -163,9 +160,6 @@
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
-  },
-  "add_an_existing_bot_5a9cc5b1": {
-    "message": "Add an existing bot"
   },
   "add_caller_5c12aa5b": {
     "message": "Add caller"
@@ -743,8 +737,14 @@
   "confirmation_modal_must_have_a_title_b0816e0b": {
     "message": "Confirmation modal must have a title."
   },
+  "conflicting_changes_detected_6c282985": {
+    "message": "Conflicting changes detected"
+  },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Congratulations! Your model is successfully published."
+  },
+  "connect_a_remote_skill_10cf0724": {
+    "message": "Connect a remote skill"
   },
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
@@ -856,6 +856,9 @@
   },
   "create_a_new_qna_maker_resource_8c03ee9e": {
     "message": "Create a new QnA Maker resource"
+  },
+  "create_a_new_skill_e961ff28": {
+    "message": "Create a new skill"
   },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Create a new skill manifest or select which one you want to edit"
@@ -1261,6 +1264,9 @@
   },
   "edit_in_json_75d0d754": {
     "message": "Edit in JSON"
+  },
+  "edit_in_power_virtual_agents_56ee7ac2": {
+    "message": "Edit in Power Virtual Agents"
   },
   "edit_kb_name_5e2d8c5b": {
     "message": "Edit KB name"
@@ -1723,6 +1729,9 @@
   },
   "get_qna_key_583b2548": {
     "message": "Get QnA key"
+  },
+  "get_remote_file_fail_37ef94c5": {
+    "message": "get remote file fail"
   },
   "get_started_76ed4cb9": {
     "message": "Get started"
@@ -2618,11 +2627,11 @@
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
   },
+  "open_an_existing_skill_fbd87273": {
+    "message": "Open an existing skill"
+  },
   "open_e0beb7b9": {
     "message": "Open"
-  },
-  "open_in_power_virtual_agents_fcd881e6": {
-    "message": "Open in Power Virtual Agents"
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
@@ -3737,6 +3746,9 @@
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
   },
+  "this_operation_will_overwrite_changes_made_to_prev_e746d44f": {
+    "message": "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
+  },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
   },
@@ -3991,9 +4003,6 @@
   },
   "user_topic_e3978941": {
     "message": "User Topic"
-  },
-  "validating_35b79a96": {
-    "message": "Validating..."
   },
   "validation_b10c677c": {
     "message": "Validation"
