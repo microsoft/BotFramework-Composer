@@ -10,8 +10,6 @@ import { AuthParameters } from './auth';
 
 export type PublishResult = {
   message: string;
-  /** for local runtime output */
-  runtimeLog?: string;
   /** for azure or pva publish */
   comment?: string;
   eTag?: string;
@@ -159,6 +157,7 @@ export type PublishProfile = {
   settings: {
     applicationInsights?: {
       InstrumentationKey: string;
+      connectionString?: string;
     };
     cosmosDb?: {
       cosmosDBEndpoint: string;

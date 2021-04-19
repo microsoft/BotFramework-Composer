@@ -85,7 +85,7 @@ export const publish = async (
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
         'Content-Length': botContent.buffer.byteLength.toString(),
-        'If-Match': project.eTag || '',
+        'If-Match': project.eTag,
       },
     });
     if (res.status === 202) {
@@ -260,11 +260,12 @@ export const pull = async (
     const accessToken = await getAccessToken(creds);
 
     // fetch zip containing bot content
-    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content`;
+    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content?includeTopics=true`;
     const options: RequestInit = {
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
     };
+    logger.log('Fetching from PVA: %s', url);
     const result = await fetch(url, options);
 
     const eTag = result.headers.get('etag') || '';

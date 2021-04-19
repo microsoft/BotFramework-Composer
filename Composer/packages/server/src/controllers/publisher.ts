@@ -73,14 +73,19 @@ export const PublishController = {
         msAppId: configuration.settings?.MicrosoftAppId,
         subscriptionId: configuration.subscriptionId,
       });
+
+      TelemetryService.startEvent('PublishingProfileCompleted', `${target}${projectId}`, {
+        target,
+        projectId,
+        msAppId: configuration.settings?.MicrosoftAppId,
+        subscriptionId: configuration.subscriptionId,
+      });
     } catch (error) {
       TelemetryService.trackEvent('PublishingProfileStarted', {
         target,
         projectId,
       });
     }
-
-    TelemetryService.startEvent('PublishingProfileCompleted', `${target}${projectId}`, { target, projectId });
 
     log('access token retrieved from body: %s', accessToken || 'no token provided');
     if (profile && extensionImplementsMethod(extensionName, 'publish')) {
@@ -330,6 +335,26 @@ export const PublishController = {
       statusCode: '400',
       message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
     });
+  },
+  setupRuntimeLogForBot: async (req, res) => {
+    log('Setting up runtime log server');
+    const profile = defaultPublishConfig;
+    const extensionName = profile.type;
+    const projectId = req.params.projectId;
+    if (profile && extensionImplementsMethod(extensionName, 'setupRuntimeLogServer') && projectId) {
+      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.setupRuntimeLogServer;
+      if (typeof pluginMethod === 'function') {
+        try {
+          const runtimeLogUrl = await pluginMethod.call(null, projectId);
+          return res.status(200).send(runtimeLogUrl);
+        } catch (ex) {
+          res.status(400).json({
+            statusCode: '400',
+            message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
+          });
+        }
+      }
+    }
   },
 
   pull: async (req, res) => {

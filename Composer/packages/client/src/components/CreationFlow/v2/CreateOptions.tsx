@@ -15,11 +15,14 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { navigate, RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy } from '../../../constants';
-import { getAliasFromPayload } from '../../../utils/electronUtil';
+import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
+import { userHasNodeInstalledState } from '../../../recoilModel';
 
 import { CreateBotV2 } from './CreateBot';
+import { NodeModal } from './NodeModal';
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
@@ -27,7 +30,6 @@ type CreateOptionsProps = {
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
-  fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
 
@@ -35,7 +37,9 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchTemplates, fetchReadMe } = props;
+  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchReadMe } = props;
+  const [showNodeModal, setShowNodeModal] = useState(false);
+  const userHasNode = useRecoilValue(userHasNodeInstalledState);
 
   useEffect(() => {
     // open bot directly if alias exist.
@@ -100,6 +104,12 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     }
   };
 
+  useEffect(() => {
+    if (!userHasNode) {
+      setShowNodeModal(true);
+    }
+  }, [userHasNode]);
+
   return (
     <Fragment>
       <DialogWrapper
@@ -117,13 +127,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       </DialogWrapper>
       <CreateBotV2
         fetchReadMe={fetchReadMe}
-        fetchTemplates={fetchTemplates}
         isOpen={isOpenCreateModal}
         location={props.location}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}
       />
+      {isElectron() && showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
     </Fragment>
   );
 }

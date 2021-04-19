@@ -173,8 +173,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
 
-      const mode = this.getRuntimeTemplateMode(runtime?.key);
-
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -275,7 +273,18 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /*******************************************************************************************************************************/
     asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user): Promise<void> => {
       const { runtimeLanguage } = parseRuntimeKey(project.settings?.runtime?.key);
-      const provisionConfig: ProvisionConfig = { ...config, workerRuntime: runtimeLanguage };
+
+      // map runtime language/platform to worker runtime
+      let workerRuntime = runtimeLanguage;
+      switch (runtimeLanguage) {
+        case 'js':
+          workerRuntime = 'node';
+          break;
+        default:
+          break;
+      }
+
+      const provisionConfig: ProvisionConfig = { ...config, workerRuntime };
 
       const { name } = provisionConfig;
 
@@ -318,6 +327,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             InstrumentationKey:
               provisionResults.appInsights?.instrumentationKey ??
               currentSettings?.applicationInsights?.InstrumentationKey,
+            connectionString:
+              provisionResults.appInsights?.connectionString ?? currentSettings?.applicationInsights?.connectionString,
           },
           cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
           blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,

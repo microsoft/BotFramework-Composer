@@ -61,7 +61,7 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
-export interface BotRuntimeError {
+export interface BotStartError {
   title: string;
   message: string;
   linkAfterMessage?: { url: string; text: string };
@@ -127,3 +127,5 @@ export type WebChatInspectionData = {
   item: ConversationTrafficItem;
   mode?: TrafficInspectionMode;
 };
+
+export type RuntimeOutputData = { standardOutput: string; standardError: BotStartError | null };

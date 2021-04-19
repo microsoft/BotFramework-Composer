@@ -18,6 +18,7 @@ import log from '../../logger';
 import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
 import { COMPOSER_VERSION } from '../../constants';
+import { TelemetryService } from '../../services/telemetry';
 
 import { IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
 import orchestratorBuilder from './process/orchestratorBuilder';
@@ -62,6 +63,7 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: -1 };
   private _locale: string;
+  private orchestratorCachedBuild = false;
   private orchestratorSettings: IOrchestratorSettings = {
     orchestrator: {
       models: {},
@@ -194,7 +196,15 @@ export class Builder {
         if (!(await pathExists(modelPath))) {
           throw new Error('Orchestrator Model missing: ' + modelPath);
         }
+
+        TelemetryService.startEvent('OrchestratorBuildStarted', 'OrchestratorBuilder', {
+          baseModel: Path.basename(modelPath),
+          firstBuild: !this.orchestratorCachedBuild,
+        });
+
         const snapshotData = await this.buildOrchestratorSnapshots(modelPath, modelData.luFiles, emptyFiles);
+
+        TelemetryService.endEvent('OrchestratorBuildCompleted', 'OrchestratorBuilder');
 
         this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
         this.orchestratorSettings.orchestrator.snapshots = snapshotData;

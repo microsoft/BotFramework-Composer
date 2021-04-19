@@ -168,6 +168,11 @@ const getInitialModalities = (structuredResponse?: PartialStructuredResponse): M
   const modalities = Object.keys(structuredResponse || {}).filter((m) =>
     modalityTypes.includes(m as ModalityType)
   ) as ModalityType[];
+
+  if (structuredResponse?.InputHint && !structuredResponse.Speak) {
+    modalities.push('Speak');
+  }
+
   return modalities.length ? modalities : ['Text'];
 };
 
@@ -283,6 +288,11 @@ export const ModalityPivot = React.memo((props: Props) => {
         if (lgOption?.templateId) {
           const mergedResponse = mergeWith({}, structuredResponse) as PartialStructuredResponse;
           delete mergedResponse[modality];
+
+          // Remove Input Hint when the user deletes the Speech modality
+          if (modality === 'Speak') {
+            delete mergedResponse.InputHint;
+          }
 
           setStructuredResponse(mergedResponse);
           const mappedResponse = structuredResponseToString(mergedResponse);
