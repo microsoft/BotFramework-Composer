@@ -349,6 +349,8 @@ export const QnALocales = [
   'vi-vn',
 ];
 
+export const chooseIntentTemplatePrefix = 'ChooseIntent';
+
 const adaptiveCardJsonBody = (designerId: string) =>
   `-\`\`\`{
       "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
@@ -358,12 +360,12 @@ const adaptiveCardJsonBody = (designerId: string) =>
       "body": [
           {
               "type": "TextBlock",
-              "text": "\${TextInput_Prompt_${designerId}_attachment_whichOneDidYouMean()}",
+              "text": "\${${chooseIntentTemplatePrefix}_${designerId}_attachment_whichOneDidYouMean()}",
               "weight": "Bolder"
           },
           {
               "type": "TextBlock",
-              "text": "\${TextInput_Prompt_${designerId}_attachment_pickOne()}",
+              "text": "\${${chooseIntentTemplatePrefix}_${designerId}_attachment_pickOne()}",
               "separator": "true"
           },
           {
@@ -371,7 +373,7 @@ const adaptiveCardJsonBody = (designerId: string) =>
               "placeholder": "Placeholder text",
               "id": "userChosenIntent",
               "choices": [
-                           \${TextInput_Prompt_${designerId}_attachment_generateChoices},
+                           \${${chooseIntentTemplatePrefix}_${designerId}_attachment_generateChoices()},
                            {
                                "title": "None of the above",
                                "value": "none"
@@ -407,22 +409,22 @@ const pickOne = `\
 - Can you help clarify by choosing one ?
 `;
 
-const getIntentReadBack = `\
+const getIntentReadBack = (designerId: string) => `\
 - SWITCH : \${intent}
 - CASE: \${'QnAMatch'}
-    - \${getAnswerReadBack()}
+    - \${${chooseIntentTemplatePrefix}_${designerId}_attachment_getAnswerReadBack()}
 - CASE : \${'GetUserProfile'}
   - Start filling in your profile(GetUserProfile intent)
 - DEFAULT :
   - \${intent}
 `;
 
-const generateChoices = `\
-- \${join(foreach(indicesAndValues(candidates), c, choice(c.value.intent, c.index)), ',')}
+const generateChoices = (designerId: string) => `\
+- \${join(foreach(indicesAndValues(candidates), c, ${chooseIntentTemplatePrefix}_${designerId}_attachment_choice(c.value.intent, c.index)), ',')}
 `;
 
-const choice = `\
--  { "title": "\${getIntentReadBack(title)}", "value": "\${value}" }
+const choice = (designerId: string) => `\
+- { "title": "\${${chooseIntentTemplatePrefix}_${designerId}_attachment_getIntentReadBack(title)}", "value": "\${value}" }
 `;
 
 const getAnswerReadBack = `- See an answer from the Knowledge Base
@@ -431,94 +433,62 @@ const getAnswerReadBack = `- See an answer from the Knowledge Base
 export const LgTemplateSamples = {
   onChooseIntentAdaptiveCard: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}_attachment_card`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_card`,
       body: adaptiveCardJsonBody(designerId),
       parameters: ['candidates'],
-    }
+    };
   },
   whichOneDidYouMean: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}_attachment_whichOneDidYouMean`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_whichOneDidYouMean`,
       body: whichOneDidYouMeanBody,
-    }
+    };
   },
   pickOne: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}_attachment_pickOne`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_pickOne`,
       body: pickOne,
-    }
+    };
   },
   getAnswerReadBack: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}_attachment_getAnswerReadBack`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_getAnswerReadBack`,
       body: getAnswerReadBack,
-    }
+    };
   },
   getIntentReadBack: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}_attachment_getIntentReadBack`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_getIntentReadBack`,
       parameters: ['intent'],
-      body: getIntentReadBack,
-    }
+      body: getIntentReadBack(designerId),
+    };
   },
   generateChoices: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}_attachment_generateChoices`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_generateChoices`,
       parameters: ['candidates'],
-      body: generateChoices,
-    }
+      body: generateChoices(designerId),
+    };
   },
   choice: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}_attachment_choice`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_choice`,
       parameters: ['title', 'value'],
-      body: choice,
-    }
+      body: choice(designerId),
+    };
   },
   textInputPromptForOnChooseIntent: (designerId) => {
     return {
-      name: `TextInput_Prompt_${designerId}`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}`,
       body: `[Activity
-    Attachments = \${json(TextInput_Prompt_${designerId}_attachment_card(dialog.candidates))}
+    Attachments = \${json(${chooseIntentTemplatePrefix}_${designerId}_attachment_card(dialog.candidates))}
 ]
-`
-      // ['adaptiveCardJson']: {
-      //   name: 'AdaptiveCardJson',
-      //   body: adaptiveCardJsonBody,
-      // },
-      // ['whichOneDidYouMean']: {
-      //   name: `whichOneDidYouMean`,
-      //   body: whichOneDidYouMeanBody,
-      // },
-      // ['pickOne']: {
-      //   name: 'pickOne',
-      //   body: pickOne,
-      // },
-      // ['getAnswerReadBack']: {
-      //   name: 'getAnswerReadBack',
-      //   body: getAnswerReadBack,
-      // },
-      // ['getIntentReadBack']: {
-      //   name: 'getIntentReadBack',
-      //   parameters: ['intent'],
-      //   body: getIntentReadBack,
-      // },
-      // ['generateChoices']: {
-      //   name: 'generateChoices',
-      //   parameters: ['candidates'],
-      //   body: generateChoices,
-      // },
-      // ['choice']: {
-      //   name: 'choice',
-      //   parameters: ['title', 'value'],
-      //   body: choice,
-      // },
-
+`,
     };
   },
   SendActivityForOnChooseIntent: (designerId) => {
     return {
-      name: `SendActivity_${designerId}`,
+      name: `${chooseIntentTemplatePrefix}_SendActivity_${designerId}`,
       body: '- Sure, no worries.\n',
     };
   },

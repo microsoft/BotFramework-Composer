@@ -11,6 +11,7 @@ import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { FieldProcessorAsync } from './copyUtils/ExternalApi';
 import { generateDesignerId } from './generateUniqueId';
 import { conceptLabels } from './labelMap';
+import { chooseIntentTemplatePrefix } from './constant';
 
 interface DesignerAttributes {
   name: string;
@@ -259,7 +260,7 @@ const initialDialogShape = () => ({
         maxTurnCount: 3,
         alwaysPrompt: true,
         allowInterruptions: false,
-        prompt: `\${TextInput_Prompt_${generateDesignerId()}()}`,
+        prompt: `\${${chooseIntentTemplatePrefix}_${generateDesignerId()}()}`,
         property: 'turn.intentChoice',
         value: '=@userChosenIntent',
         top: 3,
@@ -294,7 +295,7 @@ const initialDialogShape = () => ({
             $designer: {
               id: generateDesignerId(),
             },
-            activity: `\${SendActivity_${generateDesignerId()}()}`,
+            activity: `\${${chooseIntentTemplatePrefix}_SendActivity_${generateDesignerId()}()}`,
           },
         ],
         top: 3,
