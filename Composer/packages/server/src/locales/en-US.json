@@ -2051,9 +2051,6 @@
   "learn_how_to_publish_to_a_dev_ops_pipeline_using_c_9b4577be": {
     "message": "Learn how to publish to a Dev Ops pipeline using CI / CD."
   },
-  "learn_more_7a8d626": {
-    "message": "Learn More"
-  },
   "learn_more_a79a7918": {
     "message": "Learn more"
   },
@@ -3994,6 +3991,9 @@
   },
   "user_topic_e3978941": {
     "message": "User Topic"
+  },
+  "validating_35b79a96": {
+    "message": "Validating..."
   },
   "validation_b10c677c": {
     "message": "Validation"
