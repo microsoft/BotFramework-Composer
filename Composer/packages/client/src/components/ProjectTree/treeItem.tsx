@@ -285,6 +285,8 @@ type ITreeItemProps = {
   isMenuOpen?: boolean;
   showErrors?: boolean;
   role?: string;
+  href?: string;
+  tooltip?: string;
 };
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -417,7 +419,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   onSelect,
   textWidth = 100,
   menu = [],
-  extraSpace = 0,
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
