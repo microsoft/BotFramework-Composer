@@ -10,6 +10,7 @@ import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { composeRenderFunction } from '@uifabric/utilities';
+import { DialogSetting } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
 import { build, publishLuisToPrediction } from './luisAndQnA';
@@ -45,7 +46,7 @@ export class BotProjectDeploy {
    */
   public async deploy(
     project: any,
-    settings: any,
+    settings: DialogSetting,
     profileName: string,
     name: string,
     environment: string,
@@ -60,6 +61,11 @@ export class BotProjectDeploy {
 
       if (absSettings) {
         await this.BindKeyVault(absSettings, hostname);
+      }
+
+      // Update skill host endpoint
+      if (settings.skillHostEndpoint) {
+        settings.skillHostEndpoint = `https://${hostname}.azurewebsites.net/api/skills`;
       }
 
       // STEP 1: CLEAN UP PREVIOUS BUILDS
@@ -125,6 +131,13 @@ export class BotProjectDeploy {
           path.join(pathToArtifacts, 'wwwroot', 'manifests'),
           project.fileStorage
         );
+        // Update skill endpoint url in skill manifest.
+        await this.updateSkillSettings(
+          profileName,
+          hostname,
+          settings.MicrosoftAppId,
+          path.join(pathToArtifacts, 'wwwroot', 'manifests')
+        );
       }
 
       // STEP 4: ZIP THE ASSETS
@@ -156,6 +169,45 @@ export class BotProjectDeploy {
         message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       });
       throw error;
+    }
+  }
+
+  /**
+   * update the skill related settings to skills' manifest
+   * @param hostname hostname of web app
+   * @param msAppId microsoft app id
+   * @param skillSettingsPath the path of skills manifest settings
+   */
+  private async updateSkillSettings(profileName: string, hostname: string, msAppId: string, skillSettingsPath: string) {
+    /* eslint-disable-next-line security/detect-non-literal-fs-filename -- Safe as no value holds user input */
+    const manifestFiles = (await fs.readdir(skillSettingsPath)).filter((x) => x.endsWith('.json'));
+    if (manifestFiles.length === 0) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `The manifest does not exist on path: ${skillSettingsPath}`,
+      });
+      return;
+    }
+
+    for (const manifestFile of manifestFiles) {
+      const hostEndpoint = `https://${hostname}.azurewebsites.net/api/messages`;
+
+      const manifest = await fs.readJson(path.join(skillSettingsPath, manifestFile));
+
+      const endpointIndex = manifest.endpoints.findIndex((x) => x.name === profileName);
+      if (endpointIndex > -1) {
+        // already exists
+        return;
+      }
+      manifest.endpoints.push({
+        protocol: 'BotFrameworkV3',
+        name: profileName,
+        endpointUrl: hostEndpoint,
+        description: '<description>',
+        msAppId: msAppId,
+      });
+
+      await fs.writeJson(path.join(skillSettingsPath, manifestFile), manifest, { spaces: 2 });
     }
   }
 

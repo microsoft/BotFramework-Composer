@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
+import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
@@ -28,6 +28,7 @@ import {
   createQnAOnState,
   creationFlowTypeState,
   currentProjectIdState,
+  currentPublishTargetState,
   dispatcherState,
   feedState,
   fetchReadMePendingState,
@@ -501,6 +502,12 @@ export const projectDispatcher = () => {
     }
   );
 
+  const updateCurrentTarget = useRecoilCallback<[string, PublishTarget], void>(
+    ({ set }: CallbackInterface) => (projectId: string, currentTarget) => {
+      set(currentPublishTargetState(projectId), currentTarget);
+    }
+  );
+
   const saveTemplateId = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (templateId) => {
     if (templateId) {
       set(templateIdState, templateId);
@@ -635,6 +642,7 @@ export const projectDispatcher = () => {
     saveProjectAs,
     fetchProjectById,
     fetchRecentProjects,
+    updateCurrentTarget,
     fetchFeed,
     setBotStatus,
     saveTemplateId,

@@ -731,6 +731,9 @@
   "confirm_input_7e58417e": {
     "message": "Confirm input"
   },
+  "confirm_skill_endpoints_6eb184cf": {
+    "message": "Confirm skill endpoints"
+  },
   "confirmation_fec87d65": {
     "message": "Confirmation"
   },
@@ -1682,8 +1685,8 @@
   "general_24ac26a8": {
     "message": "General"
   },
-  "generate_44e33e72": {
-    "message": "Generate"
+  "generate_and_publish_4f218960": {
+    "message": "Generate and Publish"
   },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
@@ -2672,9 +2675,6 @@
   "paste_token_here_eccec7e4": {
     "message": "Paste token here"
   },
-  "please_add_at_least_minitems_endpoint_5439fd74": {
-    "message": "Please add at least { minItems } endpoint"
-  },
   "please_enter_a_value_for_key_77cfc097": {
     "message": "Please enter a value for { key }"
   },
@@ -2872,6 +2872,9 @@
   },
   "publishing_profile_6d7064ce": {
     "message": "Publishing Profile"
+  },
+  "publishing_skill_be1b6b96": {
+    "message": "Publishing skill"
   },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
@@ -3191,6 +3194,9 @@
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
   },
+  "select_a_publishing_profile_a2eb4e86": {
+    "message": "Select a publishing profile"
+  },
   "select_a_template_874fe803": {
     "message": "Select a template"
   },
@@ -3355,9 +3361,6 @@
   },
   "skill_endpoint_b563491e": {
     "message": "Skill Endpoint"
-  },
-  "skill_endpoints_e4e3d8c1": {
-    "message": "Skill endpoints"
   },
   "skill_host_endpoint_4118a173": {
     "message": "Skill host endpoint"
@@ -3580,6 +3583,9 @@
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
+  },
+  "the_endpoint_url_7c04ee13": {
+    "message": "The endpoint url"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "The file name can not be empty"
