@@ -38,7 +38,6 @@ const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjec
 const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
 const ExtensionsPage = React.lazy(() => import('./pages/extensions/ExtensionsPage'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
-// const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
