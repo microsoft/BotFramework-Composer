@@ -8,8 +8,11 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
+import { Label } from 'office-ui-fabric-react/lib/Label';
+import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+import { PVADisabler } from '../../components/PVADisabler';
 
 import { BotSkillConfiguration } from './BotSkillConfiguration';
 import { BotProjectInfo } from './BotProjectInfo';
@@ -27,6 +30,11 @@ const container = css`
   max-width: 1000px;
   height: 100%;
 `;
+
+const disabledPivotStyle: IButtonProps = {
+  disabled: true,
+  style: { pointerEvents: 'unset', cursor: 'no-drop' },
+};
 
 const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
@@ -80,7 +88,17 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           <AppIdAndPassword projectId={projectId} />
           <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
-        <PivotItem data-testid="luisQnaTab" headerText={formatMessage('LUIS and QnA')} itemKey={PivotItemKey.LuisQna}>
+        <PivotItem
+          data-testid="luisQnaTab"
+          headerButtonProps={disabledPivotStyle}
+          headerText={formatMessage('LUIS and QnAs')}
+          itemKey={PivotItemKey.LuisQna}
+          onRenderItemLink={() => (
+            <PVADisabler>
+              <Label disabled>{formatMessage('LUIS and QnA')}</Label>
+            </PVADisabler>
+          )}
+        >
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
         <PivotItem
@@ -92,8 +110,13 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         </PivotItem>
         <PivotItem
           data-testid="skillsTab"
-          headerText={formatMessage('Skill Configuration')}
+          headerButtonProps={disabledPivotStyle}
           itemKey={PivotItemKey.SkillConfig}
+          onRenderItemLink={() => (
+            <PVADisabler>
+              <Label disabled>{formatMessage('Skill Configuration')}</Label>
+            </PVADisabler>
+          )}
         >
           {isRootBot && <BotSkillConfiguration projectId={projectId} />}
         </PivotItem>
