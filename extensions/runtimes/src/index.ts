@@ -429,6 +429,26 @@ export default async (composer: any): Promise<void> => {
       // return the location of the build artifiacts
       return publishFolder;
     },
+    setSkillManifest: async (
+      dstRuntimePath: string,
+      dstStorage: IFileStorage,
+      srcManifestDir: string,
+      srcStorage: IFileStorage,
+      mode = 'azurewebapp' // set default as azurewebapp
+    ) => {
+      // update manifst into runtime wwwroot
+      if (mode === 'azurewebapp') {
+        const manifestDstDir = path.resolve(dstRuntimePath, 'wwwroot', 'manifests');
+
+        if (await fs.pathExists(manifestDstDir)) {
+          await removeDirAndFiles(manifestDstDir);
+        }
+
+        if (await fs.pathExists(srcManifestDir)) {
+          await copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
+        }
+      }
+    },
   });
 
   composer.addRuntimeTemplate({
