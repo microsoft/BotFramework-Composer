@@ -4,6 +4,7 @@
 import './commands';
 
 before(() => {
+  cy.exec('yarn test:integration:clean-all');
   cy.createTemplateBot('EmptySample', ({ id }) => {
     cy.visit(`/bot/${id}`);
   });

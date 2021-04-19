@@ -11,7 +11,7 @@ context('LU Page', () => {
   it('can open language understanding page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser input').click();
     // left nav tree
-    cy.contains('__TestEmptySample');
+    cy.contains('TestBot_EmptySample');
 
     // by default it goes to table view
     cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
@@ -21,7 +21,7 @@ context('LU Page', () => {
 
     // nav to ToDoBotWithLuisSample.main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestEmptySample').last().click();
+      cy.findAllByText('TestBot_EmptySample').last().click();
     });
     cy.findByTestId('showcode').as('switchButton');
     // goto edit-mode

@@ -11,7 +11,7 @@ context('LG Page', () => {
   it('can open language generation page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonBot responses').click();
     // left nav tree
-    cy.contains('__TestEmptySample');
+    cy.contains('TestBot_EmptySample');
 
     cy.findByTestId('showcode').as('switchButton');
 
@@ -29,7 +29,7 @@ context('LG Page', () => {
 
     // nav to Main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestEmptySample').last().click();
+      cy.findAllByText('TestBot_EmptySample').last().click();
     });
   });
 });
