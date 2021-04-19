@@ -21,7 +21,7 @@ type TopicsListProps = {
 };
 
 export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWidth, projectId }) => {
-  const linkTooltip = formatMessage('Open in Power Virtual Agents');
+  const linkTooltip = formatMessage('Edit in Power Virtual Agents');
 
   const renderTopic = (topic: DialogInfo) => {
     const isSystemTopic = get(topic.content, 'isSystemTopic', false);
