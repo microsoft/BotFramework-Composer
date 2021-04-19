@@ -4,10 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
+import querystring from 'query-string';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
@@ -29,12 +30,17 @@ import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { ApiStatus, PublishStatusPollingUpdater, pollingUpdaterList } from '../../utils/publishStatusPollingUpdater';
 import { PublishTargets } from '../botProject/PublishTargets';
+import { navigateTo } from '../../utils/navigation';
 
 import { ProjectList } from './components/projectList/ProjectList';
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { BotStatusList } from './BotStatusList';
-import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
+import {
+  getPendingNotificationCardProps,
+  getPublishedNotificationCardProps,
+  getSkillPublishedNotificationCardProps,
+} from './Notifications';
 import { PullDialog } from './pullDialog';
 import { PublishToolbar } from './PublishToolbar';
 import { Bot, BotStatus } from './type';
@@ -45,6 +51,13 @@ import {
   deleteNotificationInterval,
 } from './publishPageUtils';
 
+const SKILL_PUBLISH_STATUS = {
+  INITIAL: 'inital',
+  WAITING: 'wait for publish',
+  PUBLISHING: 'publishing',
+  PUBLISHED: 'published',
+  CANCEL: 'cancel',
+};
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectData = useRecoilValue(localBotsDataSelector);
@@ -126,6 +139,23 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     pendingNotificationRef.current = undefined;
   };
 
+  const [skillPublishStatus, setSkillPublishStatus] = useState(SKILL_PUBLISH_STATUS.INITIAL);
+  const decoded = props.location?.search ? decodeURIComponent(props.location.search) : '';
+  const { publishTargetName, url } = querystring.parse(decoded);
+  const [skillManifestUrl, setSkillManifestUrl] = useState('');
+
+  useEffect(() => {
+    if (publishTargetName && botStatusList.length > 0 && skillPublishStatus === SKILL_PUBLISH_STATUS.INITIAL) {
+      setSkillPublishStatus(SKILL_PUBLISH_STATUS.WAITING);
+      const currentBotStatus = botStatusList.find((bot) => bot.id === projectId);
+      changePublishTarget(publishTargetName, currentBotStatus);
+      setCheckedSkillIds([projectId]);
+      onPublish();
+      setSkillManifestUrl(url as string);
+      props.location && navigate(props.location?.pathname, { replace: true });
+    }
+  }, [publishTargetName, botStatusList, skillPublishStatus, props.location]);
+
   useEffect(() => {
     if (currentBotList.length < botList.length) {
       // init bot status list for the botProjectData is empty array when first mounted
@@ -200,10 +230,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // Show result notifications
       const displayedNotifications = showNotificationsRef.current;
       if (displayedNotifications[botProjectId]) {
-        const resultNotification = createNotification(
-          getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status })
-        );
+        const notificationCard =
+          skillPublishStatus !== SKILL_PUBLISH_STATUS.INITIAL
+            ? getSkillPublishedNotificationCardProps(
+                { ...updatedBot, status: responseData.status, skillManifestUrls: [] },
+                skillManifestUrl
+              )
+            : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status, skillManifestUrls: [] });
+        const resultNotification = createNotification(notificationCard);
         addNotification(resultNotification);
+        setSkillPublishStatus(SKILL_PUBLISH_STATUS.INITIAL);
         setTimeout(() => {
           deleteNotification(resultNotification.id);
           showNotificationsRef.current = { ...displayedNotifications, [botProjectId]: false };
@@ -233,19 +269,28 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const manageSkillPublishProfile = (skillId: string) => {
-    setActiveTab('provision');
+    setActiveTab('addNewPublishProfile');
     setProvisionProject(skillId);
   };
 
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
     if (location.hash === '#addNewPublishProfile') {
-      setActiveTab('provision');
+      setActiveTab('addNewPublishProfile');
     }
   }, [location]);
 
   const isPublishingToAzure = (target?: PublishTarget) => {
     return target?.type === 'azurePublish' || target?.type === 'azureFunctionsPublish';
+  };
+
+  const onPublish = () => {
+    if (isShowAuthDialog(false)) {
+      setShowAuthDialog(true);
+    } else {
+      setPublishDialogVisiblity(true);
+    }
+    TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
   };
 
   const publish = async (items: BotStatus[]) => {
@@ -308,9 +353,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       accumulator[item.id] = true;
       return accumulator;
     }, {});
-    const notification = createNotification(getPendingNotificationCardProps(items));
+    const notification = createNotification(
+      getPendingNotificationCardProps(items, skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING)
+    );
     pendingNotificationRef.current = notification;
     addNotification(notification);
+
+    if (skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING) {
+      setSkillPublishStatus(SKILL_PUBLISH_STATUS.PUBLISHING);
+    }
 
     // publish to remote
     for (const bot of items) {
@@ -406,14 +457,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <PublishToolbar
         canPublish={canPublish}
         canPull={canPull}
-        onPublish={() => {
-          if (isShowAuthDialog(false)) {
-            setShowAuthDialog(true);
-          } else {
-            setPublishDialogVisiblity(true);
-          }
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
-        }}
+        onPublish={onPublish}
         onPull={() => {
           setPullDialogVisiblity(true);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'pullFromProfile' });
@@ -426,7 +470,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <Pivot
         selectedKey={activeTab}
         styles={{ root: { marginLeft: 12 } }}
-        onLinkClick={(link) => setActiveTab(link?.props?.itemKey || '')}
+        onLinkClick={(link) => {
+          setActiveTab(link?.props?.itemKey || '');
+          if (link?.props.itemKey) {
+            setActiveTab(link.props.itemKey);
+            navigateTo(`/bot/${projectId}/publish/all/#${link.props.itemKey}`);
+          }
+        }}
       >
         <PivotItem headerText={formatMessage('Publish')} itemKey={'publish'}>
           <div css={ContentStyle} data-testid="Publish" role="main">
@@ -444,7 +494,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             </div>
           </div>
         </PivotItem>
-        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'provision'}>
+        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'addNewPublishProfile'}>
           <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
             {botProjectData && botProjectData.length > 1 && (
               <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
