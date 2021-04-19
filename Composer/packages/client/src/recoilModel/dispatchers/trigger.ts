@@ -80,29 +80,24 @@ const getNewDialogWithTrigger = async (
     ];
     await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
   } else if (formData.$kind === onChooseIntentKey) {
-    const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[4].prompt`);
+    const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[2].prompt`);
     const designerId2 = getDesignerIdFromDialogPath(
       newDialog,
-      `content.triggers[${index}].actions[5].elseActions[0].activity`
+      `content.triggers[${index}].actions[3].elseActions[0].activity`
     );
-    const lgTemplates1: LgTemplate[] = [
-      LgTemplateSamples.TextInputPromptForOnChooseIntent(designerId1) as LgTemplate,
+    const lgTemplates: LgTemplate[] = [
+      LgTemplateSamples.textInputPromptForOnChooseIntent(designerId1) as LgTemplate,
+      LgTemplateSamples.onChooseIntentAdaptiveCard(designerId1) as LgTemplate,
+      LgTemplateSamples.whichOneDidYouMean(designerId1) as LgTemplate,
+      LgTemplateSamples.pickOne(designerId1) as LgTemplate,
+      LgTemplateSamples.getAnswerReadBack(designerId1) as LgTemplate,
+      LgTemplateSamples.getIntentReadBack(designerId1) as LgTemplate,
+      LgTemplateSamples.generateChoices(designerId1) as LgTemplate,
+      LgTemplateSamples.choice(designerId1) as LgTemplate,
       LgTemplateSamples.SendActivityForOnChooseIntent(designerId2) as LgTemplate,
     ];
 
-    let lgTemplates2: LgTemplate[] = [
-      LgTemplateSamples.adaptiveCardJson as LgTemplate,
-      LgTemplateSamples.whichOneDidYouMean as LgTemplate,
-      LgTemplateSamples.pickOne as LgTemplate,
-      LgTemplateSamples.getAnswerReadBack as LgTemplate,
-      LgTemplateSamples.getIntentReadBack as LgTemplate,
-    ];
-    const commonlgFile = lgFiles.find(({ id }) => id === `common.${locale}`);
-
-    lgTemplates2 = lgTemplates2.filter((t) => commonlgFile?.templates.findIndex((clft) => clft.name === t.name) === -1);
-
-    await createLgTemplates({ id: `common.${locale}`, templates: lgTemplates2, projectId });
-    await createLgTemplates({ id: lgFile.id, templates: lgTemplates1, projectId });
+    await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
   }
   return {
     id: newDialog.id,
@@ -165,7 +160,7 @@ export const triggerDispatcher = () => {
         luFile &&
           deleteActions(
             actions,
-            (templateNames: string[]) => removeLgTemplates({ id: dialogId, templateNames, projectId }),
+            (templateNames: string[]) => removeLgTemplates({ id: `${dialogId}.${locale}`, templateNames, projectId }),
             (intentNames: string[]) =>
               Promise.all(intentNames.map((intentName) => removeLuIntent({ id: luFile.id, intentName, projectId })))
           );
