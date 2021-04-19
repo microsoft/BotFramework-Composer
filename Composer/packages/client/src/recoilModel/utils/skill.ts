@@ -15,7 +15,7 @@ export const createActionFromManifest = (manifestIdentifier) => {
     skillHostEndpoint: '=settings.skillHostEndpoint',
     connectionName: '=settings.connectionName',
     allowInterruptions: true,
-    skillEndpoint: `=settings.skill['${manifestIdentifier}'].endpointUrl`, // manifest.endpoints.length > 0 ? manifest.endpoints?.[selectEndpointIndex].endpointUrl : '',
-    skillAppId: `=settings.skill['${manifestIdentifier}'].msAppId`, // manifest.endpoints.length > 0 ? manifest.endpoints?.[selectEndpointIndex].msAppId : '',
+    skillEndpoint: `=settings.skill['${manifestIdentifier}'].endpointUrl`,
+    skillAppId: `=settings.skill['${manifestIdentifier}'].msAppId`,
   };
 };

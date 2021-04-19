@@ -3,9 +3,15 @@
 
 import formatMessage from 'format-message';
 import { luIndexer, combineMessage } from '@bfc/indexers';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+
+const conflictConfirmationTitle = formatMessage('Conflicting changes detected');
+const conflictConfirmationPrompt = formatMessage(
+  'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
+);
 
 export const importOrchestractor = async (projectId: string, reloadProject, setApplicationLevelError) => {
   const reqBody = {
@@ -20,6 +26,13 @@ export const importOrchestractor = async (projectId: string, reloadProject, setA
     // check to see if there was a conflict that requires confirmation
     if (results.data.success === false) {
       TelemetryClient.track('PackageInstallConflictFound', { ...reqBody, isUpdate: reqBody.isUpdating });
+      const confirmResult = await OpenConfirmModal(conflictConfirmationTitle, conflictConfirmationPrompt);
+
+      if (confirmResult) {
+        TelemetryClient.track('PackageInstallConflictResolved', { ...reqBody, isUpdate: reqBody.isUpdating });
+        // update package, set isUpdating to true
+        await httpClient.post(`projects/${projectId}/import`, { ...reqBody, isUpdate: true });
+      }
     } else {
       TelemetryClient.track('PackageInstalled', { ...reqBody, isUpdate: reqBody.isUpdating });
       // reload modified content
