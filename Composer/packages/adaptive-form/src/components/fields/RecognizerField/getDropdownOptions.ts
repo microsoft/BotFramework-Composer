@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { RecognizerSchema, FallbackRecognizerKey, ShellApi, ShellData } from '@bfc/extension-client';
+import { checkForPVASchema } from '@bfc/shared';
 
 import { recognizerOrderMap } from './defaultRecognizerOrder';
 import { mapRecognizerSchemaToDropdownOption } from './mappers';
@@ -16,7 +17,15 @@ const getRankScore = (r: RecognizerSchema, shellData: ShellData, shellApi: Shell
   return recognizerOrderMap[r.id] ?? Number.MAX_VALUE - 1;
 };
 
-export const getDropdownOptions = (recognizerConfigs: RecognizerSchema[], shellData: ShellData, shellApi: ShellApi) => {
+export const getDropdownOptions = (configs: RecognizerSchema[], shellData: ShellData, shellApi: ShellApi) => {
+  const isPVASchema = checkForPVASchema(shellData.schemas.sdk);
+  let recognizerConfigs: RecognizerSchema[] = configs;
+  if (isPVASchema) {
+    recognizerConfigs = recognizerConfigs.filter((config) => {
+      return config.id !== FallbackRecognizerKey;
+    });
+  }
+
   return recognizerConfigs
     .filter((r) => (typeof r.disabled === 'function' && !r.disabled(shellData, shellApi)) || !r.disabled)
     .sort((r1, r2) => {

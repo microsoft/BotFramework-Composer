@@ -424,8 +424,14 @@ export const outputsDebugPanelSelector = selector<WebChatEssentials[]>({
   key: 'outputsDebugPanelSelector',
   get: ({ get }) => {
     const projectIds: string[] = get(botProjectIdsState);
-    return projectIds.map((projectId) => {
-      return get(webChatEssentialsSelector(projectId));
+    const filteredProjects: WebChatEssentials[] = [];
+    projectIds.forEach((projectId: string) => {
+      const { isRemote } = get(projectMetaDataState(projectId));
+      if (!isRemote) {
+        const data = get(webChatEssentialsSelector(projectId));
+        filteredProjects.push(data);
+      }
     });
+    return filteredProjects;
   },
 });

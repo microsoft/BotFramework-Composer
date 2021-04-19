@@ -16,6 +16,7 @@ import { BASEPATH } from '../../constants';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { PageLink } from '../../utils/pageLinks';
+import { PVADisableFeature } from '../PVADisableFeature';
 
 import { useLinks } from './../../utils/hooks';
 
@@ -92,10 +93,10 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
         <div css={dividerTop} />{' '}
         <FocusZone allowFocusRoot>
           {topLinks.map((link, index) => {
-            return (
+            const navItem = (
               <NavItem
                 key={'NavLeftBar' + index}
-                disabled={link.disabled}
+                disabled={link.disabled || link.isDisabledForPVA}
                 iconName={link.iconName}
                 labelName={link.labelName}
                 match={link.match}
@@ -103,6 +104,11 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
                 to={mapNavItemTo(link.to)}
               />
             );
+
+            if (link.isDisabledForPVA) {
+              return <PVADisableFeature>{navItem}</PVADisableFeature>;
+            }
+            return navItem;
           })}
         </FocusZone>
       </div>

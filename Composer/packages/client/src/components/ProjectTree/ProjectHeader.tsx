@@ -13,6 +13,7 @@ import { BotStatus } from '../../constants';
 import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSelector } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
@@ -71,6 +72,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const status = useRecoilValue(botStatusState(projectId));
   const diagnostics = useRecoilValue(perProjectDiagnosticsSelectorFamily(projectId));
+  const isPVABot = usePVACheck(projectId);
   const isRunning = status === BotStatus.connected;
 
   const displayName = `${name} ${rootProjectId !== projectId ? `(${formatMessage('Skill')})` : ''}`;
@@ -87,7 +89,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
   };
 
   const generateMenuItems = useCallback(() => {
-    const menuItems = [
+    let menuItems = [
       {
         label: formatMessage('Add a dialog'),
         icon: 'Add',
@@ -95,6 +97,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
           onBotCreateDialog(projectId);
           TelemetryClient.track('AddNewDialogStarted');
         },
+        isDisableForPVA: false,
       },
       {
         label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
@@ -107,6 +110,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
             isRoot: projectId === rootProjectId,
           });
         },
+        isDisableForPVA: true,
       },
       {
         label: '',
@@ -117,18 +121,21 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         onClick: () => {
           onBotEditManifest(projectId);
         },
+        isDisableForPVA: true,
       },
       {
         label: formatMessage('Export this bot as .zip'),
         onClick: () => {
           onBotExportZip(projectId);
         },
+        isDisableForPVA: false,
       },
       {
         label: formatMessage('Settings'),
         onClick: () => {
           navigateTo(createBotSettingUrl(link.projectId, link.skillId));
         },
+        isDisableForPVA: false,
       },
     ];
 
@@ -138,12 +145,17 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         onBotRemoveSkill(projectId);
       },
     };
+
     if (isRemote || botError) {
       return [removeSkillItem];
     }
 
     if (!isRootBot) {
       menuItems.splice(3, 0, removeSkillItem);
+    }
+
+    if (isPVABot) {
+      menuItems = menuItems.filter((item) => !item.isDisableForPVA);
     }
     return menuItems;
   }, [projectId, isRunning]);

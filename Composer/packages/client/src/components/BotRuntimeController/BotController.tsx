@@ -12,7 +12,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
-import { PVADisabler } from '../PVADisabler';
+import { PVADisableFeature } from '../PVADisableFeature';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
   buildConfigurationSelector,
@@ -210,10 +210,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         return <BotRuntimeStatus key={projectId} projectId={projectId} />;
       })}
       <div ref={botControllerMenuTarget} css={[startPanelsContainer]}>
-        <PVADisabler
-          content={formatMessage(
-            'PVA bots cannot be run at the moment. To try this bot publish this bot to PVA and test it there.'
-          )}
+        <PVADisableFeature
+          content={formatMessage('PVA bots cannot be run at the moment. Publish the bot to PVA and test it there.')}
         >
           <DefaultButton
             primary
@@ -269,7 +267,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             )}
             <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
           </DefaultButton>
-        </PVADisabler>
+        </PVADisableFeature>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
             ariaDescription={formatMessage('Open start bots panel')}

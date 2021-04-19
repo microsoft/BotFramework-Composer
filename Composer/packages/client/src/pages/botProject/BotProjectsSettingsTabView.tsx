@@ -4,15 +4,16 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
-import { Label } from 'office-ui-fabric-react/lib/Label';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
-import { PVADisabler } from '../../components/PVADisabler';
+import { PVADisableFeature } from '../../components/PVADisableFeature';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { BotSkillConfiguration } from './BotSkillConfiguration';
 import { BotProjectInfo } from './BotProjectInfo';
@@ -33,7 +34,11 @@ const container = css`
 
 const disabledPivotStyle: IButtonProps = {
   disabled: true,
-  style: { pointerEvents: 'unset', cursor: 'no-drop' },
+  style: {
+    pointerEvents: 'unset',
+    cursor: 'not-allowed',
+    color: `${NeutralColors.gray100}`,
+  },
 };
 
 const idsInTab: Record<PivotItemKey, string[]> = {
@@ -63,6 +68,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
   const [selectedKey, setSelectedKey] = useState(PivotItemKey.Basics);
+  const isPVABot = usePVACheck(projectId);
 
   useEffect(() => {
     if (scrollToSectionId) {
@@ -91,13 +97,15 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         <PivotItem
           data-testid="luisQnaTab"
           headerButtonProps={disabledPivotStyle}
-          headerText={formatMessage('LUIS and QnAs')}
+          headerText={formatMessage('LUIS and QnA')}
           itemKey={PivotItemKey.LuisQna}
-          onRenderItemLink={() => (
-            <PVADisabler>
-              <Label disabled>{formatMessage('LUIS and QnA')}</Label>
-            </PVADisabler>
-          )}
+          onRenderItemLink={() => {
+            if (isPVABot) {
+              return <PVADisableFeature>{formatMessage('LUIS and QnA')}</PVADisableFeature>;
+            } else {
+              return <Fragment>{formatMessage('LUIS and QnA')}</Fragment>;
+            }
+          }}
         >
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
@@ -112,11 +120,15 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           data-testid="skillsTab"
           headerButtonProps={disabledPivotStyle}
           itemKey={PivotItemKey.SkillConfig}
-          onRenderItemLink={() => (
-            <PVADisabler>
-              <Label disabled>{formatMessage('Skill Configuration')}</Label>
-            </PVADisabler>
-          )}
+          onRenderItemLink={() => {
+            if (isPVABot) {
+              return (
+                <PVADisableFeature projectId={projectId}>{formatMessage('Skill Configuration')}</PVADisableFeature>
+              );
+            } else {
+              return <Fragment>{formatMessage('Skill Configuration')}</Fragment>;
+            }
+          }}
         >
           {isRootBot && <BotSkillConfiguration projectId={projectId} />}
         </PivotItem>

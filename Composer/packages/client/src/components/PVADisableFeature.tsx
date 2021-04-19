@@ -16,9 +16,9 @@ const genericDisableMessage = () => {
   return formatMessage('PVA bots cannot use this functionality at this time.');
 };
 
-export const PVADisabler: React.FC<{ content?: string }> = (props) => {
+export const PVADisableFeature: React.FC<{ content?: string; projectId?: string }> = (props) => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
-  const schema = useRecoilValue(schemasState(rootBotId ?? ''));
+  const schema = useRecoilValue(schemasState(props.projectId ?? rootBotId ?? ''));
   const [isPVABot, setIsPVABot] = useState(false);
 
   useEffect(() => {

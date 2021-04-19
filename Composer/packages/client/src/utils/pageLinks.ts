@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 import { ExtensionPageContribution } from '@bfc/extension-client';
-import { checkForPVASchema } from '@bfc/shared';
 
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
@@ -12,6 +11,7 @@ export type PageLink = {
   labelName: string;
   disabled: boolean;
   match?: RegExp;
+  isDisabledForPVA: boolean;
 };
 
 export const topLinks = (
@@ -28,12 +28,13 @@ export const topLinks = (
       ? `/bot/${projectId}/`
       : `/bot/${rootProjectId}/skill/${projectId}/`;
 
-  let links: PageLink[] = [
+  const links: PageLink[] = [
     {
       to: '/home',
       iconName: 'Home',
       labelName: formatMessage('Home'),
       disabled: false,
+      isDisabledForPVA: false,
     },
     {
       to: linkBase + `dialogs/${openedDialogId}`,
@@ -41,6 +42,7 @@ export const topLinks = (
       labelName: formatMessage('Design'),
       disabled: !botLoaded,
       match: /(bot\/[0-9.]+)$|(bot\/[0-9.]+\/skill\/[0-9.]+)$/,
+      isDisabledForPVA: false,
     },
     {
       to: linkBase + `language-generation/${openedDialogId}`,
@@ -48,6 +50,7 @@ export const topLinks = (
       labelName: formatMessage('Bot responses'),
       disabled: !botLoaded,
       match: /language-generation\/[a-zA-Z0-9_-]+$/,
+      isDisabledForPVA: false,
     },
     {
       to: linkBase + `language-understanding/${openedDialogId}`,
@@ -55,6 +58,7 @@ export const topLinks = (
       labelName: formatMessage('User input'),
       disabled: !botLoaded,
       match: /language-understanding\/[a-zA-Z0-9_-]+$/,
+      isDisabledForPVA: false,
     },
     {
       to: linkBase + `knowledge-base/${openedDialogId}`,
@@ -62,6 +66,7 @@ export const topLinks = (
       labelName: formatMessage('QnA'),
       disabled: !botLoaded,
       match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
+      isDisabledForPVA: true,
     },
     {
       to: `/bot/${rootProjectId || projectId}/diagnostics`,
@@ -69,12 +74,14 @@ export const topLinks = (
       labelName: formatMessage('Diagnostics'),
       disabled: !botLoaded,
       match: /diagnostics/,
+      isDisabledForPVA: false,
     },
     {
       to: `/bot/${rootProjectId || projectId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
       disabled: !botLoaded,
+      isDisabledForPVA: false,
     },
     {
       to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
@@ -82,6 +89,7 @@ export const topLinks = (
       labelName: formatMessage('Project settings'),
       disabled: !botLoaded,
       match: /botProjectsSettings/,
+      isDisabledForPVA: false,
     },
     ...(showFormDialog
       ? [
@@ -90,23 +98,24 @@ export const topLinks = (
             iconName: 'Table',
             labelName: formatMessage('Forms (preview)'),
             disabled: !botLoaded,
+            isDisabledForPVA: false,
           },
         ]
       : []),
   ];
 
-  // TODO: refactor when Composer can better model the left nav based on schema
-  if (schema && checkForPVASchema(schema)) {
-    links = links.filter((link) => link.to.indexOf('/knowledge-base') == -1 && link.to.indexOf('/skills') == -1);
-  }
-
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
+      let disablePluginForPva = false;
+      if (p.bundleId === 'package-manager') {
+        disablePluginForPva = true;
+      }
       links.push({
         to: `/bot/${projectId}/plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         disabled: !projectId,
+        isDisabledForPVA: disablePluginForPva,
       });
     });
   }
@@ -120,6 +129,7 @@ export const bottomLinks: PageLink[] = [
     iconName: 'Settings',
     labelName: formatMessage('Composer settings'),
     disabled: false,
+    isDisabledForPVA: false,
   },
   // {
   //   to: `/extensions`,
