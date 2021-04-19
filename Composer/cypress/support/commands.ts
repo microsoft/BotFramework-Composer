@@ -69,14 +69,13 @@ Cypress.Commands.add('createTestBot', (botName: string, callback: (bot: any) => 
 
   const params = {
     description: '',
-    location: '/Users/yellowglue/Projects/BotFramework-Composer/MyBotsTest',
+    location: '',
     name,
     storageId: 'default',
   };
 
   cy.request('post', `/api/projects/${TemplateBotProjectId}/project/saveAs`, params).then((res) => {
-    const bot = res.body;
-    callback(bot);
+    callback(res.body);
   });
 });
 
