@@ -858,6 +858,7 @@ export class BotProject implements IBotProject {
     const paths = this.fileStorage.globSync(
       [
         ...BotStructureFilesPatterns,
+        ...PVATopicFilePatterns,
         '!(generated/**)',
         '!(runtime/**)',
         '!(bin/**)',
@@ -865,7 +866,7 @@ export class BotProject implements IBotProject {
         '!(scripts/**)',
         '!(settings/appsettings.json)',
         '!(**/luconfig.json)',
-      ].concat(process.env.COMPOSER_PVA_TOPICS === 'true' ? PVATopicFilePatterns : []),
+      ],
       root
     );
 
