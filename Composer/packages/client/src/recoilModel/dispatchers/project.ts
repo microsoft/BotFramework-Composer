@@ -39,6 +39,8 @@ import {
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
+import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
+import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -69,8 +71,26 @@ export const projectDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
 
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
+        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        // const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(projectIdToRemove));
+        const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
+        const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
+        // remove the same identifier trigger in root bot
+        if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
+          const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
+          const content = DialogdeleteTrigger(
+            projectDialogsMap[rootBotProjectId],
+            rootDialog?.id,
+            index,
+            async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
+          );
+          if (content) {
+            await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
+          }
+        }
+
+        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
         set(botProjectIdsState, (currentProjects) => {
@@ -168,6 +188,8 @@ export const projectDispatcher = () => {
         const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl);
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, endpointName);
+        // update appsetting
+        await dispatcher.setSkillAndAllowCaller(rootBotProjectId, projectId, endpointName);
         navigateToSkillBot(rootBotProjectId, projectId);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
