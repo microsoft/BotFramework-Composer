@@ -16,7 +16,7 @@ import { css } from '@emotion/core';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import {
   dispatcherState,

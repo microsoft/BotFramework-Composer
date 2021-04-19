@@ -144,4 +144,4 @@ export const actionButton = {
   },
 };
 
-export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10, width: '50%' } }, customError);
+export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10, width: '75%' } }, customError);
