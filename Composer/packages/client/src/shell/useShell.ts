@@ -39,7 +39,11 @@ import {
   featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
-import { dialogsWithLuProviderSelectorFamily, skillsStateSelector } from '../recoilModel/selectors';
+import {
+  dialogsWithLuProviderSelectorFamily,
+  skillsStateSelector,
+  topicsSelectorFamily,
+} from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
@@ -73,6 +77,7 @@ const stubDialog = (): DialogInfo => ({
   intentTriggers: [],
   skills: [],
   isFormDialog: false,
+  isTopic: false,
 });
 
 export function useShell(source: EventSource, projectId: string): Shell {
@@ -80,6 +85,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
+  const topics = useRecoilValue(topicsSelectorFamily(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
@@ -296,6 +302,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     projectId,
     projectCollection,
     dialogs,
+    topics,
     dialogSchemas,
     dialogId,
     focusPath,

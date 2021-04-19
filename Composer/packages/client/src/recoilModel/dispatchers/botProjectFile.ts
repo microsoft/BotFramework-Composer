@@ -76,8 +76,29 @@ export const botProjectFileDispatcher = () => {
     const rootBotSettings = await snapshot.getPromise(settingsState(rootBotProjectId));
     if (rootBotSettings.skill) {
       const updatedSettings = produce(rootBotSettings, (draftState) => {
-        if (draftState.skill?.[botNameIdentifier]) {
+        let msAppId = '';
+        if (draftState?.skill?.[botNameIdentifier]) {
+          msAppId = draftState.skill[botNameIdentifier].msAppId;
           delete draftState.skill[botNameIdentifier];
+        }
+        // remove msAppId in allowCallers
+        if (
+          msAppId &&
+          draftState?.skillConfiguration?.allowedCallers &&
+          draftState?.skillConfiguration?.allowedCallers.length > 0
+        ) {
+          draftState.skillConfiguration.allowedCallers = draftState.skillConfiguration.allowedCallers.filter(
+            (item) => item !== msAppId
+          );
+        }
+        if (
+          msAppId &&
+          draftState?.runtimeSettings?.skills?.allowedCallers &&
+          draftState?.runtimeSettings?.skills?.allowedCallers.length > 0
+        ) {
+          draftState.runtimeSettings.skills.allowedCallers = draftState.runtimeSettings.skills.allowedCallers.filter(
+            (item) => item !== msAppId
+          );
         }
       });
       setRootBotSettingState(callbackHelpers, rootBotProjectId, updatedSettings);

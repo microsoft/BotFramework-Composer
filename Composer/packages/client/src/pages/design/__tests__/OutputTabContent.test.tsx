@@ -7,8 +7,13 @@ import { act } from '@testing-library/react';
 
 import httpClient from '../../../utils/httpUtil';
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
-import { botBuildTimeErrorState } from '../../../recoilModel';
-import { RuntimeOutputLog } from '../DebugPanel/TabExtensions/RuntimeOutputLog/RuntimeOutputLog';
+import {
+  botBuildTimeErrorState,
+  botProjectIdsState,
+  botProjectSpaceLoadedState,
+  projectMetaDataState,
+} from '../../../recoilModel';
+import { OutputsTabContent } from '../DebugPanel/TabExtensions/RuntimeOutputLog/OutputTabContent';
 const projectId = '123-avw';
 
 jest.mock('../../../utils/httpUtil');
@@ -24,7 +29,7 @@ const standardOut = `/Users/tester/Desktop/conversational_core_3/conversational_
               Content root path: /Users/tester/Desktop/conversational_core_3/conversational_core_3
         `;
 
-describe('<RuntimeLog />', () => {
+describe('<OutputTabContent />', () => {
   let mockWSServer;
   beforeAll(() => {
     const url = `ws://localhost:1234/test/${projectId}`;
@@ -38,9 +43,17 @@ describe('<RuntimeLog />', () => {
     mockWSServer = null;
   });
 
-  describe('<RuntimeLog />', () => {
+  describe('<OutputTabContent />', () => {
     it('should render Runtime logs', async () => {
-      const { findByTestId } = renderWithRecoil(<RuntimeOutputLog projectId={projectId} />);
+      const { findByTestId } = renderWithRecoil(<OutputsTabContent isActive />, ({ set }) => {
+        set(botProjectIdsState, [projectId]);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+          isRemote: false,
+        });
+        set(botProjectSpaceLoadedState, true);
+      });
+
       await mockWSServer.connected;
       act(() => {
         const stringified = JSON.stringify({
@@ -53,7 +66,14 @@ describe('<RuntimeLog />', () => {
     });
 
     it('should render Runtime standard errors', async () => {
-      const { findByText } = renderWithRecoil(<RuntimeOutputLog projectId={projectId} />);
+      const { findByText } = renderWithRecoil(<OutputsTabContent isActive />, ({ set }) => {
+        set(botProjectIdsState, [projectId]);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+          isRemote: false,
+        });
+        set(botProjectSpaceLoadedState, true);
+      });
       await mockWSServer.connected;
       act(() => {
         const stringified = JSON.stringify({
@@ -66,7 +86,13 @@ describe('<RuntimeLog />', () => {
     });
 
     it('should render Runtime errors', async () => {
-      const { findByText } = renderWithRecoil(<RuntimeOutputLog projectId={projectId} />, ({ set }) => {
+      const { findByText } = renderWithRecoil(<OutputsTabContent isActive />, ({ set }) => {
+        set(botProjectIdsState, [projectId]);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+          isRemote: false,
+        });
+        set(botProjectSpaceLoadedState, true);
         set(botBuildTimeErrorState(projectId), {
           message: '.NET 3.1 needs to be installed',
           title: '.NET runtime error',
