@@ -51,7 +51,7 @@ type Props = {
 
 const AlertDialog = (props: Props) => {
   const { setting, onCancel, onConfirm } = props;
-  const { title, subtitle = '', confirmText = formatMessage('Ok'), cancelText, style = dialogStyle.normal } = setting;
+  const { title, subtitle = '', confirmText = formatMessage('OK'), cancelText, style = dialogStyle.normal } = setting;
   if (!title) {
     throw new Error(formatMessage('Confirmation modal must have a title.'));
   }
