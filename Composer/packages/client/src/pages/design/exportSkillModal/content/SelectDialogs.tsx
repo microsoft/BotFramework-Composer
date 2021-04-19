@@ -93,7 +93,7 @@ const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
   );
 };
 
-export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, projectId }) => {
+export const SelectDialogs: React.FC<ContentProps> = ({ selectedDialogs, setSelectedDialogs, projectId }) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), [
     projectId,
@@ -138,16 +138,20 @@ export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, proj
     [projectId]
   );
 
-  const selection = useMemo(
-    () =>
-      new Selection({
-        onSelectionChanged: () => {
-          const selectedItems = selection.getSelection();
-          setSelectedDialogs(selectedItems);
-        },
-      }),
-    []
+  const selectionRef = useRef(
+    new Selection({
+      getKey: (item) => item.id,
+      onSelectionChanged: () => {
+        const selectedItems = selectionRef.current.getSelection();
+        setSelectedDialogs(selectedItems);
+      },
+    })
   );
 
-  return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
+  useEffect(() => {
+    for (const item of selectedDialogs) {
+      selectionRef.current.setKeySelected(selectionRef.current.getKey(item), true, false);
+    }
+  }, []);
+  return <SelectItems items={items} selection={selectionRef.current} tableColumns={tableColumns} />;
 };

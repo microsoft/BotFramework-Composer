@@ -117,7 +117,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         onClick: () => {},
       },
       {
-        label: formatMessage('Create/edit skill manifest'),
+        label: formatMessage('Share as a skill'),
         onClick: () => {
           onBotEditManifest(projectId);
         },
