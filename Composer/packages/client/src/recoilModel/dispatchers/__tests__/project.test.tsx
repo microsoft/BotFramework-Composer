@@ -13,6 +13,9 @@ import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
 import { botProjectFileDispatcher } from '../botProjectFile';
 import { publisherDispatcher } from '../publisher';
+import { triggerDispatcher } from '../trigger';
+import { settingsDispatcher } from '../setting';
+import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   recentProjectsState,
@@ -207,6 +210,9 @@ describe('Project dispatcher', () => {
             projectDispatcher,
             botProjectFileDispatcher,
             publisherDispatcher,
+            triggerDispatcher,
+            dialogsDispatcher,
+            settingsDispatcher,
           },
         },
       }
