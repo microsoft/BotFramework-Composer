@@ -349,53 +349,53 @@ export const QnALocales = [
   'vi-vn',
 ];
 
-const adaptiveCardJsonBody =
-  '-```\
-\n{\
-\n      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",\
-\n      "version": "1.0",\
-\n      "type": "AdaptiveCard",\
-\n      "speak": "",\
-\n      "body": [\
-\n          {\
-\n              "type": "TextBlock",\
-\n              "text": "${whichOneDidYouMean()}",\
-\n              "weight": "Bolder"\
-\n          },\
-\n          {\
-\n              "type": "TextBlock",\
-\n              "text": "${pickOne()}",\
-\n              "separator": "true"\
-\n          },\
-\n          {\
-\n              "type": "Input.ChoiceSet",\
-\n              "placeholder": "Placeholder text",\
-\n              "id": "userChosenIntent",\
-\n              "choices": [\
-\n                           ${generateChoices(candidates)},\
-\n                           {\
-\n                               "title": "None of the above",\
-\n                               "value": "none"\
-\n                           }\
-\n             ],\
-\n             "style": "expanded",\
-\n             "value": "luis"\
-\n         },\
-\n         {\
-\n             "type": "ActionSet",\
-\n             "actions": [\
-\n                {\
-\n                     "type": "Action.Submit",\
-\n                     "title": "Submit",\
-\n                     "data": {\
-\n                   "intent": "chooseIntentCardResponse"\
-\n                }\
-\n         }\
-\n       ]\
-\n     }\
-\n    ]\
-\n}\
-```';
+const adaptiveCardJsonBody = (designerId: string) =>
+  `-\`\`\`{
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.0",
+      "type": "AdaptiveCard",
+      "speak": "",
+      "body": [
+          {
+              "type": "TextBlock",
+              "text": "\${TextInput_Prompt_${designerId}_attachment_whichOneDidYouMean()}",
+              "weight": "Bolder"
+          },
+          {
+              "type": "TextBlock",
+              "text": "\${TextInput_Prompt_${designerId}_attachment_pickOne()}",
+              "separator": "true"
+          },
+          {
+              "type": "Input.ChoiceSet",
+              "placeholder": "Placeholder text",
+              "id": "userChosenIntent",
+              "choices": [
+                           \${TextInput_Prompt_${designerId}_attachment_generateChoices},
+                           {
+                               "title": "None of the above",
+                               "value": "none"
+                           }
+             ],
+             "style": "expanded",
+             "value": "luis"
+         },
+         {
+             "type": "ActionSet",
+             "actions": [
+                {
+                     "type": "Action.Submit",
+                     "title": "Submit",
+                     "data": {
+                   "intent": "chooseIntentCardResponse"
+                }
+         }
+       ]
+     }
+    ]
+}
+\`\`\`
+`;
 
 const whichOneDidYouMeanBody = `\
 - I'm not sure which one you mean.
@@ -429,45 +429,91 @@ const getAnswerReadBack = `- See an answer from the Knowledge Base
 `;
 
 export const LgTemplateSamples = {
-  ['adaptiveCardJson']: {
-    name: 'AdaptiveCardJson',
-    body: adaptiveCardJsonBody,
-    parameters: ['candidates'],
+  onChooseIntentAdaptiveCard: (designerId: string) => {
+    return {
+      name: `TextInput_Prompt_${designerId}_attachment_card`,
+      body: adaptiveCardJsonBody(designerId),
+      parameters: ['candidates'],
+    }
   },
-  ['whichOneDidYouMean']: {
-    name: `whichOneDidYouMean`,
-    body: whichOneDidYouMeanBody,
+  whichOneDidYouMean: (designerId: string) => {
+    return {
+      name: `TextInput_Prompt_${designerId}_attachment_whichOneDidYouMean`,
+      body: whichOneDidYouMeanBody,
+    }
   },
-  ['pickOne']: {
-    name: 'pickOne',
-    body: pickOne,
+  pickOne: (designerId: string) => {
+    return {
+      name: `TextInput_Prompt_${designerId}_attachment_pickOne`,
+      body: pickOne,
+    }
   },
-  ['getAnswerReadBack']: {
-    name: 'getAnswerReadBack',
-    body: getAnswerReadBack,
+  getAnswerReadBack: (designerId: string) => {
+    return {
+      name: `TextInput_Prompt_${designerId}_attachment_getAnswerReadBack`,
+      body: getAnswerReadBack,
+    }
   },
-  ['getIntentReadBack']: {
-    name: 'getIntentReadBack',
-    parameters: ['intent'],
-    body: getIntentReadBack,
+  getIntentReadBack: (designerId: string) => {
+    return {
+      name: `TextInput_Prompt_${designerId}_attachment_getIntentReadBack`,
+      parameters: ['intent'],
+      body: getIntentReadBack,
+    }
   },
-  ['generateChoices']: {
-    name: 'generateChoices',
-    parameters: ['candidates'],
-    body: generateChoices,
+  generateChoices: (designerId: string) => {
+    return {
+      name: `TextInput_Prompt_${designerId}_attachment_generateChoices`,
+      parameters: ['candidates'],
+      body: generateChoices,
+    }
   },
-  ['choice']: {
-    name: 'choice',
-    parameters: ['title', 'value'],
-    body: choice,
+  choice: (designerId: string) => {
+    return {
+      name: `TextInput_Prompt_${designerId}_attachment_choice`,
+      parameters: ['title', 'value'],
+      body: choice,
+    }
   },
-  TextInputPromptForOnChooseIntent: (designerId) => {
+  textInputPromptForOnChooseIntent: (designerId) => {
     return {
       name: `TextInput_Prompt_${designerId}`,
       body: `[Activity
-    Attachments = \${json(AdaptiveCardJson(dialog.candidates))}
+    Attachments = \${json(TextInput_Prompt_${designerId}_attachment_card(dialog.candidates))}
 ]
-`,
+`
+      // ['adaptiveCardJson']: {
+      //   name: 'AdaptiveCardJson',
+      //   body: adaptiveCardJsonBody,
+      // },
+      // ['whichOneDidYouMean']: {
+      //   name: `whichOneDidYouMean`,
+      //   body: whichOneDidYouMeanBody,
+      // },
+      // ['pickOne']: {
+      //   name: 'pickOne',
+      //   body: pickOne,
+      // },
+      // ['getAnswerReadBack']: {
+      //   name: 'getAnswerReadBack',
+      //   body: getAnswerReadBack,
+      // },
+      // ['getIntentReadBack']: {
+      //   name: 'getIntentReadBack',
+      //   parameters: ['intent'],
+      //   body: getIntentReadBack,
+      // },
+      // ['generateChoices']: {
+      //   name: 'generateChoices',
+      //   parameters: ['candidates'],
+      //   body: generateChoices,
+      // },
+      // ['choice']: {
+      //   name: 'choice',
+      //   parameters: ['title', 'value'],
+      //   body: choice,
+      // },
+
     };
   },
   SendActivityForOnChooseIntent: (designerId) => {

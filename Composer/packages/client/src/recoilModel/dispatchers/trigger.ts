@@ -89,26 +89,34 @@ export const triggerDispatcher = () => {
             `content.triggers[${index}].actions[3].elseActions[0].activity`
           );
           const lgTemplates1: LgTemplate[] = [
-            LgTemplateSamples.TextInputPromptForOnChooseIntent(designerId1) as LgTemplate,
+            LgTemplateSamples.textInputPromptForOnChooseIntent(designerId1) as LgTemplate,
+            LgTemplateSamples.onChooseIntentAdaptiveCard(designerId1) as LgTemplate,
+            LgTemplateSamples.whichOneDidYouMean(designerId1) as LgTemplate,
+            LgTemplateSamples.pickOne(designerId1) as LgTemplate,
+            LgTemplateSamples.getAnswerReadBack(designerId1) as LgTemplate,
+            LgTemplateSamples.getIntentReadBack(designerId1) as LgTemplate,
+            LgTemplateSamples.generateChoices(designerId1) as LgTemplate,
+            LgTemplateSamples.choice(designerId1) as LgTemplate,
+
             LgTemplateSamples.SendActivityForOnChooseIntent(designerId2) as LgTemplate,
           ];
 
-          let lgTemplates2: LgTemplate[] = [
-            LgTemplateSamples.adaptiveCardJson as LgTemplate,
-            LgTemplateSamples.whichOneDidYouMean as LgTemplate,
-            LgTemplateSamples.pickOne as LgTemplate,
-            LgTemplateSamples.getAnswerReadBack as LgTemplate,
-            LgTemplateSamples.getIntentReadBack as LgTemplate,
-            LgTemplateSamples.generateChoices as LgTemplate,
-            LgTemplateSamples.choice as LgTemplate,
-          ];
-          const commonlgFile = lgFiles.find(({ id }) => id === `common.${locale}`);
+          // let lgTemplates2: LgTemplate[] = [
+          //   LgTemplateSamples.adaptiveCardJson as LgTemplate,
+          //   LgTemplateSamples.whichOneDidYouMean as LgTemplate,
+          //   LgTemplateSamples.pickOne as LgTemplate,
+          //   LgTemplateSamples.getAnswerReadBack as LgTemplate,
+          //   LgTemplateSamples.getIntentReadBack as LgTemplate,
+          //   LgTemplateSamples.generateChoices as LgTemplate,
+          //   LgTemplateSamples.choice as LgTemplate,
+          // ];
+          // const commonlgFile = lgFiles.find(({ id }) => id === `common.${locale}`);
 
-          lgTemplates2 = lgTemplates2.filter(
-            (t) => commonlgFile?.templates.findIndex((clft) => clft.name === t.name) === -1
-          );
+          // lgTemplates2 = lgTemplates2.filter(
+          //   (t) => commonlgFile?.templates.findIndex((clft) => clft.name === t.name) === -1
+          // );
 
-          await createLgTemplates({ id: `common.${locale}`, templates: lgTemplates2, projectId });
+          // await createLgTemplates({ id: `common.${locale}`, templates: lgTemplates2, projectId });
           await createLgTemplates({ id: lgFile.id, templates: lgTemplates1, projectId });
         }
         const dialogPayload = {
