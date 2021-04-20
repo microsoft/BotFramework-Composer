@@ -53,12 +53,7 @@ export const InsertEntityButton = React.memo((props: Props) => {
     [onInsertEntity]
   );
 
-  const { menuProps, noEntities } = useLabelingMenuProps(
-    labelingMenuVisible ? 'disable' : 'none',
-    luFile,
-    itemClick,
-    {}
-  );
+  const { menuProps, noEntities } = useLabelingMenuProps(labelingMenuVisible ? 'disable' : 'none', luFile, itemClick);
 
   const disabled = React.useMemo(() => noEntities || insertEntityDisabled || labelingMenuVisible, [
     noEntities,
