@@ -598,7 +598,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
         modalProps={{
           isBlocking: true,
         }}
-        onDismiss={!loadingLUIS ? props.onDismiss : () => {}}
+        onDismiss={loadingLUIS ? () => {} : props.onDismiss}
       >
         {currentPage === 1 && renderPageOne()}
         {currentPage === 2 && renderPageTwo()}

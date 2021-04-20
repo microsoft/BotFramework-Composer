@@ -525,7 +525,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         modalProps={{
           isBlocking: true,
         }}
-        onDismiss={!loadingQNA ? props.onDismiss : () => {}}
+        onDismiss={loadingQNA ? () => {} : props.onDismiss}
       >
         <div>
           {currentPage === 1 && (
