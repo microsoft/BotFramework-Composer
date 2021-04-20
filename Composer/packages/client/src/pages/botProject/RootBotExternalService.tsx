@@ -33,7 +33,7 @@ import { LUIS_REGIONS } from '../../constants';
 import { ManageLuis } from '../../components/ManageLuis/ManageLuis';
 import { ManageQNA } from '../../components/ManageQNA/ManageQNA';
 
-import { inputFieldStyles, subtext, subtitle, title } from './styles';
+import { inputFieldStyles, subtext, title } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -74,16 +74,6 @@ const errorContainer = css`
   background: #fed9cc;
   color: ${NeutralColors.black};
 `;
-
-const customError = {
-  root: {
-    selectors: {
-      'p > span': {
-        width: '100%',
-      },
-    },
-  },
-};
 
 const errorIcon = {
   root: {

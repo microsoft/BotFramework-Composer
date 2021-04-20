@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import { useState, Fragment, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { mergeStyleSets } from '@uifabric/styling';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';

@@ -49,16 +49,6 @@ const appIdAndPasswordStyle = css`
   flex-direction: column;
 `;
 
-const customError = {
-  root: {
-    selectors: {
-      'p > span': {
-        width: '100%',
-      },
-    },
-  },
-};
-
 // -------------------- AppIdAndPassword -------------------- //
 
 type AppIdAndPasswordProps = {

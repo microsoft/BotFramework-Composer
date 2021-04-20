@@ -54,10 +54,6 @@ const ItemContainer = styled.div({
   marginTop: '4px',
 });
 
-const subtitle = css`
-  padding: 8px 0;
-`;
-
 type ItemProps = {
   value: string;
   onBlur: () => void;
