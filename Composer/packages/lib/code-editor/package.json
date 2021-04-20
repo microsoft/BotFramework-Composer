@@ -43,6 +43,7 @@
     "@types/react-dom": "16.9.5",
     "@types/react": "16.9.23",
     "@types/vscode": "^1.40.0",
+    "adaptivecards": "^2.7.0",
     "autoprefixer": "^9.5.1",
     "copyfiles": "^2.2.0",
     "css-loader": "^2.1.1",

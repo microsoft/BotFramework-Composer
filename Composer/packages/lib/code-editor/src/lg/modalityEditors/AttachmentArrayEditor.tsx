@@ -18,6 +18,7 @@ import debounce from 'lodash/debounce';
 import { LGOption } from '../../utils';
 import { lgCardAttachmentTemplates, LgCardTemplateType, cardTemplates, jsLgToolbarMenuClassName } from '../constants';
 import { getUniqueTemplateName } from '../../utils/lgUtils';
+import { CardCreationModal, CardTemplate } from '../card-creation-modal';
 
 import { StringArrayItem } from './StringArrayItem';
 
@@ -123,13 +124,36 @@ export const AttachmentArrayEditor = React.memo(
       [items, onChange, onRemoveTemplate]
     );
 
+    const [showCardCreationModal, setShowCardCreationModal] = React.useState(false);
+
+    const onDismissCardCreationModal = React.useCallback(() => {
+      setShowCardCreationModal(false);
+    }, []);
+
+    const onCompleteCardCreateModal = React.useCallback(
+      (cardTemplate: CardTemplate<string>) => {
+        onDismissCardCreationModal();
+
+        const templateId =
+          cardTemplate?.name ?? getUniqueTemplateName(`${lgOption?.templateId}_attachment`, lgTemplates);
+        onChange([...items, templateId]);
+        onTemplateChange(templateId, cardTemplate.body);
+        setCurrentIndex(items.length);
+      },
+      [items]
+    );
+
     const onAddTemplateClick = React.useCallback(
       (_, item?: IContextualMenuItem) => {
         if (item) {
-          const templateId = getUniqueTemplateName(`${lgOption?.templateId}_attachment`, lgTemplates);
-          onChange([...items, templateId]);
-          onTemplateChange(templateId, item?.data.template);
-          setCurrentIndex(items.length);
+          if (item.key === 'adaptive') {
+            setShowCardCreationModal(true);
+          } else {
+            const templateId = getUniqueTemplateName(`${lgOption?.templateId}_attachment`, lgTemplates);
+            onChange([...items, templateId]);
+            onTemplateChange(templateId, item?.data.template);
+            setCurrentIndex(items.length);
+          }
         }
       },
       [items, lgOption, lgTemplates, onChange, onTemplateChange]
@@ -268,6 +292,9 @@ export const AttachmentArrayEditor = React.memo(
           <CommandButton menuProps={addButtonMenuProps} styles={styles.button} onRenderMenuIcon={() => null}>
             {formatMessage('Add new attachment')}
           </CommandButton>
+        )}
+        {showCardCreationModal && (
+          <CardCreationModal onComplete={onCompleteCardCreateModal} onDismiss={onDismissCardCreationModal} />
         )}
       </div>
     );
