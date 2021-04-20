@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { useState, useMemo, useCallback, Fragment } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -12,8 +11,6 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { separator } from '../../publish/styles';
 import { PublishType } from '../../../recoilModel/types';
@@ -41,20 +38,6 @@ const customerLabel = css`
   font-weight: 600;
   font-size: 14px;
 `;
-
-const iconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
 
 const onRenderLabel = (props) => {
   return (
