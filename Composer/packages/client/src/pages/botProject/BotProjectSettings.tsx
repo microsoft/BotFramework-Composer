@@ -55,7 +55,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
   const { deleteBot } = useRecoilValue(dispatcherState);
   const isPVABot = usePVACheck(currentProjectId);
-  console.log(isPVABot);
 
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
@@ -76,16 +75,20 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
 
     return [
-      {
-        text: formatMessage('Add a package'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'Package' },
-          onClick: () => buttonClick(linkToPackageManager),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
+      ...(!isPVABot
+        ? [
+            {
+              text: formatMessage('Add a package'),
+              type: 'action',
+              buttonProps: {
+                iconProps: { iconName: 'Package' },
+                onClick: () => buttonClick(linkToPackageManager),
+                styles: defaultToolbarButtonStyles,
+              },
+              align: 'left',
+            },
+          ]
+        : []),
       {
         text: formatMessage('Edit LG'),
         type: 'action',
