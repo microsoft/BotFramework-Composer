@@ -30,6 +30,7 @@ type PublishProfileDialogProps = {
   types: PublishType[];
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
+  setIsCreateProfileFromSkill?: (isCreateProfileFromSkill: boolean) => void;
 };
 
 const Page = {
@@ -38,7 +39,7 @@ const Page = {
 };
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
-  const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
+  const { current, types, projectId, closeDialog, targets, setPublishTargets, setIsCreateProfileFromSkill } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
 
@@ -194,7 +195,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item, isFromSkill);
+      setIsCreateProfileFromSkill && setIsCreateProfileFromSkill(true);
     };
   }, [name, targetType, types, savePublishTarget]);
 

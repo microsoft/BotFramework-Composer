@@ -70,6 +70,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [callers, setCallers] = useState<string[]>(
     !isAdaptive ? skillConfiguration?.allowedCallers : runtimeSettings?.skills?.allowedCallers ?? []
   );
+  const [isCreateProfileFromSkill, setIsCreateProfileFromSkill] = useState(false);
 
   const updateAllowedCallers = React.useCallback(
     (allowedCallers: string[] = []) => {
@@ -207,6 +208,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             setSelectedDialogs={setSelectedDialogs}
             setSelectedTriggers={setSelectedTriggers}
             setSkillManifest={setSkillManifest}
+            setIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
             skillManifests={skillManifests}
             value={content}
             onChange={(manifestContent) => setSkillManifest({ ...skillManifest, content: manifestContent })}
