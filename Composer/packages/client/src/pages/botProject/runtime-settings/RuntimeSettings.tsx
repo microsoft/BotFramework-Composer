@@ -27,7 +27,9 @@ import {
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { errorContainer, errorTextStyle, errorIcon, subtext, inputFieldStyles } from '../styles';
+import { subtext, errorContainer, errorTextStyle, errorIcon, inputFieldStyles } from '../styles';
+import { DisableFeatureToolTip } from '../../../components/DisableFeatureToolTip';
+import { usePVACheck } from '../../../hooks/usePVACheck';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
@@ -49,6 +51,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const ejectedRuntimeExists = useRecoilValue(isEjectRuntimeExistState(projectId));
+  const isPVABot = usePVACheck(projectId);
 
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
   const {
@@ -147,12 +150,15 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const toggleOfCustomRuntime = () => (
     <div css={runtimeToggle}>
-      <Toggle
-        inlineLabel
-        checked={usingCustomRuntime}
-        label={formatMessage('Use custom runtime')}
-        onChange={toggleCustomRuntime}
-      />
+      <DisableFeatureToolTip isPVABot={isPVABot}>
+        <Toggle
+          inlineLabel
+          checked={usingCustomRuntime}
+          disabled={isPVABot}
+          label={formatMessage('Use custom runtime')}
+          onChange={toggleCustomRuntime}
+        />
+      </DisableFeatureToolTip>
     </div>
   );
 

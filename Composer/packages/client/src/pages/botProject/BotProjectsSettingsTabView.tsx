@@ -4,12 +4,16 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
+import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+import { DisableFeatureToolTip } from '../../components/DisableFeatureToolTip';
+import { usePVACheck } from '../../hooks/usePVACheck';
 import { navigateTo } from '../../utils/navigation';
 
 import { BotProjectInfo } from './BotProjectInfo';
@@ -29,6 +33,15 @@ const container = css`
   max-width: 1000px;
   height: 100%;
 `;
+
+const disabledPivotStyle: IButtonProps = {
+  disabled: true,
+  style: {
+    pointerEvents: 'unset',
+    cursor: 'not-allowed',
+    color: `${NeutralColors.gray100}`,
+  },
+};
 
 const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
@@ -57,6 +70,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   const botProject = botProjects.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
   const [selectedKey, setSelectedKey] = useState(PivotItemKey.Basics);
+  const isPVABot = usePVACheck(projectId);
 
   useEffect(() => {
     if (scrollToSectionId) {
@@ -86,8 +100,20 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         </PivotItem>
         <PivotItem
           data-testid="developmentResourcesTab"
+          headerButtonProps={isPVABot ? disabledPivotStyle : {}}
           headerText={formatMessage('Development Resources')}
           itemKey={PivotItemKey.LuisQna}
+          onRenderItemLink={() => {
+            if (isPVABot) {
+              return (
+                <DisableFeatureToolTip isPVABot={isPVABot}>
+                  {formatMessage('Development Resources')}
+                </DisableFeatureToolTip>
+              );
+            } else {
+              return <Fragment>{formatMessage('Development Resources')}</Fragment>;
+            }
+          }}
         >
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
           <AppIdAndPassword projectId={projectId} />
@@ -95,16 +121,37 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         {isRootBot && (
           <PivotItem
             data-testid="connectionsTab"
+            headerButtonProps={isPVABot ? disabledPivotStyle : {}}
             headerText={formatMessage('Connections')}
             itemKey={PivotItemKey.Connections}
+            onRenderItemLink={() => {
+              if (isPVABot) {
+                return (
+                  <DisableFeatureToolTip isPVABot={isPVABot}>{formatMessage('Connections')}</DisableFeatureToolTip>
+                );
+              } else {
+                return <Fragment>{formatMessage('Connections')}</Fragment>;
+              }
+            }}
           >
             <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />
           </PivotItem>
         )}
         <PivotItem
           data-testid="skillsTab"
-          headerText={formatMessage('Skill Configuration')}
+          headerButtonProps={isPVABot ? disabledPivotStyle : {}}
           itemKey={PivotItemKey.SkillConfig}
+          onRenderItemLink={() => {
+            if (isPVABot) {
+              return (
+                <DisableFeatureToolTip isPVABot={isPVABot}>
+                  {formatMessage('Skill Configuration')}
+                </DisableFeatureToolTip>
+              );
+            } else {
+              return <Fragment>{formatMessage('Skill Configuration')}</Fragment>;
+            }
+          }}
         >
           {isRootBot && <SkillHostEndPoint projectId={projectId} />}
           <AllowedCallers projectId={projectId} />
