@@ -10,7 +10,7 @@ import {
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { SearchBox, ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { IRenderFunction, getId } from 'office-ui-fabric-react/lib/Utilities';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, DialogInfo } from '@bfc/extension-client';
@@ -74,7 +74,15 @@ const buttonStyles: IButtonStyles = {
 };
 
 const searchFieldStyles: ISearchBoxStyles = {
-  root: { borderColor: 'transparent', borderRadius: '0' },
+  root: {
+    borderColor: 'transparent',
+    borderRadius: '0',
+    selectors: {
+      '::after': {
+        borderRadius: '0',
+      },
+    },
+  },
 };
 
 export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
@@ -92,6 +100,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
     dialogs,
     topics,
   } = props;
+  const menuId = useMemo(() => getId('select-dialog-menu'), []);
   const shouldShowFilter = useMemo(() => {
     return dialogs.length + topics.length > MAX_SIZE_BEFORE_FILTER;
   }, [dialogs.length, topics.length]);
@@ -187,6 +196,18 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
     return formatMessage('Find dialogs');
   }, [topics.length]);
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      const menu = document.getElementById(menuId);
+
+      if (menu) {
+        const items = menu.querySelectorAll<HTMLButtonElement>('[role="menuitem"]');
+        items[0].focus();
+        e.stopPropagation();
+      }
+    }
+  }, []);
+
   const onRenderMenuList = useCallback(
     (menuListProps?: IContextualMenuListProps, defaultRender?: IRenderFunction<IContextualMenuListProps>) => {
       return (
@@ -197,6 +218,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
             styles={searchFieldStyles}
             onAbort={() => setDialogItems(allItems)}
             onChange={filterDialogs}
+            onKeyDown={handleKeyDown}
           />
           <Stack>{defaultRender?.(menuListProps)}</Stack>
         </Stack>
@@ -219,7 +241,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
       <DefaultButton
         id={id}
         menuProps={{
-          id: 'select-dialog-menu',
+          id: menuId,
           ariaLabel: menuLabel,
           items,
           onItemClick: handleItemClick,
