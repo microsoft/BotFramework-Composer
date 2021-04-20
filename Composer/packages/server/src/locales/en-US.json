@@ -23,6 +23,12 @@
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
   },
+  "a_language_understanding_intelligent_service_luis__348b281": {
+    "message": "<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>."
+  },
+  "a_microsoft_app_id_is_required_for_your_local_azur_454cfd41": {
+    "message": "A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. <a>Learn more.</a>"
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -164,9 +170,6 @@
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
-  "add_caller_5c12aa5b": {
-    "message": "Add caller"
-  },
   "add_connections_d720a32e": {
     "message": "Add connections"
   },
@@ -251,9 +254,6 @@
   "allowed_callers_31b26262": {
     "message": "Allowed Callers"
   },
-  "allowed_callers_fe0f5bfe": {
-    "message": "Allowed callers"
-  },
   "almost_there_f90939cb": {
     "message": "Almost there!"
   },
@@ -310,9 +310,6 @@
   },
   "any_string_f22dc2e1": {
     "message": "any string"
-  },
-  "app_id_password_424f613a": {
-    "message": "App Id / Password"
   },
   "application_language_f100f3e0": {
     "message": "Application language"
@@ -518,8 +515,8 @@
   "bot_management_and_configurations_b7dadd69": {
     "message": "Bot management and configurations"
   },
-  "bot_name_cannot_not_start_with_a_number_d70239": {
-    "message": "Bot name cannot not start with a number"
+  "bot_name_cannot_start_with_a_number_or_space_3a5c6fc1": {
+    "message": "Bot name cannot start with a number or space"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot name is { botName }"
@@ -568,6 +565,9 @@
   },
   "calculating_17b21be7": {
     "message": "Calculating..."
+  },
+  "call_skills_24416f61": {
+    "message": "Call skills"
   },
   "cancel_all_active_dialogs_335b1623": {
     "message": "Cancel all active dialogs"
@@ -764,8 +764,8 @@
   "connect_to_speech_service_9d877e37": {
     "message": "Connect to Speech Service"
   },
-  "connect_your_bot_to_microsoft_teams_and_webchat_or_e1cc2567": {
-    "message": "Connect your bot to Microsoft Teams and WebChat, or enable speech. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to view, add, and enable Azure connections."
+  "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
+    "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_8b4fc9f0": {
     "message": "Connect your bot to Teams, external channels, or enable speech. Learn more"
@@ -1532,6 +1532,9 @@
   "expand_navigation_20330d1d": {
     "message": "Expand Navigation"
   },
+  "expand_the_reach_of_your_bot_by_adding_connections_631c52d3": {
+    "message": "Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. <a>Learn more.</a>"
+  },
   "expected_responses_1dca1864": {
     "message": "Expected responses"
   },
@@ -1558,9 +1561,6 @@
   },
   "external_connections_3415fea5": {
     "message": "External connections"
-  },
-  "external_services_da7820ce": {
-    "message": "External services"
   },
   "external_skill_73e16d25": {
     "message": "External skill"
@@ -1619,8 +1619,8 @@
   "filter_e3398407": {
     "message": "Filter"
   },
-  "find_and_install_more_external_services_in_the_pac_9a7cbe7f": {
-    "message": "Find and install more external services in the package manager."
+  "find_and_install_more_external_services_to_your_bo_37ef3f0c": {
+    "message": "Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>"
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
@@ -1964,6 +1964,12 @@
   "integer_or_expression_107f60fb": {
     "message": "Integer or expression"
   },
+  "integrate_with_a_qna_maker_a_to_provide_bot_conten_2e143ac3": {
+    "message": "Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more.</a2>"
+  },
+  "integrate_with_a_qna_maker_a_to_provide_bot_conten_e379948e": {
+    "message": "Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more</a2>."
+  },
   "integrating_with_power_virtual_agents_14c007cf": {
     "message": "Integrating with Power Virtual Agents"
   },
@@ -2156,8 +2162,8 @@
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
     "message": "List of attachments with their type. Used by channels to render as UI cards or other generic file attachment types."
   },
-  "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
-    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language."
+  "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
+    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
   },
   "list_view_e33843f0": {
     "message": "List view"
@@ -2353,6 +2359,9 @@
   },
   "message_updated_message_updated_activity_eacdb6bd": {
     "message": "Message updated (Message updated activity)"
+  },
+  "microsoft_app_id_9c9dc559": {
+    "message": "Microsoft App ID"
   },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft App Id"
@@ -2560,6 +2569,9 @@
   },
   "node_menu_e2aa8092": {
     "message": "Node menu"
+  },
+  "node_preview_cbcd8fb": {
+    "message": "Node (Preview)"
   },
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
@@ -2927,6 +2939,12 @@
   "pull_from_selected_profile_b5c635ec": {
     "message": "Pull from selected profile"
   },
+  "pva_bots_cannot_be_run_at_the_moment_publish_the_b_1ea3a9b6": {
+    "message": "PVA bots cannot be run at the moment. Publish the bot to PVA and test it there."
+  },
+  "pva_bots_cannot_use_this_functionality_at_this_tim_6ac2ad91": {
+    "message": "PVA bots cannot use this functionality at this time."
+  },
   "qna_28ee5e26": {
     "message": "QnA"
   },
@@ -2938,6 +2956,9 @@
   },
   "qna_intent_recognized_6760e56d": {
     "message": "QnA intent recognized"
+  },
+  "qna_maker_c313ed6e": {
+    "message": "QnA Maker"
   },
   "qna_maker_introduction_c2e426a": {
     "message": "QnA Maker introduction"
@@ -3140,8 +3161,8 @@
   "rollback_26326307": {
     "message": "Rollback"
   },
-  "root_362bb4be": {
-    "message": " (root)"
+  "root_6b5104ad": {
+    "message": "(root)"
   },
   "root_bot_7bb35314": {
     "message": "Root bot."
@@ -3232,6 +3253,9 @@
   },
   "see_details_15c93092": {
     "message": "See details"
+  },
+  "see_instructions_87eb4251": {
+    "message": "See instructions"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
@@ -3407,9 +3431,6 @@
   "skill_endpoint_b563491e": {
     "message": "Skill Endpoint"
   },
-  "skill_host_endpoint_4118a173": {
-    "message": "Skill host endpoint"
-  },
   "skill_host_endpoint_url_702c277c": {
     "message": "Skill host endpoint URL"
   },
@@ -3425,8 +3446,8 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
-  "skills_can_be_called_by_external_bots_allow_other__aa203913": {
-    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below."
+  "skills_can_be_called_by_external_bots_allow_other__482dbe75": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more.</a>"
   },
   "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
     "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
@@ -3589,6 +3610,9 @@
   },
   "teams_manifest_for_your_bot_7d0ec7ea": {
     "message": "Teams manifest for your bot:"
+  },
+  "teams_requires_a_few_more_steps_to_get_your_connec_320c55f2": {
+    "message": "Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how."
   },
   "template_name_c37cf8d9": {
     "message": "Template name: "
@@ -3856,6 +3880,9 @@
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "To which language will you be translating your bot?"
+  },
+  "todo_add_copy_here_c5e03fd2": {
+    "message": "TODO ADD COPY HERE. "
   },
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
