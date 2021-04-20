@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 import { ExtensionPageContribution } from '@bfc/extension-client';
+import { checkForPVASchema } from '@bfc/shared';
 
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
@@ -22,6 +23,7 @@ export const topLinks = (
   schema: any,
   rootProjectId?: string
 ) => {
+  const isPVASchema = checkForPVASchema(schema);
   const botLoaded = !!projectId;
   const linkBase =
     projectId === rootProjectId || rootProjectId == null
@@ -66,7 +68,7 @@ export const topLinks = (
       labelName: formatMessage('QnA'),
       disabled: !botLoaded,
       match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
-      isDisabledForPVA: true,
+      isDisabledForPVA: isPVASchema,
     },
     {
       to: `/bot/${rootProjectId || projectId}/diagnostics`,
@@ -107,7 +109,7 @@ export const topLinks = (
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
       let disablePluginForPva = false;
-      if (p.bundleId === 'package-manager') {
+      if (p.bundleId === 'package-manager' && isPVASchema) {
         disablePluginForPva = true;
       }
       links.push({

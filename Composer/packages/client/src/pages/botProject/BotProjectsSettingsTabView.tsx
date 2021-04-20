@@ -100,7 +100,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         </PivotItem>
         <PivotItem
           data-testid="luisQnaTab"
-          headerButtonProps={disabledPivotStyle}
+          headerButtonProps={isPVABot ? disabledPivotStyle : {}}
           headerText={formatMessage('LUIS and QnA')}
           itemKey={PivotItemKey.LuisQna}
           onRenderItemLink={() => {
@@ -115,14 +115,22 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         </PivotItem>
         <PivotItem
           data-testid="connectionsTab"
+          headerButtonProps={isPVABot ? disabledPivotStyle : {}}
           headerText={formatMessage('Connections')}
           itemKey={PivotItemKey.Connections}
+          onRenderItemLink={() => {
+            if (isPVABot) {
+              return <PVADisableFeature projectId={projectId}>{formatMessage('Connections')}</PVADisableFeature>;
+            } else {
+              return <Fragment>{formatMessage('Connections')}</Fragment>;
+            }
+          }}
         >
           {isRootBot && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
         </PivotItem>
         <PivotItem
           data-testid="skillsTab"
-          headerButtonProps={disabledPivotStyle}
+          headerButtonProps={isPVABot ? disabledPivotStyle : {}}
           itemKey={PivotItemKey.SkillConfig}
           onRenderItemLink={() => {
             if (isPVABot) {
