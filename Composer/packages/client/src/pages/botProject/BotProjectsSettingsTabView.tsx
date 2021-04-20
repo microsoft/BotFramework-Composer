@@ -44,8 +44,8 @@ const disabledPivotStyle: IButtonProps = {
 
 const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
+  Connections: ['connections'],
   LuisQna: ['luisKey', 'qnaKey', 'luisRegion'],
-  Connections: ['connections', 'addNewPublishProfile'],
   SkillConfig: [],
   Language: [],
 };
