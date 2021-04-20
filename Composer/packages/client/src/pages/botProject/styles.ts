@@ -132,7 +132,7 @@ export const unknownIconStyle = (required: boolean) => {
   };
 };
 
-export const columnSizes = ['300px', '150px', '300px'];
+export const columnSizes = ['300px', '150px', '150px'];
 
 export const actionButton = {
   root: {

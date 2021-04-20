@@ -506,7 +506,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     <div key={channel} css={tableRow}>
       <div css={tableRowItem(columnSizes[0])}>{name}</div>
       <div css={tableRowItem(columnSizes[1])}>{absTableToggle(channel)}</div>
-      <div css={tableRowItem(columnSizes[2])}>
+      <div css={tableRowItem(columnSizes[0])}>
         <Stack horizontal tokens={{ childrenGap: 60 }}>
           <Stack.Item>
             <Link href={link} id={channel} target="_docs">
@@ -621,7 +621,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             <div css={tableHeaderRow}>
               <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
               <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Enabled')}</div>
-              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Documentation')}</div>
+              <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Documentation')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
             {absTableRow(CHANNELS.WEBCHAT, formatMessage('Web Chat'), webchatHelpLink)}
