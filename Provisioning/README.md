@@ -15,7 +15,7 @@ This is an alternative to using the in-app provisioning tool.
 
 Follow these instructions to manually provision Azure resources:
 
-1. Download and unzip the [provisioning helper scripts.](provisionScripts.zip)
+1. Download and unzip the [provisioning helper scripts.](/raw/main/Provisioning/provisionScripts.zip)
 2. Open a new Command Prompt and navigate to the newly created folder. For example:
 
    ```cmd
