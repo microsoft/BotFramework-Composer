@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import styled from '@emotion/styled';
 import { useRecoilValue } from 'recoil';
