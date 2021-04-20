@@ -36,6 +36,7 @@ import {
   projectMetaDataState,
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
+  settingsState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -256,10 +257,15 @@ export const projectDispatcher = () => {
 
           if (profile && alias) {
             const dispatcher = await snapshot.getPromise(dispatcherState);
+            const { publishTargets } = await snapshot.getPromise(settingsState(projectId));
             const newProfile = await getPublishProfileFromPayload(profile, source);
-
-            newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-
+            if (newProfile) {
+              const newPublishTargets = publishTargets
+                ? publishTargets.filter((item) => item.name !== newProfile.name)
+                : [];
+              newPublishTargets.push(newProfile);
+              dispatcher.setPublishTargets(newPublishTargets, projectId);
+            }
             await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
           }
         }
