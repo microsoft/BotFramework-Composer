@@ -35,7 +35,8 @@ type ManageServiceProps = {
     subscriptionId: string,
     resourceGroupName: string,
     resourceName: string,
-    region: string
+    region: string,
+    tier?: string
   ) => Promise<string>;
   createServiceInBackground?: boolean;
   handoffInstructions: string;
@@ -47,6 +48,7 @@ type ManageServiceProps = {
   serviceName: string;
   regions?: IDropdownOption[];
   serviceKeyType: string;
+  tiers?: IDropdownOption[];
   onToggleVisibility: (visible: boolean) => void;
 };
 
@@ -57,11 +59,12 @@ type KeyRec = {
   key: string;
 };
 
-const dropdownStyles = { dropdown: { width: '100%', marginBottom: 20 } };
+const dropdownStyles = { dropdown: { width: '100%', marginBottom: 10 } };
+const inputStyles = { root: { width: '100%', marginBottom: 10 } };
 const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 360 };
+const dialogBodyStyles = { height: 480 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
 export const ManageService = (props: ManageServiceProps) => {
@@ -75,6 +78,7 @@ export const ManageService = (props: ManageServiceProps) => {
   const [newResourceGroupName, setNewResourceGroupName] = useState<string>('');
   const [resourceGroupKey, setResourceGroupKey] = useState<string>('');
   const [resourceGroup, setResourceGroup] = useState<string>('');
+  const [tier, setTier] = useState<string>('');
 
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
   const [resourceName, setResourceName] = useState<string>('');
@@ -168,6 +172,14 @@ export const ManageService = (props: ManageServiceProps) => {
     }
   };
 
+  const handleTierOnChange = (e, value: IDropdownOption | undefined) => {
+    if (value != null) {
+      setTier(value.key as string);
+    } else {
+      setTier('');
+    }
+  };
+
   const fetchKeys = async (cognitiveServicesManagementClient, accounts) => {
     const keyList: KeyRec[] = [];
     for (const account in accounts) {
@@ -257,14 +269,15 @@ export const ManageService = (props: ManageServiceProps) => {
 
       try {
         if (props.createServiceInBackground) {
-          props.createService(tokenCredentials, subscriptionId, resourceGroupName, resourceName, region);
+          props.createService(tokenCredentials, subscriptionId, resourceGroupName, resourceName, region, tier);
         } else {
           const newKey = await props.createService(
             tokenCredentials,
             subscriptionId,
             resourceGroupName,
             resourceName,
-            region
+            region,
+            tier
           );
 
           setKey(newKey);
@@ -518,7 +531,7 @@ export const ManageService = (props: ManageServiceProps) => {
     return (
       <div>
         <div css={dialogBodyStyles}>
-          <p>
+          <p css={{ marginTop: 0 }}>
             {formatMessage(
               'Input your details below to create a new {service} resource. You will be able to manage your new resource in the Azure portal.',
               { service: props.serviceName }
@@ -564,7 +577,7 @@ export const ManageService = (props: ManageServiceProps) => {
                 id={'resourceGroupName'}
                 label={formatMessage('Resource group name')}
                 placeholder={formatMessage('Enter name for new resource group')}
-                styles={{ root: { marginTop: 10 } }}
+                styles={inputStyles}
                 value={newResourceGroupName}
                 onChange={(e, val) => {
                   setNewResourceGroupName(val || '');
@@ -592,10 +605,25 @@ export const ManageService = (props: ManageServiceProps) => {
               id={'resourceName'}
               label={formatMessage('Resource name')}
               placeholder={formatMessage('Enter name for new resources')}
-              styles={{ root: { marginTop: 10 } }}
+              styles={inputStyles}
               value={resourceName}
               onChange={(e, val) => setResourceName(val || '')}
             />
+            {props.tiers && (
+              <Dropdown
+                required
+                aria-label={formatMessage('Pricing tier')}
+                data-testid={'tier'}
+                disabled={!subscriptionId || loading !== undefined}
+                id={'tier'}
+                label={formatMessage('Pricing tier')}
+                options={props.tiers}
+                placeholder={formatMessage('Select one')}
+                selectedKey={tier}
+                styles={dropdownStyles}
+                onChange={handleTierOnChange}
+              />
+            )}
           </div>
         </div>
         <DialogFooter>
@@ -611,6 +639,7 @@ export const ManageService = (props: ManageServiceProps) => {
               !resourceName ||
               !region ||
               !resourceGroupKey ||
+              (props.tiers && !tier) ||
               (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
             }
             text={formatMessage('Next')}
