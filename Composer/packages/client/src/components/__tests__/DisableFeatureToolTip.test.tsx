@@ -7,7 +7,7 @@ import { renderWithRecoil } from '../../../__tests__/testUtils/renderWithRecoil'
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { schemasState } from '../../recoilModel';
 
-describe('<PVADisableFeatureToolTip />', () => {
+describe('<DisableFeatureToolTip />', () => {
   const projectId = '123a.324';
 
   it('should wrap the element with a tooltip for PVA bot', async () => {
