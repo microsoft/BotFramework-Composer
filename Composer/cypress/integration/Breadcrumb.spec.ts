@@ -15,10 +15,11 @@ context('breadcrumb', () => {
   function hasBreadcrumbItems(cy: Cypress.cy, items: (string | RegExp)[]) {
     cy.get('[data-testid="Breadcrumb"]')
       .last()
-      .get('li')
-      .should(($li) => {
-        items.forEach((item, idx) => {
-          expect($li.eq(idx)).to.contain(item);
+      .within(() => {
+        cy.get('li').should(($li) => {
+          items.forEach((item, idx) => {
+            expect($li.eq(idx)).to.contain(item);
+          });
         });
       });
   }

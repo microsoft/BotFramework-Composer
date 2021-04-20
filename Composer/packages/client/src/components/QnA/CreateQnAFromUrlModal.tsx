@@ -177,7 +177,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
       }}
       hidden={false}
       modalProps={{
-        isBlocking: false,
+        isBlocking: true,
         styles: styles.modalCreateFromUrl,
       }}
       onDismiss={handleDismiss}
