@@ -20,6 +20,7 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
@@ -458,8 +459,15 @@ export const ManageLuis = (props: ManageLuisProps) => {
       <div>
         <div css={mainElementStyle}>
           <p>
-            {formatMessage(
-              'Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. Learn more'
+            {formatMessage.rich(
+              'Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. <a>Learn more</a>',
+              {
+                a: ({ children }) => (
+                  <Link href={''} target="_blank">
+                    {children}
+                  </Link>
+                ),
+              }
             )}
           </p>
           <Dropdown
