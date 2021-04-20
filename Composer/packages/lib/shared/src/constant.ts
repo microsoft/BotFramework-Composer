@@ -349,60 +349,55 @@ export const QnALocales = [
   'vi-vn',
 ];
 
-const adaptiveCardJsonBody =
-  '-```\
-\n{\
-\n      "$schema",\
-\n      "version": "1.0",\
-\n      "type": "AdaptiveCard",\
-\n      "speak": "",\
-\n      "body": [\
-\n          {\
-\n              "type": "TextBlock",\
-\n              "text": "${whichOneDidYouMean()}",\
-\n              "weight": "Bolder"\
-\n          },\
-\n          {\
-\n              "type": "TextBlock",\
-\n              "text": "${pickOne()}",\
-\n              "separator": "true"\
-\n          },\
-\n          {\
-\n              "type": "Input.ChoiceSet",\
-\n              "placeholder": "Placeholder text",\
-\n              "id": "userChosenIntent",\
-\n              "choices": [\
-\n                           {\
-\n                               "title": "${getIntentReadBack()}",\
-\n                               "value": "luisResult"\
-\n                           },\
-\n                           {\
-\n                               "title": "${getAnswerReadBack()}",\
-\n                               "value": "qnaResult"\
-\n                           },\
-\n                           {\
-\n                               "title": "None of the above",\
-\n                               "value": "none"\
-\n                           }\
-\n             ],\
-\n             "style": "expanded",\
-\n             "value": "luis"\
-\n         },\
-\n         {\
-\n             "type": "ActionSet",\
-\n             "actions": [\
-\n                {\
-\n                     "type": "Action.Submit",\
-\n                     "title": "Submit",\
-\n                     "data": {\
-\n                   "intent": "chooseIntentCardResponse"\
-\n                }\
-\n         }\
-\n       ]\
-\n     }\
-\n    ]\
-\n}\
-```';
+export const chooseIntentTemplatePrefix = 'ChooseIntent';
+
+const adaptiveCardJsonBody = (designerId: string) =>
+  `-\`\`\`{
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.0",
+      "type": "AdaptiveCard",
+      "speak": "",
+      "body": [
+          {
+              "type": "TextBlock",
+              "text": "\${${chooseIntentTemplatePrefix}_${designerId}_attachment_whichOneDidYouMean()}",
+              "weight": "Bolder"
+          },
+          {
+              "type": "TextBlock",
+              "text": "\${${chooseIntentTemplatePrefix}_${designerId}_attachment_pickOne()}",
+              "separator": "true"
+          },
+          {
+              "type": "Input.ChoiceSet",
+              "placeholder": "Placeholder text",
+              "id": "userChosenIntent",
+              "choices": [
+                           \${${chooseIntentTemplatePrefix}_${designerId}_attachment_generateChoices()},
+                           {
+                               "title": "None of the above",
+                               "value": "none"
+                           }
+             ],
+             "style": "expanded",
+             "value": "luis"
+         },
+         {
+             "type": "ActionSet",
+             "actions": [
+                {
+                     "type": "Action.Submit",
+                     "title": "Submit",
+                     "data": {
+                   "intent": "chooseIntentCardResponse"
+                }
+         }
+       ]
+     }
+    ]
+}
+\`\`\`
+`;
 
 const whichOneDidYouMeanBody = `\
 - I'm not sure which one you mean.
@@ -414,50 +409,86 @@ const pickOne = `\
 - Can you help clarify by choosing one ?
 `;
 
-const getIntentReadBack = `\
-- SWITCH : \${toLower(dialog.luisResult.intent)}
+const getIntentReadBack = (designerId: string) => `\
+- SWITCH : \${intent}
+- CASE: \${'QnAMatch'}
+    - \${${chooseIntentTemplatePrefix}_${designerId}_attachment_getAnswerReadBack()}
 - CASE : \${'GetUserProfile'}
   - Start filling in your profile(GetUserProfile intent)
 - DEFAULT :
-  - \${dialog.luisResult.intent}
+  - \${intent}
+`;
+
+const generateChoices = (designerId: string) => `\
+- \${join(foreach(indicesAndValues(candidates), c, ${chooseIntentTemplatePrefix}_${designerId}_attachment_choice(c.value.intent, c.index)), ',')}
+`;
+
+const choice = (designerId: string) => `\
+- { "title": "\${${chooseIntentTemplatePrefix}_${designerId}_attachment_getIntentReadBack(title)}", "value": "\${value}" }
 `;
 
 const getAnswerReadBack = `- See an answer from the Knowledge Base
 `;
 
 export const LgTemplateSamples = {
-  ['adaptiveCardJson']: {
-    name: 'AdaptiveCardJson',
-    body: adaptiveCardJsonBody,
-  },
-  ['whichOneDidYouMean']: {
-    name: `whichOneDidYouMean`,
-    body: whichOneDidYouMeanBody,
-  },
-  ['pickOne']: {
-    name: 'pickOne',
-    body: pickOne,
-  },
-  ['getAnswerReadBack']: {
-    name: 'getAnswerReadBack',
-    body: getAnswerReadBack,
-  },
-  ['getIntentReadBack']: {
-    name: 'getIntentReadBack',
-    body: getIntentReadBack,
-  },
-  TextInputPromptForOnChooseIntent: (designerId) => {
+  onChooseIntentAdaptiveCard: (designerId: string) => {
     return {
-      name: `TextInput_Prompt_${designerId}`,
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_card`,
+      body: adaptiveCardJsonBody(designerId),
+      parameters: ['candidates'],
+    };
+  },
+  whichOneDidYouMean: (designerId: string) => {
+    return {
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_whichOneDidYouMean`,
+      body: whichOneDidYouMeanBody,
+    };
+  },
+  pickOne: (designerId: string) => {
+    return {
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_pickOne`,
+      body: pickOne,
+    };
+  },
+  getAnswerReadBack: (designerId: string) => {
+    return {
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_getAnswerReadBack`,
+      body: getAnswerReadBack,
+    };
+  },
+  getIntentReadBack: (designerId: string) => {
+    return {
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_getIntentReadBack`,
+      parameters: ['intent'],
+      body: getIntentReadBack(designerId),
+    };
+  },
+  generateChoices: (designerId: string) => {
+    return {
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_generateChoices`,
+      parameters: ['candidates'],
+      body: generateChoices(designerId),
+    };
+  },
+  choice: (designerId: string) => {
+    return {
+      name: `${chooseIntentTemplatePrefix}_${designerId}_attachment_choice`,
+      parameters: ['title', 'value'],
+      body: choice(designerId),
+    };
+  },
+  textInputPromptForOnChooseIntent: (designerId) => {
+    return {
+      name: `${chooseIntentTemplatePrefix}_${designerId}`,
       body: `[Activity
-    Attachments = \${json(AdaptiveCardJson())}
+    Attachments = \${json(${chooseIntentTemplatePrefix}_${designerId}_attachment_card(dialog.candidates))}
 ]
 `,
     };
   },
   SendActivityForOnChooseIntent: (designerId) => {
     return {
-      name: `SendActivity_${designerId}`,
+      name: `${chooseIntentTemplatePrefix}_SendActivity_${designerId}`,
       body: '- Sure, no worries.\n',
     };
   },

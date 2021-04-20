@@ -239,7 +239,11 @@ export function CreateBotV2(props: CreateBotProps) {
           }}
         >
           <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
-          <PivotItem data-testid="nodeFeed" headerText="Node" itemKey={nodeFeedKey}></PivotItem>
+          <PivotItem
+            data-testid="nodeFeed"
+            headerText={formatMessage('Node (Preview)')}
+            itemKey={nodeFeedKey}
+          ></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
