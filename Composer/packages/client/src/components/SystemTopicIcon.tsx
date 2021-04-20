@@ -5,7 +5,14 @@ import React from 'react';
 
 export const SystemTopicIcon: React.FC = () => {
   return (
-    <svg fill="none" height="20" viewBox="0 0 17 20" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      fill="none"
+      height="20"
+      style={{ verticalAlign: 'middle' }}
+      viewBox="0 0 17 20"
+      width="100%"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path clipRule="evenodd" d="M15 12H9V11H15V12Z" fill="currentColor" fillRule="evenodd" />
       <path clipRule="evenodd" d="M15 14H9V13H15V14Z" fill="currentColor" fillRule="evenodd" />
       <path
