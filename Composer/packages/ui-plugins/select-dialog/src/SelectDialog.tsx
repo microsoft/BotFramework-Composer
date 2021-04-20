@@ -26,7 +26,7 @@ export const SelectDialog: React.FC<FieldProps> = (props) => {
     return dialogs.filter((d) => d.id !== currentDialog?.id);
   }, [dialogs.map((d) => d.id)]);
 
-  const handleChange = (_, item?: IContextualMenuItem) => {
+  const handleChange = (item?: IContextualMenuItem) => {
     if (item) {
       if (item.key === ADD_DIALOG) {
         setComboboxTitle(formatMessage('Create a new dialog'));

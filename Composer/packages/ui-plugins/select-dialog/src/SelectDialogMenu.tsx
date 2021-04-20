@@ -1,13 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import {
   IContextualMenuItem,
   ContextualMenuItemType,
-  IContextualMenuProps,
+  IContextualMenuListProps,
 } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { SearchBox, ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, DialogInfo } from '@bfc/extension-client';
@@ -16,11 +19,12 @@ import formatMessage from 'format-message';
 
 export const ADD_DIALOG = 'ADD_DIALOG';
 
+const MAX_SIZE_BEFORE_FILTER = 10;
 interface SelectDialogMenuProps extends Omit<FieldProps, 'onChange'> {
   dialogs: DialogInfo[];
   topics: DialogInfo[];
   comboboxTitle: string | null;
-  onChange: IContextualMenuProps['onItemClick'];
+  onChange: (item?: IContextualMenuItem) => void;
 }
 
 const getIconName = (item: DialogInfo) => {
@@ -69,6 +73,10 @@ const buttonStyles: IButtonStyles = {
   label: { margin: '0', fontWeight: 'normal' },
 };
 
+const searchFieldStyles: ISearchBoxStyles = {
+  root: { borderColor: 'transparent', borderRadius: '0' },
+};
+
 export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
   const {
     comboboxTitle,
@@ -84,6 +92,10 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
     dialogs,
     topics,
   } = props;
+  const shouldShowFilter = useMemo(() => {
+    return dialogs.length + topics.length > MAX_SIZE_BEFORE_FILTER;
+  }, [dialogs.length, topics.length]);
+
   const menuLabel = useMemo(() => {
     if (topics.length > 0) {
       return formatMessage('Select a dialog or topic');
@@ -92,10 +104,8 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
     return formatMessage('Select a dialog');
   }, [topics.length]);
 
-  const dialogItems: IContextualMenuItem[] = dialogs
-    .concat(topics)
-    // .filter(({ id }) => id !== currentDialogId)
-    .map((d) => ({
+  const allItems: IContextualMenuItem[] = useMemo(() => {
+    return dialogs.concat(topics).map((d) => ({
       key: d.isTopic ? d.content?.id : d.id,
       text: d.displayName,
       isSelected: value === d.displayName,
@@ -109,57 +119,117 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
         },
       },
     }));
+  }, [dialogs.length, topics.length]);
+  const [dialogItems, setDialogItems] = useState(allItems);
 
-  const items: IContextualMenuItem[] = [
-    {
-      key: 'dialogs',
-      itemType: ContextualMenuItemType.Section,
-      sectionProps: {
-        items: dialogItems,
+  const items = useMemo<IContextualMenuItem[]>(
+    () => [
+      {
+        key: 'dialogs',
+        itemType: ContextualMenuItemType.Section,
+        sectionProps: {
+          topDivider: shouldShowFilter,
+          items: dialogItems,
+        },
       },
-    },
-    {
-      key: 'actions',
-      itemType: ContextualMenuItemType.Section,
-      sectionProps: {
-        topDivider: true,
-        items: [
-          {
-            key: 'expression',
-            text: formatMessage('Write an expression'),
-            iconProps: {
-              iconName: Icons.EXPRESSION,
+      {
+        key: 'actions',
+        itemType: ContextualMenuItemType.Section,
+        sectionProps: {
+          topDivider: true,
+          items: [
+            {
+              key: 'expression',
+              text: formatMessage('Write an expression'),
+              iconProps: {
+                iconName: Icons.EXPRESSION,
+              },
             },
-          },
-          {
-            key: ADD_DIALOG,
-            text: formatMessage('Create a new dialog'),
-            iconProps: {
-              iconName: 'Add',
+            {
+              key: ADD_DIALOG,
+              text: formatMessage('Create a new dialog'),
+              iconProps: {
+                iconName: 'Add',
+              },
             },
-          },
-        ],
+          ],
+        },
       },
+    ],
+    [dialogItems, shouldShowFilter]
+  );
+
+  const filterDialogs = useCallback(
+    (e, newVal?: string) => {
+      if (!newVal) {
+        setDialogItems(allItems);
+      }
+
+      setDialogItems(allItems.filter((item) => item.text?.toLowerCase().includes(newVal?.toLowerCase() ?? '')));
     },
-  ];
+    [allItems]
+  );
 
   const selectedLabel = useMemo(() => {
     if (comboboxTitle) {
       return comboboxTitle;
     }
 
-    const selected = dialogItems.find((o) => o.key === value);
+    const selected = allItems.find((o) => o.key === value);
     return selected?.text;
   }, [items, value, comboboxTitle]);
+
+  const filterPlaceholder = useMemo(() => {
+    if (topics.length > 0) {
+      return formatMessage('Find dialogs or topics');
+    }
+
+    return formatMessage('Find dialogs');
+  }, [topics.length]);
+
+  const onRenderMenuList = useCallback(
+    (menuListProps?: IContextualMenuListProps, defaultRender?: IRenderFunction<IContextualMenuListProps>) => {
+      return (
+        <Stack>
+          <SearchBox
+            componentRef={(el) => el?.focus()}
+            placeholder={filterPlaceholder}
+            styles={searchFieldStyles}
+            onAbort={() => setDialogItems(allItems)}
+            onChange={filterDialogs}
+          />
+          <Stack>{defaultRender?.(menuListProps)}</Stack>
+        </Stack>
+      );
+    },
+    [allItems, filterDialogs]
+  );
+
+  const handleItemClick = useCallback(
+    (e, item?: IContextualMenuItem) => {
+      setDialogItems(allItems);
+      onChange(item);
+    },
+    [allItems]
+  );
 
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <DefaultButton
         id={id}
-        menuProps={{ ariaLabel: menuLabel, items, onItemClick: onChange, useTargetWidth: true }}
+        menuProps={{
+          id: 'select-dialog-menu',
+          ariaLabel: menuLabel,
+          items,
+          onItemClick: handleItemClick,
+          useTargetWidth: true,
+          onRenderMenuList: shouldShowFilter ? onRenderMenuList : undefined,
+          // send focus to the search box when present
+          shouldFocusOnMount: !shouldShowFilter,
+        }}
         styles={buttonStyles}
-        text={selectedLabel}
+        text={selectedLabel || ' '}
         onBlur={() => onBlur?.(id, value)}
         onFocus={(e) => onFocus?.(id, value, e)}
       />
