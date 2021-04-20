@@ -285,7 +285,9 @@ export const AzureProvisionDialog: React.FC = () => {
   const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
+  const [isNewResourceGroup, setIsNewResourceGroup] = useState(!currentConfig?.resourceGroup);
   const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
+
   const [errorHostName, setErrorHostName] = useState('');
 
   const [isEditorError, setEditorError] = useState(false);
@@ -627,6 +629,13 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [formData.subscriptionId, token]);
 
+  useEffect(() => {
+    if (!isNewResourceGroup) {
+      const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
+      setIsNewResourceGroup(!currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup));
+    }
+  }, [currentConfig, formData.resourceGroup, resourceGroups]);
+
   const onNext = useCallback(
     (hostname) => {
       // get resources already have
@@ -715,8 +724,6 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
-  const isNewResourceGroupName = !currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup);
-
   const PageChooseAction = (
     <ScrollablePane
       data-is-scrollable="true"
@@ -771,10 +778,11 @@ export const AzureProvisionDialog: React.FC = () => {
         />
         <ResourceGroupPicker
           disabled={currentConfig?.resourceGroup}
-          newResourceGroupName={isNewResourceGroupName ? formData.resourceGroup : undefined}
+          newResourceGroupName={isNewResourceGroup ? formData.resourceGroup : undefined}
           resourceGroupNames={resourceGroupNames}
-          selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
+          selectedResourceGroupName={isNewResourceGroup ? undefined : formData.resourceGroup}
           onChange={(choice) => {
+            setIsNewResourceGroup(choice.isNew);
             updateFormData('resourceGroup', choice.name);
             setErrorResourceGroupName(choice.errorMessage);
           }}
