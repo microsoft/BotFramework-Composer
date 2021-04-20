@@ -29,7 +29,7 @@ import {
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { subtitle, errorContainer, errorTextStyle, errorIcon, customError } from '../styles';
-import { PVADisableFeature } from '../../../components/PVADisableFeature';
+import { DisableFeatureToolTip } from '../../../components/DisableFeatureToolTip';
 import { usePVACheck } from '../../../hooks/usePVACheck';
 
 import { EjectModal } from './ejectModal';
@@ -149,7 +149,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const toggleOfCustomRuntime = () => (
     <div css={runtimeToggle}>
-      <PVADisableFeature>
+      <DisableFeatureToolTip isPVABot={isPVABot}>
         <Toggle
           inlineLabel
           checked={usingCustomRuntime}
@@ -157,7 +157,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           label={formatMessage('Use custom runtime')}
           onChange={toggleCustomRuntime}
         />
-      </PVADisableFeature>
+      </DisableFeatureToolTip>
     </div>
   );
 

@@ -12,7 +12,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
-import { PVADisableFeature } from '../PVADisableFeature';
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
   buildConfigurationSelector,
@@ -23,6 +23,7 @@ import {
 } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -77,6 +78,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   const { startAllBots, stopAllBots } = useBotOperations();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const isPVABot = usePVACheck(rootBotId ?? '');
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -210,8 +212,9 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         return <BotRuntimeStatus key={projectId} projectId={projectId} />;
       })}
       <div ref={botControllerMenuTarget} css={[startPanelsContainer]}>
-        <PVADisableFeature
+        <DisableFeatureToolTip
           content={formatMessage('PVA bots cannot be run at the moment. Publish the bot to PVA and test it there.')}
+          isPVABot={isPVABot}
         >
           <DefaultButton
             primary
@@ -266,7 +269,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             )}
             <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
           </DefaultButton>
-        </PVADisableFeature>
+        </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
             ariaDescription={formatMessage('Open start bots panel')}

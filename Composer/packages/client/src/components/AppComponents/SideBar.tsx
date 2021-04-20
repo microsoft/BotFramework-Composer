@@ -10,13 +10,16 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { PageLink } from '../../utils/pageLinks';
-import { PVADisableFeature } from '../PVADisableFeature';
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
+import { currentProjectIdState } from '../../recoilModel';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { useLinks } from './../../utils/hooks';
 
@@ -67,6 +70,8 @@ const divider = (isExpand: boolean) => css`
 // -------------------- SideBar -------------------- //
 
 export const SideBar: React.FC<RouteComponentProps> = () => {
+  const projectId = useRecoilValue(currentProjectIdState);
+  const isPVABot = usePVACheck(projectId);
   const [sideBarExpand, setSideBarExpand] = useState(false);
   const { topLinks, bottomLinks } = useLinks();
 
@@ -106,7 +111,7 @@ export const SideBar: React.FC<RouteComponentProps> = () => {
             );
 
             if (link.isDisabledForPVA) {
-              return <PVADisableFeature>{navItem}</PVADisableFeature>;
+              return <DisableFeatureToolTip isPVABot={isPVABot}>{navItem}</DisableFeatureToolTip>;
             }
             return navItem;
           })}

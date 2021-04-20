@@ -11,7 +11,7 @@ import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { useRecoilValue } from 'recoil';
 
-import { PVADisableFeature } from '../PVADisableFeature';
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
 import { rootBotProjectIdSelector } from '../../recoilModel';
 
@@ -133,11 +133,7 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
       ) : (
         <div css={commands}>
           {overflowMenu.length ? (
-            isPVABot ? (
-              <PVADisableFeature>{addCommandBtn}</PVADisableFeature>
-            ) : (
-              addCommandBtn
-            )
+            <DisableFeatureToolTip isPVABot={isPVABot}>{addCommandBtn}</DisableFeatureToolTip>
           ) : null}
           <CommandButton
             ariaLabel={formatMessage('Filter')}

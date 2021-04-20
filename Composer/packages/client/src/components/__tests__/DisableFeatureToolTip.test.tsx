@@ -4,17 +4,17 @@
 import * as React from 'react';
 
 import { renderWithRecoil } from '../../../__tests__/testUtils/renderWithRecoil';
-import { PVADisableFeature } from '../PVADisableFeature';
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { schemasState } from '../../recoilModel';
 
-describe('<PVADisableFeature />', () => {
+describe('<PVADisableFeatureToolTip />', () => {
   const projectId = '123a.324';
 
   it('should wrap the element with a tooltip for PVA bot', async () => {
     const { container } = renderWithRecoil(
-      <PVADisableFeature projectId={projectId}>
+      <DisableFeatureToolTip isPVABot>
         <span>Test element</span>
-      </PVADisableFeature>,
+      </DisableFeatureToolTip>,
       ({ set }) => {
         set(schemasState(projectId), {
           sdk: {
@@ -33,9 +33,9 @@ describe('<PVADisableFeature />', () => {
 
   it('should not wrap the element with a tooltip for non PVA bot', async () => {
     const { container } = renderWithRecoil(
-      <PVADisableFeature projectId={projectId}>
+      <DisableFeatureToolTip isPVABot={false}>
         <span>Test element</span>
-      </PVADisableFeature>,
+      </DisableFeatureToolTip>,
       ({ set }) => {
         set(schemasState(projectId), {
           sdk: {

@@ -12,7 +12,7 @@ import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
-import { PVADisableFeature } from '../../components/PVADisableFeature';
+import { DisableFeatureToolTip } from '../../components/DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
 import { navigateTo } from '../../utils/navigation';
 
@@ -105,7 +105,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           itemKey={PivotItemKey.LuisQna}
           onRenderItemLink={() => {
             if (isPVABot) {
-              return <PVADisableFeature>{formatMessage('LUIS and QnA')}</PVADisableFeature>;
+              return <DisableFeatureToolTip isPVABot={isPVABot}>{formatMessage('LUIS and QnA')}</DisableFeatureToolTip>;
             } else {
               return <Fragment>{formatMessage('LUIS and QnA')}</Fragment>;
             }
@@ -120,7 +120,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           itemKey={PivotItemKey.Connections}
           onRenderItemLink={() => {
             if (isPVABot) {
-              return <PVADisableFeature projectId={projectId}>{formatMessage('Connections')}</PVADisableFeature>;
+              return <DisableFeatureToolTip isPVABot={isPVABot}>{formatMessage('Connections')}</DisableFeatureToolTip>;
             } else {
               return <Fragment>{formatMessage('Connections')}</Fragment>;
             }
@@ -135,7 +135,9 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           onRenderItemLink={() => {
             if (isPVABot) {
               return (
-                <PVADisableFeature projectId={projectId}>{formatMessage('Skill Configuration')}</PVADisableFeature>
+                <DisableFeatureToolTip isPVABot={isPVABot}>
+                  {formatMessage('Skill Configuration')}
+                </DisableFeatureToolTip>
               );
             } else {
               return <Fragment>{formatMessage('Skill Configuration')}</Fragment>;

@@ -5,10 +5,6 @@ import { useId } from '@uifabric/react-hooks';
 import formatMessage from 'format-message';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-
-import { usePVACheck } from '../hooks/usePVACheck';
-import { rootBotProjectIdSelector } from '../recoilModel';
 
 const calloutProps = { gapSpace: 0 };
 
@@ -16,11 +12,8 @@ const genericDisableMessage = () => {
   return formatMessage('PVA bots cannot use this functionality at this time.');
 };
 
-export const PVADisableFeature: React.FC<{ content?: string; projectId?: string }> = (props) => {
-  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
-  const currentProjectId = props.projectId ?? rootBotId ?? '';
-  const isPVABot = usePVACheck(currentProjectId);
-
+export const DisableFeatureToolTip: React.FC<{ content?: string; isPVABot: boolean }> = (props) => {
+  const { isPVABot, content } = props;
   const tooltipId = useId('pva-disable-tooltip');
 
   if (!isPVABot) {
@@ -28,7 +21,7 @@ export const PVADisableFeature: React.FC<{ content?: string; projectId?: string 
   }
 
   return (
-    <TooltipHost calloutProps={calloutProps} content={props.content ?? genericDisableMessage()} id={tooltipId}>
+    <TooltipHost calloutProps={calloutProps} content={content ?? genericDisableMessage()} id={tooltipId}>
       {props.children}
     </TooltipHost>
   );

@@ -18,7 +18,7 @@ const getRankScore = (r: RecognizerSchema, shellData: ShellData, shellApi: Shell
 };
 
 export const getDropdownOptions = (configs: RecognizerSchema[], shellData: ShellData, shellApi: ShellApi) => {
-  const isPVASchema = checkForPVASchema(shellData.schemas.sdk);
+  const isPVASchema = checkForPVASchema(shellData.schemas?.sdk);
   let recognizerConfigs: RecognizerSchema[] = configs;
   if (isPVASchema) {
     recognizerConfigs = recognizerConfigs.filter((config) => {
