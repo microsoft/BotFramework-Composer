@@ -3,13 +3,15 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/microsoft/BotFramework-Composer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/microsoft/BotFramework-Composer/alerts/)
 
 # Composer
+
 The web app that can edit bots in OBI format, and can use Bot Launcher to run bot.
 
 ### Instructions
 
 Prerequisite:
-* node > 12
-* yarn         // npm install -g yarn
+
+- node > 14
+- yarn // npm install -g yarn
 
 To build for hosting as site extension
 
@@ -18,15 +20,18 @@ set PUBLIC_URL=/composer
 ```
 
 Commands:
+
 ```
 $ cd Composer
 $ yarn install
 $ yarn build
 $ yarn startall
 ```
+
 then go to http://localhost:3000/, best experienced in Chrome
 
 If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
 ## Documentation
+
 The documentation for Composer [can be found here](/toc.md).
