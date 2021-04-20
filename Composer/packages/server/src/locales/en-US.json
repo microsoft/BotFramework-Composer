@@ -731,11 +731,17 @@
   "confirm_input_7e58417e": {
     "message": "Confirm input"
   },
+  "confirm_skill_endpoints_6eb184cf": {
+    "message": "Confirm skill endpoints"
+  },
   "confirmation_fec87d65": {
     "message": "Confirmation"
   },
   "confirmation_modal_must_have_a_title_b0816e0b": {
     "message": "Confirmation modal must have a title."
+  },
+  "conflicting_changes_detected_6c282985": {
+    "message": "Conflicting changes detected"
   },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Congratulations! Your model is successfully published."
@@ -1265,6 +1271,9 @@
   "edit_in_json_75d0d754": {
     "message": "Edit in JSON"
   },
+  "edit_in_power_virtual_agents_56ee7ac2": {
+    "message": "Edit in Power Virtual Agents"
+  },
   "edit_kb_name_5e2d8c5b": {
     "message": "Edit KB name"
   },
@@ -1324,6 +1333,12 @@
   },
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
+  },
+  "enable_orchestrator_as_the_recognizer_at_the_root__1de64c98": {
+    "message": "Enable orchestrator as the recognizer at the root dialog to add this skill"
+  },
+  "enable_orchestrator_cdbbd2c5": {
+    "message": "Enable Orchestrator"
   },
   "enable_speech_e30d6a2a": {
     "message": "Enable Speech"
@@ -1685,8 +1700,8 @@
   "general_24ac26a8": {
     "message": "General"
   },
-  "generate_44e33e72": {
-    "message": "Generate"
+  "generate_and_publish_4f218960": {
+    "message": "Generate and Publish"
   },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
@@ -1709,6 +1724,9 @@
   "get_activity_members_11339605": {
     "message": "Get activity members"
   },
+  "get_an_overview_56c78cc3": {
+    "message": "Get an overview"
+  },
   "get_conversation_members_71602275": {
     "message": "Get conversation members"
   },
@@ -1717,6 +1735,9 @@
   },
   "get_qna_key_583b2548": {
     "message": "Get QnA key"
+  },
+  "get_remote_file_fail_37ef94c5": {
+    "message": "get remote file fail"
   },
   "get_started_76ed4cb9": {
     "message": "Get started"
@@ -1907,6 +1928,9 @@
   "insert_template_reference_bb33720e": {
     "message": "Insert template reference"
   },
+  "install_error_a9319839": {
+    "message": "Install Error"
+  },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
   },
@@ -1951,6 +1975,9 @@
   },
   "intentname_is_missing_or_empty_e49db2f8": {
     "message": "intentName is missing or empty"
+  },
+  "intents_9b8593e0": {
+    "message": "Intents"
   },
   "interpolated_string_c96053f2": {
     "message": "Interpolated string."
@@ -2033,6 +2060,9 @@
   "learn_about_adaptive_expressions_fb1b6c3c": {
     "message": "Learn about Adaptive expressions"
   },
+  "learn_how_to_build_a_skill_b1c39c82": {
+    "message": "learn how to build a skill"
+  },
   "learn_how_to_publish_to_a_dev_ops_pipeline_using_c_9b4577be": {
     "message": "Learn how to publish to a Dev Ops pipeline using CI / CD."
   },
@@ -2050,6 +2080,9 @@
   },
   "learn_more_about_manifests_6e7c364b": {
     "message": "Learn more about manifests"
+  },
+  "learn_more_about_orchestractor_3bfa61e1": {
+    "message": "Learn more about Orchestractor"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
@@ -2234,6 +2267,9 @@
   "make_a_copy_77d1233": {
     "message": "Make a copy"
   },
+  "make_orchestrator_my_preferred_recognizer_for_mult_2295034b": {
+    "message": "Make Orchestrator my preferred recognizer for multi-bot projects"
+  },
   "manage_bot_languages_9ec36fd7": {
     "message": "Manage bot languages"
   },
@@ -2336,6 +2372,9 @@
   "minimum_f31b05ab": {
     "message": "Minimum"
   },
+  "miss_dispatch_modal_cf2d278e": {
+    "message": "Miss dispatch modal"
+  },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
   },
@@ -2371,6 +2410,9 @@
   },
   "msg_bf173fef": {
     "message": "{ msg }"
+  },
+  "multi_bot_projects_work_best_with_the_orchestrator_8b80e480": {
+    "message": "Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level."
   },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
@@ -2597,9 +2639,6 @@
   "open_e0beb7b9": {
     "message": "Open"
   },
-  "open_in_power_virtual_agents_fcd881e6": {
-    "message": "Open in Power Virtual Agents"
-  },
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
@@ -2675,9 +2714,6 @@
   "paste_token_here_eccec7e4": {
     "message": "Paste token here"
   },
-  "please_add_at_least_minitems_endpoint_5439fd74": {
-    "message": "Please add at least { minItems } endpoint"
-  },
   "please_enter_a_value_for_key_77cfc097": {
     "message": "Please enter a value for { key }"
   },
@@ -2701,9 +2737,6 @@
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "Please select a trigger type"
-  },
-  "please_select_a_valid_endpoint_bf608af1": {
-    "message": "Please select a valid endpoint"
   },
   "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
     "message": "Please select a version of the manifest schema"
@@ -2864,6 +2897,9 @@
   "published_4bb5209e": {
     "message": "Published"
   },
+  "publisher_bf6195cf": {
+    "message": "Publisher"
+  },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
     "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
   },
@@ -2875,6 +2911,9 @@
   },
   "publishing_profile_6d7064ce": {
     "message": "Publishing Profile"
+  },
+  "publishing_skill_be1b6b96": {
+    "message": "Publishing skill"
   },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
@@ -3194,6 +3233,9 @@
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
   },
+  "select_a_publishing_profile_a2eb4e86": {
+    "message": "Select a publishing profile"
+  },
   "select_a_template_874fe803": {
     "message": "Select a template"
   },
@@ -3359,9 +3401,6 @@
   "skill_endpoint_b563491e": {
     "message": "Skill Endpoint"
   },
-  "skill_endpoints_e4e3d8c1": {
-    "message": "Skill endpoints"
-  },
   "skill_host_endpoint_4118a173": {
     "message": "Skill host endpoint"
   },
@@ -3371,8 +3410,8 @@
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Skill host endpoint url"
   },
-  "skill_manifest_endpoint_is_configured_improperly_e083731d": {
-    "message": "Skill manifest endpoint is configured improperly"
+  "skill_manifest_url_be7ef8d0": {
+    "message": "Skill Manifest Url"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
     "message": "Skill manifest URL was copied to the clipboard"
@@ -3382,6 +3421,12 @@
   },
   "skills_can_be_called_by_external_bots_allow_other__aa203913": {
     "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below."
+  },
+  "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
+    "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
+  },
+  "skip_bcb86160": {
+    "message": "Skip"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Something happened while attempting to pull: { e }"
@@ -3584,6 +3629,9 @@
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
+  "the_endpoint_url_7c04ee13": {
+    "message": "The endpoint url"
+  },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "The file name can not be empty"
   },
@@ -3707,6 +3755,9 @@
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
   },
+  "this_operation_will_overwrite_changes_made_to_prev_e746d44f": {
+    "message": "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
+  },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
   },
@@ -3766,6 +3817,9 @@
   },
   "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
     "message": "To learn more about the { title }, <a>visit its documentation page</a>."
+  },
+  "to_make_sure_the_skill_will_work_correctly_we_perf_8de42615": {
+    "message": "To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author."
   },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
@@ -3958,9 +4012,6 @@
   },
   "user_topic_e3978941": {
     "message": "User Topic"
-  },
-  "validating_35b79a96": {
-    "message": "Validating..."
   },
   "validation_b10c677c": {
     "message": "Validation"
