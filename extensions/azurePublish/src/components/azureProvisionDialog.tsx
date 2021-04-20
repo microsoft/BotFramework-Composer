@@ -100,8 +100,8 @@ const DialogTitle = {
     subText: formatMessage('How you would like to provision Azure resources to your publishing profile?'),
   },
   CONFIG_RESOURCES: {
-    title: formatMessage('Configure resources'),
-    subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
+    title: formatMessage('Import existing resources'),
+    subText: formatMessage('Please provide your Publish Configuration'),
   },
   ADD_RESOURCES: {
     title: formatMessage('Add resources'),
@@ -1110,16 +1110,23 @@ export const AzureProvisionDialog: React.FC = () => {
         <>
           <DefaultButton
             style={{ margin: '0 4px' }}
-            text={formatMessage('Cancel')}
+            text={formatMessage('Back')}
             onClick={() => {
-              closeDialog();
+              setPageAndTitle(PageTypes.ChooseAction);
             }}
           />
           <PrimaryButton
             disabled={isEditorError}
             style={{ margin: '0 4px' }}
-            text={formatMessage('Save')}
+            text={formatMessage('Import')}
             onClick={onSave}
+          />
+          <DefaultButton
+            style={{ margin: '0 4px' }}
+            text={formatMessage('Cancel')}
+            onClick={() => {
+              closeDialog();
+            }}
           />
         </>
       );
