@@ -366,11 +366,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     };
   };
 
-  const toggleSpeechOn = async (
-    settings: { subscriptionKey: string; region: string },
-    isDefault: boolean,
-    attempt = 0
-  ) => {
+  const toggleSpeechOn = async (settings: { key: string; region: string }, isDefault: boolean, attempt = 0) => {
     setChannelStatus({
       ...channelStatus,
       [CHANNELS.SPEECH]: {
@@ -381,7 +377,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
     try {
       await createChannelService(CHANNELS.SPEECH, {
-        cognitiveServiceSubscriptionKey: settings.subscriptionKey,
+        cognitiveServiceSubscriptionKey: settings.key,
         cognitiveServiceRegion: settings.region,
         isDefaultBotForCogSvcAccount: isDefault,
       });
@@ -535,7 +531,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <ManageSpeech
         hidden={!showSpeechModal}
-        setVisibility={setShowSpeechModal}
         onDismiss={() => {
           setShowSpeechModal(false);
         }}
@@ -545,6 +540,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         onNext={() => {
           setShowSpeechModal(false);
         }}
+        onToggleVisibility={setShowSpeechModal}
       />
       <div>
         <Dropdown
