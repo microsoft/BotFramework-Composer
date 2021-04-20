@@ -11,6 +11,7 @@ import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { FieldProcessorAsync } from './copyUtils/ExternalApi';
 import { generateDesignerId } from './generateUniqueId';
 import { conceptLabels } from './labelMap';
+import { chooseIntentTemplatePrefix } from './constant';
 
 interface DesignerAttributes {
   name: string;
@@ -187,86 +188,69 @@ const initialDialogShape = () => ({
         },
         assignments: [
           {
-            value: '=turn.recognized.candidates[0]',
-            property: 'dialog.luisResult',
+            property: 'turn.minThreshold',
+            value: 0.5,
           },
           {
-            property: 'dialog.qnaResult',
-            value: '=turn.recognized.candidates[1]',
+            property: 'turn.maxChoices',
+            value: 3,
+          },
+          {
+            property: 'conversation.lastAmbiguousUtterance',
+            value: '=turn.activity.text',
+          },
+          {
+            property: 'dialog.candidates',
+            value:
+              '=take(sortByDescending(where(flatten(select(turn.recognized.candidates, x, if (x.intent=="ChooseIntent", x.result.candidates, x))), c, not(startsWith(c.intent, "DeferToRecognizer_QnA")) && c.score > turn.minThreshold), \'score\'), turn.maxChoices)',
           },
         ],
       },
       {
-        $kind: SDKKinds.IfCondition,
+        $kind: SDKKinds.SwitchCondition,
         $designer: {
           id: generateDesignerId(),
         },
-        condition: 'dialog.luisResult.score >= 0.9 && dialog.qnaResult.score <= 0.5',
-        actions: [
+        condition: '=count(dialog.candidates)',
+        cases: [
           {
-            $kind: SDKKinds.EmitEvent,
-            $designer: {
-              id: generateDesignerId(),
-            },
-            eventName: 'recognizedIntent',
-            eventValue: '=dialog.luisResult.result',
+            value: '0',
+            actions: [
+              {
+                $kind: SDKKinds.EmitEvent,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+                eventName: 'unknownIntent',
+              },
+              {
+                $kind: SDKKinds.EndDialog,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+              },
+            ],
           },
           {
-            $kind: SDKKinds.BreakLoop,
-            $designer: {
-              id: generateDesignerId(),
-            },
-          },
-        ],
-      },
-      {
-        $kind: SDKKinds.IfCondition,
-        $designer: {
-          id: generateDesignerId(),
-        },
-        condition: 'dialog.luisResult.score <= 0.5 && dialog.qnaResult.score >= 0.9',
-        actions: [
-          {
-            $kind: SDKKinds.EmitEvent,
-            $designer: {
-              id: generateDesignerId(),
-            },
-            eventName: 'recognizedIntent',
-            eventValue: '=dialog.qnaResult.result',
-          },
-          {
-            $kind: SDKKinds.BreakLoop,
-            $designer: {
-              id: generateDesignerId(),
-            },
-          },
-        ],
-      },
-      {
-        $kind: SDKKinds.IfCondition,
-        $designer: {
-          id: generateDesignerId(),
-        },
-        condition: 'dialog.qnaResult.score <= 0.05',
-        actions: [
-          {
-            $kind: SDKKinds.EmitEvent,
-            $designer: {
-              id: generateDesignerId(),
-            },
-            eventName: 'recognizedIntent',
-            eventValue: '=dialog.luisResult.result',
-          },
-          {
-            $kind: SDKKinds.BreakLoop,
-            $designer: {
-              id: generateDesignerId(),
-            },
+            value: '1',
+            actions: [
+              {
+                $kind: SDKKinds.EmitEvent,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+                eventName: 'recognizedIntent',
+                eventValue: '=first(dialog.candidates).result',
+              },
+              {
+                $kind: SDKKinds.EndDialog,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+              },
+            ],
           },
         ],
-        top: 3,
-        cardNoMatchResponse: 'Thanks for the feedback.',
-        cardNoMatchText: 'None of the above.',
       },
       {
         $kind: SDKKinds.TextInput,
@@ -276,7 +260,7 @@ const initialDialogShape = () => ({
         maxTurnCount: 3,
         alwaysPrompt: true,
         allowInterruptions: false,
-        prompt: `\${TextInput_Prompt_${generateDesignerId()}()}`,
+        prompt: `\${${chooseIntentTemplatePrefix}_${generateDesignerId()}()}`,
         property: 'turn.intentChoice',
         value: '=@userChosenIntent',
         top: 3,
@@ -302,7 +286,7 @@ const initialDialogShape = () => ({
               id: generateDesignerId(),
             },
             eventName: 'recognizedIntent',
-            eventValue: '=dialog[turn.intentChoice].result',
+            eventValue: '=dialog.candidates[int(turn.intentChoice)].result',
           },
         ],
         elseActions: [
@@ -311,7 +295,7 @@ const initialDialogShape = () => ({
             $designer: {
               id: generateDesignerId(),
             },
-            activity: `\${SendActivity_${generateDesignerId()}()}`,
+            activity: `\${${chooseIntentTemplatePrefix}_SendActivity_${generateDesignerId()}()}`,
           },
         ],
         top: 3,
