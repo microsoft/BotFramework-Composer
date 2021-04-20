@@ -17,7 +17,11 @@ export const SelectDialog: React.FC<FieldProps> = (props) => {
   const { currentDialog, dialogs, topics, shellApi } = useShellApi();
   const { createDialog, navTo } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
-  const [showIntellisenseField, setShowIntellisenseField] = useState(!dialogs.find(({ id }) => id !== value));
+  const isDialogSelected = useMemo(() => {
+    return Boolean(dialogs.find(({ id }) => id === value) || topics.find(({ content }) => content?.id === value));
+  }, [value, dialogs, topics]);
+  // if there is no dialog selected but there is a value, show the intellisense field
+  const [showIntellisenseField, setShowIntellisenseField] = useState(!isDialogSelected && value.length > 0);
   const dialogsWithoutCurrent = useMemo(() => {
     return dialogs.filter((d) => d.id !== currentDialog?.id);
   }, [dialogs.map((d) => d.id)]);
