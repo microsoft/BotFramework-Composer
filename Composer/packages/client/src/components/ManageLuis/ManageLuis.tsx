@@ -464,7 +464,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
           </p>
           <Dropdown
             disabled={resourceGroups.length === 0 || loadingLUIS}
-            label={formatMessage('Resource group:')}
+            label={formatMessage('Resource group')}
             options={
               resourceGroups.map((p) => {
                 return { key: p.id, text: p.name, data: p.data };
