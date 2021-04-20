@@ -20,6 +20,7 @@ context('Home Page ', () => {
     cy.findByTestId('homePage-Toolbar-New').click();
   });
 
+  // page navigation
   it('can expand left Nav Bar', () => {
     cy.createTestBot('EmptySample', ({ id }) => {
       cy.visit(`/bot/${id}`);
@@ -34,6 +35,7 @@ context('Home Page ', () => {
     });
   });
 
+  // creation flow
   it('should open Select Template window from a url', () => {
     cy.visit('/projects/create');
     cy.findAllByTestId('dotnetFeed').should('exist');
@@ -55,19 +57,17 @@ context('Home Page ', () => {
     cy.findByTestId('homePage-Toolbar-New').within(() => {
       cy.findByText('New').click();
     });
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(3000);
     cy.findByTestId('@microsoft/generator-bot-empty').click();
     cy.findByTestId('NextStepButton').click();
     cy.enterTextAndSubmit('NewDialogName', 'TestNewProject3', 'SubmitNewBotBtn');
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(100000);
     cy.findByTestId('ProjectTree').within(() => {
       cy.findAllByText('TestNewProject3').should('exist');
     });
   });
 
-  it('can create a new bot from an existing bot', () => {
+  it('can save as a new bot from an existing bot', () => {
     cy.createTestBot('EmptySample', ({ id }) => {
       cy.visit(`/bot/${id}`);
       cy.findByTestId('LeftNav-CommandBarButtonHome').click();
