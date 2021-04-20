@@ -28,12 +28,16 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
   return (
     <div ref={containerRef}>
       <div css={subtitle}>
-        {formatMessage(
-          'Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. '
+        {formatMessage.rich(
+          'Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. <a>Learn more.</a>',
+          {
+            a: ({ children }) => (
+              <Link href={''} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
         )}
-        <Link href="" target="blank">
-          {formatMessage('Learn more.')}
-        </Link>
       </div>
       <Stack>
         <div css={title}>{formatMessage('Azure connections')}</div>
@@ -45,14 +49,21 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
       <Stack>
         <div css={title}>{formatMessage('External connections')}</div>
         <div css={subtext}>
-          {formatMessage('Find and install more external services to your bot project in ')}
-          <Link href="" target="blank">
-            {formatMessage('package manager. ')}
-          </Link>
-          {formatMessage(' For further guidance, see documentation for ')}
-          <Link href="" target="blank">
-            {formatMessage('adding external connections.')}
-          </Link>
+          {formatMessage.rich(
+            'Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>',
+            {
+              a: ({ children }) => (
+                <Link href={''} target="_blank">
+                  {children}
+                </Link>
+              ),
+              a2: ({ children }) => (
+                <Link href={''} target="_blank">
+                  {children}
+                </Link>
+              ),
+            }
+          )}
         </div>
         <ExternalAdapterSettings projectId={projectId} />
       </Stack>

@@ -141,15 +141,21 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
     <Fragment>
       <div css={title}>{formatMessage('Language Understanding')}</div>
       <div css={subtext}>
-        <Link href="" target="blank">
-          {formatMessage('Language Understanding Intelligent Service (LUIS)')}
-        </Link>
-        {formatMessage(
-          ' is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. '
+        {formatMessage.rich(
+          '<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>.',
+          {
+            a: ({ children }) => (
+              <Link href={''} target="_blank">
+                {children}
+              </Link>
+            ),
+            a2: ({ children }) => (
+              <Link href={''} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
         )}
-        <Link href="" target="blank">
-          {formatMessage('Learn more.')}
-        </Link>
       </div>
       <div css={externalServiceContainerStyle}>
         <TextField
@@ -193,16 +199,21 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         </div>
         <div css={title}>{formatMessage('QnA Maker')}</div>
         <div css={subtext}>
-          {formatMessage('Integrate with ')}
-          <Link href="" target="blank">
-            {formatMessage('QnA Maker ')}
-          </Link>
-          {formatMessage(
-            'to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. '
+          {formatMessage.rich(
+            'Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more.</a2>',
+            {
+              a: ({ children }) => (
+                <Link href={''} target="_blank">
+                  {children}
+                </Link>
+              ),
+              a2: ({ children }) => (
+                <Link href={''} target="_blank">
+                  {children}
+                </Link>
+              ),
+            }
           )}
-          <Link href="" target="blank">
-            {formatMessage('Learn more.')}
-          </Link>
         </div>
         <div ref={qnaKeyFieldRef}>
           <FieldWithCustomButton

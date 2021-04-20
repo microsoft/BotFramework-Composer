@@ -24,7 +24,7 @@ const valueStyle = css`
 `;
 
 const headerStyle = css`
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
 `;
 
@@ -33,8 +33,8 @@ const rootTextStyle = css`
 `;
 
 export const BotProjectInfo: React.FC<RouteComponentProps<{
-  projectId: string;
-  isRootBot: boolean;
+  projectId?: string;
+  isRootBot?: boolean;
 }>> = (props) => {
   const { projectId = '', isRootBot = false } = props;
   const botProjects = useRecoilValue(localBotsDataSelector);
@@ -47,7 +47,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
     <div>
       <h3 css={headerStyle}>
         {botProject?.name}
-        {isRootBot && <span css={rootTextStyle}>{formatMessage(' (root)')}</span>}
+        {isRootBot && <span css={rootTextStyle}> {formatMessage('(root)')}</span>}
       </h3>
       <Stack tokens={{ childrenGap: 10 }}>
         <StackItem>

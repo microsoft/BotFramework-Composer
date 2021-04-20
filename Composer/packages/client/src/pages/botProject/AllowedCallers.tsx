@@ -143,12 +143,16 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
     <Fragment>
       <div css={title}>{formatMessage('Allowed Callers')}</div>
       <div css={subtext}>
-        {formatMessage(
-          'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. '
+        {formatMessage.rich(
+          'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more.</a>',
+          {
+            a: ({ children }) => (
+              <Link href={''} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
         )}
-        <Link href="" target="blank">
-          {formatMessage(' Learn more.')}
-        </Link>
       </div>
       <ItemContainer>
         {runtimeSettings?.skills?.allowedCallers?.map((caller, index) => {

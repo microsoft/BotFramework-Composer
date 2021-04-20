@@ -136,7 +136,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
       return {
         id: b.projectId,
-        name: `${b.name}${b.isRootBot ? formatMessage(' (root)') : ''}`,
+        name: `${b.name} ${b.isRootBot ? formatMessage('(root)') : ''}`,
         ariaLabel: formatMessage('bot'),
         url: createBotSettingUrl(rootBotProjectId ?? '', b.projectId),
         isRootBot: b.isRootBot,

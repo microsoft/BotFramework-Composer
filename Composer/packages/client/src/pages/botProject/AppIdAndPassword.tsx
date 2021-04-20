@@ -106,12 +106,16 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
     <Fragment>
       <div css={title}>{formatMessage('Microsoft App ID')}</div>
       <div css={subtext}>
-        {formatMessage(
-          'A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. '
+        {formatMessage.rich(
+          'A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. <a>Learn more.</a>',
+          {
+            a: ({ children }) => (
+              <Link href={''} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
         )}
-        <Link href="" target="blank">
-          {formatMessage('Learn more.')}
-        </Link>
       </div>
       <div css={appIdAndPasswordStyle}>
         <TextField
