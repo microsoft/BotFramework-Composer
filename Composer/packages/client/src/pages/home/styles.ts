@@ -27,21 +27,21 @@ export const page = css`
 
 export const leftPage = css`
   flex: 50%;
-  padding: 0 25px 25px 25px;
+  padding: 0 24px 24px 24px;
   display: flex;
   flex-direction: column;
 `;
 
 export const rightPage = css`
   flex: 1;
-  padding-right: 25px;
+  padding-right: 24px;
   display: flex;
   flex-direction: column;
 `;
 
 export const title = css`
   display: block;
-  padding: 25px 25px 0px 25px;
+  padding: 24px 24px 0px 24px;
   font-size: ${FontSizes.xxLarge};
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
@@ -75,6 +75,15 @@ export const resourcesContainer = css`
 
 export const videosContainer = css`
   margin-top: 40px;
+`;
+
+export const pivotContainer = css`
+  button:first-of-type {
+    padding-left: 0;
+    :before {
+      left: 0;
+    }
+  }
 `;
 
 export const tabRowContainer = css`
@@ -176,6 +185,9 @@ export const cardItem = {
   container: css`
     font-size: ${fonts.medium.fontSize};
     margin: 12px 0 0 12px;
+    &:first-child {
+      margin-left: 0;
+    }
     padding: 12px;
     min-width: ${ImageCoverWidth}px;
     width: 17vw;
@@ -305,9 +317,9 @@ export const detailListScrollWrapper = css`
 export const whatsNewsContainer = css`
   position: relative;
   flex: 1;
-  padding: 20px 25px 25px 25px;
+  padding: 20px 24px 24px 24px;
   border-radius: 5px;
-  margin: 20px 0 25px 0;
+  margin: 20px 0 24px 0;
   background: #f6f6f6;
   @media (max-width: 1416px) {
     background: none;
