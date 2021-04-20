@@ -18,6 +18,7 @@ import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
 import { useCopyToClipboard } from '@bfc/ui-shared';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
@@ -32,25 +33,35 @@ const copiedCalloutStyles = {
 };
 
 type SkillManifestUrlFieldProps = {
-  url: string;
+  urls: string[];
 };
 
-const SkillManifestUrlField = ({ url }: SkillManifestUrlFieldProps) => {
-  const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(url);
+const SkillManifestUrlField = ({ urls }: SkillManifestUrlFieldProps) => {
+  const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(urls[0]);
 
   const calloutTarget = useRef<HTMLElement>();
+  const clipUrl = (url) => url.replace('azurewebsites.net/manifests/', 'azureweb...');
   return (
     <Fragment>
-      <ActionButton
-        className="skill-manifest-copy-button"
-        title={url}
-        onClick={(e) => {
-          calloutTarget.current = e.target as HTMLElement;
-          copyTextToClipboard();
-        }}
+      <TooltipHost
+        content={urls.map((url) => (
+          <div key={url} style={{ display: 'flex' }}>
+            {clipUrl(url)}
+            <IconButton iconProps={{ iconName: 'copy' }} onClick={() => navigator.clipboard.writeText(url)} />
+          </div>
+        ))}
       >
-        {formatMessage('Copy Skill Manifest URL')}
-      </ActionButton>
+        <ActionButton
+          className="skill-manifest-copy-button"
+          title={urls[0]}
+          onClick={(e) => {
+            calloutTarget.current = e.target as HTMLElement;
+            copyTextToClipboard();
+          }}
+        >
+          {formatMessage('Copy Skill Manifest URL')}
+        </ActionButton>
+      </TooltipHost>
       {isCopiedToClipboard && (
         <Callout
           setInitialFocus
@@ -185,6 +196,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
+            checked={checkedIds.includes(item.id)}
             disabled={disableCheckbox}
             label={item.name}
             styles={{
@@ -293,11 +305,11 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       name: '',
       className: 'skillManifest',
       fieldName: 'skillManifestUrl',
-      minWidth: 114,
-      maxWidth: 134,
+      minWidth: 134,
+      maxWidth: 150,
       data: 'string',
       onRender: (item: BotStatus) => {
-        return item?.skillManifestUrl && <SkillManifestUrlField url={item.skillManifestUrl} />;
+        return item?.skillManifestUrls.length > 0 && <SkillManifestUrlField urls={item.skillManifestUrls} />;
       },
       isPadded: true,
     },
