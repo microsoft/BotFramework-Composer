@@ -21,6 +21,7 @@ import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { openDeleteBotModal } from './DeleteBotButton';
 import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
@@ -53,6 +54,8 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
   const { deleteBot } = useRecoilValue(dispatcherState);
+  const isPVABot = usePVACheck(currentProjectId);
+  console.log(isPVABot);
 
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
@@ -103,16 +106,20 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
         },
         align: 'left',
       },
-      {
-        text: formatMessage('Manage connections'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'PlugConnected' },
-          onClick: () => buttonClick(linkToConnections),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
+      ...(!isPVABot
+        ? [
+            {
+              text: formatMessage('Manage connections'),
+              type: 'action',
+              buttonProps: {
+                iconProps: { iconName: 'PlugConnected' },
+                onClick: () => buttonClick(linkToConnections),
+                styles: defaultToolbarButtonStyles,
+              },
+              align: 'left',
+            },
+          ]
+        : []),
       {
         text: formatMessage('Delete bot'),
         type: 'action',
