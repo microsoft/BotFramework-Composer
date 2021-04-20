@@ -5,7 +5,6 @@ import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
