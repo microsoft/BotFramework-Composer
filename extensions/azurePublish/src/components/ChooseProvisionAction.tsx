@@ -81,7 +81,9 @@ const CreateActionContent = () => {
             'Select this option when you want to provision new Azure resources and publish a bot. A subscription to '
           )}
         </Text>
-        <LearnMoreLink href="https://azure.microsoft.com/free/">{formatMessage('Microsoft Azure')}</LearnMoreLink>
+        <LearnMoreLink href="https://aka.ms/azureSignUpPage" target="_blank">
+          {formatMessage('Microsoft Azure')}
+        </LearnMoreLink>
         <Text>{formatMessage(' is required.')}</Text>
       </Summary>
       <Details>
