@@ -47,19 +47,21 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       const decoded = decodeURIComponent(props.location.search);
       const { source, payload } = querystring.parse(decoded);
       if (typeof source === 'string' && typeof payload === 'string') {
-        const alias = getAliasFromPayload(source, payload);
-        // check to see if Composer currently has a bot project corresponding to the alias
-        axios
-          .get<any>(`/api/projects/alias/${alias}`)
-          .then((aliasRes) => {
-            if (aliasRes.status === 200) {
-              navigate(`/bot/${aliasRes.data.id}`);
-              return;
-            }
-          })
-          .catch((e) => {
-            setIsOpenOptionsModal(true);
-          });
+        getAliasFromPayload(source, payload).then((alias) => {
+          // check to see if Composer currently has a bot project corresponding to the alias
+          axios
+            .get<any>(`/api/projects/alias/${alias}`)
+            .then((aliasRes) => {
+              if (aliasRes.status === 200) {
+                navigate(`/bot/${aliasRes.data.id}`);
+                return;
+              }
+            })
+            .catch((e) => {
+              setIsOpenOptionsModal(true);
+            });
+        });
+
         return;
       }
     }
