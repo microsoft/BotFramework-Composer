@@ -311,6 +311,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const version = req.body.version;
       const source = req.body.source;
       const isUpdating = req.body.isUpdating || false;
+      const isPreview = req.body.isPreview || false;
       const mergeErrors: string[] = [];
 
       const captureErrors = (msg: string): void => {
@@ -328,7 +329,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             packageName,
             version,
             source,
-            currentProject
+            currentProject,
+            isPreview
           );
 
           const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);

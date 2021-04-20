@@ -19,7 +19,7 @@ export type BotStatus = {
   /**
    * The skill manifest URL associated with the current publishTarget.
    */
-  skillManifestUrl?: string;
+  skillManifestUrls: string[];
 };
 
 export type Bot = {

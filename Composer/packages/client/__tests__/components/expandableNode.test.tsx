@@ -14,16 +14,17 @@ describe('<ExpandableNode />', () => {
 
   it('closes and opens on click', async () => {
     if (component == null) fail();
+
     const triangle = await component.findByTestId('summaryTag');
     let details = await component.findByTestId('dialog');
-    expect(details.attributes.getNamedItem('open')).not.toBeNull();
+    expect(details.childNodes.length).toBe(2); // 1 for the summary itself, 1 for the details
 
     fireEvent.click(triangle);
     details = await component.findByTestId('dialog');
-    expect(details.attributes.getNamedItem('open')).toBeNull();
+    expect(details.childNodes.length).toBe(1); // when the node is closed, the details don't render at all
 
     fireEvent.click(triangle);
     details = await component.findByTestId('dialog');
-    expect(details.attributes.getNamedItem('open')).not.toBeNull();
+    expect(details.childNodes.length).toBe(2);
   });
 });

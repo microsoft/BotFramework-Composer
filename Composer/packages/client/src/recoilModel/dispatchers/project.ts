@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
+import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
@@ -28,6 +28,7 @@ import {
   createQnAOnState,
   creationFlowTypeState,
   currentProjectIdState,
+  currentPublishTargetState,
   dispatcherState,
   feedState,
   fetchReadMePendingState,
@@ -35,9 +36,12 @@ import {
   projectMetaDataState,
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
+  settingsState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
+import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
+import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -68,8 +72,26 @@ export const projectDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
 
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
+        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        // const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(projectIdToRemove));
+        const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
+        const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
+        // remove the same identifier trigger in root bot
+        if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
+          const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
+          const content = DialogdeleteTrigger(
+            projectDialogsMap[rootBotProjectId],
+            rootDialog?.id,
+            index,
+            async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
+          );
+          if (content) {
+            await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
+          }
+        }
+
+        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
         set(botProjectIdsState, (currentProjects) => {
@@ -167,6 +189,8 @@ export const projectDispatcher = () => {
         const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl);
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, endpointName);
+        // update appsetting
+        await dispatcher.setSkillAndAllowCaller(rootBotProjectId, projectId, endpointName);
         navigateToSkillBot(rootBotProjectId, projectId);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -233,10 +257,15 @@ export const projectDispatcher = () => {
 
           if (profile && alias) {
             const dispatcher = await snapshot.getPromise(dispatcherState);
+            const { publishTargets } = await snapshot.getPromise(settingsState(projectId));
             const newProfile = await getPublishProfileFromPayload(profile, source);
-
-            newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-
+            if (newProfile) {
+              const newPublishTargets = publishTargets
+                ? publishTargets.filter((item) => item.name !== newProfile.name)
+                : [];
+              newPublishTargets.push(newProfile);
+              dispatcher.setPublishTargets(newPublishTargets, projectId);
+            }
             await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
           }
         }
@@ -501,6 +530,12 @@ export const projectDispatcher = () => {
     }
   );
 
+  const updateCurrentTarget = useRecoilCallback<[string, PublishTarget], void>(
+    ({ set }: CallbackInterface) => (projectId: string, currentTarget) => {
+      set(currentPublishTargetState(projectId), currentTarget);
+    }
+  );
+
   const saveTemplateId = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (templateId) => {
     if (templateId) {
       set(templateIdState, templateId);
@@ -636,6 +671,7 @@ export const projectDispatcher = () => {
     saveProjectAs,
     fetchProjectById,
     fetchRecentProjects,
+    updateCurrentTarget,
     fetchFeed,
     setBotStatus,
     saveTemplateId,
