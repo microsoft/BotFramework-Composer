@@ -387,6 +387,7 @@ export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) 
   if (isDotnetError) {
     callbackHelpers.set(warnAboutDotNetState, true);
   } else {
+    callbackHelpers.set(warnAboutDotNetState, false);
     setError(callbackHelpers, error);
   }
 };

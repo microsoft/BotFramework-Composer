@@ -242,14 +242,12 @@ const Home: React.FC<RouteComponentProps> = () => {
       </div>
       {warnAboutDotNet && (
         <InstallDepModal
-          isOpen
-          learnMore={missingDotnetVersionError.linkAfterMessage.url}
-          learnMoreText={formatMessage('Learn more')}
-          link={missingDotnetVersionError.link.url}
-          linkText={formatMessage('Install .NET Core SDK')}
-          setIsOpen={setWarnAboutDotNet}
+          downloadLink={missingDotnetVersionError.link.url}
+          downloadLinkText={formatMessage('Install .NET Core SDK')}
+          learnMore={{ text: formatMessage('Learn more'), link: missingDotnetVersionError.linkAfterMessage.url }}
           text={missingDotnetVersionError.message}
           title={formatMessage('.NET required')}
+          onDismiss={() => setWarnAboutDotNet(false)}
         />
       )}
     </div>

@@ -137,14 +137,13 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       />
       {isElectron() && showNodeModal && (
         <InstallDepModal
-          isOpen={showNodeModal}
-          link={'https://nodejs.org/en/download/'}
-          linkText={formatMessage('Install Node.js')}
-          setIsOpen={setShowNodeModal}
+          downloadLink={'https://nodejs.org/en/download/'}
+          downloadLinkText={formatMessage('Install Node.js')}
           text={formatMessage(
             'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version'
           )}
           title={formatMessage('Node.js required')}
+          onDismiss={() => setShowNodeModal(false)}
         />
       )}
     </Fragment>
