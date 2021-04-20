@@ -132,7 +132,7 @@ export const unknownIconStyle = (required: boolean) => {
   };
 };
 
-export const columnSizes = ['300px', '150px', '150px'];
+export const columnSizes = ['300px', '150px', '300px'];
 
 export const actionButton = {
   root: {
@@ -145,3 +145,18 @@ export const actionButton = {
 };
 
 export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10, width: '75%' } }, customError);
+
+export const teamsCallOutStyles = mergeStyleSets({
+  callout: {
+    width: 320,
+    padding: '20px 24px',
+  },
+  title: {
+    marginBottom: 12,
+    fontWeight: FontWeights.semilight,
+  },
+  link: {
+    display: 'block',
+    marginTop: 20,
+  },
+});
