@@ -9,6 +9,11 @@ import formatMessage from 'format-message';
 import { CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { ISearchBox, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { useRecoilValue } from 'recoil';
+
+import { PVADisableFeature } from '../PVADisableFeature';
+import { usePVACheck } from '../../hooks/usePVACheck';
+import { rootBotProjectIdSelector } from '../../recoilModel';
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -64,6 +69,8 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
 }) => {
   const [showFilter, setShowFilter] = useState(false);
   const searchBoxRef = useRef<ISearchBox>(null);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
+  const isPVABot = usePVACheck(rootBotId);
 
   useEffect(() => {
     if (showFilter && searchBoxRef.current) {
@@ -90,6 +97,26 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
     setShowFilter(false);
   };
 
+  const addCommandBtn = (
+    <CommandButton
+      data-is-focusable
+      ariaLabel={formatMessage('Actions')}
+      className="project-tree-header-more-btn"
+      css={buttonStyle}
+      data-testid="projectTreeHeaderMoreButton"
+      disabled={isPVABot}
+      iconProps={{ iconName: 'Add' }}
+      menuProps={{ items: overflowMenu }}
+      tabIndex={0}
+      text={formatMessage('Add')}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.stopPropagation();
+        }
+      }}
+    />
+  );
+
   return (
     <div css={headerText}>
       {showFilter ? (
@@ -106,22 +133,11 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({
       ) : (
         <div css={commands}>
           {overflowMenu.length ? (
-            <CommandButton
-              data-is-focusable
-              ariaLabel={formatMessage('Actions')}
-              className="project-tree-header-more-btn"
-              css={buttonStyle}
-              data-testid="projectTreeHeaderMoreButton"
-              iconProps={{ iconName: 'Add' }}
-              menuProps={{ items: overflowMenu }}
-              tabIndex={0}
-              text={formatMessage('Add')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.stopPropagation();
-                }
-              }}
-            />
+            isPVABot ? (
+              <PVADisableFeature>{addCommandBtn}</PVADisableFeature>
+            ) : (
+              addCommandBtn
+            )
           ) : null}
           <CommandButton
             ariaLabel={formatMessage('Filter')}

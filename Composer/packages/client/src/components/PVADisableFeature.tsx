@@ -7,7 +7,8 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { rootBotProjectIdSelector, schemasState } from '../recoilModel';
+import { usePVACheck } from '../hooks/usePVACheck';
+import { rootBotProjectIdSelector } from '../recoilModel';
 
 const calloutProps = { gapSpace: 0 };
 
@@ -17,12 +18,8 @@ const genericDisableMessage = () => {
 
 export const PVADisableFeature: React.FC<{ content?: string; projectId?: string }> = (props) => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
-  const schema = useRecoilValue(schemasState(props.projectId ?? rootBotId ?? ''));
-  const [isPVABot, setIsPVABot] = useState(false);
-
-  useEffect(() => {
-    setIsPVABot(checkForPVASchema(schema.sdk));
-  }, [rootBotId]);
+  const currentProjectId = props.projectId ?? rootBotId ?? '';
+  const isPVABot = usePVACheck(currentProjectId);
 
   const tooltipId = useId('pva-disable-tooltip');
 
