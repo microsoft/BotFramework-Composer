@@ -12,13 +12,14 @@ import formatMessage from 'format-message';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
 
-import { BotSkillConfiguration } from './BotSkillConfiguration';
 import { BotProjectInfo } from './BotProjectInfo';
 import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
 import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import AdapterSection from './adapters/AdapterSection';
+import { SkillHostEndPoint } from './SkillHostEndPoint';
+import { AllowedCallers } from './AllowedCallers';
 
 // -------------------- Styles -------------------- //
 
@@ -105,7 +106,8 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           headerText={formatMessage('Skill Configuration')}
           itemKey={PivotItemKey.SkillConfig}
         >
-          {isRootBot && <BotSkillConfiguration projectId={projectId} />}
+          {isRootBot && <SkillHostEndPoint projectId={projectId} />}
+          <AllowedCallers projectId={projectId} />
         </PivotItem>
         <PivotItem
           data-testid="localizationTab"
