@@ -618,6 +618,7 @@ export const projectDispatcher = () => {
             } else {
               // failure
               callbackHelpers.set(botOpeningState, false);
+
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
