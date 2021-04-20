@@ -8,7 +8,6 @@ import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
-import { checkForPVASchema } from '@bfc/shared';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
@@ -18,7 +17,6 @@ import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { useLocation } from '../utils/hooks';
 import { BASEPATH } from '../constants';
-import { schemasState } from '../recoilModel/atoms';
 import {
   dispatcherState,
   appUpdateState,
@@ -162,7 +160,6 @@ export const Header = () => {
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
   const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
-  const schemas = useRecoilValue(schemasState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
   const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
@@ -291,7 +288,7 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {isShow && !checkForPVASchema(schemas.sdk) && (
+        {isShow && (
           <div
             css={css`
               margin-right: 12px;
