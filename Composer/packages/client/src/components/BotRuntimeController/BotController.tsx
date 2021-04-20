@@ -213,6 +213,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           primary
           aria-roledescription={formatMessage('Bot Controller')}
           ariaDescription={startPanelButtonText}
+          data-testid={'startBotButton'}
           disabled={disableStartBots || areBotsStarting}
           iconProps={{
             iconName: statusIconClass,

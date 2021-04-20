@@ -7,8 +7,8 @@ import fs from 'fs';
 import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import {
+  isUsingAdaptiveRuntime,
   getNewDesigner,
   FileInfo,
   Diagnostic,
@@ -33,11 +33,19 @@ import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
 
-import { BotStructureFilesPatterns, isCrossTrainConfig } from './botStructure';
+import {
+  BotStructureFilesPatterns,
+  defaultManifestFilePath,
+  isCrossTrainConfig,
+  PVATopicFilePatterns,
+  defaultFilePath,
+  serializeFiles,
+  parseFileName,
+  isRecognizer,
+} from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -468,6 +476,41 @@ export class BotProject implements IBotProject {
     return await this._createFile(relativePath, content);
   };
 
+  public createManifestLuFile = async (name: string, content = '') => {
+    const filename = name.trim();
+    this.validateFileName(filename);
+    this._validateFileContent(name, content);
+    const botName = this.name;
+    const relativePath = defaultManifestFilePath(botName, filename);
+    const file = this.files.get(filename);
+    if (file) {
+      throw new Error(`${filename} dialog already exist`);
+    }
+    return await this._createFile(relativePath, content);
+  };
+
+  public updateManifestLuFile = async (name: string, content: string): Promise<string> => {
+    const file = this.files.get(name);
+    if (file === undefined) {
+      const { lastModified } = await this.createManifestLuFile(name, content);
+      return lastModified;
+    }
+
+    const relativePath = file.relativePath;
+    this._validateFileContent(name, content);
+    const lastModified = await this._updateFile(relativePath, content);
+    return lastModified;
+  };
+
+  public deleteManifestLuFile = async (name: string) => {
+    const file = this.files.get(name);
+    if (file === undefined) {
+      throw new Error(`no such file ${name}`);
+    }
+    await this._removeFile(file.relativePath);
+    await this._cleanUp(file.relativePath);
+  };
+
   public createFiles = async (files) => {
     const createdFiles: FileInfo[] = [];
     for (const { name, content } of files) {
@@ -815,6 +858,7 @@ export class BotProject implements IBotProject {
     const paths = this.fileStorage.globSync(
       [
         ...BotStructureFilesPatterns,
+        ...PVATopicFilePatterns,
         '!(generated/**)',
         '!(runtime/**)',
         '!(bin/**)',
