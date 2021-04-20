@@ -3,7 +3,7 @@
 
 context('LG Page', () => {
   beforeEach(() => {
-    cy.createTestBot('EmptySample', ({ id }) => {
+    cy.createTestBot('TestSample', ({ id }) => {
       cy.visit(`/bot/${id}`);
     });
   });
@@ -11,7 +11,7 @@ context('LG Page', () => {
   it('can open language generation page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonBot responses').click();
     // left nav tree
-    cy.contains('TestBot_EmptySample');
+    cy.contains('TestBot_TestSample');
 
     cy.findByTestId('showcode').as('switchButton');
 
@@ -29,7 +29,7 @@ context('LG Page', () => {
 
     // nav to Main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('TestBot_EmptySample').last().click();
+      cy.findAllByText('TestBot_TestSample').last().click();
     });
   });
 });

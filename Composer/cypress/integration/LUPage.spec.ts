@@ -3,7 +3,7 @@
 
 context('LU Page', () => {
   beforeEach(() => {
-    cy.createTestBot('EmptySample', ({ id }) => {
+    cy.createTestBot('TestSample', ({ id }) => {
       cy.visit(`/bot/${id}`);
     });
   });
@@ -11,7 +11,7 @@ context('LU Page', () => {
   it('can open language understanding page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser input').click();
     // left nav tree
-    cy.contains('TestBot_EmptySample');
+    cy.contains('TestBot_TestSample');
 
     // by default it goes to table view
     cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
@@ -21,7 +21,7 @@ context('LU Page', () => {
 
     // nav to ToDoBotWithLuisSample.main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('TestBot_EmptySample').last().click();
+      cy.findAllByText('TestBot_TestSample').last().click();
     });
     cy.findByTestId('showcode').as('switchButton');
     // goto edit-mode

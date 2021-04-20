@@ -6,6 +6,7 @@
 declare namespace Cypress {
   interface Chainable {
     /**
+     * Deprecated!
      * Creates a bot based on template id.
      * If botName not provided, names the bot __Test${botId},
      * otherwise, __Test&{botName}.
