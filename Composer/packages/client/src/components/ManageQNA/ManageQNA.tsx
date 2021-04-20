@@ -518,7 +518,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
-          title: currentPage === 2 ? formatMessage('Create new QnA resources') : formatMessage('Select QnA keys'),
+          title: currentPage === 2 ? formatMessage('Create new QnA resource') : formatMessage('Select QnA keys'),
         }}
         hidden={props.hidden}
         minWidth={480}
@@ -659,7 +659,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
                   disabled={loadingQNA}
                   id={'qnaResourceName'}
                   label={formatMessage('Resource name')}
-                  placeholder={formatMessage('Enter name for new QnA resources')}
+                  placeholder={formatMessage('Enter name for new QnA resource')}
                   styles={{ root: { marginTop: 10 } }}
                   value={qnaResourceName}
                   onChange={(e, val) => setQNAResourceName(val || '')}
