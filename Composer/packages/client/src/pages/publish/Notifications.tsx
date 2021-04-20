@@ -184,3 +184,43 @@ export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = fa
     ),
   };
 };
+
+export const getPendingQNANotificationCardProps = (): CardProps => {
+  return {
+    title: '',
+    description: formatMessage(`Creating QnA Maker`),
+    type: 'pending',
+    onRenderCardContent: (props) => (
+      <div css={cardContent}>
+        <Icon css={infoType} iconName="CloudUpload" />
+        <div css={cardDetail}>
+          <ProgressIndicator label={props.description} />
+        </div>
+      </div>
+    ),
+  };
+};
+
+export const getCompletedQNANotificationCardProps = (opts: { time: number }): CardProps => {
+  const statusIconStyle = css({
+    margin: '12px 0 0 -1px',
+    width: '12px',
+    height: '12px',
+    fontSize: '12px',
+    color: SharedColors.cyanBlue10,
+  });
+  return {
+    title: '',
+    description: formatMessage(`Your QnA Maker is ready! It took { time } minutes to complete.`, { time: opts.time }),
+    type: 'pending',
+    onRenderCardContent: (props) => (
+      <div css={cardContent}>
+        <Icon css={infoType} iconName="CloudUpload" />
+        <Icon css={statusIconStyle} iconName={'SkypeCircleCheck'} />
+        <div css={cardDetail}>
+          <div css={cardDescription}>{props.description}</div>
+        </div>
+      </div>
+    ),
+  };
+};
