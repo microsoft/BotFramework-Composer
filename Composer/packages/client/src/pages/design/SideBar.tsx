@@ -90,6 +90,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
     updateZoomRate,
     deleteTrigger,
   } = useRecoilValue(dispatcherState);
+
   const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === dialogId)?.content,
