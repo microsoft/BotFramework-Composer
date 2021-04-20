@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { checkForPVASchema } from '@bfc/shared';
+
 import { useId } from '@uifabric/react-hooks';
 import formatMessage from 'format-message';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { usePVACheck } from '../hooks/usePVACheck';
