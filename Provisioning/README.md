@@ -22,13 +22,13 @@ Follow these instructions to manually provision Azure resources:
    cd provisionScripts/
    ```
 
-2. Run the following command to install the dependencies:
+3. Run the following command to install the dependencies:
 
    ```cmd
    npm install
    ```
 
-3. Run the following command to provision new Azure resources.
+4. Run the following command to provision new Azure resources.
 
    - **_Azure Web App_**:
 
@@ -85,9 +85,9 @@ Follow these instructions to manually provision Azure resources:
       > [!NOTE]
       > If you use `--createLuisAuthoringResource false` in this step, you should manually add the LUIS authoring key to the publish configuration. The default region is `westus`. To provision to other regions, you should add `--location region`.
 
-4. As the Azure resources are being provisioned, you will see a spinning activity indicator for a few minutes.
+5. As the Azure resources are being provisioned, you will see a spinning activity indicator for a few minutes.
 
-   Once completed, you will see the generated JSON appears in the command line like the following. The JSON output is the publishing profile, which will be used in step 5.
+   Once completed, you will see the generated JSON appears in the command line like the following. The JSON output is the publishing profile, which will be used in step 6.
 
    ```json
    {
@@ -126,7 +126,7 @@ Follow these instructions to manually provision Azure resources:
    }
    ```
 
-5. From the "Publish" tab of Composer, choose to import an existing publishing profile. Paste the JSON from step 4 into Composer and save the profile.
+6. From the "Publish" tab of Composer, choose to import an existing publishing profile. Paste the JSON from step 5 into Composer and save the profile.
 
 ### Provision scripts parameters list
 
