@@ -75,7 +75,6 @@ const LearnMoreLink = styled(Link)`
 const CreateActionContent = () => {
   return (
     <Content>
-      <Title>{formatMessage('Create New Resources')}</Title>
       <Summary>
         <Text>
           {formatMessage(
@@ -115,7 +114,7 @@ const CreateActionContent = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources">
+      <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
         {formatMessage('Learn More')}
       </LearnMoreLink>
     </Content>

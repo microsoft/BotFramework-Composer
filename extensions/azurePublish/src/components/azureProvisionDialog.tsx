@@ -96,7 +96,7 @@ const PageTypes = {
 
 const DialogTitle = {
   CHOOSE_ACTION: {
-    title: formatMessage('Configure resources'),
+    title: formatMessage('Configure resources to your publishing profile'),
     subText: formatMessage('How you would like to provision Azure resources to your publishing profile?'),
   },
   CONFIG_RESOURCES: {
@@ -937,6 +937,13 @@ export const AzureProvisionDialog: React.FC = () => {
                 }
               }}
             />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                closeDialog();
+              }}
+            />
           </div>
         </div>
       );
@@ -1046,6 +1053,13 @@ export const AzureProvisionDialog: React.FC = () => {
                   });
                   setReviewListItems(selectedResources);
                 }
+              }}
+            />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                closeDialog();
               }}
             />
           </div>
