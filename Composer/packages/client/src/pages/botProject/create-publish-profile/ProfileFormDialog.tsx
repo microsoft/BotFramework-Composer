@@ -60,9 +60,6 @@ const onRenderLabel = (props) => {
   return (
     <div css={labelContainer}>
       <div css={customerLabel}> {props.label} </div>
-      <TooltipHost content={props.ariaLabel}>
-        <Icon iconName="Info" styles={iconStyle(props.required)} />
-      </TooltipHost>
     </div>
   );
 };
@@ -143,7 +140,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             disabled={saveDisabled}
-            text={formatMessage('Next: Configure resources')}
+            text={formatMessage('Next')}
             onClick={() => {
               onNext();
             }}

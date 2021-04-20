@@ -217,7 +217,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
             <div style={{ marginBottom: '16px' }}>
               {dialogTitle.subText}
               <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage('Learn more.')}
+                {formatMessage('Learn more')}
               </Link>
             </div>
             <ProfileFormDialog

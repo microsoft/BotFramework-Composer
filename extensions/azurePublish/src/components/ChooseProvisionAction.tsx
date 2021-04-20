@@ -32,7 +32,7 @@ const ContentPane = styled(Stack)`
 `;
 
 const Content = styled(Stack)`
-  padding: 20px;
+  padding: 0px 20px;
 `;
 
 const Title = styled(Text)`
@@ -55,7 +55,6 @@ const Instruction = styled(Stack)`
 const InstructionTitle = styled(Text)`
   font-size: ${FluentTheme.fonts.smallPlus.fontSize};
   text-transform: uppercase;
-  margin: 8px 0;
 `;
 
 const InstructionDetails = styled.div`
@@ -68,6 +67,7 @@ const ResourceTitle = styled(Stack)`
 
 const LearnMoreLink = styled(Link)`
   user-select: none;
+  font-size: 14px;
 `;
 
 // ---------- CreateActionContent ---------- //
@@ -98,7 +98,7 @@ const CreateActionContent = () => {
           <InstructionDetails>
             <Text>
               {formatMessage(
-                'Select tenant & subscription, enter resource group name and resource name, and select region.'
+                'Select tenant and subscription, enter resource group name and resource name, and select region.'
               )}
             </Text>
           </InstructionDetails>
@@ -108,7 +108,7 @@ const CreateActionContent = () => {
           <InstructionDetails>
             <Text>
               {formatMessage(
-                'Review & create new resources. Once provisioned these resources will be available in your Azure portal.'
+                'Review and create new resources. Once provisioned these resources will be available in your Azure portal.'
               )}
             </Text>
           </InstructionDetails>

@@ -97,7 +97,7 @@ const PageTypes = {
 const DialogTitle = {
   CHOOSE_ACTION: {
     title: formatMessage('Configure resources to your publishing profile'),
-    subText: formatMessage('How you would like to provision Azure resources to your publishing profile?'),
+    subText: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
   },
   CONFIG_RESOURCES: {
     title: formatMessage('Import existing resources'),
