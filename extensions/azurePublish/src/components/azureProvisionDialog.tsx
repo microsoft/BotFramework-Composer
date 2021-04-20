@@ -725,18 +725,14 @@ export const AzureProvisionDialog: React.FC = () => {
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
   const PageChooseAction = (
-    <ScrollablePane
-      data-is-scrollable="true"
-      scrollbarVisibility={ScrollbarVisibility.auto}
-      style={{ height: 'calc(100vh - 64px)' }}
-    >
+    <div style={{ height: 'calc(100vh - 64px)' }}>
       <ChooseProvisionAction
         choice={formData.creationType}
         onChoiceChanged={(choice) => {
           updateFormData('creationType', choice);
         }}
       />
-    </ScrollablePane>
+    </div>
   );
 
   const PageFormConfig = (

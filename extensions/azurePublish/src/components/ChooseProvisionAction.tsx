@@ -28,6 +28,7 @@ const ChoicesPane = styled.div`
 const ContentPane = styled(Stack)`
   border-left: 1px solid ${NeutralColors.gray30};
   height: 100%;
+  overflow-y: auto;
 `;
 
 const Content = styled(Stack)`
