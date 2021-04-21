@@ -68,11 +68,11 @@ const resources = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const projectId = useRecoilValue(currentProjectIdState);
-  const botName = useRecoilValue(botDisplayNameState(projectId));
+  const projectId = useRecoilValue<string>(currentProjectIdState);
+  const botName = useRecoilValue<string>(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
-  const templateId = useRecoilValue(templateIdState);
+  const templateId = useRecoilValue<string>(templateIdState);
   const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
     dispatcherState
   );
@@ -208,7 +208,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={home.videosContainer}>
             <div css={home.rowContainer}>
-              <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
+              <Pivot aria-label="Videos and articles" css={home.pivotContainer} linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
                     {tab.viewAllLinkText && (

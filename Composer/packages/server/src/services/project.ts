@@ -207,7 +207,11 @@ export class BotProjectService {
     }
   };
 
-  public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
+  public static openProject = async (
+    locationRef: LocationRef,
+    user?: UserIdentity,
+    isRootBot?: boolean
+  ): Promise<string> => {
     BotProjectService.initialize();
 
     // TODO: this should be refactored or moved into the BotProject constructor so that it can use user auth amongst other things
@@ -224,7 +228,7 @@ export class BotProjectService {
       const projectLoc = BotProjectService.projectLocationMap[key];
       if (projectLoc && projectLoc.path === locationRef.path) {
         // TODO: this should probably move to getProjectById
-        BotProjectService.addRecentProject(locationRef.path);
+        if (isRootBot) BotProjectService.addRecentProject(locationRef.path);
         return key;
       }
     }
@@ -512,7 +516,7 @@ export class BotProjectService {
           return new Promise(async (resolve, reject) => {
             try {
               log('Open project', botRef);
-              const id = await BotProjectService.openProject(botRef, user);
+              const id = await BotProjectService.openProject(botRef, user, false);
 
               // in the case of remote project, we need to update the eTag and alias used by the import mechanism
               BotProjectService.setProjectLocationData(id, { alias, eTag });
@@ -548,7 +552,11 @@ export class BotProjectService {
 
       const rootBot = botsToProcess.find((b) => b.name === name);
       if (rootBot) {
-        const id = await BotProjectService.openProject({ storageId: rootBot?.storageId, path: rootBot.path }, user);
+        const id = await BotProjectService.openProject(
+          { storageId: rootBot?.storageId, path: rootBot.path },
+          user,
+          true
+        );
         const currentProject = await BotProjectService.getProjectById(id, user);
         const project = currentProject.getProject();
         log('Project created successfully.');
