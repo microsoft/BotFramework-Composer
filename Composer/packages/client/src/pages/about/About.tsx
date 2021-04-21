@@ -8,6 +8,8 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 
+import { isElectron } from '../../utils/electronUtil';
+
 import * as about from './styles';
 
 export const About: React.FC<RouteComponentProps> = () => {
@@ -29,7 +31,10 @@ export const About: React.FC<RouteComponentProps> = () => {
           )}
         </div>
         <div css={about.version}>
-          {formatMessage(`Release: `) + (`${process.env.COMPOSER_VERSION}-${process.env.GIT_SHA}` || 'Unknown')}
+          {formatMessage(`Release: `) +
+            (isElectron()
+              ? (window as any).appVersion
+              : `${process.env.COMPOSER_VERSION}-${process.env.GIT_SHA}` || 'Unknown')}
         </div>
         <div css={about.diagnosticsInfo}>
           <div css={about.diagnosticsInfoText}>
