@@ -108,11 +108,29 @@ type QnaEvents = {
   AlternateQnAPhraseAdded: undefined;
 };
 
+type ResourcesItem = {
+  description: string;
+  text: string;
+  tier: string;
+  group: string;
+  key: string;
+  required: boolean;
+  [key: string]: any;
+};
+
 type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
   NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileCompleted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
+  ProvisionAddResources: undefined;
+  ProvisionConfigureResources: undefined;
+  ProvisionEditJSON: undefined;
+  ProvisionReviewResources: undefined;
+  ProvisionStart: { region: string; subscriptionId: string; externalResources: ResourcesItem[] };
+  ProvisionCancel: undefined;
+  ProvisionShowHandoff: undefined;
+  ProvisionAddResourcesCancel: undefined;
 };
 
 type AppSettingsEvents = {
