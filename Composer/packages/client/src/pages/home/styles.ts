@@ -305,6 +305,9 @@ export const detailListContainer = css`
   .ms-DetailsHeader-cellName {
     font-weight: 400;
   }
+  .ms-DetailsHeader-cell:hover {
+    background: none;
+  }
 `;
 
 export const detailListScrollWrapper = css`
