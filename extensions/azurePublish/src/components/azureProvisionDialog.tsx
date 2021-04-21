@@ -346,7 +346,7 @@ export const AzureProvisionDialog: React.FC = () => {
     setPage(page);
     switch (page) {
       case PageTypes.AddResources:
-        telemetryClient.track('ProvisionAddResources', {});
+        telemetryClient.track('ProvisionAddResources');
         setTitle(DialogTitle.ADD_RESOURCES);
         break;
       case PageTypes.ChooseAction:
