@@ -36,6 +36,7 @@ import {
   projectMetaDataState,
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
+  warnAboutDotNetState,
   settingsState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
@@ -663,6 +664,10 @@ export const projectDispatcher = () => {
     setError(callbackHelpers, error);
   });
 
+  const setWarnAboutDotNet = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutDotNetState, warn);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -686,6 +691,7 @@ export const projectDispatcher = () => {
     updateCreationMessage,
     setCurrentProjectId,
     setProjectError,
+    setWarnAboutDotNet,
     fetchReadMe,
   };
 };
