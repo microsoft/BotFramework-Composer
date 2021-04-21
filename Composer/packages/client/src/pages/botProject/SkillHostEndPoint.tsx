@@ -77,7 +77,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
           'Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>.',
           {
             a: ({ children }) => (
-              <Link href={'https://aka.ms/composer-skills-learnmore'} target="_blank">
+              <Link key="skills-settings-page" href={'https://aka.ms/composer-skills-learnmore'} target="_blank">
                 {children}
               </Link>
             ),

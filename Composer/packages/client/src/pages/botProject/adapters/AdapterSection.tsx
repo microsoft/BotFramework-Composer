@@ -33,7 +33,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
           'Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. <a>Learn more.</a>',
           {
             a: ({ children }) => (
-              <Link href={'https://aka.ms/composer-connections-learnmore'} target="_blank">
+              <Link key="adapters-settings-page" href={'https://aka.ms/composer-connections-learnmore'} target="_blank">
                 {children}
               </Link>
             ),
@@ -55,6 +55,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
             {
               a: ({ children }) => (
                 <Link
+                  key="package-adapter-settings-page"
                   onClick={() => {
                     navigateTo(`/bot/${projectId}/plugin/package-manager/package-manager`);
                   }}
@@ -63,7 +64,11 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
                 </Link>
               ),
               a2: ({ children }) => (
-                <Link href={'https://aka.ms/composer-packagmanageraddconnection-learnmore'} target="_blank">
+                <Link
+                  key="package-adapter-settings-page-learn-more"
+                  href={'https://aka.ms/composer-packagmanageraddconnection-learnmore'}
+                  target="_blank"
+                >
                   {children}
                 </Link>
               ),

@@ -110,7 +110,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           'A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. <a>Learn more.</a>',
           {
             a: ({ children }) => (
-              <Link href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
+              <Link key="app-id-settings-page" href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
                 {children}
               </Link>
             ),
