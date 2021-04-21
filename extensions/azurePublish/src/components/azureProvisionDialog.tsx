@@ -361,7 +361,7 @@ export const AzureProvisionDialog: React.FC = () => {
         setTitle(DialogTitle.EDIT);
         break;
       case PageTypes.ReviewResource:
-        telemetryClient.track('ProvisionReviewResources', {});
+        telemetryClient.track('ProvisionReviewResources');
         setTitle(DialogTitle.REVIEW);
         break;
     }
