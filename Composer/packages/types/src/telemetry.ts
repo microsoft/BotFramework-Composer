@@ -123,7 +123,7 @@ type PublishingEvents = {
   NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileCompleted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
-  ProvisionAddResources: undefined;
+  ProvisionAddResourcesNavigate: undefined;
   ProvisionConfigureResources: undefined;
   ProvisionEditJSON: undefined;
   ProvisionReviewResources: undefined;
