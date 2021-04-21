@@ -183,7 +183,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     setWebChatPanelVisibility(true);
   };
 
-  const trafficSection = useMemo(() => {
+  const noWebChatTrafficSection = useMemo(() => {
     if (currentStatus === BotStatus.inactive) {
       return (
         <div css={emptyStateMessageContainer}>
@@ -211,7 +211,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   return (
     <div css={logContainer(isActive)}>
       <div ref={webChatContainerRef} css={logPane(displayedTraffic.length)} data-testid="Webchat-Logs-Container">
-        {displayedTraffic.length ? displayedTraffic : trafficSection}
+        {displayedTraffic.length ? displayedTraffic : noWebChatTrafficSection}
       </div>
       <WebChatInspectorPane inspectionData={inspectionData} onSetInspectionData={setInspectionData} />
     </div>
