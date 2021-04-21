@@ -21,12 +21,15 @@ import {
   feedState,
   templateIdState,
   currentProjectIdState,
+  warnAboutDotNetState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
+import { InstallDepModal } from '../../components/InstallDepModal';
+import { missingDotnetVersionError } from '../../utils/runtimeErrors';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -70,7 +73,10 @@ const Home: React.FC<RouteComponentProps> = () => {
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
   const templateId = useRecoilValue(templateIdState);
-  const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
+    dispatcherState
+  );
+  const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -202,7 +208,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={home.videosContainer}>
             <div css={home.rowContainer}>
-              <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
+              <Pivot aria-label="Videos and articles" css={home.pivotContainer} linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
                     {tab.viewAllLinkText && (
@@ -234,6 +240,16 @@ const Home: React.FC<RouteComponentProps> = () => {
           <WhatsNewsList newsList={feed.whatsNewLinks} />
         </div>
       </div>
+      {warnAboutDotNet && (
+        <InstallDepModal
+          downloadLink={missingDotnetVersionError.link.url}
+          downloadLinkText={formatMessage('Install .NET Core SDK')}
+          learnMore={{ text: formatMessage('Learn more'), link: missingDotnetVersionError.linkAfterMessage.url }}
+          text={missingDotnetVersionError.message}
+          title={formatMessage('.NET required')}
+          onDismiss={() => setWarnAboutDotNet(false)}
+        />
+      )}
     </div>
   );
 };

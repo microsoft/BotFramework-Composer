@@ -28,10 +28,11 @@ const ChoicesPane = styled.div`
 const ContentPane = styled(Stack)`
   border-left: 1px solid ${NeutralColors.gray30};
   height: 100%;
+  overflow-y: auto;
 `;
 
 const Content = styled(Stack)`
-  padding: 20px;
+  padding: 0px 20px;
 `;
 
 const Title = styled(Text)`
@@ -54,7 +55,6 @@ const Instruction = styled(Stack)`
 const InstructionTitle = styled(Text)`
   font-size: ${FluentTheme.fonts.smallPlus.fontSize};
   text-transform: uppercase;
-  margin: 8px 0;
 `;
 
 const InstructionDetails = styled.div`
@@ -67,6 +67,7 @@ const ResourceTitle = styled(Stack)`
 
 const LearnMoreLink = styled(Link)`
   user-select: none;
+  font-size: 14px;
 `;
 
 // ---------- CreateActionContent ---------- //
@@ -74,14 +75,15 @@ const LearnMoreLink = styled(Link)`
 const CreateActionContent = () => {
   return (
     <Content>
-      <Title>{formatMessage('Create New Resources')}</Title>
       <Summary>
         <Text>
           {formatMessage(
             'Select this option when you want to provision new Azure resources and publish a bot. A subscription to '
           )}
         </Text>
-        <LearnMoreLink href="https://azure.microsoft.com/free/">{formatMessage('Microsoft Azure')}</LearnMoreLink>
+        <LearnMoreLink href="https://aka.ms/azureSignUpPage" target="_blank">
+          {formatMessage('Microsoft Azure')}
+        </LearnMoreLink>
         <Text>{formatMessage(' is required.')}</Text>
       </Summary>
       <Details>
@@ -96,7 +98,7 @@ const CreateActionContent = () => {
           <InstructionDetails>
             <Text>
               {formatMessage(
-                'Select tenant & subscription, enter resource group name and resource name, and select region.'
+                'Select tenant and subscription, enter resource group name and resource name, and select region.'
               )}
             </Text>
           </InstructionDetails>
@@ -106,13 +108,13 @@ const CreateActionContent = () => {
           <InstructionDetails>
             <Text>
               {formatMessage(
-                'Review & create new resources. Once provisioned these resources will be available in your Azure portal.'
+                'Review and create new resources. Once provisioned these resources will be available in your Azure portal.'
               )}
             </Text>
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources">
+      <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
         {formatMessage('Learn More')}
       </LearnMoreLink>
     </Content>

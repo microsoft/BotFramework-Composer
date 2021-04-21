@@ -49,8 +49,8 @@ export const PublishDialog = (props) => {
       name: formatMessage('Comments'),
       className: 'comment',
       fieldName: 'comment',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 200,
+      maxWidth: 290,
       data: 'string',
       onRender: (item: BotStatus) => {
         // message for each publish bot
