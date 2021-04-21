@@ -86,6 +86,8 @@ const iconStyle = (required) => {
   };
 };
 
+const resourceFieldStyles = { root: { paddingBottom: '6px', width: '75%' } };
+
 const PageTypes = {
   ChooseAction: 'chooseAction',
   ConfigProvision: 'config',
@@ -99,7 +101,7 @@ const DialogTitle = {
     title: formatMessage('Configure resources to your publishing profile'),
     subText: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
   },
-  CONFIG_RESOURCES: {
+  EDIT: {
     title: formatMessage('Import existing resources'),
     subText: formatMessage('Please provide your Publish Configuration'),
   },
@@ -128,7 +130,7 @@ const DialogTitle = {
       'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
     ),
   },
-  EDIT: {
+  CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
   },
@@ -738,7 +740,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
   const PageChooseAction = (
-    <div style={{ height: 'calc(100vh - 64px)' }}>
+    <div style={{ height: 'calc(100vh - 65px)' }}>
       <ChooseProvisionAction
         choice={formData.creationType}
         onChoiceChanged={(choice) => {
@@ -752,7 +754,7 @@ export const AzureProvisionDialog: React.FC = () => {
     <ScrollablePane
       data-is-scrollable="true"
       scrollbarVisibility={ScrollbarVisibility.auto}
-      style={{ height: 'calc(100vh - 64px)' }}
+      style={{ height: 'calc(100vh - 65px)' }}
     >
       <form style={{ width: '100%' }}>
         <Dropdown
@@ -764,7 +766,7 @@ export const AzureProvisionDialog: React.FC = () => {
           label={formatMessage('Azure Directory')}
           options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
           selectedKey={formData.tenantId}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={(_e, o) => {
             updateFormData('tenantId', o.key as string);
           }}
@@ -779,7 +781,7 @@ export const AzureProvisionDialog: React.FC = () => {
           options={subscriptionOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.subscriptionId}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={(_e, o) => {
             updateFormData('subscriptionId', o.key as string);
           }}
@@ -805,7 +807,7 @@ export const AzureProvisionDialog: React.FC = () => {
           errorMessage={errorHostName}
           label={formatMessage('Resource name')}
           placeholder={formatMessage('Name of your services')}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           value={formData.hostname}
           onChange={newHostName}
           onRenderLabel={onRenderLabel}
@@ -817,7 +819,7 @@ export const AzureProvisionDialog: React.FC = () => {
           options={deployLocationsOption}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.region}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={updateCurrentLocation}
           onRenderLabel={onRenderLabel}
         />
@@ -828,6 +830,7 @@ export const AzureProvisionDialog: React.FC = () => {
           options={luisLocationsOption}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.luisLocation}
+          styles={{ root: { width: '75%' } }}
           onChange={(e, o) => {
             updateFormData('luisLocation', o.key as string);
           }}
@@ -852,7 +855,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <ScrollablePane
           data-is-scrollable="true"
           scrollbarVisibility={ScrollbarVisibility.auto}
-          style={{ height: 'calc(100vh - 64px)' }}
+          style={{ height: 'calc(100vh - 65px)' }}
         >
           <Stack>
             {requiredListItems.length > 0 && (
@@ -884,7 +887,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageReview = (
     <Fragment>
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 64px)' }}>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 65px)' }}>
         <DetailsList
           isHeaderVisible
           columns={reviewCols}
