@@ -47,18 +47,18 @@ const ImageIconPlacholder = styled.div`
 
 const ItemText = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
-  margin-left: 4px !important;
+  margin-left: 8px !important;
 `;
 
 const ItemTier = styled(Text)`
   font-size: ${FluentTheme.fonts.small.fontSize};
-  margin: 4px 0 0 22px;
+  margin: 4px 0 3px 24px;
   color: ${NeutralColors.gray130};
 `;
 
 const ItemDescription = styled(Text)`
   font-size: ${FluentTheme.fonts.medium.fontSize};
-  margin: 4px 2px 0 22px;
+  margin: 4px 2px 0 24px;
   color: ${NeutralColors.gray190};
   max-width: 500px;
 `;
