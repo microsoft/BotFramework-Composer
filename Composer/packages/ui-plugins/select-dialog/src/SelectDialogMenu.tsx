@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ClassNames } from '@emotion/core';
 import React, { useMemo, useCallback, useState } from 'react';
 import {
   IContextualMenuItem,
@@ -11,7 +12,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { SearchBox, ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IRenderFunction, getId } from 'office-ui-fabric-react/lib/Utilities';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, DialogInfo } from '@bfc/extension-client';
 import { Icons } from '@bfc/shared';
@@ -76,7 +77,7 @@ const buttonStyles: IButtonStyles = {
 const searchFieldStyles: ISearchBoxStyles = {
   root: {
     borderColor: 'transparent',
-    borderRadius: '0',
+    borderRadius: '0 !important',
     selectors: {
       '::after': {
         borderRadius: '0',
@@ -137,7 +138,6 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
         key: 'dialogs',
         itemType: ContextualMenuItemType.Section,
         sectionProps: {
-          topDivider: shouldShowFilter,
           items: dialogItems,
         },
       },
@@ -220,6 +220,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
             onChange={filterDialogs}
             onKeyDown={handleKeyDown}
           />
+          <div style={{ height: '1px', display: 'block', backgroundColor: NeutralColors.gray30 }} />
           <Stack>{defaultRender?.(menuListProps)}</Stack>
         </Stack>
       );
@@ -238,23 +239,34 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
-      <DefaultButton
-        id={id}
-        menuProps={{
-          id: menuId,
-          ariaLabel: menuLabel,
-          items,
-          onItemClick: handleItemClick,
-          useTargetWidth: true,
-          onRenderMenuList: shouldShowFilter ? onRenderMenuList : undefined,
-          // send focus to the search box when present
-          shouldFocusOnMount: !shouldShowFilter,
-        }}
-        styles={buttonStyles}
-        text={selectedLabel || ' '}
-        onBlur={() => onBlur?.(id, value)}
-        onFocus={(e) => onFocus?.(id, value, e)}
-      />
+      <ClassNames>
+        {({ css }) => (
+          <DefaultButton
+            id={id}
+            menuProps={{
+              id: menuId,
+              ariaLabel: menuLabel,
+              items,
+              onItemClick: handleItemClick,
+              useTargetWidth: true,
+              onRenderMenuList: shouldShowFilter ? onRenderMenuList : undefined,
+              // send focus to the search box when present
+              shouldFocusOnMount: !shouldShowFilter,
+              className: css`
+                .ms-ContextualMenu-list .ms-ContextualMenu-list {
+                  // 10 items @ 36px each + 2px padding
+                  max-height: 362px;
+                  overflow-y: scroll;
+                }
+              `,
+            }}
+            styles={buttonStyles}
+            text={selectedLabel || ' '}
+            onBlur={() => onBlur?.(id, value)}
+            onFocus={(e) => onFocus?.(id, value, e)}
+          />
+        )}
+      </ClassNames>
     </React.Fragment>
   );
 };
