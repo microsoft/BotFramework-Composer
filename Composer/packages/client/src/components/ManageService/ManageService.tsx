@@ -674,7 +674,7 @@ export const ManageService = (props: ManageServiceProps) => {
           type: DialogType.normal,
           title:
             currentPage === 2
-              ? formatMessage('Create new {service} resources', { service: props.serviceName })
+              ? formatMessage('Create new {service} resource', { service: props.serviceName })
               : formatMessage('Select {service} keys', { service: props.serviceName }),
         }}
         hidden={props.hidden || showAuthDialog}
@@ -682,7 +682,7 @@ export const ManageService = (props: ManageServiceProps) => {
         modalProps={{
           isBlocking: true,
         }}
-        onDismiss={props.onDismiss}
+        onDismiss={loading ? () => {} : props.onDismiss}
       >
         {currentPage === 1 && renderPageOne()}
         {currentPage === 2 && nextAction === 'choose' && renderPageChoose()}

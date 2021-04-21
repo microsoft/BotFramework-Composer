@@ -43,6 +43,6 @@ describe('Publish Target', () => {
     act(() => {
       fireEvent.click(addNewPublishProfile);
     });
-    expect(getByText('Add a publishing profile')).toBeInTheDocument();
+    expect(getByText('Add new publishing profile')).toBeInTheDocument();
   });
 });
