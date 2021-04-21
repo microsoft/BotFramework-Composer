@@ -6,7 +6,15 @@ import styled from '@emotion/styled';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
+import {
+  logOut,
+  usePublishApi,
+  getTenants,
+  getARMTokenForTenant,
+  useLocalStorage,
+  useTelemetryClient,
+  TelemetryClient,
+} from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
@@ -87,6 +95,8 @@ const iconStyle = (required) => {
   };
 };
 
+const resourceFieldStyles = { root: { paddingBottom: '4px', width: '75%' } };
+
 const PageTypes = {
   ChooseAction: 'chooseAction',
   ConfigProvision: 'config',
@@ -100,14 +110,27 @@ const DialogTitle = {
     title: formatMessage('Configure resources to your publishing profile'),
     subText: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
   },
-  CONFIG_RESOURCES: {
+  EDIT: {
     title: formatMessage('Import existing resources'),
     subText: formatMessage('Please provide your Publish Configuration'),
   },
   ADD_RESOURCES: {
     title: formatMessage('Add resources'),
-    subText: formatMessage(
-      'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile.'
+
+    subText: formatMessage.rich(
+      'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile. <a>Learn more</a>',
+      {
+        a: ({ children }) => (
+          <a
+            key="add-resource-learn-more"
+            href={'https://aka.ms/composer-publish-bot#create-new-azure-resources'}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {children}
+          </a>
+        ),
+      }
     ),
   },
   REVIEW: {
@@ -116,7 +139,7 @@ const DialogTitle = {
       'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
     ),
   },
-  EDIT: {
+  CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
   },
@@ -259,6 +282,7 @@ export const AzureProvisionDialog: React.FC = () => {
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
+  const telemetryClient: TelemetryClient = useTelemetryClient();
 
   const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
@@ -338,18 +362,22 @@ export const AzureProvisionDialog: React.FC = () => {
     setPage(page);
     switch (page) {
       case PageTypes.AddResources:
+        telemetryClient.track('ProvisionAddResourcesNavigate');
         setTitle(DialogTitle.ADD_RESOURCES);
         break;
       case PageTypes.ChooseAction:
         setTitle(DialogTitle.CHOOSE_ACTION);
         break;
       case PageTypes.ConfigProvision:
+        telemetryClient.track('ProvisionConfigureResources');
         setTitle(DialogTitle.CONFIG_RESOURCES);
         break;
       case PageTypes.EditJson:
+        telemetryClient.track('ProvisionEditJSON');
         setTitle(DialogTitle.EDIT);
         break;
       case PageTypes.ReviewResource:
+        telemetryClient.track('ProvisionReviewResources');
         setTitle(DialogTitle.REVIEW);
         break;
     }
@@ -675,6 +703,13 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSubmit = useCallback((options) => {
     // call back to the main Composer API to begin this process...
+
+    telemetryClient.track('ProvisionStart', {
+      region: options.location,
+      subscriptionId: options.subscription,
+      externalResources: options.externalResources,
+    });
+
     startProvision(options);
     clearAll();
     closeDialog();
@@ -729,7 +764,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
   const PageChooseAction = (
-    <div style={{ height: 'calc(100vh - 64px)' }}>
+    <div style={{ height: 'calc(100vh - 65px)' }}>
       <ChooseProvisionAction
         choice={formData.creationType}
         onChoiceChanged={(choice) => {
@@ -743,7 +778,7 @@ export const AzureProvisionDialog: React.FC = () => {
     <ScrollablePane
       data-is-scrollable="true"
       scrollbarVisibility={ScrollbarVisibility.auto}
-      style={{ height: 'calc(100vh - 64px)' }}
+      style={{ height: 'calc(100vh - 65px)' }}
     >
       <form style={{ width: '100%' }}>
         <Dropdown
@@ -755,7 +790,7 @@ export const AzureProvisionDialog: React.FC = () => {
           label={formatMessage('Azure Directory')}
           options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
           selectedKey={formData.tenantId}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={(_e, o) => {
             updateFormData('tenantId', o.key as string);
           }}
@@ -770,7 +805,7 @@ export const AzureProvisionDialog: React.FC = () => {
           options={subscriptionOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.subscriptionId}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={(_e, o) => {
             updateFormData('subscriptionId', o.key as string);
           }}
@@ -796,7 +831,7 @@ export const AzureProvisionDialog: React.FC = () => {
           errorMessage={errorHostName}
           label={formatMessage('Resource name')}
           placeholder={formatMessage('Name of your services')}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           value={formData.hostname}
           onChange={newHostName}
           onRenderLabel={onRenderLabel}
@@ -808,7 +843,7 @@ export const AzureProvisionDialog: React.FC = () => {
           options={deployLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.region}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={updateCurrentLocation}
           onRenderLabel={onRenderLabel}
         />
@@ -819,6 +854,7 @@ export const AzureProvisionDialog: React.FC = () => {
           options={luisLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.luisLocation}
+          styles={{ root: { width: '75%' } }}
           onChange={(e, o) => {
             updateFormData('luisLocation', o.key as string);
           }}
@@ -843,7 +879,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <ScrollablePane
           data-is-scrollable="true"
           scrollbarVisibility={ScrollbarVisibility.auto}
-          style={{ height: 'calc(100vh - 64px)' }}
+          style={{ height: 'calc(100vh - 65px)' }}
         >
           <Stack>
             {requiredListItems.length > 0 && (
@@ -875,7 +911,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageReview = (
     <Fragment>
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 64px)' }}>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 65px)' }}>
         <DetailsList
           isHeaderVisible
           columns={reviewCols}
@@ -945,6 +981,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
+                telemetryClient.track('ProvisionCancel');
                 closeDialog();
               }}
             />
@@ -1040,6 +1077,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Next')}
               onClick={() => {
                 if (formData.creationType === 'generate') {
+                  telemetryClient.track('ProvisionShowHandoff');
                   setShowHandoff(true);
                 } else {
                   setPageAndTitle(PageTypes.ReviewResource);
@@ -1063,6 +1101,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
+                telemetryClient.track('ProvisionAddResourcesCancel');
                 closeDialog();
               }}
             />
