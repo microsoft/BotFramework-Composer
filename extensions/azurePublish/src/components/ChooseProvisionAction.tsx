@@ -62,7 +62,7 @@ const InstructionDetails = styled.div`
 `;
 
 const ResourceTitle = styled(Stack)`
-  margin: 10px 0;
+  margin: 5px 0;
 `;
 
 const LearnMoreLink = styled(Link)`
@@ -139,28 +139,28 @@ const ImportActionContent = () => {
       </Summary>
       <Details>
         <ResourceTitle>
-          <Text>{formatMessage('Microsoft Application Registration')}</Text>
+          <Text>{formatMessage('- Microsoft Application Registration')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>{formatMessage('Azure Hosting')}</Text>
+          <Text>{formatMessage('- Azure Hosting')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>{formatMessage('Microsoft Bot Channels Registration')}</Text>
+          <Text>{formatMessage('- Microsoft Bot Channels Registration')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>{formatMessage('Azure Cosmos DB')}</Text>
+          <Text>{formatMessage('- Azure Cosmos DB')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>{formatMessage('Application Insights')}</Text>
+          <Text>{formatMessage('- Application Insights')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>{formatMessage('Azure Blob Storage')}</Text>
+          <Text>{formatMessage('- Azure Blob Storage')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>{formatMessage('Microsoft Language Understanding (LUIS)')}</Text>
+          <Text>{formatMessage('- Microsoft Language Understanding (LUIS)')}</Text>
         </ResourceTitle>
         <ResourceTitle>
-          <Text>{formatMessage('Microsoft QnA Maker')}</Text>
+          <Text>{formatMessage('- Microsoft QnA Maker')}</Text>
         </ResourceTitle>
       </Details>
       <LearnMoreLink href="https://aka.ms/composer-publish-bot#import-existing-azure-resources">

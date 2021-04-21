@@ -105,8 +105,21 @@ const DialogTitle = {
   },
   ADD_RESOURCES: {
     title: formatMessage('Add resources'),
-    subText: formatMessage(
-      'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile.'
+
+    subText: formatMessage.rich(
+      'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile. <a>Learn more</a>',
+      {
+        a: ({ children }) => (
+          <a
+            key="add-resource-learn-more"
+            href={'https://aka.ms/composer-publish-bot#create-new-azure-resources'}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {children}
+          </a>
+        ),
+      }
     ),
   },
   REVIEW: {
