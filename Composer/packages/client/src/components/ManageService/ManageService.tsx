@@ -23,6 +23,7 @@ import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { armScopes } from '../../constants';
@@ -255,6 +256,13 @@ export const ManageService = (props: ManageServiceProps) => {
         }
       }
 
+      TelemetryClient.track('SettingsGetKeysCreateNewResourceStarted', {
+        subscriptionId,
+        region,
+        resourceType: props.serviceName,
+        createNewResourceGroup: resourceGroupKey === CREATE_NEW_KEY,
+      });
+
       try {
         if (props.createServiceInBackground) {
           props.createService(tokenCredentials, subscriptionId, resourceGroupName, resourceName, region);
@@ -266,6 +274,13 @@ export const ManageService = (props: ManageServiceProps) => {
             resourceName,
             region
           );
+
+          TelemetryClient.track('SettingsGetKeysCreateNewResourceCompleted', {
+            subscriptionId,
+            region,
+            resourceType: props.serviceName,
+            createNewResourceGroup: resourceGroupKey === CREATE_NEW_KEY,
+          });
 
           setKey(newKey);
           // ALL DONE!
@@ -356,6 +371,11 @@ export const ManageService = (props: ManageServiceProps) => {
   };
 
   const chooseExistingKey = () => {
+    TelemetryClient.track('SettingsGetKeysExistingResourceSelected', {
+      subscriptionId,
+      resourceType: props.serviceName,
+    });
+
     // close the modal!
     props.onGetKey({
       key: key,
@@ -385,6 +405,10 @@ export const ManageService = (props: ManageServiceProps) => {
 
   const performNextAction = () => {
     if (nextAction === 'handoff') {
+      TelemetryClient.track('SettingsGetKeysResourceRequestSelected', {
+        subscriptionId,
+        resourceType: props.serviceName,
+      });
       setShowHandoff(true);
       props.onDismiss();
     } else {
