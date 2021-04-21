@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/7zip-bin/-/7zip-bin-5.0.3.tgz#bc5b5532ecafd923a61f2fb097e3b108c0106a3f"
   integrity sha512-GLyWIFBbGvpKPGo55JyRZAo4lVbnBiD52cKlw/0Vt+wnmKvWJkpZvsjVoaIolyBXDeAQKSicRtqFNPem9w0WYA==
 
+"@actions/core@^1.2.0":
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.2.7.tgz#594f8c45b213f0146e4be7eda8ae5cf4e198e5ab"
+  integrity sha512-kzLFD5BgEvq6ubcxdgPbRKGD2Qrgya/5j+wh4LZzqT915I0V3rED+MvjH6NXghbvk1MXknpNNQ3uKjXSEN00Ig==
+
 "@apidevtools/json-schema-ref-parser@^9.0.1":
   version "9.0.6"
   resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-9.0.6.tgz#5d9000a3ac1fd25404da886da6b266adcd99cf1c"
@@ -14712,6 +14717,13 @@ jest-get-type@^26.3.0:
   version "26.3.0"
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-26.3.0.tgz#e97dc3c3f53c2b406ca7afaed4493b1d099199e0"
   integrity sha512-TpfaviN1R2pQWkIihlfEanwOXK0zcxrKEE4MlU6Tn7keoXdN6/3gK/xl0yEh8DOunn5pOVGKf8hB4R9gVh04ig==
+
+jest-github-actions-reporter@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/jest-github-actions-reporter/-/jest-github-actions-reporter-1.0.3.tgz#6aa2b3a6599352e1043bbe42628a7f73a1ce48c2"
+  integrity sha512-IwLAKLSWLN8ZVfcfEEv6rfeWb78wKDeOhvOmH9KKXayKsKLSCwceopBcB+KUtwxfB5wYnT8Y9s2eZ+WdhA5yng==
+  dependencies:
+    "@actions/core" "^1.2.0"
 
 jest-haste-map@^26.0.1:
   version "26.0.1"
