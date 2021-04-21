@@ -23,6 +23,7 @@ import { DebugPanelTabHeaderProps } from '../types';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 import { BotStatus } from '../../../../../constants';
 import { useBotOperations } from '../../../../../components/BotRuntimeController/useBotOperations';
+import { usePVACheck } from '../../../../../hooks/usePVACheck';
 
 import { WebChatInspectorPane } from './WebChatInspectorPane';
 import { WebChatActivityLogItem } from './WebChatActivityLogItem';
@@ -56,7 +57,6 @@ const actionButton = {
     fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
     paddingLeft: 0,
-    marginLeft: 2,
   },
 };
 
@@ -75,6 +75,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   const { setWebChatInspectionData, setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
   const currentStatus = useRecoilValue(botStatusState(currentProjectId ?? ''));
   const { startAllBots } = useBotOperations();
+  const isPVABot = usePVACheck(currentProjectId ?? '');
 
   const navigateToNewestLogEntry = () => {
     if (currentLogItemCount && webChatContainerRef?.current) {
@@ -184,13 +185,20 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   };
 
   const noWebChatTrafficSection = useMemo(() => {
+    if (isPVABot) {
+      return null;
+    }
+
     if (currentStatus === BotStatus.inactive) {
       return (
         <div css={emptyStateMessageContainer}>
-          <span>{formatMessage('Your bot project is not running.')}</span>
-          <ActionButton styles={actionButton} type="button" onClick={startAllBots}>
-            {formatMessage('Start your bot')}
-          </ActionButton>
+          {formatMessage.rich('Your bot project is not running. <actionButton/>', {
+            actionButton: (
+              <ActionButton styles={actionButton} type="button" onClick={startAllBots}>
+                {formatMessage('Start your bot')}
+              </ActionButton>
+            ),
+          })}
         </div>
       );
     }
@@ -198,10 +206,13 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     if (currentStatus === BotStatus.connected) {
       return (
         <div css={emptyStateMessageContainer}>
-          <span>{formatMessage('Your bot project is running.')}</span>
-          <ActionButton styles={actionButton} onClick={onOpenWebChatPanelClick}>
-            {formatMessage('Test in Web Chat')}
-          </ActionButton>
+          {formatMessage.rich('Your bot project is running. <actionButton/>', {
+            actionButton: (
+              <ActionButton styles={actionButton} onClick={onOpenWebChatPanelClick}>
+                {formatMessage('Test in Web Chat')}
+              </ActionButton>
+            ),
+          })}
         </div>
       );
     }
