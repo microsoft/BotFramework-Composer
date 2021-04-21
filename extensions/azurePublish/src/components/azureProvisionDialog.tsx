@@ -31,6 +31,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
+import sortBy from 'lodash/sortBy';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -47,7 +48,7 @@ import { ChooseResourcesList } from './ChooseResourcesList';
 import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
 import { ChooseProvisionAction } from './ChooseProvisionAction';
-import sortBy from 'lodash/sortBy';
+
 type ProvisionFormData = {
   creationType: string;
   tenantId: string;
