@@ -17,11 +17,12 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
+  PublishTarget,
 } from '@bfc/shared';
 import { ConversationTrafficItem } from '@botframework-composer/types';
 import { atomFamily } from 'recoil';
 
-import { BotRuntimeError, DesignPageLocation, WebChatInspectionData } from '../../recoilModel/types';
+import { BotStartError, DesignPageLocation, WebChatInspectionData, RuntimeOutputData } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -47,6 +48,7 @@ const emptyDialog: DialogInfo = {
   intentTriggers: [],
   skills: [],
   isFormDialog: false,
+  isTopic: false,
 };
 
 const emptyLg: LgFile = {
@@ -214,7 +216,7 @@ export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
   },
 });
 
-export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
+export const botBuildTimeErrorState = atomFamily<BotStartError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };
@@ -370,6 +372,11 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
   default: false,
 });
 
+export const currentPublishTargetState = atomFamily<PublishTarget, string>({
+  key: getFullyQualifiedKey('currentTarget'),
+  default: {} as PublishTarget,
+});
+
 export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({
   key: getFullyQualifiedKey('jsonSchemaFiles'),
   default: [],
@@ -445,7 +452,10 @@ export const projectIndexingState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const botRuntimeLogState = atomFamily<string, string>({
-  key: getFullyQualifiedKey('botRuntimeLogState'),
-  default: '',
+export const runtimeStandardOutputDataState = atomFamily<RuntimeOutputData, string>({
+  key: getFullyQualifiedKey('runtimeStandardOutputData'),
+  default: {
+    standardError: null,
+    standardOutput: '',
+  },
 });

@@ -6,7 +6,6 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -29,20 +28,17 @@ import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '..
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
 import {
+  tableHeaderRow,
   tableRow,
   tableRowItem,
   tableColumnHeader,
-  labelContainer,
-  customerLabel,
-  unknownIconStyle,
   errorContainer,
   errorIcon,
   errorTextStyle,
   columnSizes,
 } from '../styles';
 import { TeamsManifestGeneratorModal } from '../../../components/Adapters/TeamsManifestGeneratorModal';
-
-import ABSChannelSpeechModal from './ABSChannelSpeechModal';
+import { ManageSpeech } from '../../../components/ManageSpeech/ManageSpeech';
 
 const teamsHelpLink = 'https://aka.ms/composer-channel-teams';
 const webchatHelpLink = 'https://aka.ms/composer-channel-webchat';
@@ -120,7 +116,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
-      navigateTo(`/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`);
+      navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
     } else {
       let newtoken = '';
       if (userShouldProvideTokens()) {
@@ -140,7 +136,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         setCurrentResource({
           microsoftAppId: config?.settings?.MicrosoftAppId,
           resourceName: config.name,
-          resourceGroupName: config.name,
+          resourceGroupName: config.resourceGroup || config.name,
           subscriptionId: config.subscriptionId,
         });
       }
@@ -370,7 +366,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     };
   };
 
-  const toggleSpeechOn = async (key: string, region: string, isDefault: boolean) => {
+  const toggleSpeechOn = async (settings: { key: string; region: string }, isDefault: boolean, attempt = 0) => {
     setChannelStatus({
       ...channelStatus,
       [CHANNELS.SPEECH]: {
@@ -381,8 +377,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
     try {
       await createChannelService(CHANNELS.SPEECH, {
-        cognitiveServiceSubscriptionKey: key,
-        cognitiveServiceRegion: region,
+        cognitiveServiceSubscriptionKey: settings.key,
+        cognitiveServiceRegion: settings.region,
         isDefaultBotForCogSvcAccount: isDefault,
       });
     } catch (err) {
@@ -395,8 +391,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           loading: false,
         },
       });
-
-      if (err?.response?.data?.error.code === 'InvalidChannelData') {
+      if (err?.response?.data?.error.code === 'UnknownError' && attempt < 5) {
+        console.error(err);
+        console.log('Retrying...');
+        setTimeout(() => {
+          toggleSpeechOn(settings, isDefault, attempt + 1);
+        }, 3000);
+      } else if (err?.response?.data?.error.code === 'InvalidChannelData') {
         const result = await OpenConfirmModal(
           formatMessage('Enable speech'),
           formatMessage(
@@ -404,23 +405,12 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           )
         );
         if (result) {
-          toggleSpeechOn(key, region, false);
+          toggleSpeechOn(settings, false);
         }
       } else {
         setApplicationLevelError(err);
       }
     }
-  };
-
-  const onRenderLabel = (props) => {
-    return (
-      <div css={labelContainer}>
-        <div css={customerLabel}> {props.label} </div>
-        <TooltipHost content={props.label}>
-          <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-        </TooltipHost>
-      </div>
-    );
   };
 
   /* Copied from BotStatusList.tx */
@@ -519,12 +509,12 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const absTableRow = (channel: string, name: string, link: string) => (
     <div key={channel} css={tableRow}>
       <div css={tableRowItem(columnSizes[0])}>{name}</div>
-      <div css={tableRowItem(columnSizes[1])}>
+      <div css={tableRowItem(columnSizes[1])}>{absTableToggle(channel)}</div>
+      <div css={tableRowItem(columnSizes[2])}>
         <Link href={link} target="_docs">
           {formatMessage('Learn more')}
         </Link>
       </div>
-      <div css={tableRowItem(columnSizes[2])}>{absTableToggle(channel)}</div>
     </div>
   );
 
@@ -539,25 +529,29 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }}
         />
       )}
-      <ABSChannelSpeechModal
-        isOpen={showSpeechModal}
-        onClose={() => {
+      <ManageSpeech
+        hidden={!showSpeechModal}
+        onDismiss={() => {
           setShowSpeechModal(false);
         }}
-        onUpdateKey={toggleSpeechOn}
+        onGetKey={(settings) => {
+          toggleSpeechOn(settings, true);
+        }}
+        onNext={() => {
+          setShowSpeechModal(false);
+        }}
+        onToggleVisibility={setShowSpeechModal}
       />
       <div>
         <Dropdown
-          label={formatMessage('Publish profile to configure:')}
           options={publishTargetOptions}
-          placeholder={formatMessage('Choose publishing profile')}
+          placeholder={formatMessage('Select publishing profile')}
           styles={{
             root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
             label: { width: 200 },
             dropdown: { width: 300 },
           }}
           onChange={onSelectProfile}
-          onRenderLabel={onRenderLabel}
           onRenderOption={renderDropdownOption}
         />
 
@@ -571,14 +565,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                   return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
                 }) ?? []
             }
-            placeholder={formatMessage('Choose subscription')}
+            placeholder={formatMessage('Select publishing profile')}
             styles={{
               root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
               label: { width: 200 },
               dropdown: { width: 300 },
             }}
             onChange={onChangeSubscription}
-            onRenderLabel={onRenderLabel}
           />
         )}
         {isLoading && <LoadingSpinner />}
@@ -590,10 +583,10 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         )}
         {currentResource && channelStatus && (
           <Fragment>
-            <div css={tableRow}>
+            <div css={tableHeaderRow}>
               <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
-              <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Documentation')}</div>
-              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
+              <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Enabled')}</div>
+              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Documentation')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
             {absTableRow(CHANNELS.WEBCHAT, formatMessage('Web Chat'), webchatHelpLink)}

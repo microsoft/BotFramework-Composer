@@ -162,8 +162,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
-  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
-  const rootLuisEndpointKey = groupLUISEndpointKey.root;
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
@@ -183,7 +181,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [qnaKeyErrorMsg, setQnAKeyErrorMsg] = useState<string>('');
 
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
-  const [localRootLuisEndpointKey, setLocalRootLuisEndpointKey] = useState<string>(rootLuisEndpointKey ?? '');
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
   const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
   const [localRootLuisName, setLocalRootLuisName] = useState<string>(rootLuisName ?? '');
@@ -191,9 +188,40 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
-  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
+
+  const handleRootLUISKeyOnChange = (e, value) => {
+    if (value) {
+      setLuisKeyErrorMsg('');
+      setLocalRootLuisKey(value);
+    } else {
+      setLuisKeyErrorMsg(
+        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
+      );
+      setLocalRootLuisKey('');
+    }
+  };
+
+  const handleRootQnAKeyOnChange = (e, value) => {
+    if (value) {
+      setQnAKeyErrorMsg('');
+      setLocalRootQnAKey(value);
+    } else {
+      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
+      setLocalRootQnAKey('');
+    }
+  };
+
+  const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
+    if (value != null) {
+      setLuisRegionErrorMsg('');
+      setLocalRootLuisRegion(value.key as string);
+    } else {
+      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
+      setLocalRootLuisRegion('');
+    }
+  };
 
   useEffect(() => {
     if (!localRootLuisKey) {
@@ -219,8 +247,16 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   }, [projectId]);
 
   useEffect(() => {
-    setLocalRootLuisKey(rootLuisKey);
+    handleRootLUISKeyOnChange(null, rootLuisKey);
   }, [rootLuisKey]);
+
+  useEffect(() => {
+    handleRootQnAKeyOnChange(null, rootqnaKey);
+  }, [rootqnaKey]);
+
+  useEffect(() => {
+    handleRootLuisRegionOnChange(null, { key: rootLuisRegion, text: '' });
+  }, [rootLuisRegion]);
 
   useEffect(() => {
     if (luisKeyFieldRef.current && scrollToSectionId === '#luisKey') {
@@ -245,42 +281,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     });
   };
 
-  const handleRootLUISKeyOnChange = (e, value) => {
-    if (value) {
-      setLuisKeyErrorMsg('');
-      setLocalRootLuisKey(value);
-    } else {
-      setLuisKeyErrorMsg(
-        formatMessage('LUIS key is required with the current recognizer setting to start your bot locally, and publish')
-      );
-      setLocalRootLuisKey('');
-    }
-  };
-
-  const handleRootLUISEndpointKeyOnChange = (e, value) => {
-    setLocalRootLuisEndpointKey(value);
-  };
-
-  const handleRootQnAKeyOnChange = (e, value) => {
-    if (value) {
-      setQnAKeyErrorMsg('');
-      setLocalRootQnAKey(value);
-    } else {
-      setQnAKeyErrorMsg(formatMessage('QnA Maker Subscription key is required to start your bot locally, and publish'));
-      setLocalRootQnAKey('');
-    }
-  };
-
-  const handleRootLuisRegionOnChange = (e, value: IDropdownOption | undefined) => {
-    if (value != null) {
-      setLuisRegionErrorMsg('');
-      setLocalRootLuisRegion(value.key as string);
-    } else {
-      setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
-      setLocalRootLuisRegion('');
-    }
-  };
-
   const handleRootLuisRegionOnBlur = () => {
     if (isLUISKeyNeeded && !localRootLuisRegion) {
       setLuisRegionErrorMsg(formatMessage('LUIS region is required'));
@@ -300,13 +300,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
     setSettings(projectId, {
       ...mergedSettings,
       luis: { ...mergedSettings.luis, authoringKey: localRootLuisKey },
-    });
-  };
-
-  const handleRootLuisEndpointKeyOnBlur = () => {
-    setSettings(projectId, {
-      ...mergedSettings,
-      luis: { ...mergedSettings.luis, endpointKey: localRootLuisEndpointKey },
     });
   };
 
@@ -335,15 +328,16 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const updateLuisSettings = (newLuisSettings) => {
     setSettings(projectId, {
       ...mergedSettings,
-      luis: { ...mergedSettings.luis, ...newLuisSettings },
+      luis: { ...mergedSettings.luis, authoringKey: newLuisSettings.key, authoringRegion: newLuisSettings.region },
     });
   };
 
   const updateQNASettings = (newQNASettings) => {
     setSettings(projectId, {
       ...mergedSettings,
-      qna: { ...mergedSettings.qna, ...newQNASettings },
+      qna: { ...mergedSettings.qna, subscriptionKey: newQNASettings.key },
     });
+    setQnASettings(projectId, newQNASettings.key);
   };
 
   return (
@@ -376,20 +370,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             onRenderLabel={onRenderLabel}
           />
         </div>
-        <div ref={luisEndpointKeyFieldRef}>
-          <TextField
-            ariaLabel={formatMessage('LUIS endpoint key')}
-            data-testid={'rootLUISEndpointKey'}
-            id={'luisEndpointKey'}
-            label={formatMessage('LUIS endpoint key')}
-            placeholder={formatMessage('Enter LUIS endpoint key')}
-            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
-            value={localRootLuisEndpointKey}
-            onBlur={handleRootLuisEndpointKeyOnBlur}
-            onChange={handleRootLUISEndpointKeyOnChange}
-            onRenderLabel={onRenderLabel}
-          />
-        </div>
         <div ref={luisRegionFieldRef}>
           <Dropdown
             ariaLabel={formatMessage('LUIS region')}
@@ -413,6 +393,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           )}
         </div>
         <PrimaryButton
+          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '130px', marginTop: '15px' } }}
           text={formatMessage('Get LUIS keys')}
           onClick={() => {
@@ -436,6 +417,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           />
         </div>
         <PrimaryButton
+          disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '130px', marginTop: '15px' } }}
           text={formatMessage('Get QnA key')}
           onClick={() => {
@@ -444,7 +426,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <ManageLuis
           hidden={!displayManageLuis}
-          setDisplayManageLuis={setDisplayManageLuis}
           onDismiss={() => {
             setDisplayManageLuis(false);
           }}
@@ -452,10 +433,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onNext={() => {
             setDisplayManageLuis(false);
           }}
+          onToggleVisibility={setDisplayManageLuis}
         />
         <ManageQNA
           hidden={!displayManageQNA}
-          setDisplayManageQna={setDisplayManageQNA}
           onDismiss={() => {
             setDisplayManageQNA(false);
           }}
@@ -463,6 +444,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onNext={() => {
             setDisplayManageQNA(false);
           }}
+          onToggleVisibility={setDisplayManageQNA}
         />
       </div>
     </CollapsableWrapper>

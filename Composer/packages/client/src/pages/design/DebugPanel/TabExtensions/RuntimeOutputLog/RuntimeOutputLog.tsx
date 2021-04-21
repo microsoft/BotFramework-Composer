@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { default as AnsiUp } from 'ansi_up';
 import { useEffect, useRef } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
-import { botRuntimeErrorState, botRuntimeLogState } from '../../../../../recoilModel';
+import { botBuildTimeErrorState, runtimeStandardOutputDataState } from '../../../../../recoilModel';
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 import { ErrorCallout } from '../../../../../components/BotRuntimeController/ErrorCallout';
 
@@ -21,15 +21,16 @@ const createMarkup = (txt: string) => {
 };
 
 export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId }) => {
-  const runtimeLogs = useRecoilValue(botRuntimeLogState(projectId));
-  const botRuntimeErrors = useRecoilValue(botRuntimeErrorState(projectId));
+  const runtimeData = useRecoilValue(runtimeStandardOutputDataState(projectId));
+  const botBuildErrors = useRecoilValue(botBuildTimeErrorState(projectId));
+
   const runtimeLogsContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (runtimeLogsContainerRef?.current) {
       runtimeLogsContainerRef.current.scrollTop = runtimeLogsContainerRef.current.scrollHeight;
     }
-  }, [runtimeLogs, botRuntimeErrors]);
+  }, [runtimeData]);
 
   return (
     <div
@@ -38,7 +39,7 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
         height: 'calc(100% - 25px)',
         display: 'flex',
         flexDirection: 'column',
-        padding: '15px 24px',
+        padding: '10px 16px',
         fontSize: DEFAULT_FONT_SETTINGS.fontSize,
         fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
         color: `${NeutralColors.black}`,
@@ -46,25 +47,23 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
         overflowY: 'auto',
         overflowX: 'hidden',
       }}
-      data-testid="Runtime-Output-Logs"
+      data-testid="runtime-output-logs"
     >
-      <div
-        css={{
-          margin: 0,
-          wordBreak: 'break-all',
-          whiteSpace: 'pre-wrap',
-          lineHeight: '20px',
-        }}
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={createMarkup(runtimeLogs)}
-      />
-      <div
-        css={{
-          color: `${SharedColors.red10}`,
-        }}
-      >
-        <ErrorCallout error={botRuntimeErrors} />
-      </div>
+      {runtimeData.standardOutput && (
+        <div
+          css={{
+            margin: 0,
+            wordBreak: 'break-all',
+            whiteSpace: 'pre-wrap',
+            lineHeight: '20px',
+          }}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={createMarkup(runtimeData.standardOutput)}
+          data-testid="runtime-standard-output"
+        />
+      )}
+      {botBuildErrors && <ErrorCallout error={botBuildErrors} />}
+      {runtimeData.standardError && <ErrorCallout error={runtimeData.standardError} />}
     </div>
   );
 };

@@ -13,6 +13,7 @@
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "adm-zip": "^0.4.14",
     "archiver": "^5.0.2",
+    "express": "^4.17.1",
     "globby": "^11.0.0",
     "kill-port": "^1.6.1",
     "lodash": "^4.17.20",
@@ -20,13 +21,15 @@
     "portfinder": "^1.0.28",
     "rimraf": "^3.0.2",
     "tcp-port-used": "^1.0.1",
-    "uuid": "^7.0.1"
+    "uuid": "^7.0.1",
+    "ws": "^7.4.4"
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "bl": "^4.0.3"
   },
   "devDependencies": {
+    "@types/express": "^4.16.1",
     "@types/lodash": "^4.14.162",
     "@types/node": "^14.11.8",
     "@types/rimraf": "^3.0.0",

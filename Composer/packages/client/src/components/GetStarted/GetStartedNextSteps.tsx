@@ -38,7 +38,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
 
-  const { setSettings } = useRecoilValue(dispatcherState);
+  const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
@@ -58,7 +58,12 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   const openLink = (link) => {
     TelemetryClient.track('GettingStartedLinkClicked', { method: 'link', url: link });
-    navigateTo(link);
+    if (link.startsWith('http')) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      window.open(link, '_blank');
+    } else {
+      navigateTo(link);
+    }
   };
 
   const doNextStep = (currentStep) => {
@@ -75,24 +80,27 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const updateLuisSettings = (newLuisSettings) => {
     setSettings(rootBotProjectId, {
       ...mergedSettings,
-      luis: { ...mergedSettings.luis, ...newLuisSettings },
+      luis: { ...mergedSettings.luis, authoringKey: newLuisSettings.key, authoringRegion: newLuisSettings.region },
     });
   };
 
   const updateQNASettings = (newQNASettings) => {
     setSettings(rootBotProjectId, {
       ...mergedSettings,
-      qna: { ...mergedSettings.qna, ...newQNASettings },
+      qna: { ...mergedSettings.qna, subscriptionKey: newQNASettings.key },
     });
+    setQnASettings(rootBotProjectId, newQNASettings.key);
   };
 
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
-  const linkToPublishProfile = `/bot/${rootBotProjectId}/botProjectsSettings/#addNewPublishProfile`;
+  const linkToPublishProfile = `/bot/${rootBotProjectId}/publish/all#addNewPublishProfile`;
   const linkToLUISSettings = `/bot/${rootBotProjectId}/botProjectsSettings/#luisKey`;
   const linktoQNASettings = `/bot/${rootBotProjectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
   const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
+  const linkToAppInsights = 'http://aka.ms/botinsights';
+  const linkToDevOps = 'https://aka.ms/bfcomposercicd';
 
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
@@ -194,6 +202,28 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           openLink(linkToLUEditor);
         },
       },
+      {
+        key: 'insights',
+        label: formatMessage('Enable Insights'),
+        description: formatMessage(
+          'Collect service-level and conversation-level data to help gauge the performance and efficacy of your bot.'
+        ),
+        learnMore: '',
+        checked: false,
+        onClick: () => {
+          openLink(linkToAppInsights);
+        },
+      },
+      {
+        key: 'devops',
+        label: formatMessage('Publish to Dev Ops'),
+        description: formatMessage('Learn how to publish to a Dev Ops pipeline using CI / CD.'),
+        learnMore: '',
+        checked: false,
+        onClick: () => {
+          openLink(linkToDevOps);
+        },
+      },
     ];
 
     if (hasPublishingProfile) {
@@ -217,23 +247,23 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
         <ManageLuis
           hidden={!displayManageLuis}
-          setDisplayManageLuis={setDisplayManageLuis}
           onDismiss={hideManageLuis}
           onGetKey={updateLuisSettings}
           onNext={() => {
             hideManageLuis();
             doNextStep('luis');
           }}
+          onToggleVisibility={setDisplayManageLuis}
         />
         <ManageQNA
           hidden={!displayManageQNA}
-          setDisplayManageQna={setDisplayManageQNA}
           onDismiss={hideManageQNA}
           onGetKey={updateQNASettings}
           onNext={() => {
             hideManageQNA();
             doNextStep('qna');
           }}
+          onToggleVisibility={setDisplayManageQNA}
         />
 
         {highlightLUIS && (

@@ -310,7 +310,6 @@ async function run() {
   app.on('before-quit', () => {
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
-    mainWindow?.webContents.send('conversation-cleanup');
   });
 
   app.on('activate', () => {
@@ -321,24 +320,20 @@ async function run() {
     }
   });
 
-  app.on('will-finish-launching', () => {
-    // Protocol handler for osx
-    app.on('open-url', (event, url) => {
-      event.preventDefault();
-      if (ElectronWindow.isBrowserWindowCreated) {
-        waitForMainWindowToShow
-          .then(() => {
-            log('[Mac] Main window is now showing. Processing deep link if any.');
-            const deeplinkUrl = parseDeepLinkUrl(url);
-            log('[Mac] Loading deeplink: %s', deeplinkUrl);
-            const mainWindow = ElectronWindow.getInstance().browserWindow;
-            mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
-          })
-          .catch((e) =>
-            console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
-          );
-      }
-    });
+  // Protocol handler for osx
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    waitForMainWindowToShow
+      .then(() => {
+        log('[Mac] Main window is now showing. Processing deep link if any.');
+        const deeplinkUrl = parseDeepLinkUrl(url);
+        log('[Mac] Loading deeplink: %s', deeplinkUrl);
+        const mainWindow = ElectronWindow.getInstance().browserWindow;
+        mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
+      })
+      .catch((e) =>
+        console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
+      );
   });
 }
 

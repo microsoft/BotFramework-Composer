@@ -35,7 +35,12 @@ import {
 import { Toolbar, IToolbarItem, LoadingSpinner, DisplayMarkdownDialog } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
-import { ContentHeaderStyle, HeaderText } from '../components/styles';
+import {
+  ContentHeaderStyle,
+  HeaderText,
+  packageScrollContainerStyle,
+  tabAndSearchBarStyles,
+} from '../components/styles';
 import { ImportDialog } from '../components/ImportDialog';
 import { LibraryRef, LibraryList, LetterIcon } from '../components/LibraryList';
 import { WorkingModal } from '../components/WorkingModal';
@@ -48,7 +53,12 @@ export interface PackageSourceFeed extends IDropdownOption {
   name: string;
   key: string;
   url: string;
-  searchUrl?: string;
+  type: string;
+  defaultQuery?: {
+    prerelease: boolean;
+    semVerLevel: string;
+    query: string;
+  };
   readonly?: boolean;
 }
 
@@ -444,10 +454,8 @@ const Library: React.FC = () => {
         telemetryClient.track('PackageSearch', { term: searchTerm });
 
         const response = await getSearchResults();
-        // if we are searching, but there is not a searchUrl, apply a local filter
-        if (!feeds.find((f) => f.key === feed)?.searchUrl) {
-          response.data.available = response.data.available.filter(applySearchTerm);
-        }
+        // if we are searching, apply a local filter
+        response.data.available = response.data.available.filter(applySearchTerm);
         updateAvailableLibraries(response.data.available);
         setRecentlyUsed(response.data.recentlyUsed);
       } else {
@@ -600,7 +608,7 @@ const Library: React.FC = () => {
           </Link>
         </p>
       </div>
-      <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
+      <Stack horizontal verticalFill styles={packageScrollContainerStyle}>
         {projectCollection && projectCollection.length > 1 && (
           <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
             <ProjectList
@@ -610,7 +618,7 @@ const Library: React.FC = () => {
             />
           </Stack.Item>
         )}
-        <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflow: 'auto', maxHeight: '100%' } }}>
+        <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflowX: 'hidden', maxHeight: '100%' } }}>
           {!ejectedRuntime && (
             <MessageBar
               actions={
@@ -629,7 +637,7 @@ const Library: React.FC = () => {
            *  This is the top nav that includes the tabs and search bar
            ****************************************************************************/}
 
-          <Stack horizontal styles={{ root: { paddingLeft: '12px', paddingRight: '20px' } }}>
+          <Stack horizontal styles={tabAndSearchBarStyles}>
             <Stack.Item align="stretch">
               <Pivot aria-label="Library Views" onLinkClick={(item: PivotItem) => setCurrentTab(item.props.itemKey)}>
                 <PivotItem headerText={strings.browseHeader} itemKey={TABS.BROWSE} />
@@ -743,7 +751,7 @@ const Library: React.FC = () => {
               width: '400px',
               padding: '10px 20px',
               borderLeft: '1px solid #CCC',
-              overflow: 'auto',
+              overflowX: 'auto',
               maxHeight: '100%',
             },
           }}

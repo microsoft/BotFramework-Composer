@@ -49,12 +49,13 @@ export default async (composer: any): Promise<void> => {
       packageName: string,
       version: string,
       source: string,
-      _project: any
+      _project: any,
+      isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
       const command = `dotnet add package "${packageName}"${version ? ' --version="' + version + '"' : ''}${
         source ? ' --source="' + source + '"' : ''
-      }`;
+      }${isPreview ? ' --prerelease' : ''}`;
       composer.log('EXEC:', command);
       const { stderr: installError, stdout: installOutput } = await execAsync(command, {
         cwd: path.join(runtimePath, 'azurewebapp'),
@@ -316,13 +317,6 @@ export default async (composer: any): Promise<void> => {
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
-    setSkillManifest: async (
-      dstRuntimePath: string,
-      dstStorage: IFileStorage,
-      srcManifestDir: string,
-      srcStorage: IFileStorage,
-      mode = 'azurewebapp'
-    ) => {},
   });
 
   /**
@@ -355,12 +349,13 @@ export default async (composer: any): Promise<void> => {
       packageName: string,
       version: string,
       source: string,
-      _project: any
+      _project: any,
+      isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
       const command = `dotnet add ${_project.name}.csproj package "${packageName}"${
         version ? ' --version="' + version + '"' : ''
-      }${source ? ' --source="' + source + '"' : ''}`;
+      }${source ? ' --source="' + source + '"' : ''}${isPreview ? ' --prerelease' : ''}`;
       composer.log('EXEC:', command);
       const { stderr: installError, stdout: installOutput } = await execAsync(command, {
         cwd: path.join(runtimePath),
@@ -431,13 +426,6 @@ export default async (composer: any): Promise<void> => {
         return;
       }
 
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(publishFolder, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       // return the location of the build artifiacts
       return publishFolder;
     },
@@ -450,7 +438,7 @@ export default async (composer: any): Promise<void> => {
     ) => {
       // update manifst into runtime wwwroot
       if (mode === 'azurewebapp') {
-        const manifestDstDir = path.resolve(dstRuntimePath, 'azurewebapp', 'wwwroot', 'manifests');
+        const manifestDstDir = path.resolve(dstRuntimePath, 'wwwroot', 'manifests');
 
         if (await fs.pathExists(manifestDstDir)) {
           await removeDirAndFiles(manifestDstDir);
@@ -492,12 +480,13 @@ export default async (composer: any): Promise<void> => {
       packageName: string,
       version: string,
       source: string,
-      _project: any
+      _project: any,
+      isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
       const command = `dotnet add ${_project.name}.csproj package "${packageName}"${
         version ? ' --version="' + version + '"' : ''
-      }${source ? ' --source="' + source + '"' : ''}`;
+      }${source ? ' --source="' + source + '"' : ''}${isPreview ? ' --prerelease' : ''}`;
       composer.log('EXEC:', command);
       const { stderr: installError, stdout: installOutput } = await execAsync(command, {
         cwd: path.join(runtimePath),
@@ -569,36 +558,8 @@ export default async (composer: any): Promise<void> => {
         throw err;
         return;
       }
-
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(publishFolder, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       // return the location of the build artifiacts
       return publishFolder;
-    },
-    setSkillManifest: async (
-      dstRuntimePath: string,
-      dstStorage: IFileStorage,
-      srcManifestDir: string,
-      srcStorage: IFileStorage,
-      mode = 'azurewebapp' // set default as azurewebapp
-    ) => {
-      // update manifst into runtime wwwroot
-      if (mode === 'azurewebapp') {
-        const manifestDstDir = path.resolve(dstRuntimePath, 'azurewebapp', 'wwwroot', 'manifests');
-
-        if (await fs.pathExists(manifestDstDir)) {
-          await removeDirAndFiles(manifestDstDir);
-        }
-
-        if (await fs.pathExists(srcManifestDir)) {
-          await copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
-        }
-      }
     },
   });
 
@@ -630,7 +591,8 @@ export default async (composer: any): Promise<void> => {
       packageName: string,
       version: string,
       source: string,
-      _project: any
+      _project: any,
+      isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
       const { stderr: installError, stdout: installOutput } = await execAsync(
@@ -669,23 +631,9 @@ export default async (composer: any): Promise<void> => {
       if (installErr) {
         composer.log(installErr);
       }
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(runtimePath, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '.');
     },
-    setSkillManifest: async (
-      dstRuntimePath: string,
-      dstStorage: IFileStorage,
-      srcManifestDir: string,
-      srcStorage: IFileStorage,
-      mode = 'azurewebapp'
-    ) => {},
   });
 
   composer.addRuntimeTemplate({
@@ -711,7 +659,8 @@ export default async (composer: any): Promise<void> => {
       packageName: string,
       version: string,
       source: string,
-      _project: any
+      _project: any,
+      isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
       const { stderr: installError, stdout: installOutput } = await execAsync(
@@ -750,22 +699,8 @@ export default async (composer: any): Promise<void> => {
       if (installErr) {
         composer.log(installErr);
       }
-      // write settings to disk in the appropriate location
-      const settingsPath = path.join(runtimePath, 'settings', 'appsettings.json');
-      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await fs.mkdirp(path.dirname(settingsPath));
-      }
-      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '.');
     },
-    setSkillManifest: async (
-      dstRuntimePath: string,
-      dstStorage: IFileStorage,
-      srcManifestDir: string,
-      srcStorage: IFileStorage,
-      mode = 'azurewebapp'
-    ) => {},
   });
 };

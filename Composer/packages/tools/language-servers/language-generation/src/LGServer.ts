@@ -3,7 +3,7 @@
 import path from 'path';
 
 import URI from 'vscode-uri';
-import { IConnection, TextDocuments } from 'vscode-languageserver';
+import { IConnection, MarkupKind, TextDocuments } from 'vscode-languageserver';
 import formatMessage from 'format-message';
 import {
   Diagnostic,
@@ -30,6 +30,7 @@ import isEqual from 'lodash/isEqual';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
+import { LgTemplate } from '@botframework-composer/types';
 
 import { LgParser } from './lgParser';
 import {
@@ -341,7 +342,12 @@ export class LGServer {
     let word = document.getText(wordRange);
     const matchItem = allTemplates.find((u) => u.name === word);
     if (matchItem) {
-      const hoveritem: Hover = { contents: [matchItem.body] };
+      const hoveritem: Hover = {
+        contents: {
+          kind: MarkupKind.Markdown,
+          value: `~~~\n${this.buildHoverTemplateInfo(matchItem)}\n~~~`,
+        },
+      };
       return Promise.resolve(hoveritem);
     }
     if (word.startsWith('builtin.')) {
@@ -365,6 +371,18 @@ export class LGServer {
       return Promise.resolve(hoveritem);
     }
     return Promise.resolve(null);
+  }
+
+  private buildHoverTemplateInfo(template: LgTemplate) {
+    let templateName = '';
+    if (template.parameters.length > 0) {
+      templateName = `# ${template.name}(${template.parameters.join(', ')})`;
+    } else {
+      templateName = `# ${template.name}`;
+    }
+
+    const templateBody = template.body;
+    return [templateName, templateBody].join('\n');
   }
 
   private getExplicitReturnType(numReturnType: number): string[] {

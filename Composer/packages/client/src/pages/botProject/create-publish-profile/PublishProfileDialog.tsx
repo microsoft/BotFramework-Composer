@@ -47,7 +47,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
 
   const [dialogTitle, setTitle] = useState({
-    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add new publishing profile'),
     subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
   });
 
@@ -81,7 +81,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle({
-        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add new publishing profile'),
         subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
       });
     };
@@ -165,7 +165,14 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
       let arm, graph;
       if (!userShouldProvideTokens()) {
-        const tenantId = getTenantIdFromCache();
+        let tenantId = config.tenantId;
+
+        if (!tenantId) {
+          // eslint-disable-next-line no-console
+          console.log('Provision config does not include tenant id, using tenant id from cache.');
+          tenantId = getTenantIdFromCache();
+        }
+
         // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {
           const notification = createNotification({
@@ -210,7 +217,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
             <div style={{ marginBottom: '16px' }}>
               {dialogTitle.subText}
               <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage('Learn More.')}
+                {formatMessage('Learn more')}
               </Link>
             </div>
             <ProfileFormDialog

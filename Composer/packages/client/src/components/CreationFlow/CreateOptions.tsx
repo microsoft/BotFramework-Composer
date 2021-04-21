@@ -9,6 +9,8 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { BotTemplate } from '@bfc/shared';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { RouteComponentProps, navigate } from '@reach/router';
 import querystring from 'query-string';
@@ -80,12 +82,32 @@ export function CreateOptions(props: CreateOptionsProps) {
     }
   };
 
+  const customerStyle = {
+    dialog: {
+      title: {
+        fontWeight: FontWeights.bold,
+        fontSize: FontSizes.size20,
+        paddingTop: '14px',
+        paddingBottom: '11px',
+      },
+      subText: {
+        fontSize: FontSizes.size14,
+      },
+    },
+    modal: {
+      main: {
+        maxWidth: '80% !important',
+        width: '480px !important',
+      },
+    },
+  };
   return (
     <Fragment>
       <DialogWrapper
         isOpen={isOpenOptionsModal}
         {...dialogWrapperProps}
-        dialogType={DialogTypes.CreateFlow}
+        customerStyle={customerStyle}
+        dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
       >
         <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />

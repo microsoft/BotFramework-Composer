@@ -6,18 +6,16 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const title = css`
-  font-size: ${FontSizes.medium};
+  font-size: ${FontSizes.mediumPlus};
   font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
   margin-top: 6px;
+  margin-bottom: 12px;
 `;
 
 export const subtitle = css`
   color: ${NeutralColors.gray130};
-  font-size: ${FontSizes.smallPlus};
-  & > h1 {
-    margin-top: 0;
-  }
+  font-size: ${FontSizes.medium};
+  padding: 12px 0;
 `;
 
 export const sectionHeader = css`
@@ -26,13 +24,21 @@ export const sectionHeader = css`
   padding: 6px 0;
 `;
 
-export const tableRow = css`
+export const tableHeaderRow = css`
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 42px;
   width: 750px;
   border-bottom: 1px solid ${NeutralColors.gray30};
+`;
+
+export const tableRow = css`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 42px;
+  width: 750px;
 `;
 
 export const tableRowItem = (width?: string) => css`

@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
 import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
@@ -20,12 +21,15 @@ import {
   feedState,
   templateIdState,
   currentProjectIdState,
+  warnAboutDotNetState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
+import { InstallDepModal } from '../../components/InstallDepModal';
+import { missingDotnetVersionError } from '../../utils/runtimeErrors';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -69,7 +73,10 @@ const Home: React.FC<RouteComponentProps> = () => {
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
   const templateId = useRecoilValue(templateIdState);
-  const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
+    dispatcherState
+  );
+  const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -141,11 +148,11 @@ const Home: React.FC<RouteComponentProps> = () => {
   ];
   return (
     <div css={home.outline}>
-      <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
       <div css={home.page}>
+        <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
         <div css={home.leftPage} role="main">
-          <div css={home.leftContainer}>
-            <h2 css={home.recentBotsTitle}>{formatMessage(`Recent Bots`)}</h2>
+          <div css={home.recentBotsContainer}>
+            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
             <Toolbar css={home.toolbar} toolbarItems={toolbarItems} />
             {recentProjects.length > 0 ? (
               <RecentBotList
@@ -167,6 +174,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                   {formatMessage.rich('You don’t have any bot yet. Start to <Link>create a new bot</Link>', {
                     Link: ({ children }) => (
                       <Link
+                        key="create-new-bot-link"
                         onClick={() => {
                           onClickNewBot();
                           TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
@@ -180,7 +188,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               </div>
             )}
           </div>
-          <div css={[home.leftContainer, home.gap40]}>
+          <div css={home.resourcesContainer}>
             <h2 css={home.subtitle}>{formatMessage('Resources')}&nbsp;</h2>
             <div css={home.rowContainer}>
               {resources.map((item, index) => (
@@ -192,19 +200,23 @@ const Home: React.FC<RouteComponentProps> = () => {
                   href={item.url}
                   imageCover={item.imageCover}
                   moreLinkText={item.moreText}
-                  rel="noopener nofollow"
                   target="_blank"
                   title={item.title}
                 />
               ))}
             </div>
           </div>
-          <div css={[home.leftContainer, home.gap40]}>
+          <div css={home.videosContainer}>
             <div css={home.rowContainer}>
               <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
-                    <div css={home.rowContainer}>
+                    {tab.viewAllLinkText && (
+                      <Link css={home.tabRowViewMore} href={tab.viewAllLinkUrl} target={'_blank'}>
+                        {tab.viewAllLinkText} <Icon iconName={'OpenInNewWindow'}></Icon>{' '}
+                      </Link>
+                    )}
+                    <div css={home.tabRowContainer}>
                       {tab.cards.map((card, index) => (
                         <CardWidget
                           key={index}
@@ -213,7 +225,6 @@ const Home: React.FC<RouteComponentProps> = () => {
                           content={card.description}
                           href={card.url}
                           imageCover={card.image}
-                          rel="noopener nofollow"
                           target="_blank"
                           title={card.title}
                         />
@@ -229,6 +240,16 @@ const Home: React.FC<RouteComponentProps> = () => {
           <WhatsNewsList newsList={feed.whatsNewLinks} />
         </div>
       </div>
+      {warnAboutDotNet && (
+        <InstallDepModal
+          downloadLink={missingDotnetVersionError.link.url}
+          downloadLinkText={formatMessage('Install .NET Core SDK')}
+          learnMore={{ text: formatMessage('Learn more'), link: missingDotnetVersionError.linkAfterMessage.url }}
+          text={missingDotnetVersionError.message}
+          title={formatMessage('.NET required')}
+          onDismiss={() => setWarnAboutDotNet(false)}
+        />
+      )}
     </div>
   );
 };

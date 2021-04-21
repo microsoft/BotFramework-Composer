@@ -12,6 +12,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
   buildConfigurationSelector,
@@ -22,6 +23,7 @@ import {
 } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -76,6 +78,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   const { startAllBots, stopAllBots } = useBotOperations();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const isPVABot = usePVACheck(rootBotId ?? '');
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -209,59 +212,64 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         return <BotRuntimeStatus key={projectId} projectId={projectId} />;
       })}
       <div ref={botControllerMenuTarget} css={[startPanelsContainer]}>
-        <DefaultButton
-          primary
-          aria-roledescription={formatMessage('Bot Controller')}
-          ariaDescription={startPanelButtonText}
-          disabled={disableStartBots || areBotsStarting}
-          iconProps={{
-            iconName: statusIconClass,
-            styles: {
-              root: {
-                color: `${NeutralColors.white}`,
-              },
-            },
-          }}
-          id={'startbot'}
-          menuAs={() => null}
-          styles={{
-            root: {
-              backgroundColor: CommunicationColors.tint10,
-              display: 'flex',
-              alignItems: 'center',
-              minWidth: '229px',
-              height: '36px',
-              flexDirection: 'row',
-              padding: '0 7px',
-              border: `1px solid ${CommunicationColors.tint10}`,
-              width: '100%',
-            },
-            rootHovered: {
-              background: transparentBackground,
-            },
-            rootDisabled: {
-              opacity: 0.6,
-              backgroundColor: CommunicationColors.tint10,
-              color: `${NeutralColors.white}`,
-              border: 'none',
-              font: '62px',
-            },
-          }}
-          title={startPanelButtonText}
-          onClick={handleClick}
+        <DisableFeatureToolTip
+          content={formatMessage('PVA bots cannot be run at the moment. Publish the bot to PVA and test it there.')}
+          isPVABot={isPVABot}
         >
-          {areBotsStarting && (
-            <Spinner
-              size={SpinnerSize.small}
-              styles={{
+          <DefaultButton
+            primary
+            aria-roledescription={formatMessage('Bot Controller')}
+            ariaDescription={startPanelButtonText}
+            data-testid={'startBotButton'}
+            disabled={disableStartBots || areBotsStarting}
+            iconProps={{
+              iconName: statusIconClass,
+              styles: {
                 root: {
-                  marginRight: '5px',
+                  color: `${NeutralColors.white}`,
                 },
-              }}
-            />
-          )}
-          <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
-        </DefaultButton>
+              },
+            }}
+            menuAs={() => null}
+            styles={{
+              root: {
+                backgroundColor: CommunicationColors.tint10,
+                display: 'flex',
+                alignItems: 'center',
+                minWidth: '229px',
+                height: '36px',
+                flexDirection: 'row',
+                padding: '0 7px',
+                border: `1px solid ${CommunicationColors.tint10}`,
+                width: '100%',
+              },
+              rootHovered: {
+                background: transparentBackground,
+              },
+              rootDisabled: {
+                opacity: 0.6,
+                backgroundColor: CommunicationColors.tint10,
+                color: `${NeutralColors.white}`,
+                border: 'none',
+                font: '62px',
+              },
+            }}
+            title={startPanelButtonText}
+            onClick={handleClick}
+          >
+            {areBotsStarting && (
+              <Spinner
+                size={SpinnerSize.small}
+                styles={{
+                  root: {
+                    marginRight: '5px',
+                  },
+                }}
+              />
+            )}
+            <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
+          </DefaultButton>
+        </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
             ariaDescription={formatMessage('Open start bots panel')}

@@ -13,19 +13,13 @@ import { BotStatus } from '../../constants';
 import { perProjectDiagnosticsSelectorFamily, botStatusState, rootBotProjectIdSelector } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { isChildDialogLinkSelected, doesLinkMatch } from './helpers';
 import { TreeItem } from './treeItem';
 import { ProjectTreeOptions, TreeLink } from './types';
 
-const icons = {
-  BOT: 'CubeShape',
-  EXTERNAL_SKILL: 'Globe',
-};
-
 const headerCSS = (label: string) => css`
-  margin-top: -6px;
-  width: 100%;
   label: ${label};
 `;
 
@@ -76,6 +70,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const status = useRecoilValue(botStatusState(projectId));
   const diagnostics = useRecoilValue(perProjectDiagnosticsSelectorFamily(projectId));
+  const isPVABot = usePVACheck(projectId);
   const isRunning = status === BotStatus.connected;
 
   const displayName = `${name} ${rootProjectId !== projectId ? `(${formatMessage('Skill')})` : ''}`;
@@ -92,7 +87,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
   };
 
   const generateMenuItems = useCallback(() => {
-    const menuItems = [
+    let menuItems = [
       {
         label: formatMessage('Add a dialog'),
         icon: 'Add',
@@ -100,6 +95,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
           onBotCreateDialog(projectId);
           TelemetryClient.track('AddNewDialogStarted');
         },
+        isDisableForPVA: false,
       },
       {
         label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
@@ -112,28 +108,32 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
             isRoot: projectId === rootProjectId,
           });
         },
+        isDisableForPVA: true,
       },
       {
         label: '',
         onClick: () => {},
       },
       {
-        label: formatMessage('Create/edit skill manifest'),
+        label: formatMessage('Share as a skill'),
         onClick: () => {
           onBotEditManifest(projectId);
         },
+        isDisableForPVA: true,
       },
       {
         label: formatMessage('Export this bot as .zip'),
         onClick: () => {
           onBotExportZip(projectId);
         },
+        isDisableForPVA: false,
       },
       {
         label: formatMessage('Settings'),
         onClick: () => {
           navigateTo(createBotSettingUrl(link.projectId, link.skillId));
         },
+        isDisableForPVA: false,
       },
     ];
 
@@ -143,12 +143,17 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         onBotRemoveSkill(projectId);
       },
     };
+
     if (isRemote || botError) {
       return [removeSkillItem];
     }
 
     if (!isRootBot) {
       menuItems.splice(3, 0, removeSkillItem);
+    }
+
+    if (isPVABot) {
+      menuItems = menuItems.filter((item) => !item.isDisableForPVA);
     }
     return menuItems;
   }, [projectId, isRunning]);
@@ -159,10 +164,10 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
     <span key={name} css={headerCSS('bot-header')} data-testid={`BotHeader-${name}`}>
       <TreeItem
         hasChildren={!isRemote}
-        icon={isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
         isActive={doesLinkMatch(link, selectedLink)}
         isChildSelected={isChildDialogLinkSelected(link, selectedLink)}
         isMenuOpen={isMenuOpen}
+        itemType={isRemote ? 'external skill' : 'bot'}
         link={link}
         menu={options.showMenu ? menu : []}
         menuOpenCallback={setMenuOpen}

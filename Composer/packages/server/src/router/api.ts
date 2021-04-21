@@ -39,6 +39,9 @@ router.delete('/projects/:projectId', ProjectController.removeProject);
 router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
 router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
+router.put('/projects/:projectId/manifest/files/:name', ProjectController.updateManifestFile);
+router.delete('/projects/:projectId/manifest/files/:name', ProjectController.removeManifestFile);
+router.post('/projects/:projectId/manifest/files', ProjectController.createManifestFile);
 router.get('/projects/:projectId/skill/retrieveSkillManifest', ProjectController.getSkill);
 router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
@@ -62,6 +65,7 @@ router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBo
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
+router.get('/storages/validate/:path', StorageController.validatePath);
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
@@ -74,6 +78,7 @@ router.get('/provision/:projectId/:type/resources', ProvisionController.getResou
 router.post('/provision/:projectId/:type', ProvisionController.provision);
 
 // publishing
+router.get('/publish/runtimeLogUrl/:projectId', PublishController.setupRuntimeLogForBot);
 router.get('/publish/types', PublishController.getTypes);
 router.get('/publish/:projectId/status/:target/:jobId', PublishController.status);
 router.get('/publish/:projectId/status/:target', PublishController.status);
@@ -98,6 +103,9 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', '
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.get('/utilities/retrieveRemoteFile', UtilitiesController.getRemoteFile);
+router.get('/utilities/checkNode', UtilitiesController.checkNodeVersion);
+
 // extensions
 router.get('/extensions', ExtensionsController.listExtensions);
 router.post('/extensions', ExtensionsController.addExtension);

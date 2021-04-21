@@ -46,10 +46,12 @@ type ResourceGroupItemChoice = {
 };
 
 type Props = {
-  disabled: boolean;
+  /**
+   * If this picker should be disabled.
+   */
+  disabled?: boolean;
   /**
    * The resource groups to choose from.
-   * Set to undefined to disable this picker.
    */
   resourceGroupNames?: string[];
   /**
@@ -102,12 +104,14 @@ export const ResourceGroupPicker = ({
 }: Props) => {
   // ----- Hooks -----//
   const [selectedName, setSelectedName] = React.useState(controlledSelectedName || CREATE_NEW_KEY);
+  const [isNew, setIsNew] = React.useState((controlledSelectedName || CREATE_NEW_KEY) === CREATE_NEW_KEY);
   const [newName, setNewName] = React.useState(controlledNewName);
   const debouncedNewName = useDebounce<string>(newName, 300);
   const [newNameErrorMessage, setNewNameErrorMessage] = React.useState('');
 
   React.useEffect(() => {
     setSelectedName(controlledSelectedName || CREATE_NEW_KEY);
+    setIsNew((controlledSelectedName || CREATE_NEW_KEY) === CREATE_NEW_KEY);
   }, [controlledSelectedName]);
 
   React.useEffect(() => {
@@ -131,13 +135,14 @@ export const ResourceGroupPicker = ({
   }, [debouncedNewName, resourceGroupNames]);
 
   React.useEffect(() => {
-    const isNew = selectedName === CREATE_NEW_KEY;
-    onChange({
-      isNew,
-      name: isNew ? debouncedNewName : selectedName,
-      errorMessage: isNew ? newNameErrorMessage : undefined,
-    });
-  }, [selectedName, debouncedNewName, newNameErrorMessage]);
+    if (!disabled) {
+      onChange({
+        isNew,
+        name: isNew ? debouncedNewName : selectedName,
+        errorMessage: isNew ? newNameErrorMessage : undefined,
+      });
+    }
+  }, [disabled, selectedName, isNew, debouncedNewName, newNameErrorMessage]);
 
   const options = React.useMemo(() => {
     const optionsList: IDropdownOption[] =
@@ -150,8 +155,6 @@ export const ResourceGroupPicker = ({
   }, [resourceGroupNames]);
 
   // ----- Render -----//
-
-  const loading = resourceGroupNames === undefined;
 
   const onRenderOption = (option) => {
     return (
@@ -171,24 +174,25 @@ export const ResourceGroupPicker = ({
         ariaLabel={formatMessage(
           'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
         )}
-        disabled={loading || disabled}
+        disabled={disabled}
         label={formatMessage('Resource group')}
         options={options}
         placeholder={formatMessage('Select one')}
         selectedKey={selectedName}
         styles={dropdownStyles}
         onChange={(_, opt) => {
+          setIsNew(opt.key === CREATE_NEW_KEY);
           setSelectedName(opt.key as string);
         }}
         onRenderLabel={onRenderLabel}
         onRenderOption={onRenderOption}
       />
-      {selectedName === CREATE_NEW_KEY && (
+      {isNew && (
         <TextField
           required
           ariaLabel={formatMessage('Enter a name for the new resource group')}
           data-testid={'newResourceGroupName'}
-          disabled={loading}
+          disabled={disabled}
           errorMessage={newNameErrorMessage}
           id={'newResourceGroupName'}
           label={formatMessage('Resource group name')}
