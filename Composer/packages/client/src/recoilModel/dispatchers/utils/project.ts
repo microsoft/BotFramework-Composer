@@ -350,10 +350,11 @@ export const loadProjectData = async (data) => {
 
 export const fetchProjectDataByPath = async (
   path: string,
-  storageId
+  storageId,
+  isRootBot: boolean
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
-    const response = await httpClient.put(`/projects/open`, { path, storageId });
+    const response = await httpClient.put(`/projects/open`, { path, storageId, isRootBot });
     const projectData = await loadProjectData(response.data);
     return projectData;
   } catch (ex) {
@@ -580,7 +581,7 @@ export const openRemoteSkill = async (
 
 export const openLocalSkill = async (callbackHelpers, pathToBot: string, storageId, botNameIdentifier: string) => {
   const { set } = callbackHelpers;
-  const { projectData, botFiles, error } = await fetchProjectDataByPath(pathToBot, storageId);
+  const { projectData, botFiles, error } = await fetchProjectDataByPath(pathToBot, storageId, false);
 
   if (error) {
     throw error;
@@ -801,7 +802,7 @@ export const postRootBotCreation = async (
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
-  const data = await fetchProjectDataByPath(path, storageId);
+  const data = await fetchProjectDataByPath(path, storageId, true);
   if (data.error) {
     throw data.error;
   }
