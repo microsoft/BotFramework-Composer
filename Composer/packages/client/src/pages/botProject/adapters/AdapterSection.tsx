@@ -8,6 +8,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { title, subtitle, subtext } from '../styles';
+import { navigateTo } from '../../../utils/navigation';
 
 import ExternalAdapterSettings from './ExternalAdapterSettings';
 import ABSChannels from './ABSChannels';
@@ -32,7 +33,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
           'Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. <a>Learn more.</a>',
           {
             a: ({ children }) => (
-              <Link href={''} target="_blank">
+              <Link href={'https://aka.ms/composer-connections-learnmore'} target="_blank">
                 {children}
               </Link>
             ),
@@ -53,12 +54,16 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
             'Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>',
             {
               a: ({ children }) => (
-                <Link href={''} target="_blank">
+                <Link
+                  onClick={() => {
+                    navigateTo(`/bot/${projectId}/plugin/package-manager/package-manager`);
+                  }}
+                >
                   {children}
                 </Link>
               ),
               a2: ({ children }) => (
-                <Link href={''} target="_blank">
+                <Link href={'https://aka.ms/composer-packagmanageraddconnection-learnmore'} target="_blank">
                   {children}
                 </Link>
               ),

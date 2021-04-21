@@ -147,7 +147,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
           'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more.</a>',
           {
             a: ({ children }) => (
-              <Link href={''} target="_blank">
+              <Link href={'https://aka.ms/composer-skills-learnmore'} target="_blank">
                 {children}
               </Link>
             ),

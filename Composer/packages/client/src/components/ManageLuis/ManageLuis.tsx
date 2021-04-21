@@ -463,7 +463,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
               'Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. <a>Learn more</a>',
               {
                 a: ({ children }) => (
-                  <Link href={''} target="_blank">
+                  <Link href={'https://aka.ms/composer-luis-learnmore'} target="_blank">
                     {children}
                   </Link>
                 ),

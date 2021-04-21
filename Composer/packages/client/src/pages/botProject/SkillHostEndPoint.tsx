@@ -73,10 +73,16 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
     <Fragment>
       <div css={title}>{formatMessage('Call skills')}</div>
       <div css={subtext}>
-        {formatMessage('TODO ADD COPY HERE. ')}
-        <Link href="" target="blank">
-          {formatMessage('Learn more.')}
-        </Link>
+        {formatMessage.rich(
+          'Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>.',
+          {
+            a: ({ children }) => (
+              <Link href={'https://aka.ms/composer-skills-learnmore'} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        )}
       </div>
       <TextField
         ariaLabel={formatMessage('Skill host endpoint url')}
