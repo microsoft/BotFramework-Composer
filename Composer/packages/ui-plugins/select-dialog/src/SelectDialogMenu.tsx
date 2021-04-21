@@ -196,6 +196,10 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
     return formatMessage('Find dialogs');
   }, [topics.length]);
 
+  const resetFilter = useCallback(() => {
+    setDialogItems(allItems);
+  }, []);
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       const menu = document.getElementById(menuId);
@@ -216,7 +220,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
             componentRef={(el) => el?.focus()}
             placeholder={filterPlaceholder}
             styles={searchFieldStyles}
-            onAbort={() => setDialogItems(allItems)}
+            onAbort={resetFilter}
             onChange={filterDialogs}
             onKeyDown={handleKeyDown}
           />
@@ -225,7 +229,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
         </Stack>
       );
     },
-    [allItems, filterDialogs]
+    [allItems, filterDialogs, resetFilter]
   );
 
   const handleItemClick = useCallback(
@@ -250,6 +254,7 @@ export const SelectDialogMenu: React.FC<SelectDialogMenuProps> = (props) => {
               onItemClick: handleItemClick,
               useTargetWidth: true,
               onRenderMenuList: shouldShowFilter ? onRenderMenuList : undefined,
+              onDismiss: resetFilter,
               // send focus to the search box when present
               shouldFocusOnMount: !shouldShowFilter,
               className: css`
