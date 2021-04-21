@@ -199,7 +199,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
       return (
         <div css={emptyStateMessageContainer}>
           <span>{formatMessage('Your bot project is running.')}</span>
-          <ActionButton data-testid={'addNewAllowedCaller'} styles={actionButton} onClick={onOpenWebChatPanelClick}>
+          <ActionButton styles={actionButton} onClick={onOpenWebChatPanelClick}>
             {formatMessage('Test in Web Chat')}
           </ActionButton>
         </div>
