@@ -165,7 +165,6 @@ export class LGServer {
 
     const wordRange = getRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
-    console.log('Cur word,', word, word.length);
     const curFileResult = this._lgFile?.templates.find((t) => t.name === word);
 
     if (curFileResult?.range) {
@@ -175,7 +174,6 @@ export class LGServer {
       );
     }
 
-    console.log('definitions:', this._templateDefinitions);
     const refResult = this._templateDefinitions[word];
     if (refResult) {
       this.connection.sendNotification('GotoDefinition', refResult);
