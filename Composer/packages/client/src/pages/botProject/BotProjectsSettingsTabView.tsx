@@ -158,7 +158,7 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         </PivotItem>
         <PivotItem
           data-testid="localizationTab"
-          headerText={formatMessage('localization')}
+          headerText={formatMessage('Localization')}
           itemKey={PivotItemKey.Language}
         >
           <BotLanguage projectId={projectId} />
