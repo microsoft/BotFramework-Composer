@@ -78,6 +78,7 @@ describe('Power Virtual Agents provider', () => {
     mockFetch.mockResolvedValueOnce(mockResult);
     const result = await provider.downloadBotContent();
 
+    expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('?includeTopics'), expect.any(Object));
     expect(result.eTag).toBe('W/"Version"');
     expect((result.zipPath as string).includes('bot-assets-'));
     expect(Buffer.from(result.urlSuffix, 'base64').toString()).toBe('dialogs/myDialog');

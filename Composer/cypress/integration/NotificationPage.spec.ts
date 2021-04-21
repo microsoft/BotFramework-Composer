@@ -3,15 +3,17 @@
 
 context('Notification Page', () => {
   beforeEach(() => {
-    cy.createBot('ToDoBotWithLuisSample');
+    cy.createTestBot('TestSample', ({ id }) => {
+      cy.visit(`/bot/${id}`);
+    });
   });
 
   it('can show lg syntax error ', () => {
     cy.visitPage('Design');
-    cy.visitPage('Bot Responses');
+    cy.visitPage('Bot responses');
 
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestToDoBotWithLuisSample').last().click();
+      cy.findAllByText('TestBot_TestSample').last().click();
     });
 
     cy.findByTestId('showcode').click();
@@ -20,18 +22,18 @@ context('Notification Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
 
     cy.findByTestId('diagnostics-table-view').within(() => {
-      cy.findAllByText('__TestToDoBotWithLuisSample.en-us.lg').should('exist').first().click();
+      cy.findAllByText('TestBot_TestSample.en-us.lg').should('exist').first().click();
     });
 
-    cy.findAllByText('Bot Responses').should('exist');
+    cy.findAllByText('Bot responses').should('exist');
   });
 
   it('can show lu syntax error ', () => {
     cy.visitPage('Design');
-    cy.visitPage('User Input');
+    cy.visitPage('User input');
 
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findAllByText('__TestToDoBotWithLuisSample').last().click();
+      cy.findAllByText('TestBot_TestSample').last().click();
     });
 
     cy.findByTestId('showcode').click();
@@ -40,10 +42,10 @@ context('Notification Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
 
     cy.findByTestId('diagnostics-table-view').within(() => {
-      cy.findAllByText('__TestToDoBotWithLuisSample.en-us.lu').should('exist').first().dblclick();
+      cy.findAllByText('TestBot_TestSample.en-us.lu').should('exist').first().dblclick();
     });
 
-    cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
+    cy.findAllByText('TestBot_TestSample').should('exist');
   });
 
   // it('can show dialog expression error ', () => {

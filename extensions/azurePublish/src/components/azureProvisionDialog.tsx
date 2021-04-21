@@ -96,12 +96,12 @@ const PageTypes = {
 
 const DialogTitle = {
   CHOOSE_ACTION: {
-    title: formatMessage('Configure resources'),
-    subText: formatMessage('How you would like to provision Azure resources to your publishing profile?'),
+    title: formatMessage('Configure resources to your publishing profile'),
+    subText: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
   },
   CONFIG_RESOURCES: {
-    title: formatMessage('Configure resources'),
-    subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
+    title: formatMessage('Import existing resources'),
+    subText: formatMessage('Please provide your Publish Configuration'),
   },
   ADD_RESOURCES: {
     title: formatMessage('Add resources'),
@@ -285,7 +285,9 @@ export const AzureProvisionDialog: React.FC = () => {
   const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
+  const [isNewResourceGroup, setIsNewResourceGroup] = useState(!currentConfig?.resourceGroup);
   const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
+
   const [errorHostName, setErrorHostName] = useState('');
 
   const [isEditorError, setEditorError] = useState(false);
@@ -627,6 +629,13 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [formData.subscriptionId, token]);
 
+  useEffect(() => {
+    if (!isNewResourceGroup) {
+      const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
+      setIsNewResourceGroup(!currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup));
+    }
+  }, [currentConfig, formData.resourceGroup, resourceGroups]);
+
   const onNext = useCallback(
     (hostname) => {
       // get resources already have
@@ -715,21 +724,15 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
-  const isNewResourceGroupName = !currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup);
-
   const PageChooseAction = (
-    <ScrollablePane
-      data-is-scrollable="true"
-      scrollbarVisibility={ScrollbarVisibility.auto}
-      style={{ height: 'calc(100vh - 64px)' }}
-    >
+    <div style={{ height: 'calc(100vh - 64px)' }}>
       <ChooseProvisionAction
         choice={formData.creationType}
         onChoiceChanged={(choice) => {
           updateFormData('creationType', choice);
         }}
       />
-    </ScrollablePane>
+    </div>
   );
 
   const PageFormConfig = (
@@ -771,10 +774,11 @@ export const AzureProvisionDialog: React.FC = () => {
         />
         <ResourceGroupPicker
           disabled={currentConfig?.resourceGroup}
-          newResourceGroupName={isNewResourceGroupName ? formData.resourceGroup : undefined}
+          newResourceGroupName={isNewResourceGroup ? formData.resourceGroup : undefined}
           resourceGroupNames={resourceGroupNames}
-          selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
+          selectedResourceGroupName={isNewResourceGroup ? undefined : formData.resourceGroup}
           onChange={(choice) => {
+            setIsNewResourceGroup(choice.isNew);
             updateFormData('resourceGroup', choice.name);
             setErrorResourceGroupName(choice.errorMessage);
           }}
@@ -933,6 +937,13 @@ export const AzureProvisionDialog: React.FC = () => {
                 }
               }}
             />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                closeDialog();
+              }}
+            />
           </div>
         </div>
       );
@@ -1044,6 +1055,13 @@ export const AzureProvisionDialog: React.FC = () => {
                 }
               }}
             />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                closeDialog();
+              }}
+            />
           </div>
         </div>
       );
@@ -1092,16 +1110,23 @@ export const AzureProvisionDialog: React.FC = () => {
         <>
           <DefaultButton
             style={{ margin: '0 4px' }}
-            text={formatMessage('Cancel')}
+            text={formatMessage('Back')}
             onClick={() => {
-              closeDialog();
+              setPageAndTitle(PageTypes.ChooseAction);
             }}
           />
           <PrimaryButton
             disabled={isEditorError}
             style={{ margin: '0 4px' }}
-            text={formatMessage('Save')}
+            text={formatMessage('Import')}
             onClick={onSave}
+          />
+          <DefaultButton
+            style={{ margin: '0 4px' }}
+            text={formatMessage('Cancel')}
+            onClick={() => {
+              closeDialog();
+            }}
           />
         </>
       );

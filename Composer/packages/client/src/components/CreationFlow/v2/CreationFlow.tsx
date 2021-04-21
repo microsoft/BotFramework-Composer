@@ -184,9 +184,17 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
         />
+        <DefineConversationV2
+          createFolder={createFolder}
+          focusedStorageFolder={focusedStorageFolder}
+          path="create/:templateId"
+          updateFolder={updateFolder}
+          onCurrentPathUpdate={updateCurrentPath}
+          onDismiss={handleDismiss}
+          onSubmit={handleSubmit}
+        />
         <CreateOptionsV2
           fetchReadMe={fetchReadMe}
-          fetchTemplates={fetchTemplatesV2}
           path="create"
           templates={templateProjects}
           onDismiss={handleDismiss}

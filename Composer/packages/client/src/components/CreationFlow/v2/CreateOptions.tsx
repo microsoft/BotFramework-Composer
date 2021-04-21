@@ -20,9 +20,9 @@ import { useRecoilValue } from 'recoil';
 import { DialogCreationCopy } from '../../../constants';
 import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
 import { userHasNodeInstalledState } from '../../../recoilModel';
+import { InstallDepModal } from '../../InstallDepModal';
 
 import { CreateBotV2 } from './CreateBot';
-import { NodeModal } from './NodeModal';
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
@@ -30,7 +30,6 @@ type CreateOptionsProps = {
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
-  fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
 
@@ -38,7 +37,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchTemplates, fetchReadMe } = props;
+  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchReadMe } = props;
   const [showNodeModal, setShowNodeModal] = useState(false);
   const userHasNode = useRecoilValue(userHasNodeInstalledState);
 
@@ -48,19 +47,21 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       const decoded = decodeURIComponent(props.location.search);
       const { source, payload } = querystring.parse(decoded);
       if (typeof source === 'string' && typeof payload === 'string') {
-        const alias = getAliasFromPayload(source, payload);
-        // check to see if Composer currently has a bot project corresponding to the alias
-        axios
-          .get<any>(`/api/projects/alias/${alias}`)
-          .then((aliasRes) => {
-            if (aliasRes.status === 200) {
-              navigate(`/bot/${aliasRes.data.id}`);
-              return;
-            }
-          })
-          .catch((e) => {
-            setIsOpenOptionsModal(true);
-          });
+        getAliasFromPayload(source, payload).then((alias) => {
+          // check to see if Composer currently has a bot project corresponding to the alias
+          axios
+            .get<any>(`/api/projects/alias/${alias}`)
+            .then((aliasRes) => {
+              if (aliasRes.status === 200) {
+                navigate(`/bot/${aliasRes.data.id}`);
+                return;
+              }
+            })
+            .catch((e) => {
+              setIsOpenOptionsModal(true);
+            });
+        });
+
         return;
       }
     }
@@ -128,14 +129,23 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       </DialogWrapper>
       <CreateBotV2
         fetchReadMe={fetchReadMe}
-        fetchTemplates={fetchTemplates}
         isOpen={isOpenCreateModal}
         location={props.location}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}
       />
-      {isElectron() && showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
+      {isElectron() && showNodeModal && (
+        <InstallDepModal
+          downloadLink={'https://nodejs.org/en/download/'}
+          downloadLinkText={formatMessage('Install Node.js')}
+          text={formatMessage(
+            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version'
+          )}
+          title={formatMessage('Node.js required')}
+          onDismiss={() => setShowNodeModal(false)}
+        />
+      )}
     </Fragment>
   );
 }

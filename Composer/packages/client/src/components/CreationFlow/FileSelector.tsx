@@ -326,7 +326,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     },
     {
       key: 'lastModified',
-      name: formatMessage('Date Modified'),
+      name: formatMessage('Date modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 100,
       maxWidth: 500,

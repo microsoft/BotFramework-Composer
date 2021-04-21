@@ -10,6 +10,7 @@ const BotStructureTemplate = {
   entry: '${BOTNAME}.dialog',
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
+  manifestLu: 'manifests/${FILENAME}.lu',
   qna: 'knowledge-base/${LOCALE}/${BOTNAME}.${LOCALE}.qna',
   sourceQnA: 'knowledge-base/source/${FILENAME}.source.${LOCALE}.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
@@ -32,6 +33,13 @@ const BotStructureTemplate = {
   botProject: '${BOTNAME}.botproj',
   recognizer: 'recognizers/${RECOGNIZERNAME}',
   crossTrainConfig: 'settings/${CROSSTRAINCONFIGNAME}',
+  // PVA
+  topics: {
+    entry: 'topics/${DIALOGNAME}/${DIALOGNAME}.dialog',
+    lg: 'topics/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
+    lu: 'topics/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    dialogSchema: 'topics/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
+  },
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -86,6 +94,13 @@ export const BotStructureFilesPatterns = [
   'dialogs/*/*.json',
 ];
 
+export const PVATopicFilePatterns = [
+  templateInterpolate(BotStructureTemplate.topics.entry, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.topics.dialogSchema, { DIALOGNAME: '*' }),
+  'topics/*/language-generation/**/*.lg',
+  'topics/*/language-understanding/**/*.lu',
+];
+
 // parse file name: [fileId].[locale].[fileType]
 export const parseFileName = (name: string, defaultLocale: string) => {
   if (isSourceQnAFile(name)) {
@@ -107,6 +122,13 @@ export const parseFileName = (name: string, defaultLocale: string) => {
 
 export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
 export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config.json');
+
+export const defaultManifestFilePath = (botName: string, fileName: string): string => {
+  return templateInterpolate(BotStructureTemplate.manifestLu, {
+    BOTNAME: botName,
+    FILENAME: fileName,
+  });
+};
 
 export const defaultFilePath = (
   botName: string,
