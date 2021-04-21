@@ -961,7 +961,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
-                telemetryClient.track('ProvisionCancel', {});
+                telemetryClient.track('ProvisionCancel');
                 closeDialog();
               }}
             />
