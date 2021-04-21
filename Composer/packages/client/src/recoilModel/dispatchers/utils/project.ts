@@ -33,6 +33,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
+import { checkIfDotnetVersionMissing } from '../../../utils/runtimeErrors';
 import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
@@ -73,6 +74,7 @@ import {
   createQnAOnState,
   botEndpointsState,
   dispatcherState,
+  warnAboutDotNetState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -348,10 +350,11 @@ export const loadProjectData = async (data) => {
 
 export const fetchProjectDataByPath = async (
   path: string,
-  storageId
+  storageId,
+  isRootBot: boolean
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
-    const response = await httpClient.put(`/projects/open`, { path, storageId });
+    const response = await httpClient.put(`/projects/open`, { path, storageId, isRootBot });
     const projectData = await loadProjectData(response.data);
     return projectData;
   } catch (ex) {
@@ -377,8 +380,17 @@ export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; 
   }
 };
 
-export const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
-  setError(callbackHelpers, ex);
+export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) => {
+  const isDotnetError = checkIfDotnetVersionMissing({
+    message: error.response?.data?.message ?? error.message ?? '',
+  });
+
+  if (isDotnetError) {
+    callbackHelpers.set(warnAboutDotNetState, true);
+  } else {
+    callbackHelpers.set(warnAboutDotNetState, false);
+    setError(callbackHelpers, error);
+  }
 };
 
 export const processSchema = (projectId: string, schema: any) => ({
@@ -569,7 +581,7 @@ export const openRemoteSkill = async (
 
 export const openLocalSkill = async (callbackHelpers, pathToBot: string, storageId, botNameIdentifier: string) => {
   const { set } = callbackHelpers;
-  const { projectData, botFiles, error } = await fetchProjectDataByPath(pathToBot, storageId);
+  const { projectData, botFiles, error } = await fetchProjectDataByPath(pathToBot, storageId, false);
 
   if (error) {
     throw error;
@@ -790,7 +802,7 @@ export const postRootBotCreation = async (
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
-  const data = await fetchProjectDataByPath(path, storageId);
+  const data = await fetchProjectDataByPath(path, storageId, true);
   if (data.error) {
     throw data.error;
   }
