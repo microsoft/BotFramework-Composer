@@ -140,7 +140,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           downloadLink={'https://nodejs.org/en/download/'}
           downloadLinkText={formatMessage('Install Node.js')}
           text={formatMessage(
-            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version'
+            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node.'
           )}
           title={formatMessage('Node.js required')}
           onDismiss={() => setShowNodeModal(false)}
