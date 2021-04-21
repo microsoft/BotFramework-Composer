@@ -115,7 +115,7 @@ export const RuntimeOutputLog: React.FC<{ projectId: string }> = ({ projectId })
       data-testid="runtime-output-logs"
     >
       {runtimeData.standardOutput && (
-        <pre
+        <div
           css={{
             margin: 0,
             wordBreak: 'break-all',
