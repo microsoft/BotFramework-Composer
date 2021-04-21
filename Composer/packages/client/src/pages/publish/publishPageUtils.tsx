@@ -56,8 +56,8 @@ export const generateBotStatusList = (
     const botStatus: BotStatus = Object.assign({ skillManifestUrls: [] }, bot);
     const publishTargets: PublishTarget[] = botPropertyData[bot.id].publishTargets;
     const publishHistory = botPublishHistoryList[bot.id];
+    botStatus.publishTargets = publishTargets;
     if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
-      botStatus.publishTargets = publishTargets;
       if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
         const history = publishHistory[botStatus.publishTarget][0];
         botStatus.time = history.time;

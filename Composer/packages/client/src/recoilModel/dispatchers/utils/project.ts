@@ -33,6 +33,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
+import { checkIfDotnetVersionMissing } from '../../../utils/runtimeErrors';
 import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
@@ -73,6 +74,7 @@ import {
   createQnAOnState,
   botEndpointsState,
   dispatcherState,
+  warnAboutDotNetState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -377,8 +379,17 @@ export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; 
   }
 };
 
-export const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
-  setError(callbackHelpers, ex);
+export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) => {
+  const isDotnetError = checkIfDotnetVersionMissing({
+    message: error.response?.data?.message ?? error.message ?? '',
+  });
+
+  if (isDotnetError) {
+    callbackHelpers.set(warnAboutDotNetState, true);
+  } else {
+    callbackHelpers.set(warnAboutDotNetState, false);
+    setError(callbackHelpers, error);
+  }
 };
 
 export const processSchema = (projectId: string, schema: any) => ({
