@@ -9,6 +9,7 @@ import { SearchManagementClient } from '@azure/arm-search';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
   getCompletedQNANotificationCardProps,
   getPendingQNANotificationCardProps,
@@ -207,6 +208,13 @@ export const provisionQNADispatcher = () => {
             },
           });
           settingStorage.setField(projectId, 'qna.endpointKey', endpointKey);
+
+          TelemetryClient.track('SettingsGetKeysCreateNewResourceCompleted', {
+            subscriptionId,
+            region,
+            createNewResourceGroup: false,
+            resourceType: 'QnA Maker',
+          });
 
           deleteNotificationInternal(callbackHelpers, notification.id);
           const timeElapsed = Math.floor((new Date().getTime() - startTime) / (60 * 1000));
