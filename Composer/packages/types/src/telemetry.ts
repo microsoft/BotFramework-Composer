@@ -44,6 +44,7 @@ type ApplicationEvents = {
 
 type GettingStartedEvents = {
   GettingStartedLinkClicked: { method: 'link' | 'button'; url: string };
+  GettingStartedActionClicked: { taskName: string; priority: string };
 };
 
 type PackageManagerEvents = {
@@ -121,6 +122,20 @@ type AppSettingsEvents = {
 type BotSettingsEvents = {
   CustomRuntimeToggleChanged: { enabled: boolean };
   GetNewRuntime: { runtimeType: string };
+  SettingsGetKeysExistingResourceSelected: { subscriptionId: string; resourceType: string };
+  SettingsGetKeysCreateNewResourceStarted: {
+    subscriptionId: string;
+    resourceType: string;
+    createNewResourceGroup: boolean;
+    region: string;
+  };
+  SettingsGetKeysCreateNewResourceCompleted: {
+    subscriptionId: string;
+    resourceType: string;
+    createNewResourceGroup: boolean;
+    region: string;
+  };
+  SettingsGetKeysResourceRequestSelected: { subscriptionId?: string; resourceType: string };
 };
 
 type LgEditorEvents = {
