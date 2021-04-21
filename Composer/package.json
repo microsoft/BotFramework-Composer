@@ -68,7 +68,7 @@
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 yarn typecheck && jest --silent",
     "test:watch": "yarn typecheck && jest --watch",
-    "test:ci": "cross-env CI=true yarn test --coverage --no-cache --forceExit --reporters=default --reporters=jest-github-actions --silent",
+    "test:ci": "cross-env CI=true yarn test --coverage --no-cache --forceExit --reporters=default --reporters=jest-github-actions --silent --testLocationInResults",
     "test:integration": "cypress run --browser edge",
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",
