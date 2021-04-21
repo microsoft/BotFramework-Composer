@@ -100,13 +100,13 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     <div css={container}>
       <section css={section}>
         <section css={section}>
-          <h2>{formatMessage('Application Language settings')}</h2>
+          <h2>{formatMessage('Application language settings')}</h2>
           <SettingDropdown
-            description={formatMessage('This is the language used for Composer’s user interface.')}
             id={'appLanguage'}
+            label={formatMessage('Composer language')}
             options={languageOptions}
             selected={userSettings.appLocale}
-            title={formatMessage('Application language')}
+            tooltip={formatMessage('This is the language used for Composer’s user interface.')}
             onChange={onLocaleChange}
           />
         </section>
