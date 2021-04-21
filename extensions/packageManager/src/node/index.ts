@@ -14,18 +14,8 @@ import { FeedFactory } from './feeds/feedFactory';
 
 const API_ROOT = '/api';
 
-const hasSchema = (c) => {
-  // NOTE: A special case for orchestrator is included here because it does not directly include the schema
-  // the schema for orchestrator is in a dependent package
-  // additionally, our schemamerge command only returns the top level components found, even though
-  // it does properly discover and include the schema from this dependent package.
-  // without this special case, composer does not see orchestrator as being installed even though it is.
-  // in the future this should be resolved in the schemamerger library by causing the includesSchema property to be passed up to all parent libraries
-  return c.includesSchema || c.name.toLowerCase() === 'microsoft.bot.components.orchestrator';
-};
-
 const isAdaptiveComponent = (c) => {
-  return hasSchema(c) || c.includesExports;
+  return c.includesSchema || c.keywords?.indexOf('msbot-component') >= 0 || c.includesExports;
 };
 
 const readFileAsync = async (path, encoding) => {
@@ -378,7 +368,9 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               }
 
               // update the settings.components array
-              const newlyInstalledPlugin = installedComponents.find((c) => hasSchema(c) && c.name == packageName);
+              const newlyInstalledPlugin = installedComponents.find(
+                (c) => isAdaptiveComponent(c) && c.name == packageName
+              );
               if (
                 newlyInstalledPlugin &&
                 !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
