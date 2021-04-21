@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "author": "andy.brown@microsoft.com",
   "license": "MIT",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "rimraf lib && tsc",
     "prepublishOnly": "npm run build"
@@ -22,6 +24,7 @@
     "@testing-library/react-hooks": "^3.2.1",
     "babel-jest": "^26.0.1",
     "jest": "^26.0.1",
+    "jest-github-actions-reporter": "^1.0.3",
     "lodash": "^4.17.19",
     "react-test-renderer": "^16.13.1"
   },
