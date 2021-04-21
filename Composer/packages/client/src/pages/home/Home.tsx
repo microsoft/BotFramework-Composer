@@ -68,11 +68,11 @@ const resources = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const projectId = useRecoilValue(currentProjectIdState);
-  const botName = useRecoilValue(botDisplayNameState(projectId));
+  const projectId = useRecoilValue<string>(currentProjectIdState);
+  const botName = useRecoilValue<string>(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
-  const templateId = useRecoilValue(templateIdState);
+  const templateId = useRecoilValue<string>(templateIdState);
   const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
     dispatcherState
   );
