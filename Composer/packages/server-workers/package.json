@@ -15,7 +15,7 @@
   "author": "benbro@microsoft.com",
   "license": "MIT",
   "dependencies": {
-    "@microsoft/bf-dialog": "4.13.0-rc1",
+    "@microsoft/bf-dialog": "next",
     "debug": "^4.3.1",
     "yeoman-environment": "^2.10.3"
   },
