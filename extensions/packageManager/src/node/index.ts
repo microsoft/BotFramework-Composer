@@ -227,6 +227,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           composer.log('GETTING FEED', packageSource, packageSource.defaultQuery);
 
+          // set default page size to 100
+          packageSource.defaultQuery.take = 100;
           const packages = await feed.getPackages(packageSource.defaultQuery);
 
           if (Array.isArray(packages)) {
