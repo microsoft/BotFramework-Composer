@@ -66,16 +66,6 @@ export const About: React.FC<RouteComponentProps> = () => {
             {formatMessage(`Terms of Use`)}
           </Link>
         </div>
-        <div css={about.linkRow}>
-          <Icon ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} styles={about.icon} />
-          <Link
-            href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'}
-            styles={about.link}
-            target={'_blank'}
-          >
-            {formatMessage(`Privacy`)}
-          </Link>
-        </div>
       </div>
     </div>
   );

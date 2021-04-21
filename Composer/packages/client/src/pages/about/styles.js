@@ -15,17 +15,9 @@ export const body = css`
 `;
 
 export const version = css`
-  font-size: ${FontSizes.large};
+  font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
   line-height: 32px;
-`;
-
-export const description = css`
-  font-size: ${FontSizes.mediumPlus};
-  font-weight: ${FontWeights.regular};
-  line-height: 32px;
-  width: 50%;
-  margin-top: 20px;
 `;
 
 export const diagnosticsText = css`
