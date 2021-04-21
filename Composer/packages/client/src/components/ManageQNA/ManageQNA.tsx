@@ -11,7 +11,6 @@ import { dispatcherState } from '../../recoilModel';
 import { ManageService } from '../ManageService/ManageService';
 import { currentProjectIdState } from '../../recoilModel';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-import TelemetryClient from '../../telemetry/TelemetryClient';
 
 const QNA_REGIONS = [{ key: 'westus', text: 'westus' }];
 

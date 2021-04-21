@@ -212,6 +212,7 @@ export const provisionQNADispatcher = () => {
           TelemetryClient.track('SettingsGetKeysCreateNewResourceCompleted', {
             subscriptionId,
             region,
+            createNewResourceGroup: false,
             resourceType: 'QnA Maker',
           });
 
