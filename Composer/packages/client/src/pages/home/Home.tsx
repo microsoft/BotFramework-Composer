@@ -208,7 +208,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={home.videosContainer}>
             <div css={home.rowContainer}>
-              <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
+              <Pivot aria-label="Videos and articles" css={home.pivotContainer} linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
                     {tab.viewAllLinkText && (
