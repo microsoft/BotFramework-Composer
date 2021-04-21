@@ -353,7 +353,7 @@ export const AzureProvisionDialog: React.FC = () => {
         setTitle(DialogTitle.CHOOSE_ACTION);
         break;
       case PageTypes.ConfigProvision:
-        telemetryClient.track('ProvisionConfigureResources', {});
+        telemetryClient.track('ProvisionConfigureResources');
         setTitle(DialogTitle.CONFIG_RESOURCES);
         break;
       case PageTypes.EditJson:
