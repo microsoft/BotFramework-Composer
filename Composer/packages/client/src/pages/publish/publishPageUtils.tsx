@@ -34,13 +34,8 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
 const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string): string[] => {
   const urls: string[] = [];
   for (const skillManifest of skillManifests || []) {
-    for (const endpoint of skillManifest?.content?.endpoints || []) {
-      if (
-        endpoint?.msAppId === appId &&
-        !urls.includes(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`)
-      ) {
-        urls.push(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`);
-      }
+    if (!urls.includes(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`)) {
+      urls.push(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`);
     }
   }
 
