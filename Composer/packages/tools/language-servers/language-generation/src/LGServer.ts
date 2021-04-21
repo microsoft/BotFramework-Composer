@@ -165,6 +165,7 @@ export class LGServer {
 
     const wordRange = getRangeAtPosition(document, params.position);
     const word = document.getText(wordRange);
+    console.log('Cur word,', word, word.length);
     const curFileResult = this._lgFile?.templates.find((t) => t.name === word);
 
     if (curFileResult?.range) {
@@ -174,6 +175,7 @@ export class LGServer {
       );
     }
 
+    console.log('definitions:', this._templateDefinitions);
     const refResult = this._templateDefinitions[word];
     if (refResult) {
       this.connection.sendNotification('GotoDefinition', refResult);
@@ -278,11 +280,11 @@ export class LGServer {
       const curLocale = this.getLocale(fileId);
       const fileIdWitoutLocale = this.removeLocaleInId(fileId);
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      this._templateDefinitions = {};
       for (const file of lgTextFiles) {
         //Only stroe templates in other LG files
         if (this.removeLocaleInId(file.id) !== fileIdWitoutLocale && this.getLocale(file.id) === curLocale) {
           const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
-          this._templateDefinitions = {};
           for (const template of lgTemplates.templates) {
             this._templateDefinitions[template.name] = {
               fileId: file.id,
