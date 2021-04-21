@@ -47,7 +47,7 @@ import { ChooseResourcesList } from './ChooseResourcesList';
 import { getExistResources, removePlaceholder, decodeToken, defaultExtensionState } from './util';
 import { ResourceGroupPicker } from './ResourceGroupPicker';
 import { ChooseProvisionAction } from './ChooseProvisionAction';
-
+import sortBy from 'lodash/sortBy';
 type ProvisionFormData = {
   creationType: string;
   tenantId: string;
@@ -559,12 +559,15 @@ export const AzureProvisionDialog: React.FC = () => {
     return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
-  const deployLocationsOption = useMemo((): IDropdownOption[] => {
-    return (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  const deployLocationOptions = useMemo((): IDropdownOption[] => {
+    const unorderedDeployLocations =
+      (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+    return sortBy(unorderedDeployLocations, [(location) => location.text]);
   }, [token, deployLocations]);
 
-  const luisLocationsOption = useMemo((): IDropdownOption[] => {
-    return (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  const luisLocationOptions = useMemo((): IDropdownOption[] => {
+    const unorderedLuisLocations = (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+    return sortBy(unorderedLuisLocations, [(location) => location.text]);
   }, [token, luisLocations]);
 
   const checkNameAvailability = useCallback(
@@ -801,7 +804,7 @@ export const AzureProvisionDialog: React.FC = () => {
           required
           disabled={currentConfig?.region}
           label={formatMessage('Region')}
-          options={deployLocationsOption}
+          options={deployLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.region}
           styles={{ root: { paddingBottom: '8px' } }}
@@ -812,7 +815,7 @@ export const AzureProvisionDialog: React.FC = () => {
           required
           disabled={currentConfig?.settings?.luis?.region}
           label={formatMessage('Region for Luis')}
-          options={luisLocationsOption}
+          options={luisLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.luisLocation}
           onChange={(e, o) => {
