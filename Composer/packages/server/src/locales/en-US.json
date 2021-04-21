@@ -2,6 +2,15 @@
   "0_bytes_a1e1cdb3": {
     "message": "0 Bytes"
   },
+  "1_using_the_azure_portal_please_create_a_language__5aa05fd6": {
+    "message": "1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
+  },
+  "1_using_the_azure_portal_please_create_a_qnamaker__a060ac82": {
+    "message": "1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
+  },
+  "1_using_the_azure_portal_please_create_a_speech_re_6326f2f5": {
+    "message": "1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
+  },
   "ErrorInfo_part1": {
     "message": "An error occurred in the form editor!"
   },
@@ -398,9 +407,6 @@
   "authoring_canvas_18802e39": {
     "message": "Authoring canvas"
   },
-  "authoring_key_f847d8c3": {
-    "message": "Authoring key"
-  },
   "authoring_region_to_use_e_g_westus_westeurope_aust_d43d5245": {
     "message": "Authoring region to use (e.g. westus, westeurope, australiaeast)"
   },
@@ -491,17 +497,11 @@
   "bot_files_created_986109df": {
     "message": "Bot files created"
   },
-  "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
-    "message": "Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code."
-  },
   "bot_framework_composer_fae721be": {
     "message": "Bot Framework Composer"
   },
   "bot_framework_composer_icon_gray_fa72d3d6": {
     "message": "bot framework composer icon gray"
-  },
-  "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
-    "message": "Bot Framework Composer is a visual authoring canvas for building bots and other types of conversational application with the Microsoft Bot Framework technology stack. With Composer you will find everything you need to build a modern, state-of-the-art conversational experience."
   },
   "bot_framework_composer_requires_node_js_in_order_t_9c45c226": {
     "message": "Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version"
@@ -619,6 +619,9 @@
   },
   "choose_from_existing_e85a88c4": {
     "message": "Choose from existing"
+  },
+  "choose_from_existing_service_keys_create_a_new_ser_53728093": {
+    "message": "Choose from existing { service } keys, create a new { service } resource, or generate a request to handoff to your Azure admin. "
   },
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
@@ -863,17 +866,11 @@
   "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
     "message": "Create a new form dialog schema by clicking + above."
   },
-  "create_a_new_luis_resource_b590482f": {
-    "message": "Create a new LUIS resource"
-  },
-  "create_a_new_qna_maker_resource_8c03ee9e": {
-    "message": "Create a new QnA Maker resource"
+  "create_a_new_service_resource_23d59c2f": {
+    "message": "Create a new { service } resource"
   },
   "create_a_new_skill_e961ff28": {
     "message": "Create a new skill"
-  },
-  "create_a_new_speech_resource_c3c8fe60": {
-    "message": "Create a new Speech resource"
   },
   "create_a_publish_profile_to_continue_1e2fa5a0": {
     "message": "Create a publish profile to continue"
@@ -935,20 +932,17 @@
   "create_new_knowledge_base_from_scratch_638c4fd2": {
     "message": "Create new knowledge base from scratch"
   },
-  "create_new_luis_resources_a1a8fad5": {
-    "message": "Create new LUIS resources"
-  },
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
   },
-  "create_new_qna_resource_bd9a0dae": {
-    "message": "Create new QnA resource"
-  },
-  "create_new_speech_resources_73a921be": {
-    "message": "Create new Speech resources"
+  "create_new_service_resource_ce813150": {
+    "message": "Create new { service } resource"
   },
   "create_your_first_bot_a23748c1": {
     "message": "Create your first bot"
+  },
+  "creating_qna_maker_7c88df84": {
+    "message": "Creating QnA Maker"
   },
   "creating_resources_af3aec2f": {
     "message": "Creating resources..."
@@ -1217,14 +1211,8 @@
   "downloading_bb6fb34b": {
     "message": "Downloading..."
   },
-  "due_to_the_following_error_we_were_unable_to_succe_5ca033c7": {
-    "message": "Due to the following error, we were unable to successfully add your selected QnA keys to your bot project:"
-  },
-  "due_to_the_following_error_we_were_unable_to_succe_897e7abb": {
-    "message": "Due to the following error, we were unable to successfully add your selected LUIS keys to your bot project:"
-  },
-  "due_to_the_following_error_we_were_unable_to_succe_9e2dcd4a": {
-    "message": "Due to the following error, we were unable to successfully add your selected Speech keys to your bot project:"
+  "due_to_the_following_error_we_were_unable_to_succe_9185fddf": {
+    "message": "Due to the following error, we were unable to successfully add your selected { service } keys to your bot project:"
   },
   "duplicate_31cec192": {
     "message": "Duplicate"
@@ -1415,29 +1403,20 @@
   "enter_microsoft_app_password_b0926c39": {
     "message": "Enter Microsoft App Password"
   },
-  "enter_name_for_new_luis_resources_8e075ea6": {
-    "message": "Enter name for new LUIS resources"
-  },
-  "enter_name_for_new_qna_resource_d93cd191": {
-    "message": "Enter name for new QnA resource"
-  },
   "enter_name_for_new_resource_group_96fe8ea8": {
     "message": "Enter name for new resource group"
   },
-  "enter_name_for_new_speech_resources_d4cd8f5d": {
-    "message": "Enter name for new Speech resources"
+  "enter_name_for_new_resources_d5ccd6a7": {
+    "message": "Enter name for new resources"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
     "message": "Enter QnA Maker Subscription key"
   },
-  "enter_qna_region_4dae87f5": {
-    "message": "Enter QnA region"
+  "enter_region_94d11bd": {
+    "message": "Enter region"
   },
   "enter_skill_host_endpoint_url_7489a83f": {
     "message": "Enter Skill host endpoint URL"
-  },
-  "enter_speech_region_7e86bace": {
-    "message": "Enter Speech region"
   },
   "entities_ef09392c": {
     "message": "Entities"
@@ -1625,6 +1604,12 @@
   "find_and_install_more_external_services_in_the_pac_9a7cbe7f": {
     "message": "Find and install more external services in the package manager."
   },
+  "find_dialogs_339a3f87": {
+    "message": "Find dialogs"
+  },
+  "find_dialogs_or_topics_c986d1e6": {
+    "message": "Find dialogs or topics"
+  },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
   },
@@ -1805,20 +1790,11 @@
   "home_351838cd": {
     "message": "Home"
   },
-  "how_would_you_like_to_provision_this_resource_174f805d": {
-    "message": "How would you like to provision this resource?"
-  },
   "http_request_b6394895": {
     "message": "HTTP request"
   },
-  "i_am_working_on_a_microsoft_bot_framework_project__12049dd4": {
-    "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
-  },
-  "i_am_working_on_a_microsoft_bot_framework_project__1295ee05": {
-    "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
-  },
-  "i_am_working_on_a_microsoft_bot_framework_project__9b5f3f78": {
-    "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
+  "i_am_working_on_a_microsoft_bot_framework_project__f22ad8ee": {
+    "message": "I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n{ instructions }"
   },
   "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
     "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
@@ -1898,14 +1874,8 @@
   "input_hint_ab89f368": {
     "message": "Input hint"
   },
-  "input_your_details_below_to_create_a_new_luis_reso_75ca7d17": {
-    "message": "Input your details below to create a new LUIS resource. You will be able to manage your new resource in the Azure portal. Learn more"
-  },
-  "input_your_details_below_to_create_a_new_qna_resou_b32404f2": {
-    "message": "Input your details below to create a new QnA resource. You will be able to manage your new resource in the Azure portal. Learn more"
-  },
-  "input_your_details_below_to_create_a_new_speech_re_51b79b16": {
-    "message": "Input your details below to create a new Speech resource. You will be able to manage your new resource in the Azure portal. Learn more"
+  "input_your_details_below_to_create_a_new_service_r_ad2cbd2f": {
+    "message": "Input your details below to create a new { service } resource. You will be able to manage your new resource in the Azure portal."
   },
   "insert_a_property_reference_in_memory_95d27746": {
     "message": "Insert a property reference in memory"
@@ -1939,6 +1909,9 @@
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Install Microsoft .NET Core SDK"
+  },
+  "install_net_core_sdk_67e62ca9": {
+    "message": "Install .NET Core SDK"
   },
   "install_node_js_1857298c": {
     "message": "Install Node.js"
@@ -2047,6 +2020,9 @@
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
+  },
+  "label_entity_45d7b842": {
+    "message": "Label entity"
   },
   "language_6b3e2c7c": {
     "message": "Language"
@@ -2176,6 +2152,9 @@
   },
   "loading_keys_22ceedc": {
     "message": "Loading keys..."
+  },
+  "loading_subscription_f0a868a1": {
+    "message": "Loading subscription..."
   },
   "local_bot_runtime_manager_812cbd0c": {
     "message": "Local bot runtime manager"
@@ -2471,6 +2450,9 @@
   "need_another_template_send_us_a_request_5cf2a4d5": {
     "message": "Need another template? Send us a request"
   },
+  "net_required_97928257": {
+    "message": ".NET required"
+  },
   "new_13daf639": {
     "message": "New"
   },
@@ -2492,9 +2474,6 @@
   "next_40e12421": {
     "message": "Next"
   },
-  "next_configure_resources_2ea29fdf": {
-    "message": "Next: Configure resources"
-  },
   "next_steps_fce2208": {
     "message": "Next steps"
   },
@@ -2504,14 +2483,8 @@
   "no_entities_found_a8e8bd19": {
     "message": "no entities found"
   },
-  "no_existing_luis_resource_found_in_this_subscripti_22642816": {
-    "message": "No existing LUIS resource found in this subscription. Click “Next” to create new."
-  },
-  "no_existing_qna_resource_found_in_this_subscriptio_c70e340": {
-    "message": "No existing QnA resource found in this subscription. Click “Next” to create new."
-  },
-  "no_existing_speech_resource_found_in_this_subscrip_4bc27bc3": {
-    "message": "No existing Speech resource found in this subscription. Click “Next” to create a new one."
+  "no_existing_service_resources_were_found_in_this_s_ca2f1745": {
+    "message": "No existing { service } resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin."
   },
   "no_extensions_installed_4b925277": {
     "message": "No extensions installed"
@@ -2563,6 +2536,9 @@
   },
   "no_wildcard_ff439e76": {
     "message": "no wildcard"
+  },
+  "node_js_required_89c1c708": {
+    "message": "Node.js required"
   },
   "node_menu_e2aa8092": {
     "message": "Node menu"
@@ -2711,8 +2687,14 @@
   "other_1c6d9c79": {
     "message": "Other"
   },
+  "our_privacy_statement_is_located_at_a_https_go_mic_56534925": {
+    "message": "Our privacy statement is located at <a>https://go.microsoft.com/fwlink/?LinkID=824704</a>. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices."
+  },
   "output_5023cf84": {
     "message": "Output"
+  },
+  "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
+    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
   },
   "page_number_cdee4179": {
     "message": "Page number"
@@ -2954,9 +2936,6 @@
   "qna_maker_introduction_c2e426a": {
     "message": "QnA Maker introduction"
   },
-  "qna_maker_key_eef1f214": {
-    "message": "QnA Maker key"
-  },
   "qna_maker_subscription_key_a645be58": {
     "message": "QnA Maker subscription key:"
   },
@@ -3113,9 +3092,6 @@
   "reset_view_d5f8245a": {
     "message": "Reset view"
   },
-  "resource_group_41fc9245": {
-    "message": "Resource group:"
-  },
   "resource_group_59eac426": {
     "message": "Resource group"
   },
@@ -3245,6 +3221,12 @@
   "select_a_bot_e1c4dc2b": {
     "message": "Select a Bot"
   },
+  "select_a_dialog_134385f2": {
+    "message": "Select a dialog"
+  },
+  "select_a_dialog_or_topic_4df93d0f": {
+    "message": "Select a dialog or topic"
+  },
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
   },
@@ -3278,9 +3260,6 @@
   "select_language_to_delete_d1662d3d": {
     "message": "Select language to delete"
   },
-  "select_luis_keys_1f3fb702": {
-    "message": "Select LUIS keys"
-  },
   "select_one_b647b384": {
     "message": "Select one"
   },
@@ -3293,14 +3272,11 @@
   "select_publishing_profile_a3f478e2": {
     "message": "Select publishing profile"
   },
-  "select_qna_keys_e616cc57": {
-    "message": "Select QnA keys"
-  },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
   },
-  "select_speech_keys_3a21b942": {
-    "message": "Select Speech keys"
+  "select_service_keys_6d3f0980": {
+    "message": "Select { service } keys"
   },
   "select_subscription_c5678611": {
     "message": "Select subscription"
@@ -3313,9 +3289,6 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
-  },
-  "select_your_azure_subscription_and_choose_from_exi_1e05256f": {
-    "message": "Select your Azure subscription and choose from existing Speech keys, or create a new Speech resource. Learn more"
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -3334,6 +3307,9 @@
   },
   "sentence_wrap_930c8ced": {
     "message": "Sentence wrap"
+  },
+  "service_key_502b7dbd": {
+    "message": "{ service } Key"
   },
   "session_expired_12aaf414": {
     "message": "Session expired"
@@ -3488,12 +3464,6 @@
   "speech_16063aed": {
     "message": "Speech"
   },
-  "speech_key_1ab3f84a": {
-    "message": "Speech key"
-  },
-  "speech_region_864a8a83": {
-    "message": "Speech region"
-  },
   "spoken_text_used_by_the_channel_to_render_audibly_d07c7427": {
     "message": "Spoken text used by the channel to render audibly."
   },
@@ -3581,9 +3551,6 @@
   "system_topic_44cfbac8": {
     "message": "System Topic"
   },
-  "tag_entity_5ae99194": {
-    "message": "Tag entity"
-  },
   "take_a_product_tour_a2892d17": {
     "message": "Take a product tour"
   },
@@ -3662,23 +3629,11 @@
   "the_following_lufile_s_are_invalid_c61ea748": {
     "message": "The Following LuFile(s) are invalid: \n"
   },
-  "the_following_luis_keys_have_been_successfully_add_2ef410b0": {
-    "message": "The following LUIS keys have been successfully added to your bot project:"
+  "the_following_service_keys_have_been_successfully__29b5672a": {
+    "message": "The following { service } keys have been successfully added to your bot project:"
   },
-  "the_following_luis_resource_was_successfully_creat_5dfde928": {
-    "message": "The following LUIS resource was successfully created and added to your bot project:"
-  },
-  "the_following_qna_key_has_been_successfully_added__7c97bbc0": {
-    "message": "The following QnA key has been successfully added to your bot project:"
-  },
-  "the_following_qna_resource_was_successfully_create_84173ca4": {
-    "message": "The following QnA resource was successfully created and added to your bot project:"
-  },
-  "the_following_speech_key_has_been_successfully_add_4bf0b587": {
-    "message": "The following Speech key has been successfully added to your bot project:"
-  },
-  "the_following_speech_resource_was_successfully_cre_c4037861": {
-    "message": "The following Speech resource was successfully created and added to your bot project:"
+  "the_following_service_resource_was_successfully_cr_1381acb2": {
+    "message": "The following { service } resource was successfully created and added to your bot project:"
   },
   "the_main_dialog_is_the_foundation_of_every_bot_cre_d4a938ff": {
     "message": "The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot."
@@ -3787,9 +3742,6 @@
   },
   "this_page_contains_detailed_information_about_your_224a2b04": {
     "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings."
-  },
-  "this_page_contains_detailed_information_about_your_b2b3413b": {
-    "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
   },
   "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
     "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
@@ -4237,6 +4189,9 @@
   },
   "your_new_bot_is_almost_ready_1bb596e": {
     "message": "Your new bot is almost ready!"
+  },
+  "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
+    "message": "Your QnA Maker is ready! It took { time } minutes to complete."
   },
   "your_skill_could_not_be_published_5bee6e6a": {
     "message": "Your skill could not be published."

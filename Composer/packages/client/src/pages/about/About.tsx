@@ -28,7 +28,9 @@ export const About: React.FC<RouteComponentProps> = () => {
             { p: ({ children }) => <p>{children}</p> }
           )}
         </div>
-        <div css={about.version}>{formatMessage(`Release: `) + (process.env.COMPOSER_VERSION || 'Unknown')}</div>
+        <div css={about.version}>
+          {formatMessage(`Release: `) + (`${process.env.COMPOSER_VERSION}-${process.env.GIT_SHA}` || 'Unknown')}
+        </div>
         <div css={about.diagnosticsInfo}>
           <div css={about.diagnosticsInfoText}>
             <div css={about.diagnosticsInfoTextAlignLeft}>{formatMessage(`SDK runtime packages`)}</div>
