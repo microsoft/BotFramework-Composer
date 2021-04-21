@@ -18,8 +18,7 @@ type ErrorPopupProps = {
   onDismiss: () => void;
 };
 
-const formatErrorTitle = (error: StateError): string => {
-  const { summary } = error;
+const formatErrorTitle = (summary: string): string => {
   if (!summary) return '';
   return summary.length > 20 ? summary.substring(0, 20) + '...' : summary;
 };
@@ -62,7 +61,7 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     }
   }, [props.error]);
 
-  const title = props.error ? formatErrorTitle(props.error) : '';
+  const title = props.error && props.error.summary ? formatErrorTitle(props.error.summary) : 'Error';
   const detail = props.error ? formatErrorDetail(props.error) : '';
 
   return (
