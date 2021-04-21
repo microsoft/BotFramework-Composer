@@ -337,9 +337,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     );
   }, [focusedStorageFolder]);
   const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
-
   return (
-    // TODO remove runtime language drop down prior to merging as that data is indicated by the tab chosen
     <Fragment>
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
@@ -359,7 +357,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
               <TextField
-                multiline
                 label={formatMessage('Description')}
                 resizable={false}
                 styles={description}
@@ -368,7 +365,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
           </Stack>
-          {!isImported ?? (
+          {!isImported && (
             <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
               <StackItem grow={0} styles={halfstack}>
                 <Dropdown
