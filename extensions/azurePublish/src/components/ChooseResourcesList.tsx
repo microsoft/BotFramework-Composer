@@ -52,7 +52,7 @@ const ItemText = styled(Text)`
 
 const ItemTier = styled(Text)`
   font-size: ${FluentTheme.fonts.small.fontSize};
-  margin: 4px 0 3px 24px;
+  margin: 4px 0 4px 24px;
   color: ${NeutralColors.gray130};
 `;
 

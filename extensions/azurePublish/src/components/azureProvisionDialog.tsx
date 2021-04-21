@@ -86,7 +86,7 @@ const iconStyle = (required) => {
   };
 };
 
-const resourceFieldStyles = { root: { paddingBottom: '6px', width: '75%' } };
+const resourceFieldStyles = { root: { paddingBottom: '4px', width: '75%' } };
 
 const PageTypes = {
   ChooseAction: 'chooseAction',
