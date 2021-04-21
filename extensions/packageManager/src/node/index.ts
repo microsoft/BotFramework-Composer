@@ -113,18 +113,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           defaultQuery: {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: `microsoft.bot.components+tags:${botComponentTag}`,
-          },
-          type: PackageSourceType.NuGet,
-        },
-        {
-          key: 'nuget-community',
-          text: formatMessage('community packages'),
-          url: 'https://api.nuget.org/v3/index.json',
-          readonly: true,
-          defaultQuery: {
-            prerelease: true,
-            semVerLevel: '2.0.0',
             query: `tags:${botComponentTag}`,
           },
           type: PackageSourceType.NuGet,
@@ -132,17 +120,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         {
           key: 'npm',
           text: formatMessage('npm'),
-          url: `https://registry.npmjs.org/-/v1/search`,
-          readonly: true,
-          defaultQuery: {
-            prerelease: true,
-            query: `keywords:${botComponentTag}+scope:microsoft`,
-          },
-          type: PackageSourceType.NPM,
-        },
-        {
-          key: 'npm-community',
-          text: formatMessage('JS community packages'),
           url: `https://registry.npmjs.org/-/v1/search`,
           readonly: true,
           defaultQuery: {
