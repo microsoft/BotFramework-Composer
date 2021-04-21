@@ -38,10 +38,6 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       maxWidth: 200,
       isRowHeader: true,
       isResizable: true,
-      isSorted: true,
-      isSortedDescending: false,
-      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
-      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: (item) => {
         return (
@@ -131,7 +127,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
         onRenderDetailsHeader={onRenderDetailsHeader}
       />
     );
-  }, []);
+  }, [recentProjects]);
 
   return (
     <div css={home.detailListContainer} data-is-scrollable="true">
