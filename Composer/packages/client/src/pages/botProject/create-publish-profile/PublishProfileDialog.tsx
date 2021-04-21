@@ -195,7 +195,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item, isFromSkill);
+      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
       setIsCreateProfileFromSkill && setIsCreateProfileFromSkill(true);
     };
   }, [name, targetType, types, savePublishTarget]);

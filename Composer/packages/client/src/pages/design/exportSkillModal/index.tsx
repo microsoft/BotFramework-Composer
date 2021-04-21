@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -14,7 +14,7 @@ import { SkillManifestFile } from '@bfc/shared';
 import { navigate } from '@reach/router';
 import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
-
+import { Notification } from '../../../recoilModel/types';
 import {
   dispatcherState,
   skillManifestsState,
@@ -25,12 +25,24 @@ import {
   luFilesSelectorFamily,
   settingsState,
   rootBotProjectIdSelector,
+  botStatusState,
+  publishHistoryState,
 } from '../../../recoilModel';
-import { mergePropertiesManagedByRootBot } from '../../../recoilModel/dispatchers/utils/project';
+import {
+  getSensitiveProperties,
+  mergePropertiesManagedByRootBot,
+} from '../../../recoilModel/dispatchers/utils/project';
 
 import { styles } from './styles';
 import { generateSkillManifest } from './generateSkillManifest';
 import { editorSteps, ManifestEditorSteps, order } from './constants';
+import { getTokenFromCache } from '../../../utils/auth';
+import { ApiStatus, PublishStatusPollingUpdater } from '../../../utils/publishStatusPollingUpdater';
+import { notificationsSelector } from '../../../recoilModel/selectors/notifications';
+import {
+  getSkillPublishedNotificationCardProps,
+  getSkilPendingNotificationCardProps,
+} from '../../publish/Notifications';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -46,11 +58,15 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
-  const { updateSkillManifest } = useRecoilValue(dispatcherState);
+  const notifications = useRecoilValue(notificationsSelector);
+  const { updateSkillManifest, publishToTarget, updateNotification, deleteNotification } = useRecoilValue(
+    dispatcherState
+  );
 
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [schema, setSchema] = useState<JSONSchema7>({});
+  const [isHidden, setIsHidden] = useState(false);
 
   const [skillManifest, setSkillManifest] = useState<Partial<SkillManifestFile>>({});
   const { content = {}, id } = skillManifest;
@@ -70,7 +86,77 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [callers, setCallers] = useState<string[]>(
     !isAdaptive ? skillConfiguration?.allowedCallers : runtimeSettings?.skills?.allowedCallers ?? []
   );
+
   const [isCreateProfileFromSkill, setIsCreateProfileFromSkill] = useState(false);
+  let publishUpdater: PublishStatusPollingUpdater;
+  const publishNotificationRef = useRef<Notification>();
+  // stop polling updater & delete pending notification
+  const stopUpdater = async (updater) => {
+    updater.stop();
+
+    const notification = publishNotificationRef.current;
+    notification && (await deleteNotification(notification.id));
+    publishNotificationRef.current = undefined;
+    handleDismiss();
+  };
+  const changeNotificationStatus = async (data) => {
+    const { apiResponse } = data;
+    if (!apiResponse) {
+      stopUpdater(publishUpdater);
+      return;
+    }
+    const responseData = apiResponse.data;
+
+    if (responseData.status !== ApiStatus.Publishing) {
+      stopUpdater(publishUpdater);
+
+      // Show result notifications
+      const displayedNotification = publishNotificationRef.current;
+      if (displayedNotification) {
+        const notificationCard = getSkillPublishedNotificationCardProps({ ...responseData });
+        updateNotification(displayedNotification.id, notificationCard);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!publishTargets || publishTargets.length === 0) return;
+    const notification = notifications.find(
+      (n) => n.title === 'Provision success' || n.title === 'Provision partially completed'
+    );
+    const currentTarget = publishTargets.find((item) => {
+      const config = JSON.parse(item.configuration);
+      return (
+        config.settings &&
+        config.settings.MicrosoftAppId &&
+        config.hostname &&
+        config.settings.MicrosoftAppId.length > 0 &&
+        config.hostname.length > 0
+      );
+    });
+    if (isCreateProfileFromSkill && currentTarget && notification) {
+      publishNotificationRef.current = notification;
+      const sensitiveSettings = getSensitiveProperties(settings);
+      const token = getTokenFromCache('accessToken');
+      publishToTarget(projectId, currentTarget, { comment: '' }, sensitiveSettings, token);
+      const skillPublishPenddingNotificationCard = getSkilPendingNotificationCardProps();
+      updateNotification(notification.id, skillPublishPenddingNotificationCard);
+      publishUpdater = new PublishStatusPollingUpdater(projectId, currentTarget.name);
+      publishUpdater.start(changeNotificationStatus);
+    }
+  }, [isCreateProfileFromSkill, publishTargets]);
+  useEffect(() => {
+    isCreateProfileFromSkill && setIsHidden(true);
+  }, [isCreateProfileFromSkill]);
+
+  useEffect(() => {
+    // Clear intervals when unmount
+    return () => {
+      if (publishUpdater) {
+        stopUpdater(publishUpdater);
+      }
+    };
+  }, []);
 
   const updateAllowedCallers = React.useCallback(
     (allowedCallers: string[] = []) => {
@@ -168,7 +254,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
         title: title(),
         styles: styles.dialog,
       }}
-      hidden={false}
+      hidden={isHidden}
       modalProps={{
         isBlocking: false,
         styles: styles.modal,

@@ -53,10 +53,17 @@ export const notificationDispatcher = () => {
     set(notificationsState(id), (notification) => ({ ...notification, hidden: true }));
   });
 
+  const updateNotification = useRecoilCallback(
+    (callbackHelper: CallbackInterface) => (id: string, newValue: CardProps) => {
+      updateNotificationInternal(callbackHelper, id, newValue);
+    }
+  );
+
   return {
     addNotification,
     deleteNotification,
     hideNotification,
     markNotificationAsRead,
+    updateNotification,
   };
 };
