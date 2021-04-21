@@ -317,16 +317,16 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const updateLuisSettings = (newLuisSettings) => {
     setSettings(projectId, {
       ...mergedSettings,
-      luis: { ...mergedSettings.luis, ...newLuisSettings },
+      luis: { ...mergedSettings.luis, authoringKey: newLuisSettings.key, authoringRegion: newLuisSettings.region },
     });
   };
 
   const updateQNASettings = (newQNASettings) => {
     setSettings(projectId, {
       ...mergedSettings,
-      qna: { ...mergedSettings.qna, ...newQNASettings },
+      qna: { ...mergedSettings.qna, subscriptionKey: newQNASettings.key },
     });
-    setQnASettings(projectId, newQNASettings.subscriptionKey);
+    setQnASettings(projectId, newQNASettings.key);
   };
 
   return (
@@ -452,7 +452,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <ManageLuis
           hidden={!displayManageLuis}
-          setDisplayManageLuis={setDisplayManageLuis}
           onDismiss={() => {
             setDisplayManageLuis(false);
           }}
@@ -460,10 +459,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onNext={() => {
             setDisplayManageLuis(false);
           }}
+          onToggleVisibility={setDisplayManageLuis}
         />
         <ManageQNA
           hidden={!displayManageQNA}
-          setDisplayManageQna={setDisplayManageQNA}
           onDismiss={() => {
             setDisplayManageQNA(false);
           }}
@@ -471,6 +470,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onNext={() => {
             setDisplayManageQNA(false);
           }}
+          onToggleVisibility={setDisplayManageQNA}
         />
       </div>
     </Fragment>

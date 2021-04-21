@@ -87,7 +87,7 @@ export const LuLabelingMenu = ({ editor, luFile, onMenuToggled, onInsertEntity }
   );
 
   const { menuProps, noEntities } = useLabelingMenuProps('filter', luFile, itemClick, {
-    menuHeaderText: formatMessage('Tag entity'),
+    menuHeaderText: formatMessage('Label entity'),
   });
 
   return menuTargetElm && !noEntities ? (
