@@ -13,7 +13,6 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { useDebounce } from './useDebounce';
 
 const stackStyles = { root: { marginBottom: '6px' } };
-
 const dropdownStyles = { root: { marginBottom: '6px' }, dropdown: { width: '75%' } };
 const itemIconStyles = { marginRight: '8px' };
 const newNameTextFileStyles = { root: { marginTop: '10px', width: '75%' } };
