@@ -178,6 +178,7 @@ export const publisherDispatcher = () => {
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
+          publishTarget: target,
           accessToken: token,
           metadata: {
             ...metadata,

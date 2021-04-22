@@ -43,6 +43,7 @@ import {
   getSkillPublishedNotificationCardProps,
   getSkilPendingNotificationCardProps,
 } from '../../publish/Notifications';
+import { createNotification } from '../../../recoilModel/dispatchers/notification';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -58,10 +59,13 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
-  const notifications = useRecoilValue(notificationsSelector);
-  const { updateSkillManifest, publishToTarget, updateNotification, deleteNotification } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    updateSkillManifest,
+    publishToTarget,
+    addNotification,
+    updateNotification,
+    deleteNotification,
+  } = useRecoilValue(dispatcherState);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
@@ -98,6 +102,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     notification && (await deleteNotification(notification.id));
     publishNotificationRef.current = undefined;
     handleDismiss();
+    setIsHidden(false);
   };
   const changeNotificationStatus = async (data) => {
     const { apiResponse } = data;
@@ -121,9 +126,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
   useEffect(() => {
     if (!publishTargets || publishTargets.length === 0) return;
-    const notification = notifications.find(
-      (n) => n.title === 'Provision success' || n.title === 'Provision partially completed'
-    );
     const currentTarget = publishTargets.find((item) => {
       const config = JSON.parse(item.configuration);
       return (
@@ -134,17 +136,19 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
         config.hostname.length > 0
       );
     });
-    if (isCreateProfileFromSkill && currentTarget && notification) {
-      publishNotificationRef.current = notification;
+    if (isCreateProfileFromSkill && currentTarget) {
+      const skillPublishPenddingNotificationCard = getSkilPendingNotificationCardProps();
+      publishNotificationRef.current = createNotification(skillPublishPenddingNotificationCard);
+      addNotification(publishNotificationRef.current);
       const sensitiveSettings = getSensitiveProperties(settings);
       const token = getTokenFromCache('accessToken');
       publishToTarget(projectId, currentTarget, { comment: '' }, sensitiveSettings, token);
-      const skillPublishPenddingNotificationCard = getSkilPendingNotificationCardProps();
-      updateNotification(notification.id, skillPublishPenddingNotificationCard);
-      publishUpdater = new PublishStatusPollingUpdater(projectId, currentTarget.name);
-      publishUpdater.start(changeNotificationStatus);
+      setTimeout(() => {
+        publishUpdater = new PublishStatusPollingUpdater(projectId, currentTarget.name);
+        publishUpdater.start(changeNotificationStatus);
+      }, 200);
     }
-  }, [isCreateProfileFromSkill, publishTargets]);
+  }, [isCreateProfileFromSkill, publishTargets?.length]);
   useEffect(() => {
     isCreateProfileFromSkill && setIsHidden(true);
   }, [isCreateProfileFromSkill]);
