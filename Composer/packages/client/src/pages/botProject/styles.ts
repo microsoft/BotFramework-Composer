@@ -3,13 +3,19 @@
 
 import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 export const title = css`
-  font-size: ${FontSizes.mediumPlus};
+  font-size: ${FontSizes.large};
   font-weight: ${FontWeights.semibold};
-  margin-top: 6px;
-  margin-bottom: 12px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+`;
+
+export const subtext = css`
+  color: ${NeutralColors.gray130};
+  font-size: ${FontSizes.medium};
+  padding-bottom: 5px;
 `;
 
 export const subtitle = css`
@@ -127,6 +133,7 @@ export const unknownIconStyle = (required: boolean) => {
 };
 
 export const columnSizes = ['300px', '150px', '150px'];
+export const extendedColumnSizes = ['300px', '150px', '300px'];
 
 export const actionButton = {
   root: {
@@ -137,3 +144,20 @@ export const actionButton = {
     marginLeft: 5,
   },
 };
+
+export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10, width: '75%' } }, customError);
+
+export const teamsCallOutStyles = mergeStyleSets({
+  callout: {
+    width: 320,
+    padding: '20px 24px',
+  },
+  title: {
+    marginBottom: 12,
+    fontWeight: FontWeights.semilight,
+  },
+  link: {
+    display: 'block',
+    marginTop: 20,
+  },
+});
