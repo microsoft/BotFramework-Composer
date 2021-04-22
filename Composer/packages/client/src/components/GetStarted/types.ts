@@ -10,4 +10,5 @@ export type NextSteps = {
   label: string;
   onClick: (step?: NextSteps) => void;
   highlight?: (step?: NextSteps) => void;
+  isDisabled: boolean;
 };

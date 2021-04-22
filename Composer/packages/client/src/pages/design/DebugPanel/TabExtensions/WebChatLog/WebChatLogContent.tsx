@@ -192,10 +192,10 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     if (currentStatus === BotStatus.inactive) {
       return (
         <div css={emptyStateMessageContainer}>
-          {formatMessage.rich('Your bot project is not running. <actionButton/>', {
-            actionButton: (
-              <ActionButton styles={actionButton} type="button" onClick={startAllBots}>
-                {formatMessage('Start your bot')}
+          {formatMessage.rich('Your bot project is not running. <actionButton>Start your bot</actionButton>', {
+            actionButton: ({ children }) => (
+              <ActionButton key="webchat-tab-startbot" styles={actionButton} type="button" onClick={startAllBots}>
+                {children}
               </ActionButton>
             ),
           })}
@@ -206,10 +206,10 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     if (currentStatus === BotStatus.connected) {
       return (
         <div css={emptyStateMessageContainer}>
-          {formatMessage.rich('Your bot project is running. <actionButton/>', {
-            actionButton: (
-              <ActionButton styles={actionButton} onClick={onOpenWebChatPanelClick}>
-                {formatMessage('Test in Web Chat')}
+          {formatMessage.rich('Your bot project is running. <actionButton>Test in Web Chat</actionButton>', {
+            actionButton: ({ children }) => (
+              <ActionButton key="webchat-tab-openWC" styles={actionButton} onClick={onOpenWebChatPanelClick}>
+                {children}
               </ActionButton>
             ),
           })}
