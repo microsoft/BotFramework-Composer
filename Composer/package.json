@@ -73,6 +73,7 @@
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",
     "test:integration:clean": "node scripts/clean-e2e.js",
+    "test:integration:clean-all": "node scripts/clean-e2e.js --all",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:ci": "wsrun --exclude-missing --collect-logs --report --no-prefix lint --format github-actions",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
