@@ -162,22 +162,36 @@ export class LocalDiskStorage implements IFileStorage {
 
   async zip(source: string, exclusions, cb): Promise<void> {
     const defaultDirectories = [
+      '/Controllers/',
       '/dialogs/',
-      '/language-understanding/',
-      '/language-generation/',
-      '/settings/',
-      '/generated/',
-      '/knowledge-base/',
-      '/recognizers/',
       '/form-dialogs/',
-      '/scripts/',
+      '/knowledge-base/',
+      '/language-generation/',
+      '/language-understanding/',
+      '/media/',
+      '/Properties/',
+      '/recognizers/',
+      '/schemas/',
+      '/Scripts/',
+      '/settings/',
+      '/wwwroot/',
+      '/generated/',
     ];
 
     const directoriesToInclude = defaultDirectories.filter((elem) => {
       return exclusions?.directories == undefined || exclusions?.directories?.indexOf(elem) == -1;
     });
 
-    const defaultFiles = [`*${FileExtensions.BotProject}`, `*${FileExtensions.Dialog}`, 'README.md', '.gitignore'];
+    const defaultFiles = [
+      `*${FileExtensions.BotProject}`,
+      `*${FileExtensions.Dialog}`,
+      `*.csproj`,
+      `*.botproj`,
+      `*.cs`,
+      `Nuget.config`,
+      'README.md',
+      '.gitignore',
+    ];
 
     const filesToInclude = defaultFiles.filter((elem) => {
       return exclusions?.files == undefined || exclusions?.files?.indexOf(elem) == -1;
