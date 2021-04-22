@@ -80,16 +80,16 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const updateLuisSettings = (newLuisSettings) => {
     setSettings(rootBotProjectId, {
       ...mergedSettings,
-      luis: { ...mergedSettings.luis, ...newLuisSettings },
+      luis: { ...mergedSettings.luis, authoringKey: newLuisSettings.key, authoringRegion: newLuisSettings.region },
     });
   };
 
   const updateQNASettings = (newQNASettings) => {
     setSettings(rootBotProjectId, {
       ...mergedSettings,
-      qna: { ...mergedSettings.qna, ...newQNASettings },
+      qna: { ...mergedSettings.qna, subscriptionKey: newQNASettings.key },
     });
-    setQnASettings(rootBotProjectId, newQNASettings.subscriptionKey);
+    setQnASettings(rootBotProjectId, newQNASettings.key);
   };
 
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
@@ -125,6 +125,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightLUIS(true);
         },
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'luis', priority: 'required' });
           openLink(linkToLUISSettings);
           if (!step?.checked) {
             setDisplayManageLuis(true);
@@ -144,6 +145,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightQNA(true);
         },
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'qna', priority: 'required' });
           openLink(linktoQNASettings);
           if (!step?.checked) {
             setDisplayManageQNA(true);
@@ -165,6 +167,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         required: true,
         checked: hasPublishingProfile,
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publishing', priority: 'recommended' });
           openLink(linkToPublishProfile);
         },
       });
@@ -179,6 +182,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'packages', priority: 'optional' });
           openLink(linkToPackageManager);
         },
       },
@@ -189,6 +193,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlg', priority: 'optional' });
           openLink(linkToLGEditor);
         },
       },
@@ -199,6 +204,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'optional' });
           openLink(linkToLUEditor);
         },
       },
@@ -211,6 +217,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'insights', priority: 'optional' });
           openLink(linkToAppInsights);
         },
       },
@@ -221,6 +228,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'devops', priority: 'optional' });
           openLink(linkToDevOps);
         },
       },
@@ -234,6 +242,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
           openLink(linkToConnections);
         },
       });
@@ -247,23 +256,23 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
         <ManageLuis
           hidden={!displayManageLuis}
-          setDisplayManageLuis={setDisplayManageLuis}
           onDismiss={hideManageLuis}
           onGetKey={updateLuisSettings}
           onNext={() => {
             hideManageLuis();
             doNextStep('luis');
           }}
+          onToggleVisibility={setDisplayManageLuis}
         />
         <ManageQNA
           hidden={!displayManageQNA}
-          setDisplayManageQna={setDisplayManageQNA}
           onDismiss={hideManageQNA}
           onGetKey={updateQNASettings}
           onNext={() => {
             hideManageQNA();
             doNextStep('qna');
           }}
+          onToggleVisibility={setDisplayManageQNA}
         />
 
         {highlightLUIS && (
