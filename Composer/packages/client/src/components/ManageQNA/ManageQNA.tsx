@@ -50,6 +50,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         '1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker'
       )}
       hidden={props.hidden}
+      learnMore={'https://aka.ms/composer-addqnamaker-learnmore'}
       regions={QNA_REGIONS}
       serviceKeyType={'QnAMaker'}
       serviceName={'QnA Maker'}
