@@ -48,6 +48,7 @@ import { navigateTo } from '../utils/navigation';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
 import { getMemoryVariables } from '../recoilModel/dispatchers/utils/project';
+import { recognizersSelectorFamily } from '../recoilModel/selectors/recognizers';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -109,6 +110,12 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState(projectId));
   const featureFlags = useRecoilValue(featureFlagsState);
+  const recognizers = useRecoilValue(recognizersSelectorFamily(projectId));
+  const isOrchestrator = () =>
+    recognizers.some(
+      (f) => f.id === `${dialogId}.${locale}.lu.dialog` && f.content.$kind === SDKKinds.OrchestratorRecognizer
+    );
+
   const {
     updateDialog,
     updateDialogSchema,
@@ -319,7 +326,15 @@ export function useShell(source: EventSource, projectId: string): Shell {
     focusedTab: promptTab,
     clipboardActions,
     hosted: !!isAbsHosted(),
-    luFeatures: settings.luFeatures,
+    luFeatures: isOrchestrator()
+      ? {
+          enableListEntities: false,
+          enableCompositeEntities: false,
+          enableMLEntities: false,
+          enablePrebuiltEntities: false,
+          enableRegexEntities: false,
+        }
+      : settings.luFeatures,
     skills,
     skillsSettings: settings.skill || {},
     flowZoomRate,
