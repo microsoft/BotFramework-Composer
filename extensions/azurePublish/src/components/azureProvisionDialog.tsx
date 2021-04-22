@@ -718,7 +718,8 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const onSave = useCallback(() => {
-    savePublishConfig(importConfig);
+    const noPlaceholderConfig = removePlaceholder(importConfig);
+    savePublishConfig(noPlaceholderConfig);
     clearAll();
     closeDialog();
   }, [importConfig]);
