@@ -82,6 +82,7 @@ const Library: React.FC = () => {
   const [selectedItemVersions, setSelectedItemVersions] = useState<string[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<string>('');
   const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
+  const [isRemote, setIsRemote] = useState<boolean>(false);
   const [working, setWorking] = useState<string>('');
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
@@ -614,12 +615,15 @@ const Library: React.FC = () => {
             <ProjectList
               defaultSelected={projectId}
               projectCollection={projectCollection}
-              onSelect={(link) => setCurrentProjectId(link.projectId)}
+              onSelect={(link) => {
+                setCurrentProjectId(link.projectId);
+                setIsRemote(link.isRemote);
+              }}
             />
           </Stack.Item>
         )}
         <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflowX: 'hidden', maxHeight: '100%' } }}>
-          {!ejectedRuntime && (
+          {!isRemote && !ejectedRuntime && (
             <MessageBar
               actions={
                 <div>
