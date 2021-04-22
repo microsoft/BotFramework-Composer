@@ -4,10 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useEffect, useMemo, Fragment, useRef } from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { PublishResult, PublishTarget } from '@bfc/shared';
+import querystring from 'query-string';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
@@ -35,7 +36,11 @@ import { ProjectList } from './components/projectList/ProjectList';
 import { PublishDialog } from './PublishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { BotStatusList } from './BotStatusList';
-import { getPendingNotificationCardProps, getPublishedNotificationCardProps } from './Notifications';
+import {
+  getPendingNotificationCardProps,
+  getPublishedNotificationCardProps,
+  getSkillPublishedNotificationCardProps,
+} from './Notifications';
 import { PullDialog } from './pullDialog';
 import { PublishToolbar } from './PublishToolbar';
 import { Bot, BotStatus } from './type';
@@ -46,6 +51,13 @@ import {
   deleteNotificationInterval,
 } from './publishPageUtils';
 
+const SKILL_PUBLISH_STATUS = {
+  INITIAL: 'inital',
+  WAITING: 'wait for publish',
+  PUBLISHING: 'publishing',
+  PUBLISHED: 'published',
+  CANCEL: 'cancel',
+};
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectData = useRecoilValue(localBotsDataSelector);
@@ -83,7 +95,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const botStatusList = useMemo(() => {
     return generateBotStatusList(currentBotList, botPropertyData, publishHistoryList);
-  }, [currentBotList, botPropertyData, publishHistoryList]);
+  }, [currentBotList, botPropertyData, publishHistoryList, botProjectData]);
 
   const isPublishPending = useMemo(() => {
     return Object.values(updaterStatus).some(Boolean);
@@ -126,6 +138,23 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     pendingNotification && (await deleteNotification(pendingNotification.id));
     pendingNotificationRef.current = undefined;
   };
+
+  const [skillPublishStatus, setSkillPublishStatus] = useState(SKILL_PUBLISH_STATUS.INITIAL);
+  const decoded = props.location?.search ? decodeURIComponent(props.location.search) : '';
+  const { publishTargetName, url } = querystring.parse(decoded);
+  const [skillManifestUrl, setSkillManifestUrl] = useState('');
+
+  useEffect(() => {
+    if (publishTargetName && botStatusList.length > 0 && skillPublishStatus === SKILL_PUBLISH_STATUS.INITIAL) {
+      setSkillPublishStatus(SKILL_PUBLISH_STATUS.WAITING);
+      const currentBotStatus = botStatusList.find((bot) => bot.id === projectId);
+      changePublishTarget(publishTargetName, currentBotStatus);
+      setCheckedSkillIds([projectId]);
+      onPublish();
+      setSkillManifestUrl(url as string);
+      props.location && navigate(props.location?.pathname, { replace: true });
+    }
+  }, [publishTargetName, botStatusList, skillPublishStatus, props.location]);
 
   useEffect(() => {
     if (currentBotList.length < botList.length) {
@@ -201,10 +230,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // Show result notifications
       const displayedNotifications = showNotificationsRef.current;
       if (displayedNotifications[botProjectId]) {
-        const resultNotification = createNotification(
-          getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status })
-        );
+        const notificationCard =
+          skillPublishStatus !== SKILL_PUBLISH_STATUS.INITIAL
+            ? getSkillPublishedNotificationCardProps(
+                { ...updatedBot, status: responseData.status, skillManifestUrls: [] },
+                skillManifestUrl
+              )
+            : getPublishedNotificationCardProps({ ...updatedBot, status: responseData.status, skillManifestUrls: [] });
+        const resultNotification = createNotification(notificationCard);
         addNotification(resultNotification);
+        setSkillPublishStatus(SKILL_PUBLISH_STATUS.INITIAL);
         setTimeout(() => {
           deleteNotification(resultNotification.id);
           showNotificationsRef.current = { ...displayedNotifications, [botProjectId]: false };
@@ -247,6 +282,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const isPublishingToAzure = (target?: PublishTarget) => {
     return target?.type === 'azurePublish' || target?.type === 'azureFunctionsPublish';
+  };
+
+  const onPublish = () => {
+    if (isShowAuthDialog(false)) {
+      setShowAuthDialog(true);
+    } else {
+      setPublishDialogVisiblity(true);
+    }
+    TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
   };
 
   const publish = async (items: BotStatus[]) => {
@@ -309,9 +353,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       accumulator[item.id] = true;
       return accumulator;
     }, {});
-    const notification = createNotification(getPendingNotificationCardProps(items));
+    const notification = createNotification(
+      getPendingNotificationCardProps(items, skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING)
+    );
     pendingNotificationRef.current = notification;
     addNotification(notification);
+
+    if (skillPublishStatus === SKILL_PUBLISH_STATUS.WAITING) {
+      setSkillPublishStatus(SKILL_PUBLISH_STATUS.PUBLISHING);
+    }
 
     // publish to remote
     for (const bot of items) {
@@ -407,14 +457,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <PublishToolbar
         canPublish={canPublish}
         canPull={canPull}
-        onPublish={() => {
-          if (isShowAuthDialog(false)) {
-            setShowAuthDialog(true);
-          } else {
-            setPublishDialogVisiblity(true);
-          }
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
-        }}
+        onPublish={onPublish}
         onPull={() => {
           setPullDialogVisiblity(true);
           TelemetryClient.track('ToolbarButtonClicked', { name: 'pullFromProfile' });

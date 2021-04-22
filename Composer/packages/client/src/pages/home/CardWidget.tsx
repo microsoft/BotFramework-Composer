@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Image, ImageFit, ImageLoadState } from 'office-ui-fabric-react/lib/Image';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
@@ -54,7 +54,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
 }) => {
   const defaultImageCover = cardType === 'video' ? defaultVideoCardCover : defaultArticleCardCover;
   const [appliedImageCover, setAppliedImageCover] = useState<string>(imageCover ?? defaultImageCover);
-  const [useImageBackground, setUseImageBackground] = useState(false);
+  const imageContainerEl = useRef<HTMLDivElement>(null);
   const styles =
     rest.styles || cardType === 'resource'
       ? home.cardItem
@@ -65,16 +65,6 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
   const onImageLoading = (state: ImageLoadState) => {
     if (state === ImageLoadState.error) {
       setAppliedImageCover(defaultImageCover);
-    }
-  };
-
-  // detect image cover dimention to decide apply background or not.
-  // By design standard image width is 244 height is 95, if feed image aspectRatio too far away will be treated as a small image.
-  const onImageLoaded = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const aspectRatio = rect.width / rect.height;
-    if (aspectRatio < 1.5) {
-      setUseImageBackground(true);
     }
   };
 
@@ -92,13 +82,11 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
       {...rest}
     >
       <div ref={forwardedRef} aria-label={ariaLabel}>
-        <div css={styles.imageCover}>
-          {useImageBackground && <div className={'image-cover-background'} />}
+        <div ref={imageContainerEl} css={styles.imageCover}>
           <Image
             className={'image-cover-img'}
-            imageFit={ImageFit.centerContain}
+            imageFit={ImageFit.contain}
             src={appliedImageCover}
-            onLoad={onImageLoaded}
             onLoadingStateChange={onImageLoading}
           />
         </div>

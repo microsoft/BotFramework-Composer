@@ -54,12 +54,13 @@ describe('Select Dialog', () => {
     const navTo = jest.fn().mockResolvedValue();
     const onChange = jest.fn();
 
-    const { baseElement, findByRole } = renderSelectDialog({ createDialog, navTo, onChange });
-    const combobox = await findByRole('combobox');
-    fireEvent.click(combobox);
+    const { baseElement, findByLabelText } = renderSelectDialog({ createDialog, navTo, onChange });
+    const menu = await findByLabelText('Dialog name');
+    fireEvent.click(menu);
 
-    const dialogs = await getAllByRole(baseElement, 'option');
-    fireEvent.click(dialogs[dialogs.length - 1]);
+    const createItem = getAllByRole(baseElement, 'menuitem').pop();
+    expect(createItem).toHaveTextContent('Create a new dialog');
+    fireEvent.click(createItem);
 
     await flushPromises();
     jest.advanceTimersByTime(1000);
@@ -72,11 +73,12 @@ describe('Select Dialog', () => {
   it('should select dialog', async () => {
     const onChange = jest.fn();
 
-    const { baseElement, findByRole } = renderSelectDialog({ onChange });
-    const combobox = await findByRole('combobox');
-    fireEvent.click(combobox);
+    const { baseElement, findByLabelText } = renderSelectDialog({ onChange });
+    const menu = await findByLabelText('Dialog name');
+    fireEvent.click(menu);
 
-    const [dialog] = getAllByRole(baseElement, 'option');
+    const [dialog] = getAllByRole(baseElement, 'menuitem');
+    expect(dialog).toHaveTextContent('dialog2');
     fireEvent.click(dialog);
 
     expect(onChange).toHaveBeenCalledWith('dialog2');

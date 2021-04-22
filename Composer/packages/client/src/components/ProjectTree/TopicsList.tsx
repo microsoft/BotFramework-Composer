@@ -10,7 +10,7 @@ import get from 'lodash/get';
 
 import { ExpandableNode } from './ExpandableNode';
 import { TreeItem } from './treeItem';
-import { LEVEL_PADDING, INDENT_PER_LEVEL } from './constants';
+import { INDENT_PER_LEVEL } from './constants';
 import { headerCSS } from './ProjectTree';
 
 type TopicsListProps = {
@@ -21,7 +21,7 @@ type TopicsListProps = {
 };
 
 export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWidth, projectId }) => {
-  const linkTooltip = formatMessage('Open in Power Virtual Agents');
+  const linkTooltip = formatMessage('Edit in Power Virtual Agents');
 
   const renderTopic = (topic: DialogInfo) => {
     const isSystemTopic = get(topic.content, 'isSystemTopic', false);
@@ -69,8 +69,10 @@ export const TopicsList: React.FC<TopicsListProps> = ({ topics, onToggle, textWi
             link={{
               displayName: formatMessage('Power Virtual Agents Topics ({count})', { count: topics.length }),
               projectId,
+              isRoot: false,
+              isRemote: false,
+              diagnostics: [],
             }}
-            padLeft={0 * LEVEL_PADDING}
             showErrors={false}
             textWidth={textWidth}
           />

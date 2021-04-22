@@ -53,26 +53,18 @@ export const InsertEntityButton = React.memo((props: Props) => {
     [onInsertEntity]
   );
 
-  const { menuProps, noEntities } = useLabelingMenuProps(labelingMenuVisible ? 'disable' : 'none', luFile, itemClick, {
-    menuHeaderText: labelingMenuVisible ? formatMessage('Tag entity') : undefined,
-  });
+  const { menuProps, noEntities } = useLabelingMenuProps(labelingMenuVisible ? 'disable' : 'none', luFile, itemClick);
 
-  const mode = React.useMemo(() => (labelingMenuVisible ? 'tag' : 'insert'), [labelingMenuVisible]);
-  const disabled = React.useMemo(
-    () => noEntities || (mode === 'tag' && tagEntityDisabled) || (mode === 'insert' && insertEntityDisabled),
-    [mode, noEntities, insertEntityDisabled, tagEntityDisabled]
-  );
+  const disabled = React.useMemo(() => noEntities || insertEntityDisabled || labelingMenuVisible, [
+    noEntities,
+    insertEntityDisabled,
+    tagEntityDisabled,
+    labelingMenuVisible,
+  ]);
 
-  const { iconName, text } = React.useMemo(
-    () => getLuToolbarItemTextAndIcon(labelingMenuVisible ? 'tagEntity' : 'useEntity'),
-    [labelingMenuVisible]
-  );
+  const { iconName, text } = React.useMemo(() => getLuToolbarItemTextAndIcon('useEntity'), []);
 
-  const CommandBarButton = React.useMemo(
-    () =>
-      getCommandBarButton(labelingMenuVisible ? formatMessage('Tag entity') : formatMessage('Insert defined entity')),
-    [labelingMenuVisible]
-  );
+  const CommandBarButton = React.useMemo(() => getCommandBarButton(formatMessage('Insert defined entity')), []);
 
   return (
     <CommandBarButton
