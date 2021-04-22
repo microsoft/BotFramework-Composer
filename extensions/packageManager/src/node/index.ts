@@ -15,7 +15,7 @@ import { FeedFactory } from './feeds/feedFactory';
 const API_ROOT = '/api';
 
 const hasSchema = (c) => {
-  return c.includesSchema || c.keywords?.indexOf('msbot-component') >= 0;
+  return c.includesSchema || c.keywords?.includes('msbot-component');
 };
 
 const isAdaptiveComponent = (c) => {
