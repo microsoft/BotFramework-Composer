@@ -6,7 +6,15 @@ import styled from '@emotion/styled';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
+import {
+  logOut,
+  usePublishApi,
+  getTenants,
+  getARMTokenForTenant,
+  useLocalStorage,
+  useTelemetryClient,
+  TelemetryClient,
+} from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
@@ -27,9 +35,11 @@ import {
   Stack,
   Text,
 } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
+import sortBy from 'lodash/sortBy';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -85,6 +95,8 @@ const iconStyle = (required) => {
   };
 };
 
+const resourceFieldStyles = { root: { paddingBottom: '4px', width: '75%' } };
+
 const PageTypes = {
   ChooseAction: 'chooseAction',
   ConfigProvision: 'config',
@@ -95,17 +107,30 @@ const PageTypes = {
 
 const DialogTitle = {
   CHOOSE_ACTION: {
-    title: formatMessage('Configure resources'),
-    subText: formatMessage('How you would like to provision Azure resources to your publishing profile?'),
+    title: formatMessage('Configure resources to your publishing profile'),
+    subText: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
   },
-  CONFIG_RESOURCES: {
-    title: formatMessage('Configure resources'),
-    subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
+  EDIT: {
+    title: formatMessage('Import existing resources'),
+    subText: formatMessage('Please provide your Publish Configuration'),
   },
   ADD_RESOURCES: {
     title: formatMessage('Add resources'),
-    subText: formatMessage(
-      'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile.'
+
+    subText: formatMessage.rich(
+      'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile. <a>Learn more</a>',
+      {
+        a: ({ children }) => (
+          <a
+            key="add-resource-learn-more"
+            href={'https://aka.ms/composer-publish-bot#create-new-azure-resources'}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {children}
+          </a>
+        ),
+      }
     ),
   },
   REVIEW: {
@@ -114,7 +139,7 @@ const DialogTitle = {
       'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
     ),
   },
-  EDIT: {
+  CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
     subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
   },
@@ -257,6 +282,9 @@ export const AzureProvisionDialog: React.FC = () => {
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
+  const telemetryClient: TelemetryClient = useTelemetryClient();
+
+  console.log('TELEMETRY CLIENT', telemetryClient);
 
   const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
@@ -271,6 +299,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // form options
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
+  const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string>('');
   const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
@@ -279,11 +308,13 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [formData, setFormData] = useState<ProvisionFormData>(getDefaultFormData(currentConfig, extensionState));
 
-  // null = loading
-  const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingErrorMessage, setLoadingErrorMessage] = useState<string>();
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>();
+  const [isNewResourceGroup, setIsNewResourceGroup] = useState(!currentConfig?.resourceGroup);
   const [errorResourceGroupName, setErrorResourceGroupName] = useState<string>();
+
   const [errorHostName, setErrorHostName] = useState('');
 
   const [isEditorError, setEditorError] = useState(false);
@@ -308,21 +339,21 @@ export const AzureProvisionDialog: React.FC = () => {
     const createQnAResource = resources.filter((r) => r.key === 'qna').length > 0;
 
     const provisionComposer = `node provisionComposer.js --subscriptionId ${
-      formData.subscriptionId ?? '<YOUR SUBSCRIPTION ID>'
-    } --name ${formData.hostname ?? '<RESOURCE NAME>'}
-    --appPassword=<16 CHAR PASSWORD>
-    --location=${formData.region || 'westus'}
-    --resourceGroup=${formData.resourceGroup || '<RESOURCE GROUP NAME>'}
-    --createLuisResource=${createLuisResource}
-    --createLuisAuthoringResource=${createLuisAuthoringResource}
-    --createCosmosDb=${createCosmosDb}
-    --createStorage=${createStorage}
-    --createAppInsights=${createAppInsights}
-    --createQnAResource=${createQnAResource}
-    `;
+      formData.subscriptionId || '<YOUR SUBSCRIPTION ID>'
+    } --name ${formData.hostname || '<RESOURCE NAME>'} --appPassword=<16 CHAR PASSWORD> --location=${
+      formData.region || 'westus'
+    } --resourceGroup=${
+      formData.resourceGroup || '<RESOURCE GROUP NAME>'
+    } --createLuisResource=${createLuisResource} --createLuisAuthoringResource=${createLuisAuthoringResource} --createCosmosDb=${createCosmosDb} --createStorage=${createStorage} --createAppInsights=${createAppInsights} --createQnAResource=${createQnAResource}`;
 
     const instructions = formatMessage(
-      'A hosting environment and some Azure cognitive services are required for this bot project to be published.  You can find instructions for creating the necessary resources and communicating them back to me at the link below: \n\nSOME LINK GOES HERE\n\nIn addition, here is a customized command that you can use to automatically create the required resources:\n\n {command}',
+      'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created.' +
+        ' Please follow the instructions below to create these resources and provide them to me.\n\n' +
+        '1. Follow the instructions at the link below to run the provisioning command (seen below)\n' +
+        '2. Copy and paste the resulting JSON and securely share it with me.\n\n' +
+        'Provisoning Command:\n' +
+        '{command}\n\n' +
+        'Detailed instructions:\nhttps://aka.ms/how-to-complete-provision-handoff',
       { command: provisionComposer }
     );
 
@@ -333,18 +364,22 @@ export const AzureProvisionDialog: React.FC = () => {
     setPage(page);
     switch (page) {
       case PageTypes.AddResources:
+        // telemetryClient.track('ProvisionAddResourcesNavigate');
         setTitle(DialogTitle.ADD_RESOURCES);
         break;
       case PageTypes.ChooseAction:
         setTitle(DialogTitle.CHOOSE_ACTION);
         break;
       case PageTypes.ConfigProvision:
+        // telemetryClient.track('ProvisionConfigureResources');
         setTitle(DialogTitle.CONFIG_RESOURCES);
         break;
       case PageTypes.EditJson:
+        // telemetryClient.track('ProvisionEditJSON');
         setTitle(DialogTitle.EDIT);
         break;
       case PageTypes.ReviewResource:
+        // telemetryClient.track('ProvisionReviewResources');
         setTitle(DialogTitle.REVIEW);
         break;
     }
@@ -365,29 +400,6 @@ export const AzureProvisionDialog: React.FC = () => {
       isMounted.current = false;
     };
   }, []);
-
-  const getTokenForTenant = (tenantId: string) => {
-    // set tenantId in cache.
-    setTenantId(tenantId);
-    getARMTokenForTenant(tenantId)
-      .then((token) => {
-        setToken(token);
-        const decoded = decodeToken(token);
-        setCurrentUser({
-          token: token,
-          email: decoded.upn,
-          name: decoded.name,
-          expiration: (decoded.exp || 0) * 1000, // convert to ms,
-          sessionExpired: false,
-        });
-        setLoginErrorMsg(undefined);
-      })
-      .catch((err) => {
-        setTenantId(undefined);
-        setCurrentUser(undefined);
-        setLoginErrorMsg(err.message || err.toString());
-      });
-  };
 
   useEffect(() => {
     setPage(PageTypes.ChooseAction);
@@ -410,27 +422,89 @@ export const AzureProvisionDialog: React.FC = () => {
           sessionExpired: false,
         });
         setPageAndTitle(PageTypes.ChooseAction);
-        setLoginErrorMsg(undefined);
+      } else {
+        setLoadingErrorMessage(
+          formatMessage(
+            'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
+          )
+        );
       }
-    } else {
-      getTenants().then((tenants) => {
-        if (isMounted.current) {
-          setAllTenants(tenants);
-          if (!getTenantIdFromCache()) {
-            if (tenants?.length > 0) {
-              // seed tenant selection with 1st tenant
-              updateFormData('tenantId', tenants[0].tenantId);
-            }
-          } else {
-            updateFormData('tenantId', getTenantIdFromCache());
-          }
-        }
-      });
     }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    if (formData.tenantId) {
+    if (page === PageTypes.ConfigProvision) {
+      if (!userShouldProvideTokens()) {
+        // TODO: handle when existing profile is being edited
+        // We should get an ARM token for the tenant in the profile and then fetch tenant details after to show in the UI.
+        // Note: For electron, getTenants may cause the sign-in dialog to appear.
+        getTenants()
+          .then((tenants) => {
+            if (isMounted.current) {
+              setAllTenants(tenants);
+
+              if (tenants.length === 0) {
+                setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
+              } else {
+                setTenantsErrorMessage(undefined);
+              }
+
+              const cachedTenantId = getTenantIdFromCache();
+
+              // default to the last used tenant only if it is in the account's tenants
+              if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+                updateFormData('tenantId', cachedTenantId);
+              } else {
+                setTenantId(undefined);
+                if (tenants?.length > 0) {
+                  // seed tenant selection with 1st tenant
+                  updateFormData('tenantId', tenants[0].tenantId);
+                }
+              }
+            }
+          })
+          .catch((err) => {
+            setTenantsErrorMessage(
+              formatMessage('There was a problem loading Azure directories. {errMessage}', {
+                errMessage: err.message || err.toString(),
+              })
+            );
+          });
+      }
+    }
+  }, [page]);
+
+  const getTokenForTenant = (tenantId: string) => {
+    getARMTokenForTenant(tenantId)
+      .then((token) => {
+        // set tenantId in cache only after a token is received
+        setTenantId(tenantId);
+        setToken(token);
+        const decoded = decodeToken(token);
+        setCurrentUser({
+          token: token,
+          email: decoded.upn,
+          name: decoded.name,
+          expiration: (decoded.exp || 0) * 1000, // convert to ms,
+          sessionExpired: false,
+        });
+        setTenantsErrorMessage(undefined);
+      })
+      .catch((err) => {
+        setTenantId(undefined);
+        setCurrentUser(undefined);
+        setTenantsErrorMessage(
+          formatMessage('There was a problem getting the access token for the current Azure directory. {errMessage}', {
+            errMessage: err.message || err.toString(),
+          })
+        );
+        setTenantsErrorMessage(err.message || err.toString());
+      });
+  };
+
+  useEffect(() => {
+    if (formData.tenantId && page === PageTypes.ConfigProvision) {
       if (formData.tenantId !== currentConfig?.tenantId) {
         // reset form data when tenant id changes
         setFormData((current) => ({
@@ -447,7 +521,7 @@ export const AzureProvisionDialog: React.FC = () => {
         getTokenForTenant(formData.tenantId);
       }
     }
-  }, [formData.tenantId]);
+  }, [formData.tenantId, page]);
 
   const getResources = async () => {
     try {
@@ -516,12 +590,15 @@ export const AzureProvisionDialog: React.FC = () => {
     return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
-  const deployLocationsOption = useMemo((): IDropdownOption[] => {
-    return (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  const deployLocationOptions = useMemo((): IDropdownOption[] => {
+    const unorderedDeployLocations =
+      (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+    return sortBy(unorderedDeployLocations, [(location) => location.text]);
   }, [token, deployLocations]);
 
-  const luisLocationsOption = useMemo((): IDropdownOption[] => {
-    return (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  const luisLocationOptions = useMemo((): IDropdownOption[] => {
+    const unorderedLuisLocations = (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+    return sortBy(unorderedLuisLocations, [(location) => location.text]);
   }, [token, luisLocations]);
 
   const checkNameAvailability = useCallback(
@@ -586,6 +663,13 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [formData.subscriptionId, token]);
 
+  useEffect(() => {
+    if (!isNewResourceGroup) {
+      const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
+      setIsNewResourceGroup(!currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup));
+    }
+  }, [currentConfig, formData.resourceGroup, resourceGroups]);
+
   const onNext = useCallback(
     (hostname) => {
       // get resources already have
@@ -621,6 +705,13 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSubmit = useCallback((options) => {
     // call back to the main Composer API to begin this process...
+
+    // telemetryClient.track('ProvisionStart', {
+    //   region: options.location,
+    //   subscriptionId: options.subscription,
+    //   externalResources: options.externalResources,
+    // });
+
     startProvision(options);
     clearAll();
     closeDialog();
@@ -674,28 +765,22 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const resourceGroupNames = resourceGroups?.map((r) => r.name) || [];
 
-  const isNewResourceGroupName = !currentConfig?.resourceGroup && !resourceGroupNames.includes(formData.resourceGroup);
-
   const PageChooseAction = (
-    <ScrollablePane
-      data-is-scrollable="true"
-      scrollbarVisibility={ScrollbarVisibility.auto}
-      style={{ height: 'calc(100vh - 64px)' }}
-    >
+    <div style={{ height: 'calc(100vh - 65px)' }}>
       <ChooseProvisionAction
         choice={formData.creationType}
         onChoiceChanged={(choice) => {
           updateFormData('creationType', choice);
         }}
       />
-    </ScrollablePane>
+    </div>
   );
 
   const PageFormConfig = (
     <ScrollablePane
       data-is-scrollable="true"
       scrollbarVisibility={ScrollbarVisibility.auto}
-      style={{ height: 'calc(100vh - 64px)' }}
+      style={{ height: 'calc(100vh - 65px)' }}
     >
       <form style={{ width: '100%' }}>
         <Dropdown
@@ -703,11 +788,11 @@ export const AzureProvisionDialog: React.FC = () => {
             'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
           )}
           disabled={allTenants.length === 1 || currentConfig?.tenantId}
-          errorMessage={loginErrorMsg}
+          errorMessage={tenantsErrorMessage}
           label={formatMessage('Azure Directory')}
           options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
           selectedKey={formData.tenantId}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={(_e, o) => {
             updateFormData('tenantId', o.key as string);
           }}
@@ -722,7 +807,7 @@ export const AzureProvisionDialog: React.FC = () => {
           options={subscriptionOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.subscriptionId}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={(_e, o) => {
             updateFormData('subscriptionId', o.key as string);
           }}
@@ -730,10 +815,11 @@ export const AzureProvisionDialog: React.FC = () => {
         />
         <ResourceGroupPicker
           disabled={currentConfig?.resourceGroup}
-          newResourceGroupName={isNewResourceGroupName ? formData.resourceGroup : undefined}
+          newResourceGroupName={isNewResourceGroup ? formData.resourceGroup : undefined}
           resourceGroupNames={resourceGroupNames}
-          selectedResourceGroupName={isNewResourceGroupName ? undefined : formData.resourceGroup}
+          selectedResourceGroupName={isNewResourceGroup ? undefined : formData.resourceGroup}
           onChange={(choice) => {
+            setIsNewResourceGroup(choice.isNew);
             updateFormData('resourceGroup', choice.name);
             setErrorResourceGroupName(choice.errorMessage);
           }}
@@ -747,7 +833,7 @@ export const AzureProvisionDialog: React.FC = () => {
           errorMessage={errorHostName}
           label={formatMessage('Resource name')}
           placeholder={formatMessage('Name of your services')}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           value={formData.hostname}
           onChange={newHostName}
           onRenderLabel={onRenderLabel}
@@ -756,10 +842,10 @@ export const AzureProvisionDialog: React.FC = () => {
           required
           disabled={currentConfig?.region}
           label={formatMessage('Region')}
-          options={deployLocationsOption}
+          options={deployLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.region}
-          styles={{ root: { paddingBottom: '8px' } }}
+          styles={resourceFieldStyles}
           onChange={updateCurrentLocation}
           onRenderLabel={onRenderLabel}
         />
@@ -767,9 +853,10 @@ export const AzureProvisionDialog: React.FC = () => {
           required
           disabled={currentConfig?.settings?.luis?.region}
           label={formatMessage('Region for Luis')}
-          options={luisLocationsOption}
+          options={luisLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.luisLocation}
+          styles={{ root: { width: '75%' } }}
           onChange={(e, o) => {
             updateFormData('luisLocation', o.key as string);
           }}
@@ -794,7 +881,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <ScrollablePane
           data-is-scrollable="true"
           scrollbarVisibility={ScrollbarVisibility.auto}
-          style={{ height: 'calc(100vh - 64px)' }}
+          style={{ height: 'calc(100vh - 65px)' }}
         >
           <Stack>
             {requiredListItems.length > 0 && (
@@ -826,7 +913,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const PageReview = (
     <Fragment>
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 64px)' }}>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{ height: 'calc(100vh - 65px)' }}>
         <DetailsList
           isHeaderVisible
           columns={reviewCols}
@@ -890,6 +977,14 @@ export const AzureProvisionDialog: React.FC = () => {
                     setPageAndTitle(PageTypes.ConfigProvision);
                     break;
                 }
+              }}
+            />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                // telemetryClient.track('ProvisionCancel');
+                closeDialog();
               }}
             />
           </div>
@@ -984,6 +1079,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Next')}
               onClick={() => {
                 if (formData.creationType === 'generate') {
+                  // telemetryClient.track('ProvisionShowHandoff');
                   setShowHandoff(true);
                 } else {
                   setPageAndTitle(PageTypes.ReviewResource);
@@ -1001,6 +1097,14 @@ export const AzureProvisionDialog: React.FC = () => {
                   });
                   setReviewListItems(selectedResources);
                 }
+              }}
+            />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                // telemetryClient.track('ProvisionAddResourcesCancel');
+                closeDialog();
               }}
             />
           </div>
@@ -1051,16 +1155,23 @@ export const AzureProvisionDialog: React.FC = () => {
         <>
           <DefaultButton
             style={{ margin: '0 4px' }}
-            text={formatMessage('Cancel')}
+            text={formatMessage('Back')}
             onClick={() => {
-              closeDialog();
+              setPageAndTitle(PageTypes.ChooseAction);
             }}
           />
           <PrimaryButton
             disabled={isEditorError}
             style={{ margin: '0 4px' }}
-            text={formatMessage('Save')}
+            text={formatMessage('Import')}
             onClick={onSave}
+          />
+          <DefaultButton
+            style={{ margin: '0 4px' }}
+            text={formatMessage('Cancel')}
+            onClick={() => {
+              closeDialog();
+            }}
           />
         </>
       );
@@ -1069,7 +1180,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   // if we haven't loaded the token yet, show a loading spinner
   // unless we need to select the tenant first
-  if (!token) {
+  if (isLoading) {
     return (
       <div style={{ height: '100vh' }}>
         <LoadingSpinner />
@@ -1077,13 +1188,26 @@ export const AzureProvisionDialog: React.FC = () => {
     );
   }
 
+  if (loadingErrorMessage) {
+    return (
+      <div style={{ height: '100vh' }}>
+        <MessageBar isMultiline messageBarType={MessageBarType.error}>
+          {loadingErrorMessage}
+        </MessageBar>
+      </div>
+    );
+  }
+
   return (
     <Fragment>
       <ProvisionHandoff
-        developerInstructions={formatMessage('Send this to your IT admin')}
+        developerInstructions={formatMessage(
+          'Copy and share the following information with your Azure admin to provision resources on your behalf.'
+        )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
-        title={formatMessage('Generate a provisioning request')}
+        learnMoreLink="https://aka.ms/how-to-complete-provision-handoff"
+        title={formatMessage('Share resource request')}
         onBack={() => {
           setShowHandoff(false);
         }}

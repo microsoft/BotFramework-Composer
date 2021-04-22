@@ -10,6 +10,7 @@ import {
 } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
+import { v4 as uuid } from 'uuid';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
@@ -85,6 +86,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
                   projectId,
                   data.activities.map((a) => ({
                     activity: a,
+                    id: uuid(),
                     timestamp: new Date(a.timestamp || Date.now()).getTime(),
                     trafficType: data.trafficType,
                   }))
@@ -106,20 +108,19 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         }
       } catch (ex) {
         const response: AxiosResponse = ex.response;
-        if (response) {
-          const err: ConversationNetworkErrorItem = {
-            error: {
-              message: formatMessage('An error occurred connecting initializing the DirectLine server'),
-            },
-            request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
-            response: { payload: response.data, statusCode: response.status },
-            timestamp: Date.now(),
-            trafficType: 'networkError',
-          };
-          appendWebChatTraffic(projectId, err);
-          setActiveTabInDebugPanel('WebChatInspector');
-          setDebugPanelExpansion(true);
-        }
+        const err: ConversationNetworkErrorItem = {
+          error: {
+            message: formatMessage('An error occurred connecting initializing the DirectLine server'),
+          },
+          id: uuid(),
+          request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
+          response: { payload: response.data, statusCode: response.status },
+          timestamp: Date.now(),
+          trafficType: 'networkError',
+        };
+        appendWebChatTraffic(projectId, err);
+        setActiveTabInDebugPanel('WebChatInspector');
+        setDebugPanelExpansion(true);
       }
     };
 
@@ -209,6 +210,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         error: {
           message: formatMessage('An error occurred saving transcripts'),
         },
+        id: uuid(),
         request: { route: 'saveTranscripts/', method: '', payload: {} },
         response: { payload: ex, statusCode: 400 },
         timestamp: Date.now(),

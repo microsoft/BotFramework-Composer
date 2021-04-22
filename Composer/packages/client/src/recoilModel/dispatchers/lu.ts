@@ -66,7 +66,7 @@ const updateLuFiles = (
   }
 };
 const getRelatedLuFileChanges = async (
-  luFiles: LuFile[],
+  originLuFiles: LuFile[],
   updatedLuFile: LuFile,
   projectId: string,
   luFeatures: ILUFeaturesConfig
@@ -74,6 +74,7 @@ const getRelatedLuFileChanges = async (
   const { id } = updatedLuFile;
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
+  const luFiles = originLuFiles.map((file) => (file.id === updatedLuFile.id ? updatedLuFile : file));
   const originLuFile = luFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = luFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
@@ -175,6 +176,32 @@ export const removeLuFileState = async (
 };
 
 export const luDispatcher = () => {
+  const batchUpdateLuFiles = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      payloads: {
+        id: string;
+        content: string;
+        projectId: string;
+      }[]
+    ) => {
+      const { snapshot } = callbackHelpers;
+      payloads.map(async ({ id, content, projectId }) => {
+        const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
+        try {
+          const updatedFile = (await luWorker.parse(id, content, luFeatures, [])) as LuFile;
+          // compare to drop expired change on current id file.
+          /**
+           * Why other methods do not need double check content?
+           * Because this method already did set content before call luFilesAtomUpdater.
+           */
+          updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      });
+    }
+  );
+
   const updateLuFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
@@ -329,6 +356,7 @@ export const luDispatcher = () => {
   );
 
   return {
+    batchUpdateLuFiles,
     updateLuFile,
     updateLuIntent,
     createLuIntent,

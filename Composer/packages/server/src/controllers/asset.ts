@@ -62,7 +62,7 @@ export async function getProjTemplatesV2(req: any, res: any) {
       templates = templates.concat(await getNpmTemplates());
     }
 
-    const sortedTemplateList = sortTemplates(templates);
+    const sortedTemplateList = await sortTemplates(templates);
 
     // return templates
     res.status(200).json(sortedTemplateList);
@@ -86,7 +86,7 @@ export async function getTemplateReadMe(req: any, res: any) {
         'microsoft',
         'botframework-components',
         'main',
-        'docs/qnaTemplateReadMe.md'
+        'generators/generator-bot-qna-maker/README.md'
       );
       res.status(200).json(qnaReadMe);
     } else {

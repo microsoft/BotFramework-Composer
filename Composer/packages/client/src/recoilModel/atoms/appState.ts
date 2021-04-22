@@ -351,6 +351,11 @@ export const userHasNodeInstalledState = atom<boolean>({
   default: true,
 });
 
+export const warnAboutDotNetState = atom<boolean>({
+  key: getFullyQualifiedKey('warnAboutDotNetState'),
+  default: false,
+});
+
 export const webChatDataState = atom<Record<string, ChatData>>({
   key: getFullyQualifiedKey('webChatData'),
   default: {},

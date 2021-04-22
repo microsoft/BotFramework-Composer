@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
@@ -36,7 +36,6 @@ export const DebugPanel: React.FC = () => {
   const { setActiveTabInDebugPanel, setDebugPanelExpansion } = useRecoilValue(dispatcherState);
   const isPanelExpanded = useRecoilValue(debugPanelExpansionState);
   const activeTab = useRecoilValue(debugPanelActiveTabState);
-  const refElement = useRef<HTMLDivElement>(null);
 
   const onExpandPanel = useCallback((activeTabKey: DebugDrawerKeys) => {
     setDebugPanelExpansion(true);
@@ -130,12 +129,7 @@ export const DebugPanel: React.FC = () => {
   }, [isPanelExpanded, activeTab]);
 
   return (
-    <div
-      ref={refElement}
-      css={{
-        zIndex: 2,
-      }}
-    >
+    <div>
       <Resizable
         css={css`
           ${debugPaneContainerStyle}

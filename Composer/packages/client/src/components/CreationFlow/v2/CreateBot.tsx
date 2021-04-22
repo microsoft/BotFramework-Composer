@@ -118,7 +118,6 @@ type CreateBotProps = {
   location?: WindowLocation | undefined;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
-  fetchTemplates: (feedUrls?: string[]) => Promise<void>;
   fetchReadMe: (moduleName: string) => {};
 };
 
@@ -240,7 +239,11 @@ export function CreateBotV2(props: CreateBotProps) {
           }}
         >
           <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
-          <PivotItem data-testid="nodeFeed" headerText="Node" itemKey={nodeFeedKey}></PivotItem>
+          <PivotItem
+            data-testid="nodeFeed"
+            headerText={formatMessage('Node (Preview)')}
+            itemKey={nodeFeedKey}
+          ></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">

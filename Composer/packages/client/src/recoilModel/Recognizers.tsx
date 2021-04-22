@@ -79,14 +79,13 @@ export const getMultiLanguagueRecognizerDialog = (
 ) => {
   const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target, fileType);
   const defaultLanguageFile = files.find((f) => getExtension(f.id) === defaultLanguage);
-  if (!defaultLanguageFile) throw new Error('default language file not found');
   files.forEach((item) => {
     if (item.empty || getBaseName(item.id) !== target) return;
     const locale = getExtension(item.id);
     const fileName = `${item.id}.${fileType}`;
-    if (supportedLanguages.includes(locale)) {
+    if (supportedLanguages.includes(locale) || !defaultLanguageFile) {
       multiLanguageRecognizer.recognizers[locale] = fileName;
-    } else {
+    } else if (defaultLanguageFile) {
       multiLanguageRecognizer.recognizers[locale] = `${defaultLanguageFile.id}.${fileType}`;
     }
 

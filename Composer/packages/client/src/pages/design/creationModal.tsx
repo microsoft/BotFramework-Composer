@@ -39,7 +39,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     createNewBotV2,
     openProject,
     addExistingSkillToBotProject,
-    fetchTemplatesV2,
     fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
@@ -65,7 +64,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const fetchResources = async () => {
     await fetchStorages();
-    fetchTemplatesV2();
   };
 
   useEffect(() => {
@@ -169,7 +167,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       <CreateBotV2
         isOpen
         fetchReadMe={fetchReadMe}
-        fetchTemplates={fetchTemplatesV2}
         templates={templateProjects}
         onDismiss={handleDismiss}
         onNext={handleCreateNext}

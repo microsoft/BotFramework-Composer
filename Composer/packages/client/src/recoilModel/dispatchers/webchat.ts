@@ -19,6 +19,7 @@ export const webChatLogDispatcher = () => {
   const clearWebChatLogs = useRecoilCallback((callbackHelpers: CallbackInterface) => (projectId: string) => {
     const { set } = callbackHelpers;
     set(webChatTrafficState(projectId), []);
+    set(webChatInspectionDataState(projectId), undefined); // clear the inspection panel
   });
 
   const setWebChatPanelVisibility = useRecoilCallback((callbackHelpers: CallbackInterface) => (value: boolean) => {
@@ -34,9 +35,9 @@ export const webChatLogDispatcher = () => {
       const { set } = callbackHelpers;
       set(webChatTrafficState(projectId), (currentTraffic) => {
         if (Array.isArray(traffic)) {
-          return [...currentTraffic, ...traffic];
+          return [...currentTraffic, ...traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
         } else {
-          return [...currentTraffic, traffic];
+          return [...currentTraffic, traffic].sort((t1, t2) => t1.timestamp - t2.timestamp);
         }
       });
     }
