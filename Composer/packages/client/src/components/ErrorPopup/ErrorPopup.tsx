@@ -19,7 +19,7 @@ type ErrorPopupProps = {
 };
 
 const formatErrorTitle = (summary: string): string => {
-  if (!summary) return '';
+  if (!summary) return formatMessage('Error');
   return summary.length > 20 ? summary.substring(0, 20) + '...' : summary;
 };
 
@@ -61,7 +61,7 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     }
   }, [props.error]);
 
-  const title = props.error && props.error.summary ? formatErrorTitle(props.error.summary) : 'Error';
+  const title = formatErrorTitle(props?.error?.summary);
   const detail = props.error ? formatErrorDetail(props.error) : '';
 
   return (

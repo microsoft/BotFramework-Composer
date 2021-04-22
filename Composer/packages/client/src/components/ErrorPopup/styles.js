@@ -6,7 +6,7 @@ import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 export const consoleStyle = css`
-  background: ${NeutralColors.gray30};
+  background: ${NeutralColors.gray20};
   padding: 15px;
   margin-bottom: 20px;
   overflow-y: auto;
