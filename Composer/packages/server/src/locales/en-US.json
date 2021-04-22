@@ -323,11 +323,8 @@
   "app_id_password_424f613a": {
     "message": "App Id / Password"
   },
-  "application_language_f100f3e0": {
-    "message": "Application language"
-  },
-  "application_language_settings_26f82dfc": {
-    "message": "Application Language settings"
+  "application_language_settings_85b1f06": {
+    "message": "Application language settings"
   },
   "application_settings_39e840c6": {
     "message": "Application Settings"
@@ -683,8 +680,8 @@
   "composer_is_up_to_date_9118257d": {
     "message": "Composer is up to date."
   },
-  "composer_language_is_the_language_of_composer_ui_c23a57b6": {
-    "message": "Composer language is the language of Composer UI"
+  "composer_language_f958f3bf": {
+    "message": "Composer language"
   },
   "composer_logo_ba2048a0": {
     "message": "Composer Logo"

@@ -125,6 +125,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightLUIS(true);
         },
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'luis', priority: 'required' });
           openLink(linkToLUISSettings);
           if (!step?.checked) {
             setDisplayManageLuis(true);
@@ -144,6 +145,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightQNA(true);
         },
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'qna', priority: 'required' });
           openLink(linktoQNASettings);
           if (!step?.checked) {
             setDisplayManageQNA(true);
@@ -165,6 +167,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         required: true,
         checked: hasPublishingProfile,
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publishing', priority: 'recommended' });
           openLink(linkToPublishProfile);
         },
       });
@@ -179,6 +182,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'packages', priority: 'optional' });
           openLink(linkToPackageManager);
         },
       },
@@ -189,6 +193,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlg', priority: 'optional' });
           openLink(linkToLGEditor);
         },
       },
@@ -199,6 +204,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'optional' });
           openLink(linkToLUEditor);
         },
       },
@@ -211,6 +217,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'insights', priority: 'optional' });
           openLink(linkToAppInsights);
         },
       },
@@ -221,6 +228,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'devops', priority: 'optional' });
           openLink(linkToDevOps);
         },
       },
@@ -234,6 +242,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
           openLink(linkToConnections);
         },
       });
