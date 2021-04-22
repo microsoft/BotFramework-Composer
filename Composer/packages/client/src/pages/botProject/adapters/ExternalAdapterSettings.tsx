@@ -129,7 +129,7 @@ const ExternalAdapterSettings = (props: Props) => {
     <Fragment>
       <div data-testid="adapterSettings">{externalServices(adapterSchemas)}</div>
       <div key={'subtitle'} css={subtitle}>
-        {formatMessage.rich('<a>Add from package manager</a>.', {
+        {formatMessage.rich('<a>Add from package manager</a>', {
           a: ({ children }) => (
             <RouterLink key="link" to={`/bot/${projectId}/plugin/package-manager/package-manager`}>
               {children}
