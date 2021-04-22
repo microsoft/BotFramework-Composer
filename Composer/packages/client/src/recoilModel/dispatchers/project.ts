@@ -36,6 +36,8 @@ import {
   projectMetaDataState,
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
+  warnAboutDotNetState,
+  settingsState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -256,10 +258,15 @@ export const projectDispatcher = () => {
 
           if (profile && alias) {
             const dispatcher = await snapshot.getPromise(dispatcherState);
+            const { publishTargets } = await snapshot.getPromise(settingsState(projectId));
             const newProfile = await getPublishProfileFromPayload(profile, source);
-
-            newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-
+            if (newProfile) {
+              const newPublishTargets = publishTargets
+                ? publishTargets.filter((item) => item.name !== newProfile.name)
+                : [];
+              newPublishTargets.push(newProfile);
+              dispatcher.setPublishTargets(newPublishTargets, projectId);
+            }
             await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
           }
         }
@@ -612,6 +619,7 @@ export const projectDispatcher = () => {
             } else {
               // failure
               callbackHelpers.set(botOpeningState, false);
+
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
@@ -656,6 +664,10 @@ export const projectDispatcher = () => {
     setError(callbackHelpers, error);
   });
 
+  const setWarnAboutDotNet = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutDotNetState, warn);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -679,6 +691,7 @@ export const projectDispatcher = () => {
     updateCreationMessage,
     setCurrentProjectId,
     setProjectError,
+    setWarnAboutDotNet,
     fetchReadMe,
   };
 };

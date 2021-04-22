@@ -48,7 +48,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
 
   const [dialogTitle, setTitle] = useState({
-    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add new publishing profile'),
     subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
   });
 
@@ -82,7 +82,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle({
-        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add new publishing profile'),
         subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
       });
     };
@@ -219,7 +219,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
             <div style={{ marginBottom: '16px' }}>
               {dialogTitle.subText}
               <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage('Learn more.')}
+                {formatMessage('Learn more')}
               </Link>
             </div>
             <ProfileFormDialog

@@ -16,13 +16,14 @@ import { DisableFeatureToolTip } from '../../components/DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
 import { navigateTo } from '../../utils/navigation';
 
-import { BotSkillConfiguration } from './BotSkillConfiguration';
 import { BotProjectInfo } from './BotProjectInfo';
 import { AppIdAndPassword } from './AppIdAndPassword';
 import { ExternalService } from './ExternalService';
 import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import AdapterSection from './adapters/AdapterSection';
+import { SkillHostEndPoint } from './SkillHostEndPoint';
+import { AllowedCallers } from './AllowedCallers';
 
 // -------------------- Styles -------------------- //
 
@@ -44,8 +45,8 @@ const disabledPivotStyle: IButtonProps = {
 
 const idsInTab: Record<PivotItemKey, string[]> = {
   Basics: ['runtimeSettings'],
+  Connections: ['connections'],
   LuisQna: ['luisKey', 'qnaKey', 'luisRegion'],
-  Connections: ['connections', 'addNewPublishProfile'],
   SkillConfig: [],
   Language: [],
 };
@@ -58,7 +59,7 @@ enum PivotItemKey {
   Language = 'Language',
 }
 
-// -------------------- BotProjectSettingsTableView -------------------- //
+// -------------------- BotProjectSettingsTabView -------------------- //
 
 export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   projectId: string;
@@ -93,41 +94,49 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
           }
         }}
       >
-        <PivotItem data-testid="basicsTab" headerText={formatMessage('Basics')} itemKey={PivotItemKey.Basics}>
-          <BotProjectInfo projectId={projectId} />
-          <AppIdAndPassword projectId={projectId} />
+        <PivotItem data-testid="overviewTab" headerText={formatMessage('Overview')} itemKey={PivotItemKey.Basics}>
+          <BotProjectInfo isRootBot={isRootBot} projectId={projectId} />
           <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
         </PivotItem>
         <PivotItem
-          data-testid="luisQnaTab"
+          data-testid="developmentResourcesTab"
           headerButtonProps={isPVABot ? disabledPivotStyle : {}}
-          headerText={formatMessage('LUIS and QnA')}
+          headerText={formatMessage('Development Resources')}
           itemKey={PivotItemKey.LuisQna}
           onRenderItemLink={() => {
             if (isPVABot) {
-              return <DisableFeatureToolTip isPVABot={isPVABot}>{formatMessage('LUIS and QnA')}</DisableFeatureToolTip>;
+              return (
+                <DisableFeatureToolTip isPVABot={isPVABot}>
+                  {formatMessage('Development Resources')}
+                </DisableFeatureToolTip>
+              );
             } else {
-              return <Fragment>{formatMessage('LUIS and QnA')}</Fragment>;
+              return <Fragment>{formatMessage('Development Resources')}</Fragment>;
             }
           }}
         >
           <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
+          <AppIdAndPassword projectId={projectId} />
         </PivotItem>
-        <PivotItem
-          data-testid="connectionsTab"
-          headerButtonProps={isPVABot ? disabledPivotStyle : {}}
-          headerText={formatMessage('Connections')}
-          itemKey={PivotItemKey.Connections}
-          onRenderItemLink={() => {
-            if (isPVABot) {
-              return <DisableFeatureToolTip isPVABot={isPVABot}>{formatMessage('Connections')}</DisableFeatureToolTip>;
-            } else {
-              return <Fragment>{formatMessage('Connections')}</Fragment>;
-            }
-          }}
-        >
-          {isRootBot && <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />}
-        </PivotItem>
+        {isRootBot && (
+          <PivotItem
+            data-testid="connectionsTab"
+            headerButtonProps={isPVABot ? disabledPivotStyle : {}}
+            headerText={formatMessage('Connections')}
+            itemKey={PivotItemKey.Connections}
+            onRenderItemLink={() => {
+              if (isPVABot) {
+                return (
+                  <DisableFeatureToolTip isPVABot={isPVABot}>{formatMessage('Connections')}</DisableFeatureToolTip>
+                );
+              } else {
+                return <Fragment>{formatMessage('Connections')}</Fragment>;
+              }
+            }}
+          >
+            <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />
+          </PivotItem>
+        )}
         <PivotItem
           data-testid="skillsTab"
           headerButtonProps={isPVABot ? disabledPivotStyle : {}}
@@ -144,9 +153,14 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
             }
           }}
         >
-          {isRootBot && <BotSkillConfiguration projectId={projectId} />}
+          {isRootBot && <SkillHostEndPoint projectId={projectId} />}
+          <AllowedCallers projectId={projectId} />
         </PivotItem>
-        <PivotItem data-testid="languageTab" headerText={formatMessage('Language')} itemKey={PivotItemKey.Language}>
+        <PivotItem
+          data-testid="localizationTab"
+          headerText={formatMessage('Localization')}
+          itemKey={PivotItemKey.Language}
+        >
           <BotLanguage projectId={projectId} />
         </PivotItem>
       </Pivot>
