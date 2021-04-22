@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
+import React, { Fragment } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -11,13 +11,13 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { Link } from 'office-ui-fabric-react/lib/components/Link';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
-import { title } from './styles';
+import { subtext, title } from './styles';
 // -------------------- Styles -------------------- //
 
 const labelContainer = css`
@@ -70,7 +70,20 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
 
   return (
-    <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={title}>
+    <Fragment>
+      <div css={title}>{formatMessage('Call skills')}</div>
+      <div css={subtext}>
+        {formatMessage.rich(
+          'Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>.',
+          {
+            a: ({ children }) => (
+              <Link key="skills-settings-page" href={'https://aka.ms/composer-skills-learnmore'} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        )}
+      </div>
       <TextField
         ariaLabel={formatMessage('Skill host endpoint url')}
         data-testid={'SkillHostEndPointTextField'}
@@ -85,6 +98,6 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
         }}
         onRenderLabel={onRenderLabel}
       />
-    </CollapsableWrapper>
+    </Fragment>
   );
 };
