@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { jsx, keyframes } from '@emotion/core';
-import { mergeStyleSets } from '@uifabric/styling';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -17,6 +16,7 @@ import { css } from '@emotion/core';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import {
   dispatcherState,
@@ -28,13 +28,12 @@ import {
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
 import { ManageLuis } from '../../components/ManageLuis/ManageLuis';
 import { ManageQNA } from '../../components/ManageQNA/ManageQNA';
 
-import { title } from './styles';
+import { inputFieldStyles, subtext, title } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -75,16 +74,6 @@ const errorContainer = css`
   background: #fed9cc;
   color: ${NeutralColors.black};
 `;
-
-const customError = {
-  root: {
-    selectors: {
-      'p > span': {
-        width: '100%',
-      },
-    },
-  },
-};
 
 const errorIcon = {
   root: {
@@ -341,7 +330,29 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   };
 
   return (
-    <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
+    <Fragment>
+      <div css={title}>{formatMessage('Language Understanding')}</div>
+      <div css={subtext}>
+        {formatMessage.rich(
+          '<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>.',
+          {
+            a: ({ children }) => (
+              <Link key="luis-root-bot-settings-page" href={'https://www.luis.ai/'} target="_blank">
+                {children}
+              </Link>
+            ),
+            a2: ({ children }) => (
+              <Link
+                key="luis-root-bot-settings-page-learn-more"
+                href={'https://aka.ms/composer-luis-learnmore'}
+                target="_blank"
+              >
+                {children}
+              </Link>
+            ),
+          }
+        )}
+      </div>
       <div css={externalServiceContainerStyle}>
         <TextField
           ariaLabel={formatMessage('LUIS application name')}
@@ -349,6 +360,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           id={'luisName'}
           label={formatMessage('LUIS application name')}
           placeholder={formatMessage('Enter LUIS application name')}
+          styles={inputFieldStyles}
           value={localRootLuisName}
           onBlur={handleRootLUISNameOnBlur}
           onChange={handleRootLUISNameOnChange}
@@ -363,7 +375,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             label={formatMessage('LUIS authoring key')}
             placeholder={formatMessage('Enter LUIS authoring key')}
             required={isLUISKeyNeeded}
-            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            styles={inputFieldStyles}
             value={localRootLuisKey}
             onBlur={handleRootLuisAuthoringKeyOnBlur}
             onChange={handleRootLUISKeyOnChange}
@@ -380,7 +392,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             placeholder={formatMessage('Enter LUIS region')}
             required={isLUISKeyNeeded}
             selectedKey={localRootLuisRegion}
-            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            styles={inputFieldStyles}
             onBlur={handleRootLuisRegionOnBlur}
             onChange={handleRootLuisRegionOnChange}
             onRenderLabel={onRenderLabel}
@@ -400,6 +412,28 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             setDisplayManageLuis(true);
           }}
         />
+        <div css={title}>{formatMessage('QnA Maker')}</div>
+        <div css={subtext}>
+          {formatMessage.rich(
+            'Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more</a2>.',
+            {
+              a: ({ children }) => (
+                <Link key="qna-root-bot-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">
+                  {children}
+                </Link>
+              ),
+              a2: ({ children }) => (
+                <Link
+                  key="qna-root-bot-settings-page-learn-more"
+                  href={'https://aka.ms/composer-addqnamaker-learnmore'}
+                  target="_blank"
+                >
+                  {children}
+                </Link>
+              ),
+            }
+          )}
+        </div>
         <div ref={qnaKeyFieldRef}>
           <TextField
             ariaLabel={formatMessage('QnA Maker Subscription key')}
@@ -409,7 +443,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             label={formatMessage('QnA Maker Subscription key')}
             placeholder={formatMessage('Enter QnA Maker Subscription key')}
             required={isQnAKeyNeeded}
-            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            styles={inputFieldStyles}
             value={localRootQnAKey}
             onBlur={handleRootQnAKeyOnBlur}
             onChange={handleRootQnAKeyOnChange}
@@ -447,6 +481,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onToggleVisibility={setDisplayManageQNA}
         />
       </div>
-    </CollapsableWrapper>
+    </Fragment>
   );
 };
