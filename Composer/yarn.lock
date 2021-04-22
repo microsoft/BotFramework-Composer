@@ -4670,6 +4670,11 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/btoa-lite@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/btoa-lite/-/btoa-lite-1.0.0.tgz#e190a5a548e0b348adb0df9ac7fa5f1151c7cca4"
+  integrity sha512-wJsiX1tosQ+J5+bY5LrSahHxr2wT+uME5UDwdN1kg4frt40euqA+wzECkmq4t5QbveHiJepfdThgQrPw6KiSlg==
+
 "@types/classnames@^2.2.9":
   version "2.2.11"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
@@ -5385,7 +5390,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/xmldom@^0.1.29":
+"@types/xmldom@^0.1.29", "@types/xmldom@^0.1.30":
   version "0.1.30"
   resolved "https://registry.yarnpkg.com/@types/xmldom/-/xmldom-0.1.30.tgz#d36d9a7d64af4693d3b18d5dc02ce432a95be12e"
   integrity sha512-edqgAFXMEtVvaBZ3YnhamvmrHjoYpuxETmnb0lbTZmf/dXpAsO9ZKotUO4K2rn2SIZBDFCMOuA7fOe0H6dRZcA==
@@ -6057,6 +6062,30 @@ adaptive-expressions@4.12.0-rc1:
     x2js "^3.4.0"
     xml2js "^0.4.23"
     xmldom "^0.4.0"
+    xpath "^0.0.32"
+
+adaptive-expressions@4.14.0-dev.7d2b38d:
+  version "4.14.0-dev.7d2b38d"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.14.0-dev.7d2b38d.tgz#4b514eec1ebc12ba6318d0f11383cdea520c524d"
+  integrity sha512-Kuz72qKb+jaXve5KFsY/a7EJNJpSH/z9n0gwYxDUElgG6VFh7oZkc87iFiBQg0GY0ug2kza/YSMbvJmLpP6sww==
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
+    "@types/atob-lite" "^2.0.0"
+    "@types/btoa-lite" "^1.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/xmldom" "^0.1.30"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    btoa-lite "^1.0.0"
+    d3-format "^1.4.4"
+    dayjs "^1.10.3"
+    jspath "^0.4.0"
+    lru-cache "^5.1.1"
+    uuid "^8.3.2"
+    x2js "^3.4.0"
+    xml2js "^0.4.23"
+    xmldom "^0.5.0"
     xpath "^0.0.32"
 
 adaptivecards@2.5.0:
@@ -7286,12 +7315,12 @@ botbuilder-lg@4.11.1:
     path "^0.12.7"
     uuid "^3.4.0"
 
-botbuilder-lg@4.12.0-rc1:
-  version "4.12.0-rc1"
-  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-rc1.tgz#32e5f6dd8bdbf176d059a2d4f6faad8c1effc140"
-  integrity sha512-Sg4Kahj1EW5dkfoKosfzsQu2x0QTKaEeci/nOQI/RaXvvG2pzAr1d/qOLdcPCq04KMRBSuyDC5SqRpXYGpPIpA==
+botbuilder-lg@4.14.0-dev.7d2b38d:
+  version "4.14.0-dev.7d2b38d"
+  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.14.0-dev.7d2b38d.tgz#e551593c373882e62afbc8e5ebb9b45bd63e70bd"
+  integrity sha512-sHM7BnTm2jZhuZJKdyPSww0cj0hs3m+TzwrYxoAsnDAeHGKpuuoUvCQSwT679mDMrMLmnOIL3Vagv+xRwGZ7vQ==
   dependencies:
-    adaptive-expressions "4.12.0-rc1"
+    adaptive-expressions "4.14.0-dev.7d2b38d"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
@@ -7618,6 +7647,11 @@ bser@^2.0.0:
   integrity sha1-mseNPtXZFYBP2HrLFYvHlxR6Fxk=
   dependencies:
     node-int64 "^0.4.0"
+
+btoa-lite@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/btoa-lite/-/btoa-lite-1.0.0.tgz#337766da15801210fdd956c22e9c6891ab9d0337"
+  integrity sha1-M3dm2hWAEhD92VbCLpxokaudAzc=
 
 btoa@^1.2.1:
   version "1.2.1"
@@ -24015,6 +24049,11 @@ xmldom@^0.4.0:
   version "0.4.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xmldom/-/xmldom-0.4.0.tgz#8771e482a333af44587e30ce026f0998c23f3830"
   integrity sha1-h3HkgqMzr0RYfjDOAm8JmMI/ODA=
+
+xmldom@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.5.0.tgz#193cb96b84aa3486127ea6272c4596354cb4962e"
+  integrity sha512-Foaj5FXVzgn7xFzsKeNIde9g6aFBxTPi37iwsno8QvApmtg7KYrr+OPyRHcJF7dud2a5nGRBXK3n0dL62Gf7PA==
 
 xmlhttprequest-ts@^1.0.1:
   version "1.0.1"
