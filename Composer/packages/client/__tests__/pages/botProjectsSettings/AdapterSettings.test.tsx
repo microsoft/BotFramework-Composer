@@ -87,8 +87,6 @@ describe('ExternalAdapterSettings', () => {
 
     const link = getByText(/from package manager/);
 
-    console.log(link);
-
     expect(link.attributes.getNamedItem('href')?.value).toContain('plugin/package-manager/package-manager');
   });
 
