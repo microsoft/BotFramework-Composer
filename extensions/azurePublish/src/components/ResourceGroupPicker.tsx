@@ -12,10 +12,10 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { useDebounce } from './useDebounce';
 
-const stackStyles = { root: { marginBottom: '8px' } };
-const dropdownStyles = { root: { marginBottom: '8px' }, dropdown: { width: '100%' } };
+const stackStyles = { root: { marginBottom: '6px' } };
+const dropdownStyles = { root: { marginBottom: '6px' }, dropdown: { width: '75%' } };
 const itemIconStyles = { marginRight: '8px' };
-const newNameTextFileStyles = { root: { marginTop: '10px' } };
+const newNameTextFileStyles = { root: { marginTop: '10px', width: '75%' } };
 
 const getInfoIconStyle = (required) => {
   return {
@@ -104,12 +104,14 @@ export const ResourceGroupPicker = ({
 }: Props) => {
   // ----- Hooks -----//
   const [selectedName, setSelectedName] = React.useState(controlledSelectedName || CREATE_NEW_KEY);
+  const [isNew, setIsNew] = React.useState((controlledSelectedName || CREATE_NEW_KEY) === CREATE_NEW_KEY);
   const [newName, setNewName] = React.useState(controlledNewName);
   const debouncedNewName = useDebounce<string>(newName, 300);
   const [newNameErrorMessage, setNewNameErrorMessage] = React.useState('');
 
   React.useEffect(() => {
     setSelectedName(controlledSelectedName || CREATE_NEW_KEY);
+    setIsNew((controlledSelectedName || CREATE_NEW_KEY) === CREATE_NEW_KEY);
   }, [controlledSelectedName]);
 
   React.useEffect(() => {
@@ -134,14 +136,13 @@ export const ResourceGroupPicker = ({
 
   React.useEffect(() => {
     if (!disabled) {
-      const isNew = selectedName === CREATE_NEW_KEY;
       onChange({
         isNew,
         name: isNew ? debouncedNewName : selectedName,
         errorMessage: isNew ? newNameErrorMessage : undefined,
       });
     }
-  }, [disabled, selectedName, debouncedNewName, newNameErrorMessage]);
+  }, [disabled, selectedName, isNew, debouncedNewName, newNameErrorMessage]);
 
   const options = React.useMemo(() => {
     const optionsList: IDropdownOption[] =
@@ -180,12 +181,13 @@ export const ResourceGroupPicker = ({
         selectedKey={selectedName}
         styles={dropdownStyles}
         onChange={(_, opt) => {
+          setIsNew(opt.key === CREATE_NEW_KEY);
           setSelectedName(opt.key as string);
         }}
         onRenderLabel={onRenderLabel}
         onRenderOption={onRenderOption}
       />
-      {selectedName === CREATE_NEW_KEY && (
+      {isNew && (
         <TextField
           required
           ariaLabel={formatMessage('Enter a name for the new resource group')}

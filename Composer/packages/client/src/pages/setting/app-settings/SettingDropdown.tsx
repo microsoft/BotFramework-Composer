@@ -3,54 +3,65 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
 import { useId } from '@uifabric/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import formatMessage from 'format-message';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import React from 'react';
 
 import * as styles from './styles';
 
-interface ISettingToggleProps {
-  description: React.ReactChild;
+const defaultItemHeight = 36;
+const defaultItemCountBeforeScroll = 10;
+const defaultDropdownWidth = 300;
+
+type Props = {
+  label: string;
+  options: IDropdownOption[];
+  tooltip?: React.ReactNode;
   id?: string;
-  onChange: (key: string) => void;
-  title: string;
-  options: { key: string; text: string }[];
   selected?: string;
-  dropdownWidth?: number;
-}
+  width?: number;
+  itemCountBeforeScroll?: number;
+  onChange: (key: string) => void;
+};
 
-const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
-  const { id, title, onChange, options, selected } = props;
-  const uniqueId = useId(kebabCase(title));
+export const SettingDropdown: React.FC<Props> = ({
+  id,
+  label,
+  tooltip,
+  width = defaultDropdownWidth,
+  itemCountBeforeScroll = defaultItemCountBeforeScroll,
+  onChange,
+  options,
+  selected,
+}) => {
+  const uniqueId = useId(kebabCase(label));
 
-  const onRenderLabel = (props) => {
+  const renderLabel = React.useCallback(({ label: dropdownLabel }) => {
     return (
       <div css={styles.labelContainer}>
-        <div css={styles.customerLabel}> {props.label} </div>
-        <TooltipHost content={props.label}>
+        <div css={styles.customerLabel}>{dropdownLabel}</div>
+        <TooltipHost content={tooltip ?? dropdownLabel}>
           <Icon iconName="Unknown" styles={styles.icon} />
         </TooltipHost>
       </div>
     );
-  };
+  }, []);
 
   return (
     <div css={styles.settingsContainer}>
       <Dropdown
+        calloutProps={{ calloutMaxHeight: defaultItemHeight * itemCountBeforeScroll }}
         id={id || uniqueId}
-        label={formatMessage('Composer language is the language of Composer UI')}
+        label={label}
         options={options}
         selectedKey={selected}
-        styles={{ root: { width: '100%' } }}
+        styles={{ root: { width } }}
         onChange={(_e, option) => onChange(option?.key?.toString() ?? '')}
-        onRenderLabel={onRenderLabel}
+        onRenderLabel={renderLabel}
       />
     </div>
   );
 };
-
-export { SettingDropdown };

@@ -49,7 +49,7 @@ async function createProject(req: Request, res: Response) {
     await BotProjectService.cleanProject(locationRef);
     const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
 
-    const id = await BotProjectService.openProject(newProjRef, user);
+    const id = await BotProjectService.openProject(newProjRef, user, true);
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
     BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
@@ -207,7 +207,7 @@ async function openProject(req: Request, res: Response) {
   };
 
   try {
-    const id = await BotProjectService.openProject(location, user);
+    const id = await BotProjectService.openProject(location, user, req.body.isRootBot);
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.init();
@@ -347,6 +347,51 @@ async function removeFile(req: Request, res: Response) {
   }
 }
 
+async function updateManifestFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const lastModified = await currentProject.updateManifestLuFile(req.body.name, req.body.content);
+    res.status(200).json({ lastModified: lastModified });
+  } else {
+    res.status(404).json({
+      message: 'No such bot project found',
+    });
+  }
+}
+
+async function createManifestFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const { name, content } = req.body;
+
+    //dir = id
+    const file = await currentProject.createManifestLuFile(name, content);
+    res.status(200).json(file);
+  } else {
+    res.status(404).json({
+      message: 'No such bot project found',
+    });
+  }
+}
+
+async function removeManifestFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const dialogResources = await currentProject.deleteManifestLuFile(req.params.name);
+    res.status(200).json(dialogResources);
+  } else {
+    res.status(404).json({ error: 'No bot project found' });
+  }
+}
+
 async function getSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
@@ -355,7 +400,7 @@ async function getSkill(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
     if (currentProject === undefined) {
       res.status(404).json({
-        message: 'No such bot project opened',
+        message: 'No such bot project found',
       });
     }
   }
@@ -392,9 +437,22 @@ async function setQnASettings(req: Request, res: Response) {
       const qnaEndpointKey = await currentProject.updateQnaEndpointKey(req.body.subscriptionKey);
       res.status(200).json(qnaEndpointKey);
     } catch (error) {
-      res.status(400).json({
-        message: error instanceof Error ? error.message : error,
-      });
+      // QNA maker will occasionally fail to do this
+      // instead of failing, we need to tell composer to retry
+      if (
+        error.message ===
+          'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.' ||
+        error.message ===
+          'No Endpoint keys found. If this is a new service, please wait a minimum of 10 minutes for the runtime to be ready.'
+      ) {
+        res.status(202).json({
+          message: 'Waiting for QnA Maker',
+        });
+      } else {
+        res.status(400).json({
+          message: error instanceof Error ? error.message : error,
+        });
+      }
     }
   } else {
     res.status(404).json({
@@ -593,6 +651,9 @@ export const ProjectController = {
   updateFile,
   createFile,
   removeFile,
+  createManifestFile,
+  updateManifestFile,
+  removeManifestFile,
   getSkill,
   build,
   setQnASettings,

@@ -154,7 +154,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
         if (!value || !nameRegexV2.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {
-            return formatMessage('Bot name cannot not start with a number');
+            return formatMessage('Bot name cannot start with a number or space');
           } else {
             return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, or _.');
           }
@@ -337,9 +337,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     );
   }, [focusedStorageFolder]);
   const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
-
   return (
-    // TODO remove runtime language drop down prior to merging as that data is indicated by the tab chosen
     <Fragment>
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
@@ -359,7 +357,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
               <TextField
-                multiline
                 label={formatMessage('Description')}
                 resizable={false}
                 styles={description}
@@ -368,17 +365,19 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
           </Stack>
-          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                data-testid="NewDialogRuntimeType"
-                label={formatMessage('Runtime type')}
-                options={getSupportedRuntimesForTemplate()}
-                selectedKey={formData.runtimeType}
-                onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
-              />
-            </StackItem>
-          </Stack>
+          {!isImported && (
+            <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+              <StackItem grow={0} styles={halfstack}>
+                <Dropdown
+                  data-testid="NewDialogRuntimeType"
+                  label={formatMessage('Runtime type')}
+                  options={getSupportedRuntimesForTemplate()}
+                  selectedKey={formData.runtimeType}
+                  onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
+                />
+              </StackItem>
+            </Stack>
+          )}
           {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
