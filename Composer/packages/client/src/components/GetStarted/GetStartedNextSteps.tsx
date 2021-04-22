@@ -18,6 +18,8 @@ import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { GetStartedTask } from './GetStartedTask';
 import { NextSteps } from './types';
@@ -48,6 +50,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
   const [highlightQNA, setHighlightQNA] = useState<boolean>(false);
+  const isPVABot = usePVACheck(projectId);
 
   const hideManageLuis = () => {
     setDisplayManageLuis(false);
@@ -131,6 +134,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             setDisplayManageLuis(true);
           }
         },
+        isDisabled: isPVABot,
       });
     }
     if (props.requiresQNA) {
@@ -151,6 +155,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             setDisplayManageQNA(true);
           }
         },
+        isDisabled: isPVABot,
       });
     }
     setRequiredNextSteps(newNextSteps);
@@ -170,6 +175,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publishing', priority: 'recommended' });
           openLink(linkToPublishProfile);
         },
+        isDisabled: false,
       });
     }
     setRecommendedNextSteps(newRecomendedSteps);
@@ -185,6 +191,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'packages', priority: 'optional' });
           openLink(linkToPackageManager);
         },
+        isDisabled: isPVABot,
       },
       {
         key: 'editlg',
@@ -196,6 +203,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlg', priority: 'optional' });
           openLink(linkToLGEditor);
         },
+        isDisabled: false,
       },
       {
         key: 'editlu',
@@ -207,6 +215,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'optional' });
           openLink(linkToLUEditor);
         },
+        isDisabled: false,
       },
       {
         key: 'insights',
@@ -220,6 +229,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'insights', priority: 'optional' });
           openLink(linkToAppInsights);
         },
+        isDisabled: isPVABot,
       },
       {
         key: 'devops',
@@ -231,6 +241,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'devops', priority: 'optional' });
           openLink(linkToDevOps);
         },
+        isDisabled: false,
       },
     ];
 
@@ -245,11 +256,18 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
           openLink(linkToConnections);
         },
+        isDisabled: isPVABot,
       });
     }
 
     setOptionalSteps(optSteps);
   }, [botProject, props.requiresLUIS, props.requiresQNA, props.showTeachingBubble]);
+
+  const getStartedTaskElement = (step: NextSteps) => (
+    <DisableFeatureToolTip key={'disableToolTip-' + step.key} isPVABot>
+      <GetStartedTask key={step.key} step={step} />
+    </DisableFeatureToolTip>
+  );
 
   return (
     <ScrollablePane styles={{ root: { marginTop: 60 } }}>
@@ -304,27 +322,21 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         {requiredNextSteps.length ? (
           <div>
             <h3 style={h3Style}>{formatMessage('Required')}</h3>
-            {requiredNextSteps.map((step) => (
-              <GetStartedTask key={step.key} step={step} />
-            ))}
+            {requiredNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {recommendedNextSteps.length ? (
           <div>
             <h3 style={h3Style}>{formatMessage('Recommended')}</h3>
-            {recommendedNextSteps.map((step) => (
-              <GetStartedTask key={step.key} step={step} />
-            ))}
+            {recommendedNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {optionalSteps.length ? (
           <div>
             <h3 style={h3Style}>{formatMessage('Optional')}</h3>
-            {optionalSteps.map((step) => (
-              <GetStartedTask key={step.key} step={step} />
-            ))}
+            {optionalSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
       </div>
