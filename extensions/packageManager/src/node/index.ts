@@ -14,8 +14,12 @@ import { FeedFactory } from './feeds/feedFactory';
 
 const API_ROOT = '/api';
 
+const hasSchema = (c) => {
+  return c.includesSchema || c.keywords?.indexOf('msbot-component') >= 0;
+};
+
 const isAdaptiveComponent = (c) => {
-  return c.includesSchema || c.keywords?.indexOf('msbot-component') >= 0 || c.includesExports;
+  return hasSchema(c) || c.includesExports;
 };
 
 const readFileAsync = async (path, encoding) => {
@@ -368,9 +372,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
               }
 
               // update the settings.components array
-              const newlyInstalledPlugin = installedComponents.find(
-                (c) => isAdaptiveComponent(c) && c.name == packageName
-              );
+              const newlyInstalledPlugin = installedComponents.find((c) => hasSchema(c) && c.name == packageName);
               if (
                 newlyInstalledPlugin &&
                 !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
