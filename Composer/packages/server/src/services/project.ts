@@ -462,6 +462,9 @@ export class BotProjectService {
         jobId,
         'webapp',
         'dotnet',
+        {
+          applicationSettingsDirectory: 'settings',
+        },
         user
       );
 
@@ -615,6 +618,7 @@ export class BotProjectService {
             jobId,
             runtimeType,
             runtimeLanguage,
+            null,
             user
           );
 
