@@ -41,11 +41,12 @@ const headerCSS = (label: string) => css`
 export type ListLink = {
   displayName?: string;
   projectId: string;
+  isRemote: boolean;
 };
 
 type BotInProject = {
-  projectId: string;
   name: string;
+  projectId: string;
   isRemote: boolean;
 };
 
@@ -76,6 +77,7 @@ export const ProjectList: React.FC<Props> = ({ onSelect, defaultSelected, projec
     const link: ListLink = {
       displayName: bot.name,
       projectId: bot.projectId,
+      isRemote: bot.isRemote,
     };
 
     return (
