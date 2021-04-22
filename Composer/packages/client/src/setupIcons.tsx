@@ -5,14 +5,14 @@ import React from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { registerIcons } from 'office-ui-fabric-react/lib/Styling';
 
-import systemTopicIcon from './images/systemTopicIcon.svg';
+import { SystemTopicIcon } from './components/SystemTopicIcon';
 
 export function setupIcons() {
   initializeIcons(undefined, { disableWarnings: true });
 
   registerIcons({
     icons: {
-      SystemTopic: <img alt="" aria-hidden="true" src={systemTopicIcon} style={{ width: '100%' }} />,
+      SystemTopic: <SystemTopicIcon />,
     },
   });
 }

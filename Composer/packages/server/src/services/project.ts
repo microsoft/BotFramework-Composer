@@ -210,6 +210,7 @@ export class BotProjectService {
   public static openProject = async (
     locationRef: LocationRef,
     user?: UserIdentity,
+    isRootBot?: boolean,
     options?: { allowPartialBots: boolean }
   ): Promise<string> => {
     BotProjectService.initialize();
@@ -231,7 +232,7 @@ export class BotProjectService {
       const projectLoc = BotProjectService.projectLocationMap[key];
       if (projectLoc && projectLoc.path === locationRef.path) {
         // TODO: this should probably move to getProjectById
-        BotProjectService.addRecentProject(locationRef.path);
+        if (isRootBot) BotProjectService.addRecentProject(locationRef.path);
         return key;
       }
     }
@@ -479,7 +480,7 @@ export class BotProjectService {
 
         // pass in allowPartialBots = true so that this project can be opened even though
         // it doesn't yet have a root dialog...
-        const id = await BotProjectService.openProject(newProjRef, user, { allowPartialBots: true });
+        const id = await BotProjectService.openProject(newProjRef, user, true, { allowPartialBots: true });
         const currentProject = await BotProjectService.getProjectById(id, user);
 
         // add all original files to new project
@@ -650,7 +651,7 @@ export class BotProjectService {
           return new Promise(async (resolve, reject) => {
             try {
               log('Open project', botRef);
-              const id = await BotProjectService.openProject(botRef, user);
+              const id = await BotProjectService.openProject(botRef, user, false);
 
               // in the case of remote project, we need to update the eTag and alias used by the import mechanism
               BotProjectService.setProjectLocationData(id, { alias, eTag });
@@ -686,7 +687,11 @@ export class BotProjectService {
 
       const rootBot = botsToProcess.find((b) => b.name === name);
       if (rootBot) {
-        const id = await BotProjectService.openProject({ storageId: rootBot?.storageId, path: rootBot.path }, user);
+        const id = await BotProjectService.openProject(
+          { storageId: rootBot?.storageId, path: rootBot.path },
+          user,
+          true
+        );
         const currentProject = await BotProjectService.getProjectById(id, user);
         const project = currentProject.getProject();
         log('Project created successfully.');

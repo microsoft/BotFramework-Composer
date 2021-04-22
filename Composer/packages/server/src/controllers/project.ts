@@ -49,7 +49,7 @@ async function createProject(req: Request, res: Response) {
     await BotProjectService.cleanProject(locationRef);
     const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
 
-    const id = await BotProjectService.openProject(newProjRef, user);
+    const id = await BotProjectService.openProject(newProjRef, user, true);
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
     BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
@@ -207,7 +207,7 @@ async function openProject(req: Request, res: Response) {
   };
 
   try {
-    const id = await BotProjectService.openProject(location, user);
+    const id = await BotProjectService.openProject(location, user, req.body.isRootBot);
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.init();

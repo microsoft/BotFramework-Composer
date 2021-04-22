@@ -20,9 +20,9 @@ import { useRecoilValue } from 'recoil';
 import { DialogCreationCopy } from '../../../constants';
 import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
 import { userHasNodeInstalledState } from '../../../recoilModel';
+import { InstallDepModal } from '../../InstallDepModal';
 
 import { CreateBotV2 } from './CreateBot';
-import { NodeModal } from './NodeModal';
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
@@ -135,7 +135,17 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         onDismiss={onDismiss}
         onNext={onNext}
       />
-      {isElectron() && showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
+      {isElectron() && showNodeModal && (
+        <InstallDepModal
+          downloadLink={'https://nodejs.org/en/download/'}
+          downloadLinkText={formatMessage('Install Node.js')}
+          text={formatMessage(
+            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node.'
+          )}
+          title={formatMessage('Node.js required')}
+          onDismiss={() => setShowNodeModal(false)}
+        />
+      )}
     </Fragment>
   );
 }
