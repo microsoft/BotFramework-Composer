@@ -57,7 +57,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
         <ActionButton styles={{ root: { color: SharedColors.cyanBlue10 } }} onClick={handleClearAll}>
           {formatMessage('Clear all')}
         </ActionButton>
-        {defaultRender!(props)}
+        {defaultRender?.(props)}
       </div>
     ),
     [handleClearAll]
@@ -67,7 +67,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
     <Panel
       isLightDismiss
       closeButtonAriaLabel={formatMessage('Close')}
-      customWidth={'390px'}
+      customWidth="395px"
       headerText={formatMessage('Notifications')}
       isBlocking={false}
       isOpen={isOpen}

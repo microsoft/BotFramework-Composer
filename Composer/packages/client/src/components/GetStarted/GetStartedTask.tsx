@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -15,6 +15,12 @@ type TaskProps = {
   step: NextSteps;
 };
 
+const getStartedStepStyle = (disabled?: boolean) => css`
+  margin-bottom: 20px;
+  pointer-events: ${disabled ? 'none' : 'auto'};
+  opacity: ${disabled ? 0.4 : 1};
+`;
+
 export const GetStartedTask: React.FC<TaskProps> = (props) => {
   const icon = props.step.checked ? 'CompletedSolid' : props.step.required ? 'Error' : 'Completed';
   const color = props.step.checked
@@ -23,7 +29,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
     ? SharedColors.orange20
     : SharedColors.cyanBlue10;
   return (
-    <div css={{ marginBottom: 20 }}>
+    <div css={getStartedStepStyle(props.step.isDisabled)}>
       <ActionButton
         iconProps={{ iconName: icon, id: props.step.key }}
         styles={{
