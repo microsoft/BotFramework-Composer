@@ -6,6 +6,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { SearchManagementClient } from '@azure/arm-search';
+import { SkuName } from '@azure/arm-search/lib/models';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 
@@ -20,6 +21,57 @@ import { dispatcherState, settingsState } from '../atoms';
 import { setError } from './shared';
 import httpClient from './../../utils/httpUtil';
 import { createNotification, addNotificationInternal, deleteNotificationInternal } from './notification';
+
+type SkuList = {
+  search: {
+    name: SkuName;
+  };
+  qna: {
+    name: string;
+  };
+  appservice: {
+    name: string;
+    tier: string;
+    size: string;
+    family: string;
+    capacity: number;
+  };
+  appinsights?: boolean;
+};
+
+const FREE_SKUS: SkuList = {
+  search: {
+    name: 'free',
+  },
+  appservice: {
+    name: 'F1',
+    tier: 'Free',
+    size: 'F1',
+    family: 'F',
+    capacity: 1,
+  },
+  qna: {
+    name: 'F0',
+  },
+};
+
+const PAID_SKUS: SkuList = {
+  search: {
+    name: 'standard',
+  },
+  appservice: {
+    name: 'S1',
+    tier: 'Standard',
+    size: 'S1',
+    family: 'S',
+    capacity: 1,
+  },
+  qna: {
+    name: 'S0',
+  },
+  appinsights: true,
+};
+
 // poll for the endpoint key til it is available
 const fetchEndpointKey = async (projectId: string, subscriptionKey: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -50,11 +102,12 @@ export const provisionQNADispatcher = () => {
       subscriptionId: string,
       resourceGroupName: string,
       resourceName: string,
-      region: string
+      region: string,
+      tier: string
     ) => {
       const { snapshot } = callbackHelpers;
-
       const startTime = new Date().getTime();
+      const skus: SkuList = tier === 'free' ? FREE_SKUS : PAID_SKUS;
 
       const notification = createNotification(getPendingQNANotificationCardProps());
       // add that notification
@@ -68,9 +121,7 @@ export const provisionQNADispatcher = () => {
         const searchManagementClient = new SearchManagementClient(tokenCredentials as any, subscriptionId);
         await searchManagementClient.services.createOrUpdate(resourceGroupName, qnaMakerSearchName, {
           location: region,
-          sku: {
-            name: 'standard',
-          },
+          sku: skus.search,
           replicaCount: 1,
           partitionCount: 1,
           hostingMode: 'default',
@@ -79,39 +130,40 @@ export const provisionQNADispatcher = () => {
         const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
         await webSiteManagementClient.appServicePlans.createOrUpdate(resourceGroupName, resourceGroupName, {
           location: region,
-          sku: {
-            name: 'S1',
-            tier: 'Standard',
-            size: 'S1',
-            family: 'S',
-            capacity: 1,
-          },
-        });
-        // deploy or update exisiting app insights component
-        const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
-          tokenCredentials,
-          subscriptionId
-        );
-        await applicationInsightsManagementClient.components.createOrUpdate(resourceGroupName, resourceGroupName, {
-          location: region,
-          applicationType: 'web',
-          kind: 'web',
+          sku: skus.appservice,
         });
 
         // add web config for websites
-        const azureSearchAdminKey = (await searchManagementClient.adminKeys.get(resourceGroupName, qnaMakerSearchName))
-          .primaryKey;
-        const appInsightsComponent = await applicationInsightsManagementClient.components.get(
-          resourceGroupName,
-          resourceGroupName
-        );
-        const userAppInsightsKey = appInsightsComponent.instrumentationKey;
-        const userAppInsightsName = resourceGroupName;
-        const userAppInsightsAppId = appInsightsComponent.appId;
         const primaryEndpointKey = `${qnaMakerWebAppName}-PrimaryEndpointKey`;
         const secondaryEndpointKey = `${qnaMakerWebAppName}-SecondaryEndpointKey`;
         const defaultAnswer = 'No good match found in KB.';
         const QNAMAKER_EXTENSION_VERSION = 'latest';
+
+        const azureSearchAdminKey = (await searchManagementClient.adminKeys.get(resourceGroupName, qnaMakerSearchName))
+          .primaryKey;
+
+        // if app insights is included, set this up too
+        let userAppInsightsAppId, userAppInsightsKey, userAppInsightsName;
+        if (skus.appinsights) {
+          // deploy or update exisiting app insights component
+          const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
+            tokenCredentials,
+            subscriptionId
+          );
+          await applicationInsightsManagementClient.components.createOrUpdate(resourceGroupName, resourceGroupName, {
+            location: region,
+            applicationType: 'web',
+            kind: 'web',
+          });
+
+          const appInsightsComponent = await applicationInsightsManagementClient.components.get(
+            resourceGroupName,
+            resourceGroupName
+          );
+          userAppInsightsKey = appInsightsComponent.instrumentationKey;
+          userAppInsightsName = resourceGroupName;
+          userAppInsightsAppId = appInsightsComponent.appId;
+        }
 
         // deploy qna host webapp
         const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
@@ -179,9 +231,7 @@ export const provisionQNADispatcher = () => {
         );
         await cognitiveServicesManagementClient.accounts.create(resourceGroupName, qnaMakerServiceName, {
           kind: 'QnAMaker',
-          sku: {
-            name: 'F0',
-          },
+          sku: skus.qna,
           location: region,
           properties: {
             apiProperties: {

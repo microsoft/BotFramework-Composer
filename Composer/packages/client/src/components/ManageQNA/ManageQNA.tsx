@@ -13,6 +13,10 @@ import { currentProjectIdState } from '../../recoilModel';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
 const QNA_REGIONS = [{ key: 'westus', text: 'westus' }];
+const QNA_TIERS = [
+  { key: 'free', text: 'Free' },
+  { key: 'paid', text: 'Paid' },
+];
 
 type ManageQNAProps = {
   hidden: boolean;
@@ -32,13 +36,22 @@ export const ManageQNA = (props: ManageQNAProps) => {
     subscriptionId: string,
     resourceGroupName: string,
     resourceName: string,
-    region: string
+    region: string,
+    tier?: string
   ): Promise<string> => {
     // hide modal
     props.onToggleVisibility(false);
 
     // start background QNA
-    createQNA(rootBotProjectId, tokenCredentials, subscriptionId, resourceGroupName, resourceName, region);
+    createQNA(
+      rootBotProjectId,
+      tokenCredentials,
+      subscriptionId,
+      resourceGroupName,
+      resourceName,
+      region,
+      tier || 'free'
+    );
     return '';
   };
 
@@ -50,9 +63,11 @@ export const ManageQNA = (props: ManageQNAProps) => {
         '1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker'
       )}
       hidden={props.hidden}
+      learnMore={'https://aka.ms/composer-addqnamaker-learnmore'}
       regions={QNA_REGIONS}
       serviceKeyType={'QnAMaker'}
       serviceName={'QnA Maker'}
+      tiers={QNA_TIERS}
       onDismiss={props.onDismiss}
       onGetKey={props.onGetKey}
       onNext={props.onNext}
