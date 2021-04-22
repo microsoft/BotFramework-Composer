@@ -213,7 +213,9 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
       })}
       <div ref={botControllerMenuTarget} css={[startPanelsContainer]}>
         <DisableFeatureToolTip
-          content={formatMessage('PVA bots cannot be run at the moment. Publish the bot to PVA and test it there.')}
+          content={formatMessage(
+            'Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there.'
+          )}
           isPVABot={isPVABot}
         >
           <DefaultButton
