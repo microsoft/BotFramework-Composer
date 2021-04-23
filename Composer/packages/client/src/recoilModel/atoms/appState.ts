@@ -366,3 +366,8 @@ export const currentWebChatConversationState = atom<string>({
   key: getFullyQualifiedKey('currentWebChatConversation'),
   default: '',
 });
+
+export const webChatScrollPositionState = atom<number>({
+  key: getFullyQualifiedKey('webChatScrollPosition'),
+  default: 0,
+});

@@ -35,11 +35,10 @@ import { AppUpdaterStatus } from '../constants';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
-import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
-import { GetStarted } from './GetStarted/GetStarted';
 import { BotController } from './BotRuntimeController/BotController';
+import { useDirectLineServer } from './WebChat/useDirectlineServer';
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;
@@ -158,6 +157,7 @@ export const Header = () => {
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
+
   const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
@@ -174,6 +174,7 @@ export const Header = () => {
   const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(false);
   const [requiresLUIS, setRequiresLUIS] = useState<boolean>(false);
   const [requiresQNA, setRequiresQNA] = useState<boolean>(false);
+  useDirectLineServer(rootBotProjectId, BASEPATH);
 
   const { location } = useLocation();
 
@@ -382,44 +383,6 @@ export const Header = () => {
           </FocusTrapZone>
         </Callout>
       )}
-      <Panel
-        isHiddenOnDismiss
-        closeButtonAriaLabel={formatMessage('Close')}
-        customWidth={'395px'}
-        headerText={projectName}
-        isBlocking={false}
-        isOpen={isWebChatPanelVisible}
-        styles={{
-          root: {
-            marginTop: '50px',
-          },
-          scrollableContent: {
-            width: '100%',
-            height: '100%',
-          },
-          content: {
-            width: '100%',
-            height: '100%',
-            padding: 0,
-            margin: 0,
-          },
-        }}
-        type={PanelType.custom}
-      >
-        <GetStarted
-          isOpen={botProjectSolutionLoaded && showGetStarted}
-          projectId={rootBotProjectId}
-          requiresLUIS={requiresLUIS}
-          requiresQNA={requiresQNA}
-          showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
-          onBotReady={() => {
-            setShowTeachingBubble(true);
-          }}
-          onDismiss={() => {
-            toggleGetStarted(false);
-          }}
-        />
-      </Panel>
     </div>
   );
 };

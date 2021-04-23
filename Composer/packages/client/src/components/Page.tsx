@@ -194,7 +194,6 @@ const Page: React.FC<IPageProps> = (props) => {
             <h1 css={headerTitle}>{title}</h1>
             {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
           </div>
-          <WebChatContainer />
           <Split
             resetOnDoubleClick
             initialPrimarySize="20%"

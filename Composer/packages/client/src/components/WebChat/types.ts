@@ -57,4 +57,5 @@ export type ChatData = {
   user: User;
   conversationId: string;
   webChatStore: unknown;
+  endpointId: string;
 };

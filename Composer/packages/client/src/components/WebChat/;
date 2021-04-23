@@ -1,16 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useEffect, useRef, useState } from 'react';
-import { createStyleSet, hooks, Components } from 'botframework-webchat';
+import React, { useEffect, useState } from 'react';
+import ReactWebChat, { createStyleSet } from 'botframework-webchat';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
-import { useRecoilState } from 'recoil';
-
-import { webChatScrollPositionState } from '../../recoilModel';
 
 import { ConversationService } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 import { ChatData, ActivityType } from './types';
-const { BasicWebChat, Composer } = Components;
 
 export type WebChatProps = {
   currentConversation: string;
@@ -84,48 +80,8 @@ const areEqual = (prevProps: WebChatProps, nextProps: WebChatProps) => {
   return result;
 };
 
-const styleSet = createStyleSet({ ...webChatStyleOptions });
-styleSet.fileContent = {
-  ...styleSet.fileContent,
-  background: `${NeutralColors.white}`,
-  '& .webchat__fileContent__fileName': {
-    color: `${CommunicationColors.primary}`,
-  },
-  '& .webchat__fileContent__size': {
-    color: `${NeutralColors.white}`,
-  },
-  '& .webchat__fileContent__downloadIcon': {
-    fill: `${NeutralColors.white}`,
-  },
-  '& .webchat__fileContent__badge': {
-    padding: '4px',
-  },
-};
-
-const ScrollToLatest = () => {
-  const scrollPositionRef = useRef();
-  const [webChatScrollPosition, setScrollPosition] = useRecoilState(webChatScrollPositionState);
-  const scrollTo = hooks.useScrollTo({});
-
-  hooks.useObserveScrollPosition(
-    (position) => {
-      setScrollPosition({ ...position });
-    },
-    [scrollPositionRef]
-  );
-
-  useEffect(() => {
-    if (webChatScrollPosition) {
-      scrollTo(webChatScrollPosition);
-    }
-  }, []);
-
-  return <></>;
-};
-
 export const WebChat = React.memo((props: WebChatProps) => {
   const { activeLocale, chatData, isDisabled, currentConversation, conversationService } = props;
-
   const [directlineObject, setDirectlineObject] = useState<any>(null);
 
   useEffect(() => {
@@ -137,9 +93,8 @@ export const WebChat = React.memo((props: WebChatProps) => {
       });
       setDirectlineObject(directlineObject);
     };
-    if (!directlineObject && chatData) {
+    if (!directlineObject) {
       getDirectlineObject();
-      // scrollTo(webChatScrollPosition);
     }
   }, [currentConversation, chatData]);
 
@@ -147,8 +102,26 @@ export const WebChat = React.memo((props: WebChatProps) => {
     return null;
   }
 
+  const styleSet = createStyleSet({ ...webChatStyleOptions });
+  styleSet.fileContent = {
+    ...styleSet.fileContent,
+    background: `${NeutralColors.white}`,
+    '& .webchat__fileContent__fileName': {
+      color: `${CommunicationColors.primary}`,
+    },
+    '& .webchat__fileContent__size': {
+      color: `${NeutralColors.white}`,
+    },
+    '& .webchat__fileContent__downloadIcon': {
+      fill: `${NeutralColors.white}`,
+    },
+    '& .webchat__fileContent__badge': {
+      padding: '4px',
+    },
+  };
+
   return (
-    <Composer
+    <ReactWebChat
       key={chatData.conversationId}
       activityMiddleware={createActivityMiddleware}
       cardActionMiddleware={createCardActionMiddleware}
@@ -158,9 +131,6 @@ export const WebChat = React.memo((props: WebChatProps) => {
       store={chatData.webChatStore}
       styleSet={styleSet}
       userID={chatData?.user.id}
-    >
-      <BasicWebChat />
-      <ScrollToLatest />
-    </Composer>
+    />
   );
 }, areEqual);

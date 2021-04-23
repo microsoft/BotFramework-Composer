@@ -3,12 +3,7 @@
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import {
-  ConversationActivityTraffic,
-  ConversationNetworkTrafficItem,
-  ConversationNetworkErrorItem,
-} from '@botframework-composer/types';
-import { AxiosResponse } from 'axios';
+import { ConversationNetworkErrorItem } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { v4 as uuid } from 'uuid';
 
@@ -47,8 +42,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     openBotInEmulator,
     appendWebChatTraffic,
     clearWebChatLogs,
-    setDebugPanelExpansion,
-    setActiveTabInDebugPanel,
     setWebChatData: setChatData,
     setCurrentConversation,
   } = useRecoilValue(dispatcherState);
@@ -58,78 +51,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
 
   const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
 
-  const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
+  const conversationService = useMemo(() => new ConversationService('http://localhost:3000/'), [directlineHostUrl]);
+
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
-  const webChatTrafficChannel = useRef<WebSocket>();
-
-  useEffect(() => {
-    const bootstrapChat = async () => {
-      const conversationServerPort = await conversationService.setUpConversationServer();
-      try {
-        // set up Web Chat traffic listener
-        webChatTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic`);
-        if (webChatTrafficChannel.current) {
-          webChatTrafficChannel.current.onmessage = (event) => {
-            const data:
-              | ConversationActivityTraffic
-              | ConversationNetworkTrafficItem
-              | ConversationNetworkErrorItem = JSON.parse(event.data);
-
-            switch (data.trafficType) {
-              case 'network': {
-                appendWebChatTraffic(projectId, data);
-                break;
-              }
-              case 'activity': {
-                appendWebChatTraffic(
-                  projectId,
-                  data.activities.map((a) => ({
-                    activity: a,
-                    id: uuid(),
-                    timestamp: new Date(a.timestamp || Date.now()).getTime(),
-                    trafficType: data.trafficType,
-                  }))
-                );
-                break;
-              }
-              case 'networkError': {
-                appendWebChatTraffic(projectId, data);
-                setTimeout(() => {
-                  setActiveTabInDebugPanel('WebChatInspector');
-                  setDebugPanelExpansion(true);
-                }, 300);
-                break;
-              }
-              default:
-                break;
-            }
-          };
-        }
-      } catch (ex) {
-        const response: AxiosResponse = ex.response;
-        const err: ConversationNetworkErrorItem = {
-          error: {
-            message: formatMessage('An error occurred connecting initializing the DirectLine server'),
-          },
-          id: uuid(),
-          request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
-          response: { payload: response.data, statusCode: response.status },
-          timestamp: Date.now(),
-          trafficType: 'networkError',
-        };
-        appendWebChatTraffic(projectId, err);
-        setActiveTabInDebugPanel('WebChatInspector');
-        setDebugPanelExpansion(true);
-      }
-    };
-
-    bootstrapChat();
-
-    return () => {
-      webChatTrafficChannel.current?.close();
-    };
-  }, []);
 
   const sendInitialActivities = async (chatData: ChatData) => {
     try {
@@ -149,6 +74,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   useEffect(() => {
     let mounted = true;
     if (isWebChatPanelVisible && !currentConversation) {
+      console.log('Im inside here');
       const startConversation = async () => {
         const chatData: ChatData = await conversationService.startNewConversation(
           botUrl,
