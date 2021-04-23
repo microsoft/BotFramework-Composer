@@ -73,9 +73,18 @@ export const projectDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
 
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        // const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(projectIdToRemove));
+        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
+
+        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
+        const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
+
+        set(botProjectIdsState, (currentProjects) => {
+          const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
+          return filtered;
+        });
+        resetBotStates(callbackHelpers, projectIdToRemove);
+
         const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
         const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
         // remove the same identifier trigger in root bot
@@ -91,15 +100,6 @@ export const projectDispatcher = () => {
             await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
           }
         }
-
-        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
-        const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
-
-        set(botProjectIdsState, (currentProjects) => {
-          const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
-          return filtered;
-        });
-        resetBotStates(callbackHelpers, projectIdToRemove);
         if (rootBotProjectId) {
           navigateToBot(callbackHelpers, rootBotProjectId, '');
         }

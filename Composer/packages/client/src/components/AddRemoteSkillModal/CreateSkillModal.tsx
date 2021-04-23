@@ -38,7 +38,7 @@ export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A
 export interface CreateSkillModalProps {
   projectId: string;
   addRemoteSkill: (manifestUrl: string, endpointName: string) => Promise<void>;
-  addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, skillId: string) => void;
+  addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, skillId: string) => Promise<void>;
   onDismiss: () => void;
 }
 
@@ -141,23 +141,23 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     [projectId, formData]
   );
 
-  const handleSubmit = (event, content: string, enable: boolean) => {
+  const handleSubmit = async (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
-    addRemoteSkill(formData.manifestUrl, formData.endpointName).then(() => {
-      TelemetryClient.track('AddNewSkillCompleted');
-      const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
-      if (skillId) {
-        // add trigger with connect to skill action to root bot
-        const triggerFormData = getTriggerFormData(skillManifest.name, content);
-        addTriggerToRoot(dialogId, triggerFormData, skillId);
-        TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
-      }
-    });
+    await addRemoteSkill(formData.manifestUrl, formData.endpointName);
+    TelemetryClient.track('AddNewSkillCompleted');
+    // if added remote skill fail, just not addTrigger to root.
+    const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
+    if (skillId) {
+      // add trigger with connect to skill action to root bot
+      const triggerFormData = getTriggerFormData(skillManifest.name, content);
+      await addTriggerToRoot(dialogId, triggerFormData, skillId);
+      TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
+    }
 
     if (enable) {
       // update recognizor type to orchestrator
-      updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
+      await updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
     }
   };
 
