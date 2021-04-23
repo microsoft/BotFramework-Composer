@@ -87,7 +87,7 @@ describe('ExternalAdapterSettings', () => {
 
     const link = getByText(/from package manager/);
 
-    expect(link.attributes.getNamedItem('href')?.value).toEqual('plugin/package-manager/package-manager');
+    expect(link.attributes.getNamedItem('href')?.value).toContain('plugin/package-manager/package-manager');
   });
 
   it('brings up the modal', () => {
