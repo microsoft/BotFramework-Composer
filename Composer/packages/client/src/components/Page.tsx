@@ -20,6 +20,7 @@ import {
 } from '../recoilModel';
 import { DebugPanel } from '../pages/design/DebugPanel/DebugPanel';
 import implementedDebugExtensions from '../pages/design/DebugPanel/TabExtensions';
+import { splitPaneContainer, splitPaneWrapper } from '../pages/design/styles';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
@@ -198,36 +199,42 @@ const Page: React.FC<IPageProps> = (props) => {
         renderSplitter={renderThinSplitter}
         onMeasuredSizesChanged={onMeasuredSizesChanged}
       >
-        {useNewTree ? (
-          <ProjectTree
-            headerAriaLabel={formatMessage('Filter by file name')}
-            headerPlaceholder={formatMessage('Filter by file name')}
-            options={{
-              showDelete: false,
-              showTriggers: false,
-              showDialogs: true,
-              showLgImports: pageMode === 'language-generation',
-              showLuImports: pageMode === 'language-understanding',
-              showRemote: false,
-              showMenu: false,
-              showQnAMenu: pageMode === 'knowledge-base',
-              showErrors: false,
-              showCommonLinks,
-            }}
-            selectedLink={{
-              projectId,
-              skillId,
-              dialogId,
-              lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
-              luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
-            }}
-            onSelect={(link) => {
-              navigateTo(buildURL(pageMode, link));
-            }}
-          />
-        ) : (
-          <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
-        )}
+        <div css={contentWrapper}>
+          <div css={splitPaneContainer}>
+            <div css={splitPaneWrapper}>
+              {useNewTree ? (
+                <ProjectTree
+                  headerAriaLabel={formatMessage('Filter by file name')}
+                  headerPlaceholder={formatMessage('Filter by file name')}
+                  options={{
+                    showDelete: false,
+                    showTriggers: false,
+                    showDialogs: true,
+                    showLgImports: pageMode === 'language-generation',
+                    showLuImports: pageMode === 'language-understanding',
+                    showRemote: false,
+                    showMenu: false,
+                    showQnAMenu: pageMode === 'knowledge-base',
+                    showErrors: false,
+                    showCommonLinks,
+                  }}
+                  selectedLink={{
+                    projectId,
+                    skillId,
+                    dialogId,
+                    lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
+                    luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
+                  }}
+                  onSelect={(link) => {
+                    navigateTo(buildURL(pageMode, link));
+                  }}
+                />
+              ) : (
+                <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+              )}
+            </div>
+          </div>
+        </div>
         <div aria-label={mainRegionName} css={content(shouldShowEditorError)} data-testid="PageContent" role="region">
           <div css={contentStyle}>{children}</div>
         </div>

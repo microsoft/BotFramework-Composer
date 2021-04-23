@@ -10,32 +10,14 @@ import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import { dispatcherState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
-import { WebChatContainer } from '../../components/WebChat/WebChatContainer';
 
 import SideBar from './SideBar';
 import CommandBar from './CommandBar';
 import VisualPanel from './VisualPanel';
 import PropertyPanel from './PropertyPanel';
 import useEmptyPropsHandler from './useEmptyPropsHandler';
-import { contentWrapper, editorContainer, editorWrapper } from './styles';
+import { contentWrapper, splitPaneContainer, splitPaneWrapper } from './styles';
 import Modals from './Modals';
-import { DebugPanel } from './DebugPanel/DebugPanel';
-
-export const root = css`
-  height: calc(100vh - 50px);
-  display: flex;
-  flex-direction: row;
-
-  label: Page;
-`;
-
-export const pageWrapper = css`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-
-  label: PageWrapper;
-`;
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
@@ -62,11 +44,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         splitterSize="5px"
         onMeasuredSizesChanged={onMeasuredSizesChanged}
       >
-        <SideBar projectId={activeBot} />
+        <div css={contentWrapper}>
+          <div css={splitPaneContainer}>
+            <div css={splitPaneWrapper}>
+              <SideBar projectId={activeBot} />
+            </div>
+          </div>
+        </div>
+
         <div css={contentWrapper} role="main">
           <CommandBar projectId={activeBot} />
-          <Conversation css={editorContainer}>
-            <div css={editorWrapper}>
+          <Conversation css={splitPaneContainer}>
+            <div css={splitPaneWrapper}>
               <Split
                 resetOnDoubleClick
                 initialPrimarySize="65%"
