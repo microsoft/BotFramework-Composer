@@ -45,7 +45,7 @@ type SelectIntentProps = {
   luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
-  onSubmit: (event: Event, content: string, enable: boolean) => void;
+  onSubmit: (event: Event, content: string, enable: boolean) => Promise<void>;
   onDismiss: () => void;
   onUpdateTitle: (title: { title: string; subText: string }) => void;
   onBack: () => void;
@@ -165,28 +165,25 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     return res;
   }, [manifest]);
 
-  const updateLuFiles = useCallback(() => {
+  const updateLuFiles = useCallback(async () => {
     const payloads: { projectId: string; id: string; content: string }[] = [];
     for (const lufile of rootLuFiles) {
       const rootId = lufile.id.split('.');
       const language = rootId[rootId.length - 1];
-      let append = '';
-      if (language === locale) {
-        append = displayContent;
-      } else {
+      if (language !== locale) {
         const intents = multiLanguageIntents[language];
         if (!intents) {
           continue;
         }
-        append = mergeIntentsContent(intents);
+        const append = mergeIntentsContent(intents);
+        payloads.push({
+          projectId,
+          id: lufile.id,
+          content: `${lufile.content}\n# ${manifest.name}\n${append}`,
+        });
       }
-      payloads.push({
-        projectId,
-        id: lufile.id,
-        content: `${lufile.content}\n# ${manifest.name}\n${append}`,
-      });
     }
-    batchUpdateLuFiles(payloads);
+    await batchUpdateLuFiles(payloads);
   }, [rootLuFiles, projectId, locale, displayContent, multiLanguageIntents]);
 
   useEffect(() => {
@@ -241,11 +238,11 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     }
   }, [selectedIntents, currentLuFile, luFiles]);
 
-  const handleSubmit = (ev, enableOchestractor) => {
-    // append remote lufile into root lu file
-    updateLuFiles();
+  const handleSubmit = async (ev, enableOchestractor) => {
     // add trigger to root
-    onSubmit(ev, displayContent, enableOchestractor);
+    await onSubmit(ev, displayContent, enableOchestractor);
+    // append remote lufile into different language lu file
+    await updateLuFiles();
   };
 
   return (
