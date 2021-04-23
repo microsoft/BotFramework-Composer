@@ -207,7 +207,10 @@ export class Builder {
         TelemetryService.endEvent('OrchestratorBuildCompleted', 'OrchestratorBuilder');
 
         this.orchestratorSettings.orchestrator.models[modelData.lang] = modelPath;
-        this.orchestratorSettings.orchestrator.snapshots = snapshotData;
+        this.orchestratorSettings.orchestrator.snapshots = {
+          ...this.orchestratorSettings.orchestrator.snapshots,
+          ...snapshotData,
+        };
       }
     }
 
