@@ -158,7 +158,7 @@ export const Header = () => {
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
-  const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
+  const [showGetStartedTeachingBubble, setShowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
   const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
@@ -213,10 +213,10 @@ export const Header = () => {
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
     if (location.hash === '#getstarted') {
-      setshowGetStartedTeachingBubble(true);
+      setShowGetStartedTeachingBubble(true);
       setShowGetStarted(true);
     } else {
-      setshowGetStartedTeachingBubble(false);
+      setShowGetStartedTeachingBubble(false);
     }
   }, [location]);
 
@@ -386,7 +386,7 @@ export const Header = () => {
       <Panel
         isHiddenOnDismiss
         closeButtonAriaLabel={formatMessage('Close')}
-        customWidth={'395px'}
+        customWidth="395px"
         headerText={projectName}
         isBlocking={false}
         isOpen={isWebChatPanelVisible}
@@ -418,20 +418,21 @@ export const Header = () => {
             isWebChatPanelVisible={isWebChatPanelVisible}
           />
         ) : null}
-        <GetStarted
-          isOpen={botProjectSolutionLoaded && showGetStarted}
-          projectId={rootBotProjectId}
-          requiresLUIS={requiresLUIS}
-          requiresQNA={requiresQNA}
-          showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
-          onBotReady={() => {
-            setShowTeachingBubble(true);
-          }}
-          onDismiss={() => {
-            toggleGetStarted(false);
-          }}
-        />
       </Panel>
+
+      <GetStarted
+        isOpen={botProjectSolutionLoaded && showGetStarted}
+        projectId={rootBotProjectId}
+        requiresLUIS={requiresLUIS}
+        requiresQNA={requiresQNA}
+        showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
+        onBotReady={() => {
+          setShowTeachingBubble(true);
+        }}
+        onDismiss={() => {
+          toggleGetStarted(false);
+        }}
+      />
     </div>
   );
 };
