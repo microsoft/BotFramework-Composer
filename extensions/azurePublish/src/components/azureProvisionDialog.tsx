@@ -939,28 +939,25 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
+    console.log(page);
     if (page === PageTypes.ChooseAction) {
+      const isSignedInAndCreateCreationType = currentUser && formData.creationType === 'create';
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
-          {currentUser ? (
+        <div
+          style={{
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: isSignedInAndCreateCreationType ? 'space-between' : 'flex-end',
+          }}
+        >
+          {isSignedInAndCreateCreationType ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
             />
-          ) : (
-            <div
-              style={{ color: 'blue', cursor: 'pointer' }}
-              onClick={() => {
-                clearAll();
-                closeDialog();
-                logOut();
-              }}
-            >
-              Sign out
-            </div>
-          )}
+          ) : null}
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
