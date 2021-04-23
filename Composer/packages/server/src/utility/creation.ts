@@ -14,7 +14,11 @@ export const defaultSortOrder = [
   { generatorName: '@microsoft/generator-bot-enterprise-assistant', displayName: 'Enterprise assistant' },
   { generatorName: '@microsoft/generator-bot-people', displayName: 'People' },
   { generatorName: '@microsoft/generator-bot-calendar', displayName: 'Calendar' },
-  { generatorName: QnABotTemplateId, displayName: 'QnAMaker bot' },
+  { generatorName: '@microsoft/generator-bot-core-language', displayName: 'Core Bot with Language' },
+  { generatorName: QnABotTemplateId, displayName: 'Core Bot with QnA Maker' },
+  { generatorName: '@microsoft/generator-bot-core-assistant', displayName: 'Core Assistant Bot' },
+  { generatorName: '@microsoft/generator-bot-enterprise-calendar', displayName: 'Enterprise Calendar Bot' },
+  { generatorName: '@microsoft/generator-bot-enterprise-people', displayName: 'Enterprise People Bot' },
 ];
 
 export const sortTemplates = async (templates: BotTemplate[]): Promise<BotTemplate[]> => {
