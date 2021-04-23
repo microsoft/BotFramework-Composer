@@ -24,14 +24,13 @@ const redErrorText = css`
 `;
 
 type WebChatNetworkLogItemProps = {
-  index: number;
   item: ConversationNetworkTrafficItem | ConversationNetworkErrorItem;
   isSelected?: boolean;
   onClickTraffic: (data: WebChatInspectionData) => void;
 };
 
 export const WebChatNetworkLogItem: React.FC<WebChatNetworkLogItemProps> = (props) => {
-  const { index, item, isSelected = false, onClickTraffic } = props;
+  const { item, isSelected = false, onClickTraffic } = props;
   const { appLocale } = useRecoilValue(userSettingsState);
   const onClickRequest = useCallback(() => {
     onClickTraffic({ item, mode: 'request' });
@@ -49,7 +48,7 @@ export const WebChatNetworkLogItem: React.FC<WebChatNetworkLogItemProps> = (prop
     ) : null;
 
   return (
-    <div key={`webchat-network-item-${index}`} css={[logItem, hoverItem(isSelected), networkItem]}>
+    <div css={[logItem, hoverItem(isSelected), networkItem]}>
       <span>
         {renderTimeStamp(item.timestamp, appLocale)}
         <span css={[clickableSegment]} onClick={onClickRequest}>

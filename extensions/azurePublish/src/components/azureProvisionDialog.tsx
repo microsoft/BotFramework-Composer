@@ -34,10 +34,15 @@ import {
   SelectionMode,
   Stack,
   Text,
+  FontWeights,
+  FontSizes,
+  Label,
+  IStackTokens,
+  IStackItemStyles,
+  Link,
 } from 'office-ui-fabric-react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import sortBy from 'lodash/sortBy';
 
@@ -75,27 +80,46 @@ const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
 
-const labelTooltipStyles = {
+const ConfigureResourcesSectionName = styled(Text)`
+  font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
+  font-weight: ${FontWeights.semibold};
+  margin-bottom: 4px;
+`;
+
+const ConfigureResourcesSectionDescription = styled(Text)`
+  font-size: ${FluentTheme.fonts.medium.fontSize};
+  line-height: ${FontSizes.size14};
+  margin-bottom: 20px;
+`;
+
+const configureResourcePropertyStackTokens: IStackTokens = { childrenGap: 5 };
+
+const configureResourcePropertyLabelStackStyles: IStackItemStyles = {
   root: {
+    width: '200px',
+  },
+};
+
+const ConfigureResourcesPropertyLabel = styled(Label)`
+  font-size: ${FluentTheme.fonts.medium.fontSize};
+  font-weight: ${FontWeights.regular};
+`;
+
+const configureResourceDropdownStyles = { root: { paddingBottom: '4px', width: '300px' } };
+
+const configureResourceTextFieldStyles = { root: { paddingBottom: '4px', width: '300px' } };
+
+const configureResourcesIconStyle = {
+  root: {
+    color: NeutralColors.gray160,
     userSelect: 'none',
   },
 };
 
-const iconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: SharedColors.red10,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
-
-const resourceFieldStyles = { root: { paddingBottom: '4px', width: '75%' } };
+const LearnMoreLink = styled(Link)`
+  user-select: none;
+  font-size: 14px;
+`;
 
 const PageTypes = {
   ChooseAction: 'chooseAction',
@@ -141,34 +165,19 @@ const DialogTitle = {
   },
   CONFIG_RESOURCES: {
     title: formatMessage('Configure resources'),
-    subText: formatMessage('How you would like to provision your Azure resources to publish your bot?'),
+    subText: '',
   },
 };
 
-const onRenderLabel = (props) => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: '5px',
-      }}
-    >
-      <div
-        style={{
-          marginRight: '5px',
-          fontWeight: 600,
-          fontSize: '14px',
-        }}
-      >
-        {' '}
-        {props.label}{' '}
-      </div>
-      <TooltipHost content={props.ariaLabel} styles={labelTooltipStyles}>
-        <Icon iconName="Info" styles={iconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
+const getResourceRegion = (item: ResourcesItem): string => {
+  const { key, region } = item;
+  switch (key) {
+    case AzureResourceTypes.APP_REGISTRATION:
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return 'global';
+    default:
+      return region;
+  }
 };
 
 const reviewCols: IColumn[] = [
@@ -235,7 +244,7 @@ const reviewCols: IColumn[] = [
     onRender: (item: ResourcesItem) => {
       return (
         <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>
-          {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global' : item?.region}
+          {getResourceRegion(item)}
         </div>
       );
     },
@@ -284,6 +293,7 @@ export const AzureProvisionDialog: React.FC = () => {
   } = usePublishApi();
   const telemetryClient: TelemetryClient = useTelemetryClient();
 
+  // eslint-disable-next-line no-console
   console.log('TELEMETRY CLIENT', telemetryClient);
 
   const { setItem, getItem, clearAll } = useLocalStorage();
@@ -718,7 +728,7 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const onSave = useCallback(() => {
-    savePublishConfig(importConfig);
+    savePublishConfig(removePlaceholder(importConfig));
     clearAll();
     closeDialog();
   }, [importConfig]);
@@ -776,6 +786,14 @@ export const AzureProvisionDialog: React.FC = () => {
     </div>
   );
 
+  const renderPropertyInfoIcon = (tooltip: string) => {
+    return (
+      <TooltipHost content={tooltip}>
+        <Icon iconName="Unknown" styles={configureResourcesIconStyle} />
+      </TooltipHost>
+    );
+  };
+
   const PageFormConfig = (
     <ScrollablePane
       data-is-scrollable="true"
@@ -783,84 +801,134 @@ export const AzureProvisionDialog: React.FC = () => {
       style={{ height: 'calc(100vh - 65px)' }}
     >
       <form style={{ width: '100%' }}>
-        <Dropdown
-          ariaLabel={formatMessage(
-            'The Azure AD directory includes the tenant’s users, groups, and apps and is used to perform identity and access management functions for tenant resources.'
-          )}
-          disabled={allTenants.length === 1 || currentConfig?.tenantId}
-          errorMessage={tenantsErrorMessage}
-          label={formatMessage('Azure Directory')}
-          options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-          selectedKey={formData.tenantId}
-          styles={resourceFieldStyles}
-          onChange={(_e, o) => {
-            updateFormData('tenantId', o.key as string);
-          }}
-          onRenderLabel={onRenderLabel}
-        />
-        <Dropdown
-          required
-          ariaLabel={formatMessage('All resources in an Azure subscription are billed together')}
-          disabled={currentConfig?.subscriptionId}
-          errorMessage={subscriptionsErrorMessage}
-          label={formatMessage('Subscription')}
-          options={subscriptionOptions}
-          placeholder={formatMessage('Select one')}
-          selectedKey={formData.subscriptionId}
-          styles={resourceFieldStyles}
-          onChange={(_e, o) => {
-            updateFormData('subscriptionId', o.key as string);
-          }}
-          onRenderLabel={onRenderLabel}
-        />
-        <ResourceGroupPicker
-          disabled={currentConfig?.resourceGroup}
-          newResourceGroupName={isNewResourceGroup ? formData.resourceGroup : undefined}
-          resourceGroupNames={resourceGroupNames}
-          selectedResourceGroupName={isNewResourceGroup ? undefined : formData.resourceGroup}
-          onChange={(choice) => {
-            setIsNewResourceGroup(choice.isNew);
-            updateFormData('resourceGroup', choice.name);
-            setErrorResourceGroupName(choice.errorMessage);
-          }}
-        />
-        <TextField
-          required
-          ariaLabel={formatMessage(
-            'This name will be assigned to all your new resources. For eg-test-web app, test-luis-prediction'
-          )}
-          disabled={currentConfig?.hostname || currentConfig?.name}
-          errorMessage={errorHostName}
-          label={formatMessage('Resource name')}
-          placeholder={formatMessage('Name of your services')}
-          styles={resourceFieldStyles}
-          value={formData.hostname}
-          onChange={newHostName}
-          onRenderLabel={onRenderLabel}
-        />
-        <Dropdown
-          required
-          disabled={currentConfig?.region}
-          label={formatMessage('Region')}
-          options={deployLocationOptions}
-          placeholder={formatMessage('Select one')}
-          selectedKey={formData.region}
-          styles={resourceFieldStyles}
-          onChange={updateCurrentLocation}
-          onRenderLabel={onRenderLabel}
-        />
-        <Dropdown
-          required
-          disabled={currentConfig?.settings?.luis?.region}
-          label={formatMessage('Region for Luis')}
-          options={luisLocationOptions}
-          placeholder={formatMessage('Select one')}
-          selectedKey={formData.luisLocation}
-          styles={{ root: { width: '75%' } }}
-          onChange={(e, o) => {
-            updateFormData('luisLocation', o.key as string);
-          }}
-        />
+        <Stack>
+          <ConfigureResourcesSectionName>{formatMessage('Azure details')}</ConfigureResourcesSectionName>
+          <ConfigureResourcesSectionDescription>
+            {formatMessage('Select your Azure directory and subscription, enter resource group name.')}
+          </ConfigureResourcesSectionDescription>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Azure Directory')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage(
+                  'Azure Active Directory is Microsoft’s cloud-based identity and access management service.'
+                )
+              )}
+            </Stack>
+            <Dropdown
+              disabled={allTenants.length === 1 || currentConfig?.tenantId}
+              errorMessage={tenantsErrorMessage}
+              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
+              selectedKey={formData.tenantId}
+              styles={configureResourceDropdownStyles}
+              onChange={(_e, o) => {
+                updateFormData('tenantId', o.key as string);
+              }}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Subscription')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('The subscription that will be billed for the resources.'))}
+            </Stack>
+            <Dropdown
+              disabled={currentConfig?.subscriptionId}
+              errorMessage={subscriptionsErrorMessage}
+              options={subscriptionOptions}
+              placeholder={formatMessage('Select one')}
+              selectedKey={formData.subscriptionId}
+              styles={configureResourceDropdownStyles}
+              onChange={(_e, o) => {
+                updateFormData('subscriptionId', o.key as string);
+              }}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Resource group')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage(
+                  'A custom resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.'
+                )
+              )}
+            </Stack>
+            <ResourceGroupPicker
+              disabled={currentConfig?.resourceGroup}
+              newResourceGroupName={isNewResourceGroup ? formData.resourceGroup : undefined}
+              resourceGroupNames={resourceGroupNames}
+              selectedResourceGroupName={isNewResourceGroup ? undefined : formData.resourceGroup}
+              onChange={(choice) => {
+                setIsNewResourceGroup(choice.isNew);
+                updateFormData('resourceGroup', choice.name);
+                setErrorResourceGroupName(choice.errorMessage);
+              }}
+            />
+          </Stack>
+          <ConfigureResourcesSectionName>{formatMessage('Resource details')}</ConfigureResourcesSectionName>
+          <ConfigureResourcesSectionDescription>
+            {formatMessage('Enter resource name and select region. This will be applied to the new resources.')}
+          </ConfigureResourcesSectionDescription>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>{formatMessage('Name')}</ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('A unique name for your resources.'))}
+            </Stack>
+            <TextField
+              disabled={currentConfig?.hostname || currentConfig?.name}
+              errorMessage={errorHostName}
+              placeholder={formatMessage('New resource name')}
+              styles={configureResourceTextFieldStyles}
+              value={formData.hostname}
+              onChange={newHostName}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>{formatMessage('Region')}</ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('The region where your resources and bot will be used.'))}
+            </Stack>
+            <Dropdown
+              disabled={currentConfig?.region}
+              options={deployLocationOptions}
+              placeholder={formatMessage('Select one')}
+              selectedKey={formData.region}
+              styles={configureResourceDropdownStyles}
+              onChange={updateCurrentLocation}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack>
+              <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+                <ConfigureResourcesPropertyLabel required>
+                  {formatMessage('LUIS region')}
+                </ConfigureResourcesPropertyLabel>
+                {renderPropertyInfoIcon(formatMessage('The region associated with your Language understanding model.'))}
+              </Stack>
+              <LearnMoreLink
+                href="https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions"
+                target="_blank"
+              >
+                {formatMessage('Learn More')}
+              </LearnMoreLink>
+            </Stack>
+            <Dropdown
+              disabled={currentConfig?.settings?.luis?.region}
+              options={luisLocationOptions}
+              placeholder={formatMessage('Select one')}
+              selectedKey={formData.luisLocation}
+              styles={configureResourceDropdownStyles}
+              onChange={(e, o) => {
+                updateFormData('luisLocation', o.key as string);
+              }}
+            />
+          </Stack>
+        </Stack>
       </form>
     </ScrollablePane>
   );
@@ -1026,7 +1094,7 @@ export const AzureProvisionDialog: React.FC = () => {
               <PrimaryButton
                 disabled={isNextDisabled}
                 style={{ margin: '0 4px' }}
-                text={formatMessage('Next: Review')}
+                text={formatMessage('Next')}
                 onClick={() => {
                   onNext(formData.hostname);
                 }}
@@ -1047,6 +1115,13 @@ export const AzureProvisionDialog: React.FC = () => {
                 onClick={onSave}
               />
             )}
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                closeDialog();
+              }}
+            />
           </div>
         </div>
       );
@@ -1132,7 +1207,7 @@ export const AzureProvisionDialog: React.FC = () => {
             <PrimaryButton
               disabled={isNextDisabled}
               style={{ margin: '0 4px' }}
-              text={formatMessage('Done')}
+              text={formatMessage('Create')}
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
                 onSubmit({
@@ -1145,6 +1220,13 @@ export const AzureProvisionDialog: React.FC = () => {
                   type: publishType,
                   externalResources: selectedResources,
                 });
+              }}
+            />
+            <DefaultButton
+              style={{ margin: '0 4px' }}
+              text={formatMessage('Cancel')}
+              onClick={() => {
+                closeDialog();
               }}
             />
           </div>
@@ -1215,7 +1297,15 @@ export const AzureProvisionDialog: React.FC = () => {
           closeDialog();
         }}
       />
-      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          minHeight: '430px',
+        }}
+      >
         <div style={{ flex: 1 }}>
           {page === PageTypes.ChooseAction && PageChooseAction}
           {page === PageTypes.ConfigProvision && PageFormConfig}

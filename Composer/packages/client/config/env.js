@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -49,6 +49,14 @@ function getGitSha() {
   }
 }
 
+function getComposerVersion() {
+  try {
+    return fs.readJSONSync(path.join(__dirname, '../../electron-server/package.json')).version;
+  } catch {
+    return 'unknown';
+  }
+}
+
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
 // https://github.com/facebook/create-react-app/issues/253.
@@ -88,7 +96,7 @@ function getClientEnvironment(publicUrl) {
         PUBLIC_URL: publicUrl,
         GIT_SHA: getGitSha().toString().replace('\n', ''),
         SDK_PACKAGE_VERSION: '4.12.2', // TODO: change this when Composer supports custom schema/custom runtime
-        COMPOSER_VERSION: '1.4.0',
+        COMPOSER_VERSION: getComposerVersion(),
         LOCAL_PUBLISH_PATH:
           process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../../extensions/localPublish/hostedBots'),
         WEBLOGIN_CLIENTID: process.env.WEBLOGIN_CLIENTID,
