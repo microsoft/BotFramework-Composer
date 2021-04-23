@@ -802,7 +802,7 @@ export const AzureProvisionDialog: React.FC = () => {
     >
       <form style={{ width: '100%' }}>
         <Stack>
-          <ConfigureResourcesSectionName>Azure details</ConfigureResourcesSectionName>
+          <ConfigureResourcesSectionName>{formatMessage('Azure details')}</ConfigureResourcesSectionName>
           <ConfigureResourcesSectionDescription>
             {formatMessage('Select your Azure directory and subscription, enter resource group name.')}
           </ConfigureResourcesSectionDescription>
