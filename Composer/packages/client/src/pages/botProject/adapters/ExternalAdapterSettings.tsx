@@ -8,11 +8,11 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { BotSchemas, DialogSetting } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link as RouterLink } from '@reach/router';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { AdapterRecord } from '@botframework-composer/types/src';
 
-import { useRouterCache } from '../../../utils/hooks';
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableHeaderRow, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
 
@@ -35,7 +35,6 @@ const ExternalAdapterSettings = (props: Props) => {
   const schemas = useRecoilValue<BotSchemas>(schemasState(projectId));
   const currentSettings = useRecoilValue<DialogSetting>(settingsState(projectId));
   const { setSettings } = useRecoilValue(dispatcherState);
-  const packageManagerLink = useRouterCache('plugin/package-manager/package-manager');
 
   const adapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];
 
@@ -130,11 +129,11 @@ const ExternalAdapterSettings = (props: Props) => {
     <Fragment>
       <div data-testid="adapterSettings">{externalServices(adapterSchemas)}</div>
       <div key={'subtitle'} css={subtitle}>
-        {formatMessage.rich('<a>Add from package manager</a>.', {
+        {formatMessage.rich('<a>Add from package manager</a>', {
           a: ({ children }) => (
-            <Link key="link" href={packageManagerLink}>
+            <RouterLink key="link" to={`/bot/${projectId}/plugin/package-manager/package-manager`}>
               {children}
-            </Link>
+            </RouterLink>
           ),
         })}
       </div>

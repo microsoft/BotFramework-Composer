@@ -156,7 +156,7 @@ export const Header = () => {
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
 
-  const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
+  const [showGetStartedTeachingBubble, setShowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
   const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
@@ -211,10 +211,10 @@ export const Header = () => {
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
     if (location.hash === '#getstarted') {
-      setshowGetStartedTeachingBubble(true);
+      setShowGetStartedTeachingBubble(true);
       setShowGetStarted(true);
     } else {
-      setshowGetStartedTeachingBubble(false);
+      setShowGetStartedTeachingBubble(false);
     }
   }, [location]);
 

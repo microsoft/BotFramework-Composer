@@ -516,8 +516,6 @@ const Library: React.FC = () => {
 
             updateInstalledComponents(results.data.components);
           } else {
-            telemetryClient.track('PackageUninstallFailed', { package: selectedItem.name });
-
             throw new Error(results.data.message);
           }
 
@@ -526,11 +524,15 @@ const Library: React.FC = () => {
         } catch (err) {
           telemetryClient.track('PackageUninstallFailed', { package: selectedItem.name });
 
-          setApplicationLevelError({
-            status: err.response.status,
-            message: err.response && err.response.data.message ? err.response.data.message : err,
-            summary: strings.importError,
-          });
+          if (err.response) {
+            setApplicationLevelError({
+              status: err.response.status,
+              message: err.response && err.response.data.message ? err.response.data.message : err,
+              summary: strings.importError,
+            });
+          } else {
+            setApplicationLevelError(err);
+          }
         }
         setWorking('');
       }
