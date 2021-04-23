@@ -33,7 +33,7 @@ export const About: React.FC<RouteComponentProps> = () => {
         <div css={about.version}>
           {formatMessage(`Release: `) +
             (isElectron()
-              ? (window as any).appVersion
+              ? process.env.COMPOSER_VERSION
               : `${process.env.COMPOSER_VERSION}-${process.env.GIT_SHA}` || 'Unknown')}
         </div>
         <div css={about.diagnosticsInfo}>

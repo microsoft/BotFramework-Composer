@@ -17,7 +17,6 @@ import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 import { setEnvDefault } from '../../utility/setEnvDefault';
 import { useElectronContext } from '../../utility/electronContext';
-import { COMPOSER_VERSION } from '../../constants';
 import { TelemetryService } from '../../services/telemetry';
 
 import { IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
@@ -52,7 +51,7 @@ export type DownSamplingConfig = {
 
 const getUserAgent = () => {
   const platform = useElectronContext() ? 'desktop' : 'web';
-  return `microsoft.bot.composer/${COMPOSER_VERSION} ${platform}`;
+  return `microsoft.bot.composer/${process.env.COMPOSER_VERSION} ${platform}`;
 };
 
 export class Builder {
