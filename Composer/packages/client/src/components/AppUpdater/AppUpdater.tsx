@@ -20,8 +20,10 @@ import { useRecoilValue } from 'recoil';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import { IpcRendererEvent } from 'electron';
 
-import { AppUpdaterStatus } from '../constants';
-import { appUpdateState, dispatcherState } from '../recoilModel';
+import { AppUpdaterStatus } from '../../constants';
+import { appUpdateState, dispatcherState } from '../../recoilModel';
+
+import { breakingUpdatesMap } from './breakingUpdates/breakingUpdatesMap';
 
 const updateAvailableDismissBtn: Partial<IButtonStyles> = {
   root: {
@@ -85,6 +87,13 @@ const downloadOptions = {
   installAndUpdate: 'installAndUpdate',
 };
 
+// TODO: factor this out into shared or types
+type BreakingUpdateMetaData = {
+  autoDownload: boolean;
+  useNightly: boolean;
+  uxId: string;
+};
+
 // -------------------- AppUpdater -------------------- //
 
 export const AppUpdater: React.FC<{}> = () => {
@@ -93,9 +102,11 @@ export const AppUpdater: React.FC<{}> = () => {
   );
   const { downloadSizeInBytes, error, progressPercent, showing, status, version } = useRecoilValue(appUpdateState);
   const [downloadOption, setDownloadOption] = useState(downloadOptions.installAndUpdate);
+  const [breakingMetaData, setBreakingMetaData] = useState<BreakingUpdateMetaData | undefined>(undefined);
 
   const handleDismiss = useCallback(() => {
     setAppUpdateShowing(false);
+    setBreakingMetaData(undefined);
     if (status === AppUpdaterStatus.UPDATE_UNAVAILABLE || status === AppUpdaterStatus.UPDATE_FAILED) {
       setAppUpdateStatus(AppUpdaterStatus.IDLE, undefined);
     }
@@ -118,53 +129,69 @@ export const AppUpdater: React.FC<{}> = () => {
     setDownloadOption(option);
   }, []);
 
+  // necessary?
+  const handleContinueFromBreakingUx = useCallback(() => {
+    handlePreDownloadOkay();
+  }, [handlePreDownloadOkay]);
+
   // listen for app updater events from main process
   useEffect(() => {
-    ipcRenderer.on('app-update', (_event: IpcRendererEvent, name: string, payload) => {
-      switch (name) {
-        case 'update-available':
-          setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
-          setAppUpdateShowing(true);
-          break;
-
-        case 'progress': {
-          const progress = +(payload.percent as number).toFixed(2);
-          setAppUpdateProgress(progress, payload.total);
-          break;
-        }
-
-        case 'update-in-progress': {
-          setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
-          setAppUpdateShowing(true);
-          break;
-        }
-
-        case 'update-not-available': {
-          const explicit = payload;
-          if (explicit) {
-            // the user has explicitly checked for an update via the Help menu;
-            // we should display some UI feedback if there are no updates available
-            setAppUpdateStatus(AppUpdaterStatus.UPDATE_UNAVAILABLE, undefined);
+    ipcRenderer.on(
+      'app-update',
+      (_event: IpcRendererEvent, name: string, payload, breakingMetaData?: BreakingUpdateMetaData) => {
+        switch (name) {
+          case 'update-available':
+            setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
             setAppUpdateShowing(true);
+            break;
+
+          case 'progress': {
+            const progress = +(payload.percent as number).toFixed(2);
+            setAppUpdateProgress(progress, payload.total);
+            break;
           }
-          break;
+
+          case 'update-in-progress': {
+            setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
+            setAppUpdateShowing(true);
+            break;
+          }
+
+          case 'update-not-available': {
+            const explicit = payload;
+            if (explicit) {
+              // the user has explicitly checked for an update via the Help menu;
+              // we should display some UI feedback if there are no updates available
+              setAppUpdateStatus(AppUpdaterStatus.UPDATE_UNAVAILABLE, undefined);
+              setAppUpdateShowing(true);
+            }
+            break;
+          }
+
+          case 'update-downloaded':
+            setAppUpdateStatus(AppUpdaterStatus.UPDATE_SUCCEEDED, undefined);
+            setAppUpdateShowing(true);
+            break;
+
+          case 'error':
+            setAppUpdateStatus(AppUpdaterStatus.UPDATE_FAILED, undefined);
+            setAppUpdateError(payload);
+            setAppUpdateShowing(true);
+            break;
+
+          case 'breaking-update-available':
+            if (breakingMetaData) {
+              setBreakingMetaData(breakingMetaData);
+              setAppUpdateStatus(AppUpdaterStatus.BREAKING_UPDATE_AVAILABLE, payload.version);
+              setAppUpdateShowing(true);
+            }
+            break;
+
+          default:
+            break;
         }
-
-        case 'update-downloaded':
-          setAppUpdateStatus(AppUpdaterStatus.UPDATE_SUCCEEDED, undefined);
-          setAppUpdateShowing(true);
-          break;
-
-        case 'error':
-          setAppUpdateStatus(AppUpdaterStatus.UPDATE_FAILED, undefined);
-          setAppUpdateError(payload);
-          setAppUpdateShowing(true);
-          break;
-
-        default:
-          break;
       }
-    });
+    );
   }, []);
 
   const title = useMemo(() => {
@@ -291,6 +318,19 @@ export const AppUpdater: React.FC<{}> = () => {
 
   const subText =
     status === AppUpdaterStatus.UPDATE_AVAILABLE ? `${formatMessage('Bot Framework Composer')} v${version}` : '';
+
+  if (status === AppUpdaterStatus.BREAKING_UPDATE_AVAILABLE && showing && breakingMetaData) {
+    const BreakingUpdateUx = breakingUpdatesMap[breakingMetaData.uxId];
+    // TODO: check if breaking update ux component is defined and handle undefined case
+    return (
+      <BreakingUpdateUx
+        updateSettings={{ autoDownload: breakingMetaData.autoDownload, useNightly: breakingMetaData.useNightly }}
+        version={version}
+        onCancel={handleDismiss}
+        onContinue={handleContinueFromBreakingUx}
+      />
+    );
+  }
 
   return showing ? (
     <Dialog
