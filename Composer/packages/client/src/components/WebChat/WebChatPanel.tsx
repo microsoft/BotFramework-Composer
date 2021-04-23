@@ -14,7 +14,7 @@ import { currentWebChatConversationState, dispatcherState, webChatDataState } fr
 import { ConversationService } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
 import { WebChat } from './WebChat';
-import { RestartOption } from './type';
+import { RestartOption } from './types';
 import { BotSecrets, ChatData } from './types';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
@@ -74,7 +74,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   useEffect(() => {
     let mounted = true;
     if (isWebChatPanelVisible && !currentConversation) {
-      console.log('Im inside here');
       const startConversation = async () => {
         const chatData: ChatData = await conversationService.startNewConversation(
           botUrl,

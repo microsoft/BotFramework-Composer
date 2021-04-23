@@ -6,7 +6,6 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { createStore as createWebChatStore } from 'botframework-webchat-core';
 import { createDirectLine } from 'botframework-webchat';
 import moment from 'moment';
-import { ConnectionStatus } from 'botframework-directlinejs';
 import formatMessage from 'format-message';
 
 import { BotSecrets, WebChatMode, User, ChatData, StartConversationPayload } from '../types';
@@ -65,13 +64,10 @@ export class ConversationService {
     };
   }
 
-  public async fetchDirectLineObject(
+  private async fetchDirectLineObject(
     conversationId: string,
     directLineOptions: { mode: WebChatMode; endpointId: string; userId: string }
   ) {
-    if (this.restServerForWSPort === -1) {
-      await this.setUpConversationServer();
-    }
     const options = {
       conversationId,
       ...directLineOptions,
@@ -129,17 +125,20 @@ export class ConversationService {
     const conversationId: string = resp.data.conversationId;
     const endpointId: string = resp.data.endpointId;
 
+    const directline = await this.fetchDirectLineObject(conversationId, {
+      mode: webChatMode,
+      endpointId: endpointId,
+      userId: user.id,
+    });
+
     const webChatStore: unknown = createWebChatStore({});
     return {
-      directline: {
-        end: () => undefined,
-      },
+      directline,
       webChatMode: webChatMode,
       projectId,
       user,
       conversationId,
       webChatStore,
-      endpointId,
     };
   }
 
@@ -182,7 +181,6 @@ export class ConversationService {
       user,
       conversationId,
       webChatStore,
-      endpointId,
     };
   }
 

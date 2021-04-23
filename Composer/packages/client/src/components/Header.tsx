@@ -174,7 +174,6 @@ export const Header = () => {
   const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(false);
   const [requiresLUIS, setRequiresLUIS] = useState<boolean>(false);
   const [requiresQNA, setRequiresQNA] = useState<boolean>(false);
-  useDirectLineServer(rootBotProjectId, BASEPATH);
 
   const { location } = useLocation();
 

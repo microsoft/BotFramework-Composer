@@ -57,5 +57,9 @@ export type ChatData = {
   user: User;
   conversationId: string;
   webChatStore: unknown;
-  endpointId: string;
 };
+
+export enum RestartOption {
+  SameUserID,
+  NewUserID,
+}

@@ -9,7 +9,7 @@ import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu'
 import formatMessage from 'format-message';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import { RestartOption } from './type';
+import { RestartOption } from './types';
 
 const customButtonStyles: IButtonStyles = {
   root: {

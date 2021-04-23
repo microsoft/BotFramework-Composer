@@ -65,7 +65,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         >
           <SideBar projectId={activeBot} />
           <div css={contentWrapper} role="main">
-            <WebChatContainer />
             <CommandBar projectId={activeBot} />
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
@@ -84,7 +83,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </div>
         </Split>
         <Modals projectId={activeBot} />
-        <DebugPanel />
       </div>
     </div>
   );

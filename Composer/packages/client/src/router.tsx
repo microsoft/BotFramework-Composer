@@ -9,8 +9,8 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { resolveToBasePath } from './utils/fileUtil';
-import { data } from './styles';
 import { NotFound } from './components/NotFound';
+import { WebChatContainer } from './components/WebChat/WebChatContainer';
 import { BASEPATH } from './constants';
 import {
   dispatcherState,
@@ -28,6 +28,7 @@ import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
 import { botDisplayNameState, botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
 import languageStorage from './utils/languageStorage';
+import { DebugPanel } from './pages/design/DebugPanel/DebugPanel';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -41,79 +42,117 @@ const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
+export const root = css`
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: row;
+
+  label: Page;
+`;
+
+export const pageWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  label: PageWrapper;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  position: relative;
+  label: FInalContent;
+`;
+
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const spinnerText = useRecoilValue(botOpeningMessage);
 
   return (
-    <div css={data}>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Router basepath={BASEPATH} {...props}>
-          <Redirect
-            noThrow
-            from="/bot/:projectId/language-generation"
-            to="/bot/:projectId/language-generation/common"
-          />
-          <Redirect
-            noThrow
-            from="/bot/:projectId/language-understanding"
-            to="/bot/:projectId/language-understanding/all"
-          />
-          <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
-          <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
-          <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
-          <ProjectRouter path="/bot/:projectId/skill/:skillId">
-            <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
-            <LUPage path="language-understanding/:dialogId/*" />
-            <LGPage path="language-generation/all/*" />
-            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
-            <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
-            <QnAPage path="knowledge-base/:dialogId/*" />
-            <BotProjectSettings path="botProjectsSettings" />
-            <Diagnostics path="diagnostics" />
-            <DesignPage path="*" />
-          </ProjectRouter>
-          <ProjectRouter path="/bot/:projectId">
-            <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
-            <LUPage path="language-understanding/:dialogId/*" />
-            <LGPage path="language-generation/all/*" />
-            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
-            <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/:dialogId/*" />
-            <Publish path="publish/:targetName" />
-            <BotProjectSettings path="botProjectsSettings" />
-            <FormDialogPage path="forms/:schemaId/*" />
-            <FormDialogPage path="forms/*" />
-            <DesignPage path="*" />
-            <Diagnostics path="diagnostics" />
-            {pluginPages.map((page) => (
-              <PluginPageContainer
-                key={`${page.id}/${page.bundleId}`}
-                bundleId={page.bundleId}
-                path={`plugin/${page.id}/${page.bundleId}`}
-                pluginId={page.id}
+    <div css={root} data-testid={props['data-testid']}>
+      <div css={pageWrapper}>
+        <div css={contentWrapper} role="main">
+          <WebChatContainer />
+          <Suspense fallback={<LoadingSpinner />}>
+            <Router basepath={BASEPATH} {...props}>
+              <Redirect
+                noThrow
+                from="/bot/:projectId/language-generation"
+                to="/bot/:projectId/language-generation/common"
               />
-            ))}
-          </ProjectRouter>
-          <SettingPage path="settings/*" />
-          <ExtensionsPage path="extensions/*" />
-          <BotCreationFlowRouterV2 path="projects/*" />
-          <BotCreationFlowRouterV2 path="v2/projects/*" />
-          <BotCreationFlowRouterV2 path="home" />
-          <NotFound default />
-        </Router>
-      </Suspense>
-      {botOpening && (
-        <div
-          css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)' }}
-        >
-          <LoadingSpinner inModal message={spinnerText} />
+              <Redirect
+                noThrow
+                from="/bot/:projectId/language-understanding"
+                to="/bot/:projectId/language-understanding/all"
+              />
+              <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
+              <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
+              <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
+              <ProjectRouter path="/bot/:projectId/skill/:skillId">
+                <DesignPage path="dialogs/:dialogId/*" />
+                <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
+                <LUPage path="language-understanding/:dialogId/*" />
+                <LGPage path="language-generation/all/*" />
+                <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
+                <LGPage path="language-generation/:dialogId/*" />
+                <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
+                <QnAPage path="knowledge-base/:dialogId/*" />
+                <BotProjectSettings path="botProjectsSettings" />
+                <Diagnostics path="diagnostics" />
+                <DesignPage path="*" />
+              </ProjectRouter>
+              <ProjectRouter path="/bot/:projectId">
+                <DesignPage path="dialogs/:dialogId/*" />
+                <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
+                <LUPage path="language-understanding/:dialogId/*" />
+                <LGPage path="language-generation/all/*" />
+                <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
+                <LGPage path="language-generation/:dialogId/*" />
+                <QnAPage path="knowledge-base/:dialogId/*" />
+                <Publish path="publish/:targetName" />
+                <BotProjectSettings path="botProjectsSettings" />
+                <FormDialogPage path="forms/:schemaId/*" />
+                <FormDialogPage path="forms/*" />
+                <DesignPage path="*" />
+                <Diagnostics path="diagnostics" />
+                {pluginPages.map((page) => (
+                  <PluginPageContainer
+                    key={`${page.id}/${page.bundleId}`}
+                    bundleId={page.bundleId}
+                    path={`plugin/${page.id}/${page.bundleId}`}
+                    pluginId={page.id}
+                  />
+                ))}
+              </ProjectRouter>
+              <SettingPage path="settings/*" />
+              <ExtensionsPage path="extensions/*" />
+              <BotCreationFlowRouterV2 path="projects/*" />
+              <BotCreationFlowRouterV2 path="v2/projects/*" />
+              <BotCreationFlowRouterV2 path="home" />
+              <NotFound default />
+            </Router>
+          </Suspense>
+          {botOpening && (
+            <div
+              css={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                background: 'rgba(255, 255, 255, 0.6)',
+              }}
+            >
+              <LoadingSpinner inModal message={spinnerText} />
+            </div>
+          )}
         </div>
-      )}
+        <DebugPanel />
+      </div>
     </div>
   );
 };

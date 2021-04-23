@@ -41,7 +41,7 @@ export const contentWrapper = css`
   flex-grow: 1;
   height: 100%;
   position: relative;
-  label: DesignPageContent;
+  label: PageContent;
 `;
 
 export const pageWrapper = css`
@@ -162,8 +162,6 @@ const Page: React.FC<IPageProps> = (props) => {
 
   const { setPageElementState } = useRecoilValue(dispatcherState);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
-  const webchatEssentials = useRecoilValue(webChatEssentialsSelector(rootBotId));
-  const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState(pageMode, { leftSplitWidth: sizes.primary });
@@ -186,64 +184,54 @@ const Page: React.FC<IPageProps> = (props) => {
   const displayedToolbarItems = toolbarItems.concat(debugItems);
 
   return (
-    <div css={root} data-testid={props['data-testid']}>
-      <div css={pageWrapper}>
-        <div css={contentWrapper} role="main">
-          <Toolbar toolbarItems={displayedToolbarItems} />
-          <div css={headerStyle}>
-            <h1 css={headerTitle}>{title}</h1>
-            {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
-          </div>
-          <Split
-            resetOnDoubleClick
-            initialPrimarySize="20%"
-            minPrimarySize="200px"
-            minSecondarySize="800px"
-            renderSplitter={renderThinSplitter}
-            onMeasuredSizesChanged={onMeasuredSizesChanged}
-          >
-            {useNewTree ? (
-              <ProjectTree
-                headerAriaLabel={formatMessage('Filter by file name')}
-                headerPlaceholder={formatMessage('Filter by file name')}
-                options={{
-                  showDelete: false,
-                  showTriggers: false,
-                  showDialogs: true,
-                  showLgImports: pageMode === 'language-generation',
-                  showLuImports: pageMode === 'language-understanding',
-                  showRemote: false,
-                  showMenu: false,
-                  showQnAMenu: pageMode === 'knowledge-base',
-                  showErrors: false,
-                  showCommonLinks,
-                }}
-                selectedLink={{
-                  projectId,
-                  skillId,
-                  dialogId,
-                  lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
-                  luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
-                }}
-                onSelect={(link) => {
-                  navigateTo(buildURL(pageMode, link));
-                }}
-              />
-            ) : (
-              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
-            )}
-            <div
-              aria-label={mainRegionName}
-              css={content(shouldShowEditorError)}
-              data-testid="PageContent"
-              role="region"
-            >
-              <div css={contentStyle}>{children}</div>
-            </div>
-          </Split>
-        </div>
-        {useDebugPane ? <DebugPanel /> : null}
+    <div css={contentWrapper} role="main">
+      <Toolbar toolbarItems={displayedToolbarItems} />
+      <div css={headerStyle}>
+        <h1 css={headerTitle}>{title}</h1>
+        {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
       </div>
+      <Split
+        resetOnDoubleClick
+        initialPrimarySize="20%"
+        minPrimarySize="200px"
+        minSecondarySize="800px"
+        renderSplitter={renderThinSplitter}
+        onMeasuredSizesChanged={onMeasuredSizesChanged}
+      >
+        {useNewTree ? (
+          <ProjectTree
+            headerAriaLabel={formatMessage('Filter by file name')}
+            headerPlaceholder={formatMessage('Filter by file name')}
+            options={{
+              showDelete: false,
+              showTriggers: false,
+              showDialogs: true,
+              showLgImports: pageMode === 'language-generation',
+              showLuImports: pageMode === 'language-understanding',
+              showRemote: false,
+              showMenu: false,
+              showQnAMenu: pageMode === 'knowledge-base',
+              showErrors: false,
+              showCommonLinks,
+            }}
+            selectedLink={{
+              projectId,
+              skillId,
+              dialogId,
+              lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
+              luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
+            }}
+            onSelect={(link) => {
+              navigateTo(buildURL(pageMode, link));
+            }}
+          />
+        ) : (
+          <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+        )}
+        <div aria-label={mainRegionName} css={content(shouldShowEditorError)} data-testid="PageContent" role="region">
+          <div css={contentStyle}>{children}</div>
+        </div>
+      </Split>
     </div>
   );
 };
