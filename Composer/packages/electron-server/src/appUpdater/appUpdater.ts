@@ -14,7 +14,8 @@ import { breakingUpdates } from './breakingUpdates';
 
 const log = logger.extend('app-updater');
 
-export type BreakingUpdateMetaData = AppUpdaterSettings & {
+export type BreakingUpdateMetaData = {
+  explicitCheck: boolean;
   uxId: string;
 };
 
@@ -25,6 +26,7 @@ export class AppUpdater extends EventEmitter {
   private downloadingUpdate = false;
   private _downloadedUpdate = false;
   private explicitCheck = false;
+  private isBreakingUpdate = false;
   private updateInfo: UpdateInfo | undefined = undefined;
   private settings: AppUpdaterSettings = { autoDownload: false, useNightly: false };
 
@@ -33,6 +35,7 @@ export class AppUpdater extends EventEmitter {
 
     autoUpdater.allowDowngrade = false;
     autoUpdater.allowPrerelease = true;
+    autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = false; // we will explicitly call the install logic
 
     autoUpdater.on('error', this.onError.bind(this));
@@ -65,7 +68,6 @@ export class AppUpdater extends EventEmitter {
 
     this.setFeedURL();
     this.determineUpdatePath();
-    autoUpdater.autoDownload = this.settings.autoDownload;
     autoUpdater.checkForUpdates();
   }
 
@@ -83,11 +85,6 @@ export class AppUpdater extends EventEmitter {
 
   public setSettings(settings: AppUpdaterSettings) {
     this.settings = settings;
-    this.emit(
-      'breaking-update-available',
-      { version: 'v2.0.0-breaking' },
-      { uxId: 'Version1.x.xTo2.x.x', ...this.settings }
-    );
   }
 
   public get downloadedUpdate(): boolean {
@@ -107,9 +104,6 @@ export class AppUpdater extends EventEmitter {
     this.checkingForUpdate = true;
   }
 
-  // Brainstorming:
-  // If we satisfy a certain update check (currVersion < 2 && newVersion is 2.x.x)
-  // then emit a special event or maybe set a special property on the payload
   private onUpdateAvailable(updateInfo: UpdateInfo) {
     log('Update available: %O', updateInfo);
     this.checkingForUpdate = false;
@@ -120,12 +114,22 @@ export class AppUpdater extends EventEmitter {
       .map((predicate) => predicate(this.currentAppVersion, updateInfo.version))
       .find((result) => result.breaking);
     if (breakingUpdate) {
-      this.emit('breaking-update-available', updateInfo, { uxId: breakingUpdate.uxId, ...this.settings });
+      this.isBreakingUpdate = true;
+      // show custom UX for the breaking changes
+      this.emit('breaking-update-available', updateInfo, {
+        uxId: breakingUpdate.uxId,
+        explicitCheck: this.explicitCheck,
+      });
       return;
     }
 
+    // show standard update UX
     if (this.explicitCheck || !this.settings.autoDownload) {
+      this.isBreakingUpdate = false;
       this.emit('update-available', updateInfo);
+    } else {
+      // silently download
+      autoUpdater.downloadUpdate();
     }
   }
 
@@ -141,7 +145,7 @@ export class AppUpdater extends EventEmitter {
   private onDownloadProgress(progress: any) {
     log('Got update progress: %O', progress);
     this.downloadingUpdate = true;
-    if (this.explicitCheck || !this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload || this.isBreakingUpdate) {
       this.emit('progress', progress);
     }
   }
@@ -150,7 +154,7 @@ export class AppUpdater extends EventEmitter {
     log('Update downloaded: %O', updateInfo);
     this._downloadedUpdate = true;
     this.updateInfo = updateInfo;
-    if (this.explicitCheck || !this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload || this.isBreakingUpdate) {
       this.emit('update-downloaded', updateInfo);
     }
     this.resetToIdle();
@@ -164,23 +168,32 @@ export class AppUpdater extends EventEmitter {
   }
 
   private setFeedURL() {
-    if (this.settings.useNightly) {
-      log('Updates set to be retrieved from nightly repo.');
-      autoUpdater.setFeedURL({
-        provider: 'github',
-        repo: 'BotFramework-Composer-Nightlies',
-        owner: 'microsoft',
-        vPrefixedTagName: true, // whether our release tags are prefixed with v or not
-      });
-    } else {
-      log('Updates set to be retrieved from stable repo.');
-      autoUpdater.setFeedURL({
-        provider: 'github',
-        repo: 'BotFramework-Composer',
-        owner: 'microsoft',
-        vPrefixedTagName: true,
-      });
-    }
+    // TODO: re-enable once testing is done
+
+    // if (this.settings.useNightly) {
+    //   log('Updates set to be retrieved from nightly repo.');
+    //   autoUpdater.setFeedURL({
+    //     provider: 'github',
+    //     repo: 'BotFramework-Composer-Nightlies',
+    //     owner: 'microsoft',
+    //     vPrefixedTagName: true, // whether our release tags are prefixed with v or not
+    //   });
+    // } else {
+    //   log('Updates set to be retrieved from stable repo.');
+    //   autoUpdater.setFeedURL({
+    //     provider: 'github',
+    //     repo: 'BotFramework-Composer',
+    //     owner: 'microsoft',
+    //     vPrefixedTagName: true,
+    //   });
+    // }
+    autoUpdater.setFeedURL({
+      provider: 'github',
+      repo: 'electron-updates-PPE-nightly',
+      owner: 'tonyanziano',
+      vPrefixedTagName: true,
+      private: true,
+    });
   }
 
   private determineUpdatePath() {
