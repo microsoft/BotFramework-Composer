@@ -51,11 +51,6 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const { name, setName, targetType, setTargetType, onDismiss, targets, types, onNext, setType, current } = props;
   const [errorMessage, setErrorMsg] = useState('');
 
-  const updateName = (e, newName) => {
-    setName(newName);
-    isValidateProfileName(newName);
-  };
-
   const isValidateProfileName = (newName) => {
     if (!newName || newName.trim() === '') {
       setErrorMsg(formatMessage('Must have a name'));
@@ -68,6 +63,11 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
         setErrorMsg('');
       }
     }
+  };
+
+  const updateName = (e, newName) => {
+    setName(newName);
+    isValidateProfileName(newName);
   };
 
   const targetTypes = useMemo(() => {
@@ -120,14 +120,15 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
         </div>
         <Separator css={separator} />
         <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             disabled={saveDisabled}
+            style={{ margin: '0 4px' }}
             text={formatMessage('Next')}
             onClick={() => {
               onNext();
             }}
           />
+          <DefaultButton style={{ margin: '0 4px 0 12px' }} text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </Fragment>
     </Fragment>
