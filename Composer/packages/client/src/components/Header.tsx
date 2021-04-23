@@ -12,11 +12,9 @@ import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { useLocation } from '../utils/hooks';
-import { BASEPATH } from '../constants';
 import {
   dispatcherState,
   appUpdateState,
@@ -38,7 +36,7 @@ import { useBotControllerBar } from '../hooks/useControllerBar';
 import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
-import { useDirectLineServer } from './WebChat/useDirectlineServer';
+import { GetStarted } from './GetStarted/GetStarted';
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;
@@ -382,6 +380,20 @@ export const Header = () => {
           </FocusTrapZone>
         </Callout>
       )}
+
+      <GetStarted
+        isOpen={botProjectSolutionLoaded && showGetStarted}
+        projectId={rootBotProjectId}
+        requiresLUIS={requiresLUIS}
+        requiresQNA={requiresQNA}
+        showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
+        onBotReady={() => {
+          setShowTeachingBubble(true);
+        }}
+        onDismiss={() => {
+          toggleGetStarted(false);
+        }}
+      />
     </div>
   );
 };

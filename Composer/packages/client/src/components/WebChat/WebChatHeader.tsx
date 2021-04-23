@@ -39,8 +39,8 @@ export type WebChatHeaderProps = {
   currentRestartOption: RestartOption;
   onSetRestartOption: (restartOption: RestartOption) => void;
   conversationId: string;
-  onRestartConversation: (conversationId: string, requireNewUserId: boolean) => Promise<any>;
-  onSaveTranscript: (conversationId: string) => Promise<any>;
+  onRestartConversation: (conversationId: string, requireNewUserId: boolean) => void;
+  onSaveTranscript: (conversationId: string) => void;
   openBotInEmulator: () => void;
   hideWebChat: () => void;
 };

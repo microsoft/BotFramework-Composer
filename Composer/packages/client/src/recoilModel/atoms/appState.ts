@@ -19,7 +19,6 @@ import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType, FEEDVERSION } f
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
-import { ChatData } from '../../components/WebChat/types';
 
 export type BotProject = {
   readonly id: string;

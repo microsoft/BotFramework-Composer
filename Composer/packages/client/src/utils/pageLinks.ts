@@ -30,6 +30,7 @@ export const topLinks = (
       ? `/bot/${projectId}/`
       : `/bot/${rootProjectId}/skill/${projectId}/`;
 
+  // TODO: Remove code related to diagnostics page when DebugPanel is stable.
   const links: PageLink[] = [
     {
       to: '/home',
@@ -69,14 +70,6 @@ export const topLinks = (
       disabled: !botLoaded,
       match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
       isDisabledForPVA: isPVASchema,
-    },
-    {
-      to: `/bot/${rootProjectId || projectId}/diagnostics`,
-      iconName: 'Warning',
-      labelName: formatMessage('Diagnostics'),
-      disabled: !botLoaded,
-      match: /diagnostics/,
-      isDisabledForPVA: false,
     },
     {
       to: `/bot/${rootProjectId || projectId}/publish`,
