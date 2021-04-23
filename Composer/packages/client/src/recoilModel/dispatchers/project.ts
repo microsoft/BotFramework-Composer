@@ -90,14 +90,16 @@ export const projectDispatcher = () => {
         // remove the same identifier trigger in root bot
         if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
           const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
-          const content = DialogdeleteTrigger(
-            projectDialogsMap[rootBotProjectId],
-            rootDialog?.id,
-            index,
-            async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
-          );
-          if (content) {
-            await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
+          if (index >= 0) {
+            const content = DialogdeleteTrigger(
+              projectDialogsMap[rootBotProjectId],
+              rootDialog?.id,
+              index,
+              async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
+            );
+            if (content) {
+              await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
+            }
           }
         }
         if (rootBotProjectId) {
