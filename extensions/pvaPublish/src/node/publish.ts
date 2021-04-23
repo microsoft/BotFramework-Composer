@@ -368,7 +368,7 @@ const getUserFriendlyMessage = (job: PVAPublishJob): string => {
       return 'Bot content out of sync. Please check logs.';
 
     case 'UpdatingSnapshot':
-      return 'Updating bot content in PVA...';
+      return 'Updating bot content in Power Virtual Agents...';
 
     case 'Validating':
       return 'Validating bot assets...';
