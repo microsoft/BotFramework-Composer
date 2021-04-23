@@ -16,6 +16,8 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -35,7 +37,8 @@ import {
   errorContainer,
   errorIcon,
   errorTextStyle,
-  columnSizes,
+  extendedColumnSizes,
+  teamsCallOutStyles,
 } from '../styles';
 import { TeamsManifestGeneratorModal } from '../../../components/Adapters/TeamsManifestGeneratorModal';
 import { ManageSpeech } from '../../../components/ManageSpeech/ManageSpeech';
@@ -92,6 +95,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
   const [showTeamsManifestModal, setShowTeamsManifestModal] = useState<boolean>(false);
+  const [showTeamsCallOut, setShowTeamsCallOut] = useState<boolean>(false);
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -135,8 +139,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const config = JSON.parse(profile.configuration);
         setCurrentResource({
           microsoftAppId: config?.settings?.MicrosoftAppId,
-          resourceName: config.name,
-          resourceGroupName: config.resourceGroup || config.name,
+          resourceName: config.botName || config.name,
+          resourceGroupName: config.resourceGroup || config.botName || config.name,
           subscriptionId: config.subscriptionId,
         });
       }
@@ -243,7 +247,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
       if (channelId === CHANNELS.TEAMS) {
-        setShowTeamsManifestModal(true);
+        setShowTeamsCallOut(true);
       }
       // success!!
       setChannelStatus({
@@ -491,29 +495,32 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           <Spinner />
         </Stack.Item>
       )}
-      {key === CHANNELS.TEAMS && channelStatus?.[key].enabled && !channelStatus?.[key].loading && (
-        <Stack.Item>
-          <Link
-            styles={{ root: { marginTop: '7px' } }}
-            onClick={() => {
-              setShowTeamsManifestModal(true);
-            }}
-          >
-            {formatMessage('Open Manifest')}
-          </Link>
-        </Stack.Item>
-      )}
     </Stack>
   );
 
   const absTableRow = (channel: string, name: string, link: string) => (
     <div key={channel} css={tableRow}>
-      <div css={tableRowItem(columnSizes[0])}>{name}</div>
-      <div css={tableRowItem(columnSizes[1])}>{absTableToggle(channel)}</div>
-      <div css={tableRowItem(columnSizes[2])}>
-        <Link href={link} target="_docs">
-          {formatMessage('Learn more')}
-        </Link>
+      <div css={tableRowItem(extendedColumnSizes[0])}>{name}</div>
+      <div css={tableRowItem(extendedColumnSizes[1])}>{absTableToggle(channel)}</div>
+      <div css={tableRowItem(extendedColumnSizes[2])}>
+        <Stack horizontal tokens={{ childrenGap: 60 }}>
+          <Stack.Item>
+            <Link href={link} id={channel} target="_docs">
+              {formatMessage('Learn more')}
+            </Link>
+          </Stack.Item>
+          {channel === CHANNELS.TEAMS && channelStatus?.[channel].enabled && !channelStatus?.[channel].loading && (
+            <Stack.Item>
+              <Link
+                onClick={() => {
+                  setShowTeamsManifestModal(true);
+                }}
+              >
+                {formatMessage('Open Manifest')}
+              </Link>
+            </Stack.Item>
+          )}
+        </Stack>
       </div>
     </div>
   );
@@ -542,6 +549,30 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         }}
         onToggleVisibility={setShowSpeechModal}
       />
+      {showTeamsCallOut && (
+        <Callout
+          setInitialFocus
+          className={teamsCallOutStyles.callout}
+          gapSpace={0}
+          role="alertdialog"
+          target={`#${CHANNELS.TEAMS}`}
+          onDismiss={() => {
+            setShowTeamsCallOut(false);
+          }}
+        >
+          <Text className={teamsCallOutStyles.title} variant="xLarge">
+            {formatMessage('Almost there!')}
+          </Text>
+          <Text block variant="small">
+            {formatMessage(
+              'Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how.'
+            )}
+          </Text>
+          <Link className={teamsCallOutStyles.link} href={teamsHelpLink} target="_blank">
+            {formatMessage('See instructions')}
+          </Link>
+        </Callout>
+      )}
       <div>
         <Dropdown
           options={publishTargetOptions}
@@ -584,9 +615,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         {currentResource && channelStatus && (
           <Fragment>
             <div css={tableHeaderRow}>
-              <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
-              <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Enabled')}</div>
-              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Documentation')}</div>
+              <div css={tableColumnHeader(extendedColumnSizes[0])}>{formatMessage('Name')}</div>
+              <div css={tableColumnHeader(extendedColumnSizes[1])}>{formatMessage('Enabled')}</div>
+              <div css={tableColumnHeader(extendedColumnSizes[2])}>{formatMessage('Documentation')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
             {absTableRow(CHANNELS.WEBCHAT, formatMessage('Web Chat'), webchatHelpLink)}

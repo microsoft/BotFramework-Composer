@@ -179,8 +179,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
       key: 'column4',
       name: 'Prerelease',
       fieldName: 'defaultQuery.prerelease',
-      minWidth: 40,
-      maxWidth: 40,
+      minWidth: 90,
       isResizable: false,
       height: 32,
       onRender: (item: PackageSourceFeed) => {
@@ -296,7 +295,7 @@ export const FeedModal: React.FC<WorkingModalProps> = (props) => {
     <DialogWrapper
       dialogType={DialogTypes.Customer}
       isOpen={!props.hidden}
-      minWidth={900}
+      minWidth={960}
       subText={uitext.subTitle}
       title={uitext.title}
       onDismiss={props.closeDialog}

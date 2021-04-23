@@ -6,7 +6,15 @@ import styled from '@emotion/styled';
 import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { logOut, usePublishApi, getTenants, getARMTokenForTenant, useLocalStorage } from '@bfc/extension-client';
+import {
+  logOut,
+  usePublishApi,
+  getTenants,
+  getARMTokenForTenant,
+  useLocalStorage,
+  useTelemetryClient,
+  TelemetryClient,
+} from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
@@ -31,6 +39,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { JsonEditor } from '@bfc/code-editor';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
+import sortBy from 'lodash/sortBy';
 
 import { AzureResourceTypes, ResourcesItem } from '../types';
 
@@ -162,6 +171,17 @@ const onRenderLabel = (props) => {
   );
 };
 
+const getResourceRegion = (item: ResourcesItem): string => {
+  const { key, region } = item;
+  switch (key) {
+    case AzureResourceTypes.APP_REGISTRATION:
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return 'global';
+    default:
+      return region;
+  }
+};
+
 const reviewCols: IColumn[] = [
   {
     key: 'Icon',
@@ -226,7 +246,7 @@ const reviewCols: IColumn[] = [
     onRender: (item: ResourcesItem) => {
       return (
         <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>
-          {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global' : item?.region}
+          {getResourceRegion(item)}
         </div>
       );
     },
@@ -273,6 +293,9 @@ export const AzureProvisionDialog: React.FC = () => {
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
+  const telemetryClient: TelemetryClient = useTelemetryClient();
+
+  console.log('TELEMETRY CLIENT', telemetryClient);
 
   const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
@@ -352,18 +375,22 @@ export const AzureProvisionDialog: React.FC = () => {
     setPage(page);
     switch (page) {
       case PageTypes.AddResources:
+        // telemetryClient.track('ProvisionAddResourcesNavigate');
         setTitle(DialogTitle.ADD_RESOURCES);
         break;
       case PageTypes.ChooseAction:
         setTitle(DialogTitle.CHOOSE_ACTION);
         break;
       case PageTypes.ConfigProvision:
+        // telemetryClient.track('ProvisionConfigureResources');
         setTitle(DialogTitle.CONFIG_RESOURCES);
         break;
       case PageTypes.EditJson:
+        // telemetryClient.track('ProvisionEditJSON');
         setTitle(DialogTitle.EDIT);
         break;
       case PageTypes.ReviewResource:
+        // telemetryClient.track('ProvisionReviewResources');
         setTitle(DialogTitle.REVIEW);
         break;
     }
@@ -574,12 +601,15 @@ export const AzureProvisionDialog: React.FC = () => {
     return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
-  const deployLocationsOption = useMemo((): IDropdownOption[] => {
-    return (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  const deployLocationOptions = useMemo((): IDropdownOption[] => {
+    const unorderedDeployLocations =
+      (token && deployLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+    return sortBy(unorderedDeployLocations, [(location) => location.text]);
   }, [token, deployLocations]);
 
-  const luisLocationsOption = useMemo((): IDropdownOption[] => {
-    return (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+  const luisLocationOptions = useMemo((): IDropdownOption[] => {
+    const unorderedLuisLocations = (token && luisLocations?.map((t) => ({ key: t.name, text: t.displayName }))) || [];
+    return sortBy(unorderedLuisLocations, [(location) => location.text]);
   }, [token, luisLocations]);
 
   const checkNameAvailability = useCallback(
@@ -686,13 +716,20 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSubmit = useCallback((options) => {
     // call back to the main Composer API to begin this process...
+
+    // telemetryClient.track('ProvisionStart', {
+    //   region: options.location,
+    //   subscriptionId: options.subscription,
+    //   externalResources: options.externalResources,
+    // });
+
     startProvision(options);
     clearAll();
     closeDialog();
   }, []);
 
   const onSave = useCallback(() => {
-    savePublishConfig(importConfig);
+    savePublishConfig(removePlaceholder(importConfig));
     clearAll();
     closeDialog();
   }, [importConfig]);
@@ -816,7 +853,7 @@ export const AzureProvisionDialog: React.FC = () => {
           required
           disabled={currentConfig?.region}
           label={formatMessage('Region')}
-          options={deployLocationsOption}
+          options={deployLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.region}
           styles={resourceFieldStyles}
@@ -827,7 +864,7 @@ export const AzureProvisionDialog: React.FC = () => {
           required
           disabled={currentConfig?.settings?.luis?.region}
           label={formatMessage('Region for Luis')}
-          options={luisLocationsOption}
+          options={luisLocationOptions}
           placeholder={formatMessage('Select one')}
           selectedKey={formData.luisLocation}
           styles={{ root: { width: '75%' } }}
@@ -957,6 +994,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
+                // telemetryClient.track('ProvisionCancel');
                 closeDialog();
               }}
             />
@@ -1052,6 +1090,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Next')}
               onClick={() => {
                 if (formData.creationType === 'generate') {
+                  // telemetryClient.track('ProvisionShowHandoff');
                   setShowHandoff(true);
                 } else {
                   setPageAndTitle(PageTypes.ReviewResource);
@@ -1075,6 +1114,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
+                // telemetryClient.track('ProvisionAddResourcesCancel');
                 closeDialog();
               }}
             />

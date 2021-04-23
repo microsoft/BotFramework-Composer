@@ -53,6 +53,7 @@ export const ManageLuis = (props: ManageLuisProps) => {
         '1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis'
       )}
       hidden={props.hidden}
+      learnMore={'https://aka.ms/composer-luis-learnmore'}
       regions={LUIS_REGIONS}
       serviceKeyType={'LUIS.Authoring'}
       serviceName={'LUIS'}
