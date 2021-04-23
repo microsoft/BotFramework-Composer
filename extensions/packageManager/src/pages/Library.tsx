@@ -196,7 +196,7 @@ const Library: React.FC = () => {
   };
 
   useEffect(() => {
-    setCurrentProjectId(projectId);
+    setCurrentProjectId(startingProjectId);
     getFeeds().then((feeds) => updateFeeds(feeds.data));
   }, []);
 
@@ -221,7 +221,7 @@ const Library: React.FC = () => {
   }, [feed, feeds, searchTerm]);
 
   useEffect(() => {
-    const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
+    const settings = projectCollection.find((b) => b.projectId === currentProjectId)?.setting;
     if (settings?.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       // detect programming language.

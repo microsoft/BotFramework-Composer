@@ -113,7 +113,7 @@ export const topLinks = (
         disablePluginForPva = true;
       }
       links.push({
-        to: `/bot/${projectId}/plugin/${p.id}/${p.bundleId}`,
+        to: `/bot/${rootProjectId || projectId}/plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         disabled: !projectId,
