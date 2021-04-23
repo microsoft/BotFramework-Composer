@@ -88,7 +88,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
   const [formData, setFormData] = useState<CreateQnAFromUrlFormData>({
     urls: [],
     locales: initializeLocales(locales, defaultLocale),
-    name: initialName,
+    name: initialName || '',
     multiTurn: false,
   });
 
@@ -112,7 +112,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
 
   const onChangeNameField = (value: string | undefined) => {
     updateNameField(value);
-    setInitialName(value ?? '');
+    setInitialName?.(value ?? '');
     updateNameError(value);
   };
 
@@ -158,6 +158,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
 
   const handleDismiss = () => {
     onDismiss?.();
+    setInitialName?.('');
     actions.createQnAFromUrlDialogCancel({ projectId });
     TelemetryClient.track('AddNewKnowledgeBaseCanceled');
   };
@@ -258,7 +259,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
               return;
             }
             onSubmit(removeEmptyUrls(formData));
-            setInitialName('');
+            setInitialName?.('');
             TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: false });
           }}
         />

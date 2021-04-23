@@ -34,9 +34,9 @@ export type CreateQnAFromModalProps = {
   projectId: string;
   dialogId: string;
   qnaFiles: QnAFile[];
-  initialName: string;
+  initialName?: string;
   subscriptionKey?: string;
-  setInitialName: (initialName: string) => void;
+  setInitialName?: (initialName: string) => void;
   onDismiss?: () => void;
   onSubmit: (formData: CreateQnAFormData) => void;
 };
@@ -47,9 +47,9 @@ export type CreateQnAFromUrlModalProps = {
   defaultLocale: string;
   dialogId: string;
   qnaFiles: QnAFile[];
-  initialName: string;
+  initialName?: string;
   subscriptionKey?: string;
-  setInitialName: (initialName: string) => void;
+  setInitialName?: (initialName: string) => void;
   onDismiss?: () => void;
   onSubmit: (formData: CreateQnAFormData) => void;
 };

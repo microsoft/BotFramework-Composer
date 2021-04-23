@@ -42,12 +42,13 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
   const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
 
   formConfig.name.validate = validateName(qnaFiles);
-  formConfig.name.defaultValue = initialName;
+  formConfig.name.defaultValue = initialName || '';
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors || !formData.name;
 
   const handleDismiss = () => {
     onDismiss?.();
+    setInitialName?.('');
     actions.createQnAFromScratchDialogCancel({ projectId });
     TelemetryClient.track('AddNewKnowledgeBaseCanceled');
   };
@@ -77,7 +78,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
             value={formData.name}
             onChange={(e, name = '') => {
               updateField('name', name);
-              setInitialName(name);
+              setInitialName?.(name);
             }}
           />
         </Stack>
@@ -107,7 +108,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
               return;
             }
             onSubmit(formData);
-            setInitialName('');
+            setInitialName?.('');
             TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
           }}
         />
