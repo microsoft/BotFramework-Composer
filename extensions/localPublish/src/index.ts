@@ -402,17 +402,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       }
       config = this.getConfig(settings, skillHostEndpoint);
       let spawnProcess;
+      const args = [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config];
+      this.composer.log('Executing command with arguments: %s %s', startCommand, args.join(' '));
       try {
-        spawnProcess = spawn(
-          startCommand,
-          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config],
-          {
-            cwd: botDir,
-            stdio: ['ignore', 'pipe', 'pipe'],
-            detached: !isWin, // detach in non-windows
-            shell: isWin, // run in a shell on windows so `npm start` doesn't need to be `npm.cmd start`
-          }
-        );
+        spawnProcess = spawn(startCommand, args, {
+          cwd: botDir,
+          stdio: ['ignore', 'pipe', 'pipe'],
+          detached: !isWin, // detach in non-windows
+          shell: isWin, // run in a shell on windows so `npm start` doesn't need to be `npm.cmd start`
+        });
         this.composer.log('Started process %d', spawnProcess.pid);
         this.setBotStatus(botId, {
           process: spawnProcess,
@@ -455,7 +453,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push('--MicrosoftAppPassword');
       configList.push(config.MicrosoftAppPassword);
     }
-    if (config.luis) {
+    if (config.luis && (config.luis.endpointKey || config.luis.authoringKey)) {
       configList.push('--luis:endpointKey');
       configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
