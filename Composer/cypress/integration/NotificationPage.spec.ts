@@ -19,11 +19,9 @@ context('Notification Page', () => {
     cy.findByTestId('showcode').click();
     cy.get('textarea').type('#', { delay: 200 });
 
-    cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
+    cy.findByTestId('DebugPanel-Composer').click();
 
-    cy.findByTestId('diagnostics-table-view').within(() => {
-      cy.findAllByText('TestBot_TestSample.en-us.lg').should('exist').first().click();
-    });
+    cy.findAllByText('TestBot_TestSample.en-us.lg').should('exist').first().click();
 
     cy.findAllByText('Bot responses').should('exist');
   });
@@ -39,11 +37,9 @@ context('Notification Page', () => {
     cy.findByTestId('showcode').click();
     cy.get('textarea').type('t*', { delay: 200 });
 
-    cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
+    cy.findByTestId('DebugPanel-Composer').click();
 
-    cy.findByTestId('diagnostics-table-view').within(() => {
-      cy.findAllByText('TestBot_TestSample.en-us.lu').should('exist').first().dblclick();
-    });
+    cy.findAllByText('TestBot_TestSample.en-us.lu').should('exist').first().dblclick();
 
     cy.findAllByText('TestBot_TestSample').should('exist');
   });
