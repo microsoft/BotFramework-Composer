@@ -100,7 +100,7 @@ export const topLinks = (
             to: `/bot/${projectId}/forms`,
             iconName: 'Table',
             labelName: formatMessage('Forms (preview)'),
-            disabled: !botLoaded && !skillIsRemote,
+            disabled: !botLoaded || skillIsRemote,
             isDisabledForPVA: false,
           },
         ]
