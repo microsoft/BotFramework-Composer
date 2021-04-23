@@ -26,7 +26,7 @@ import { crossTrainConfigState, filePersistenceState, settingsState } from './at
 import { dialogsSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from './selectors';
 import { recognizersSelectorFamily } from './selectors/recognizers';
 
-const isFilesUnparsed = (files: { isContentUnparsed: boolean }[]) => {
+const isAnyFileNotParsed = (files: { isContentUnparsed: boolean }[]) => {
   return files.some((file) => file.isContentUnparsed);
 };
 
@@ -209,7 +209,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
 
   useEffect(() => {
     if (isEmpty(filePersistence)) return;
-    if (isFilesUnparsed(luFiles) || isFilesUnparsed(qnaFiles)) return;
+    if (isAnyFileNotParsed(luFiles) || isAnyFileNotParsed(qnaFiles)) return;
     let recognizers: RecognizerFile[] = [];
 
     dialogs
