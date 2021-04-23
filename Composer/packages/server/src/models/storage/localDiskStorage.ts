@@ -186,7 +186,6 @@ export class LocalDiskStorage implements IFileStorage {
       `*${FileExtensions.BotProject}`,
       `*${FileExtensions.Dialog}`,
       `*.csproj`,
-      `*.botproj`,
       `*.cs`,
       `*.js`,
       `*.json`,
