@@ -102,6 +102,9 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
       mainWindow.webContents.send('app-update', 'update-available', updateInfo);
     });
+    appUpdater.on('breaking-update-available', (updateInfo: UpdateInfo, breakingMetaData) => {
+      mainWindow.webContents.send('app-update', 'breaking-update-available', updateInfo, breakingMetaData);
+    });
     appUpdater.on('progress', (progress) => {
       mainWindow.webContents.send('app-update', 'progress', progress);
     });

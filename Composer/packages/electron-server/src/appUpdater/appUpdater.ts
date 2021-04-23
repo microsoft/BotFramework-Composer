@@ -8,11 +8,19 @@ import { app } from 'electron';
 import { prerelease as isNightly } from 'semver';
 import { AppUpdaterSettings } from '@bfc/shared';
 
-import logger from './utility/logger';
+import logger from '../utility/logger';
+
+import { breakingUpdates } from './breakingUpdates';
+
 const log = logger.extend('app-updater');
+
+export type BreakingUpdateMetaData = AppUpdaterSettings & {
+  uxId: string;
+};
 
 let appUpdater: AppUpdater | undefined;
 export class AppUpdater extends EventEmitter {
+  private currentAppVersion = app.getVersion();
   private checkingForUpdate = false;
   private downloadingUpdate = false;
   private _downloadedUpdate = false;
@@ -75,6 +83,11 @@ export class AppUpdater extends EventEmitter {
 
   public setSettings(settings: AppUpdaterSettings) {
     this.settings = settings;
+    this.emit(
+      'breaking-update-available',
+      { version: 'v2.0.0-breaking' },
+      { uxId: 'Version1.x.xTo2.x.x', ...this.settings }
+    );
   }
 
   public get downloadedUpdate(): boolean {
@@ -94,10 +107,23 @@ export class AppUpdater extends EventEmitter {
     this.checkingForUpdate = true;
   }
 
+  // Brainstorming:
+  // If we satisfy a certain update check (currVersion < 2 && newVersion is 2.x.x)
+  // then emit a special event or maybe set a special property on the payload
   private onUpdateAvailable(updateInfo: UpdateInfo) {
     log('Update available: %O', updateInfo);
     this.checkingForUpdate = false;
     this.updateInfo = updateInfo;
+
+    // check to see if the update will include breaking changes
+    const breakingUpdate = breakingUpdates
+      .map((predicate) => predicate(this.currentAppVersion, updateInfo.version))
+      .find((result) => result.breaking);
+    if (breakingUpdate) {
+      this.emit('breaking-update-available', updateInfo, { uxId: breakingUpdate.uxId, ...this.settings });
+      return;
+    }
+
     if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-available', updateInfo);
     }
@@ -158,12 +184,10 @@ export class AppUpdater extends EventEmitter {
   }
 
   private determineUpdatePath() {
-    const currentVersion = app.getVersion();
-
     // The following paths don't need to allow downgrade:
     //    nightly -> stable     (1.0.1-nightly.x.x -> 1.0.2)
     //    nightly -> nightly    (1.0.1-nightly.x.x -> 1.0.1-nightly.y.x)
-    if (isNightly(currentVersion)) {
+    if (isNightly(this.currentAppVersion)) {
       const targetChannel = this.settings.useNightly ? 'nightly' : 'stable';
       log(`Updating from nightly to ${targetChannel}. Not allowing downgrade.`);
       autoUpdater.allowDowngrade = false;
@@ -173,7 +197,7 @@ export class AppUpdater extends EventEmitter {
     // https://github.com/npm/node-semver/blob/v7.3.2/classes/semver.js#L127
     // The following path needs to allow downgrade to work:
     //    stable -> nightly     (1.0.1 -> 1.0.1-nightly.x.x)
-    if (!isNightly(currentVersion) && this.settings.useNightly) {
+    if (!isNightly(this.currentAppVersion) && this.settings.useNightly) {
       log(`Updating from stable to nightly. Allowing downgrade.`);
       autoUpdater.allowDowngrade = true;
       return;

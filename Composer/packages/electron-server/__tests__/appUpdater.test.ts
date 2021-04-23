@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { AppUpdater } from '../src/appUpdater';
+
 const mockAutoUpdater = {
   allowDowngrade: false,
   autoDownload: false,
@@ -22,8 +24,6 @@ jest.mock('electron', () => ({
     getVersion: () => mockGetVersion(),
   },
 }));
-
-import { AppUpdater } from '../src/appUpdater';
 
 describe('App updater', () => {
   let appUpdater: AppUpdater;
