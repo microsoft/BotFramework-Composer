@@ -52,38 +52,36 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const activeBot = skillId ?? projectId;
 
   return (
-    <div css={root} data-testid="DesignPage">
-      <div css={pageWrapper}>
-        <Split
-          resetOnDoubleClick
-          initialPrimarySize="20%"
-          minPrimarySize="200px"
-          minSecondarySize="800px"
-          renderSplitter={renderThinSplitter}
-          splitterSize="5px"
-          onMeasuredSizesChanged={onMeasuredSizesChanged}
-        >
-          <SideBar projectId={activeBot} />
-          <div css={contentWrapper} role="main">
-            <CommandBar projectId={activeBot} />
-            <Conversation css={editorContainer}>
-              <div css={editorWrapper}>
-                <Split
-                  resetOnDoubleClick
-                  initialPrimarySize="65%"
-                  minPrimarySize="500px"
-                  minSecondarySize="350px"
-                  renderSplitter={renderThinSplitter}
-                >
-                  <VisualPanel projectId={activeBot} />
-                  <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
-                </Split>
-              </div>
-            </Conversation>
-          </div>
-        </Split>
-        <Modals projectId={activeBot} />
-      </div>
+    <div css={contentWrapper} role="main">
+      <Split
+        resetOnDoubleClick
+        initialPrimarySize="20%"
+        minPrimarySize="200px"
+        minSecondarySize="800px"
+        renderSplitter={renderThinSplitter}
+        splitterSize="5px"
+        onMeasuredSizesChanged={onMeasuredSizesChanged}
+      >
+        <SideBar projectId={activeBot} />
+        <div css={contentWrapper} role="main">
+          <CommandBar projectId={activeBot} />
+          <Conversation css={editorContainer}>
+            <div css={editorWrapper}>
+              <Split
+                resetOnDoubleClick
+                initialPrimarySize="65%"
+                minPrimarySize="500px"
+                minSecondarySize="350px"
+                renderSplitter={renderThinSplitter}
+              >
+                <VisualPanel projectId={activeBot} />
+                <PropertyPanel isSkill={activeBot !== projectId} projectId={activeBot} />
+              </Split>
+            </div>
+          </Conversation>
+        </div>
+      </Split>
+      <Modals projectId={activeBot} />
     </div>
   );
 };
