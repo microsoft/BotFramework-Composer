@@ -101,7 +101,7 @@ export const botProjectFileDispatcher = () => {
           );
         }
       });
-      setRootBotSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
+      await setRootBotSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
     }
   });
 
