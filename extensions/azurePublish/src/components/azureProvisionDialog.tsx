@@ -171,6 +171,17 @@ const onRenderLabel = (props) => {
   );
 };
 
+const getResourceRegion = (item: ResourcesItem): string => {
+  const { key, region } = item;
+  switch (key) {
+    case AzureResourceTypes.APP_REGISTRATION:
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return 'global';
+    default:
+      return region;
+  }
+};
+
 const reviewCols: IColumn[] = [
   {
     key: 'Icon',
@@ -235,7 +246,7 @@ const reviewCols: IColumn[] = [
     onRender: (item: ResourcesItem) => {
       return (
         <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>
-          {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global' : item?.region}
+          {getResourceRegion(item)}
         </div>
       );
     },
@@ -283,6 +294,8 @@ export const AzureProvisionDialog: React.FC = () => {
     setTenantId,
   } = usePublishApi();
   const telemetryClient: TelemetryClient = useTelemetryClient();
+
+  console.log('TELEMETRY CLIENT', telemetryClient);
 
   const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
@@ -362,22 +375,22 @@ export const AzureProvisionDialog: React.FC = () => {
     setPage(page);
     switch (page) {
       case PageTypes.AddResources:
-        telemetryClient.track('ProvisionAddResourcesNavigate');
+        // telemetryClient.track('ProvisionAddResourcesNavigate');
         setTitle(DialogTitle.ADD_RESOURCES);
         break;
       case PageTypes.ChooseAction:
         setTitle(DialogTitle.CHOOSE_ACTION);
         break;
       case PageTypes.ConfigProvision:
-        telemetryClient.track('ProvisionConfigureResources');
+        // telemetryClient.track('ProvisionConfigureResources');
         setTitle(DialogTitle.CONFIG_RESOURCES);
         break;
       case PageTypes.EditJson:
-        telemetryClient.track('ProvisionEditJSON');
+        // telemetryClient.track('ProvisionEditJSON');
         setTitle(DialogTitle.EDIT);
         break;
       case PageTypes.ReviewResource:
-        telemetryClient.track('ProvisionReviewResources');
+        // telemetryClient.track('ProvisionReviewResources');
         setTitle(DialogTitle.REVIEW);
         break;
     }
@@ -704,11 +717,11 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSubmit = useCallback((options) => {
     // call back to the main Composer API to begin this process...
 
-    telemetryClient.track('ProvisionStart', {
-      region: options.location,
-      subscriptionId: options.subscription,
-      externalResources: options.externalResources,
-    });
+    // telemetryClient.track('ProvisionStart', {
+    //   region: options.location,
+    //   subscriptionId: options.subscription,
+    //   externalResources: options.externalResources,
+    // });
 
     startProvision(options);
     clearAll();
@@ -716,7 +729,7 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const onSave = useCallback(() => {
-    savePublishConfig(importConfig);
+    savePublishConfig(removePlaceholder(importConfig));
     clearAll();
     closeDialog();
   }, [importConfig]);
@@ -981,7 +994,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
-                telemetryClient.track('ProvisionCancel');
+                // telemetryClient.track('ProvisionCancel');
                 closeDialog();
               }}
             />
@@ -1077,7 +1090,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Next')}
               onClick={() => {
                 if (formData.creationType === 'generate') {
-                  telemetryClient.track('ProvisionShowHandoff');
+                  // telemetryClient.track('ProvisionShowHandoff');
                   setShowHandoff(true);
                 } else {
                   setPageAndTitle(PageTypes.ReviewResource);
@@ -1101,7 +1114,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
-                telemetryClient.track('ProvisionAddResourcesCancel');
+                // telemetryClient.track('ProvisionAddResourcesCancel');
                 closeDialog();
               }}
             />
