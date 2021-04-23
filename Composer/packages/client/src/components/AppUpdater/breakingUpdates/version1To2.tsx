@@ -6,6 +6,7 @@ import { jsx, css } from '@emotion/core';
 import React, { useCallback, useMemo, useState } from 'react';
 import { DefaultButton, PrimaryButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Dialog, DialogType, IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
@@ -77,13 +78,19 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
       }}
     >
       <p>
-        Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to
-        Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through
-        packages.
+        {formatMessage(
+          'Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages.'
+        )}
       </p>
+
       <p>
-        Note: If your bot is using custom actions, they will not be supported in Composer 2.0.{' '}
-        <a href="https://aka.ms/bot-framework-composer-2.0">Learn more about updating to Composer 2.0.</a>
+        {formatMessage.rich(
+          'Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>',
+          {
+            // TODO: needs real link
+            a: ({ children }) => <Link href="https://aka.ms/bot-framework-composer-2.0">{children}</Link>,
+          }
+        )}
       </p>
       <div css={buttonRow}>
         {isManualCheck ? (
