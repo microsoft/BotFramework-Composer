@@ -29,7 +29,6 @@ import { botDisplayNameState, botProjectSpaceLoadedState } from './recoilModel/a
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
 import languageStorage from './utils/languageStorage';
 import { DebugPanel } from './pages/design/DebugPanel/DebugPanel';
-import { useLocation } from './utils/hooks';
 import { useDebugPane } from './components/useDebugPane';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
