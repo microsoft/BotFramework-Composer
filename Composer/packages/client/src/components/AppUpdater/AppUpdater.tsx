@@ -89,8 +89,7 @@ const downloadOptions = {
 
 // TODO: factor this out into shared or types
 type BreakingUpdateMetaData = {
-  autoDownload: boolean;
-  useNightly: boolean;
+  explicitCheck: boolean;
   uxId: string;
 };
 
@@ -324,7 +323,7 @@ export const AppUpdater: React.FC<{}> = () => {
     // TODO: check if breaking update ux component is defined and handle undefined case
     return (
       <BreakingUpdateUx
-        updateSettings={{ autoDownload: breakingMetaData.autoDownload, useNightly: breakingMetaData.useNightly }}
+        explicitCheck={breakingMetaData.explicitCheck}
         version={version}
         onCancel={handleDismiss}
         onContinue={handleContinueFromBreakingUx}

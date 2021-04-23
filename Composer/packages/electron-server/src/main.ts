@@ -12,7 +12,7 @@ import formatMessage from 'format-message';
 import { mkdirp } from 'fs-extra';
 
 import { initAppMenu } from './appMenu';
-import { AppUpdater } from './appUpdater';
+import { AppUpdater, BreakingUpdateMetaData } from './appUpdater';
 import { OneAuthService } from './auth/oneAuthService';
 import { composerProtocol } from './constants';
 import ElectronWindow from './electronWindow';
@@ -102,7 +102,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
       mainWindow.webContents.send('app-update', 'update-available', updateInfo);
     });
-    appUpdater.on('breaking-update-available', (updateInfo: UpdateInfo, breakingMetaData) => {
+    appUpdater.on('breaking-update-available', (updateInfo: UpdateInfo, breakingMetaData: BreakingUpdateMetaData) => {
       mainWindow.webContents.send('app-update', 'breaking-update-available', updateInfo, breakingMetaData);
     });
     appUpdater.on('progress', (progress) => {

@@ -3,12 +3,15 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { DefaultButton, PrimaryButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Dialog, DialogType, IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
+
+import { dispatcherState } from '../../../recoilModel';
 
 import { BreakingUpdateProps } from './types';
 
@@ -51,17 +54,18 @@ const updateCancelledCopy = css`
 type ModalState = 'Default' | 'PressedNotNow';
 
 export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
-  const { onCancel, onContinue, updateSettings } = props;
+  const { explicitCheck, onCancel, onContinue } = props;
   const [currentState, setCurrentState] = useState<ModalState>('Default');
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
   const onNotNow = useCallback(() => {
+    // disable auto update and notify the user
+    updateUserSettings({
+      appUpdater: {
+        autoDownload: false,
+      },
+    });
     setCurrentState('PressedNotNow');
-    // disable auto update
   }, []);
-  const onUpdateAndRestart = useCallback(() => {
-    // update auto update settings here before continuing to standard upate flow
-    onContinue();
-  }, []);
-  const isManualCheck = useMemo(() => updateSettings.autoDownload, [updateSettings]);
 
   return currentState === 'Default' ? (
     <Dialog
@@ -88,17 +92,21 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
           'Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>',
           {
             // TODO: needs real link
-            a: ({ children }) => <Link href="https://aka.ms/bot-framework-composer-2.0">{children}</Link>,
+            a: ({ children }) => (
+              <Link key="v2-breaking-changes-docs" href="https://aka.ms/bot-framework-composer-2.0">
+                {children}
+              </Link>
+            ),
           }
         )}
       </p>
       <div css={buttonRow}>
-        {isManualCheck ? (
+        {explicitCheck ? (
           <DefaultButton styles={dismissButton} text={formatMessage('Cancel')} onClick={onCancel} />
         ) : (
           <DefaultButton styles={dismissButton} text={formatMessage('Not now')} onClick={onNotNow} />
         )}
-        <PrimaryButton text={formatMessage('Update and restart')} onClick={onUpdateAndRestart} />
+        <PrimaryButton text={formatMessage('Update and restart')} onClick={onContinue} />
       </div>
     </Dialog>
   ) : (
@@ -116,8 +124,10 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
       }}
     >
       <p css={updateCancelledCopy}>
-        Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting{' '}
-        <b>Help &gt; Check for updates.</b>
+        {formatMessage.rich(
+          'Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>',
+          { b: ({ children }) => <b key="v2-breaking-changes-re-enable-auto-updates">{children}</b> }
+        )}
       </p>
       <div css={buttonRow}>
         <PrimaryButton css={gotItButton} text={formatMessage('Got it!')} onClick={onCancel} />
