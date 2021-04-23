@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
@@ -20,6 +21,7 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
+import { projectReadmeState } from '../../recoilModel/atoms';
 
 import { GetStartedTask } from './GetStartedTask';
 import { NextSteps } from './types';
@@ -39,6 +41,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const botProject = useMemo(() => botProjects.find((b) => b.projectId === projectId), [botProjects, projectId]);
   const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
+  const readme = useRecoilValue(projectReadmeState(projectId));
+  const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
 
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
@@ -98,12 +102,14 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
   const linkToPublishProfile = `/bot/${rootBotProjectId}/publish/all#addNewPublishProfile`;
+  const linkToCompletePublishProfile = `/bot/${rootBotProjectId}/publish/all#completePublishProfile`;
   const linkToLUISSettings = `/bot/${rootBotProjectId}/botProjectsSettings/#luisKey`;
   const linktoQNASettings = `/bot/${rootBotProjectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
   const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
   const linkToAppInsights = 'http://aka.ms/botinsights';
   const linkToDevOps = 'https://aka.ms/bfcomposercicd';
+  const linkToReadme = `/bot/${rootBotProjectId}/botProjectsSettings`;
 
   useEffect(() => {
     const newNextSteps: NextSteps[] = [];
@@ -115,6 +121,13 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
     const hasPublishingProfile =
       botProject?.setting?.publishTargets && botProject?.setting?.publishTargets?.length > 0 ? true : false;
+
+    const hasPartialPublishingProfile =
+      botProject?.setting?.publishTargets &&
+      botProject?.setting?.publishTargets?.length == 1 &&
+      JSON.parse(botProject.setting.publishTargets[0].configuration).hostname == ''
+        ? true
+        : false;
 
     if (props.requiresLUIS) {
       newNextSteps.push({
@@ -164,20 +177,74 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       newNextSteps[0].highlight();
     }
 
+    if (readme) {
+      newRecomendedSteps.push({
+        key: 'readme',
+        label: formatMessage('Review your template readme'),
+        description: formatMessage('Find additional template-specific guidance for setting up your bot.'),
+        checked: false,
+        onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'readme', priority: 'recommended' });
+          openLink(linkToReadme);
+          setReadmeHidden(false);
+        },
+        isDisabled: false,
+      });
+    }
     if (!hasPublishingProfile) {
       newRecomendedSteps.push({
         key: 'publishing',
         label: formatMessage('Create a publishing profile'),
         description: formatMessage('Set up hosting and other Azure resources to enable publishing'),
-        required: true,
         checked: hasPublishingProfile,
-        onClick: (step) => {
+        onClick: () => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publishing', priority: 'recommended' });
           openLink(linkToPublishProfile);
         },
         isDisabled: false,
       });
     }
+    if (hasPartialPublishingProfile) {
+      newRecomendedSteps.push({
+        key: 'partialProfile',
+        label: formatMessage('Complete your publishing profile'),
+        description: formatMessage(
+          'Finish setting up your environment and provisionig resources so that you can publish your bot.'
+        ),
+        checked: hasPublishingProfile && !hasPartialPublishingProfile,
+        onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'partialProfile', priority: 'recommended' });
+          openLink(linkToCompletePublishProfile);
+        },
+        isDisabled: false,
+      });
+    }
+
+    newRecomendedSteps.push({
+      key: 'editlg',
+      label: formatMessage('Edit what your bot says'),
+      description: formatMessage('Customize your bot by editing and adding bot responses.'),
+      learnMore: '',
+      checked: false,
+      onClick: () => {
+        TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlg', priority: 'recommended' });
+        openLink(linkToLGEditor);
+      },
+      isDisabled: false,
+    });
+    newRecomendedSteps.push({
+      key: 'editlu',
+      label: formatMessage('Train your language model'),
+      description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
+      learnMore: '',
+      checked: false,
+      onClick: () => {
+        TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'recommended' });
+        openLink(linkToLUEditor);
+      },
+      isDisabled: false,
+    });
+
     setRecommendedNextSteps(newRecomendedSteps);
 
     const optSteps = [
@@ -192,30 +259,6 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           openLink(linkToPackageManager);
         },
         isDisabled: isPVABot,
-      },
-      {
-        key: 'editlg',
-        label: formatMessage('Edit what your bot says'),
-        description: formatMessage('Customize your bot by editing and adding bot responses.'),
-        learnMore: '',
-        checked: false,
-        onClick: () => {
-          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlg', priority: 'optional' });
-          openLink(linkToLGEditor);
-        },
-        isDisabled: false,
-      },
-      {
-        key: 'editlu',
-        label: formatMessage('Train your language model'),
-        description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
-        learnMore: '',
-        checked: false,
-        onClick: () => {
-          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'optional' });
-          openLink(linkToLUEditor);
-        },
-        isDisabled: false,
       },
       {
         key: 'insights',
@@ -291,6 +334,14 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             doNextStep('qna');
           }}
           onToggleVisibility={setDisplayManageQNA}
+        />
+        <DisplayMarkdownDialog
+          content={readme}
+          hidden={readmeHidden}
+          title={'Project Readme'}
+          onDismiss={() => {
+            setReadmeHidden(true);
+          }}
         />
 
         {highlightLUIS && (
