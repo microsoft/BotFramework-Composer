@@ -804,7 +804,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <Stack>
           <ConfigureResourcesSectionName>Azure details</ConfigureResourcesSectionName>
           <ConfigureResourcesSectionDescription>
-            Select your Azure directory and subscription, enter resource group name.
+            {formatMessage('Select your Azure directory and subscription, enter resource group name.')}
           </ConfigureResourcesSectionDescription>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
@@ -870,9 +870,9 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </Stack>
-          <ConfigureResourcesSectionName>Resource details</ConfigureResourcesSectionName>
+          <ConfigureResourcesSectionName>{formatMessage('Resource details')}</ConfigureResourcesSectionName>
           <ConfigureResourcesSectionDescription>
-            Enter resource name and select region. This will be applied to the new resources.
+            {formatMessage('Enter resource name and select region. This will be applied to the new resources.')}
           </ConfigureResourcesSectionDescription>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
