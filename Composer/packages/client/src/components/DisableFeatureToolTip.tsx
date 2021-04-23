@@ -9,7 +9,7 @@ import React from 'react';
 const calloutProps = { gapSpace: 0 };
 
 const genericDisableMessage = () => {
-  return formatMessage('PVA bots cannot use this functionality at this time.');
+  return formatMessage('Power Virtual Agents bots cannot use this functionality at this time.');
 };
 
 export const DisableFeatureToolTip: React.FC<{ content?: string; isPVABot: boolean }> = (props) => {

@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import React from 'react';
+import { jsx } from '@emotion/core';
+import React, { Fragment } from 'react';
 import styled from '@emotion/styled';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/components/Button';
@@ -13,12 +13,12 @@ import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/Tex
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 
-import { actionButton, subtitle as defaultSubtitle, title } from './styles';
+import { actionButton, subtext, title } from './styles';
 
 const Input = styled(TextField)({
   width: '100%',
@@ -53,10 +53,6 @@ const ItemContainer = styled.div({
   borderTop: `1px solid ${FluentTheme.palette.neutralLight}`,
   marginTop: '4px',
 });
-
-const subtitle = css`
-  padding: 8px 0;
-`;
 
 type ItemProps = {
   value: string;
@@ -144,10 +140,22 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
   }, [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]);
 
   return (
-    <CollapsableWrapper title={formatMessage('Allowed callers')} titleStyle={title}>
-      <div css={[defaultSubtitle, subtitle]}>
-        {formatMessage(
-          'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below.'
+    <Fragment>
+      <div css={title}>{formatMessage('Allowed Callers')}</div>
+      <div css={subtext}>
+        {formatMessage.rich(
+          'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more.</a>',
+          {
+            a: ({ children }) => (
+              <Link
+                key="allowed-callers-settings-page"
+                href={'https://aka.ms/composer-skills-learnmore'}
+                target="_blank"
+              >
+                {children}
+              </Link>
+            ),
+          }
         )}
       </div>
       <ItemContainer>
@@ -157,9 +165,6 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
           );
         })}
       </ItemContainer>
-      <ActionButton data-testid={'addNewAllowedCaller'} styles={actionButton} onClick={onAddNewAllowedCaller}>
-        {formatMessage('Add caller')}
-      </ActionButton>
       {!runtimeSettings?.skills?.allowedCallers?.length && (
         <MessageBar messageBarType={MessageBarType.warning}>
           {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
@@ -168,6 +173,6 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       <ActionButton data-testid={'addNewAllowedCaller'} styles={actionButton} onClick={onAddNewAllowedCaller}>
         {formatMessage('Add new caller')}
       </ActionButton>
-    </CollapsableWrapper>
+    </Fragment>
   );
 };
