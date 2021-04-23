@@ -1048,7 +1048,7 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
             <DefaultButton
-              style={{ margin: '0 4px 0 12px' }}
+              style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
                 // telemetryClient.track('ProvisionCancel');
@@ -1116,7 +1116,7 @@ export const AzureProvisionDialog: React.FC = () => {
               />
             )}
             <DefaultButton
-              style={{ margin: '0 4px 0 12px' }}
+              style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
                 closeDialog();
@@ -1175,7 +1175,7 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
             <DefaultButton
-              style={{ margin: '0 4px 0 12px' }}
+              style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
                 // telemetryClient.track('ProvisionAddResourcesCancel');
@@ -1223,7 +1223,7 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
             <DefaultButton
-              style={{ margin: '0 4px 0 12px' }}
+              style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
                 closeDialog();
@@ -1249,7 +1249,7 @@ export const AzureProvisionDialog: React.FC = () => {
             onClick={onSave}
           />
           <DefaultButton
-            style={{ margin: '0 4px 0 12px' }}
+            style={{ margin: '0 4px' }}
             text={formatMessage('Cancel')}
             onClick={() => {
               closeDialog();

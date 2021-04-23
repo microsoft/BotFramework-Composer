@@ -128,7 +128,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
               onNext();
             }}
           />
-          <DefaultButton style={{ margin: '0 4px 0 12px' }} text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton style={{ margin: '0 4px' }} text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </Fragment>
     </Fragment>
