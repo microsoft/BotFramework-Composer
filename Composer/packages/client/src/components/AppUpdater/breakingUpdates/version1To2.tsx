@@ -11,7 +11,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
-import { dispatcherState } from '../../../recoilModel';
+import { dispatcherState, userSettingsState } from '../../../recoilModel';
 
 import { BreakingUpdateProps } from './types';
 
@@ -56,15 +56,20 @@ type ModalState = 'Default' | 'PressedNotNow';
 export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
   const { explicitCheck, onCancel, onContinue } = props;
   const [currentState, setCurrentState] = useState<ModalState>('Default');
+  const userSettings = useRecoilValue(userSettingsState);
   const { updateUserSettings } = useRecoilValue(dispatcherState);
   const onNotNow = useCallback(() => {
-    // disable auto update and notify the user
-    updateUserSettings({
-      appUpdater: {
-        autoDownload: false,
-      },
-    });
-    setCurrentState('PressedNotNow');
+    if (userSettings.appUpdater.autoDownload) {
+      // disable auto update and notify the user
+      updateUserSettings({
+        appUpdater: {
+          autoDownload: false,
+        },
+      });
+      setCurrentState('PressedNotNow');
+    } else {
+      onCancel();
+    }
   }, []);
 
   return currentState === 'Default' ? (
