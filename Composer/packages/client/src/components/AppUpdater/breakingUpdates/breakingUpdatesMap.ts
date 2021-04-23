@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import { BreakingUpdateId } from '@botframework-composer/types';
 
 import { BreakingUpdateProps } from './types';
 import { Version1To2Content } from './version1To2';
@@ -14,7 +15,6 @@ import { Version1To2Content } from './version1To2';
  * Ex.  'Version2.5.xTo3.x.x': DialogWithDisclaimerAndDocsAboutNewChanges
  */
 
-// TODO: update 'string' to more specific 'BreakingUpdateUXIdentifier'
-export const breakingUpdatesMap: Record<string, React.FC<BreakingUpdateProps>> = {
+export const breakingUpdatesMap: Record<BreakingUpdateId, React.FC<BreakingUpdateProps>> = {
   'Version1.x.xTo2.x.x': Version1To2Content,
 };

@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { BreakingUpdatePredicate } from './types';
 import { version1To2 } from './version1To2';
-
-type BreakingUpdateResult = { breaking: boolean; uxId: string };
-type BreakingUpdatePredicate = (curVersion: string, newVersion: string) => BreakingUpdateResult;
 
 /**
  * Array of functions that will check the current version and latest version during an update to determine
