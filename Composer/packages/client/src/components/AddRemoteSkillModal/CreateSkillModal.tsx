@@ -62,9 +62,6 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
       },
     });
     setSkillManifest(data);
-    if (!data.dispatchModels) {
-      setFormDataErrors({ manifestUrl: formatMessage('Miss dispatch modal') });
-    }
   } catch (error) {
     setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest URL can not be accessed') });
   }
@@ -246,9 +243,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             <StackItem align={'end'}>
               <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
               {skillManifest ? (
-                isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
+                isUsingAdaptiveRuntime(runtime) &&
+                luFiles.length > 0 &&
+                skillManifest.dispatchModels?.intents?.length > 0 ? (
                   <PrimaryButton
-                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels ? true : false}
+                    disabled={formDataErrors.manifestUrl ? true : false}
                     styles={buttonStyle}
                     text={formatMessage('Next')}
                     onClick={(event) => {
