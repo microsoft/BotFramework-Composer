@@ -87,7 +87,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
-            placeholder={formatMessage('Type a name for this Knowledge Base')}
+            placeholder={formatMessage('Type a name for this knowledge base')}
             styles={textFieldKBNameFromScratch}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
