@@ -69,8 +69,8 @@ const AttachmentModalityEditor = React.memo(
           selected: attachmentLayout === 'list',
         },
         {
-          key: 'carousal',
-          text: formatMessage('Carousal'),
+          key: 'carousel',
+          text: formatMessage('Carousel'),
           selected: attachmentLayout === 'carousel',
         },
       ],
