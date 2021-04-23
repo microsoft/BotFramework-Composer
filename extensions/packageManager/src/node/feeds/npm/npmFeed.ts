@@ -100,6 +100,8 @@ export class NpmFeed implements IFeed {
       url = `${url}&from=${query.skip}`;
     }
 
+    url = `${url}&popularity=1.0`;
+
     return url;
   }
 }
