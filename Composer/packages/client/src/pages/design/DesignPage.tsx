@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';

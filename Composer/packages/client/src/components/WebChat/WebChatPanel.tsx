@@ -3,21 +3,27 @@
 
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { ConversationNetworkErrorItem } from '@botframework-composer/types';
+import {
+  ConversationActivityTraffic,
+  ConversationNetworkTrafficItem,
+  ConversationNetworkErrorItem,
+} from '@botframework-composer/types';
+import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 import { v4 as uuid } from 'uuid';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
-import { currentWebChatConversationState, dispatcherState, webChatDataState } from '../../recoilModel';
+import { dispatcherState } from '../../recoilModel';
 
 import { ConversationService } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
-import { WebChat } from './WebChat';
-import { RestartOption } from './types';
-import { BotSecrets, ChatData } from './types';
+import { WebChatComposer } from './WebChatComposer';
+import { BotSecrets, ChatData, RestartOption } from './types';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
+// TODO: Refactor to include Webchat header component as a part of WebchatComposer to avoid this variable.
+const webChatHeaderHeight = '85px';
 
 export interface WebChatPanelProps {
   botData: {
@@ -42,19 +48,91 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     openBotInEmulator,
     appendWebChatTraffic,
     clearWebChatLogs,
-    setWebChatData: setChatData,
-    setCurrentConversation,
+    setDebugPanelExpansion,
+    setActiveTabInDebugPanel,
+    setWebChatPanelVisibility,
   } = useRecoilValue(dispatcherState);
-
-  const currentConversation = useRecoilValue(currentWebChatConversationState);
-  const chats = useRecoilValue(webChatDataState);
-
   const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
-
-  const conversationService = useMemo(() => new ConversationService('http://localhost:3000/'), [directlineHostUrl]);
-
+  const [chats, setChatData] = useState<Record<string, ChatData>>({});
+  const [currentConversation, setCurrentConversation] = useState<string>('');
+  const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
   const webChatPanelRef = useRef<HTMLDivElement>(null);
   const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
+  const webChatTrafficChannel = useRef<WebSocket>();
+
+  useEffect(() => {
+    const bootstrapChat = async () => {
+      const conversationServerPort = await conversationService.setUpConversationServer();
+      try {
+        // set up Web Chat traffic listener
+        webChatTrafficChannel.current = new WebSocket(`ws://localhost:${conversationServerPort}/ws/traffic`);
+        if (webChatTrafficChannel.current) {
+          webChatTrafficChannel.current.onmessage = (event) => {
+            const data:
+              | ConversationActivityTraffic
+              | ConversationNetworkTrafficItem
+              | ConversationNetworkErrorItem = JSON.parse(event.data);
+
+            switch (data.trafficType) {
+              case 'network': {
+                appendWebChatTraffic(projectId, data);
+                break;
+              }
+              case 'activity': {
+                appendWebChatTraffic(
+                  projectId,
+                  data.activities.map((a) => ({
+                    activity: a,
+                    id: uuid(),
+                    timestamp: new Date(a.timestamp || Date.now()).getTime(),
+                    trafficType: data.trafficType,
+                  }))
+                );
+                break;
+              }
+              case 'networkError': {
+                appendWebChatTraffic(projectId, data);
+                setTimeout(() => {
+                  setActiveTabInDebugPanel('WebChatInspector');
+                  setDebugPanelExpansion(true);
+                }, 300);
+                break;
+              }
+              default:
+                break;
+            }
+          };
+        }
+      } catch (ex) {
+        const response: AxiosResponse = ex.response;
+        const err: ConversationNetworkErrorItem = {
+          error: {
+            message: formatMessage('An error occurred connecting initializing the DirectLine server'),
+          },
+          id: uuid(),
+          request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
+          response: { payload: response.data, statusCode: response.status },
+          timestamp: Date.now(),
+          trafficType: 'networkError',
+        };
+        appendWebChatTraffic(projectId, err);
+        setActiveTabInDebugPanel('WebChatInspector');
+        setDebugPanelExpansion(true);
+      }
+    };
+
+    bootstrapChat();
+
+    return () => {
+      webChatTrafficChannel.current?.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (botUrl) {
+      setCurrentConversation('');
+    }
+  }, [botUrl]);
 
   const sendInitialActivities = async (chatData: ChatData) => {
     try {
@@ -82,6 +160,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           activeLocale
         );
         if (mounted) {
+          setChatData({
+            [chatData.conversationId]: chatData,
+          });
+          setCurrentConversation(chatData.conversationId);
           setConversationData(chatData);
           sendInitialActivities(chatData);
         }
@@ -146,11 +228,14 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   };
 
   return (
-    <div ref={webChatPanelRef} style={{ height: 'calc(100% - 85px)', zIndex: 1 }}>
+    <div ref={webChatPanelRef} style={{ height: `calc(100% - ${webChatHeaderHeight})` }}>
       <WebChatHeader
-        botName={botData.botName}
+        botName={botName}
         conversationId={currentConversation}
         currentRestartOption={currentRestartOption}
+        hideWebChat={() => {
+          setWebChatPanelVisibility(false);
+        }}
         openBotInEmulator={() => {
           openBotInEmulator(projectId);
           TelemetryClient.track('EmulatorButtonClicked', { isRoot: true, projectId, location: 'WebChatPane' });
@@ -159,7 +244,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         onSaveTranscript={onSaveTranscriptClick}
         onSetRestartOption={onSetRestartOption}
       />
-      <WebChat
+      <WebChatComposer
         activeLocale={activeLocale}
         botUrl={botUrl}
         chatData={chats[currentConversation]}

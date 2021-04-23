@@ -64,7 +64,7 @@ export const contentWrapper = css`
   flex-grow: 1;
   height: 100%;
   position: relative;
-  label: FInalContent;
+  label: PageContent;
 `;
 
 const Routes = (props) => {

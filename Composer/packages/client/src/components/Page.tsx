@@ -11,21 +11,13 @@ import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import formatMessage from 'format-message';
 
 import { navigateTo, buildURL } from '../utils/navigation';
-import {
-  dispatcherState,
-  PageMode,
-  webChatEssentialsSelector,
-  isWebChatPanelVisibleState,
-  rootBotProjectIdSelector,
-} from '../recoilModel';
-import { DebugPanel } from '../pages/design/DebugPanel/DebugPanel';
+import { dispatcherState, PageMode } from '../recoilModel';
 import implementedDebugExtensions from '../pages/design/DebugPanel/TabExtensions';
 import { splitPaneContainer, splitPaneWrapper } from '../pages/design/styles';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
 import { renderThinSplitter } from './Split/ThinSplitter';
-import { WebChatContainer } from './WebChat/WebChatContainer';
 // -------------------- Styles -------------------- //
 
 export const root = css`
@@ -152,7 +144,6 @@ const Page: React.FC<IPageProps> = (props) => {
     contentStyle = defaultContentStyle,
     shouldShowEditorError = false,
     useNewTree,
-    useDebugPane,
     pageMode,
     showCommonLinks = false,
     projectId,
@@ -162,7 +153,6 @@ const Page: React.FC<IPageProps> = (props) => {
   } = props;
 
   const { setPageElementState } = useRecoilValue(dispatcherState);
-  const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState(pageMode, { leftSplitWidth: sizes.primary });

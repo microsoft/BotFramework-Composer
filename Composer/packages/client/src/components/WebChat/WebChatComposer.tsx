@@ -9,7 +9,7 @@ import webChatStyleOptions from './utils/webChatTheme';
 import { ChatData, ActivityType } from './types';
 const { BasicWebChat, Composer } = Components;
 
-export type WebChatProps = {
+export type WebChatComposerProps = {
   currentConversation: string;
   activeLocale: string;
   conversationService: ConversationService;
@@ -75,13 +75,13 @@ const createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...
   }
 };
 
-const areEqual = (prevProps: WebChatProps, nextProps: WebChatProps) => {
+const areEqual = (prevProps: WebChatComposerProps, nextProps: WebChatComposerProps) => {
   const result =
     prevProps.currentConversation === nextProps.currentConversation && prevProps.isDisabled === nextProps.isDisabled;
   return result;
 };
 
-export const WebChat = React.memo((props: WebChatProps) => {
+export const WebChatComposer = React.memo((props: WebChatComposerProps) => {
   const { activeLocale, chatData, isDisabled, currentConversation } = props;
 
   if (!currentConversation || !chatData) {

@@ -74,8 +74,6 @@ import {
   createQnAOnState,
   botEndpointsState,
   dispatcherState,
-  webChatDataState,
-  currentWebChatConversationState,
   warnAboutDotNetState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
@@ -106,8 +104,6 @@ export const resetBotStates = async ({ reset }: CallbackInterface, projectId: st
     reset(currentRecoilAtom(projectId));
   });
   reset(botEndpointsState);
-  reset(webChatDataState);
-  reset(currentWebChatConversationState);
 };
 
 export const setErrorOnBotProject = async (

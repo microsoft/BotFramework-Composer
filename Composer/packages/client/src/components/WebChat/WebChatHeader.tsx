@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { ActionButton, DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, DefaultButton, IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
@@ -42,6 +42,7 @@ export type WebChatHeaderProps = {
   onRestartConversation: (conversationId: string, requireNewUserId: boolean) => Promise<any>;
   onSaveTranscript: (conversationId: string) => Promise<any>;
   openBotInEmulator: () => void;
+  hideWebChat: () => void;
 };
 
 export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
@@ -52,6 +53,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   onSaveTranscript,
   openBotInEmulator,
   onSetRestartOption,
+  hideWebChat,
 }) => {
   const menuProps: IContextualMenuProps = {
     items: [
@@ -80,11 +82,33 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
     <div data-testid="Webchat-Header" style={{ borderBottom: `1px solid ${NeutralColors.gray60}` }}>
       <h4
         css={{
-          padding: '10px 0 0 10px',
-          margin: '5px 0',
+          margin: 0,
+          padding: 0,
+          height: '44px',
+          paddingLeft: '18px',
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
         }}
       >
         {botName}
+        <IconButton
+          ariaLabel={formatMessage('Close WebChat')}
+          css={{
+            position: 'absolute',
+            right: '10px',
+          }}
+          iconProps={{
+            iconName: 'ChromeClose',
+            styles: {
+              root: {
+                fontSize: '14px',
+              },
+            },
+          }}
+          title={formatMessage('Close')}
+          onClick={hideWebChat}
+        />
       </h4>
       <DefaultButton
         split

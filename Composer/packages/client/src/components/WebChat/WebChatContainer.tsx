@@ -24,7 +24,7 @@ export const WebChatContainer = () => {
         zIndex: 10,
         display: isWebChatPanelVisible ? 'block' : 'none',
         background: `${NeutralColors.white}`,
-        boxShadow: '-4px 0px 6px 1px rgb(0 0 0 / 5%)',
+        boxShadow: '-4px 0px 6px 1px rgb(0 0 0 / 10%)',
       }}
     >
       {webchatEssentials?.projectId ? (
