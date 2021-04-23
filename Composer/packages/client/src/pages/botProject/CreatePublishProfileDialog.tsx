@@ -100,8 +100,8 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
           }}
           current={currentPublishProfile}
           projectId={projectId}
-          setPublishTargets={setPublishTargets}
           setIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
+          setPublishTargets={setPublishTargets}
           targets={publishTargets || []}
           types={publishTypes}
         />

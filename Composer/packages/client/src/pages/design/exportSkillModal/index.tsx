@@ -14,6 +14,7 @@ import { SkillManifestFile } from '@bfc/shared';
 import { navigate } from '@reach/router';
 import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
+
 import { Notification } from '../../../recoilModel/types';
 import {
   dispatcherState,
@@ -32,10 +33,6 @@ import {
   getSensitiveProperties,
   mergePropertiesManagedByRootBot,
 } from '../../../recoilModel/dispatchers/utils/project';
-
-import { styles } from './styles';
-import { generateSkillManifest } from './generateSkillManifest';
-import { editorSteps, ManifestEditorSteps, order } from './constants';
 import { getTokenFromCache } from '../../../utils/auth';
 import { ApiStatus, PublishStatusPollingUpdater } from '../../../utils/publishStatusPollingUpdater';
 import { notificationsSelector } from '../../../recoilModel/selectors/notifications';
@@ -44,6 +41,10 @@ import {
   getSkilPendingNotificationCardProps,
 } from '../../publish/Notifications';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
+
+import { editorSteps, ManifestEditorSteps, order } from './constants';
+import { generateSkillManifest } from './generateSkillManifest';
+import { styles } from './styles';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -294,11 +295,11 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             selectedDialogs={selectedDialogs}
             selectedTriggers={selectedTriggers}
             setErrors={setErrors}
+            setIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
             setSchema={setSchema}
             setSelectedDialogs={setSelectedDialogs}
             setSelectedTriggers={setSelectedTriggers}
             setSkillManifest={setSkillManifest}
-            setIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
             skillManifests={skillManifests}
             value={content}
             onChange={(manifestContent) => setSkillManifest({ ...skillManifest, content: manifestContent })}
