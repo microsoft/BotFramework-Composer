@@ -26,8 +26,6 @@ import {
   luFilesSelectorFamily,
   settingsState,
   rootBotProjectIdSelector,
-  botStatusState,
-  publishHistoryState,
 } from '../../../recoilModel';
 import {
   getSensitiveProperties,
@@ -35,7 +33,6 @@ import {
 } from '../../../recoilModel/dispatchers/utils/project';
 import { getTokenFromCache } from '../../../utils/auth';
 import { ApiStatus, PublishStatusPollingUpdater } from '../../../utils/publishStatusPollingUpdater';
-import { notificationsSelector } from '../../../recoilModel/selectors/notifications';
 import {
   getSkillPublishedNotificationCardProps,
   getSkilPendingNotificationCardProps,
@@ -126,29 +123,30 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   };
 
   useEffect(() => {
-    if (!publishTargets || publishTargets.length === 0) return;
-    const currentTarget = publishTargets.find((item) => {
-      const config = JSON.parse(item.configuration);
-      return (
-        config.settings &&
-        config.settings.MicrosoftAppId &&
-        config.hostname &&
-        config.settings.MicrosoftAppId.length > 0 &&
-        config.hostname.length > 0
-      );
-    });
-    if (isCreateProfileFromSkill && currentTarget) {
-      const skillPublishPenddingNotificationCard = getSkilPendingNotificationCardProps();
-      publishNotificationRef.current = createNotification(skillPublishPenddingNotificationCard);
-      addNotification(publishNotificationRef.current);
-      const sensitiveSettings = getSensitiveProperties(settings);
-      const token = getTokenFromCache('accessToken');
-      publishToTarget(projectId, currentTarget, { comment: '' }, sensitiveSettings, token);
-      setTimeout(() => {
+    const publish = async () => {
+      if (!publishTargets || publishTargets.length === 0) return;
+      const currentTarget = publishTargets.find((item) => {
+        const config = JSON.parse(item.configuration);
+        return (
+          config.settings &&
+          config.settings.MicrosoftAppId &&
+          config.hostname &&
+          config.settings.MicrosoftAppId.length > 0 &&
+          config.hostname.length > 0
+        );
+      });
+      if (isCreateProfileFromSkill && currentTarget) {
+        const skillPublishPenddingNotificationCard = getSkilPendingNotificationCardProps();
+        publishNotificationRef.current = createNotification(skillPublishPenddingNotificationCard);
+        addNotification(publishNotificationRef.current);
+        const sensitiveSettings = getSensitiveProperties(settings);
+        const token = getTokenFromCache('accessToken');
+        await publishToTarget(projectId, currentTarget, { comment: '' }, sensitiveSettings, token);
         publishUpdater = new PublishStatusPollingUpdater(projectId, currentTarget.name);
         publishUpdater.start(changeNotificationStatus);
-      }, 200);
-    }
+      }
+    };
+    publish();
   }, [isCreateProfileFromSkill, publishTargets?.length]);
   useEffect(() => {
     isCreateProfileFromSkill && setIsHidden(true);

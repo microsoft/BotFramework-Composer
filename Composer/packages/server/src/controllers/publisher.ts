@@ -53,7 +53,7 @@ export const PublishController = {
   publish: async (req, res) => {
     const target: string = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
-    const { accessToken = '', metadata, sensitiveSettings, publishTarget } = req.body;
+    const { accessToken = '', metadata, sensitiveSettings } = req.body;
     const projectId: string = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -62,7 +62,7 @@ export const PublishController = {
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
-    const profile = profiles.length ? profiles[0] : publishTarget;
+    const profile = profiles.length ? profiles[0] : undefined;
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
 
     try {
