@@ -70,6 +70,8 @@ export class NuGetFeed implements IFeed {
       }
 
       const searchResult = httpResponse.data as INuGetSearchResult;
+      // sort these results by total downloads
+      searchResult.data = searchResult.data.sort((a, b) => b.totalDownloads - a.totalDownloads);
       if (searchResult.data) {
         return this.asPackageDefinition(searchResult);
       }

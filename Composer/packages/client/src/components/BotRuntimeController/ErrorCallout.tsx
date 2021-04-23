@@ -33,8 +33,8 @@ const descriptionText = css`
 `;
 
 const descriptionLongText = css`
-  overflow: auto;
   font-size: small;
+  white-space: pre-wrap;
 `;
 const descriptionShow = css``;
 const descriptionHide = css`
