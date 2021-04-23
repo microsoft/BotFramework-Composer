@@ -144,6 +144,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
 }
 
 async function loadServer() {
+  process.env.COMPOSER_VERSION = app.getVersion();
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
