@@ -83,7 +83,7 @@ export const projectDispatcher = () => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
           return filtered;
         });
-        resetBotStates(callbackHelpers, projectIdToRemove);
+        await resetBotStates(callbackHelpers, projectIdToRemove);
 
         const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
         const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
