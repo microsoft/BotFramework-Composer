@@ -1,9 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import fs from 'fs';
-
-import rimraf from 'rimraf';
+import fs from 'fs-extra';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import endsWith from 'lodash/endsWith';
 
@@ -36,6 +34,19 @@ const mockLocationRef: LocationRef = {
   path: Path.join(__dirname, `${botDir}`),
 };
 let proj: BotProject;
+
+const cleanup = (dirs: string | string[]) => {
+  const targets = Array.isArray(dirs) ? dirs : [dirs];
+
+  for (const dir of targets) {
+    try {
+      fs.emptyDirSync(dir);
+      fs.rmdirSync(dir);
+    } catch {
+      // ignore
+    }
+  }
+};
 
 beforeEach(async () => {
   proj = new BotProject(mockLocationRef);
@@ -71,11 +82,7 @@ describe('createFromTemplate', () => {
   const content = JSON.stringify(new DialogFactory({}).create(SDKKinds.AdaptiveDialog), null, 2) + '\n';
 
   afterEach(() => {
-    try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/${dialogName}`));
-    } catch (err) {
-      // ignore
-    }
+    cleanup(Path.resolve(__dirname, `${botDir}/dialogs/${dialogName}`));
   });
 
   it('should create a dialog file with given steps', async () => {
@@ -111,7 +118,7 @@ describe('copyTo', () => {
               fs.unlinkSync(curPath);
             }
           });
-          rimraf.sync(path);
+          cleanup(path);
         }
       };
       deleteFolder(copyDir);
@@ -141,11 +148,7 @@ describe('modify non exist files', () => {
 
 describe('lg operations', () => {
   afterEach(() => {
-    try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
-    } catch (err) {
-      // ignore
-    }
+    cleanup(Path.resolve(__dirname, `${botDir}/dialogs/root`));
   });
 
   it('should create lg file and update index', async () => {
@@ -198,12 +201,7 @@ describe('lg operations', () => {
 
 describe('lu operations', () => {
   afterEach(() => {
-    try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/generated`));
-    } catch (err) {
-      // ignore
-    }
+    cleanup([Path.resolve(__dirname, `${botDir}/dialogs/root`), Path.resolve(__dirname, `${botDir}/generated`)]);
   });
 
   it('should create lu file and update index', async () => {
@@ -266,15 +264,11 @@ describe('qna operations', () => {
 describe('buildFiles', () => {
   const path = Path.resolve(__dirname, `${botDir}/generated`);
   afterEach(() => {
-    try {
-      rimraf.sync(path);
-    } catch (err) {
-      // ignore
-    }
+    cleanup(path);
   });
 
   it('should build lu & qna file successfully', async () => {
-    proj.init();
+    await proj.init();
     const luisConfig = {
       authoringEndpoint: '',
       authoringKey: 'test',
