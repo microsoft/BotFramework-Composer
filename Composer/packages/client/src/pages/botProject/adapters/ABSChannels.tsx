@@ -139,8 +139,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const config = JSON.parse(profile.configuration);
         setCurrentResource({
           microsoftAppId: config?.settings?.MicrosoftAppId,
-          resourceName: config.name,
-          resourceGroupName: config.resourceGroup || config.name,
+          resourceName: config.botName || config.name,
+          resourceGroupName: config.resourceGroup || config.botName || config.name,
           subscriptionId: config.subscriptionId,
         });
       }
