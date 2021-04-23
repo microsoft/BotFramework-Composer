@@ -29,6 +29,8 @@ import { botDisplayNameState, botProjectSpaceLoadedState } from './recoilModel/a
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
 import languageStorage from './utils/languageStorage';
 import { DebugPanel } from './pages/design/DebugPanel/DebugPanel';
+import { useLocation } from './utils/hooks';
+import { useDebugPane } from './components/useDebugPane';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -71,11 +73,12 @@ const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const spinnerText = useRecoilValue(botOpeningMessage);
+  const showDebugPanel = useDebugPane();
 
   return (
-    <div css={root} data-testid={props['data-testid']}>
+    <div css={root}>
       <div css={pageWrapper}>
-        <div css={contentWrapper} role="main">
+        <div css={contentWrapper}>
           <WebChatContainer />
           <Suspense fallback={<LoadingSpinner />}>
             <Router basepath={BASEPATH} {...props}>
@@ -151,7 +154,7 @@ const Routes = (props) => {
             </div>
           )}
         </div>
-        <DebugPanel />
+        {showDebugPanel && <DebugPanel />}
       </div>
     </div>
   );

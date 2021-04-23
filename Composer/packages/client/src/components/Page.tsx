@@ -175,7 +175,7 @@ const Page: React.FC<IPageProps> = (props) => {
   const displayedToolbarItems = toolbarItems.concat(debugItems);
 
   return (
-    <div css={contentWrapper} role="main">
+    <div css={contentWrapper} data-testid={props['data-testid']} role="main">
       <Toolbar toolbarItems={displayedToolbarItems} />
       <div css={headerStyle}>
         <h1 css={headerTitle}>{title}</h1>
