@@ -76,7 +76,7 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
-            placeholder={formatMessage('Type a name that describes this content')}
+            placeholder={formatMessage('Type a name for this Knowledge Base')}
             styles={textFieldKBNameFromScratch}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
