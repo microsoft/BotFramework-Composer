@@ -87,7 +87,9 @@ export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
 
       // install all dependencies and build the app
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
+      const timer1 = new Date().getTime();
       await runtime.build(runtimePath, currentProject);
+      log(`PERF: BUILD RUNTIME PROCESS ${(new Date().getTime() - timer1) / 1000} seconds`);
 
       const manifestFile = runtime.identifyManifest(currentProject.dataDir, currentProject.name);
 
