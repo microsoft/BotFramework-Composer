@@ -171,6 +171,17 @@ const onRenderLabel = (props) => {
   );
 };
 
+const getResourceRegion = (item: ResourcesItem): string => {
+  const { key, region } = item;
+  switch (key) {
+    case AzureResourceTypes.APP_REGISTRATION:
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return 'global';
+    default:
+      return region;
+  }
+};
+
 const reviewCols: IColumn[] = [
   {
     key: 'Icon',
@@ -235,7 +246,7 @@ const reviewCols: IColumn[] = [
     onRender: (item: ResourcesItem) => {
       return (
         <div style={{ whiteSpace: 'normal', fontSize: '12px', color: NeutralColors.gray130 }}>
-          {item.key === AzureResourceTypes.APP_REGISTRATION ? 'global' : item?.region}
+          {getResourceRegion(item)}
         </div>
       );
     },
@@ -718,7 +729,7 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const onSave = useCallback(() => {
-    savePublishConfig(importConfig);
+    savePublishConfig(removePlaceholder(importConfig));
     clearAll();
     closeDialog();
   }, [importConfig]);
