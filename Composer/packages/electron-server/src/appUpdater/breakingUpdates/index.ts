@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { version1To2 } from './version1.0.0To2.x.x';
+import { version1To2 } from './version1To2';
 
 type BreakingUpdateResult = { breaking: boolean; uxId: string };
 type BreakingUpdatePredicate = (curVersion: string, newVersion: string) => BreakingUpdateResult;
