@@ -246,7 +246,7 @@ export const publisherDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       try {
         const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-        filePersistence.flush();
+        await filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
         set(publishHistoryState(projectId), (publishHistory) => ({
           ...publishHistory,

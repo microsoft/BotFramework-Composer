@@ -90,7 +90,7 @@ export const provisionDispatcher = () => {
         });
 
         // call provision status api interval to update the state.
-        updateProvisionStatus(
+        await updateProvisionStatus(
           callbackHelpers,
           result.data.id,
           projectId,
@@ -135,7 +135,7 @@ export const provisionDispatcher = () => {
           });
 
           // update publishTargets
-          callbackHelpers.set(settingsState(projectId), (settings) => {
+          await callbackHelpers.set(settingsState(projectId), (settings) => {
             const profile = {
               configuration: JSON.stringify(response.data.config, null, 2),
               name: targetName,
