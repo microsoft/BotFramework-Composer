@@ -119,6 +119,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
         const notificationCard = getSkillPublishedNotificationCardProps({ ...responseData });
         updateNotification(displayedNotification.id, notificationCard);
       }
+      navigate(`bot/${projectId}/publish/all`);
     }
   };
 
