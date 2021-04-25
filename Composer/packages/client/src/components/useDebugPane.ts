@@ -24,7 +24,8 @@ export const useDebugPane = () => {
 
       // URL Patterns /bot/1234.123/dialogs or /bot/1234.123/skill/3434.34/dialogs
       let pageName = result[2];
-      if (result[3] && result[3].includes('skill')) {
+
+      if (result[2] === 'skill') {
         pageName = result[4];
       }
 
