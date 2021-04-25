@@ -134,7 +134,7 @@ export const DebugPanel: React.FC = () => {
         css={css`
           ${debugPaneContainerStyle}
         `}
-        data-testid="DebugPanel-Composer"
+        data-testid="DebugPanelDrawer"
         defaultSize={{
           width: '100%',
           height: isPanelExpanded ? debugPanelDefaultHeight : computedPivotHeight,

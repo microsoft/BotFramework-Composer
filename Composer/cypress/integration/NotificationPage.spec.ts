@@ -19,7 +19,7 @@ context('Notification Page', () => {
     cy.findByTestId('showcode').click();
     cy.get('textarea').type('#', { delay: 200 });
 
-    cy.findByTestId('DebugPanel-Composer').click();
+    cy.findByTestId('DebugPanelDrawer').click();
 
     cy.findAllByText('TestBot_TestSample.en-us.lg').should('exist').first().click();
 
@@ -37,7 +37,7 @@ context('Notification Page', () => {
     cy.findByTestId('showcode').click();
     cy.get('textarea').type('t*', { delay: 200 });
 
-    cy.findByTestId('DebugPanel-Composer').click();
+    cy.findByTestId('DebugPanelDrawer').click();
 
     cy.findAllByText('TestBot_TestSample.en-us.lu').should('exist').first().dblclick();
 

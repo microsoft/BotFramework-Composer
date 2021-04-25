@@ -9,6 +9,8 @@ import { isWebChatPanelVisibleState, webChatEssentialsSelector, rootBotProjectId
 import { BASEPATH } from '../../constants';
 import { WebChatPanel } from '../../components/WebChat/WebChatPanel';
 
+const webChatPanelZIndex = 1;
+
 export const WebChatContainer = () => {
   const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
   const webchatEssentials = useRecoilValue(webChatEssentialsSelector(rootBotId));
@@ -21,7 +23,7 @@ export const WebChatContainer = () => {
         height: '100%',
         width: '395px',
         right: 0,
-        zIndex: 10,
+        zIndex: webChatPanelZIndex,
         display: isWebChatPanelVisible ? 'block' : 'none',
         background: `${NeutralColors.white}`,
         boxShadow: '-4px 0px 6px 1px rgb(0 0 0 / 10%)',

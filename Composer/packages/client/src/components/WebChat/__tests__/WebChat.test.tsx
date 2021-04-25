@@ -11,7 +11,7 @@ import { ChatData } from '../types';
 URL.createObjectURL = jest.fn();
 
 describe('<WebChat />', () => {
-  fit('should not render webchat if no conversation or chat data', async () => {
+  it('should not render webchat if no conversation or chat data', async () => {
     const props: WebChatComposerProps = {
       currentConversation: '',
       activeLocale: 'en-us',
