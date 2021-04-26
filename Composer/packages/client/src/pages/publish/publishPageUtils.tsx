@@ -33,7 +33,7 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
 };
 
 const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string): string => {
-  let url: string = '';
+  let url = '';
   for (const skillManifest of skillManifests || []) {
     if (skillManifest.content.$schema === SCHEMA_URI && !url) {
       url = `https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`;

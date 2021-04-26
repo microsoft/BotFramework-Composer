@@ -154,8 +154,8 @@ export const Description: React.FC<ContentProps> = ({
         </Label>
         <TextField
           disabled
-          styles={{ root: { width: '350px' } }}
           defaultValue={formatMessage('Version {version}', { version })}
+          styles={{ root: { width: '350px' } }}
         />
       </div>
       {isFetchCompleted ? (
