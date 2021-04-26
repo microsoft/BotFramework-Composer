@@ -21,6 +21,7 @@ export const topLinks = (
   pluginPages: ExtensionPageConfig[],
   showFormDialog: boolean,
   schema: any,
+  skillIsRemote: boolean,
   rootProjectId?: string
 ) => {
   const isPVASchema = checkForPVASchema(schema);
@@ -50,7 +51,7 @@ export const topLinks = (
       to: linkBase + `language-generation/${openedDialogId}`,
       iconName: 'Robot',
       labelName: formatMessage('Bot responses'),
-      disabled: !botLoaded,
+      disabled: !botLoaded || skillIsRemote,
       match: /language-generation\/[a-zA-Z0-9_-]+$/,
       isDisabledForPVA: false,
     },
@@ -58,7 +59,7 @@ export const topLinks = (
       to: linkBase + `language-understanding/${openedDialogId}`,
       iconName: 'People',
       labelName: formatMessage('User input'),
-      disabled: !botLoaded,
+      disabled: !botLoaded || skillIsRemote,
       match: /language-understanding\/[a-zA-Z0-9_-]+$/,
       isDisabledForPVA: false,
     },
@@ -66,17 +67,9 @@ export const topLinks = (
       to: linkBase + `knowledge-base/${openedDialogId}`,
       iconName: 'QnAIcon',
       labelName: formatMessage('QnA'),
-      disabled: !botLoaded,
+      disabled: !botLoaded || skillIsRemote,
       match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
       isDisabledForPVA: isPVASchema,
-    },
-    {
-      to: `/bot/${rootProjectId || projectId}/diagnostics`,
-      iconName: 'Warning',
-      labelName: formatMessage('Diagnostics'),
-      disabled: !botLoaded,
-      match: /diagnostics/,
-      isDisabledForPVA: false,
     },
     {
       to: `/bot/${rootProjectId || projectId}/publish`,
@@ -99,7 +92,7 @@ export const topLinks = (
             to: `/bot/${projectId}/forms`,
             iconName: 'Table',
             labelName: formatMessage('Forms (preview)'),
-            disabled: !botLoaded,
+            disabled: !botLoaded || skillIsRemote,
             isDisabledForPVA: false,
           },
         ]
@@ -113,7 +106,7 @@ export const topLinks = (
         disablePluginForPva = true;
       }
       links.push({
-        to: `/bot/${projectId}/plugin/${p.id}/${p.bundleId}`,
+        to: linkBase + `plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         disabled: !projectId,
