@@ -41,8 +41,8 @@ export type WebChatHeaderProps = {
   conversationId: string;
   onRestartConversation: (conversationId: string, requireNewUserId: boolean) => void;
   onSaveTranscript: (conversationId: string) => void;
-  openBotInEmulator: () => void;
-  hideWebChat: () => void;
+  onOpenBotInEmulator: () => void;
+  onCloseWebChat: () => void;
 };
 
 export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
@@ -51,9 +51,9 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   currentRestartOption,
   onRestartConversation,
   onSaveTranscript,
-  openBotInEmulator,
+  onOpenBotInEmulator: openBotInEmulator,
   onSetRestartOption,
-  hideWebChat,
+  onCloseWebChat: hideWebChat,
 }) => {
   const menuProps: IContextualMenuProps = {
     items: [

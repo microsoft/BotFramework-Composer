@@ -19,8 +19,8 @@ describe('<WebChatHeader />', () => {
     conversationId: '123-abc-conv',
     onRestartConversation: mockOnRestartConversation,
     onSaveTranscript: mockOnSaveTranscript,
-    openBotInEmulator: jest.fn(),
-    hideWebChat: jest.fn(),
+    onOpenBotInEmulator: jest.fn(),
+    onCloseWebChat: jest.fn(),
   };
 
   afterEach(() => {
@@ -41,8 +41,8 @@ describe('<WebChatHeader />', () => {
       conversationId: '123-abc-conv',
       onRestartConversation: mockOnRestartConversation,
       onSaveTranscript: mockOnSaveTranscript,
-      openBotInEmulator: jest.fn(),
-      hideWebChat: jest.fn(),
+      onOpenBotInEmulator: jest.fn(),
+      onCloseWebChat: jest.fn(),
     };
 
     const { findByText } = render(<WebChatHeader {...props} />);
@@ -66,8 +66,8 @@ describe('<WebChatHeader />', () => {
       conversationId: '123-abc-conv',
       onRestartConversation: mockOnRestartConversation,
       onSaveTranscript: mockOnSaveTranscript,
-      openBotInEmulator: jest.fn(),
-      hideWebChat: jest.fn(),
+      onOpenBotInEmulator: jest.fn(),
+      onCloseWebChat: jest.fn(),
     };
 
     const { findByText } = render(<WebChatHeader {...props} />);

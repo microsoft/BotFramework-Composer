@@ -15,14 +15,13 @@ const pagesToShow = [
 
 export const useDebugPane = () => {
   const { location: currentLocation } = useLocation();
-  const [showDebugPane, setVisibilityOfPane] = useState(false);
+  const [showDebugPanel, setShowDebugPanel] = useState(false);
 
   useEffect(() => {
     if (currentLocation?.pathname) {
       let isShow = false;
+      // URL Patterns we parse are /bot/1234.123/dialogs or /bot/1234.123/skill/3434.34/dialogs. Removing the leading slash in pathname to avoid an empty item at the start of the list.
       const result = currentLocation.pathname.replace(/^\/|\/$/g, '').split('/');
-
-      // URL Patterns /bot/1234.123/dialogs or /bot/1234.123/skill/3434.34/dialogs
       let pageName = result[2];
 
       if (result[2] === 'skill') {
@@ -30,14 +29,14 @@ export const useDebugPane = () => {
       }
 
       if (pageName) {
-        isShow = !!pagesToShow.some((pattern: string) => {
+        isShow = pagesToShow.some((pattern: string) => {
           return pageName.includes(pattern);
         });
       }
 
-      setVisibilityOfPane(isShow);
+      setShowDebugPanel(isShow);
     }
   }, [currentLocation]);
 
-  return showDebugPane;
+  return showDebugPanel;
 };

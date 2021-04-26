@@ -233,10 +233,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         botName={botName}
         conversationId={currentConversation}
         currentRestartOption={currentRestartOption}
-        hideWebChat={() => {
+        onCloseWebChat={() => {
           setWebChatPanelVisibility(false);
         }}
-        openBotInEmulator={() => {
+        onOpenBotInEmulator={() => {
           openBotInEmulator(projectId);
           TelemetryClient.track('EmulatorButtonClicked', { isRoot: true, projectId, location: 'WebChatPane' });
         }}
