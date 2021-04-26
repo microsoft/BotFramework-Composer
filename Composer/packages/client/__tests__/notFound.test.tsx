@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as React from 'react';
+import React from 'react';
 import { render } from '@botframework-composer/test-utils';
 
 import { BASEPATH } from '../src/constants';

@@ -9,17 +9,13 @@ import { storageDispatcher } from '../storage';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { runtimeTemplatesState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '../../dispatchers';
-
-// let httpMocks;
-let navigateTo;
+import { navigateTo } from '../../../utils/navigation';
 
 const projectId = '30876.502871204648';
 
 jest.mock('../../../utils/navigation', () => {
-  const navigateMock = jest.fn();
-  navigateTo = navigateMock;
   return {
-    navigateTo: navigateMock,
+    navigateTo: jest.fn(),
   };
 });
 
@@ -58,7 +54,7 @@ describe('Storage dispatcher', () => {
   let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
-    navigateTo.mockReset();
+    (navigateTo as jest.Mock).mockReset();
     const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(
       useRecoilTestHook,
       {

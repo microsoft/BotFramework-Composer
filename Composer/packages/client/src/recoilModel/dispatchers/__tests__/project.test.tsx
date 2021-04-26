@@ -46,21 +46,17 @@ import {
 import { dialogsSelectorFamily, lgFilesSelectorFamily, luFilesSelectorFamily } from '../../selectors';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
+import { navigateTo } from '../../../utils/navigation';
 
 import mockProjectData from './mocks/mockProjectResponse.json';
 import mockManifestData from './mocks/mockManifest.json';
 import mockBotProjectFileData from './mocks/mockBotProjectFile.json';
 
-// let httpMocks;
-let navigateTo;
-
 const projectId = '30876.502871204648';
 
 jest.mock('../../../utils/navigation', () => {
-  const navigateMock = jest.fn();
-  navigateTo = navigateMock;
   return {
-    navigateTo: navigateMock,
+    navigateTo: jest.fn(),
   };
 });
 
@@ -196,7 +192,7 @@ describe('Project dispatcher', () => {
   let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(async () => {
-    navigateTo.mockReset();
+    (navigateTo as jest.Mock).mockReset();
     mockProjectResponse = cloneDeep(mockProjectData);
     mockManifestResponse = cloneDeep(mockManifestData);
     mockBotProjectResponse = cloneDeep(mockBotProjectFileData);
