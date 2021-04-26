@@ -41,6 +41,7 @@ const mockSchemas = {
               default: 'Adapter.Full.Type.Mock',
             },
           },
+          required: ['exampleName'],
         },
       },
     },
@@ -148,6 +149,21 @@ describe('ExternalAdapterSettings', () => {
         type: 'Adapter.Full.Type.Mock',
       },
     });
+  });
+
+  it('does not proceed if required settings are missing', async () => {
+    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
+      initRecoilState
+    );
+    const container = getByTestId('adapterSettings');
+    const configureButton = within(container).queryAllByText('Configure')[0];
+    act(() => {
+      fireEvent.click(configureButton);
+    });
+
+    const modal = getByTestId('adapterModal');
+    expect(within(modal).getByText('Configure')).toBeDisabled();
   });
 
   it('disables an adapter', async () => {
