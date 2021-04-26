@@ -118,7 +118,6 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   }
 
   function defaultContentRender() {
-    console.log('RENDERING SUBTITLE', subTitle);
     if (subTitle) {
       return <div css={builtInStyles[style]}> {subTitle} </div>;
     }
