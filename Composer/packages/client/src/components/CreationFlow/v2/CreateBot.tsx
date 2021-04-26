@@ -215,7 +215,9 @@ export function CreateBotV2(props: CreateBotProps) {
   useEffect(() => {
     if (displayedTemplates?.[0]?.id) {
       setCurrentTemplateId(displayedTemplates[0].id);
-      selectedTemplate.setIndexSelected(0, true, false);
+      setTimeout(() => {
+        selectedTemplate.setIndexSelected(0, true, false);
+      }, 0);
     }
   }, [displayedTemplates]);
 
