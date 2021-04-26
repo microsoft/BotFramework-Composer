@@ -63,7 +63,7 @@ const confirmationContainer = css`
 /**
  * When we want the user to check the box to confirm their action, in addition to confirming the dialog.
  */
-type DoubleConfirmCheckboxProps = { kind: 'doubleConfirm'; checkboxLabel?: string };
+type DoubleConfirmCheckboxProps = { kind: 'doubleConfirm'; checkboxLabel?: React.ReactElement };
 /**
  * When we want to ask user for extra checks in addition to the original action confirmation.
  */
@@ -118,7 +118,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   }
 
   function defaultContentRender() {
-    return <div css={builtInStyles[style]}> {subTitle} </div>;
+    console.log('RENDERING SUBTITLE', subTitle);
+    if (subTitle) {
+      return <div css={builtInStyles[style]}> {subTitle} </div>;
+    }
   }
 
   const renderCheckbox = React.useCallback(() => {
@@ -131,7 +134,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
         {checkboxProps.kind === 'doubleConfirm' ? (
           <Checkbox
             checked={!disabled}
-            label={(checkboxProps as DoubleConfirmCheckboxProps).checkboxLabel}
+            label={(checkboxProps as DoubleConfirmCheckboxProps).checkboxLabel as any}
             onChange={handleCheckbox}
           />
         ) : (

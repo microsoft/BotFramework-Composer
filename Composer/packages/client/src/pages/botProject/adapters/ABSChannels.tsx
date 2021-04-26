@@ -18,6 +18,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { format } from 'prettier';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -200,6 +201,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               channelName: channelId,
               location: 'global',
               properties: {
+                acceptedTerms: opts?.acceptedTerms,
                 isEnabled: true,
               },
             },
@@ -247,7 +249,37 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
       if (channelId === CHANNELS.TEAMS) {
-        setShowTeamsCallOut(true);
+        const createResults = await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
+        if (!createResults.data?.properties?.properties?.acceptedTerms === true) {
+          if (
+            await OpenConfirmModal(formatMessage('Microsoft Teams terms and conditions'), null, {
+              disabled: true,
+              confirmText: formatMessage('Agree'),
+              checkboxProps: {
+                kind: 'doubleConfirm',
+                checkboxLabel: (
+                  <div>
+                    {formatMessage('I agree to the ')}
+                    <a href="https://aka.ms/bots/terms/channels" rel="noreferrer" target="_blank">
+                      {formatMessage('Microsoft Channel Publication Terms')}
+                    </a>
+                    {formatMessage(' and the ')}
+                    <a href="https://privacy.microsoft.com/en-us/privacystatement" rel="noreferrer" target="_blank">
+                      {formatMessage('Microsoft Privacy Statement')}
+                    </a>
+                    {formatMessage(' for my deployment to the Microsoft Teams channel.')}
+                  </div>
+                ),
+              },
+            })
+          ) {
+            return await createChannelService(channelId, { ...opts, acceptedTerms: true });
+          } else {
+            return await deleteChannelService(channelId);
+          }
+        } else {
+          setShowTeamsCallOut(true);
+        }
       }
       // success!!
       setChannelStatus({
