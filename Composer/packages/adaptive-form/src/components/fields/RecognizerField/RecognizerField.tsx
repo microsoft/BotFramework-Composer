@@ -39,7 +39,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         ? seedNewRecognizer(shellData, shellApi)
         : { $kind: option.key as string, intents: [] }; // fallback to default Recognizer instance;
     onChange(recognizerInstance);
-    telemetryClient.track('RecognizerChanged', { recognizer: option.key as string });
+    telemetryClient?.track('RecognizerChanged', { recognizer: option.key as string });
   };
 
   return (
