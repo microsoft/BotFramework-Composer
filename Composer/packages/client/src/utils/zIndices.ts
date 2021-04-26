@@ -10,5 +10,5 @@ import { ZIndexes } from 'office-ui-fabric-react/lib/Styling';
  */
 export const zIndices = {
   notificationContainer: ZIndexes.Layer + 1,
-  webChatContainer: ZIndexes.Layer + 1,
+  webChatContainer: ZIndexes.Layer,
 };
