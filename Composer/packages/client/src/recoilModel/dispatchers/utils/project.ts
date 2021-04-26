@@ -22,6 +22,8 @@ import {
   defaultPublishConfig,
   LgFile,
   QnABotTemplateId,
+  ILUFeaturesConfig,
+  SDKKinds,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -281,10 +283,18 @@ const emptyQnaFile = (id: string, content: string): QnAFile => {
 };
 
 const parseAllAssets = async ({ set }: CallbackInterface, projectId: string, botFiles: any) => {
-  const { luFiles, lgFiles, qnaFiles, mergedSettings, dialogs } = botFiles;
+  const { luFiles, lgFiles, qnaFiles, mergedSettings, dialogs, recognizers } = botFiles;
+  const luFeaturesMap: { [key: string]: ILUFeaturesConfig } = {};
+  for (const { id } of luFiles) {
+    const isOrchestartor = recognizers.some(
+      (f) => f.id === `${id}.lu.dialog` && f.content.$kind === SDKKinds.OrchestratorRecognizer
+    );
+    const luFeatures = { ...mergedSettings.luFeatures, isOrchestartor };
+    luFeaturesMap[id] = luFeatures;
+  }
   const [parsedLgFiles, parsedLuFiles, parsedQnaFiles] = await Promise.all([
     lgWorker.parseAll(projectId, lgFiles),
-    luWorker.parseAll(luFiles, mergedSettings.luFeatures),
+    luWorker.parseAll(luFiles, luFeaturesMap),
     qnaWorker.parseAll(qnaFiles),
   ]);
 

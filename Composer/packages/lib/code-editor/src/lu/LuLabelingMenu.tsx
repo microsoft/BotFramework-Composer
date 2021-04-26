@@ -4,12 +4,16 @@
 import { LuEntity, LuFile } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { ContextualMenu, DirectionalHint, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ZIndexes } from 'office-ui-fabric-react/lib/Styling';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { isSelectionWithinBrackets } from '../utils/luUtils';
 
 import { useLabelingMenuProps } from './hooks/useLabelingMenuItems';
 import { useMonacoSelectedTextDom } from './hooks/useMonacoSelectedTextDom';
+
+// This makes sure that this Fabric context menu appears under any Fabric layers in Composer
+const calloutProps = { layerProps: { styles: { root: { zIndex: ZIndexes.Layer - 1 } } } };
 
 type Props = {
   editor: any;
@@ -92,6 +96,7 @@ export const LuLabelingMenu = ({ editor, luFile, onMenuToggled, onInsertEntity }
 
   return menuTargetElm && !noEntities ? (
     <ContextualMenu
+      calloutProps={calloutProps}
       {...menuProps}
       directionalHint={DirectionalHint.bottomLeftEdge}
       hidden={false}

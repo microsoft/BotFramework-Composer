@@ -7,29 +7,13 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { useDebounce } from './useDebounce';
 
 const stackStyles = { root: { marginBottom: '6px' } };
-const dropdownStyles = { root: { marginBottom: '6px' }, dropdown: { width: '75%' } };
+const dropdownStyles = { root: { marginBottom: '6px' }, dropdown: { width: '300px' } };
 const itemIconStyles = { marginRight: '8px' };
-const newNameTextFileStyles = { root: { marginTop: '10px', width: '75%' } };
-
-const getInfoIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: FluentTheme.palette.red,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
+const newNameTextFileStyles = { root: { marginTop: '10px', width: '300px' } };
 
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
@@ -68,31 +52,6 @@ type Props = {
    * Called when the selection or new resource name changes.
    */
   onChange: (choice: ResourceGroupItemChoice) => void;
-};
-
-const onRenderLabel = (props) => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: '5px',
-      }}
-    >
-      <div
-        style={{
-          marginRight: '5px',
-          fontWeight: 600,
-          fontSize: '14px',
-        }}
-      >
-        {` ${props.label} `}
-      </div>
-      <TooltipHost content={props.ariaLabel}>
-        <Icon iconName="Info" styles={getInfoIconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
 };
 
 export const ResourceGroupPicker = ({
@@ -170,12 +129,7 @@ export const ResourceGroupPicker = ({
   return (
     <Stack styles={stackStyles}>
       <Dropdown
-        required
-        ariaLabel={formatMessage(
-          'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
-        )}
         disabled={disabled}
-        label={formatMessage('Resource group')}
         options={options}
         placeholder={formatMessage('Select one')}
         selectedKey={selectedName}
@@ -184,25 +138,20 @@ export const ResourceGroupPicker = ({
           setIsNew(opt.key === CREATE_NEW_KEY);
           setSelectedName(opt.key as string);
         }}
-        onRenderLabel={onRenderLabel}
         onRenderOption={onRenderOption}
       />
       {isNew && (
         <TextField
-          required
-          ariaLabel={formatMessage('Enter a name for the new resource group')}
           data-testid={'newResourceGroupName'}
           disabled={disabled}
           errorMessage={newNameErrorMessage}
           id={'newResourceGroupName'}
-          label={formatMessage('Resource group name')}
-          placeholder={formatMessage('New resource group')}
+          placeholder={formatMessage('New resource group name')}
           styles={newNameTextFileStyles}
           value={newName}
           onChange={(e, val) => {
             setNewName(val || '');
           }}
-          onRenderLabel={onRenderLabel}
         />
       )}
     </Stack>

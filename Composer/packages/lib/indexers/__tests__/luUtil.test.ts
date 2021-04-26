@@ -55,6 +55,14 @@ describe('LU parse and validation', () => {
     expect(result1.allIntents[2].fileId).toEqual('greeting');
   });
 
+  it('should throws error when Orchestrator include entity', () => {
+    const fileContent = `# AskForName
+    - @{userName=Jack}
+    `;
+    const result1 = parse('a.lu', fileContent, { isOrchestartor: true }, []);
+    expect(result1.diagnostics.length).toEqual(1);
+  });
+
   it('Throws when ML entity is disable (validateResource)', () => {
     const fileContent = `# AskForName
     - {@userName=Jack}
