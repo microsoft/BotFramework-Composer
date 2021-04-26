@@ -111,14 +111,19 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     const responseData = apiResponse.data;
 
     if (responseData.status !== ApiStatus.Publishing) {
-      stopUpdater(publishUpdater);
-
       // Show result notifications
       const displayedNotification = publishNotificationRef.current;
       if (displayedNotification) {
-        const notificationCard = getSkillPublishedNotificationCardProps({ ...responseData });
+        const currentTarget = publishTargets?.find((target) => target.name === publishUpdater.getPublishTargetName());
+        const url = currentTarget
+          ? `https://${JSON.parse(currentTarget.configuration).hostname}.azurewebsites.net/manifests/${
+              skillManifest.id
+            }.json`
+          : '';
+        const notificationCard = getSkillPublishedNotificationCardProps({ ...responseData }, url);
         updateNotification(displayedNotification.id, notificationCard);
       }
+      stopUpdater(publishUpdater);
       navigate(`bot/${projectId}/publish/all`);
     }
   };
