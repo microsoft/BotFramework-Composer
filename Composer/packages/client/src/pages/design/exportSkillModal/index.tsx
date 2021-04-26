@@ -62,7 +62,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const { buttons = [], content: Content, editJson, helpLink, subText, title, validate } = editorSteps[editorStep];
 
   const settings = useRecoilValue(settingsState(projectId));
-  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || projectId;
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const { skillConfiguration, runtime, runtimeSettings, publishTargets } = mergedSettings;
   const { setSettings } = useRecoilValue(dispatcherState);
