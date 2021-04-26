@@ -13,7 +13,6 @@ import {
   getARMTokenForTenant,
   useLocalStorage,
   useTelemetryClient,
-  TelemetryClient,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
@@ -291,10 +290,8 @@ export const AzureProvisionDialog: React.FC = () => {
     getTenantIdFromCache,
     setTenantId,
   } = usePublishApi();
-  const telemetryClient: TelemetryClient = useTelemetryClient();
 
-  // eslint-disable-next-line no-console
-  console.log('TELEMETRY CLIENT', telemetryClient);
+  const telemetryClient = useTelemetryClient();
 
   const { setItem, getItem, clearAll } = useLocalStorage();
   // set type of publish - azurePublish or azureFunctionsPublish
@@ -374,22 +371,22 @@ export const AzureProvisionDialog: React.FC = () => {
     setPage(page);
     switch (page) {
       case PageTypes.AddResources:
-        // telemetryClient.track('ProvisionAddResourcesNavigate');
+        telemetryClient?.track('ProvisionAddResourcesNavigate');
         setTitle(DialogTitle.ADD_RESOURCES);
         break;
       case PageTypes.ChooseAction:
         setTitle(DialogTitle.CHOOSE_ACTION);
         break;
       case PageTypes.ConfigProvision:
-        // telemetryClient.track('ProvisionConfigureResources');
+        telemetryClient?.track('ProvisionConfigureResources');
         setTitle(DialogTitle.CONFIG_RESOURCES);
         break;
       case PageTypes.EditJson:
-        // telemetryClient.track('ProvisionEditJSON');
+        telemetryClient?.track('ProvisionEditJSON');
         setTitle(DialogTitle.EDIT);
         break;
       case PageTypes.ReviewResource:
-        // telemetryClient.track('ProvisionReviewResources');
+        telemetryClient?.track('ProvisionReviewResources');
         setTitle(DialogTitle.REVIEW);
         break;
     }
@@ -716,11 +713,11 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSubmit = useCallback((options) => {
     // call back to the main Composer API to begin this process...
 
-    // telemetryClient.track('ProvisionStart', {
-    //   region: options.location,
-    //   subscriptionId: options.subscription,
-    //   externalResources: options.externalResources,
-    // });
+    telemetryClient?.track('ProvisionStart', {
+      region: options.location,
+      subscriptionId: options.subscription,
+      externalResources: options.externalResources,
+    });
 
     startProvision(options);
     clearAll();
@@ -1051,7 +1048,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
-                // telemetryClient.track('ProvisionCancel');
+                telemetryClient?.track('ProvisionCancel');
                 closeDialog();
               }}
             />
@@ -1154,7 +1151,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Next')}
               onClick={() => {
                 if (formData.creationType === 'generate') {
-                  // telemetryClient.track('ProvisionShowHandoff');
+                  telemetryClient?.track('ProvisionShowHandoff');
                   setShowHandoff(true);
                 } else {
                   setPageAndTitle(PageTypes.ReviewResource);
@@ -1178,7 +1175,7 @@ export const AzureProvisionDialog: React.FC = () => {
               style={{ margin: '0 4px' }}
               text={formatMessage('Cancel')}
               onClick={() => {
-                // telemetryClient.track('ProvisionAddResourcesCancel');
+                telemetryClient?.track('ProvisionAddResourcesCancel');
                 closeDialog();
               }}
             />

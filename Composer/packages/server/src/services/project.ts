@@ -183,6 +183,13 @@ export class BotProjectService {
     );
     const allRecentBots = BotProjectService.recentBotProjects;
 
+    // Filter the bot projects that don't exist anymore.
+    for (const locationRef of allRecentBots) {
+      if (!(await StorageService.checkBlob(locationRef.storageId ?? 'default', locationRef.path, user))) {
+        BotProjectService.deleteRecentProject(locationRef.path);
+      }
+    }
+
     const recentBots = allRecentBots
       .filter((bot) => !Path.basename(bot.path).includes('.botproj'))
       .map((bot) => ({

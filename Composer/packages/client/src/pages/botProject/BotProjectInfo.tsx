@@ -68,7 +68,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
               <DisplayMarkdownDialog
                 content={readme}
                 hidden={readmeHidden}
-                title={'Project Readme'}
+                title={formatMessage('Project Readme')}
                 onDismiss={() => {
                   setReadmeHidden(true);
                 }}

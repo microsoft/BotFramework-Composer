@@ -5,13 +5,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
-import { Shell, ExtensionSettings } from '@botframework-composer/types';
+import { ExtensionSettings } from '@botframework-composer/types';
 import { PluginType } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../LoadingSpinner';
 import { PluginAPI } from '../../plugins/api';
 import { extensionSettingsState } from '../../recoilModel';
+import { useShell } from '../../shell';
 
 const containerStyles = css`
   position: relative;
@@ -38,7 +39,7 @@ interface PluginHostProps {
   pluginName: string;
   pluginType: PluginType;
   bundleId: string;
-  shell?: Shell;
+  projectId: string;
 }
 
 /** Binds closures around Composer client code to plugin iframe's window object */
@@ -76,9 +77,10 @@ function injectScript(doc: Document, id: string, src: string, async: boolean, on
  */
 export const PluginHost: React.FC<PluginHostProps> = (props) => {
   const targetRef = useRef<HTMLIFrameElement>(null);
-  const { pluginType, pluginName, bundleId, shell } = props;
+  const { pluginType, pluginName, bundleId, projectId } = props;
   const [isLoading, setIsLoading] = useState(true);
   const extensionSettings = useRecoilValue(extensionSettingsState);
+  const shell = useShell('DesignPage', projectId);
 
   useEffect(() => {
     const isReady = (ev) => {
