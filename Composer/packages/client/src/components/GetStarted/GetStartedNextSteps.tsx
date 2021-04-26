@@ -338,7 +338,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         <DisplayMarkdownDialog
           content={readme}
           hidden={readmeHidden}
-          title={'Project Readme'}
+          title={formatMessage('Project Readme')}
           onDismiss={() => {
             setReadmeHidden(true);
           }}
