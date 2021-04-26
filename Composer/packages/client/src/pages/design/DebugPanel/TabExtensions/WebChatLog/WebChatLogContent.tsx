@@ -134,7 +134,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         case 'activity':
           return (
             <WebChatActivityLogItem
-              index={index}
+              key={`webchat-activity-item-${index}`}
               isSelected={itemIsSelected(item, inspectionData)}
               item={item}
               onClickTraffic={onClickTraffic}
@@ -144,7 +144,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         case 'network':
           return (
             <WebChatNetworkLogItem
-              index={index}
+              key={`webchat-network-item-${index}`}
               isSelected={itemIsSelected(item, inspectionData)}
               item={item}
               onClickTraffic={onClickTraffic}
@@ -154,7 +154,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
         case 'networkError':
           return (
             <WebChatNetworkLogItem
-              index={index}
+              key={`webchat-network-item-${index}`}
               isSelected={itemIsSelected(item, inspectionData)}
               item={item}
               onClickTraffic={onClickTraffic}
