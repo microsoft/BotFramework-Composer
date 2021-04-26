@@ -22,6 +22,7 @@ const babelConfig = {
 };
 
 export default mergeConfig(baseConfig, {
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.jsx?$': [require.resolve('babel-jest'), babelConfig],
     '^.+\\.tsx?$': [require.resolve('babel-jest'), babelConfig],
