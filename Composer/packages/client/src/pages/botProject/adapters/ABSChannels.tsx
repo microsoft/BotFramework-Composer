@@ -18,7 +18,6 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { format } from 'prettier';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
