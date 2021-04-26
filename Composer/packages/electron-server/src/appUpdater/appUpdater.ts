@@ -168,32 +168,23 @@ export class AppUpdater extends EventEmitter {
   }
 
   private setFeedURL() {
-    // TODO: re-enable once testing is done
-
-    // if (this.settings.useNightly) {
-    //   log('Updates set to be retrieved from nightly repo.');
-    //   autoUpdater.setFeedURL({
-    //     provider: 'github',
-    //     repo: 'BotFramework-Composer-Nightlies',
-    //     owner: 'microsoft',
-    //     vPrefixedTagName: true, // whether our release tags are prefixed with v or not
-    //   });
-    // } else {
-    //   log('Updates set to be retrieved from stable repo.');
-    //   autoUpdater.setFeedURL({
-    //     provider: 'github',
-    //     repo: 'BotFramework-Composer',
-    //     owner: 'microsoft',
-    //     vPrefixedTagName: true,
-    //   });
-    // }
-    autoUpdater.setFeedURL({
-      provider: 'github',
-      repo: 'electron-updates-PPE-nightly',
-      owner: 'tonyanziano',
-      vPrefixedTagName: true,
-      private: true,
-    });
+    if (this.settings.useNightly) {
+      log('Updates set to be retrieved from nightly repo.');
+      autoUpdater.setFeedURL({
+        provider: 'github',
+        repo: 'BotFramework-Composer-Nightlies',
+        owner: 'microsoft',
+        vPrefixedTagName: true, // whether our release tags are prefixed with v or not
+      });
+    } else {
+      log('Updates set to be retrieved from stable repo.');
+      autoUpdater.setFeedURL({
+        provider: 'github',
+        repo: 'BotFramework-Composer',
+        owner: 'microsoft',
+        vPrefixedTagName: true,
+      });
+    }
   }
 
   private determineUpdatePath() {
