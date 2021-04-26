@@ -53,7 +53,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   onSaveTranscript,
   onOpenBotInEmulator: openBotInEmulator,
   onSetRestartOption,
-  onCloseWebChat: hideWebChat,
+  onCloseWebChat,
 }) => {
   const menuProps: IContextualMenuProps = {
     items: [
@@ -107,7 +107,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
             },
           }}
           title={formatMessage('Close')}
-          onClick={hideWebChat}
+          onClick={onCloseWebChat}
         />
       </h4>
       <DefaultButton

@@ -235,6 +235,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         currentRestartOption={currentRestartOption}
         onCloseWebChat={() => {
           setWebChatPanelVisibility(false);
+          TelemetryClient.track('WebChatPaneClosed');
         }}
         onOpenBotInEmulator={() => {
           openBotInEmulator(projectId);
