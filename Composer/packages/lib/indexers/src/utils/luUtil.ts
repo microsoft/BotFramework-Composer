@@ -36,6 +36,8 @@ import { SectionTypes } from './qnaUtil';
 const { luParser, sectionOperator } = sectionHandler;
 const { parseFile, validateResource } = BFLUParser;
 const NEWLINE = '\r\n';
+const OrchestratorEntityPattern = new RegExp(/Do not support (\w+) entity.\.*/);
+
 export const defaultLUFeatures = {
   enablePattern: true,
   enableMLEntities: true,
@@ -112,6 +114,13 @@ export function convertLuParseResultToLuFile(
   });
 
   const appliedluFeatures = merge(defaultLUFeatures, luFeatures || {});
+  if (luFeatures.isOrchestartor) {
+    appliedluFeatures.enableCompositeEntities = false;
+    appliedluFeatures.enableListEntities = false;
+    appliedluFeatures.enableMLEntities = false;
+    appliedluFeatures.enablePrebuiltEntities = false;
+    appliedluFeatures.enableRegexEntities = false;
+  }
 
   const syntaxDiagnostics = Errors.map((e) => convertLuDiagnostic(e, id)) as Diagnostic[];
   const semanticDiagnostics = validateResource(resource, appliedluFeatures).map((e) =>
@@ -153,7 +162,20 @@ export function convertLuParseResultToLuFile(
     });
   }
 
-  const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics).concat(referenceDiagnostics);
+  let diagnostics = syntaxDiagnostics.concat(semanticDiagnostics).concat(referenceDiagnostics);
+
+  // if is orchestrator, report entity error
+  if (luFeatures.isOrchestartor) {
+    const orchestatorSemanticDiagnostics: Diagnostic[] = semanticDiagnostics.map((item) => {
+      const matchResult = item.message.match(OrchestratorEntityPattern);
+      if (matchResult) {
+        item.message = `Orchestrator does not support ${matchResult[1]} entities.`;
+      }
+      return item;
+    });
+    diagnostics = syntaxDiagnostics.concat(orchestatorSemanticDiagnostics).concat(referenceDiagnostics);
+  }
+
   return {
     id,
     content: Content,
