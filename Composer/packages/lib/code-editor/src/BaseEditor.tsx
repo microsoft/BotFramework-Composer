@@ -17,6 +17,9 @@ import { isElectron } from './utils';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
+  scrollbar: {
+    alwaysConsumeMouseWheel: false,
+  },
   wordWrap: 'off',
   wordWrapColumn: 120,
   fontFamily: 'Courier',

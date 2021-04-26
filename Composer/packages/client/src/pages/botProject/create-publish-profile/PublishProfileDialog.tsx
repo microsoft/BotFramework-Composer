@@ -240,7 +240,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           <Fragment>
             <div style={{ marginBottom: '16px' }}>{dialogTitle.subText}</div>
             <div css={publishSurfaceStyles}>
-              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+              <PluginHost
+                bundleId={selectedType.bundleId}
+                pluginName={selectedType.extensionId}
+                pluginType="publish"
+                projectId={projectId}
+              />
             </div>
           </Fragment>
         )}
