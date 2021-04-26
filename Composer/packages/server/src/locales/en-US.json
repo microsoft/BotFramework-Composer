@@ -4091,11 +4091,11 @@
   "what_is_the_name_of_the_custom_event_b28a7b3": {
     "message": "What is the name of the custom event?"
   },
+  "what_is_the_name_of_this_trigger_1d6db01": {
+    "message": "What is the name of this trigger?"
+  },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "What is the name of this trigger"
-  },
-  "what_is_the_name_of_this_trigger_luis_17b60a23": {
-    "message": "What is the name of this trigger (LUIS)"
   },
   "what_is_the_name_of_this_trigger_regex_f77376d7": {
     "message": "What is the name of this trigger (RegEx)"
