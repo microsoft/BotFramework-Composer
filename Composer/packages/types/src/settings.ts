@@ -134,6 +134,7 @@ export type ILUFeaturesConfig = {
   enablePrebuiltEntities?: boolean;
   enableRegexEntities?: boolean;
   enablePhraseLists?: boolean;
+  isOrchestartor?: boolean;
 };
 
 export type IQnAConfig = {
