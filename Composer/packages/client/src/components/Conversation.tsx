@@ -13,12 +13,6 @@ const container = css`
   position: relative;
 `;
 
-const top = css`
-  width: 100%;
-  height: 10px;
-  background-color: #efeaf5;
-`;
-
 // -------------------- Conversation -------------------- //
 
 const Conversation = (props) => {
