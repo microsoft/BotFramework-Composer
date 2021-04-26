@@ -37,7 +37,7 @@ const DialogTitle = () => {
 };
 
 export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (props) => {
-  const { onDismiss, onSubmit, qnaFiles, projectId, initialName, setInitialName } = props;
+  const { onDismiss, onSubmit, qnaFiles, projectId, initialName, onUpdateInitialName } = props;
   const actions = useRecoilValue(dispatcherState);
   const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
 
@@ -48,7 +48,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
 
   const handleDismiss = () => {
     onDismiss?.();
-    setInitialName?.('');
+    onUpdateInitialName?.('');
     actions.createQnAFromScratchDialogCancel({ projectId });
     TelemetryClient.track('AddNewKnowledgeBaseCanceled');
   };
@@ -78,7 +78,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
             value={formData.name}
             onChange={(e, name = '') => {
               updateField('name', name);
-              setInitialName?.(name);
+              onUpdateInitialName?.(name);
             }}
           />
         </Stack>
@@ -108,7 +108,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
               return;
             }
             onSubmit(formData);
-            setInitialName?.('');
+            onUpdateInitialName?.('');
             TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
           }}
         />

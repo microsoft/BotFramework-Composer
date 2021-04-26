@@ -26,7 +26,7 @@ export const CreateQnAModal: React.FC<CreateQnAFromModalProps> = (props) => {
   const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
   const [initialName, setInitialName] = useState<string>('');
   if (showCreateQnAFromScratchDialog) {
-    return <CreateQnAFromScratchModal {...props} initialName={initialName} setInitialName={setInitialName} />;
+    return <CreateQnAFromScratchModal {...props} initialName={initialName} onUpdateInitialName={setInitialName} />;
   } else if (showCreateQnAFromUrlDialog) {
     return (
       <CreateQnAFromUrlModal
@@ -34,7 +34,7 @@ export const CreateQnAModal: React.FC<CreateQnAFromModalProps> = (props) => {
         defaultLocale={defaultLocale}
         initialName={initialName}
         locales={locales}
-        setInitialName={setInitialName}
+        onUpdateInitialName={setInitialName}
       />
     );
   } else {
