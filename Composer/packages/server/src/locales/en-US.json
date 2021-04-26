@@ -635,6 +635,9 @@
   "close_d634289d": {
     "message": "Close"
   },
+  "close_webchat_b26d03e1": {
+    "message": "Close WebChat"
+  },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
   },
@@ -1732,9 +1735,6 @@
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
-  },
-  "getting_help_ab6811b0": {
-    "message": "Getting Help"
   },
   "getting_template_910a4116": {
     "message": "Getting template"
@@ -3073,6 +3073,9 @@
   },
   "replace_this_dialog_e304015e": {
     "message": "Replace this dialog"
+  },
+  "report_a_bug_or_request_a_feature_36eb52c7": {
+    "message": "Report a bug or request a feature"
   },
   "reprompt_dialog_event_c42d2c33": {
     "message": "Reprompt dialog event"

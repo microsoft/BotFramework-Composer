@@ -16,12 +16,14 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 
-import { ConversationService, ChatData, BotSecrets } from './utils/conversationService';
+import { ConversationService } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
-import { WebChatContainer } from './WebChatContainer';
-import { RestartOption } from './type';
+import { WebChatComposer } from './WebChatComposer';
+import { BotSecrets, ChatData, RestartOption } from './types';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
+// TODO: Refactor to include Webchat header component as a part of WebchatComposer to avoid this variable.
+const webChatHeaderHeight = '85px';
 
 export interface WebChatPanelProps {
   botData: {
@@ -48,6 +50,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     clearWebChatLogs,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setWebChatPanelVisibility,
   } = useRecoilValue(dispatcherState);
   const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
@@ -225,11 +228,16 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   };
 
   return (
-    <div ref={webChatPanelRef} style={{ height: 'calc(100% - 38px)' }}>
+    <div ref={webChatPanelRef} style={{ height: `calc(100% - ${webChatHeaderHeight})` }}>
       <WebChatHeader
+        botName={botName}
         conversationId={currentConversation}
         currentRestartOption={currentRestartOption}
-        openBotInEmulator={() => {
+        onCloseWebChat={() => {
+          setWebChatPanelVisibility(false);
+          TelemetryClient.track('WebChatPaneClosed');
+        }}
+        onOpenBotInEmulator={() => {
           openBotInEmulator(projectId);
           TelemetryClient.track('EmulatorButtonClicked', { isRoot: true, projectId, location: 'WebChatPane' });
         }}
@@ -237,7 +245,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         onSaveTranscript={onSaveTranscriptClick}
         onSetRestartOption={onSetRestartOption}
       />
-      <WebChatContainer
+      <WebChatComposer
         activeLocale={activeLocale}
         botUrl={botUrl}
         chatData={chats[currentConversation]}

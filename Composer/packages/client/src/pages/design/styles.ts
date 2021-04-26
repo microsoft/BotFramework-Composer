@@ -18,6 +18,7 @@ export const contentWrapper = css`
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
+  position: relative;
   label: DesignPageContent;
 `;
 
@@ -61,14 +62,14 @@ export const assetTree = css`
 `;
 /*******/
 
-export const editorContainer = css`
+export const splitPaneContainer = css`
   display: flex;
   flex-direction: column;
   height: 0;
   flex-grow: 1;
 `;
 
-export const editorWrapper = css`
+export const splitPaneWrapper = css`
   display: flex;
   flex-direction: row;
   flex-grow: 1;
