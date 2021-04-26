@@ -9,10 +9,10 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 
-import { NextSteps } from './types';
+import { NextStep } from './types';
 
 type TaskProps = {
-  step: NextSteps;
+  step: NextStep;
 };
 
 const getStartedStepStyle = (disabled?: boolean) => css`
@@ -29,7 +29,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
     ? SharedColors.orange20
     : SharedColors.cyanBlue10;
   return (
-    <div css={getStartedStepStyle(props.step.isDisabled)}>
+    <div css={getStartedStepStyle(props.step.hideFeatureStep)}>
       <ActionButton
         iconProps={{ iconName: icon, id: props.step.key }}
         styles={{
