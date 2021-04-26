@@ -307,7 +307,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   }, [botProject, props.requiresLUIS, props.requiresQNA, props.showTeachingBubble]);
 
   const getStartedTaskElement = (step: NextSteps) => (
-    <DisableFeatureToolTip key={'disableToolTip-' + step.key} isPVABot>
+    <DisableFeatureToolTip key={'disableToolTip-' + step.key} isPVABot={step.isDisabled}>
       <GetStartedTask key={step.key} step={step} />
     </DisableFeatureToolTip>
   );
