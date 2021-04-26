@@ -20,8 +20,8 @@
   "ErrorInfo_part3": {
     "message": "Try navigating to another node in the visual editor."
   },
-  "a_add_from_package_manager_a_4515cfc2": {
-    "message": "<a>Add from package manager</a>."
+  "a_add_from_package_manager_a_9eee7630": {
+    "message": "<a>Add from package manager</a>"
   },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "a dialog file must have a name"
@@ -590,8 +590,8 @@
   "cannot_upload_file_conversation_not_found_8a983504": {
     "message": "Cannot upload file. Conversation not found."
   },
-  "carousal_c65edfcd": {
-    "message": "Carousal"
+  "carousel_a2321ac9": {
+    "message": "Carousel"
   },
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
@@ -2362,9 +2362,6 @@
   },
   "minimum_f31b05ab": {
     "message": "Minimum"
-  },
-  "miss_dispatch_modal_cf2d278e": {
-    "message": "Miss dispatch modal"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
