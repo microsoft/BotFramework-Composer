@@ -47,6 +47,7 @@ const editPublishProfile = {
 
 type PublishTargetsProps = {
   projectId: string;
+  completePartial?: boolean;
   scrollToSectionId?: string;
 };
 
@@ -61,6 +62,17 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
+
+  useEffect(() => {
+    if (props.completePartial && publishTargets && publishTargets.length > 0) {
+      setCurrent({ item: publishTargets[0], index: 0 });
+      if (isShowAuthDialog(true)) {
+        setShowAuthDialog(true);
+      } else {
+        setDialogHidden(false);
+      }
+    }
+  }, [props.completePartial, publishTargets]);
 
   useEffect(() => {
     if (projectId) {
