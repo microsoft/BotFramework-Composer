@@ -170,6 +170,7 @@ export function convertLuParseResultToLuFile(
       const matchResult = item.message.match(OrchestratorEntityPattern);
       if (matchResult) {
         item.message = `Orchestrator does not support ${matchResult[1]} entities.`;
+        item.severity = DiagnosticSeverity.Warning;
       }
       return item;
     });
