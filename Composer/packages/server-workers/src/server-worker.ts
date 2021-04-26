@@ -10,6 +10,8 @@ import type { DialogMergeArgs } from './workers/dialogMerge.worker';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isElectron: boolean = process.versions && (process.versions as any).electron;
 
+export const isProduction = process.env.NODE_ENV === 'production';
+
 export type WorkerName = 'dialogMerge' | 'templateInstallation';
 
 export class ServerWorker {
@@ -67,7 +69,7 @@ export class ServerWorker {
   }
 
   private static getWorkerPath(workerName: WorkerName) {
-    if (isElectron) {
+    if (isElectron && isProduction) {
       return path.join(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (process as any).resourcesPath,
