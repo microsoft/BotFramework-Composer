@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { dirname } from 'path';
-
 import rimraf from 'rimraf';
 import fs from 'fs-extra';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
@@ -12,7 +10,6 @@ import { nanoid } from 'nanoid';
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
 import { LocationRef } from '../interface';
-import { BotProjectService } from '../../../services/project';
 
 import { Resource } from './../interface';
 
