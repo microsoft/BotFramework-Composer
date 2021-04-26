@@ -13,18 +13,12 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/preset-react": "^7.9.4",
-    "@babel/preset-typescript": "^7.9.0",
+    "@swc-node/jest": "^1.2.0",
     "@testing-library/jest-dom": "^5.9.0",
-    "@testing-library/react": "^10.0.4",
     "@testing-library/react-hooks": "^3.2.1",
-    "babel-jest": "^26.0.1",
-    "jest": "^26.0.1",
+    "@testing-library/react": "^10.0.4",
     "jest-github-actions-reporter": "^1.0.3",
+    "jest": "^26.0.1",
     "lodash": "^4.17.19",
     "react-test-renderer": "^16.13.1"
   },

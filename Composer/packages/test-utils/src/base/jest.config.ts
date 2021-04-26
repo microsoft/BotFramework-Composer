@@ -18,6 +18,15 @@ const base: Partial<JestOverrides> = {
     'testUtils.ts',
   ],
 
+  transform: {
+    '.(js|jsx|ts|tsx)': [
+      '@swc-node/jest',
+      {
+        dynamicImport: true,
+      },
+    ],
+  },
+
   transformIgnorePatterns: ['/node_modules/'],
 
   setupFiles: [path.resolve(__dirname, 'setupEnv.js')],
