@@ -9,12 +9,10 @@ import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import formatMessage from 'format-message';
 import { LoadingSpinner } from '@bfc/ui-shared/lib/components/LoadingSpinner';
 
 import { botDisplayNameState } from '../../../../recoilModel';
-import { ContentProps, SCHEMA_URI, VERSION_REGEX } from '../constants';
+import { ContentProps, SCHEMA_URI } from '../constants';
 
 const styles = {
   row: css`
@@ -28,12 +26,6 @@ const styles = {
   `,
 };
 
-const chooseVersion = css`
-  display: flex;
-  width: 72%;
-  margin: 10px 18px;
-  justify-content: space-between;
-`;
 const InlineLabelField: React.FC<FieldProps> = (props) => {
   const { id, placeholder, rawErrors, value = '', onChange } = props;
 
@@ -139,25 +131,8 @@ export const Description: React.FC<ContentProps> = ({
     properties,
   };
 
-  const [version] = VERSION_REGEX.exec(SCHEMA_URI) || [];
-
   return (
     <Fragment>
-      <div css={chooseVersion}>
-        <Label
-          required
-          styles={{
-            root: { fontWeight: 400 },
-          }}
-        >
-          {formatMessage('Manifest Version')}
-        </Label>
-        <TextField
-          disabled
-          defaultValue={formatMessage('Version {version}', { version })}
-          styles={{ root: { width: '350px' } }}
-        />
-      </div>
       {isFetchCompleted ? (
         <AdaptiveForm errors={errors} formData={value} schema={schema} uiOptions={uiOptions} onChange={onChange} />
       ) : (
