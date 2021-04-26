@@ -4,6 +4,7 @@
 import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+import { SCHEMA_URI } from '../design/exportSkillModal/constants';
 
 import { Bot, BotStatus, BotPublishHistory, BotProjectType, BotPropertyType } from './type';
 
@@ -31,15 +32,15 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
   return { botPropertyData, botList };
 };
 
-const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string): string[] => {
-  const urls: string[] = [];
+const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string): string => {
+  let url: string = '';
   for (const skillManifest of skillManifests || []) {
-    if (!urls.includes(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`)) {
-      urls.push(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`);
+    if (skillManifest.content.$schema === SCHEMA_URI && !url) {
+      url = `https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`;
     }
   }
 
-  return urls;
+  return url;
 };
 
 export const generateBotStatusList = (
@@ -48,7 +49,7 @@ export const generateBotStatusList = (
   botPublishHistoryList: BotPublishHistory
 ): BotStatus[] => {
   const bots = botList.map((bot) => {
-    const botStatus: BotStatus = Object.assign({ skillManifestUrls: [] }, bot);
+    const botStatus: BotStatus = Object.assign({ skillManifestUrl: '' }, bot);
     const publishTargets: PublishTarget[] = botPropertyData[bot.id].publishTargets;
     const publishHistory = botPublishHistoryList[bot.id];
     botStatus.publishTargets = publishTargets;
@@ -66,7 +67,7 @@ export const generateBotStatusList = (
         const config = JSON.parse(currentPublishTarget.configuration);
         const appId = config?.settings?.MicrosoftAppId;
         if (appId) {
-          botStatus.skillManifestUrls = findSkillManifestUrl(
+          botStatus.skillManifestUrl = findSkillManifestUrl(
             botPropertyData[bot.id].skillManifests,
             config.hostname,
             appId

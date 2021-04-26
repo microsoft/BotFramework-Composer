@@ -11,11 +11,10 @@ import { useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { LoadingSpinner } from '@bfc/ui-shared/lib/components/LoadingSpinner';
 
 import { botDisplayNameState } from '../../../../recoilModel';
-import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
+import { ContentProps, SCHEMA_URI, VERSION_REGEX } from '../constants';
 
 const styles = {
   row: css`
@@ -101,38 +100,20 @@ export const Description: React.FC<ContentProps> = ({
     );
   }, [schema]);
 
-  const options: IDropdownOption[] = useMemo(
-    () =>
-      SCHEMA_URIS.map((key, index) => {
-        const [version] = VERSION_REGEX.exec(key) || [];
-        let selected = false;
-        if ($schema) {
-          selected = $schema && key === $schema;
-        } else {
-          selected = !index;
-        }
-        return {
-          text: formatMessage('Version {version}', { version }),
-          key,
-          selected,
-        };
-      }),
-    [$schema]
-  );
-
   useEffect(() => {
-    const skillManifest = skillManifests.find(
-      (manifest) => manifest.content.$schema === ($schema || SCHEMA_URIS[0])
-    ) || {
-      content: {
-        $schema: $schema || SCHEMA_URIS[0],
-        $id: `${botName}-${uuid()}`,
-        endpoints: [{}],
-        name: botName,
-        ...rest,
-      },
-    };
-    setSkillManifest(skillManifest);
+    if (!$schema) {
+      const skillManifest = skillManifests.find((manifest) => manifest.content.$schema === SCHEMA_URI) || {
+        content: {
+          $schema: SCHEMA_URI,
+          $id: `${botName}-${uuid()}`,
+          endpoints: [{}],
+          name: botName,
+          ...rest,
+        },
+      };
+
+      setSkillManifest(skillManifest);
+    }
     (async function () {
       try {
         if ($schema) {
@@ -158,15 +139,7 @@ export const Description: React.FC<ContentProps> = ({
     properties,
   };
 
-  const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    if (option) {
-      const skillManifest = skillManifests.find((manifest) => manifest.content.$schema === option.key) || {
-        content: { $schema: option.key as string },
-      };
-      setIsFetchCompleted(false);
-      setSkillManifest(skillManifest);
-    }
-  };
+  const [version] = VERSION_REGEX.exec(SCHEMA_URI) || [];
 
   return (
     <Fragment>
@@ -179,17 +152,10 @@ export const Description: React.FC<ContentProps> = ({
         >
           {formatMessage('Manifest Version')}
         </Label>
-        <Dropdown
-          disabled={!isFetchCompleted}
-          errorMessage={errors?.version}
-          options={options}
-          responsiveMode={ResponsiveMode.large}
-          styles={{
-            root: {
-              width: '350px',
-            },
-          }}
-          onChange={handleChange}
+        <TextField
+          disabled
+          styles={{ root: { width: '350px' } }}
+          defaultValue={formatMessage('Version {version}', { version })}
         />
       </div>
       {isFetchCompleted ? (
