@@ -219,7 +219,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   responsiveMode={ResponsiveMode.large}
                   onChange={(e, option?: IDropdownOption) => {
                     if (option) {
-                      console.log(option);
                       setFormData({
                         ...formData,
                         endpointName: option.key as string,
