@@ -8,15 +8,12 @@ import logger from '../logger';
 import AssetService from '../services/asset';
 
 export const defaultSortOrder = [
-  { generatorName: '@microsoft/generator-bot-empty', displayName: 'Blank bot' },
-  { generatorName: '@microsoft/generator-bot-conversational-core', displayName: 'Basic bot' },
-  { generatorName: '@microsoft/generator-bot-assistant-core', displayName: 'Basic assistant' },
-  { generatorName: '@microsoft/generator-bot-enterprise-assistant', displayName: 'Enterprise assistant' },
-  { generatorName: '@microsoft/generator-bot-people', displayName: 'People' },
-  { generatorName: '@microsoft/generator-bot-calendar', displayName: 'Calendar' },
+  { generatorName: '@microsoft/generator-bot-empty', displayName: 'Empty Bot' },
   { generatorName: '@microsoft/generator-bot-core-language', displayName: 'Core Bot with Language' },
+  { generatorName: '@microsoft/generator-bot-core-qna', displayName: 'Core Bot with QnA Maker' },
   { generatorName: QnABotTemplateId, displayName: 'Core Bot with QnA Maker' },
   { generatorName: '@microsoft/generator-bot-core-assistant', displayName: 'Core Assistant Bot' },
+  { generatorName: '@microsoft/generator-bot-enterprise-assistant', displayName: 'Enterprise Assistant Bot' },
   { generatorName: '@microsoft/generator-bot-enterprise-calendar', displayName: 'Enterprise Calendar Bot' },
   { generatorName: '@microsoft/generator-bot-enterprise-people', displayName: 'Enterprise People Bot' },
 ];
