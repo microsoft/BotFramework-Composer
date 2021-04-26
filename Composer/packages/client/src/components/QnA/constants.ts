@@ -36,7 +36,7 @@ export type CreateQnAFromModalProps = {
   qnaFiles: QnAFile[];
   initialName?: string;
   subscriptionKey?: string;
-  setInitialName?: (initialName: string) => void;
+  onUpdateInitialName?: (initialName: string) => void;
   onDismiss?: () => void;
   onSubmit: (formData: CreateQnAFormData) => void;
 };
@@ -49,7 +49,7 @@ export type CreateQnAFromUrlModalProps = {
   qnaFiles: QnAFile[];
   initialName?: string;
   subscriptionKey?: string;
-  setInitialName?: (initialName: string) => void;
+  onUpdateInitialName?: (initialName: string) => void;
   onDismiss?: () => void;
   onSubmit: (formData: CreateQnAFormData) => void;
 };
