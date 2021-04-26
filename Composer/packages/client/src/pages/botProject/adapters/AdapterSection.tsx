@@ -6,9 +6,9 @@ import { useEffect, useRef } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Link as RouterLink } from '@reach/router';
 
 import { title, subtitle, subtext } from '../styles';
-import { navigateTo } from '../../../utils/navigation';
 
 import ExternalAdapterSettings from './ExternalAdapterSettings';
 import ABSChannels from './ABSChannels';
@@ -54,14 +54,12 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
             'Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>',
             {
               a: ({ children }) => (
-                <Link
+                <RouterLink
                   key="package-adapter-settings-page"
-                  onClick={() => {
-                    navigateTo(`/bot/${projectId}/plugin/package-manager/package-manager`);
-                  }}
+                  to={`/bot/${projectId}/plugin/package-manager/package-manager`}
                 >
                   {children}
-                </Link>
+                </RouterLink>
               ),
               a2: ({ children }) => (
                 <Link

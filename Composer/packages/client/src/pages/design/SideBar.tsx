@@ -263,7 +263,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
       : await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subTextNoUse);
 
     if (!confirmRemove) return;
-    removeSkillFromBotProject(skillId);
+    await removeSkillFromBotProject(skillId);
   }
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);

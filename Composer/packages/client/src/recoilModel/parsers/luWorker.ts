@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection, LuFile, TextFile } from '@bfc/shared';
+import { LuIntentSection, LuFile, TextFile, ILUFeaturesConfig } from '@bfc/shared';
 
 import Worker from './workers/luParser.worker.ts';
 import { BaseWorker } from './baseWorker';
@@ -21,8 +21,8 @@ class LuWorker extends BaseWorker<LuActionType> {
     return this.sendMsg<LuParsePayload>(LuActionType.Parse, payload);
   }
 
-  parseAll(luResources: TextFile[], luFeatures) {
-    const payload = { luResources, luFeatures };
+  parseAll(luResources: TextFile[], luFeaturesMap: { [key: string]: ILUFeaturesConfig }) {
+    const payload = { luResources, luFeaturesMap };
     return this.sendMsg<LuParseAllPayload>(LuActionType.ParseAll, payload);
   }
 
