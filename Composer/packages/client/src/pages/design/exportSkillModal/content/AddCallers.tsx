@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { tableColumnHeader, tableRow, tableRowItem } from '../../../botProject/styles';
 import { ContentProps } from '../constants';
@@ -42,12 +42,16 @@ const removeCaller = {
 export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdateCallers }) => {
   const handleRemove = (index) => {
     onUpdateCallers(callers.filter((_, i) => i !== index));
+    setFocusCallerIndex(undefined);
   };
   const handleAddNewAllowedCallerClick = () => {
     const currentCallers = callers.slice();
-    currentCallers?.push('0000-11111-00000-11111');
+    currentCallers?.push('');
     onUpdateCallers(currentCallers);
+    setFocusCallerIndex(currentCallers.length - 1);
   };
+
+  const [focusCallerIndex, setFocusCallerIndex] = useState<number | undefined>(0);
 
   return (
     <div>
@@ -59,12 +63,20 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdat
           <div key={index} css={tableRow}>
             <div css={tableRowItem('90%')} title={caller}>
               <TextField
-                borderless
+                borderless={focusCallerIndex !== index}
                 value={caller}
+                onBlur={(_) => {
+                  if (focusCallerIndex === index) {
+                    setFocusCallerIndex(undefined);
+                  }
+                }}
                 onChange={(e, newValue) => {
                   const currentCallers = callers.slice();
                   currentCallers[index] = newValue ?? '';
                   onUpdateCallers(currentCallers);
+                }}
+                onFocus={() => {
+                  setFocusCallerIndex(index);
                 }}
               />
             </div>
