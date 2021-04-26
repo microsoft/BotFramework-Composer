@@ -41,7 +41,7 @@ export const About: React.FC<RouteComponentProps> = () => {
             <div css={about.diagnosticsInfoTextAlignLeft}>{formatMessage(`SDK runtime packages`)}</div>
             <div css={about.diagnosticsInfoTextAlignLeft}>
               <Link
-                href={`https://www.nuget.org/packages/Microsoft.Bot.Builder/${process.env.SDK_PACKAGE_VERSION}`}
+                href={`https://github.com/microsoft/botframework-sdk/releases/tag/${process.env.SDK_PACKAGE_VERSION}`}
                 style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 target={'_blank'}
               >
@@ -52,12 +52,17 @@ export const About: React.FC<RouteComponentProps> = () => {
         </div>
       </div>
       <div css={about.linkRow}>
+        <Link href={'https://docs.microsoft.com/en-us/composer/introduction'} styles={about.helpLink} target={'_blank'}>
+          {formatMessage(`Documentation`)}
+        </Link>
+      </div>
+      <div css={about.linkRow}>
         <Link
           href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
           styles={about.helpLink}
           target={'_blank'}
         >
-          {formatMessage(`Getting Help`)}
+          {formatMessage(`Report a bug or request a feature`)}
         </Link>
       </div>
       <div css={about.linkContainer}>
