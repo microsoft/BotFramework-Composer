@@ -7,7 +7,7 @@ import { useState, MouseEvent, KeyboardEvent } from 'react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   summary: React.ReactNode;
   depth?: number;
   detailsRef?: (el: HTMLElement | null) => void;
@@ -16,13 +16,15 @@ type Props = {
   isActive?: boolean;
 };
 
-const listItemStyle = (isActive: boolean, isOpen: boolean) => css`
+const listItemStyle = (isActive: boolean, isOpen: boolean, hasChildren: boolean) => css`
   label: listItem;
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
   }
   background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
-  ${isOpen
+  ${!hasChildren
+    ? 'list-style: none'
+    : isOpen
     ? `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 8 8 h 16 l -8 8 l -8 -8'/%3E%3C/svg%3E");`
     : `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 16 0 v 16 l 8 -8 l -8 -8'/%3E%3C/svg%3E");`}
 `;
@@ -74,10 +76,10 @@ export const ExpandableNode = ({
       onKeyDown={handleKey}
     >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-      <li css={listItemStyle(isActive, isExpanded)} data-testid={'summaryTag'}>
+      <li css={listItemStyle(isActive, isExpanded, children != null)} data-testid={'summaryTag'}>
         {summary}
       </li>
-      {isExpanded && <div role="group">{children}</div>}
+      {children != null && isExpanded && <div role="group">{children}</div>}
     </ul>
   );
 };

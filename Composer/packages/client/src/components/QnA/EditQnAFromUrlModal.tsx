@@ -70,7 +70,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
   return (
     <Dialog
       dialogContentProps={{
-        type: DialogType.close,
+        type: DialogType.normal,
         title: <DialogTitle />,
         styles: styles.dialog,
       }}
@@ -87,7 +87,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
-            placeholder={formatMessage('Type a name that describes this content')}
+            placeholder={formatMessage('Type a name for this knowledge base')}
             styles={textFieldKBNameFromScratch}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
