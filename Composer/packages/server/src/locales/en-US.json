@@ -635,6 +635,9 @@
   "close_d634289d": {
     "message": "Close"
   },
+  "close_webchat_b26d03e1": {
+    "message": "Close WebChat"
+  },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
   },
