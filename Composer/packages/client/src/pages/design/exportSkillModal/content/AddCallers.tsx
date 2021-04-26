@@ -7,8 +7,8 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import React, { useState } from 'react';
+import { ITextField, ITextFieldProps, TextField, TextFieldBase } from 'office-ui-fabric-react/lib/TextField';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { tableColumnHeader, tableRow, tableRowItem } from '../../../botProject/styles';
 import { ContentProps } from '../constants';
@@ -39,6 +39,31 @@ const removeCaller = {
   },
 };
 
+interface BorderlessTextFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
+  componentFocusOnMount?: boolean;
+  onBlur?: () => void;
+  onChange: (e, newValue?: string) => void;
+  onFocus?: () => void;
+}
+const BorderlessTextField: React.FC<BorderlessTextFieldProps> = (props) => {
+  const { componentFocusOnMount, borderless, value, onBlur, onChange, onFocus } = props;
+  const fieldRef = useRef<ITextField>(null);
+  useEffect(() => {
+    if (componentFocusOnMount) {
+      fieldRef.current?.focus();
+    }
+  }, []);
+  return (
+    <TextField
+      borderless={borderless}
+      componentRef={fieldRef}
+      value={value}
+      onBlur={onBlur}
+      onChange={onChange}
+      onFocus={onFocus}
+    />
+  );
+};
 export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdateCallers }) => {
   const handleRemove = (index) => {
     onUpdateCallers(callers.filter((_, i) => i !== index));
@@ -59,13 +84,15 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdat
         <div css={tableColumnHeader()}>{formatMessage('Allowed Callers')}</div>
       </div>
       {callers?.map((caller, index) => {
+        const isFocus = focusCallerIndex === index;
         return (
           <div key={index} css={tableRow}>
             <div css={tableRowItem('90%')} title={caller}>
-              <TextField
-                borderless={focusCallerIndex !== index}
+              <BorderlessTextField
+                borderless={!isFocus}
+                componentFocusOnMount={isFocus}
                 value={caller}
-                onBlur={(_) => {
+                onBlur={() => {
                   if (focusCallerIndex === index) {
                     setFocusCallerIndex(undefined);
                   }
