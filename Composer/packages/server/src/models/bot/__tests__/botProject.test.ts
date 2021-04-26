@@ -1,13 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { dirname } from 'path';
+
+import rimraf from 'rimraf';
 import fs from 'fs-extra';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import endsWith from 'lodash/endsWith';
+import { nanoid } from 'nanoid';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
 import { LocationRef } from '../interface';
+import { BotProjectService } from '../../../services/project';
 
 import { Resource } from './../interface';
 
@@ -27,11 +32,17 @@ jest.mock('../../../services/asset', () => {
   };
 });
 
-const botDir = '../../../__mocks__/samplebots/bot1';
+jest.mock('../process/orchestratorBuilder', () => ({
+  warmupCache: jest.fn(),
+  build: jest.fn(),
+}));
+
+const newBotName = nanoid();
+const botDir = Path.resolve(__dirname, `../../../__mocks__/samplebots/${newBotName}`);
 
 const mockLocationRef: LocationRef = {
   storageId: 'default',
-  path: Path.join(__dirname, `${botDir}`),
+  path: botDir,
 };
 let proj: BotProject;
 
@@ -40,13 +51,26 @@ const cleanup = (dirs: string | string[]) => {
 
   for (const dir of targets) {
     try {
-      fs.emptyDirSync(dir);
-      fs.rmdirSync(dir);
+      rimraf.sync(dir);
     } catch {
       // ignore
     }
   }
 };
+
+beforeAll(async () => {
+  // create a new bot just for these tests to avoid race conditions
+  const sampleBotDir = '../../../__mocks__/samplebots/bot1';
+  const sample = new BotProject({
+    storageId: 'default',
+    path: Path.join(__dirname, sampleBotDir),
+  });
+  await sample.copyTo(mockLocationRef);
+});
+
+afterAll(() => {
+  cleanup(botDir);
+});
 
 beforeEach(async () => {
   proj = new BotProject(mockLocationRef);
@@ -82,7 +106,7 @@ describe('createFromTemplate', () => {
   const content = JSON.stringify(new DialogFactory({}).create(SDKKinds.AdaptiveDialog), null, 2) + '\n';
 
   afterEach(() => {
-    cleanup(Path.resolve(__dirname, `${botDir}/dialogs/${dialogName}`));
+    cleanup(Path.join(botDir, `/dialogs/${dialogName}`));
   });
 
   it('should create a dialog file with given steps', async () => {
@@ -94,7 +118,7 @@ describe('createFromTemplate', () => {
   });
 });
 
-const copyDir = Path.join(__dirname, botDir, '../copy');
+const copyDir = Path.join(botDir, '../copy');
 
 describe('copyTo', () => {
   const locationRef: LocationRef = {
@@ -148,7 +172,7 @@ describe('modify non exist files', () => {
 
 describe('lg operations', () => {
   afterEach(() => {
-    cleanup(Path.resolve(__dirname, `${botDir}/dialogs/root`));
+    cleanup(Path.join(botDir, '/dialogs/root'));
   });
 
   it('should create lg file and update index', async () => {
@@ -201,7 +225,7 @@ describe('lg operations', () => {
 
 describe('lu operations', () => {
   afterEach(() => {
-    cleanup([Path.resolve(__dirname, `${botDir}/dialogs/root`), Path.resolve(__dirname, `${botDir}/generated`)]);
+    cleanup([Path.join(botDir, '/dialogs/root'), Path.join(botDir, '/generated')]);
   });
 
   it('should create lu file and update index', async () => {
@@ -262,11 +286,6 @@ describe('qna operations', () => {
   });
 });
 describe('buildFiles', () => {
-  const path = Path.resolve(__dirname, `${botDir}/generated`);
-  afterEach(() => {
-    cleanup(path);
-  });
-
   it('should build lu & qna file successfully', async () => {
     await proj.init();
     const luisConfig = {
