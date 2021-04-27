@@ -454,10 +454,15 @@ export class BotProjectService {
     const { oldProjectId, name, description, location, storageId } = req.body;
     const user = await ExtensionContext.getUserFromRequest(req);
 
+    const language = 'dotnet';
+    const hostingPlatform = 'webapp';
+
     try {
       const locationRef = getLocationRef(location, storageId, name);
 
       await BotProjectService.cleanProject(locationRef);
+
+      log('Downloading adaptive generator');
 
       // Update status for polling
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
@@ -468,8 +473,8 @@ export class BotProjectService {
         name,
         locationRef,
         jobId,
-        'webapp',
-        'dotnet',
+        hostingPlatform,
+        language,
         {
           applicationSettingsDirectory: 'settings',
         },
@@ -481,9 +486,16 @@ export class BotProjectService {
 
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Migrating data'));
 
+      log('Migrating files...');
+
       const originalProject = await BotProjectService.getProjectById(oldProjectId, user);
       if (originalProject.settings) {
         const originalFiles = originalProject.getProject().files;
+
+        console.log(
+          'ORIGINAL FILES',
+          originalFiles.map((f) => f.name)
+        );
 
         // pass in allowPartialBots = true so that this project can be opened even though
         // it doesn't yet have a root dialog...
@@ -547,10 +559,15 @@ export class BotProjectService {
           },
         };
 
+        log('Update settings...');
+
         // adjust settings from old format to new format
         await currentProject.updateEnvSettings(newSettings);
 
+        log('Copy boilerplate...');
         await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
+        log('Update bot info...');
         await currentProject.updateBotInfo(name, description, true);
 
         const runtime = ExtensionContext.getRuntimeByProject(currentProject);
@@ -558,6 +575,7 @@ export class BotProjectService {
         if (runtimePath) {
           // install all dependencies and build the app
           BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
+          log('Build new runtime...');
           await runtime.build(runtimePath, currentProject);
         }
 

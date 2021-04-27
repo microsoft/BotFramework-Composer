@@ -14,6 +14,7 @@ const BotStructureTemplate = {
   qna: 'knowledge-base/${LOCALE}/${BOTNAME}.${LOCALE}.qna',
   sourceQnA: 'knowledge-base/source/${FILENAME}.source.${LOCALE}.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
+  schemas: 'schemas/${FILENAME}',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
   common: {
@@ -121,7 +122,8 @@ export const parseFileName = (name: string, defaultLocale: string) => {
 
 export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
 export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config.json');
-
+export const isSchema = (fileName: string) =>
+  (fileName.startsWith('sdk') || fileName.startsWith('app')) && fileName.endsWith('schema'); // catch sdk.schema and sdk.uischema
 export const defaultManifestFilePath = (botName: string, fileName: string): string => {
   return templateInterpolate(BotStructureTemplate.manifestLu, {
     BOTNAME: botName,
@@ -144,6 +146,12 @@ export const defaultFilePath = (
   const { endpoint = '', rootDialogId = '' } = options;
   const { fileId, locale, fileType, dialogId } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
+
+  if (isSchema(filename)) {
+    return templateInterpolate(Path.join(endpoint, BotStructureTemplate.schemas), {
+      FILENAME: filename,
+    });
+  }
 
   // now recognizer extension is .lu.dialog or .qna.dialog
   if (isRecognizer(filename)) {
