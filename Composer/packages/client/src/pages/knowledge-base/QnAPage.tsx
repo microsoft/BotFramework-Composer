@@ -130,7 +130,6 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
-      useDebugPane
       useNewTree
       contentStyle={qnaContentStyle}
       data-testid="QnAPage"
