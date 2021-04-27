@@ -665,6 +665,9 @@
   "common_7911ab4b": {
     "message": "Common"
   },
+  "complete_your_publishing_profile_7240d0d6": {
+    "message": "Complete your publishing profile"
+  },
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
   },
@@ -905,9 +908,6 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
-  "create_kb_e78571ba": {
-    "message": "Create KB"
-  },
   "create_knowledge_base_db6d66c4": {
     "message": "Create knowledge base"
   },
@@ -925,9 +925,6 @@
   },
   "create_new_knowledge_base_d15d6873": {
     "message": "Create new knowledge base"
-  },
-  "create_new_knowledge_base_from_scratch_638c4fd2": {
-    "message": "Create new knowledge base from scratch"
   },
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
@@ -1238,9 +1235,6 @@
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
-  "edit_a_publishing_profile_705e87e3": {
-    "message": "Edit a publishing profile"
-  },
   "edit_a_skill_5665d9ac": {
     "message": "Edit a skill"
   },
@@ -1276,6 +1270,9 @@
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
+  },
+  "edit_publishing_profile_e40a0bf1": {
+    "message": "Edit publishing profile"
   },
   "edit_schema_a2ab5695": {
     "message": "Edit schema"
@@ -1601,6 +1598,9 @@
   "filter_e3398407": {
     "message": "Filter"
   },
+  "find_additional_template_specific_guidance_for_set_d7256573": {
+    "message": "Find additional template-specific guidance for setting up your bot."
+  },
   "find_and_install_more_external_services_to_your_bo_37ef3f0c": {
     "message": "Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>"
   },
@@ -1615,6 +1615,9 @@
   },
   "find_tutorials_step_by_step_guides_discover_what_y_8f3e3863": {
     "message": "Find tutorials, step-by-step guides. Discover what you can build with Composer."
+  },
+  "finish_setting_up_your_environment_and_provisionig_11cdecda": {
+    "message": "Finish setting up your environment and provisionig resources so that you can publish your bot."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -2285,8 +2288,8 @@
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
   },
-  "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
-    "message": "Manually add question and answer pairs to create a KB"
+  "manually_add_question_and_answer_pairs_to_create_a_39089442": {
+    "message": "Manually add question and answer pairs to create a knowledge base"
   },
   "maximum_f0e8e5e4": {
     "message": "Maximum"
@@ -2783,6 +2786,9 @@
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
   },
+  "project_readme_68f88d88": {
+    "message": "Project Readme"
+  },
   "project_settings_42fe3f68": {
     "message": "Project settings"
   },
@@ -3127,6 +3133,9 @@
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
+  },
+  "review_your_template_readme_2d6eae1e": {
+    "message": "Review your template readme"
   },
   "rollback_26326307": {
     "message": "Rollback"
@@ -3881,8 +3890,8 @@
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
   },
-  "type_a_name_that_describes_this_content_d1a910b6": {
-    "message": "Type a name that describes this content"
+  "type_a_name_for_this_knowledge_base_ab07b439": {
+    "message": "Type a name for this knowledge base"
   },
   "type_and_press_enter_33a2905d": {
     "message": "Type and press enter"
@@ -4082,11 +4091,11 @@
   "what_is_the_name_of_the_custom_event_b28a7b3": {
     "message": "What is the name of the custom event?"
   },
+  "what_is_the_name_of_this_trigger_1d6db01": {
+    "message": "What is the name of this trigger?"
+  },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "What is the name of this trigger"
-  },
-  "what_is_the_name_of_this_trigger_luis_17b60a23": {
-    "message": "What is the name of this trigger (LUIS)"
   },
   "what_is_the_name_of_this_trigger_regex_f77376d7": {
     "message": "What is the name of this trigger (RegEx)"
