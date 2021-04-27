@@ -3,6 +3,7 @@
 
 import formatMessage from 'format-message';
 import React from 'react';
+import { TemplateBodyItem } from '@bfc/shared';
 
 import { CommonModalityEditorProps, SuggestedActionsStructuredResponseItem } from '../types';
 
@@ -25,9 +26,10 @@ const SuggestedActionsModalityEditor = React.memo(
     const [items, setItems] = React.useState<string[]>(response?.value || []);
 
     const onChange = React.useCallback(
-      (newItems: string[]) => {
-        setItems(newItems);
-        onUpdateResponseTemplate({ SuggestedActions: { kind: 'SuggestedActions', value: newItems } });
+      (newItems: TemplateBodyItem[]) => {
+        const newValues = newItems.map(s => s.value);
+        setItems(newValues);
+        onUpdateResponseTemplate({ SuggestedActions: { kind: 'SuggestedActions', value: newValues } });
       },
       [onUpdateResponseTemplate]
     );
@@ -45,7 +47,7 @@ const SuggestedActionsModalityEditor = React.memo(
       >
         <StringArrayEditor
           addButtonText={formatMessage('Add suggested action')}
-          items={items}
+          items={items.map(s => ({kind:'variation', value: s}))}
           lgOption={lgOption}
           lgTemplates={lgTemplates}
           memoryVariables={memoryVariables}
