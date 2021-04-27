@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
@@ -18,9 +19,11 @@ import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
+import { usePVACheck } from '../../hooks/usePVACheck';
+import { projectReadmeState } from '../../recoilModel/atoms';
 
 import { GetStartedTask } from './GetStartedTask';
-import { NextSteps } from './types';
+import { NextStep } from './types';
 import { h3Style } from './styles';
 
 type GetStartedProps = {
@@ -37,17 +40,20 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const botProject = useMemo(() => botProjects.find((b) => b.projectId === projectId), [botProjects, projectId]);
   const [displayManageLuis, setDisplayManageLuis] = useState<boolean>(false);
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
+  const readme = useRecoilValue(projectReadmeState(projectId));
+  const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
 
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const [requiredNextSteps, setRequiredNextSteps] = useState<NextSteps[]>([]);
-  const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextSteps[]>([]);
-  const [optionalSteps, setOptionalSteps] = useState<NextSteps[]>([]);
+  const [requiredNextSteps, setRequiredNextSteps] = useState<NextStep[]>([]);
+  const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextStep[]>([]);
+  const [optionalSteps, setOptionalSteps] = useState<NextStep[]>([]);
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
   const [highlightQNA, setHighlightQNA] = useState<boolean>(false);
+  const isPVABot = usePVACheck(projectId);
 
   const hideManageLuis = () => {
     setDisplayManageLuis(false);
@@ -95,16 +101,18 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
   const linkToPublishProfile = `/bot/${rootBotProjectId}/publish/all#addNewPublishProfile`;
+  const linkToCompletePublishProfile = `/bot/${rootBotProjectId}/publish/all#completePublishProfile`;
   const linkToLUISSettings = `/bot/${rootBotProjectId}/botProjectsSettings/#luisKey`;
   const linktoQNASettings = `/bot/${rootBotProjectId}/botProjectsSettings/#qnaKey`;
   const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
   const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
   const linkToAppInsights = 'http://aka.ms/botinsights';
   const linkToDevOps = 'https://aka.ms/bfcomposercicd';
+  const linkToReadme = `/bot/${rootBotProjectId}/botProjectsSettings`;
 
   useEffect(() => {
-    const newNextSteps: NextSteps[] = [];
-    const newRecomendedSteps: NextSteps[] = [];
+    const newNextSteps: NextStep[] = [];
+    const newRecomendedSteps: NextStep[] = [];
 
     const hasLUIS =
       botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion ? true : false;
@@ -112,6 +120,13 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
     const hasPublishingProfile =
       botProject?.setting?.publishTargets && botProject?.setting?.publishTargets?.length > 0 ? true : false;
+
+    const hasPartialPublishingProfile =
+      botProject?.setting?.publishTargets &&
+      botProject?.setting?.publishTargets?.length == 1 &&
+      JSON.parse(botProject.setting.publishTargets[0].configuration).hostname == ''
+        ? true
+        : false;
 
     if (props.requiresLUIS) {
       newNextSteps.push({
@@ -125,11 +140,13 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightLUIS(true);
         },
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'luis', priority: 'required' });
           openLink(linkToLUISSettings);
           if (!step?.checked) {
             setDisplayManageLuis(true);
           }
         },
+        hideFeatureStep: isPVABot,
       });
     }
     if (props.requiresQNA) {
@@ -144,11 +161,13 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           setHighlightQNA(true);
         },
         onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'qna', priority: 'required' });
           openLink(linktoQNASettings);
           if (!step?.checked) {
             setDisplayManageQNA(true);
           }
         },
+        hideFeatureStep: isPVABot,
       });
     }
     setRequiredNextSteps(newNextSteps);
@@ -157,21 +176,77 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       newNextSteps[0].highlight();
     }
 
+    if (readme) {
+      newRecomendedSteps.push({
+        key: 'readme',
+        label: formatMessage('Review your template readme'),
+        description: formatMessage('Find additional template-specific guidance for setting up your bot.'),
+        checked: false,
+        onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'readme', priority: 'recommended' });
+          openLink(linkToReadme);
+          setReadmeHidden(false);
+        },
+        hideFeatureStep: false,
+      });
+    }
     if (!hasPublishingProfile) {
       newRecomendedSteps.push({
         key: 'publishing',
         label: formatMessage('Create a publishing profile'),
         description: formatMessage('Set up hosting and other Azure resources to enable publishing'),
-        required: true,
         checked: hasPublishingProfile,
-        onClick: (step) => {
+        onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publishing', priority: 'recommended' });
           openLink(linkToPublishProfile);
         },
+        hideFeatureStep: false,
       });
     }
+    if (hasPartialPublishingProfile) {
+      newRecomendedSteps.push({
+        key: 'partialProfile',
+        label: formatMessage('Complete your publishing profile'),
+        description: formatMessage(
+          'Finish setting up your environment and provisionig resources so that you can publish your bot.'
+        ),
+        checked: hasPublishingProfile && !hasPartialPublishingProfile,
+        onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'partialProfile', priority: 'recommended' });
+          openLink(linkToCompletePublishProfile);
+        },
+        hideFeatureStep: false,
+      });
+    }
+
+    newRecomendedSteps.push({
+      key: 'editlg',
+      label: formatMessage('Edit what your bot says'),
+      description: formatMessage('Customize your bot by editing and adding bot responses.'),
+      learnMore: '',
+      checked: false,
+      onClick: () => {
+        TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlg', priority: 'recommended' });
+        openLink(linkToLGEditor);
+      },
+      hideFeatureStep: false,
+    });
+    newRecomendedSteps.push({
+      key: 'editlu',
+      label: formatMessage('Train your language model'),
+      description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
+      learnMore: '',
+      checked: false,
+      onClick: () => {
+        TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'recommended' });
+        openLink(linkToLUEditor);
+      },
+      hideFeatureStep: false,
+    });
+
     setRecommendedNextSteps(newRecomendedSteps);
 
-    const optSteps = [
+    const optSteps: NextStep[] = [
       {
         key: 'packages',
         label: formatMessage('Add packages'),
@@ -179,28 +254,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'packages', priority: 'optional' });
           openLink(linkToPackageManager);
         },
-      },
-      {
-        key: 'editlg',
-        label: formatMessage('Edit what your bot says'),
-        description: formatMessage('Customize your bot by editing and adding bot responses.'),
-        learnMore: '',
-        checked: false,
-        onClick: () => {
-          openLink(linkToLGEditor);
-        },
-      },
-      {
-        key: 'editlu',
-        label: formatMessage('Train your language model'),
-        description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
-        learnMore: '',
-        checked: false,
-        onClick: () => {
-          openLink(linkToLUEditor);
-        },
+        hideFeatureStep: isPVABot,
       },
       {
         key: 'insights',
@@ -211,8 +268,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'insights', priority: 'optional' });
           openLink(linkToAppInsights);
         },
+        hideFeatureStep: isPVABot,
       },
       {
         key: 'devops',
@@ -221,8 +280,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'devops', priority: 'optional' });
           openLink(linkToDevOps);
         },
+        hideFeatureStep: false,
       },
     ];
 
@@ -234,13 +295,22 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         learnMore: '',
         checked: false,
         onClick: () => {
+          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
           openLink(linkToConnections);
         },
+        hideFeatureStep: isPVABot,
       });
     }
 
     setOptionalSteps(optSteps);
   }, [botProject, props.requiresLUIS, props.requiresQNA, props.showTeachingBubble]);
+
+  const getStartedTaskElement = (step: NextStep) => {
+    if (!step.hideFeatureStep) {
+      return <GetStartedTask key={step.key} step={step} />;
+    }
+    return null;
+  };
 
   return (
     <ScrollablePane styles={{ root: { marginTop: 60 } }}>
@@ -264,6 +334,14 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             doNextStep('qna');
           }}
           onToggleVisibility={setDisplayManageQNA}
+        />
+        <DisplayMarkdownDialog
+          content={readme}
+          hidden={readmeHidden}
+          title={formatMessage('Project Readme')}
+          onDismiss={() => {
+            setReadmeHidden(true);
+          }}
         />
 
         {highlightLUIS && (
@@ -295,27 +373,21 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         {requiredNextSteps.length ? (
           <div>
             <h3 style={h3Style}>{formatMessage('Required')}</h3>
-            {requiredNextSteps.map((step) => (
-              <GetStartedTask key={step.key} step={step} />
-            ))}
+            {requiredNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {recommendedNextSteps.length ? (
           <div>
             <h3 style={h3Style}>{formatMessage('Recommended')}</h3>
-            {recommendedNextSteps.map((step) => (
-              <GetStartedTask key={step.key} step={step} />
-            ))}
+            {recommendedNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {optionalSteps.length ? (
           <div>
             <h3 style={h3Style}>{formatMessage('Optional')}</h3>
-            {optionalSteps.map((step) => (
-              <GetStartedTask key={step.key} step={step} />
-            ))}
+            {optionalSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
       </div>

@@ -35,11 +35,13 @@ import { mountConversationsRoutes } from './directline/mountConversationRoutes';
 import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 import { cleanHostedBots } from './utility/cleanHostedBots';
+import { getVersion } from './utility/getVersion';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
 export async function start(electronContext?: ElectronContext): Promise<number | string> {
+  setEnvDefault('COMPOSER_VERSION', getVersion());
   if (electronContext) {
     setElectronContext(electronContext);
   }

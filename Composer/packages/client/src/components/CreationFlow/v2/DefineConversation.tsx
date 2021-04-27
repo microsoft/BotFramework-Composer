@@ -116,23 +116,23 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const writable = focusedStorageFolder.writable;
   const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
   const templateProjects = useRecoilValue(templateProjectsState);
+  const currentTemplate = templateProjects.find((t) => {
+    if (t?.id) {
+      return t.id === templateId;
+    }
+  });
 
   // template ID is populated by npm package name which needs to be formatted
-  const normalizeTemplateId = (templateId?: string) => {
-    if (templateId) {
+  const normalizeTemplateId = () => {
+    if (currentTemplate) {
       // use almost the same patterns as in assetManager.ts
-      return templateId
-        .replace(/^@microsoft\/generator-bot-/, '') // clean up our complex package names
-        .replace(/^generator-/, '') // clean up other package names too
-        .trim()
-        .replace(/-/, '_')
-        .toLocaleLowerCase();
+      return currentTemplate.name.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
     }
   };
 
   const getDefaultName = () => {
     let i = 0;
-    const bot = normalizeTemplateId(templateId);
+    const bot = normalizeTemplateId();
     let defaultName = `${bot}`;
     while (
       files.some((file) => {
@@ -295,11 +295,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
 
   const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
     const result: IDropdownOption[] = [];
-    const currentTemplate = templateProjects.find((t) => {
-      if (t?.id) {
-        return t.id === templateId;
-      }
-    });
 
     if (currentTemplate) {
       if (runtimeLanguage === csharpFeedKey) {
