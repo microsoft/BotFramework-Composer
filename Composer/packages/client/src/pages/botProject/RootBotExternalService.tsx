@@ -420,7 +420,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         {localRootLuisKey && !rootLuisEndpointKey && (
           <MessageBar messageBarType={MessageBarType.info} styles={{ root: { width: '75%', marginTop: 20 } }}>
             {formatMessage.rich(
-              'Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a<a>publishing profile</a> to continue testing.<a2>Learn more</a2>',
+              'Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>',
               {
                 a: ({ children }) => (
                   <Link key="luis-endpoint-key-info" href={linkToPublishProfile}>
