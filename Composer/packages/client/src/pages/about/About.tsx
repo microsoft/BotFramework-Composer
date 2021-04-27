@@ -7,6 +7,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
+import { generateUniqueId } from '@bfc/shared';
 
 import { isElectron } from '../../utils/electronUtil';
 
@@ -30,17 +31,13 @@ export const About: React.FC<RouteComponentProps> = () => {
         </div>
         <div css={about.smallerText}>
           {formatMessage.rich(
-            `<p1>Copyright (c) Microsoft Corporation.</p1>
-            <p2>MIT License</p2>
-            <p3>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p3>
-            <p4>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p4>
-            <p5>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p5>`,
+            `<p>Copyright (c) Microsoft Corporation.</p>
+            <p>MIT License</p>
+            <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+            <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+            <p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>`,
             {
-              p1: ({ children }) => <p key="copyright">{children}</p>,
-              p2: ({ children }) => <p key="title">{children}</p>,
-              p3: ({ children }) => <p key="permission-granted">{children}</p>,
-              p4: ({ children }) => <p key="license-inclusion-clause">{children}</p>,
-              p5: ({ children }) => <p key="as-is-disclaimer">{children}</p>,
+              p: ({ children }) => <p key={generateUniqueId()}>{children}</p>,
             }
           )}
         </div>
