@@ -64,7 +64,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
     setSkillManifest(data);
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
-    const message = httpMessage.match('Unexpected string in JSON')
+    const message = httpMessage?.match('Unexpected string in JSON')
       ? httpMessage
       : formatMessage('Manifest URL can not be accessed');
 
