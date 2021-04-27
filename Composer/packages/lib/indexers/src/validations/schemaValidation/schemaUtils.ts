@@ -76,7 +76,7 @@ const discoverNestedSchemaPaths = (data: BaseSchema, schema: JSONSchema7): strin
      * Discover skip-level child elements.
      * Currently, this logic can only handle skip-level child actions under the 'actions' field.
      * To discover all possible actions under arbitrary levels / field names, needs to traverse the schema tree.
-     * 
+     *
      * Example: (Reference to SwitchCondition.schema: https://github.com/microsoft/botbuilder-dotnet/blob/main/libraries/Microsoft.Bot.Builder.Dialogs.Adaptive/Schemas/Actions/Microsoft.SwitchCondition.schema)
      *  properties.cases.items.properties = {
      *   "value": { ... },
@@ -92,9 +92,9 @@ const discoverNestedSchemaPaths = (data: BaseSchema, schema: JSONSchema7): strin
      */
     const actionsDefUnderItems = get(propertyDef, 'items.properties.actions');
     const schemaHasSkipLevelActions =
-      propertyDef?.type === 'array'
-      && Boolean(actionsDefUnderItems)
-      && propertyDefinesActionArray(actionsDefUnderItems);
+      propertyDef?.type === 'array' &&
+      Boolean(actionsDefUnderItems) &&
+      propertyDefinesActionArray(actionsDefUnderItems);
 
     if (schemaHasSkipLevelActions) {
       propertyData.forEach((caseData, caseIndex) => {
@@ -118,4 +118,4 @@ export const discoverNestedPaths = (data: BaseSchema, schema: JSONSchema7): stri
     // Met potential schema visit bugs
     return [];
   }
-}
+};
