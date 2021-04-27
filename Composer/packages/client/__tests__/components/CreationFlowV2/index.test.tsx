@@ -73,7 +73,7 @@ describe('<CreationFlowV2/>', () => {
       </RecoilRoot>
     );
 
-    navigate('create/dotnet/generator-conversational-core');
+    navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
     const node = await findByText('OK');
 
     act(() => {
@@ -90,7 +90,7 @@ describe('<CreationFlowV2/>', () => {
       location: expectedLocation,
       name: 'conversational_core',
       schemaUrl: '',
-      templateId: 'generator-conversational-core',
+      templateId: '@microsoft/generator-bot-empty',
       templateVersion: '',
       alias: undefined,
       eTag: undefined,
