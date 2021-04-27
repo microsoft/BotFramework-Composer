@@ -28,25 +28,27 @@ const formConfig: FieldConfig<CreateQnAFromScratchFormData> = {
 const DialogTitle = () => {
   return (
     <div>
-      {formatMessage('Create new knowledge base from scratch')}
+      {formatMessage('Create new knowledge base')}
       <p>
-        <span css={subText}>{formatMessage('Manually add question and answer pairs to create a KB')}</span>
+        <span css={subText}>{formatMessage('Manually add question and answer pairs to create a knowledge base')}</span>
       </p>
     </div>
   );
 };
 
 export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (props) => {
-  const { onDismiss, onSubmit, qnaFiles, projectId } = props;
+  const { onDismiss, onSubmit, qnaFiles, projectId, initialName, onUpdateInitialName } = props;
   const actions = useRecoilValue(dispatcherState);
   const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
 
   formConfig.name.validate = validateName(qnaFiles);
+  formConfig.name.defaultValue = initialName || '';
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors || !formData.name;
 
   const handleDismiss = () => {
     onDismiss?.();
+    onUpdateInitialName?.('');
     actions.createQnAFromScratchDialogCancel({ projectId });
     TelemetryClient.track('AddNewKnowledgeBaseCanceled');
   };
@@ -54,7 +56,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
   return (
     <Dialog
       dialogContentProps={{
-        type: DialogType.close,
+        type: DialogType.normal,
         title: <DialogTitle />,
         styles: styles.dialog,
       }}
@@ -71,10 +73,13 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formErrors.name}
             label={formatMessage('Knowledge base name')}
-            placeholder={formatMessage('Type a name that describes this content')}
+            placeholder={formatMessage('Type a name for this knowledge base')}
             styles={textFieldKBNameFromScratch}
             value={formData.name}
-            onChange={(e, name = '') => updateField('name', name)}
+            onChange={(e, name = '') => {
+              updateField('name', name);
+              onUpdateInitialName?.(name);
+            }}
           />
         </Stack>
       </div>
@@ -97,12 +102,13 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
-          text={formatMessage('Create KB')}
+          text={formatMessage('Create knowledge base')}
           onClick={() => {
             if (hasErrors) {
               return;
             }
             onSubmit(formData);
+            onUpdateInitialName?.('');
             TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
           }}
         />

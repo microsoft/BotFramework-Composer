@@ -1,13 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
-import { ActionButton, DefaultButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, DefaultButton, IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 
-import { RestartOption } from './type';
+import { RestartOption } from './types';
 
 const customButtonStyles: IButtonStyles = {
   root: {
@@ -33,21 +35,25 @@ const customButtonStyles: IButtonStyles = {
 };
 
 export type WebChatHeaderProps = {
+  botName: string;
   currentRestartOption: RestartOption;
   onSetRestartOption: (restartOption: RestartOption) => void;
   conversationId: string;
-  onRestartConversation: (conversationId: string, requireNewUserId: boolean) => Promise<any>;
-  onSaveTranscript: (conversationId: string) => Promise<any>;
-  openBotInEmulator: () => void;
+  onRestartConversation: (conversationId: string, requireNewUserId: boolean) => void;
+  onSaveTranscript: (conversationId: string) => void;
+  onOpenBotInEmulator: () => void;
+  onCloseWebChat: () => void;
 };
 
 export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
+  botName,
   conversationId,
   currentRestartOption,
   onRestartConversation,
   onSaveTranscript,
-  openBotInEmulator,
+  onOpenBotInEmulator: openBotInEmulator,
   onSetRestartOption,
+  onCloseWebChat,
 }) => {
   const menuProps: IContextualMenuProps = {
     items: [
@@ -73,7 +79,37 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   };
 
   return (
-    <div data-testid="Webchat-Header" style={{ height: 36, borderBottom: `1px solid ${NeutralColors.gray60}` }}>
+    <div data-testid="Webchat-Header" style={{ borderBottom: `1px solid ${NeutralColors.gray60}` }}>
+      <h4
+        css={{
+          margin: 0,
+          padding: 0,
+          height: '44px',
+          paddingLeft: '18px',
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
+        }}
+      >
+        {botName}
+        <IconButton
+          ariaLabel={formatMessage('Close WebChat')}
+          css={{
+            position: 'absolute',
+            right: '10px',
+          }}
+          iconProps={{
+            iconName: 'ChromeClose',
+            styles: {
+              root: {
+                fontSize: '14px',
+              },
+            },
+          }}
+          title={formatMessage('Close')}
+          onClick={onCloseWebChat}
+        />
+      </h4>
       <DefaultButton
         split
         aria-roledescription="split button"
