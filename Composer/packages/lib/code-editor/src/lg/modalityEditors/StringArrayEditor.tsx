@@ -131,15 +131,15 @@ export const StringArrayEditor = React.memo(
           }
 
           setCalloutTargetElement(null);
-          // Filter out empty or newline strings
-          const filteredItems = items.filter((s) => s.kind !== 'variation' || (s.value !== '' && s.value !== '\n'));
+          // Filter out empty variations
+          const filteredItems = items.filter((item) => item.kind !== 'variation' || !!item.value);
           if (e.key === 'Enter' && containerRef.current?.contains(e.target as Node)) {
             // If the value is not filtered, go to the next entry
             // Otherwise cancel editing
             if (items.length === filteredItems.length) {
               e.preventDefault();
-              onChange([...filteredItems, { kind: 'variation', value: '' }]);
-              setCurrentIndex(filteredItems.length);
+              onChange([...items, { kind: 'variation', value: '' }]);
+              setCurrentIndex(items.length);
             } else {
               onChange(filteredItems);
               setCurrentIndex(null);
@@ -170,7 +170,7 @@ export const StringArrayEditor = React.memo(
           setCurrentIndex(null);
           // Remove empty variations only if necessary
           if (items.some((item) => item.kind === 'variation' && !item.value)) {
-            onChange(items.filter(item => item.kind === 'variation' && !!item.value));
+            onChange(items.filter(item => item.kind !== 'variation' || !!item.value));
           }
         }
       };
