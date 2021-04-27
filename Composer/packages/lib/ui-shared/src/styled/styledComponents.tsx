@@ -41,7 +41,7 @@ export const BorderedDiv = styled.div<DivProps>(
 export const SingleLineDiv = styled.div<DivProps>`
   ${StandardFontCSS};
   ${TruncatedCSS};
-  line-height: ${(height) => (height ? height + 'px' : undefined)};
+  line-height: ${(height) => (height && typeof height === 'number' ? height + 'px' : undefined)};
 `;
 
 export const TextDiv = styled.div`
