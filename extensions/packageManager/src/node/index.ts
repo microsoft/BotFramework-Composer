@@ -15,7 +15,15 @@ import { FeedFactory } from './feeds/feedFactory';
 const API_ROOT = '/api';
 
 const hasSchema = (c) => {
-  return c.includesSchema || c.keywords?.includes('msbot-component');
+  return (
+    c.includesSchema ||
+    c.keywords?.includes('msbot-action') ||
+    c.keywords?.includes('msbot-trigger') ||
+    c.keywords?.includes('msbot-adapter') ||
+    c.keywords?.includes('msbot-function') ||
+    c.keywords?.includes('msbot-recognizer') ||
+    c.keywords?.includes('msbot-storage')
+  );
 };
 
 const isAdaptiveComponent = (c) => {
