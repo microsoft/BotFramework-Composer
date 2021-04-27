@@ -908,9 +908,6 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
-  "create_kb_e78571ba": {
-    "message": "Create KB"
-  },
   "create_knowledge_base_db6d66c4": {
     "message": "Create knowledge base"
   },
@@ -928,9 +925,6 @@
   },
   "create_new_knowledge_base_d15d6873": {
     "message": "Create new knowledge base"
-  },
-  "create_new_knowledge_base_from_scratch_638c4fd2": {
-    "message": "Create new knowledge base from scratch"
   },
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
@@ -1241,9 +1235,6 @@
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
-  "edit_a_publishing_profile_705e87e3": {
-    "message": "Edit a publishing profile"
-  },
   "edit_a_skill_5665d9ac": {
     "message": "Edit a skill"
   },
@@ -1279,6 +1270,9 @@
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
+  },
+  "edit_publishing_profile_e40a0bf1": {
+    "message": "Edit publishing profile"
   },
   "edit_schema_a2ab5695": {
     "message": "Edit schema"
@@ -2294,8 +2288,8 @@
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
   },
-  "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
-    "message": "Manually add question and answer pairs to create a KB"
+  "manually_add_question_and_answer_pairs_to_create_a_39089442": {
+    "message": "Manually add question and answer pairs to create a knowledge base"
   },
   "maximum_f0e8e5e4": {
     "message": "Maximum"
@@ -3896,8 +3890,8 @@
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
   },
-  "type_a_name_that_describes_this_content_d1a910b6": {
-    "message": "Type a name that describes this content"
+  "type_a_name_for_this_knowledge_base_ab07b439": {
+    "message": "Type a name for this knowledge base"
   },
   "type_and_press_enter_33a2905d": {
     "message": "Type and press enter"
