@@ -133,7 +133,9 @@ export class AzureResourceMananger {
    * Deploy luis authoring resource
    * @param config
    */
-  public async deployLuisAuthoringResource(config: LuisAuthoringResourceConfig) {
+  public async deployLuisAuthoringResource(
+    config: LuisAuthoringResourceConfig
+  ): Promise<{ authoringKey: string; authoringEndpoint: string; location: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -170,7 +172,8 @@ export class AzureResourceMananger {
       const authoringEndpoint = deployResult.properties?.endpoint ?? '';
       const keys = await cognitiveServicesManagementClient.accounts.listKeys(config.resourceGroupName, config.name);
       const authoringKey = keys?.key1 ?? '';
-      return { authoringKey, authoringEndpoint };
+      const location = deployResult.location;
+      return { authoringKey, authoringEndpoint, location };
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -184,7 +187,9 @@ export class AzureResourceMananger {
    * Deploy luis resource
    * @param config
    */
-  public async deployLuisResource(config: LuisResourceConfig): Promise<{ endpoint: string; endpointKey: string }> {
+  public async deployLuisResource(
+    config: LuisResourceConfig
+  ): Promise<{ endpoint: string; endpointKey: string; location: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -218,7 +223,8 @@ export class AzureResourceMananger {
       const endpoint = deployResult.properties?.endpoint ?? '';
       const keys = await cognitiveServicesManagementClient.accounts.listKeys(config.resourceGroupName, config.name);
       const endpointKey = keys?.key1 ?? '';
-      return { endpoint, endpointKey };
+      const location = deployResult.location;
+      return { endpoint, endpointKey, location };
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
