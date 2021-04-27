@@ -19,6 +19,7 @@ import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } fro
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 
 import { DialogCreationCopy, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
@@ -128,9 +129,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     if (currentTemplate) {
       // use almost the same patterns as in assetManager.ts
       const camelCasedName = camelCase(
-        currentTemplate.name.trim().toLocaleLowerCase().replace('bot', '').replace('maker', '').replace(/-/g, ' ')
+        currentTemplate.name
+          .trim()
+          .replace(/bot|maker/gi, '')
+          .replace(/-/g, ' ')
       );
-      return camelCasedName.charAt(0).toUpperCase() + camelCasedName.slice(1);
+      return upperFirst(camelCasedName);
     }
   };
 
