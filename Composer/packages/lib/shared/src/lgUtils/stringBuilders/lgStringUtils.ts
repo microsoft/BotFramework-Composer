@@ -58,7 +58,7 @@ export const parseTemplateBody = (body?: string): TemplateBodyItem[] => {
         multiLineItem = item;
         // Check if multiline variation ends in the same line (one line)
         // If yes, it will start keeping track of the multiline variation
-        if(/```$/.test(item)) {
+        if (/```$/.test(item)) {
           fixedItems.push(multiLineItem);
           multiLineItem = '';
         } else {

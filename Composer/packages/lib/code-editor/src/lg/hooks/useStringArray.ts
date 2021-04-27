@@ -10,7 +10,6 @@ import { ArrayBasedStructuredResponseItem, PartialStructuredResponse } from '../
 import { getTemplateId } from '../../utils/structuredResponse';
 import { LGOption } from '../../utils/types';
 
-
 const multiLineBlockSymbol = '```';
 
 const getInitialItems = <T extends ArrayBasedStructuredResponseItem>(

@@ -170,7 +170,7 @@ export const StringArrayEditor = React.memo(
           setCurrentIndex(null);
           // Remove empty variations only if necessary
           if (items.some((item) => item.kind === 'variation' && !item.value)) {
-            onChange(items.filter(item => item.kind !== 'variation' || !!item.value));
+            onChange(items.filter((item) => item.kind !== 'variation' || !!item.value));
           }
         }
       };
@@ -298,18 +298,20 @@ export const StringArrayEditor = React.memo(
 
     return (
       <div ref={containerRef}>
-        {items.map((item, idx) => item.kind === 'variation' ? (
-          <StringArrayItem
-            key={`item-${idx}`}
-            mode={idx === currentIndex ? 'edit' : 'view'}
-            telemetryClient={telemetryClient}
-            value={item.value}
-            onChange={onItemChange(idx)}
-            onFocus={onItemFocus(idx)}
-            onRemove={onItemRemove(idx)}
-            onShowCallout={onShowCallout}
-          />
-        ): null)}
+        {items.map((item, idx) =>
+          item.kind === 'variation' ? (
+            <StringArrayItem
+              key={`item-${idx}`}
+              mode={idx === currentIndex ? 'edit' : 'view'}
+              telemetryClient={telemetryClient}
+              value={item.value}
+              onChange={onItemChange(idx)}
+              onFocus={onItemFocus(idx)}
+              onRemove={onItemRemove(idx)}
+              onShowCallout={onShowCallout}
+            />
+          ) : null
+        )}
         {currentIndex === null && (
           <Link as="button" styles={styles.link} onClick={onClickAddVariation}>
             {addButtonText ?? formatMessage('Add new variation')}
