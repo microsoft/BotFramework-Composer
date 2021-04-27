@@ -146,6 +146,7 @@ export enum CreationFlowStatus {
   SAVEAS = 'Save as',
   OPEN = 'Open',
   CLOSE = 'Close',
+  NEW_SKILL = 'New Skill',
 }
 
 export type CreationFlowType = 'Bot' | 'Skill';
