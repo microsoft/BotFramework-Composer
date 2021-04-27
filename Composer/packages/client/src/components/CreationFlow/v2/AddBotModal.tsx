@@ -45,7 +45,7 @@ export const AddBotModal: React.FC<AddBotModalProps> = (props) => {
   return (
     <DialogWrapper
       isOpen
-      dialogType={DialogTypes.CreateFlow}
+      dialogType={DialogTypes.DesignFlow}
       subText={formatMessage('Which bot would you like to add to your project')}
       title={formatMessage('Add a bot')}
       onDismiss={props.onDismiss}
