@@ -5,7 +5,7 @@ import React from 'react';
 import { act, fireEvent, render } from '@botframework-composer/test-utils';
 
 import { WebChatHeader, WebChatHeaderProps } from '../WebChatHeader';
-import { RestartOption } from '../type';
+import { RestartOption } from '../types';
 
 describe('<WebChatHeader />', () => {
   const mockOnSetRestartOption = jest.fn();
@@ -13,12 +13,14 @@ describe('<WebChatHeader />', () => {
   const mockOnSaveTranscript = jest.fn();
 
   const props: WebChatHeaderProps = {
+    botName: 'Test-Bot',
     currentRestartOption: RestartOption.NewUserID,
     onSetRestartOption: mockOnSetRestartOption,
     conversationId: '123-abc-conv',
     onRestartConversation: mockOnRestartConversation,
     onSaveTranscript: mockOnSaveTranscript,
-    openBotInEmulator: jest.fn(),
+    onOpenBotInEmulator: jest.fn(),
+    onCloseWebChat: jest.fn(),
   };
 
   afterEach(() => {
@@ -33,12 +35,14 @@ describe('<WebChatHeader />', () => {
     const mockOnSaveTranscript = jest.fn();
 
     const props: WebChatHeaderProps = {
+      botName: 'Test-Bot',
       currentRestartOption: RestartOption.SameUserID,
       onSetRestartOption: mockOnSetRestartOption,
       conversationId: '123-abc-conv',
       onRestartConversation: mockOnRestartConversation,
       onSaveTranscript: mockOnSaveTranscript,
-      openBotInEmulator: jest.fn(),
+      onOpenBotInEmulator: jest.fn(),
+      onCloseWebChat: jest.fn(),
     };
 
     const { findByText } = render(<WebChatHeader {...props} />);
@@ -56,12 +60,14 @@ describe('<WebChatHeader />', () => {
     const mockOnSaveTranscript = jest.fn();
 
     const props: WebChatHeaderProps = {
+      botName: 'Test-Bot',
       currentRestartOption: RestartOption.NewUserID,
       onSetRestartOption: mockOnSetRestartOption,
       conversationId: '123-abc-conv',
       onRestartConversation: mockOnRestartConversation,
       onSaveTranscript: mockOnSaveTranscript,
-      openBotInEmulator: jest.fn(),
+      onOpenBotInEmulator: jest.fn(),
+      onCloseWebChat: jest.fn(),
     };
 
     const { findByText } = render(<WebChatHeader {...props} />);

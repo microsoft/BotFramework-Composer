@@ -72,14 +72,6 @@ export const topLinks = (
       isDisabledForPVA: isPVASchema,
     },
     {
-      to: `/bot/${rootProjectId || projectId}/diagnostics`,
-      iconName: 'Warning',
-      labelName: formatMessage('Diagnostics'),
-      disabled: !botLoaded,
-      match: /diagnostics/,
-      isDisabledForPVA: false,
-    },
-    {
       to: `/bot/${rootProjectId || projectId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
