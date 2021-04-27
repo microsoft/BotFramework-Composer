@@ -46,7 +46,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
       >
         {props.step.label}
       </ActionButton>
-      <div css={{ marginLeft: 36, fontSize: 12, color: NeutralColors.gray120 }}>
+      <div css={{ marginLeft: 36, fontSize: 12, color: NeutralColors.gray120, marginTop: '-4px' }}>
         <span>{props.step.description}</span>
         {props.step.learnMore && (
           <span>
