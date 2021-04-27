@@ -129,6 +129,14 @@ const Routes = (props) => {
                 <FormDialogPage path="forms/*" />
                 <DesignPage path="*" />
                 <Diagnostics path="diagnostics" />
+                {pluginPages.map((page) => (
+                  <PluginPageContainer
+                    key={`${page.id}/${page.bundleId}`}
+                    bundleId={page.bundleId}
+                    path={`plugin/${page.id}/${page.bundleId}`}
+                    pluginId={page.id}
+                  />
+                ))}
               </ProjectRouter>
               <SettingPage path="settings/*" />
               <ExtensionsPage path="extensions/*" />
