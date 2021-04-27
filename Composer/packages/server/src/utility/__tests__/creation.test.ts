@@ -13,7 +13,7 @@ jest.mock('../../models/asset/assetManager', () => ({
 describe('templateSort', () => {
   const templates: BotTemplate[] = [
     {
-      id: '@microsoft/generator-bot-assistant-core',
+      id: '@microsoft/generator-bot-core-language',
       name: ' Calendar Assistant',
       description: 'Preview Calendar Assistant template for TESTING ONLY',
       package: {
@@ -33,7 +33,7 @@ describe('templateSort', () => {
       },
     },
     {
-      id: '@microsoft/generator-bot-people',
+      id: '@microsoft/generator-bot-enterprise-people',
       name: ' Calendar Assistant',
       description: 'Preview Calendar Assistant template for TESTING ONLY',
       package: {
@@ -43,7 +43,7 @@ describe('templateSort', () => {
       },
     },
     {
-      id: '@microsoft/generator-bot-calendar',
+      id: '@microsoft/generator-bot-enterprise-calendar',
       name: ' Calendar',
       description: 'Preview calendar bot for TESTING ONLY',
       package: {
@@ -75,6 +75,26 @@ describe('templateSort', () => {
     },
     {
       id: 'QnASample',
+      name: 'generator-qna-bot',
+      description: 'Empty bot template that routes to qna configuration',
+      package: {
+        packageName: 'generator-empty-bot',
+        packageSource: 'npm',
+        packageVersion: '0.0.1',
+      },
+    },
+    {
+      id: '@microsoft/generator-bot-core-qna',
+      name: 'generator-qna-bot',
+      description: 'Empty bot template that routes to qna configuration',
+      package: {
+        packageName: 'generator-empty-bot',
+        packageSource: 'npm',
+        packageVersion: '0.0.1',
+      },
+    },
+    {
+      id: '@microsoft/generator-bot-core-assistant',
       name: 'generator-qna-bot',
       description: 'Empty bot template that routes to qna configuration',
       package: {
