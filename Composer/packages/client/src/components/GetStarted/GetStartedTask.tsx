@@ -22,6 +22,13 @@ const getStartedStepStyle = (disabled?: boolean) => css`
   opacity: ${disabled ? 0.4 : 1};
 `;
 
+const stepDescriptionStyle = css`
+  margin-left: 36px;
+  font-size: 12px;
+  color: ${NeutralColors.gray120};
+  margin-top: -4px;
+`;
+
 export const GetStartedTask: React.FC<TaskProps> = (props) => {
   const icon = props.step.checked ? 'CompletedSolid' : props.step.required ? 'Error' : 'Completed';
   const color = props.step.checked
@@ -46,7 +53,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
       >
         {props.step.label}
       </ActionButton>
-      <div css={{ marginLeft: 36, fontSize: 12, color: NeutralColors.gray120, marginTop: '-4px' }}>
+      <div css={stepDescriptionStyle}>
         <span>{props.step.description}</span>
         {props.step.learnMore && (
           <span>
