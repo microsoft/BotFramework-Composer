@@ -27,7 +27,7 @@ const SuggestedActionsModalityEditor = React.memo(
 
     const onChange = React.useCallback(
       (newItems: TemplateBodyItem[]) => {
-        const newValues = newItems.map(s => s.value);
+        const newValues = newItems.map((s) => s.value);
         setItems(newValues);
         onUpdateResponseTemplate({ SuggestedActions: { kind: 'SuggestedActions', value: newValues } });
       },
@@ -47,7 +47,7 @@ const SuggestedActionsModalityEditor = React.memo(
       >
         <StringArrayEditor
           addButtonText={formatMessage('Add suggested action')}
-          items={items.map(s => ({kind:'variation', value: s}))}
+          items={items.map((s) => ({ kind: 'variation', value: s }))}
           lgOption={lgOption}
           lgTemplates={lgTemplates}
           memoryVariables={memoryVariables}
