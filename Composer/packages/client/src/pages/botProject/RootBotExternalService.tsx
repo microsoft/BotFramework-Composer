@@ -17,6 +17,7 @@ import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 
 import {
   dispatcherState,
@@ -151,6 +152,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
+  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
+  const rootLuisEndpointKey = groupLUISEndpointKey.root;
+
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
@@ -179,6 +183,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
+  const linkToPublishProfile = `/bot/${rootBotProjectId}/publish/all#addNewPublishProfile`;
 
   const handleRootLUISKeyOnChange = (e, value) => {
     if (value) {
@@ -412,6 +417,29 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             setDisplayManageLuis(true);
           }}
         />
+        {localRootLuisKey && !rootLuisEndpointKey && (
+          <MessageBar messageBarType={MessageBarType.info} styles={{ root: { width: '75%', marginTop: 20 } }}>
+            {formatMessage.rich(
+              'Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a<a>publishing profile</a> to continue testing.<a2>Learn more</a2>',
+              {
+                a: ({ children }) => (
+                  <Link key="luis-endpoint-key-info" href={linkToPublishProfile}>
+                    {children}
+                  </Link>
+                ),
+                a2: ({ children }) => (
+                  <Link
+                    key="luis-endpoint-key-info"
+                    href={'https://aka.ms/composer-settings-luislimits'}
+                    target="_blank"
+                  >
+                    {children}
+                  </Link>
+                ),
+              }
+            )}
+          </MessageBar>
+        )}
         <div css={title}>{formatMessage('QnA Maker')}</div>
         <div css={subtext}>
           {formatMessage.rich(
