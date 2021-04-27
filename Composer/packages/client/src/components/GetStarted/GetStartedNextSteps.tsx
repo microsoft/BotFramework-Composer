@@ -372,21 +372,21 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
         {requiredNextSteps.length ? (
           <div>
-            <h3 style={topH3Style}>{formatMessage('Required')}</h3>
+            <h3 css={topH3Style}>{formatMessage('Required')}</h3>
             {requiredNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {recommendedNextSteps.length ? (
           <div>
-            <h3 style={h3Style}>{formatMessage('Recommended')}</h3>
+            <h3 css={h3Style}>{formatMessage('Recommended')}</h3>
             {recommendedNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {optionalSteps.length ? (
           <div>
-            <h3 style={h3Style}>{formatMessage('Optional')}</h3>
+            <h3 css={h3Style}>{formatMessage('Optional')}</h3>
             {optionalSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}

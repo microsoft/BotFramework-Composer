@@ -51,7 +51,7 @@ export const GetStartedLearn: React.FC<Props> = ({ projectId, onDismiss }) => {
   return (
     <ScrollablePane styles={{ root: { marginTop: 60 } }}>
       <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
-        <h3 style={topH3Style}>{formatMessage('Get started')}</h3>
+        <h3 css={topH3Style}>{formatMessage('Get started')}</h3>
         <ul style={ulStyle}>
           <li style={liStyle}>
             <Link target="_blank" onClick={onStartProductTourClicked}>
@@ -90,7 +90,7 @@ export const GetStartedLearn: React.FC<Props> = ({ projectId, onDismiss }) => {
           </li>
         </ul>
 
-        <h3 style={h3Style}>{formatMessage('Quick references')}</h3>
+        <h3 css={h3Style}>{formatMessage('Quick references')}</h3>
         <ul style={ulStyle}>
           <li style={liStyle}>
             <Link href={linkToAdaptiveExpressions} target="_blank" onClick={linkClick}>
