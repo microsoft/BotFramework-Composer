@@ -81,8 +81,8 @@ export const handleMessage = (msg: LuMessageEvent) => {
     }
 
     case LuActionType.ParseAll: {
-      const { luResources, luFeatures } = msg.payload;
-      result = luResources.map(({ id, content }) => luUtil.parse(id, content, luFeatures, luResources));
+      const { luResources, luFeaturesMap } = msg.payload;
+      result = luResources.map(({ id, content }) => luUtil.parse(id, content, luFeaturesMap[id], luResources));
       break;
     }
 
