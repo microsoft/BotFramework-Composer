@@ -64,7 +64,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
     setSkillManifest(data);
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
-    const message = httpMessage?.match('Error attempting to parse Skill manifest. There could be an error in it\'s format.')
+    const message = httpMessage?.match("Error attempting to parse Skill manifest. There could be an error in it's format.")
       ? httpMessage
       : formatMessage('Manifest URL can not be accessed');
 
