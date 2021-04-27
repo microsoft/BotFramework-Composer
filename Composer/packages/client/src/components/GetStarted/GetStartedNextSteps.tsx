@@ -24,7 +24,7 @@ import { projectReadmeState } from '../../recoilModel/atoms';
 
 import { GetStartedTask } from './GetStartedTask';
 import { NextStep } from './types';
-import { h3Style } from './styles';
+import { h3Style, topH3Style } from './styles';
 
 type GetStartedProps = {
   requiresLUIS: boolean;
@@ -372,7 +372,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
         {requiredNextSteps.length ? (
           <div>
-            <h3 style={h3Style}>{formatMessage('Required')}</h3>
+            <h3 style={topH3Style}>{formatMessage('Required')}</h3>
             {requiredNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}

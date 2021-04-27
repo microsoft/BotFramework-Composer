@@ -8,6 +8,7 @@ import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { NextStep } from './types';
 
@@ -16,7 +17,7 @@ type TaskProps = {
 };
 
 const getStartedStepStyle = (disabled?: boolean) => css`
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   pointer-events: ${disabled ? 'none' : 'auto'};
   opacity: ${disabled ? 0.4 : 1};
 `;
@@ -33,7 +34,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
       <ActionButton
         iconProps={{ iconName: icon, id: props.step.key }}
         styles={{
-          root: { display: 'block', fontSize: 16 },
+          root: { padding: '0px', display: 'block', fontSize: 16 },
           icon: {
             fontSize: props.step.checked ? 20 : 22,
             color: color,
@@ -45,7 +46,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
       >
         {props.step.label}
       </ActionButton>
-      <div css={{ marginLeft: 40, fontSize: 12 }}>
+      <div css={{ marginLeft: 36, fontSize: 12, color: NeutralColors.gray120 }}>
         <span>{props.step.description}</span>
         {props.step.learnMore && (
           <span>

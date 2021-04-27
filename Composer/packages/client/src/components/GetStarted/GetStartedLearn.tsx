@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { dispatcherState } from '../../recoilModel';
 
-import { h3Style, ulStyle, liStyle } from './styles';
+import { h3Style, ulStyle, liStyle, topH3Style } from './styles';
 
 const linkToEmulator = 'https://aka.ms/composer-getstarted-emulator';
 const linkToQNA = 'https://aka.ms/composer-getstarted-qnamaker';
@@ -51,7 +51,7 @@ export const GetStartedLearn: React.FC<Props> = ({ projectId, onDismiss }) => {
   return (
     <ScrollablePane styles={{ root: { marginTop: 60 } }}>
       <div css={{ paddingTop: 20, paddingLeft: 27, paddingRight: 20 }}>
-        <h3 style={h3Style}>{formatMessage('Get started')}</h3>
+        <h3 style={topH3Style}>{formatMessage('Get started')}</h3>
         <ul style={ulStyle}>
           <li style={liStyle}>
             <Link target="_blank" onClick={onStartProductTourClicked}>
