@@ -94,15 +94,11 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         return template.id == templateId;
       })?.package?.packageVersion;
       const newCreationBotData = {
-        templateId: templateId || '',
+        ...newBotData,
         templateVersion: templateVersion || '',
-        name: formData.name,
-        description: formData.description,
-        location: formData.location,
         schemaUrl: formData.schemaUrl,
         runtimeType: formData.runtimeType,
         runtimeLanguage: formData.runtimeLanguage,
-        appLocale,
         templateDir: formData?.pvaData?.templateDir,
         eTag: formData?.pvaData?.eTag,
         urlSuffix: formData?.pvaData?.urlSuffix,
