@@ -157,7 +157,14 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const handleMigrate = (formData) => {
     handleDismiss();
     setCreationFlowStatus(CreationFlowStatus.MIGRATE);
-    migrateProjectTo(projectId, formData.name, formData.description, formData.location);
+    migrateProjectTo(
+      projectId,
+      formData.name,
+      formData.description,
+      formData.location,
+      formData.runtimeLanguage,
+      formData.runtimeType
+    );
   };
 
   const handleSubmit = async (formData, templateId: string) => {
