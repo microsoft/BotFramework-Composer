@@ -462,7 +462,7 @@ export class BotProjectService {
       schemaUrl,
       runtimeType,
       runtimeLanguage,
-      isRoot: creatingRootBot,
+      isRoot: creatingRootBot = true,
     } = req.body;
 
     // get user from request
@@ -563,7 +563,7 @@ export class BotProjectService {
         const id = await BotProjectService.openProject(
           { storageId: rootBot?.storageId, path: rootBot.path },
           user,
-          creatingRootBot ?? true
+          creatingRootBot
         );
         const currentProject = await BotProjectService.getProjectById(id, user);
         const project = currentProject.getProject();
