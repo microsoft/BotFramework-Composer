@@ -75,7 +75,9 @@ const yeomanWork = async (
   log('Instantiating Yeoman template');
   parentPort?.postMessage({ status: 'Creating project' });
 
-  await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeType, runtimeLanguage);
+  if (dstDir && projectName && runtimeType && runtimeLanguage) {
+    await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeType, runtimeLanguage);
+  }
 };
 
 export type TemplateInstallationArgs = {

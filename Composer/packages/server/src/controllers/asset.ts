@@ -4,11 +4,13 @@
 import { Request, Response } from 'express';
 import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
+import { ServerWorker } from '@bfc/server-workers';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
 import { sortTemplates } from '../utility/creation';
+import { templateGeneratorPath } from '../settings/env';
 
 async function getProjTemplates(req: Request, res: Response) {
   try {
@@ -66,6 +68,27 @@ export async function getProjTemplatesV2(req: any, res: any) {
 
     // return templates
     res.status(200).json(sortedTemplateList);
+
+    // now kick off a process in the background to "preheat" the template cache!
+    for (const t in templates) {
+      if (templates[t].package?.packageName) {
+        await ServerWorker.execute(
+          'templateInstallation',
+          {
+            npmPackageName: templates[t]?.package?.packageName || '',
+            templateVersion: templates[t]?.package?.packageVersion || '',
+            dstDir: '',
+            projectName: '',
+            templateGeneratorPath: templateGeneratorPath,
+            runtimeType: '',
+            runtimeLanguage: '',
+          },
+          (status, msg) => {
+            log(msg);
+          }
+        );
+      }
+    }
   } catch (error) {
     res.status(400).json({
       message: error instanceof Error ? error.message : error,
