@@ -72,6 +72,7 @@ export async function getProjTemplatesV2(req: any, res: any) {
     // now kick off a process in the background to "preheat" the template cache!
     for (const t in templates) {
       if (templates[t].package?.packageName) {
+        log('Prefetch ', templates[t].package?.packageName);
         await ServerWorker.execute(
           'templateInstallation',
           {

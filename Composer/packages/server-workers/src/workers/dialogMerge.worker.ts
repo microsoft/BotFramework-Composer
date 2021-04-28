@@ -11,6 +11,7 @@ import logger from '../logger';
 const log = logger.extend('dialogMerge');
 
 if (!isMainThread) {
+  const timer1 = new Date().getTime();
   const realMerge = new SchemaMerger(
     [workerData.manifestFile, `!${path.join(workerData.currentProjectDataDir, 'generated')}/**`],
     path.join(workerData.currentProjectDataDir, 'schemas/sdk'),
@@ -25,6 +26,7 @@ if (!isMainThread) {
   realMerge
     .merge()
     .then(() => {
+      log(`PERF: DIALOG MERGE TOOK ${(new Date().getTime() - timer1) / 1000} seconds`);
       process.exit(0);
     })
     .catch((err) => {

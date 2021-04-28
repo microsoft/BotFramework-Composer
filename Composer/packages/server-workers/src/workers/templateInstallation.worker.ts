@@ -61,6 +61,7 @@ const yeomanWork = async (
   log('Getting Yeoman environment');
   parentPort?.postMessage({ status: 'Downloading template' });
 
+  const timer1 = new Date().getTime();
   const yeomanEnv = yeoman.createEnv(
     '',
     { yeomanRepository: templateGeneratorPath },
@@ -72,11 +73,14 @@ const yeomanWork = async (
   log('Installing Yeoman template');
 
   await installRemoteTemplate(yeomanEnv, templateGeneratorPath, npmPackageName, templateVersion);
+  log(`PERF: DOWNLOAD AND INSTALL TEMPLATE TOOK ${(new Date().getTime() - timer1) / 1000} seconds`);
   log('Instantiating Yeoman template');
   parentPort?.postMessage({ status: 'Creating project' });
 
   if (dstDir && projectName && runtimeType && runtimeLanguage) {
+    const timer2 = new Date().getTime();
     await instantiateRemoteTemplate(yeomanEnv, generatorName, dstDir, projectName, runtimeType, runtimeLanguage);
+    log(`PERF: INSTANTIATE TEMPLATE TOOK ${(new Date().getTime() - timer2) / 1000} seconds`);
   }
 };
 
