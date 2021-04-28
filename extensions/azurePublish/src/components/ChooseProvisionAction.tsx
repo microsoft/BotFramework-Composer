@@ -164,7 +164,7 @@ const ImportActionContent = () => {
           <Text>- {formatMessage('Microsoft QnA Maker')}</Text>
         </ResourceTitle>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publish-bot#import-existing-azure-resources">
+      <LearnMoreLink href="https://aka.ms/composer-getstarted-importpublishing" target="_blank">
         {formatMessage('Learn More')}
       </LearnMoreLink>
     </Content>
@@ -204,7 +204,7 @@ const GenerateActionContent = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publish-bot#handoff-to-admin">
+      <LearnMoreLink href="https://aka.ms/composer-publishingprofile-handoffadmin" target="_blank">
         {formatMessage('Learn More')}
       </LearnMoreLink>
     </Content>

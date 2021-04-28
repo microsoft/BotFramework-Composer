@@ -83,6 +83,12 @@ const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
 
+const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: props.showSignout ? 'space-between' : 'flex-end',
+}));
+
 const ConfigureResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
   font-weight: ${FontWeights.semibold};
