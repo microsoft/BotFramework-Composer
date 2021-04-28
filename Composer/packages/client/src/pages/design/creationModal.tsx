@@ -88,6 +88,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       location: formData.location,
       schemaUrl: formData.schemaUrl,
       appLocale,
+      isRoot: true,
     };
     if (creationFlowType === 'Skill') {
       const templateVersion = templateProjects.find((template: BotTemplate) => {
@@ -106,6 +107,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         alias: formData?.alias,
         profile: formData?.profile,
         source: formData?.source,
+        isRoot: false,
       };
       createNewBotV2(newCreationBotData);
     } else {
