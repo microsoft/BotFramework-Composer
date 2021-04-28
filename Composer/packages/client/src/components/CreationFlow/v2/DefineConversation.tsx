@@ -66,11 +66,6 @@ const stackinput = {
   ],
 };
 
-const RuntimeLanguageOptions: IDropdownOption[] = [
-  { key: csharpFeedKey, text: 'C#' },
-  { key: nodeFeedKey, text: formatMessage('Node (Preview)') },
-];
-
 // -------------------- DefineConversation -------------------- //
 
 const MAXTRYTIMES = 10000;
@@ -145,7 +140,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           .replace(/-/g, ' ')
       );
       return upperFirst(camelCasedName);
-      return currentTemplate.name.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
     } else if (templateId && inBotMigration) {
       return templateId.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
     } else {
@@ -338,6 +332,13 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     return result;
   };
 
+  const getRuntimeLanguageOptions = (): IDropdownOption[] => {
+    return [
+      { key: csharpFeedKey, text: 'C#' },
+      { key: nodeFeedKey, text: formatMessage('Node (Preview)') },
+    ];
+  };
+
   useEffect(() => {
     const location =
       focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
@@ -402,7 +403,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                   <Dropdown
                     data-testid="NewDialogRuntimeLanguage"
                     label={formatMessage('Runtime Language')}
-                    options={RuntimeLanguageOptions}
+                    options={getRuntimeLanguageOptions()}
                     selectedKey={formData.runtimeLanguage}
                     onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
                   />
