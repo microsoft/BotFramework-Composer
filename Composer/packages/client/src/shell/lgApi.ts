@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { useResolvers } from '../hooks/useResolver';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
-import { dispatcherState, focusPathState } from './../recoilModel';
+import { designPageLocationState, dispatcherState } from './../recoilModel';
 
 const fileNotFound = (id: string) => formatMessage('LG file {id} not found', { id });
 const TEMPLATE_ERROR = formatMessage('templateName is missing or empty');
@@ -31,13 +31,13 @@ const memoizedDebounce = (func, wait, options = {}) => {
 };
 
 function createLgApi(
-  state: { focusPath: string; projectId: string },
+  state: { dialogId: string; projectId: string },
   actions: Dispatcher,
   lgFileResolver: (id: string) => LgFile | undefined
 ): LgContextApi {
   const getLgTemplates = (id) => {
     if (id === undefined) throw new Error('must have a file id');
-    const focusedDialogId = state.focusPath.split('#').shift() || id;
+    const focusedDialogId = state.dialogId || id;
     const file = lgFileResolver(focusedDialogId);
     if (!file) throw new Error(fileNotFound(id));
     return file.templates;
@@ -148,15 +148,14 @@ function createLgApi(
 }
 
 export function useLgApi(projectId: string) {
-  const focusPath = useRecoilValue(focusPathState(projectId));
+  const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const actions: Dispatcher = useRecoilValue(dispatcherState);
   const { lgFileResolver } = useResolvers(projectId);
-  const [api, setApi] = useState(createLgApi({ focusPath, projectId }, actions, lgFileResolver));
+  const [api, setApi] = useState(createLgApi({ dialogId, projectId }, actions, lgFileResolver));
 
   useEffect(() => {
-    const newApi = createLgApi({ focusPath, projectId }, actions, lgFileResolver);
+    const newApi = createLgApi({ dialogId, projectId }, actions, lgFileResolver);
     setApi(newApi);
-
     return () => {
       Object.keys(newApi).forEach((apiName) => {
         if (typeof newApi[apiName].flush === 'function') {
@@ -164,7 +163,7 @@ export function useLgApi(projectId: string) {
         }
       });
     };
-  }, [projectId, focusPath]);
+  }, [projectId, dialogId]);
 
   return api;
 }

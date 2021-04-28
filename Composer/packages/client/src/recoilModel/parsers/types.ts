@@ -13,7 +13,7 @@ export type LuParsePayload = {
 
 export type LuParseAllPayload = {
   luResources: TextFile[];
-  luFeatures: ILUFeaturesConfig;
+  luFeaturesMap: { [key: string]: ILUFeaturesConfig };
 };
 
 export type LuAddIntentPayload = {

@@ -15,13 +15,15 @@ import { FeedFactory } from './feeds/feedFactory';
 const API_ROOT = '/api';
 
 const hasSchema = (c) => {
-  // NOTE: A special case for orchestrator is included here because it does not directly include the schema
-  // the schema for orchestrator is in a dependent package
-  // additionally, our schemamerge command only returns the top level components found, even though
-  // it does properly discover and include the schema from this dependent package.
-  // without this special case, composer does not see orchestrator as being installed even though it is.
-  // in the future this should be resolved in the schemamerger library by causing the includesSchema property to be passed up to all parent libraries
-  return c.includesSchema || c.name.toLowerCase() === 'microsoft.bot.components.orchestrator';
+  return (
+    c.includesSchema ||
+    c.keywords?.includes('msbot-action') ||
+    c.keywords?.includes('msbot-trigger') ||
+    c.keywords?.includes('msbot-adapter') ||
+    c.keywords?.includes('msbot-function') ||
+    c.keywords?.includes('msbot-recognizer') ||
+    c.keywords?.includes('msbot-storage')
+  );
 };
 
 const isAdaptiveComponent = (c) => {
@@ -113,18 +115,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           defaultQuery: {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: `microsoft.bot.components+tags:${botComponentTag}`,
-          },
-          type: PackageSourceType.NuGet,
-        },
-        {
-          key: 'nuget-community',
-          text: formatMessage('community packages'),
-          url: 'https://api.nuget.org/v3/index.json',
-          readonly: true,
-          defaultQuery: {
-            prerelease: true,
-            semVerLevel: '2.0.0',
             query: `tags:${botComponentTag}`,
           },
           type: PackageSourceType.NuGet,
@@ -132,17 +122,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         {
           key: 'npm',
           text: formatMessage('npm'),
-          url: `https://registry.npmjs.org/-/v1/search`,
-          readonly: true,
-          defaultQuery: {
-            prerelease: true,
-            query: `keywords:${botComponentTag}+scope:microsoft`,
-          },
-          type: PackageSourceType.NPM,
-        },
-        {
-          key: 'npm-community',
-          text: formatMessage('JS community packages'),
           url: `https://registry.npmjs.org/-/v1/search`,
           readonly: true,
           defaultQuery: {
@@ -227,6 +206,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           composer.log('GETTING FEED', packageSource, packageSource.defaultQuery);
 
+          // set default page size to 100
+          packageSource.defaultQuery.take = 100;
           const packages = await feed.getPackages(packageSource.defaultQuery);
 
           if (Array.isArray(packages)) {
@@ -311,6 +292,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const version = req.body.version;
       const source = req.body.source;
       const isUpdating = req.body.isUpdating || false;
+      const isPreview = req.body.isPreview || false;
       const mergeErrors: string[] = [];
 
       const captureErrors = (msg: string): void => {
@@ -328,7 +310,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             packageName,
             version,
             source,
-            currentProject
+            currentProject,
+            isPreview
           );
 
           const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);

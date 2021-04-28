@@ -215,6 +215,9 @@ export function CreateBotV2(props: CreateBotProps) {
   useEffect(() => {
     if (displayedTemplates?.[0]?.id) {
       setCurrentTemplateId(displayedTemplates[0].id);
+      setTimeout(() => {
+        selectedTemplate.setIndexSelected(0, true, false);
+      }, 0);
     }
   }, [displayedTemplates]);
 
@@ -239,7 +242,11 @@ export function CreateBotV2(props: CreateBotProps) {
           }}
         >
           <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
-          <PivotItem data-testid="nodeFeed" headerText="Node" itemKey={nodeFeedKey}></PivotItem>
+          <PivotItem
+            data-testid="nodeFeed"
+            headerText={formatMessage('Node (Preview)')}
+            itemKey={nodeFeedKey}
+          ></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">

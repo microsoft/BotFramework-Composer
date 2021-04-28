@@ -77,7 +77,6 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const { commitChanges } = undoFunction;
-
   const {
     removeDialog,
     updateDialog,
@@ -91,6 +90,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
     updateZoomRate,
     deleteTrigger,
   } = useRecoilValue(dispatcherState);
+
   const skillUsedInBotsMap = useRecoilValue(skillUsedInBotsSelector);
   const selected = decodeDesignerPathToArrayPath(
     dialogs.find((x) => x.id === dialogId)?.content,
@@ -136,26 +136,17 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
 
   const projectTreeHeaderMenuItems = [
     {
-      key: 'CreateNewSkill',
-      label: formatMessage('Create a new skill'),
+      key: 'AddSkill',
+      label: formatMessage('Add a bot'),
       onClick: () => {
         setCreationFlowType('Skill');
-        setCreationFlowStatus(CreationFlowStatus.NEW);
+        setCreationFlowStatus(CreationFlowStatus.NEW_SKILL);
         TelemetryClient.track('AddNewSkillStarted', { method: 'newSkill' });
       },
     },
     {
-      key: 'OpenSkill',
-      label: formatMessage('Open an existing skill'),
-      onClick: () => {
-        setCreationFlowType('Skill');
-        setCreationFlowStatus(CreationFlowStatus.OPEN);
-        TelemetryClient.track('AddNewSkillStarted', { method: 'existingSkill' });
-      },
-    },
-    {
       key: 'ConnectRemoteSkill',
-      label: formatMessage('Connect a remote skill'),
+      label: formatMessage('Connect to a skill'),
       onClick: () => {
         setAddSkillDialogModalVisibility(true);
         TelemetryClient.track('AddNewSkillStarted', { method: 'remoteSkill' });
@@ -247,6 +238,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
   async function handleRemoveSkill(skillId: string) {
     // check if skill used in current project workspace
     const usedInBots = skillUsedInBotsMap[skillId];
+
     const confirmRemove = usedInBots.length
       ? await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subText, {
           onRenderContent: () => {
@@ -262,7 +254,7 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
       : await OpenConfirmModal(formatMessage('Warning'), removeSkillDialog().subTextNoUse);
 
     if (!confirmRemove) return;
-    removeSkillFromBotProject(skillId);
+    await removeSkillFromBotProject(skillId);
   }
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);

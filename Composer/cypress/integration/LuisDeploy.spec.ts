@@ -7,14 +7,14 @@ context('Luis Deploy', () => {
     cy.route('POST', '/api/publish/*/publish/default', { endpointURL: 'anything', status: 202 });
     cy.route('POST', '/api/projects/*/settings', 'OK');
     cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything', status: 404 });
-    cy.visit('/home');
-    cy.createBot('ToDoBotWithLuisSample');
-    cy.visitPage('Design');
+    cy.createTestBot('TestSample', ({ id }) => {
+      cy.visit(`/bot/${id}`);
+    });
   });
 
   it('can deploy luis success', () => {
     cy.visitPage('Project settings');
-    cy.findByText('LUIS and QnA').click();
+    cy.findByText('Development Resources').click();
     cy.findAllByTestId('rootLUISAuthoringKey').type('12345678', { delay: 200 });
     cy.findAllByTestId('rootLUISRegion').click();
     cy.findByText('westus').click();

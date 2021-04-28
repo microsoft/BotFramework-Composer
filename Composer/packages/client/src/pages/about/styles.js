@@ -3,26 +3,9 @@
 
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-export const outline = css`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  margin: 32px 50px 0px 32px;
-  border: 1px solid #979797;
-  overflow-x: auto;
-`;
 
 export const content = css`
   height: 100%;
-`;
-
-export const title = css`
-  display: block;
-  height: 36px;
-  margin: 33px 0px 0px 42px;
-  font-size: ${FontSizes.xLarge};
-  font-weight: ${FontWeights.semibold};
-  line-height: 32px;
 `;
 
 export const body = css`
@@ -32,43 +15,41 @@ export const body = css`
 `;
 
 export const version = css`
-  font-size: ${FontSizes.large};
+  font-size: ${FontSizes.medium};
   font-weight: ${FontWeights.regular};
   line-height: 32px;
 `;
 
-export const description = css`
-  font-size: ${FontSizes.mediumPlus};
-  font-weight: ${FontWeights.regular};
-  line-height: 32px;
-  width: 50%;
-  margin-top: 20px;
-`;
-
-export const DiagnosticsText = css`
+export const diagnosticsText = css`
   width: 50%;
   font-size: 24px;
   margin-top: 20px;
 `;
 
 export const smallText = css`
-  margin-top: 20px;
-  font-size: 13px;
+  margin: 20px 20px 20px 0;
+  font-size: 14px;
 `;
-export const DiagnosticsInfoText = css`
+
+export const smallerText = css`
+  margin: 20px 20px 20px 0;
+  font-size: 12px;
+`;
+
+export const diagnosticsInfoText = css`
   display: flex;
   justify-content: space-between;
   width: 550px;
   font-size: 24px;
 `;
 
-export const DiagnosticsInfoTextAlignLeft = css`
+export const diagnosticsInfoTextAlignLeft = css`
   text-align: left;
   font-size: ${FontSizes.mediumPlus};
   font-weight: ${FontWeights.semibold};
 `;
 
-export const DiagnosticsInfo = css`
+export const diagnosticsInfo = css`
   margin-top: 40px;
 `;
 

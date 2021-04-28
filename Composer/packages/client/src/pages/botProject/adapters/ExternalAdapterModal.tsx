@@ -34,7 +34,7 @@ type Props = {
 
 export function hasRequired(testObject: { [key: string]: JSONSchema7Type | undefined }, fields?: string[]) {
   if (fields == null || fields.length === 0) return true;
-  return fields.every((field: string) => field in testObject);
+  return fields.every((field: string) => field in testObject && testObject[field] != null);
 }
 
 function makeDefault(schema: JSONSchema7) {

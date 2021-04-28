@@ -75,7 +75,11 @@ export interface LULSPEditorProps extends BaseEditorProps {
         path: string;
       }
     | string;
-  toolbarHidden?: boolean;
+  toolbarOptions?: Partial<{
+    hidden: boolean;
+    disabled: boolean;
+    tooltip: string;
+  }>;
   telemetryClient: TelemetryClient;
   onNavigateToLuPage?: (luFileId: string, luSectionId?: string) => void;
 }
@@ -129,7 +133,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   };
 
   const {
-    toolbarHidden,
+    toolbarOptions,
     onNavigateToLuPage,
     luOption,
     luFile,
@@ -296,11 +300,12 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   return (
     <>
       <Stack verticalFill>
-        {!toolbarHidden && (
+        {toolbarOptions?.hidden !== true && (
           <LuEditorToolbar
             editor={editor}
             labelingMenuVisible={labelingMenuVisible}
             luFile={luFile}
+            options={toolbarOptions}
             onDefineEntity={defineEntity}
             onInsertEntity={insertEntity}
           />

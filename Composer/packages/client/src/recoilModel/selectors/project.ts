@@ -2,7 +2,15 @@
 // Licensed under the MIT License.
 
 import { BotIndexer } from '@bfc/indexers';
-import { BotAssets, checkForPVASchema, DialogInfo, FormDialogSchema, JsonSchemaFile, SDKKinds } from '@bfc/shared';
+import {
+  BotAssets,
+  checkForPVASchema,
+  DialogInfo,
+  FormDialogSchema,
+  ILUFeaturesConfig,
+  JsonSchemaFile,
+  SDKKinds,
+} from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqBy from 'lodash/uniqBy';
 import { selector, selectorFamily } from 'recoil';
@@ -45,6 +53,7 @@ import {
 
 import { lgFilesSelectorFamily } from './lg';
 import { topicsSelectorFamily } from './dialogs';
+import { recognizersSelectorFamily } from './recognizers';
 // Selector return types
 export type TreeDataPerProject = {
   isRemote: boolean;
@@ -425,8 +434,28 @@ export const outputsDebugPanelSelector = selector<WebChatEssentials[]>({
   key: 'outputsDebugPanelSelector',
   get: ({ get }) => {
     const projectIds: string[] = get(botProjectIdsState);
-    return projectIds.map((projectId) => {
-      return get(webChatEssentialsSelector(projectId));
+    const filteredProjects: WebChatEssentials[] = [];
+    projectIds.forEach((projectId: string) => {
+      const { isRemote } = get(projectMetaDataState(projectId));
+      if (!isRemote) {
+        const data = get(webChatEssentialsSelector(projectId));
+        filteredProjects.push(data);
+      }
     });
+    return filteredProjects;
+  },
+});
+
+export const luFileLuFeatureSelector = selectorFamily<ILUFeaturesConfig, { projectId: string; id: string }>({
+  key: 'luFileLuFeatureSelector',
+  get: ({ projectId, id }) => ({ get }) => {
+    const recognizers = get(recognizersSelectorFamily(projectId));
+    const { luFeatures } = get(settingsState(projectId));
+
+    const isOrchestartor = recognizers.some(
+      (f) => f.id === `${id}.lu.dialog` && f.content.$kind === SDKKinds.OrchestratorRecognizer
+    );
+
+    return { ...luFeatures, isOrchestartor };
   },
 });
