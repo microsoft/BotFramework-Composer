@@ -759,7 +759,7 @@ export const ProjectTree: React.FC<Props> = ({
         </ExpandableNode>
       );
     } else if (options.showRemote) {
-      return projectHeader;
+      return <ExpandableNode key={key} summary={projectHeader} />;
     } else {
       return null;
     }

@@ -112,7 +112,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   };
 
   const {
-    toolbarHidden,
+    toolbarOptions,
     lgOption,
     languageServer,
     onInit: onInitProp,
@@ -270,7 +270,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   return (
     <>
       <Stack verticalFill>
-        {!toolbarHidden && (
+        {toolbarOptions?.hidden !== true && (
           <EditorToolbar
             farItems={toolbarFarItems}
             lgTemplates={lgTemplates}
