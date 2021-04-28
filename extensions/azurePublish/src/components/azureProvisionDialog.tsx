@@ -749,7 +749,9 @@ export const AzureProvisionDialog: React.FC = () => {
           onClick={() => {
             OpenConfirmModal(
               formatMessage('Sign out from Azure'),
-              formatMessage('Changes you made may not be saved. Do you wish to continue?'),
+              formatMessage(
+                'Changes you made may not be saved and the wizard will be closed. Do you wish to continue?'
+              ),
               {
                 confirmText: formatMessage('Sign out'),
                 cancelText: formatMessage('Cancel'),
@@ -757,12 +759,15 @@ export const AzureProvisionDialog: React.FC = () => {
             ).then(async (signoutAndCloseProvisionDialog) => {
               if (signoutAndCloseProvisionDialog) {
                 await logOut();
-                console.log(addNotification);
                 if (!currentUser) {
                   addNotification({
                     type: 'info',
                     title: '',
-                    description: 'You have successfully signed out of Azure',
+                    retentionTime: 5000,
+                    description: formatMessage('You have successfully signed out of Azure'),
+                    onRenderCardContent: (props) => {
+                      return <div style={{ padding: '0 16px 16px 16px', fontSize: '10px' }}>{props.description}</div>;
+                    },
                   });
                 }
                 closeDialog();
