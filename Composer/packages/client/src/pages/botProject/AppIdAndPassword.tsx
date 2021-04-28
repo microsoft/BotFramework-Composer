@@ -12,12 +12,14 @@ import formatMessage from 'format-message';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
 import { inputFieldStyles, subtext, title } from './styles';
+import { GetAppInfoFromPublishProfileDialog } from './GetAppInfoFromPublishProfileDialog';
 // -------------------- Styles -------------------- //
 
 const labelContainer = css`
@@ -75,6 +77,8 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
+  const [showImportDialog, setShowImportDialog] = useState(false);
+
   useEffect(() => {
     setLocalMicrosoftAppId(MicrosoftAppId ?? '');
     setLocalMicrosoftAppPassword(MicrosoftAppPassword ?? '');
@@ -107,7 +111,11 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
       <div css={title}>{formatMessage('Microsoft App ID')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          'A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. <a>Learn more.</a>',
+          'A Microsoft App ID is required for your local Azure resources.' +
+            ' If you’ve created an App ID already, you can add here.' +
+            ' If not, your App ID and secret will be created when you provision resources for this bot.' +
+            ' To add and App ID and Secret from a publishing profile you’ve created, click the button below.' +
+            ' <a>Learn more.</a>',
           {
             a: ({ children }) => (
               <Link key="app-id-settings-page" href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
@@ -140,7 +148,29 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           onChange={handleAppPasswordOnChange}
           onRenderLabel={onRenderLabel}
         />
+        <PrimaryButton
+          disabled={false}
+          styles={{ root: { width: '230px', marginTop: '15px' } }}
+          text={formatMessage('Add from publishing profile')}
+          onClick={() => {
+            setShowImportDialog(true);
+          }}
+        />
       </div>
+      {showImportDialog && (
+        <GetAppInfoFromPublishProfileDialog
+          hidden={!showImportDialog}
+          projectId={projectId}
+          onCancel={() => {
+            setShowImportDialog(false);
+          }}
+          onOK={(info) => {
+            setShowImportDialog(false);
+            setLocalMicrosoftAppId(info.appId);
+            setLocalMicrosoftAppPassword(info.appSecret || '');
+          }}
+        />
+      )}
     </Fragment>
   );
 };
