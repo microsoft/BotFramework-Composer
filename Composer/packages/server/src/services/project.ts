@@ -500,14 +500,14 @@ export class BotProjectService {
 
         // add all original files to new project
         for (let f = 0; f < originalFiles.length; f++) {
-          // todo: do we want to migrate the schema or not?
-          // if (!isSchema(originalFiles[f].name)) {
-          await currentProject.migrateFile(
-            originalFiles[f].name,
-            originalFiles[f].content,
-            originalProject.rootDialogId
-          );
-          // }
+          // exclude the schema files, so we start from scratch
+          if (!isSchema(originalFiles[f].name)) {
+            await currentProject.migrateFile(
+              originalFiles[f].name,
+              originalFiles[f].content,
+              originalProject.rootDialogId
+            );
+          }
         }
 
         const newSettings: DialogSetting = {
