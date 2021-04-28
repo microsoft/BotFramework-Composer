@@ -815,6 +815,12 @@
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate activity"
   },
+  "convert_583eb59d": {
+    "message": "Convert"
+  },
+  "convert_your_project_to_the_latest_format_a28e824c": {
+    "message": "Convert your project to the latest format"
+  },
   "copy_9748f9f": {
     "message": "Copy"
   },
@@ -2357,6 +2363,9 @@
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
   },
+  "migrating_data_a35b3055": {
+    "message": "Migrating data"
+  },
   "migrating_to_composer_bc304b5d": {
     "message": "Migrating to Composer"
   },
@@ -3194,6 +3203,9 @@
   "schema_24739a48": {
     "message": "Schema"
   },
+  "schema_definition_not_found_in_sdk_schema_1102ce9b": {
+    "message": "Schema definition not found in sdk.schema."
+  },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
     "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
   },
@@ -3760,6 +3772,9 @@
   },
   "this_page_contains_detailed_information_about_your_224a2b04": {
     "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings."
+  },
+  "this_project_was_created_in_an_older_version_of_co_8b57954": {
+    "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
   },
   "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
     "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."

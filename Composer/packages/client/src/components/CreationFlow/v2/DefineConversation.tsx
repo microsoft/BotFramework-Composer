@@ -64,6 +64,11 @@ const stackinput = {
   ],
 };
 
+const RuntimeLanguageOptions: IDropdownOption[] = [
+  { key: csharpFeedKey, text: 'C#' },
+  { key: nodeFeedKey, text: formatMessage('Node (Preview)') },
+];
+
 // -------------------- DefineConversation -------------------- //
 
 const MAXTRYTIMES = 10000;
@@ -122,6 +127,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
       return t.id === templateId;
     }
   });
+  const inBotMigration = props?.path?.indexOf('migrate') !== -1;
 
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = () => {
@@ -298,8 +304,10 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
 
   const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
     const result: IDropdownOption[] = [];
-
-    if (currentTemplate) {
+    if (inBotMigration) {
+      result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+      result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+    } else if (currentTemplate) {
       if (runtimeLanguage === csharpFeedKey) {
         currentTemplate.dotnetSupport?.functionsSupported &&
           result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
@@ -312,6 +320,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
       }
     }
+
     return result;
   };
 
@@ -374,6 +383,17 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                   onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
                 />
               </StackItem>
+              {inBotMigration && (
+                <StackItem grow={0} styles={halfstack}>
+                  <Dropdown
+                    data-testid="NewDialogRuntimeLanguage"
+                    label={formatMessage('Runtime Language')}
+                    options={RuntimeLanguageOptions}
+                    selectedKey={formData.runtimeLanguage}
+                    onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
+                  />
+                </StackItem>
+              )}
             </Stack>
           )}
           {locationSelectContent}
