@@ -9,7 +9,7 @@ import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, FEEDVERSION } from '../../constants';
+import { BotStatus, CreationFlowStatus, FEEDVERSION } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -39,6 +39,7 @@ import {
   showCreateQnAFromUrlDialogState,
   warnAboutDotNetState,
   settingsState,
+  creationFlowStatusState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -241,7 +242,7 @@ export const projectDispatcher = () => {
     }
   );
 
-  const forceMigrate = async (projectId: string) => {
+  const forceMigrate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     if (
       await OpenConfirmModal(
         formatMessage('Convert your project to the latest format'),
@@ -251,11 +252,12 @@ export const projectDispatcher = () => {
         { confirmText: formatMessage('Convert') }
       )
     ) {
+      callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
       navigateTo(`/v2/projects/migrate/${projectId}`);
     } else {
       navigateTo(`/home`);
     }
-  };
+  });
 
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (

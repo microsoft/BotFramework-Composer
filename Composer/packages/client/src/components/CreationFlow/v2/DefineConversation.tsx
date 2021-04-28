@@ -19,12 +19,12 @@ import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } fro
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DialogCreationCopy, nameRegexV2 } from '../../../constants';
+import { CreationFlowStatus, DialogCreationCopy, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
-import { dispatcherState, templateProjectsState } from '../../../recoilModel';
+import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
 
@@ -122,12 +122,15 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const writable = focusedStorageFolder.writable;
   const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
   const templateProjects = useRecoilValue(templateProjectsState);
+  const creationFlowStatus = useRecoilValue(creationFlowStatusState);
+
   const currentTemplate = templateProjects.find((t) => {
     if (t?.id) {
       return t.id === templateId;
     }
   });
-  const inBotMigration = props?.path?.indexOf('migrate') !== -1;
+
+  const inBotMigration = creationFlowStatus === CreationFlowStatus.MIGRATE;
 
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = () => {
