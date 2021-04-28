@@ -468,7 +468,7 @@ export class BotProjectService {
 
       const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(
         '@microsoft/generator-bot-adaptive',
-        '*', // use any available version
+        '1.0.0-rc6', // use any available version
         name,
         locationRef,
         jobId,
@@ -488,6 +488,7 @@ export class BotProjectService {
       log('Migrating files...');
 
       const originalProject = await BotProjectService.getProjectById(oldProjectId, user);
+
       if (originalProject.settings) {
         const originalFiles = originalProject.getProject().files;
 
@@ -507,7 +508,6 @@ export class BotProjectService {
             );
           }
         }
-
         const newSettings: DialogSetting = {
           ...currentProject.settings,
           runtimeSettings: {
@@ -548,12 +548,15 @@ export class BotProjectService {
           customFunctions: originalProject.settings.customfunctions,
           importedLibraries: [],
           MicrosoftAppId: originalProject.settings.MicrosoftAppId,
-          runtime: {
-            customRuntime: true,
-            path: '../',
-            key: 'adaptive-runtime-dotnet-webapp',
-            command: `dotnet run --project ${name}.csproj`,
-          },
+
+          runtime: currentProject.settings?.runtime
+            ? { ...currentProject.settings.runtime }
+            : {
+                customRuntime: true,
+                path: '../',
+                key: 'adaptive-runtime-dotnet-webapp',
+                command: `dotnet run --project ${name}.csproj`,
+              },
         };
 
         log('Update settings...');
