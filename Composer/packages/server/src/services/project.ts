@@ -18,6 +18,7 @@ import { Store } from '../store/store';
 import log from '../logger';
 import { ExtensionContext } from '../models/extension/extensionContext';
 import { getLocationRef, getNewProjRef, ejectAndMerge } from '../utility/project';
+import { isSchema } from '../models/bot/botStructure';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
@@ -499,11 +500,14 @@ export class BotProjectService {
 
         // add all original files to new project
         for (let f = 0; f < originalFiles.length; f++) {
+          // todo: do we want to migrate the schema or not?
+          // if (!isSchema(originalFiles[f].name)) {
           await currentProject.migrateFile(
             originalFiles[f].name,
             originalFiles[f].content,
             originalProject.rootDialogId
           );
+          // }
         }
 
         const newSettings: DialogSetting = {

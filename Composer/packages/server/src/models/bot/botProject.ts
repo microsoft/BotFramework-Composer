@@ -487,7 +487,6 @@ export class BotProject implements IBotProject {
     const dialogId = name.split('.')[0];
     const dialogFile = this.files.get(`${dialogId}.dialog`);
     const endpoint = dialogFile ? Path.dirname(dialogFile.relativePath) : '';
-
     const relativePath = defaultFilePath(botName, defaultLocale, filename, { endpoint, rootDialogId });
     const file = this.files.get(filename);
     if (file) {
