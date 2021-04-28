@@ -111,11 +111,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
       <div css={title}>{formatMessage('Microsoft App ID')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          'A Microsoft App ID is required for your local Azure resources.' +
-            ' If you’ve created an App ID already, you can add here.' +
-            ' If not, your App ID and Password will be created when you provision resources for this bot.' +
-            ' To add and App ID and Password from a publishing profile you’ve created, click the button below.' +
-            ' <a>Learn more.</a>',
+          'A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and Password will be created when you provision resources for this bot. To add and App ID and Password from a publishing profile you’ve created, click the button below. <a>Learn more.</a>',
           {
             a: ({ children }) => (
               <Link key="app-id-settings-page" href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
@@ -149,7 +145,6 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           onRenderLabel={onRenderLabel}
         />
         <PrimaryButton
-          disabled={false}
           styles={{ root: { width: '230px', marginTop: '15px' } }}
           text={formatMessage('Add from publishing profile')}
           onClick={() => {
