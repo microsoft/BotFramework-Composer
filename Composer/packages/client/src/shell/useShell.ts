@@ -11,6 +11,7 @@ import {
   BotInProject,
   FeatureFlagKey,
   SDKKinds,
+  Notification,
 } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -48,6 +49,7 @@ import { navigateTo } from '../utils/navigation';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
 import { getMemoryVariables } from '../recoilModel/dispatchers/utils/project';
+import { createNotification } from '../recoilModel/dispatchers/notification';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -127,6 +129,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     reloadProject,
     setApplicationLevelError,
     updateRecognizer,
+    addNotification,
+    deleteNotification,
+    hideNotification,
+    markNotificationAsRead,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -279,6 +285,14 @@ export function useShell(source: EventSource, projectId: string): Shell {
     confirm: OpenConfirmModal,
     telemetryClient: TelemetryClient,
     getMemoryVariables,
+    addNotification: (notificationWithoutId: Notification): string => {
+      const notification = createNotification(notificationWithoutId);
+      addNotification(notification);
+      return notification.id;
+    },
+    deleteNotification,
+    markNotificationAsRead,
+    hideNotification,
   };
 
   const currentDialog = useMemo(() => {

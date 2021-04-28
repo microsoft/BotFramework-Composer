@@ -14,11 +14,12 @@ import {
   useLocalStorage,
   useTelemetryClient,
   TelemetryClient,
+  useApplicationApi,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { LoadingSpinner, ProvisionHandoff } from '@bfc/ui-shared';
+import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -75,7 +76,9 @@ type ProvisionFormData = {
 };
 
 // ---------- Styles ---------- //
-
+type ProvisonActionsStylingProps = {
+  showSignout: boolean;
+};
 const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
@@ -85,6 +88,12 @@ const ConfigureResourcesSectionName = styled(Text)`
   font-weight: ${FontWeights.semibold};
   margin-bottom: 4px;
 `;
+
+const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: props.showSignout ? 'space-between' : 'flex-end',
+}));
 
 const ConfigureResourcesSectionDescription = styled(Text)`
   font-size: ${FluentTheme.fonts.medium.fontSize};
@@ -340,6 +349,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [handoffInstructions, setHandoffInstructions] = useState<string>('');
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const { addNotification } = useApplicationApi();
   const updateHandoffInstructions = (resources) => {
     const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
     const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
@@ -739,8 +749,27 @@ export const AzureProvisionDialog: React.FC = () => {
         <div
           style={{ color: 'blue', cursor: 'pointer' }}
           onClick={() => {
-            closeDialog();
-            logOut();
+            OpenConfirmModal(
+              formatMessage('Sign out from Azure'),
+              formatMessage('Changes you made may not be saved. Do you wish to continue?'),
+              {
+                confirmText: formatMessage('Sign out'),
+                cancelText: formatMessage('Cancel'),
+              }
+            ).then(async (signoutAndCloseProvisionDialog) => {
+              if (signoutAndCloseProvisionDialog) {
+                await logOut();
+                console.log(addNotification);
+                if (!currentUser) {
+                  addNotification({
+                    type: 'info',
+                    title: '',
+                    description: 'You have successfully signed out of Azure',
+                  });
+                }
+                closeDialog();
+              }
+            });
           }}
         >
           {props.secondaryText}
@@ -996,17 +1025,10 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
-    console.log(page);
+    const isSignedInAndCreateCreationType = currentUser && formData.creationType === 'create';
     if (page === PageTypes.ChooseAction) {
-      const isSignedInAndCreateCreationType = currentUser && formData.creationType === 'create';
       return (
-        <div
-          style={{
-            display: 'flex',
-            flexFlow: 'row nowrap',
-            justifyContent: isSignedInAndCreateCreationType ? 'space-between' : 'flex-end',
-          }}
-        >
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
           {isSignedInAndCreateCreationType ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
@@ -1053,11 +1075,11 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else if (page === PageTypes.ConfigProvision) {
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
           {currentUser ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
@@ -1065,18 +1087,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
             />
-          ) : (
-            <div
-              style={{ color: 'blue', cursor: 'pointer' }}
-              onClick={() => {
-                clearAll();
-                closeDialog();
-                logOut();
-              }}
-            >
-              {formatMessage('Sign out')}
-            </div>
-          )}
+          ) : null}
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
@@ -1120,12 +1131,12 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else if (page === PageTypes.AddResources) {
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
-          {currentUser ? (
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
+          {isSignedInAndCreateCreationType ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
@@ -1180,11 +1191,11 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else if (page === PageTypes.ReviewResource) {
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
           {currentUser ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
@@ -1227,7 +1238,7 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else {
       return (
