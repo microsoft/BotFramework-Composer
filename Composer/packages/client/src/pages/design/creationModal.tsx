@@ -5,6 +5,7 @@ import Path from 'path';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@botframework-composer/types';
+import { emptyBotNpmTemplateName } from '@bfc/shared';
 
 import { OpenProject } from '../../components/CreationFlow/OpenProject';
 import {
@@ -20,6 +21,7 @@ import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
 import { CreateBotV2 } from '../../components/CreationFlow/v2/CreateBot';
+import { AddBotModal } from '../../components/CreationFlow/v2/AddBotModal';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -51,7 +53,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-  const [templateId, setTemplateId] = useState('');
+  const [templateId, setTemplateId] = useState(emptyBotNpmTemplateName);
 
   useEffect(() => {
     if (storages?.length) {
@@ -186,6 +188,8 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
           onOpen={openBot}
         />
       ) : null}
+
+      {creationFlowStatus === CreationFlowStatus.NEW_SKILL ? <AddBotModal onDismiss={handleDismiss} /> : null}
     </Fragment>
   );
 };
