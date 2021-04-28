@@ -456,11 +456,6 @@ export class BotProjectService {
 
     const user = await ExtensionContext.getUserFromRequest(req);
 
-    // const language = 'dotnet';
-    // const hostingPlatform = 'webapp';
-    console.log(`\n${runtimeType}\n`);
-    console.log(`\n${runtimeLanguage}\n`);
-
     try {
       const locationRef = getLocationRef(location, storageId, name);
 
@@ -472,7 +467,7 @@ export class BotProjectService {
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
 
       const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(
-        '@microsoft/generator-microsoft-bot-adaptive',
+        '@microsoft/generator-bot-adaptive',
         '*', // use any available version
         name,
         locationRef,
