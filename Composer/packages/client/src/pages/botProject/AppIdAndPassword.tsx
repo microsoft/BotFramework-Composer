@@ -113,8 +113,8 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
         {formatMessage.rich(
           'A Microsoft App ID is required for your local Azure resources.' +
             ' If you’ve created an App ID already, you can add here.' +
-            ' If not, your App ID and secret will be created when you provision resources for this bot.' +
-            ' To add and App ID and Secret from a publishing profile you’ve created, click the button below.' +
+            ' If not, your App ID and Password will be created when you provision resources for this bot.' +
+            ' To add and App ID and Password from a publishing profile you’ve created, click the button below.' +
             ' <a>Learn more.</a>',
           {
             a: ({ children }) => (
@@ -167,7 +167,12 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           onOK={(info) => {
             setShowImportDialog(false);
             setLocalMicrosoftAppId(info.appId);
-            setLocalMicrosoftAppPassword(info.appSecret || '');
+            setLocalMicrosoftAppPassword(info.appPassword || '');
+            setSettings(projectId, {
+              ...mergedSettings,
+              MicrosoftAppId: info.appId,
+              MicrosoftAppPassword: info.appPassword,
+            });
           }}
         />
       )}

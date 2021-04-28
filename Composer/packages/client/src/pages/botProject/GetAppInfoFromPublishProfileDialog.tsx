@@ -15,7 +15,7 @@ import { settingsState } from '../../recoilModel/atoms/botState';
 
 type AppInfo = {
   appId: string;
-  appSecret?: string;
+  appPassword?: string;
 };
 
 type Props = {
@@ -34,17 +34,17 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
 
   const dialogTitle = {
     title: formatMessage('Add from publishing profile'),
-    subText: formatMessage('Select the publishing profile you’d like to add a Microsoft App ID and Secret from.'),
+    subText: formatMessage('Select the publishing profile you’d like to add a Microsoft App ID and Password from.'),
   };
 
   const getAppInfo = (profile: PublishTarget) => {
     if (profile) {
       const config = JSON.parse(profile.configuration);
       const appId = config?.settings?.MicrosoftAppId;
-      const appSecret = config?.settings?.MicrosoftAppPassword;
+      const appPassword = config?.settings?.MicrosoftAppPassword;
 
       if (appId) {
-        return { appId, appSecret };
+        return { appId, appPassword };
       }
     }
   };
@@ -111,7 +111,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
         <DialogFooter>
           <PrimaryButton
             disabled={!!publishTargetsErrorMessage || !selectedKey}
-            text={formatMessage('Add App ID and Secret')}
+            text={formatMessage('Add App ID and Password')}
             onClick={handleAdd}
           />
           <DefaultButton text={formatMessage('Cancel')} onClick={onCancel} />
