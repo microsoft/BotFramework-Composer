@@ -24,6 +24,7 @@ import { selectIntentDialog } from '../../constants';
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
+import { PreparatoryWorkDialog } from './PreparatoryWorkDialog';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -89,6 +90,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     subText: '',
     title: addSkillDialog.SKILL_MANIFEST_FORM.title,
   });
+  const [showPreparatoryWorkDialog, setShowPreparatoryWorkDialog] = useState(true);
   const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
     manifestUrl: '',
@@ -163,6 +165,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     }
   };
 
+  const handleDismiss = () => {
+    setShowPreparatoryWorkDialog(true);
+    onDismiss();
+  };
+
   useEffect(() => {
     if (skillManifest?.endpoints) {
       setFormData({
@@ -173,8 +180,9 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   }, [skillManifest]);
 
   return (
-    <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss} {...title}>
-      {showIntentSelectDialog ? (
+    <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={handleDismiss} {...title}>
+      {showPreparatoryWorkDialog && <PreparatoryWorkDialog projectId={projectId} onDismiss={handleDismiss} />}
+      {showIntentSelectDialog && (
         <SelectIntent
           dialogId={dialogId}
           languages={languages}
@@ -189,11 +197,12 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             });
             setShowIntentSelectDialog(false);
           }}
-          onDismiss={onDismiss}
+          onDismiss={handleDismiss}
           onSubmit={handleSubmit}
           onUpdateTitle={setTitle}
         />
-      ) : (
+      )}
+      {!showIntentSelectDialog && !showPreparatoryWorkDialog && (
         <Fragment>
           <div style={{ marginBottom: '16px' }}>
             {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
@@ -245,7 +254,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           <Stack>
             <Separator />
             <StackItem align={'end'}>
-              <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
+              <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={handleDismiss} />
               {skillManifest ? (
                 isUsingAdaptiveRuntime(runtime) &&
                 luFiles.length > 0 &&

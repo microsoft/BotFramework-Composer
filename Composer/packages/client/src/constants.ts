@@ -315,6 +315,12 @@ export const MultiLanguagesDialog = {
 };
 
 export const addSkillDialog = {
+  get PREPARATORY_WORK() {
+    return {
+      title: formatMessage('Before we begin'),
+      subText: formatMessage('Please setup the following to ensure we can connect to your remote skill successfully'),
+    };
+  },
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
