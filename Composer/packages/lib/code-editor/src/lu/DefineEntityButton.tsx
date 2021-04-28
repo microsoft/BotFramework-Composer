@@ -44,16 +44,17 @@ const buttonStyles = {
   icon: { color: FluentTheme.palette.black, fontSize: 12 },
 };
 
-const CommandBarButton = React.memo(
-  withTooltip({ content: formatMessage('Define new entity') }, DefaultCommandBarButton)
-);
+const getCommandBarButton = (tooltipContent: string) =>
+  withTooltip({ content: tooltipContent }, DefaultCommandBarButton);
 
 type Props = {
   onDefineEntity: (entityType: ToolbarLuEntityType, entityName?: string) => void;
+  disabled?: boolean;
+  tooltip?: string;
 };
 
 export const DefineEntityButton = React.memo((props: Props) => {
-  const { onDefineEntity } = props;
+  const { onDefineEntity, disabled = false, tooltip } = props;
 
   const { iconName, text } = React.useMemo(() => getLuToolbarItemTextAndIcon('defineEntity'), []);
   const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
@@ -154,10 +155,15 @@ export const DefineEntityButton = React.memo((props: Props) => {
     };
   }, [menuItems]);
 
+  const CommandBarButton = React.useMemo(() => getCommandBarButton(tooltip || formatMessage('Define new entity')), [
+    tooltip,
+  ]);
+
   return (
     <CommandBarButton
       className={jsLuToolbarMenuClassName}
       data-testid="menuButton"
+      disabled={disabled}
       iconProps={{ iconName }}
       menuProps={menuProps}
       styles={buttonStyles}
