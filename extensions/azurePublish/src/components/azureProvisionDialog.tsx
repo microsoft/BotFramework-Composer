@@ -746,8 +746,8 @@ export const AzureProvisionDialog: React.FC = () => {
       return (
         <div
           style={{ color: 'blue', cursor: 'pointer' }}
-          onClick={() => {
-            OpenConfirmModal(
+          onClick={async () => {
+            const signoutAndCloseProvisionDialog = await OpenConfirmModal(
               formatMessage('Sign out from Azure'),
               formatMessage(
                 'Changes you made may not be saved and the wizard will be closed. Do you wish to continue?'
@@ -756,30 +756,29 @@ export const AzureProvisionDialog: React.FC = () => {
                 confirmText: formatMessage('Sign out'),
                 cancelText: formatMessage('Cancel'),
               }
-            ).then(async (signoutAndCloseProvisionDialog) => {
-              if (signoutAndCloseProvisionDialog) {
-                await logOut();
-                if (!currentUser) {
-                  addNotification({
-                    type: 'info',
-                    title: '',
-                    retentionTime: 5000,
-                    description: formatMessage('You have successfully signed out of Azure'),
-                    onRenderCardContent: (props) => {
-                      return <div style={{ padding: '0 16px 16px 16px', fontSize: '10px' }}>{props.description}</div>;
-                    },
-                  });
-                }
-                closeDialog();
+            );
+            if (signoutAndCloseProvisionDialog) {
+              const isSignedOutSuccesfully = await logOut();
+              if (isSignedOutSuccesfully) {
+                addNotification({
+                  type: 'info',
+                  title: '',
+                  retentionTime: 5000,
+                  description: formatMessage('You have successfully signed out of Azure'),
+                  onRenderCardContent: (props) => {
+                    return <div style={{ padding: '0 16px 16px 16px', fontSize: '10px' }}>{props.description}</div>;
+                  },
+                });
               }
-            });
+              closeDialog();
+            }
           }}
         >
           {props.secondaryText}
         </div>
       );
     },
-    []
+    [addNotification]
   );
 
   const isNextDisabled = useMemo(() => {
