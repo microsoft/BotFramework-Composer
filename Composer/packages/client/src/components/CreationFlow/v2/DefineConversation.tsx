@@ -137,6 +137,8 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     if (currentTemplate) {
       // use almost the same patterns as in assetManager.ts
       return currentTemplate.name.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
+    } else if (templateId && inBotMigration) {
+      return templateId.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
     } else {
       return templateId;
     }
