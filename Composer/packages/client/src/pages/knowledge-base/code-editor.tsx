@@ -104,7 +104,6 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         </ActionButton>
       )}
       <QnAEditor
-        toolbarHidden
         diagnostics={currentDiagnostics}
         editorDidMount={editorDidMount}
         editorSettings={userSettings.codeEditor}
@@ -113,6 +112,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         }}
         placeholder={defaultQnAPlaceholder}
         telemetryClient={TelemetryClient}
+        toolbarOptions={{ hidden: true }}
         value={content}
         onChange={onChangeContent}
         onChangeSettings={handleSettingsChange}

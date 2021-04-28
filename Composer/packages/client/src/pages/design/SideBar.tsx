@@ -136,26 +136,17 @@ const SideBar: React.FC<SideBarProps> = React.memo(({ projectId }) => {
 
   const projectTreeHeaderMenuItems = [
     {
-      key: 'CreateNewSkill',
-      label: formatMessage('Create a new skill'),
+      key: 'AddSkill',
+      label: formatMessage('Add a bot'),
       onClick: () => {
         setCreationFlowType('Skill');
-        setCreationFlowStatus(CreationFlowStatus.NEW);
+        setCreationFlowStatus(CreationFlowStatus.NEW_SKILL);
         TelemetryClient.track('AddNewSkillStarted', { method: 'newSkill' });
       },
     },
     {
-      key: 'OpenSkill',
-      label: formatMessage('Open an existing skill'),
-      onClick: () => {
-        setCreationFlowType('Skill');
-        setCreationFlowStatus(CreationFlowStatus.OPEN);
-        TelemetryClient.track('AddNewSkillStarted', { method: 'existingSkill' });
-      },
-    },
-    {
       key: 'ConnectRemoteSkill',
-      label: formatMessage('Connect a remote skill'),
+      label: formatMessage('Connect to a skill'),
       onClick: () => {
         setAddSkillDialogModalVisibility(true);
         TelemetryClient.track('AddNewSkillStarted', { method: 'remoteSkill' });
