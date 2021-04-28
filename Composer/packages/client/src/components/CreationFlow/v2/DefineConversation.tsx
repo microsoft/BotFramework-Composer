@@ -18,6 +18,8 @@ import { useRecoilValue } from 'recoil';
 import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 
 import { DialogCreationCopy, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
@@ -126,7 +128,13 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const normalizeTemplateId = () => {
     if (currentTemplate) {
       // use almost the same patterns as in assetManager.ts
-      return currentTemplate.name.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
+      const camelCasedName = camelCase(
+        currentTemplate.name
+          .trim()
+          .replace(/bot|maker/gi, '')
+          .replace(/-/g, ' ')
+      );
+      return upperFirst(camelCasedName);
     }
   };
 

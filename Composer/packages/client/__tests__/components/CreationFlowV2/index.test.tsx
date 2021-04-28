@@ -100,7 +100,7 @@ describe('<CreationFlowV2/>', () => {
       appLocale: 'en-US',
       description: '',
       location: expectedLocation,
-      name: 'empty_bot',
+      name: 'Empty',
       schemaUrl: '',
       templateId: '@microsoft/generator-bot-empty',
       templateVersion: '1.0.0',
