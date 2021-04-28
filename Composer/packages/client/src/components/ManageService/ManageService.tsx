@@ -141,7 +141,15 @@ export const ManageService = (props: ManageServiceProps) => {
       }
       newtoken = getTokenFromCache('accessToken');
     } else {
-      newtoken = await AuthClient.getAccessToken(armScopes);
+      const tenants = await AuthClient.getTenants();
+      if (tenants) {
+        newtoken = await AuthClient.getARMTokenForTenant(tenants[0].tenantId);
+      }
+      // newtoken = await AuthClient.getAccessToken(armScopes);
+    }
+
+    if (!token) {
+      alert('could not get token');
     }
 
     setToken(newtoken);
