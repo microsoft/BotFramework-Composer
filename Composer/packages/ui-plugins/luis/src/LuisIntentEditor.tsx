@@ -7,10 +7,13 @@ import React, { useMemo, useCallback } from 'react';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { filterSectionDiagnostics } from '@bfc/indexers';
-import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
+import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType, checkForPVASchema } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
   const { onChange, value, schema, placeholder } = props;
+  const { schemas } = useShellApi();
+  const isPVABot = useMemo(() => checkForPVASchema(schemas.sdk), [schemas.sdk]);
 
   const {
     currentDialog,
@@ -96,6 +99,12 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
       luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId, luFeatures }}
       placeholder={placeholder || inlineModePlaceholder}
       telemetryClient={shellApi.telemetryClient}
+      toolbarOptions={{
+        disabled: isPVABot,
+        tooltip: isPVABot
+          ? formatMessage('Power Virtual Agents bots cannot use this functionality at this time.')
+          : undefined,
+      }}
       value={luIntent.Body}
       onChange={commitChanges}
       onChangeSettings={handleSettingsChange}

@@ -277,7 +277,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           ) : (
             <StackItem>
               <LuEditor
-                toolbarHidden
                 height={300}
                 luOption={{
                   projectId,
@@ -286,6 +285,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                   luFeatures: luFeatures,
                 }}
                 telemetryClient={TelemetryClient}
+                toolbarOptions={{ hidden: true }}
                 value={displayContent}
                 warningMessage={warningMsg}
                 onChange={setDisplayContent}
