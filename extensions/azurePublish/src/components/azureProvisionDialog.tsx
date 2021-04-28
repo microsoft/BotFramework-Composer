@@ -74,10 +74,19 @@ type ProvisionFormData = {
 };
 
 // ---------- Styles ---------- //
+type ProvisonActionsStylingProps = {
+  showSignout: boolean;
+};
 
 const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
+
+const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: props.showSignout ? 'space-between' : 'flex-end',
+}));
 
 const ConfigureResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
@@ -993,28 +1002,18 @@ export const AzureProvisionDialog: React.FC = () => {
   );
 
   const PageFooter = useMemo(() => {
+    const isSignedInAndCreateCreationType = currentUser && formData.creationType === 'create';
     if (page === PageTypes.ChooseAction) {
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
-          {currentUser ? (
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
+          {isSignedInAndCreateCreationType ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
             />
-          ) : (
-            <div
-              style={{ color: 'blue', cursor: 'pointer' }}
-              onClick={() => {
-                clearAll();
-                closeDialog();
-                logOut();
-              }}
-            >
-              Sign out
-            </div>
-          )}
+          ) : null}
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
@@ -1053,11 +1052,11 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else if (page === PageTypes.ConfigProvision) {
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
           {currentUser ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
@@ -1065,18 +1064,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={currentUser.name}
               onRenderSecondaryText={onRenderSecondaryText}
             />
-          ) : (
-            <div
-              style={{ color: 'blue', cursor: 'pointer' }}
-              onClick={() => {
-                clearAll();
-                closeDialog();
-                logOut();
-              }}
-            >
-              {formatMessage('Sign out')}
-            </div>
-          )}
+          ) : null}
           <div>
             <DefaultButton
               style={{ margin: '0 4px' }}
@@ -1120,12 +1108,12 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else if (page === PageTypes.AddResources) {
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
-          {currentUser ? (
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
+          {isSignedInAndCreateCreationType ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
               size={PersonaSize.size40}
@@ -1180,11 +1168,11 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else if (page === PageTypes.ReviewResource) {
       return (
-        <div style={{ display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between' }}>
+        <ProvisonActions showSignout={isSignedInAndCreateCreationType}>
           {currentUser ? (
             <Persona
               secondaryText={formatMessage('Sign out')}
@@ -1227,7 +1215,7 @@ export const AzureProvisionDialog: React.FC = () => {
               }}
             />
           </div>
-        </div>
+        </ProvisonActions>
       );
     } else {
       return (

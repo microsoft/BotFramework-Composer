@@ -93,6 +93,8 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
 async function logOut() {
   // clean tenantId cache
   removeTenantFromCache();
+  cleanTokenFromCache('accessToken');
+  cleanTokenFromCache('graphToken');
   if (isElectron()) {
     try {
       const url = '/api/auth/logOut';
