@@ -207,7 +207,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   }, [props.location?.state]);
 
   useEffect(() => {
-    console.log('SET FORM DATA ', templateId, getDefaultName());
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       runtimeLanguage: runtimeLanguage,

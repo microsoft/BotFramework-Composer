@@ -492,11 +492,6 @@ export class BotProjectService {
       if (originalProject.settings) {
         const originalFiles = originalProject.getProject().files;
 
-        console.log(
-          'ORIGINAL FILES',
-          originalFiles.map((f) => f.name)
-        );
-
         // pass in allowPartialBots = true so that this project can be opened even though
         // it doesn't yet have a root dialog...
         const id = await BotProjectService.openProject(newProjRef, user, true, { allowPartialBots: true });
@@ -578,6 +573,8 @@ export class BotProjectService {
           log('Build new runtime...');
           await runtime.build(runtimePath, currentProject);
         }
+
+        await ejectAndMerge(currentProject, jobId);
 
         const project = currentProject.getProject();
 
