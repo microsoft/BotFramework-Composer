@@ -515,7 +515,9 @@ export const projectDispatcher = () => {
       oldProjectId: string,
       name: string,
       description: string,
-      location: string
+      location: string,
+      runtimeLanguage: string,
+      runtimeType: string
     ) => {
       const { set, snapshot } = callbackHelpers;
       try {
@@ -523,7 +525,15 @@ export const projectDispatcher = () => {
         set(botOpeningState, true);
 
         // starts the creation process and stores the jobID in state for tracking
-        const response = await migrateToV2(callbackHelpers, oldProjectId, name, description, location);
+        const response = await migrateToV2(
+          callbackHelpers,
+          oldProjectId,
+          name,
+          description,
+          location,
+          runtimeLanguage,
+          runtimeType
+        );
 
         if (response.data.jobId) {
           dispatcher.updateCreationMessage(response.data.jobId);

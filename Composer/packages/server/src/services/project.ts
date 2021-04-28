@@ -452,11 +452,14 @@ export class BotProjectService {
   };
 
   public static async migrateProjectAsync(req: Request, jobId: string) {
-    const { oldProjectId, name, description, location, storageId } = req.body;
+    const { oldProjectId, name, description, location, storageId, runtimeType, runtimeLanguage } = req.body;
+
     const user = await ExtensionContext.getUserFromRequest(req);
 
-    const language = 'dotnet';
-    const hostingPlatform = 'webapp';
+    // const language = 'dotnet';
+    // const hostingPlatform = 'webapp';
+    console.log(`\n${runtimeType}\n`);
+    console.log(`\n${runtimeLanguage}\n`);
 
     try {
       const locationRef = getLocationRef(location, storageId, name);
@@ -474,8 +477,8 @@ export class BotProjectService {
         name,
         locationRef,
         jobId,
-        hostingPlatform,
-        language,
+        runtimeType,
+        runtimeLanguage,
         {
           applicationSettingsDirectory: 'settings',
         },
