@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef } from '@bfc/shared';
+import { LgTemplateRef, parseTemplateBody } from '@bfc/shared';
 import { LgTemplate, useShellApi } from '@bfc/extension-client';
 
 import { locateLgTemplatePosition } from '../locateLgTemplatePosition';
@@ -38,17 +38,13 @@ const getLgTemplateTextData = (
               const subTemplate = templates.find((x) => x.name === subTemplateId);
               // If found template and it matches auto-generated names
               if (subTemplate) {
-                const lines =
-                  subTemplate.body
-                    // eslint-disable-next-line security/detect-unsafe-regex
-                    .split(/(?<!\\)- /g)
-                    // Ignore empty or newline strings
-                    .filter((s) => s !== '' && s !== '\n')
-                    .map((s) => s.replace(/\r?\n$/g, ''))
-                    // Remove LG template multiline block symbol
-                    .map((s) => s.replace(/```/g, '')) || [];
-                if (lines.length) {
-                  acc[responseType] = { value: lines[0].replace(/\r?\n/g, '↵'), moreCount: lines.length - 1 };
+                const variations = parseTemplateBody(subTemplate.body)
+                  // Remove LG template multiline block symbol
+                  .map((s) => ({ ...s, value: s.value.replace(/```/g, '') }))
+                  .filter((s) => s.kind === 'variation')
+                  .map((s) => s.value);
+                if (variations.length) {
+                  acc[responseType] = { value: variations[0].replace(/\r?\n/g, '↵'), moreCount: variations.length - 1 };
                 }
               }
             } else {
