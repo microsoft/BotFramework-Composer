@@ -93,7 +93,7 @@ export const topLinks = (
             iconName: 'Table',
             labelName: formatMessage('Forms (preview)'),
             disabled: !botLoaded || skillIsRemote,
-            isDisabledForPVA: false,
+            isDisabledForPVA: isPVASchema,
           },
         ]
       : []),

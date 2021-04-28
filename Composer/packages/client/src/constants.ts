@@ -147,6 +147,7 @@ export enum CreationFlowStatus {
   MIGRATE = 'Migrate',
   OPEN = 'Open',
   CLOSE = 'Close',
+  NEW_SKILL = 'New Skill',
 }
 
 export type CreationFlowType = 'Bot' | 'Skill';
