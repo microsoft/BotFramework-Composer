@@ -244,7 +244,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'recommended' });
         openLink(linkToLUEditor);
       },
-      hideFeatureStep: false,
+      hideFeatureStep: isPVABot,
     });
 
     setRecommendedNextSteps(newRecomendedSteps);
@@ -274,7 +274,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'insights', priority: 'optional' });
           openLink(linkToAppInsights);
         },
-        hideFeatureStep: isPVABot,
+        hideFeatureStep: false,
       },
       {
         key: 'devops',
@@ -286,7 +286,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'devops', priority: 'optional' });
           openLink(linkToDevOps);
         },
-        hideFeatureStep: false,
+        hideFeatureStep: isPVABot,
       },
     ];
 
