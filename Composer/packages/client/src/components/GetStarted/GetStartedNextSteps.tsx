@@ -297,6 +297,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           key: 'publish',
           label: formatMessage('Publish your bot'),
           description: formatMessage('Once you publish your bot to Azure you will be ready to add connections.'),
+          learnMore: 'https://aka.ms/composer-getstarted-publishbot',
           checked: false,
           onClick: () => {
             TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publish', priority: 'optional' });
