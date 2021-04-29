@@ -135,6 +135,7 @@ describe('assetManager', () => {
           id: 'generator-conversational-core',
           name: 'Conversational Core',
           description: 'Preview conversational core package for TESTING ONLY',
+          isMultiBotTemplate: false,
           package: {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',

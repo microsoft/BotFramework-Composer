@@ -72,6 +72,7 @@ type BotProjectEvents = {
   CreateNewBotProjectFromExample: { template: string };
   CreateNewBotProjectStarted: { template: string };
   CreateNewBotProjectCompleted: { template: string; status: number };
+  CreateNewBotProjectFailed: { reason: string; template: string; status: number };
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
   StartBotButtonClicked: { isRoot: boolean; location: string; projectId: string };

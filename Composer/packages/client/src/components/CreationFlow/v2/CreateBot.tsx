@@ -199,17 +199,22 @@ export function CreateBotV2(props: CreateBotProps) {
 
   useEffect(() => {
     const itemKey = selectedProgLang.props.itemKey;
+    let newTemplates: BotTemplate[] = [];
     if (itemKey === csharpFeedKey) {
-      const newTemplates = templates.filter((template) => {
+      newTemplates = templates.filter((template) => {
         return template.dotnetSupport;
       });
-      setDisplayedTemplates(newTemplates);
     } else if (itemKey === nodeFeedKey) {
-      const newTemplates = templates.filter((template) => {
+      newTemplates = templates.filter((template) => {
         return template.nodeSupport;
       });
-      setDisplayedTemplates(newTemplates);
     }
+    if (creationFlowType === 'Skill') {
+      newTemplates = newTemplates.filter((template) => {
+        return !template.isMultiBotTemplate;
+      });
+    }
+    setDisplayedTemplates(newTemplates);
   }, [templates, selectedProgLang]);
 
   useEffect(() => {
