@@ -242,7 +242,7 @@ export class BotProjectService {
 
     // generate an id and store it in the projectLocationMap
     const projectId = await BotProjectService.generateProjectId(locationRef.path);
-    BotProjectService.addRecentProject(locationRef.path);
+    if (isRootBot) BotProjectService.addRecentProject(locationRef.path);
     Store.set('projectLocationMap', BotProjectService.projectLocationMap);
     return projectId.toString();
   };
@@ -462,6 +462,7 @@ export class BotProjectService {
       schemaUrl,
       runtimeType,
       runtimeLanguage,
+      isRoot: creatingRootBot = true,
     } = req.body;
 
     // get user from request
@@ -562,7 +563,7 @@ export class BotProjectService {
         const id = await BotProjectService.openProject(
           { storageId: rootBot?.storageId, path: rootBot.path },
           user,
-          true
+          creatingRootBot
         );
         const currentProject = await BotProjectService.getProjectById(id, user);
         const project = currentProject.getProject();
