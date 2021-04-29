@@ -19,9 +19,9 @@ interface AddBotModalProps {
 const addExistingBotKey = 'existing';
 const addNewBotKey = 'new';
 
-const addSkillOptions: IChoiceGroupOption[] = [
-  { key: addNewBotKey, text: 'Create a new bot' },
-  { key: addExistingBotKey, text: 'Add an existing bot' },
+const getAddSkillOptions = (): IChoiceGroupOption[] => [
+  { key: addNewBotKey, text: formatMessage('Create a new bot') },
+  { key: addExistingBotKey, text: formatMessage('Add an existing bot') },
 ];
 
 export const AddBotModal: React.FC<AddBotModalProps> = (props) => {
@@ -50,7 +50,7 @@ export const AddBotModal: React.FC<AddBotModalProps> = (props) => {
       title={formatMessage('Add a bot')}
       onDismiss={props.onDismiss}
     >
-      <ChoiceGroup required defaultSelectedKey={addNewBotKey} options={addSkillOptions} onChange={handleChange} />
+      <ChoiceGroup required defaultSelectedKey={addNewBotKey} options={getAddSkillOptions()} onChange={handleChange} />
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
         <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleSubmit} />
