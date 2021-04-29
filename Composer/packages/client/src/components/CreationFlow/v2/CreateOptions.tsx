@@ -99,7 +99,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     },
   };
 
-  const options: IChoiceGroupOption[] = [
+  const getOptions = (): IChoiceGroupOption[] => [
     { key: 'Create', text: formatMessage('Create a new bot') },
     { key: 'Connect', text: formatMessage('Connect to an existing bot') },
   ];
