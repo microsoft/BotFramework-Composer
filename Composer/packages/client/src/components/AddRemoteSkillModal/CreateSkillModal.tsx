@@ -63,7 +63,12 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
     });
     setSkillManifest(data);
   } catch (error) {
-    setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest URL can not be accessed') });
+    const httpMessage = error?.response?.data?.message;
+    const message = httpMessage?.match('Unexpected string in JSON')
+      ? formatMessage("Error attempting to parse Skill manifest. There could be an error in it's format.")
+      : formatMessage('Manifest URL can not be accessed');
+
+    setFormDataErrors({ ...error, manifestUrl: message });
   }
 };
 const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
@@ -219,7 +224,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   responsiveMode={ResponsiveMode.large}
                   onChange={(e, option?: IDropdownOption) => {
                     if (option) {
-                      console.log(option);
                       setFormData({
                         ...formData,
                         endpointName: option.key as string,

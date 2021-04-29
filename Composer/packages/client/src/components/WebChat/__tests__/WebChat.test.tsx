@@ -4,14 +4,15 @@
 import React from 'react';
 import { render } from '@botframework-composer/test-utils';
 
-import { WebChatContainerProps, WebChatContainer } from '../WebChatContainer';
-import { ChatData, ConversationService } from '../utils/conversationService';
+import { WebChatComposerProps, WebChatComposer } from '../WebChatComposer';
+import { ConversationService } from '../utils/conversationService';
+import { ChatData } from '../types';
 
 URL.createObjectURL = jest.fn();
 
-describe('<WebChatContainer />', () => {
-  fit('should not render webchat if no conversation or chat data', async () => {
-    const props: WebChatContainerProps = {
+describe('<WebChat />', () => {
+  it('should not render webchat if no conversation or chat data', async () => {
+    const props: WebChatComposerProps = {
       currentConversation: '',
       activeLocale: 'en-us',
       conversationService: new ConversationService('http://localhost:4000'),
@@ -20,7 +21,7 @@ describe('<WebChatContainer />', () => {
       isDisabled: false,
     };
 
-    const { container } = render(<WebChatContainer {...props} />);
+    const { container } = render(<WebChatComposer {...props} />);
     expect(container.innerHTML).toBe('');
   });
 });

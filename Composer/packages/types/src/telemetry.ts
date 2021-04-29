@@ -198,6 +198,10 @@ type OrchestratorEvents = {
   OrchestratorBuildCompleted: { baseModel: string; firstBuild: boolean };
 };
 
+type PropertyEditorEvents = {
+  RecognizerChanged: { recognizer: string };
+};
+
 type OtherEvents = {};
 
 type PageView = {
@@ -232,7 +236,8 @@ export type TelemetryEvents = ApplicationEvents &
   LgEditorEvents &
   WebChatEvents &
   LuEditorEvents &
-  OrchestratorEvents;
+  OrchestratorEvents &
+  PropertyEditorEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

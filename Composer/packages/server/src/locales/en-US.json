@@ -35,8 +35,8 @@
   "a_language_understanding_intelligent_service_luis__348b281": {
     "message": "<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>."
   },
-  "a_microsoft_app_id_is_required_for_your_local_azur_454cfd41": {
-    "message": "A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. <a>Learn more.</a>"
+  "a_microsoft_app_id_is_required_for_your_local_azur_eb7844c2": {
+    "message": "A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and Password will be created when you provision resources for this bot. To add and App ID and Password from a publishing profile you’ve created, click the button below. <a>Learn more.</a>"
   },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
@@ -143,6 +143,9 @@
   "add_8523c19b": {
     "message": "Add"
   },
+  "add_a_bot_58522e81": {
+    "message": "Add a bot"
+  },
   "add_a_dialog_e378aa3a": {
     "message": "Add a dialog"
   },
@@ -179,6 +182,9 @@
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
+  "add_app_id_and_password_164e0fdb": {
+    "message": "Add App ID and Password"
+  },
   "add_connections_d720a32e": {
     "message": "Add connections"
   },
@@ -190,6 +196,9 @@
   },
   "add_entity_5f769994": {
     "message": "Add entity"
+  },
+  "add_from_publishing_profile_a672094f": {
+    "message": "Add from publishing profile"
   },
   "add_microsoft_app_ids_of_bots_that_can_access_this_7d41742c": {
     "message": "Add Microsoft App Ids of bots that can access this skill. You can skip this step and add this information later from the project settings tab."
@@ -635,6 +644,9 @@
   "close_d634289d": {
     "message": "Close"
   },
+  "close_webchat_b26d03e1": {
+    "message": "Close WebChat"
+  },
   "cognitive_service_region_87c668be": {
     "message": "Cognitive Service Region"
   },
@@ -661,6 +673,9 @@
   },
   "common_7911ab4b": {
     "message": "Common"
+  },
+  "complete_your_publishing_profile_7240d0d6": {
+    "message": "Complete your publishing profile"
   },
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
@@ -752,9 +767,6 @@
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Congratulations! Your model is successfully published."
   },
-  "connect_a_remote_skill_10cf0724": {
-    "message": "Connect a remote skill"
-  },
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
   },
@@ -770,8 +782,8 @@
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
     "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
   },
-  "connect_your_bot_to_teams_external_channels_or_ena_8b4fc9f0": {
-    "message": "Connect your bot to Teams, external channels, or enable speech. Learn more"
+  "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
+    "message": "Connect your bot to Teams, external channels, or enable speech."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -863,9 +875,6 @@
   "create_a_new_service_resource_23d59c2f": {
     "message": "Create a new { service } resource"
   },
-  "create_a_new_skill_e961ff28": {
-    "message": "Create a new skill"
-  },
   "create_a_publish_profile_to_continue_1e2fa5a0": {
     "message": "Create a publish profile to continue"
   },
@@ -902,9 +911,6 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
-  "create_kb_e78571ba": {
-    "message": "Create KB"
-  },
   "create_knowledge_base_db6d66c4": {
     "message": "Create knowledge base"
   },
@@ -922,9 +928,6 @@
   },
   "create_new_knowledge_base_d15d6873": {
     "message": "Create new knowledge base"
-  },
-  "create_new_knowledge_base_from_scratch_638c4fd2": {
-    "message": "Create new knowledge base from scratch"
   },
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
@@ -1235,9 +1238,6 @@
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
-  "edit_a_publishing_profile_705e87e3": {
-    "message": "Edit a publishing profile"
-  },
   "edit_a_skill_5665d9ac": {
     "message": "Edit a skill"
   },
@@ -1273,6 +1273,9 @@
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
+  },
+  "edit_publishing_profile_e40a0bf1": {
+    "message": "Edit publishing profile"
   },
   "edit_schema_a2ab5695": {
     "message": "Edit schema"
@@ -1432,6 +1435,9 @@
   },
   "error_afac7133": {
     "message": "Error:"
+  },
+  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
+    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
   },
   "error_checking_node_version_98bfbf4c": {
     "message": "Error checking node version"
@@ -1598,6 +1604,9 @@
   "filter_e3398407": {
     "message": "Filter"
   },
+  "find_additional_template_specific_guidance_for_set_d7256573": {
+    "message": "Find additional template-specific guidance for setting up your bot."
+  },
   "find_and_install_more_external_services_to_your_bo_37ef3f0c": {
     "message": "Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>"
   },
@@ -1612,6 +1621,9 @@
   },
   "find_tutorials_step_by_step_guides_discover_what_y_8f3e3863": {
     "message": "Find tutorials, step-by-step guides. Discover what you can build with Composer."
+  },
+  "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
+    "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1732,9 +1744,6 @@
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
-  },
-  "getting_help_ab6811b0": {
-    "message": "Getting Help"
   },
   "getting_template_910a4116": {
     "message": "Getting template"
@@ -2285,8 +2294,8 @@
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
   },
-  "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
-    "message": "Manually add question and answer pairs to create a KB"
+  "manually_add_question_and_answer_pairs_to_create_a_39089442": {
+    "message": "Manually add question and answer pairs to create a knowledge base"
   },
   "maximum_f0e8e5e4": {
     "message": "Maximum"
@@ -2510,6 +2519,9 @@
   "no_prebuilt_entities_found_a1015451": {
     "message": "no prebuilt entities found"
   },
+  "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
+    "message": "No profiles were found containing a Microsoft App ID."
+  },
   "no_properties_found_6f777f6e": {
     "message": "No properties found"
   },
@@ -2617,9 +2629,6 @@
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
-  },
-  "open_an_existing_skill_fbd87273": {
-    "message": "Open an existing skill"
   },
   "open_e0beb7b9": {
     "message": "Open"
@@ -2782,6 +2791,9 @@
   },
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
+  },
+  "project_readme_68f88d88": {
+    "message": "Project Readme"
   },
   "project_settings_42fe3f68": {
     "message": "Project settings"
@@ -3074,6 +3086,9 @@
   "replace_this_dialog_e304015e": {
     "message": "Replace this dialog"
   },
+  "report_a_bug_or_request_a_feature_36eb52c7": {
+    "message": "Report a bug or request a feature"
+  },
   "reprompt_dialog_event_c42d2c33": {
     "message": "Reprompt dialog event"
   },
@@ -3124,6 +3139,9 @@
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
+  },
+  "review_your_template_readme_2d6eae1e": {
+    "message": "Review your template readme"
   },
   "rollback_26326307": {
     "message": "Rollback"
@@ -3289,6 +3307,9 @@
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "Select the language that bot will be able to understand (User input) and respond to (Bot responses).\n    To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language."
+  },
+  "select_the_publishing_profile_you_d_like_to_add_a__ffff34ac": {
+    "message": "Select the publishing profile you’d like to add a Microsoft App ID and Password from."
   },
   "select_which_dialogs_are_included_in_the_skill_man_281ef8c9": {
     "message": "Select which dialogs are included in the skill manifest"
@@ -3878,8 +3899,8 @@
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
   },
-  "type_a_name_that_describes_this_content_d1a910b6": {
-    "message": "Type a name that describes this content"
+  "type_a_name_for_this_knowledge_base_ab07b439": {
+    "message": "Type a name for this knowledge base"
   },
   "type_and_press_enter_33a2905d": {
     "message": "Type and press enter"
@@ -4079,11 +4100,11 @@
   "what_is_the_name_of_the_custom_event_b28a7b3": {
     "message": "What is the name of the custom event?"
   },
+  "what_is_the_name_of_this_trigger_1d6db01": {
+    "message": "What is the name of this trigger?"
+  },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "What is the name of this trigger"
-  },
-  "what_is_the_name_of_this_trigger_luis_17b60a23": {
-    "message": "What is the name of this trigger (LUIS)"
   },
   "what_is_the_name_of_this_trigger_regex_f77376d7": {
     "message": "What is the name of this trigger (RegEx)"
@@ -4123,6 +4144,9 @@
   },
   "which_bot_do_you_want_to_open_974bb1e5": {
     "message": "Which bot do you want to open?"
+  },
+  "which_bot_would_you_like_to_add_to_your_project_e31270db": {
+    "message": "Which bot would you like to add to your project"
   },
   "which_bots_are_allowed_to_use_this_skill_b908339e": {
     "message": "Which bots are allowed to use this skill?"
@@ -4183,6 +4207,9 @@
   },
   "you_re_ready_to_go_18ee8dac": {
     "message": "You’re ready to go!"
+  },
+  "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
+    "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."

@@ -19,13 +19,12 @@ import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
-import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
 import { projectReadmeState } from '../../recoilModel/atoms';
 
 import { GetStartedTask } from './GetStartedTask';
-import { NextSteps } from './types';
-import { h3Style } from './styles';
+import { NextStep } from './types';
+import { h3Style, topH3Style } from './styles';
 
 type GetStartedProps = {
   requiresLUIS: boolean;
@@ -48,9 +47,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
-  const [requiredNextSteps, setRequiredNextSteps] = useState<NextSteps[]>([]);
-  const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextSteps[]>([]);
-  const [optionalSteps, setOptionalSteps] = useState<NextSteps[]>([]);
+  const [requiredNextSteps, setRequiredNextSteps] = useState<NextStep[]>([]);
+  const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextStep[]>([]);
+  const [optionalSteps, setOptionalSteps] = useState<NextStep[]>([]);
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
   const [highlightQNA, setHighlightQNA] = useState<boolean>(false);
@@ -112,8 +111,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const linkToReadme = `/bot/${rootBotProjectId}/botProjectsSettings`;
 
   useEffect(() => {
-    const newNextSteps: NextSteps[] = [];
-    const newRecomendedSteps: NextSteps[] = [];
+    const newNextSteps: NextStep[] = [];
+    const newRecomendedSteps: NextStep[] = [];
 
     const hasLUIS =
       botProject?.setting?.luis?.authoringKey && botProject?.setting?.luis?.authoringRegion ? true : false;
@@ -147,7 +146,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             setDisplayManageLuis(true);
           }
         },
-        isDisabled: isPVABot,
+        hideFeatureStep: isPVABot,
       });
     }
     if (props.requiresQNA) {
@@ -155,7 +154,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'qna',
         label: formatMessage('Add a QnA Maker key'),
         description: formatMessage('Your template requires QnA Maker to access content for your bot.'),
-        learnMore: '',
+        learnMore: 'https://aka.ms/composer-addqnamaker-learnmore',
         required: true,
         checked: hasQNA,
         highlight: (step) => {
@@ -168,7 +167,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             setDisplayManageQNA(true);
           }
         },
-        isDisabled: isPVABot,
+        hideFeatureStep: isPVABot,
       });
     }
     setRequiredNextSteps(newNextSteps);
@@ -183,12 +182,13 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         label: formatMessage('Review your template readme'),
         description: formatMessage('Find additional template-specific guidance for setting up your bot.'),
         checked: false,
+        learnMore: 'https://aka.ms/composer-template-overview',
         onClick: (step) => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'readme', priority: 'recommended' });
           openLink(linkToReadme);
           setReadmeHidden(false);
         },
-        isDisabled: false,
+        hideFeatureStep: false,
       });
     }
     if (!hasPublishingProfile) {
@@ -197,11 +197,12 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         label: formatMessage('Create a publishing profile'),
         description: formatMessage('Set up hosting and other Azure resources to enable publishing'),
         checked: hasPublishingProfile,
+        learnMore: 'https://aka.ms/composer-getstarted-publishingprofile',
         onClick: () => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publishing', priority: 'recommended' });
           openLink(linkToPublishProfile);
         },
-        isDisabled: false,
+        hideFeatureStep: false,
       });
     }
     if (hasPartialPublishingProfile) {
@@ -209,14 +210,15 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'partialProfile',
         label: formatMessage('Complete your publishing profile'),
         description: formatMessage(
-          'Finish setting up your environment and provisionig resources so that you can publish your bot.'
+          'Finish setting up your environment and provisioning resources so that you can publish your bot.'
         ),
         checked: hasPublishingProfile && !hasPartialPublishingProfile,
+        learnMore: 'https://aka.ms/composer-getstarted-publishingprofile',
         onClick: () => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'partialProfile', priority: 'recommended' });
           openLink(linkToCompletePublishProfile);
         },
-        isDisabled: false,
+        hideFeatureStep: false,
       });
     }
 
@@ -224,41 +226,41 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       key: 'editlg',
       label: formatMessage('Edit what your bot says'),
       description: formatMessage('Customize your bot by editing and adding bot responses.'),
-      learnMore: '',
+      learnMore: 'https://aka.ms/composer-getstarted-editbotsays',
       checked: false,
       onClick: () => {
         TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlg', priority: 'recommended' });
         openLink(linkToLGEditor);
       },
-      isDisabled: false,
+      hideFeatureStep: false,
     });
     newRecomendedSteps.push({
       key: 'editlu',
       label: formatMessage('Train your language model'),
       description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
-      learnMore: '',
+      learnMore: 'https://aka.ms/composer-luis-learnmore',
       checked: false,
       onClick: () => {
         TelemetryClient.track('GettingStartedActionClicked', { taskName: 'editlu', priority: 'recommended' });
         openLink(linkToLUEditor);
       },
-      isDisabled: false,
+      hideFeatureStep: isPVABot,
     });
 
     setRecommendedNextSteps(newRecomendedSteps);
 
-    const optSteps = [
+    const optSteps: NextStep[] = [
       {
         key: 'packages',
         label: formatMessage('Add packages'),
         description: formatMessage('Visit the Package manager to browse packages to add to your bot.'),
-        learnMore: '',
+        learnMore: 'https://aka.ms/composer-getstarted-addpackages',
         checked: false,
         onClick: () => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'packages', priority: 'optional' });
           openLink(linkToPackageManager);
         },
-        isDisabled: isPVABot,
+        hideFeatureStep: isPVABot,
       },
       {
         key: 'insights',
@@ -266,25 +268,25 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         description: formatMessage(
           'Collect service-level and conversation-level data to help gauge the performance and efficacy of your bot.'
         ),
-        learnMore: '',
+        learnMore: 'https://aka.ms/composer-getstarted-enableinsights',
         checked: false,
         onClick: () => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'insights', priority: 'optional' });
           openLink(linkToAppInsights);
         },
-        isDisabled: isPVABot,
+        hideFeatureStep: false,
       },
       {
         key: 'devops',
         label: formatMessage('Publish to Dev Ops'),
         description: formatMessage('Learn how to publish to a Dev Ops pipeline using CI / CD.'),
-        learnMore: '',
+        learnMore: 'https://aka.ms/bfcomposercicd',
         checked: false,
         onClick: () => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'devops', priority: 'optional' });
           openLink(linkToDevOps);
         },
-        isDisabled: false,
+        hideFeatureStep: isPVABot,
       },
     ];
 
@@ -292,25 +294,26 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       optSteps.push({
         key: 'connections',
         label: formatMessage('Add connections'),
-        description: formatMessage('Connect your bot to Teams, external channels, or enable speech. Learn more'),
-        learnMore: '',
+        description: formatMessage('Connect your bot to Teams, external channels, or enable speech.'),
+        learnMore: 'https://aka.ms/composer-connections-learnmore',
         checked: false,
         onClick: () => {
           TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
           openLink(linkToConnections);
         },
-        isDisabled: isPVABot,
+        hideFeatureStep: isPVABot,
       });
     }
 
     setOptionalSteps(optSteps);
   }, [botProject, props.requiresLUIS, props.requiresQNA, props.showTeachingBubble]);
 
-  const getStartedTaskElement = (step: NextSteps) => (
-    <DisableFeatureToolTip key={'disableToolTip-' + step.key} isPVABot>
-      <GetStartedTask key={step.key} step={step} />
-    </DisableFeatureToolTip>
-  );
+  const getStartedTaskElement = (step: NextStep) => {
+    if (!step.hideFeatureStep) {
+      return <GetStartedTask key={step.key} step={step} />;
+    }
+    return null;
+  };
 
   return (
     <ScrollablePane styles={{ root: { marginTop: 60 } }}>
@@ -372,21 +375,21 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
         {requiredNextSteps.length ? (
           <div>
-            <h3 style={h3Style}>{formatMessage('Required')}</h3>
+            <h3 css={topH3Style}>{formatMessage('Required')}</h3>
             {requiredNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {recommendedNextSteps.length ? (
           <div>
-            <h3 style={h3Style}>{formatMessage('Recommended')}</h3>
+            <h3 css={h3Style}>{formatMessage('Recommended')}</h3>
             {recommendedNextSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
 
         {optionalSteps.length ? (
           <div>
-            <h3 style={h3Style}>{formatMessage('Optional')}</h3>
+            <h3 css={h3Style}>{formatMessage('Optional')}</h3>
             {optionalSteps.map((step) => getStartedTaskElement(step))}
           </div>
         ) : null}
