@@ -120,6 +120,7 @@ type ResourcesItem = {
 };
 
 type PublishingEvents = {
+  publishStartBtnClick: undefined;
   PublishSuccess: undefined;
   PublishFailure: { message: string };
   NewPublishingProfileStarted: undefined;
