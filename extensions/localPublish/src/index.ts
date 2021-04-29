@@ -386,7 +386,28 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         ? settings.runtime.command.split(/\s+/)
         : this.composer.getRuntimeByProject(project).startCommand.split(/\s+/);
 
-    return new Promise(async (resolve, reject) => {
+    let skillHostEndpoint;
+    let url;
+    // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+    if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
+      // Only enable tunnelling for remote skill
+      if (Object.keys(settings.skill).length > 0) {
+        try {
+          url = await ngrok.connect({
+            proto: 'http',
+            port: port,
+            binPath: (path) => path.replace('bin', 'node_modules/ngrok/bin'),
+          });
+          skillHostEndpoint = `${url}/api/skills`;
+        } catch (err) {
+          skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+        }
+      } else {
+        skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+      }
+    }
+
+    return new Promise((resolve, reject) => {
       // ensure the specified runtime path exists
       if (!fs.existsSync(botDir)) {
         reject(`Runtime path ${botDir} does not exist.`);
@@ -397,26 +418,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       const startCommand = commandAndArgs.shift();
 
       let config: any[] = [];
-      let skillHostEndpoint;
-      let url;
-      // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
-      if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
-        // Only enable tunnelling for remote skill
-        if (Object.keys(settings.skill).length > 0) {
-          try {
-            url = await ngrok.connect({
-              proto: 'http',
-              port: port,
-              binPath: (path) => path.replace('bin', 'node_modules/ngrok/bin'),
-            });
-            skillHostEndpoint = `${url}/api/skills`;
-          } catch (err) {
-            skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
-          }
-        } else {
-          skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
-        }
-      }
       config = this.getConfig(settings, skillHostEndpoint);
       let spawnProcess;
       const args = [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config];
