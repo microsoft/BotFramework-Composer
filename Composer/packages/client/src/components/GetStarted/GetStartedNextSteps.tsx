@@ -101,6 +101,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
   const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
   const linkToPublishProfile = `/bot/${rootBotProjectId}/publish/all#addNewPublishProfile`;
+  const linkToPublish = `/bot/${rootBotProjectId}/publish/all`;
   const linkToCompletePublishProfile = `/bot/${rootBotProjectId}/publish/all#completePublishProfile`;
   const linkToLUISSettings = `/bot/${rootBotProjectId}/botProjectsSettings/#luisKey`;
   const linktoQNASettings = `/bot/${rootBotProjectId}/botProjectsSettings/#qnaKey`;
@@ -291,6 +292,21 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     ];
 
     if (hasPublishingProfile) {
+      if (!hasPartialPublishingProfile) {
+        optSteps.push({
+          key: 'publish',
+          label: formatMessage('Publish your bot'),
+          description: formatMessage('Once you publish your bot to Azure you will be ready to add connections.'),
+          learnMore: 'https://aka.ms/composer-getstarted-publishbot',
+          checked: false,
+          onClick: () => {
+            TelemetryClient.track('GettingStartedActionClicked', { taskName: 'publish', priority: 'optional' });
+            openLink(linkToPublish);
+          },
+          hideFeatureStep: isPVABot,
+        });
+      }
+
       optSteps.push({
         key: 'connections',
         label: formatMessage('Add connections'),
