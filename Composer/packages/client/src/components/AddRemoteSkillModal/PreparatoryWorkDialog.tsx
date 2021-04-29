@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 import { settingsState, botDisplayNameState } from '../../recoilModel';
 import { Fragment } from 'react';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 type PreparatoryWorkDialogProps = {
   projectId: string;
@@ -55,16 +56,15 @@ type RenderItemProps = {
 };
 
 const renderItem = ({ title, description, link }: RenderItemProps) => {
-  const titleStyle = css``;
-  const descriptionStyle = css``;
   return (
-    <div>
-      <FontIcon iconName="Completed" />
-      <div>
-        <div css={titleStyle}>
-          <div>{title}</div>
-        </div>
-        <div css={descriptionStyle}>{description}</div>
+    <div css={{ display: 'flex', marginBottom: '20px' }}>
+      <FontIcon
+        iconName="Completed"
+        style={{ color: SharedColors.cyanBlue10, fontSize: '18px', margin: '4px 12px 0 0' }}
+      />
+      <div css={{ fontSize: '14px', lineHeight: '20px' }}>
+        <div css={{ color: NeutralColors.gray160, fontWeight: '600', marginBottom: '5px' }}>{title}</div>
+        <div css={{ color: NeutralColors.gray130 }}>{description}</div>
         {link && <Link onClick={link.onClick}>{link.text}</Link>}
       </div>
     </div>

@@ -86,10 +86,7 @@ const buttonStyle = { root: { marginLeft: '8px' } };
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
 
-  const [title, setTitle] = useState({
-    subText: '',
-    title: addSkillDialog.SKILL_MANIFEST_FORM.title,
-  });
+  const [title, setTitle] = useState(addSkillDialog.PREPARATORY_WORK);
   const [showPreparatoryWorkDialog, setShowPreparatoryWorkDialog] = useState(true);
   const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
@@ -170,6 +167,14 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     onDismiss();
   };
 
+  const handleGotoAddSkill = () => {
+    setShowPreparatoryWorkDialog(false);
+    setTitle({
+      subText: '',
+      title: addSkillDialog.SKILL_MANIFEST_FORM.title,
+    });
+  };
+
   useEffect(() => {
     if (skillManifest?.endpoints) {
       setFormData({
@@ -181,7 +186,9 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
 
   return (
     <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={handleDismiss} {...title}>
-      {showPreparatoryWorkDialog && <PreparatoryWorkDialog projectId={projectId} onDismiss={handleDismiss} />}
+      {showPreparatoryWorkDialog && (
+        <PreparatoryWorkDialog projectId={projectId} onDismiss={handleDismiss} onNext={handleGotoAddSkill} />
+      )}
       {showIntentSelectDialog && (
         <SelectIntent
           dialogId={dialogId}
