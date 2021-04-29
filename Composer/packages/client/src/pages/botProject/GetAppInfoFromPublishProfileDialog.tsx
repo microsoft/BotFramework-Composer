@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { Fragment, useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
