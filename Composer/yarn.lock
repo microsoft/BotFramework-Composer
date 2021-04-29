@@ -3227,28 +3227,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bfcomposer/bf-lu@1.6.4":
-  version "1.6.4"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.6.4.tgz#c9296f1d8092d0f4766e2f596a7e29b87a1a87e6"
-  integrity sha1-ySlvHYCS0PR2bi9Zan4puHoah+Y=
-  dependencies:
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "~4.8.0"
-    axios "~0.21.1"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    https-proxy-agent "^5.0.0"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.19"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^2.0.3"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -4118,6 +4096,28 @@
     fs-extra "^8.1.0"
     get-stdin "^6.0.0"
     globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
+"@microsoft/bf-lu@4.14.0-dev.20210427.c0be653":
+  version "4.14.0-dev.20210427.c0be653"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.14.0-dev.20210427.c0be653.tgz#b710879b1843af69b0d43ecb5cbf583c946ec1d0"
+  integrity sha1-txCHmxhDr2mw1D7LXL9YPJRuwdA=
+  dependencies:
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "~4.8.0"
+    axios "~0.21.1"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    https-proxy-agent "^5.0.0"
     intercept-stdout "^0.1.2"
     lodash "^4.17.19"
     node-fetch "~2.6.0"

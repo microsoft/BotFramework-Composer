@@ -22,11 +22,11 @@ import { TelemetryService } from '../../services/telemetry';
 import { IOrchestratorNLRList, IOrchestratorProgress, IOrchestratorSettings } from './interface';
 import orchestratorBuilder from './process/orchestratorBuilder';
 
-const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
-const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
-const qnaBuild = require('@bfcomposer/bf-lu/lib/parser/qnabuild/builder.js');
-const LuisBuilder = require('@bfcomposer/bf-lu/lib/parser/luis/luisBuilder');
-const luisToLuContent = require('@bfcomposer/bf-lu/lib/parser/luis/luConverter');
+const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
+const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
+const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
+const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const SETTINGS = 'settings';
