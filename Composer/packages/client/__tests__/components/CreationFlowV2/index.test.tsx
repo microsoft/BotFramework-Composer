@@ -12,6 +12,7 @@ import {
   creationFlowStatusState,
   dispatcherState,
   featureFlagsState,
+  templateProjectsState,
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
 import CreationFlowV2 from '../../../src/components/CreationFlow/v2/CreationFlow';
@@ -36,6 +37,17 @@ describe('<CreationFlowV2/>', () => {
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
     set(featureFlagsState, getDefaultFeatureFlags());
+    set(templateProjectsState, [
+      {
+        id: '@microsoft/generator-bot-empty',
+        name: 'Empty Bot',
+        description: 'Yeoman generator for creating an empty bot built on the Azure Bot Framework.',
+        package: { packageName: '@microsoft/generator-bot-empty', packageSource: 'npm', packageVersion: '1.0.0' },
+        dotnetSupport: { functionsSupported: true, webAppSupported: true },
+        nodeSupport: { functionsSupported: true, webAppSupported: true },
+      },
+    ]);
+
     set(focusedStorageFolderState, {
       name: 'Desktop',
       parent: '/test-folder',
@@ -73,7 +85,7 @@ describe('<CreationFlowV2/>', () => {
       </RecoilRoot>
     );
 
-    navigate('create/dotnet/generator-conversational-core');
+    navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
     const node = await findByText('OK');
 
     act(() => {
@@ -88,10 +100,10 @@ describe('<CreationFlowV2/>', () => {
       appLocale: 'en-US',
       description: '',
       location: expectedLocation,
-      name: 'conversational_core',
+      name: 'Empty',
       schemaUrl: '',
-      templateId: 'generator-conversational-core',
-      templateVersion: '',
+      templateId: '@microsoft/generator-bot-empty',
+      templateVersion: '1.0.0',
       alias: undefined,
       eTag: undefined,
       preserveRoot: undefined,
