@@ -44,15 +44,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const creationFlowType = useRecoilValue(creationFlowTypeState);
 
   useEffect(() => {
-    if (!props.location?.search) {
-      TelemetryClient.track('NewBotDialogOpened', {
-        isSkillBot: creationFlowType === 'Skill',
-        fromAbsHandoff: false,
-      });
-    }
-  }, []);
-
-  useEffect(() => {
     // open bot directly if alias exist.
     if (props.location?.search) {
       const decoded = decodeURIComponent(props.location.search);
@@ -80,6 +71,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         return;
       }
     }
+    TelemetryClient.track('NewBotDialogOpened', {
+      isSkillBot: creationFlowType === 'Skill',
+      fromAbsHandoff: false,
+    });
     setIsOpenCreateModal(true);
   }, [props.location?.search]);
   const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
