@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil';
 import { settingsState, botDisplayNameState } from '../../recoilModel';
 import { Fragment } from 'react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 type PreparatoryWorkDialogProps = {
   projectId: string;

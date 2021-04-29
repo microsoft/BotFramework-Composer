@@ -6,6 +6,7 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
@@ -25,6 +26,7 @@ import { selectIntentDialog } from '../../constants';
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
 import { PreparatoryWorkDialog } from './PreparatoryWorkDialog';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -184,10 +186,41 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     }
   }, [skillManifest]);
 
+  const PreparatoryWorkStyles = {
+    dialog: {
+      title: {
+        fontWeight: FontWeights.bold,
+        fontSize: FontSizes.size20,
+        paddingTop: '14px',
+        paddingBottom: '11px',
+      },
+      subText: {
+        fontSize: FontSizes.size14,
+        marginBottom: '0px',
+      },
+    },
+    modal: {
+      main: {
+        // maxWidth: '416px !important',
+        maxWidth: '80% !important',
+        width: '960px !important',
+      },
+    },
+  };
+
   return (
-    <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={handleDismiss} {...title}>
+    <DialogWrapper
+      isOpen
+      dialogType={showPreparatoryWorkDialog ? DialogTypes.Customer : DialogTypes.CreateFlow}
+      onDismiss={handleDismiss}
+      {...title}
+      customerStyle={showPreparatoryWorkDialog ? PreparatoryWorkStyles : { dialog: {}, modal: {} }}
+    >
       {showPreparatoryWorkDialog && (
-        <PreparatoryWorkDialog projectId={projectId} onDismiss={handleDismiss} onNext={handleGotoAddSkill} />
+        <Fragment>
+          <Separator styles={{ root: { marginBottom: '20px' } }} />
+          <PreparatoryWorkDialog projectId={projectId} onDismiss={handleDismiss} onNext={handleGotoAddSkill} />
+        </Fragment>
       )}
       {showIntentSelectDialog && (
         <SelectIntent
