@@ -175,12 +175,14 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
         // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {
+          const errorMessage = formatMessage(
+            'An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again.'
+          );
+          TelemetryClient.track('ProvisionProfileCreateFailure', { message: errorMessage });
           const notification = createNotification({
             type: 'error',
             title: formatMessage('Error provisioning.'),
-            description: formatMessage(
-              'An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again.'
-            ),
+            description: errorMessage,
           });
           addNotification(notification);
           return;

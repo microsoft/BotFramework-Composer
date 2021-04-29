@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FeedType, RuntimeType } from './creation';
 import { TelemetrySettings } from './settings';
 
 export type ServerSettings = Partial<{ telemetry: TelemetrySettings }>;
@@ -131,12 +132,14 @@ type PublishingEvents = {
   ProvisionCancel: undefined;
   ProvisionShowHandoff: undefined;
   ProvisionAddResourcesCancel: undefined;
+  ProvisionProfileCreateFailure: { message: string };
 };
 
 type CreationEvents = {
   NewBotDialogOpened: { fromAbsHandoff: boolean; isSkillBot: boolean };
   CreationCancelled: undefined;
   NeedAnotherTemplateCLicked: undefined;
+  creationExecuted: { runtimeChoice: RuntimeType; runtimeLanguage: FeedType; isPva: boolean; isAbs: boolean };
 };
 
 type RocketPanelEvents = {
