@@ -121,6 +121,10 @@ export class DefaultSettingManager extends FileSettingManager {
         maxImbalanceRatio: -1,
       },
       skill: {},
+      skillConfiguration: {
+        isSkill: false,
+        allowedCallers: ['*'],
+      },
       defaultLanguage: 'en-us',
       languages: ['en-us'],
       customFunctions: [],

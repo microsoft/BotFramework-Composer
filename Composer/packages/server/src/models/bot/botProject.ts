@@ -242,9 +242,9 @@ export class BotProject implements IBotProject {
       // if endpointKey has not been set, migrate old key to new key
       if (!settings.qna.endpointKey) {
         settings.qna.endpointKey = settings.qna.endpointkey;
+        delete settings.qna.endpointkey;
+        await this.updateEnvSettings(settings);
       }
-      delete settings.qna.endpointkey;
-      await this.updateEnvSettings(settings);
     }
 
     // set these after migrating qna settings to not write them to storage
