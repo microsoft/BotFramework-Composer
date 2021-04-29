@@ -19,6 +19,7 @@ import log from '../logger';
 import { ExtensionContext } from '../models/extension/extensionContext';
 import { getLocationRef, getNewProjRef, ejectAndMerge } from '../utility/project';
 import { isSchema } from '../models/bot/botStructure';
+import { getLatestGeneratorVersion } from '../controllers/asset';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
@@ -465,10 +466,13 @@ export class BotProjectService {
 
       // Update status for polling
       BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
+      const baseGenerator = '@microsoft/generator-bot-adaptive';
+      const latestVersion = await getLatestGeneratorVersion(baseGenerator);
 
+      log(`Using version ${latestVersion} of ${baseGenerator} for migration`);
       const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(
-        '@microsoft/generator-bot-adaptive',
-        '1.0.0-rc6', // use any available version
+        baseGenerator,
+        latestVersion, // use the @latest version
         name,
         locationRef,
         jobId,
