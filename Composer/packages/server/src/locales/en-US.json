@@ -35,8 +35,8 @@
   "a_language_understanding_intelligent_service_luis__348b281": {
     "message": "<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>."
   },
-  "a_microsoft_app_id_is_required_for_your_local_azur_454cfd41": {
-    "message": "A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and secret will be created when you provision resources for this bot. <a>Learn more.</a>"
+  "a_microsoft_app_id_is_required_for_your_local_azur_eb7844c2": {
+    "message": "A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and Password will be created when you provision resources for this bot. To add and App ID and Password from a publishing profile you’ve created, click the button below. <a>Learn more.</a>"
   },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
@@ -143,6 +143,9 @@
   "add_8523c19b": {
     "message": "Add"
   },
+  "add_a_bot_58522e81": {
+    "message": "Add a bot"
+  },
   "add_a_dialog_e378aa3a": {
     "message": "Add a dialog"
   },
@@ -179,6 +182,9 @@
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
+  "add_app_id_and_password_164e0fdb": {
+    "message": "Add App ID and Password"
+  },
   "add_connections_d720a32e": {
     "message": "Add connections"
   },
@@ -190,6 +196,9 @@
   },
   "add_entity_5f769994": {
     "message": "Add entity"
+  },
+  "add_from_publishing_profile_a672094f": {
+    "message": "Add from publishing profile"
   },
   "add_microsoft_app_ids_of_bots_that_can_access_this_7d41742c": {
     "message": "Add Microsoft App Ids of bots that can access this skill. You can skip this step and add this information later from the project settings tab."
@@ -758,9 +767,6 @@
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Congratulations! Your model is successfully published."
   },
-  "connect_a_remote_skill_10cf0724": {
-    "message": "Connect a remote skill"
-  },
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
   },
@@ -776,8 +782,8 @@
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
     "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
   },
-  "connect_your_bot_to_teams_external_channels_or_ena_8b4fc9f0": {
-    "message": "Connect your bot to Teams, external channels, or enable speech. Learn more"
+  "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
+    "message": "Connect your bot to Teams, external channels, or enable speech."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -868,9 +874,6 @@
   },
   "create_a_new_service_resource_23d59c2f": {
     "message": "Create a new { service } resource"
-  },
-  "create_a_new_skill_e961ff28": {
-    "message": "Create a new skill"
   },
   "create_a_publish_profile_to_continue_1e2fa5a0": {
     "message": "Create a publish profile to continue"
@@ -1433,6 +1436,9 @@
   "error_afac7133": {
     "message": "Error:"
   },
+  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
+    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  },
   "error_checking_node_version_98bfbf4c": {
     "message": "Error checking node version"
   },
@@ -1616,8 +1622,8 @@
   "find_tutorials_step_by_step_guides_discover_what_y_8f3e3863": {
     "message": "Find tutorials, step-by-step guides. Discover what you can build with Composer."
   },
-  "finish_setting_up_your_environment_and_provisionig_11cdecda": {
-    "message": "Finish setting up your environment and provisionig resources so that you can publish your bot."
+  "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
+    "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -2513,6 +2519,9 @@
   "no_prebuilt_entities_found_a1015451": {
     "message": "no prebuilt entities found"
   },
+  "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
+    "message": "No profiles were found containing a Microsoft App ID."
+  },
   "no_properties_found_6f777f6e": {
     "message": "No properties found"
   },
@@ -2620,9 +2629,6 @@
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
-  },
-  "open_an_existing_skill_fbd87273": {
-    "message": "Open an existing skill"
   },
   "open_e0beb7b9": {
     "message": "Open"
@@ -3301,6 +3307,9 @@
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "Select the language that bot will be able to understand (User input) and respond to (Bot responses).\n    To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language."
+  },
+  "select_the_publishing_profile_you_d_like_to_add_a__ffff34ac": {
+    "message": "Select the publishing profile you’d like to add a Microsoft App ID and Password from."
   },
   "select_which_dialogs_are_included_in_the_skill_man_281ef8c9": {
     "message": "Select which dialogs are included in the skill manifest"
@@ -4136,6 +4145,9 @@
   "which_bot_do_you_want_to_open_974bb1e5": {
     "message": "Which bot do you want to open?"
   },
+  "which_bot_would_you_like_to_add_to_your_project_e31270db": {
+    "message": "Which bot would you like to add to your project"
+  },
   "which_bots_are_allowed_to_use_this_skill_b908339e": {
     "message": "Which bots are allowed to use this skill?"
   },
@@ -4195,6 +4207,9 @@
   },
   "you_re_ready_to_go_18ee8dac": {
     "message": "You’re ready to go!"
+  },
+  "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
+    "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."

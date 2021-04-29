@@ -37,6 +37,7 @@ import {
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
   warnAboutDotNetState,
+  warnAboutFunctionsState,
   settingsState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
@@ -420,6 +421,7 @@ export const projectDispatcher = () => {
         source,
         runtimeType,
         runtimeLanguage,
+        isRoot,
       } = newProjectData;
 
       // starts the creation process and stores the jobID in state for tracking
@@ -438,6 +440,7 @@ export const projectDispatcher = () => {
         preserveRoot,
         runtimeType,
         runtimeLanguage,
+        isRoot,
       });
 
       if (response.data.jobId) {
@@ -670,6 +673,10 @@ export const projectDispatcher = () => {
     callbackHelpers.set(warnAboutDotNetState, warn);
   });
 
+  const setWarnAboutFunctions = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutFunctionsState, warn);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -694,6 +701,7 @@ export const projectDispatcher = () => {
     setCurrentProjectId,
     setProjectError,
     setWarnAboutDotNet,
+    setWarnAboutFunctions,
     fetchReadMe,
   };
 };
