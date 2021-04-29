@@ -58,13 +58,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
-  const {
-    updateSkillManifest,
-    publishToTarget,
-    addNotification,
-    updateNotification,
-    deleteNotification,
-  } = useRecoilValue(dispatcherState);
+  const { updateSkillManifest, publishToTarget, addNotification, updateNotification } = useRecoilValue(dispatcherState);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
@@ -93,18 +87,18 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [isCreateProfileFromSkill, setIsCreateProfileFromSkill] = useState(false);
   let publishUpdaterRef = useRef<PublishStatusPollingUpdater>();
   const publishNotificationRef = useRef<Notification>();
-  // stop polling updater & delete pending notification
-  const stopUpdater = () => {
-    publishUpdaterRef.current && publishUpdaterRef.current.stop();
-    publishUpdaterRef.current = undefined;
-
+  const resetDialog = () => {
     handleDismiss();
     setIsHidden(false);
   };
+  // stop polling updater
+  const stopUpdater = () => {
+    publishUpdaterRef.current && publishUpdaterRef.current.stop();
+    publishUpdaterRef.current = undefined;
+    resetDialog();
+  };
 
   const deleteNotificationCard = async () => {
-    const notification = publishNotificationRef.current;
-    notification && (await deleteNotification(notification.id));
     publishNotificationRef.current = undefined;
   };
   const changeNotificationStatus = async (data) => {
