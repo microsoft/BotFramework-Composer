@@ -131,7 +131,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
       >
-        <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
+        <ChoiceGroup required defaultSelectedKey="B" options={getOptions()} onChange={handleChange} />
         <DialogFooter>
           <PrimaryButton data-testid="NextStepButton" text={formatMessage('Open')} onClick={handleJumpToNext} />
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />

@@ -135,7 +135,7 @@ type PublishingEvents = {
 
 type CreationEvents = {
   NewBotDialogOpened: { fromAbsHandoff: boolean; isSkillBot: boolean };
-  CreationCancelBtnClicked: undefined;
+  CreationCancelled: undefined;
   NeedAnotherTemplateCLicked: undefined;
 };
 
