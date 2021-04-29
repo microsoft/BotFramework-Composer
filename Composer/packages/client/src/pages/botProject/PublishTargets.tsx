@@ -27,6 +27,10 @@ const publishTargetsContainer = css`
   flex-direction: column;
 `;
 
+const belowTargetsContainer = css`
+  padding: 0 20px 20px 20px;
+`;
+
 const publishTargetsHeader = css`
   display: flex;
   flex-direction: row;
@@ -103,6 +107,22 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     }
   };
 
+  const addNewButton = (
+    <ActionButton
+      data-testid={'addNewPublishProfile'}
+      styles={actionButton}
+      onClick={() => {
+        if (isShowAuthDialog(true)) {
+          setShowAuthDialog(true);
+        } else {
+          setDialogHidden(false);
+        }
+      }}
+    >
+      {formatMessage('Add new')}
+    </ActionButton>
+  );
+
   return (
     <Fragment>
       <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
@@ -148,20 +168,8 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
             </div>
           );
         })}
-        <ActionButton
-          data-testid={'addNewPublishProfile'}
-          styles={actionButton}
-          onClick={() => {
-            if (isShowAuthDialog(true)) {
-              setShowAuthDialog(true);
-            } else {
-              setDialogHidden(false);
-            }
-          }}
-        >
-          {formatMessage('Add new')}
-        </ActionButton>
       </div>
+      <div css={belowTargetsContainer}>{addNewButton}</div>
       {showAuthDialog && (
         <AuthDialog
           needGraph
