@@ -20,7 +20,6 @@ import * as tcpPortUsed from 'tcp-port-used';
 import ngrok from 'ngrok';
 
 import { RuntimeLogServer } from './runtimeLogServer';
-import { settings } from 'cluster';
 
 const removeDirAndFiles = promisify(rimraf);
 const mkdir = promisify(fs.mkdir);
