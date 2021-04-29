@@ -88,7 +88,7 @@ export const PublishDialog = (props) => {
     setShowItems(cleanedItems);
   };
   const submit = async () => {
-    TelemetryClient.track('publishStartBtnClick');
+    TelemetryClient.track('PublishStartBtnClick');
     props.onDismiss();
     await props.onSubmit(showItems);
     cleanComments();

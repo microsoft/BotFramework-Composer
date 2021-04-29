@@ -120,7 +120,8 @@ type ResourcesItem = {
 };
 
 type PublishingEvents = {
-  publishStartBtnClick: undefined;
+  CreateProvisionStarted: { newResourceGroup: boolean };
+  PublishStartBtnClick: undefined;
   PublishSuccess: undefined;
   PublishFailure: { message: string };
   NewPublishingProfileStarted: undefined;
