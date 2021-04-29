@@ -16,17 +16,17 @@ interface AddBotModalProps {
   onDismiss: () => void;
 }
 
-const addExistingKey = 'existing';
-const addBlankKey = 'blank';
+const addExistingBotKey = 'existing';
+const addNewBotKey = 'new';
 
-const addSkillOptions: IChoiceGroupOption[] = [
-  { key: addExistingKey, text: 'Add an existing bot' },
-  { key: addBlankKey, text: 'Create a new blank bot' },
+const getAddSkillOptions = (): IChoiceGroupOption[] => [
+  { key: addNewBotKey, text: formatMessage('Create a new bot') },
+  { key: addExistingBotKey, text: formatMessage('Add an existing bot') },
 ];
 
 export const AddBotModal: React.FC<AddBotModalProps> = (props) => {
   const { setCreationFlowStatus } = useRecoilValue(dispatcherState);
-  const [addBotType, setAddBotType] = useState(addExistingKey);
+  const [addBotType, setAddBotType] = useState(addNewBotKey);
 
   const handleChange = (ev?, option?: IChoiceGroupOption): void => {
     if (option) {
@@ -35,10 +35,10 @@ export const AddBotModal: React.FC<AddBotModalProps> = (props) => {
   };
 
   const handleSubmit = () => {
-    if (addBotType === addExistingKey) {
+    if (addBotType === addExistingBotKey) {
       setCreationFlowStatus(CreationFlowStatus.OPEN);
     } else {
-      setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+      setCreationFlowStatus(CreationFlowStatus.NEW);
     }
   };
 
@@ -50,7 +50,7 @@ export const AddBotModal: React.FC<AddBotModalProps> = (props) => {
       title={formatMessage('Add a bot')}
       onDismiss={props.onDismiss}
     >
-      <ChoiceGroup required defaultSelectedKey={addExistingKey} options={addSkillOptions} onChange={handleChange} />
+      <ChoiceGroup required defaultSelectedKey={addNewBotKey} options={getAddSkillOptions()} onChange={handleChange} />
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
         <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleSubmit} />
