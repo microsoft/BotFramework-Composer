@@ -17,8 +17,10 @@ import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframew
 import killPort from 'kill-port';
 import map from 'lodash/map';
 import * as tcpPortUsed from 'tcp-port-used';
+import ngrok from 'ngrok';
 
 import { RuntimeLogServer } from './runtimeLogServer';
+import { settings } from 'cluster';
 
 const removeDirAndFiles = promisify(rimraf);
 const mkdir = promisify(fs.mkdir);
@@ -31,6 +33,7 @@ interface RunningBot {
   process?: ChildProcess;
   port?: number;
   status: number;
+  ngrokUrl?: string;
   result: {
     message: string;
     runtimeLog?: string;
@@ -384,7 +387,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         ? settings.runtime.command.split(/\s+/)
         : this.composer.getRuntimeByProject(project).startCommand.split(/\s+/);
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       // ensure the specified runtime path exists
       if (!fs.existsSync(botDir)) {
         reject(`Runtime path ${botDir} does not exist.`);
@@ -396,9 +399,24 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
       let config: any[] = [];
       let skillHostEndpoint;
+      let url;
+      // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
       if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
-        // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
-        skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+        // Only enable tunnelling for remote skill
+        if (Object.keys(settings.skill).length > 0) {
+          try {
+            url = await ngrok.connect({
+              proto: 'http',
+              port: port,
+              binPath: (path) => path.replace('bin', 'node_modules/ngrok/bin'),
+            });
+            skillHostEndpoint = `${url}/api/skills`;
+          } catch (err) {
+            skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+          }
+        } else {
+          skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+        }
       }
       config = this.getConfig(settings, skillHostEndpoint);
       let spawnProcess;
@@ -416,6 +434,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           process: spawnProcess,
           port,
           status: 202,
+          ngrokUrl: url,
           result: { message: 'Starting runtime' },
         });
 
@@ -569,10 +588,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   public stopBot = async (botId: string) => {
     const proc = LocalPublisher.runningBots[botId]?.process;
     const port = LocalPublisher.runningBots[botId]?.port;
+    const url = LocalPublisher.runningBots[botId]?.ngrokUrl;
 
     if (port) {
       this.composer.log('Killing process at port %d', port);
 
+      ngrok.disconnect(url);
       await new Promise((resolve, reject) => {
         setTimeout(async () => {
           killPort(port)
@@ -611,6 +632,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   static stopAll = () => {
+    ngrok.disconnect();
+    ngrok.kill();
     for (const botId in LocalPublisher.runningBots) {
       const bot = LocalPublisher.runningBots[botId];
       // Kill the bot process AND all child processes
