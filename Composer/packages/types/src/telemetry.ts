@@ -120,6 +120,8 @@ type ResourcesItem = {
 };
 
 type PublishingEvents = {
+  PublishSuccess: undefined;
+  PublishFailure: { message: string };
   NewPublishingProfileStarted: undefined;
   NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
@@ -140,11 +142,6 @@ type CreationEvents = {
   CreationCancelled: undefined;
   NeedAnotherTemplateCLicked: undefined;
   creationExecuted: { runtimeChoice: RuntimeType; runtimeLanguage: FeedType; isPva: boolean; isAbs: boolean };
-};
-
-type RocketPanelEvents = {
-  LearningLinkClicked: { linkName: string };
-  NextStepClicked: { title: string };
 };
 
 type AppSettingsEvents = {
@@ -252,8 +249,7 @@ export type TelemetryEvents = ApplicationEvents &
   LuEditorEvents &
   OrchestratorEvents &
   PropertyEditorEvents &
-  CreationEvents &
-  RocketPanelEvents;
+  CreationEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

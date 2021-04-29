@@ -28,6 +28,7 @@ import * as luUtil from '../../utils/luUtil';
 import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
 import { RuntimeOutputData } from '../types';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -42,6 +43,7 @@ export const publishStorage = new ClientStorage(window.sessionStorage, 'publish'
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
+    TelemetryClient.track('PublishFailure', { message: title });
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
       set(botBuildTimeErrorState(projectId), { ...error, title });
@@ -58,6 +60,7 @@ export const publisherDispatcher = () => {
   };
 
   const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data: PublishResult, target) => {
+    TelemetryClient.track('PublishSuccess');
     const { endpointURL, status } = data;
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
