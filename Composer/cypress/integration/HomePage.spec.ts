@@ -67,7 +67,10 @@ context('Home Page ', () => {
     });
   });
 
-  it('can save as a new bot from an existing bot', () => {
+  // We are disabling this test since we are temporarily removing
+  // this feature in R13 since we don't have a clear definition or solution
+  // for copying parent bots and skills.
+  xit('can save as a new bot from an existing bot', () => {
     cy.createTestBot('EmptySample', ({ id }) => {
       cy.visit(`/bot/${id}`);
       cy.findByTestId('LeftNav-CommandBarButtonHome').click();
