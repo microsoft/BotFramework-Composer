@@ -143,6 +143,9 @@
   "add_8523c19b": {
     "message": "Add"
   },
+  "add_a_bot_58522e81": {
+    "message": "Add a bot"
+  },
   "add_a_dialog_e378aa3a": {
     "message": "Add a dialog"
   },
@@ -758,9 +761,6 @@
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Congratulations! Your model is successfully published."
   },
-  "connect_a_remote_skill_10cf0724": {
-    "message": "Connect a remote skill"
-  },
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
   },
@@ -776,8 +776,8 @@
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
     "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
   },
-  "connect_your_bot_to_teams_external_channels_or_ena_8b4fc9f0": {
-    "message": "Connect your bot to Teams, external channels, or enable speech. Learn more"
+  "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
+    "message": "Connect your bot to Teams, external channels, or enable speech."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Connecting to <b>{ source }</b> to import bot content..."
@@ -868,9 +868,6 @@
   },
   "create_a_new_service_resource_23d59c2f": {
     "message": "Create a new { service } resource"
-  },
-  "create_a_new_skill_e961ff28": {
-    "message": "Create a new skill"
   },
   "create_a_publish_profile_to_continue_1e2fa5a0": {
     "message": "Create a publish profile to continue"
@@ -1433,6 +1430,9 @@
   "error_afac7133": {
     "message": "Error:"
   },
+  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
+    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  },
   "error_checking_node_version_98bfbf4c": {
     "message": "Error checking node version"
   },
@@ -1616,8 +1616,8 @@
   "find_tutorials_step_by_step_guides_discover_what_y_8f3e3863": {
     "message": "Find tutorials, step-by-step guides. Discover what you can build with Composer."
   },
-  "finish_setting_up_your_environment_and_provisionig_11cdecda": {
-    "message": "Finish setting up your environment and provisionig resources so that you can publish your bot."
+  "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
+    "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -2620,9 +2620,6 @@
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
-  },
-  "open_an_existing_skill_fbd87273": {
-    "message": "Open an existing skill"
   },
   "open_e0beb7b9": {
     "message": "Open"
@@ -4136,6 +4133,9 @@
   "which_bot_do_you_want_to_open_974bb1e5": {
     "message": "Which bot do you want to open?"
   },
+  "which_bot_would_you_like_to_add_to_your_project_e31270db": {
+    "message": "Which bot would you like to add to your project"
+  },
   "which_bots_are_allowed_to_use_this_skill_b908339e": {
     "message": "Which bots are allowed to use this skill?"
   },
@@ -4195,6 +4195,9 @@
   },
   "you_re_ready_to_go_18ee8dac": {
     "message": "You’re ready to go!"
+  },
+  "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
+    "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
