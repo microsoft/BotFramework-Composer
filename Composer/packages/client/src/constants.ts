@@ -421,7 +421,7 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
 
 export const invalidNameCharRegex = /[^a-zA-Z0-9-_]/g;
-export const invalidNameCharRegexV2 = /[^a-zA-Z0-9-_]/g;
+export const invalidNameCharRegexV2 = /[^a-zA-Z0-9_]/g;
 
 export const authConfig = {
   // for web login
