@@ -15,7 +15,7 @@ export const validateSchema = (dialogId: string, dialogData: BaseSchema, schema:
   walkAdaptiveDialog(dialogData, schemas, ($kind, data, path) => {
     if (!schemas[$kind]) {
       diagnostics.push(
-        new Diagnostic(`${$kind}: ${SCHEMA_NOT_FOUND}`, `${dialogId}.dialog`, DiagnosticSeverity.Warning, path)
+        new Diagnostic(`${$kind}: ${SCHEMA_NOT_FOUND}`, `${dialogId}.dialog`, DiagnosticSeverity.Error, path)
       );
     }
     return true;
