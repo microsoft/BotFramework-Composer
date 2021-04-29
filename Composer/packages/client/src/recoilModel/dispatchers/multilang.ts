@@ -5,6 +5,7 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import difference from 'lodash/difference';
+import { QnAFile, LgFile, LuFile } from '@bfc/shared';
 
 import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
@@ -21,6 +22,17 @@ import {
   showDelLanguageModalState,
   botDisplayNameState,
 } from './../atoms/botState';
+
+type FileWithId = { id: string };
+
+const filterFiles = (targetFiles: FileWithId[], currentFiles: FileWithId[]) => {
+  const map: Record<string, boolean> = {};
+  currentFiles.forEach((file) => {
+    map[file.id] = true;
+  });
+
+  return targetFiles.filter((file) => !map[file.id]);
+};
 
 const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: string[]): any[] => {
   const copiedFiles: any = [];
@@ -94,15 +106,15 @@ export const multilangDispatcher = () => {
       // copy files from default language
       set(lgFilesSelectorFamily(projectId), (oldLgFiles) => {
         const addedLgFiles = copyLanguageResources(oldLgFiles, defaultLang, languages);
-        return [...oldLgFiles, ...addedLgFiles];
+        return [...oldLgFiles, ...(filterFiles(addedLgFiles, oldLgFiles) as LgFile[])];
       });
       set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
-        return [...prevluFiles, ...addedLuFiles];
+        return [...prevluFiles, ...(filterFiles(addedLuFiles, prevluFiles) as LuFile[])];
       });
       set(qnaFilesSelectorFamily(projectId), (prevQnAFiles) => {
         const addedQnAFiles = copyLanguageResources(prevQnAFiles, defaultLang, languages);
-        return [...prevQnAFiles, ...addedQnAFiles];
+        return [...prevQnAFiles, ...(filterFiles(addedQnAFiles, prevQnAFiles) as QnAFile[])];
       });
       set(settingsState(projectId), (prevSettings) => {
         const settings: any = cloneDeep(prevSettings);
