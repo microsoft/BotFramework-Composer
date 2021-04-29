@@ -15,14 +15,8 @@ import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState } from '../../recoilModel';
-import {
-  recentProjectsState,
-  feedState,
-  templateIdState,
-  currentProjectIdState,
-  warnAboutDotNetState,
-} from '../../recoilModel/atoms/appState';
+import { dispatcherState } from '../../recoilModel';
+import { recentProjectsState, feedState, warnAboutDotNetState } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
@@ -68,11 +62,17 @@ const resources = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const projectId = useRecoilValue<string>(currentProjectIdState);
-  const botName = useRecoilValue<string>(botDisplayNameState(projectId));
+  // These variables are used in the save as method which is currently disabled until we
+  // determine the appropriate save as behavior for parent bots and skills. Since we are
+  // planning to add the feature back in the next release, I am commenting out this section
+  // of code instead of removing it. See comment below for more details.
+  //
+  // const projectId = useRecoilValue<string>(currentProjectIdState);
+  // const botName = useRecoilValue<string>(botDisplayNameState(projectId));
+  // const templateId = useRecoilValue<string>(templateIdState);
+
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
-  const templateId = useRecoilValue<string>(templateIdState);
   const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
     dispatcherState
   );
@@ -128,23 +128,30 @@ const Home: React.FC<RouteComponentProps> = () => {
       dataTestid: 'homePage-Toolbar-Open',
       disabled: false,
     },
-    {
-      type: 'action',
-      text: formatMessage('Save as'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Save',
-        },
-        onClick: () => {
-          setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${projectId}/${templateId}/save`);
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
-        },
-        styles: home.toolbarButtonStyles,
-      },
-      align: 'left',
-      disabled: botName ? false : true,
-    },
+    // We are temporarily disabling the save as button until we can
+    // determine what the appropriate save as behavior should be for both
+    // parent bots and skills.
+    //
+    // Associated issue:
+    // https://github.com/microsoft/BotFramework-Composer/issues/6808#issuecomment-828758688
+    //
+    // {
+    //   type: 'action',
+    //   text: formatMessage('Save as'),
+    //   buttonProps: {
+    //     iconProps: {
+    //       iconName: 'Save',
+    //     },
+    //     onClick: () => {
+    //       setCreationFlowStatus(CreationFlowStatus.SAVEAS);
+    //       navigate(`projects/${projectId}/${templateId}/save`);
+    //       TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
+    //     },
+    //     styles: home.toolbarButtonStyles,
+    //   },
+    //   align: 'left',
+    //   disabled: botName ? false : true,
+    // },
   ];
   return (
     <div css={home.outline}>
