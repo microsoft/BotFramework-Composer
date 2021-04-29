@@ -273,7 +273,14 @@ export function CreateBotV2(props: CreateBotProps) {
           </div>
         </div>
         <DialogFooter>
-          <Link href={templateRequestUrl} styles={{ root: { fontSize: '12px', float: 'left' } }} target="_blank">
+          <Link
+            href={templateRequestUrl}
+            styles={{ root: { fontSize: '12px', float: 'left' } }}
+            target="_blank"
+            onClick={() => {
+              TelemetryClient.track('NeedAnotherTemplateCLicked');
+            }}
+          >
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>
