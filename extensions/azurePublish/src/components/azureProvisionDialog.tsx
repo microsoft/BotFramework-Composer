@@ -95,12 +95,6 @@ const ConfigureResourcesSectionName = styled(Text)`
   margin-bottom: 4px;
 `;
 
-const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
-  display: 'flex',
-  flexFlow: 'row nowrap',
-  justifyContent: props.showSignout ? 'space-between' : 'flex-end',
-}));
-
 const ConfigureResourcesSectionDescription = styled(Text)`
   font-size: ${FluentTheme.fonts.medium.fontSize};
   line-height: ${FontSizes.size14};
