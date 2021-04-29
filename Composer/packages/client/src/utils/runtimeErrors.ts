@@ -23,7 +23,7 @@ export const missingFunctionsError = {
       'https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools',
   },
   link: {
-    text: formatMessage('Install Microsoft .NET Core SDK'),
+    text: formatMessage('Install Azure Functions'),
     url: 'https://www.npmjs.com/package/azure-functions-core-tools',
   },
 };
