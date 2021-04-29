@@ -133,6 +133,17 @@ type PublishingEvents = {
   ProvisionAddResourcesCancel: undefined;
 };
 
+type CreationEvents = {
+  NewBotDialogOpened: { fromAbsHandoff: boolean; isSkillBot: boolean };
+  CreationCancelBtnClicked: undefined;
+  NeedAnotherTemplateCLicked: undefined;
+};
+
+type RocketPanelEvents = {
+  LearningLinkClicked: { linkName: string };
+  NextStepClicked: { title: string };
+};
+
 type AppSettingsEvents = {
   FeatureFlagChanged: { featureFlag: string; enabled: boolean };
 };
@@ -237,7 +248,9 @@ export type TelemetryEvents = ApplicationEvents &
   WebChatEvents &
   LuEditorEvents &
   OrchestratorEvents &
-  PropertyEditorEvents;
+  PropertyEditorEvents &
+  CreationEvents &
+  RocketPanelEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

@@ -17,10 +17,11 @@ import querystring from 'query-string';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
-import { DialogCreationCopy } from '../../../constants';
+import { CreationFlowStatus, DialogCreationCopy } from '../../../constants';
 import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
-import { userHasNodeInstalledState } from '../../../recoilModel';
+import { creationFlowTypeState, userHasNodeInstalledState } from '../../../recoilModel';
 import { InstallDepModal } from '../../InstallDepModal';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { CreateBotV2 } from './CreateBot';
 
@@ -40,6 +41,16 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const { templates, onDismiss, onNext, onJumpToOpenModal, fetchReadMe } = props;
   const [showNodeModal, setShowNodeModal] = useState(false);
   const userHasNode = useRecoilValue(userHasNodeInstalledState);
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
+
+  useEffect(() => {
+    if (!props.location?.search) {
+      TelemetryClient.track('NewBotDialogOpened', {
+        isSkillBot: creationFlowType === 'Skill',
+        fromAbsHandoff: false,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     // open bot directly if alias exist.
@@ -58,6 +69,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
               }
             })
             .catch((e) => {
+              TelemetryClient.track('NewBotDialogOpened', {
+                isSkillBot: false,
+                fromAbsHandoff: true,
+              });
               setIsOpenOptionsModal(true);
             });
         });
