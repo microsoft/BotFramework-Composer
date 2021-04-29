@@ -177,8 +177,6 @@ export const publisherDispatcher = () => {
         const qnaFiles = await snapshot.getPromise(qnaFilesSelectorFamily(projectId));
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
-        const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-        await filePersistence.flush();
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           publishTarget: target,
           accessToken: token,
@@ -193,7 +191,7 @@ export const publisherDispatcher = () => {
         // add job id to storage
         const publishJobIds = publishStorage.get('jobIds') || {};
         publishJobIds[`${projectId}-${target.name}`] = response.data.id;
-        await publishStorage.set('jobIds', publishJobIds);
+        publishStorage.set('jobIds', publishJobIds);
 
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {

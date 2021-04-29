@@ -35,13 +35,14 @@ import { getTokenFromCache } from '../../../utils/auth';
 import { ApiStatus, PublishStatusPollingUpdater } from '../../../utils/publishStatusPollingUpdater';
 import {
   getSkillPublishedNotificationCardProps,
-  getSkilPendingNotificationCardProps,
+  getSkillPendingNotificationCardProps,
 } from '../../publish/Notifications';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 
 import { editorSteps, ManifestEditorSteps, order } from './constants';
 import { generateSkillManifest } from './generateSkillManifest';
 import { styles } from './styles';
+import { getManifestUrl } from '../../../utils/skillManifestUtil';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -90,22 +91,27 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   );
 
   const [isCreateProfileFromSkill, setIsCreateProfileFromSkill] = useState(false);
-  let publishUpdater: PublishStatusPollingUpdater;
+  let publishUpdaterRef = useRef<PublishStatusPollingUpdater>();
   const publishNotificationRef = useRef<Notification>();
   // stop polling updater & delete pending notification
-  const stopUpdater = async (updater) => {
-    updater.stop();
+  const stopUpdater = () => {
+    publishUpdaterRef.current && publishUpdaterRef.current.stop();
+    publishUpdaterRef.current = undefined;
 
+    handleDismiss();
+    setIsHidden(false);
+  };
+
+  const deleteNotificationCard = async () => {
     const notification = publishNotificationRef.current;
     notification && (await deleteNotification(notification.id));
     publishNotificationRef.current = undefined;
-    handleDismiss();
-    setIsHidden(false);
   };
   const changeNotificationStatus = async (data) => {
     const { apiResponse } = data;
     if (!apiResponse) {
-      stopUpdater(publishUpdater);
+      stopUpdater();
+      deleteNotificationCard();
       return;
     }
     const responseData = apiResponse.data;
@@ -113,43 +119,45 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     if (responseData.status !== ApiStatus.Publishing) {
       // Show result notifications
       const displayedNotification = publishNotificationRef.current;
-      if (displayedNotification) {
+      const publishUpdater = publishUpdaterRef.current;
+      if (displayedNotification && publishUpdater) {
         const currentTarget = publishTargets?.find((target) => target.name === publishUpdater.getPublishTargetName());
         const url = currentTarget
-          ? `https://${JSON.parse(currentTarget.configuration).hostname}.azurewebsites.net/manifests/${
-              skillManifest.id
-            }.json`
+          ? getManifestUrl(JSON.parse(currentTarget.configuration).hostname, skillManifest)
           : '';
         const notificationCard = getSkillPublishedNotificationCardProps({ ...responseData }, url);
         updateNotification(displayedNotification.id, notificationCard);
       }
-      stopUpdater(publishUpdater);
-      navigate(`bot/${projectId}/publish/all`);
+      stopUpdater();
     }
   };
 
   useEffect(() => {
     const publish = async () => {
-      if (!publishTargets || publishTargets.length === 0) return;
-      const currentTarget = publishTargets.find((item) => {
-        const config = JSON.parse(item.configuration);
-        return (
-          config.settings &&
-          config.settings.MicrosoftAppId &&
-          config.hostname &&
-          config.settings.MicrosoftAppId.length > 0 &&
-          config.hostname.length > 0
-        );
-      });
-      if (isCreateProfileFromSkill && currentTarget) {
-        const skillPublishPenddingNotificationCard = getSkilPendingNotificationCardProps();
-        publishNotificationRef.current = createNotification(skillPublishPenddingNotificationCard);
-        addNotification(publishNotificationRef.current);
-        const sensitiveSettings = getSensitiveProperties(settings);
-        const token = getTokenFromCache('accessToken');
-        await publishToTarget(projectId, currentTarget, { comment: '' }, sensitiveSettings, token);
-        publishUpdater = new PublishStatusPollingUpdater(projectId, currentTarget.name);
-        publishUpdater.start(changeNotificationStatus);
+      try {
+        if (!publishTargets || publishTargets.length === 0) return;
+        const currentTarget = publishTargets.find((item) => {
+          const config = JSON.parse(item.configuration);
+          return (
+            config.settings &&
+            config.settings.MicrosoftAppId &&
+            config.hostname &&
+            config.settings.MicrosoftAppId.length > 0 &&
+            config.hostname.length > 0
+          );
+        });
+        if (isCreateProfileFromSkill && currentTarget) {
+          const skillPublishPenddingNotificationCard = getSkillPendingNotificationCardProps();
+          publishNotificationRef.current = createNotification(skillPublishPenddingNotificationCard);
+          addNotification(publishNotificationRef.current);
+          const sensitiveSettings = getSensitiveProperties(settings);
+          const token = getTokenFromCache('accessToken');
+          await publishToTarget(projectId, currentTarget, { comment: '' }, sensitiveSettings, token);
+          publishUpdaterRef.current = new PublishStatusPollingUpdater(projectId, currentTarget.name);
+          publishUpdaterRef.current.start(changeNotificationStatus);
+        }
+      } catch (e) {
+        console.log(e.message);
       }
     };
     publish();
@@ -161,8 +169,11 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   useEffect(() => {
     // Clear intervals when unmount
     return () => {
-      if (publishUpdater) {
-        stopUpdater(publishUpdater);
+      if (publishUpdaterRef.current) {
+        stopUpdater();
+      }
+      if (publishNotificationRef.current) {
+        deleteNotificationCard();
       }
     };
   }, []);
@@ -299,7 +310,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             selectedDialogs={selectedDialogs}
             selectedTriggers={selectedTriggers}
             setErrors={setErrors}
-            setIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
+            OnUpdateIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
             setSchema={setSchema}
             setSelectedDialogs={setSelectedDialogs}
             setSelectedTriggers={setSelectedTriggers}

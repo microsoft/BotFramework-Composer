@@ -64,12 +64,10 @@ export const PublishController = {
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
-    let profile: PublishTarget;
-    if (profiles.length === 0) {
+    let profile: PublishTarget = profiles[0];
+    if (!profile) {
       profile = publishTarget;
       currentProject.settings?.publishTargets && currentProject.settings?.publishTargets.push(publishTarget);
-    } else {
-      profile = profiles[0];
     }
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
 
@@ -151,12 +149,10 @@ export const PublishController = {
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
-    let profile: PublishTarget;
-    if (profiles.length === 0) {
+    let profile: PublishTarget = profiles[0];
+    if (!profile) {
       profile = currentPublishTarget;
       currentProject.settings?.publishTargets && currentProject.settings?.publishTargets.push(currentPublishTarget);
-    } else {
-      profile = profiles[0];
     }
     // get the publish plugin key
     const extensionName = profile ? profile.type : '';

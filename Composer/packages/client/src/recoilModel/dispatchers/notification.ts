@@ -25,8 +25,8 @@ export const deleteNotificationInternal = ({ reset, set }: CallbackInterface, id
     return notifications.filter((notification) => notification !== id);
   });
 };
-export const updateNotificationInternal = ({ set }: CallbackInterface, id: string, newValue: CardProps) => {
-  set(notificationsState(id), { ...newValue, id: id });
+export const updateNotificationInternal = ({ set }: CallbackInterface, id: string, newValue: Partial<CardProps>) => {
+  set(notificationsState(id), (current) => ({ ...current, ...newValue }));
   // check if notification exist
   set(notificationIdsState, (notificationIds) => {
     if (notificationIds.some((notificationId) => notificationId === id)) {
@@ -54,7 +54,7 @@ export const notificationDispatcher = () => {
   });
 
   const updateNotification = useRecoilCallback(
-    (callbackHelper: CallbackInterface) => (id: string, newValue: CardProps) => {
+    (callbackHelper: CallbackInterface) => (id: string, newValue: Partial<CardProps>) => {
       updateNotificationInternal(callbackHelper, id, newValue);
     }
   );

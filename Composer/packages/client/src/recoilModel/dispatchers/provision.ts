@@ -135,7 +135,7 @@ export const provisionDispatcher = () => {
           });
 
           // update publishTargets
-          await callbackHelpers.set(settingsState(projectId), (settings) => {
+          callbackHelpers.set(settingsState(projectId), (settings) => {
             const profile = {
               configuration: JSON.stringify(response.data.config, null, 2),
               name: targetName,

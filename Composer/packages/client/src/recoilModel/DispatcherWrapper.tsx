@@ -123,7 +123,7 @@ export const DispatcherWrapper = ({ children }) => {
         if (filePersistence.isErrorHandlerEmpty()) {
           filePersistence.registerErrorHandler(setProjectError);
         }
-        await filePersistence.notify(assets, previousAssets);
+        filePersistence.notify(assets, previousAssets);
       }
     }
   });

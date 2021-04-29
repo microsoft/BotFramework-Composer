@@ -86,7 +86,7 @@ export interface ContentProps {
   setSelectedDialogs: (dialogs: any[]) => void;
   setSelectedTriggers: (selectedTriggers: any[]) => void;
   setSkillManifest: (_: Partial<SkillManifestFile>) => void;
-  setIsCreateProfileFromSkill: (isCreateProfileFromSkill: boolean) => void;
+  OnUpdateIsCreateProfileFromSkill: (isCreateProfileFromSkill: boolean) => void;
   schema: JSONSchema7;
   selectedDialogs: any[];
   selectedTriggers: any[];

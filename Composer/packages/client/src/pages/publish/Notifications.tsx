@@ -72,7 +72,7 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
 };
 
 export const getSkillPublishedNotificationCardProps = (
-  item: { status: number; [key: string]: any },
+  item: { status: number } & Record<string, any>,
   url?: string
 ): CardProps => {
   const skillCardContent = css`
@@ -188,7 +188,7 @@ export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = fa
   };
 };
 
-export const getSkilPendingNotificationCardProps = (): CardProps => {
+export const getSkillPendingNotificationCardProps = (): CardProps => {
   return {
     title: '',
     description: formatMessage('Publishing your skill...'),
