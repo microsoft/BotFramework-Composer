@@ -39,12 +39,16 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
 
   const getAppInfo = (profile: PublishTarget) => {
     if (profile) {
-      const config = JSON.parse(profile.configuration);
-      const appId = config?.settings?.MicrosoftAppId;
-      const appPassword = config?.settings?.MicrosoftAppPassword;
+      try {
+        const config = JSON.parse(profile.configuration);
+        const appId = config?.settings?.MicrosoftAppId;
+        const appPassword = config?.settings?.MicrosoftAppPassword;
 
-      if (appId) {
-        return { appId, appPassword };
+        if (appId) {
+          return { appId, appPassword };
+        }
+      } catch (err) {
+        console.log(err);
       }
     }
   };
@@ -62,7 +66,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
         .filter((p) => p.data !== undefined) || [];
 
     setPublishTargetOptions(options);
-  }, [publishTargets, projectId]);
+  }, [publishTargets]);
 
   useEffect(() => {
     if (publishTargetOptions.length === 0) {
@@ -80,46 +84,41 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
   };
 
   return (
-    <Fragment>
-      <Dialog
-        dialogContentProps={{
-          title: dialogTitle.title,
-          subText: dialogTitle.subText,
-        }}
-        hidden={hidden}
-        minWidth={500}
-        modalProps={{
-          isBlocking: true,
-        }}
-        onDismiss={onCancel}
-      >
-        <div css={{ height: '100px' }}>
-          <Dropdown
-            errorMessage={publishTargetsErrorMessage}
-            options={publishTargetOptions}
-            placeholder={formatMessage('Select publishing profile')}
-            selectedKey={selectedKey}
-            styles={{
-              root: { marginBottom: 10 },
-              dropdown: { width: 450 },
-            }}
-            onChange={(_, opt) => {
-              setSelectedKey(opt?.key);
-            }}
-          />
-        </div>
-        <DialogFooter>
-          <PrimaryButton
-            disabled={!!publishTargetsErrorMessage || !selectedKey}
-            text={formatMessage('Add App ID and Password')}
-            onClick={handleAdd}
-          />
-          <DefaultButton text={formatMessage('Cancel')} onClick={onCancel} />
-        </DialogFooter>
-      </Dialog>
-    </Fragment>
+    <Dialog
+      dialogContentProps={{
+        title: dialogTitle.title,
+        subText: dialogTitle.subText,
+      }}
+      hidden={hidden}
+      minWidth={500}
+      modalProps={{
+        isBlocking: true,
+      }}
+      onDismiss={onCancel}
+    >
+      <div css={{ height: '100px' }}>
+        <Dropdown
+          errorMessage={publishTargetsErrorMessage}
+          options={publishTargetOptions}
+          placeholder={formatMessage('Select publishing profile')}
+          selectedKey={selectedKey}
+          styles={{
+            root: { marginBottom: 10 },
+            dropdown: { width: 450 },
+          }}
+          onChange={(_, opt) => {
+            setSelectedKey(opt?.key);
+          }}
+        />
+      </div>
+      <DialogFooter>
+        <PrimaryButton
+          disabled={!!publishTargetsErrorMessage || !selectedKey}
+          text={formatMessage('Add App ID and Password')}
+          onClick={handleAdd}
+        />
+        <DefaultButton text={formatMessage('Cancel')} onClick={onCancel} />
+      </DialogFooter>
+    </Dialog>
   );
 };
-
-//onChange={onSelectProfile}
-//onRenderOption={renderDropdownOption}

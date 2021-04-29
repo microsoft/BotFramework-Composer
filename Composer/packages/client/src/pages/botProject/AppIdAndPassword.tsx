@@ -152,25 +152,23 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           }}
         />
       </div>
-      {showImportDialog && (
-        <GetAppInfoFromPublishProfileDialog
-          hidden={!showImportDialog}
-          projectId={projectId}
-          onCancel={() => {
-            setShowImportDialog(false);
-          }}
-          onOK={(info) => {
-            setShowImportDialog(false);
-            setLocalMicrosoftAppId(info.appId);
-            setLocalMicrosoftAppPassword(info.appPassword || '');
-            setSettings(projectId, {
-              ...mergedSettings,
-              MicrosoftAppId: info.appId,
-              MicrosoftAppPassword: info.appPassword,
-            });
-          }}
-        />
-      )}
+      <GetAppInfoFromPublishProfileDialog
+        hidden={!showImportDialog}
+        projectId={projectId}
+        onCancel={() => {
+          setShowImportDialog(false);
+        }}
+        onOK={(info) => {
+          setShowImportDialog(false);
+          setLocalMicrosoftAppId(info.appId);
+          setLocalMicrosoftAppPassword(info.appPassword || '');
+          setSettings(projectId, {
+            ...mergedSettings,
+            MicrosoftAppId: info.appId,
+            MicrosoftAppPassword: info.appPassword,
+          });
+        }}
+      />
     </Fragment>
   );
 };
