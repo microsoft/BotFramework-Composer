@@ -106,6 +106,16 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
     });
   }, [projectId, mergedSettings, localMicrosoftAppId]);
 
+  const handleAddFromProfile = (appId: string, appPassword: string) => {
+    setLocalMicrosoftAppId(appId);
+    setLocalMicrosoftAppPassword(appPassword);
+    setSettings(projectId, {
+      ...mergedSettings,
+      MicrosoftAppId: appId,
+      MicrosoftAppPassword: appPassword,
+    });
+  };
+
   return (
     <Fragment>
       <div css={title}>{formatMessage('Microsoft App ID')}</div>
@@ -152,23 +162,19 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           }}
         />
       </div>
-      <GetAppInfoFromPublishProfileDialog
-        hidden={!showImportDialog}
-        projectId={projectId}
-        onCancel={() => {
-          setShowImportDialog(false);
-        }}
-        onOK={(info) => {
-          setShowImportDialog(false);
-          setLocalMicrosoftAppId(info.appId);
-          setLocalMicrosoftAppPassword(info.appPassword || '');
-          setSettings(projectId, {
-            ...mergedSettings,
-            MicrosoftAppId: info.appId,
-            MicrosoftAppPassword: info.appPassword,
-          });
-        }}
-      />
+      {showImportDialog && (
+        <GetAppInfoFromPublishProfileDialog
+          hidden={!showImportDialog}
+          projectId={projectId}
+          onCancel={() => {
+            setShowImportDialog(false);
+          }}
+          onOK={(info) => {
+            setShowImportDialog(false);
+            handleAddFromProfile(info.appId, info.appPassword || '');
+          }}
+        />
+      )}
     </Fragment>
   );
 };

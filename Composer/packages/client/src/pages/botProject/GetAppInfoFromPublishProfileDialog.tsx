@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
@@ -25,56 +25,48 @@ type Props = {
   onCancel: () => void;
 };
 
+const getAppInfo = (profile: PublishTarget) => {
+  if (profile) {
+    try {
+      const config = JSON.parse(profile.configuration);
+      const appId = config?.settings?.MicrosoftAppId;
+      const appPassword = config?.settings?.MicrosoftAppPassword;
+
+      if (appId) {
+        return { appId, appPassword };
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
+
 export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
   const { projectId, hidden, onOK: onAdd, onCancel } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
-  const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
-  const [publishTargetsErrorMessage, setPublishTargetsErrorMessage] = useState<string | undefined>();
   const [selectedKey, setSelectedKey] = useState<string | number | undefined>();
 
-  const dialogTitle = {
-    title: formatMessage('Add from publishing profile'),
-    subText: formatMessage('Select the publishing profile you’d like to add a Microsoft App ID and Password from.'),
-  };
-
-  const getAppInfo = (profile: PublishTarget) => {
-    if (profile) {
-      try {
-        const config = JSON.parse(profile.configuration);
-        const appId = config?.settings?.MicrosoftAppId;
-        const appPassword = config?.settings?.MicrosoftAppPassword;
-
-        if (appId) {
-          return { appId, appPassword };
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
-  useEffect(() => {
-    // reset the ui back to no selection
-    setPublishTargetOptions([]);
-
-    // generate options
+  const publishTargetOptions = useMemo(() => {
     const options: IDropdownOption[] =
       publishTargets
         ?.map((p) => {
           return { key: p.name, text: p.name, data: getAppInfo(p) };
         })
         .filter((p) => p.data !== undefined) || [];
-
-    setPublishTargetOptions(options);
+    return options;
   }, [publishTargets]);
 
-  useEffect(() => {
+  const publishTargetsErrorMessage = useMemo(() => {
     if (publishTargetOptions.length === 0) {
-      setPublishTargetsErrorMessage('No profiles were found containing a Microsoft App ID.');
-    } else {
-      setPublishTargetsErrorMessage(undefined);
+      return formatMessage('No profiles were found containing a Microsoft App ID.');
     }
+    return undefined;
   }, [publishTargetOptions]);
+
+  const dialogTitle = {
+    title: formatMessage('Add from publishing profile'),
+    subText: formatMessage('Select the publishing profile you’d like to add a Microsoft App ID and Password from.'),
+  };
 
   const handleAdd = () => {
     const opt = publishTargetOptions?.find((p) => p.key === selectedKey);

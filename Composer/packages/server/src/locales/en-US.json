@@ -2519,6 +2519,9 @@
   "no_prebuilt_entities_found_a1015451": {
     "message": "no prebuilt entities found"
   },
+  "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
+    "message": "No profiles were found containing a Microsoft App ID."
+  },
   "no_properties_found_6f777f6e": {
     "message": "No properties found"
   },
