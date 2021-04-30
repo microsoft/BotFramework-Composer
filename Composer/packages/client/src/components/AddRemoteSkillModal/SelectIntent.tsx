@@ -22,7 +22,7 @@ import luWorker from '../../recoilModel/parsers/luWorker';
 import { localeState, dispatcherState } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
-import { Orchestrator } from './Orchestrator';
+import { EnableOrchestrator } from './EnableOrchestrator';
 
 const detailListContainer = css`
   width: 100%;
@@ -248,7 +248,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   return (
     <Fragment>
       {showOrchestratorDialog ? (
-        <Orchestrator
+        <EnableOrchestrator
           projectId={projectId}
           onBack={() => {
             onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));

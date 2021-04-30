@@ -23,7 +23,7 @@ type OrchestratorProps = {
   hideBackButton?: boolean;
 };
 
-const Orchestrator: React.FC<OrchestratorProps> = (props) => {
+const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
   const { projectId, onSubmit, onBack, hideBackButton = false } = props;
   const [enableOrchestrator, setEnableOrchestrator] = useState(true);
   const { setApplicationLevelError, reloadProject } = useRecoilValue(dispatcherState);
@@ -66,4 +66,4 @@ const Orchestrator: React.FC<OrchestratorProps> = (props) => {
   );
 };
 
-export { OrchestratorProps, Orchestrator };
+export { OrchestratorProps, EnableOrchestrator };

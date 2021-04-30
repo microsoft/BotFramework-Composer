@@ -16,7 +16,7 @@ import {
   rootBotProjectIdSelector,
 } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
-import { Orchestrator } from '../AddRemoteSkillModal/Orchestrator';
+import { EnableOrchestrator } from '../AddRemoteSkillModal/EnableOrchestrator';
 
 export const OrchestratorForSkillsDialog = () => {
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useRecoilState(orchestratorForSkillsDialogState);
@@ -64,7 +64,7 @@ export const OrchestratorForSkillsDialog = () => {
       title={enableOrchestratorDialog.title}
       onDismiss={onDismissHandler}
     >
-      <Orchestrator hideBackButton projectId={rootProjectId} onSubmit={handleOrchestratorSubmit} />
+      <EnableOrchestrator hideBackButton projectId={rootProjectId} onSubmit={handleOrchestratorSubmit} />
     </DialogWrapper>
   );
 };
