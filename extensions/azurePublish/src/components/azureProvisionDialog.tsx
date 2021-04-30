@@ -1195,6 +1195,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Create')}
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
+                telemetryClient?.track('CreateProvisionStarted', { newResourceGroup: isNewResourceGroup });
                 onSubmit({
                   tenantId: formData.tenantId,
                   subscription: formData.subscriptionId,
