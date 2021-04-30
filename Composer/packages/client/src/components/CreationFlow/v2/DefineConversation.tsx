@@ -15,13 +15,13 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 
-import { DialogCreationCopy, nameRegexV2 } from '../../../constants';
+import { DialogCreationCopy, nameRegexV2, nameRegex } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -29,6 +29,7 @@ import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSucces
 import { dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -159,7 +160,9 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!value || !nameRegexV2.test(`${value}`)) {
+        const isPvaBot = templateId === 'pva';
+        const namePattern = isPvaBot ? nameRegex : nameRegexV2;
+        if (!value || !namePattern.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {
             return formatMessage('Bot name cannot start with a number or space');
@@ -291,6 +294,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = await getAliasFromPayload(source, payload);
         }
       }
+      TelemetryClient.track('CreationExecuted', {
+        runtimeChoice: dataToSubmit?.runtimeType,
+        runtimeLanguage: dataToSubmit?.runtimeLanguage as FeedType,
+        isPva: isImported,
+        isAbs: !!dataToSubmit?.source,
+      });
       onSubmit({ ...dataToSubmit }, templateId || '');
     },
     [hasErrors, formData]

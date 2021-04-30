@@ -29,6 +29,7 @@ import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
 import { RuntimeOutputData } from '../types';
 import { checkIfFunctionsMissing, missingFunctionsError } from '../../utils/runtimeErrors';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -43,6 +44,7 @@ export const publishStorage = new ClientStorage(window.sessionStorage, 'publish'
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
+    TelemetryClient.track('PublishFailure', { message: typeof error === 'string' ? error : JSON.stringify(error) });
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
       set(botBuildTimeErrorState(projectId), { ...error, title });
@@ -59,6 +61,7 @@ export const publisherDispatcher = () => {
   };
 
   const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data: PublishResult, target) => {
+    TelemetryClient.track('PublishSuccess');
     const { endpointURL, status } = data;
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
@@ -186,6 +189,7 @@ export const publisherDispatcher = () => {
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
+          publishTarget: target,
           accessToken: token,
           metadata: {
             ...metadata,
@@ -251,7 +255,7 @@ export const publisherDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       try {
         const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-        filePersistence.flush();
+        await filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
         set(publishHistoryState(projectId), (publishHistory) => ({
           ...publishHistory,
