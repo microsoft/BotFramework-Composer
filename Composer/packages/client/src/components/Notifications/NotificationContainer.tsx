@@ -22,6 +22,7 @@ const container = css`
   position: absolute;
   right: 0px;
   padding: 6px;
+  pointer-events: none;
 `;
 
 const layerStyles = { root: { zIndex: zIndices.notificationContainer } };

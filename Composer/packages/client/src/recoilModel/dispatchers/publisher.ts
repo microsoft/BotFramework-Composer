@@ -28,6 +28,7 @@ import * as luUtil from '../../utils/luUtil';
 import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
 import { RuntimeOutputData } from '../types';
+import { checkIfFunctionsMissing, missingFunctionsError } from '../../utils/runtimeErrors';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -125,7 +126,14 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.starting);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botBuildTimeErrorState(projectId), { ...data, title: formatMessage('Error occurred building the bot') });
+        if (checkIfFunctionsMissing(data)) {
+          set(botBuildTimeErrorState(projectId), {
+            ...missingFunctionsError,
+            title: formatMessage('Error occurred building the bot'),
+          });
+        } else {
+          set(botBuildTimeErrorState(projectId), { ...data, title: formatMessage('Error occurred building the bot') });
+        }
       }
     }
 
