@@ -14,7 +14,7 @@ import { enableOrchestratorDialog } from '../../constants';
 
 import { importOrchestrator } from './helper';
 
-const learnMoreUrl = 'https://aka.ms/bf-composer-docs-publish-bot';
+const learnMoreUrl = 'https://aka.ms/bf-orchestrator';
 
 type OrchestratorProps = {
   projectId: string;
