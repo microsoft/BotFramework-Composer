@@ -94,6 +94,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
   const handleCreateQnA = async (data) => {
     const { projectId, dialogId } = creatQnAOnInfo;
     if (!projectId || !dialogId) return;
+
     await createQnATrigger(projectId, dialogId);
 
     const { name, urls = [], locales, multiTurn } = data;
