@@ -95,6 +95,9 @@ export const Text = {
   get DOTNETFAILURE() {
     return formatMessage('Composer needs .NET Core SDK');
   },
+  get FUNCTIONSFAILURE() {
+    return formatMessage('Composer needs Azure Functions');
+  },
   get BOTRUNTIMEERROR() {
     return formatMessage('Composer Runtime Error');
   },
