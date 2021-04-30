@@ -14,7 +14,7 @@ import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { isShowAuthDialog } from '../../utils/auth';
+import { isShowAuthDialog as shouldShowTokenDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 import { tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
@@ -61,8 +61,8 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
-  const [dialogHidden, setDialogHidden] = useState(true);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showPublishDialog, setShowingPublishDialog] = useState(false);
+  const [showAuthDialog, setShowingAuthDialog] = useState(false);
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
@@ -70,10 +70,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   useEffect(() => {
     if (props.completePartial && publishTargets && publishTargets.length > 0) {
       setCurrent({ item: publishTargets[0], index: 0 });
-      if (isShowAuthDialog(true)) {
-        setShowAuthDialog(true);
+      if (shouldShowTokenDialog(true)) {
+        setShowingAuthDialog(true);
       } else {
-        setDialogHidden(false);
+        setShowingPublishDialog(true);
       }
     }
   }, [props.completePartial, publishTargets]);
@@ -112,10 +112,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       data-testid={'addNewPublishProfile'}
       styles={actionButton}
       onClick={() => {
-        if (isShowAuthDialog(true)) {
-          setShowAuthDialog(true);
+        if (shouldShowTokenDialog(true)) {
+          setShowingAuthDialog(true);
         } else {
-          setDialogHidden(false);
+          setShowingPublishDialog(true);
         }
       }}
     >
@@ -146,10 +146,10 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                   styles={editPublishProfile}
                   onClick={() => {
                     setCurrent({ item: p, index: index });
-                    if (isShowAuthDialog(true)) {
-                      setShowAuthDialog(true);
+                    if (shouldShowTokenDialog(true)) {
+                      setShowingAuthDialog(true);
                     } else {
-                      setDialogHidden(false);
+                      setShowingPublishDialog(true);
                     }
                   }}
                 >
@@ -174,17 +174,17 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         <AuthDialog
           needGraph
           next={() => {
-            setDialogHidden(false);
+            setShowingPublishDialog(true);
           }}
           onDismiss={() => {
-            setShowAuthDialog(false);
+            setShowingAuthDialog(false);
           }}
         />
       )}
-      {!dialogHidden ? (
+      {showPublishDialog ? (
         <PublishProfileDialog
           closeDialog={() => {
-            setDialogHidden(true);
+            setShowingPublishDialog(false);
             // reset current
             setCurrent(null);
           }}
