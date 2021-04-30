@@ -134,7 +134,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'luis',
         label: formatMessage('Add a LUIS key'),
         description: formatMessage('Setup Language Understanding so that you can start and test your bot.'),
-        learnMore: 'https://www.luis.ai',
+        learnMore: 'https://aka.ms/composer-luis-learnmore',
         required: true,
         checked: hasLUIS,
         highlight: (step) => {
