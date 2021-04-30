@@ -13,7 +13,7 @@ const conflictConfirmationPrompt = formatMessage(
   'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
 );
 
-export const importOrchestractor = async (projectId: string, reloadProject, setApplicationLevelError) => {
+export const importOrchestrator = async (projectId: string, reloadProject, setApplicationLevelError) => {
   const reqBody = {
     package: 'Microsoft.Bot.Builder.AI.Orchestrator',
     version: '4.13.0',
