@@ -761,9 +761,10 @@ export const AzureProvisionDialog: React.FC = () => {
     () => (props: IPersonaProps) => {
       return (
         <div
+          role="button"
           style={{ color: 'blue', cursor: 'pointer' }}
           onClick={async () => {
-            const signoutAndCloseProvisionDialog = await OpenConfirmModal(
+            const confirmed = await OpenConfirmModal(
               formatMessage('Sign out from Azure'),
               formatMessage(
                 'Changes you made may not be saved and the wizard will be closed. Do you wish to continue?'
@@ -774,7 +775,9 @@ export const AzureProvisionDialog: React.FC = () => {
                 cancelText: formatMessage('Cancel'),
               }
             );
-            if (signoutAndCloseProvisionDialog) await signoutAndNotify();
+            if (confirmed) {
+              await signoutAndNotify();
+            }
           }}
         >
           {props.secondaryText}
