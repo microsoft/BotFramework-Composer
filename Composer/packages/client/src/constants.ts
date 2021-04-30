@@ -359,7 +359,7 @@ export const enableOrchestratorDialog = {
     return formatMessage('Enable Orchestrator');
   },
   get subText() {
-    return formatMessage('Enable orchestrator as the recognizer at the root dialog to add this skill');
+    return formatMessage('Enable Orchestrator as the recognizer at the root dialog to add this skill');
   },
   get content() {
     return formatMessage(
