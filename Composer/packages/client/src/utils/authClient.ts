@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { promises } from 'fs';
-
 import { AuthParameters, AzureTenant } from '@botframework-composer/types';
 
 import { authConfig } from '../constants';
