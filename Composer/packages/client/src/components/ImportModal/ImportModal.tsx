@@ -12,6 +12,7 @@ import axios from 'axios';
 
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { invalidNameCharRegex } from '../../constants';
 
 import { ImportStatus } from './ImportStatus';
 import { ImportSuccessNotificationWrapper } from './ImportSuccessNotification';
@@ -75,7 +76,8 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
     const searchParams = new URLSearchParams();
     if (name) {
-      searchParams.set('name', encodeURIComponent(name));
+      const validName = source === 'pva' ? name.replace(invalidNameCharRegex, '-') : name;
+      searchParams.set('name', encodeURIComponent(validName));
     }
     if (description) {
       searchParams.set('description', encodeURIComponent(description));
