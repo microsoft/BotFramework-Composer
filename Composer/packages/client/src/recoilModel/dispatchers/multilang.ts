@@ -23,20 +23,9 @@ import {
   botDisplayNameState,
 } from './../atoms/botState';
 
-type FileWithId = { id: string };
-
-const filterFiles = (targetFiles: FileWithId[], currentFiles: FileWithId[]) => {
-  const map: Record<string, boolean> = {};
-  currentFiles.forEach((file) => {
-    map[file.id] = true;
-  });
-
-  return targetFiles.filter((file) => !map[file.id]);
-};
-
-const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: string[]): any[] => {
+const copyLanguageResources = (prevFiles: any[], fromLanguage: string, toLanguages: string[]): any[] => {
   const copiedFiles: any = [];
-  const copyOriginFiles = files.filter(({ id }) => getExtension(id) === fromLanguage);
+  const copyOriginFiles = prevFiles.filter(({ id }) => getExtension(id) === fromLanguage);
 
   for (const file of copyOriginFiles) {
     for (const toLanguage of toLanguages) {
@@ -49,7 +38,13 @@ const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: 
     }
   }
 
-  return copiedFiles;
+  // do not overwrite existed file
+  const existedFileMap: Record<string, boolean> = {};
+  prevFiles.forEach((file) => {
+    existedFileMap[file.id] = true;
+  });
+
+  return copiedFiles.filter((file) => !existedFileMap[file.id]);
 };
 
 // pull out target language file
@@ -104,17 +99,17 @@ export const multilangDispatcher = () => {
       const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesSelectorFamily(projectId), (oldLgFiles) => {
-        const addedLgFiles = copyLanguageResources(oldLgFiles, defaultLang, languages);
-        return [...oldLgFiles, ...(filterFiles(addedLgFiles, oldLgFiles) as LgFile[])];
+      set(lgFilesSelectorFamily(projectId), (prevLgFiles) => {
+        const addedLgFiles = copyLanguageResources(prevLgFiles, defaultLang, languages);
+        return [...prevLgFiles, ...addedLgFiles];
       });
       set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
-        return [...prevluFiles, ...(filterFiles(addedLuFiles, prevluFiles) as LuFile[])];
+        return [...prevluFiles, ...addedLuFiles];
       });
       set(qnaFilesSelectorFamily(projectId), (prevQnAFiles) => {
         const addedQnAFiles = copyLanguageResources(prevQnAFiles, defaultLang, languages);
-        return [...prevQnAFiles, ...(filterFiles(addedQnAFiles, prevQnAFiles) as QnAFile[])];
+        return [...prevQnAFiles, ...addedQnAFiles];
       });
       set(settingsState(projectId), (prevSettings) => {
         const settings: any = cloneDeep(prevSettings);
