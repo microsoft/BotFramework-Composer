@@ -7,34 +7,38 @@ import formatMessage from 'format-message';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
-import { settingsState, botDisplayNameState } from '../../recoilModel';
-import { Fragment } from 'react';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { Fragment, useState } from 'react';
+import { CommunicationColors, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { Label } from 'office-ui-fabric-react/lib/Label';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { FontSizes } from '@uifabric/fluent-theme';
+import { DefaultButton, IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+
+import { settingsState, botDisplayNameState } from '../../recoilModel';
+
+import { buttonStyle } from './CreateSkillModal';
 
 type PreparatoryWorkDialogProps = {
   projectId: string;
   onDismiss: () => void;
-  onNext: () => void;
+  onNext: (appId: string, targetName: string) => void;
+  onGotoCreateProfile: () => void;
 };
-const ngrokInstallation = {
-  title: formatMessage('Setup tunneling software'),
-  description: formatMessage(
-    'To connect to a remote skill, tunneling software is required so your remote skill can call back to your bot with responses.'
-  ),
-  link: {
-    text: formatMessage('Install ngrok'),
-    onClick: () => {},
+const getCreateProfileDescription = (botName, handleCreateProfile) => ({
+  iconProps: {
+    iconName: 'Error',
+    color: SharedColors.orange20,
   },
-};
-const getProfileDescription = (botName) => ({
   title: formatMessage(`Create a publishing profile for {botName}`, { botName }),
   description: formatMessage(
     'Your root bot must have an associated Microsoft App Id and Password to connect to a skill.'
   ),
   link: {
     text: formatMessage('Create a publishing profile'),
-    onClick: () => {},
+    onClick: handleCreateProfile,
   },
 });
 const manifestUrl = {
@@ -42,49 +46,166 @@ const manifestUrl = {
   description: formatMessage(
     'To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step.'
   ),
-  link: {
-    text: formatMessage('Know more about skill manifest URLs'),
-    onClick: () => {},
-  },
+};
+const appIdInfo = {
+  title: formatMessage('Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list'),
+  description: formatMessage(
+    'For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list.'
+  ),
 };
 type RenderItemProps = {
   title: string;
   description: string;
+  iconProps?: {
+    iconName: string;
+    color: string;
+  };
   link?: {
     text: string;
     onClick: () => void;
   };
 };
 
-const renderItem = ({ title, description, link }: RenderItemProps) => {
+const renderItem = ({
+  title,
+  description,
+  link,
+  iconProps = { iconName: 'Completed', color: SharedColors.cyanBlue10 },
+}: RenderItemProps) => {
   return (
     <div css={{ display: 'flex', marginBottom: '20px' }}>
       <FontIcon
-        iconName="Completed"
-        style={{ color: SharedColors.cyanBlue10, fontSize: '18px', margin: '4px 12px 0 0' }}
+        iconName={iconProps.iconName}
+        style={{ color: iconProps.color, fontSize: '18px', margin: '4px 12px 0 0' }}
       />
       <div css={{ fontSize: '14px', lineHeight: '20px' }}>
-        <div css={{ color: NeutralColors.gray160, fontWeight: '600', marginBottom: '5px' }}>{title}</div>
-        <div css={{ color: NeutralColors.gray130 }}>{description}</div>
+        <div style={{ color: NeutralColors.gray160, fontWeight: 600, marginBottom: '5px' }}>{title}</div>
+        <div style={{ color: NeutralColors.gray130 }}>{description}</div>
         {link && <Link onClick={link.onClick}>{link.text}</Link>}
       </div>
     </div>
   );
 };
-export const PreparatoryWorkDialog: React.FC<PreparatoryWorkDialogProps> = (props) => {
-  const { projectId, onDismiss, onNext } = props;
-  const settings = useRecoilValue(settingsState(projectId));
-  const botName = useRecoilValue(botDisplayNameState(projectId));
-  const { publishTargets } = settings;
+type CustomLabelProps = {
+  label: string;
+  description: string;
+  required?: boolean;
+};
+const CustomLabel: React.FC<CustomLabelProps> = ({ label, description, required = false }) => {
+  return (
+    <Stack style={{ display: 'flex', flexDirection: 'row' }}>
+      <Label
+        required={required}
+        styles={{ root: { marginRight: '4px', selectors: { '::after': { paddingRight: '0px' } } } }}
+      >
+        {label}
+      </Label>
+      <TooltipHost content={description}>
+        <FontIcon iconName="Info" style={{ fontSize: FontSizes.size12 }} />
+      </TooltipHost>
+    </Stack>
+  );
+};
+
+const renderMicrosoftAppId = (MicrosoftAppId: string, label: string, description: string): JSX.Element => {
   return (
     <Fragment>
-      {renderItem(ngrokInstallation)}
+      <CustomLabel description={description} label={label} />
+      <div
+        style={{
+          color: NeutralColors.gray90,
+          backgroundColor: NeutralColors.gray20,
+          fontSize: FontSizes.size14,
+          display: 'flex',
+          justifyContent: 'space-between',
+          lineHeight: '30px',
+          paddingLeft: '10px',
+          width: '394px',
+        }}
+      >
+        {MicrosoftAppId}
+        <IconButton
+          iconProps={{ iconName: 'copy' }}
+          styles={{ icon: { fontSize: FontSizes.size12, color: CommunicationColors.primary } }}
+          onClick={() => navigator.clipboard.writeText(MicrosoftAppId)}
+        />
+      </div>
+    </Fragment>
+  );
+};
+export const PreparatoryWorkDialog: React.FC<PreparatoryWorkDialogProps> = (props) => {
+  const { projectId, onDismiss, onNext, onGotoCreateProfile } = props;
+  const settings = useRecoilValue(settingsState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
+  const { publishTargets, MicrosoftAppId } = settings;
+  const publishTargetOptions: IDropdownOption[] = publishTargets.map((target) => ({
+    key: target.name,
+    text: target.name,
+  }));
+
+  const [currentTargetName, setCurrentTargetName] = useState(publishTargets.length === 0 ? '' : publishTargets[0].name);
+
+  return (
+    <Fragment>
       {publishTargets.length === 0 ? (
         <Fragment>
-          {renderItem(getProfileDescription(botName))}
+          {renderItem(getCreateProfileDescription(botName, onGotoCreateProfile))}
+          {renderItem(appIdInfo)}
           {renderItem(manifestUrl)}
         </Fragment>
-      ) : null}
+      ) : (
+        <Fragment>
+          {renderItem(appIdInfo)}
+          {publishTargets.length === 1 ? (
+            <div style={{ margin: '0 0 40px 30px' }}>
+              {renderMicrosoftAppId(
+                MicrosoftAppId,
+                formatMessage('Your bot’s Microsoft App Id'),
+                formatMessage('Microsoft App Id')
+              )}
+            </div>
+          ) : (
+            <div style={{ display: 'flex', margin: '0 0 40px 30px' }}>
+              <div style={{ marginRight: '20px' }}>
+                <CustomLabel
+                  required
+                  description={formatMessage('Publish profile')}
+                  label={formatMessage('Publish profile')}
+                />
+                <Dropdown
+                  options={publishTargetOptions}
+                  placeholder="Select an option"
+                  selectedKey={currentTargetName}
+                  styles={{ root: { width: '187px' } }}
+                  onChange={(_, option) => {
+                    setCurrentTargetName(option?.key);
+                  }}
+                />
+              </div>
+              <div>
+                {renderMicrosoftAppId(
+                  MicrosoftAppId,
+                  formatMessage('Microsoft App Id'),
+                  formatMessage('Microsoft App Id')
+                )}
+              </div>
+            </div>
+          )}
+          {renderItem(manifestUrl)}
+        </Fragment>
+      )}
+      <Stack>
+        <Separator />
+        <StackItem align={'end'}>
+          <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
+          <PrimaryButton
+            disabled={publishTargets.length === 0}
+            styles={buttonStyle}
+            text={formatMessage('Next')}
+            onClick={() => onNext(MicrosoftAppId, currentTargetName)}
+          />
+        </StackItem>
+      </Stack>
     </Fragment>
   );
 };
