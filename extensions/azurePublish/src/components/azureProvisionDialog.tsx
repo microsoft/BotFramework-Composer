@@ -268,7 +268,18 @@ const getHostname = (config) => {
     return config?.environment ? `${config.name}-${config.environment}` : config.name;
   }
 };
-
+type NotificationType = 'info' | 'warning' | 'error' | 'pending' | 'success';
+const getLogoutNotificationSettings = (description: string, type: NotificationType) => {
+  return {
+    title: '',
+    retentionTime: 5000,
+    description: description,
+    type,
+    onRenderCardContent: (props) => (
+      <div style={{ padding: '0 16px 16px 16px', fontSize: '12px' }}>{props.description}</div>
+    ),
+  };
+};
 const getDefaultFormData = (currentProfile, defaults) => {
   return {
     creationType: defaults.creationType ?? 'create',
@@ -742,18 +753,21 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [importConfig]);
 
   const signoutAndNotify = useCallback(async () => {
-    const isSignedOutSuccesfully = await logOut();
-    if (isSignedOutSuccesfully) {
-      addNotification({
-        type: 'info',
-        title: '',
-        retentionTime: 5000,
-        description: formatMessage('You have successfully signed out of Azure'),
-        onRenderCardContent: (props) => (
-          <div style={{ padding: '0 16px 16px 16px', fontSize: '12px' }}>{props.description}</div>
-        ),
-      });
+    const isSignedOut = await logOut();
+    if (isSignedOut) {
+      addNotification(
+        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info')
+      );
       closeDialog();
+    } else {
+      addNotification(
+        getLogoutNotificationSettings(
+          formatMessage(
+            'There was an error attempting to logout of Azure. To complete logout, you may need to restart Composer.'
+          ),
+          'error'
+        )
+      );
     }
   }, [addNotification]);
 
@@ -767,7 +781,7 @@ export const AzureProvisionDialog: React.FC = () => {
             const confirmed = await OpenConfirmModal(
               formatMessage('Sign out from Azure'),
               formatMessage(
-                'Changes you made may not be saved and the wizard will be closed. Do you wish to continue?'
+                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
               ),
               {
                 onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
