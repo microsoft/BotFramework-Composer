@@ -230,6 +230,10 @@ export class OneAuthInstance extends OneAuthBase {
     if (!this.signedInARMAccount) {
       const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
       const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, signInParams, '');
+      if (!result.account) {
+        return '';
+      }
+
       this.signedInARMAccount = result.account;
     }
 
