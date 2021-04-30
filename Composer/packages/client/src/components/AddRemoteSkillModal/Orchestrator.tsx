@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton, DefaultButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../../recoilModel';
@@ -16,15 +16,15 @@ import { importOrchestrator } from './helper';
 
 const learnMoreUrl = 'https://aka.ms/bf-composer-docs-publish-bot';
 
-interface OrchestratorProps {
+type OrchestratorProps = {
   projectId: string;
-  onSubmit: (event: any, userSelected?: boolean) => Promise<void>;
-  onBack: (event: any) => void;
+  onSubmit: (event: React.MouseEvent<HTMLElement | Button>, userSelected?: boolean) => Promise<void>;
+  onBack?: (event: React.MouseEvent<HTMLElement | Button>) => void;
   hideBackButton?: boolean;
-}
+};
 
 const Orchestrator: React.FC<OrchestratorProps> = (props) => {
-  const { projectId, onSubmit, onBack } = props;
+  const { projectId, onSubmit, onBack, hideBackButton = false } = props;
   const [enableOrchestrator, setEnableOrchestrator] = useState(true);
   const { setApplicationLevelError, reloadProject } = useRecoilValue(dispatcherState);
   const onChange = (ev, check) => {
@@ -47,33 +47,23 @@ const Orchestrator: React.FC<OrchestratorProps> = (props) => {
         />
       </StackItem>
       <Stack horizontal horizontalAlign="space-between">
-        <Stack.Item>
-          {!props.hideBackButton && <DefaultButton text={formatMessage('Back')} onClick={onBack} />}
-        </Stack.Item>
+        <Stack.Item>{!hideBackButton && <DefaultButton text={formatMessage('Back')} onClick={onBack} />}</Stack.Item>
         <Stack.Item align="end">
-          <span>
-            <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
-            <PrimaryButton
-              text={formatMessage('Continue')}
-              onClick={(event) => {
-                onSubmit(event, enableOrchestrator);
-                if (enableOrchestrator) {
-                  // TODO. show notification
-                  // download orchestrator first
-                  importOrchestrator(projectId, reloadProject, setApplicationLevelError);
-                  // TODO. update notification
-                }
-              }}
-            />
-          </span>
+          <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
+          <PrimaryButton
+            text={formatMessage('Continue')}
+            onClick={(event) => {
+              onSubmit(event, enableOrchestrator);
+              if (enableOrchestrator) {
+                // TODO: Block UI from doing any work until import is complete. Item #7531
+                importOrchestrator(projectId, reloadProject, setApplicationLevelError);
+              }
+            }}
+          />
         </Stack.Item>
       </Stack>
     </Stack>
   );
-};
-
-Orchestrator.defaultProps = {
-  hideBackButton: false,
 };
 
 export { OrchestratorProps, Orchestrator };

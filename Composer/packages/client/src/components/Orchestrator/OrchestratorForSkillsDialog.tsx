@@ -17,7 +17,7 @@ import {
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 import { Orchestrator } from '../AddRemoteSkillModal/Orchestrator';
 
-export const OrchestratorForSkillsDialog = (props) => {
+export const OrchestratorForSkillsDialog = () => {
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useRecoilState(orchestratorForSkillsDialogState);
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const { dialogId } = useRecoilValue(designPageLocationState(rootProjectId));
@@ -40,7 +40,7 @@ export const OrchestratorForSkillsDialog = (props) => {
     setShowOrchestratorDialog(false);
   };
 
-  const isVisible = () => {
+  const setVisibility = () => {
     if (showOrchestratorDialog) {
       if (hasOrchestrator) {
         setShowOrchestratorDialog(false);
@@ -58,19 +58,12 @@ export const OrchestratorForSkillsDialog = (props) => {
   return (
     <DialogWrapper
       dialogType={DialogTypes.CreateFlow}
-      isOpen={isVisible()}
+      isOpen={setVisibility()}
       subText={formatMessage('Enable Orchestrator as the recognizer at the root level to add this skill')}
       title={formatMessage('Enable Orchestrator')}
       onDismiss={onDismissHandler}
     >
-      <Orchestrator
-        hideBackButton
-        projectId={rootProjectId}
-        onBack={() => {
-          setShowOrchestratorDialog(false);
-        }}
-        onSubmit={handleOrchestratorSubmit}
-      />
+      <Orchestrator hideBackButton projectId={rootProjectId} onSubmit={handleOrchestratorSubmit} />
     </DialogWrapper>
   );
 };
