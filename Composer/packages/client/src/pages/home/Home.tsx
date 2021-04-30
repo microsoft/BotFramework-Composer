@@ -16,14 +16,19 @@ import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
-import { recentProjectsState, feedState, warnAboutDotNetState } from '../../recoilModel/atoms/appState';
+import {
+  recentProjectsState,
+  feedState,
+  warnAboutDotNetState,
+  warnAboutFunctionsState,
+} from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 import { InstallDepModal } from '../../components/InstallDepModal';
-import { missingDotnetVersionError } from '../../utils/runtimeErrors';
+import { missingDotnetVersionError, missingFunctionsError } from '../../utils/runtimeErrors';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -73,10 +78,15 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
-  const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    openProject,
+    setCreationFlowStatus,
+    setCreationFlowType,
+    setWarnAboutDotNet,
+    setWarnAboutFunctions,
+  } = useRecoilValue(dispatcherState);
   const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
+  const warnAboutFunctions = useRecoilValue(warnAboutFunctionsState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -255,6 +265,19 @@ const Home: React.FC<RouteComponentProps> = () => {
           text={missingDotnetVersionError.message}
           title={formatMessage('.NET required')}
           onDismiss={() => setWarnAboutDotNet(false)}
+        />
+      )}
+      {warnAboutFunctions && (
+        <InstallDepModal
+          downloadLink={missingFunctionsError.link.url}
+          downloadLinkText={formatMessage('Install Azure Functions')}
+          learnMore={{
+            text: formatMessage('Learn more'),
+            link: missingFunctionsError.linkAfterMessage.url,
+          }}
+          text={missingFunctionsError.message}
+          title={formatMessage('Azure Functions required')}
+          onDismiss={() => setWarnAboutFunctions(false)}
         />
       )}
     </div>

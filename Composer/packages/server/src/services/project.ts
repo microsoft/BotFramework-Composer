@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
@@ -23,6 +26,7 @@ import StorageService from './storage';
 import { Path } from './../utility/path';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { TelemetryService } from './telemetry';
+const execAsync = promisify(exec);
 
 const MAX_RECENT_BOTS = 7;
 
@@ -53,6 +57,15 @@ function fixOldBotProjectMapEntries(
   }
   return map;
 }
+
+const isFunctionsRuntimeInstalled = async (): Promise<boolean> => {
+  try {
+    const { stderr: funcErr } = await execAsync(`func -v`);
+    return !funcErr;
+  } catch (err) {
+    return false;
+  }
+};
 
 export class BotProjectService {
   private static currentBotProjects: BotProject[] = [];
@@ -475,6 +488,20 @@ export class BotProjectService {
       // TODO: Replace with default template once one is determined
       throw Error('empty templateID passed');
     }
+
+    // test for required dependencies
+    if (runtimeType === 'functions') {
+      if (!(await isFunctionsRuntimeInstalled())) {
+        BackgroundProcessManager.updateProcess(jobId, 500, formatMessage('Azure Functions runtime not installed.'));
+        TelemetryService.trackEvent('CreateNewBotProjectFailed', {
+          reason: 'Azure Functions runtime not installed.',
+          template: templateId,
+          status: 500,
+        });
+        return;
+      }
+    }
+
     // location to store the bot project
     const locationRef = getLocationRef(location, storageId, name);
     try {
@@ -583,7 +610,11 @@ export class BotProjectService {
       const storage = StorageService.getStorageClient(locationRef.storageId, user);
       await storage.rmrfDir(locationRef.path);
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
-      TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+      TelemetryService.trackEvent('CreateNewBotProjectFailed', {
+        reason: err instanceof Error ? err.message : err,
+        template: templateId,
+        status: 500,
+      });
     }
   }
 }
