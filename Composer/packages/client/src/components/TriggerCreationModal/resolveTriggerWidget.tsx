@@ -92,7 +92,7 @@ export function resolveTriggerWidget(
       <TextField
         data-testid="TriggerName"
         errorMessage={formData.errors.intent}
-        label={formatMessage('What is the name of this trigger (LUIS)')}
+        label={formatMessage('What is the name of this trigger?')}
         styles={intentStyles}
         onChange={onNameChange}
       />

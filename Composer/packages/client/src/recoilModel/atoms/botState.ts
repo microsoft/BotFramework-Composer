@@ -17,6 +17,7 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
+  PublishTarget,
 } from '@bfc/shared';
 import { ConversationTrafficItem } from '@botframework-composer/types';
 import { atomFamily } from 'recoil';
@@ -369,6 +370,11 @@ export const onCreateQnAFromScratchDialogCompleteState = atomFamily<{ func: unde
 export const isEjectRuntimeExistState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('isEjectRuntimeExist'),
   default: false,
+});
+
+export const currentPublishTargetState = atomFamily<PublishTarget, string>({
+  key: getFullyQualifiedKey('currentTarget'),
+  default: {} as PublishTarget,
 });
 
 export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({

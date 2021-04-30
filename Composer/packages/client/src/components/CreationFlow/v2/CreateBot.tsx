@@ -199,22 +199,30 @@ export function CreateBotV2(props: CreateBotProps) {
 
   useEffect(() => {
     const itemKey = selectedProgLang.props.itemKey;
+    let newTemplates: BotTemplate[] = [];
     if (itemKey === csharpFeedKey) {
-      const newTemplates = templates.filter((template) => {
+      newTemplates = templates.filter((template) => {
         return template.dotnetSupport;
       });
-      setDisplayedTemplates(newTemplates);
     } else if (itemKey === nodeFeedKey) {
-      const newTemplates = templates.filter((template) => {
+      newTemplates = templates.filter((template) => {
         return template.nodeSupport;
       });
-      setDisplayedTemplates(newTemplates);
     }
+    if (creationFlowType === 'Skill') {
+      newTemplates = newTemplates.filter((template) => {
+        return !template.isMultiBotTemplate;
+      });
+    }
+    setDisplayedTemplates(newTemplates);
   }, [templates, selectedProgLang]);
 
   useEffect(() => {
     if (displayedTemplates?.[0]?.id) {
       setCurrentTemplateId(displayedTemplates[0].id);
+      setTimeout(() => {
+        selectedTemplate.setIndexSelected(0, true, false);
+      }, 0);
     }
   }, [displayedTemplates]);
 
@@ -239,7 +247,11 @@ export function CreateBotV2(props: CreateBotProps) {
           }}
         >
           <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
-          <PivotItem data-testid="nodeFeed" headerText="Node" itemKey={nodeFeedKey}></PivotItem>
+          <PivotItem
+            data-testid="nodeFeed"
+            headerText={formatMessage('Node (Preview)')}
+            itemKey={nodeFeedKey}
+          ></PivotItem>
         </Pivot>
         <div css={pickerContainer}>
           <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">

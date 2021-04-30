@@ -260,8 +260,7 @@ export const pull = async (
     const accessToken = await getAccessToken(creds);
 
     // fetch zip containing bot content
-    const query = process.env.COMPOSER_PVA_TOPICS === 'true' ? '?includeTopics=true' : '';
-    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content${query}`;
+    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content?includeTopics=true`;
     const options: RequestInit = {
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
@@ -369,7 +368,7 @@ const getUserFriendlyMessage = (job: PVAPublishJob): string => {
       return 'Bot content out of sync. Please check logs.';
 
     case 'UpdatingSnapshot':
-      return 'Updating bot content in PVA...';
+      return 'Updating bot content in Power Virtual Agents...';
 
     case 'Validating':
       return 'Validating bot assets...';

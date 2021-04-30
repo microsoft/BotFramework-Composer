@@ -349,3 +349,13 @@ export const userHasNodeInstalledState = atom<boolean>({
   key: getFullyQualifiedKey('userHasNodeInstalled'),
   default: true,
 });
+
+export const warnAboutDotNetState = atom<boolean>({
+  key: getFullyQualifiedKey('warnAboutDotNetState'),
+  default: false,
+});
+
+export const warnAboutFunctionsState = atom<boolean>({
+  key: getFullyQualifiedKey('warnAboutFunctionsState'),
+  default: false,
+});

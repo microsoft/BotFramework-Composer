@@ -144,6 +144,7 @@ const schema: JSONSchema7 = {
     name: '<unique name in your subscription>',
     environment: 'dev',
     tenantId: '<tenant id of your azure account>',
+    hostname: '<web application host name>',
     runtimeIdentifier: 'win-x64',
     resourceGroup: '<name of your resource group>',
     botName: '<name of your bot channel registration>',

@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import axios from 'axios';
 
 export const getDialogNameFromFile = (file: string) => {
   const tokens = file.split('.');
@@ -17,4 +18,9 @@ export const getDialogNameFromFile = (file: string) => {
     }
   }
   return dialogName;
+};
+
+export const getRemoteFile = async (url): Promise<string> => {
+  const response = await axios.get(url);
+  return response.data;
 };

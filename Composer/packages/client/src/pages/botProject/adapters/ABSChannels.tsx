@@ -6,7 +6,6 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -17,6 +16,8 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -29,16 +30,15 @@ import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '..
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
 import {
+  tableHeaderRow,
   tableRow,
   tableRowItem,
   tableColumnHeader,
-  labelContainer,
-  customerLabel,
-  unknownIconStyle,
   errorContainer,
   errorIcon,
   errorTextStyle,
-  columnSizes,
+  extendedColumnSizes,
+  teamsCallOutStyles,
 } from '../styles';
 import { TeamsManifestGeneratorModal } from '../../../components/Adapters/TeamsManifestGeneratorModal';
 import { ManageSpeech } from '../../../components/ManageSpeech/ManageSpeech';
@@ -95,6 +95,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
   const [showTeamsManifestModal, setShowTeamsManifestModal] = useState<boolean>(false);
+  const [showTeamsCallOut, setShowTeamsCallOut] = useState<boolean>(false);
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -119,7 +120,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
-      navigateTo(`/bot/${projectId}/botProjectsSettings/#addNewPublishProfile`);
+      navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
     } else {
       let newtoken = '';
       if (userShouldProvideTokens()) {
@@ -138,8 +139,8 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         const config = JSON.parse(profile.configuration);
         setCurrentResource({
           microsoftAppId: config?.settings?.MicrosoftAppId,
-          resourceName: config.name,
-          resourceGroupName: config.resourceGroup || config.name,
+          resourceName: config.botName || config.name,
+          resourceGroupName: config.resourceGroup || config.botName || config.name,
           subscriptionId: config.subscriptionId,
         });
       }
@@ -246,7 +247,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
       if (channelId === CHANNELS.TEAMS) {
-        setShowTeamsManifestModal(true);
+        setShowTeamsCallOut(true);
       }
       // success!!
       setChannelStatus({
@@ -369,11 +370,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     };
   };
 
-  const toggleSpeechOn = async (
-    settings: { subscriptionKey: string; region: string },
-    isDefault: boolean,
-    attempt = 0
-  ) => {
+  const toggleSpeechOn = async (settings: { key: string; region: string }, isDefault: boolean, attempt = 0) => {
     setChannelStatus({
       ...channelStatus,
       [CHANNELS.SPEECH]: {
@@ -384,7 +381,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
     try {
       await createChannelService(CHANNELS.SPEECH, {
-        cognitiveServiceSubscriptionKey: settings.subscriptionKey,
+        cognitiveServiceSubscriptionKey: settings.key,
         cognitiveServiceRegion: settings.region,
         isDefaultBotForCogSvcAccount: isDefault,
       });
@@ -418,17 +415,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         setApplicationLevelError(err);
       }
     }
-  };
-
-  const onRenderLabel = (props) => {
-    return (
-      <div css={labelContainer}>
-        <div css={customerLabel}> {props.label} </div>
-        <TooltipHost content={props.label}>
-          <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
-        </TooltipHost>
-      </div>
-    );
   };
 
   /* Copied from BotStatusList.tx */
@@ -509,30 +495,33 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           <Spinner />
         </Stack.Item>
       )}
-      {key === CHANNELS.TEAMS && channelStatus?.[key].enabled && !channelStatus?.[key].loading && (
-        <Stack.Item>
-          <Link
-            styles={{ root: { marginTop: '7px' } }}
-            onClick={() => {
-              setShowTeamsManifestModal(true);
-            }}
-          >
-            {formatMessage('Open Manifest')}
-          </Link>
-        </Stack.Item>
-      )}
     </Stack>
   );
 
   const absTableRow = (channel: string, name: string, link: string) => (
     <div key={channel} css={tableRow}>
-      <div css={tableRowItem(columnSizes[0])}>{name}</div>
-      <div css={tableRowItem(columnSizes[1])}>
-        <Link href={link} target="_docs">
-          {formatMessage('Learn more')}
-        </Link>
+      <div css={tableRowItem(extendedColumnSizes[0])}>{name}</div>
+      <div css={tableRowItem(extendedColumnSizes[1])}>{absTableToggle(channel)}</div>
+      <div css={tableRowItem(extendedColumnSizes[2])}>
+        <Stack horizontal tokens={{ childrenGap: 60 }}>
+          <Stack.Item>
+            <Link href={link} id={channel} target="_docs">
+              {formatMessage('Learn more')}
+            </Link>
+          </Stack.Item>
+          {channel === CHANNELS.TEAMS && channelStatus?.[channel].enabled && !channelStatus?.[channel].loading && (
+            <Stack.Item>
+              <Link
+                onClick={() => {
+                  setShowTeamsManifestModal(true);
+                }}
+              >
+                {formatMessage('Open Manifest')}
+              </Link>
+            </Stack.Item>
+          )}
+        </Stack>
       </div>
-      <div css={tableRowItem(columnSizes[2])}>{absTableToggle(channel)}</div>
     </div>
   );
 
@@ -549,7 +538,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       )}
       <ManageSpeech
         hidden={!showSpeechModal}
-        setVisibility={setShowSpeechModal}
         onDismiss={() => {
           setShowSpeechModal(false);
         }}
@@ -559,19 +547,42 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         onNext={() => {
           setShowSpeechModal(false);
         }}
+        onToggleVisibility={setShowSpeechModal}
       />
+      {showTeamsCallOut && (
+        <Callout
+          setInitialFocus
+          className={teamsCallOutStyles.callout}
+          gapSpace={0}
+          role="alertdialog"
+          target={`#${CHANNELS.TEAMS}`}
+          onDismiss={() => {
+            setShowTeamsCallOut(false);
+          }}
+        >
+          <Text className={teamsCallOutStyles.title} variant="xLarge">
+            {formatMessage('Almost there!')}
+          </Text>
+          <Text block variant="small">
+            {formatMessage(
+              'Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how.'
+            )}
+          </Text>
+          <Link className={teamsCallOutStyles.link} href={teamsHelpLink} target="_blank">
+            {formatMessage('See instructions')}
+          </Link>
+        </Callout>
+      )}
       <div>
         <Dropdown
-          label={formatMessage('Publish profile to configure:')}
           options={publishTargetOptions}
-          placeholder={formatMessage('Choose publishing profile')}
+          placeholder={formatMessage('Select publishing profile')}
           styles={{
             root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
             label: { width: 200 },
             dropdown: { width: 300 },
           }}
           onChange={onSelectProfile}
-          onRenderLabel={onRenderLabel}
           onRenderOption={renderDropdownOption}
         />
 
@@ -585,14 +596,13 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                   return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
                 }) ?? []
             }
-            placeholder={formatMessage('Choose subscription')}
+            placeholder={formatMessage('Select publishing profile')}
             styles={{
               root: { display: 'flex', alignItems: 'center', marginBottom: 10 },
               label: { width: 200 },
               dropdown: { width: 300 },
             }}
             onChange={onChangeSubscription}
-            onRenderLabel={onRenderLabel}
           />
         )}
         {isLoading && <LoadingSpinner />}
@@ -604,10 +614,10 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         )}
         {currentResource && channelStatus && (
           <Fragment>
-            <div css={tableRow}>
-              <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')}</div>
-              <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Documentation')}</div>
-              <div css={tableColumnHeader(columnSizes[2])}>{formatMessage('Enabled')}</div>
+            <div css={tableHeaderRow}>
+              <div css={tableColumnHeader(extendedColumnSizes[0])}>{formatMessage('Name')}</div>
+              <div css={tableColumnHeader(extendedColumnSizes[1])}>{formatMessage('Enabled')}</div>
+              <div css={tableColumnHeader(extendedColumnSizes[2])}>{formatMessage('Documentation')}</div>
             </div>
             {absTableRow(CHANNELS.TEAMS, formatMessage('MS Teams'), teamsHelpLink)}
             {absTableRow(CHANNELS.WEBCHAT, formatMessage('Web Chat'), webchatHelpLink)}

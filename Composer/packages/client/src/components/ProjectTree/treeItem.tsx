@@ -21,12 +21,13 @@ import { DiagnosticSeverity, Diagnostic, Icons } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
-import { SUMMARY_ARROW_SPACE, THREE_DOTS_ICON_WIDTH } from './constants';
+import { THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
+import { TreeItemContent } from './TreeItemContent';
 
 // -------------------- Styles -------------------- //
 
-const projectTreeItemContainer = css`
+const projectTreeItemContainer = (extraSpace: number) => css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
@@ -37,6 +38,8 @@ const projectTreeItemContainer = css`
   overflow: hidden;
   text-align: left;
   cursor: pointer;
+
+  padding-left: ${extraSpace}px;
 
   label: ProjectTreeItemContainer;
 `;
@@ -93,16 +96,13 @@ const navContainer = (
   isActive: boolean,
   menuOpenHere: boolean,
   textWidth: number,
-  isBroken: boolean,
-  padLeft: number,
-  marginLeft: number
+  isBroken: boolean
 ) => css`
   ${isAnyMenuOpen
     ? ''
     : `
     &:hover {
-        background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
-
+      background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
         .dialog-more-btn {
           visibility: visible;
         }
@@ -112,7 +112,10 @@ const navContainer = (
         .treeItem-text {
           max-width: ${textWidth}px;
         }
-        }`};
+        .external-link {
+          visibility: visible;
+        }
+      }`};
 
   background: ${isActive ? NeutralColors.gray30 : menuOpenHere ? '#f2f2f2' : 'transparent'};
 
@@ -121,16 +124,10 @@ const navContainer = (
 
   label: navItem;
 
-  height: 24px;
   font-size: 12px;
-  padding-left: ${padLeft}px;
-  margin-left: ${marginLeft}px;
-  min-width: calc(100% - ${padLeft + 24}px);
+  min-width: 100%;
   opacity: ${isBroken ? 0.5 : 1};
   align-items: center;
-
-  position: relative;
-  top: -4px;
 
   :hover {
     background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
@@ -214,7 +211,7 @@ const diagnosticWarningIcon = {
   color: '#8A8780',
   background: '#FFF4CE',
 };
-const itemName = (nameWidth: number) => css`
+export const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -228,6 +225,8 @@ const calloutRootStyle = css`
 type TreeObject =
   | 'bot'
   | 'dialog'
+  | 'topic'
+  | 'system topic'
   | 'trigger' // basic ProjectTree elements
   | 'trigger group'
   | 'form dialog'
@@ -241,6 +240,8 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
   bot: Icons.BOT,
   dialog: Icons.DIALOG,
   trigger: Icons.TRIGGER,
+  topic: Icons.TOPIC,
+  'system topic': Icons.SYSTEM_TOPIC,
   'trigger group': null,
   'form dialog': Icons.FORM_DIALOG,
   'form field': Icons.FORM_FIELD, // x in parentheses
@@ -253,6 +254,8 @@ const TreeIcons: { [key in TreeObject]: string | null } = {
 const objectNames: { [key in TreeObject]: () => string } = {
   trigger: () => formatMessage('Trigger'),
   dialog: () => formatMessage('Dialog'),
+  topic: () => formatMessage('User Topic'),
+  'system topic': () => formatMessage('System Topic'),
   'trigger group': () => formatMessage('Trigger group'),
   'form dialog': () => formatMessage('Form dialog'),
   'form field': () => formatMessage('Form field'),
@@ -275,7 +278,6 @@ type ITreeItemProps = {
   dialogName?: string;
   textWidth?: number;
   extraSpace?: number;
-  padLeft?: number;
   marginLeft?: number;
   hasChildren?: boolean;
   menu?: TreeMenuItem[];
@@ -283,6 +285,8 @@ type ITreeItemProps = {
   isMenuOpen?: boolean;
   showErrors?: boolean;
   role?: string;
+  href?: string;
+  tooltip?: string;
 };
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -414,11 +418,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   dialogName,
   onSelect,
   textWidth = 100,
-  hasChildren = false,
   menu = [],
-  extraSpace = 0,
-  padLeft = 0,
-  marginLeft = 0,
   menuOpenCallback = () => {},
   isMenuOpen = false,
   showErrors = true,
@@ -428,12 +428,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const ariaLabel = `${objectNames[itemType]()} ${link.displayName}`;
   const dataTestId = `${dialogName ?? '$Root'}_${link.displayName}`;
+  const isExternal = Boolean(link.href);
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
   const isBroken = !!link.botError;
-  const spacerWidth = hasChildren && !isBroken ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   const overflowIconWidthOnHover = overflowMenu.length > 0 ? THREE_DOTS_ICON_WIDTH : 0;
 
@@ -460,44 +460,53 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       }
 
       return (
-        <div
-          data-is-focusable
-          aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
-          css={projectTreeItemContainer}
-          tabIndex={0}
-          onBlur={item.onBlur}
-          onFocus={item.onFocus}
-        >
-          <div css={projectTreeItem} role="presentation" tabIndex={-1}>
-            {item.itemType != null && TreeIcons[item.itemType] != null && (
-              <Icon
-                iconName={TreeIcons[item.itemType]}
-                styles={{
-                  root: {
-                    width: '12px',
-                    marginRight: '8px',
-                    outline: 'none',
-                  },
-                }}
-                tabIndex={-1}
-              />
-            )}
-            <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
-              {item.displayName}
-            </span>
-            {showErrors && (
-              <DiagnosticIcons
-                diagnostics={diagnostics}
-                projectId={projectId}
-                skillId={skillId}
-                onErrorClick={onErrorClick}
-              />
-            )}
+        <TreeItemContent tooltip={link.tooltip}>
+          <div
+            data-is-focusable
+            aria-label={`${ariaLabel} ${warningContent} ${errorContent}`}
+            css={projectTreeItemContainer}
+            tabIndex={0}
+            onBlur={item.onBlur}
+            onFocus={item.onFocus}
+          >
+            <div css={projectTreeItem} role="presentation" tabIndex={-1}>
+              {item.itemType != null && TreeIcons[item.itemType] != null && (
+                <Icon
+                  iconName={TreeIcons[item.itemType]}
+                  styles={{
+                    root: {
+                      width: '12px',
+                      marginRight: '8px',
+                      outline: 'none',
+                    },
+                  }}
+                  tabIndex={-1}
+                />
+              )}
+              <span className={'treeItem-text'} css={itemName(maxTextWidth)}>
+                {item.displayName}
+              </span>
+              {isExternal && (
+                <Icon
+                  className="external-link"
+                  iconName="NavigateExternalInline"
+                  styles={{ root: { visibility: 'hidden', width: '12px', marginLeft: '4px', outline: 'none' } }}
+                />
+              )}
+              {showErrors && (
+                <DiagnosticIcons
+                  diagnostics={diagnostics}
+                  projectId={projectId}
+                  skillId={skillId}
+                  onErrorClick={onErrorClick}
+                />
+              )}
+            </div>
           </div>
-        </div>
+        </TreeItemContent>
       );
     },
-    [textWidth, spacerWidth, extraSpace, overflowIconWidthActiveOrChildSelected, showErrors]
+    [textWidth, overflowIconWidthActiveOrChildSelected, showErrors]
   );
 
   const onRenderOverflowButton = useCallback(
@@ -554,28 +563,28 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   return (
     <div
       aria-label={ariaLabel}
-      css={navContainer(
-        isMenuOpen,
-        isActive,
-        thisItemSelected,
-        textWidth - spacerWidth + extraSpace - overflowIconWidthOnHover,
-        isBroken,
-        padLeft,
-        marginLeft
-      )}
+      css={navContainer(isMenuOpen, isActive, thisItemSelected, textWidth - overflowIconWidthOnHover, isBroken)}
       data-testid={dataTestId}
       role={role}
       tabIndex={0}
-      onClick={() => {
-        onSelect?.(link);
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          onSelect?.(link);
-        }
-      }}
+      onClick={
+        onSelect
+          ? () => {
+              onSelect(link);
+            }
+          : undefined
+      }
+      onKeyDown={
+        onSelect
+          ? (e) => {
+              if (e.key === 'Enter') {
+                onSelect(link);
+                e.stopPropagation();
+              }
+            }
+          : undefined
+      }
     >
-      <div style={{ minWidth: `${spacerWidth}px` }} />
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
@@ -592,10 +601,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         ]}
         overflowItems={overflowMenu}
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(
-          textWidth - spacerWidth + extraSpace - overflowIconWidthActiveOrChildSelected,
-          showErrors
-        )}
+        onRenderItem={onRenderItem(textWidth, showErrors)}
         onRenderOverflowButton={onRenderOverflowButton(
           !!isActive,
           isChildSelected,

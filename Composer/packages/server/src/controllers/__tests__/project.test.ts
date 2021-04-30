@@ -106,7 +106,7 @@ describe('get bot project', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../../__mocks__/samplebots/bot1') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../../__mocks__/samplebots/bot1'), isRootBot: true },
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -143,7 +143,7 @@ describe('open bot operation', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../../__mocks__/samplebots/bot1') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../../__mocks__/samplebots/bot1'), isRootBot: true },
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);

@@ -6,7 +6,10 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import httpClient from '../../src/utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';
-import CreateSkillModal, { validateEndpoint, validateManifestUrl } from '../../src/components/CreateSkillModal';
+import CreateSkillModal, {
+  validateManifestUrl,
+  getSkillManifest,
+} from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
 import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
@@ -50,13 +53,19 @@ describe('<SkillForm />', () => {
       (httpClient.get as jest.Mock).mockResolvedValue({ endpoints: [] });
 
       const onDismiss = jest.fn();
-      const onSubmit = jest.fn();
-      const { getByLabelText, getByText } = renderWithRecoil(
-        <CreateSkillModal projectId={projectId} onDismiss={onDismiss} onSubmit={onSubmit} />,
+      const addRemoteSkill = jest.fn();
+      const addTriggerToRoot = jest.fn();
+      const { getByLabelText } = renderWithRecoil(
+        <CreateSkillModal
+          addRemoteSkill={addRemoteSkill}
+          addTriggerToRoot={addTriggerToRoot}
+          projectId={projectId}
+          onDismiss={onDismiss}
+        />,
         recoilInitState
       );
 
-      const urlInput = getByLabelText('Manifest URL');
+      const urlInput = getByLabelText('Skill Manifest Url');
       act(() => {
         fireEvent.change(urlInput, {
           target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
@@ -66,12 +75,6 @@ describe('<SkillForm />', () => {
       expect(urlInput.getAttribute('value')).toBe(
         'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
       );
-
-      const submitButton = getByText('Confirm');
-      act(() => {
-        fireEvent.click(submitButton);
-      });
-      expect(onSubmit).not.toBeCalled();
     } finally {
       jest.runOnlyPendingTimers();
       jest.useRealTimers();
@@ -79,17 +82,13 @@ describe('<SkillForm />', () => {
   });
 
   let formDataErrors;
-  let validationState;
   let setFormDataErrors;
   let setSkillManifest;
-  let setValidationState;
 
   beforeEach(() => {
     formDataErrors = {};
-    validationState = {};
     setFormDataErrors = jest.fn();
     setSkillManifest = jest.fn();
-    setValidationState = jest.fn();
   });
 
   describe('validateManifestUrl', () => {
@@ -99,18 +98,13 @@ describe('<SkillForm />', () => {
       await validateManifestUrl({
         formData,
         formDataErrors,
-        projectId,
         setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
       });
 
       expect(setFormDataErrors).toBeCalledWith(
         expect.objectContaining({ manifestUrl: 'URL should start with http:// or https://' })
       );
       expect(setSkillManifest).not.toBeCalled();
-      expect(setValidationState).not.toBeCalled();
     });
   });
 
@@ -121,188 +115,41 @@ describe('<SkillForm />', () => {
       validateManifestUrl({
         formData,
         formDataErrors,
-        projectId,
         setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
       });
 
       expect(setFormDataErrors).toBeCalledWith(expect.objectContaining({ manifestUrl: 'Please input a manifest URL' }));
     });
 
-    it('should try and retrieve manifest if manifest URL meets other criteria', async () => {
+    it('should try and retrieve manifest', async () => {
       (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: 'skill manifest' });
 
-      const formData = { manifestUrl: 'https://skill' };
-      const formDataErrors = { manifestUrl: 'error' };
+      const manifestUrl = 'https://skill';
 
-      await validateManifestUrl({
-        formData,
-        formDataErrors,
-        projectId,
-        setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
-      });
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validating',
-        })
-      );
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
-          url: formData.manifestUrl,
+          url: manifestUrl,
         },
       });
       expect(setSkillManifest).toBeCalledWith('skill manifest');
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validated',
-        })
-      );
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.not.objectContaining({
-          manifestUrl: 'error',
-        })
-      );
     });
 
     it('should show error when it could not retrieve skill manifest', async () => {
       (httpClient.get as jest.Mock) = jest.fn().mockRejectedValue({ message: 'skill manifest' });
 
-      const formData = { manifestUrl: 'https://skill' };
+      const manifestUrl = 'https://skill';
 
-      await validateManifestUrl({
-        formData,
-        formDataErrors,
-        projectId,
-        setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
-      });
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validating',
-        })
-      );
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
-          url: formData.manifestUrl,
+          url: manifestUrl,
         },
       });
       expect(setSkillManifest).not.toBeCalled();
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'NotValidated',
-        })
-      );
       expect(setFormDataErrors).toBeCalledWith(
         expect.objectContaining({
           manifestUrl: 'Manifest URL can not be accessed',
-        })
-      );
-    });
-  });
-
-  describe('validateEndpoint', () => {
-    it('should set an error for missing msAppId', () => {
-      const formData = { endpointUrl: 'https://skill/api/messages' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Please select a valid endpoint',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should set an error for missing endpointUrl', () => {
-      const formData = { msAppId: '00000000-0000-0000-0000-000000000000' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Please select a valid endpoint',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should set an error for malformed msAppId', () => {
-      const formData = { endpointUrl: 'https://skill/api/messages', msAppId: 'malformed app id' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Skill manifest endpoint is configured improperly',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should set an error for malformed endpointUrl', () => {
-      const formData = { endpointUrl: 'malformed endpoint', msAppId: '00000000-0000-0000-0000-000000000000' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Skill manifest endpoint is configured improperly',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should not set an error', () => {
-      const formData = { endpointUrl: 'https://skill/api/messages', msAppId: '00000000-0000-0000-0000-000000000000' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.not.objectContaining({
-          endpoint: expect.any(String),
-        })
-      );
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Validated',
         })
       );
     });

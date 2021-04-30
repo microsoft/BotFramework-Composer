@@ -3,23 +3,15 @@
 
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension-client';
-import { resolveRef } from '@bfc/adaptive-form';
 import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
 
 import { nameRegex } from '../../../constants';
 
-import {
-  Description,
-  Endpoints,
-  FetchManifestSchema,
-  ReviewManifest,
-  SaveManifest,
-  SelectDialogs,
-  SelectManifest,
-  SelectTriggers,
-} from './content';
+import { Description, ReviewManifest, SaveManifest, SelectDialogs, SelectTriggers } from './content';
+import { SelectProfile } from './content/SelectProfile';
+import { AddCallers } from './content/AddCallers';
 
 export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
 
@@ -95,10 +87,14 @@ export interface ContentProps {
   setSelectedTriggers: (selectedTriggers: any[]) => void;
   setSkillManifest: (_: Partial<SkillManifestFile>) => void;
   schema: JSONSchema7;
+  selectedDialogs: any[];
+  selectedTriggers: any[];
   skillManifests: SkillManifestFile[];
   value: { [key: string]: any };
   onChange: (_: any) => void;
   projectId: string;
+  callers: string[];
+  onUpdateCallers: (callers: string[]) => void;
 }
 
 interface Button {
@@ -127,25 +123,21 @@ interface EditorStep {
 }
 
 export enum ManifestEditorSteps {
-  ENDPOINTS = 'ENDPOINTS',
-  FETCH_MANIFEST_SCHEMA = 'FETCH_MANIFEST_SCHEMA',
   MANIFEST_DESCRIPTION = 'MANIFEST_DESCRIPTION',
   MANIFEST_REVIEW = 'MANIFEST_REVIEW',
   SAVE_MANIFEST = 'SAVE_MANIFEST',
-  SELECT_MANIFEST = 'SELECT_MANIFEST',
   SELECT_DIALOGS = 'SELECT_DIALOGS',
   SELECT_TRIGGERS = 'SELECT_TRIGGERS',
+  SELECT_PROFILE = 'SELECT_PROFILE',
+  ADD_CALLERS = 'ADD_CALLERS',
 }
 
 export const order: ManifestEditorSteps[] = [
-  ManifestEditorSteps.SELECT_MANIFEST,
-  ManifestEditorSteps.FETCH_MANIFEST_SCHEMA,
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
-  ManifestEditorSteps.ENDPOINTS,
   ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
-  ManifestEditorSteps.MANIFEST_REVIEW,
-  ManifestEditorSteps.SAVE_MANIFEST,
+  ManifestEditorSteps.ADD_CALLERS,
+  ManifestEditorSteps.SELECT_PROFILE,
 ];
 
 const cancelButton: Button = {
@@ -157,6 +149,12 @@ const nextButton: Button = {
   primary: true,
   text: () => formatMessage('Next'),
   onClick: ({ onNext }) => onNext,
+};
+
+const backButton: Button = {
+  primary: true,
+  text: () => formatMessage('Back'),
+  onClick: ({ onBack }) => onBack,
 };
 
 const validate = ({ content, schema }) => {
@@ -177,61 +175,79 @@ const validate = ({ content, schema }) => {
 };
 
 export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
-  [ManifestEditorSteps.SELECT_MANIFEST]: {
-    buttons: [
-      cancelButton,
-      {
-        disabled: ({ manifest }) => !manifest?.id,
-        primary: true,
-        text: () => formatMessage('Edit'),
-        onClick: ({ onNext, manifest }) => () => {
-          onNext({ id: manifest?.id });
-        },
-      },
-    ],
-    content: SelectManifest,
-    editJson: false,
-    subText: () => formatMessage('Create a new skill manifest or select which one you want to edit'),
-    title: () => formatMessage('Create or edit skill manifest'),
-  },
-  [ManifestEditorSteps.FETCH_MANIFEST_SCHEMA]: {
-    content: FetchManifestSchema,
-    editJson: false,
-    title: () => formatMessage('Select manifest version'),
-  },
   [ManifestEditorSteps.MANIFEST_DESCRIPTION]: {
     buttons: [cancelButton, nextButton],
     content: Description,
-    editJson: true,
+    editJson: false,
     title: () => formatMessage('Describe your skill'),
     subText: () => formatMessage('To make your bot available for others as a skill, we need to generate a manifest.'),
     validate,
   },
-  [ManifestEditorSteps.ENDPOINTS]: {
-    buttons: [cancelButton, nextButton],
-    content: Endpoints,
-    editJson: true,
+  [ManifestEditorSteps.SELECT_PROFILE]: {
+    buttons: [
+      cancelButton,
+      backButton,
+      {
+        disabled: ({ publishTargets }) => {
+          try {
+            return (
+              publishTargets.findIndex((item) => {
+                const config = JSON.parse(item.configuration);
+                return (
+                  config.settings &&
+                  config.settings.MicrosoftAppId &&
+                  config.hostname &&
+                  config.settings.MicrosoftAppId.length > 0 &&
+                  config.hostname.length > 0
+                );
+              }) < 0
+            );
+          } catch (err) {
+            console.log(err.message);
+            return true;
+          }
+        },
+
+        primary: true,
+        text: () => formatMessage('Generate and Publish'),
+        onClick: ({ generateManifest, onNext, onPublish }) => () => {
+          generateManifest();
+          onNext({ dismiss: true, save: true });
+          onPublish();
+        },
+      },
+    ],
+    editJson: false,
+    content: SelectProfile,
     subText: () =>
       formatMessage('We need to define the endpoints for the skill to allow other bots to interact with it.'),
-    title: () => formatMessage('Skill endpoints'),
-    validate: ({ content, schema }) => {
-      const { items, minItems } = schema.properties?.endpoints;
-
-      if (!content.endpoints || content.endpoints.length < minItems) {
-        return { endpoints: formatMessage('Please add at least {minItems} endpoint', { minItems }) };
-      }
-
-      const endpointSchema = resolveRef(items, schema.definitions);
-      const endpoints = (content.endpoints || []).map((endpoint) =>
-        validate({ content: endpoint, schema: endpointSchema })
-      );
-
-      return endpoints.some((endpoint) => Object.keys(endpoint).length) ? { endpoints } : {};
-    },
+    title: () => formatMessage('Confirm skill endpoints'),
+  },
+  [ManifestEditorSteps.ADD_CALLERS]: {
+    buttons: [
+      cancelButton,
+      backButton,
+      {
+        primary: true,
+        text: () => formatMessage('Next'),
+        onClick: ({ onNext, onSaveSkill }) => () => {
+          onSaveSkill();
+          onNext();
+        },
+      },
+    ],
+    editJson: false,
+    content: AddCallers,
+    subText: () =>
+      formatMessage(
+        'Add Microsoft App Ids of bots that can access this skill. You can skip this step and add this information later from the project settings tab.'
+      ),
+    title: () => formatMessage('Which bots are allowed to use this skill?'),
   },
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Next'),
@@ -245,6 +261,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.SELECT_DIALOGS]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Next'),
@@ -252,7 +269,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       },
     ],
     content: SelectDialogs,
-    editJson: true,
+    editJson: false,
     subText: () =>
       formatMessage(
         'These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.'
@@ -262,17 +279,18 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.SELECT_TRIGGERS]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
-        text: () => formatMessage('Generate'),
-        onClick: ({ generateManifest, onNext }) => () => {
-          generateManifest();
+        text: () => formatMessage('Next'),
+        onClick: ({ onNext, generateManifest }) => () => {
+          // generateManifest();
           onNext();
         },
       },
     ],
     content: SelectTriggers,
-    editJson: true,
+    editJson: false,
     subText: () =>
       formatMessage(
         'These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.'
@@ -282,6 +300,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.SAVE_MANIFEST]: {
     buttons: [
       cancelButton,
+      backButton,
       {
         primary: true,
         text: () => formatMessage('Save'),
@@ -291,7 +310,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       },
     ],
     content: SaveManifest,
-    editJson: true,
+    editJson: false,
     subText: () => formatMessage('Name and save your skill manifest.'),
     title: () => formatMessage('Save your skill manifest'),
     validate: ({ editingId, id, skillManifests }) => {

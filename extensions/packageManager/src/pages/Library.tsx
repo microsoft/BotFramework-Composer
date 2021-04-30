@@ -35,7 +35,12 @@ import {
 import { Toolbar, IToolbarItem, LoadingSpinner, DisplayMarkdownDialog } from '@bfc/ui-shared';
 import ReactMarkdown from 'react-markdown';
 
-import { ContentHeaderStyle, HeaderText } from '../components/styles';
+import {
+  ContentHeaderStyle,
+  HeaderText,
+  packageScrollContainerStyle,
+  tabAndSearchBarStyles,
+} from '../components/styles';
 import { ImportDialog } from '../components/ImportDialog';
 import { LibraryRef, LibraryList, LetterIcon } from '../components/LibraryList';
 import { WorkingModal } from '../components/WorkingModal';
@@ -59,9 +64,15 @@ export interface PackageSourceFeed extends IDropdownOption {
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
-  const { projectId, reloadProject, projectCollection } = useProjectApi();
+  const { projectId, reloadProject, projectCollection: allProjectCollection } = useProjectApi();
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
   const telemetryClient: TelemetryClient = useTelemetryClient();
+
+  const projectCollection = allProjectCollection.filter((proj) => !proj.isRemote);
+
+  const startingProjectId = allProjectCollection.find((proj) => proj.projectId === projectId).isRemote
+    ? projectCollection[0].projectId // this should always exist, because there's always at least a root bot
+    : projectId;
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<LibraryRef[] | undefined>(undefined);
@@ -76,7 +87,7 @@ const Library: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [selectedItemVersions, setSelectedItemVersions] = useState<string[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<string>('');
-  const [currentProjectId, setCurrentProjectId] = useState<string>(projectId);
+  const [currentProjectId, setCurrentProjectId] = useState<string>(startingProjectId);
   const [working, setWorking] = useState<string>('');
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
@@ -185,7 +196,7 @@ const Library: React.FC = () => {
   };
 
   useEffect(() => {
-    setCurrentProjectId(projectId);
+    setCurrentProjectId(startingProjectId);
     getFeeds().then((feeds) => updateFeeds(feeds.data));
   }, []);
 
@@ -210,7 +221,7 @@ const Library: React.FC = () => {
   }, [feed, feeds, searchTerm]);
 
   useEffect(() => {
-    const settings = projectCollection.find((b) => b.projectId === currentProjectId).setting;
+    const settings = projectCollection.find((b) => b.projectId === currentProjectId)?.setting;
     if (settings?.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       // detect programming language.
@@ -511,8 +522,6 @@ const Library: React.FC = () => {
 
             updateInstalledComponents(results.data.components);
           } else {
-            telemetryClient.track('PackageUninstallFailed', { package: selectedItem.name });
-
             throw new Error(results.data.message);
           }
 
@@ -521,11 +530,15 @@ const Library: React.FC = () => {
         } catch (err) {
           telemetryClient.track('PackageUninstallFailed', { package: selectedItem.name });
 
-          setApplicationLevelError({
-            status: err.response.status,
-            message: err.response && err.response.data.message ? err.response.data.message : err,
-            summary: strings.importError,
-          });
+          if (err.response) {
+            setApplicationLevelError({
+              status: err.response.status,
+              message: err.response && err.response.data.message ? err.response.data.message : err,
+              summary: strings.importError,
+            });
+          } else {
+            setApplicationLevelError(err);
+          }
         }
         setWorking('');
       }
@@ -603,7 +616,7 @@ const Library: React.FC = () => {
           </Link>
         </p>
       </div>
-      <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
+      <Stack horizontal verticalFill styles={packageScrollContainerStyle}>
         {projectCollection && projectCollection.length > 1 && (
           <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
             <ProjectList
@@ -613,7 +626,7 @@ const Library: React.FC = () => {
             />
           </Stack.Item>
         )}
-        <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflow: 'auto', maxHeight: '100%' } }}>
+        <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflowX: 'hidden', maxHeight: '100%' } }}>
           {!ejectedRuntime && (
             <MessageBar
               actions={
@@ -632,7 +645,7 @@ const Library: React.FC = () => {
            *  This is the top nav that includes the tabs and search bar
            ****************************************************************************/}
 
-          <Stack horizontal styles={{ root: { paddingLeft: '12px', paddingRight: '20px' } }}>
+          <Stack horizontal styles={tabAndSearchBarStyles}>
             <Stack.Item align="stretch">
               <Pivot aria-label="Library Views" onLinkClick={(item: PivotItem) => setCurrentTab(item.props.itemKey)}>
                 <PivotItem headerText={strings.browseHeader} itemKey={TABS.BROWSE} />
@@ -746,7 +759,7 @@ const Library: React.FC = () => {
               width: '400px',
               padding: '10px 20px',
               borderLeft: '1px solid #CCC',
-              overflow: 'auto',
+              overflowX: 'auto',
               maxHeight: '100%',
             },
           }}

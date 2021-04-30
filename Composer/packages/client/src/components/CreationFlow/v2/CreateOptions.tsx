@@ -20,9 +20,9 @@ import { useRecoilValue } from 'recoil';
 import { DialogCreationCopy } from '../../../constants';
 import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
 import { userHasNodeInstalledState } from '../../../recoilModel';
+import { InstallDepModal } from '../../InstallDepModal';
 
 import { CreateBotV2 } from './CreateBot';
-import { NodeModal } from './NodeModal';
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
@@ -47,19 +47,21 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
       const decoded = decodeURIComponent(props.location.search);
       const { source, payload } = querystring.parse(decoded);
       if (typeof source === 'string' && typeof payload === 'string') {
-        const alias = getAliasFromPayload(source, payload);
-        // check to see if Composer currently has a bot project corresponding to the alias
-        axios
-          .get<any>(`/api/projects/alias/${alias}`)
-          .then((aliasRes) => {
-            if (aliasRes.status === 200) {
-              navigate(`/bot/${aliasRes.data.id}`);
-              return;
-            }
-          })
-          .catch((e) => {
-            setIsOpenOptionsModal(true);
-          });
+        getAliasFromPayload(source, payload).then((alias) => {
+          // check to see if Composer currently has a bot project corresponding to the alias
+          axios
+            .get<any>(`/api/projects/alias/${alias}`)
+            .then((aliasRes) => {
+              if (aliasRes.status === 200) {
+                navigate(`/bot/${aliasRes.data.id}`);
+                return;
+              }
+            })
+            .catch((e) => {
+              setIsOpenOptionsModal(true);
+            });
+        });
+
         return;
       }
     }
@@ -133,7 +135,17 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         onDismiss={onDismiss}
         onNext={onNext}
       />
-      {isElectron() && showNodeModal && <NodeModal isOpen={showNodeModal} setIsOpen={setShowNodeModal} />}
+      {isElectron() && showNodeModal && (
+        <InstallDepModal
+          downloadLink={'https://nodejs.org/en/download/'}
+          downloadLinkText={formatMessage('Install Node.js')}
+          text={formatMessage(
+            'Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node.'
+          )}
+          title={formatMessage('Node.js required')}
+          onDismiss={() => setShowNodeModal(false)}
+        />
+      )}
     </Fragment>
   );
 }
