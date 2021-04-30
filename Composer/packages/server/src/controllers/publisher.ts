@@ -4,7 +4,7 @@
 import { join } from 'path';
 
 import merge from 'lodash/merge';
-import { defaultPublishConfig, PublishResult } from '@bfc/shared';
+import { defaultPublishConfig, PublishResult, PublishTarget } from '@bfc/shared';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
@@ -22,6 +22,7 @@ function extensionImplementsMethod(extensionName: string, methodName: string): b
   return extensionName && ExtensionContext.extensions.publish[extensionName]?.methods[methodName];
 }
 
+let currentPublishTarget: PublishTarget;
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
@@ -53,8 +54,9 @@ export const PublishController = {
   publish: async (req, res) => {
     const target: string = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
-    const { accessToken = '', metadata, sensitiveSettings } = req.body;
+    const { accessToken = '', metadata, sensitiveSettings, publishTarget } = req.body;
     const projectId: string = req.params.projectId;
+    currentPublishTarget = publishTarget;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // deal with publishTargets not exist in settings
@@ -62,7 +64,11 @@ export const PublishController = {
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
-    const profile = profiles.length ? profiles[0] : undefined;
+    let profile: PublishTarget = profiles[0];
+    if (!profile) {
+      profile = publishTarget;
+      currentProject.settings?.publishTargets && currentProject.settings?.publishTargets.push(publishTarget);
+    }
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
 
     try {
@@ -143,7 +149,11 @@ export const PublishController = {
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
-    const profile = profiles.length ? profiles[0] : undefined;
+    let profile: PublishTarget = profiles[0];
+    if (!profile) {
+      profile = currentPublishTarget;
+      currentProject.settings?.publishTargets && currentProject.settings?.publishTargets.push(currentPublishTarget);
+    }
     // get the publish plugin key
     const extensionName = profile ? profile.type : '';
     if (profile && extensionImplementsMethod(extensionName, 'getStatus')) {
