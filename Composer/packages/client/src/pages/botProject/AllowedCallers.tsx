@@ -122,7 +122,8 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
 
   const onRemove = React.useCallback(
     (index: number) => () => {
-      const updatedAllowedCallers = allowedCallers.filter((_, itemIndex) => itemIndex !== index);
+      const updatedAllowedCallers = allowedCallers.slice();
+      updatedAllowedCallers.splice(index, 1);
       handleChange(updatedAllowedCallers);
     },
     [allowedCallers, handleChange]
@@ -130,16 +131,15 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
 
   const onChange = React.useCallback(
     (index: number) => (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
-      const updatedAllowedCallers = allowedCallers.map((arrayItem, itemIndex) => {
-        return itemIndex === index ? { ...arrayItem, value: newValue } : arrayItem;
-      });
+      const updatedAllowedCallers = allowedCallers.slice();
+      updatedAllowedCallers[index].value = newValue;
       handleChange(updatedAllowedCallers);
     },
     [allowedCallers, handleChange]
   );
 
   const onBlur = React.useCallback(() => {
-    handleChange(allowedCallers.filter(({ value }) => value));
+    handleChange(allowedCallers.filter(({ value }) => !!value));
   }, [allowedCallers, handleChange]);
 
   return (
