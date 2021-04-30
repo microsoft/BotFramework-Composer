@@ -60,10 +60,6 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
               }
             })
             .catch((e) => {
-              TelemetryClient.track('NewBotDialogOpened', {
-                isSkillBot: false,
-                fromAbsHandoff: true,
-              });
               setIsOpenOptionsModal(true);
             });
         });
@@ -110,6 +106,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   const handleJumpToNext = () => {
     if (option === 'Create') {
+      TelemetryClient.track('NewBotDialogOpened', {
+        isSkillBot: false,
+        fromAbsHandoff: true,
+      });
       setIsOpenCreateModal(true);
     } else {
       onJumpToOpenModal(props.location?.search);

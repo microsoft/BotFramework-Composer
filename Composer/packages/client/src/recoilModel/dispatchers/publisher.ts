@@ -44,7 +44,7 @@ export const publishStorage = new ClientStorage(window.sessionStorage, 'publish'
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
-    TelemetryClient.track('PublishFailure', { message: title });
+    TelemetryClient.track('PublishFailure', { message: error });
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
       set(botBuildTimeErrorState(projectId), { ...error, title });

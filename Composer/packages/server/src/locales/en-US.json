@@ -182,6 +182,9 @@
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
+  "add_an_existing_bot_5a9cc5b1": {
+    "message": "Add an existing bot"
+  },
   "add_app_id_and_password_164e0fdb": {
     "message": "Add App ID and Password"
   },
@@ -430,6 +433,12 @@
   },
   "azure_functions_5e23be5c": {
     "message": "Azure Functions"
+  },
+  "azure_functions_required_2a035b48": {
+    "message": "Azure Functions required"
+  },
+  "azure_functions_runtime_not_installed_bc24e100": {
+    "message": "Azure Functions runtime not installed."
   },
   "azure_web_app_d834cb4c": {
     "message": "Azure Web App"
@@ -697,6 +706,9 @@
   },
   "composer_logo_ba2048a0": {
     "message": "Composer Logo"
+  },
+  "composer_needs_azure_functions_36138382": {
+    "message": "Composer needs Azure Functions"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer needs .NET Core SDK"
@@ -1910,6 +1922,9 @@
   "insert_template_reference_bb33720e": {
     "message": "Insert template reference"
   },
+  "install_azure_functions_d607f182": {
+    "message": "Install Azure Functions"
+  },
   "install_error_a9319839": {
     "message": "Install Error"
   },
@@ -2621,6 +2636,9 @@
   "onboarding_8407871c": {
     "message": "Onboarding"
   },
+  "once_you_publish_your_bot_to_azure_you_will_be_rea_93048067": {
+    "message": "Once you publish your bot to Azure you will be ready to add connections."
+  },
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents Types"
   },
@@ -2893,6 +2911,9 @@
   },
   "publish_to_dev_ops_3b8f5a2f": {
     "message": "Publish to Dev Ops"
+  },
+  "publish_your_bot_9099e323": {
+    "message": "Publish your bot"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
     "message": "Publish your bot to Azure and manage published bots here."
@@ -3190,9 +3211,6 @@
   },
   "save_11a80ec3": {
     "message": "Save"
-  },
-  "save_as_9e0cf70b": {
-    "message": "Save as"
   },
   "save_your_skill_manifest_63bf5f26": {
     "message": "Save your skill manifest"
@@ -3832,6 +3850,9 @@
   },
   "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
     "message": "To perform provisioning and publishing actions, Composer requires access to your Azure and MS Graph accounts.  Paste access tokens from the az command line tool using the commands highlighted below."
+  },
+  "to_run_this_bot_composer_needs_azure_functions_cor_bbbd0e7": {
+    "message": "To run this bot, Composer needs Azure Functions Core Tools."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."

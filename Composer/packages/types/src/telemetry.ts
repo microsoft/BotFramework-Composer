@@ -137,7 +137,7 @@ type PublishingEvents = {
   ProvisionCancel: undefined;
   ProvisionShowHandoff: undefined;
   ProvisionAddResourcesCancel: undefined;
-  ProvisionProfileCreateFailure: { message: string };
+  ProvisioningProfileCreateFailure: { message: string };
 };
 
 type CreationEvents = {

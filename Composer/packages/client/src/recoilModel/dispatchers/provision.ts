@@ -99,7 +99,7 @@ export const provisionDispatcher = () => {
           notification.id
         );
       } catch (error) {
-        TelemetryClient.track('ProvisionProfileCreateFailure', {
+        TelemetryClient.track('ProvisioningProfileCreateFailure', {
           message: error.response?.data || 'Error when provision target',
         });
 
@@ -168,8 +168,8 @@ export const provisionDispatcher = () => {
           if (response.data.status !== 500) {
             notification = getProvisionPendingNotification(response.data.message);
           } else {
-            TelemetryClient.track('ProvisionProfileCreateFailure', {
-              message: 'Error when provisioning',
+            TelemetryClient.track('ProvisioningProfileCreateFailure', {
+              message: response.data.message,
             });
             notification = getProvisionFailureNotification(response.data.message);
             isCleanTimer = true;
