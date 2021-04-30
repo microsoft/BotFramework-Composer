@@ -26,7 +26,7 @@ type Props = {
   onClick: () => void;
 };
 
-export const AddButton: React.FC<Props> = ({ children, onClick }) => {
+export const AddButton = ({ children, onClick }: React.PropsWithChildren<Props>) => {
   return (
     <ButtonContainer>
       <ActionButton styles={actionButtonStyles} onClick={onClick}>
