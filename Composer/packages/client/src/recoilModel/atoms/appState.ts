@@ -354,3 +354,8 @@ export const warnAboutDotNetState = atom<boolean>({
   key: getFullyQualifiedKey('warnAboutDotNetState'),
   default: false,
 });
+
+export const orchestratorForSkillsDialogState = atom<boolean>({
+  key: getFullyQualifiedKey('orchestratorForSkillsDialogState'),
+  default: false,
+});

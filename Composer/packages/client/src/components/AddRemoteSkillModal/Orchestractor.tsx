@@ -16,7 +16,14 @@ import { importOrchestractor } from './helper';
 
 const learnMoreUrl = 'https://aka.ms/bf-composer-docs-publish-bot';
 
-export const Orchestractor = (props) => {
+interface OrchestractorProps {
+  projectId: string;
+  onSubmit: (event: any, userSelected?: boolean) => Promise<void>;
+  onBack: (event: any) => void;
+  hideBackButton?: boolean;
+}
+
+const Orchestractor: React.FC<OrchestractorProps> = (props) => {
   const { projectId, onSubmit, onBack } = props;
   const [enableOrchestrator, setEnableOrchestrator] = useState(true);
   const { setApplicationLevelError, reloadProject } = useRecoilValue(dispatcherState);
@@ -40,23 +47,33 @@ export const Orchestractor = (props) => {
         />
       </StackItem>
       <Stack horizontal horizontalAlign="space-between">
-        <DefaultButton text={formatMessage('Back')} onClick={onBack} />
-        <span>
-          <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
-          <PrimaryButton
-            text={formatMessage('Continue')}
-            onClick={(event) => {
-              onSubmit(event, enableOrchestrator);
-              if (enableOrchestrator) {
-                // TODO. show notification
-                // download orchestrator first
-                importOrchestractor(projectId, reloadProject, setApplicationLevelError);
-                // TODO. update notification
-              }
-            }}
-          />
-        </span>
+        <Stack.Item>
+          {!props.hideBackButton && <DefaultButton text={formatMessage('Back')} onClick={onBack} />}
+        </Stack.Item>
+        <Stack.Item align="end">
+          <span>
+            <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
+            <PrimaryButton
+              text={formatMessage('Continue')}
+              onClick={(event) => {
+                onSubmit(event, enableOrchestrator);
+                if (enableOrchestrator) {
+                  // TODO. show notification
+                  // download orchestrator first
+                  importOrchestractor(projectId, reloadProject, setApplicationLevelError);
+                  // TODO. update notification
+                }
+              }}
+            />
+          </span>
+        </Stack.Item>
       </Stack>
     </Stack>
   );
 };
+
+Orchestractor.defaultProps = {
+  hideBackButton: false,
+};
+
+export { OrchestractorProps, Orchestractor };
