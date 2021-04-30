@@ -25,8 +25,10 @@ describe('OneAuth Serivce', () => {
     id: 'myAccount',
     realm: 'myTenant',
   };
+
+  const tomorrow = Date.now() + 1000 * 60 * 60 * 24;
   const mockCredential = {
-    expiresOn: 9999,
+    expiresOn: tomorrow,
     value: 'someToken',
   };
   const mockOneAuth = {
@@ -255,15 +257,19 @@ describe('OneAuth Serivce', () => {
   });
 
   it('should get an ARM token for a tenant', async () => {
-    mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({ credential: { value: 'someARMToken' } });
-    (oneAuthService as any).signedInARMAccount = {};
+    mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({
+      credential: { value: 'someARMToken', expiresOn: tomorrow },
+    });
+    (oneAuthService as any).signedInARMAccount = { id: 'someAccount' };
     const result = await oneAuthService.getARMTokenForTenant('someTenant');
 
     expect(result).toBe('someARMToken');
   });
 
   it('should get an ARM token for a tenant interactively if interaction is required', async () => {
-    mockOneAuth.acquireCredentialInteractively.mockReturnValueOnce({ credential: { value: 'someARMToken' } });
+    mockOneAuth.acquireCredentialInteractively.mockReturnValueOnce({
+      credential: { value: 'someARMToken', expiresOn: tomorrow },
+    });
     mockOneAuth.acquireCredentialSilently.mockRejectedValueOnce({ error: { status: 2 /* Interaction Required */ } });
     (oneAuthService as any).signedInARMAccount = {};
     const result = await oneAuthService.getARMTokenForTenant('someTenant');
