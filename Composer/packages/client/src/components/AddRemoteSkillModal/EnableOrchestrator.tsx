@@ -36,7 +36,7 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
         <div style={{ marginBottom: '16px' }}>
           {enableOrchestratorDialog.content}
           <Link href={learnMoreUrl} target="_blank">
-            <div>{formatMessage('Learn more about Orchestractor')}</div>
+            <div>{formatMessage('Learn more about Orchestrator')}</div>
           </Link>
         </div>
         <Checkbox
