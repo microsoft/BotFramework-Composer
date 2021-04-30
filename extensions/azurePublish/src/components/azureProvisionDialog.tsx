@@ -17,7 +17,7 @@ import {
   useApplicationApi,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { DeployLocation, AzureTenant } from '@botframework-composer/types';
+import { DeployLocation, AzureTenant, Notification } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { dialogStyle, LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
@@ -268,8 +268,8 @@ const getHostname = (config) => {
     return config?.environment ? `${config.name}-${config.environment}` : config.name;
   }
 };
-type NotificationType = 'info' | 'warning' | 'error' | 'pending' | 'success';
-const getLogoutNotificationSettings = (description: string, type: NotificationType) => {
+
+const getLogoutNotificationSettings = (description: string, type: Notification['type']) => {
   return {
     title: '',
     retentionTime: 5000,
@@ -763,7 +763,7 @@ export const AzureProvisionDialog: React.FC = () => {
       addNotification(
         getLogoutNotificationSettings(
           formatMessage(
-            'There was an error attempting to logout of Azure. To complete logout, you may need to restart Composer.'
+            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.'
           ),
           'error'
         )
@@ -779,7 +779,7 @@ export const AzureProvisionDialog: React.FC = () => {
           style={{ color: 'blue', cursor: 'pointer' }}
           onClick={async () => {
             const confirmed = await OpenConfirmModal(
-              formatMessage('Sign out from Azure'),
+              formatMessage('Sign out of Azure'),
               formatMessage(
                 'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
               ),
