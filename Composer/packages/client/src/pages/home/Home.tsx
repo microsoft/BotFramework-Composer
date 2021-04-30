@@ -15,18 +15,20 @@ import { useRecoilValue } from 'recoil';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState } from '../../recoilModel';
+import { dispatcherState } from '../../recoilModel';
 import {
   recentProjectsState,
   feedState,
-  templateIdState,
-  currentProjectIdState,
+  warnAboutDotNetState,
+  warnAboutFunctionsState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
+import { InstallDepModal } from '../../components/InstallDepModal';
+import { missingDotnetVersionError, missingFunctionsError } from '../../utils/runtimeErrors';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -65,12 +67,26 @@ const resources = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const projectId = useRecoilValue(currentProjectIdState);
-  const botName = useRecoilValue(botDisplayNameState(projectId));
+  // These variables are used in the save as method which is currently disabled until we
+  // determine the appropriate save as behavior for parent bots and skills. Since we are
+  // planning to add the feature back in the next release, I am commenting out this section
+  // of code instead of removing it. See comment below for more details.
+  //
+  // const projectId = useRecoilValue<string>(currentProjectIdState);
+  // const botName = useRecoilValue<string>(botDisplayNameState(projectId));
+  // const templateId = useRecoilValue<string>(templateIdState);
+
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
-  const templateId = useRecoilValue(templateIdState);
-  const { openProject, setCreationFlowStatus, setCreationFlowType } = useRecoilValue(dispatcherState);
+  const {
+    openProject,
+    setCreationFlowStatus,
+    setCreationFlowType,
+    setWarnAboutDotNet,
+    setWarnAboutFunctions,
+  } = useRecoilValue(dispatcherState);
+  const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
+  const warnAboutFunctions = useRecoilValue(warnAboutFunctionsState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -122,23 +138,30 @@ const Home: React.FC<RouteComponentProps> = () => {
       dataTestid: 'homePage-Toolbar-Open',
       disabled: false,
     },
-    {
-      type: 'action',
-      text: formatMessage('Save as'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Save',
-        },
-        onClick: () => {
-          setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${projectId}/${templateId}/save`);
-          TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
-        },
-        styles: home.toolbarButtonStyles,
-      },
-      align: 'left',
-      disabled: botName ? false : true,
-    },
+    // We are temporarily disabling the save as button until we can
+    // determine what the appropriate save as behavior should be for both
+    // parent bots and skills.
+    //
+    // Associated issue:
+    // https://github.com/microsoft/BotFramework-Composer/issues/6808#issuecomment-828758688
+    //
+    // {
+    //   type: 'action',
+    //   text: formatMessage('Save as'),
+    //   buttonProps: {
+    //     iconProps: {
+    //       iconName: 'Save',
+    //     },
+    //     onClick: () => {
+    //       setCreationFlowStatus(CreationFlowStatus.SAVEAS);
+    //       navigate(`projects/${projectId}/${templateId}/save`);
+    //       TelemetryClient.track('ToolbarButtonClicked', { name: 'saveAs' });
+    //     },
+    //     styles: home.toolbarButtonStyles,
+    //   },
+    //   align: 'left',
+    //   disabled: botName ? false : true,
+    // },
   ];
   return (
     <div css={home.outline}>
@@ -202,7 +225,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={home.videosContainer}>
             <div css={home.rowContainer}>
-              <Pivot aria-label="Videos and articles" linkSize={PivotLinkSize.large}>
+              <Pivot aria-label="Videos and articles" css={home.pivotContainer} linkSize={PivotLinkSize.large}>
                 {feed.tabs.map((tab, index) => (
                   <PivotItem key={index} headerText={tab.title}>
                     {tab.viewAllLinkText && (
@@ -234,6 +257,29 @@ const Home: React.FC<RouteComponentProps> = () => {
           <WhatsNewsList newsList={feed.whatsNewLinks} />
         </div>
       </div>
+      {warnAboutDotNet && (
+        <InstallDepModal
+          downloadLink={missingDotnetVersionError.link.url}
+          downloadLinkText={formatMessage('Install .NET Core SDK')}
+          learnMore={{ text: formatMessage('Learn more'), link: missingDotnetVersionError.linkAfterMessage.url }}
+          text={missingDotnetVersionError.message}
+          title={formatMessage('.NET required')}
+          onDismiss={() => setWarnAboutDotNet(false)}
+        />
+      )}
+      {warnAboutFunctions && (
+        <InstallDepModal
+          downloadLink={missingFunctionsError.link.url}
+          downloadLinkText={formatMessage('Install Azure Functions')}
+          learnMore={{
+            text: formatMessage('Learn more'),
+            link: missingFunctionsError.linkAfterMessage.url,
+          }}
+          text={missingFunctionsError.message}
+          title={formatMessage('Azure Functions required')}
+          onDismiss={() => setWarnAboutFunctions(false)}
+        />
+      )}
     </div>
   );
 };

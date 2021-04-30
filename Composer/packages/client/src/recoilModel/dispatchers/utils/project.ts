@@ -22,6 +22,8 @@ import {
   defaultPublishConfig,
   LgFile,
   QnABotTemplateId,
+  ILUFeaturesConfig,
+  SDKKinds,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -33,6 +35,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
+import { checkIfDotnetVersionMissing, checkIfFunctionsMissing } from '../../../utils/runtimeErrors';
 import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
@@ -73,6 +76,8 @@ import {
   createQnAOnState,
   botEndpointsState,
   dispatcherState,
+  warnAboutDotNetState,
+  warnAboutFunctionsState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -279,10 +284,18 @@ const emptyQnaFile = (id: string, content: string): QnAFile => {
 };
 
 const parseAllAssets = async ({ set }: CallbackInterface, projectId: string, botFiles: any) => {
-  const { luFiles, lgFiles, qnaFiles, mergedSettings, dialogs } = botFiles;
+  const { luFiles, lgFiles, qnaFiles, mergedSettings, dialogs, recognizers } = botFiles;
+  const luFeaturesMap: { [key: string]: ILUFeaturesConfig } = {};
+  for (const { id } of luFiles) {
+    const isOrchestartor = recognizers.some(
+      (f) => f.id === `${id}.lu.dialog` && f.content.$kind === SDKKinds.OrchestratorRecognizer
+    );
+    const luFeatures = { ...mergedSettings.luFeatures, isOrchestartor };
+    luFeaturesMap[id] = luFeatures;
+  }
   const [parsedLgFiles, parsedLuFiles, parsedQnaFiles] = await Promise.all([
     lgWorker.parseAll(projectId, lgFiles),
-    luWorker.parseAll(luFiles, mergedSettings.luFeatures),
+    luWorker.parseAll(luFiles, luFeaturesMap),
     qnaWorker.parseAll(qnaFiles),
   ]);
 
@@ -348,10 +361,11 @@ export const loadProjectData = async (data) => {
 
 export const fetchProjectDataByPath = async (
   path: string,
-  storageId
+  storageId,
+  isRootBot: boolean
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
-    const response = await httpClient.put(`/projects/open`, { path, storageId });
+    const response = await httpClient.put(`/projects/open`, { path, storageId, isRootBot });
     const projectData = await loadProjectData(response.data);
     return projectData;
   } catch (ex) {
@@ -377,8 +391,23 @@ export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; 
   }
 };
 
-export const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
-  setError(callbackHelpers, ex);
+export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) => {
+  const isDotnetError = checkIfDotnetVersionMissing({
+    message: error.response?.data?.message ?? error.message ?? '',
+  });
+  const isFunctionsError = checkIfFunctionsMissing({
+    message: error.response?.data?.message ?? error.message ?? '',
+  });
+
+  if (isDotnetError) {
+    callbackHelpers.set(warnAboutDotNetState, true);
+  } else if (isFunctionsError) {
+    callbackHelpers.set(warnAboutFunctionsState, true);
+  } else {
+    callbackHelpers.set(warnAboutDotNetState, false);
+    callbackHelpers.set(warnAboutFunctionsState, false);
+    setError(callbackHelpers, error);
+  }
 };
 
 export const processSchema = (projectId: string, schema: any) => ({
@@ -569,7 +598,7 @@ export const openRemoteSkill = async (
 
 export const openLocalSkill = async (callbackHelpers, pathToBot: string, storageId, botNameIdentifier: string) => {
   const { set } = callbackHelpers;
-  const { projectData, botFiles, error } = await fetchProjectDataByPath(pathToBot, storageId);
+  const { projectData, botFiles, error } = await fetchProjectDataByPath(pathToBot, storageId, false);
 
   if (error) {
     throw error;
@@ -790,7 +819,7 @@ export const postRootBotCreation = async (
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
-  const data = await fetchProjectDataByPath(path, storageId);
+  const data = await fetchProjectDataByPath(path, storageId, true);
   if (data.error) {
     throw data.error;
   }

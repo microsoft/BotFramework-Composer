@@ -38,7 +38,7 @@ export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A
 export interface CreateSkillModalProps {
   projectId: string;
   addRemoteSkill: (manifestUrl: string, endpointName: string) => Promise<void>;
-  addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, skillId: string) => void;
+  addTriggerToRoot: (dialogId: string, triggerFormData: TriggerFormData, skillId: string) => Promise<void>;
   onDismiss: () => void;
 }
 
@@ -62,11 +62,13 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
       },
     });
     setSkillManifest(data);
-    if (!data.dispatchModels) {
-      setFormDataErrors({ manifestUrl: formatMessage('Miss dispatch modal') });
-    }
   } catch (error) {
-    setFormDataErrors({ ...error, manifestUrl: formatMessage('Manifest URL can not be accessed') });
+    const httpMessage = error?.response?.data?.message;
+    const message = httpMessage?.match('Unexpected string in JSON')
+      ? formatMessage("Error attempting to parse Skill manifest. There could be an error in it's format.")
+      : formatMessage('Manifest URL can not be accessed');
+
+    setFormDataErrors({ ...error, manifestUrl: message });
   }
 };
 const getTriggerFormData = (intent: string, content: string): TriggerFormData => ({
@@ -141,23 +143,23 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     [projectId, formData]
   );
 
-  const handleSubmit = (event, content: string, enable: boolean) => {
+  const handleSubmit = async (event, content: string, enable: boolean) => {
     event.preventDefault();
     // add a remote skill, add skill identifier into botProj file
-    addRemoteSkill(formData.manifestUrl, formData.endpointName).then(() => {
-      TelemetryClient.track('AddNewSkillCompleted');
-      const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
-      if (skillId) {
-        // add trigger with connect to skill action to root bot
-        const triggerFormData = getTriggerFormData(skillManifest.name, content);
-        addTriggerToRoot(dialogId, triggerFormData, skillId);
-        TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
-      }
-    });
+    await addRemoteSkill(formData.manifestUrl, formData.endpointName);
+    TelemetryClient.track('AddNewSkillCompleted');
+    // if added remote skill fail, just not addTrigger to root.
+    const skillId = location.href.match(/skill\/([^/]*)/)?.[1];
+    if (skillId) {
+      // add trigger with connect to skill action to root bot
+      const triggerFormData = getTriggerFormData(skillManifest.name, content);
+      await addTriggerToRoot(dialogId, triggerFormData, skillId);
+      TelemetryClient.track('AddNewTriggerCompleted', { kind: 'Microsoft.OnIntent' });
+    }
 
     if (enable) {
       // update recognizor type to orchestrator
-      updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
+      await updateRecognizer(projectId, dialogId, SDKKinds.OrchestratorRecognizer);
     }
   };
 
@@ -222,7 +224,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   responsiveMode={ResponsiveMode.large}
                   onChange={(e, option?: IDropdownOption) => {
                     if (option) {
-                      console.log(option);
                       setFormData({
                         ...formData,
                         endpointName: option.key as string,
@@ -246,9 +247,11 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             <StackItem align={'end'}>
               <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
               {skillManifest ? (
-                isUsingAdaptiveRuntime(runtime) && luFiles.length > 0 ? (
+                isUsingAdaptiveRuntime(runtime) &&
+                luFiles.length > 0 &&
+                skillManifest.dispatchModels?.intents?.length > 0 ? (
                   <PrimaryButton
-                    disabled={formDataErrors.manifestUrl || !skillManifest.dispatchModels ? true : false}
+                    disabled={formDataErrors.manifestUrl ? true : false}
                     styles={buttonStyle}
                     text={formatMessage('Next')}
                     onClick={(event) => {

@@ -101,7 +101,7 @@ export const botProjectFileDispatcher = () => {
           );
         }
       });
-      setRootBotSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
+      await setRootBotSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
     }
   });
 
@@ -115,13 +115,15 @@ export const botProjectFileDispatcher = () => {
       const skillNameIdentifier = await snapshot.getPromise(botNameIdentifierState(skillProjectId));
       set(botProjectFileState(rootBotProjectId), (current: BotProjectFile) => {
         const result = produce(current, (draftState) => {
-          if (!manifestId) {
-            delete draftState.content.skills[skillNameIdentifier].manifest;
-          } else {
-            draftState.content.skills[skillNameIdentifier] = {
-              ...draftState.content.skills[skillNameIdentifier],
-              manifest: manifestId,
-            };
+          if (skillNameIdentifier) {
+            if (!manifestId) {
+              delete draftState.content.skills[skillNameIdentifier].manifest;
+            } else {
+              draftState.content.skills[skillNameIdentifier] = {
+                ...draftState.content.skills[skillNameIdentifier],
+                manifest: manifestId,
+              };
+            }
           }
         });
         return result;

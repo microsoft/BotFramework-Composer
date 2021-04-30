@@ -12,11 +12,9 @@ import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { useLocation } from '../utils/hooks';
-import { BASEPATH } from '../constants';
 import {
   dispatcherState,
   appUpdateState,
@@ -35,11 +33,10 @@ import { AppUpdaterStatus } from '../constants';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
-import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
-import { GetStarted } from './GetStarted/GetStarted';
 import { BotController } from './BotRuntimeController/BotController';
+import { GetStarted } from './GetStarted/GetStarted';
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;
@@ -158,7 +155,8 @@ export const Header = () => {
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
-  const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
+
+  const [showGetStartedTeachingBubble, setShowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
   const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
@@ -213,10 +211,10 @@ export const Header = () => {
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
     if (location.hash === '#getstarted') {
-      setshowGetStartedTeachingBubble(true);
+      setShowGetStartedTeachingBubble(true);
       setShowGetStarted(true);
     } else {
-      setshowGetStartedTeachingBubble(false);
+      setShowGetStartedTeachingBubble(false);
     }
   }, [location]);
 
@@ -383,55 +381,19 @@ export const Header = () => {
         </Callout>
       )}
 
-      <Panel
-        isHiddenOnDismiss
-        closeButtonAriaLabel={formatMessage('Close')}
-        customWidth={'395px'}
-        headerText={projectName}
-        isBlocking={false}
-        isOpen={isWebChatPanelVisible}
-        styles={{
-          root: {
-            marginTop: '50px',
-          },
-          scrollableContent: {
-            width: '100%',
-            height: '100%',
-          },
-          content: {
-            width: '100%',
-            height: '100%',
-            padding: 0,
-            margin: 0,
-          },
+      <GetStarted
+        isOpen={botProjectSolutionLoaded && showGetStarted}
+        projectId={rootBotProjectId}
+        requiresLUIS={requiresLUIS}
+        requiresQNA={requiresQNA}
+        showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
+        onBotReady={() => {
+          setShowTeachingBubble(true);
         }}
-        type={PanelType.custom}
         onDismiss={() => {
-          setWebChatPanelVisibility(false);
-          TelemetryClient.track('WebChatPaneClosed');
+          toggleGetStarted(false);
         }}
-      >
-        {webchatEssentials?.projectId ? (
-          <WebChatPanel
-            botData={{ ...webchatEssentials }}
-            directlineHostUrl={BASEPATH}
-            isWebChatPanelVisible={isWebChatPanelVisible}
-          />
-        ) : null}
-        <GetStarted
-          isOpen={botProjectSolutionLoaded && showGetStarted}
-          projectId={rootBotProjectId}
-          requiresLUIS={requiresLUIS}
-          requiresQNA={requiresQNA}
-          showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
-          onBotReady={() => {
-            setShowTeachingBubble(true);
-          }}
-          onDismiss={() => {
-            toggleGetStarted(false);
-          }}
-        />
-      </Panel>
+      />
     </div>
   );
 };

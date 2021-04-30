@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import { useState, Fragment, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { mergeStyleSets } from '@uifabric/styling';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -28,7 +27,7 @@ import {
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { subtitle, errorContainer, errorTextStyle, errorIcon, customError } from '../styles';
+import { subtext, errorContainer, errorTextStyle, errorIcon, inputFieldStyles } from '../styles';
 import { DisableFeatureToolTip } from '../../../components/DisableFeatureToolTip';
 import { usePVACheck } from '../../../hooks/usePVACheck';
 
@@ -142,8 +141,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   };
 
   const header = () => (
-    <div css={subtitle}>
-      {formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}
+    <div css={subtext}>
+      {formatMessage(
+        'Configure Composer to start your bot using runtime code you can customize and control. Leave the field below blank if you don’t require customization.'
+      )}
     </div>
   );
 
@@ -243,7 +244,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
             disabled={!settings.runtime || !settings.runtime.customRuntime}
             errorMessage={errorElement(formDataErrors.path)}
             label={formatMessage('Runtime code location')}
-            styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+            styles={inputFieldStyles}
             value={runtimePath}
             onBlur={() => handleRuntimeSettingOnBlur('path')}
             onChange={handleRuntimeSettingOnChange('path')}
@@ -270,7 +271,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           disabled={!settings.runtime || !settings.runtime.customRuntime}
           errorMessage={errorElement(formDataErrors.command)}
           label={formatMessage('Start command')}
-          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+          styles={inputFieldStyles}
           value={runtimeCommand}
           onBlur={() => handleRuntimeSettingOnBlur('command')}
           onChange={handleRuntimeSettingOnChange('command')}

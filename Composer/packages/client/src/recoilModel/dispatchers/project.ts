@@ -36,6 +36,8 @@ import {
   projectMetaDataState,
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
+  warnAboutDotNetState,
+  warnAboutFunctionsState,
   settingsState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
@@ -72,24 +74,8 @@ export const projectDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
 
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        // const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(projectIdToRemove));
-        const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
-        const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
-        // remove the same identifier trigger in root bot
-        if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
-          const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
-          const content = DialogdeleteTrigger(
-            projectDialogsMap[rootBotProjectId],
-            rootDialog?.id,
-            index,
-            async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
-          );
-          if (content) {
-            await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
-          }
-        }
+        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
 
         await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
@@ -98,7 +84,25 @@ export const projectDispatcher = () => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
           return filtered;
         });
-        resetBotStates(callbackHelpers, projectIdToRemove);
+        await resetBotStates(callbackHelpers, projectIdToRemove);
+
+        const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
+        const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
+        // remove the same identifier trigger in root bot
+        if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
+          const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
+          if (index >= 0) {
+            const content = DialogdeleteTrigger(
+              projectDialogsMap[rootBotProjectId],
+              rootDialog?.id,
+              index,
+              async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
+            );
+            if (content) {
+              await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
+            }
+          }
+        }
         if (rootBotProjectId) {
           navigateToBot(callbackHelpers, rootBotProjectId, '');
         }
@@ -417,6 +421,7 @@ export const projectDispatcher = () => {
         source,
         runtimeType,
         runtimeLanguage,
+        isRoot,
       } = newProjectData;
 
       // starts the creation process and stores the jobID in state for tracking
@@ -435,6 +440,7 @@ export const projectDispatcher = () => {
         preserveRoot,
         runtimeType,
         runtimeLanguage,
+        isRoot,
       });
 
       if (response.data.jobId) {
@@ -618,6 +624,7 @@ export const projectDispatcher = () => {
             } else {
               // failure
               callbackHelpers.set(botOpeningState, false);
+
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
@@ -662,6 +669,14 @@ export const projectDispatcher = () => {
     setError(callbackHelpers, error);
   });
 
+  const setWarnAboutDotNet = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutDotNetState, warn);
+  });
+
+  const setWarnAboutFunctions = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutFunctionsState, warn);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -685,6 +700,8 @@ export const projectDispatcher = () => {
     updateCreationMessage,
     setCurrentProjectId,
     setProjectError,
+    setWarnAboutDotNet,
+    setWarnAboutFunctions,
     fetchReadMe,
   };
 };

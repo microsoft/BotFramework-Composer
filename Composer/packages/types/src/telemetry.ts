@@ -44,6 +44,7 @@ type ApplicationEvents = {
 
 type GettingStartedEvents = {
   GettingStartedLinkClicked: { method: 'link' | 'button'; url: string };
+  GettingStartedActionClicked: { taskName: string; priority: string };
 };
 
 type PackageManagerEvents = {
@@ -70,6 +71,7 @@ type BotProjectEvents = {
   CreateNewBotProjectFromExample: { template: string };
   CreateNewBotProjectStarted: { template: string };
   CreateNewBotProjectCompleted: { template: string; status: number };
+  CreateNewBotProjectFailed: { reason: string; template: string; status: number };
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
   StartBotButtonClicked: { isRoot: boolean; location: string; projectId: string };
@@ -107,11 +109,29 @@ type QnaEvents = {
   AlternateQnAPhraseAdded: undefined;
 };
 
+type ResourcesItem = {
+  description: string;
+  text: string;
+  tier: string;
+  group: string;
+  key: string;
+  required: boolean;
+  [key: string]: any;
+};
+
 type PublishingEvents = {
   NewPublishingProfileStarted: undefined;
   NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileCompleted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
+  ProvisionAddResourcesNavigate: undefined;
+  ProvisionConfigureResources: undefined;
+  ProvisionEditJSON: undefined;
+  ProvisionReviewResources: undefined;
+  ProvisionStart: { region: string; subscriptionId: string; externalResources: ResourcesItem[] };
+  ProvisionCancel: undefined;
+  ProvisionShowHandoff: undefined;
+  ProvisionAddResourcesCancel: undefined;
 };
 
 type AppSettingsEvents = {
@@ -121,6 +141,20 @@ type AppSettingsEvents = {
 type BotSettingsEvents = {
   CustomRuntimeToggleChanged: { enabled: boolean };
   GetNewRuntime: { runtimeType: string };
+  SettingsGetKeysExistingResourceSelected: { subscriptionId: string; resourceType: string };
+  SettingsGetKeysCreateNewResourceStarted: {
+    subscriptionId: string;
+    resourceType: string;
+    createNewResourceGroup: boolean;
+    region: string;
+  };
+  SettingsGetKeysCreateNewResourceCompleted: {
+    subscriptionId: string;
+    resourceType: string;
+    createNewResourceGroup: boolean;
+    region: string;
+  };
+  SettingsGetKeysResourceRequestSelected: { subscriptionId?: string; resourceType: string };
 };
 
 type LgEditorEvents = {
@@ -165,6 +199,10 @@ type OrchestratorEvents = {
   OrchestratorBuildCompleted: { baseModel: string; firstBuild: boolean };
 };
 
+type PropertyEditorEvents = {
+  RecognizerChanged: { recognizer: string };
+};
+
 type OtherEvents = {};
 
 type PageView = {
@@ -199,7 +237,8 @@ export type TelemetryEvents = ApplicationEvents &
   LgEditorEvents &
   WebChatEvents &
   LuEditorEvents &
-  OrchestratorEvents;
+  OrchestratorEvents &
+  PropertyEditorEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

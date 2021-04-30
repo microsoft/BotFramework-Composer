@@ -41,6 +41,7 @@ const mockSchemas = {
               default: 'Adapter.Full.Type.Mock',
             },
           },
+          required: ['exampleName'],
         },
       },
     },
@@ -87,7 +88,7 @@ describe('ExternalAdapterSettings', () => {
 
     const link = getByText(/from package manager/);
 
-    expect(link.attributes.getNamedItem('href')?.value).toEqual('plugin/package-manager/package-manager');
+    expect(link.attributes.getNamedItem('href')?.value).toContain('plugin/package-manager/package-manager');
   });
 
   it('brings up the modal', () => {
@@ -148,6 +149,21 @@ describe('ExternalAdapterSettings', () => {
         type: 'Adapter.Full.Type.Mock',
       },
     });
+  });
+
+  it('does not proceed if required settings are missing', async () => {
+    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
+      initRecoilState
+    );
+    const container = getByTestId('adapterSettings');
+    const configureButton = within(container).queryAllByText('Configure')[0];
+    act(() => {
+      fireEvent.click(configureButton);
+    });
+
+    const modal = getByTestId('adapterModal');
+    expect(within(modal).getByText('Configure')).toBeDisabled();
   });
 
   it('disables an adapter', async () => {

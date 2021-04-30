@@ -30,6 +30,7 @@ type PublishProfileDialogProps = {
   types: PublishType[];
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
+  onUpdateIsCreateProfileFromSkill?: (isCreateProfileFromSkill: boolean) => void;
 };
 
 const Page = {
@@ -38,7 +39,15 @@ const Page = {
 };
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
-  const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
+  const {
+    current,
+    types,
+    projectId,
+    closeDialog,
+    targets,
+    setPublishTargets,
+    onUpdateIsCreateProfileFromSkill,
+  } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
 
@@ -47,7 +56,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
 
   const [dialogTitle, setTitle] = useState({
-    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+    title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
     subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
   });
 
@@ -81,7 +90,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle({
-        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+        title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
         subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
       });
     };
@@ -194,7 +203,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      onUpdateIsCreateProfileFromSkill?.(true);
     };
   }, [name, targetType, types, savePublishTarget]);
 
@@ -217,7 +227,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
             <div style={{ marginBottom: '16px' }}>
               {dialogTitle.subText}
               <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage('Learn more.')}
+                {formatMessage('Learn more')}
               </Link>
             </div>
             <ProfileFormDialog
@@ -240,7 +250,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           <Fragment>
             <div style={{ marginBottom: '16px' }}>{dialogTitle.subText}</div>
             <div css={publishSurfaceStyles}>
-              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+              <PluginHost
+                bundleId={selectedType.bundleId}
+                pluginName={selectedType.extensionId}
+                pluginType="publish"
+                projectId={projectId}
+              />
             </div>
           </Fragment>
         )}

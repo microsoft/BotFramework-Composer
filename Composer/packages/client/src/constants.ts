@@ -95,6 +95,9 @@ export const Text = {
   get DOTNETFAILURE() {
     return formatMessage('Composer needs .NET Core SDK');
   },
+  get FUNCTIONSFAILURE() {
+    return formatMessage('Composer needs Azure Functions');
+  },
   get BOTRUNTIMEERROR() {
     return formatMessage('Composer Runtime Error');
   },
@@ -146,6 +149,7 @@ export enum CreationFlowStatus {
   SAVEAS = 'Save as',
   OPEN = 'Open',
   CLOSE = 'Close',
+  NEW_SKILL = 'New Skill',
 }
 
 export type CreationFlowType = 'Bot' | 'Skill';
@@ -419,7 +423,8 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
 
-export const invalidNameCharRegex = /[^a-z^A-Z^0-9^_]/g;
+export const invalidNameCharRegex = /[^a-zA-Z0-9-_]/g;
+export const invalidNameCharRegexV2 = /[^a-zA-Z0-9_]/g;
 
 export const authConfig = {
   // for web login

@@ -23,7 +23,6 @@ import { localeState, dispatcherState } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { Orchestractor } from './Orchestractor';
-import { getLuDiagnostics } from './helper';
 
 const detailListContainer = css`
   width: 100%;
@@ -46,7 +45,7 @@ type SelectIntentProps = {
   luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
-  onSubmit: (event: Event, content: string, enable: boolean) => void;
+  onSubmit: (event: Event, content: string, enable: boolean) => Promise<void>;
   onDismiss: () => void;
   onUpdateTitle: (title: { title: string; subText: string }) => void;
   onBack: () => void;
@@ -139,7 +138,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   const [showOrchestratorDialog, setShowOrchestratorDialog] = useState(false);
   const { batchUpdateLuFiles } = useRecoilValue(dispatcherState);
   const curRecognizers = useRecoilValue(recognizersSelectorFamily(projectId));
-  const [triggerErrorMessage, setTriggerErrorMsg] = useState('');
   const [warningMsg, setWarningMsg] = useState('');
 
   const hasOrchestrator = useMemo(() => {
@@ -167,44 +165,34 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     return res;
   }, [manifest]);
 
-  const updateLuFiles = useCallback(() => {
+  const updateLuFiles = useCallback(async () => {
     const payloads: { projectId: string; id: string; content: string }[] = [];
     for (const lufile of rootLuFiles) {
       const rootId = lufile.id.split('.');
       const language = rootId[rootId.length - 1];
-      let append = '';
-      if (language === locale) {
-        append = displayContent;
-      } else {
+      if (language !== locale) {
         const intents = multiLanguageIntents[language];
         if (!intents) {
           continue;
         }
-        append = mergeIntentsContent(intents);
+        const append = mergeIntentsContent(intents);
+        payloads.push({
+          projectId,
+          id: lufile.id,
+          content: `${lufile.content}\n# ${manifest.name}\n${append}`,
+        });
       }
-      payloads.push({
-        projectId,
-        id: lufile.id,
-        content: `${lufile.content}\n# ${manifest.name}\n${append}`,
-      });
     }
-    batchUpdateLuFiles(payloads);
+    await batchUpdateLuFiles(payloads);
   }, [rootLuFiles, projectId, locale, displayContent, multiLanguageIntents]);
 
   useEffect(() => {
     if (locale) {
       const skillLanguages = manifest.dispatchModels?.languages;
-      const luFeaturesTemp = {
-        enableMLEntities: false,
-        enableListEntities: false,
-        enableCompositeEntities: false,
-        enablePrebuiltEntities: false,
-        enableRegexEntities: false,
-      };
       getRemoteLuFiles(skillLanguages, languages, setWarningMsg)
         .then((items) => {
           items &&
-            getParsedLuFiles(items, luFeaturesTemp, []).then((files) => {
+            getParsedLuFiles(items, luFeatures, []).then((files) => {
               setLufiles(files);
               files.map((file) => {
                 if (file.id.includes(locale)) {
@@ -218,7 +206,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           setWarningMsg(formatMessage('get remote file fail'));
         });
     }
-  }, [manifest.dispatchModels?.languages, languages, locale]);
+  }, [manifest.dispatchModels?.languages, languages, locale, luFeatures]);
 
   useEffect(() => {
     if (selectedIntents.length > 0) {
@@ -250,20 +238,11 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     }
   }, [selectedIntents, currentLuFile, luFiles]);
 
-  useEffect(() => {
-    if (displayContent) {
-      const error = getLuDiagnostics('manifestName', displayContent);
-      setTriggerErrorMsg(error);
-    } else {
-      setTriggerErrorMsg('');
-    }
-  }, [displayContent]);
-
-  const handleSubmit = (ev, enableOchestractor) => {
-    // append remote lufile into root lu file
-    updateLuFiles();
+  const handleSubmit = async (ev, enableOchestractor) => {
     // add trigger to root
-    onSubmit(ev, displayContent, enableOchestractor);
+    await onSubmit(ev, displayContent, enableOchestractor);
+    // append remote lufile into different language lu file
+    await updateLuFiles();
   };
 
   return (
@@ -298,8 +277,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           ) : (
             <StackItem>
               <LuEditor
-                toolbarHidden
-                errorMessage={triggerErrorMessage}
                 height={300}
                 luOption={{
                   projectId,
@@ -308,6 +285,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
                   luFeatures: luFeatures,
                 }}
                 telemetryClient={TelemetryClient}
+                toolbarOptions={{ hidden: true }}
                 value={displayContent}
                 warningMessage={warningMsg}
                 onChange={setDisplayContent}
@@ -330,7 +308,6 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
             <span>
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
-                disabled={triggerErrorMessage && pageIndex === 1 ? true : false}
                 styles={{ root: { marginLeft: '8px' } }}
                 text={pageIndex === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
                 onClick={(ev) => {
