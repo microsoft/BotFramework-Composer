@@ -5,7 +5,6 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import difference from 'lodash/difference';
-import { QnAFile, LgFile, LuFile } from '@bfc/shared';
 
 import languageStorage from '../../utils/languageStorage';
 import { getExtension } from '../../utils/fileUtil';
