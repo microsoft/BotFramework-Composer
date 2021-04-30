@@ -44,6 +44,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
     animation-timing-function: ${show ? 'cubic-bezier(0.1, 0.9, 0.2, 1)' : 'linear'};
     animation-fill-mode: both;
     animation-name: ${show ? fadeIn : fadeOut(height)};
+    pointer-events: auto;
   `;
 };
 
