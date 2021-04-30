@@ -90,7 +90,7 @@ export const provisionDispatcher = () => {
         });
 
         // call provision status api interval to update the state.
-        updateProvisionStatus(
+        await updateProvisionStatus(
           callbackHelpers,
           result.data.id,
           projectId,
