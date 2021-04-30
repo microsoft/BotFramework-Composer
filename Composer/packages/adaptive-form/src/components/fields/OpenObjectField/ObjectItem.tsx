@@ -13,13 +13,14 @@ import formatMessage from 'format-message';
 
 import { StringField } from '../StringField';
 import { SchemaField } from '../../SchemaField';
+import { WithTypeIcons } from '../../WithTypeIcons';
 
-import { container, item, itemContainer } from './styles';
+import { container, item } from './styles';
 
+const StringFieldWithIcon = WithTypeIcons(StringField);
 interface ObjectItemProps extends FieldProps {
   name: string;
   formData: object;
-  stackedLayout?: boolean;
   onNameChange: (name: string) => void;
   onDelete: () => void;
 }
@@ -29,7 +30,6 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   name: originalName,
   formData,
   value,
-  stackedLayout,
   schema,
   onChange,
   onNameChange,
@@ -68,35 +68,31 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
 
   return (
     <div css={container} data-testid="ObjectItem">
-      <div css={itemContainer(stackedLayout)}>
-        <div css={item}>
-          <StringField
-            definitions={definitions}
-            error={errorMessage}
-            id={`${name}.key`}
-            label={stackedLayout ? formatMessage('Key') : false}
-            name="key"
-            placeholder={initialName || formatMessage('Add a new key')}
-            schema={{}}
-            uiOptions={{}}
-            value={name}
-            onBlur={handleBlur}
-            onChange={(newValue) => setName(newValue || '')}
-          />
-        </div>
-        <div css={item}>
-          <SchemaField
-            {...rest}
-            definitions={definitions}
-            id={`${name}.value`}
-            label={stackedLayout ? formatMessage('Value') : false}
-            name="value"
-            placeholder={placeholder}
-            schema={schema}
-            value={value}
-            onChange={onChange}
-          />
-        </div>
+      <div css={item}>
+        <StringFieldWithIcon
+          definitions={definitions}
+          error={errorMessage}
+          id={`${name}.key`}
+          label={formatMessage('Key')}
+          name="key"
+          placeholder={initialName || formatMessage('Add a new key')}
+          schema={{ type: 'string' }}
+          uiOptions={{}}
+          value={name}
+          onBlur={handleBlur}
+          onChange={(newValue) => setName(newValue || '')}
+        />
+        <SchemaField
+          {...rest}
+          definitions={definitions}
+          id={`${name}.value`}
+          label={formatMessage('Value')}
+          name="value"
+          placeholder={placeholder}
+          schema={schema}
+          value={value}
+          onChange={onChange}
+        />
       </div>
       <TooltipHost content={moreLabel}>
         <IconButton

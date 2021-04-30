@@ -1,36 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import styled from '@emotion/styled';
 import { jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import formatMessage from 'format-message';
-import { FluentTheme } from '@uifabric/fluent-theme';
 
 import { getArrayItemProps, useArrayItems } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
+import { AddButton } from '../AddButton';
 
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
-
-const ButtonContainer = styled.div({
-  borderTop: `1px solid ${FluentTheme.palette.neutralLight}`,
-  width: '100%',
-});
-
-const styles: { actionButton: IButtonStyles } = {
-  actionButton: {
-    root: {
-      fontSize: FluentTheme.fonts.small.fontSize,
-      fontWeight: FluentTheme.fonts.small.fontWeight,
-      color: FluentTheme.palette.themePrimary,
-      paddingLeft: 8,
-      height: 20,
-    },
-  },
-};
 
 const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
   const {
@@ -75,11 +55,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
           {...getArrayItemProps(arrayItems, idx, handleChange)}
         />
       ))}
-      <ButtonContainer>
-        <ActionButton styles={styles.actionButton} onClick={onClick}>
-          {formatMessage('Add new')}
-        </ActionButton>
-      </ButtonContainer>
+      <AddButton onClick={onClick} />
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { getOrderedProperties, getSchemaWithAdditionalFields } from '../../utils
 import { FormRow } from '../FormRow';
 
 const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
-  const { schema: baseSchema, uiOptions, value = {}, label, ...rest } = props;
+  const { schema: baseSchema, uiOptions, value = {}, ...rest } = props;
 
   if (!baseSchema) {
     return null;
