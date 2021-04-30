@@ -4,6 +4,7 @@
 import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+import { getManifestUrl } from '../../utils/skillManifestUtil';
 
 import { Bot, BotStatus, BotPublishHistory, BotProjectType, BotPropertyType } from './type';
 
@@ -35,11 +36,9 @@ const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: str
   const urls: string[] = [];
   for (const skillManifest of skillManifests || []) {
     for (const endpoint of skillManifest?.content?.endpoints || []) {
-      if (
-        endpoint?.msAppId === appId &&
-        !urls.includes(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`)
-      ) {
-        urls.push(`https://${hostname}.azurewebsites.net/manifests/${skillManifest.id}.json`);
+      const url = getManifestUrl(hostname, skillManifest);
+      if (endpoint?.msAppId === appId && !urls.includes(url)) {
+        urls.push(url);
       }
     }
   }
