@@ -19,7 +19,7 @@ import {
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { DeployLocation, AzureTenant } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
+import { dialogStyle, LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -741,6 +741,22 @@ export const AzureProvisionDialog: React.FC = () => {
     closeDialog();
   }, [importConfig]);
 
+  const signoutAndNotify = useCallback(async () => {
+    const isSignedOutSuccesfully = await logOut();
+    if (isSignedOutSuccesfully) {
+      addNotification({
+        type: 'info',
+        title: '',
+        retentionTime: 5000,
+        description: formatMessage('You have successfully signed out of Azure'),
+        onRenderCardContent: (props) => (
+          <div style={{ padding: '0 16px 16px 16px', fontSize: '12px' }}>{props.description}</div>
+        ),
+      });
+      closeDialog();
+    }
+  }, [addNotification]);
+
   const onRenderSecondaryText = useMemo(
     () => (props: IPersonaProps) => {
       return (
@@ -753,32 +769,19 @@ export const AzureProvisionDialog: React.FC = () => {
                 'Changes you made may not be saved and the wizard will be closed. Do you wish to continue?'
               ),
               {
+                onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
                 confirmText: formatMessage('Sign out'),
                 cancelText: formatMessage('Cancel'),
               }
             );
-            if (signoutAndCloseProvisionDialog) {
-              const isSignedOutSuccesfully = await logOut();
-              if (isSignedOutSuccesfully) {
-                addNotification({
-                  type: 'info',
-                  title: '',
-                  retentionTime: 5000,
-                  description: formatMessage('You have successfully signed out of Azure'),
-                  onRenderCardContent: (props) => {
-                    return <div style={{ padding: '0 16px 16px 16px', fontSize: '10px' }}>{props.description}</div>;
-                  },
-                });
-              }
-              closeDialog();
-            }
+            if (signoutAndCloseProvisionDialog) await signoutAndNotify();
           }}
         >
           {props.secondaryText}
         </div>
       );
     },
-    [addNotification]
+    [signoutAndNotify]
   );
 
   const isNextDisabled = useMemo(() => {
