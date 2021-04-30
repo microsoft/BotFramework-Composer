@@ -22,10 +22,11 @@ import { actionButton } from './styles';
 
 type CreatePublishProfileDialogProps = {
   projectId: string;
+  onUpdateIsCreateProfileFromSkill: (isCreateProfileFromSkill: boolean) => void;
 };
 
 export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, onUpdateIsCreateProfileFromSkill } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
@@ -102,6 +103,7 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
           setPublishTargets={setPublishTargets}
           targets={publishTargets || []}
           types={publishTypes}
+          onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
         />
       ) : null}
     </Fragment>
