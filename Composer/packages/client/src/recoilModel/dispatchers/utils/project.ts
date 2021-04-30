@@ -35,7 +35,7 @@ import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
 
-import { checkIfDotnetVersionMissing } from '../../../utils/runtimeErrors';
+import { checkIfDotnetVersionMissing, checkIfFunctionsMissing } from '../../../utils/runtimeErrors';
 import { BASEURL, BotStatus } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { getUniqueName } from '../../../utils/fileUtil';
@@ -77,6 +77,7 @@ import {
   botEndpointsState,
   dispatcherState,
   warnAboutDotNetState,
+  warnAboutFunctionsState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -394,11 +395,17 @@ export const handleProjectFailure = (callbackHelpers: CallbackInterface, error) 
   const isDotnetError = checkIfDotnetVersionMissing({
     message: error.response?.data?.message ?? error.message ?? '',
   });
+  const isFunctionsError = checkIfFunctionsMissing({
+    message: error.response?.data?.message ?? error.message ?? '',
+  });
 
   if (isDotnetError) {
     callbackHelpers.set(warnAboutDotNetState, true);
+  } else if (isFunctionsError) {
+    callbackHelpers.set(warnAboutFunctionsState, true);
   } else {
     callbackHelpers.set(warnAboutDotNetState, false);
+    callbackHelpers.set(warnAboutFunctionsState, false);
     setError(callbackHelpers, error);
   }
 };
