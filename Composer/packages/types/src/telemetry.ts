@@ -143,8 +143,8 @@ type PublishingEvents = {
 type CreationEvents = {
   NewBotDialogOpened: { fromAbsHandoff: boolean; isSkillBot: boolean };
   CreationCancelled: undefined;
-  NeedAnotherTemplateCLicked: undefined;
-  creationExecuted: { runtimeChoice: RuntimeType; runtimeLanguage: FeedType; isPva: boolean; isAbs: boolean };
+  NeedAnotherTemplateClicked: undefined;
+  CreationExecuted: { runtimeChoice: RuntimeType; runtimeLanguage: FeedType; isPva: boolean; isAbs: boolean };
 };
 
 type AppSettingsEvents = {

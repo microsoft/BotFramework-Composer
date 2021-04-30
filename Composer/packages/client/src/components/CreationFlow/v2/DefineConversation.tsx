@@ -294,7 +294,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = await getAliasFromPayload(source, payload);
         }
       }
-      TelemetryClient.track('creationExecuted', {
+      TelemetryClient.track('CreationExecuted', {
         runtimeChoice: dataToSubmit?.runtimeType,
         runtimeLanguage: dataToSubmit?.runtimeLanguage as FeedType,
         isPva: isImported,

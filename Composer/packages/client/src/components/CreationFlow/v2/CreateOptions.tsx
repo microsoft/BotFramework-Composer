@@ -95,7 +95,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
     },
   };
 
-  const getOptions = (): IChoiceGroupOption[] => [
+  const options: IChoiceGroupOption[] = [
     { key: 'Create', text: formatMessage('Create a new bot') },
     { key: 'Connect', text: formatMessage('Connect to an existing bot') },
   ];
@@ -131,7 +131,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
       >
-        <ChoiceGroup required defaultSelectedKey="B" options={getOptions()} onChange={handleChange} />
+        <ChoiceGroup required defaultSelectedKey="Create" options={options} onChange={handleChange} />
         <DialogFooter>
           <PrimaryButton data-testid="NextStepButton" text={formatMessage('Open')} onClick={handleJumpToNext} />
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />

@@ -283,7 +283,7 @@ export function CreateBotV2(props: CreateBotProps) {
             styles={{ root: { fontSize: '12px', float: 'left' } }}
             target="_blank"
             onClick={() => {
-              TelemetryClient.track('NeedAnotherTemplateCLicked');
+              TelemetryClient.track('NeedAnotherTemplateClicked');
             }}
           >
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
