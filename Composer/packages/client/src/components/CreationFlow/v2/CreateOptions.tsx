@@ -17,7 +17,7 @@ import querystring from 'query-string';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
-import { CreationFlowStatus, DialogCreationCopy } from '../../../constants';
+import { DialogCreationCopy } from '../../../constants';
 import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
 import { creationFlowTypeState, userHasNodeInstalledState } from '../../../recoilModel';
 import { InstallDepModal } from '../../InstallDepModal';

@@ -30,7 +30,6 @@ import { dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { ImportFailedModal } from '../../ImportModal/ImportFailedModal';
 
 // -------------------- Styles -------------------- //
 
