@@ -10,6 +10,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 
+import TelemetryClient from '../../telemetry/TelemetryClient';
+
 import { BotStatus } from './type';
 
 export const PublishDialog = (props) => {
@@ -86,6 +88,7 @@ export const PublishDialog = (props) => {
     setShowItems(cleanedItems);
   };
   const submit = async () => {
+    TelemetryClient.track('PublishStartBtnClick');
     props.onDismiss();
     await props.onSubmit(showItems);
     cleanComments();
