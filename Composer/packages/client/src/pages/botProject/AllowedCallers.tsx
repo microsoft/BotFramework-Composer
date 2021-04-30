@@ -14,6 +14,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { useArrayItems } from '@bfc/adaptive-form';
 
 import { dispatcherState, rootBotProjectIdSelector, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
@@ -110,34 +111,36 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
     [mergedSettings, projectId, runtimeSettings?.skills]
   );
 
-  const onBlur = React.useCallback(() => {
-    updateAllowedCallers(runtimeSettings?.skills?.allowedCallers?.filter(Boolean));
-  }, [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]);
-
-  const onChange = React.useCallback(
-    (index: number) => (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
-      const updatedAllowedCallers = [...(runtimeSettings?.skills?.allowedCallers || [])];
-      updatedAllowedCallers[index] = newValue;
-      updateAllowedCallers(updatedAllowedCallers);
-    },
-    [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]
-  );
-
-  const onRemove = React.useCallback(
-    (index: number) => () => {
-      const updatedAllowedCallers = runtimeSettings?.skills?.allowedCallers?.filter(
-        (_, itemIndex) => itemIndex !== index
-      );
-      updateAllowedCallers(updatedAllowedCallers);
-    },
-    [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]
+  const { arrayItems: allowedCallers = [], addItem, handleChange } = useArrayItems(
+    runtimeSettings?.skills?.allowedCallers || [],
+    updateAllowedCallers
   );
 
   const onAddNewAllowedCaller = React.useCallback(() => {
-    runtimeSettings?.skills?.allowedCallers
-      ? updateAllowedCallers([...runtimeSettings?.skills?.allowedCallers, ''])
-      : updateAllowedCallers(['']);
-  }, [runtimeSettings?.skills?.allowedCallers, updateAllowedCallers]);
+    addItem('');
+  }, [addItem]);
+
+  const onRemove = React.useCallback(
+    (index: number) => () => {
+      const updatedAllowedCallers = allowedCallers.filter((_, itemIndex) => itemIndex !== index);
+      handleChange(updatedAllowedCallers);
+    },
+    [allowedCallers, handleChange]
+  );
+
+  const onChange = React.useCallback(
+    (index: number) => (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue = '') => {
+      const updatedAllowedCallers = allowedCallers.map((arrayItem, itemIndex) => {
+        return itemIndex === index ? { ...arrayItem, value: newValue } : arrayItem;
+      });
+      handleChange(updatedAllowedCallers);
+    },
+    [allowedCallers, handleChange]
+  );
+
+  const onBlur = React.useCallback(() => {
+    handleChange(allowedCallers.filter(({ value }) => value));
+  }, [allowedCallers, handleChange]);
 
   return (
     <Fragment>
@@ -159,13 +162,11 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
         )}
       </div>
       <ItemContainer>
-        {runtimeSettings?.skills?.allowedCallers?.map((caller, index) => {
-          return (
-            <Item key={index} value={caller} onBlur={onBlur} onChange={onChange(index)} onRemove={onRemove(index)} />
-          );
+        {allowedCallers.map(({ value, id }, index) => {
+          return <Item key={id} value={value} onBlur={onBlur} onChange={onChange(index)} onRemove={onRemove(index)} />;
         })}
       </ItemContainer>
-      {!runtimeSettings?.skills?.allowedCallers?.length && (
+      {!allowedCallers.length && (
         <MessageBar messageBarType={MessageBarType.warning}>
           {formatMessage('This bot cannot be called as a skill since the allowed caller list is empty')}
         </MessageBar>
