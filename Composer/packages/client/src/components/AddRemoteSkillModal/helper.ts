@@ -16,7 +16,7 @@ const conflictConfirmationPrompt = formatMessage(
 export const importOrchestrator = async (projectId: string, reloadProject, setApplicationLevelError) => {
   const reqBody = {
     package: 'Microsoft.Bot.Builder.AI.Orchestrator',
-    version: '4.13.0',
+    version: '4.13.1',
     source: 'https://api.nuget.org/v3/index.json',
     isUpdating: false,
     isPreview: false,
