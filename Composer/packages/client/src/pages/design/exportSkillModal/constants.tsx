@@ -9,7 +9,7 @@ import { SDKKinds } from '@bfc/shared';
 
 import { nameRegex } from '../../../constants';
 
-import { Description, ReviewManifest, SaveManifest, SelectDialogs, SelectTriggers } from './content';
+import { Description, ReviewManifest, SaveManifest, SelectTriggers } from './content';
 import { SelectProfile } from './content/SelectProfile';
 import { AddCallers } from './content/AddCallers';
 
@@ -83,11 +83,9 @@ export interface ContentProps {
   manifest: Partial<SkillManifestFile>;
   setErrors: (errors: { [key: string]: any }) => void;
   setSchema: (_: JSONSchema7) => void;
-  setSelectedDialogs: (dialogs: any[]) => void;
   setSelectedTriggers: (selectedTriggers: any[]) => void;
   setSkillManifest: (_: Partial<SkillManifestFile>) => void;
   schema: JSONSchema7;
-  selectedDialogs: any[];
   selectedTriggers: any[];
   skillManifests: SkillManifestFile[];
   value: { [key: string]: any };
@@ -126,7 +124,6 @@ export enum ManifestEditorSteps {
   MANIFEST_DESCRIPTION = 'MANIFEST_DESCRIPTION',
   MANIFEST_REVIEW = 'MANIFEST_REVIEW',
   SAVE_MANIFEST = 'SAVE_MANIFEST',
-  SELECT_DIALOGS = 'SELECT_DIALOGS',
   SELECT_TRIGGERS = 'SELECT_TRIGGERS',
   SELECT_PROFILE = 'SELECT_PROFILE',
   ADD_CALLERS = 'ADD_CALLERS',
@@ -134,7 +131,6 @@ export enum ManifestEditorSteps {
 
 export const order: ManifestEditorSteps[] = [
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
-  ManifestEditorSteps.SELECT_DIALOGS,
   ManifestEditorSteps.SELECT_TRIGGERS,
   ManifestEditorSteps.ADD_CALLERS,
   ManifestEditorSteps.SELECT_PROFILE,
@@ -257,24 +253,6 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: ReviewManifest,
     subText: () => formatMessage('The manifest can be edited and refined manually if and where needed.'),
     title: () => formatMessage('Review and generate'),
-  },
-  [ManifestEditorSteps.SELECT_DIALOGS]: {
-    buttons: [
-      cancelButton,
-      backButton,
-      {
-        primary: true,
-        text: () => formatMessage('Next'),
-        onClick: ({ onNext }) => onNext,
-      },
-    ],
-    content: SelectDialogs,
-    editJson: false,
-    subText: () =>
-      formatMessage(
-        'These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.'
-      ),
-    title: () => formatMessage('Select which dialogs are included in the skill manifest'),
   },
   [ManifestEditorSteps.SELECT_TRIGGERS]: {
     buttons: [

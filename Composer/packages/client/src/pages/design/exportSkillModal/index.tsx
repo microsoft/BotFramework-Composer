@@ -55,7 +55,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [skillManifest, setSkillManifest] = useState<Partial<SkillManifestFile>>({});
   const { content = {}, id } = skillManifest;
 
-  const [selectedDialogs, setSelectedDialogs] = useState<any[]>([]);
   const [selectedTriggers, setSelectedTriggers] = useState<any[]>([]);
 
   const editorStep = order[currentStep];
@@ -96,7 +95,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       luFiles,
       qnaFiles,
       selectedTriggers,
-      selectedDialogs,
+      [],
       currentPublishTarget,
       projectId
     );
@@ -130,7 +129,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       luFiles,
       qnaFiles,
       selectedTriggers,
-      selectedDialogs,
+      [],
       currentPublishTarget,
       projectId
     );
@@ -200,11 +199,9 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             manifest={skillManifest}
             projectId={projectId}
             schema={schema}
-            selectedDialogs={selectedDialogs}
             selectedTriggers={selectedTriggers}
             setErrors={setErrors}
             setSchema={setSchema}
-            setSelectedDialogs={setSelectedDialogs}
             setSelectedTriggers={setSelectedTriggers}
             setSkillManifest={setSkillManifest}
             skillManifests={skillManifests}
