@@ -36,6 +36,7 @@ export type BotTemplate = {
   id: string;
   name: string;
   description: string;
+  isMultiBotTemplate?: boolean;
   nodeSupport?: EnvSupport;
   dotnetSupport?: EnvSupport;
   /* absolute path */
