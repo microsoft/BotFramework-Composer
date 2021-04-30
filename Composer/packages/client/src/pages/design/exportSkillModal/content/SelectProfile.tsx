@@ -82,7 +82,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
   value,
   onChange,
   projectId,
-  OnUpdateIsCreateProfileFromSkill,
+  onUpdateIsCreateProfileFromSkill,
 }) => {
   const [publishingTargets, setPublishingTargets] = useState<PublishTarget[]>([]);
   const [currentTarget, setCurrentTarget] = useState<PublishTarget>();
@@ -210,7 +210,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
     <div>
       <CreatePublishProfileDialog
         projectId={projectId}
-        OnUpdateIsCreateProfileFromSkill={OnUpdateIsCreateProfileFromSkill}
+        onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
       />
     </div>
   );

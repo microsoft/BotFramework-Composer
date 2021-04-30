@@ -38,11 +38,11 @@ import {
   getSkillPendingNotificationCardProps,
 } from '../../publish/Notifications';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
+import { getManifestUrl } from '../../../utils/skillManifestUtil';
 
 import { editorSteps, ManifestEditorSteps, order } from './constants';
 import { generateSkillManifest } from './generateSkillManifest';
 import { styles } from './styles';
-import { getManifestUrl } from '../../../utils/skillManifestUtil';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
@@ -85,7 +85,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   );
 
   const [isCreateProfileFromSkill, setIsCreateProfileFromSkill] = useState(false);
-  let publishUpdaterRef = useRef<PublishStatusPollingUpdater>();
+  const publishUpdaterRef = useRef<PublishStatusPollingUpdater>();
   const publishNotificationRef = useRef<Notification>();
   const resetDialog = () => {
     handleDismiss();
@@ -304,7 +304,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             selectedDialogs={selectedDialogs}
             selectedTriggers={selectedTriggers}
             setErrors={setErrors}
-            OnUpdateIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
             setSchema={setSchema}
             setSelectedDialogs={setSelectedDialogs}
             setSelectedTriggers={setSelectedTriggers}
@@ -313,6 +312,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             value={content}
             onChange={(manifestContent) => setSkillManifest({ ...skillManifest, content: manifestContent })}
             onUpdateCallers={setCallers}
+            onUpdateIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
           />
         </div>
         <DialogFooter>
