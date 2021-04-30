@@ -189,6 +189,7 @@ export const publisherDispatcher = () => {
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
+          publishTarget: target,
           accessToken: token,
           metadata: {
             ...metadata,
@@ -254,7 +255,7 @@ export const publisherDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       try {
         const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-        filePersistence.flush();
+        await filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
         set(publishHistoryState(projectId), (publishHistory) => ({
           ...publishHistory,

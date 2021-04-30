@@ -62,8 +62,10 @@ export class OneAuthInstance extends OneAuthBase {
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
   private signedInARMAccount: OneAuth.Account | undefined;
+
   /** Token solely used to fetch tenants */
   private tenantToken: string | undefined;
+  private tenantTokenExpiresOn: number | undefined;
 
   constructor() {
     super();
@@ -192,13 +194,18 @@ export class OneAuthInstance extends OneAuthBase {
         this.initialize();
       }
 
-      if (!this.signedInARMAccount || !this.tenantToken) {
+      if (
+        !this.signedInARMAccount ||
+        !this.tenantToken ||
+        (this.tenantTokenExpiresOn && Date.now() >= this.tenantTokenExpiresOn)
+      ) {
         // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
         log('Logging user into ARM...');
         const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
         const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, signInParams, '');
         this.signedInARMAccount = result.account;
         this.tenantToken = result.credential.value;
+        this.tenantTokenExpiresOn = result.credential.expiresOn;
       }
 
       // call the tenants API
@@ -218,47 +225,64 @@ export class OneAuthInstance extends OneAuthBase {
     if (!this.initialized) {
       this.initialize();
     }
-    // sign in arm account.
+
+    // if not signed into the ARM account, sign in.
     if (!this.signedInARMAccount) {
       const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
       const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, signInParams, '');
+      if (!result.account) {
+        return '';
+      }
+
       this.signedInARMAccount = result.account;
     }
-    if (this.signedInARMAccount) {
-      try {
-        log('Getting an ARM token for tenant %s', tenantId);
-        const tokenParams = new this.oneAuth.AuthParameters(
-          DEFAULT_AUTH_SCHEME,
-          `https://login.microsoftonline.com/${tenantId}`,
-          ARM_RESOURCE,
-          '',
-          ''
-        );
-        const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
+
+    // try to get the tenant token silently
+    try {
+      log('Getting an ARM token for tenant %s', tenantId);
+      const tokenParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        `https://login.microsoftonline.com/${tenantId}`,
+        ARM_RESOURCE,
+        '',
+        ''
+      );
+      const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
+      if (result.credential.value && Date.now() <= result.credential.expiresOn) {
         log('Acquired ARM token for tenant: %s', result.credential.value);
         return result.credential.value;
-      } catch (e) {
-        if (e.error?.status === Status.InteractionRequired) {
-          // try again but interactively
-          log('Acquiring ARM token failed: Interaction required. Trying again interactively to get access token.');
-          const tokenParams = new this.oneAuth.AuthParameters(
-            DEFAULT_AUTH_SCHEME,
-            `https://login.microsoftonline.com/${tenantId}`,
-            ARM_RESOURCE,
-            '',
-            ''
-          );
-          const result = await this.oneAuth.acquireCredentialInteractively(this.signedInARMAccount.id, tokenParams, '');
-          if (result.credential && result.credential.value) {
-            log('Acquired access token interactively. %s', result.credential.value);
-            return result.credential.value;
-          }
-        }
-        log('There was an error trying to get an ARM token for tenant %s: %O', tenantId, e);
+      }
+    } catch (e) {
+      if (e.error?.status === Status.InteractionRequired) {
+        log(
+          'There was an error trying to silently get an ARM token for tenant %s: %O. Trying again interactively to get access token.',
+          tenantId,
+          e
+        );
+      } else {
         throw e;
       }
     }
-    return '';
+
+    // get the tenant token interactively
+    try {
+      const tokenParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        `https://login.microsoftonline.com/${tenantId}`,
+        ARM_RESOURCE,
+        '',
+        ''
+      );
+      const result = await this.oneAuth.acquireCredentialInteractively(this.signedInARMAccount.id, tokenParams, '');
+      if (!result.credential.value) {
+        throw new Error('Interactive sign on returned an empty credential value.');
+      }
+      log('Acquired ARM token for tenant: %s', result.credential.value);
+      return result.credential.value;
+    } catch (e) {
+      log('There was an error trying to get an ARM token interactively for tenant %s: %O', tenantId, e);
+      throw e;
+    }
   }
 
   public shutdown() {
@@ -275,6 +299,7 @@ export class OneAuthInstance extends OneAuthBase {
     this.signedInAccount = undefined;
     this.signedInARMAccount = undefined;
     this.tenantToken = undefined;
+    this.tenantTokenExpiresOn = undefined;
     log('Signed out user.');
   }
 
