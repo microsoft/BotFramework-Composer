@@ -122,7 +122,6 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       skill: {},
       skillConfiguration: {
-        isSkill: false,
         allowedCallers: ['*'],
       },
       defaultLanguage: 'en-us',
