@@ -14,7 +14,7 @@ import { enableOrchestratorDialog } from '../../constants';
 
 import { importOrchestrator } from './helper';
 
-const learnMoreUrl = 'https://aka.ms/bf-orchestrator';
+const learnMoreUrl = 'https://aka.ms/LearnMoreOrchestrator';
 
 type OrchestratorProps = {
   projectId: string;
