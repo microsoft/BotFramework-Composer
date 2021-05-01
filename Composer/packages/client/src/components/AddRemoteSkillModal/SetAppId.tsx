@@ -19,9 +19,9 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import { settingsState, botDisplayNameState } from '../../recoilModel';
 
-import { buttonStyle } from './CreateSkillModal';
+const buttonStyle = { root: { marginLeft: '8px' } };
 
-type PreparatoryWorkDialogProps = {
+type SetAppIdProps = {
   projectId: string;
   onDismiss: () => void;
   onNext: (appId: string, targetName: string) => void;
@@ -93,7 +93,7 @@ type CustomLabelProps = {
 };
 const CustomLabel: React.FC<CustomLabelProps> = ({ label, description, required = false }) => {
   return (
-    <Stack style={{ display: 'flex', flexDirection: 'row' }}>
+    <Stack horizontal verticalAlign="center">
       <Label
         required={required}
         styles={{ root: { marginRight: '4px', selectors: { '::after': { paddingRight: '0px' } } } }}
@@ -127,17 +127,17 @@ const renderMicrosoftAppId = (MicrosoftAppId: string, label: string, description
         <IconButton
           iconProps={{ iconName: 'copy' }}
           styles={{ icon: { fontSize: FontSizes.size12, color: CommunicationColors.primary } }}
-          onClick={() => navigator.clipboard.writeText(MicrosoftAppId)}
+          onClick={() => navigator.clipboard.writeText(MicrosoftAppId || '')}
         />
       </div>
     </Fragment>
   );
 };
-export const PreparatoryWorkDialog: React.FC<PreparatoryWorkDialogProps> = (props) => {
+export const SetAppId: React.FC<SetAppIdProps> = (props) => {
   const { projectId, onDismiss, onNext, onGotoCreateProfile } = props;
   const settings = useRecoilValue(settingsState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
-  const { publishTargets, MicrosoftAppId } = settings;
+  const { publishTargets = [], MicrosoftAppId = '' } = settings;
   const publishTargetOptions: IDropdownOption[] = publishTargets.map((target) => ({
     key: target.name,
     text: target.name,
@@ -174,11 +174,11 @@ export const PreparatoryWorkDialog: React.FC<PreparatoryWorkDialogProps> = (prop
                 />
                 <Dropdown
                   options={publishTargetOptions}
-                  placeholder="Select an option"
+                  placeholder={formatMessage('Select an option')}
                   selectedKey={currentTargetName}
                   styles={{ root: { width: '187px' } }}
                   onChange={(_, option) => {
-                    setCurrentTargetName(option?.key);
+                    setCurrentTargetName(option?.key as string);
                   }}
                 />
               </div>

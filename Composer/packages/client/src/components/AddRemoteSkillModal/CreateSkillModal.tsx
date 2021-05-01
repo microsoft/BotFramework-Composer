@@ -35,7 +35,7 @@ import { PublishProfileDialog } from '../../pages/botProject/create-publish-prof
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
-import { PreparatoryWorkDialog } from './PreparatoryWorkDialog';
+import { SetAppId } from './SetAppId';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -92,13 +92,33 @@ const getTriggerFormData = (intent: string, content: string): TriggerFormData =>
   regEx: '',
 });
 
-export const buttonStyle = { root: { marginLeft: '8px' } };
+const buttonStyle = { root: { marginLeft: '8px' } };
 
+const setAppIdDialogStyles = {
+  dialog: {
+    title: {
+      fontWeight: FontWeights.bold,
+      fontSize: FontSizes.size20,
+      paddingTop: '14px',
+      paddingBottom: '11px',
+    },
+    subText: {
+      fontSize: FontSizes.size14,
+      marginBottom: '0px',
+    },
+  },
+  modal: {
+    main: {
+      maxWidth: '80% !important',
+      width: '960px !important',
+    },
+  },
+};
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
 
-  const [title, setTitle] = useState(addSkillDialog.PREPARATORY_WORK);
-  const [showPreparatoryWorkDialog, setShowPreparatoryWorkDialog] = useState(true);
+  const [title, setTitle] = useState(addSkillDialog.SET_APP_ID);
+  const [showSetAppIdDialog, setshowSetAppIdDialog] = useState(true);
   const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
     manifestUrl: '',
@@ -108,10 +128,10 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
   const [showDetail, setShowDetail] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [dialogHidden, setDialogHidden] = useState(false);
+  const [createSkillDialogHidden, setCreateSkillDialogHidden] = useState(false);
 
   const publishTypes = useRecoilValue(publishTypesState(projectId));
-  const { languages, luFeatures, runtime, publishTargets } = useRecoilValue(settingsState(projectId));
+  const { languages, luFeatures, runtime, publishTargets = [] } = useRecoilValue(settingsState(projectId));
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateRecognizer, setPublishTargets } = useRecoilValue(dispatcherState);
@@ -177,7 +197,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const handleDismiss = () => {
-    setShowPreparatoryWorkDialog(true);
+    setshowSetAppIdDialog(true);
     onDismiss();
   };
 
@@ -194,7 +214,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       projectId
     );
 
-    setShowPreparatoryWorkDialog(false);
+    setshowSetAppIdDialog(false);
     setTitle({
       subText: '',
       title: addSkillDialog.SKILL_MANIFEST_FORM.title,
@@ -202,7 +222,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const handleGotoCreateProfile = () => {
-    isShowAuthDialog(true) ? setShowAuthDialog(true) : setDialogHidden(true);
+    isShowAuthDialog(true) ? setShowAuthDialog(true) : setCreateSkillDialogHidden(true);
   };
 
   useEffect(() => {
@@ -214,41 +234,19 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     }
   }, [skillManifest]);
 
-  const PreparatoryWorkStyles = {
-    dialog: {
-      title: {
-        fontWeight: FontWeights.bold,
-        fontSize: FontSizes.size20,
-        paddingTop: '14px',
-        paddingBottom: '11px',
-      },
-      subText: {
-        fontSize: FontSizes.size14,
-        marginBottom: '0px',
-      },
-    },
-    modal: {
-      main: {
-        // maxWidth: '416px !important',
-        maxWidth: '80% !important',
-        width: '960px !important',
-      },
-    },
-  };
-
   return (
     <Fragment>
       <DialogWrapper
-        dialogType={showPreparatoryWorkDialog ? DialogTypes.Customer : DialogTypes.CreateFlow}
-        isOpen={!dialogHidden}
+        dialogType={showSetAppIdDialog ? DialogTypes.Customer : DialogTypes.CreateFlow}
+        isOpen={!createSkillDialogHidden}
         onDismiss={handleDismiss}
         {...title}
-        customerStyle={showPreparatoryWorkDialog ? PreparatoryWorkStyles : { dialog: {}, modal: {} }}
+        customerStyle={showSetAppIdDialog ? setAppIdDialogStyles : { dialog: {}, modal: {} }}
       >
-        {showPreparatoryWorkDialog && (
+        {showSetAppIdDialog && (
           <Fragment>
             <Separator styles={{ root: { marginBottom: '20px' } }} />
-            <PreparatoryWorkDialog
+            <SetAppId
               projectId={projectId}
               onDismiss={handleDismiss}
               onGotoCreateProfile={handleGotoCreateProfile}
@@ -276,7 +274,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             onUpdateTitle={setTitle}
           />
         )}
-        {!showIntentSelectDialog && !showPreparatoryWorkDialog && (
+        {!showIntentSelectDialog && !showSetAppIdDialog && (
           <Fragment>
             <div style={{ marginBottom: '16px' }}>
               {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
@@ -368,17 +366,17 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
         <AuthDialog
           needGraph
           next={() => {
-            setDialogHidden(true);
+            setCreateSkillDialogHidden(true);
           }}
           onDismiss={() => {
             setShowAuthDialog(false);
           }}
         />
       )}
-      {dialogHidden ? (
+      {createSkillDialogHidden ? (
         <PublishProfileDialog
           closeDialog={() => {
-            setDialogHidden(false);
+            setCreateSkillDialogHidden(false);
           }}
           current={null}
           projectId={projectId}

@@ -318,7 +318,7 @@ export const MultiLanguagesDialog = {
 };
 
 export const addSkillDialog = {
-  get PREPARATORY_WORK() {
+  get SET_APP_ID() {
     return {
       title: formatMessage('Before we begin'),
       subText: formatMessage('Please setup the following to ensure we can connect to your remote skill successfully'),
