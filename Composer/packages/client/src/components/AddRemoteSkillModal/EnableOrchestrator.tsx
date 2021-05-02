@@ -31,7 +31,7 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
     setEnableOrchestrator(check);
   };
   return (
-    <Stack>
+    <Stack data-testid="orchestrator-skill">
       <StackItem styles={{ root: { height: 300, width: '60%' } }}>
         <div style={{ marginBottom: '16px' }}>
           {enableOrchestratorDialog.content}
@@ -51,6 +51,7 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
         <Stack.Item align="end">
           <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
           <PrimaryButton
+            data-testid="import-orchestrator"
             text={formatMessage('Continue')}
             onClick={(event) => {
               onSubmit(event, enableOrchestrator);
