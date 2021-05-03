@@ -12,7 +12,7 @@ import { ManageService } from '../ManageService/ManageService';
 import { currentProjectIdState } from '../../recoilModel';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
-const QNA_REGIONS = [{ key: 'westus', text: 'westus' }];
+const QNA_REGIONS = [{ key: 'westus', text: 'West US' }];
 const QNA_TIERS = [
   { key: 'free', text: 'Free' },
   { key: 'paid', text: 'Paid' },
