@@ -39,6 +39,7 @@ import {
   warnAboutDotNetState,
   warnAboutFunctionsState,
   settingsState,
+  orchestratorForSkillsDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -166,6 +167,7 @@ export const projectDispatcher = () => {
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
         navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
+        callbackHelpers.set(orchestratorForSkillsDialogState, true);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
