@@ -15,6 +15,7 @@ import { OpenConfirmModal } from '@bfc/ui-shared';
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { isShowAuthDialog } from '../../utils/auth';
+import { useLocation } from '../../utils/hooks';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
 import { tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
@@ -47,7 +48,6 @@ const editPublishProfile = {
 
 type PublishTargetsProps = {
   projectId: string;
-  completePartial?: boolean;
   scrollToSectionId?: string;
 };
 
@@ -59,20 +59,25 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
   const [dialogHidden, setDialogHidden] = useState(true);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
-
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
 
+  const { location } = useLocation();
+
   useEffect(() => {
-    if (props.completePartial && publishTargets && publishTargets.length > 0) {
-      setCurrent({ item: publishTargets[0], index: 0 });
-      if (isShowAuthDialog(true)) {
-        setShowAuthDialog(true);
-      } else {
-        setDialogHidden(false);
+    if (location.hash === '#completePublishProfile') {
+      if (publishTargets && publishTargets.length > 0) {
+        // clear the hash so that the dialog doesn't open again.
+        window.location.hash = '';
+        setCurrent({ item: publishTargets[0], index: 0 });
+        if (isShowAuthDialog(true)) {
+          setShowAuthDialog(true);
+        } else {
+          setDialogHidden(false);
+        }
       }
     }
-  }, [props.completePartial, publishTargets]);
+  }, []);
 
   useEffect(() => {
     if (projectId) {
