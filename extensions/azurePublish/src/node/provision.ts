@@ -333,8 +333,8 @@ export class BotProjectProvision {
               location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname,
               workerRuntime: config.workerRuntime,
-              appId: config.appId,
-              appPwd: config.appPassword,
+              appId: provisionResults.appId,
+              appPwd: provisionResults.appPassword,
             });
             provisionResults.webApp = {
               hostname: functionsHostName,
