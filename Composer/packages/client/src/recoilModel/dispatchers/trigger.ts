@@ -171,7 +171,11 @@ export const triggerDispatcher = () => {
   );
 
   const createQnATrigger = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, dialogId: string) => {
+    (callbackHelpers: CallbackInterface) => async (
+      projectId: string,
+      dialogId: string,
+      autoSelectTrigger?: boolean
+    ) => {
       try {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
@@ -183,7 +187,7 @@ export const triggerDispatcher = () => {
           (item) => item.$kind === SDKKinds.OnQnAMatch
         );
         if (!existedQnATrigger) {
-          await dispatcher.createTrigger(projectId, dialogId, defaultQnATriggerData);
+          await dispatcher.createTrigger(projectId, dialogId, defaultQnATriggerData, autoSelectTrigger);
         }
       } catch (ex) {
         setError(callbackHelpers, ex);

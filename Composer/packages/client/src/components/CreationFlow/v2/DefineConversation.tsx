@@ -15,7 +15,7 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
@@ -29,6 +29,7 @@ import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSucces
 import { dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -293,6 +294,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = await getAliasFromPayload(source, payload);
         }
       }
+      TelemetryClient.track('CreationExecuted', {
+        runtimeChoice: dataToSubmit?.runtimeType,
+        runtimeLanguage: dataToSubmit?.runtimeLanguage as FeedType,
+        isPva: isImported,
+        isAbs: !!dataToSubmit?.source,
+      });
       onSubmit({ ...dataToSubmit }, templateId || '');
     },
     [hasErrors, formData]
