@@ -200,6 +200,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           status: 200,
           result: {
             message: 'Running',
+            port,
             endpointURL: url,
           },
         };
