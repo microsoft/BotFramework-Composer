@@ -52,15 +52,15 @@ export const Tips = {
 export const LUIS_REGIONS: IDropdownOption[] = [
   {
     key: 'westus',
-    text: formatMessage('westus'),
+    text: formatMessage('West US'),
   },
   {
     key: 'westeurope',
-    text: formatMessage('westeurope'),
+    text: formatMessage('West Europe'),
   },
   {
     key: 'australiaeast',
-    text: formatMessage('australiaeast'),
+    text: formatMessage('Australia East'),
   },
 ];
 

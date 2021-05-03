@@ -429,7 +429,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
                 ),
                 a2: ({ children }) => (
                   <Link
-                    key="luis-endpoint-key-info"
+                    key="luis-endpoint-key-limits-info"
                     href={'https://aka.ms/composer-settings-luislimits'}
                     target="_blank"
                   >
