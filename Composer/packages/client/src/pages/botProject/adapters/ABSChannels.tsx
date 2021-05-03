@@ -118,6 +118,23 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
+  const getTokenInteractively = async (tenantId: string) => {
+    let newtoken = '';
+    try {
+      // if tenantId is present, use this to retrieve the arm token.
+      // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
+      if (tenantId) {
+        newtoken = await AuthClient.getARMTokenForTenant(tenantId);
+      } else {
+        newtoken = await AuthClient.getAccessToken(armScopes);
+      }
+    } catch (error) {
+      setErrorMessage(error.message || error.toString());
+      setCurrentResource(undefined);
+    }
+    return newtoken;
+  };
+
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
@@ -143,18 +160,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           }
           newtoken = getTokenFromCache('accessToken');
         } else {
-          try {
-            // if tenantId is present, use this to retrieve the arm token.
-            // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
-            if (config.tenantId) {
-              newtoken = await AuthClient.getARMTokenForTenant(config.tenantId);
-            } else {
-              newtoken = await AuthClient.getAccessToken(armScopes);
-            }
-          } catch (error) {
-            setErrorMessage(error.message || error.toString());
-            setCurrentResource(undefined);
-          }
+          newtoken = await getTokenInteractively(config.tenantId);
         }
         setToken(newtoken);
       }
@@ -343,16 +349,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         }
         newtoken = getTokenFromCache('accessToken');
       } else {
-        try {
-          if (currentResource.tenantId) {
-            newtoken = await AuthClient.getARMTokenForTenant(currentResource.tenantId);
-          } else {
-            newtoken = await AuthClient.getAccessToken(armScopes);
-          }
-        } catch (error) {
-          setErrorMessage(error.message || error.toString());
-          setCurrentResource(undefined);
-        }
+        newtoken = await getTokenInteractively(currentResource.tenantId);
       }
       setToken(newtoken);
     }
