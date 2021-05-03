@@ -162,14 +162,6 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       if (profile) {
         const config = JSON.parse(profile.configuration);
 
-        setCurrentResource({
-          microsoftAppId: config?.settings?.MicrosoftAppId,
-          resourceName: config.botName || config.name,
-          resourceGroupName: config.resourceGroup || config.botName || config.name,
-          tenantId: config.tenantId,
-          subscriptionId: config.subscriptionId,
-        });
-
         let newtoken = '';
         if (userShouldProvideTokens()) {
           if (isShowAuthDialog(false)) {
@@ -180,6 +172,16 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           newtoken = await getTokenInteractively(config.tenantId);
         }
         setToken(newtoken);
+
+        if (newtoken) {
+          setCurrentResource({
+            microsoftAppId: config?.settings?.MicrosoftAppId,
+            resourceName: config.botName || config.name,
+            resourceGroupName: config.resourceGroup || config.botName || config.name,
+            tenantId: config.tenantId,
+            subscriptionId: config.subscriptionId,
+          });
+        }
       }
     }
   };
