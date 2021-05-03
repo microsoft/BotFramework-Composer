@@ -65,7 +65,6 @@ export class AppUpdater extends EventEmitter {
       this.emit('update-in-progress', this.updateInfo);
       return;
     }
-
     this.setFeedURL();
     this.determineUpdatePath();
     autoUpdater.checkForUpdates();
