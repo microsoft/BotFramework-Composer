@@ -749,7 +749,7 @@ export const ManageService = (props: ManageServiceProps) => {
     );
   };
 
-  const subscriptionSelector = () => {
+  const renderSubscriptionSelectionStep = () => {
     return (
       <div>
         <div css={dialogBodyStyles}>
@@ -818,7 +818,7 @@ export const ManageService = (props: ManageServiceProps) => {
         if (nextAction === 'choose') {
           return renderChooseResourceStep();
         }
-        return subscriptionSelector();
+        return renderSubscriptionSelectionStep();
       }
       case 'resourceCreation':
         return renderResourseCreatorStep();
