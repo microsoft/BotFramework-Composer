@@ -82,7 +82,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         }
       }
     }
-  }, []);
+  }, [location, publishTargets]);
 
   useEffect(() => {
     if (projectId) {
