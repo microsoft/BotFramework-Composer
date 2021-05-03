@@ -25,10 +25,10 @@ import { navigateTo } from '../../../utils/navigation';
 import { botDisplayNameState, settingsState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';
-import { armScopes } from '../../../constants';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
+import { armScopes } from '../../../constants';
 import {
   tableHeaderRow,
   tableRow,
@@ -63,6 +63,7 @@ type AzureResourcePointer = {
   resourceName: string;
   resourceGroupName: string;
   microsoftAppId: string;
+  tenantId: string;
 };
 
 type AzureChannelStatus = {
@@ -122,27 +123,40 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       TelemetryClient.track('ConnectionsAddNewProfile');
       navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
     } else {
-      let newtoken = '';
-      if (userShouldProvideTokens()) {
-        if (isShowAuthDialog(false)) {
-          setShowAuthDialog(true);
-        }
-        newtoken = getTokenFromCache('accessToken');
-      } else {
-        newtoken = await AuthClient.getAccessToken(armScopes);
-      }
-      setToken(newtoken);
-
       // identify the publishing profile in the list
       const profile = publishTargets?.find((p) => p.name === opt.key);
       if (profile) {
         const config = JSON.parse(profile.configuration);
+
         setCurrentResource({
           microsoftAppId: config?.settings?.MicrosoftAppId,
           resourceName: config.botName || config.name,
           resourceGroupName: config.resourceGroup || config.botName || config.name,
+          tenantId: config.tenantId,
           subscriptionId: config.subscriptionId,
         });
+
+        let newtoken = '';
+        if (userShouldProvideTokens()) {
+          if (isShowAuthDialog(false)) {
+            setShowAuthDialog(true);
+          }
+          newtoken = getTokenFromCache('accessToken');
+        } else {
+          try {
+            // if tenantId is present, use this to retrieve the arm token.
+            // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
+            if (config.tenantId) {
+              newtoken = await AuthClient.getARMTokenForTenant(config.tenantId);
+            } else {
+              newtoken = await AuthClient.getAccessToken(armScopes);
+            }
+          } catch (error) {
+            setErrorMessage(error.message || error.toString());
+            setCurrentResource(undefined);
+          }
+        }
+        setToken(newtoken);
       }
     }
   };
@@ -321,16 +335,27 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const hasAuth = async () => {
-    let newtoken = '';
-    if (userShouldProvideTokens()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
+    if (currentResource) {
+      let newtoken = '';
+      if (userShouldProvideTokens()) {
+        if (isShowAuthDialog(false)) {
+          setShowAuthDialog(true);
+        }
+        newtoken = getTokenFromCache('accessToken');
+      } else {
+        try {
+          if (currentResource.tenantId) {
+            newtoken = await AuthClient.getARMTokenForTenant(currentResource.tenantId);
+          } else {
+            newtoken = await AuthClient.getAccessToken(armScopes);
+          }
+        } catch (error) {
+          setErrorMessage(error.message || error.toString());
+          setCurrentResource(undefined);
+        }
       }
-      newtoken = getTokenFromCache('accessToken');
-    } else {
-      newtoken = await AuthClient.getAccessToken(armScopes);
+      setToken(newtoken);
     }
-    setToken(newtoken);
   };
 
   const toggleService = (channel) => {
