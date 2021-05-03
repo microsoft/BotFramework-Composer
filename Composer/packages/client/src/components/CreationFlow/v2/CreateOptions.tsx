@@ -19,8 +19,9 @@ import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy } from '../../../constants';
 import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
-import { userHasNodeInstalledState } from '../../../recoilModel';
+import { creationFlowTypeState, userHasNodeInstalledState } from '../../../recoilModel';
 import { InstallDepModal } from '../../InstallDepModal';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 import { CreateBotV2 } from './CreateBot';
 
@@ -40,6 +41,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
   const { templates, onDismiss, onNext, onJumpToOpenModal, fetchReadMe } = props;
   const [showNodeModal, setShowNodeModal] = useState(false);
   const userHasNode = useRecoilValue(userHasNodeInstalledState);
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
 
   useEffect(() => {
     // open bot directly if alias exist.
@@ -65,6 +67,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         return;
       }
     }
+    TelemetryClient.track('NewBotDialogOpened', {
+      isSkillBot: creationFlowType === 'Skill',
+      fromAbsHandoff: false,
+    });
     setIsOpenCreateModal(true);
   }, [props.location?.search]);
   const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
@@ -100,6 +106,10 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
 
   const handleJumpToNext = () => {
     if (option === 'Create') {
+      TelemetryClient.track('NewBotDialogOpened', {
+        isSkillBot: false,
+        fromAbsHandoff: true,
+      });
       setIsOpenCreateModal(true);
     } else {
       onJumpToOpenModal(props.location?.search);
@@ -121,7 +131,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
         dialogType={DialogTypes.Customer}
         onDismiss={onDismiss}
       >
-        <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
+        <ChoiceGroup required defaultSelectedKey="Create" options={options} onChange={handleChange} />
         <DialogFooter>
           <PrimaryButton data-testid="NextStepButton" text={formatMessage('Open')} onClick={handleJumpToNext} />
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />

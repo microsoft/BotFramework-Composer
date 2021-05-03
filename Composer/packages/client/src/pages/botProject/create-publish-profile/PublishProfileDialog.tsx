@@ -184,6 +184,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
         // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {
+          TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
           const notification = createNotification({
             type: 'error',
             title: formatMessage('Error provisioning.'),
