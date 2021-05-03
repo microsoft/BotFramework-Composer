@@ -121,7 +121,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
       <div css={title}>{formatMessage('Microsoft App ID')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          'A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and Password will be created when you provision resources for this bot. To add and App ID and Password from a publishing profile you’ve created, click the button below. <a>Learn more.</a>',
+          'An App ID is used for communication between your bot and skills, services, websites or applications. An App ID is created when you provision resources for your bot. If you’ve created an App ID already, you can use that ID instead. <a>Learn more.</a>',
           {
             a: ({ children }) => (
               <Link key="app-id-settings-page" href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
