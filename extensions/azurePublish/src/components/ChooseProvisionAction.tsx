@@ -75,6 +75,7 @@ const LearnMoreLink = styled(Link)`
 const CreateActionContent = () => {
   return (
     <Content>
+      <Title>{formatMessage('Create new resources')}</Title>
       <Summary>
         <Text>
           {formatMessage(
