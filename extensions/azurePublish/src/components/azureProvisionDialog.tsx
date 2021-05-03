@@ -13,11 +13,13 @@ import {
   getARMTokenForTenant,
   useLocalStorage,
   useTelemetryClient,
+  TelemetryClient,
+  useApplicationApi,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { DeployLocation, AzureTenant } from '@botframework-composer/types';
+import { DeployLocation, AzureTenant, Notification } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { LoadingSpinner, ProvisionHandoff } from '@bfc/ui-shared';
+import { dialogStyle, LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -77,7 +79,6 @@ type ProvisionFormData = {
 type ProvisonActionsStylingProps = {
   showSignout: boolean;
 };
-
 const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
@@ -268,6 +269,17 @@ const getHostname = (config) => {
   }
 };
 
+const getLogoutNotificationSettings = (description: string, type: Notification['type']) => {
+  return {
+    title: '',
+    retentionTime: 5000,
+    description: description,
+    type,
+    onRenderCardContent: (props) => (
+      <div style={{ padding: '0 16px 16px 16px', fontSize: '12px' }}>{props.description}</div>
+    ),
+  };
+};
 const getDefaultFormData = (currentProfile, defaults) => {
   return {
     creationType: defaults.creationType ?? 'create',
@@ -346,6 +358,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [handoffInstructions, setHandoffInstructions] = useState<string>('');
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const { addNotification } = useApplicationApi();
   const updateHandoffInstructions = (resources) => {
     const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
     const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
@@ -739,21 +752,53 @@ export const AzureProvisionDialog: React.FC = () => {
     closeDialog();
   }, [importConfig]);
 
+  const signoutAndNotify = useCallback(async () => {
+    const isSignedOut = await logOut();
+    if (isSignedOut) {
+      addNotification(
+        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info')
+      );
+      closeDialog();
+    } else {
+      addNotification(
+        getLogoutNotificationSettings(
+          formatMessage(
+            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.'
+          ),
+          'error'
+        )
+      );
+    }
+  }, [addNotification]);
+
   const onRenderSecondaryText = useMemo(
     () => (props: IPersonaProps) => {
       return (
         <div
+          role="button"
           style={{ color: 'blue', cursor: 'pointer' }}
-          onClick={() => {
-            closeDialog();
-            logOut();
+          onClick={async () => {
+            const confirmed = await OpenConfirmModal(
+              formatMessage('Sign out of Azure'),
+              formatMessage(
+                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
+              ),
+              {
+                onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
+                confirmText: formatMessage('Sign out'),
+                cancelText: formatMessage('Cancel'),
+              }
+            );
+            if (confirmed) {
+              await signoutAndNotify();
+            }
           }}
         >
           {props.secondaryText}
         </div>
       );
     },
-    []
+    [signoutAndNotify]
   );
 
   const isNextDisabled = useMemo(() => {
@@ -1195,6 +1240,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Create')}
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
+                telemetryClient?.track('CreateProvisionStarted', { newResourceGroup: isNewResourceGroup });
                 onSubmit({
                   tenantId: formData.tenantId,
                   subscription: formData.subscriptionId,

@@ -10,6 +10,7 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
+import { Notification } from '@botframework-composer/types';
 
 import { useInterval } from '../../utils/hooks';
 
@@ -121,24 +122,8 @@ const getShimmerStyles = {
   ],
 };
 // -------------------- NotificationCard -------------------- //
-
-export type NotificationType = 'info' | 'warning' | 'error' | 'pending' | 'success';
-
-export type Link = {
-  label: string;
-  onClick: () => void;
-};
-
-export type CardProps = {
-  type: NotificationType;
-  title: string;
-  description?: string;
-  retentionTime?: number;
-  link?: Link;
-  read?: boolean;
-  hidden?: boolean;
-  onRenderCardContent?: ((props: CardProps) => JSX.Element) | React.FC<any>;
-};
+export type CardProps = Notification;
+export type NotificationType = Notification['type'];
 
 export type NotificationProps = {
   id: string;
