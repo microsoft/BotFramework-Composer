@@ -35,9 +35,6 @@
   "a_language_understanding_intelligent_service_luis__348b281": {
     "message": "<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>."
   },
-  "a_microsoft_app_id_is_required_for_your_local_azur_eb7844c2": {
-    "message": "A Microsoft App ID is required for your local Azure resources. If you’ve created an App ID already, you can add here. If not, your App ID and Password will be created when you provision resources for this bot. To add and App ID and Password from a publishing profile you’ve created, click the button below. <a>Learn more.</a>"
-  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -280,6 +277,9 @@
   },
   "almost_there_f90939cb": {
     "message": "Almost there!"
+  },
+  "an_app_id_is_used_for_communication_between_your_b_9bed41ac": {
+    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. An App ID is created when you provision resources for your bot. If you’ve created an App ID already, you can use that ID instead. <a>Learn more.</a>"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
@@ -1337,11 +1337,11 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
   },
-  "enable_orchestrator_as_the_recognizer_at_the_root__1de64c98": {
-    "message": "Enable orchestrator as the recognizer at the root dialog to add this skill"
+  "enable_orchestrator_as_the_recognizer_for_routing__a914d9ba": {
+    "message": "Enable Orchestrator as the recognizer for routing to other skills"
   },
-  "enable_orchestrator_cdbbd2c5": {
-    "message": "Enable Orchestrator"
+  "enable_orchestrator_recognizer_300dd83a": {
+    "message": "Enable Orchestrator Recognizer"
   },
   "enable_speech_e30d6a2a": {
     "message": "Enable Speech"
@@ -2090,8 +2090,8 @@
   "learn_more_about_manifests_6e7c364b": {
     "message": "Learn more about manifests"
   },
-  "learn_more_about_orchestractor_3bfa61e1": {
-    "message": "Learn more about Orchestractor"
+  "learn_more_about_orchestrator_c070e031": {
+    "message": "Learn more about Orchestrator"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
@@ -2423,8 +2423,8 @@
   "msg_bf173fef": {
     "message": "{ msg }"
   },
-  "multi_bot_projects_work_best_with_the_orchestrator_8b80e480": {
-    "message": "Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level."
+  "multi_bot_projects_work_best_with_the_orchestrator_86fc19e3": {
+    "message": "Multi-bot projects work best with the Orchestrator recognizer set at the dispatching dialog (typically the root dialog). Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that handles the intent. Orchestrator does not support entity extraction. If you plan to combine entity extraction and routing at the root dialog, use LUIS instead."
   },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
