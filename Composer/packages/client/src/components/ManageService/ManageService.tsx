@@ -506,8 +506,7 @@ export const ManageService = (props: ManageServiceProps) => {
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
             {formatMessage(
-              'Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. ',
-              { service: props.serviceName }
+              'Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. '
             )}
             {props.learnMore ? (
               <Link href={props.learnMore} target={'_blank'}>

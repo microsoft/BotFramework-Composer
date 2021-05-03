@@ -407,8 +407,8 @@
   "audio_card_8587cf83": {
     "message": "Audio card"
   },
-  "australiaeast_f3227a31": {
-    "message": "australiaeast"
+  "australia_east_b7af6cc": {
+    "message": "Australia East"
   },
   "authentication_error_39e996c5": {
     "message": "Authentication Error"
@@ -3335,11 +3335,11 @@
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
   },
-  "select_your_azure_directory_then_choose_the_subscr_69776814": {
-    "message": "Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. "
-  },
   "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
     "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+  },
+  "select_your_azure_directory_then_choose_the_subscr_8c3aa61": {
+    "message": "Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use."
   },
   "select_your_azure_directory_then_choose_the_subscr_e3d67edf": {
     "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource. "
@@ -4127,11 +4127,11 @@
   "welcome_to_composer_7147714a": {
     "message": "Welcome to Composer!"
   },
-  "westeurope_cabf9688": {
-    "message": "westeurope"
+  "west_europe_75ac94f4": {
+    "message": "West Europe"
   },
-  "westus_dc50d800": {
-    "message": "westus"
+  "west_us_51d3fdbb": {
+    "message": "West US"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
     "message": "What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc."
