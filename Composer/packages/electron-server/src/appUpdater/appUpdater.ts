@@ -22,6 +22,7 @@ export type BreakingUpdateMetaData = {
 let appUpdater: AppUpdater | undefined;
 export class AppUpdater extends EventEmitter {
   private currentAppVersion = app.getVersion();
+
   private checkingForUpdate = false;
   private downloadingUpdate = false;
   private _downloadedUpdate = false;
