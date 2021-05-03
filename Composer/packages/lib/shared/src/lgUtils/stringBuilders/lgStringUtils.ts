@@ -106,3 +106,17 @@ export const templateBodyItemsToString = (items: TemplateBodyItem[]) =>
       }
     })
     .join('\n');
+
+const templateNameExtractRegex = /\${(?<templateName>.*)(\(.*\))\s*}/;
+const jsonTemplateNameExtractRegex = /\${json\((?<templateName>.*)(\(.*\))\s*}/;
+
+/**
+ * Extracts template name from an LG expression
+ * ${templateName(params)} => templateName
+ * ${json(templateName(params))} => templateName
+ * @param expression Expression to extract template name from.
+ */
+export const extractTemplateNameFromExpression = (expression: string): string | undefined =>
+  expression.startsWith('${json(')
+    ? expression.match(jsonTemplateNameExtractRegex)?.groups?.templateName?.trim()
+    : expression.match(templateNameExtractRegex)?.groups?.templateName?.trim();

@@ -1337,11 +1337,11 @@
   "enable_multi_turn_extraction_8a168892": {
     "message": "Enable multi-turn extraction"
   },
-  "enable_orchestrator_as_the_recognizer_at_the_root__1de64c98": {
-    "message": "Enable orchestrator as the recognizer at the root dialog to add this skill"
+  "enable_orchestrator_as_the_recognizer_for_routing__a914d9ba": {
+    "message": "Enable Orchestrator as the recognizer for routing to other skills"
   },
-  "enable_orchestrator_cdbbd2c5": {
-    "message": "Enable Orchestrator"
+  "enable_orchestrator_recognizer_300dd83a": {
+    "message": "Enable Orchestrator Recognizer"
   },
   "enable_speech_e30d6a2a": {
     "message": "Enable Speech"
@@ -2090,8 +2090,8 @@
   "learn_more_about_manifests_6e7c364b": {
     "message": "Learn more about manifests"
   },
-  "learn_more_about_orchestractor_3bfa61e1": {
-    "message": "Learn more about Orchestractor"
+  "learn_more_about_orchestrator_c070e031": {
+    "message": "Learn more about Orchestrator"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
@@ -2423,8 +2423,8 @@
   "msg_bf173fef": {
     "message": "{ msg }"
   },
-  "multi_bot_projects_work_best_with_the_orchestrator_8b80e480": {
-    "message": "Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level."
+  "multi_bot_projects_work_best_with_the_orchestrator_86fc19e3": {
+    "message": "Multi-bot projects work best with the Orchestrator recognizer set at the dispatching dialog (typically the root dialog). Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that handles the intent. Orchestrator does not support entity extraction. If you plan to combine entity extraction and routing at the root dialog, use LUIS instead."
   },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"

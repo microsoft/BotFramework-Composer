@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgMetaData, LgTemplateRef, LgType } from '@bfc/shared';
+import { LgMetaData, LgTemplateRef, LgType, extractTemplateNameFromExpression } from '@bfc/shared';
 import { LgTemplate, MicrosoftIDialog, ShellApi } from '@botframework-composer/types';
 
 type SerializableLg = {
@@ -44,9 +44,8 @@ export const serializeLgTemplate = (
           ? (lgTemplate.properties[responseType] as string[])
           : ([lgTemplate.properties[responseType]] as string[]);
         for (const subTemplateItem of subTemplateItems) {
-          const matched = subTemplateItem.trim().match(exprRegex);
-          if (matched && matched.length > 1) {
-            const subTemplateId = matched[1];
+          const subTemplateId = extractTemplateNameFromExpression(subTemplateItem.trim());
+          if (subTemplateId) {
             const subTemplate = lgTemplates.find((x) => x.name === subTemplateId);
             if (subTemplate) {
               if (!serializableLg.relatedLgTemplateBodies) {
