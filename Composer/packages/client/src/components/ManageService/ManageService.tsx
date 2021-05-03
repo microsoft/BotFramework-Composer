@@ -59,13 +59,9 @@ type KeyRec = {
   resourceGroup: string;
   key: string;
 };
+
 type Step = 'intro' | 'subscription' | 'resourceCreation' | 'outcome';
-// enum Step {
-//   Intro = 1,
-//   Subscription = 2,
-//   ResourceCreation = 2.1,
-//   Outcome = 3,
-// }
+
 const dropdownStyles = { dropdown: { width: '100%', marginBottom: 10 } };
 const inputStyles = { root: { width: '100%', marginBottom: 10 } };
 const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
