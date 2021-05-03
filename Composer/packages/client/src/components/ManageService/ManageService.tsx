@@ -27,7 +27,6 @@ import { AzureTenant } from '@botframework-composer/types';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { armScopes } from '../../constants';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { dispatcherState } from '../../recoilModel/atoms';
 
@@ -60,12 +59,13 @@ type KeyRec = {
   resourceGroup: string;
   key: string;
 };
-enum Page {
-  Intro = 1,
-  Subscription = 2,
-  ResourceCreation = 2.1,
-  Outcome = 3,
-}
+type Step = 'intro' | 'subscription' | 'resourceCreation' | 'outcome';
+// enum Step {
+//   Intro = 1,
+//   Subscription = 2,
+//   ResourceCreation = 2.1,
+//   Outcome = 3,
+// }
 const dropdownStyles = { dropdown: { width: '100%', marginBottom: 10 } };
 const inputStyles = { root: { width: '100%', marginBottom: 10 } };
 const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
@@ -80,7 +80,7 @@ export const ManageService = (props: ManageServiceProps) => {
 
   const { setApplicationLevelError } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
-  const [tenantId, setTenantId] = useState<string | undefined>(undefined);
+  const [tenantId, setTenantId] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
   const [createResourceGroup, setCreateResourceGroup] = useState<boolean>(false);
   const [newResourceGroupName, setNewResourceGroupName] = useState<string>('');
@@ -100,7 +100,7 @@ export const ManageService = (props: ManageServiceProps) => {
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [keys, setKeys] = useState<KeyRec[]>([]);
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<Step>('intro');
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
   const [outcomeError, setOutcomeError] = useState<boolean>(false);
@@ -141,6 +141,7 @@ export const ManageService = (props: ManageServiceProps) => {
       return [];
     }
   };
+
   useEffect(() => {
     if (!userShouldProvideTokens()) {
       AuthClient.getTenants()
@@ -163,6 +164,7 @@ export const ManageService = (props: ManageServiceProps) => {
         });
     }
   }, []);
+
   useEffect(() => {
     if (tenantId) {
       AuthClient.getARMTokenForTenant(tenantId)
@@ -171,7 +173,6 @@ export const ManageService = (props: ManageServiceProps) => {
           setTenantsErrorMessage(undefined);
         })
         .catch((err) => {
-          setTenantId(undefined);
           setTenantsErrorMessage(
             formatMessage(
               'There was a problem getting the access token for the current Azure directory. {errMessage}',
@@ -184,6 +185,7 @@ export const ManageService = (props: ManageServiceProps) => {
         });
     }
   }, [tenantId]);
+
   useEffect(() => {
     if (token) {
       setAvailableSubscriptions([]);
@@ -216,14 +218,14 @@ export const ManageService = (props: ManageServiceProps) => {
     if (newtoken) {
       setToken(newtoken);
     }
-    setCurrentPage(2);
+    setCurrentStep('subscription');
   };
 
   useEffect(() => {
     // reset the ui
     setSubscription('');
     setKeys([]);
-    setCurrentPage(1);
+    setCurrentStep('intro');
   }, [props.hidden]);
 
   const handleRegionOnChange = (e, value: IDropdownOption | undefined) => {
@@ -323,7 +325,7 @@ export const ManageService = (props: ManageServiceProps) => {
           );
           setOutcomeSummary(<p>{err.message}</p>);
           setOutcomeError(true);
-          setCurrentPage(3);
+          setCurrentStep('outcome');
           setLoading(undefined);
           return;
         }
@@ -373,7 +375,7 @@ export const ManageService = (props: ManageServiceProps) => {
         );
         setOutcomeSummary(<p>{err.message}</p>);
         setOutcomeError(true);
-        setCurrentPage(3);
+        setCurrentStep('outcome');
         setLoading(undefined);
         return;
       }
@@ -407,7 +409,7 @@ export const ManageService = (props: ManageServiceProps) => {
       );
       setOutcomeError(false);
 
-      setCurrentPage(3);
+      setCurrentStep('outcome');
     }
   };
 
@@ -474,7 +476,7 @@ export const ManageService = (props: ManageServiceProps) => {
     );
     setOutcomeError(false);
 
-    setCurrentPage(3);
+    setCurrentStep('outcome');
   };
 
   const performNextAction = () => {
@@ -502,7 +504,7 @@ export const ManageService = (props: ManageServiceProps) => {
     );
   };
 
-  const pageOne = () => {
+  const renderIntroStep = () => {
     return (
       <div>
         <div css={dialogBodyStyles}>
@@ -522,9 +524,9 @@ export const ManageService = (props: ManageServiceProps) => {
           </div>
         </div>
         <DialogFooter>
-          <PrimaryButton disabled={loading !== undefined} text={formatMessage('Next')} onClick={performNextAction} />
+          <PrimaryButton disabled={!!loading} text={formatMessage('Next')} onClick={performNextAction} />
           <DefaultButton
-            disabled={loading !== undefined || showAuthDialog}
+            disabled={!!loading || showAuthDialog}
             text={formatMessage('Cancel')}
             onClick={props.onDismiss}
           />
@@ -533,7 +535,7 @@ export const ManageService = (props: ManageServiceProps) => {
     );
   };
 
-  const chooseResource = () => {
+  const renderChooseResourceStep = () => {
     return (
       <div>
         <div css={dialogBodyStyles}>
@@ -551,7 +553,7 @@ export const ManageService = (props: ManageServiceProps) => {
           <div css={mainElementStyle}>
             <Dropdown
               required
-              disabled={allTenants.length === 1 || tenantId != null}
+              disabled={allTenants.length === 1 || !tenantId || tenantId.trim().length === 0}
               errorMessage={tenantsErrorMessage}
               label={formatMessage('Azure directory')}
               options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
@@ -570,7 +572,7 @@ export const ManageService = (props: ManageServiceProps) => {
                 availableSubscriptions
                   ?.filter((p) => p.subscriptionId && p.displayName)
                   .map((p) => {
-                    return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+                    return { key: p.subscriptionId ?? '', text: p.displayName ?? formatMessage('Unnamed') };
                   }) ?? []
               }
               placeholder={formatMessage('Select one')}
@@ -610,23 +612,19 @@ export const ManageService = (props: ManageServiceProps) => {
         </div>
         <DialogFooter>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
-          <DefaultButton
-            disabled={loading !== undefined}
-            text={formatMessage('Back')}
-            onClick={() => setCurrentPage(1)}
-          />
+          <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
-            disabled={loading !== undefined || !(region && key)}
+            disabled={!!loading || !(region && key)}
             text={formatMessage('Next')}
             onClick={chooseExistingKey}
           />
-          <DefaultButton disabled={loading !== undefined} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton disabled={!!loading} text={formatMessage('Cancel')} onClick={props.onDismiss} />
         </DialogFooter>
       </div>
     );
   };
 
-  const resourceCreator = () => {
+  const renderResourseCreatorStep = () => {
     return (
       <div>
         <div css={dialogBodyStyles}>
@@ -639,7 +637,7 @@ export const ManageService = (props: ManageServiceProps) => {
 
           <div css={mainElementStyle}>
             <Dropdown
-              disabled={!subscriptionId || resourceGroups.length === 0 || loading !== undefined}
+              disabled={!subscriptionId || resourceGroups.length === 0 || !!loading}
               label={formatMessage('Resource group')}
               options={
                 resourceGroups.map((p) => {
@@ -657,7 +655,7 @@ export const ManageService = (props: ManageServiceProps) => {
                 required
                 aria-label={formatMessage('Resource group name')}
                 data-testid={'resourceGroupName'}
-                disabled={!subscriptionId || loading !== undefined}
+                disabled={!subscriptionId || !!loading}
                 id={'resourceGroupName'}
                 label={formatMessage('Resource group name')}
                 placeholder={formatMessage('Enter name for new resource group')}
@@ -672,7 +670,7 @@ export const ManageService = (props: ManageServiceProps) => {
               required
               aria-label={formatMessage('Region')}
               data-testid={'rootRegion'}
-              disabled={!subscriptionId || loading !== undefined}
+              disabled={!subscriptionId || !!loading}
               id={'region'}
               label={formatMessage('Region')}
               options={locationList}
@@ -685,7 +683,7 @@ export const ManageService = (props: ManageServiceProps) => {
               required
               aria-label={formatMessage('Resource name')}
               data-testid={'resourceName'}
-              disabled={!subscriptionId || loading !== undefined}
+              disabled={!subscriptionId || !!loading}
               id={'resourceName'}
               label={formatMessage('Resource name')}
               placeholder={formatMessage('Enter name for new resources')}
@@ -698,7 +696,7 @@ export const ManageService = (props: ManageServiceProps) => {
                 required
                 aria-label={formatMessage('Pricing tier')}
                 data-testid={'tier'}
-                disabled={!subscriptionId || loading !== undefined}
+                disabled={!subscriptionId || !!loading}
                 id={'tier'}
                 label={formatMessage('Pricing tier')}
                 options={props.tiers}
@@ -713,13 +711,13 @@ export const ManageService = (props: ManageServiceProps) => {
         <DialogFooter>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton
-            disabled={loading !== undefined}
+            disabled={!!loading}
             text={formatMessage('Back')}
-            onClick={() => setCurrentPage(2)}
+            onClick={() => setCurrentStep('subscription')}
           />
           <PrimaryButton
             disabled={
-              loading !== undefined ||
+              !!loading ||
               !resourceName ||
               !region ||
               !resourceGroupKey ||
@@ -729,13 +727,13 @@ export const ManageService = (props: ManageServiceProps) => {
             text={formatMessage('Next')}
             onClick={createService}
           />
-          <DefaultButton disabled={loading !== undefined} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton disabled={!!loading} text={formatMessage('Cancel')} onClick={props.onDismiss} />
         </DialogFooter>
       </div>
     );
   };
 
-  const pageThree = () => {
+  const renderOutcomeStep = () => {
     return (
       <div>
         <div css={dialogBodyStyles}>
@@ -748,7 +746,7 @@ export const ManageService = (props: ManageServiceProps) => {
           )}
         </div>
         <DialogFooter>
-          {outcomeError && <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentPage(1)} />}
+          {outcomeError && <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />}
           <PrimaryButton text={formatMessage('Done')} onClick={props.onNext} />
         </DialogFooter>
       </div>
@@ -773,7 +771,7 @@ export const ManageService = (props: ManageServiceProps) => {
           <div css={mainElementStyle}>
             <Dropdown
               required
-              disabled={allTenants.length === 1 || tenantId != null}
+              disabled={allTenants.length === 1 || !tenantId}
               errorMessage={tenantsErrorMessage}
               label={formatMessage('Azure directory')}
               options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
@@ -785,14 +783,14 @@ export const ManageService = (props: ManageServiceProps) => {
             />
             <Dropdown
               required
-              disabled={!(availableSubscriptions?.length > 0)}
+              disabled={availableSubscriptions?.length === 0}
               errorMessage={subscriptionsErrorMessage}
               label={formatMessage('Subscription')}
               options={
                 availableSubscriptions
                   ?.filter((p) => p.subscriptionId && p.displayName)
                   .map((p) => {
-                    return { key: p.subscriptionId ?? '', text: p.displayName ?? 'Unnamed' };
+                    return { key: p.subscriptionId ?? '', text: p.displayName ?? formatMessage('Unnamed') };
                   }) ?? []
               }
               placeholder={formatMessage('Select one')}
@@ -804,36 +802,32 @@ export const ManageService = (props: ManageServiceProps) => {
         </div>
         <DialogFooter>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
-          <DefaultButton
-            disabled={loading !== undefined}
-            text={formatMessage('Back')}
-            onClick={() => setCurrentPage(1)}
-          />
+          <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
-            disabled={loading !== undefined || !tenantId || !subscriptionId}
+            disabled={!!loading || !tenantId || !subscriptionId}
             text={formatMessage('Next')}
-            onClick={() => setCurrentPage(2.1)}
+            onClick={() => setCurrentStep('resourceCreation')}
           />
-          <DefaultButton disabled={loading !== undefined} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton disabled={!!loading} text={formatMessage('Cancel')} onClick={props.onDismiss} />
         </DialogFooter>
       </div>
     );
   };
 
-  const getPage = () => {
-    switch (currentPage as Page) {
-      case Page.Intro:
-        return pageOne();
-      case Page.Subscription: {
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 'intro':
+        return renderIntroStep();
+      case 'subscription': {
         if (nextAction === 'choose') {
-          return chooseResource();
+          return renderChooseResourceStep();
         }
         return subscriptionSelector();
       }
-      case Page.ResourceCreation:
-        return resourceCreator();
-      case Page.Outcome:
-        return pageThree();
+      case 'resourceCreation':
+        return renderResourseCreatorStep();
+      case 'outcome':
+        return renderOutcomeStep();
       default:
         return null;
     }
@@ -881,7 +875,7 @@ export const ManageService = (props: ManageServiceProps) => {
         }}
         onDismiss={loading ? () => {} : props.onDismiss}
       >
-        {getPage()}
+        {renderCurrentStep()}
       </Dialog>
     </Fragment>
   );
