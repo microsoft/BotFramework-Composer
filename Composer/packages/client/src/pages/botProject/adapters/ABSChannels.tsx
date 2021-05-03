@@ -25,7 +25,12 @@ import { navigateTo } from '../../../utils/navigation';
 import { botDisplayNameState, settingsState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';
-import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../../utils/auth';
+import {
+  getTokenFromCache,
+  getTenantIdFromCache,
+  isShowAuthDialog,
+  userShouldProvideTokens,
+} from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
 import { armScopes } from '../../../constants';
@@ -123,6 +128,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     try {
       // if tenantId is present, use this to retrieve the arm token.
       // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
+      if (!tenantId) {
+        const tenants = await AuthClient.getTenants();
+        const cachedTenantId = getTenantIdFromCache();
+
+        if (tenants.length === 0) {
+          throw new Error('No Azure Directories were found.');
+        } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+          tenantId = cachedTenantId;
+        } else {
+          tenantId = tenants[0].tenantId;
+        }
+      }
       if (tenantId) {
         newtoken = await AuthClient.getARMTokenForTenant(tenantId);
       } else {
