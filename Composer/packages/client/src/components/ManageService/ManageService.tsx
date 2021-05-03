@@ -67,7 +67,7 @@ const inputStyles = { root: { width: '100%', marginBottom: 10 } };
 const summaryLabelStyles = { display: 'block', color: '#605E5C', fontSize: 14 };
 const summaryStyles = { background: '#F3F2F1', padding: '1px 1rem' };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 480 };
+const dialogBodyStyles = { height: 400 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
 export const ManageService = (props: ManageServiceProps) => {
@@ -506,7 +506,7 @@ export const ManageService = (props: ManageServiceProps) => {
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
             {formatMessage(
-              'Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use.',
+              'Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. ',
               { service: props.serviceName }
             )}
             {props.learnMore ? (
@@ -537,7 +537,7 @@ export const ManageService = (props: ManageServiceProps) => {
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
             {formatMessage(
-              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource.',
+              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource. ',
               { service: props.serviceName }
             )}
             {props.learnMore ? (
@@ -862,7 +862,7 @@ export const ManageService = (props: ManageServiceProps) => {
           title:
             nextAction === 'create'
               ? formatMessage('Create new {service} resource', { service: props.serviceName })
-              : formatMessage('Select {service} keys', { service: props.serviceName }),
+              : formatMessage('Select {service} key', { service: props.serviceName }),
         }}
         hidden={props.hidden || showAuthDialog}
         minWidth={480}
