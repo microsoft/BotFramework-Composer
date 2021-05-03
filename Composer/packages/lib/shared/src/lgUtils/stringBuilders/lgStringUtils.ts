@@ -1,6 +1,6 @@
-/* eslint-disable security/detect-unsafe-regex */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable security/detect-unsafe-regex */
 
 export type TemplateBodyItem = {
   kind: 'newline' | 'variation' | 'comment';

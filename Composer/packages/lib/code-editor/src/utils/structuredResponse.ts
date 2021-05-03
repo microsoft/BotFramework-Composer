@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-/* eslint-disable security/detect-unsafe-regex */
 
 import { LgTemplate, extractTemplateNameFromExpression } from '@bfc/shared';
 

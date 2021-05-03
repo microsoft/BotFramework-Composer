@@ -30,7 +30,6 @@ export const serializeLgTemplate = (
     return '';
   }
 
-  const exprRegex = /^\${(.*)\(\)}$/;
   const serializableLg: SerializableLg = {
     originalId: fromId,
     mainTemplateBody: lgTemplate?.body,
