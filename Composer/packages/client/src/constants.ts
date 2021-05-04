@@ -52,15 +52,15 @@ export const Tips = {
 export const LUIS_REGIONS: IDropdownOption[] = [
   {
     key: 'westus',
-    text: formatMessage('westus'),
+    text: formatMessage('West US'),
   },
   {
     key: 'westeurope',
-    text: formatMessage('westeurope'),
+    text: formatMessage('West Europe'),
   },
   {
     key: 'australiaeast',
-    text: formatMessage('australiaeast'),
+    text: formatMessage('Australia East'),
   },
 ];
 
@@ -356,14 +356,14 @@ export const selectIntentDialog = {
 
 export const enableOrchestratorDialog = {
   get title() {
-    return formatMessage('Enable Orchestrator');
+    return formatMessage('Enable Orchestrator Recognizer');
   },
   get subText() {
-    return formatMessage('Enable orchestrator as the recognizer at the root dialog to add this skill');
+    return formatMessage('Enable Orchestrator as the recognizer for routing to other skills');
   },
   get content() {
     return formatMessage(
-      'Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level.'
+      'Multi-bot projects work best with the Orchestrator recognizer set at the dispatching dialog (typically the root dialog). Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that handles the intent. Orchestrator does not support entity extraction. If you plan to combine entity extraction and routing at the root dialog, use LUIS instead.'
     );
   },
 };
@@ -423,7 +423,8 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
 
-export const invalidNameCharRegex = /[^a-z^A-Z^0-9^_]/g;
+export const invalidNameCharRegex = /[^a-zA-Z0-9-_]/g;
+export const invalidNameCharRegexV2 = /[^a-zA-Z0-9_]/g;
 
 export const authConfig = {
   // for web login

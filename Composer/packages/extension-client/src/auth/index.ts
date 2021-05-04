@@ -8,7 +8,7 @@ import { ComposerGlobalName } from '../common/constants';
 /**
  * log out current user
  */
-export function logOut(): Promise<void> {
+export function logOut(): Promise<boolean> {
   return window[ComposerGlobalName].logOut();
 }
 
