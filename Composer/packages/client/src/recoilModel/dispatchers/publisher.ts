@@ -15,6 +15,7 @@ import {
   filePersistenceState,
   settingsState,
   runtimeStandardOutputDataState,
+  botProjectFileState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
@@ -30,11 +31,13 @@ import { ClientStorage } from '../../utils/storage';
 import { RuntimeOutputData } from '../types';
 import { checkIfFunctionsMissing, missingFunctionsError } from '../../utils/runtimeErrors';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { TunnelingSetupNotification } from '../../components/Notifications/TunnelingSetupNotification';
 
 import { BotStatus, Text, defaultBotEndpoint, defaultBotPort } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
 import { setRootBotSettingState } from './setting';
+import { createNotification, addNotificationInternal } from './notification';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -121,6 +124,19 @@ export const publisherDispatcher = () => {
               skillHostEndpoint: endpointURL + '/api/skills',
             };
             setRootBotSettingState(callbackHelpers, projectId, updatedSettings);
+          }
+
+          const rootBotProjectFile = await snapshot.getPromise(botProjectFileState(rootBotId));
+          if (Object.values(rootBotProjectFile?.content?.skills ?? []).some((s) => s.remote)) {
+            const notification = createNotification({
+              type: 'info',
+              title: formatMessage('Setup tunneling software to test your remote skill'),
+              onRenderCardContent: TunnelingSetupNotification,
+              data: {
+                port,
+              },
+            });
+            addNotificationInternal(callbackHelpers, notification);
           }
         }
         set(botStatusState(projectId), BotStatus.connected);
