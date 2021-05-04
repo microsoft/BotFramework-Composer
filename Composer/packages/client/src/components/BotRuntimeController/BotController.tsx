@@ -161,7 +161,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         `{
         total, plural,
           =1 {Start bot}
-          other {Start all bots}
+          other {Start all}
       }`,
         { total: runningBots.totalBots }
       )

@@ -266,21 +266,21 @@ export const Header = () => {
         style={{ marginLeft: '9px' }}
       />
       <div css={headerTextContainer}>
-        <div css={title}>{formatMessage('Bot Framework Composer')}</div>
         {projectName && (
           <Fragment>
-            <div css={divider} />
             <span css={botName}>{projectName}</span>
-            <span
-              css={botLocale}
-              id="targetButton"
-              role={'button'}
-              tabIndex={0}
-              onClick={() => setTeachingBubbleVisibility(true)}
-              onKeyDown={handleActiveLanguageButtonOnKeyDown}
-            >
-              {languageFullName(locale)}
-            </span>
+            {languageListOptions.length > 1 && (
+              <span
+                css={botLocale}
+                id="targetButton"
+                role={'button'}
+                tabIndex={0}
+                onClick={() => setTeachingBubbleVisibility(true)}
+                onKeyDown={handleActiveLanguageButtonOnKeyDown}
+              >
+                {languageFullName(locale)}
+              </span>
+            )}
           </Fragment>
         )}
       </div>
