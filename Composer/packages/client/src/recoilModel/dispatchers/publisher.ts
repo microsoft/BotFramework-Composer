@@ -126,8 +126,14 @@ export const publisherDispatcher = () => {
             setRootBotSettingState(callbackHelpers, projectId, updatedSettings);
           }
 
+          // display a notification for bots with remote skills the first time they are published
+          // for a given session.
           const rootBotProjectFile = await snapshot.getPromise(botProjectFileState(rootBotId));
-          if (Object.values(rootBotProjectFile?.content?.skills ?? []).some((s) => s.remote)) {
+          const notificationCache = publishStorage.get('notifications') || {};
+          if (
+            !notificationCache[rootBotId] &&
+            Object.values(rootBotProjectFile?.content?.skills ?? []).some((s) => s.remote)
+          ) {
             const notification = createNotification({
               type: 'info',
               title: formatMessage('Setup tunneling software to test your remote skill'),
@@ -137,6 +143,10 @@ export const publisherDispatcher = () => {
               },
             });
             addNotificationInternal(callbackHelpers, notification);
+            publishStorage.set('notifications', {
+              ...notificationCache,
+              [rootBotId]: true,
+            });
           }
         }
         set(botStatusState(projectId), BotStatus.connected);
