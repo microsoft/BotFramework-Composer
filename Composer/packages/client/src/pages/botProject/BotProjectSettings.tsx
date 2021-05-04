@@ -33,6 +33,7 @@ const header = css`
   flex-shrink: 0;
   justify-content: space-between;
   label: PageHeader;
+  border-bottom: 1px solid silver;
 `;
 
 const container = css`
