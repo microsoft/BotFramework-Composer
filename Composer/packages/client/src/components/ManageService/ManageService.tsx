@@ -154,7 +154,7 @@ export const ManageService = (props: ManageServiceProps) => {
           setAllTenants(tenants);
           if (tenants.length === 0) {
             setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
-          } else if (tenants.length === 1) {
+          } else if (tenants.length >= 1) {
             setTenantId(tenants[0].tenantId);
           } else {
             setTenantsErrorMessage(undefined);
