@@ -46,7 +46,7 @@ const DialogTitle = () => {
         <span css={subText}>
           {formatMessage('Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. ')}
           <Link href={knowledgeBaseSourceUrl} target={'_blank'}>
-            {formatMessage('Learn more about knowledge base sources. ')}
+            {formatMessage('Learn more')}
           </Link>
         </span>
       </p>
