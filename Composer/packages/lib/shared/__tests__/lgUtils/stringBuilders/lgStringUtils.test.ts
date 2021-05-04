@@ -89,12 +89,12 @@ describe('lgStringUtils', () => {
   });
 
   it('extractTemplateNameFromExpression: Extracts template name from an LG expression', () => {
-    const templateName = extractTemplateNameFromExpression('${templateName()}')
+    const templateName = extractTemplateNameFromExpression('${templateName()}');
     expect(templateName).toEqual('templateName');
   });
 
   it('extractTemplateNameFromExpression: Extracts template name from an LG expression in json method', () => {
-    const templateName = extractTemplateNameFromExpression('${json(templateName())}')
+    const templateName = extractTemplateNameFromExpression('${json(templateName())}');
     expect(templateName).toEqual('templateName');
   });
 });
