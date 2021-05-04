@@ -41,12 +41,10 @@ import {
 const DialogTitle = () => {
   return (
     <div>
-      {formatMessage('Create new knowledge base')}
+      {formatMessage('Add QnA Maker knowledge base')}
       <p>
         <span css={subText}>
-          {formatMessage(
-            'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. '
-          )}
+          {formatMessage('Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. ')}
           <Link href={knowledgeBaseSourceUrl} target={'_blank'}>
             {formatMessage('Learn more about knowledge base sources. ')}
           </Link>
@@ -205,7 +203,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
             value={formData.name}
             onChange={(e, name) => onChangeNameField(name)}
           />
-          <Text styles={knowledgeBaseStyle}>{formatMessage('Knowledge base')}</Text>
+          <Text styles={knowledgeBaseStyle}>{formatMessage('FAQ website (source)')}</Text>
           {formData.locales.map((locale, i) => {
             return (
               <div key={`add${locale}InCreateQnAFromUrlModal`} css={urlPairStyle}>
@@ -213,7 +211,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
                   data-testid={`add${locale}InCreateQnAFromUrlModal`}
                   errorMessage={formDataErrors.urls[i]}
                   label={usedLocales[i]}
-                  placeholder={formatMessage('Enter a URL')}
+                  placeholder={formatMessage('Type or paste URL')}
                   required={i === 0}
                   styles={textFieldUrl}
                   value={formData.urls[i]}
@@ -238,7 +236,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
         <DefaultButton
           data-testid={'createKnowledgeBaseFromScratch'}
           styles={{ root: { float: 'left' } }}
-          text={formatMessage('Create knowledge base from scratch')}
+          text={formatMessage('Create custom knowledge base')}
           onClick={() => {
             // switch to create from scratch flow, pass onComplete callback.
             actions.createQnAFromScratchDialogBegin({ projectId, dialogId, onComplete: onComplete?.func });
@@ -253,7 +251,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
-          text={formatMessage('Create knowledge base')}
+          text={formatMessage('Create')}
           onClick={() => {
             if (hasErrors(formDataErrors)) {
               return;

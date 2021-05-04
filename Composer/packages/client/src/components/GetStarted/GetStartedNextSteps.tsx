@@ -201,7 +201,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         key: 'publishing',
         label: formatMessage('Create a publishing profile'),
         description: formatMessage(
-          'Create a publishing profile and configure Azure resources to publish your bot. A publishing profile provides the secure connectivity required to publish your bot.'
+          'A publishing profile provides the secure connectivity required to publish your bot.'
         ),
         checked: hasPublishingProfile,
         learnMore: 'https://aka.ms/composer-getstarted-publishingprofile',
@@ -246,9 +246,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     newRecomendedSteps.push({
       key: 'editlu',
       label: formatMessage('Edit user input and triggers'),
-      description: formatMessage(
-        'Define user input (intents) and trigger phrases that your bot can understand and use to determine what to do next in the conversation flow.'
-      ),
+      description: formatMessage('Define user input and trigger phrases to direct the conversation flow.'),
       learnMore: 'https://aka.ms/composer-luis-learnmore',
       checked: false,
       onClick: () => {
@@ -264,9 +262,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       {
         key: 'packages',
         label: formatMessage('Add packages'),
-        description: formatMessage(
-          'Packages are components for your bot, including customizable dialogs, bot response templates and custom actions.'
-        ),
+        description: formatMessage('Extend your bot with reusable dialogs, bot response templates and custom actions.'),
         learnMore: 'https://aka.ms/composer-getstarted-addpackages',
         checked: false,
         onClick: () => {

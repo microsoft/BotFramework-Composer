@@ -259,7 +259,7 @@ export const DialogCreationCopy = {
   },
   get IMPORT_QNA() {
     return {
-      title: formatMessage('Create new knowledge base'),
+      title: formatMessage('Add QnA Maker knowledge base'),
       subText: formatMessage(
         'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
       ),
