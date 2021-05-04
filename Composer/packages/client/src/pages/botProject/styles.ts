@@ -8,7 +8,7 @@ import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/l
 export const title = css`
   font-size: ${FontSizes.large};
   font-weight: ${FontWeights.semibold};
-  margin-top: 20px;
+  margin-top: 25px;
   margin-bottom: 5px;
 `;
 
@@ -22,6 +22,12 @@ export const subtitle = css`
   color: ${NeutralColors.gray130};
   font-size: ${FontSizes.medium};
   padding: 12px 0;
+`;
+
+export const headerText = css`
+  color: ${NeutralColors.gray130};
+  font-size: ${FontSizes.medium};
+  margin-top: 25px;
 `;
 
 export const sectionHeader = css`

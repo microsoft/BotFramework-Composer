@@ -8,7 +8,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Link as RouterLink } from '@reach/router';
 
-import { title, subtitle, subtext } from '../styles';
+import { title, subtitle, subtext, headerText } from '../styles';
 
 import ExternalAdapterSettings from './ExternalAdapterSettings';
 import ABSChannels from './ABSChannels';
@@ -28,7 +28,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
 
   return (
     <div ref={containerRef}>
-      <div css={subtitle}>
+      <div css={headerText}>
         {formatMessage.rich(
           'Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. <a>Learn more.</a>',
           {

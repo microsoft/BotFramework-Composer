@@ -26,6 +26,7 @@ const valueStyle = css`
 const headerStyle = css`
   font-size: 20px;
   font-weight: 600;
+  margin-top: 25px;
 `;
 
 const rootTextStyle = css`
