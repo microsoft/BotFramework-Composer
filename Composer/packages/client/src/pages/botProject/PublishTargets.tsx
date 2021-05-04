@@ -36,11 +36,9 @@ const publishTargetsHeader = css`
 
 const editPublishProfile = {
   root: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
-    paddingLeft: 0,
-    paddingBottom: 5,
   },
 };
 
