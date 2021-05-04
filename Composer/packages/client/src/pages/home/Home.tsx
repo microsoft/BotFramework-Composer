@@ -60,7 +60,7 @@ const resources = [
   {
     imageCover: stackoverflowIcon,
     title: formatMessage('Stack Overflow'),
-    description: formatMessage('Connect with the community to ask and answer questions about Bot Framework Composer'),
+    description: formatMessage('Connect with the community to ask and answer questions about Composer'),
     moreText: formatMessage('Go to Stack Overflow'),
     url: 'https://stackoverflow.com/questions/tagged/botframework',
   },
