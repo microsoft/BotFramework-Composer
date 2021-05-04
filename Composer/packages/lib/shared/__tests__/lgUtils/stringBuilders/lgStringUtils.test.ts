@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { parseTemplateBody, extractTemplateNameFromExpression } from '../../../src';
+import { parseTemplateBody } from '../../../src';
 
 const normalTemplateBody = `- variation0
 - variation1
@@ -86,15 +86,5 @@ describe('lgStringUtils', () => {
     const items = parseTemplateBody(undefined);
     expect(items.length).toBe(0);
     expect(items).toEqual([]);
-  });
-
-  it('extractTemplateNameFromExpression: Extracts template name from an LG expression', () => {
-    const templateName = extractTemplateNameFromExpression('${templateName()}');
-    expect(templateName).toEqual('templateName');
-  });
-
-  it('extractTemplateNameFromExpression: Extracts template name from an LG expression in json method', () => {
-    const templateName = extractTemplateNameFromExpression('${json(templateName())}');
-    expect(templateName).toEqual('templateName');
   });
 });

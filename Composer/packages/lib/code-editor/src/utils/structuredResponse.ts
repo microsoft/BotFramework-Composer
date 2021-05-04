@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplate, extractTemplateNameFromExpression } from '@bfc/shared';
+import { LgTemplate } from '@bfc/shared';
 
 import { activityTemplateType } from '../lg/constants';
 import {
@@ -20,6 +20,7 @@ import {
 } from '../lg/types';
 
 const subTemplateNameRegex = /\${(.*)}/;
+const templateNameExtractRegex = /\${(.*)(\(.*\))\s*}/;
 const defaultIndent = '    ';
 
 const getStructuredResponseHelper = (value: unknown, kind: 'Text' | 'Speak' | 'Attachments') => {
@@ -111,6 +112,14 @@ export const getStructuredResponseFromTemplate = (lgTemplate?: LgTemplate): Part
 
   return Object.keys(structuredResponse).length ? structuredResponse : undefined;
 };
+
+/**
+ * Extracts template name from an LG expression
+ * ${templateName(params)} => templateName
+ * @param expression Expression to extract template name from.
+ */
+export const extractTemplateNameFromExpression = (expression: string): string | undefined =>
+  expression.match(templateNameExtractRegex)?.[1]?.trim();
 
 export const structuredResponseToString = (structuredResponse: PartialStructuredResponse): string => {
   const keys = Object.keys(structuredResponse);
