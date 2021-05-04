@@ -620,9 +620,6 @@
   "check_for_updates_and_install_them_automatically_50337340": {
     "message": "Check for updates and install them automatically."
   },
-  "check_out_the_resources_on_github_4d73792a": {
-    "message": "Check out the resources on GitHub."
-  },
   "choice_input_369b0c57": {
     "message": "Choice input"
   },
@@ -692,9 +689,6 @@
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
   },
-  "composer_documentation_60a27d37": {
-    "message": "Composer documentation"
-  },
   "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
     "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
   },
@@ -712,9 +706,6 @@
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer needs .NET Core SDK"
-  },
-  "composer_on_github_1e3782ef": {
-    "message": "Composer on GitHub"
   },
   "composer_runtime_error_b0efe05": {
     "message": "Composer Runtime Error"
@@ -790,6 +781,9 @@
   },
   "connect_to_speech_service_9d877e37": {
     "message": "Connect to Speech Service"
+  },
+  "connect_with_the_community_to_ask_and_answer_quest_aeec8c4f": {
+    "message": "Connect with the community to ask and answer questions about Composer"
   },
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
     "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
@@ -1370,9 +1364,6 @@
   "endpoints_ff946539": {
     "message": "Endpoints"
   },
-  "engage_with_other_bot_builders_ask_and_answer_ques_550d86bc": {
-    "message": "Engage with other bot builders. Ask and answer questions."
-  },
   "ensure_your_bot_can_understand_your_users_by_frequ_c3f5c722": {
     "message": "Ensure your bot can understand your users by frequently training your LUIS model."
   },
@@ -1514,6 +1505,9 @@
   "events_cf7a8c50": {
     "message": "Events"
   },
+  "everything_you_need_to_build_sophisticated_convers_9c00cc01": {
+    "message": "Everything you need to build sophisticated conversational experiences"
+  },
   "examples_c435f08c": {
     "message": "Examples"
   },
@@ -1630,9 +1624,6 @@
   },
   "find_pre_built_adaptive_expressions_b106308e": {
     "message": "Find pre-built Adaptive expressions"
-  },
-  "find_tutorials_step_by_step_guides_discover_what_y_8f3e3863": {
-    "message": "Find tutorials, step-by-step guides. Discover what you can build with Composer."
   },
   "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
     "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
@@ -1760,8 +1751,8 @@
   "getting_template_910a4116": {
     "message": "Getting template"
   },
-  "go_to_composer_repository_cba5d3d2": {
-    "message": "Go to Composer repository"
+  "github_c7cc3613": {
+    "message": "GitHub"
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Go to QnA all-up view page."
@@ -2477,9 +2468,6 @@
   "net_required_97928257": {
     "message": ".NET required"
   },
-  "new_13daf639": {
-    "message": "New"
-  },
   "new_template_49e6f0f2": {
     "message": "New template"
   },
@@ -2654,6 +2642,9 @@
   "open_e0beb7b9": {
     "message": "Open"
   },
+  "open_github_811d5819": {
+    "message": "Open GitHub"
+  },
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
@@ -2668,6 +2659,9 @@
   },
   "open_teams_416aae5c": {
     "message": "Open Teams"
+  },
+  "open_the_product_tour_to_learn_about_bot_framework_4e6e7227": {
+    "message": "Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>"
   },
   "open_web_chat_23601990": {
     "message": "Open Web Chat"
@@ -3014,14 +3008,11 @@
   "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
     "message": "Re-prompt for input (Reprompt dialog event)"
   },
-  "read_documentation_d5df5d59": {
-    "message": "Read documentation"
-  },
   "read_me_4734ca1": {
     "message": "Read Me"
   },
-  "recent_bots_53585911": {
-    "message": "Recent Bots"
+  "recent_f19e8c64": {
+    "message": "Recent"
   },
   "recognizer_type_dc591e16": {
     "message": "Recognizer Type"
@@ -3335,11 +3326,11 @@
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
   },
+  "select_your_azure_directory_then_choose_the_subscr_69776814": {
+    "message": "Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. "
+  },
   "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
     "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
-  },
-  "select_your_azure_directory_then_choose_the_subscr_8c3aa61": {
-    "message": "Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use."
   },
   "select_your_azure_directory_then_choose_the_subscr_e3d67edf": {
     "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource. "
@@ -3629,8 +3620,8 @@
   "terms_of_use_6542769b": {
     "message": "Terms of Use"
   },
-  "test_and_debug_bots_built_using_the_bot_framework__fa382385": {
-    "message": "Test and debug bots built using the Bot Framework SDK. Available on GitHub."
+  "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
+    "message": "Test and debug your bots in Bot Framework Emulator"
   },
   "test_in_emulator_b1b3c278": {
     "message": "Test in Emulator"
@@ -4079,6 +4070,9 @@
   "view_dialog_f5151228": {
     "message": "View dialog"
   },
+  "view_documentation_samples_and_extensions_285b9404": {
+    "message": "View documentation, samples, and extensions"
+  },
   "view_kb_c382e495": {
     "message": "View KB"
   },
@@ -4123,6 +4117,9 @@
   },
   "welcome_dd4e7151": {
     "message": "Welcome"
+  },
+  "welcome_to_bot_framework_composer_b4f92694": {
+    "message": "Welcome to Bot Framework Composer"
   },
   "welcome_to_composer_7147714a": {
     "message": "Welcome to Composer!"
@@ -4237,9 +4234,6 @@
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "You do not have permission to save bots here"
-  },
-  "you_don_t_have_any_bot_yet_start_to_link_create_a__ccacc2d6": {
-    "message": "You don’t have any bot yet. Start to <Link>create a new bot</Link>"
   },
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
     "message": "You have successfully published { name } to { publishTarget }"
