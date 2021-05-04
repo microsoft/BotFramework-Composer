@@ -12,6 +12,11 @@ export const title = css`
   margin-bottom: 5px;
 `;
 
+export const tabContentContainer = css`
+  margin-left: 7px;
+  max-width: 580px;
+`;
+
 export const subtext = css`
   color: ${NeutralColors.gray130};
   font-size: ${FontSizes.medium};
@@ -151,7 +156,7 @@ export const actionButton = {
   },
 };
 
-export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10, width: '75%' } }, customError);
+export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10 } }, customError);
 
 export const teamsCallOutStyles = mergeStyleSets({
   callout: {
