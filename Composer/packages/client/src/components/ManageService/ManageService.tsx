@@ -695,6 +695,17 @@ export const ManageService = (props: ManageServiceProps) => {
     );
   };
 
+  const getModalTitle = (): string => {
+    let title = formatMessage('Select {service} keys', { service: props.serviceName });
+    if (currentPage === 2) {
+      title =
+        nextAction === 'create'
+          ? formatMessage('Create new {service} resource', { service: props.serviceName })
+          : formatMessage('Choose existing {service} resource', { service: props.serviceName });
+    }
+    return title;
+  };
+
   return (
     <Fragment>
       {showAuthDialog && (
@@ -725,16 +736,13 @@ export const ManageService = (props: ManageServiceProps) => {
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
-          title:
-            currentPage === 2
-              ? formatMessage('Create new {service} resource', { service: props.serviceName })
-              : formatMessage('Select {service} keys', { service: props.serviceName }),
         }}
         hidden={props.hidden || showAuthDialog}
         minWidth={480}
         modalProps={{
           isBlocking: true,
         }}
+        title={getModalTitle()}
         onDismiss={loading ? () => {} : props.onDismiss}
       >
         {currentPage === 1 && renderPageOne()}
