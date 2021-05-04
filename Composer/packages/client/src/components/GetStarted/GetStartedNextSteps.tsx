@@ -273,7 +273,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       },
       {
         key: 'insights',
-        label: formatMessage('Enable App insights'),
+        label: formatMessage('Enable App Insights'),
         description: formatMessage('Collect information about the use and performance of your bot.'),
         learnMore: 'https://aka.ms/composer-getstarted-enableinsights',
         checked: false,
