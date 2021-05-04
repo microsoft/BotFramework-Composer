@@ -100,12 +100,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     return newbotProjectLinks;
   }, [botProjects]);
 
-  const onRenderHeaderContent = () => {
-    return formatMessage(
-      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
-    );
-  };
-
   const saveChangeResult = (result: DialogSetting) => {
     setSettings(currentProjectId, result);
   };
@@ -132,9 +126,8 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
       pageMode={'botProjectsSettings'}
       shouldShowEditorError={false}
-      title={formatMessage('Bot management and configurations')}
+      title={formatMessage('Project settings')}
       toolbarItems={toolbarItems}
-      onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
