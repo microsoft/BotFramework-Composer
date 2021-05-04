@@ -29,6 +29,9 @@
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
     "message": "A form dialog enables your bot to collect pieces of information ."
   },
+  "a_install_ngrok_a_and_run_the_following_command_to_634f3414": {
+    "message": "<a>Install ngrok</a> and run the following command to continue"
+  },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
   },
@@ -3335,11 +3338,11 @@
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
   },
+  "select_your_azure_directory_then_choose_the_subscr_69776814": {
+    "message": "Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. "
+  },
   "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
     "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
-  },
-  "select_your_azure_directory_then_choose_the_subscr_8c3aa61": {
-    "message": "Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use."
   },
   "select_your_azure_directory_then_choose_the_subscr_e3d67edf": {
     "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource. "
@@ -3403,6 +3406,9 @@
   },
   "setup_language_understanding_so_that_you_can_start_97addd86": {
     "message": "Setup Language Understanding so that you can start and test your bot."
+  },
+  "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
+    "message": "Setup tunneling software to test your remote skill"
   },
   "share_as_a_skill_63554df2": {
     "message": "Share as a skill"
