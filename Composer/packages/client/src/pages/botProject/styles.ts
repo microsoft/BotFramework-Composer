@@ -70,7 +70,7 @@ export const tableRowItem = (width?: string) => css`
 
 export const tableColumnHeader = (width?: string) => css`
   font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.bold};
+  font-weight: ${FontWeights.semibold};
   padding-top: 10px;
   padding-left: 10px;
   text-overflow: ellipsis;
