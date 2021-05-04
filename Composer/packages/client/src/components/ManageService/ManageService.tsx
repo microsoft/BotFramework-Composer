@@ -43,6 +43,7 @@ type ManageServiceProps = {
   createServiceInBackground?: boolean;
   handoffInstructions: string;
   hidden: boolean;
+  introText: string;
   learnMore?: string;
   onDismiss: () => void;
   onGetKey: (settings: { key: string; region: string }) => void;
@@ -96,6 +97,8 @@ export const ManageService = (props: ManageServiceProps) => {
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [keys, setKeys] = useState<KeyRec[]>([]);
+  const [dialogTitle, setDialogTitle] = useState<string>('');
+
   const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('intro');
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
@@ -104,12 +107,12 @@ export const ManageService = (props: ManageServiceProps) => {
   const [locationList, setLocationList] = useState<IDropdownOption[]>(props.regions || []);
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'choose', text: formatMessage('Choose from existing') },
+    { key: 'choose', text: formatMessage('Use existing resources') },
     {
       key: 'create',
-      text: formatMessage('Create a new {service} resource', { service: props.serviceName }),
+      text: formatMessage('Create and configure new Azure resources', { service: props.serviceName }),
     },
-    { key: 'handoff', text: formatMessage('Handoff to admin') },
+    { key: 'handoff', text: formatMessage('Generate instructions for Azure administrator') },
   ];
 
   const fetchLocations = async (subscriptionId) => {
@@ -526,9 +529,7 @@ export const ManageService = (props: ManageServiceProps) => {
       <div>
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
-            {formatMessage(
-              'Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. '
-            )}
+            {props.introText}
             {props.learnMore ? (
               <Link href={props.learnMore} target={'_blank'}>
                 {formatMessage('Learn more')}
@@ -557,7 +558,7 @@ export const ManageService = (props: ManageServiceProps) => {
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
             {formatMessage(
-              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource. ',
+              'Select your Azure directory, then choose the subscription where your existing {service} resource is located. ',
               { service: props.serviceName }
             )}
             {props.learnMore ? (
@@ -583,7 +584,7 @@ export const ManageService = (props: ManageServiceProps) => {
               required
               disabled={!(availableSubscriptions?.length > 0)}
               errorMessage={subscriptionsErrorMessage}
-              label={formatMessage('Subscription')}
+              label={formatMessage('Azure subscription')}
               options={
                 availableSubscriptions
                   ?.filter((p) => p.subscriptionId && p.displayName)
@@ -591,7 +592,7 @@ export const ManageService = (props: ManageServiceProps) => {
                     return { key: p.subscriptionId ?? '', text: p.displayName ?? formatMessage('Unnamed') };
                   }) ?? []
               }
-              placeholder={formatMessage('Select one')}
+              placeholder={formatMessage('Select a subscription')}
               selectedKey={subscriptionId}
               styles={dropdownStyles}
               onChange={onChangeSubscription}
@@ -612,13 +613,13 @@ export const ManageService = (props: ManageServiceProps) => {
               <div>
                 <Dropdown
                   disabled={!(keys?.length > 0) || nextAction !== 'choose'}
-                  label={formatMessage('{service} Key', { service: props.serviceName })}
+                  label={formatMessage('{service} resource name', { service: props.serviceName })}
                   options={
                     keys.map((p) => {
                       return { text: p.name, ...p };
                     }) ?? []
                   }
-                  placeholder={formatMessage('Select one')}
+                  placeholder={formatMessage('Select resource')}
                   styles={dropdownStyles}
                   onChange={onChangeKey}
                 />
@@ -645,22 +646,21 @@ export const ManageService = (props: ManageServiceProps) => {
       <div>
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
-            {formatMessage(
-              'Input your details below to create a new {service} resource. You will be able to manage your new resource in the Azure portal.',
-              { service: props.serviceName }
-            )}
+            {formatMessage('Select the resource group and region in which your {service} service will be created.', {
+              service: props.serviceName,
+            })}
           </p>
 
           <div css={mainElementStyle}>
             <Dropdown
               disabled={!subscriptionId || resourceGroups.length === 0 || !!loading}
-              label={formatMessage('Resource group')}
+              label={formatMessage('Azure resource group')}
               options={
                 resourceGroups.map((p) => {
                   return { key: p.id, text: p.name, data: p.data };
                 }) ?? []
               }
-              placeholder={formatMessage('Select one')}
+              placeholder={formatMessage('Select a resource group')}
               selectedKey={resourceGroupKey}
               styles={dropdownStyles}
               onChange={onChangeResourceGroup}
@@ -690,18 +690,18 @@ export const ManageService = (props: ManageServiceProps) => {
               id={'region'}
               label={formatMessage('Region')}
               options={locationList}
-              placeholder={formatMessage('Enter region')}
+              placeholder={formatMessage('Select region')}
               selectedKey={region}
               styles={dropdownStyles}
               onChange={handleRegionOnChange}
             />
             <TextField
               required
-              aria-label={formatMessage('Resource name')}
+              aria-label={formatMessage('{service} resource name', { service: props.serviceName })}
               data-testid={'resourceName'}
               disabled={!subscriptionId || !!loading}
               id={'resourceName'}
-              label={formatMessage('Resource name')}
+              label={formatMessage('{service} resource name', { service: props.serviceName })}
               placeholder={formatMessage('Enter name for new resources')}
               styles={inputStyles}
               value={resourceName}
@@ -801,7 +801,7 @@ export const ManageService = (props: ManageServiceProps) => {
               required
               disabled={availableSubscriptions?.length === 0}
               errorMessage={subscriptionsErrorMessage}
-              label={formatMessage('Subscription')}
+              label={formatMessage('Azure subscription')}
               options={
                 availableSubscriptions
                   ?.filter((p) => p.subscriptionId && p.displayName)
@@ -809,7 +809,7 @@ export const ManageService = (props: ManageServiceProps) => {
                     return { key: p.subscriptionId ?? '', text: p.displayName ?? formatMessage('Unnamed') };
                   }) ?? []
               }
-              placeholder={formatMessage('Select one')}
+              placeholder={formatMessage('Select subscription')}
               selectedKey={subscriptionId}
               styles={dropdownStyles}
               onChange={onChangeSubscription}
@@ -849,6 +849,24 @@ export const ManageService = (props: ManageServiceProps) => {
     }
   };
 
+  useEffect(() => {
+    switch (currentStep) {
+      case 'intro':
+        setDialogTitle(formatMessage('Set up {service}', { service: props.serviceName }));
+        break;
+      case 'subscription':
+        if (nextAction === 'choose') {
+          setDialogTitle(formatMessage('Select {service} resources', { service: props.serviceName }));
+        } else {
+          setDialogTitle(formatMessage('Create {service} resources', { service: props.serviceName }));
+        }
+        break;
+      case 'resourceCreation':
+        setDialogTitle(formatMessage('Create {service} resources', { service: props.serviceName }));
+        break;
+    }
+  }, [currentStep, props.serviceName]);
+
   return (
     <Fragment>
       {showAuthDialog && (
@@ -862,14 +880,14 @@ export const ManageService = (props: ManageServiceProps) => {
       )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share this information with your Azure admin to provision resources on your behalf.'
+          'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
         )}
         handoffInstructions={formatMessage(
-          'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created. Please follow the instructions below to create these resources and provide them to me.\n\n{instructions}',
-          { instructions: props.handoffInstructions }
+          'I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including {service}. Below are the steps to create these resources.\n\n{instructions}',
+          { instructions: props.handoffInstructions, service: props.serviceName }
         )}
         hidden={!showHandoff}
-        title={formatMessage('Share resource request')}
+        title={formatMessage('Generate instructions for Azure administrator')}
         onBack={() => {
           setShowHandoff(false);
           props.onToggleVisibility(true);
@@ -879,10 +897,7 @@ export const ManageService = (props: ManageServiceProps) => {
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
-          title:
-            nextAction === 'create'
-              ? formatMessage('Create new {service} resource', { service: props.serviceName })
-              : formatMessage('Select {service} key', { service: props.serviceName }),
+          title: dialogTitle,
         }}
         hidden={props.hidden || showAuthDialog}
         minWidth={480}

@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
@@ -51,31 +51,28 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
       </h3>
       <Stack tokens={{ childrenGap: 10 }}>
         <StackItem>
-          <div css={labelStyle}>{formatMessage('File Location')}</div>
+          <div css={labelStyle}>{formatMessage('Bot project location')}</div>
           <div css={valueStyle}>{location}</div>
         </StackItem>
-        <StackItem>
-          <div css={labelStyle}>{formatMessage('Read Me')}</div>
-          {readme && (
-            <Fragment>
-              <Link
-                onClick={() => {
-                  setReadmeHidden(false);
-                }}
-              >
-                {formatMessage('View project readme')}
-              </Link>
-              <DisplayMarkdownDialog
-                content={readme}
-                hidden={readmeHidden}
-                title={formatMessage('Project Readme')}
-                onDismiss={() => {
-                  setReadmeHidden(true);
-                }}
-              />
-            </Fragment>
-          )}
-        </StackItem>
+        {readme && (
+          <StackItem>
+            <Link
+              onClick={() => {
+                setReadmeHidden(false);
+              }}
+            >
+              {formatMessage('View readme')}
+            </Link>
+            <DisplayMarkdownDialog
+              content={readme}
+              hidden={readmeHidden}
+              title={formatMessage('Project readme')}
+              onDismiss={() => {
+                setReadmeHidden(true);
+              }}
+            />
+          </StackItem>
+        )}
       </Stack>
     </div>
   );
