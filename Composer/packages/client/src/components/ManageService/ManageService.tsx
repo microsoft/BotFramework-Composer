@@ -23,7 +23,6 @@ import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { AzureTenant } from '@botframework-composer/types';
-import { escapeRegExp } from 'lodash';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
