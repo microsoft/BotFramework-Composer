@@ -16,9 +16,8 @@ import CommandBar from './CommandBar';
 import VisualPanel from './VisualPanel';
 import PropertyPanel from './PropertyPanel';
 import useEmptyPropsHandler from './useEmptyPropsHandler';
-import { contentWrapper, editorContainer, editorWrapper, pageRoot } from './styles';
+import { contentWrapper, splitPaneContainer, splitPaneWrapper } from './styles';
 import Modals from './Modals';
-import { DebugPanel } from './DebugPanel/DebugPanel';
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
@@ -35,7 +34,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const activeBot = skillId ?? projectId;
 
   return (
-    <div css={pageRoot}>
+    <div css={contentWrapper} role="main">
       <Split
         resetOnDoubleClick
         initialPrimarySize="20%"
@@ -45,11 +44,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         splitterSize="5px"
         onMeasuredSizesChanged={onMeasuredSizesChanged}
       >
-        <SideBar projectId={activeBot} />
+        <div css={contentWrapper}>
+          <div css={splitPaneContainer}>
+            <div css={splitPaneWrapper}>
+              <SideBar projectId={activeBot} />
+            </div>
+          </div>
+        </div>
+
         <div css={contentWrapper} role="main">
           <CommandBar projectId={activeBot} />
-          <Conversation css={editorContainer}>
-            <div css={editorWrapper}>
+          <Conversation css={splitPaneContainer}>
+            <div css={splitPaneWrapper}>
               <Split
                 resetOnDoubleClick
                 initialPrimarySize="65%"
@@ -62,7 +68,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               </Split>
             </div>
           </Conversation>
-          <DebugPanel />
         </div>
       </Split>
       <Modals projectId={activeBot} />

@@ -12,7 +12,7 @@ const log = logger.extend('dialogMerge');
 
 if (!isMainThread) {
   const realMerge = new SchemaMerger(
-    [workerData.manifestFile, '!**/imported/**', '!**/generated/**'],
+    [workerData.manifestFile, `!${path.join(workerData.currentProjectDataDir, 'generated')}/**`],
     path.join(workerData.currentProjectDataDir, 'schemas/sdk'),
     path.join(workerData.currentProjectDataDir, 'dialogs/imported'),
     false,

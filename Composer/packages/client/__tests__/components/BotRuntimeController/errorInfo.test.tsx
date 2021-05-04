@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render, fireEvent } from '@botframework-composer/test-utils';
 
-import { ErrorInfo } from '../../../src/components/BotRuntimeController/errorInfo';
+import { ErrorInfo } from '../../../src/components/BotRuntimeController/ErrorInfo';
 
 describe('<ErrorInfo />', () => {
   it('should render <ErrorInfo />', () => {

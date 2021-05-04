@@ -11,6 +11,7 @@ import { getBaseName, getExtension } from '../../utils/fileUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { localeState, settingsState, luFileIdsState } from '../atoms/botState';
 import { luFilesSelectorFamily } from '../selectors/lu';
+import { luFileLuFeatureSelector } from '../selectors';
 
 import { luFileState } from './../atoms/botState';
 import { setError } from './shared';
@@ -66,7 +67,7 @@ const updateLuFiles = (
   }
 };
 const getRelatedLuFileChanges = async (
-  luFiles: LuFile[],
+  originLuFiles: LuFile[],
   updatedLuFile: LuFile,
   projectId: string,
   luFeatures: ILUFeaturesConfig
@@ -74,6 +75,7 @@ const getRelatedLuFileChanges = async (
   const { id } = updatedLuFile;
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
+  const luFiles = originLuFiles.map((file) => (file.id === updatedLuFile.id ? updatedLuFile : file));
   const originLuFile = luFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = luFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
@@ -175,6 +177,32 @@ export const removeLuFileState = async (
 };
 
 export const luDispatcher = () => {
+  const batchUpdateLuFiles = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      payloads: {
+        id: string;
+        content: string;
+        projectId: string;
+      }[]
+    ) => {
+      const { snapshot } = callbackHelpers;
+      payloads.map(async ({ id, content, projectId }) => {
+        const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
+        try {
+          const updatedFile = (await luWorker.parse(id, content, luFeatures, [])) as LuFile;
+          // compare to drop expired change on current id file.
+          /**
+           * Why other methods do not need double check content?
+           * Because this method already did set content before call luFilesAtomUpdater.
+           */
+          updateLuFiles(callbackHelpers, projectId, { updates: [updatedFile] });
+        } catch (error) {
+          setError(callbackHelpers, error);
+        }
+      });
+    }
+  );
+
   const updateLuFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
@@ -195,7 +223,7 @@ export const luDispatcher = () => {
       });
 
       const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
+      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
 
       try {
         const updatedFile = (await luWorker.parse(id, content, luFeatures, luFiles)) as LuFile;
@@ -230,8 +258,7 @@ export const luDispatcher = () => {
     }) => {
       const { snapshot } = callbackHelpers;
       const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
-
+      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
       const luFile = luFiles.find((temp) => temp.id === id);
       if (!luFile) return luFiles;
 
@@ -288,7 +315,7 @@ export const luDispatcher = () => {
     }) => {
       const { snapshot } = callbackHelpers;
       const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
+      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
 
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return luFiles;
@@ -314,7 +341,7 @@ export const luDispatcher = () => {
     }) => {
       const { snapshot } = callbackHelpers;
       const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
-      const { luFeatures } = await snapshot.getPromise(settingsState(projectId));
+      const luFeatures = await snapshot.getPromise(luFileLuFeatureSelector({ projectId, id }));
 
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return luFiles;
@@ -329,6 +356,7 @@ export const luDispatcher = () => {
   );
 
   return {
+    batchUpdateLuFiles,
     updateLuFile,
     updateLuIntent,
     createLuIntent,

@@ -41,6 +41,14 @@ export async function getProjTemplatesV2(req: any, res: any) {
         id: QnABotTemplateId,
         name: 'QNA',
         description: formatMessage('Empty bot template that routes to qna configuration'),
+        dotnetSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
+        nodeSupport: {
+          functionsSupported: true,
+          webAppSupported: true,
+        },
         package: {
           packageName: emptyBotNpmTemplateName,
           packageSource: 'npm',
@@ -54,7 +62,7 @@ export async function getProjTemplatesV2(req: any, res: any) {
       templates = templates.concat(await getNpmTemplates());
     }
 
-    const sortedTemplateList = sortTemplates(templates);
+    const sortedTemplateList = await sortTemplates(templates);
 
     // return templates
     res.status(200).json(sortedTemplateList);
@@ -78,7 +86,7 @@ export async function getTemplateReadMe(req: any, res: any) {
         'microsoft',
         'botframework-components',
         'main',
-        'docs/qnaTemplateReadMe.md'
+        'generators/generator-bot-core-qna/README.md'
       );
       res.status(200).json(qnaReadMe);
     } else {

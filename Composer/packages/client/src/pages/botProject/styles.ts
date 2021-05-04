@@ -3,21 +3,25 @@
 
 import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 export const title = css`
-  font-size: ${FontSizes.medium};
+  font-size: ${FontSizes.large};
   font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+`;
+
+export const subtext = css`
+  color: ${NeutralColors.gray130};
+  font-size: ${FontSizes.medium};
+  padding-bottom: 5px;
 `;
 
 export const subtitle = css`
   color: ${NeutralColors.gray130};
-  font-size: ${FontSizes.smallPlus};
-  & > h1 {
-    margin-top: 0;
-  }
+  font-size: ${FontSizes.medium};
+  padding: 12px 0;
 `;
 
 export const sectionHeader = css`
@@ -26,13 +30,21 @@ export const sectionHeader = css`
   padding: 6px 0;
 `;
 
-export const tableRow = css`
+export const tableHeaderRow = css`
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 42px;
   width: 750px;
   border-bottom: 1px solid ${NeutralColors.gray30};
+`;
+
+export const tableRow = css`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 42px;
+  width: 750px;
 `;
 
 export const tableRowItem = (width?: string) => css`
@@ -121,6 +133,7 @@ export const unknownIconStyle = (required: boolean) => {
 };
 
 export const columnSizes = ['300px', '150px', '150px'];
+export const extendedColumnSizes = ['300px', '150px', '300px'];
 
 export const actionButton = {
   root: {
@@ -131,3 +144,20 @@ export const actionButton = {
     marginLeft: 5,
   },
 };
+
+export const inputFieldStyles = mergeStyleSets({ root: { marginTop: 10, width: '75%' } }, customError);
+
+export const teamsCallOutStyles = mergeStyleSets({
+  callout: {
+    width: 320,
+    padding: '20px 24px',
+  },
+  title: {
+    marginBottom: 12,
+    fontWeight: FontWeights.semilight,
+  },
+  link: {
+    display: 'block',
+    marginTop: 20,
+  },
+});

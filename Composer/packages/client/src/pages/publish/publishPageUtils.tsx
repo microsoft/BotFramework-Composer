@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { PublishTarget, SkillManifestFile } from '@bfc/shared';
+
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+import { getManifestUrl } from '../../utils/skillManifestUtil';
 
 import { Bot, BotStatus, BotPublishHistory, BotProjectType, BotPropertyType } from './type';
 
@@ -18,6 +21,7 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
       setting: bot.setting,
       publishTargets,
       publishTypes: bot.publishTypes,
+      skillManifests: bot.skillManifests,
     };
     const tmpBot = { id: bot.projectId, name: bot.name, publishTarget: '' };
     if (publishTargets.length > 0) {
@@ -28,17 +32,31 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
   return { botPropertyData, botList };
 };
 
+const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string): string[] => {
+  const urls: string[] = [];
+  for (const skillManifest of skillManifests || []) {
+    for (const endpoint of skillManifest?.content?.endpoints || []) {
+      const url = getManifestUrl(hostname, skillManifest);
+      if (endpoint?.msAppId === appId && !urls.includes(url)) {
+        urls.push(url);
+      }
+    }
+  }
+
+  return urls;
+};
+
 export const generateBotStatusList = (
   botList: Bot[],
   botPropertyData: BotPropertyType,
   botPublishHistoryList: BotPublishHistory
 ): BotStatus[] => {
   const bots = botList.map((bot) => {
-    const botStatus: BotStatus = Object.assign({}, bot);
-    const publishTargets = botPropertyData[bot.id].publishTargets;
+    const botStatus: BotStatus = Object.assign({ skillManifestUrls: [] }, bot);
+    const publishTargets: PublishTarget[] = botPropertyData[bot.id].publishTargets;
     const publishHistory = botPublishHistoryList[bot.id];
+    botStatus.publishTargets = publishTargets;
     if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
-      botStatus.publishTargets = publishTargets;
       if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
         const history = publishHistory[botStatus.publishTarget][0];
         botStatus.time = history.time;
@@ -46,7 +64,21 @@ export const generateBotStatusList = (
         botStatus.message = history.message;
         botStatus.status = history.status;
       }
+
+      const currentPublishTarget = publishTargets.find((pt) => pt.name === botStatus.publishTarget);
+      if (currentPublishTarget) {
+        const config = JSON.parse(currentPublishTarget.configuration);
+        const appId = config?.settings?.MicrosoftAppId;
+        if (appId) {
+          botStatus.skillManifestUrls = findSkillManifestUrl(
+            botPropertyData[bot.id].skillManifests,
+            config.hostname,
+            appId
+          );
+        }
+      }
     }
+
     return botStatus;
   });
   return bots;

@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+import { ILuisConfig, IQnAConfig, IOrchestratorConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
 import * as qnaUtil from '../../utils/qnaUtil';
@@ -11,7 +11,7 @@ import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { botStatusState, botRuntimeErrorState } from '../atoms';
+import { botStatusState, botBuildTimeErrorState } from '../atoms';
 import { dialogsWithLuProviderSelectorFamily, luFilesSelectorFamily, qnaFilesSelectorFamily } from '../selectors';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
@@ -23,7 +23,8 @@ export const builderDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (
       projectId: string,
       luisConfig: ILuisConfig,
-      qnaConfig: IQnAConfig
+      qnaConfig: IQnAConfig,
+      orchestratorConfig: IOrchestratorConfig
     ) => {
       const { set, snapshot } = callbackHelpers;
       const dialogs = await snapshot.getPromise(dialogsWithLuProviderSelectorFamily(projectId));
@@ -45,7 +46,7 @@ export const builderDispatcher = () => {
         { title: Text.LUISDEPLOYFAILURE, message: '' }
       );
       if (errorMsg.message) {
-        set(botRuntimeErrorState(projectId), errorMsg);
+        set(botBuildTimeErrorState(projectId), errorMsg);
         set(botStatusState(projectId), BotStatus.failed);
         return;
       }
@@ -53,6 +54,7 @@ export const builderDispatcher = () => {
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
+          orchestratorConfig,
           projectId,
           luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           qnaFiles: referredQnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
@@ -62,7 +64,7 @@ export const builderDispatcher = () => {
         set(botStatusState(projectId), BotStatus.published);
       } catch (err) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botRuntimeErrorState(projectId), {
+        set(botBuildTimeErrorState(projectId), {
           title: Text.LUISDEPLOYFAILURE,
           message: err.response?.data?.message || err.message,
         });

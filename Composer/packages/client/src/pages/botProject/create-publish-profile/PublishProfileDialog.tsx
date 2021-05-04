@@ -10,7 +10,7 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
+import { getTokenFromCache, userShouldProvideTokens, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
@@ -30,6 +30,7 @@ type PublishProfileDialogProps = {
   types: PublishType[];
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
+  onUpdateIsCreateProfileFromSkill?: (isCreateProfileFromSkill: boolean) => void;
 };
 
 const Page = {
@@ -38,7 +39,15 @@ const Page = {
 };
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
-  const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
+  const {
+    current,
+    types,
+    projectId,
+    closeDialog,
+    targets,
+    setPublishTargets,
+    onUpdateIsCreateProfileFromSkill,
+  } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
 
@@ -47,7 +56,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
 
   const [dialogTitle, setTitle] = useState({
-    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+    title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
     subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
   });
 
@@ -81,7 +90,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle({
-        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+        title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
         subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
       });
     };
@@ -91,8 +100,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         graphToken: getTokenFromCache('graphToken'),
       };
     };
+    /** @deprecated use `userShouldProvideTokens` instead */
     PluginAPI.publish.isGetTokenFromUser = () => {
-      return isGetTokenFromUser();
+      return userShouldProvideTokens();
+    };
+    PluginAPI.publish.userShouldProvideTokens = () => {
+      return userShouldProvideTokens();
     };
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
@@ -160,10 +173,18 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
       const fullConfig = { ...config, name: name, type: targetType };
 
       let arm, graph;
-      if (!isGetTokenFromUser()) {
-        const tenantId = getTenantIdFromCache();
+      if (!userShouldProvideTokens()) {
+        let tenantId = config.tenantId;
+
+        if (!tenantId) {
+          // eslint-disable-next-line no-console
+          console.log('Provision config does not include tenant id, using tenant id from cache.');
+          tenantId = getTenantIdFromCache();
+        }
+
         // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {
+          TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
           const notification = createNotification({
             type: 'error',
             title: formatMessage('Error provisioning.'),
@@ -183,7 +204,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      onUpdateIsCreateProfileFromSkill?.(true);
     };
   }, [name, targetType, types, savePublishTarget]);
 
@@ -206,7 +228,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
             <div style={{ marginBottom: '16px' }}>
               {dialogTitle.subText}
               <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage('Learn More.')}
+                {formatMessage('Learn more')}
               </Link>
             </div>
             <ProfileFormDialog
@@ -229,7 +251,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           <Fragment>
             <div style={{ marginBottom: '16px' }}>{dialogTitle.subText}</div>
             <div css={publishSurfaceStyles}>
-              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+              <PluginHost
+                bundleId={selectedType.bundleId}
+                pluginName={selectedType.extensionId}
+                pluginType="publish"
+                projectId={projectId}
+              />
             </div>
           </Fragment>
         )}

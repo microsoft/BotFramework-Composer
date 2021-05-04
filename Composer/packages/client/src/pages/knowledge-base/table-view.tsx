@@ -224,11 +224,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
     actions.setMessage('item deleted');
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     setCreateQnAPairSettings({ groupKey: '', sectionIndex: -1 });
-    removeQnAPairs({
-      id: fileId,
-      sectionId,
-      projectId: actualProjectId,
-    });
+    if (sectionId) {
+      removeQnAPairs({
+        id: fileId,
+        sectionId,
+        projectId: actualProjectId,
+      });
+    } else {
+      setQnASections(qnaSections.filter((section) => !(section.Answer === '' && section.Questions.length === 0)));
+    }
     // update expand status
     if (expandedIndex) {
       if (sectionIndex < expandedIndex) {
@@ -252,11 +256,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const groupStartIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     // create on empty KB.
     let insertPosition = groupStartIndex;
-    if (groupStartIndex === -1) {
-      insertPosition = 0;
-    }
     const newGroups = getGroups(fileId);
     setGroups(newGroups);
+    if (groupStartIndex === -1) {
+      insertPosition = newGroups?.find((group) => group.key === fileId)?.startIndex || 0;
+    }
     const newItem = createQnASectionItem(fileId);
     const newQnaSections = [...qnaSections];
     newQnaSections.splice(insertPosition, 0, newItem);
@@ -381,7 +385,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           };
           const title = formatMessage('Warning');
           const subTitle = formatMessage(
-            'Delete one source file will also delete qna files with the same name on other locales'
+            'Deleting one source file will also delete qna files with the same name on other locales'
           );
 
           setting = {
@@ -452,7 +456,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       {
                         key: 'update',
                         iconProps: { iconName: 'Download' },
-                        name: formatMessage('Import new url and overwrite'),
+                        name: formatMessage('Import new URL and overwrite'),
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!containerQnAFile) return;

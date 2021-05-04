@@ -6,8 +6,8 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 export const buttonStyle = css`
   position: absolute;
-  right: -24px;
-  top: -24px;
+  right: -16px;
+  top: -16px;
 `;
 
 export const contentStyle = css`
@@ -54,6 +54,7 @@ export const subtitleStyle = css`
 `;
 
 export const titleStyle = css`
+  padding-top: 8px;
   font-size: 24px;
 `;
 

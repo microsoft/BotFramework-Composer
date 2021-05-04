@@ -4,10 +4,10 @@
 import * as React from 'react';
 import { fireEvent, render } from '@botframework-composer/test-utils';
 import { Toolbar } from '@bfc/ui-shared';
-import { BotTemplate } from '@bfc/shared';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
-import { ExampleList } from '../../src/pages/home/ExampleList';
+import { WhatsNewsList } from '../../src/pages/home/WhatsNewsList';
+import { CardWidget } from '../../src/pages/home/CardWidget';
 import { renderWithRecoil } from '../testUtils';
 
 describe('<Home/>', () => {
@@ -29,17 +29,22 @@ describe('<Home/>', () => {
     }
   });
 
-  it('should dispatch onClick event when clicked on an ExampleList', () => {
-    const templates = [
-      { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot' },
-      { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot' },
-    ] as BotTemplate[];
-    const onClickTemplate = jest.fn((item) => item);
-    const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);
-    expect(container).toHaveTextContent('Echo Bot');
-    const link = getByText('Echo Bot');
-    fireEvent.click(link);
-    expect(onClickTemplate.mock.results[0].value).toBe('EchoBot');
+  it("should render what's news List", () => {
+    const newsList = [
+      {
+        title: 'Composer 1.4',
+        description: "Learn about new features in Composer's latest release.",
+        url: 'https://www.microsoft.com',
+      },
+      {
+        title: 'Conversational AI at Microsoft Ignite',
+        description:
+          'Updates from Microsoft Ignite. New Composer release, public preview of Orchestrator and updates to Azure Bot Service and Bot Framework SDK.',
+        url: 'https://www.microsoft.com',
+      },
+    ];
+    const { container } = render(<WhatsNewsList newsList={newsList} />);
+    expect(container).toHaveTextContent(newsList[0].description);
   });
 
   it('should call onClick handler when clicked', () => {
@@ -89,5 +94,25 @@ describe('<Home/>', () => {
     const link = getByText('New');
     fireEvent.click(link);
     expect(setCreationFlowStatus.mock.results[0].value).toBe('NEW');
+  });
+
+  it('should render resoure, article, video cards', () => {
+    const videoItem = {
+      image: 'https://via.placeholder.com/244x95/0078d4/ffffff?text=Bot+FrameWork+Composer',
+      title: 'Introduction to Composer',
+      description: 'A five minute intro to Composer',
+      url: 'https://www.youtube.com/watch?v=hiIiZnRcCv0',
+    };
+    const { container } = renderWithRecoil(
+      <CardWidget
+        ariaLabel="test"
+        cardType={'video'}
+        content={videoItem.description}
+        href={videoItem.url}
+        imageCover={videoItem.image}
+        title={videoItem.title}
+      />
+    );
+    expect(container).toHaveTextContent(videoItem.title);
   });
 });

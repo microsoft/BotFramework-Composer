@@ -8,16 +8,29 @@ import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { useRecoilValue } from 'recoil';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { ITeachingBubbleStyles } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { ILinkStyles, Link } from 'office-ui-fabric-react/lib/components/Link';
 
+import TelemetryClient from '../telemetry/TelemetryClient';
 import { onboardingState } from '../recoilModel';
 
 import { useOnboardingContext } from './OnboardingContext';
 import { getTeachingBubble } from './content';
 
-export const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
+const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
   bodyContent: {
     selectors: {
       a: {
+        color: FluentTheme.palette.white,
+      },
+    },
+  },
+};
+
+const linkStyles: Partial<ILinkStyles> = {
+  root: {
+    textDecoration: 'underline',
+    selectors: {
+      ':hover': {
         color: FluentTheme.palette.white,
       },
     },
@@ -58,45 +71,71 @@ const TeachingBubbles = () => {
     return null;
   }
 
-  const teachingBubbleProps = getTeachingBubble(id);
+  const { content, headline, helpLink, calloutProps } = getTeachingBubble(id);
 
-  teachingBubbleProps.primaryButtonProps = {
+  const primaryButtonProps = {
     children: getPrimaryButtonText(currentStep, setLength),
     onClick: nextStep,
     'data-testid': 'onboardingNext',
   };
 
+  let secondaryButtonProps;
   if (currentStep > 0) {
-    teachingBubbleProps.secondaryButtonProps = {
+    secondaryButtonProps = {
       children: formatMessage('Previous'),
       onClick: previousStep,
       'data-testid': 'onboardingPrevious',
     };
   }
 
+  let footerContent;
   if (setLength > 1) {
-    teachingBubbleProps.footerContent = `${formatMessage('{step} of {setLength}', {
+    footerContent = `${formatMessage('{step} of {setLength}', {
       step: currentStep + 1,
       setLength,
     })}`;
   }
 
+  let onDismiss;
   if (currentSet === 0) {
-    teachingBubbleProps.onDismiss = nextStep;
+    onDismiss = nextStep;
   }
 
   return (
     <TeachingBubble
-      styles={teachingBubbleStyles}
-      target={target}
-      {...teachingBubbleProps}
       calloutProps={{
         preventDismissOnLostFocus: true,
         preventDismissOnResize: true,
         preventDismissOnScroll: true,
-        ...teachingBubbleProps.calloutProps,
+        ...calloutProps,
       }}
-    />
+      footerContent={footerContent}
+      headline={headline}
+      primaryButtonProps={primaryButtonProps}
+      secondaryButtonProps={secondaryButtonProps}
+      styles={teachingBubbleStyles}
+      target={target}
+      onDismiss={onDismiss}
+    >
+      {content}
+      {helpLink && headline && (
+        <>
+          &nbsp;
+          <Link
+            aria-label={formatMessage('Learn more about {title}', { title: headline.toLowerCase() })}
+            href={helpLink}
+            rel="noopener noreferrer"
+            styles={linkStyles}
+            target="_blank"
+            onClick={() => {
+              TelemetryClient.track('HelpLinkClicked', { url: helpLink });
+            }}
+          >
+            {formatMessage('Learn more')}
+          </Link>
+        </>
+      )}
+    </TeachingBubble>
   );
 };
 

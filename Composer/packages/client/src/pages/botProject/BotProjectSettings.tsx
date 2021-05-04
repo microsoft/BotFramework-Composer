@@ -10,8 +10,6 @@ import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DialogSetting } from '@bfc/shared';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -23,9 +21,10 @@ import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { openDeleteBotModal } from './DeleteBotButton';
-import BotProjectSettingsTableView from './BotProjectSettingsTableView';
+import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 
 // -------------------- Styles -------------------- //
 
@@ -45,18 +44,6 @@ const container = css`
   height: 100%;
 `;
 
-const botNameStyle = css`
-  font-size: ${FontSizes.xLarge};
-  font-weight: ${FontWeights.semibold};
-  color: ${NeutralColors.black};
-`;
-
-const mainContentHeader = css`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-`;
-
 // -------------------- BotProjectSettings -------------------- //
 
 const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
@@ -67,9 +54,8 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
   const { deleteBot } = useRecoilValue(dispatcherState);
+  const isPVABot = usePVACheck(currentProjectId);
 
-  const isRootBot = !!botProject?.isRootBot;
-  const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
 
@@ -89,16 +75,20 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
 
     return [
-      {
-        text: formatMessage('Add a package'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'Package' },
-          onClick: () => buttonClick(linkToPackageManager),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
+      ...(!isPVABot
+        ? [
+            {
+              text: formatMessage('Add a package'),
+              type: 'action',
+              buttonProps: {
+                iconProps: { iconName: 'Package' },
+                onClick: () => buttonClick(linkToPackageManager),
+                styles: defaultToolbarButtonStyles,
+              },
+              align: 'left',
+            },
+          ]
+        : []),
       {
         text: formatMessage('Edit LG'),
         type: 'action',
@@ -119,16 +109,20 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
         },
         align: 'left',
       },
-      {
-        text: formatMessage('Manage connections'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'PlugConnected' },
-          onClick: () => buttonClick(linkToConnections),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
+      ...(!isPVABot
+        ? [
+            {
+              text: formatMessage('Manage connections'),
+              type: 'action',
+              buttonProps: {
+                iconProps: { iconName: 'PlugConnected' },
+                onClick: () => buttonClick(linkToConnections),
+                styles: defaultToolbarButtonStyles,
+              },
+              align: 'left',
+            },
+          ]
+        : []),
       {
         text: formatMessage('Delete bot'),
         type: 'action',
@@ -152,7 +146,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
       return {
         id: b.projectId,
-        name: b.name,
+        name: `${b.name} ${b.isRootBot ? formatMessage('(root)') : ''}`,
         ariaLabel: formatMessage('bot'),
         url: createBotSettingUrl(rootBotProjectId ?? '', b.projectId),
         isRootBot: b.isRootBot,
@@ -169,7 +163,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   const onRenderHeaderContent = () => {
     return formatMessage(
-      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'
+      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
     );
   };
 
@@ -205,19 +199,16 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     >
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
-          <div css={mainContentHeader}>
-            <div css={botNameStyle}>
-              {`${botName} (${isRootBot ? formatMessage('Root Bot') : formatMessage('Skill')})`}
-            </div>
-            <Toggle
-              inlineLabel
-              checked={isAdvancedSettingsEnabled}
-              className={'advancedSettingsView'}
-              defaultChecked={false}
-              label={formatMessage('Advanced Settings View (json)')}
-              onChange={() => setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled)}
-            />
-          </div>
+          <Toggle
+            inlineLabel
+            checked={isAdvancedSettingsEnabled}
+            className={'advancedSettingsView'}
+            defaultChecked={false}
+            label={formatMessage('Advanced Settings View (json)')}
+            onChange={() => {
+              setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
+            }}
+          />
           {isAdvancedSettingsEnabled ? (
             <JsonEditor
               key={'settingsjson'}
@@ -227,7 +218,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               onChange={handleChange}
             />
           ) : (
-            <BotProjectSettingsTableView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
+            <BotProjectSettingsTabView projectId={currentProjectId} scrollToSectionId={props.location?.hash} />
           )}
         </div>
       </Suspense>

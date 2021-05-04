@@ -40,6 +40,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
             {
               a: (props) => {
                 <Link
+                  key="nightly-link-learn-more-link"
                   href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
                   rel="noopener noreferrer"
                   styles={link}

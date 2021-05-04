@@ -27,10 +27,11 @@ import { undoFunctionState } from '../../recoilModel/undo/history';
 import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
+import { OrchestratorForSkillsDialog } from '../../components/Orchestrator/OrchestratorForSkillsDialog';
 
 import CreationModal from './creationModal';
 
-const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/AddRemoteSkillModal/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
@@ -60,6 +61,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     createQnAKBsFromUrls,
     createQnAKBFromScratch,
     createTrigger,
+    createTriggerForRemoteSkill,
     createQnATrigger,
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
@@ -125,13 +127,17 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
       )}
       {showAddSkillDialogModal && (
         <CreateSkillModal
+          addRemoteSkill={async (manifestUrl, endpointName) => {
+            setAddSkillDialogModalVisibility(false);
+            await addRemoteSkillToBotProject(manifestUrl, endpointName);
+          }}
+          addTriggerToRoot={async (dialogId, formData, skillId) => {
+            await createTriggerForRemoteSkill(projectId, dialogId, formData, skillId);
+            commitChanges();
+          }}
           projectId={projectId}
           onDismiss={() => {
             setAddSkillDialogModalVisibility(false);
-          }}
-          onSubmit={(manifestUrl, endpointName) => {
-            setAddSkillDialogModalVisibility(false);
-            addRemoteSkillToBotProject(manifestUrl, endpointName);
           }}
         />
       )}
@@ -164,6 +170,8 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
         qnaFiles={qnaFiles}
         onSubmit={handleCreateQnA}
       />
+
+      <OrchestratorForSkillsDialog />
 
       {displaySkillManifestNameIdentifier && (
         <DisplayManifestModal

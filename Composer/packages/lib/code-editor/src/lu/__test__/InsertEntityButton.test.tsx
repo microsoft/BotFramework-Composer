@@ -43,7 +43,13 @@ const luFile: LuFile = {
   isContentUnparsed: false,
 };
 
-jest.useFakeTimers();
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
+});
 
 describe('<InsertEntityButton />', () => {
   it('Should call onInsertEntity callback when a menu item is clicked', () => {
@@ -81,30 +87,5 @@ describe('<InsertEntityButton />', () => {
     });
 
     expect((await screen.findAllByText(/.*target.*/)).length).toBe(1);
-  });
-
-  it('Should disable non-ml entities when labeling menu is visible', async () => {
-    const container = render(
-      <InsertEntityButton
-        insertEntityDisabled
-        labelingMenuVisible
-        luFile={luFile}
-        tagEntityDisabled={false}
-        onInsertEntity={jest.fn()}
-      />
-    );
-
-    fireEvent.click(screen.getByTestId('menuButton'));
-    const elms = container.getAllByText('Prebuilt entity');
-
-    const allDisabled = elms.reduce((acc, elm) => {
-      if (!elm.closest('button')?.classList.contains('is-disabled')) {
-        acc = false;
-      }
-
-      return acc;
-    }, true);
-
-    expect(allDisabled).toBeTruthy();
   });
 });

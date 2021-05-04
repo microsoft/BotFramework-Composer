@@ -10,10 +10,11 @@ import {
   publishTypesState,
   botStatusState,
   publishHistoryState,
-  botRuntimeErrorState,
+  botBuildTimeErrorState,
   isEjectRuntimeExistState,
   filePersistenceState,
   settingsState,
+  runtimeStandardOutputDataState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
@@ -26,6 +27,9 @@ import {
 import * as luUtil from '../../utils/luUtil';
 import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
+import { RuntimeOutputData } from '../types';
+import { checkIfFunctionsMissing, missingFunctionsError } from '../../utils/runtimeErrors';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -36,29 +40,14 @@ const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
 const PUBLISH_FAILED = 500;
 
-const missingDotnetVersionError = {
-  message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
-  linkAfterMessage: {
-    text: formatMessage('Learn more.'),
-    url: 'https://aka.ms/install-composer',
-  },
-  link: {
-    text: formatMessage('Install Microsoft .NET Core SDK'),
-    url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
-  },
-};
-
-const checkIfDotnetVersionMissing = (err: any) => {
-  return /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(err.message as string);
-};
-
 export const publishStorage = new ClientStorage(window.sessionStorage, 'publish');
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
+    TelemetryClient.track('PublishFailure', { message: typeof error === 'string' ? error : JSON.stringify(error) });
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
-      set(botRuntimeErrorState(projectId), { ...error, title });
+      set(botBuildTimeErrorState(projectId), { ...error, title });
     }
     // prepend the latest publish results to the history
 
@@ -72,6 +61,7 @@ export const publisherDispatcher = () => {
   };
 
   const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data: PublishResult, target) => {
+    TelemetryClient.track('PublishSuccess');
     const { endpointURL, status } = data;
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
@@ -139,11 +129,14 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.starting);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
-        if (checkIfDotnetVersionMissing(data)) {
-          set(botRuntimeErrorState(projectId), { title: Text.DOTNETFAILURE, ...missingDotnetVersionError });
-          return;
+        if (checkIfFunctionsMissing(data)) {
+          set(botBuildTimeErrorState(projectId), {
+            ...missingFunctionsError,
+            title: formatMessage('Error occurred building the bot'),
+          });
+        } else {
+          set(botBuildTimeErrorState(projectId), { ...data, title: formatMessage('Error occurred building the bot') });
         }
-        set(botRuntimeErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
       }
     }
 
@@ -196,6 +189,7 @@ export const publisherDispatcher = () => {
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
         const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
+          publishTarget: target,
           accessToken: token,
           metadata: {
             ...metadata,
@@ -213,11 +207,7 @@ export const publisherDispatcher = () => {
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
-        if (checkIfDotnetVersionMissing(err?.response?.data)) {
-          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, missingDotnetVersionError, target, projectId);
-        } else {
-          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
-        }
+        await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
       }
     }
   );
@@ -253,6 +243,7 @@ export const publisherDispatcher = () => {
         const response = await httpClient.get(
           `/publish/${projectId}/status/${target.name}${currentJobId ? '/' + currentJobId : ''}`
         );
+
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
@@ -264,7 +255,7 @@ export const publisherDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       try {
         const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-        filePersistence.flush();
+        await filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
         set(publishHistoryState(projectId), (publishHistory) => ({
           ...publishHistory,
@@ -305,9 +296,10 @@ export const publisherDispatcher = () => {
     }
   );
 
-  const resetBotRuntimeError = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+  const resetBotRuntimeLog = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { reset } = callbackHelpers;
-    reset(botRuntimeErrorState(projectId));
+    reset(botBuildTimeErrorState(projectId));
+    reset(runtimeStandardOutputDataState(projectId));
   });
 
   const openBotInEmulator = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
@@ -327,6 +319,18 @@ export const publisherDispatcher = () => {
     }
   });
 
+  const setRuntimeStandardOutputData = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, data: RuntimeOutputData) => {
+      const { set } = callbackHelpers;
+      try {
+        set(runtimeStandardOutputDataState(projectId), data);
+      } catch (err) {
+        setError(callbackHelpers, err);
+        logMessage(callbackHelpers, err.message);
+      }
+    }
+  );
+
   return {
     getPublishTargetTypes,
     publishToTarget,
@@ -337,6 +341,7 @@ export const publisherDispatcher = () => {
     getPublishHistory,
     setEjectRuntimeExist,
     openBotInEmulator,
-    resetBotRuntimeError,
+    resetBotRuntimeLog,
+    setRuntimeStandardOutputData,
   };
 };

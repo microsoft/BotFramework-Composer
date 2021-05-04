@@ -62,7 +62,6 @@ const LUPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
-      useDebugPane
       useNewTree
       data-testid="LUPage"
       dialogId={dialogId}
@@ -72,7 +71,7 @@ const LUPage: React.FC<RouteComponentProps<{
       pageMode={'language-understanding'}
       projectId={projectId}
       skillId={skillId}
-      title={formatMessage('User Input')}
+      title={formatMessage('User input')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >

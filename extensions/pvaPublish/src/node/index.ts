@@ -10,7 +10,7 @@ function initialize(registration: IExtensionRegistration) {
   setLogger(registration.log);
   const extension = {
     name: 'pva-publish-composer',
-    description: 'Publish bot to Power Virtual Agents (Preview)',
+    description: 'Publish bot to Power Virtual Agents',
     bundleId: 'publish',
     getHistory: history,
     getStatus,

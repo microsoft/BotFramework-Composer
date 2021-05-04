@@ -7,8 +7,8 @@ import fs from 'fs';
 import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import {
+  isUsingAdaptiveRuntime,
   getNewDesigner,
   FileInfo,
   Diagnostic,
@@ -33,11 +33,19 @@ import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
 
-import { BotStructureFilesPatterns, isCrossTrainConfig } from './botStructure';
+import {
+  BotStructureFilesPatterns,
+  defaultManifestFilePath,
+  isCrossTrainConfig,
+  PVATopicFilePatterns,
+  defaultFilePath,
+  serializeFiles,
+  parseFileName,
+  isRecognizer,
+} from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -54,6 +62,7 @@ export class BotProject implements IBotProject {
   public id: string | undefined;
   public name: string;
   public dir: string;
+  public readme: string;
   public dataDir: string;
   public eTag?: string;
   public fileStorage: IFileStorage;
@@ -83,6 +92,7 @@ export class BotProject implements IBotProject {
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+    this.readme = '';
   }
 
   public get dialogFiles() {
@@ -181,12 +191,14 @@ export class BotProject implements IBotProject {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
     this.files = await this._getFiles();
+    this.readme = await this._getReadme();
   };
 
   public getProject = () => {
     return {
       botName: this.name,
       files: Array.from(this.files.values()),
+      readme: this.readme,
       location: this.dir,
       schemas: this.getSchemas(),
       diagnostics: this.diagnostics,
@@ -464,6 +476,41 @@ export class BotProject implements IBotProject {
     return await this._createFile(relativePath, content);
   };
 
+  public createManifestLuFile = async (name: string, content = '') => {
+    const filename = name.trim();
+    this.validateFileName(filename);
+    this._validateFileContent(name, content);
+    const botName = this.name;
+    const relativePath = defaultManifestFilePath(botName, filename);
+    const file = this.files.get(filename);
+    if (file) {
+      throw new Error(`${filename} dialog already exist`);
+    }
+    return await this._createFile(relativePath, content);
+  };
+
+  public updateManifestLuFile = async (name: string, content: string): Promise<string> => {
+    const file = this.files.get(name);
+    if (file === undefined) {
+      const { lastModified } = await this.createManifestLuFile(name, content);
+      return lastModified;
+    }
+
+    const relativePath = file.relativePath;
+    this._validateFileContent(name, content);
+    const lastModified = await this._updateFile(relativePath, content);
+    return lastModified;
+  };
+
+  public deleteManifestLuFile = async (name: string) => {
+    const file = this.files.get(name);
+    if (file === undefined) {
+      throw new Error(`no such file ${name}`);
+    }
+    await this._removeFile(file.relativePath);
+    await this._cleanUp(file.relativePath);
+  };
+
   public createFiles = async (files) => {
     const createdFiles: FileInfo[] = [];
     for (const { name, content } of files) {
@@ -473,7 +520,13 @@ export class BotProject implements IBotProject {
     return createdFiles;
   };
 
-  public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
+  public buildFiles = async ({
+    luisConfig,
+    qnaConfig,
+    orchestratorConfig,
+    luResource = [],
+    qnaResource = [],
+  }: IBuildConfig) => {
     if (this.settings) {
       const luFiles: FileInfo[] = [];
       const emptyFiles = {};
@@ -497,7 +550,12 @@ export class BotProject implements IBotProject {
 
       this.builder.rootDir = this.dir;
       this.builder.setBuildConfig(
-        { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey ?? '', qnaRegion: qnaConfig.qnaRegion ?? '' },
+        {
+          ...luisConfig,
+          subscriptionKey: qnaConfig.subscriptionKey ?? '',
+          qnaRegion: qnaConfig.qnaRegion ?? '',
+          ...orchestratorConfig,
+        },
         this.settings.downsampling
       );
       await this.builder.build(
@@ -773,6 +831,19 @@ export class BotProject implements IBotProject {
     }
   };
 
+  private _getReadme = async (): Promise<string> => {
+    const variants = ['readme.md', 'README.md', 'README.MD'];
+
+    for (const v in variants) {
+      const readmePath = Path.join(this.dir, variants[v]);
+      if (await this.fileStorage.exists(readmePath)) {
+        return await this.fileStorage.readFile(readmePath);
+      }
+    }
+
+    return '';
+  };
+
   private _getFiles = async () => {
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
@@ -787,6 +858,7 @@ export class BotProject implements IBotProject {
     const paths = this.fileStorage.globSync(
       [
         ...BotStructureFilesPatterns,
+        ...PVATopicFilePatterns,
         '!(generated/**)',
         '!(runtime/**)',
         '!(bin/**)',
