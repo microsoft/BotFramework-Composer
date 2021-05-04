@@ -44,10 +44,9 @@ const textFieldlabel = {
 };
 
 const name = {
-  subComponentStyles: textFieldlabel,
-};
-
-const description = {
+  root: {
+    width: '420px',
+  },
   subComponentStyles: textFieldlabel,
 };
 
@@ -367,29 +366,19 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 onChange={(_e, val) => updateField('name', val)}
               />
             </StackItem>
-            <StackItem grow={0} styles={halfstack}>
-              <TextField
-                label={formatMessage('Description')}
-                resizable={false}
-                styles={description}
-                value={formData.description}
-                onChange={(_e, val) => updateField('description', val)}
-              />
-            </StackItem>
-          </Stack>
-          {!isImported && (
-            <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+            {!isImported && (
               <StackItem grow={0} styles={halfstack}>
                 <Dropdown
                   data-testid="NewDialogRuntimeType"
                   label={formatMessage('Runtime type')}
                   options={getSupportedRuntimesForTemplate()}
                   selectedKey={formData.runtimeType}
+                  styles={{ root: { width: '420px' } }}
                   onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
                 />
               </StackItem>
-            </Stack>
-          )}
+            )}
+          </Stack>
           {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
