@@ -449,6 +449,9 @@
   "bot_files_created_986109df": {
     "message": "Bot files created"
   },
+  "bot_framework_composer_2_0_provides_more_built_in__c6abf11c": {
+    "message": "Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages."
+  },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code."
   },
@@ -631,6 +634,9 @@
   },
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
+  },
+  "composer_2_0_is_now_available_113ed532": {
+    "message": "Composer 2.0 is now available!"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
@@ -2276,6 +2282,9 @@
   "not_yet_published_669e37b3": {
     "message": "Not yet published"
   },
+  "note_if_your_bot_is_using_custom_actions_they_will_a500ed2": {
+    "message": "Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>"
+  },
   "notifications_cbfa7704": {
     "message": "Notifications"
   },
@@ -3446,8 +3455,14 @@
   "update_activity_2b05e6c6": {
     "message": "Update activity"
   },
+  "update_and_restart_b236a67": {
+    "message": "Update and restart"
+  },
   "update_available_b637d767": {
     "message": "Update available"
+  },
+  "update_cancelled_auto_update_has_been_turned_off_f_7f7e08d7": {
+    "message": "Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>"
   },
   "update_complete_c5163fbf": {
     "message": "Update complete"
