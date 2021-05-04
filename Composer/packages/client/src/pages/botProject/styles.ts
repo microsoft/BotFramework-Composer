@@ -13,8 +13,9 @@ export const title = css`
 `;
 
 export const tabContentContainer = css`
-  margin-left: 7px;
+  margin-left: 10px;
   max-width: 580px;
+  padding-bottom: 10px;
 `;
 
 export const subtext = css`
