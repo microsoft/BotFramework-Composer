@@ -197,8 +197,10 @@ export const BotStatusesCopy = {
 export const DialogCreationCopy = {
   get CREATE_OPTIONS() {
     return {
-      title: formatMessage('Open your Azure Bot resource'),
-      subText: formatMessage('Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?'),
+      title: formatMessage('Your new Azure Bot is available in Composer'),
+      subText: formatMessage(
+        'The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot. Learn more.'
+      ),
     };
   },
   get CREATE_NEW_BOT() {
