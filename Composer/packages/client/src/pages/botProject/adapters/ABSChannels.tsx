@@ -516,7 +516,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                   setShowTeamsManifestModal(true);
                 }}
               >
-                {formatMessage('Open Manifest')}
+                {formatMessage('Open manifest')}
               </Link>
             </Stack.Item>
           )}
