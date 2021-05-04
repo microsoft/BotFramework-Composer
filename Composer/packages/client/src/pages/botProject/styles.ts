@@ -56,7 +56,6 @@ export const tableRow = css`
   flex-direction: row;
   align-items: center;
   height: 42px;
-  width: 750px;
 `;
 
 export const tableRowItem = (width?: string) => css`
