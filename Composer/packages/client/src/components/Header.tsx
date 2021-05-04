@@ -305,13 +305,13 @@ export const Header = () => {
         )}
         {isShow && (
           <IconButton
-            ariaDescription={formatMessage('Test in web chat')}
+            ariaDescription={formatMessage('Test your bot')}
             disabled={!webchatEssentials?.botUrl}
             iconProps={{
               iconName: 'OfficeChat',
             }}
             styles={buttonStyles}
-            title={formatMessage('Test in Web Chat')}
+            title={formatMessage('Test your bot')}
             onClick={() => {
               const currentWebChatVisibility = !isWebChatPanelVisible;
               setWebChatPanelVisibility(currentWebChatVisibility);
@@ -329,7 +329,7 @@ export const Header = () => {
             iconProps={{ iconName: 'Rocket' }}
             id="rocketButton"
             styles={buttonStyles}
-            title={formatMessage('Get started')}
+            title={formatMessage('Recommended actions')}
             onClick={() => toggleGetStarted(true)}
           />
         )}
