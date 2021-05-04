@@ -188,19 +188,22 @@ const Home: React.FC<RouteComponentProps> = () => {
                   src={noRecentBotsCover}
                 />
                 <div css={home.noRecentBotsDescription}>
-                  {formatMessage.rich('<Link>Create a new bot</Link>', {
-                    Link: ({ children }) => (
-                      <Link
-                        key="create-new-bot-link"
-                        onClick={() => {
-                          onClickNewBot();
-                          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
-                        }}
-                      >
-                        {children}
-                      </Link>
-                    ),
-                  })}
+                  {formatMessage.rich(
+                    'Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>',
+                    {
+                      Link: ({ children }) => (
+                        <Link
+                          key="create-new-bot-link"
+                          onClick={() => {
+                            onClickNewBot();
+                            TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+                          }}
+                        >
+                          {children}
+                        </Link>
+                      ),
+                    }
+                  )}
                 </div>
               </div>
             )}
