@@ -145,7 +145,7 @@ export const unknownIconStyle = (required: boolean) => {
 };
 
 export const columnSizes = ['300px', '150px', '150px'];
-export const extendedColumnSizes = ['300px', '150px', '300px'];
+export const extendedColumnSizes = ['200px', '200px', '250px'];
 
 export const actionButton = {
   root: {
