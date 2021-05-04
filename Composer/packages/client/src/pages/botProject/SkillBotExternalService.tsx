@@ -142,7 +142,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       <div css={title}>{formatMessage('Language Understanding')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          '<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>.',
+          '<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
               <Link key="luis-skill-settings-page" href={'https://www.luis.ai/'} target="_blank">
@@ -200,7 +200,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         <div css={title}>{formatMessage('QnA Maker')}</div>
         <div css={subtext}>
           {formatMessage.rich(
-            'Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more.</a2>',
+            'Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more</a2>',
             {
               a: ({ children }) => (
                 <Link key="qna-skill-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">

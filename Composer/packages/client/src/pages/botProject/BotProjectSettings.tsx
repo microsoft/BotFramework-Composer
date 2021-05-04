@@ -126,7 +126,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
       pageMode={'botProjectsSettings'}
       shouldShowEditorError={false}
-      title={formatMessage('Project settings')}
+      title={formatMessage('Configure your bot')}
       toolbarItems={toolbarItems}
     >
       <Suspense fallback={<LoadingSpinner />}>

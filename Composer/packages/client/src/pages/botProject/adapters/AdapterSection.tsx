@@ -30,7 +30,7 @@ const AdapterSection = ({ projectId, scrollToSectionId }: Props) => {
     <div ref={containerRef}>
       <div css={headerText}>
         {formatMessage.rich(
-          'Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. <a>Learn more.</a>',
+          'Expand the reach of your bot by adding connections. Connections are added per bot (typically to the root bot, if your project contains multiple bots), as well as per publishing profile. Select a publishing profile to add and enable connections. <a>Learn more</a>',
           {
             a: ({ children }) => (
               <Link key="adapters-settings-page" href={'https://aka.ms/composer-connections-learnmore'} target="_blank">
