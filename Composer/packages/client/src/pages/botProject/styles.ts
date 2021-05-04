@@ -172,5 +172,6 @@ export const teamsCallOutStyles = mergeStyleSets({
   link: {
     display: 'block',
     marginTop: 20,
+    color: NeutralColors.white,
   },
 });
