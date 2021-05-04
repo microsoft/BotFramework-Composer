@@ -139,10 +139,10 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Language Understanding')}</div>
+      <div css={title}>{formatMessage('Azure Language Understanding')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          '<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>',
+          'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
               <Link key="luis-skill-settings-page" href={'https://www.luis.ai/'} target="_blank">
@@ -159,11 +159,11 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       </div>
       <div css={externalServiceContainerStyle}>
         <TextField
-          ariaLabel={formatMessage('LUIS application name')}
+          ariaLabel={formatMessage('Application name')}
           data-testid={'skillLUISApplicationName'}
           id={'luisName'}
-          label={formatMessage('LUIS application name')}
-          placeholder={formatMessage('Enter LUIS application name')}
+          label={formatMessage('Application name')}
+          placeholder={formatMessage('Type application name')}
           styles={{ root: { marginBottom: 10 } }}
           value={localSkillLuisName}
           onBlur={handleSkillLUISNameOnBlur}
@@ -171,12 +171,12 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         />
         <div ref={luisKeyFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('LUIS authoring key')}
+            ariaLabel={formatMessage('Language Understanding authoring key')}
             buttonText={formatMessage('Use custom LUIS authoring key')}
             errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS authoring key is empty') : ''}
             id={'luisAuthoringKey'}
-            label={formatMessage('LUIS authoring key')}
-            placeholder={formatMessage('Enter LUIS authoring key')}
+            label={formatMessage('Language Understanding authoring key')}
+            placeholder={formatMessage('Type Language Understanding authoring key')}
             placeholderOnDisable={rootLuisKey}
             required={isLUISKeyNeeded}
             value={skillLuisKey}
@@ -185,22 +185,22 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         </div>
         <div ref={luisRegionFieldRef}>
           <FieldWithCustomButton
-            ariaLabel={formatMessage('LUIS region')}
+            ariaLabel={formatMessage('Language Understanding region')}
             buttonText={formatMessage('Use custom LUIS region')}
             errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
-            label={formatMessage('LUIS region')}
+            label={formatMessage('Language Understanding region')}
             options={LUIS_REGIONS}
-            placeholder={formatMessage('Enter LUIS region')}
+            placeholder={formatMessage('Select region')}
             placeholderOnDisable={rootLuisRegion}
             required={isLUISKeyNeeded}
             value={skillLuisRegion}
             onBlur={handleLUISRegionOnBlur}
           />
         </div>
-        <div css={title}>{formatMessage('QnA Maker')}</div>
+        <div css={title}>{formatMessage('Azure QnA Maker')}</div>
         <div css={subtext}>
           {formatMessage.rich(
-            'Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more</a2>',
+            'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>',
             {
               a: ({ children }) => (
                 <Link key="qna-skill-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">

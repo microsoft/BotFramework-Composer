@@ -99,8 +99,10 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     return newbotProjectLinks;
   }, [botProjects]);
 
-  const saveChangeResult = (result: DialogSetting) => {
-    setSettings(currentProjectId, result);
+  const onRenderHeaderContent = () => {
+    return formatMessage(
+      "Review and configure your bot's resources, and add new connections such as speech, Microsoft Teams and more."
+    );
   };
 
   const renderJsonToggle = (): JSX.Element => {
