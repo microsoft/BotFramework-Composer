@@ -154,6 +154,7 @@ export const actionButton = {
     color: SharedColors.cyanBlue10,
     paddingLeft: 0,
     marginLeft: 5,
+    width: '75px',
   },
 };
 
