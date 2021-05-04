@@ -23,6 +23,7 @@ import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { AzureTenant } from '@botframework-composer/types';
+import jwtDecode from 'jwt-decode';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
@@ -95,7 +96,7 @@ export const ManageService = (props: ManageServiceProps) => {
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [subscriptionsErrorMessage, setSubscriptionsErrorMessage] = useState<string>();
   const [keys, setKeys] = useState<KeyRec[]>([]);
-
+  const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('intro');
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
@@ -137,15 +138,23 @@ export const ManageService = (props: ManageServiceProps) => {
       return [];
     }
   };
+  const decodeToken = (token: string) => {
+    try {
+      return jwtDecode<any>(token);
+    } catch (err) {
+      console.error('decode token error in ', err);
+      return null;
+    }
+  };
 
   useEffect(() => {
-    if (!userShouldProvideTokens()) {
+    if (currentStep === 'subscription' && !userShouldProvideTokens()) {
       AuthClient.getTenants()
         .then((tenants) => {
           setAllTenants(tenants);
           if (tenants.length === 0) {
             setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
-          } else if (tenants.length === 1) {
+          } else if (tenants.length >= 1) {
             setTenantId(tenants[0].tenantId);
           } else {
             setTenantsErrorMessage(undefined);
@@ -159,7 +168,7 @@ export const ManageService = (props: ManageServiceProps) => {
           );
         });
     }
-  }, []);
+  }, [currentStep]);
 
   useEffect(() => {
     if (tenantId) {
@@ -210,9 +219,21 @@ export const ManageService = (props: ManageServiceProps) => {
         setShowAuthDialog(true);
       }
       newtoken = getTokenFromCache('accessToken');
-    }
-    if (newtoken) {
-      setToken(newtoken);
+      if (newtoken) {
+        const decoded = decodeToken(newtoken);
+        if (decoded) {
+          setToken(newtoken);
+          setUserProvidedTokens(true);
+        } else {
+          setTenantsErrorMessage(
+            formatMessage(
+              'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
+            )
+          );
+        }
+      }
+    } else {
+      setUserProvidedTokens(false);
     }
     setCurrentStep('subscription');
   };
@@ -619,7 +640,7 @@ export const ManageService = (props: ManageServiceProps) => {
     );
   };
 
-  const renderResourseCreatorStep = () => {
+  const renderResourceCreatorStep = () => {
     return (
       <div>
         <div css={dialogBodyStyles}>
@@ -754,7 +775,7 @@ export const ManageService = (props: ManageServiceProps) => {
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
             {formatMessage(
-              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource.',
+              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource. ',
               { service: props.serviceName }
             )}
             {props.learnMore ? (
@@ -799,7 +820,7 @@ export const ManageService = (props: ManageServiceProps) => {
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
-            disabled={!!loading || !tenantId || !subscriptionId}
+            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId}
             text={formatMessage('Next')}
             onClick={() => setCurrentStep('resourceCreation')}
           />
@@ -820,7 +841,7 @@ export const ManageService = (props: ManageServiceProps) => {
         return renderSubscriptionSelectionStep();
       }
       case 'resourceCreation':
-        return renderResourseCreatorStep();
+        return renderResourceCreatorStep();
       case 'outcome':
         return renderOutcomeStep();
       default:
