@@ -12,7 +12,6 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DialogSetting } from '@bfc/shared';
 import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
 
-import TelemetryClient from '../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
@@ -21,7 +20,6 @@ import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { openDeleteBotModal } from './DeleteBotButton';
 import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
@@ -54,7 +52,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
   const { deleteBot } = useRecoilValue(dispatcherState);
-  const isPVABot = usePVACheck(currentProjectId);
 
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
@@ -63,66 +60,8 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
 
   const { setSettings } = useRecoilValue(dispatcherState);
 
-  const buttonClick = (link) => {
-    TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
-    navigateTo(link);
-  };
-
   const toolbarItems = useMemo(() => {
-    const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
-    const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
-    const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
-    const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
-
     return [
-      ...(!isPVABot
-        ? [
-            {
-              text: formatMessage('Add a package'),
-              type: 'action',
-              buttonProps: {
-                iconProps: { iconName: 'Package' },
-                onClick: () => buttonClick(linkToPackageManager),
-                styles: defaultToolbarButtonStyles,
-              },
-              align: 'left',
-            },
-          ]
-        : []),
-      {
-        text: formatMessage('Edit LG'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'Robot' },
-          onClick: () => buttonClick(linkToLGEditor),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
-      {
-        text: formatMessage('Edit LU'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'People' },
-          onClick: () => buttonClick(linkToLUEditor),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
-      ...(!isPVABot
-        ? [
-            {
-              text: formatMessage('Manage connections'),
-              type: 'action',
-              buttonProps: {
-                iconProps: { iconName: 'PlugConnected' },
-                onClick: () => buttonClick(linkToConnections),
-                styles: defaultToolbarButtonStyles,
-              },
-              align: 'left',
-            },
-          ]
-        : []),
       {
         text: formatMessage('Delete bot'),
         type: 'action',
