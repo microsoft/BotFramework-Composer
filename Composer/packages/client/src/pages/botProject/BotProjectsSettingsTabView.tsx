@@ -101,17 +101,17 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         <PivotItem
           data-testid="developmentResourcesTab"
           headerButtonProps={isPVABot ? disabledPivotStyle : {}}
-          headerText={formatMessage('Development Resources')}
+          headerText={formatMessage('Development resources')}
           itemKey={PivotItemKey.LuisQna}
           onRenderItemLink={() => {
             if (isPVABot) {
               return (
                 <DisableFeatureToolTip isPVABot={isPVABot}>
-                  {formatMessage('Development Resources')}
+                  {formatMessage('Development resources')}
                 </DisableFeatureToolTip>
               );
             } else {
-              return <Fragment>{formatMessage('Development Resources')}</Fragment>;
+              return <Fragment>{formatMessage('Development resources')}</Fragment>;
             }
           }}
         >
@@ -145,11 +145,11 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
             if (isPVABot) {
               return (
                 <DisableFeatureToolTip isPVABot={isPVABot}>
-                  {formatMessage('Skill Configuration')}
+                  {formatMessage('Skill configuration')}
                 </DisableFeatureToolTip>
               );
             } else {
-              return <Fragment>{formatMessage('Skill Configuration')}</Fragment>;
+              return <Fragment>{formatMessage('Skill configuration')}</Fragment>;
             }
           }}
         >

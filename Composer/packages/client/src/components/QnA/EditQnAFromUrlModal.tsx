@@ -98,8 +98,8 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
             disabled
             data-testid={`knowledgeLocationTextField-url`}
             errorMessage={formErrors.url}
-            label={formatMessage('Knowledge source')}
-            placeholder={formatMessage('Enter a URL or browse to upload a file ')}
+            label={formatMessage('FAQ website (source)')}
+            placeholder={formatMessage('Type or paste URL')}
             styles={textFieldKBNameFromScratch}
             value={formData.url}
             onChange={(e, url) => updateUrl(url)}
