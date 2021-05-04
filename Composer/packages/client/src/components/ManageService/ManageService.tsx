@@ -844,7 +844,7 @@ export const ManageService = (props: ManageServiceProps) => {
         setDialogTitle(formatMessage('Create {service} resources', { service: props.serviceName }));
         break;
     }
-  }, [currentStep]);
+  }, [currentStep, props.serviceName]);
 
   return (
     <Fragment>
