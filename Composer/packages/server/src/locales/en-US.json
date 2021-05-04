@@ -3314,9 +3314,6 @@
   "select_your_azure_directory_then_choose_the_subscr_69776814": {
     "message": "Select your Azure directory, then choose the subscription where your existing resource is located and the keys you want to use. "
   },
-  "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
-  },
   "select_your_azure_directory_then_choose_the_subscr_e3d67edf": {
     "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource. "
   },
@@ -3718,6 +3715,9 @@
   },
   "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
     "message": "There was a problem loading Azure directories. { errMessage }"
+  },
+  "there_was_a_problem_with_the_authentication_access_3ca717f6": {
+    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
