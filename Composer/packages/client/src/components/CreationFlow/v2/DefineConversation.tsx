@@ -385,7 +385,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={hasErrors || !writable}
-              text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('OK')}
+              text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('Create')}
               onClick={handleSubmit}
             />
           </DialogFooter>
