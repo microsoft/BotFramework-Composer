@@ -121,7 +121,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
       <div css={title}>{formatMessage('Microsoft App ID')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          'An App ID is used for communication between your bot and skills, services, websites or applications. An App ID is created when you provision resources for your bot. If you’ve created an App ID already, you can use that ID instead. <a>Learn more.</a>',
+          'An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more.</a>',
           {
             a: ({ children }) => (
               <Link key="app-id-settings-page" href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
@@ -136,7 +136,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           ariaLabel={formatMessage('Microsoft App Id')}
           data-testid={'MicrosoftAppId'}
           label={formatMessage('Microsoft App Id')}
-          placeholder={formatMessage('Enter Microsoft App Id')}
+          placeholder={formatMessage('Type App Id')}
           styles={inputFieldStyles}
           value={localMicrosoftAppId}
           onBlur={handleAppIdOnBlur}
@@ -147,7 +147,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           ariaLabel={formatMessage('Microsoft App Password')}
           data-testid={'MicrosoftPassword'}
           label={formatMessage('Microsoft App Password')}
-          placeholder={formatMessage('Enter Microsoft App Password')}
+          placeholder={formatMessage('Type App Password')}
           styles={inputFieldStyles}
           value={localMicrosoftAppPassword}
           onBlur={handleAppPasswordOnBlur}
@@ -156,7 +156,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
         />
         <PrimaryButton
           styles={{ root: { width: '230px', marginTop: '15px' } }}
-          text={formatMessage('Add from publishing profile')}
+          text={formatMessage('Retrieve App ID')}
           onClick={() => {
             setShowImportDialog(true);
           }}
