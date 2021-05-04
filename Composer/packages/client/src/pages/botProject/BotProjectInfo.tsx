@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
