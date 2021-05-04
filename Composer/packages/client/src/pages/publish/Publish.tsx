@@ -498,7 +498,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             </div>
           </div>
         </PivotItem>
-        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'addNewPublishProfile'}>
+        <PivotItem headerText={formatMessage('Publishing profile')} itemKey={'addNewPublishProfile'}>
           <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
             {botProjectData && botProjectData.length > 1 && (
               <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
