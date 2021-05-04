@@ -18,6 +18,7 @@ import {
   webChatTrafficState,
   webChatInspectionDataState,
   botStatusState,
+  isWebChatPanelVisibleState,
 } from '../../../../../recoilModel';
 import { DebugPanelTabHeaderProps } from '../types';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
@@ -74,8 +75,10 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   const webChatContainerRef = useRef<HTMLDivElement | null>(null);
   const { setWebChatInspectionData, setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
   const currentStatus = useRecoilValue(botStatusState(currentProjectId ?? ''));
+  const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
   const { startAllBots } = useBotOperations();
   const isPVABot = usePVACheck(currentProjectId ?? '');
+  const [isWebChatPanelOpenedOnce, setIsWebChatPanelOpenedOnce] = useState(false);
 
   const navigateToNewestLogEntry = () => {
     if (currentLogItemCount && webChatContainerRef?.current) {
@@ -106,6 +109,12 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
       }
     }
   };
+
+  useEffect(() => {
+    if (isWebChatPanelVisible && !isWebChatPanelOpenedOnce) {
+      setIsWebChatPanelOpenedOnce(true);
+    }
+  }, [isWebChatPanelVisible]);
 
   useEffect(() => {
     if (navigateToLatestEntry && isActive) {
@@ -222,7 +231,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   return (
     <div css={logContainer(isActive)}>
       <div ref={webChatContainerRef} css={logPane(displayedTraffic.length)} data-testid="Webchat-Logs-Container">
-        {displayedTraffic.length ? displayedTraffic : noWebChatTrafficSection}
+        {displayedTraffic.length || isWebChatPanelOpenedOnce ? displayedTraffic : noWebChatTrafficSection}
       </div>
       <WebChatInspectorPane inspectionData={inspectionData} onSetInspectionData={setInspectionData} />
     </div>

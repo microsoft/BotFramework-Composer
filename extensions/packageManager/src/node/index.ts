@@ -22,7 +22,8 @@ const hasSchema = (c) => {
     c.keywords?.includes('msbot-adapter') ||
     c.keywords?.includes('msbot-function') ||
     c.keywords?.includes('msbot-recognizer') ||
-    c.keywords?.includes('msbot-storage')
+    c.keywords?.includes('msbot-storage') ||
+    c.keywords?.includes('msbot-middleware')
   );
 };
 

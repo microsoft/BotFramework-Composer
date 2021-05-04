@@ -30,6 +30,7 @@ type PublishProfileDialogProps = {
   types: PublishType[];
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
+  onUpdateIsCreateProfileFromSkill?: (isCreateProfileFromSkill: boolean) => void;
 };
 
 const Page = {
@@ -38,7 +39,15 @@ const Page = {
 };
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
-  const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
+  const {
+    current,
+    types,
+    projectId,
+    closeDialog,
+    targets,
+    setPublishTargets,
+    onUpdateIsCreateProfileFromSkill,
+  } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
 
@@ -175,6 +184,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
         // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {
+          TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
           const notification = createNotification({
             type: 'error',
             title: formatMessage('Error provisioning.'),
@@ -194,7 +204,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      onUpdateIsCreateProfileFromSkill?.(true);
     };
   }, [name, targetType, types, savePublishTarget]);
 
