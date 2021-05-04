@@ -40,7 +40,7 @@ jobs:
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
-        run: yarn lint && yarn lint:extensions
+        run: yarn lint:ci && yarn lint:extensions
       - name: yarn test:coverage
         run: yarn test:coverage
       - name: Coveralls

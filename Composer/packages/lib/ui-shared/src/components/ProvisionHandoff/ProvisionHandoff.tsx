@@ -11,12 +11,14 @@ import { IconButton } from 'office-ui-fabric-react/lib/components/Button';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme/lib/fluent';
 import { useRef } from 'react';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { DialogTypes, DialogWrapper } from '../DialogWrapper';
 
 type ProvisionHandoffProps = {
   title: string;
   developerInstructions: string;
+  learnMoreLink?: string;
   handoffInstructions: string;
   hidden: boolean;
   onBack: () => void;
@@ -43,12 +45,23 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
     <DialogWrapper
       dialogType={DialogTypes.ProvisionFlow}
       isOpen={!props.hidden}
-      subText={props.developerInstructions}
       title={props.title}
       onDismiss={props.onDismiss}
     >
+      {props.developerInstructions && (
+        <div style={{ paddingBottom: '16px', fontSize: FontSizes.size14 }}>
+          <Text>{props.developerInstructions}&nbsp;&nbsp;</Text>
+          {props.learnMoreLink && (
+            <Link href={props.learnMoreLink} target="_blank">
+              {formatMessage('Learn more')}
+            </Link>
+          )}
+        </div>
+      )}
       <div>
-        <Text style={{ fontWeight: 700 }}>{formatMessage('Instructions for your Azure admin:')}</Text>
+        <Text style={{ fontSize: FontSizes.size14, fontWeight: 600 }}>
+          {formatMessage('Instructions for your Azure admin')}
+        </Text>
         <IconButton
           ariaLabel={formatMessage('Copy Icon')}
           menuIconProps={{ iconName: 'Copy' }}
@@ -73,10 +86,12 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
         />
       </div>
       <TextField
-        autoAdjustHeight
         multiline
         componentRef={textFieldRef}
-        styles={{ root: { marginTop: '10px' }, fieldGroup: { backgroundColor: '#f3f2f1' } }}
+        styles={{
+          root: { marginTop: '10px' },
+          fieldGroup: { height: '200px', backgroundColor: '#f3f2f1' },
+        }}
         value={props.handoffInstructions}
       />
       <DialogFooter>

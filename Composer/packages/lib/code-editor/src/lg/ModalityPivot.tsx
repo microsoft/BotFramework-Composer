@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CodeEditorSettings, LgTemplate, TelemetryClient } from '@bfc/shared';
+import { CodeEditorSettings, LgTemplate, TelemetryClient, extractTemplateNameFromExpression } from '@bfc/shared';
 import { FluentTheme, FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -20,11 +20,7 @@ import mergeWith from 'lodash/mergeWith';
 
 import { LGOption } from '../utils';
 import { ItemWithTooltip } from '../components/ItemWithTooltip';
-import {
-  extractTemplateNameFromExpression,
-  getTemplateId,
-  structuredResponseToString,
-} from '../utils/structuredResponse';
+import { getTemplateId, structuredResponseToString } from '../utils/structuredResponse';
 
 import { AttachmentModalityEditor } from './modalityEditors/AttachmentModalityEditor';
 import { SpeechModalityEditor } from './modalityEditors/SpeechModalityEditor';
@@ -168,6 +164,11 @@ const getInitialModalities = (structuredResponse?: PartialStructuredResponse): M
   const modalities = Object.keys(structuredResponse || {}).filter((m) =>
     modalityTypes.includes(m as ModalityType)
   ) as ModalityType[];
+
+  if (structuredResponse?.InputHint && !structuredResponse.Speak) {
+    modalities.push('Speak');
+  }
+
   return modalities.length ? modalities : ['Text'];
 };
 
@@ -283,6 +284,11 @@ export const ModalityPivot = React.memo((props: Props) => {
         if (lgOption?.templateId) {
           const mergedResponse = mergeWith({}, structuredResponse) as PartialStructuredResponse;
           delete mergedResponse[modality];
+
+          // Remove Input Hint when the user deletes the Speech modality
+          if (modality === 'Speak') {
+            delete mergedResponse.InputHint;
+          }
 
           setStructuredResponse(mergedResponse);
           const mappedResponse = structuredResponseToString(mergedResponse);

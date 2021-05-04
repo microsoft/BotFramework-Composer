@@ -9,7 +9,7 @@ import isEqual from 'lodash/isEqual';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
-import { dialogsSelectorFamily, rootBotProjectIdSelector } from '../selectors';
+import { dialogsSelectorFamily, rootBotProjectIdSelector, topicsSelectorFamily } from '../selectors';
 import { DesignPageLocation } from '../types';
 
 import { getSelected } from './../../utils/dialogUtil';
@@ -52,8 +52,20 @@ export const navigationDispatcher = () => {
       if (rootBotProjectId == null) return;
 
       const projectId = skillId ?? rootBotProjectId;
+      const topics = await snapshot.getPromise(topicsSelectorFamily(projectId));
 
       await setCurrentProjectId(callbackInterface, projectId);
+
+      // check to see if navigating to PVA topic
+      const topic = topics.find((t) => t.content?.id === dialogId);
+      if (topic) {
+        if (topic?.content?.$designer?.link) {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename
+          window.open(topic.content.$designer.link as string, '_blank');
+        }
+        // no-op even if topic has no link
+        return;
+      }
 
       const currentUri =
         trigger == null
@@ -120,6 +132,11 @@ export const navigationDispatcher = () => {
       const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
       const { dialogId, selected } = designPageLocation;
 
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+      const currentDialog = dialogs.find(({ id }) => id === dialogId);
+
+      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selected);
+
       let currentUri =
         skillId == null || skillId === projectId
           ? `/bot/${projectId}/dialogs/${dialogId}`
@@ -134,7 +151,7 @@ export const navigationDispatcher = () => {
 
         currentUri = `${currentUri}?selected=${targetSelected}&focused=${encodedFocusPath}`;
       } else {
-        currentUri = `${currentUri}?selected=${selected}`;
+        currentUri = `${currentUri}?selected=${encodedSelectPath}`;
       }
 
       if (fragment && typeof fragment === 'string') {
@@ -144,7 +161,7 @@ export const navigationDispatcher = () => {
 
       set(designPageLocationState(skillId || projectId), {
         dialogId,
-        selected: getSelected(focusPath) || selected,
+        selected: getSelected(focusPath) || encodedSelectPath,
         focused: focusPath ?? '',
         promptTab: Object.values(PromptTab).find((value) => fragment === value),
       });

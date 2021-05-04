@@ -25,14 +25,13 @@ const renderActivityArrow = (activity) => {
 };
 
 type WebChatActivityLogItemProps = {
-  index: number;
   item: ConversationActivityTrafficItem;
   isSelected?: boolean;
   onClickTraffic: (data: WebChatInspectionData) => void;
 };
 
 export const WebChatActivityLogItem: React.FC<WebChatActivityLogItemProps> = (props) => {
-  const { index, item, isSelected = false, onClickTraffic } = props;
+  const { item, isSelected = false, onClickTraffic } = props;
   const { appLocale } = useRecoilValue(userSettingsState);
 
   const onClick = useCallback(() => {
@@ -40,11 +39,12 @@ export const WebChatActivityLogItem: React.FC<WebChatActivityLogItemProps> = (pr
   }, [item, onClickTraffic]);
 
   return (
-    <span key={`webchat-activity-item-${index}`} css={[clickable, hoverItem(isSelected), logItem]} onClick={onClick}>
+    <span css={[clickable, hoverItem(isSelected), logItem]} onClick={onClick}>
       {renderTimeStamp(item.timestamp, appLocale)}
       {renderActivityArrow(item.activity)}
       <span css={clickableSegment}>{item.activity.type || 'unknown'}</span>
       {item.activity.type === 'message' ? <span css={emphasizedText}>{item.activity.text}</span> : null}
+      {item.activity.type === 'trace' ? <span css={emphasizedText}>{item.activity.label}</span> : null}
     </span>
   );
 };

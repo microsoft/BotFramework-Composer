@@ -7,6 +7,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useSetRecoilState } from 'recoil';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
 import { DiagnosticsTabKey } from '../types';
@@ -23,12 +24,33 @@ export const DiagnosticsStatus = () => {
 
   if (!errorsCount && !warningsCount) return null;
 
+  const errorLabel = formatMessage(
+    `{
+    errorsCount, plural,
+        =0 {No errors}
+        =1 {One error}
+      other {# errors}
+    }`,
+    { errorsCount }
+  );
+
+  const warningLabel = formatMessage(
+    `{
+    warningsCount, plural,
+        =0 {No warnings}
+        =1 {One warning}
+      other {# warnings}
+    }`,
+    { warningsCount }
+  );
+
   return (
     <div
       css={{ height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '8px' }}
       data-testid="diagnostics-tab-header--collapsed"
     >
       <DefaultButton
+        ariaLabel={`${errorLabel} ${warningLabel}`}
         styles={{
           root: {
             height: '36px',

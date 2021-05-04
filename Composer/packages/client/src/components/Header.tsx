@@ -8,17 +8,13 @@ import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
-import { checkForPVASchema } from '@bfc/shared';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { useLocation } from '../utils/hooks';
-import { BASEPATH } from '../constants';
-import { schemasState } from '../recoilModel/atoms';
 import {
   dispatcherState,
   appUpdateState,
@@ -28,6 +24,7 @@ import {
   rootBotProjectIdSelector,
   settingsState,
   webChatEssentialsSelector,
+  botProjectSpaceLoadedState,
   isWebChatPanelVisibleState,
   allRequiredRecognizersSelector,
 } from '../recoilModel';
@@ -36,11 +33,10 @@ import { AppUpdaterStatus } from '../constants';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
-import { WebChatPanel } from './WebChat/WebChatPanel';
 import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
-import { GetStarted } from './GetStarted/GetStarted';
 import { BotController } from './BotRuntimeController/BotController';
+import { GetStarted } from './GetStarted/GetStarted';
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;
@@ -90,6 +86,7 @@ const headerTextContainer = css`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  min-width: 600px;
   width: 50%;
 `;
 
@@ -158,10 +155,11 @@ export const Header = () => {
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
-  const [showGetStartedTeachingBubble, setshowGetStartedTeachingBubble] = useState<boolean>(false);
+
+  const [showGetStartedTeachingBubble, setShowGetStartedTeachingBubble] = useState<boolean>(false);
   const settings = useRecoilValue(settingsState(projectId));
-  const schemas = useRecoilValue(schemasState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
+  const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
@@ -172,14 +170,22 @@ export const Header = () => {
   const [hideBotController, hideBotStartController] = useState(true);
   const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
   const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(false);
+  const [requiresLUIS, setRequiresLUIS] = useState<boolean>(false);
+  const [requiresQNA, setRequiresQNA] = useState<boolean>(false);
+
   const { location } = useLocation();
 
   // These are needed to determine if the bot needs LUIS or QNA
   // this data is passed into the GetStarted widget
   // ... if the get started widget moves, this code should too!
   const requiredStuff = useRecoilValue(allRequiredRecognizersSelector);
-  const requiresLUIS = requiredStuff.some((p) => p.requiresLUIS);
-  const requiresQNA = requiredStuff.some((p) => p.requiresQNA);
+
+  useEffect(() => {
+    if (botProjectSolutionLoaded) {
+      setRequiresLUIS(requiredStuff.some((p) => p.requiresLUIS));
+      setRequiresQNA(requiredStuff.some((p) => p.requiresQNA));
+    }
+  }, [requiredStuff, botProjectSolutionLoaded]);
   // ... end of get started stuff
 
   const isShow = useBotControllerBar();
@@ -205,10 +211,10 @@ export const Header = () => {
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
     if (location.hash === '#getstarted') {
-      setshowGetStartedTeachingBubble(true);
+      setShowGetStartedTeachingBubble(true);
       setShowGetStarted(true);
     } else {
-      setshowGetStartedTeachingBubble(false);
+      setShowGetStartedTeachingBubble(false);
     }
   }, [location]);
 
@@ -280,7 +286,7 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {isShow && !checkForPVASchema(schemas.sdk) && (
+        {isShow && (
           <div
             css={css`
               margin-right: 12px;
@@ -299,13 +305,13 @@ export const Header = () => {
         )}
         {isShow && (
           <IconButton
-            ariaDescription={formatMessage('Open web chat')}
+            ariaDescription={formatMessage('Test in web chat')}
             disabled={!webchatEssentials?.botUrl}
             iconProps={{
               iconName: 'OfficeChat',
             }}
             styles={buttonStyles}
-            title={formatMessage('Open Web Chat')}
+            title={formatMessage('Test in Web Chat')}
             onClick={() => {
               const currentWebChatVisibility = !isWebChatPanelVisible;
               setWebChatPanelVisibility(currentWebChatVisibility);
@@ -333,7 +339,7 @@ export const Header = () => {
             hasCondensedHeadline
             calloutProps={{ directionalHint: DirectionalHint.bottomAutoEdge }}
             headline={formatMessage('You’re ready to go!')}
-            target="#startbot"
+            target="#startBotPanelElement"
             onDismiss={hideTeachingBubble}
           >
             {formatMessage(
@@ -375,55 +381,19 @@ export const Header = () => {
         </Callout>
       )}
 
-      <Panel
-        isHiddenOnDismiss
-        closeButtonAriaLabel={formatMessage('Close')}
-        customWidth={'395px'}
-        headerText={projectName}
-        isBlocking={false}
-        isOpen={isWebChatPanelVisible}
-        styles={{
-          root: {
-            marginTop: '50px',
-          },
-          scrollableContent: {
-            width: '100%',
-            height: '100%',
-          },
-          content: {
-            width: '100%',
-            height: '100%',
-            padding: 0,
-            margin: 0,
-          },
+      <GetStarted
+        isOpen={botProjectSolutionLoaded && showGetStarted}
+        projectId={rootBotProjectId}
+        requiresLUIS={requiresLUIS}
+        requiresQNA={requiresQNA}
+        showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
+        onBotReady={() => {
+          setShowTeachingBubble(true);
         }}
-        type={PanelType.custom}
         onDismiss={() => {
-          setWebChatPanelVisibility(false);
-          TelemetryClient.track('WebChatPaneClosed');
+          toggleGetStarted(false);
         }}
-      >
-        {webchatEssentials?.projectId ? (
-          <WebChatPanel
-            botData={{ ...webchatEssentials }}
-            directlineHostUrl={BASEPATH}
-            isWebChatPanelVisible={isWebChatPanelVisible}
-          />
-        ) : null}
-        <GetStarted
-          isOpen={showGetStarted}
-          projectId={rootBotProjectId}
-          requiresLUIS={requiresLUIS}
-          requiresQNA={requiresQNA}
-          showTeachingBubble={showGetStartedTeachingBubble}
-          onBotReady={() => {
-            setShowTeachingBubble(true);
-          }}
-          onDismiss={() => {
-            toggleGetStarted(false);
-          }}
-        />
-      </Panel>
+      />
     </div>
   );
 };

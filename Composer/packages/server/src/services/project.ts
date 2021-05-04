@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
@@ -23,6 +26,7 @@ import StorageService from './storage';
 import { Path } from './../utility/path';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { TelemetryService } from './telemetry';
+const execAsync = promisify(exec);
 
 const MAX_RECENT_BOTS = 7;
 
@@ -53,6 +57,15 @@ function fixOldBotProjectMapEntries(
   }
   return map;
 }
+
+const isFunctionsRuntimeInstalled = async (): Promise<boolean> => {
+  try {
+    const { stderr: funcErr } = await execAsync(`func -v`);
+    return !funcErr;
+  } catch (err) {
+    return false;
+  }
+};
 
 export class BotProjectService {
   private static currentBotProjects: BotProject[] = [];
@@ -183,6 +196,13 @@ export class BotProjectService {
     );
     const allRecentBots = BotProjectService.recentBotProjects;
 
+    // Filter the bot projects that don't exist anymore.
+    for (const locationRef of allRecentBots) {
+      if (!(await StorageService.checkBlob(locationRef.storageId ?? 'default', locationRef.path, user))) {
+        BotProjectService.deleteRecentProject(locationRef.path);
+      }
+    }
+
     const recentBots = allRecentBots
       .filter((bot) => !Path.basename(bot.path).includes('.botproj'))
       .map((bot) => ({
@@ -207,7 +227,11 @@ export class BotProjectService {
     }
   };
 
-  public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
+  public static openProject = async (
+    locationRef: LocationRef,
+    user?: UserIdentity,
+    isRootBot?: boolean
+  ): Promise<string> => {
     BotProjectService.initialize();
 
     // TODO: this should be refactored or moved into the BotProject constructor so that it can use user auth amongst other things
@@ -224,14 +248,14 @@ export class BotProjectService {
       const projectLoc = BotProjectService.projectLocationMap[key];
       if (projectLoc && projectLoc.path === locationRef.path) {
         // TODO: this should probably move to getProjectById
-        BotProjectService.addRecentProject(locationRef.path);
+        if (isRootBot) BotProjectService.addRecentProject(locationRef.path);
         return key;
       }
     }
 
     // generate an id and store it in the projectLocationMap
     const projectId = await BotProjectService.generateProjectId(locationRef.path);
-    BotProjectService.addRecentProject(locationRef.path);
+    if (isRootBot) BotProjectService.addRecentProject(locationRef.path);
     Store.set('projectLocationMap', BotProjectService.projectLocationMap);
     return projectId.toString();
   };
@@ -451,6 +475,7 @@ export class BotProjectService {
       schemaUrl,
       runtimeType,
       runtimeLanguage,
+      isRoot: creatingRootBot = true,
     } = req.body;
 
     // get user from request
@@ -463,6 +488,20 @@ export class BotProjectService {
       // TODO: Replace with default template once one is determined
       throw Error('empty templateID passed');
     }
+
+    // test for required dependencies
+    if (runtimeType === 'functions') {
+      if (!(await isFunctionsRuntimeInstalled())) {
+        BackgroundProcessManager.updateProcess(jobId, 500, formatMessage('Azure Functions runtime not installed.'));
+        TelemetryService.trackEvent('CreateNewBotProjectFailed', {
+          reason: 'Azure Functions runtime not installed.',
+          template: templateId,
+          status: 500,
+        });
+        return;
+      }
+    }
+
     // location to store the bot project
     const locationRef = getLocationRef(location, storageId, name);
     try {
@@ -512,7 +551,7 @@ export class BotProjectService {
           return new Promise(async (resolve, reject) => {
             try {
               log('Open project', botRef);
-              const id = await BotProjectService.openProject(botRef, user);
+              const id = await BotProjectService.openProject(botRef, user, false);
 
               // in the case of remote project, we need to update the eTag and alias used by the import mechanism
               BotProjectService.setProjectLocationData(id, { alias, eTag });
@@ -548,7 +587,11 @@ export class BotProjectService {
 
       const rootBot = botsToProcess.find((b) => b.name === name);
       if (rootBot) {
-        const id = await BotProjectService.openProject({ storageId: rootBot?.storageId, path: rootBot.path }, user);
+        const id = await BotProjectService.openProject(
+          { storageId: rootBot?.storageId, path: rootBot.path },
+          user,
+          creatingRootBot
+        );
         const currentProject = await BotProjectService.getProjectById(id, user);
         const project = currentProject.getProject();
         log('Project created successfully.');
@@ -562,8 +605,16 @@ export class BotProjectService {
         throw new Error('Could not find root bot');
       }
     } catch (err) {
+      // Clean up failed projects
+      log('Cleaning up failed project at ', locationRef.path);
+      const storage = StorageService.getStorageClient(locationRef.storageId, user);
+      await storage.rmrfDir(locationRef.path);
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
-      TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+      TelemetryService.trackEvent('CreateNewBotProjectFailed', {
+        reason: err instanceof Error ? err.message : err,
+        template: templateId,
+        status: 500,
+      });
     }
   }
 }

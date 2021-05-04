@@ -11,6 +11,7 @@ import {
   BotInProject,
   FeatureFlagKey,
   SDKKinds,
+  Notification,
 } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -39,11 +40,16 @@ import {
   featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
-import { dialogsWithLuProviderSelectorFamily, skillsStateSelector } from '../recoilModel/selectors';
+import {
+  dialogsWithLuProviderSelectorFamily,
+  skillsStateSelector,
+  topicsSelectorFamily,
+} from '../recoilModel/selectors';
 import { navigateTo } from '../utils/navigation';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
 import { getMemoryVariables } from '../recoilModel/dispatchers/utils/project';
+import { createNotification } from '../recoilModel/dispatchers/notification';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -73,6 +79,7 @@ const stubDialog = (): DialogInfo => ({
   intentTriggers: [],
   skills: [],
   isFormDialog: false,
+  isTopic: false,
 });
 
 export function useShell(source: EventSource, projectId: string): Shell {
@@ -80,6 +87,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(dialogsWithLuProviderSelectorFamily(projectId));
+  const topics = useRecoilValue(topicsSelectorFamily(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
@@ -121,6 +129,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     reloadProject,
     setApplicationLevelError,
     updateRecognizer,
+    addNotification,
+    deleteNotification,
+    hideNotification,
+    markNotificationAsRead,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -273,6 +285,14 @@ export function useShell(source: EventSource, projectId: string): Shell {
     confirm: OpenConfirmModal,
     telemetryClient: TelemetryClient,
     getMemoryVariables,
+    addNotification: (notificationWithoutId: Notification): string => {
+      const notification = createNotification(notificationWithoutId);
+      addNotification(notification);
+      return notification.id;
+    },
+    deleteNotification,
+    markNotificationAsRead,
+    hideNotification,
   };
 
   const currentDialog = useMemo(() => {
@@ -296,6 +316,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     projectId,
     projectCollection,
     dialogs,
+    topics,
     dialogSchemas,
     dialogId,
     focusPath,

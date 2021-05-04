@@ -23,6 +23,11 @@ import {
   debugPaneHeaderStyle,
   debugPaneContentStyle,
   debugPaneFooterStyle,
+  expandedPanelHeaderHeight,
+  collapsedPaneHeaderHeight,
+  debugPanelDefaultHeight,
+  debugPanelMaxExpandedHeight,
+  debugPanelMinHeight,
 } from './styles';
 import debugExtensions from './TabExtensions';
 import { DebugDrawerKeys, DebugPanelTabHeaderProps } from './TabExtensions/types';
@@ -67,7 +72,7 @@ export const DebugPanel: React.FC = () => {
     return { key: tabKey, element };
   };
 
-  const computedPivotHeight = isPanelExpanded ? 36 : 24;
+  const computedPivotHeight = isPanelExpanded ? expandedPanelHeaderHeight : collapsedPaneHeaderHeight;
 
   const headerPivot = useMemo(() => {
     const tabTitles = debugExtensions
@@ -124,67 +129,69 @@ export const DebugPanel: React.FC = () => {
   }, [isPanelExpanded, activeTab]);
 
   return (
-    <Resizable
-      css={css`
-        ${debugPaneContainerStyle}
-      `}
-      data-testid="debug-panel"
-      defaultSize={{
-        width: '100%',
-        height: isPanelExpanded ? 300 : computedPivotHeight,
-      }}
-      enable={{
-        top: isPanelExpanded,
-        right: false,
-        bottom: false,
-        left: false,
-        topRight: false,
-        bottomRight: false,
-        bottomLeft: false,
-        topLeft: false,
-      }}
-      maxHeight={isPanelExpanded ? 600 : computedPivotHeight}
-      minHeight={isPanelExpanded ? 200 : computedPivotHeight}
-    >
-      <div
+    <div>
+      <Resizable
         css={css`
-          ${debugPaneBarStyle}
-          ${isPanelExpanded ? debugPaneHeaderStyle : debugPaneFooterStyle}
+          ${debugPaneContainerStyle}
         `}
-        data-testid={isPanelExpanded ? 'debug-panel__header' : 'debug-panel__footer'}
+        data-testid="DebugPanelDrawer"
+        defaultSize={{
+          width: '100%',
+          height: isPanelExpanded ? debugPanelDefaultHeight : computedPivotHeight,
+        }}
+        enable={{
+          top: isPanelExpanded,
+          right: false,
+          bottom: false,
+          left: false,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false,
+        }}
+        maxHeight={isPanelExpanded ? debugPanelMaxExpandedHeight : computedPivotHeight}
+        minHeight={isPanelExpanded ? debugPanelMinHeight : computedPivotHeight}
       >
-        <div css={leftBarStyle} data-testid="header__left">
-          {headerPivot}
-        </div>
         <div
-          css={{ flexGrow: 1, cursor: 'pointer', outline: 'none' }}
-          data-testid="header__blank"
-          role="button"
-          tabIndex={0}
-          onClick={onDebugPaneClick}
-          onKeyPress={onDebugPaneClick}
-        ></div>
-        <div css={rightBarStyle} data-testid="header__right">
-          <IconButton
-            iconProps={{ iconName: isPanelExpanded ? 'ChevronDown' : 'ChevronUp' }}
-            styles={{ root: { height: '100%' } }}
-            title={formatMessage('Collapse debug panel')}
-            onClick={() => {
-              if (isPanelExpanded) {
-                onCollapsePanel();
-              } else {
-                onExpandPanel('Diagnostics');
-              }
-            }}
+          css={css`
+            ${debugPaneBarStyle}
+            ${isPanelExpanded ? debugPaneHeaderStyle : debugPaneFooterStyle}
+          `}
+          data-testid={isPanelExpanded ? 'debug-panel__header' : 'debug-panel__footer'}
+        >
+          <div css={leftBarStyle} data-testid="header__left">
+            {headerPivot}
+          </div>
+          <div
+            css={{ flexGrow: 1, cursor: 'pointer', outline: 'none' }}
+            data-testid="header__blank"
+            role="button"
+            tabIndex={0}
+            onClick={onDebugPaneClick}
+            onKeyPress={onDebugPaneClick}
           />
+          <div css={rightBarStyle} data-testid="header__right">
+            <IconButton
+              iconProps={{ iconName: isPanelExpanded ? 'ChevronDown' : 'ChevronUp' }}
+              styles={{ root: { height: '100%' } }}
+              title={isPanelExpanded ? formatMessage('Collapse Debug Panel') : formatMessage('Expand Debug Panel')}
+              onClick={() => {
+                if (isPanelExpanded) {
+                  onCollapsePanel();
+                } else {
+                  onExpandPanel('Diagnostics');
+                }
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div css={debugPaneContentStyle} data-testid="debug-panel__content">
-        {debugExtensions.map((debugTabs) => {
-          const { ContentWidget } = debugTabs;
-          return <ContentWidget key={`tabContent-${debugTabs.key}`} isActive={activeTab === debugTabs.key} />;
-        })}
-      </div>
-    </Resizable>
+        <div css={debugPaneContentStyle} data-testid="debug-panel__content">
+          {debugExtensions.map((debugTabs) => {
+            const { ContentWidget } = debugTabs;
+            return <ContentWidget key={`tabContent-${debugTabs.key}`} isActive={activeTab === debugTabs.key} />;
+          })}
+        </div>
+      </Resizable>
+    </div>
   );
 };

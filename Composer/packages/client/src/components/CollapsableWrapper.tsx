@@ -29,7 +29,7 @@ export const CollapsableWrapper: React.FC<CollapsableComponentProps> = (props) =
     <div css={containerStyle}>
       <div data-is-focusable aria-label={title} css={header}>
         <IconButton
-          ariaLabel={isCollapsed ? formatMessage('Expand') : formatMessage('Collapse')}
+          ariaLabel={isCollapsed ? `${title}, ${formatMessage('Expand')}` : `${title}, ${formatMessage('Collapse')}`}
           iconProps={{ iconName: isCollapsed ? 'ChevronRight' : 'ChevronDown' }}
           styles={{ root: { color: NeutralColors.gray150 } }}
           onClick={() => setIsCollapsed(!isCollapsed)}

@@ -141,6 +141,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
 }
 
 async function loadServer() {
+  process.env.COMPOSER_VERSION = app.getVersion();
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
@@ -310,7 +311,6 @@ async function run() {
   app.on('before-quit', () => {
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
-    mainWindow?.webContents.send('conversation-cleanup');
   });
 
   app.on('activate', () => {

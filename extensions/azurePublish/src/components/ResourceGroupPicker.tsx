@@ -7,29 +7,13 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { FluentTheme } from '@uifabric/fluent-theme';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { useDebounce } from './useDebounce';
 
-const stackStyles = { root: { marginBottom: '8px' } };
-const dropdownStyles = { root: { marginBottom: '8px' }, dropdown: { width: '100%' } };
+const stackStyles = { root: { marginBottom: '6px' } };
+const dropdownStyles = { root: { marginBottom: '6px' }, dropdown: { width: '300px' } };
 const itemIconStyles = { marginRight: '8px' };
-const newNameTextFileStyles = { root: { marginTop: '10px' } };
-
-const getInfoIconStyle = (required) => {
-  return {
-    root: {
-      selectors: {
-        '&::before': {
-          content: required ? " '*'" : '',
-          color: FluentTheme.palette.red,
-          paddingRight: 3,
-        },
-      },
-    },
-  };
-};
+const newNameTextFileStyles = { root: { marginTop: '10px', width: '300px' } };
 
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
@@ -46,10 +30,12 @@ type ResourceGroupItemChoice = {
 };
 
 type Props = {
-  disabled: boolean;
+  /**
+   * If this picker should be disabled.
+   */
+  disabled?: boolean;
   /**
    * The resource groups to choose from.
-   * Set to undefined to disable this picker.
    */
   resourceGroupNames?: string[];
   /**
@@ -68,31 +54,6 @@ type Props = {
   onChange: (choice: ResourceGroupItemChoice) => void;
 };
 
-const onRenderLabel = (props) => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: '5px',
-      }}
-    >
-      <div
-        style={{
-          marginRight: '5px',
-          fontWeight: 600,
-          fontSize: '14px',
-        }}
-      >
-        {` ${props.label} `}
-      </div>
-      <TooltipHost content={props.ariaLabel}>
-        <Icon iconName="Info" styles={getInfoIconStyle(props.required)} />
-      </TooltipHost>
-    </div>
-  );
-};
-
 export const ResourceGroupPicker = ({
   disabled,
   resourceGroupNames,
@@ -102,12 +63,14 @@ export const ResourceGroupPicker = ({
 }: Props) => {
   // ----- Hooks -----//
   const [selectedName, setSelectedName] = React.useState(controlledSelectedName || CREATE_NEW_KEY);
+  const [isNew, setIsNew] = React.useState((controlledSelectedName || CREATE_NEW_KEY) === CREATE_NEW_KEY);
   const [newName, setNewName] = React.useState(controlledNewName);
   const debouncedNewName = useDebounce<string>(newName, 300);
   const [newNameErrorMessage, setNewNameErrorMessage] = React.useState('');
 
   React.useEffect(() => {
     setSelectedName(controlledSelectedName || CREATE_NEW_KEY);
+    setIsNew((controlledSelectedName || CREATE_NEW_KEY) === CREATE_NEW_KEY);
   }, [controlledSelectedName]);
 
   React.useEffect(() => {
@@ -131,13 +94,14 @@ export const ResourceGroupPicker = ({
   }, [debouncedNewName, resourceGroupNames]);
 
   React.useEffect(() => {
-    const isNew = selectedName === CREATE_NEW_KEY;
-    onChange({
-      isNew,
-      name: isNew ? debouncedNewName : selectedName,
-      errorMessage: isNew ? newNameErrorMessage : undefined,
-    });
-  }, [selectedName, debouncedNewName, newNameErrorMessage]);
+    if (!disabled) {
+      onChange({
+        isNew,
+        name: isNew ? debouncedNewName : selectedName,
+        errorMessage: isNew ? newNameErrorMessage : undefined,
+      });
+    }
+  }, [disabled, selectedName, isNew, debouncedNewName, newNameErrorMessage]);
 
   const options = React.useMemo(() => {
     const optionsList: IDropdownOption[] =
@@ -150,8 +114,6 @@ export const ResourceGroupPicker = ({
   }, [resourceGroupNames]);
 
   // ----- Render -----//
-
-  const loading = resourceGroupNames === undefined;
 
   const onRenderOption = (option) => {
     return (
@@ -167,38 +129,29 @@ export const ResourceGroupPicker = ({
   return (
     <Stack styles={stackStyles}>
       <Dropdown
-        required
-        ariaLabel={formatMessage(
-          'A resource group is a collection of resources that share the same lifecycle, permissions, and policies'
-        )}
-        disabled={loading || disabled}
-        label={formatMessage('Resource group')}
+        disabled={disabled}
         options={options}
         placeholder={formatMessage('Select one')}
         selectedKey={selectedName}
         styles={dropdownStyles}
         onChange={(_, opt) => {
+          setIsNew(opt.key === CREATE_NEW_KEY);
           setSelectedName(opt.key as string);
         }}
-        onRenderLabel={onRenderLabel}
         onRenderOption={onRenderOption}
       />
-      {selectedName === CREATE_NEW_KEY && (
+      {isNew && (
         <TextField
-          required
-          ariaLabel={formatMessage('Enter a name for the new resource group')}
           data-testid={'newResourceGroupName'}
-          disabled={loading}
+          disabled={disabled}
           errorMessage={newNameErrorMessage}
           id={'newResourceGroupName'}
-          label={formatMessage('Resource group name')}
-          placeholder={formatMessage('New resource group')}
+          placeholder={formatMessage('New resource group name')}
           styles={newNameTextFileStyles}
           value={newName}
           onChange={(e, val) => {
             setNewName(val || '');
           }}
-          onRenderLabel={onRenderLabel}
         />
       )}
     </Stack>

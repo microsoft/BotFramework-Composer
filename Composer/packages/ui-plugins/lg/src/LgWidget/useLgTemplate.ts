@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef } from '@bfc/shared';
+import { LgTemplateRef, parseTemplateBody, extractTemplateNameFromExpression } from '@bfc/shared';
 import { LgTemplate, useShellApi } from '@bfc/extension-client';
 
 import { locateLgTemplatePosition } from '../locateLgTemplatePosition';
-
-const exprRegex = /^\${(.*)\(\)}$/;
 
 const getAttachmentDisplayText = (template: LgTemplate) => {
   const cardType = template.properties?.$type as string;
@@ -31,24 +29,19 @@ const getLgTemplateTextData = (
         if (responseType === 'Text' || responseType === 'Speak') {
           const subTemplateItem = template.properties[responseType];
           if (subTemplateItem && typeof subTemplateItem === 'string') {
-            const matched = subTemplateItem.trim().match(exprRegex);
+            const subTemplateId = extractTemplateNameFromExpression(subTemplateItem.trim());
             //If it's a template
-            if (matched && matched.length > 1) {
-              const subTemplateId = matched[1];
+            if (subTemplateId) {
               const subTemplate = templates.find((x) => x.name === subTemplateId);
               // If found template and it matches auto-generated names
               if (subTemplate) {
-                const lines =
-                  subTemplate.body
-                    // eslint-disable-next-line security/detect-unsafe-regex
-                    .split(/(?<!\\)- /g)
-                    // Ignore empty or newline strings
-                    .filter((s) => s !== '' && s !== '\n')
-                    .map((s) => s.replace(/\r?\n$/g, ''))
-                    // Remove LG template multiline block symbol
-                    .map((s) => s.replace(/```/g, '')) || [];
-                if (lines.length) {
-                  acc[responseType] = { value: lines[0].replace(/\r?\n/g, '↵'), moreCount: lines.length - 1 };
+                const variations = parseTemplateBody(subTemplate.body)
+                  // Remove LG template multiline block symbol
+                  .map((s) => ({ ...s, value: s.value.replace(/```/g, '') }))
+                  .filter((s) => s.kind === 'variation')
+                  .map((s) => s.value);
+                if (variations.length) {
+                  acc[responseType] = { value: variations[0].replace(/\r?\n/g, '↵'), moreCount: variations.length - 1 };
                 }
               }
             } else {
@@ -61,10 +54,9 @@ const getLgTemplateTextData = (
             : [template.properties[responseType]]) as string[];
           const subTemplateItem = subTemplateItems[0];
           if (subTemplateItem && typeof subTemplateItem === 'string') {
-            const matched = subTemplateItem.trim().match(exprRegex);
-            //If it's a template
-            if (matched && matched.length > 1) {
-              const subTemplateId = matched[1];
+            const subTemplateId = extractTemplateNameFromExpression(subTemplateItem.trim());
+            // If it's a template
+            if (subTemplateId) {
               const subTemplate = templates.find((x) => x.name === subTemplateId);
               if (subTemplate) {
                 acc[responseType] = {

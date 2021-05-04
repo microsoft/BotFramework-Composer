@@ -156,7 +156,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
               css={content}
               underline="true"
               onClick={() => {
-                navigateTo(item.getUrl());
+                navigateTo(item.getUrl(item.dialogPath));
                 if (item.location === 'manifest.json') {
                   setExportSkillModalInfo(item.projectId);
                 }

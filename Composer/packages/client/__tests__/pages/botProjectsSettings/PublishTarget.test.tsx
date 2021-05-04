@@ -18,7 +18,7 @@ jest.mock('../../../src/utils/auth', () => ({
 
 const state = {
   projectId: 'test',
-  publishTypes: [{ name: 'azurePublish', description: 'Publish bot to Azure (Preview)' }],
+  publishTypes: [{ name: 'azurePublish', description: 'Publish bot to Azure' }],
 };
 
 describe('Publish Target', () => {
@@ -31,7 +31,7 @@ describe('Publish Target', () => {
       setPublishTargets: setPublishTargetsMock,
       getPublishTargetTypes: () => {},
     });
-    set(publishTypesState(state.projectId), [{ name: 'azurePublish', description: 'Publish bot to Azure (Preview)' }]);
+    set(publishTypesState(state.projectId), [{ name: 'azurePublish', description: 'Publish bot to Azure' }]);
   };
   it('should add new publish profile', () => {
     const { getByTestId, getByText } = renderWithRecoilAndCustomDispatchers(
@@ -43,6 +43,6 @@ describe('Publish Target', () => {
     act(() => {
       fireEvent.click(addNewPublishProfile);
     });
-    expect(getByText('Add a publishing profile')).toBeInTheDocument();
+    expect(getByText('Add new publishing profile')).toBeInTheDocument();
   });
 });

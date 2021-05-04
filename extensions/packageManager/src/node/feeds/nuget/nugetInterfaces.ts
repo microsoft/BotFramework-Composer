@@ -22,6 +22,7 @@ export interface INuGetPackage {
   versions: INuGetVersion[];
   tags?: string | string[];
   projectUrl?: string;
+  totalDownloads: number;
 }
 
 /**

@@ -5,8 +5,9 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
-import { Panel, IPanelStyles } from 'office-ui-fabric-react/lib/Panel';
-import { Pivot, PivotItem, IPivotStyles } from 'office-ui-fabric-react/lib/Pivot';
+import { Panel, IPanelStyles, PanelType } from 'office-ui-fabric-react/lib/Panel';
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { GetStartedNextSteps } from './GetStartedNextSteps';
 import { GetStartedLearn } from './GetStartedLearn';
@@ -25,45 +26,35 @@ const panelStyles = {
   root: {
     marginTop: 50,
   },
-  navigation: {
-    display: 'block',
-    height: 'auto',
-  },
 } as IPanelStyles;
-
-const pivotStyles = { root: { paddingLeft: 20, paddingTop: 10, width: '100%' } } as IPivotStyles;
 
 export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const { projectId, onDismiss } = props;
 
   const renderTabs = () => {
     return (
-      <Pivot styles={pivotStyles}>
-        <PivotItem headerText={formatMessage('Next steps')}>
-          <GetStartedNextSteps {...props} />
-        </PivotItem>
-        <PivotItem headerText={formatMessage('Learning')}>
-          <GetStartedLearn projectId={projectId} onDismiss={onDismiss} />
-        </PivotItem>
-      </Pivot>
+      <Stack grow styles={{ root: { alignSelf: 'flex-start', padding: '0 20px' } }}>
+        <Pivot styles={{ link: { fontSize: '20px' }, linkIsSelected: { fontSize: '20px' } }}>
+          <PivotItem headerText={formatMessage('Next steps')}>
+            <GetStartedNextSteps {...props} />
+          </PivotItem>
+          <PivotItem headerText={formatMessage('Learning')}>
+            <GetStartedLearn projectId={projectId} onDismiss={onDismiss} />
+          </PivotItem>
+        </Pivot>
+      </Stack>
     );
   };
 
-  const onRenderNavigationContent = React.useCallback(
-    (props, defaultRender) => (
-      <div css={{ position: 'absolute', top: 15, right: 0, zIndex: 1 }}>{defaultRender(props)}</div>
-    ),
-    []
-  );
-
   return (
     <Panel
+      customWidth="395px"
       isBlocking={false}
       isOpen={props.isOpen}
       styles={panelStyles}
+      type={PanelType.custom}
       onDismiss={props.onDismiss}
       onRenderHeader={renderTabs}
-      onRenderNavigationContent={onRenderNavigationContent}
     />
   );
 };

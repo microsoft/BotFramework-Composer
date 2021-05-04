@@ -3,12 +3,17 @@
 
 import { BotTemplate } from '@bfc/shared';
 
-import { sortTemplates, templateSortOrder } from '../creation';
+import { sortTemplates, defaultSortOrder } from '../creation';
+
+jest.mock('../../models/asset/assetManager', () => ({
+  getRawGithubFileContent: jest.fn(),
+  AssetManager: jest.fn(),
+}));
 
 describe('templateSort', () => {
   const templates: BotTemplate[] = [
     {
-      id: '@microsoft/generator-bot-assistant-core',
+      id: '@microsoft/generator-bot-core-language',
       name: ' Calendar Assistant',
       description: 'Preview Calendar Assistant template for TESTING ONLY',
       package: {
@@ -28,7 +33,7 @@ describe('templateSort', () => {
       },
     },
     {
-      id: '@microsoft/generator-bot-people',
+      id: '@microsoft/generator-bot-enterprise-people',
       name: ' Calendar Assistant',
       description: 'Preview Calendar Assistant template for TESTING ONLY',
       package: {
@@ -38,7 +43,7 @@ describe('templateSort', () => {
       },
     },
     {
-      id: '@microsoft/generator-bot-calendar',
+      id: '@microsoft/generator-bot-enterprise-calendar',
       name: ' Calendar',
       description: 'Preview calendar bot for TESTING ONLY',
       package: {
@@ -78,12 +83,32 @@ describe('templateSort', () => {
         packageVersion: '0.0.1',
       },
     },
+    {
+      id: '@microsoft/generator-bot-core-qna',
+      name: 'generator-qna-bot',
+      description: 'Empty bot template that routes to qna configuration',
+      package: {
+        packageName: 'generator-empty-bot',
+        packageSource: 'npm',
+        packageVersion: '0.0.1',
+      },
+    },
+    {
+      id: '@microsoft/generator-bot-core-assistant',
+      name: 'generator-qna-bot',
+      description: 'Empty bot template that routes to qna configuration',
+      package: {
+        packageName: 'generator-empty-bot',
+        packageSource: 'npm',
+        packageVersion: '0.0.1',
+      },
+    },
   ];
 
   it('should return sorted templates per sortOrder obj', async () => {
     // note - the list in templates has to include all the same items in creation.ts
-    const sortedTemplateList = sortTemplates(templates);
-    templateSortOrder.forEach((templateSortEntry, index) => {
+    const sortedTemplateList = await sortTemplates(templates);
+    defaultSortOrder.forEach((templateSortEntry, index) => {
       if (
         templates.findIndex((temp) => {
           temp.id === templateSortEntry.generatorName;

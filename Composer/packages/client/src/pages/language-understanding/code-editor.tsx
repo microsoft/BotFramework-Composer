@@ -13,8 +13,9 @@ import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { LuFile } from '@bfc/shared';
 
-import { localeState, settingsState } from '../../recoilModel/atoms';
+import { dialogState, localeState, settingsState } from '../../recoilModel/atoms';
 import { userSettingsState, dispatcherState, luFilesSelectorFamily } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { DiffCodeEditor } from './diff-editor';
@@ -43,6 +44,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const luFiles = useRecoilValue(luFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
+  const currentDialog = useRecoilValue(dialogState({ projectId: actualProjectId, dialogId }));
 
   const { languages, defaultLanguage } = settings;
 
@@ -145,6 +147,19 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings({ codeEditor: settings });
   };
 
+  const navigateToLuPage = useCallback(
+    (luFileId: string, sectionId?: string) => {
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      const pattern = new RegExp(`.${locale}`, 'g');
+      const fileId = currentDialog.isFormDialog ? luFileId : luFileId.replace(pattern, '');
+      const url = currentDialog.isFormDialog
+        ? `/bot/${projectId}/language-understanding/${currentDialog.id}/item/${fileId}`
+        : `/bot/${projectId}/language-understanding/${fileId}${sectionId ? `/edit?t=${sectionId}` : ''}`;
+      navigateTo(url);
+    },
+    [projectId, locale, currentDialog]
+  );
+
   const currentLanguageFileEditor = useMemo(() => {
     return (
       <LuEditor
@@ -160,6 +175,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         value={content}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
+        onNavigateToLuPage={navigateToLuPage}
       />
     );
   }, [luOption, file]);

@@ -9,19 +9,22 @@ import formatMessage from 'format-message';
 import { IExtensionRegistration } from '@botframework-composer/types';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
-import { IFeed, IPackageDefinition, IPackageQuery, IPackageSource, PackageSourceType } from './feeds/feedInterfaces';
+import { IFeed, IPackageDefinition, IPackageSource, PackageSourceType } from './feeds/feedInterfaces';
 import { FeedFactory } from './feeds/feedFactory';
 
 const API_ROOT = '/api';
 
 const hasSchema = (c) => {
-  // NOTE: A special case for orchestrator is included here because it does not directly include the schema
-  // the schema for orchestrator is in a dependent package
-  // additionally, our schemamerge command only returns the top level components found, even though
-  // it does properly discover and include the schema from this dependent package.
-  // without this special case, composer does not see orchestrator as being installed even though it is.
-  // in the future this should be resolved in the schemamerger library by causing the includesSchema property to be passed up to all parent libraries
-  return c.includesSchema || c.name.toLowerCase() === 'microsoft.bot.components.orchestrator';
+  return (
+    c.includesSchema ||
+    c.keywords?.includes('msbot-action') ||
+    c.keywords?.includes('msbot-trigger') ||
+    c.keywords?.includes('msbot-adapter') ||
+    c.keywords?.includes('msbot-function') ||
+    c.keywords?.includes('msbot-recognizer') ||
+    c.keywords?.includes('msbot-storage') ||
+    c.keywords?.includes('msbot-middleware')
+  );
 };
 
 const isAdaptiveComponent = (c) => {
@@ -113,18 +116,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           defaultQuery: {
             prerelease: true,
             semVerLevel: '2.0.0',
-            query: `microsoft.bot.components+tags:${botComponentTag}`,
-          },
-          type: PackageSourceType.NuGet,
-        },
-        {
-          key: 'nuget-community',
-          text: formatMessage('community packages'),
-          url: 'https://api.nuget.org/v3/index.json',
-          readonly: true,
-          defaultQuery: {
-            prerelease: true,
-            semVerLevel: '2.0.0',
             query: `tags:${botComponentTag}`,
           },
           type: PackageSourceType.NuGet,
@@ -132,16 +123,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         {
           key: 'npm',
           text: formatMessage('npm'),
-          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}+scope:microsoft&size=100&from=0`,
-          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
+          url: `https://registry.npmjs.org/-/v1/search`,
           readonly: true,
-        },
-        {
-          key: 'npm-community',
-          text: formatMessage('JS community packages'),
-          url: `https://registry.npmjs.org/-/v1/search?text=keywords:${botComponentTag}&size=100&from=0`,
-          searchUrl: `https://registry.npmjs.org/-/v1/search?text={{keyword}}+keywords:${botComponentTag}&size=100&from=0`,
-          readonly: true,
+          defaultQuery: {
+            prerelease: true,
+            query: `keywords:${botComponentTag}`,
+          },
+          type: PackageSourceType.NPM,
         },
       ];
 
@@ -209,15 +197,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       if (packageSource) {
         try {
           const feed: IFeed = await new FeedFactory(composer).build(packageSource);
-          const packageQuery: IPackageQuery = {
-            prerelease: true,
-            semVerLevel: '2.0.0',
-            query: 'tags:msbot-component',
-          };
 
-          composer.log('GETTING FEED', packageSource, packageSource.defaultQuery ?? packageQuery);
+          // append user specified query to defaultQuery
+          if (req.query.term) {
+            packageSource.defaultQuery.query = `${packageSource.defaultQuery.query}+${encodeURIComponent(
+              req.query.term
+            )}`;
+          }
 
-          const packages = await feed.getPackages(packageSource.defaultQuery ?? packageQuery);
+          composer.log('GETTING FEED', packageSource, packageSource.defaultQuery);
+
+          // set default page size to 100
+          packageSource.defaultQuery.take = 100;
+          const packages = await feed.getPackages(packageSource.defaultQuery);
 
           if (Array.isArray(packages)) {
             combined.push(...packages);
@@ -262,7 +254,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
         const dryrun = new SchemaMerger(
-          [manifestFile, '!**/imported/**', '!**/generated/**'],
+          [manifestFile, `!${path.join(currentProject.dir, 'generated')}/**`],
           path.join(currentProject.dataDir, 'schemas/sdk'),
           path.join(currentProject.dataDir, 'dialogs/imported'),
           true, // copy only? true = dry run
@@ -301,6 +293,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const version = req.body.version;
       const source = req.body.source;
       const isUpdating = req.body.isUpdating || false;
+      const isPreview = req.body.isPreview || false;
       const mergeErrors: string[] = [];
 
       const captureErrors = (msg: string): void => {
@@ -318,14 +311,15 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             packageName,
             version,
             source,
-            currentProject
+            currentProject,
+            isPreview
           );
 
           const manifestFile = runtime.identifyManifest(runtimePath, currentProject.name);
 
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
-            [manifestFile, '!**/imported/**', '!**/generated/**'],
+            [manifestFile, `!${path.join(currentProject.dir, 'generated')}/**`],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             true, // copy only? true = dry run
@@ -353,7 +347,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
             });
           } else {
             const realMerge = new SchemaMerger(
-              [manifestFile, '!**/imported/**', '!**/generated/**'],
+              [manifestFile, `!${path.join(currentProject.dir, 'generated')}/**`],
               path.join(currentProject.dataDir, 'schemas/sdk'),
               path.join(currentProject.dataDir, 'dialogs/imported'),
               false, // copy only? true = dry run
@@ -458,7 +452,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
-            [manifestFile, '!**/imported/**', '!**/generated/**'],
+            [manifestFile, `!${path.join(currentProject.dir, 'generated')}/**`],
             path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             false, // copy only? true = dry run

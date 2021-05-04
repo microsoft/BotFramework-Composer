@@ -15,11 +15,13 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 
-import { DialogCreationCopy, nameRegexV2 } from '../../../constants';
+import { DialogCreationCopy, nameRegexV2, nameRegex } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
@@ -27,6 +29,7 @@ import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSucces
 import { dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -116,23 +119,29 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const writable = focusedStorageFolder.writable;
   const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
   const templateProjects = useRecoilValue(templateProjectsState);
+  const currentTemplate = templateProjects.find((t) => {
+    if (t?.id) {
+      return t.id === templateId;
+    }
+  });
 
   // template ID is populated by npm package name which needs to be formatted
-  const normalizeTemplateId = (templateId?: string) => {
-    if (templateId) {
+  const normalizeTemplateId = () => {
+    if (currentTemplate) {
       // use almost the same patterns as in assetManager.ts
-      return templateId
-        .replace(/^@microsoft\/generator-bot-/, '') // clean up our complex package names
-        .replace(/^generator-/, '') // clean up other package names too
-        .trim()
-        .replace(/-/, '_')
-        .toLocaleLowerCase();
+      const camelCasedName = camelCase(
+        currentTemplate.name
+          .trim()
+          .replace(/bot|maker/gi, '')
+          .replace(/-/g, ' ')
+      );
+      return upperFirst(camelCasedName);
     }
   };
 
   const getDefaultName = () => {
     let i = 0;
-    const bot = normalizeTemplateId(templateId);
+    const bot = normalizeTemplateId();
     let defaultName = `${bot}`;
     while (
       files.some((file) => {
@@ -151,10 +160,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!value || !nameRegexV2.test(`${value}`)) {
+        const isPvaBot = templateId === 'pva';
+        const namePattern = isPvaBot ? nameRegex : nameRegexV2;
+        if (!value || !namePattern.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {
-            return formatMessage('Bot name cannot not start with a number');
+            return formatMessage('Bot name cannot start with a number or space');
           } else {
             return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, or _.');
           }
@@ -283,6 +294,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = await getAliasFromPayload(source, payload);
         }
       }
+      TelemetryClient.track('CreationExecuted', {
+        runtimeChoice: dataToSubmit?.runtimeType,
+        runtimeLanguage: dataToSubmit?.runtimeLanguage as FeedType,
+        isPva: isImported,
+        isAbs: !!dataToSubmit?.source,
+      });
       onSubmit({ ...dataToSubmit }, templateId || '');
     },
     [hasErrors, formData]
@@ -295,11 +312,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
 
   const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
     const result: IDropdownOption[] = [];
-    const currentTemplate = templateProjects.find((t) => {
-      if (t?.id) {
-        return t.id === templateId;
-      }
-    });
 
     if (currentTemplate) {
       if (runtimeLanguage === csharpFeedKey) {
@@ -337,9 +349,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     );
   }, [focusedStorageFolder]);
   const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
-
   return (
-    // TODO remove runtime language drop down prior to merging as that data is indicated by the tab chosen
     <Fragment>
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
@@ -359,7 +369,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
               <TextField
-                multiline
                 label={formatMessage('Description')}
                 resizable={false}
                 styles={description}
@@ -368,17 +377,19 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
           </Stack>
-          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                data-testid="NewDialogRuntimeType"
-                label={formatMessage('Runtime type')}
-                options={getSupportedRuntimesForTemplate()}
-                selectedKey={formData.runtimeType}
-                onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
-              />
-            </StackItem>
-          </Stack>
+          {!isImported && (
+            <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+              <StackItem grow={0} styles={halfstack}>
+                <Dropdown
+                  data-testid="NewDialogRuntimeType"
+                  label={formatMessage('Runtime type')}
+                  options={getSupportedRuntimesForTemplate()}
+                  selectedKey={formData.runtimeType}
+                  onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
+                />
+              </StackItem>
+            </Stack>
+          )}
           {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />

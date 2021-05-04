@@ -4,6 +4,7 @@
 import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+import { getManifestUrl } from '../../utils/skillManifestUtil';
 
 import { Bot, BotStatus, BotPublishHistory, BotProjectType, BotPropertyType } from './type';
 
@@ -31,16 +32,18 @@ export const generateBotPropertyData = (botProjectData: BotProjectType[]) => {
   return { botPropertyData, botList };
 };
 
-const findSkillManifestUrl = (skillManifests: SkillManifestFile[], appId: string) => {
+const findSkillManifestUrl = (skillManifests: SkillManifestFile[], hostname: string, appId: string): string[] => {
+  const urls: string[] = [];
   for (const skillManifest of skillManifests || []) {
     for (const endpoint of skillManifest?.content?.endpoints || []) {
-      if (endpoint?.msAppId === appId) {
-        return endpoint?.endpointUrl;
+      const url = getManifestUrl(hostname, skillManifest);
+      if (endpoint?.msAppId === appId && !urls.includes(url)) {
+        urls.push(url);
       }
     }
   }
 
-  return undefined;
+  return urls;
 };
 
 export const generateBotStatusList = (
@@ -49,11 +52,11 @@ export const generateBotStatusList = (
   botPublishHistoryList: BotPublishHistory
 ): BotStatus[] => {
   const bots = botList.map((bot) => {
-    const botStatus: BotStatus = Object.assign({}, bot);
+    const botStatus: BotStatus = Object.assign({ skillManifestUrls: [] }, bot);
     const publishTargets: PublishTarget[] = botPropertyData[bot.id].publishTargets;
     const publishHistory = botPublishHistoryList[bot.id];
+    botStatus.publishTargets = publishTargets;
     if (publishTargets.length > 0 && botStatus.publishTarget && publishHistory) {
-      botStatus.publishTargets = publishTargets;
       if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
         const history = publishHistory[botStatus.publishTarget][0];
         botStatus.time = history.time;
@@ -67,7 +70,11 @@ export const generateBotStatusList = (
         const config = JSON.parse(currentPublishTarget.configuration);
         const appId = config?.settings?.MicrosoftAppId;
         if (appId) {
-          botStatus.skillManifestUrl = findSkillManifestUrl(botPropertyData[bot.id].skillManifests, appId);
+          botStatus.skillManifestUrls = findSkillManifestUrl(
+            botPropertyData[bot.id].skillManifests,
+            config.hostname,
+            appId
+          );
         }
       }
     }

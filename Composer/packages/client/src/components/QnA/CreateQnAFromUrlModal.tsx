@@ -71,14 +71,24 @@ const initializeLocales = (locales: string[], defaultLocale: string) => {
 };
 
 export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (props) => {
-  const { onDismiss, onSubmit, dialogId, projectId, qnaFiles, locales, defaultLocale } = props;
+  const {
+    onDismiss,
+    onSubmit,
+    dialogId,
+    projectId,
+    qnaFiles,
+    locales,
+    defaultLocale,
+    initialName,
+    onUpdateInitialName,
+  } = props;
   const actions = useRecoilValue(dispatcherState);
   const onComplete = useRecoilValue(onCreateQnAFromUrlDialogCompleteState(projectId));
 
   const [formData, setFormData] = useState<CreateQnAFromUrlFormData>({
     urls: [],
     locales: initializeLocales(locales, defaultLocale),
-    name: '',
+    name: initialName || '',
     multiTurn: false,
   });
 
@@ -98,11 +108,11 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
 
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = hasErrors(formDataErrors) || !formData.urls[0] || !formData.name;
-
   const validFormDataName = validateName(qnaFiles);
 
   const onChangeNameField = (value: string | undefined) => {
     updateNameField(value);
+    onUpdateInitialName?.(value ?? '');
     updateNameError(value);
   };
 
@@ -148,6 +158,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
 
   const handleDismiss = () => {
     onDismiss?.();
+    onUpdateInitialName?.('');
     actions.createQnAFromUrlDialogCancel({ projectId });
     TelemetryClient.track('AddNewKnowledgeBaseCanceled');
   };
@@ -171,7 +182,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
   return (
     <Dialog
       dialogContentProps={{
-        type: DialogType.close,
+        type: DialogType.normal,
         title: <DialogTitle />,
         styles: styles.dialog,
       }}
@@ -189,7 +200,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formDataErrors.name}
             label={formatMessage('Knowledge base name')}
-            placeholder={formatMessage('Type a name that describes this content')}
+            placeholder={formatMessage('Type a name for this knowledge base')}
             styles={textFieldKBNameFromUrl}
             value={formData.name}
             onChange={(e, name) => onChangeNameField(name)}
@@ -248,6 +259,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
               return;
             }
             onSubmit(removeEmptyUrls(formData));
+            onUpdateInitialName?.('');
             TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: false });
           }}
         />

@@ -10,17 +10,20 @@ import {
 } from '@botframework-composer/types';
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
+import { v4 as uuid } from 'uuid';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 
-import { ConversationService, ChatData, BotSecrets } from './utils/conversationService';
+import { ConversationService } from './utils/conversationService';
 import { WebChatHeader } from './WebChatHeader';
-import { WebChatContainer } from './WebChatContainer';
-import { RestartOption } from './type';
+import { WebChatComposer } from './WebChatComposer';
+import { BotSecrets, ChatData, RestartOption } from './types';
 
 const BASEPATH = process.env.PUBLIC_URL || 'http://localhost:3000/';
+// TODO: Refactor to include Webchat header component as a part of WebchatComposer to avoid this variable.
+const webChatHeaderHeight = '85px';
 
 export interface WebChatPanelProps {
   botData: {
@@ -47,6 +50,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     clearWebChatLogs,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setWebChatPanelVisibility,
   } = useRecoilValue(dispatcherState);
   const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
@@ -79,6 +83,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
                   projectId,
                   data.activities.map((a) => ({
                     activity: a,
+                    id: uuid(),
                     timestamp: new Date(a.timestamp || Date.now()).getTime(),
                     trafficType: data.trafficType,
                   }))
@@ -104,6 +109,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           error: {
             message: formatMessage('An error occurred connecting initializing the DirectLine server'),
           },
+          id: uuid(),
           request: { route: 'conversations/ws/port', method: 'GET', payload: {} },
           response: { payload: response.data, statusCode: response.status },
           timestamp: Date.now(),
@@ -211,6 +217,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         error: {
           message: formatMessage('An error occurred saving transcripts'),
         },
+        id: uuid(),
         request: { route: 'saveTranscripts/', method: '', payload: {} },
         response: { payload: ex, statusCode: 400 },
         timestamp: Date.now(),
@@ -221,11 +228,16 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   };
 
   return (
-    <div ref={webChatPanelRef} style={{ height: 'calc(100% - 38px)' }}>
+    <div ref={webChatPanelRef} style={{ height: `calc(100% - ${webChatHeaderHeight})` }}>
       <WebChatHeader
+        botName={botName}
         conversationId={currentConversation}
         currentRestartOption={currentRestartOption}
-        openBotInEmulator={() => {
+        onCloseWebChat={() => {
+          setWebChatPanelVisibility(false);
+          TelemetryClient.track('WebChatPaneClosed');
+        }}
+        onOpenBotInEmulator={() => {
           openBotInEmulator(projectId);
           TelemetryClient.track('EmulatorButtonClicked', { isRoot: true, projectId, location: 'WebChatPane' });
         }}
@@ -233,7 +245,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         onSaveTranscript={onSaveTranscriptClick}
         onSetRestartOption={onSetRestartOption}
       />
-      <WebChatContainer
+      <WebChatComposer
         activeLocale={activeLocale}
         botUrl={botUrl}
         chatData={chats[currentConversation]}

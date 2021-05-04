@@ -52,15 +52,15 @@ export const Tips = {
 export const LUIS_REGIONS: IDropdownOption[] = [
   {
     key: 'westus',
-    text: formatMessage('westus'),
+    text: formatMessage('West US'),
   },
   {
     key: 'westeurope',
-    text: formatMessage('westeurope'),
+    text: formatMessage('West Europe'),
   },
   {
     key: 'australiaeast',
-    text: formatMessage('australiaeast'),
+    text: formatMessage('Australia East'),
   },
 ];
 
@@ -94,6 +94,12 @@ export const Text = {
   },
   get DOTNETFAILURE() {
     return formatMessage('Composer needs .NET Core SDK');
+  },
+  get FUNCTIONSFAILURE() {
+    return formatMessage('Composer needs Azure Functions');
+  },
+  get BOTRUNTIMEERROR() {
+    return formatMessage('Composer Runtime Error');
   },
 };
 
@@ -143,6 +149,7 @@ export enum CreationFlowStatus {
   SAVEAS = 'Save as',
   OPEN = 'Open',
   CLOSE = 'Close',
+  NEW_SKILL = 'New Skill',
 }
 
 export type CreationFlowType = 'Bot' | 'Skill';
@@ -252,7 +259,7 @@ export const DialogCreationCopy = {
   },
   get IMPORT_QNA() {
     return {
-      title: formatMessage('Create New Knowledge Base'),
+      title: formatMessage('Create new knowledge base'),
       subText: formatMessage(
         'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
       ),
@@ -314,14 +321,50 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
+      afterSubText: formatMessage(
+        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
+      ),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
     return {
       title: formatMessage('Edit a skill'),
-      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+      subText: formatMessage('Enter a manifest URL to add a new skill to your bot.'),
     };
+  },
+};
+
+export const selectIntentDialog = {
+  SELECT_INTENT: (name: string, skill: string) => {
+    return {
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Select intents to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
+      subText: formatMessage(`These intents will trigger this skill from ${name}`),
+    };
+  },
+  ADD_OR_EDIT_PHRASE: (name: string, skill: string) => {
+    return {
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Add or edit phrases to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
+      subText: formatMessage(`These phrases will trigger this skill from ${name}`),
+    };
+  },
+};
+
+export const enableOrchestratorDialog = {
+  get title() {
+    return formatMessage('Enable Orchestrator Recognizer');
+  },
+  get subText() {
+    return formatMessage('Enable Orchestrator as the recognizer for routing to other skills');
+  },
+  get content() {
+    return formatMessage(
+      'Multi-bot projects work best with the Orchestrator recognizer set at the dispatching dialog (typically the root dialog). Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that handles the intent. Orchestrator does not support entity extraction. If you plan to combine entity extraction and routing at the root dialog, use LUIS instead.'
+    );
   },
 };
 
@@ -380,7 +423,8 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
 
-export const invalidNameCharRegex = /[^a-z^A-Z^0-9^_]/g;
+export const invalidNameCharRegex = /[^a-zA-Z0-9-_]/g;
+export const invalidNameCharRegexV2 = /[^a-zA-Z0-9_]/g;
 
 export const authConfig = {
   // for web login

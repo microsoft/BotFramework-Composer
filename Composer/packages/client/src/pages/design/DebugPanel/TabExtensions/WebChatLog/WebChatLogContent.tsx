@@ -7,23 +7,28 @@ import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react'
 import { useRecoilValue } from 'recoil';
 import { ConversationTrafficItem } from '@botframework-composer/types/src';
 import formatMessage from 'format-message';
+import debounce from 'lodash/debounce';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import {
   dispatcherState,
   rootBotProjectIdSelector,
   webChatTrafficState,
   webChatInspectionDataState,
+  botStatusState,
+  isWebChatPanelVisibleState,
 } from '../../../../../recoilModel';
 import { DebugPanelTabHeaderProps } from '../types';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
+import { BotStatus } from '../../../../../constants';
+import { useBotOperations } from '../../../../../components/BotRuntimeController/useBotOperations';
+import { usePVACheck } from '../../../../../hooks/usePVACheck';
 
 import { WebChatInspectorPane } from './WebChatInspectorPane';
 import { WebChatActivityLogItem } from './WebChatActivityLogItem';
 import { WebChatNetworkLogItem } from './WebChatNetworkLogItem';
-
-const emptyStateMessage = css`
-  padding-left: 16px;
-`;
 
 const logContainer = (isActive: boolean) => css`
   height: 100%;
@@ -32,15 +37,33 @@ const logContainer = (isActive: boolean) => css`
   flex-direction: row;
 `;
 
-const logPane = css`
+const logPane = (trafficLength: number) => css`
   height: 100%;
   width: 100%;
   display: flex;
   overflow: auto;
   flex-direction: column;
-  padding: 16px 0;
+  padding: ${trafficLength ? '16px 0' : '4px 0'};
   box-sizing: border-box;
 `;
+
+const emptyStateMessageContainer = css`
+  padding: 0px 16px;
+  font-size: 12px;
+`;
+
+const actionButton = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+  },
+};
+
+const itemIsSelected = (item: ConversationTrafficItem, currentInspectionData?: WebChatInspectionData) => {
+  return item.id === currentInspectionData?.item?.id;
+};
 
 // R12: We are showing Errors from the root bot only.
 export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
@@ -50,7 +73,12 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   const [navigateToLatestEntry, navigateToLatestEntryWhenActive] = useState(false);
   const [currentLogItemCount, setLogItemCount] = useState<number>(0);
   const webChatContainerRef = useRef<HTMLDivElement | null>(null);
-  const { setWebChatInspectionData } = useRecoilValue(dispatcherState);
+  const { setWebChatInspectionData, setWebChatPanelVisibility } = useRecoilValue(dispatcherState);
+  const currentStatus = useRecoilValue(botStatusState(currentProjectId ?? ''));
+  const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
+  const { startAllBots } = useBotOperations();
+  const isPVABot = usePVACheck(currentProjectId ?? '');
+  const [isWebChatPanelOpenedOnce, setIsWebChatPanelOpenedOnce] = useState(false);
 
   const navigateToNewestLogEntry = () => {
     if (currentLogItemCount && webChatContainerRef?.current) {
@@ -59,9 +87,39 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     }
   };
 
+  const performInspection = useRef(
+    debounce((trafficItem: ConversationTrafficItem) => {
+      if (currentProjectId) {
+        if (trafficItem?.trafficType === 'network') {
+          // default to inspecting the request body
+          setWebChatInspectionData(currentProjectId, { item: trafficItem, mode: 'request' });
+        } else {
+          setWebChatInspectionData(currentProjectId, { item: trafficItem });
+        }
+      }
+    }, 500)
+  ).current;
+
+  const inspectLatestLogMessage = () => {
+    // inspect latest log message if nothing is being inspected
+    if (!inspectionData && currentProjectId) {
+      const latestTrafficItem = [...rawWebChatTraffic].pop();
+      if (latestTrafficItem) {
+        performInspection(latestTrafficItem);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isWebChatPanelVisible && !isWebChatPanelOpenedOnce) {
+      setIsWebChatPanelOpenedOnce(true);
+    }
+  }, [isWebChatPanelVisible]);
+
   useEffect(() => {
     if (navigateToLatestEntry && isActive) {
       navigateToNewestLogEntry();
+      inspectLatestLogMessage();
       navigateToLatestEntryWhenActive(false);
     }
   }, [isActive, navigateToLatestEntry]);
@@ -80,16 +138,37 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   );
 
   const renderLogItem = useCallback(
-    (item: ConversationTrafficItem, index: number) => {
+    (item: ConversationTrafficItem, index: number, inspectionData?: WebChatInspectionData) => {
       switch (item.trafficType) {
         case 'activity':
-          return <WebChatActivityLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+          return (
+            <WebChatActivityLogItem
+              key={`webchat-activity-item-${index}`}
+              isSelected={itemIsSelected(item, inspectionData)}
+              item={item}
+              onClickTraffic={onClickTraffic}
+            />
+          );
 
         case 'network':
-          return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+          return (
+            <WebChatNetworkLogItem
+              key={`webchat-network-item-${index}`}
+              isSelected={itemIsSelected(item, inspectionData)}
+              item={item}
+              onClickTraffic={onClickTraffic}
+            />
+          );
 
         case 'networkError':
-          return <WebChatNetworkLogItem index={index} item={item} onClickTraffic={onClickTraffic} />;
+          return (
+            <WebChatNetworkLogItem
+              key={`webchat-network-item-${index}`}
+              isSelected={itemIsSelected(item, inspectionData)}
+              item={item}
+              onClickTraffic={onClickTraffic}
+            />
+          );
 
         default:
           return null;
@@ -99,12 +178,10 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   );
 
   const displayedTraffic = useMemo(() => {
-    const sortedTraffic = [...rawWebChatTraffic]
-      .sort((t1, t2) => t1.timestamp - t2.timestamp)
-      .map((t, i) => renderLogItem(t, i));
-    setLogItemCount(sortedTraffic.length);
-    return sortedTraffic;
-  }, [rawWebChatTraffic, renderLogItem]);
+    const renderedTraffic = [...rawWebChatTraffic].map((t, i) => renderLogItem(t, i, inspectionData));
+    setLogItemCount(renderedTraffic.length);
+    return renderedTraffic;
+  }, [inspectionData, rawWebChatTraffic, renderLogItem]);
 
   const setInspectionData = (data: WebChatInspectionData) => {
     if (currentProjectId) {
@@ -112,14 +189,49 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
     }
   };
 
+  const onOpenWebChatPanelClick = () => {
+    setWebChatPanelVisibility(true);
+  };
+
+  const noWebChatTrafficSection = useMemo(() => {
+    if (isPVABot) {
+      return null;
+    }
+
+    if (currentStatus === BotStatus.inactive) {
+      return (
+        <div css={emptyStateMessageContainer}>
+          {formatMessage.rich('Your bot project is not running. <actionButton>Start your bot</actionButton>', {
+            actionButton: ({ children }) => (
+              <ActionButton key="webchat-tab-startbot" styles={actionButton} type="button" onClick={startAllBots}>
+                {children}
+              </ActionButton>
+            ),
+          })}
+        </div>
+      );
+    }
+
+    if (currentStatus === BotStatus.connected) {
+      return (
+        <div css={emptyStateMessageContainer}>
+          {formatMessage.rich('Your bot project is running. <actionButton>Test in Web Chat</actionButton>', {
+            actionButton: ({ children }) => (
+              <ActionButton key="webchat-tab-openWC" styles={actionButton} onClick={onOpenWebChatPanelClick}>
+                {children}
+              </ActionButton>
+            ),
+          })}
+        </div>
+      );
+    }
+    return null;
+  }, [currentStatus]);
+
   return (
     <div css={logContainer(isActive)}>
-      <div ref={webChatContainerRef} css={logPane} data-testid="Webchat-Logs-Container">
-        {displayedTraffic.length ? (
-          displayedTraffic
-        ) : (
-          <span css={emptyStateMessage}>{formatMessage('No Web Chat activity yet.')}</span>
-        )}
+      <div ref={webChatContainerRef} css={logPane(displayedTraffic.length)} data-testid="Webchat-Logs-Container">
+        {displayedTraffic.length || isWebChatPanelOpenedOnce ? displayedTraffic : noWebChatTrafficSection}
       </div>
       <WebChatInspectorPane inspectionData={inspectionData} onSetInspectionData={setInspectionData} />
     </div>

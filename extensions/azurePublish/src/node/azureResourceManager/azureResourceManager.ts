@@ -133,7 +133,9 @@ export class AzureResourceMananger {
    * Deploy luis authoring resource
    * @param config
    */
-  public async deployLuisAuthoringResource(config: LuisAuthoringResourceConfig) {
+  public async deployLuisAuthoringResource(
+    config: LuisAuthoringResourceConfig
+  ): Promise<{ authoringKey: string; authoringEndpoint: string; location: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -170,7 +172,8 @@ export class AzureResourceMananger {
       const authoringEndpoint = deployResult.properties?.endpoint ?? '';
       const keys = await cognitiveServicesManagementClient.accounts.listKeys(config.resourceGroupName, config.name);
       const authoringKey = keys?.key1 ?? '';
-      return { authoringKey, authoringEndpoint };
+      const location = deployResult.location;
+      return { authoringKey, authoringEndpoint, location };
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -184,7 +187,9 @@ export class AzureResourceMananger {
    * Deploy luis resource
    * @param config
    */
-  public async deployLuisResource(config: LuisResourceConfig): Promise<{ endpoint: string; endpointKey: string }> {
+  public async deployLuisResource(
+    config: LuisResourceConfig
+  ): Promise<{ endpoint: string; endpointKey: string; location: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -218,7 +223,8 @@ export class AzureResourceMananger {
       const endpoint = deployResult.properties?.endpoint ?? '';
       const keys = await cognitiveServicesManagementClient.accounts.listKeys(config.resourceGroupName, config.name);
       const endpointKey = keys?.key1 ?? '';
-      return { endpoint, endpointKey };
+      const location = deployResult.location;
+      return { endpoint, endpointKey, location };
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -323,31 +329,6 @@ export class AzureResourceMananger {
         throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, appinsightsDeployResult._response.bodyAsText);
       }
 
-      // deploy qna host webapp
-      const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
-        config.resourceGroupName,
-        qnaMakerWebAppName,
-        {
-          name: qnaMakerWebAppName,
-          serverFarmId: servicePlanResult.name,
-          location: config.location,
-          siteConfig: {
-            cors: {
-              allowedOrigins: ['*'],
-            },
-          },
-          enabled: true,
-        }
-      );
-
-      if (webAppResult._response.status >= 300) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: webAppResult._response.bodyAsText,
-        });
-        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, webAppResult._response.bodyAsText);
-      }
-
       // add web config for websites
       const azureSearchAdminKey = (
         await searchManagementClient.adminKeys.get(config.resourceGroupName, qnaMakerSearchName)
@@ -363,62 +344,73 @@ export class AzureResourceMananger {
       const secondaryEndpointKey = `${qnaMakerWebAppName}-SecondaryEndpointKey`;
       const defaultAnswer = 'No good match found in KB.';
       const QNAMAKER_EXTENSION_VERSION = 'latest';
-      const EnalbeMultipleTestIndex = 'true';
+      const EnableMultipleTestIndex = 'true';
 
-      const webAppConfigUpdateResult = await webSiteManagementClient.webApps.createOrUpdateConfiguration(
+      // deploy qna host webapp
+      const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(
         config.resourceGroupName,
         qnaMakerWebAppName,
         {
-          appSettings: [
-            {
-              name: 'AzureSearchName',
-              value: qnaMakerSearchName,
+          name: qnaMakerWebAppName,
+          serverFarmId: servicePlanResult.name,
+          location: config.location,
+          siteConfig: {
+            cors: {
+              allowedOrigins: ['*'],
             },
-            {
-              name: 'AzureSearchAdminKey',
-              value: azureSearchAdminKey,
-            },
-            {
-              name: 'UserAppInsightsKey',
-              value: userAppInsightsKey,
-            },
-            {
-              name: 'UserAppInsightsName',
-              value: userAppInsightsName,
-            },
-            {
-              name: 'UserAppInsightsAppId',
-              value: userAppInsightsAppId,
-            },
-            {
-              name: 'PrimaryEndpointKey',
-              value: primaryEndpointKey,
-            },
-            {
-              name: 'SecondaryEndpointKey',
-              value: secondaryEndpointKey,
-            },
-            {
-              name: 'DefaultAnswer',
-              value: defaultAnswer,
-            },
-            {
-              name: 'QNAMAKER_EXTENSION_VERSION',
-              value: QNAMAKER_EXTENSION_VERSION,
-            },
-            {
-              name: 'EnalbeMultipleTestIndex',
-              value: EnalbeMultipleTestIndex,
-            },
-          ],
+            appSettings: [
+              {
+                name: 'AzureSearchName',
+                value: qnaMakerSearchName,
+              },
+              {
+                name: 'AzureSearchAdminKey',
+                value: azureSearchAdminKey,
+              },
+              {
+                name: 'UserAppInsightsKey',
+                value: userAppInsightsKey,
+              },
+              {
+                name: 'UserAppInsightsName',
+                value: userAppInsightsName,
+              },
+              {
+                name: 'UserAppInsightsAppId',
+                value: userAppInsightsAppId,
+              },
+              {
+                name: 'PrimaryEndpointKey',
+                value: primaryEndpointKey,
+              },
+              {
+                name: 'SecondaryEndpointKey',
+                value: secondaryEndpointKey,
+              },
+              {
+                name: 'DefaultAnswer',
+                value: defaultAnswer,
+              },
+              {
+                name: 'QNAMAKER_EXTENSION_VERSION',
+                value: QNAMAKER_EXTENSION_VERSION,
+              },
+              {
+                name: 'EnableMultipleTestIndex',
+                value: EnableMultipleTestIndex,
+              },
+            ],
+          },
+          enabled: true,
         }
       );
-      if (webAppConfigUpdateResult._response.status >= 300) {
+
+      if (webAppResult._response.status >= 300) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: webAppConfigUpdateResult._response.bodyAsText,
+          message: webAppResult._response.bodyAsText,
         });
-        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, webAppConfigUpdateResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, webAppResult._response.bodyAsText);
       }
 
       // Create qna account
@@ -470,7 +462,9 @@ export class AzureResourceMananger {
    * Deploy application insights
    * @param config
    */
-  public async deployAppInsightsResource(config: ApplicationInsightsConfig): Promise<{ instrumentationKey: string }> {
+  public async deployAppInsightsResource(
+    config: ApplicationInsightsConfig
+  ): Promise<{ instrumentationKey: string; connectionString: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -500,6 +494,7 @@ export class AzureResourceMananger {
       // Update output and status
       return {
         instrumentationKey: deployResult.instrumentationKey,
+        connectionString: deployResult.connectionString,
       };
     } catch (err) {
       this.logger({
@@ -883,7 +878,11 @@ export class AzureResourceMananger {
               },
               {
                 name: 'FUNCTIONS_WORKER_RUNTIME',
-                value: 'dotnet',
+                value: config.workerRuntime || 'dotnet',
+              },
+              {
+                name: 'WEBSITE_NODE_DEFAULT_VERSION',
+                value: '~14',
               },
               {
                 name: 'APPINSIGHTS_INSTRUMENTATIONKEY',

@@ -27,6 +27,13 @@ export const provisionDispatcher = () => {
       type: 'success',
     };
   };
+  const getProvisionPartialSuccessNotification = (value: string): CardProps => {
+    return {
+      title: formatMessage('Provision partially completed'),
+      description: formatMessage('{msg}', { msg: value }),
+      type: 'warning',
+    };
+  };
   const getProvisionFailureNotification = (value: string): CardProps => {
     return {
       title: formatMessage('Provision failure'),
@@ -83,7 +90,7 @@ export const provisionDispatcher = () => {
         });
 
         // call provision status api interval to update the state.
-        updateProvisionStatus(
+        await updateProvisionStatus(
           callbackHelpers,
           result.data.id,
           projectId,
@@ -92,6 +99,10 @@ export const provisionDispatcher = () => {
           notification.id
         );
       } catch (error) {
+        TelemetryClient.track('ProvisioningProfileCreateFailure', {
+          message: error.response?.data || 'Error when provision target',
+        });
+
         // set notification
         const notification = createNotification(
           getProvisionFailureNotification(error.response?.data || 'Error when provision target')
@@ -115,7 +126,11 @@ export const provisionDispatcher = () => {
         isCleanTimer = false;
       try {
         const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
-        if (response.data?.status === 200 && response.data.config && response.data.config != {}) {
+        if (
+          (response.data?.status === 200 || response.data?.status === 206) &&
+          response.data.config &&
+          response.data.config != {}
+        ) {
           // delete provisionStatus
           callbackHelpers.set(provisionStatusState(projectId), (status) => {
             const newStatus = { ...status };
@@ -143,12 +158,19 @@ export const provisionDispatcher = () => {
             subscriptionId: response.data.config.subscriptionId,
           });
 
-          notification = getProvisionSuccessNotification(response.data.message);
+          if (response.data?.status === 200) {
+            notification = getProvisionSuccessNotification(response.data.message);
+          } else {
+            notification = getProvisionPartialSuccessNotification(response.data.message);
+          }
           isCleanTimer = true;
         } else {
           if (response.data.status !== 500) {
             notification = getProvisionPendingNotification(response.data.message);
           } else {
+            TelemetryClient.track('ProvisioningProfileCreateFailure', {
+              message: response.data.message,
+            });
             notification = getProvisionFailureNotification(response.data.message);
             isCleanTimer = true;
           }
