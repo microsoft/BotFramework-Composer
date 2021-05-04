@@ -9,8 +9,8 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { DialogSetting } from '@bfc/shared';
 import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
+import { DialogSetting } from '@botframework-composer/types';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
@@ -56,7 +56,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
 
   const [isAdvancedSettingsEnabled, setAdvancedSettingsEnabled] = useState<boolean>(false);
-
   const { setSettings } = useRecoilValue(dispatcherState);
 
   const toolbarItems = useMemo(() => {
@@ -99,12 +98,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     return newbotProjectLinks;
   }, [botProjects]);
 
-  const onRenderHeaderContent = () => {
-    return formatMessage(
-      "Review and configure your bot's resources, and add new connections such as speech, Microsoft Teams and more."
-    );
-  };
-
   const renderJsonToggle = (): JSX.Element => {
     return (
       <Toggle
@@ -119,6 +112,10 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
         }}
       />
     );
+  };
+
+  const saveChangeResult = (result: DialogSetting) => {
+    setSettings(currentProjectId, result);
   };
 
   const handleChange = (result: any) => {
