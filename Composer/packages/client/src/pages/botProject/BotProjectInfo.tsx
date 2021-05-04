@@ -56,7 +56,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
           <div css={valueStyle}>{location}</div>
         </StackItem>
         <StackItem>
-          <div css={labelStyle}>{formatMessage('Read Me')}</div>
+          <div css={labelStyle}>{formatMessage('Readme')}</div>
           {readme && (
             <Fragment>
               <Link
@@ -64,7 +64,7 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
                   setReadmeHidden(false);
                 }}
               >
-                {formatMessage('View project readme')}
+                {formatMessage('View project Readme')}
               </Link>
               <DisplayMarkdownDialog
                 content={readme}
