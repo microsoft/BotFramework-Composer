@@ -17,7 +17,14 @@ import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
+import {
+  tableRow,
+  tableRowItem,
+  tableColumnHeader,
+  columnSizes,
+  actionButton,
+  publishProfileButtonColumnSize,
+} from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -119,7 +126,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
               <div css={tableRowItem(columnSizes[1])} title={p.type}>
                 {p.type}
               </div>
-              <div css={tableRowItem(columnSizes[2])}>
+              <div css={tableRowItem(publishProfileButtonColumnSize)}>
                 <ActionButton
                   data-testid={'editPublishProfile'}
                   styles={editPublishProfile}
@@ -135,7 +142,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
                   {formatMessage('Edit')}
                 </ActionButton>
               </div>
-              <div css={tableRowItem(columnSizes[2])}>
+              <div css={tableRowItem(publishProfileButtonColumnSize)}>
                 <ActionButton
                   data-testid={'deletePublishProfile'}
                   styles={editPublishProfile}
