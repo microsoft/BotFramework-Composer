@@ -11,7 +11,6 @@ import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { useLocation } from '../utils/hooks';
@@ -52,13 +51,6 @@ const headerContainer = css`
   align-items: center;
 `;
 
-const title = css`
-  margin-left: 20px;
-  font-weight: ${FontWeights.semibold};
-  font-size: ${FontSizes.size16};
-  color: #fff;
-`;
-
 const botName = css`
   font-size: 16px;
   color: #fff;
@@ -74,12 +66,6 @@ const botLocale = css`
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
-`;
-
-const divider = css`
-  height: 24px;
-  border-right: 1px solid #979797;
-  margin: 0px 0px 0px 20px;
 `;
 
 const headerTextContainer = css`
