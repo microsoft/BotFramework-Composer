@@ -31,6 +31,7 @@ const publishTargetsHeader = css`
   display: flex;
   flex-direction: row;
   height: 42px;
+  border-bottom: 1px solid rgb(243, 242, 241);
 `;
 
 const editPublishProfile = {
