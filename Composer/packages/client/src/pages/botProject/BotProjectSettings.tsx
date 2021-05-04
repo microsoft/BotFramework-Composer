@@ -29,8 +29,6 @@ import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 const header = css`
   padding: 5px 20px;
   display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
   justify-content: space-between;
   label: PageHeader;
   border-bottom: 1px solid silver;
@@ -105,6 +103,22 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     setSettings(currentProjectId, result);
   };
 
+  const renderJsonToggle = (): JSX.Element => {
+    return (
+      <Toggle
+        inlineLabel
+        checked={isAdvancedSettingsEnabled}
+        className={'advancedSettingsView'}
+        defaultChecked={false}
+        label={formatMessage('Advanced Settings View (json)')}
+        styles={{ label: { fontSize: '12px', marginLeft: '8px' } }}
+        onChange={() => {
+          setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
+        }}
+      />
+    );
+  };
+
   const handleChange = (result: any) => {
     // prevent result was undefined, it will cause error
     if (result && typeof result === 'object') {
@@ -129,19 +143,10 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       shouldShowEditorError={false}
       title={formatMessage('Configure your bot')}
       toolbarItems={toolbarItems}
+      onRenderHeaderContent={renderJsonToggle}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
-          <Toggle
-            inlineLabel
-            checked={isAdvancedSettingsEnabled}
-            className={'advancedSettingsView'}
-            defaultChecked={false}
-            label={formatMessage('Advanced Settings View (json)')}
-            onChange={() => {
-              setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
-            }}
-          />
           {isAdvancedSettingsEnabled ? (
             <JsonEditor
               key={'settingsjson'}
