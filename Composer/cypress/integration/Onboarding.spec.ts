@@ -11,7 +11,7 @@ context('Onboarding', () => {
         cy.findByText('Application Settings').click();
       });
       cy.findByTestId('onboardingToggle').click();
-      cy.visitPage('Design');
+      cy.visitPage('Create');
     });
   });
 

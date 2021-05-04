@@ -19,7 +19,7 @@ context('Luis Deploy', () => {
     cy.findAllByTestId('rootLUISRegion').click();
     cy.findByText('West US').click();
     cy.visitPage('User input');
-    cy.visitPage('Design');
+    cy.visitPage('Create');
     cy.route({
       method: 'POST',
       url: 'api/projects/*/build',
