@@ -182,6 +182,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
           manifest={skillManifest}
           projectId={projectId}
           rootLuFiles={luFiles}
+          runtime={runtime}
           onBack={() => {
             setTitle({
               subText: '',

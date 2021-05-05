@@ -12,7 +12,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { LuEditor } from '@bfc/code-editor';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig } from '@bfc/shared';
+import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig, DialogSetting } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -23,6 +23,7 @@ import { localeState, dispatcherState } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { EnableOrchestrator } from './EnableOrchestrator';
+import { canImportOrchestrator } from './helper';
 
 const detailListContainer = css`
   width: 100%;
@@ -45,6 +46,7 @@ type SelectIntentProps = {
   luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
+  runtime: DialogSetting['runtime'];
   onSubmit: (event: Event, content: string, enable: boolean) => Promise<void>;
   onDismiss: () => void;
   onUpdateTitle: (title: { title: string; subText: string }) => void;
@@ -121,6 +123,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     projectId,
     rootLuFiles,
     dialogId,
+    runtime,
     onUpdateTitle,
     onBack,
   } = props;
@@ -309,12 +312,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
               <PrimaryButton
                 styles={{ root: { marginLeft: '8px' } }}
-                text={pageIndex === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
+                text={
+                  pageIndex === 1 && (hasOrchestrator || !canImportOrchestrator(runtime?.key))
+                    ? formatMessage('Done')
+                    : formatMessage('Next')
+                }
                 onClick={(ev) => {
                   if (pageIndex === 1) {
-                    if (hasOrchestrator) {
+                    if (hasOrchestrator || !canImportOrchestrator(runtime?.key)) {
                       // skip orchestrator modal
-                      handleSubmit(ev, true);
+                      handleSubmit(ev, false);
                     } else {
                       // show orchestrator
                       onUpdateTitle(enableOrchestratorDialog);
