@@ -19,6 +19,7 @@ const Logger = () => {
   return null;
 };
 
+const { ipcRenderer } = window;
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
 
@@ -34,7 +35,9 @@ export const App: React.FC = () => {
     checkNodeVersion();
     fetchExtensions();
     fetchFeatureFlags();
-    performAppCleanupOnQuit();
+    ipcRenderer?.on('cleanup', (_event) => {
+      performAppCleanupOnQuit();
+    });
   }, []);
 
   return (
