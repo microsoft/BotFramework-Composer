@@ -8,13 +8,13 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { BotSchemas, DialogSetting } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Link as RouterLink } from '@reach/router';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { JSONSchema7 } from '@botframework-composer/types';
 import { AdapterRecord } from '@botframework-composer/types/src';
 
 import { schemasState, settingsState, dispatcherState } from '../../../recoilModel';
 import { subtitle, tableHeaderRow, tableRow, tableRowItem, tableColumnHeader, columnSizes } from '../styles';
+import { navigateTo } from '../../../utils/navigation';
 
 import AdapterModal, { hasRequired } from './ExternalAdapterModal';
 
@@ -131,9 +131,14 @@ const ExternalAdapterSettings = (props: Props) => {
       <div key={'subtitle'} css={subtitle}>
         {formatMessage.rich('<a>Add from package manager</a>', {
           a: ({ children }) => (
-            <RouterLink key="link" to={`/bot/${projectId}/plugin/package-manager/package-manager`}>
+            <Link
+              key="link"
+              onClick={() => {
+                navigateTo(`/bot/${projectId}/plugin/package-manager/package-manager`);
+              }}
+            >
               {children}
-            </RouterLink>
+            </Link>
           ),
         })}
       </div>

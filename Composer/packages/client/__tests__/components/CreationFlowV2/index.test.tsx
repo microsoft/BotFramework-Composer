@@ -86,7 +86,7 @@ describe('<CreationFlowV2/>', () => {
     );
 
     navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
-    const node = await findByText('OK');
+    const node = await findByText('Create');
 
     act(() => {
       fireEvent.click(node);

@@ -966,7 +966,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 href="https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions"
                 target="_blank"
               >
-                {formatMessage('Learn More')}
+                {formatMessage('Learn more')}
               </LearnMoreLink>
             </Stack>
             <Dropdown
