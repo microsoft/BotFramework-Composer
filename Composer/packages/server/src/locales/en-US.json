@@ -170,6 +170,9 @@
   "add_allowed_callers_7188d3d4": {
     "message": "Add allowed callers"
   },
+  "add_alternative_662902c1": {
+    "message": "Add alternative"
+  },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
@@ -229,9 +232,6 @@
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Add new validation rule here"
-  },
-  "add_new_variation_e49425ea": {
-    "message": "Add new variation"
   },
   "add_packages_3ab0558c": {
     "message": "Add packages"
@@ -386,8 +386,56 @@
   "ask_a_question_92ef7e0c": {
     "message": "Ask a question"
   },
-  "ask_activity_82c174e2": {
-    "message": "Ask Activity"
+  "ask_a_question_confirmation_434ad620": {
+    "message": "Ask a question - confirmation"
+  },
+  "ask_a_question_date_or_time_6e896738": {
+    "message": "Ask a question - date or time"
+  },
+  "ask_a_question_file_or_attachment_eebb66b2": {
+    "message": "Ask a question - file or attachment"
+  },
+  "ask_a_question_multi_choice_5fce9e3e": {
+    "message": "Ask a question - multi choice"
+  },
+  "ask_a_question_number_28cb66b1": {
+    "message": "Ask a question - number"
+  },
+  "ask_a_question_oauth_login_8ec5ccd5": {
+    "message": "Ask a question - OAuth login"
+  },
+  "ask_a_question_send_activity_19848af2": {
+    "message": "Ask a question - send activity"
+  },
+  "ask_a_question_text_ba993a5e": {
+    "message": "Ask a question - text"
+  },
+  "ask_a_question_to_collect_user_input_choice_c1fbb541": {
+    "message": "Ask a question to collect user input (choice)"
+  },
+  "ask_a_question_to_collect_user_input_confirmation_29c70209": {
+    "message": "Ask a question to collect user input (confirmation)"
+  },
+  "ask_a_question_to_collect_user_input_date_or_time_3a8659ee": {
+    "message": "Ask a question to collect user input (date or time)"
+  },
+  "ask_a_question_to_collect_user_input_file_or_attac_dccad24b": {
+    "message": "Ask a question to collect user input (file or attachment)"
+  },
+  "ask_a_question_to_collect_user_input_number_b3abe981": {
+    "message": "Ask a question to collect user input (number)"
+  },
+  "ask_a_question_to_collect_user_input_oauth_login_5347b7fc": {
+    "message": "Ask a question to collect user input (OAuth login)"
+  },
+  "ask_a_question_to_collect_user_input_send_activity_eb3dd7ab": {
+    "message": "Ask a question to collect user input (send activity)"
+  },
+  "ask_a_question_to_collect_user_input_text_5d8adc89": {
+    "message": "Ask a question to collect user input (text)"
+  },
+  "ask_activity_7bb716b4": {
+    "message": "Ask activity"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "At least one question is required"
@@ -508,9 +556,6 @@
   },
   "bot_7926b66d": {
     "message": "Bot"
-  },
-  "bot_asks_5e9f0202": {
-    "message": "Bot Asks"
   },
   "bot_content_was_successfully_imported_5a07ae64": {
     "message": "Bot content was successfully imported."
@@ -2579,9 +2624,6 @@
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents Types"
   },
-  "one_of_the_variations_added_below_will_be_selected_bee3c3f1": {
-    "message": "One of the variations added below will be selected at random by the LG library."
-  },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
   },
@@ -2762,26 +2804,14 @@
   "prompt_configurations_ab47cd3f": {
     "message": "Prompt Configurations"
   },
-  "prompt_for_a_date_5d2c689e": {
-    "message": "Prompt for a date"
-  },
   "prompt_for_a_date_or_a_time_d2df7f90": {
     "message": "Prompt for a date or a time"
   },
   "prompt_for_a_file_or_an_attachment_1bf18e7e": {
     "message": "Prompt for a file or an attachment"
   },
-  "prompt_for_a_number_84999edb": {
-    "message": "Prompt for a number"
-  },
-  "prompt_for_attachment_727d4fac": {
-    "message": "Prompt for Attachment"
-  },
   "prompt_for_confirmation_dc85565c": {
     "message": "Prompt for confirmation"
-  },
-  "prompt_for_text_5c524f80": {
-    "message": "Prompt for text"
   },
   "prompt_with_multi_choice_f428542f": {
     "message": "Prompt with multi-choice"
@@ -3074,11 +3104,11 @@
   "resources_ccefab27": {
     "message": "Resources"
   },
+  "response_alternatives_will_be_selected_at_random_f_552dd090": {
+    "message": "Response alternatives will be selected at random for a more dynamic conversation."
+  },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
-  },
-  "response_variations_302594e": {
-    "message": "Response Variations"
   },
   "responses_12d6df1d": {
     "message": "Responses"
@@ -3308,6 +3338,9 @@
   "send_an_http_request_aa32fd2": {
     "message": "Send an HTTP request"
   },
+  "send_handoff_activity_651ee597": {
+    "message": "Send handoff activity"
+  },
   "send_messages_c48b239": {
     "message": "Send Messages"
   },
@@ -3379,6 +3412,9 @@
   },
   "show_keys_3072a5b8": {
     "message": "Show keys"
+  },
+  "show_response_editor_90bd8b49": {
+    "message": "Show response editor"
   },
   "show_skill_manifest_5d0abde1": {
     "message": "Show skill manifest"
@@ -3544,12 +3580,6 @@
   },
   "suggestion_for_card_or_activity_type_b257066a": {
     "message": "Suggestion for Card or Activity: { type }"
-  },
-  "switch_to_code_editor_aa03c4b7": {
-    "message": "Switch to code editor"
-  },
-  "switch_to_response_editor_cb0efe35": {
-    "message": "Switch to response editor"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
