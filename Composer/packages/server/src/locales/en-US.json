@@ -1136,11 +1136,8 @@
   "description_436c48d7": {
     "message": "Description"
   },
-  "design_51b2812a": {
-    "message": "Design"
-  },
-  "development_resources_67364176": {
-    "message": "Development resources"
+  "development_resources_e5c7c3d5": {
+    "message": "Development Resources"
   },
   "diagnostic_description_msg_9ddd1be": {
     "message": "Diagnostic Description { msg }"
@@ -2624,9 +2621,6 @@
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
-  "open_start_bots_panel_f7f87200": {
-    "message": "Open start bots panel"
-  },
   "open_teams_416aae5c": {
     "message": "Open Teams"
   },
@@ -2903,9 +2897,6 @@
   "pull_from_selected_profile_b5c635ec": {
     "message": "Pull from selected profile"
   },
-  "qna_28ee5e26": {
-    "message": "QnA"
-  },
   "qna_editor_9eb94b02": {
     "message": "QnA editor"
   },
@@ -2977,6 +2968,9 @@
   },
   "recommended_7101829e": {
     "message": "Recommended"
+  },
+  "recommended_actions_befdd1a": {
+    "message": "Recommended actions"
   },
   "redo_363c58b7": {
     "message": "Redo"
@@ -3491,6 +3485,9 @@
   "stack_overflow_de80008e": {
     "message": "Stack Overflow"
   },
+  "start_and_stop_local_bot_runtimes_98f94e21": {
+    "message": "Start and stop local bot runtimes"
+  },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Start and stop local bot runtimes individually."
   },
@@ -3602,17 +3599,14 @@
   "test_in_emulator_b1b3c278": {
     "message": "Test in Emulator"
   },
-  "test_in_web_chat_57f58838": {
-    "message": "Test in Web Chat"
-  },
-  "test_in_web_chat_eb14550": {
-    "message": "Test in web chat"
-  },
   "test_with_web_chat_and_emulator_d0f87a81": {
     "message": "Test with Web Chat and Emulator"
   },
   "test_with_web_chat_or_emulator_4edda954": {
     "message": "Test with Web Chat or Emulator"
+  },
+  "test_your_bot_3cd1f4bb": {
+    "message": "Test your bot"
   },
   "text_7f4593da": {
     "message": "Text"
@@ -3872,8 +3866,8 @@
   "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
     "message": "{ total, plural,\n     =1 {Restart bot}\n  other {Restart all bots ({ running }/{ total } running)}\n}"
   },
-  "total_plural_1_start_bot_other_start_all_bots_8e25aec9": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all bots}\n}"
+  "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
+    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"

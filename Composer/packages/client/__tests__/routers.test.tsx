@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import { within } from '@testing-library/dom';
 import { render } from '@botframework-composer/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
@@ -35,7 +36,7 @@ describe('<Router/> router test', () => {
     } = renderWithRouter(wrapWithRecoil(<AppTest />));
 
     const appContainer = container;
-    expect(appContainer.innerHTML).toMatch('Bot Framework Composer');
+    expect(within(appContainer).findByAltText('Composer Logo')).not.toBeNull();
 
     navigate('/language-understanding');
     expect(appContainer.innerHTML).toMatch('Setting');
