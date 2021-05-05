@@ -4,7 +4,6 @@
 import formatMessage from 'format-message';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { parseRuntimeKey } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -15,16 +14,9 @@ const conflictConfirmationPrompt = formatMessage(
 );
 
 /**
- * Orchestrator Nuget Package can only be imported into Adaptive .Net WebApps.
+ * Orchestrator Nuget Package can only be automatically imported into Adaptive .Net WebApps.
  */
-export const canImportOrchestrator = (runtimeKey: string) => {
-  const runtimeInfo = parseRuntimeKey(runtimeKey);
-  return (
-    runtimeInfo.isUsingAdaptiveRuntime &&
-    runtimeInfo.runtimeLanguage === 'dotnet' &&
-    runtimeInfo.runtimeType === 'webapp'
-  );
-};
+export const canImportOrchestrator = (runtimeKey?: string) => runtimeKey === 'adaptive-runtime-dotnet-webapp';
 
 export const importOrchestrator = async (projectId: string, reloadProject, setApplicationLevelError) => {
   const reqBody = {

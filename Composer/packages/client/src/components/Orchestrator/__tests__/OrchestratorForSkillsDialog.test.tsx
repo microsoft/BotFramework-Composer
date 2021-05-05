@@ -14,12 +14,19 @@ import {
   localeState,
   orchestratorForSkillsDialogState,
   projectMetaDataState,
+  settingsState,
 } from '../../../recoilModel';
 import { recognizersSelectorFamily } from '../../../recoilModel/selectors/recognizers';
 import { OrchestratorForSkillsDialog } from '../OrchestratorForSkillsDialog';
 import { importOrchestrator } from '../../AddRemoteSkillModal/helper';
 
-jest.mock('../../AddRemoteSkillModal/helper');
+jest.mock('../../AddRemoteSkillModal/helper', () => {
+  const helper = jest.requireActual('../../AddRemoteSkillModal/helper');
+  return {
+    ...helper,
+    importOrchestrator: jest.fn(),
+  };
+});
 
 // mimick a project setup with a rootbot and dialog files, and provide conditions for orchestrator skill dialog to be visible
 const makeInitialState = (set: any) => {
@@ -29,6 +36,7 @@ const makeInitialState = (set: any) => {
   set(projectMetaDataState('rootBotId'), { isRootBot: true, isRemote: false });
   set(designPageLocationState('rootBotId'), { dialogId: 'rootBotRootDialogId', focused: 'na', selected: 'na' });
   set(localeState('rootBotId'), 'en-us');
+  set(settingsState('rootBotId'), { runtime: { key: 'adaptive-runtime-dotnet-webapp' } });
   set(recognizersSelectorFamily('rootBotId'), [
     { id: 'rootBotRootDialogId.en-us.lu.dialog', content: { $kind: SDKKinds.LuisRecognizer } },
   ]);
@@ -61,7 +69,25 @@ describe('<OrchestratorForSkillsDialog />', () => {
     expect(dialog).toBeNull();
   });
 
-  it('open OrchestratorForSkillsDialog if orchestratorForSkillsDialogState and Orchestrator not used in Root Bot Root Dialog', () => {
+  it('should not render OrchestratorForSkillsDialog if runtime is node', () => {
+    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+      makeInitialState(set);
+      set(settingsState('rootBotId'), { runtime: { key: 'adaptive-runtime-node-webapp' } });
+    });
+    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    expect(dialog).toBeNull();
+  });
+
+  it('should not crash OrchestratorForSkillsDialog if runtime is missing or invalid', () => {
+    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+      makeInitialState(set);
+      set(settingsState('rootBotId'), { runtime: {} });
+    });
+    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    expect(dialog).toBeNull();
+  });
+
+  it('open OrchestratorForSkillsDialog if orchestratorForSkillsDialogState and Orchestrator not used in Root Bot Root Dialog, and using dotnet adaptive runtime', () => {
     const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
     });
