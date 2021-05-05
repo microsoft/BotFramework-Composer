@@ -50,13 +50,16 @@ export const ManageLuis = (props: ManageLuisProps) => {
     <ManageService
       createService={createService}
       handoffInstructions={formatMessage(
-        '1. Using the Azure portal, please create a Language Understanding resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis'
+        '1. Using the Azure portal, please create a Language Understanding resource.\n2. Once created, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis'
       )}
       hidden={props.hidden}
+      introText={formatMessage(
+        'To understand natural language input and direct the conversation flow, your bot needs a language understanding service. '
+      )}
       learnMore={'https://aka.ms/composer-luis-learnmore'}
       regions={LUIS_REGIONS}
       serviceKeyType={'LUIS.Authoring'}
-      serviceName={'LUIS'}
+      serviceName={'Language Understanding'}
       onDismiss={props.onDismiss}
       onGetKey={props.onGetKey}
       onNext={props.onNext}
