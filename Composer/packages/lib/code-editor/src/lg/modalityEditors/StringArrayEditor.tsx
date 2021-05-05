@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplate, TelemetryClient } from '@bfc/shared';
+import { LgTemplate, TelemetryClient, TemplateBodyItem } from '@bfc/shared';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
@@ -11,13 +11,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LGOption } from '../../utils';
 import { getCursorContextWithinLine } from '../../utils/lgUtils';
 import { jsLgToolbarMenuClassName } from '../constants';
-import { LgEditorToolbar } from '../LgEditorToolbar';
+import { FieldToolbar } from '../../components/toolbar/FieldToolbar';
 import { LgSpeechModalityToolbar, SSMLTagType } from '../LgSpeechModalityToolbar';
-import { ToolbarButtonPayload } from '../types';
+import { ToolbarButtonPayload } from '../../types';
 
 import { StringArrayItem } from './StringArrayItem';
 
-const submitKeys = ['Enter', 'Escape'];
+const inputs = ['input', 'textarea'];
 
 const styles: { link: ILinkStyles } = {
   link: {
@@ -55,12 +55,12 @@ const getSSMLProps = (tag: 'prosody' | 'audio' | 'break'): string => {
 
 type StringArrayEditorProps = {
   addButtonText?: string;
-  items: string[];
+  items: TemplateBodyItem[];
   lgTemplates?: readonly LgTemplate[];
   memoryVariables?: readonly string[];
   lgOption?: LGOption;
   isSpeech?: boolean;
-  onChange: (items: string[]) => void;
+  onChange: (items: TemplateBodyItem[]) => void;
   telemetryClient: TelemetryClient;
 };
 
@@ -76,13 +76,15 @@ export const StringArrayEditor = React.memo(
   }: StringArrayEditorProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const [currentIndex, setCurrentIndex] = useState<number | null>(items.length === 1 && items[0] === '' ? 0 : null);
+    const [currentIndex, setCurrentIndex] = useState<number | null>(
+      items.length === 1 && items[0].value === '' ? 0 : null
+    );
     const [calloutTargetElement, setCalloutTargetElement] = useState<HTMLTextAreaElement | null>(null);
 
     const onItemChange = useCallback(
       (index: number) => (_, newValue?: string) => {
         const updatedItems = [...items];
-        updatedItems[index] = newValue ?? '';
+        updatedItems[index].value = newValue ?? '';
         onChange(updatedItems);
       },
       [items, onChange]
@@ -108,7 +110,7 @@ export const StringArrayEditor = React.memo(
     );
 
     const onClickAddVariation = useCallback(() => {
-      onChange([...items, '']);
+      onChange([...items, { kind: 'variation', value: '' }]);
       setCurrentIndex(items.length);
     }, [items, onChange]);
 
@@ -118,22 +120,26 @@ export const StringArrayEditor = React.memo(
 
     useEffect(() => {
       const keydownHandler = (e: KeyboardEvent) => {
-        if (submitKeys.includes(e.key)) {
+        if (
+          e.key === 'Enter' ||
+          (e.key === 'Escape' &&
+            (!document.activeElement || inputs.includes(document.activeElement.tagName.toLowerCase())))
+        ) {
           // Allow multiline via shift+Enter
           if (e.key === 'Enter' && e.shiftKey) {
             return;
           }
 
           setCalloutTargetElement(null);
-          // Filter our empty or newline strings
-          const filteredItems = items.filter((s) => s !== '' && s !== '\n');
+          // Filter out empty variations
+          const filteredItems = items.filter((item) => item.kind !== 'variation' || !!item.value);
           if (e.key === 'Enter' && containerRef.current?.contains(e.target as Node)) {
             // If the value is not filtered, go to the next entry
             // Otherwise cancel editing
             if (items.length === filteredItems.length) {
               e.preventDefault();
-              onChange([...filteredItems, '']);
-              setCurrentIndex(filteredItems.length);
+              onChange([...items, { kind: 'variation', value: '' }]);
+              setCurrentIndex(items.length);
             } else {
               onChange(filteredItems);
               setCurrentIndex(null);
@@ -163,8 +169,8 @@ export const StringArrayEditor = React.memo(
           setCalloutTargetElement(null);
           setCurrentIndex(null);
           // Remove empty variations only if necessary
-          if (items.some((item) => !item)) {
-            onChange(items.filter(Boolean));
+          if (items.some((item) => item.kind === 'variation' && !item.value)) {
+            onChange(items.filter((item) => item.kind !== 'variation' || !!item.value));
           }
         }
       };
@@ -190,15 +196,15 @@ export const StringArrayEditor = React.memo(
               typeof calloutTargetElement?.selectionEnd === 'number'
                 ? calloutTargetElement.selectionEnd
                 : calloutTargetElement.selectionStart;
-            const context = getCursorContextWithinLine(item.substring(0, start));
+            const context = getCursorContextWithinLine(item.value.substring(0, start));
             const insertText = context === 'expression' ? text : `\${${text}}`;
-            updatedItems[currentIndex] = [item.slice(0, start), insertText, item.slice(end)].join('');
+            updatedItems[currentIndex].value = [item.value.slice(0, start), insertText, item.value.slice(end)].join('');
             onChange(updatedItems);
 
             setTimeout(() => {
               calloutTargetElement.setSelectionRange(
-                updatedItems[currentIndex].length,
-                updatedItems[currentIndex].length
+                updatedItems[currentIndex].value.length,
+                updatedItems[currentIndex].value.length
               );
             }, 0);
           }
@@ -234,26 +240,26 @@ export const StringArrayEditor = React.memo(
                 typeof calloutTargetElement?.selectionEnd === 'number'
                   ? calloutTargetElement.selectionEnd
                   : calloutTargetElement.selectionStart;
-              updatedItems[currentIndex] = [
-                item.slice(0, start),
+              updatedItems[currentIndex].value = [
+                item.value.slice(0, start),
                 `<${ssmlTagType} ${getSSMLProps(ssmlTagType)}/>`,
-                item.slice(end),
+                item.value.slice(end),
               ].join('');
             } else {
-              updatedItems[currentIndex] = [
-                item.slice(0, start),
+              updatedItems[currentIndex].value = [
+                item.value.slice(0, start),
                 `<${ssmlTagType} ${getSSMLProps(ssmlTagType)}>`,
-                item.slice(start, end),
+                item.value.slice(start, end),
                 `</${ssmlTagType}>`,
-                item.slice(end),
+                item.value.slice(end),
               ].join('');
             }
             onChange(updatedItems);
 
             setTimeout(() => {
               calloutTargetElement.setSelectionRange(
-                updatedItems[currentIndex].length,
-                updatedItems[currentIndex].length
+                updatedItems[currentIndex].value.length,
+                updatedItems[currentIndex].value.length
               );
             }, 0);
           }
@@ -280,7 +286,7 @@ export const StringArrayEditor = React.memo(
             onSelectToolbarMenuItem={onSelectToolbarMenuItem}
           />
         ) : (
-          <LgEditorToolbar
+          <FieldToolbar
             key="lg-toolbar"
             lgTemplates={lgTemplates}
             properties={memoryVariables}
@@ -292,18 +298,20 @@ export const StringArrayEditor = React.memo(
 
     return (
       <div ref={containerRef}>
-        {items.map((value, idx) => (
-          <StringArrayItem
-            key={`item-${idx}`}
-            mode={idx === currentIndex ? 'edit' : 'view'}
-            telemetryClient={telemetryClient}
-            value={value}
-            onChange={onItemChange(idx)}
-            onFocus={onItemFocus(idx)}
-            onRemove={onItemRemove(idx)}
-            onShowCallout={onShowCallout}
-          />
-        ))}
+        {items.map((item, idx) =>
+          item.kind === 'variation' ? (
+            <StringArrayItem
+              key={`item-${idx}`}
+              mode={idx === currentIndex ? 'edit' : 'view'}
+              telemetryClient={telemetryClient}
+              value={item.value}
+              onChange={onItemChange(idx)}
+              onFocus={onItemFocus(idx)}
+              onRemove={onItemRemove(idx)}
+              onShowCallout={onShowCallout}
+            />
+          ) : null
+        )}
         {currentIndex === null && (
           <Link as="button" styles={styles.link} onClick={onClickAddVariation}>
             {addButtonText ?? formatMessage('Add new variation')}
@@ -311,6 +319,7 @@ export const StringArrayEditor = React.memo(
         )}
         {calloutTargetElement && (
           <Callout
+            doNotLayer
             directionalHint={DirectionalHint.topLeftEdge}
             gapSpace={2}
             isBeakVisible={false}

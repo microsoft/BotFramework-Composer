@@ -14,8 +14,7 @@ import {
   dispatcherState,
   schemasState,
   showCreateDialogModalState,
-  localeState,
-  qnaFilesState,
+  qnaFilesSelectorFamily,
   displaySkillManifestState,
   brokenSkillInfoState,
   brokenSkillRepairCallbackState,
@@ -28,10 +27,11 @@ import { undoFunctionState } from '../../recoilModel/undo/history';
 import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
+import { OrchestratorForSkillsDialog } from '../../components/Orchestrator/OrchestratorForSkillsDialog';
 
 import CreationModal from './creationModal';
 
-const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/AddRemoteSkillModal/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
@@ -42,13 +42,12 @@ type ModalsProps = {
   projectId: string;
 };
 const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
   const displaySkillManifestNameIdentifier = useRecoilValue(displaySkillManifestState);
 
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-  const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const { commitChanges } = undoFunction;
 
@@ -59,9 +58,10 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     setCreationFlowStatus,
     setCreationFlowType,
     removeSkillFromBotProject,
-    createQnAKBFromUrl,
+    createQnAKBsFromUrls,
     createQnAKBFromScratch,
     createTrigger,
+    createTriggerForRemoteSkill,
     createQnATrigger,
     createDialogCancel,
   } = useRecoilValue(dispatcherState);
@@ -97,11 +97,11 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     if (!projectId || !dialogId) return;
     await createQnATrigger(projectId, dialogId);
 
-    const { name, url, multiTurn } = data;
-    if (url) {
-      await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn, projectId });
+    const { name, urls = [], locales, multiTurn } = data;
+    if (urls.length !== 0) {
+      await createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
     } else {
-      await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
+      await createQnAKBFromScratch({ id: dialogId, name, projectId });
     }
     commitChanges();
   };
@@ -127,13 +127,17 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
       )}
       {showAddSkillDialogModal && (
         <CreateSkillModal
+          addRemoteSkill={async (manifestUrl, endpointName) => {
+            setAddSkillDialogModalVisibility(false);
+            await addRemoteSkillToBotProject(manifestUrl, endpointName);
+          }}
+          addTriggerToRoot={async (dialogId, formData, skillId) => {
+            await createTriggerForRemoteSkill(projectId, dialogId, formData, skillId);
+            commitChanges();
+          }}
           projectId={projectId}
           onDismiss={() => {
             setAddSkillDialogModalVisibility(false);
-          }}
-          onSubmit={(manifestUrl, endpointName) => {
-            setAddSkillDialogModalVisibility(false);
-            addRemoteSkillToBotProject(manifestUrl, endpointName);
           }}
         />
       )}
@@ -166,6 +170,8 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
         qnaFiles={qnaFiles}
         onSubmit={handleCreateQnA}
       />
+
+      <OrchestratorForSkillsDialog />
 
       {displaySkillManifestNameIdentifier && (
         <DisplayManifestModal

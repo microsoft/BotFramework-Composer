@@ -93,19 +93,19 @@ async function getAccessToken(options: AuthParameters): Promise<string> {
 async function logOut() {
   // clean tenantId cache
   removeTenantFromCache();
+  cleanTokenFromCache('accessToken');
+  cleanTokenFromCache('graphToken');
   if (isElectron()) {
-    try {
-      const url = '/api/auth/logOut';
-      await fetch(url, { method: 'GET' });
-    } catch (e) {
-      // error handling
-      console.error('Can not log out');
-    }
+    const url = '/api/auth/logOut';
+    const result = await fetch(url, { method: 'GET' });
+    return result.ok;
   } else if (authConfig.clientId) {
     // clean token cache in storage
     cleanTokenFromCache('idToken');
     cleanTokenFromCache(authConfig.clientId);
+    return true;
   }
+  return true;
 }
 
 /**

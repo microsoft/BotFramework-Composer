@@ -33,7 +33,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[],
             .map((dialog) => createConfigId(dialog, language))
             .filter((id) => luFiles.some((file) => `${file.id}` === id));
           if (!ids.length && dialogs.length) return result;
-          result[intent] = ids;
+          result[intent] = ids.length ? ids : '';
           return result;
         }, {});
         result[createConfigId(id, language)] = { rootDialog, triggers };

@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 export const buttonStyle = css`
   position: absolute;
-  right: 0px;
-  top: 0px;
+  right: -16px;
+  top: -16px;
 `;
 
 export const contentStyle = css`
@@ -54,6 +54,7 @@ export const subtitleStyle = css`
 `;
 
 export const titleStyle = css`
+  padding-top: 8px;
   font-size: 24px;
 `;
 

@@ -17,6 +17,7 @@ import { getDropdownOptions } from './getDropdownOptions';
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
+  const { telemetryClient } = shellApi;
 
   useMigrationEffect(value, onChange);
   const { recognizers: recognizerConfigs, currentRecognizer } = useRecognizerConfig();
@@ -38,12 +39,14 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         ? seedNewRecognizer(shellData, shellApi)
         : { $kind: option.key as string, intents: [] }; // fallback to default Recognizer instance;
     onChange(recognizerInstance);
+    telemetryClient?.track('RecognizerChanged', { recognizer: option.key as string });
   };
 
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <Dropdown
+        ariaLabel={formatMessage('Recognizer Type')}
         data-testid="recognizerTypeDropdown"
         label={formatMessage('Recognizer Type')}
         options={dropdownOptions}

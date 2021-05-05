@@ -9,11 +9,12 @@ import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
-export const borderStyles = (transparentBorder: boolean, error: boolean) =>
+export const borderStyles = (transparentBorder: boolean, error: boolean, hasIcon: boolean) =>
   transparentBorder
     ? {
         fieldGroup: {
           borderColor: error ? undefined : 'transparent',
+          borderRadius: hasIcon ? '0 2px 2px 0' : undefined,
           transition: 'border-color 0.1s linear',
           selectors: {
             ':hover': {
@@ -22,7 +23,11 @@ export const borderStyles = (transparentBorder: boolean, error: boolean) =>
           },
         },
       }
-    : {};
+    : {
+        fieldGroup: {
+          borderRadius: hasIcon ? '0 2px 2px 0' : undefined,
+        },
+      };
 
 export const StringField: React.FC<FieldProps<string>> = function StringField(props) {
   const {
@@ -42,6 +47,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     required,
     focused,
     cursorPosition,
+    hasIcon,
   } = props;
 
   const textFieldRef = React.createRef<ITextField>();
@@ -61,7 +67,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (typeof onFocus === 'function') {
       e.stopPropagation();
-      onFocus(id, value);
+      onFocus(id, value, e);
     }
   };
 
@@ -89,7 +95,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         placeholder={placeholder}
         readOnly={readonly}
         styles={{
-          ...borderStyles(Boolean(transparentBorder), Boolean(error)),
+          ...borderStyles(Boolean(transparentBorder), Boolean(error), !!hasIcon),
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}

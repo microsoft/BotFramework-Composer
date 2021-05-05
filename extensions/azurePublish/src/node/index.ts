@@ -3,8 +3,9 @@
 
 import path from 'path';
 
+import formatMessage from 'format-message';
 import md5 from 'md5';
-import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
+import { readJson, pathExists, writeJson } from 'fs-extra';
 import { Debugger } from 'debug';
 import {
   IBotProject,
@@ -14,17 +15,18 @@ import {
   PublishResponse,
   PublishResult,
 } from '@botframework-composer/types';
+import { isUsingAdaptiveRuntime, parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
 
 import { authConfig, ResourcesItem } from '../types';
 
 import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
-import { BotProjectDeploy, getAbsSettings, isProfileComplete } from './deploy';
+import { BotProjectDeploy, getAbsSettings } from './deploy';
 import { BotProjectProvision } from './provision';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
 import schema from './schema';
-import { stringifyError, AzurePublishErrors, createCustomizeError } from './utils/errorHandler';
+import { stringifyError } from './utils/errorHandler';
 import { ProcessStatus } from './types';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
@@ -47,12 +49,6 @@ interface DeployResources {
 interface PublishConfig {
   fullSettings: any;
   profileName: string; //profile name
-  [key: string]: any;
-}
-
-interface ResourceType {
-  key: string;
-  // other keys TBD
   [key: string]: any;
 }
 
@@ -86,7 +82,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     private historyFilePath: string;
     private publishHistories: Record<string, Record<string, PublishResult[]>>; // use botId profileName as key
     private provisionHistories: Record<string, Record<string, ProcessStatus>>;
-    private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
     public name: string;
@@ -95,14 +90,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     public hasView = true;
     public bundleId = 'publish'; /** host custom UI */
 
-    constructor(mode: string, name: string, description: string, bundleId: string) {
+    constructor(name: string, description: string, bundleId: string) {
       this.publishHistories = {};
       this.provisionHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
       }
-      this.mode = mode || 'azurewebapp';
       this.schema = schema;
       this.instructions = instructions;
       this.name = name;
@@ -110,26 +104,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       this.logger = composer.log;
       this.bundleId = bundleId;
     }
-
-    private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../../publishBots`);
-
-    /*******************************************************************************************************************************/
-    /* These methods generate all the necessary paths to various files  */
-    /*******************************************************************************************************************************/
-
-    // path to working folder containing all the assets
-    private getRuntimeFolder = (key: string) => {
-      return path.resolve(this.baseRuntimeFolder, `${key}`);
-    };
-
-    // path to the runtime code inside the working folder
-    private getProjectFolder = (key: string, template: string) => {
-      return path.resolve(this.baseRuntimeFolder, `${key}/${template}`);
-    };
-
-    // path to the declarative assets
-    private getBotFolder = (key: string, template: string) =>
-      path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
 
     /*******************************************************************************************************************************/
     /* These methods deal with the publishing history displayed in the Composer UI */
@@ -187,19 +161,32 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // point to the declarative assets (possibly in remote storage)
         const botFiles = project.getProject().files;
 
+        const mode = this.getRuntimeTemplateMode(runtime?.key);
+
         // include both pre-release and release identifiers here
         // TODO: eventually we can clean this up when the "old" runtime is deprecated
         // (old runtime support is the else block below)
-        if (runtime.key === 'csharp-azurewebapp-v2' || runtime.key === 'adaptive-runtime-dotnet-webapp') {
-          const buildFolder = this.getProjectFolder(resourcekey, this.mode);
+        if (isUsingAdaptiveRuntime(runtime)) {
+          const buildFolder = this.getProjectFolder(resourcekey, mode);
 
           // clean up from any previous deploys
           await this.cleanup(resourcekey);
 
           // copy bot and runtime into projFolder
           await copy(srcTemplate, buildFolder);
+
+          let manifestPath;
+          for (const file of botFiles) {
+            const pattern = /manifests\/[0-9A-z-]*.json/;
+            if (file.relativePath.match(pattern)) {
+              manifestPath = path.dirname(file.path);
+            }
+          }
+
+          // save manifest
+          runtime.setSkillManifest(buildFolder, project.fileStorage, manifestPath, project.fileStorage, mode);
         } else {
-          const botFolder = this.getBotFolder(resourcekey, this.mode);
+          const botFolder = this.getBotFolder(resourcekey, mode);
           const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
           // clean up from any previous deploys
@@ -226,7 +213,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
 
           // save manifest
-          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
+          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, mode);
 
           // copy bot and runtime into projFolder
           await copy(srcTemplate, runtimeFolder);
@@ -274,6 +261,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       customizeConfiguration: DeployResources
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
+
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
         logger: (msg: any, ...args: any[]) => {
@@ -283,7 +271,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey, this.mode),
+        projPath: project.getRuntimePath(),
         runtime: runtime,
       });
 
@@ -300,8 +288,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       await this.updateHistory(botId, profileName, publishResultFromStatus(status).result);
       // clean up the background process
       BackgroundProcessManager.removeProcess(jobId);
-      // clean up post-deploy
-      await this.cleanup(resourcekey);
     };
 
     /*******************************************************************************************************************************/
@@ -320,7 +306,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         environment,
         hostname,
         luisResource,
-        settings,
+        settings, // these are the settings from inside the publishing profile
         accessToken,
         luResources,
         qnaResources,
@@ -330,25 +316,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         // get the appropriate runtime template which contains methods to build and configure the runtime
         const runtime = composer.getRuntimeByProject(project);
         // set runtime code path as runtime template folder path
-        let runtimeCodePath = runtime.path;
-
-        // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
-        if (
-          project.settings &&
-          project.settings.runtime &&
-          project.settings.runtime.customRuntime === true &&
-          project.settings.runtime.path
-        )
-          runtimeCodePath = project.getRuntimePath(); // get computed absolute path
-
-        // Prepare the temporary project
-        // this writes all the settings to the root settings/appsettings.json file
-        await this.init(project, runtimeCodePath, resourcekey, runtime);
 
         // Merge all the settings
         // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
         // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-        const mergedSettings = mergeDeep(fullSettings, settings, { luResources, qnaResources });
+        const mergedSettings = mergeDeep(applyPublishingProfileToSettings(fullSettings, config), {
+          luResources,
+          qnaResources,
+        });
 
         // Prepare parameters and then perform the actual deployment action
         const customizeConfiguration: DeployResources = {
@@ -379,7 +354,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           publishResultFromStatus(BackgroundProcessManager.getStatus(jobId)).result
         );
         BackgroundProcessManager.removeProcess(jobId);
-        this.cleanup(resourcekey);
       }
     };
 
@@ -387,10 +361,25 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /* These methods provision resources to azure async */
     /*******************************************************************************************************************************/
     asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user): Promise<void> => {
-      const { subscription, name } = config;
+      const { runtimeLanguage } = parseRuntimeKey(project.settings?.runtime?.key);
+
+      // map runtime language/platform to worker runtime
+      let workerRuntime = runtimeLanguage;
+      switch (runtimeLanguage) {
+        case 'js':
+          workerRuntime = 'node';
+          break;
+        default:
+          break;
+      }
+
+      const provisionConfig: ProvisionConfig = { ...config, workerRuntime };
+
+      const { name } = provisionConfig;
+
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
-        ...config,
+        ...provisionConfig,
         logger: (msg: any) => {
           this.logger(msg);
           BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
@@ -400,73 +389,79 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       // perform the provision using azureProvisioner.create.
       // this will start the process, then return.
       // However, the process will continue in the background
-      try {
-        const provisionResults = await azureProvisioner.create(config);
-        // GOT PROVISION RESULTS!
-        // cast this into the right form for a publish profile
+      const provisionResults = await azureProvisioner.create(provisionConfig);
 
-        let currentProfile = null;
-        if (config.currentProfile) {
-          currentProfile = JSON.parse(config.currentProfile.configuration);
-        }
-        const currentSettings = currentProfile?.settings;
-
-        const publishProfile = {
-          name: currentProfile?.name ?? config.hostname,
-          environment: currentProfile?.environment ?? 'composer',
-          subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
-          resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
-          botName: currentProfile?.botName ?? provisionResults.botName,
-          hostname: config.hostname ?? currentProfile?.hostname,
-          luisResource: provisionResults.luisPrediction ? `${config.hostname}-luis` : currentProfile?.luisResource,
-          runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
-          region: config.location,
-          settings: {
-            applicationInsights: {
-              InstrumentationKey:
-                provisionResults.appInsights?.instrumentationKey ??
-                currentSettings?.applicationInsights?.InstrumentationKey,
-            },
-            cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
-            blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
-            luis: {
-              authoringKey: provisionResults.luisAuthoring?.authoringKey ?? currentSettings?.luis?.authoringKey,
-              authoringEndpoint:
-                provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
-              endpointKey: provisionResults.luisPrediction?.endpointKey ?? currentSettings?.luis?.endpointKey,
-              endpoint: provisionResults.luisPrediction?.endpoint ?? currentSettings?.luis?.endpoint,
-              region: provisionResults.luisPrediction?.location ?? currentSettings?.luis?.region,
-            },
-            qna: {
-              subscriptionKey: provisionResults.qna?.subscriptionKey ?? currentSettings?.qna?.subscriptionKey,
-              qnaRegion: provisionResults.qna?.region ?? currentSettings?.qna?.qnaRegion,
-            },
-            MicrosoftAppId: provisionResults.appId ?? currentSettings?.MicrosoftAppId,
-            MicrosoftAppPassword: provisionResults.appPassword ?? currentSettings?.MicrosoftAppPassword,
-          },
-        };
-        for (const configUnit in currentProfile) {
-          if (!(configUnit in publishProfile)) {
-            publishProfile[configUnit] = currentProfile[configUnit];
-          }
-        }
-
-        this.logger(publishProfile);
-
-        BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!', publishProfile);
-      } catch (error) {
-        BackgroundProcessManager.updateProcess(
-          jobId,
-          500,
-          `${stringifyError(error)}
-        detail message can see ${getProvisionLogName(name)} in your bot folder`
-        );
-        // save provision history to log file.
-        const provisionHistoryPath = path.resolve(project.dataDir, getProvisionLogName(name));
-        await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
+      // cast this into the right form for a publish profile
+      let currentProfile = null;
+      if (provisionConfig.currentProfile) {
+        currentProfile = JSON.parse(provisionConfig.currentProfile.configuration);
       }
+      const currentSettings = currentProfile?.settings;
+
+      const publishProfile = {
+        name: currentProfile?.name ?? provisionConfig.hostname,
+        environment: currentProfile?.environment ?? 'composer',
+        tenantId: provisionResults?.tenantId ?? currentProfile?.tenantId,
+        subscriptionId: provisionResults.subscriptionId ?? currentProfile?.subscriptionId,
+        resourceGroup: currentProfile?.resourceGroup ?? provisionResults.resourceGroup?.name,
+        botName: currentProfile?.botName ?? provisionResults.botName,
+        hostname: provisionConfig.hostname ?? currentProfile?.hostname,
+        luisResource: provisionResults.luisPrediction
+          ? `${provisionConfig.hostname}-luis`
+          : currentProfile?.luisResource,
+        runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
+        region: provisionConfig.location,
+        settings: {
+          applicationInsights: {
+            InstrumentationKey:
+              provisionResults.appInsights?.instrumentationKey ??
+              currentSettings?.applicationInsights?.InstrumentationKey,
+            connectionString:
+              provisionResults.appInsights?.connectionString ?? currentSettings?.applicationInsights?.connectionString,
+          },
+          cosmosDb: provisionResults.cosmosDB ?? currentSettings?.cosmosDb,
+          blobStorage: provisionResults.blobStorage ?? currentSettings?.blobStorage,
+          luis: {
+            authoringKey: provisionResults.luisAuthoring?.authoringKey ?? currentSettings?.luis?.authoringKey,
+            authoringEndpoint:
+              provisionResults.luisAuthoring?.authoringEndpoint ?? currentSettings?.luis?.authoringEndpoint,
+            endpointKey: provisionResults.luisPrediction?.endpointKey ?? currentSettings?.luis?.endpointKey,
+            endpoint: provisionResults.luisPrediction?.endpoint ?? currentSettings?.luis?.endpoint,
+            region: provisionResults.luisPrediction?.location ?? currentSettings?.luis?.region,
+          },
+          qna: {
+            subscriptionKey: provisionResults.qna?.subscriptionKey ?? currentSettings?.qna?.subscriptionKey,
+            qnaRegion: provisionResults.qna?.region ?? currentSettings?.qna?.qnaRegion,
+          },
+          MicrosoftAppId: provisionResults.appId ?? currentSettings?.MicrosoftAppId,
+          MicrosoftAppPassword: provisionResults.appPassword ?? currentSettings?.MicrosoftAppPassword,
+        },
+      };
+      for (const configUnit in currentProfile) {
+        if (!(configUnit in publishProfile)) {
+          publishProfile[configUnit] = currentProfile[configUnit];
+        }
+      }
+
+      this.logger(publishProfile);
+
+      if (provisionResults.success) {
+        BackgroundProcessManager.updateProcess(jobId, 200, 'Provisioning completed successfully!', publishProfile);
+      } else {
+        const partialSuccess = provisionResults.provisionedCount > 0;
+        const errorCode = partialSuccess ? 206 : 500;
+        let message = `${provisionResults.errorMessage}. See ${getProvisionLogName(name)} in your bot folder`;
+        if (partialSuccess) {
+          message = `Provisioning completed ${provisionResults.provisionedCount} items before encountering a problem. ${message}`;
+        }
+        BackgroundProcessManager.updateProcess(jobId, errorCode, message, partialSuccess ? publishProfile : undefined);
+      }
+      // save provision history to log file.
+      const provisionHistoryPath = path.resolve(project.dataDir, getProvisionLogName(name));
+      await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
+
       // add in history
-      this.addProvisionHistory(project.id, config.name, BackgroundProcessManager.getStatus(jobId));
+      this.addProvisionHistory(project.id, provisionConfig.name, BackgroundProcessManager.getStatus(jobId));
       BackgroundProcessManager.removeProcess(jobId);
     };
 
@@ -503,6 +498,36 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const resourcekey = md5([project.name, name, environment].join());
 
       try {
+        // verify the profile has been provisioned at least once
+        if (!this.isProfileProvisioned(config)) {
+          throw new Error(
+            formatMessage(
+              'There was a problem publishing {projectName}/{profileName}. The profile has not been provisioned yet.',
+              { projectName: project.name, profileName }
+            )
+          );
+        }
+
+        // verify the publish profile has the required resources configured
+        const resources = await this.getResources(project, user);
+
+        const missingResourceNames = resources.reduce((result, resource) => {
+          if (resource.required && !this.isResourceProvisionedInProfile(resource, config)) {
+            result.push(resource.text);
+          }
+          return result;
+        }, []);
+
+        if (missingResourceNames.length > 0) {
+          const missingResourcesText = missingResourceNames.join(',');
+          throw new Error(
+            formatMessage(
+              'There was a problem publishing {projectName}/{profileName}. These required resources have not been provisioned: {missingResourcesText}',
+              { projectName: project.name, profileName, missingResourcesText }
+            )
+          );
+        }
+
         // authenticate with azure
         const accessToken = config.accessToken || (await getAccessToken(authConfig.arm));
 
@@ -513,8 +538,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         if (!settings) {
           throw new Error('Required field `settings` is missing from publishing profile.');
         }
-        // verify publish profile
-        isProfileComplete(config);
 
         this.asyncPublish({ ...config, accessToken, luResources, qnaResources, abs }, project, resourcekey, jobId);
 
@@ -526,8 +549,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         const status = publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
         await this.updateHistory(botId, profileName, status.result);
         BackgroundProcessManager.removeProcess(jobId);
-        this.cleanup(resourcekey as string);
-
         return status;
       }
     };
@@ -608,6 +629,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     getResources = async (project: IBotProject, user): Promise<ResourcesItem[]> => {
       const recommendedResources: ResourcesItem[] = [];
 
+      const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
+
       // add in the ALWAYS REQUIRED options
 
       // Always need an app registration (app id and password)
@@ -617,14 +640,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       });
 
       // always need hosting compute - either web app or functions
-      if (this.mode === 'azurewebapp') {
+      if (runtimeType === 'functions') {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
+          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
           required: true,
         });
       } else {
         recommendedResources.push({
-          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
+          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
           required: true,
         });
       }
@@ -671,6 +694,54 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       return recommendedResources;
     };
 
+    private isProfileProvisioned = (profile: PublishConfig): boolean => {
+      //TODO: Post-migration we can check for profile?.tenantId
+      return profile?.resourceGroup && profile?.subscriptionId && profile?.region;
+    };
+
+    // While the provisioning process may return more information for various resources than is checked here,
+    // this tries to verify the minimum settings are present and that cannot be empty strings.
+    private isResourceProvisionedInProfile = (resource: ResourcesItem, profile: PublishConfig): boolean => {
+      switch (resource.key) {
+        case AzureResourceTypes.APPINSIGHTS:
+          // InstrumentationKey is Pascal-cased for some unknown reason
+          return profile?.settings?.applicationInsights?.InstrumentationKey;
+        case AzureResourceTypes.APP_REGISTRATION:
+          // MicrosoftAppId and MicrosoftAppPassword are Pascal-cased for some unknown reason
+          return profile?.settings?.MicrosoftAppId && profile?.settings?.MicrosoftAppPassword;
+        case AzureResourceTypes.BLOBSTORAGE:
+          // name is not checked (not in schema.ts)
+          // container property is not checked (empty may be a valid value)
+          return profile?.settings?.blobStorage?.connectionString;
+        case AzureResourceTypes.BOT_REGISTRATION:
+          return profile?.botName;
+        case AzureResourceTypes.COSMOSDB:
+          // collectionId is not checked (not in schema.ts)
+          // databaseId and containerId are not checked (empty may be a valid value)
+          return profile?.settings?.cosmosDB?.authKey && profile?.settings?.cosmosDB?.cosmosDBEndpoint;
+        case AzureResourceTypes.LUIS_AUTHORING:
+          // region is not checked (empty may be a valid value)
+          return profile?.settings?.luis?.authoringKey && profile?.settings?.luis?.authoringEndpoint;
+        case AzureResourceTypes.LUIS_PREDICTION:
+          // region is not checked (empty may be a valid value)
+          return profile?.settings?.luis?.endpointKey && profile?.settings?.luis?.endpoint;
+        case AzureResourceTypes.QNA:
+          // endpoint is not checked (it is in schema.ts and provision() returns the value, but it is not set in the config)
+          // qnaRegion is not checked (empty may be a valid value)
+          return profile?.settings?.qna?.subscriptionKey;
+        case AzureResourceTypes.SERVICE_PLAN:
+          // no settings exist to verify the service plan was created
+          return true;
+        case AzureResourceTypes.AZUREFUNCTIONS:
+        case AzureResourceTypes.WEBAPP:
+          return profile?.hostname;
+        default:
+          throw new Error(
+            formatMessage('Azure resource type {resourceKey} is not handled.', { resourceKey: resource.key })
+          );
+      }
+    };
+
     private addProvisionHistory = (botId: string, profileName: string, newValue: ProcessStatus) => {
       if (!this.provisionHistories[botId]) {
         this.provisionHistories[botId] = {};
@@ -694,19 +765,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher(
-    'azurewebapp',
-    'azurePublish',
-    'Publish bot to Azure Web App (Preview)',
-    'azurePublish'
-  );
-  const azureFunctionsPublish = new AzurePublisher(
-    'azurefunctions',
-    'azureFunctionsPublish',
-    'Publish bot to Azure Functions (Preview)',
-    'azureFunctionsPublish'
-  );
+  const azurePublish = new AzurePublisher('azurePublish', 'Publish bot to Azure', 'azurePublish');
 
   await composer.addPublishMethod(azurePublish);
-  await composer.addPublishMethod(azureFunctionsPublish);
 };

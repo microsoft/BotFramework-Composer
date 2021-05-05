@@ -9,12 +9,12 @@ import uniqueId from 'lodash/uniqueId';
 import { lgUtil } from '@bfc/indexers';
 import uniq from 'lodash/uniq';
 
-import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes } from './utils';
+import { getSuggestionEntities, extractLUISContent, suggestionAllEntityTypes, findAllVariables } from './utils';
 
 const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
   id: string;
-  type: 'parse' | 'updateTemplate' | 'extractLuisEntity';
+  type: 'parse' | 'updateTemplate' | 'extractLuisEntity' | 'extractLGVariables';
   error?: any;
   payload?: any;
 }
@@ -43,6 +43,17 @@ class LgParserWithoutWorker {
     }
 
     return { suggestEntities: uniq(suggestEntities) };
+  }
+
+  public extractLGVariables(curCbangedFile: string | undefined, lgFiles: string[]) {
+    let result: string[] = [];
+    if (curCbangedFile) {
+      result = findAllVariables(curCbangedFile);
+    } else {
+      result = findAllVariables(lgFiles);
+    }
+
+    return { lgVariables: uniq(result) };
   }
 }
 
@@ -83,6 +94,19 @@ class LgParserWithWorker {
   public async extractLuisEntity(luContents: string[]): Promise<{ suggestEntities: string[] }> {
     const msgId = uniqueId();
     const msg = { id: msgId, type: 'extractLuisEntity', payload: { luContents } };
+    return new Promise((resolve, reject) => {
+      this.resolves[msgId] = resolve;
+      this.rejects[msgId] = reject;
+      LgParserWithWorker.worker.send(msg);
+    });
+  }
+
+  public async extractLGVariables(
+    curCbangedFile: string | undefined,
+    lgFiles: string[]
+  ): Promise<{ lgVariables: string[] }> {
+    const msgId = uniqueId();
+    const msg = { id: msgId, type: 'extractLGVariables', payload: { curCbangedFile, lgFiles } };
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;

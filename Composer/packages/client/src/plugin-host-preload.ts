@@ -10,9 +10,10 @@ import * as CodeEditors from '@bfc/code-editor';
 import * as UIShared from '@bfc/ui-shared';
 import { syncStore, Shell } from '@bfc/extension-client';
 
+import { setupIcons } from './setupIcons';
 import './index.css';
 
-Fabric.initializeIcons(undefined, { disableWarnings: true });
+setupIcons();
 
 if (!document.head.title) {
   const title = document.createElement('title');
@@ -51,6 +52,7 @@ window.CodeEditors = CodeEditors;
 window.UIShared = UIShared;
 window.Composer = {
   __extensionId: '',
+  __bundleId: '',
   __pluginType: '',
   render: (component: React.ReactElement) => {
     ReactDOM.render(component, document.getElementById('root'));

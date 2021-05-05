@@ -37,9 +37,10 @@ export interface FieldProps<T = any> {
   focused?: boolean;
   style?: React.CSSProperties;
   cursorPosition?: number;
+  hasIcon?: boolean;
 
   onChange: ChangeHandler<T>;
-  onFocus?: (id: string, value?: T) => void;
+  onFocus?: (id: string, value?: T, event?: React.FocusEvent<any>) => void;
   onBlur?: (id: string, value?: T) => void;
 
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;

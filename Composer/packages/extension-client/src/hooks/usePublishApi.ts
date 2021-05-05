@@ -40,6 +40,9 @@ export function usePublishApi() {
   function getType(): string {
     return window[ComposerGlobalName].getType();
   }
+  function getName(): string {
+    return window[ComposerGlobalName].getName();
+  }
   function savePublishConfig(config): void {
     return window[ComposerGlobalName].savePublishConfig(config);
   }
@@ -52,10 +55,13 @@ export function usePublishApi() {
   function setTenantId(value): void {
     window[ComposerGlobalName].setTenantId(value);
   }
-  function isGetTokenFromUser(): boolean {
-    return window[ComposerGlobalName].isGetTokenFromUser();
+  function userShouldProvideTokens(): boolean {
+    return window[ComposerGlobalName].userShouldProvideTokens();
   }
-
+  /** @deprecated use `userShouldProvideTokens` instead */
+  function isGetTokenFromUser(): boolean {
+    return window[ComposerGlobalName].userShouldProvideTokens();
+  }
   return {
     publishConfig: getPublishConfig(),
     startProvision,
@@ -65,9 +71,11 @@ export function usePublishApi() {
     setTitle,
     getSchema,
     getType,
+    getName,
     savePublishConfig,
     getTokenFromCache,
     isGetTokenFromUser,
+    userShouldProvideTokens,
     getTenantIdFromCache,
     setTenantId,
   };

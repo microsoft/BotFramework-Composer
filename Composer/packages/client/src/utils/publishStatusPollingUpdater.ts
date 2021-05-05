@@ -45,6 +45,11 @@ export class PublishStatusPollingUpdater {
       ? publishStorage.get('jobIds')[`${botProjectId}-${publishTargetName}`]
       : undefined;
     if (!currentJobId) {
+      onData({
+        botProjectId,
+        targetName: publishTargetName,
+        apiResponse: null,
+      });
       return;
     }
     const response = await httpClient
@@ -93,6 +98,10 @@ export class PublishStatusPollingUpdater {
 
   isSameUpdater(botProjectId: string, targetName: string) {
     return this.botProjectId === botProjectId && this.publishTargetName === targetName;
+  }
+
+  getPublishTargetName() {
+    return this.publishTargetName;
   }
 }
 

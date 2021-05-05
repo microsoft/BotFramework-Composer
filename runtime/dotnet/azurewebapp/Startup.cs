@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 using System;
 using System.IO;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -8,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.AI.QnA;
@@ -32,6 +30,7 @@ using Microsoft.BotFramework.Composer.Core.Settings;
 using Microsoft.BotFramework.Composer.WebAppTemplates.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace Microsoft.BotFramework.Composer.WebAppTemplates
 {
@@ -227,7 +226,18 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+
+            // Set up custom content types - associating file extension to MIME type.
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".lu"] = "application/lu";
+            provider.Mappings[".qna"] = "application/qna";
+
+            // Expose static files in manifests folder for skill scenarios.
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+
             app.UseNamedPipes(System.Environment.GetEnvironmentVariable("APPSETTING_WEBSITE_SITE_NAME") + ".directline");
             app.UseWebSockets();
             app.UseRouting()

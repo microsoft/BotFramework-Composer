@@ -119,7 +119,6 @@ export function luImportResolverGenerator(files: FileInfo[]) {
       const options = new luOptions(targetFile.path, file.includeInCollate, locale);
       return new luObject(targetFile.content, options);
     });
-
-    return luObjects.concat(luObjectFromWildCardIds);
+    return luObjects.concat(luObjectFromWildCardIds).filter((obj) => obj.content);
   };
 }

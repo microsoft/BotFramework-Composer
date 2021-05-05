@@ -18,6 +18,8 @@ import killPort from 'kill-port';
 import map from 'lodash/map';
 import * as tcpPortUsed from 'tcp-port-used';
 
+import { RuntimeLogServer } from './runtimeLogServer';
+
 const removeDirAndFiles = promisify(rimraf);
 const mkdir = promisify(fs.mkdir);
 const readFile = promisify(fs.readFile);
@@ -31,6 +33,8 @@ interface RunningBot {
   status: number;
   result: {
     message: string;
+    runtimeLog?: string;
+    runtimeError?: string;
   };
 }
 interface PublishConfig {
@@ -71,17 +75,57 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     this.composer = composer;
   }
 
-  private setBotStatus = (botId: string, status: RunningBot) => {
-    this.composer.log(`SETTING STATUS OF ${botId} to port ${status.port} and status ${status.status}`);
+  private setBotStatus = (botId: string, data: RunningBot) => {
+    const updatedBotData: RunningBot = {
+      ...LocalPublisher.runningBots[botId],
+      status: data.status,
+    };
+
+    this.composer.log(`SETTING STATUS OF ${botId} to port ${data.port} and status ${data.status}`);
     // preserve the pid and port if one is available
-    if (!status.process && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].process) {
-      status.process = LocalPublisher.runningBots[botId].process;
-    }
-    if (!status.port && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].port) {
-      status.port = LocalPublisher.runningBots[botId].port;
+    if (data.process && !LocalPublisher.runningBots[botId]?.process) {
+      updatedBotData.process = data.process;
     }
 
-    LocalPublisher.runningBots[botId] = status;
+    if (data.port && !LocalPublisher.runningBots[botId]?.port) {
+      updatedBotData.port = data.port;
+    }
+
+    if (data.result.message) {
+      updatedBotData.result = {
+        ...updatedBotData.result,
+        message: data.result.message,
+      };
+    }
+    LocalPublisher.runningBots[botId] = updatedBotData;
+  };
+
+  private appendRuntimeLogs = (botId: string, newContent: string, logType: 'stdout' | 'stderr' = 'stdout') => {
+    const botData = LocalPublisher.runningBots[botId];
+    if (logType === 'stdout') {
+      const runtimeLog = botData.result.runtimeLog ? botData.result.runtimeLog + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeLog,
+        },
+      };
+    } else {
+      const runtimeError = botData.result.runtimeError ? botData.result.runtimeError + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeError: runtimeError,
+        },
+      };
+    }
+    RuntimeLogServer.sendRuntimeLogToSubscribers(
+      botId,
+      LocalPublisher.runningBots[botId].result.runtimeLog ?? '',
+      LocalPublisher.runningBots[botId].result.runtimeError ?? ''
+    );
   };
 
   private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
@@ -94,23 +138,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
         await this.initBot(project);
         await this.saveContent(botId, version, project.dataDir, user);
-        await runtime.setSkillManifest(
-          this.getBotRuntimeDir(botId),
-          project.fileStorage,
-          this.getManifestSrcDir(project.dataDir),
-          project.fileStorage,
-          'azurewebapp'
-        );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
         const runtimePath = project.getRuntimePath();
         await runtime.build(runtimePath, project);
-        await runtime.setSkillManifest(
-          project.settings.runtime.path,
-          project.fileStorage,
-          this.getManifestSrcDir(project.dataDir),
-          project.fileStorage,
-          'azurewebapp'
-        );
       } else {
         throw new Error('Custom runtime settings are incomplete. Please specify path and command.');
       }
@@ -195,7 +225,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   removeRuntimeData = async (botId: string) => {
-    const targetDir = path.resolve(__dirname, `../hostedBots/${botId}`);
+    const targetDir = path.resolve(this.getBotsDir(), `./${botId}`);
     if (!(await this.dirExist(targetDir))) {
       return { msg: `runtime path ${targetDir} does not exist` };
     }
@@ -205,6 +235,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
     }
+  };
+
+  setupRuntimeLogServer = async (projectId: string) => {
+    await RuntimeLogServer.init();
+    return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
   };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
@@ -367,16 +402,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       }
       config = this.getConfig(settings, skillHostEndpoint);
       let spawnProcess;
+      const args = [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config];
+      this.composer.log('Executing command with arguments: %s %s', startCommand, args.join(' '));
       try {
-        spawnProcess = spawn(
-          startCommand,
-          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config],
-          {
-            cwd: botDir,
-            stdio: ['ignore', 'pipe', 'pipe'],
-            detached: !isWin, // detach in non-windows
-          }
-        );
+        spawnProcess = spawn(startCommand, args, {
+          cwd: botDir,
+          stdio: ['ignore', 'pipe', 'pipe'],
+          detached: !isWin, // detach in non-windows
+          shell: isWin, // run in a shell on windows so `npm start` doesn't need to be `npm.cmd start`
+        });
         this.composer.log('Started process %d', spawnProcess.pid);
         this.setBotStatus(botId, {
           process: spawnProcess,
@@ -400,7 +434,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
               status: 200,
               result: { message: 'Runtime started' },
             });
-            resolve();
+            resolve('Runtime started');
           },
           (err) => {
             reject(`Bot on localhost:${port} not working, error message: ${err.message}`);
@@ -419,7 +453,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push('--MicrosoftAppPassword');
       configList.push(config.MicrosoftAppPassword);
     }
-    if (config.luis) {
+    if (config.luis && (config.luis.endpointKey || config.luis.authoringKey)) {
       configList.push('--luis:endpointKey');
       configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
@@ -451,23 +485,28 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logger: (...args: any[]) => void
   ) => {
-    let erroutput = '';
+    let errOutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
+        const runtimeData = data.toString();
+        this.appendRuntimeLogs(botId, runtimeData);
         logger('%s', data.toString());
       });
 
     child.stderr &&
       child.stderr.on('data', (err: any) => {
-        erroutput += err.toString();
+        errOutput += err.toString();
       });
 
     child.on('exit', (code) => {
       if (code !== 0) {
-        logger('error on exit: %s, exit code %d', erroutput, code);
+        logger('error on exit: %s, exit code %d', errOutput, code);
+        if (LocalPublisher.runningBots[botId].status === 200) {
+          this.appendRuntimeLogs(botId, errOutput, 'stderr');
+        }
         this.setBotStatus(botId, {
           status: 500,
-          result: { message: erroutput },
+          result: { message: errOutput },
         });
       }
     });
@@ -540,7 +579,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             .then(() => {
               this.removeListener(proc);
               delete LocalPublisher.runningBots[botId];
-              resolve();
+              resolve('Stopped');
             })
             .catch((err) => {
               reject(err);

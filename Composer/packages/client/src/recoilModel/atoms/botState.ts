@@ -17,11 +17,12 @@ import {
   QnAFile,
   SkillManifestFile,
   RecognizerFile,
+  PublishTarget,
 } from '@bfc/shared';
-import { DirectLineLog } from '@botframework-composer/types/src';
+import { ConversationTrafficItem } from '@botframework-composer/types';
 import { atomFamily } from 'recoil';
 
-import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
+import { BotStartError, DesignPageLocation, WebChatInspectionData, RuntimeOutputData } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -47,6 +48,7 @@ const emptyDialog: DialogInfo = {
   intentTriggers: [],
   skills: [],
   isFormDialog: false,
+  isTopic: false,
 };
 
 const emptyLg: LgFile = {
@@ -56,9 +58,44 @@ const emptyLg: LgFile = {
   templates: [],
   allTemplates: [],
   imports: [],
+  isContentUnparsed: true,
+};
+
+const emptyLu: LuFile = {
+  id: '',
+  content: '',
+  diagnostics: [],
+  intents: [],
+  allIntents: [],
+  empty: true,
+  resource: {
+    Sections: [],
+    Errors: [],
+    Content: '',
+  },
+  imports: [],
+  isContentUnparsed: true,
+};
+
+const emptyQna: QnAFile = {
+  id: '',
+  content: '',
+  diagnostics: [],
+  qnaSections: [],
+  imports: [],
+  options: [],
+  empty: true,
+  resource: {
+    Sections: [],
+    Errors: [],
+    Content: '',
+  },
+  isContentUnparsed: true,
 };
 
 type LgStateParams = { projectId: string; lgFileId: string };
+type LuStateParams = { projectId: string; luFileId: string };
+type QnaStateParams = { projectId: string; qnaFileId: string };
 
 export const lgFileState = atomFamily<LgFile, LgStateParams>({
   key: getFullyQualifiedKey('lg'),
@@ -69,6 +106,34 @@ export const lgFileState = atomFamily<LgFile, LgStateParams>({
 
 export const lgFileIdsState = atomFamily<string[], string>({
   key: getFullyQualifiedKey('lgFileIds'),
+  default: () => {
+    return [];
+  },
+});
+
+export const qnaFileState = atomFamily<QnAFile, QnaStateParams>({
+  key: getFullyQualifiedKey('qna'),
+  default: () => {
+    return emptyQna;
+  },
+});
+
+export const qnaFileIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('qnaFileIds'),
+  default: () => {
+    return [];
+  },
+});
+
+export const luFileState = atomFamily<LuFile, LuStateParams>({
+  key: getFullyQualifiedKey('lu'),
+  default: () => {
+    return emptyLu;
+  },
+});
+
+export const luFileIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('luFileIds'),
   default: () => {
     return [];
   },
@@ -115,6 +180,13 @@ export const locationState = atomFamily<string, string>({
   },
 });
 
+export const projectReadmeState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('readme'),
+  default: (id) => {
+    return '';
+  },
+});
+
 export const botEnvironmentState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botEnvironment'),
   default: (id) => {
@@ -144,17 +216,10 @@ export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
   },
 });
 
-export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
+export const botBuildTimeErrorState = atomFamily<BotStartError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };
-  },
-});
-
-export const luFilesState = atomFamily<LuFile[], string>({
-  key: getFullyQualifiedKey('luFiles'),
-  default: (id) => {
-    return [];
   },
 });
 
@@ -307,9 +372,9 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const qnaFilesState = atomFamily<QnAFile[], string>({
-  key: getFullyQualifiedKey('qnaFiles'),
-  default: [],
+export const currentPublishTargetState = atomFamily<PublishTarget, string>({
+  key: getFullyQualifiedKey('currentTarget'),
+  default: {} as PublishTarget,
 });
 
 export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({
@@ -372,7 +437,25 @@ export const canRedoState = atomFamily<boolean, string>({
   default: false,
 });
 
-export const webChatLogsState = atomFamily<DirectLineLog[], string>({
-  key: getFullyQualifiedKey('webChatLogs'),
+export const webChatTrafficState = atomFamily<ConversationTrafficItem[], string>({
+  key: getFullyQualifiedKey('webChatTraffic'),
   default: [],
+});
+
+export const webChatInspectionDataState = atomFamily<WebChatInspectionData | undefined, string>({
+  key: getFullyQualifiedKey('webChatInspectionData'),
+  default: undefined,
+});
+
+export const projectIndexingState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('projectIndexing'),
+  default: false,
+});
+
+export const runtimeStandardOutputDataState = atomFamily<RuntimeOutputData, string>({
+  key: getFullyQualifiedKey('runtimeStandardOutputData'),
+  default: {
+    standardError: null,
+    standardOutput: '',
+  },
 });

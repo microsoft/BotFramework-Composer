@@ -3,19 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FluentTheme } from '@uifabric/fluent-theme';
 
-import OnboardingContext from '../../OnboardingContext';
-import { palette } from '../../palette';
+import { useOnboardingContext } from '../../OnboardingContext';
 
 import { buttonStyles, content } from './styles';
 
 const CollapsedWelcomeModal = () => {
   const {
     actions: { exit, toggleMinimized },
-  } = useContext(OnboardingContext);
+  } = useOnboardingContext();
 
   return (
     <div css={content}>
@@ -29,7 +28,7 @@ const CollapsedWelcomeModal = () => {
         />
         <IconButton
           iconProps={{ iconName: 'ChromeClose' }}
-          styles={{ ...buttonStyles, icon: { color: palette.white, fontSize: '12px' } }}
+          styles={{ ...buttonStyles, icon: { color: FluentTheme.palette.white, fontSize: '12px' } }}
           title={formatMessage('Close')}
           onClick={exit}
         />

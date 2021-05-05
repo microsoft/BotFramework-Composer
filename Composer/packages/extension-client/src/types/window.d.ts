@@ -22,6 +22,7 @@ declare global {
      */
     Composer: {
       __extensionId: string;
+      __bundleId: string;
       __pluginType: string;
       render: (component: React.ReactElement) => void;
       sync: (shell: Shell) => void;

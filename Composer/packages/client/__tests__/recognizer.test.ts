@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuFile, SDKKinds, QnAFile } from '@bfc/shared';
+import { LuFile, SDKKinds, QnAFile, QnALocales } from '@bfc/shared';
 
 import {
   getCrossTrainedRecognizerDialog,
@@ -19,7 +19,8 @@ describe('Test the generated recognizer dialogs', () => {
         { id: 'test.en-us', empty: false },
         { id: 'test.fr-fr', empty: false },
       ],
-      'qna'
+      'qna',
+      QnALocales
     );
 
     expect(result.id).toBe('test.qna.dialog');

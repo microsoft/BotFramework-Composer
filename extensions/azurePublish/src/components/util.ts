@@ -34,6 +34,7 @@ export const getExistResources = (config) => {
     // If name or hostname is configured, it means the webapp is already created.
     if (config.hostname || config.name) {
       result.push(AzureResourceTypes.WEBAPP);
+      result.push(AzureResourceTypes.AZUREFUNCTIONS);
     }
     if (config.settings?.MicrosoftAppId) {
       result.push(AzureResourceTypes.BOT_REGISTRATION);
@@ -59,4 +60,15 @@ export const getExistResources = (config) => {
     }
     return result;
   } else return [];
+};
+
+export const defaultExtensionState = {
+  subscriptionId: '',
+  resourceGroup: '',
+  hostname: '',
+  region: '',
+  luisLocation: '',
+  enabledResources: [],
+  requiredResources: [],
+  creationType: 'create',
 };

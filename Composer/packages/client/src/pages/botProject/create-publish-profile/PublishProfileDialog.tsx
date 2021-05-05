@@ -10,7 +10,7 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, isGetTokenFromUser, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
+import { getTokenFromCache, userShouldProvideTokens, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
@@ -19,6 +19,7 @@ import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { AuthClient } from '../../../utils/authClient';
 import { graphScopes } from '../../../constants';
 import { dispatcherState } from '../../../recoilModel';
+import { createNotification } from '../../../recoilModel/dispatchers/notification';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
 
@@ -29,6 +30,7 @@ type PublishProfileDialogProps = {
   types: PublishType[];
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
+  onUpdateIsCreateProfileFromSkill?: (isCreateProfileFromSkill: boolean) => void;
 };
 
 const Page = {
@@ -37,13 +39,24 @@ const Page = {
 };
 
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
-  const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
+  const {
+    current,
+    types,
+    projectId,
+    closeDialog,
+    targets,
+    setPublishTargets,
+    onUpdateIsCreateProfileFromSkill,
+  } = props;
+  const [name, setName] = useState(current?.item.name || '');
+  const [targetType, setTargetType] = useState<string>(current?.item.type || '');
+
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
-  const { provisionToTarget } = useRecoilValue(dispatcherState);
+  const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
 
   const [dialogTitle, setTitle] = useState({
-    title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+    title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
     subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
   });
 
@@ -77,7 +90,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
       setTitle({
-        title: current ? formatMessage('Edit a publishing profile') : formatMessage('Add a publishing profile'),
+        title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
         subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
       });
     };
@@ -87,8 +100,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         graphToken: getTokenFromCache('graphToken'),
       };
     };
+    /** @deprecated use `userShouldProvideTokens` instead */
     PluginAPI.publish.isGetTokenFromUser = () => {
-      return isGetTokenFromUser();
+      return userShouldProvideTokens();
+    };
+    PluginAPI.publish.userShouldProvideTokens = () => {
+      return userShouldProvideTokens();
     };
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
@@ -140,38 +157,57 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   );
 
   useEffect(() => {
-    if (current?.item?.type) {
-      PluginAPI.publish.getType = () => {
-        return current?.item?.type;
-      };
-      PluginAPI.publish.getSchema = () => {
-        return types.find((t) => t.name === current?.item?.type)?.schema;
-      };
-      PluginAPI.publish.savePublishConfig = (config) => {
-        savePublishTarget(current?.item.name, current?.item?.type, JSON.stringify(config) || '{}');
-      };
-      PluginAPI.publish.startProvision = async (config) => {
-        const fullConfig = { ...config, name: current.item.name, type: current.item.type };
-        let arm, graph;
-        if (!isGetTokenFromUser()) {
-          // login or get token implicit
-          let tenantId = getTenantIdFromCache();
-          if (!tenantId) {
-            const tenants = await AuthClient.getTenants();
-            tenantId = tenants?.[0]?.tenantId;
-            setTenantId(tenantId);
-          }
-          arm = await AuthClient.getARMTokenForTenant(tenantId);
-          graph = await AuthClient.getAccessToken(graphScopes);
-        } else {
-          // get token from cache
-          arm = getTokenFromCache('accessToken');
-          graph = getTokenFromCache('graphToken');
+    PluginAPI.publish.getType = () => {
+      return targetType;
+    };
+    PluginAPI.publish.getName = () => {
+      return name;
+    };
+    PluginAPI.publish.getSchema = () => {
+      return types.find((t) => t.name === targetType)?.schema;
+    };
+    PluginAPI.publish.savePublishConfig = (config) => {
+      savePublishTarget(name, targetType, JSON.stringify(config) || '{}');
+    };
+    PluginAPI.publish.startProvision = async (config) => {
+      const fullConfig = { ...config, name: name, type: targetType };
+
+      let arm, graph;
+      if (!userShouldProvideTokens()) {
+        let tenantId = config.tenantId;
+
+        if (!tenantId) {
+          // eslint-disable-next-line no-console
+          console.log('Provision config does not include tenant id, using tenant id from cache.');
+          tenantId = getTenantIdFromCache();
         }
-        provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
-      };
-    }
-  }, [current, types, savePublishTarget]);
+
+        // require tenant id to be set by plugin (handles multiple tenant scenario)
+        if (!tenantId) {
+          TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
+          const notification = createNotification({
+            type: 'error',
+            title: formatMessage('Error provisioning.'),
+            description: formatMessage(
+              'An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again.'
+            ),
+          });
+          addNotification(notification);
+          return;
+        }
+
+        // login or get token implicit
+        arm = await AuthClient.getARMTokenForTenant(tenantId);
+        graph = await AuthClient.getAccessToken(graphScopes);
+      } else {
+        // get token from cache
+        arm = getTokenFromCache('accessToken');
+        graph = getTokenFromCache('graphToken');
+      }
+      await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      onUpdateIsCreateProfileFromSkill?.(true);
+    };
+  }, [name, targetType, types, savePublishTarget]);
 
   return (
     <Fragment>
@@ -192,16 +228,18 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
             <div style={{ marginBottom: '16px' }}>
               {dialogTitle.subText}
               <Link href="https://aka.ms/bf-composer-docs-publish-bot" target="_blank">
-                {formatMessage('Learn More.')}
+                {formatMessage('Learn more')}
               </Link>
             </div>
             <ProfileFormDialog
               current={current}
-              projectId={projectId}
+              name={name}
+              setName={setName}
+              setTargetType={setTargetType}
               setType={setSelectType}
               targets={targets}
+              targetType={targetType}
               types={types}
-              updateSettings={savePublishTarget}
               onDismiss={closeDialog}
               onNext={() => {
                 setPage(Page.ConfigProvision);
@@ -213,7 +251,12 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
           <Fragment>
             <div style={{ marginBottom: '16px' }}>{dialogTitle.subText}</div>
             <div css={publishSurfaceStyles}>
-              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+              <PluginHost
+                bundleId={selectedType.bundleId}
+                pluginName={selectedType.extensionId}
+                pluginType="publish"
+                projectId={projectId}
+              />
             </div>
           </Fragment>
         )}

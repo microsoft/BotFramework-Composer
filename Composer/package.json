@@ -17,7 +17,8 @@
     "axios": "^0.21.1",
     "y18n": "^5.0.5",
     "immer": "^8.0.1",
-    "url-parse": "^1.5.1"
+    "url-parse": "^1.5.1",
+    "underscore": "^1.12.1"
   },
   "engines": {
     "node": ">=12"
@@ -41,7 +42,9 @@
       "packages/types",
       "packages/ui-plugins/*"
     ],
-    "nohoist": ["**/server-workers/**"]
+    "nohoist": [
+      "**/server-workers/**"
+    ]
   },
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
@@ -63,14 +66,16 @@
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
-    "test": "yarn typecheck && jest",
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
-    "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default",
+    "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default --silent",
     "test:integration": "cypress run --browser edge",
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",
     "test:integration:clean": "node scripts/clean-e2e.js",
+    "test:integration:clean-all": "node scripts/clean-e2e.js --all",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
+    "lint:ci": "wsrun --exclude-missing --collect-logs --report --no-prefix lint --format github-actions",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
     "lint:extensions": "cd ../extensions && yarn lint",
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
@@ -90,11 +95,11 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,jsx}": [
+    "**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ],
-    "../extensions/**/*": [
+    "../extensions/**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ]
@@ -121,6 +126,7 @@
     "cypress-plugin-tab": "^1.0.5",
     "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
+    "eslint-formatter-github-actions": "^1.0.0",
     "eslint-plugin-cypress": "2.11.1",
     "eslint-plugin-emotion": "10.0.27",
     "eslint-plugin-format-message": "6.2.3",

@@ -2,10 +2,7 @@
 // Licensed under the MIT License.
 import * as express from 'express';
 import { StatusCodes } from 'http-status-codes';
-import moment from 'moment';
-import { DirectLineError, DirectLineLog } from '@botframework-composer/types';
-
-import { WebSocketServer } from './webSocketServer';
+import { DirectLineError } from '@botframework-composer/types';
 
 export enum BotErrorCodes {
   /// unknown service error
@@ -35,23 +32,14 @@ const generateGenericError = (code: BotErrorCodes, exception: any, status?: numb
   return apiException;
 };
 
-export const createDirectLineErrorLog = (req: express.Request, errorObject: DirectLineError): DirectLineLog => {
-  return {
-    timestamp: moment().local().format('YYYY-MM-DD HH:mm:ss'),
-    route: `${req.method} ${req.path}`,
-    logType: 'Error',
-    ...errorObject,
-  };
-};
-
 export const handleDirectLineErrors = (req: express.Request, res: express.Response, err) => {
-  let item: DirectLineLog;
+  let item: { error: DirectLineError };
   if (err.status && err.message) {
-    item = createDirectLineErrorLog(req, err);
+    item = { error: err };
   } else {
     const error = generateGenericError(err.code ?? BotErrorCodes.ServiceError, err);
-    item = createDirectLineErrorLog(req, error);
+    item = { error };
   }
-  WebSocketServer.sendDLErrorsToSubscribers(item);
-  res.status(item.status).json(item).end();
+  // send error through Express and let logNetworkTraffic middleware handle the logging
+  res.status(item.error.status).json(item).end();
 };

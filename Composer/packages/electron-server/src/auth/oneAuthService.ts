@@ -34,11 +34,38 @@ type GetTenantsResult = {
   value: AzureTenant[];
 };
 
+// Pulled from ./oneAuth.d.ts
+enum Status {
+  Unexpected = 0,
+  Reserved = 1,
+  InteractionRequired = 2,
+  NoNetwork = 3,
+  NetworkTemporarilyUnavailable = 4,
+  ServerTemporarilyUnavailable = 5,
+  ApiContractViolation = 6,
+  UserCanceled = 7,
+  ApplicationCanceled = 8,
+  IncorrectConfiguration = 9,
+  InsufficientBuffer = 10,
+  AuthorityUntrusted = 11,
+}
+
+// Pulled from ./oneAuth.d.ts
+enum Flight {
+  UseMsalforMsa = 2,
+  UseWamforMSA = 1002,
+  UseWamforAAD = 1003,
+}
+
 export class OneAuthInstance extends OneAuthBase {
   private initialized: boolean;
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
   private signedInARMAccount: OneAuth.Account | undefined;
+
+  /** Token solely used to fetch tenants */
+  private tenantToken: string | undefined;
+  private tenantTokenExpiresOn: number | undefined;
 
   constructor() {
     super();
@@ -77,9 +104,7 @@ export class OneAuthInstance extends OneAuthBase {
         GRAPH_RESOURCE,
         false // prefer broker
       );
-      this.oneAuth.setFlights([
-        2, // UseMsalforMsa
-      ]);
+      this.oneAuth.setFlights([Flight.UseMsalforMsa]);
       this.oneAuth.initialize(appConfig, msaConfig, aadConfig, undefined);
       this.initialized = true;
       log('Service initialized.');
@@ -126,7 +151,7 @@ export class OneAuthInstance extends OneAuthBase {
         this.signedInAccount.realm,
         ''
       );
-      let result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, reqParams, '');
+      const result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, reqParams, '');
       if (result.credential && result.credential.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
@@ -135,24 +160,29 @@ export class OneAuthInstance extends OneAuthBase {
           expiryTime: result.credential.expiresOn,
         };
       }
-      if (result.error) {
-        if (result.error.status === this.oneAuth.Status.InteractionRequired) {
-          // try again but interactively
-          log('Interaction required. Trying again interactively to get access token.');
-          result = await this.oneAuth.acquireCredentialInteractively(this.signedInAccount?.id, reqParams, '');
-          if (result.credential && result.credential.value) {
-            log('Acquired access token interactively. %s', result.credential.value);
-            return {
-              accessToken: result.credential.value,
-              acquiredAt: Date.now(),
-              expiryTime: result.credential.expiresOn,
-            };
-          }
-        }
-        throw result.error;
-      }
       throw 'Could not acquire an access token.';
     } catch (e) {
+      if (e.error?.status === Status.InteractionRequired && this.signedInAccount) {
+        // try again but interactively
+        log('Interaction required. Trying again interactively to get access token.');
+        // use the signed in account to acquire a token
+        const reqParams = new this.oneAuth.AuthParameters(
+          DEFAULT_AUTH_SCHEME,
+          DEFAULT_AUTH_AUTHORITY,
+          params.targetResource,
+          this.signedInAccount.realm,
+          ''
+        );
+        const result = await this.oneAuth.acquireCredentialInteractively(this.signedInAccount?.id, reqParams, '');
+        if (result.credential && result.credential.value) {
+          log('Acquired access token interactively. %s', result.credential.value);
+          return {
+            accessToken: result.credential.value,
+            acquiredAt: Date.now(),
+            expiryTime: result.credential.expiresOn,
+          };
+        }
+      }
       log('Error while trying to get an access token: %O', e);
       throw e;
     }
@@ -163,17 +193,24 @@ export class OneAuthInstance extends OneAuthBase {
       if (!this.initialized) {
         this.initialize();
       }
-      // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
-      log('Logging user into ARM...');
-      this.signedInARMAccount = undefined;
-      const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
-      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
-      this.signedInARMAccount = result.account;
-      const token = result.credential.value;
+
+      if (
+        !this.signedInARMAccount ||
+        !this.tenantToken ||
+        (this.tenantTokenExpiresOn && Date.now() >= this.tenantTokenExpiresOn)
+      ) {
+        // log the user into the infrastructure tenant to get a token that can be used on the "tenants" API
+        log('Logging user into ARM...');
+        const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
+        const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, signInParams, '');
+        this.signedInARMAccount = result.account;
+        this.tenantToken = result.credential.value;
+        this.tenantTokenExpiresOn = result.credential.expiresOn;
+      }
 
       // call the tenants API
       const tenantsResult = await fetch('https://management.azure.com/tenants?api-version=2020-01-01', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${this.tenantToken}` },
       });
       const tenants = (await tenantsResult.json()) as GetTenantsResult;
       log('Got Azure tenants for user: %O', tenants.value);
@@ -188,31 +225,64 @@ export class OneAuthInstance extends OneAuthBase {
     if (!this.initialized) {
       this.initialize();
     }
-    // sign in arm account.
+
+    // if not signed into the ARM account, sign in.
     if (!this.signedInARMAccount) {
       const signInParams = new this.oneAuth.AuthParameters(DEFAULT_AUTH_SCHEME, ARM_AUTHORITY, ARM_RESOURCE, '', '');
-      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', signInParams, '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, signInParams, '');
+      if (!result.account) {
+        return '';
+      }
+
       this.signedInARMAccount = result.account;
     }
-    if (this.signedInARMAccount) {
-      try {
-        log('Getting an ARM token for tenant %s', tenantId);
-        const tokenParams = new this.oneAuth.AuthParameters(
-          DEFAULT_AUTH_SCHEME,
-          `https://login.microsoftonline.com/${tenantId}`,
-          ARM_RESOURCE,
-          '',
-          ''
-        );
-        const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
+
+    // try to get the tenant token silently
+    try {
+      log('Getting an ARM token for tenant %s', tenantId);
+      const tokenParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        `https://login.microsoftonline.com/${tenantId}`,
+        ARM_RESOURCE,
+        '',
+        ''
+      );
+      const result = await this.oneAuth.acquireCredentialSilently(this.signedInARMAccount.id, tokenParams, '');
+      if (result.credential.value && Date.now() <= result.credential.expiresOn) {
         log('Acquired ARM token for tenant: %s', result.credential.value);
         return result.credential.value;
-      } catch (e) {
-        log('There was an error trying to get an ARM token for tenant %s: %O', tenantId, e);
+      }
+    } catch (e) {
+      if (e.error?.status === Status.InteractionRequired) {
+        log(
+          'There was an error trying to silently get an ARM token for tenant %s: %O. Trying again interactively to get access token.',
+          tenantId,
+          e
+        );
+      } else {
         throw e;
       }
     }
-    return '';
+
+    // get the tenant token interactively
+    try {
+      const tokenParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        `https://login.microsoftonline.com/${tenantId}`,
+        ARM_RESOURCE,
+        '',
+        ''
+      );
+      const result = await this.oneAuth.acquireCredentialInteractively(this.signedInARMAccount.id, tokenParams, '');
+      if (!result.credential.value) {
+        throw new Error('Interactive sign on returned an empty credential value.');
+      }
+      log('Acquired ARM token for tenant: %s', result.credential.value);
+      return result.credential.value;
+    } catch (e) {
+      log('There was an error trying to get an ARM token interactively for tenant %s: %O', tenantId, e);
+      throw e;
+    }
   }
 
   public shutdown() {
@@ -227,6 +297,9 @@ export class OneAuthInstance extends OneAuthBase {
   public signOut() {
     log('Signing out user...');
     this.signedInAccount = undefined;
+    this.signedInARMAccount = undefined;
+    this.tenantToken = undefined;
+    this.tenantTokenExpiresOn = undefined;
     log('Signed out user.');
   }
 
@@ -236,7 +309,7 @@ export class OneAuthInstance extends OneAuthBase {
   private async signIn(): Promise<void> {
     try {
       log('Signing in...');
-      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', undefined, '');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively(undefined, undefined, '');
       this.signedInAccount = result.account;
       log('Signed in successfully. Got account: %O', result.account);
     } catch (e) {
@@ -259,7 +332,7 @@ export class OneAuthInstance extends OneAuthBase {
         '',
         ''
       );
-      const result = await this.oneAuth.signInInteractively('', reqParams, '');
+      const result = await this.oneAuth.signInInteractively(undefined, reqParams, '');
       if (result?.credential?.value) {
         log('Acquired access token. %s', result.credential.value);
         return {

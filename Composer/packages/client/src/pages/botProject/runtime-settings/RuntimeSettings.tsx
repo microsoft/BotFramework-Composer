@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -15,6 +15,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { isUsingAdaptiveRuntime } from '@bfc/shared';
 
 import {
   dispatcherState,
@@ -26,7 +27,9 @@ import {
 } from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { subtitle, errorContainer, errorTextStyle, errorIcon, customError } from '../styles';
+import { subtext, errorContainer, errorTextStyle, errorIcon, inputFieldStyles } from '../styles';
+import { DisableFeatureToolTip } from '../../../components/DisableFeatureToolTip';
+import { usePVACheck } from '../../../hooks/usePVACheck';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
@@ -48,6 +51,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const ejectedRuntimeExists = useRecoilValue(isEjectRuntimeExistState(projectId));
+  const isPVABot = usePVACheck(projectId);
 
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
   const {
@@ -68,6 +72,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   const [runtimePath, setRuntimePath] = useState(settings.runtime?.path ?? '');
   const [runtimeCommand, setRuntimeCommand] = useState(settings.runtime?.command ?? '');
   const [usingCustomRuntime, setUsingCustomRuntime] = useState(settings.runtime?.customRuntime ?? false);
+  const isAdaptive = useMemo(() => isUsingAdaptiveRuntime(settings.runtime), [settings]);
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
@@ -136,19 +141,22 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   };
 
   const header = () => (
-    <div css={subtitle}>
-      {formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}
+    <div css={subtext}>
+      {formatMessage('Configure the command used by Composer to start your bot application when testing locally.')}
     </div>
   );
 
   const toggleOfCustomRuntime = () => (
     <div css={runtimeToggle}>
-      <Toggle
-        inlineLabel
-        checked={usingCustomRuntime}
-        label={formatMessage('Use custom runtime')}
-        onChange={toggleCustomRuntime}
-      />
+      <DisableFeatureToolTip isPVABot={isPVABot}>
+        <Toggle
+          inlineLabel
+          checked={usingCustomRuntime}
+          disabled={isPVABot}
+          label={formatMessage('Use custom runtime')}
+          onChange={toggleCustomRuntime}
+        />
+      </DisableFeatureToolTip>
     </div>
   );
 
@@ -169,7 +177,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   };
 
   const callUpdateBoilerplate = async () => {
-    const title = formatMessage('Update Scripts');
+    const title = formatMessage('Update scripts');
     const msg = formatMessage(
       'Existing files in scripts/folder will be overwritten. Are you sure you want to continue?'
     );
@@ -225,36 +233,43 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   return botName ? (
     <div css={runtimeSettingsStyle} id="runtimeSettings">
       {header()}
-      {toggleOfCustomRuntime()}
+      {!isAdaptive && toggleOfCustomRuntime()}
       <div>
-        <TextField
-          required
-          data-testid="runtimeCodeLocation"
-          disabled={!settings.runtime || !settings.runtime.customRuntime}
-          errorMessage={errorElement(formDataErrors.path)}
-          label={formatMessage('Runtime code location')}
-          styles={customError}
-          value={runtimePath}
-          onBlur={() => handleRuntimeSettingOnBlur('path')}
-          onChange={handleRuntimeSettingOnChange('path')}
-          onRenderLabel={onRenderLabel}
-        />
-        <span css={textOr}>{formatMessage('Or: ')}</span>
-        <Link
-          css={breathingSpace}
-          disabled={!settings.runtime || !settings.runtime.customRuntime}
-          onClick={showEjectModal}
-        >
-          {formatMessage('Get a new copy of the runtime code')}
-        </Link>
-
+        {!isAdaptive && (
+          <TextField
+            required
+            data-testid="runtimeCodeLocation"
+            disabled={!settings.runtime || !settings.runtime.customRuntime}
+            errorMessage={errorElement(formDataErrors.path)}
+            label={formatMessage('Runtime code location')}
+            styles={inputFieldStyles}
+            value={runtimePath}
+            onBlur={() => handleRuntimeSettingOnBlur('path')}
+            onChange={handleRuntimeSettingOnChange('path')}
+            onRenderLabel={onRenderLabel}
+          />
+        )}
+        {!isAdaptive && (
+          <div>
+            <span css={textOr}>{formatMessage('Or: ')}</span>
+            <Link
+              css={breathingSpace}
+              disabled={!settings.runtime || !settings.runtime.customRuntime}
+              onClick={showEjectModal}
+            >
+              {formatMessage('Get a new copy of the runtime code')}
+            </Link>
+          </div>
+        )}
+      </div>
+      <div>
         <TextField
           required
           data-testid="runtimeCommand"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
           errorMessage={errorElement(formDataErrors.command)}
           label={formatMessage('Start command')}
-          styles={customError}
+          styles={inputFieldStyles}
           value={runtimeCommand}
           onBlur={() => handleRuntimeSettingOnBlur('command')}
           onChange={handleRuntimeSettingOnChange('command')}

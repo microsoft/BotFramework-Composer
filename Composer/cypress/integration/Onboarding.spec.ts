@@ -3,24 +3,25 @@
 
 context('Onboarding', () => {
   beforeEach(() => {
-    cy.visit('/home');
-    cy.createBot('TodoSample', 'Onboarding');
-    cy.visitPage('Design');
-    //enable onboarding setting
-    cy.visitPage('Composer Settings');
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('Application Settings').click();
+    cy.createTestBot('TestSample', ({ id }) => {
+      cy.visit(`/bot/${id}`);
+      //enable onboarding setting
+      cy.visitPage('Composer settings');
+      cy.findByTestId('ProjectTree').within(() => {
+        cy.findByText('Application Settings').click();
+      });
+      cy.findByTestId('onboardingToggle').click();
+      cy.visitPage('Design');
     });
-    cy.findByTestId('onboardingToggle').click();
-    cy.visitPage('Design');
   });
 
-  // The onboarding test is disabled since we are temporarily disabling onboarding
-  xit('walk through product tour teaching bubbles', () => {
+  it('walk through product tour teaching bubbles', () => {
     cy.findByTestId('onboardingNextSet').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
+
+    cy.findByTestId('onboardingNextSet').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
 
@@ -28,11 +29,6 @@ context('Onboarding', () => {
     cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingNextSet').click();
-
-    cy.findByTestId('onboardingNext').click();
-
-    cy.findByTestId('onboardingNextSet').click();
-
     cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingDone').click();

@@ -151,12 +151,12 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
         return (
-          <div data-is-focusable css={tableCell}>
+          <div css={tableCell}>
             <Link
               css={content}
               underline="true"
               onClick={() => {
-                navigateTo(item.getUrl());
+                navigateTo(item.getUrl(item.dialogPath));
                 if (item.location === 'manifest.json') {
                   setExportSkillModalInfo(item.projectId);
                 }

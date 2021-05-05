@@ -10,20 +10,26 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { isShowAuthDialog } from '../../utils/auth';
+import { useLocation } from '../../utils/hooks';
+import { isShowAuthDialog as shouldShowTokenDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { title, tableRow, tableRowItem, tableColumnHeader, columnSizes } from './styles';
+import { tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
 
 // -------------------- Styles -------------------- //
 
 const publishTargetsContainer = css`
   display: flex;
+  padding: 20px;
   flex-direction: column;
+`;
+
+const belowTargetsContainer = css`
+  padding: 0 20px 20px 20px;
 `;
 
 const publishTargetsHeader = css`
@@ -31,16 +37,6 @@ const publishTargetsHeader = css`
   flex-direction: row;
   height: 42px;
 `;
-
-const addPublishProfile = {
-  root: {
-    fontSize: 12,
-    fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
-    paddingLeft: 0,
-    marginLeft: 5,
-  },
-};
 
 const editPublishProfile = {
   root: {
@@ -65,11 +61,28 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
-  const [dialogHidden, setDialogHidden] = useState(true);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showPublishDialog, setShowingPublishDialog] = useState(false);
+  const [showAuthDialog, setShowingAuthDialog] = useState(false);
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
+
+  const { location } = useLocation();
+
+  useEffect(() => {
+    if (location.hash === '#completePublishProfile') {
+      if (publishTargets && publishTargets.length > 0) {
+        // clear the hash so that the dialog doesn't open again.
+        window.location.hash = '';
+        setCurrent({ item: publishTargets[0], index: 0 });
+        if (shouldShowTokenDialog(true)) {
+          setShowingAuthDialog(true);
+        } else {
+          setShowingPublishDialog(true);
+        }
+      }
+    }
+  }, [location, publishTargets]);
 
   useEffect(() => {
     if (projectId) {
@@ -83,72 +96,101 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     }
   }, [scrollToSectionId]);
 
+  const onDeletePublishTarget = async (publishTarget: PublishTarget) => {
+    if (publishTargets) {
+      const targetName = publishTarget.name;
+      const confirmed = await OpenConfirmModal(
+        formatMessage('Delete?'),
+        formatMessage(
+          'Are you sure you want to remove {targetName}? This will remove only the profile and will not delete provisioned resources.',
+          { targetName }
+        )
+      );
+      if (confirmed) {
+        const newPublishTargets = publishTargets.filter((t) => t.name !== targetName);
+        setPublishTargets(newPublishTargets, projectId);
+      }
+    }
+  };
+
+  const addNewButton = (
+    <ActionButton
+      data-testid={'addNewPublishProfile'}
+      styles={actionButton}
+      onClick={() => {
+        if (shouldShowTokenDialog(true)) {
+          setShowingAuthDialog(true);
+        } else {
+          setShowingPublishDialog(true);
+        }
+      }}
+    >
+      {formatMessage('Add new')}
+    </ActionButton>
+  );
+
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Publish profiles')} titleStyle={title}>
-        <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
-          <div css={publishTargetsHeader}>
-            <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')} </div>
-            <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Target')} </div>
-            <div css={tableColumnHeader(columnSizes[2])}> </div>
-          </div>
-          {publishTargets?.map((p, index) => {
-            return (
-              <div key={index} css={tableRow}>
-                <div css={tableRowItem(columnSizes[0])} title={p.name}>
-                  {p.name}
-                </div>
-                <div css={tableRowItem(columnSizes[1])} title={p.type}>
-                  {p.type}
-                </div>
-                <div css={tableRowItem(columnSizes[2])}>
-                  <ActionButton
-                    styles={editPublishProfile}
-                    onClick={() => {
-                      setCurrent({ item: p, index: index });
-                      if (isShowAuthDialog(true)) {
-                        setShowAuthDialog(true);
-                      } else {
-                        setDialogHidden(false);
-                      }
-                    }}
-                  >
-                    {formatMessage('Edit')}
-                  </ActionButton>
-                </div>
-              </div>
-            );
-          })}
-          <ActionButton
-            data-testid={'addNewPublishProfile'}
-            styles={addPublishProfile}
-            onClick={() => {
-              if (isShowAuthDialog(true)) {
-                setShowAuthDialog(true);
-              } else {
-                setDialogHidden(false);
-              }
-            }}
-          >
-            {formatMessage('Add new')}
-          </ActionButton>
+      <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
+        <div css={publishTargetsHeader}>
+          <div css={tableColumnHeader(columnSizes[0])}>{formatMessage('Name')} </div>
+          <div css={tableColumnHeader(columnSizes[1])}>{formatMessage('Target')} </div>
+          <div css={tableColumnHeader(columnSizes[2])}> </div>
         </div>
-      </CollapsableWrapper>
+        {publishTargets?.map((p, index) => {
+          return (
+            <div key={index} css={tableRow}>
+              <div css={tableRowItem(columnSizes[0])} title={p.name}>
+                {p.name}
+              </div>
+              <div css={tableRowItem(columnSizes[1])} title={p.type}>
+                {p.type}
+              </div>
+              <div css={tableRowItem(columnSizes[2])}>
+                <ActionButton
+                  data-testid={'editPublishProfile'}
+                  styles={editPublishProfile}
+                  onClick={() => {
+                    setCurrent({ item: p, index: index });
+                    if (shouldShowTokenDialog(true)) {
+                      setShowingAuthDialog(true);
+                    } else {
+                      setShowingPublishDialog(true);
+                    }
+                  }}
+                >
+                  {formatMessage('Edit')}
+                </ActionButton>
+              </div>
+              <div css={tableRowItem(columnSizes[2])}>
+                <ActionButton
+                  data-testid={'deletePublishProfile'}
+                  styles={editPublishProfile}
+                  onClick={() => onDeletePublishTarget(p)}
+                >
+                  {formatMessage('Delete')}
+                </ActionButton>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div css={belowTargetsContainer}>{addNewButton}</div>
       {showAuthDialog && (
         <AuthDialog
           needGraph
           next={() => {
-            setDialogHidden(false);
+            setShowingPublishDialog(true);
           }}
           onDismiss={() => {
-            setShowAuthDialog(false);
+            setShowingAuthDialog(false);
           }}
         />
       )}
-      {!dialogHidden ? (
+      {showPublishDialog ? (
         <PublishProfileDialog
           closeDialog={() => {
-            setDialogHidden(true);
+            setShowingPublishDialog(false);
             // reset current
             setCurrent(null);
           }}
