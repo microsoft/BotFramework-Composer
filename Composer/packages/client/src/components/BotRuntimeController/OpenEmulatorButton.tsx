@@ -22,7 +22,7 @@ export const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectI
   const { openBotInEmulator } = useRecoilValue(dispatcherState);
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const botEndpoints = useRecoilValue(botEndpointsState);
-  const endpoint = botEndpoints[projectId];
+  const endpoint = botEndpoints[projectId]?.url;
 
   const handleClick = () => {
     openBotInEmulator(projectId);

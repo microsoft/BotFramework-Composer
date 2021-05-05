@@ -519,3 +519,6 @@ export const defaultTeamsManifest: TeamsManifest = {
   permissions: ['identity', 'messageTeamMembers'],
   validDomains: ['token.botframework.com'],
 };
+
+export const defaultBotPort = 3979;
+export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;
