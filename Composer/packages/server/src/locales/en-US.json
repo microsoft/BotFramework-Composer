@@ -53,9 +53,6 @@
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot."
   },
-  "a_publishing_profile_provides_the_secure_connectiv_e203980e": {
-    "message": "A publishing profile provides the secure connectivity required to publish your bot. "
-  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
   },
@@ -98,8 +95,8 @@
   "action_unfocused_18a2800e": {
     "message": "Action unfocused"
   },
-  "actions_are_the_main_component_of_a_trigger_they_a_767485a9": {
-    "message": "Actions are the main component of a trigger, they are what enable your bot to take action whether in response to user input or any other event that may occur."
+  "actions_are_the_main_component_of_a_trigger_they_a_8e3af9b9": {
+    "message": "Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur."
   },
   "actions_copied_2821ab27": {
     "message": "Actions copied"
@@ -220,9 +217,6 @@
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
-  },
-  "add_new_publishing_profile_95980909": {
-    "message": "Add new publishing profile"
   },
   "add_new_question_85612b7f": {
     "message": "Add new question"
@@ -1136,8 +1130,8 @@
   "description_436c48d7": {
     "message": "Description"
   },
-  "development_resources_e5c7c3d5": {
-    "message": "Development Resources"
+  "development_resources_67364176": {
+    "message": "Development resources"
   },
   "diagnostic_description_msg_9ddd1be": {
     "message": "Diagnostic Description { msg }"
@@ -1943,8 +1937,8 @@
   "install_the_update_and_restart_composer_fac30a61": {
     "message": "Install the update and restart Composer."
   },
-  "instructions_for_your_azure_admin_aa780628": {
-    "message": "Instructions for your Azure admin"
+  "instructions_2f88ee72": {
+    "message": "Instructions"
   },
   "integer_7f378275": {
     "message": "integer"
@@ -2026,6 +2020,9 @@
   },
   "keys_must_be_unique_2028cef3": {
     "message": "Keys must be unique"
+  },
+  "knowledge_base_31e6868e": {
+    "message": "Knowledge base"
   },
   "knowledge_base_name_7d83bbe4": {
     "message": "Knowledge base name"
@@ -2770,9 +2767,6 @@
   },
   "project_readme_68f88d88": {
     "message": "Project Readme"
-  },
-  "project_settings_42fe3f68": {
-    "message": "Project settings"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "Prompt Configurations"
@@ -3835,6 +3829,9 @@
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
+  },
+  "to_test_run_and_publish_your_bot_it_needs_azure_re_e33d8fd": {
+    "message": "To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels. Other resources, such as language understanding and storage are optional. A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources."
   },
   "to_understand_natural_language_input_and_direct_th_fc982d4a": {
     "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
