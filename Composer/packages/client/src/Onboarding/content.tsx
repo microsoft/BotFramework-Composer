@@ -120,7 +120,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
     case 'actions':
       return {
         content: formatMessage(
-          'Actions are the main component of a trigger, they are what enable your bot to take action whether in response to user input or any other event that may occur.'
+          'Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur.'
         ),
         headline: formatMessage('Actions'),
         helpLink: 'https://docs.microsoft.com/en-us/composer/concept-dialog#action',
