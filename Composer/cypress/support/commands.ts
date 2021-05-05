@@ -85,7 +85,7 @@ Cypress.Commands.add('withinEditor', (editorName, cb) => {
 
 Cypress.Commands.add('visitPage', (page) => {
   cy.findByTestId(`LeftNav-CommandBarButton${page}`).click();
-  cy.findByTestId('ActiveLeftNavItem').should('contain', page);
+  // cy.findByTestId('ActiveLeftNavItem').should('contain', page);
 
   // click the logo to clear any stray tooltips from page navigation
   cy.findByAltText('Composer Logo').click({ force: true });
