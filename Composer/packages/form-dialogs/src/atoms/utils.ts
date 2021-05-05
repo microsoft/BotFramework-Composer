@@ -29,7 +29,7 @@ export const templateTypeToJsonSchemaType = (cardData: PropertyCardData, templat
 };
 
 const $refToRef = ($ref: string) => {
-  const [, ref] = $ref.match(/template:(.*)\.schema/);
+  const [, ref] = $ref.match(/template:(.*)\.template/);
   return ref;
 };
 
@@ -166,7 +166,7 @@ export const getDuplicateName = (name: string, allNames: readonly string[]) => {
 const spreadCardDataNormal = (propertyType: string, cardValues: Record<string, any>) => {
   cardValues = cardValues.items ?? cardValues;
   return {
-    $ref: `template:${propertyType}.schema`,
+    $ref: `template:${propertyType}.template`,
     ...cardValues,
   };
 };

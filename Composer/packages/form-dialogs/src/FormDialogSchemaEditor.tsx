@@ -53,7 +53,7 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
     editorId,
     schema,
     templates = [],
-    schemaExtension = '.schema',
+    schemaExtension = '.template',
     isGenerating = false,
     onSchemaUpdated,
     onGenerateDialog,
