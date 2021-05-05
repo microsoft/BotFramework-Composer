@@ -341,6 +341,9 @@
   "application_updates_bdf5f8b6": {
     "message": "Application Updates"
   },
+  "apply_my_azure_bot_resources_for_an_existing_bot_4979e343": {
+    "message": "Apply my Azure Bot resources for an existing bot"
+  },
   "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
     "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
   },
@@ -785,9 +788,6 @@
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
   },
-  "connect_to_an_existing_bot_7f42990b": {
-    "message": "Connect to an existing bot"
-  },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
   },
@@ -1186,9 +1186,6 @@
   },
   "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
     "message": "Display text used by the channel to render visually."
-  },
-  "do_you_want_to_create_a_new_bot_or_connect_your_az_f5c9dee": {
-    "message": "Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?"
   },
   "do_you_want_to_proceed_cd35aa38": {
     "message": "Do you want to proceed?"
@@ -2615,9 +2612,6 @@
   "open_web_chat_23601990": {
     "message": "Open Web Chat"
   },
-  "open_your_azure_bot_resource_9165e3d1": {
-    "message": "Open your Azure Bot resource"
-  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -3299,8 +3293,8 @@
   "select_your_azure_directory_then_choose_the_subscr_28e935bc": {
     "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located. "
   },
-  "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+  "select_your_azure_directory_then_choose_the_subscr_e3d67edf": {
+    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource. "
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -3626,6 +3620,9 @@
   "the_app_id_of_your_application_registration_16fba1a9": {
     "message": "The app id of your application registration"
   },
+  "the_azure_bot_created_in_azure_bot_services_contai_e1514f26": {
+    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot. Learn more."
+  },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
   },
@@ -3703,6 +3700,9 @@
   },
   "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
     "message": "There was a problem loading Azure directories. { errMessage }"
+  },
+  "there_was_a_problem_with_the_authentication_access_3ca717f6": {
+    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
@@ -4001,6 +4001,9 @@
   "url_should_start_with_http_or_https_c34632bb": {
     "message": "URL should start with http:// or https://"
   },
+  "use_azure_bot_to_create_a_new_conversation_1a116a65": {
+    "message": "Use Azure Bot to create a new conversation"
+  },
   "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
     "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ."
   },
@@ -4258,6 +4261,9 @@
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
+  },
+  "your_new_azure_bot_is_available_in_composer_2756367a": {
+    "message": "Your new Azure Bot is available in Composer"
   },
   "your_new_bot_is_almost_ready_1bb596e": {
     "message": "Your new bot is almost ready!"

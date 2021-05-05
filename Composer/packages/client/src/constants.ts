@@ -199,7 +199,7 @@ export const DialogCreationCopy = {
     return {
       title: formatMessage('Your new Azure Bot is available in Composer'),
       subText: formatMessage(
-        'The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot. Learn more.'
+        'The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot.'
       ),
     };
   },
