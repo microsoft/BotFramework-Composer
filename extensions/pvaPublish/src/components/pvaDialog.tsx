@@ -261,7 +261,7 @@ export const PVADialog: FC = () => {
           </p>
           <Separator styles={{ root: { width: '50%' } }} />
           <p style={{ textAlign: 'center', fontWeight: 500 }}>
-            {formatMessage('Publish your bot assets from Composer directly into Power Virtual Agents.')}
+            {formatMessage('Publish directly from Bot Framework Composer to Power Virtual Agents.')}
           </p>
           <i
             style={{
