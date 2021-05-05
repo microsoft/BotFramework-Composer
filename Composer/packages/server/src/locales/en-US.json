@@ -32,6 +32,9 @@
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
     "message": "A form dialog enables your bot to collect pieces of information ."
   },
+  "a_install_ngrok_a_and_run_the_following_command_to_634f3414": {
+    "message": "<a>Install ngrok</a> and run the following command to continue"
+  },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
   },
@@ -886,6 +889,9 @@
   },
   "copy_9748f9f": {
     "message": "Copy"
+  },
+  "copy_command_to_clipboard_4649910f": {
+    "message": "Copy command to clipboard"
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Copy content for translation"
@@ -3364,6 +3370,9 @@
   },
   "settings_menu_c99ecc6d": {
     "message": "Settings menu"
+  },
+  "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
+    "message": "Setup tunneling software to test your remote skill"
   },
   "short_description_for_6abb9a1b": {
     "message": "short description for"
