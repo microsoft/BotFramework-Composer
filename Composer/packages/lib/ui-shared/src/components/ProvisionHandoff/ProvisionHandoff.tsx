@@ -59,9 +59,7 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
         </div>
       )}
       <div>
-        <Text style={{ fontSize: FontSizes.size14, fontWeight: 600 }}>
-          {formatMessage('Instructions for your Azure admin')}
-        </Text>
+        <Text style={{ fontSize: FontSizes.size14, fontWeight: 600 }}>{formatMessage('Instructions')}</Text>
         <IconButton
           ariaLabel={formatMessage('Copy Icon')}
           menuIconProps={{ iconName: 'Copy' }}
