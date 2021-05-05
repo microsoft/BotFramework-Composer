@@ -32,7 +32,7 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
   };
   return (
     <Stack data-testid="orchestrator-skill">
-      <StackItem styles={{ root: { height: 300, width: '60%' } }}>
+      <StackItem styles={{ root: { height: 150, width: '90%' } }}>
         <div style={{ marginBottom: '16px' }}>
           {enableOrchestratorDialog.subText}
           <Link href={learnMoreUrl} target="_blank">
