@@ -72,7 +72,24 @@ describe('<OrchestratorForSkillsDialog />', () => {
   it('should not render OrchestratorForSkillsDialog if runtime is node', () => {
     const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
-      set(settingsState('rootBotId'), { runtime: { key: 'adaptive-runtime-node-webapp' } });
+      set(settingsState('rootBotId'), {
+        defaultLanguage: 'en-us',
+        languages: ['en-us'],
+        luis: {
+          authoringEndpoint: '',
+          name: '',
+          authoringKey: '',
+          defaultLanguage: '',
+          endpoint: '',
+          endpointKey: '',
+          environment: '',
+        },
+        qna: { endpointKey: '', subscriptionKey: '' },
+        luFeatures: { enableCompositeEntities: false },
+        customFunctions: [],
+        importedLibraries: [],
+        runtime: { key: 'adaptive-runtime-node-webapp', command: '', path: '', customRuntime: false },
+      });
     });
     const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
@@ -81,7 +98,24 @@ describe('<OrchestratorForSkillsDialog />', () => {
   it('should not crash OrchestratorForSkillsDialog if runtime is missing or invalid', () => {
     const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
-      set(settingsState('rootBotId'), { runtime: {} });
+      set(settingsState('rootBotId'), {
+        defaultLanguage: 'en-us',
+        languages: ['en-us'],
+        luis: {
+          authoringEndpoint: '',
+          name: '',
+          authoringKey: '',
+          defaultLanguage: '',
+          endpoint: '',
+          endpointKey: '',
+          environment: '',
+        },
+        qna: { endpointKey: '', subscriptionKey: '' },
+        luFeatures: { enableCompositeEntities: false },
+        customFunctions: [],
+        importedLibraries: [],
+        runtime: { key: 'adaptive-runtime-node-functions', command: '', path: '', customRuntime: false },
+      });
     });
     const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
