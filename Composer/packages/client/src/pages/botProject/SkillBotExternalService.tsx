@@ -142,7 +142,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
       <div css={title}>{formatMessage('Azure Language Understanding')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>.',
+          'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
               <Link key="luis-skill-settings-page" href={'https://www.luis.ai/'} target="_blank">
@@ -200,7 +200,7 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
         <div css={title}>{formatMessage('Azure QnA Maker')}</div>
         <div css={subtext}>
           {formatMessage.rich(
-            'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>',
+            'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>',
             {
               a: ({ children }) => (
                 <Link key="qna-skill-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">

@@ -32,7 +32,7 @@ const renderLabel = (featureName: string, description: string, documentationLink
     {description}
     {documentationLink && (
       <Link href={documentationLink} target="_blank">
-        <span css={styles.featureFlagDescription}>{formatMessage('Learn more.')}</span>
+        <span css={styles.featureFlagDescription}>{formatMessage('Learn more')}</span>
       </Link>
     )}
   </span>
