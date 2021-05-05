@@ -135,7 +135,8 @@ const config: PluginConfig = {
         order: PROMPTS_ORDER,
         properties: {
           prompt: {
-            label: () => formatMessage('Prompt for Attachment'),
+            label: () => formatMessage('Ask a question - file or attachment'),
+            description: () => formatMessage('Ask a question to collect user input (file or attachment)'),
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
@@ -162,7 +163,8 @@ const config: PluginConfig = {
         order: PROMPTS_ORDER,
         properties: {
           prompt: {
-            label: () => formatMessage('Prompt with multi-choice'),
+            label: () => formatMessage('Ask a question - multi choice'),
+            description: () => formatMessage('Ask a question to collect user input (choice)'),
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
@@ -197,7 +199,8 @@ const config: PluginConfig = {
         order: PROMPTS_ORDER,
         properties: {
           prompt: {
-            label: () => formatMessage('Prompt for confirmation'),
+            label: () => formatMessage('Ask a question - confirmation'),
+            description: () => formatMessage('Ask a question to collect user input (confirmation)'),
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
@@ -223,7 +226,8 @@ const config: PluginConfig = {
         order: PROMPTS_ORDER,
         properties: {
           prompt: {
-            label: () => formatMessage('Prompt for a date'),
+            label: () => formatMessage('Ask a question - date or time'),
+            description: () => formatMessage('Ask a question to collect user input (date or time)'),
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
@@ -245,7 +249,8 @@ const config: PluginConfig = {
         order: PROMPTS_ORDER,
         properties: {
           prompt: {
-            label: () => formatMessage('Prompt for a number'),
+            label: () => formatMessage('Ask a question - number'),
+            description: () => formatMessage('Ask a question to collect user input (number)'),
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
@@ -267,7 +272,8 @@ const config: PluginConfig = {
         order: PROMPTS_ORDER,
         properties: {
           prompt: {
-            label: () => formatMessage('Prompt for text'),
+            label: () => formatMessage('Ask a question - text'),
+            description: () => formatMessage('Ask a question to collect user input (text)'),
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
@@ -281,6 +287,26 @@ const config: PluginConfig = {
         },
       },
       flow: BaseInputSchema,
+    },
+    [SDKKinds.Ask]: {
+      form: {
+        properties: {
+          activity: {
+            label: () => formatMessage('Ask a question - send activity'),
+            description: () => formatMessage('Ask a question to collect user input (send activity)'),
+          },
+        },
+      },
+    },
+    [SDKKinds.OAuthInput]: {
+      form: {
+        properties: {
+          defaultValueResponse: {
+            label: () => formatMessage('Ask a question - OAuth login'),
+            description: () => formatMessage('Ask a question to collect user input (OAuth login)'),
+          },
+        },
+      },
     },
   },
 };

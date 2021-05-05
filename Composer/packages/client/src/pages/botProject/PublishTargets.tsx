@@ -14,10 +14,18 @@ import { OpenConfirmModal } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { isShowAuthDialog } from '../../utils/auth';
+import { useLocation } from '../../utils/hooks';
+import { isShowAuthDialog as shouldShowTokenDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { tableRow, tableRowItem, tableColumnHeader, columnSizes, actionButton } from './styles';
+import {
+  tableRow,
+  tableRowItem,
+  tableColumnHeader,
+  columnSizes,
+  actionButton,
+  publishProfileButtonColumnSize,
+} from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -27,19 +35,22 @@ const publishTargetsContainer = css`
   flex-direction: column;
 `;
 
+const belowTargetsContainer = css`
+  padding: 0 20px 20px 20px;
+`;
+
 const publishTargetsHeader = css`
   display: flex;
   flex-direction: row;
   height: 42px;
+  border-bottom: 1px solid rgb(243, 242, 241);
 `;
 
 const editPublishProfile = {
   root: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
-    paddingLeft: 0,
-    paddingBottom: 5,
   },
 };
 
@@ -47,7 +58,6 @@ const editPublishProfile = {
 
 type PublishTargetsProps = {
   projectId: string;
-  completePartial?: boolean;
   scrollToSectionId?: string;
 };
 
@@ -57,22 +67,28 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
-  const [dialogHidden, setDialogHidden] = useState(true);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showPublishDialog, setShowingPublishDialog] = useState(false);
+  const [showAuthDialog, setShowingAuthDialog] = useState(false);
 
   const publishTargetsRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
 
+  const { location } = useLocation();
+
   useEffect(() => {
-    if (props.completePartial && publishTargets && publishTargets.length > 0) {
-      setCurrent({ item: publishTargets[0], index: 0 });
-      if (isShowAuthDialog(true)) {
-        setShowAuthDialog(true);
-      } else {
-        setDialogHidden(false);
+    if (location.hash === '#completePublishProfile') {
+      if (publishTargets && publishTargets.length > 0) {
+        // clear the hash so that the dialog doesn't open again.
+        window.location.hash = '';
+        setCurrent({ item: publishTargets[0], index: 0 });
+        if (shouldShowTokenDialog(true)) {
+          setShowingAuthDialog(true);
+        } else {
+          setShowingPublishDialog(true);
+        }
       }
     }
-  }, [props.completePartial, publishTargets]);
+  }, [location, publishTargets]);
 
   useEffect(() => {
     if (projectId) {
@@ -103,6 +119,22 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
     }
   };
 
+  const addNewButton = (
+    <ActionButton
+      data-testid={'addNewPublishProfile'}
+      styles={actionButton}
+      onClick={() => {
+        if (shouldShowTokenDialog(true)) {
+          setShowingAuthDialog(true);
+        } else {
+          setShowingPublishDialog(true);
+        }
+      }}
+    >
+      {formatMessage('Add new')}
+    </ActionButton>
+  );
+
   return (
     <Fragment>
       <div ref={publishTargetsRef} css={publishTargetsContainer} id="addNewPublishProfile">
@@ -120,23 +152,23 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
               <div css={tableRowItem(columnSizes[1])} title={p.type}>
                 {p.type}
               </div>
-              <div css={tableRowItem(columnSizes[2])}>
+              <div css={tableRowItem(publishProfileButtonColumnSize)}>
                 <ActionButton
                   data-testid={'editPublishProfile'}
                   styles={editPublishProfile}
                   onClick={() => {
                     setCurrent({ item: p, index: index });
-                    if (isShowAuthDialog(true)) {
-                      setShowAuthDialog(true);
+                    if (shouldShowTokenDialog(true)) {
+                      setShowingAuthDialog(true);
                     } else {
-                      setDialogHidden(false);
+                      setShowingPublishDialog(true);
                     }
                   }}
                 >
                   {formatMessage('Edit')}
                 </ActionButton>
               </div>
-              <div css={tableRowItem(columnSizes[2])}>
+              <div css={tableRowItem(publishProfileButtonColumnSize)}>
                 <ActionButton
                   data-testid={'deletePublishProfile'}
                   styles={editPublishProfile}
@@ -148,35 +180,23 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
             </div>
           );
         })}
-        <ActionButton
-          data-testid={'addNewPublishProfile'}
-          styles={actionButton}
-          onClick={() => {
-            if (isShowAuthDialog(true)) {
-              setShowAuthDialog(true);
-            } else {
-              setDialogHidden(false);
-            }
-          }}
-        >
-          {formatMessage('Add new')}
-        </ActionButton>
       </div>
+      <div css={belowTargetsContainer}>{addNewButton}</div>
       {showAuthDialog && (
         <AuthDialog
           needGraph
           next={() => {
-            setDialogHidden(false);
+            setShowingPublishDialog(true);
           }}
           onDismiss={() => {
-            setShowAuthDialog(false);
+            setShowingAuthDialog(false);
           }}
         />
       )}
-      {!dialogHidden ? (
+      {showPublishDialog ? (
         <PublishProfileDialog
           closeDialog={() => {
-            setDialogHidden(true);
+            setShowingPublishDialog(false);
             // reset current
             setCurrent(null);
           }}

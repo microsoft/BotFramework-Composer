@@ -327,27 +327,19 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
   return url;
 }
 
-export function isShowAuthDialog(needGraph: boolean): boolean {
-  if (isElectron()) {
-    return false;
-  } else if (!(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId)) {
-    return isTokenExpired(getTokenFromCache('accessToken'))
-      ? true
-      : needGraph && isTokenExpired(getTokenFromCache('graphToken'))
-      ? true
-      : false;
-  } else {
-    return false;
-  }
-}
-
 export function userShouldProvideTokens(): boolean {
   if (isElectron()) {
     return false;
-  } else if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId) {
+  } else return !(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId);
+}
+
+export function isShowAuthDialog(needGraph: boolean): boolean {
+  if (userShouldProvideTokens())
+    return (
+      (needGraph && isTokenExpired(getTokenFromCache('graphToken'))) || isTokenExpired(getTokenFromCache('accessToken'))
+    );
+  else {
     return false;
-  } else {
-    return true;
   }
 }
 
