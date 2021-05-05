@@ -167,9 +167,9 @@ const DialogTitle = {
     ),
   },
   REVIEW: {
-    title: formatMessage('Review & create'),
+    title: formatMessage('Review resources to be created'),
     subText: formatMessage(
-      'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
+      'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal. '
     ),
   },
   CONFIG_RESOURCES: {
@@ -376,8 +376,9 @@ export const AzureProvisionDialog: React.FC = () => {
     } --createLuisResource=${createLuisResource} --createLuisAuthoringResource=${createLuisAuthoringResource} --createCosmosDb=${createCosmosDb} --createStorage=${createStorage} --createAppInsights=${createAppInsights} --createQnAResource=${createQnAResource}`;
 
     const instructions = formatMessage(
-      'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created.' +
-        ' Please follow the instructions below to create these resources and provide them to me.\n\n' +
+      'I am creating a conversational experience using Microsoft Bot Framework project. For my project to work,' +
+        'Azure resources, including app registration, hosting, channels, Language Understanding, and QnA Maker,' +
+        'are required. Below are the steps to create these resources.' +
         '1. Follow the instructions at the link below to run the provisioning command (seen below)\n' +
         '2. Copy and paste the resulting JSON and securely share it with me.\n\n' +
         'Provisoning Command:\n' +
@@ -1315,12 +1316,12 @@ export const AzureProvisionDialog: React.FC = () => {
     <Fragment>
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share the following information with your Azure admin to provision resources on your behalf.'
+          'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
         )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
         learnMoreLink="https://aka.ms/how-to-complete-provision-handoff"
-        title={formatMessage('Share resource request')}
+        title={formatMessage('Generate instructions for Azure administrator')}
         onBack={() => {
           setShowHandoff(false);
         }}

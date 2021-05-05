@@ -28,7 +28,7 @@ export const AzureResourceDefinitions = {
   },
   [AzureResourceTypes.BOT_REGISTRATION]: {
     description:
-      'Your own Bot hosted where you want, registered with the Azure Bot Service. Build, connect, and manage Bots to interact with your users wherever they are - from your app or website to Cortana, Skype, Messenger and many other services.',
+      'When registered with the Azure Bot Service,  you can host your bot in any environment and enable customers from a variety of channels, such as your app or website, Direct Line Speech, Microsoft Teams and more.',
     text: 'Microsoft Bot Channels Registration',
     tier: 'F0',
     group: hostingGroupName,
@@ -58,8 +58,7 @@ export const AzureResourceDefinitions = {
     key: AzureResourceTypes.COSMOSDB,
   },
   [AzureResourceTypes.APPINSIGHTS]: {
-    description:
-      'Application performance, availability and usage information at your fingertips. Used for Bot chatting data analyzing.',
+    description: 'Application Insights allows you to monitor and analyze usage and performance of your bot. ',
     text: 'Application Insights',
     tier: 'Pay as you go',
     group: hostingGroupName,
@@ -83,7 +82,7 @@ export const AzureResourceDefinitions = {
   },
   [AzureResourceTypes.BLOBSTORAGE]: {
     description:
-      'Microsoft Azure provides scalable, durable cloud storage, backup, and recovery solutions for any data, big or small. Used for bot transcripts logging.',
+      'Azure blob storage provides scalable cloud storage, backup and recovery solutions for any data, including bot transcript logs. ',
     text: 'Azure Blob Storage',
     tier: 'Standard_LRS',
     group: hostingGroupName,
