@@ -49,6 +49,7 @@ export const ManageSpeech = (props: ManageSpeechProps) => {
         '1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls'
       )}
       hidden={props.hidden}
+      introText={formatMessage('Use Speech to enable voice input and output for your bot.')}
       serviceKeyType={'SpeechServices'}
       serviceName={'Speech'}
       onDismiss={props.onDismiss}
