@@ -35,7 +35,7 @@ export const HeaderText = css`
 `;
 
 export const ContentStyle = css`
-  margin-left: 2px;
+  margin-left: 12px;
   display: flex;
   height: 100%;
   border-top: 1px solid #dddddd;
