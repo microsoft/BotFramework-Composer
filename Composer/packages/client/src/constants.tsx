@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import React from 'react';
 import {
   webAppRuntimeKey,
   functionsRuntimeKey,
@@ -10,6 +11,7 @@ import {
 } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -323,10 +325,17 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
-      afterSubText: formatMessage(
-        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
-      ),
+      subText: (url: string) =>
+        formatMessage.rich(
+          `To connect to a skill, your bot needs the information captured in the skill's manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
+          {
+            link: ({ children }) => (
+              <Link key="learn-more-about-skills" href={url} rel="noopener noreferrer" target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        ),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
@@ -358,14 +367,11 @@ export const selectIntentDialog = {
 
 export const enableOrchestratorDialog = {
   get title() {
-    return formatMessage('Enable Orchestrator Recognizer');
+    return formatMessage('Enable Orchestrator');
   },
   get subText() {
-    return formatMessage('Enable Orchestrator as the recognizer for routing to other skills');
-  },
-  get content() {
     return formatMessage(
-      'Multi-bot projects work best with the Orchestrator recognizer set at the dispatching dialog (typically the root dialog). Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that handles the intent. Orchestrator does not support entity extraction. If you plan to combine entity extraction and routing at the root dialog, use LUIS instead.'
+      'A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill.'
     );
   },
 };
