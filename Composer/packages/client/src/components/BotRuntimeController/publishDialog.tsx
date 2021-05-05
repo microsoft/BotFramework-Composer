@@ -175,7 +175,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
         <br />
         {Text.LUISDEPLOY}
         <Link href={Links.LUIS} target="_blank">
-          {formatMessage('Learn more.')}
+          {formatMessage('Learn more')}
         </Link>
       </Fragment>
     );
@@ -187,7 +187,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
         <br />
         {Text.QNADEPLOY}
         <Link href={Links.QNA} target="_blank">
-          {formatMessage('Learn more.')}
+          {formatMessage('Learn more')}
         </Link>
       </Fragment>
     );

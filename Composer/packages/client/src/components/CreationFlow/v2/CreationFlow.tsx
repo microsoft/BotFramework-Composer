@@ -200,7 +200,10 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           path="create/:runtimeLanguage/:templateId"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
+          onDismiss={() => {
+            TelemetryClient.track('CreationCancelled');
+            handleDismiss();
+          }}
           onSubmit={handleSubmit}
         />
         <DefineConversationV2
@@ -209,14 +212,20 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           path="create/:templateId"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
+          onDismiss={() => {
+            TelemetryClient.track('CreationCancelled');
+            handleDismiss();
+          }}
           onSubmit={handleSubmit}
         />
         <CreateOptionsV2
           fetchReadMe={fetchReadMe}
           path="create"
           templates={templateProjects}
-          onDismiss={handleDismiss}
+          onDismiss={() => {
+            TelemetryClient.track('CreationCancelled');
+            handleDismiss();
+          }}
           onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
         />

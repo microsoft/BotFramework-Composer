@@ -16,14 +16,19 @@ import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
-import { recentProjectsState, feedState, warnAboutDotNetState } from '../../recoilModel/atoms/appState';
+import {
+  recentProjectsState,
+  feedState,
+  warnAboutDotNetState,
+  warnAboutFunctionsState,
+} from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
 import stackoverflowIcon from '../../images/stackoverflowIcon.svg';
 import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 import { InstallDepModal } from '../../components/InstallDepModal';
-import { missingDotnetVersionError } from '../../utils/runtimeErrors';
+import { missingDotnetVersionError, missingFunctionsError } from '../../utils/runtimeErrors';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -33,29 +38,29 @@ import * as home from './styles';
 const resources = [
   {
     imageCover: composerDocumentIcon,
-    title: formatMessage('Composer documentation'),
-    description: formatMessage('Find tutorials, step-by-step guides. Discover what you can build with Composer.'),
-    moreText: formatMessage('Read documentation'),
+    title: formatMessage('Documentation'),
+    description: formatMessage('Everything you need to build sophisticated conversational experiences'),
+    moreText: formatMessage('Learn more'),
     url: 'https://docs.microsoft.com/en-us/composer/',
   },
   {
     imageCover: githubIcon,
-    title: formatMessage('Composer on GitHub'),
-    description: formatMessage('Check out the resources on GitHub.'),
-    moreText: formatMessage('Go to Composer repository'),
+    title: formatMessage('GitHub'),
+    description: formatMessage('View documentation, samples, and extensions'),
+    moreText: formatMessage('Open GitHub'),
     url: 'https://github.com/microsoft/BotFramework-Composer',
   },
   {
     imageCover: githubIcon,
     title: formatMessage('Bot Framework Emulator'),
-    description: formatMessage('Test and debug bots built using the Bot Framework SDK. Available on GitHub.'),
+    description: formatMessage('Test and debug your bots in Bot Framework Emulator'),
     moreText: formatMessage('Download Emulator'),
     url: 'https://github.com/microsoft/BotFramework-Emulator/releases',
   },
   {
     imageCover: stackoverflowIcon,
     title: formatMessage('Stack Overflow'),
-    description: formatMessage('Engage with other bot builders. Ask and answer questions.'),
+    description: formatMessage('Connect with the community to ask and answer questions about Composer'),
     moreText: formatMessage('Go to Stack Overflow'),
     url: 'https://stackoverflow.com/questions/tagged/botframework',
   },
@@ -73,10 +78,15 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
-  const { openProject, setCreationFlowStatus, setCreationFlowType, setWarnAboutDotNet } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    openProject,
+    setCreationFlowStatus,
+    setCreationFlowType,
+    setWarnAboutDotNet,
+    setWarnAboutFunctions,
+  } = useRecoilValue(dispatcherState);
   const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
+  const warnAboutFunctions = useRecoilValue(warnAboutFunctionsState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -95,7 +105,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
-      text: formatMessage('New'),
+      text: formatMessage('Create new'),
       buttonProps: {
         iconProps: {
           iconName: 'Add',
@@ -156,10 +166,10 @@ const Home: React.FC<RouteComponentProps> = () => {
   return (
     <div css={home.outline}>
       <div css={home.page}>
-        <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
+        <h1 css={home.title}>{formatMessage(`Welcome to Bot Framework Composer`)}</h1>
         <div css={home.leftPage} role="main">
           <div css={home.recentBotsContainer}>
-            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
+            <h2 css={home.subtitle}>{formatMessage(`Recent`)}</h2>
             <Toolbar css={home.toolbar} toolbarItems={toolbarItems} />
             {recentProjects.length > 0 ? (
               <RecentBotList
@@ -178,19 +188,22 @@ const Home: React.FC<RouteComponentProps> = () => {
                   src={noRecentBotsCover}
                 />
                 <div css={home.noRecentBotsDescription}>
-                  {formatMessage.rich('You don’t have any bot yet. Start to <Link>create a new bot</Link>', {
-                    Link: ({ children }) => (
-                      <Link
-                        key="create-new-bot-link"
-                        onClick={() => {
-                          onClickNewBot();
-                          TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
-                        }}
-                      >
-                        {children}
-                      </Link>
-                    ),
-                  })}
+                  {formatMessage.rich(
+                    'Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>',
+                    {
+                      Link: ({ children }) => (
+                        <Link
+                          key="create-new-bot-link"
+                          onClick={() => {
+                            onClickNewBot();
+                            TelemetryClient.track('ToolbarButtonClicked', { name: 'new' });
+                          }}
+                        >
+                          {children}
+                        </Link>
+                      ),
+                    }
+                  )}
                 </div>
               </div>
             )}
@@ -255,6 +268,19 @@ const Home: React.FC<RouteComponentProps> = () => {
           text={missingDotnetVersionError.message}
           title={formatMessage('.NET required')}
           onDismiss={() => setWarnAboutDotNet(false)}
+        />
+      )}
+      {warnAboutFunctions && (
+        <InstallDepModal
+          downloadLink={missingFunctionsError.link.url}
+          downloadLinkText={formatMessage('Install Azure Functions')}
+          learnMore={{
+            text: formatMessage('Learn more'),
+            link: missingFunctionsError.linkAfterMessage.url,
+          }}
+          text={missingFunctionsError.message}
+          title={formatMessage('Azure Functions required')}
+          onDismiss={() => setWarnAboutFunctions(false)}
         />
       )}
     </div>

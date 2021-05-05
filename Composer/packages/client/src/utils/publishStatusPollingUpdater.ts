@@ -99,6 +99,10 @@ export class PublishStatusPollingUpdater {
   isSameUpdater(botProjectId: string, targetName: string) {
     return this.botProjectId === botProjectId && this.publishTargetName === targetName;
   }
+
+  getPublishTargetName() {
+    return this.publishTargetName;
+  }
 }
 
 export const pollingUpdaterList: PublishStatusPollingUpdater[] = [];

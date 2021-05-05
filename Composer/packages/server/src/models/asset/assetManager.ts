@@ -296,6 +296,7 @@ export class AssetManager {
                 webAppSupported: keywords.includes('bf-js-webapp'),
               };
             }
+            templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
           }
           return templateToReturn;
         });

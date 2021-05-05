@@ -38,8 +38,10 @@ import {
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
   warnAboutDotNetState,
+  warnAboutFunctionsState,
   settingsState,
   creationFlowStatusState,
+  orchestratorForSkillsDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -168,6 +170,7 @@ export const projectDispatcher = () => {
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
         navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
+        callbackHelpers.set(orchestratorForSkillsDialogState, true);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
@@ -740,6 +743,10 @@ export const projectDispatcher = () => {
     callbackHelpers.set(warnAboutDotNetState, warn);
   });
 
+  const setWarnAboutFunctions = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutFunctionsState, warn);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -765,6 +772,7 @@ export const projectDispatcher = () => {
     setCurrentProjectId,
     setProjectError,
     setWarnAboutDotNet,
+    setWarnAboutFunctions,
     fetchReadMe,
   };
 };
