@@ -71,7 +71,7 @@ context('breadcrumb', () => {
   });
 
   it('can create different kinds of triggers ', () => {
-    cy.visitPage('Design');
+    cy.visitPage('Create');
     cy.findByTestId('DialogHeader-TestBot_TestSample').click();
     cy.findByTestId('recognizerTypeDropdown').click();
     cy.findByText('Regular expression recognizer').click();

@@ -60,7 +60,6 @@ export const OrchestratorForSkillsDialog = () => {
     <DialogWrapper
       dialogType={DialogTypes.CreateFlow}
       isOpen={setVisibility()}
-      subText={enableOrchestratorDialog.subText}
       title={enableOrchestratorDialog.title}
       onDismiss={onDismissHandler}
     >
