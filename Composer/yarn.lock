@@ -180,23 +180,6 @@
     uuid "^3.3.2"
     xml2js "^0.4.19"
 
-"@azure/msal-common@^1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-1.7.2.tgz#b0061367efbfd459ebd11f6851ff36121db3278c"
-  integrity sha512-3/voCdFKONENX+5tMrNOBSrVJb6NbE7YB8vc4FZ/4ZbjpK7GVtq9Bu1MW+HZhrmsUzSF/joHx0ZIJDYIequ/jg==
-  dependencies:
-    debug "^4.1.1"
-
-"@azure/msal-node@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@azure/msal-node/-/msal-node-1.0.0-beta.1.tgz#abc122385f978db0744ba79422ae424dec21e251"
-  integrity sha512-dO/bgVScpl5loZfsfhHXmFLTNoDxGvUiZIsJCe1+HpHyFWXwGsBZ71P5ixbxRhhf/bPpZS3X+/rm1Fq2uUucJw==
-  dependencies:
-    "@azure/msal-common" "^1.7.2"
-    axios "^0.19.2"
-    jsonwebtoken "^8.5.1"
-    uuid "^8.3.0"
-
 "@babel/cli@7.2.3":
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.2.3.tgz#1b262e42a3e959d28ab3d205ba2718e1923cfee6"
@@ -6726,7 +6709,7 @@ axios-https-proxy@^0.1.1:
   dependencies:
     https-proxy-agent "^2.2.1"
 
-axios@^0.18.0, axios@^0.19.2, axios@^0.21.1, axios@~0.21.1:
+axios@^0.18.0, axios@^0.21.1, axios@~0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
