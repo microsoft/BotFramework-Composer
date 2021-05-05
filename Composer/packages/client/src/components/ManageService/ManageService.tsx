@@ -558,7 +558,7 @@ export const ManageService = (props: ManageServiceProps) => {
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
             {formatMessage(
-              'Select your Azure directory, then choose the subscription where your existing {service} resource is located. ',
+              'Select your Azure directory, then choose the subscription where your existing {service} resource is located.',
               { service: props.serviceName }
             )}
             {props.learnMore ? (
@@ -775,7 +775,7 @@ export const ManageService = (props: ManageServiceProps) => {
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
             {formatMessage(
-              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource. ',
+              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource.',
               { service: props.serviceName }
             )}
             {props.learnMore ? (
