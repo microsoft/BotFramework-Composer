@@ -66,8 +66,8 @@ export function CreateOptions(props: CreateOptionsProps) {
   const dialogWrapperProps = DialogCreationCopy.CREATE_OPTIONS;
 
   const options: IChoiceGroupOption[] = [
-    { key: 'Create', text: formatMessage('Create a new bot') },
-    { key: 'Connect', text: formatMessage('Connect to an existing bot') },
+    { key: 'Create', text: formatMessage('Use Azure Bot to create a new conversation') },
+    { key: 'Connect', text: formatMessage('Apply my Azure Bot resources for an existing bot') },
   ];
 
   const handleChange = (e, option) => {
@@ -112,7 +112,7 @@ export function CreateOptions(props: CreateOptionsProps) {
       >
         <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
         <DialogFooter>
-          <PrimaryButton data-testid="NextStepButton" text={formatMessage('Open')} onClick={handleJumpToNext} />
+          <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </DialogWrapper>

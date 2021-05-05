@@ -80,7 +80,7 @@ context('breadcrumb', () => {
     cy.findByTestId('DialogHeader-TestBot_TestSample').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click({ force: true });
+    cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Intent recognized"]').click();
     cy.findByTestId('TriggerName').type('myTrigger1');
@@ -92,7 +92,7 @@ context('breadcrumb', () => {
     cy.findByTestId('DialogHeader-TestBot_TestSample').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click({ force: true });
+    cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Dialog events"]').click();
     cy.findByText('Select an event type').click();
@@ -104,7 +104,7 @@ context('breadcrumb', () => {
     cy.findByTestId('DialogHeader-TestBot_TestSample').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click({ force: true });
+    cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Custom events"]').click();
     cy.findByTestId('CustomEventName').type('myCustomEvent');
@@ -115,7 +115,7 @@ context('breadcrumb', () => {
     cy.findByTestId('DialogHeader-TestBot_TestSample').within(() => {
       cy.findByTestId('dialogMoreButton').click({ force: true });
     });
-    cy.findAllByText('Add a trigger').click({ force: true });
+    cy.findAllByText('Add new trigger').click({ force: true });
     cy.findByTestId('triggerTypeDropDown').click();
     cy.get('[title="Activities"]').click();
     cy.findByText('Select an activity type').click();

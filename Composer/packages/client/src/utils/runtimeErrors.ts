@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 export const missingDotnetVersionError = {
   message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
   linkAfterMessage: {
-    text: formatMessage('Learn more.'),
+    text: formatMessage('Learn more'),
     url: 'https://aka.ms/install-composer',
   },
   link: {
@@ -18,7 +18,7 @@ export const missingDotnetVersionError = {
 export const missingFunctionsError = {
   message: formatMessage('To run this bot, Composer needs Azure Functions Core Tools.'),
   linkAfterMessage: {
-    text: formatMessage('Learn more.'),
+    text: formatMessage('Learn more'),
     url:
       'https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools',
   },

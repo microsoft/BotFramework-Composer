@@ -224,6 +224,12 @@ export const Header = () => {
     }
   }, [isWebChatPanelVisible]);
 
+  useEffect(() => {
+    if (!hideBotController && showGetStarted) {
+      setShowGetStarted(false);
+    }
+  }, [hideBotController]);
+
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   const languageListOptions = useMemo(() => {
@@ -339,7 +345,7 @@ export const Header = () => {
             hasCondensedHeadline
             calloutProps={{ directionalHint: DirectionalHint.bottomAutoEdge }}
             headline={formatMessage('You’re ready to go!')}
-            target="#startbot"
+            target="#startBotPanelElement"
             onDismiss={hideTeachingBubble}
           >
             {formatMessage(
