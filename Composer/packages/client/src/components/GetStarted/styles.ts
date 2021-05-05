@@ -7,14 +7,14 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 export const h3Style = css`
   font-size: ${FontSizes.size14};
   margin-top: 24px;
-  font-weight: ${FontWeights.regular};
+  font-weight: ${FontWeights.semibold};
   margin-bottom: 4px;
 `;
 
 export const topH3Style = css`
   font-size: ${FontSizes.size14};
   margin-top: 12px;
-  font-weight: ${FontWeights.regular};
+  font-weight: ${FontWeights.semibold};
   margin-bottom: 4px;
 `;
 
