@@ -56,9 +56,6 @@
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot."
   },
-  "a_publishing_profile_provides_the_secure_connectiv_e203980e": {
-    "message": "A publishing profile provides the secure connectivity required to publish your bot. "
-  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
   },
@@ -223,9 +220,6 @@
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
-  },
-  "add_new_publishing_profile_95980909": {
-    "message": "Add new publishing profile"
   },
   "add_new_question_85612b7f": {
     "message": "Add new question"
@@ -1949,8 +1943,8 @@
   "install_the_update_and_restart_composer_fac30a61": {
     "message": "Install the update and restart Composer."
   },
-  "instructions_for_your_azure_admin_aa780628": {
-    "message": "Instructions for your Azure admin"
+  "instructions_2f88ee72": {
+    "message": "Instructions"
   },
   "integer_7f378275": {
     "message": "integer"
@@ -3844,6 +3838,9 @@
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
+  },
+  "to_test_run_and_publish_your_bot_it_needs_azure_re_e33d8fd": {
+    "message": "To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels. Other resources, such as language understanding and storage are optional. A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources."
   },
   "to_understand_natural_language_input_and_direct_th_fc982d4a": {
     "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
