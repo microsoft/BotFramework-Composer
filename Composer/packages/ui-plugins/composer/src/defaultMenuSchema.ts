@@ -47,7 +47,7 @@ export const DefaultMenuSchema: MenuUISchema = {
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.Ask]: {
-    label: formatMessage('Ask Activity'),
+    label: formatMessage('Ask activity'),
     submenu: [SubmenuNames.AskQuestion],
   },
   // OAuthInput appears twice
@@ -186,5 +186,9 @@ export const DefaultMenuSchema: MenuUISchema = {
   [SDKKinds.ThrowException]: {
     label: formatMessage('Throw exception'),
     submenu: [SubmenuNames.Debugging],
+  },
+  [SDKKinds.SendHandoffActivity]: {
+    label: formatMessage('Send handoff activity'),
+    submenu: [SubmenuNames.AccessExternalResources],
   },
 };

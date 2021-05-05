@@ -66,7 +66,7 @@ export function useRecognizerConfig(): RecognizerSchemaConfig {
     const recognizerWidgets = plugins.widgets?.recognizer ?? {};
     const schemas = Object.entries(plugins.uiSchema)
       .filter(([$kind, uiOptions]) => {
-        return Boolean(uiOptions?.recognizer && appSchema?.definitions?.[$kind]);
+        return Boolean(uiOptions?.recognizer && (appSchema?.definitions?.[$kind] || $kind === FallbackRecognizerKey));
       })
       .map(([$kind, uiOptions]) => {
         const recognizerOptions = uiOptions?.recognizer as RecognizerOptions;

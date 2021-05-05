@@ -55,7 +55,7 @@ context('Home Page ', () => {
     cy.visit('/home');
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-Toolbar-New').within(() => {
-      cy.findByText('New').click();
+      cy.findByText('Create new').click();
     });
     cy.wait(3000);
     cy.findByTestId('@microsoft/generator-bot-empty').click();
