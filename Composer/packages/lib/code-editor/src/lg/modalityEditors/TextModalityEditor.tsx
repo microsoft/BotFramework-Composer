@@ -40,9 +40,9 @@ const TextModalityEditor = React.memo(
     return (
       <ModalityEditorContainer
         contentDescription={formatMessage(
-          'One of the variations added below will be selected at random by the LG library.'
+          'Response alternatives will be selected at random for a more dynamic conversation.'
         )}
-        contentTitle={formatMessage('Response Variations')}
+        contentTitle={formatMessage('Responses')}
         disableRemoveModality={disableRemoveModality}
         modalityTitle={formatMessage('Text')}
         modalityType="Text"
