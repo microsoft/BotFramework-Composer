@@ -887,6 +887,9 @@
   "copy_9748f9f": {
     "message": "Copy"
   },
+  "copy_command_to_clipboard_4649910f": {
+    "message": "Copy command to clipboard"
+  },
   "copy_content_for_translation_7affbcbb": {
     "message": "Copy content for translation"
   },
@@ -3308,11 +3311,11 @@
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
   },
-  "select_your_azure_directory_then_choose_the_subscr_28e935bc": {
-    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located. "
+  "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
+    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
   },
-  "select_your_azure_directory_then_choose_the_subscr_e3d67edf": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource. "
+  "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
+    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -3382,6 +3385,9 @@
   },
   "settings_menu_c99ecc6d": {
     "message": "Settings menu"
+  },
+  "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
+    "message": "Setup tunneling software to test your remote skill"
   },
   "share_as_a_skill_63554df2": {
     "message": "Share as a skill"
@@ -3638,8 +3644,8 @@
   "the_app_id_of_your_application_registration_16fba1a9": {
     "message": "The app id of your application registration"
   },
-  "the_azure_bot_created_in_azure_bot_services_contai_e1514f26": {
-    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot. Learn more."
+  "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
+    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
   },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
