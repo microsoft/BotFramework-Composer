@@ -76,7 +76,7 @@ export type Notification = {
   read?: boolean;
   hidden?: boolean;
   onRenderCardContent?: ((props: Notification) => JSX.Element) | React.FC<any>;
-  data?: Record<string, unknown>;
+  data?: Record<string, any>;
 };
 
 export type ApplicationContextApi = {
