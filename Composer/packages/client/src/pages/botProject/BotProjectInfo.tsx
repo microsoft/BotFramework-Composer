@@ -26,6 +26,7 @@ const valueStyle = css`
 const headerStyle = css`
   font-size: 20px;
   font-weight: 600;
+  margin-top: 25px;
 `;
 
 const rootTextStyle = css`
@@ -61,12 +62,12 @@ export const BotProjectInfo: React.FC<RouteComponentProps<{
                 setReadmeHidden(false);
               }}
             >
-              {formatMessage('View readme')}
+              {formatMessage('View Readme')}
             </Link>
             <DisplayMarkdownDialog
               content={readme}
               hidden={readmeHidden}
-              title={formatMessage('Project readme')}
+              title={formatMessage('Project Readme')}
               onDismiss={() => {
                 setReadmeHidden(true);
               }}
