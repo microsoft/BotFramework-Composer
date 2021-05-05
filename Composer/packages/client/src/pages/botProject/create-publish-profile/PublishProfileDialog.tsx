@@ -41,10 +41,11 @@ const Page = {
 const formatDialogTitle = (current) => {
   return {
     title: current ? formatMessage('Edit publishing profile') : formatMessage('Create a publishing profile'),
-    subText: formatMessage(`To test, run and publish your bot, it needs Azure resources such as app registration,
-          hosting and channels. Other resources, such as language understanding and storage are optional.
-          A publishing profile contains all of the information necessary to provision and publish your bot,
-          including its Azure resources. `),
+    subText: formatMessage(
+      'To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels.' +
+        ' Other resources, such as language understanding and storage are optional.' +
+        ' A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources.'
+    ),
   };
 };
 

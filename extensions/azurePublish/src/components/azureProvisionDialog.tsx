@@ -169,7 +169,7 @@ const DialogTitle = {
   REVIEW: {
     title: formatMessage('Review resources to be created'),
     subText: formatMessage(
-      'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal. '
+      'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal.'
     ),
   },
   CONFIG_RESOURCES: {

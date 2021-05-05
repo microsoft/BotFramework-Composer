@@ -79,13 +79,16 @@ const CreateActionContent = () => {
       <Summary>
         <Text>
           {formatMessage(
-            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to '
+            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to'
           )}
         </Text>
+        &nbsp;
         <LearnMoreLink href="https://aka.ms/azureSignUpPage" target="_blank">
           {formatMessage('Microsoft Azure')}
         </LearnMoreLink>
-        <Text>{formatMessage(' is required. ')}</Text>
+        &nbsp;
+        <Text>{formatMessage('is required.')}</Text>
+        &nbsp;
         <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
           {formatMessage('Learn more')}
         </LearnMoreLink>
@@ -117,7 +120,8 @@ const CreateActionContent = () => {
         </Instruction>
       </Details>
       <Summary>
-        <Text>{formatMessage('Once provisioned, your new resources will be available in the Azure portal. ')}</Text>
+        <Text>{formatMessage('Once provisioned, your new resources will be available in the Azure portal.')}</Text>
+        &nbsp;
         <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
           {formatMessage('Learn More')}
         </LearnMoreLink>

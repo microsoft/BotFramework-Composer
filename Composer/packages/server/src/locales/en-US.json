@@ -3830,8 +3830,8 @@
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
   },
-  "to_test_run_and_publish_your_bot_it_needs_azure_re_a9733e8f": {
-    "message": "To test, run and publish your bot, it needs Azure resources such as app registration,\n          hosting and channels. Other resources, such as language understanding and storage are optional.\n          A publishing profile contains all of the information necessary to provision and publish your bot,\n          including its Azure resources. "
+  "to_test_run_and_publish_your_bot_it_needs_azure_re_e33d8fd": {
+    "message": "To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels. Other resources, such as language understanding and storage are optional. A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources."
   },
   "to_understand_natural_language_input_and_direct_th_fc982d4a": {
     "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
