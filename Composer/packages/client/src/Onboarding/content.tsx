@@ -81,9 +81,9 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
     id: 'publish',
     steps: [
       {
-        id: 'projectSettings',
+        id: 'publish',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navProjectsettings',
+        targetId: 'navPublish',
       },
     ],
     title: formatMessage('Configure and publish'),
