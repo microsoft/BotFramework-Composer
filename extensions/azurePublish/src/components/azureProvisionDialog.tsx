@@ -376,9 +376,9 @@ export const AzureProvisionDialog: React.FC = () => {
     } --createLuisResource=${createLuisResource} --createLuisAuthoringResource=${createLuisAuthoringResource} --createCosmosDb=${createCosmosDb} --createStorage=${createStorage} --createAppInsights=${createAppInsights} --createQnAResource=${createQnAResource}`;
 
     const instructions = formatMessage(
-      'I am creating a conversational experience using Microsoft Bot Framework project. ' +
-        'For my project to work, Azure resources, including app registration, hosting, channels, Language Understanding, and QnA Maker, are required.' +
-        'Below are the steps to create these resources.\n\n' +
+      'I am creating a conversational experience using Microsoft Bot Framework project.' +
+        ' For my project to work, Azure resources, including app registration, hosting, channels, Language Understanding, and QnA Maker, are required.' +
+        ' Below are the steps to create these resources.\n\n' +
         '1. Follow the instructions at the link below to run the provisioning command (seen below)\n' +
         '2. Copy and paste the resulting JSON and securely share it with me.\n\n' +
         'Provisoning Command:\n' +
