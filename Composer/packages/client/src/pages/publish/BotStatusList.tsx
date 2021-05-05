@@ -219,7 +219,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       name: formatMessage('Publish target'),
       className: 'publishTarget',
       fieldName: 'target',
-      minWidth: 100,
+      minWidth: 150,
       maxWidth: 200,
       isRowHeader: true,
       data: 'string',

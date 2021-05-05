@@ -339,7 +339,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       <div css={title}>{formatMessage('Azure Language Understanding')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>.',
+          'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
               <Link key="luis-root-bot-settings-page" href={'https://www.luis.ai/'} target="_blank">

@@ -158,9 +158,6 @@
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
   },
-  "add_a_package_2857cc9": {
-    "message": "Add a package"
-  },
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
   },
@@ -272,8 +269,8 @@
   "almost_there_f90939cb": {
     "message": "Almost there!"
   },
-  "an_app_id_is_used_for_communication_between_your_b_1763a926": {
-    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more.</a>"
+  "an_app_id_is_used_for_communication_between_your_b_255025e1": {
+    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
@@ -1319,12 +1316,6 @@
   "edit_kb_name_5e2d8c5b": {
     "message": "Edit KB name"
   },
-  "edit_lg_c14451bf": {
-    "message": "Edit LG"
-  },
-  "edit_lu_32fd20f7": {
-    "message": "Edit LU"
-  },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
   },
@@ -2051,8 +2042,8 @@
   "language_understanding_authoring_key_74a41a4": {
     "message": "Language Understanding authoring key"
   },
-  "language_understanding_luis_is_an_azure_cognitive__5181510f": {
-    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>."
+  "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
+    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>"
   },
   "language_understanding_region_ec8fb05c": {
     "message": "Language Understanding region"
@@ -2095,9 +2086,6 @@
   },
   "learn_more_about_your_property_schema_3a0a0890": {
     "message": "Learn more about your property schema"
-  },
-  "learn_more_c08939e8": {
-    "message": "Learn more."
   },
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
@@ -2266,9 +2254,6 @@
   },
   "manage_bot_languages_9ec36fd7": {
     "message": "Manage bot languages"
-  },
-  "manage_connections_442f1693": {
-    "message": "Manage connections"
   },
   "manage_profiles_715c2092": {
     "message": "Manage profiles"
@@ -2633,8 +2618,8 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
-  "open_manifest_ffb556af": {
-    "message": "Open Manifest"
+  "open_manifest_6c334f9": {
+    "message": "Open manifest"
   },
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
@@ -2900,6 +2885,9 @@
   "publishing_profile_6d7064ce": {
     "message": "Publishing Profile"
   },
+  "publishing_profile_a2cd5d52": {
+    "message": "Publishing profile"
+  },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
   },
@@ -2926,6 +2914,9 @@
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
     "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>"
+  },
+  "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
+    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
     "message": "QnA Maker subscription key:"
@@ -3115,9 +3106,6 @@
   },
   "retrieve_app_id_from_publishing_profile_b6643a25": {
     "message": "Retrieve App ID from publishing profile"
-  },
-  "review_and_configure_your_bot_s_resources_and_add__c0e30e9a": {
-    "message": "Review and configure your bot''s resources, and add new connections such as speech, Microsoft Teams and more."
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -3443,8 +3431,8 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
-  "skills_can_be_called_by_external_bots_allow_other__482dbe75": {
-    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more.</a>"
+  "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>"
   },
   "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
     "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
@@ -4109,8 +4097,8 @@
   "view_on_npm_2051324d": {
     "message": "View on npm"
   },
-  "view_readme_37414cb9": {
-    "message": "View readme"
+  "view_readme_30ed498f": {
+    "message": "View Readme"
   },
   "visit_a_this_page_a_to_learn_more_about_entity_def_c7c862a9": {
     "message": "Visit <a>this page</a> to learn more about entity definition."

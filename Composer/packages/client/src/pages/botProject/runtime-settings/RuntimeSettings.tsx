@@ -273,7 +273,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           value={runtimeCommand}
           onBlur={() => handleRuntimeSettingOnBlur('command')}
           onChange={handleRuntimeSettingOnChange('command')}
-          onRenderLabel={onRenderLabel}
         />
       </div>
       {needsUpdate && (

@@ -210,6 +210,12 @@ export const Header = () => {
     }
   }, [isWebChatPanelVisible]);
 
+  useEffect(() => {
+    if (!hideBotController && showGetStarted) {
+      setShowGetStarted(false);
+    }
+  }, [hideBotController]);
+
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   const languageListOptions = useMemo(() => {
