@@ -18,6 +18,6 @@ export const BotSettings = {
   languageBotLanauge: formatMessage('Bot language (active)'),
   languageDefaultLanauge: formatMessage('Default language'),
   languageAddLanauge: formatMessage('Create copy to translate bot content'),
-  learnMore: formatMessage('Learn more.'),
+  learnMore: formatMessage('Learn more'),
   settingsTitle: formatMessage('Bot settings'),
 };

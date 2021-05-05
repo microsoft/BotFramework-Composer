@@ -270,7 +270,7 @@ export const mediaCardItem = {
   `,
 };
 
-export const meidiaCardNoCoverItem = {
+export const mediaCardNoCoverItem = {
   ...mediaCardItem,
   imageCover: css`
     ${mediaCardItem.imageCover};
