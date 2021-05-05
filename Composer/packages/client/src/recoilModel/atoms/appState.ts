@@ -184,7 +184,7 @@ export const runtimeSettingsState = atom<{
   },
 });
 
-export const botEndpointsState = atom<Record<string, string>>({
+export const botEndpointsState = atom<Record<string, { url: string; port: number }>>({
   key: getFullyQualifiedKey('botEndpoints'),
   default: {},
 });
