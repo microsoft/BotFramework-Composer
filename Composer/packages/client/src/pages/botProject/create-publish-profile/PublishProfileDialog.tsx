@@ -56,6 +56,15 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
   const [selectedType, setSelectType] = useState<PublishType | undefined>();
 
+  function formatDialogTitle() {
+    return {
+      title: current ? formatMessage('Edit publishing profile') : formatMessage('Create a publishing profile'),
+      subText: formatMessage(`To test, run and publish your bot, it needs Azure resources such as app registration,
+          hosting and channels. Other resources, such as language understanding and storage are optional.
+          A publishing profile contains all of the information necessary to provision and publish your bot,
+          including its Azure resources. `),
+    };
+  }
   const [dialogTitle, setTitle] = useState(formatDialogTitle());
 
   useEffect(() => {
@@ -123,16 +132,6 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
       setPage(Page.ProfileForm);
     }
   }, [current, projectId]);
-
-  function formatDialogTitle() {
-    return {
-      title: current ? formatMessage('Edit publishing profile') : formatMessage('Create a publishing profile'),
-      subText: formatMessage(`To test, run and publish your bot, it needs Azure resources such as app registration,
-          hosting and channels. Other resources, such as language understanding and storage are optional.
-          A publishing profile contains all of the information necessary to provision and publish your bot,
-          including its Azure resources. `),
-    };
-  }
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
