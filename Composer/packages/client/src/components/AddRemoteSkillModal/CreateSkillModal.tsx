@@ -10,7 +10,6 @@ import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -196,15 +195,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       ) : (
         <Fragment>
           <div style={{ marginBottom: '16px' }}>
-            {addSkillDialog.SKILL_MANIFEST_FORM.preSubText}
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" style={{ padding: '0 5px' }} target="_blank">
-              {formatMessage('Get an overview')}
-            </Link>
-            or
-            <Link href="https://aka.ms/bf-composer-docs-publish-bot" style={{ padding: '0 5px' }} target="_blank">
-              {formatMessage('learn how to build a skill')}
-            </Link>
-            {addSkillDialog.SKILL_MANIFEST_FORM.afterSubText}
+            {addSkillDialog.SKILL_MANIFEST_FORM.subText('https://aka.ms/bf-composer-docs-publish-bot')}
           </div>
           <Separator />
           <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
@@ -212,7 +203,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
               <TextField
                 required
                 errorMessage={formDataErrors.manifestUrl}
-                label={formatMessage('Skill Manifest Url')}
+                label={formatMessage('Skill Manifest URL')}
+                placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
                 value={formData.manifestUrl || ''}
                 onChange={handleManifestUrlChange}
               />

@@ -80,7 +80,7 @@ describe('<BotController />', () => {
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
-    await findByText('Start all bots');
+    await findByText('Start all');
   });
 
   it('should stop all bots if Stop all bots is clicked', async () => {
