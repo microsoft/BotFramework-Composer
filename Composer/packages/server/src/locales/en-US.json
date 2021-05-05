@@ -158,9 +158,6 @@
   "add_a_new_value_24ca14ac": {
     "message": "Add a new value"
   },
-  "add_a_package_2857cc9": {
-    "message": "Add a package"
-  },
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
   },
@@ -169,6 +166,9 @@
   },
   "add_allowed_callers_7188d3d4": {
     "message": "Add allowed callers"
+  },
+  "add_alternative_662902c1": {
+    "message": "Add alternative"
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
@@ -230,9 +230,6 @@
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Add new validation rule here"
   },
-  "add_new_variation_e49425ea": {
-    "message": "Add new variation"
-  },
   "add_packages_3ab0558c": {
     "message": "Add packages"
   },
@@ -272,8 +269,8 @@
   "almost_there_f90939cb": {
     "message": "Almost there!"
   },
-  "an_app_id_is_used_for_communication_between_your_b_1763a926": {
-    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more.</a>"
+  "an_app_id_is_used_for_communication_between_your_b_255025e1": {
+    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "An authoring key is created automatically when you create a LUIS account."
@@ -341,6 +338,9 @@
   "application_updates_bdf5f8b6": {
     "message": "Application Updates"
   },
+  "apply_my_azure_bot_resources_for_an_existing_bot_4979e343": {
+    "message": "Apply my Azure Bot resources for an existing bot"
+  },
   "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
     "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
   },
@@ -383,8 +383,56 @@
   "ask_a_question_92ef7e0c": {
     "message": "Ask a question"
   },
-  "ask_activity_82c174e2": {
-    "message": "Ask Activity"
+  "ask_a_question_confirmation_434ad620": {
+    "message": "Ask a question - confirmation"
+  },
+  "ask_a_question_date_or_time_6e896738": {
+    "message": "Ask a question - date or time"
+  },
+  "ask_a_question_file_or_attachment_eebb66b2": {
+    "message": "Ask a question - file or attachment"
+  },
+  "ask_a_question_multi_choice_5fce9e3e": {
+    "message": "Ask a question - multi choice"
+  },
+  "ask_a_question_number_28cb66b1": {
+    "message": "Ask a question - number"
+  },
+  "ask_a_question_oauth_login_8ec5ccd5": {
+    "message": "Ask a question - OAuth login"
+  },
+  "ask_a_question_send_activity_19848af2": {
+    "message": "Ask a question - send activity"
+  },
+  "ask_a_question_text_ba993a5e": {
+    "message": "Ask a question - text"
+  },
+  "ask_a_question_to_collect_user_input_choice_c1fbb541": {
+    "message": "Ask a question to collect user input (choice)"
+  },
+  "ask_a_question_to_collect_user_input_confirmation_29c70209": {
+    "message": "Ask a question to collect user input (confirmation)"
+  },
+  "ask_a_question_to_collect_user_input_date_or_time_3a8659ee": {
+    "message": "Ask a question to collect user input (date or time)"
+  },
+  "ask_a_question_to_collect_user_input_file_or_attac_dccad24b": {
+    "message": "Ask a question to collect user input (file or attachment)"
+  },
+  "ask_a_question_to_collect_user_input_number_b3abe981": {
+    "message": "Ask a question to collect user input (number)"
+  },
+  "ask_a_question_to_collect_user_input_oauth_login_5347b7fc": {
+    "message": "Ask a question to collect user input (OAuth login)"
+  },
+  "ask_a_question_to_collect_user_input_send_activity_eb3dd7ab": {
+    "message": "Ask a question to collect user input (send activity)"
+  },
+  "ask_a_question_to_collect_user_input_text_5d8adc89": {
+    "message": "Ask a question to collect user input (text)"
+  },
+  "ask_activity_7bb716b4": {
+    "message": "Ask activity"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "At least one question is required"
@@ -505,9 +553,6 @@
   },
   "bot_7926b66d": {
     "message": "Bot"
-  },
-  "bot_asks_5e9f0202": {
-    "message": "Bot Asks"
   },
   "bot_content_was_successfully_imported_5a07ae64": {
     "message": "Bot content was successfully imported."
@@ -784,9 +829,6 @@
   },
   "connect_to_a_skill_53c9dff0": {
     "message": "Connect to a skill"
-  },
-  "connect_to_an_existing_bot_7f42990b": {
-    "message": "Connect to an existing bot"
   },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
@@ -1187,9 +1229,6 @@
   "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
     "message": "Display text used by the channel to render visually."
   },
-  "do_you_want_to_create_a_new_bot_or_connect_your_az_f5c9dee": {
-    "message": "Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?"
-  },
   "do_you_want_to_proceed_cd35aa38": {
     "message": "Do you want to proceed?"
   },
@@ -1279,12 +1318,6 @@
   },
   "edit_kb_name_5e2d8c5b": {
     "message": "Edit KB name"
-  },
-  "edit_lg_c14451bf": {
-    "message": "Edit LG"
-  },
-  "edit_lu_32fd20f7": {
-    "message": "Edit LU"
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
@@ -2012,8 +2045,8 @@
   "language_understanding_authoring_key_74a41a4": {
     "message": "Language Understanding authoring key"
   },
-  "language_understanding_luis_is_an_azure_cognitive__5181510f": {
-    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>."
+  "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
+    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>"
   },
   "language_understanding_region_ec8fb05c": {
     "message": "Language Understanding region"
@@ -2056,9 +2089,6 @@
   },
   "learn_more_about_your_property_schema_3a0a0890": {
     "message": "Learn more about your property schema"
-  },
-  "learn_more_c08939e8": {
-    "message": "Learn more."
   },
   "leave_product_tour_49585718": {
     "message": "Leave Product Tour?"
@@ -2227,9 +2257,6 @@
   },
   "manage_bot_languages_9ec36fd7": {
     "message": "Manage bot languages"
-  },
-  "manage_connections_442f1693": {
-    "message": "Manage connections"
   },
   "manage_profiles_715c2092": {
     "message": "Manage profiles"
@@ -2582,9 +2609,6 @@
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents Types"
   },
-  "one_of_the_variations_added_below_will_be_selected_bee3c3f1": {
-    "message": "One of the variations added below will be selected at random by the LG library."
-  },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
   },
@@ -2597,8 +2621,8 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
-  "open_manifest_ffb556af": {
-    "message": "Open Manifest"
+  "open_manifest_6c334f9": {
+    "message": "Open manifest"
   },
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
@@ -2614,9 +2638,6 @@
   },
   "open_web_chat_23601990": {
     "message": "Open Web Chat"
-  },
-  "open_your_azure_bot_resource_9165e3d1": {
-    "message": "Open your Azure Bot resource"
   },
   "optional_221bcc9d": {
     "message": "Optional"
@@ -2759,17 +2780,11 @@
   "project_readme_68f88d88": {
     "message": "Project Readme"
   },
-  "project_readme_6f5488be": {
-    "message": "Project readme"
-  },
   "project_settings_42fe3f68": {
     "message": "Project settings"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "Prompt Configurations"
-  },
-  "prompt_for_a_date_5d2c689e": {
-    "message": "Prompt for a date"
   },
   "prompt_for_a_date_or_a_time_d2df7f90": {
     "message": "Prompt for a date or a time"
@@ -2777,17 +2792,8 @@
   "prompt_for_a_file_or_an_attachment_1bf18e7e": {
     "message": "Prompt for a file or an attachment"
   },
-  "prompt_for_a_number_84999edb": {
-    "message": "Prompt for a number"
-  },
-  "prompt_for_attachment_727d4fac": {
-    "message": "Prompt for Attachment"
-  },
   "prompt_for_confirmation_dc85565c": {
     "message": "Prompt for confirmation"
-  },
-  "prompt_for_text_5c524f80": {
-    "message": "Prompt for text"
   },
   "prompt_with_multi_choice_f428542f": {
     "message": "Prompt with multi-choice"
@@ -2885,6 +2891,9 @@
   "publishing_profile_6d7064ce": {
     "message": "Publishing Profile"
   },
+  "publishing_profile_a2cd5d52": {
+    "message": "Publishing profile"
+  },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
   },
@@ -2914,6 +2923,9 @@
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
     "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>"
+  },
+  "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
+    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
     "message": "QnA Maker subscription key:"
@@ -3080,11 +3092,11 @@
   "resources_ccefab27": {
     "message": "Resources"
   },
+  "response_alternatives_will_be_selected_at_random_f_552dd090": {
+    "message": "Response alternatives will be selected at random for a more dynamic conversation."
+  },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
-  },
-  "response_variations_302594e": {
-    "message": "Response Variations"
   },
   "responses_12d6df1d": {
     "message": "Responses"
@@ -3100,9 +3112,6 @@
   },
   "retrieve_app_id_from_publishing_profile_b6643a25": {
     "message": "Retrieve App ID from publishing profile"
-  },
-  "review_and_configure_your_bot_s_resources_and_add__c0e30e9a": {
-    "message": "Review and configure your bot''s resources, and add new connections such as speech, Microsoft Teams and more."
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -3299,8 +3308,8 @@
   "select_your_azure_directory_then_choose_the_subscr_28e935bc": {
     "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located. "
   },
-  "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+  "select_your_azure_directory_then_choose_the_subscr_e3d67edf": {
+    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource. "
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -3313,6 +3322,9 @@
   },
   "send_an_http_request_aa32fd2": {
     "message": "Send an HTTP request"
+  },
+  "send_handoff_activity_651ee597": {
+    "message": "Send handoff activity"
   },
   "send_messages_c48b239": {
     "message": "Send Messages"
@@ -3386,6 +3398,9 @@
   "show_keys_3072a5b8": {
     "message": "Show keys"
   },
+  "show_response_editor_90bd8b49": {
+    "message": "Show response editor"
+  },
   "show_skill_manifest_5d0abde1": {
     "message": "Show skill manifest"
   },
@@ -3422,8 +3437,8 @@
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
-  "skills_can_be_called_by_external_bots_allow_other__482dbe75": {
-    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more.</a>"
+  "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>"
   },
   "skills_extend_your_bot_s_conversational_capabiliti_ce5c2384": {
     "message": "Skills extend your bot''s conversational capabilities . To know more about skills"
@@ -3551,12 +3566,6 @@
   "suggestion_for_card_or_activity_type_b257066a": {
     "message": "Suggestion for Card or Activity: { type }"
   },
-  "switch_to_code_editor_aa03c4b7": {
-    "message": "Switch to code editor"
-  },
-  "switch_to_response_editor_cb0efe35": {
-    "message": "Switch to response editor"
-  },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
   },
@@ -3625,6 +3634,9 @@
   },
   "the_app_id_of_your_application_registration_16fba1a9": {
     "message": "The app id of your application registration"
+  },
+  "the_azure_bot_created_in_azure_bot_services_contai_e1514f26": {
+    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot. Learn more."
   },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
@@ -3703,6 +3715,9 @@
   },
   "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
     "message": "There was a problem loading Azure directories. { errMessage }"
+  },
+  "there_was_a_problem_with_the_authentication_access_3ca717f6": {
+    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
@@ -4001,6 +4016,9 @@
   "url_should_start_with_http_or_https_c34632bb": {
     "message": "URL should start with http:// or https://"
   },
+  "use_azure_bot_to_create_a_new_conversation_1a116a65": {
+    "message": "Use Azure Bot to create a new conversation"
+  },
   "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
     "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ."
   },
@@ -4085,8 +4103,8 @@
   "view_on_npm_2051324d": {
     "message": "View on npm"
   },
-  "view_readme_37414cb9": {
-    "message": "View readme"
+  "view_readme_30ed498f": {
+    "message": "View Readme"
   },
   "visit_a_this_page_a_to_learn_more_about_entity_def_c7c862a9": {
     "message": "Visit <a>this page</a> to learn more about entity definition."
@@ -4258,6 +4276,9 @@
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
+  },
+  "your_new_azure_bot_is_available_in_composer_2756367a": {
+    "message": "Your new Azure Bot is available in Composer"
   },
   "your_new_bot_is_almost_ready_1bb596e": {
     "message": "Your new bot is almost ready!"

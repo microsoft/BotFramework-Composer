@@ -16,8 +16,8 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -557,7 +557,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                   setShowTeamsManifestModal(true);
                 }}
               >
-                {formatMessage('Open Manifest')}
+                {formatMessage('Open manifest')}
               </Link>
             </Stack.Item>
           )}
@@ -591,19 +591,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         onToggleVisibility={setShowSpeechModal}
       />
       {showTeamsCallOut && (
-        <Callout
-          setInitialFocus
-          className={teamsCallOutStyles.callout}
-          gapSpace={0}
-          role="alertdialog"
+        <TeachingBubble
+          hasCondensedHeadline
+          headline={formatMessage('Almost there!')}
           target={`#${CHANNELS.TEAMS}`}
           onDismiss={() => {
             setShowTeamsCallOut(false);
           }}
         >
-          <Text className={teamsCallOutStyles.title} variant="xLarge">
-            {formatMessage('Almost there!')}
-          </Text>
           <Text block variant="small">
             {formatMessage(
               'Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how.'
@@ -612,7 +607,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           <Link className={teamsCallOutStyles.link} href={teamsHelpLink} target="_blank">
             {formatMessage('See instructions')}
           </Link>
-        </Callout>
+        </TeachingBubble>
       )}
       <div>
         <Dropdown
