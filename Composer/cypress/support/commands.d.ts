@@ -36,7 +36,7 @@ declare namespace Cypress {
      * Visits a page from the left nav bar using the page's testid
      * @example visitPage('Bot Responses');
      */
-    visitPage(page: string): void;
+    visitPage(page: string, checked?: boolean): void;
 
     /**
      * Invokes callback inside editor context
