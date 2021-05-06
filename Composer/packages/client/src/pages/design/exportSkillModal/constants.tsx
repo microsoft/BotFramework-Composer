@@ -18,7 +18,6 @@ import { AddCallers } from './content/AddCallers';
 export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
 
 export const SCHEMA_URIS = [
-  'http://localhost:3000/skill-manifest.json',
   'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
   'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
 ];
