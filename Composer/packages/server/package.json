@@ -68,7 +68,6 @@
     "ts-node": "^8.4.1"
   },
   "dependencies": {
-    "@azure/msal-node": "^1.0.0-beta.1",
     "@bfc/client": "*",
     "@bfc/extension": "*",
     "@bfc/indexers": "*",

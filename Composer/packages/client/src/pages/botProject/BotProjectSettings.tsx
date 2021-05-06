@@ -9,10 +9,9 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { DialogSetting } from '@bfc/shared';
 import { defaultToolbarButtonStyles } from '@bfc/ui-shared';
+import { DialogSetting } from '@botframework-composer/types';
 
-import TelemetryClient from '../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
@@ -21,7 +20,6 @@ import { settingsState, userSettingsState } from '../../recoilModel/atoms';
 import { localBotsDataSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { createBotSettingUrl, navigateTo } from '../../utils/navigation';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { openDeleteBotModal } from './DeleteBotButton';
 import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
@@ -31,10 +29,9 @@ import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 const header = css`
   padding: 5px 20px;
   display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
   justify-content: space-between;
   label: PageHeader;
+  border-bottom: 1px solid silver;
 `;
 
 const container = css`
@@ -54,75 +51,15 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const currentProjectId = skillId ?? projectId;
   const botProject = botProjects.find((b) => b.projectId === currentProjectId);
   const { deleteBot } = useRecoilValue(dispatcherState);
-  const isPVABot = usePVACheck(currentProjectId);
 
   const settings = useRecoilValue(settingsState(currentProjectId));
   const mergedSettings = mergePropertiesManagedByRootBot(currentProjectId, rootBotProjectId, settings);
 
   const [isAdvancedSettingsEnabled, setAdvancedSettingsEnabled] = useState<boolean>(false);
-
   const { setSettings } = useRecoilValue(dispatcherState);
 
-  const buttonClick = (link) => {
-    TelemetryClient.track('GettingStartedLinkClicked', { method: 'button', url: link });
-    navigateTo(link);
-  };
-
   const toolbarItems = useMemo(() => {
-    const linkToPackageManager = `/bot/${rootBotProjectId}/plugin/package-manager/package-manager`;
-    const linkToConnections = `/bot/${rootBotProjectId}/botProjectsSettings/#connections`;
-    const linkToLGEditor = `/bot/${rootBotProjectId}/language-generation`;
-    const linkToLUEditor = `/bot/${rootBotProjectId}/language-understanding`;
-
     return [
-      ...(!isPVABot
-        ? [
-            {
-              text: formatMessage('Add a package'),
-              type: 'action',
-              buttonProps: {
-                iconProps: { iconName: 'Package' },
-                onClick: () => buttonClick(linkToPackageManager),
-                styles: defaultToolbarButtonStyles,
-              },
-              align: 'left',
-            },
-          ]
-        : []),
-      {
-        text: formatMessage('Edit LG'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'Robot' },
-          onClick: () => buttonClick(linkToLGEditor),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
-      {
-        text: formatMessage('Edit LU'),
-        type: 'action',
-        buttonProps: {
-          iconProps: { iconName: 'People' },
-          onClick: () => buttonClick(linkToLUEditor),
-          styles: defaultToolbarButtonStyles,
-        },
-        align: 'left',
-      },
-      ...(!isPVABot
-        ? [
-            {
-              text: formatMessage('Manage connections'),
-              type: 'action',
-              buttonProps: {
-                iconProps: { iconName: 'PlugConnected' },
-                onClick: () => buttonClick(linkToConnections),
-                styles: defaultToolbarButtonStyles,
-              },
-              align: 'left',
-            },
-          ]
-        : []),
       {
         text: formatMessage('Delete bot'),
         type: 'action',
@@ -161,9 +98,19 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     return newbotProjectLinks;
   }, [botProjects]);
 
-  const onRenderHeaderContent = () => {
-    return formatMessage(
-      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
+  const renderJsonToggle = (): JSX.Element => {
+    return (
+      <Toggle
+        inlineLabel
+        checked={isAdvancedSettingsEnabled}
+        className={'advancedSettingsView'}
+        defaultChecked={false}
+        label={formatMessage('Advanced Settings View (json)')}
+        styles={{ label: { fontSize: '12px', marginLeft: '8px' } }}
+        onChange={() => {
+          setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
+        }}
+      />
     );
   };
 
@@ -193,22 +140,12 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
       pageMode={'botProjectsSettings'}
       shouldShowEditorError={false}
-      title={formatMessage('Bot management and configurations')}
+      title={formatMessage('Configure your bot')}
       toolbarItems={toolbarItems}
-      onRenderHeaderContent={onRenderHeaderContent}
+      onRenderHeaderContent={renderJsonToggle}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
-          <Toggle
-            inlineLabel
-            checked={isAdvancedSettingsEnabled}
-            className={'advancedSettingsView'}
-            defaultChecked={false}
-            label={formatMessage('Advanced Settings View (json)')}
-            onChange={() => {
-              setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled);
-            }}
-          />
           {isAdvancedSettingsEnabled ? (
             <JsonEditor
               key={'settingsjson'}

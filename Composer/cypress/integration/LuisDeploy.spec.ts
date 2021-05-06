@@ -13,13 +13,13 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.visitPage('Project settings');
-    cy.findByText('Development Resources').click();
+    cy.visitPage('Configure');
+    cy.findByText('Development resources').click();
     cy.findAllByTestId('rootLUISAuthoringKey').type('12345678', { delay: 200 });
     cy.findAllByTestId('rootLUISRegion').click();
-    cy.findByText('westus').click();
+    cy.findByText('West US').click();
     cy.visitPage('User input');
-    cy.visitPage('Design');
+    cy.visitPage('Create');
     cy.route({
       method: 'POST',
       url: 'api/projects/*/build',

@@ -98,7 +98,7 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         isDisableForPVA: false,
       },
       {
-        label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
+        label: isRunning ? formatMessage('Stop this bot') : formatMessage('Start this bot'),
         icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
         onClick: () => {
           isRunning ? onBotStop(projectId) : onBotStart(projectId);
@@ -115,21 +115,21 @@ export const ProjectHeader = (props: ProjectHeaderProps) => {
         onClick: () => {},
       },
       {
-        label: formatMessage('Share as a skill'),
+        label: formatMessage('Export as skill'),
         onClick: () => {
           onBotEditManifest(projectId);
         },
         isDisableForPVA: true,
       },
       {
-        label: formatMessage('Export this bot as .zip'),
+        label: formatMessage('Export as .zip'),
         onClick: () => {
           onBotExportZip(projectId);
         },
         isDisableForPVA: false,
       },
       {
-        label: formatMessage('Settings'),
+        label: formatMessage('Bot settings'),
         onClick: () => {
           navigateTo(createBotSettingUrl(link.projectId, link.skillId));
         },

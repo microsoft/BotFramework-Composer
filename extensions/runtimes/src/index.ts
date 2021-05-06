@@ -535,17 +535,7 @@ export default async (composer: any): Promise<void> => {
 
       // do the dotnet publish
       try {
-        const configuration = JSON.parse(profile.configuration);
-        const runtimeIdentifier = configuration.runtimeIdentifier;
-
-        // TODO: swap these lines??? ben to confirm
-        // Don't set self-contained and runtimeIdentifier for AzureFunctions.
-        // let buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`;
-        // if runtime identifier set, make dotnet runtime to self contained, default runtime identifier is win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-        const buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true -r ${
-          runtimeIdentifier ?? 'win-x64'
-        }`;
-        //  }
+        const buildCommand = `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`;
         const { stdout, stderr } = await execAsync(buildCommand, {
           cwd: runtimePath,
         });
