@@ -391,6 +391,7 @@ const Library: React.FC = () => {
 
   const importComponent = async (packageName, version, isUpdating, source) => {
     try {
+      stopBot(currentProjectId);
       const results = await installComponentAPI(currentProjectId, packageName, version, isUpdating, source);
 
       // check to see if there was a conflict that requires confirmation
@@ -424,8 +425,6 @@ const Library: React.FC = () => {
           setReadmeHidden(false);
         }
 
-        // reload modified content
-        await stopBot(currentProjectId);
         await reloadProject();
       }
     } catch (err) {
@@ -516,7 +515,7 @@ const Library: React.FC = () => {
         closeDialog();
         setWorking(strings.uninstallProgress);
         try {
-          await stopBot(currentProjectId);
+          stopBot(currentProjectId);
           const results = await uninstallComponentAPI(currentProjectId, selectedItem.name);
 
           if (results.data.success) {
