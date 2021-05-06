@@ -381,7 +381,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
                 newlyInstalledPlugin &&
                 !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
               ) {
-                const newSettings = currentProject.settings;
+                const newSettings = await currentProject.getEnvSettings();
                 // guard against missing settings keys
                 if (!newSettings.runtimeSettings) {
                   newSettings.runtimeSettings = {
@@ -479,7 +479,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           // update the settings.components array
           if (currentProject.settings.runtimeSettings?.components?.find((p) => p.name === packageName)) {
-            const newSettings = currentProject.settings;
+            const newSettings = await currentProject.getEnvSettings();
             newSettings.runtimeSettings.components = newSettings.runtimeSettings.components.filter(
               (p) => p.name !== packageName
             );
