@@ -476,6 +476,26 @@ export class BotProject implements IBotProject {
     return await this._createFile(relativePath, content);
   };
 
+  public migrateFile = async (name: string, content = '', rootDialogId) => {
+    const filename = name.trim();
+    this.validateFileName(filename);
+    this._validateFileContent(name, content);
+    const botName = this.name;
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+
+    // find created file belong to which dialog, all resources should be writed to <dialog>/
+    const dialogId = name.split('.')[0];
+    const dialogFile = this.files.get(`${dialogId}.dialog`);
+    const endpoint = dialogFile ? Path.dirname(dialogFile.relativePath) : '';
+    const relativePath = defaultFilePath(botName, defaultLocale, filename, { endpoint, rootDialogId });
+    const file = this.files.get(filename);
+    if (file) {
+      throw new Error(`${filename} dialog already exist`);
+    }
+
+    return await this._createFile(relativePath, content);
+  };
+
   public createManifestLuFile = async (name: string, content = '') => {
     const filename = name.trim();
     this.validateFileName(filename);
