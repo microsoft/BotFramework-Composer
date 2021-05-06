@@ -4,11 +4,12 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
+import { OpenConfirmModal } from '@bfc/ui-shared';
 import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, FEEDVERSION } from '../../constants';
+import { BotStatus, CreationFlowStatus, FEEDVERSION } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -37,7 +38,10 @@ import {
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
   warnAboutDotNetState,
+  warnAboutFunctionsState,
   settingsState,
+  creationFlowStatusState,
+  orchestratorForSkillsDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -64,6 +68,7 @@ import {
   removeRecentProject,
   resetBotStates,
   saveProject,
+  migrateToV2,
 } from './utils/project';
 
 export const projectDispatcher = () => {
@@ -165,6 +170,7 @@ export const projectDispatcher = () => {
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
         navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
+        callbackHelpers.set(orchestratorForSkillsDialogState, true);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
@@ -239,6 +245,23 @@ export const projectDispatcher = () => {
     }
   );
 
+  const forceMigrate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    if (
+      await OpenConfirmModal(
+        formatMessage('Convert your project to the latest format'),
+        formatMessage(
+          'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
+        ),
+        { confirmText: formatMessage('Convert') }
+      )
+    ) {
+      callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
+      navigateTo(`/v2/projects/migrate/${projectId}`);
+    } else {
+      navigateTo(`/home`);
+    }
+  });
+
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       path: string,
@@ -252,7 +275,16 @@ export const projectDispatcher = () => {
         set(botOpeningState, true);
 
         await flushExistingTasks(callbackHelpers);
-        const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
+        const { projectId, mainDialog, requiresMigrate } = await openRootBotAndSkillsByPath(
+          callbackHelpers,
+          path,
+          storageId
+        );
+
+        if (requiresMigrate) {
+          await forceMigrate(projectId);
+          return;
+        }
 
         // ABS open Flow, update publishProfile & set alias for project after open project
         if (absData) {
@@ -313,8 +345,11 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
-
+      const { requiresMigrate } = await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
+      if (requiresMigrate) {
+        await forceMigrate(projectId);
+        return;
+      }
       // Post project creation
       set(projectMetaDataState(projectId), {
         isRootBot: true,
@@ -482,6 +517,42 @@ export const projectDispatcher = () => {
     }
   );
 
+  const migrateProjectTo = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      oldProjectId: string,
+      name: string,
+      description: string,
+      location: string,
+      runtimeLanguage: string,
+      runtimeType: string
+    ) => {
+      const { set, snapshot } = callbackHelpers;
+      try {
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        set(botOpeningState, true);
+
+        // starts the creation process and stores the jobID in state for tracking
+        const response = await migrateToV2(
+          callbackHelpers,
+          oldProjectId,
+          name,
+          description,
+          location,
+          runtimeLanguage,
+          runtimeType
+        );
+
+        if (response.data.jobId) {
+          dispatcher.updateCreationMessage(response.data.jobId);
+        }
+      } catch (ex) {
+        set(botProjectIdsState, []);
+        handleProjectFailure(callbackHelpers, ex);
+        navigateTo('/home');
+      }
+    }
+  );
+
   const deleteBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
       const { reset } = callbackHelpers;
@@ -581,10 +652,10 @@ export const projectDispatcher = () => {
   const updateCreationMessage = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       jobId: string,
-      templateId: string,
-      urlSuffix: string,
-      profile: any,
-      source: any
+      templateId?: string,
+      urlSuffix?: string,
+      profile?: any,
+      source?: any
     ) => {
       const timer = setInterval(async () => {
         try {
@@ -672,12 +743,17 @@ export const projectDispatcher = () => {
     callbackHelpers.set(warnAboutDotNetState, warn);
   });
 
+  const setWarnAboutFunctions = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutFunctionsState, warn);
+  });
+
   return {
     openProject,
     createNewBot,
     createNewBotV2,
     deleteBot,
     saveProjectAs,
+    migrateProjectTo,
     fetchProjectById,
     fetchRecentProjects,
     updateCurrentTarget,
@@ -696,6 +772,7 @@ export const projectDispatcher = () => {
     setCurrentProjectId,
     setProjectError,
     setWarnAboutDotNet,
+    setWarnAboutFunctions,
     fetchReadMe,
   };
 };

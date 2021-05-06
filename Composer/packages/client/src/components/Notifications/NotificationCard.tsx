@@ -10,6 +10,7 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
+import { Notification } from '@botframework-composer/types';
 
 import { useInterval } from '../../utils/hooks';
 
@@ -35,7 +36,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
     border-left: 4px solid #0078d4;
     background: white;
     box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
-    width: 340px;
+    min-width: 340px;
     border-radius: 2px;
     display: flex;
     flex-direction: column;
@@ -44,6 +45,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
     animation-timing-function: ${show ? 'cubic-bezier(0.1, 0.9, 0.2, 1)' : 'linear'};
     animation-fill-mode: both;
     animation-name: ${show ? fadeIn : fadeOut(height)};
+    pointer-events: auto;
   `;
 };
 
@@ -120,24 +122,8 @@ const getShimmerStyles = {
   ],
 };
 // -------------------- NotificationCard -------------------- //
-
-export type NotificationType = 'info' | 'warning' | 'error' | 'pending' | 'success';
-
-export type Link = {
-  label: string;
-  onClick: () => void;
-};
-
-export type CardProps = {
-  type: NotificationType;
-  title: string;
-  description?: string;
-  retentionTime?: number;
-  link?: Link;
-  read?: boolean;
-  hidden?: boolean;
-  onRenderCardContent?: ((props: CardProps) => JSX.Element) | React.FC<any>;
-};
+export type CardProps = Notification;
+export type NotificationType = Notification['type'];
 
 export type NotificationProps = {
   id: string;

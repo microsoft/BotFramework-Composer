@@ -9,7 +9,7 @@ context('Notification Page', () => {
   });
 
   it('can show lg syntax error ', () => {
-    cy.visitPage('Design');
+    cy.visitPage('Create');
     cy.visitPage('Bot responses');
 
     cy.findByTestId('ProjectTree').within(() => {
@@ -27,7 +27,7 @@ context('Notification Page', () => {
   });
 
   it('can show lu syntax error ', () => {
-    cy.visitPage('Design');
+    cy.visitPage('Create');
     cy.visitPage('User input');
 
     cy.findByTestId('ProjectTree').within(() => {
@@ -45,7 +45,7 @@ context('Notification Page', () => {
   });
 
   // it('can show dialog expression error ', () => {
-  //   cy.visitPage('Design');
+  //   cy.visitPage('Create');
 
   //   cy.findByTestId('ProjectTree').within(() => {
   //     cy.findByText('WelcomeUser').click();

@@ -81,7 +81,7 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdat
   return (
     <div>
       <div css={header}>
-        <div css={tableColumnHeader()}>{formatMessage('Allowed Callers')}</div>
+        <div css={tableColumnHeader()}>{formatMessage('Available as skill to the following bots:')}</div>
       </div>
       {callers?.map((caller, index) => {
         const isFocus = focusCallerIndex === index;

@@ -143,7 +143,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const decoded = props.location?.search ? decodeURIComponent(props.location.search) : '';
   const { publishTargetName, url } = querystring.parse(decoded);
   const [skillManifestUrl, setSkillManifestUrl] = useState('');
-  const [completionRequired, setCompletionRequired] = useState<boolean>(false);
 
   useEffect(() => {
     if (publishTargetName && botStatusList.length > 0 && skillPublishStatus === SKILL_PUBLISH_STATUS.INITIAL) {
@@ -276,11 +275,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
-    if (location.hash === '#addNewPublishProfile') {
+    if (location.hash === '#addNewPublishProfile' || location.hash === '#completePublishProfile') {
       setActiveTab('addNewPublishProfile');
-    } else if (location.hash === '#completePublishProfile') {
-      setActiveTab('addNewPublishProfile');
-      setCompletionRequired(true);
     }
   }, [location]);
 
@@ -498,7 +494,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             </div>
           </div>
         </PivotItem>
-        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'addNewPublishProfile'}>
+        <PivotItem headerText={formatMessage('Publishing profile')} itemKey={'addNewPublishProfile'}>
           <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
             {botProjectData && botProjectData.length > 1 && (
               <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
@@ -510,7 +506,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               </Stack.Item>
             )}
             <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflow: 'auto', maxHeight: '100%' } }}>
-              <PublishTargets completePartial={completionRequired} projectId={provisionProject} />
+              <PublishTargets projectId={provisionProject} />
             </Stack.Item>
           </Stack>
         </PivotItem>

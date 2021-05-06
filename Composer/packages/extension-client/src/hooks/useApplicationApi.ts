@@ -29,6 +29,10 @@ const APPLICATION_KEYS = [
   'api.confirm',
   'api.updateFlowZoomRate',
   'api.telemetryClient',
+  'api.addNotification',
+  'api.deleteNotification',
+  'api.markNotificationAsRead',
+  'api.hideNotification',
 ];
 
 export function useApplicationApi(): ApplicationContext & ApplicationContextApi {

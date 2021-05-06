@@ -28,7 +28,7 @@ const formConfig: FieldConfig<CreateQnAFromScratchFormData> = {
 const DialogTitle = () => {
   return (
     <div>
-      {formatMessage('Create new knowledge base')}
+      {formatMessage('Add QnA Maker knowledge base')}
       <p>
         <span css={subText}>{formatMessage('Manually add question and answer pairs to create a knowledge base')}</span>
       </p>
@@ -102,7 +102,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
-          text={formatMessage('Create knowledge base')}
+          text={formatMessage('Create')}
           onClick={() => {
             if (hasErrors) {
               return;

@@ -161,7 +161,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         `{
         total, plural,
           =1 {Start bot}
-          other {Start all bots}
+          other {Start all}
       }`,
         { total: runningBots.totalBots }
       )
@@ -232,6 +232,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 },
               },
             }}
+            id={'startBotPanelElement'}
             menuAs={() => null}
             styles={{
               root: {
@@ -274,7 +275,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
-            ariaDescription={formatMessage('Open start bots panel')}
+            ariaDescription={formatMessage('Start and stop local bot runtimes')}
             data-testid="StartBotsPanel"
             disabled={disableStartBots}
             iconProps={{
@@ -295,7 +296,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
               },
               rootHovered: { background: transparentBackground, color: NeutralColors.white },
             }}
-            title={formatMessage('Open start bots panel')}
+            title={formatMessage('Start and stop local bot runtimes')}
             onClick={onSplitButtonClick}
           />
         </div>

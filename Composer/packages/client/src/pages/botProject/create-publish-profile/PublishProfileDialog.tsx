@@ -30,6 +30,7 @@ type PublishProfileDialogProps = {
   types: PublishType[];
   projectId: string;
   setPublishTargets: (targets: PublishTarget[], projectId: string) => Promise<void>;
+  onUpdateIsCreateProfileFromSkill?: (isCreateProfileFromSkill: boolean) => void;
 };
 
 const Page = {
@@ -37,21 +38,36 @@ const Page = {
   ConfigProvision: Symbol('config'),
 };
 
+const formatDialogTitle = (current) => {
+  return {
+    title: current ? formatMessage('Edit publishing profile') : formatMessage('Create a publishing profile'),
+    subText: formatMessage(
+      'To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels.' +
+        ' Other resources, such as language understanding and storage are optional.' +
+        ' A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources.'
+    ),
+  };
+};
+
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
-  const { current, types, projectId, closeDialog, targets, setPublishTargets } = props;
+  const {
+    current,
+    types,
+    projectId,
+    closeDialog,
+    targets,
+    setPublishTargets,
+    onUpdateIsCreateProfileFromSkill,
+  } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
 
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
   const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
-
-  const [dialogTitle, setTitle] = useState({
-    title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
-    subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
-  });
-
   const [selectedType, setSelectType] = useState<PublishType | undefined>();
+
+  const [dialogTitle, setTitle] = useState(formatDialogTitle(current));
 
   useEffect(() => {
     const ty = types.find((t) => t.name === current?.item.type);
@@ -80,10 +96,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.closeDialog = closeDialog;
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
-      setTitle({
-        title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
-        subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
-      });
+      setTitle(formatDialogTitle(current));
     };
     PluginAPI.publish.getTokenFromCache = () => {
       return {
@@ -175,6 +188,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
 
         // require tenant id to be set by plugin (handles multiple tenant scenario)
         if (!tenantId) {
+          TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
           const notification = createNotification({
             type: 'error',
             title: formatMessage('Error provisioning.'),
@@ -194,7 +208,8 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         arm = getTokenFromCache('accessToken');
         graph = getTokenFromCache('graphToken');
       }
-      provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
+      onUpdateIsCreateProfileFromSkill?.(true);
     };
   }, [name, targetType, types, savePublishTarget]);
 
