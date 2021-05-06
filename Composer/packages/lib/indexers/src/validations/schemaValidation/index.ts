@@ -13,7 +13,15 @@ export const validateSchema = (dialogId: string, dialogData: BaseSchema, schema:
   walkAdaptiveDialog(dialogData, schemas, ($kind, data, path) => {
     if (!schemas[$kind]) {
       diagnostics.push(
-        new Diagnostic(formatMessage('Components of $kind "{kind}" are not supported. Replace with a different component or create a custom component.', {kind: $kind }), `${dialogId}.dialog`, DiagnosticSeverity.Error, path)
+        new Diagnostic(
+          formatMessage(
+            'Components of $kind "{kind}" are not supported. Replace with a different component or create a custom component.',
+            { kind: $kind }
+          ),
+          `${dialogId}.dialog`,
+          DiagnosticSeverity.Error,
+          path
+        )
       );
     }
     return true;
