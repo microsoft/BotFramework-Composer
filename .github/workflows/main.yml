@@ -10,8 +10,8 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  ci:
-    name: ci build
+  cibuild:
+    name: CI build
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
@@ -48,11 +48,11 @@ jobs:
           path-to-lcov: ./Composer/coverage/lcov.info
           base-path: ./Composer
 
-  unittest:
-    name: unit tests
+  ci:
+    name: Unit Tests
     runs-on: ubuntu-latest
     needs:
-      - ci
+      - cibuild
     strategy:
       matrix:
         test-workspaces:
