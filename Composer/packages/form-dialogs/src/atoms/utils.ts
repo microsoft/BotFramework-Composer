@@ -30,7 +30,8 @@ export const templateTypeToJsonSchemaType = (cardData: PropertyCardData, templat
 
 const $refToRef = ($ref: string) => {
   const [, ref] = $ref.match(/template:(.*)\.template/);
-  return ref;
+  // Lower case is necessary because in generator parser dereferencing always converts to lower case
+  return ref.toLowerCase();
 };
 
 export const jsonSchemaTypeToTemplateType = (
