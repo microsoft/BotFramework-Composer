@@ -240,7 +240,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
         isOpen={!createSkillDialogHidden}
         onDismiss={handleDismiss}
         {...title}
-        customerStyle={showSetAppIdDialog ? setAppIdDialogStyles : { dialog: {}, modal: {} }}
+        customerStyle={setAppIdDialogStyles}
       >
         {showSetAppIdDialog && (
           <Fragment>
