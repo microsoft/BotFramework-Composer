@@ -671,7 +671,6 @@ export class BotProject implements IBotProject {
     // merge - if generated assets should be merged with any user customized assets
     // singleton - if the generated assets should be merged into a single dialog
     // feeback - a callback for status and progress and generation happens
-    debugger;
     const success = await generate(generateParams.schemaPath, generateParams);
 
     return { success, errors };
