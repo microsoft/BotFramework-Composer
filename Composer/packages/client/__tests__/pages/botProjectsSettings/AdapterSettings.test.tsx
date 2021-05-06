@@ -80,17 +80,6 @@ describe('ExternalAdapterSettings', () => {
     setSettingsMock.mockClear();
   });
 
-  it('renders a link to the package manager', () => {
-    const { getByText } = renderWithRecoilAndCustomDispatchers(
-      <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      initRecoilState
-    );
-
-    const link = getByText(/from package manager/);
-
-    expect(link.attributes.getNamedItem('href')?.value).toContain('plugin/package-manager/package-manager');
-  });
-
   it('brings up the modal', () => {
     const { getByTestId, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
