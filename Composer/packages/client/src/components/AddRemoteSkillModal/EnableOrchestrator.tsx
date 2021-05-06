@@ -32,16 +32,18 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
   };
   return (
     <Stack data-testid="orchestrator-skill">
-      <StackItem styles={{ root: { height: 300, width: '60%' } }}>
+      <StackItem styles={{ root: { height: 150, width: '90%' } }}>
         <div style={{ marginBottom: '16px' }}>
-          {enableOrchestratorDialog.content}
+          {enableOrchestratorDialog.subText}
           <Link href={learnMoreUrl} target="_blank">
             <div>{formatMessage('Learn more about Orchestrator')}</div>
           </Link>
         </div>
         <Checkbox
           defaultChecked
-          label={formatMessage('Make Orchestrator my preferred recognizer for multi-bot projects')}
+          label={formatMessage(
+            'Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills).'
+          )}
           styles={{ root: { margin: '20px 0' } }}
           onChange={onChange}
         />
