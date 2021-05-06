@@ -149,6 +149,7 @@ export enum CreationFlowStatus {
   NEW_FROM_SCRATCH = 'Scratch',
   NEW_FROM_TEMPLATE = 'Template',
   SAVEAS = 'Save as',
+  MIGRATE = 'Migrate',
   OPEN = 'Open',
   CLOSE = 'Close',
   NEW_SKILL = 'New Skill',
