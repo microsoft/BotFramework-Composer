@@ -11,7 +11,6 @@ import { FocusTrapZone } from 'office-ui-fabric-react/lib/FocusTrapZone';
 import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes, CommunicationColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { useLocation } from '../utils/hooks';
@@ -52,13 +51,6 @@ const headerContainer = css`
   align-items: center;
 `;
 
-const title = css`
-  margin-left: 20px;
-  font-weight: ${FontWeights.semibold};
-  font-size: ${FontSizes.size16};
-  color: #fff;
-`;
-
 const botName = css`
   font-size: 16px;
   color: #fff;
@@ -74,12 +66,6 @@ const botLocale = css`
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
-`;
-
-const divider = css`
-  height: 24px;
-  border-right: 1px solid #979797;
-  margin: 0px 0px 0px 20px;
 `;
 
 const headerTextContainer = css`
@@ -224,6 +210,12 @@ export const Header = () => {
     }
   }, [isWebChatPanelVisible]);
 
+  useEffect(() => {
+    if (!hideBotController && showGetStarted) {
+      setShowGetStarted(false);
+    }
+  }, [hideBotController]);
+
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   const languageListOptions = useMemo(() => {
@@ -266,21 +258,21 @@ export const Header = () => {
         style={{ marginLeft: '9px' }}
       />
       <div css={headerTextContainer}>
-        <div css={title}>{formatMessage('Bot Framework Composer')}</div>
         {projectName && (
           <Fragment>
-            <div css={divider} />
             <span css={botName}>{projectName}</span>
-            <span
-              css={botLocale}
-              id="targetButton"
-              role={'button'}
-              tabIndex={0}
-              onClick={() => setTeachingBubbleVisibility(true)}
-              onKeyDown={handleActiveLanguageButtonOnKeyDown}
-            >
-              {languageFullName(locale)}
-            </span>
+            {languageListOptions.length > 1 && (
+              <span
+                css={botLocale}
+                id="targetButton"
+                role={'button'}
+                tabIndex={0}
+                onClick={() => setTeachingBubbleVisibility(true)}
+                onKeyDown={handleActiveLanguageButtonOnKeyDown}
+              >
+                {languageFullName(locale)}
+              </span>
+            )}
           </Fragment>
         )}
       </div>
@@ -305,13 +297,13 @@ export const Header = () => {
         )}
         {isShow && (
           <IconButton
-            ariaDescription={formatMessage('Test in web chat')}
+            ariaDescription={formatMessage('Test your bot')}
             disabled={!webchatEssentials?.botUrl}
             iconProps={{
               iconName: 'OfficeChat',
             }}
             styles={buttonStyles}
-            title={formatMessage('Test in Web Chat')}
+            title={formatMessage('Test your bot')}
             onClick={() => {
               const currentWebChatVisibility = !isWebChatPanelVisible;
               setWebChatPanelVisibility(currentWebChatVisibility);
@@ -329,7 +321,7 @@ export const Header = () => {
             iconProps={{ iconName: 'Rocket' }}
             id="rocketButton"
             styles={buttonStyles}
-            title={formatMessage('Get started')}
+            title={formatMessage('Recommended actions')}
             onClick={() => toggleGetStarted(true)}
           />
         )}
