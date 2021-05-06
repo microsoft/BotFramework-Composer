@@ -113,7 +113,7 @@ export const generateOtherActivities = (kind: SDKKinds): Activities => {
   return type ? { [type]: { type } } : {};
 };
 
-export const generateDispatchModels = async (
+export const generateDispatchModels = (
   schema: JSONSchema7,
   dialogs: DialogInfo[],
   selectedTriggers: any[],
@@ -121,7 +121,7 @@ export const generateDispatchModels = async (
   qnaFiles: QnAFile[],
   target: PublishTarget,
   projectId: string
-): Promise<{ dispatchModels?: DispatchModels }> => {
+): { dispatchModels?: DispatchModels } => {
   const intents = selectedTriggers.filter(({ $kind }) => $kind === SDKKinds.OnIntent).map(({ intent }) => intent);
   const { id: rootId } = dialogs.find((dialog) => dialog?.isRoot) || {};
 
@@ -151,7 +151,7 @@ export const generateDispatchModels = async (
       }
     });
     const mergedContents = contents.join('\n');
-    await createManifestFile(projectId, currentFileName, mergedContents);
+    createManifestFile(projectId, currentFileName, mergedContents);
   }
 
   const luLanguages = intents.length
