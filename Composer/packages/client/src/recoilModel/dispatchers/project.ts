@@ -4,7 +4,6 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { OpenConfirmModal } from '@bfc/ui-shared';
 import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
@@ -47,6 +46,7 @@ import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selec
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
 import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
 import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
+import { BotConvertConfirmDialog } from '../../components/BotConvertDialog';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -246,15 +246,7 @@ export const projectDispatcher = () => {
   );
 
   const forceMigrate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
-    if (
-      await OpenConfirmModal(
-        formatMessage('Convert your project to the latest format'),
-        formatMessage(
-          'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
-        ),
-        { confirmText: formatMessage('Convert') }
-      )
-    ) {
+    if (await BotConvertConfirmDialog()) {
       callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
       navigateTo(`/v2/projects/migrate/${projectId}`);
     } else {
