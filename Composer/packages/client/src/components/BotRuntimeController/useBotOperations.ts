@@ -103,8 +103,8 @@ export function useBotOperations() {
     }
   };
 
-  const stopSingleBot = (projectId: string) => {
-    botRuntimeOperations?.stopBot(projectId);
+  const stopSingleBot = async (projectId: string) => {
+    await botRuntimeOperations?.stopBot(projectId);
   };
 
   return {
