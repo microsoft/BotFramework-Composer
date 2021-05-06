@@ -63,8 +63,14 @@ jobs:
       run:
         working-directory: Composer
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set Node Version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.15.5
       - name: yarn test matrix
-        run: npx yarn workspace @${{ matrix['test-workspaces'] }} test
+        run: yarn workspace @${{ matrix['test-workspaces'] }} test
 
   # botproject:
   #   name: BotProject-dotnet
