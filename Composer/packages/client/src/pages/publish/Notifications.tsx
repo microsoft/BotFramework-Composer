@@ -6,6 +6,7 @@ import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
@@ -117,11 +118,23 @@ export const getSkillPublishedNotificationCardProps = (
     margin: 10px 8px 0 0;
   `;
   return {
-    title: item.status === 200 ? formatMessage('Your skill is ready to be shared!') : '',
+    title: item.status === 200 ? formatMessage('Your bot was exported to a skill') : '',
     description:
       item.status === 200
-        ? formatMessage(
-            'Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab.'
+        ? formatMessage.rich(
+            'Copy and share this URL with the bots that can connect to this skill. <link>Learn more.</link>',
+            {
+              link: ({ children }) => (
+                <Link
+                  key={'republish-skill'}
+                  href={'https://docs.microsoft.com/en-us/composer/how-to-export-a-skill#republish-the-skill-to-azure'}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {children}
+                </Link>
+              ),
+            }
           )
         : formatMessage(`Your skill could not be published.`),
     type: item.status === 200 ? 'success' : 'error',
@@ -164,7 +177,7 @@ export const getSkillPublishedNotificationCardProps = (
 
 export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = false): CardProps => {
   const description = isSkill
-    ? formatMessage('Publishing your skill...')
+    ? formatMessage('Exporting bot as a skill...')
     : formatMessage(
         `Publishing {
       count, plural,
@@ -191,7 +204,7 @@ export const getPendingNotificationCardProps = (items: BotStatus[], isSkill = fa
 export const getSkillPendingNotificationCardProps = (): CardProps => {
   return {
     title: '',
-    description: formatMessage('Publishing your skill...'),
+    description: formatMessage('Exporting bot as a skill...'),
     type: 'pending',
     onRenderCardContent: (props) => (
       <div css={cardContent}>

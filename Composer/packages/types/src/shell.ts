@@ -67,7 +67,7 @@ export type DisabledMenuActions = {
 export type Notification = {
   type: 'info' | 'warning' | 'error' | 'pending' | 'success';
   title: string;
-  description?: string;
+  description?: string | any[]; // any[] is the return type of formatMessage.rich
   retentionTime?: number;
   link?: {
     label: string;
