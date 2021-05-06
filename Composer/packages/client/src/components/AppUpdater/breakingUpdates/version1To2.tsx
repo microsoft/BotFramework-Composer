@@ -96,8 +96,9 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
         {formatMessage.rich(
           'Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>',
           {
+            // TODO: needs real link
             a: ({ children }) => (
-              <Link key="v2-breaking-changes-docs" href="https://aka.ms/bfcomposer-2-migratefrom1">
+              <Link key="v2-breaking-changes-docs" href="https://aka.ms/bot-framework-composer-2.0">
                 {children}
               </Link>
             ),
