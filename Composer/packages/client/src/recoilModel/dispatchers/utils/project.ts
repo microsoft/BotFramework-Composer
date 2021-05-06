@@ -463,6 +463,14 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
 
+export const isAdaptiveRuntime = (settings): boolean => {
+  return settings?.runtime?.key?.match(/^adaptive-runtime/) ? true : false;
+};
+
+export const isPVA = (settings): boolean => {
+  return settings?.publishTargets?.some((target) => target.type === 'pva-publish-composer');
+};
+
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { set } = callbackHelpers;
   const { botName, botEnvironment, location, readme, schemas, settings, id: projectId, diagnostics } = data;
@@ -479,7 +487,6 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     recognizers,
     crossTrainConfig,
   } = botFiles;
-
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   languageStorage.setLocale(botName, locale);
@@ -603,6 +610,7 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   if (error) {
     throw error;
   }
+
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   set(projectMetaDataState(projectData.id), {
     isRootBot: false,
@@ -652,7 +660,6 @@ export const createNewBotFromTemplate = async (
   }
   const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
   set(botProjectFileState(projectId), currentBotProjectFileIndexed);
-
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   // if create from QnATemplate, continue creation flow.
   if (templateId === QnABotTemplateId) {
@@ -661,6 +668,58 @@ export const createNewBotFromTemplate = async (
   }
 
   return { projectId, mainDialog };
+};
+
+export const createNewBotFromTemplateV2 = async (
+  callbackHelpers,
+  templateId: string,
+  templateVersion: string,
+  name: string,
+  description: string,
+  location: string,
+  schemaUrl?: string,
+  locale?: string,
+  templateDir?: string,
+  eTag?: string,
+  alias?: string,
+  preserveRoot?: boolean
+) => {
+  const jobId = await httpClient.post(`/v2/projects`, {
+    storageId: 'default',
+    templateId,
+    templateVersion,
+    name,
+    description,
+    location,
+    schemaUrl,
+    locale,
+    templateDir,
+    eTag,
+    alias,
+    preserveRoot,
+  });
+  return jobId;
+};
+
+export const migrateToV2 = async (
+  callbackHelpers,
+  oldProjectId: string,
+  name: string,
+  description: string,
+  location: string,
+  runtimeLanguage: string,
+  runtimeType: string
+) => {
+  const jobId = await httpClient.post(`/v2/projects/migrate`, {
+    storageId: 'default',
+    oldProjectId,
+    name,
+    description,
+    location,
+    runtimeLanguage,
+    runtimeType,
+  });
+  return jobId;
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
@@ -776,6 +835,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
   return {
     mainDialog,
     projectId: rootBotProjectId,
+    requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings) && !isPVA(botFiles.mergedSettings),
   };
 };
 
@@ -831,6 +891,7 @@ export const openRootBotAndSkillsByProjectId = async (callbackHelpers: CallbackI
   if (data.error) {
     throw data.error;
   }
+
   return await openRootBotAndSkills(callbackHelpers, data);
 };
 

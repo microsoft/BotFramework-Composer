@@ -311,6 +311,7 @@ async function run() {
   app.on('before-quit', () => {
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
+    mainWindow?.webContents.send('cleanup');
   });
 
   app.on('activate', () => {

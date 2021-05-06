@@ -216,7 +216,7 @@ export const ProjectTree: React.FC<Props> = ({
     };
     const menu: TreeMenuItem[] = [
       {
-        label: formatMessage('Add a trigger'),
+        label: formatMessage('Add new trigger'),
         icon: 'Add',
         onClick: () => {
           onDialogCreateTrigger(skillId, dialog.id);
@@ -230,7 +230,7 @@ export const ProjectTree: React.FC<Props> = ({
     ];
 
     const QnAMenuItem = {
-      label: formatMessage('Add new knowledge base'),
+      label: formatMessage('Add QnA Maker knowledge base'),
       icon: 'Add',
       onClick: () => {
         createQnAFromUrlDialogBegin({ projectId: skillId, dialogId: dialog.id });
