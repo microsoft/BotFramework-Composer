@@ -13,6 +13,7 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { LoadingSpinner } from '@bfc/ui-shared/lib/components/LoadingSpinner';
+import mapValues from 'lodash/mapValues';
 
 import { botDisplayNameState } from '../../../../recoilModel';
 import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
@@ -121,18 +122,6 @@ export const Description: React.FC<ContentProps> = ({
   );
 
   useEffect(() => {
-    const skillManifest = skillManifests.find(
-      (manifest) => manifest.content.$schema === ($schema || SCHEMA_URIS[0])
-    ) || {
-      content: {
-        $schema: $schema || SCHEMA_URIS[0],
-        $id: `${botName}-${uuid()}`,
-        endpoints: [{}],
-        name: botName,
-        ...rest,
-      },
-    };
-    setSkillManifest(skillManifest);
     (async function () {
       try {
         if ($schema) {
@@ -147,7 +136,20 @@ export const Description: React.FC<ContentProps> = ({
         editJson();
       }
     })();
-  }, [$schema]);
+    const skillManifest = skillManifests.find(
+      (manifest) => manifest.content.$schema === ($schema || SCHEMA_URIS[0])
+    ) || {
+      content: {
+        $schema: $schema || SCHEMA_URIS[0],
+        $id: `${botName}-${uuid()}`,
+        endpoints: [{}],
+        skillName: botName,
+        ...mapValues(schema?.properties, 'default'),
+        ...rest,
+      },
+    };
+    setSkillManifest(skillManifest);
+  }, [$schema, isFetchCompleted]);
 
   const required = schema?.required || [];
 

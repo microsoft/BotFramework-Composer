@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import React from 'react';
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension-client';
 import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { nameRegex } from '../../../constants';
 
@@ -16,6 +18,7 @@ import { AddCallers } from './content/AddCallers';
 export const VERSION_REGEX = /\d\.\d+\.(\d+|preview-\d+)|\d\.\d+/i;
 
 export const SCHEMA_URIS = [
+  'http://localhost:3000/skill-manifest.json',
   'https://schemas.botframework.com/schemas/skills/v2.1/skill-manifest.json',
   'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
 ];
@@ -182,8 +185,20 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     title: () => formatMessage('Export your bot'),
     subText: () =>
-      formatMessage(
-        'A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform.'
+      formatMessage.rich(
+        'A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform. <link>Learn more.</link>',
+        {
+          link: ({ children }) => (
+            <Link
+              key="learn-about-skill-manifests"
+              href={'https://docs.microsoft.com/en-us/composer/how-to-export-a-skill'}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {children}
+            </Link>
+          ),
+        }
       ),
     validate,
   },
