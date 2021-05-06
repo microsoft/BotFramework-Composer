@@ -21,12 +21,12 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 
-import { DialogCreationCopy, nameRegexV2, nameRegex } from '../../../constants';
+import { CreationFlowStatus, DialogCreationCopy, nameRegex, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
-import { dispatcherState, templateProjectsState } from '../../../recoilModel';
+import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
@@ -100,6 +100,7 @@ type DefineConversationProps = {
   focusedStorageFolder: StorageFolder;
 } & RouteComponentProps<{
   templateId: string;
+  defaultName: string;
   runtimeLanguage: string;
   location: string;
 }>;
@@ -118,11 +119,15 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const writable = focusedStorageFolder.writable;
   const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
   const templateProjects = useRecoilValue(templateProjectsState);
+  const creationFlowStatus = useRecoilValue(creationFlowStatusState);
+
   const currentTemplate = templateProjects.find((t) => {
     if (t?.id) {
       return t.id === templateId;
     }
   });
+
+  const inBotMigration = creationFlowStatus === CreationFlowStatus.MIGRATE;
 
   // template ID is populated by npm package name which needs to be formatted
   const normalizeTemplateId = () => {
@@ -135,6 +140,10 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           .replace(/-/g, ' ')
       );
       return upperFirst(camelCasedName);
+    } else if (templateId && inBotMigration) {
+      return templateId.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
+    } else {
+      return templateId;
     }
   };
 
@@ -311,8 +320,10 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
 
   const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
     const result: IDropdownOption[] = [];
-
-    if (currentTemplate) {
+    if (inBotMigration) {
+      result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+      result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+    } else if (currentTemplate) {
       if (runtimeLanguage === csharpFeedKey) {
         currentTemplate.dotnetSupport?.functionsSupported &&
           result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
@@ -325,7 +336,15 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
       }
     }
+
     return result;
+  };
+
+  const getRuntimeLanguageOptions = (): IDropdownOption[] => {
+    return [
+      { key: csharpFeedKey, text: 'C#' },
+      { key: nodeFeedKey, text: formatMessage('Node (Preview)') },
+    ];
   };
 
   useEffect(() => {
@@ -368,14 +387,30 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             </StackItem>
             {!isImported && (
               <StackItem grow={0} styles={halfstack}>
-                <Dropdown
-                  data-testid="NewDialogRuntimeType"
-                  label={formatMessage('Runtime type')}
-                  options={getSupportedRuntimesForTemplate()}
-                  selectedKey={formData.runtimeType}
-                  styles={{ root: { width: '420px' } }}
-                  onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
-                />
+                <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+                  <StackItem grow={0}>
+                    <Dropdown
+                      data-testid="NewDialogRuntimeType"
+                      label={formatMessage('Runtime type')}
+                      options={getSupportedRuntimesForTemplate()}
+                      selectedKey={formData.runtimeType}
+                      styles={{ root: { width: inBotMigration ? '200px' : '420px' } }}
+                      onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
+                    />
+                  </StackItem>
+                  {inBotMigration && (
+                    <StackItem grow={0}>
+                      <Dropdown
+                        data-testid="NewDialogRuntimeLanguage"
+                        label={formatMessage('Runtime Language')}
+                        options={getRuntimeLanguageOptions()}
+                        selectedKey={formData.runtimeLanguage}
+                        styles={{ root: { width: '200px' } }}
+                        onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
+                      />
+                    </StackItem>
+                  )}
+                </Stack>
               </StackItem>
             )}
           </Stack>

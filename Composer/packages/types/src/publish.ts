@@ -19,6 +19,7 @@ export type PublishResult = {
   status?: number;
   /** for local publish */
   endpointURL?: string;
+  port?: number;
   /** for PVA publish */
   action?: {
     href: string;
