@@ -132,9 +132,11 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     if (props.requiresLUIS) {
       newNextSteps.push({
         key: 'luis',
-        label: formatMessage('Add a LUIS key'),
-        description: formatMessage('Setup Language Understanding so that you can start and test your bot.'),
-        learnMore: 'https://www.luis.ai',
+        label: formatMessage('Set up Language Understanding'),
+        description: formatMessage(
+          'Use machine learning to understand natural language input and direct the conversation flow.'
+        ),
+        learnMore: 'https://aka.ms/composer-luis-learnmore',
         required: true,
         checked: hasLUIS,
         highlight: (step) => {
@@ -153,8 +155,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     if (props.requiresQNA) {
       newNextSteps.push({
         key: 'qna',
-        label: formatMessage('Add a QnA Maker key'),
-        description: formatMessage('Your template requires QnA Maker to access content for your bot.'),
+        label: formatMessage('Set up QnA Maker'),
+        description: formatMessage(
+          'Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ.'
+        ),
         learnMore: 'https://aka.ms/composer-addqnamaker-learnmore',
         required: true,
         checked: hasQNA,
@@ -196,7 +200,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       newRecomendedSteps.push({
         key: 'publishing',
         label: formatMessage('Create a publishing profile'),
-        description: formatMessage('Set up hosting and other Azure resources to enable publishing'),
+        description: formatMessage(
+          'A publishing profile provides the secure connectivity required to publish your bot.'
+        ),
         checked: hasPublishingProfile,
         learnMore: 'https://aka.ms/composer-getstarted-publishingprofile',
         onClick: () => {
@@ -225,8 +231,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
     newRecomendedSteps.push({
       key: 'editlg',
-      label: formatMessage('Edit what your bot says'),
-      description: formatMessage('Customize your bot by editing and adding bot responses.'),
+      label: formatMessage('Edit bot responses'),
+      description: formatMessage(
+        "Define your bot's responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
+      ),
       learnMore: 'https://aka.ms/composer-getstarted-editbotsays',
       checked: false,
       onClick: () => {
@@ -237,8 +245,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     });
     newRecomendedSteps.push({
       key: 'editlu',
-      label: formatMessage('Train your language model'),
-      description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
+      label: formatMessage('Edit user input and triggers'),
+      description: formatMessage('Define user input and trigger phrases to direct the conversation flow.'),
       learnMore: 'https://aka.ms/composer-luis-learnmore',
       checked: false,
       onClick: () => {
@@ -254,7 +262,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       {
         key: 'packages',
         label: formatMessage('Add packages'),
-        description: formatMessage('Visit the Package manager to browse packages to add to your bot.'),
+        description: formatMessage('Extend your bot with reusable dialogs, bot response templates and custom actions.'),
         learnMore: 'https://aka.ms/composer-getstarted-addpackages',
         checked: false,
         onClick: () => {
@@ -265,10 +273,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       },
       {
         key: 'insights',
-        label: formatMessage('Enable Insights'),
-        description: formatMessage(
-          'Collect service-level and conversation-level data to help gauge the performance and efficacy of your bot.'
-        ),
+        label: formatMessage('Enable App Insights'),
+        description: formatMessage('Collect information about the use and performance of your bot.'),
         learnMore: 'https://aka.ms/composer-getstarted-enableinsights',
         checked: false,
         onClick: () => {
@@ -279,8 +285,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       },
       {
         key: 'devops',
-        label: formatMessage('Publish to Dev Ops'),
-        description: formatMessage('Learn how to publish to a Dev Ops pipeline using CI / CD.'),
+        label: formatMessage('Set up continuous deployment (DevOps)'),
+        description: formatMessage(
+          'Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates.'
+        ),
         learnMore: 'https://aka.ms/bfcomposercicd',
         checked: false,
         onClick: () => {

@@ -99,6 +99,7 @@ export class AssetManager {
     jobId: string,
     runtimeType: RuntimeType,
     runtimeLanguage: FeedName,
+    yeomanOptions?: any,
     user?: UserIdentity
   ): Promise<LocationRef> {
     try {
@@ -125,6 +126,7 @@ export class AssetManager {
           templateGeneratorPath,
           runtimeType,
           runtimeLanguage,
+          yeomanOptions,
         },
         (status, msg) => {
           BackgroundProcessManager.updateProcess(jobId, status, msg);

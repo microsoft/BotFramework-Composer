@@ -527,17 +527,20 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             label={formatMessage('Location')}
             options={breadcrumbItems}
             selectedKey={currentPath}
+            styles={{ root: { width: '420px' } }}
             onChange={updatePath}
             onPendingValueChanged={updatePathPending}
           />
-        </StackItem>
-        {operationMode.write && (
-          <StackItem align={'end'} styles={{ root: { marginBottom: 5 } }}>
-            <Link disabled={editMode !== EditMode.NONE} onClick={onCreateNewFolder}>
+          {operationMode.write && (
+            <Link
+              disabled={editMode !== EditMode.NONE}
+              styles={{ root: { marginTop: '5px' } }}
+              onClick={onCreateNewFolder}
+            >
               {formatMessage('Create new folder')}
             </Link>
-          </StackItem>
-        )}
+          )}
+        </StackItem>
       </Stack>
       <div css={detailListContainer} data-is-scrollable="true">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

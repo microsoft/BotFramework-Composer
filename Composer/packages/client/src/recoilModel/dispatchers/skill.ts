@@ -41,13 +41,13 @@ export const skillDispatcher = () => {
       const currentSetting = await snapshot.getPromise(settingsState(projectId));
 
       // Update settings only for skills that have chosen the "Composer local" endpoint and not manifest endpoints
-      if (projectId && botEndpoints[projectId] && !botProjectSkill.endpointName) {
+      if (projectId && botEndpoints[projectId]?.url && !botProjectSkill.endpointName) {
         updatedSettings = produce(updatedSettings, (draftState) => {
           if (!draftState.skill) {
             draftState.skill = {};
           }
           draftState.skill[skillNameIdentifier] = {
-            endpointUrl: botEndpoints[projectId],
+            endpointUrl: botEndpoints[projectId].url,
             msAppId: currentSetting.MicrosoftAppId ?? '',
           };
         });
