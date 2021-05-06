@@ -29,17 +29,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.15.5
-      #- name: Restore yarn cache
-      #  uses: actions/cache@v2.1.2
-      #  with:
-      #    path: ~/.cache/yarn
-      #    key: ${{ runner.os }}-yarn-new-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
-      #    restore-keys: |
-      #      ${{ runner.os }}-yarn-new-
-      - name: Clear global yarn cache
-        run: yarn cache clean
-      - name: yarn --update-checksums
-        run: yarn --update-checksums
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: yarn
+        run: yarn
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
@@ -54,46 +55,46 @@ jobs:
           path-to-lcov: ./Composer/coverage/lcov.info
           base-path: ./Composer
 
-  botproject:
-    name: BotProject-dotnet
-    runs-on: windows-latest
-    timeout-minutes: 20
+  # botproject:
+  #   name: BotProject-dotnet
+  #   runs-on: windows-latest
+  #   timeout-minutes: 20
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set Dotnet Version
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "3.1.102" # SDK Version to use.
-      - name: dotnet build
-        run: dotnet build
-        working-directory: runtime/dotnet
-      - name: dotnet test
-        run: dotnet test
-        working-directory: runtime/dotnet/tests
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Set Dotnet Version
+  #       uses: actions/setup-dotnet@v1
+  #       with:
+  #         dotnet-version: "3.1.102" # SDK Version to use.
+  #     - name: dotnet build
+  #       run: dotnet build
+  #       working-directory: runtime/dotnet
+  #     - name: dotnet test
+  #       run: dotnet test
+  #       working-directory: runtime/dotnet/tests
 
-  nodejs:
-    name: BotProject-nodejs
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+  # nodejs:
+  #   name: BotProject-nodejs
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 20
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set Node Version
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.15.5
-      - name: npm install
-        run: npm install
-        working-directory: runtime/node
-      - name: npm build
-        run: npm run build
-        working-directory: runtime/node
-      - name: npm test
-        run: npm run test
-        working-directory: runtime/node
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Set Node Version
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14.15.5
+  #     - name: npm install
+  #       run: npm install
+  #       working-directory: runtime/node
+  #     - name: npm build
+  #       run: npm run build
+  #       working-directory: runtime/node
+  #     - name: npm test
+  #       run: npm run test
+  #       working-directory: runtime/node
   # docker-build:
   #   name: Docker Build
   #   timeout-minutes: 20
