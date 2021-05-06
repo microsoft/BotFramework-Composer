@@ -64,7 +64,7 @@ jobs:
         working-directory: Composer
     steps:
       - name: yarn test matrix
-        run: yarn workspace @${{ matrix['test-workspaces'] }} test
+        run: npx yarn workspace @${{ matrix['test-workspaces'] }} test
 
   # botproject:
   #   name: BotProject-dotnet
