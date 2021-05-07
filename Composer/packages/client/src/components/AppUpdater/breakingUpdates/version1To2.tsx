@@ -76,7 +76,7 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
     <Dialog
       dialogContentProps={{
         styles: dialogContent,
-        title: formatMessage('Composer 2.0 is now available!'),
+        title: formatMessage('Update to Composer 2.0'),
         type: DialogType.largeHeader,
       }}
       hidden={false}
@@ -88,13 +88,13 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
     >
       <p>
         {formatMessage(
-          'Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages.'
+          'Take advantage of new, advanced bot templates, reusable components and an extensible runtime available in Composer 2.0.'
         )}
       </p>
 
       <p>
         {formatMessage.rich(
-          'Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>',
+          'Custom actions created in previous versions might need to be recreated for Composer 2.0. <a>Learn more.</a>',
           {
             // TODO: needs real link
             a: ({ children }) => (
@@ -130,12 +130,12 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
     >
       <p css={updateCancelledCopy}>
         {formatMessage.rich(
-          'Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>',
+          'Auto-update was cancelled. To update to Bot Framework Composer 2.0, select <b>Help > Check for updates.</b>',
           { b: ({ children }) => <b key="v2-breaking-changes-re-enable-auto-updates">{children}</b> }
         )}
       </p>
       <div css={buttonRow}>
-        <PrimaryButton css={gotItButton} text={formatMessage('Got it!')} onClick={onCancel} />
+        <PrimaryButton css={gotItButton} text={formatMessage('OK')} onClick={onCancel} />
       </div>
     </Dialog>
   );

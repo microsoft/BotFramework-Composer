@@ -248,11 +248,11 @@ export const projectDispatcher = () => {
   const forceMigrate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     if (
       await OpenConfirmModal(
-        formatMessage('Convert your project to the latest format'),
+        formatMessage('Update this project to Composer 2.0'),
         formatMessage(
-          'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
+          'This project was created in an older version of Composer. To open this project in Composer 2.0, it needs to be updated and saved as a new project. Your original project will not be changed.'
         ),
-        { confirmText: formatMessage('Convert') }
+        { confirmText: formatMessage('Update this bot') }
       )
     ) {
       callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
