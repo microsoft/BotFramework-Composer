@@ -26,14 +26,6 @@ import { BotProjectSettingsTabView } from './BotProjectsSettingsTabView';
 
 // -------------------- Styles -------------------- //
 
-const header = css`
-  padding: 5px 20px;
-  display: flex;
-  justify-content: space-between;
-  label: PageHeader;
-  border-bottom: 1px solid silver;
-`;
-
 const container = css`
   display: flex;
   flex-direction: column;
@@ -134,7 +126,6 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
     <Page
       useDebugPane
       data-testid="BotProjectsSettings"
-      headerStyle={header}
       mainRegionName={formatMessage('Bot projects settings list View')}
       navLinks={navLinks}
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
