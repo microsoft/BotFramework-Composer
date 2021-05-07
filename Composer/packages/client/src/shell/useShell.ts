@@ -272,7 +272,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     },
     updateFlowZoomRate,
     reloadProject: () => reloadProject(projectId),
-    stopBot: async (targetProjectId: string) => {
+    stopBot: (targetProjectId: string) => {
       stopSingleBot(targetProjectId);
     },
     ...lgApi,
