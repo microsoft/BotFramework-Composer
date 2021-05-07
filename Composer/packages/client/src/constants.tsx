@@ -418,6 +418,7 @@ export const SupportedFileTypes = [
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
 
 export enum AppUpdaterStatus {
+  BREAKING_UPDATE_AVAILABLE,
   IDLE,
   UPDATE_AVAILABLE,
   UPDATE_UNAVAILABLE,
