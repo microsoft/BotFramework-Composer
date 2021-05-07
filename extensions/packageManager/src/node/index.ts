@@ -28,7 +28,7 @@ const hasSchema = (c) => {
 };
 
 const isAdaptiveComponent = (c) => {
-  return hasSchema(c) || c.includesExports;
+  return c.name && c.version && (hasSchema(c) || c.includesExports);
 };
 
 const readFileAsync = async (path, encoding) => {
