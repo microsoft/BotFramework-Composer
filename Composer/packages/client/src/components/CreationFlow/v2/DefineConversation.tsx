@@ -15,16 +15,21 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { QnABotTemplateId } from '@bfc/shared';
+import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
+import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 
-import { DialogCreationCopy, nameRegexV2, defaultPrimaryLanguage, defaultRuntime } from '../../../constants';
+import { CreationFlowStatus, DialogCreationCopy, nameRegex, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
-import { dispatcherState } from '../../../recoilModel';
+import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
+import TelemetryClient from '../../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 
@@ -39,10 +44,9 @@ const textFieldlabel = {
 };
 
 const name = {
-  subComponentStyles: textFieldlabel,
-};
-
-const description = {
+  root: {
+    width: '420px',
+  },
   subComponentStyles: textFieldlabel,
 };
 
@@ -70,8 +74,8 @@ type DefineConversationFormData = {
   name: string;
   description: string;
   schemaUrl: string;
-  primaryLanguage: string;
-  runtimeChoice: string;
+  runtimeLanguage: string;
+  runtimeType: RuntimeType;
   location?: string;
   templateVersion?: string;
   profile?: Profile; // abs payload to create bot
@@ -96,6 +100,8 @@ type DefineConversationProps = {
   focusedStorageFolder: StorageFolder;
 } & RouteComponentProps<{
   templateId: string;
+  defaultName: string;
+  runtimeLanguage: string;
   location: string;
 }>;
 
@@ -111,23 +117,39 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   } = props;
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
+  const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
+  const templateProjects = useRecoilValue(templateProjectsState);
+  const creationFlowStatus = useRecoilValue(creationFlowStatusState);
+
+  const currentTemplate = templateProjects.find((t) => {
+    if (t?.id) {
+      return t.id === templateId;
+    }
+  });
+
+  const inBotMigration = creationFlowStatus === CreationFlowStatus.MIGRATE;
 
   // template ID is populated by npm package name which needs to be formatted
-  const normalizeTemplateId = (templateId?: string) => {
-    if (templateId) {
+  const normalizeTemplateId = () => {
+    if (currentTemplate) {
       // use almost the same patterns as in assetManager.ts
-      return templateId
-        .replace(/^@microsoft\/generator-microsoft-bot-/, '') // clean up our complex package names
-        .replace(/^generator-/, '') // clean up other package names too
-        .trim()
-        .replace(/-/, '_')
-        .toLocaleLowerCase();
+      const camelCasedName = camelCase(
+        currentTemplate.name
+          .trim()
+          .replace(/bot|maker/gi, '')
+          .replace(/-/g, ' ')
+      );
+      return upperFirst(camelCasedName);
+    } else if (templateId && inBotMigration) {
+      return templateId.trim().replace(/[-\s]/g, '_').toLocaleLowerCase();
+    } else {
+      return templateId;
     }
   };
 
   const getDefaultName = () => {
     let i = 0;
-    const bot = normalizeTemplateId(templateId);
+    const bot = normalizeTemplateId();
     let defaultName = `${bot}`;
     while (
       files.some((file) => {
@@ -146,10 +168,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!value || !nameRegexV2.test(`${value}`)) {
+        const isPvaBot = templateId === 'pva';
+        const namePattern = isPvaBot ? nameRegex : nameRegexV2;
+        if (!value || !namePattern.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {
-            return formatMessage('Bot name cannot not start with a number');
+            return formatMessage('Bot name cannot start with a number or space');
           } else {
             return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, or _.');
           }
@@ -171,10 +195,10 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     description: {
       required: false,
     },
-    primaryLanguage: {
+    runtimeLanguage: {
       required: false,
     },
-    runtimeChoice: {
+    runtimeType: {
       required: false,
     },
     schemaUrl: {
@@ -201,8 +225,8 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
-      primaryLanguage: defaultPrimaryLanguage,
-      runtimeChoice: defaultRuntime,
+      runtimeLanguage: runtimeLanguage,
+      runtimeType: webAppRuntimeKey,
       description: '',
       schemaUrl: '',
       location:
@@ -278,7 +302,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.alias = await getAliasFromPayload(source, payload);
         }
       }
-
+      TelemetryClient.track('CreationExecuted', {
+        runtimeChoice: dataToSubmit?.runtimeType,
+        runtimeLanguage: dataToSubmit?.runtimeLanguage as FeedType,
+        isPva: isImported,
+        isAbs: !!dataToSubmit?.source,
+      });
       onSubmit({ ...dataToSubmit }, templateId || '');
     },
     [hasErrors, formData]
@@ -287,6 +316,35 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const onCurrentPathUpdateWrap = (newPath: string, storageId?: string) => {
     onCurrentPathUpdate(newPath, storageId);
     updateField('location', newPath);
+  };
+
+  const getSupportedRuntimesForTemplate = (): IDropdownOption[] => {
+    const result: IDropdownOption[] = [];
+    if (inBotMigration) {
+      result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+      result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+    } else if (currentTemplate) {
+      if (runtimeLanguage === csharpFeedKey) {
+        currentTemplate.dotnetSupport?.functionsSupported &&
+          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+        currentTemplate.dotnetSupport?.webAppSupported &&
+          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+      } else if (runtimeLanguage === nodeFeedKey) {
+        currentTemplate.nodeSupport?.functionsSupported &&
+          result.push({ key: functionsRuntimeKey, text: formatMessage('Azure Functions') });
+        currentTemplate.nodeSupport?.webAppSupported &&
+          result.push({ key: webAppRuntimeKey, text: formatMessage('Azure Web App') });
+      }
+    }
+
+    return result;
+  };
+
+  const getRuntimeLanguageOptions = (): IDropdownOption[] => {
+    return [
+      { key: csharpFeedKey, text: 'C#' },
+      { key: nodeFeedKey, text: formatMessage('Node (Preview)') },
+    ];
   };
 
   useEffect(() => {
@@ -309,7 +367,6 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
     );
   }, [focusedStorageFolder]);
   const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
-
   return (
     <Fragment>
       <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
@@ -328,16 +385,34 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
                 onChange={(_e, val) => updateField('name', val)}
               />
             </StackItem>
-            <StackItem grow={0} styles={halfstack}>
-              <TextField
-                multiline
-                label={formatMessage('Description')}
-                resizable={false}
-                styles={description}
-                value={formData.description}
-                onChange={(_e, val) => updateField('description', val)}
-              />
-            </StackItem>
+            {!isImported && (
+              <StackItem grow={0} styles={halfstack}>
+                <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+                  <StackItem grow={0}>
+                    <Dropdown
+                      data-testid="NewDialogRuntimeType"
+                      label={formatMessage('Runtime type')}
+                      options={getSupportedRuntimesForTemplate()}
+                      selectedKey={formData.runtimeType}
+                      styles={{ root: { width: inBotMigration ? '200px' : '420px' } }}
+                      onChange={(_e, option) => updateField('runtimeType', option?.key.toString())}
+                    />
+                  </StackItem>
+                  {inBotMigration && (
+                    <StackItem grow={0}>
+                      <Dropdown
+                        data-testid="NewDialogRuntimeLanguage"
+                        label={formatMessage('Runtime Language')}
+                        options={getRuntimeLanguageOptions()}
+                        selectedKey={formData.runtimeLanguage}
+                        styles={{ root: { width: '200px' } }}
+                        onChange={(_e, option) => updateField('runtimeLanguage', option?.key.toString())}
+                      />
+                    </StackItem>
+                  )}
+                </Stack>
+              </StackItem>
+            )}
           </Stack>
           {locationSelectContent}
           <DialogFooter>
@@ -345,7 +420,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={hasErrors || !writable}
-              text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('OK')}
+              text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('Create')}
               onClick={handleSubmit}
             />
           </DialogFooter>

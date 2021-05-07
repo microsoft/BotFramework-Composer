@@ -135,6 +135,7 @@ describe('assetManager', () => {
           id: 'generator-conversational-core',
           name: 'Conversational Core',
           description: 'Preview conversational core package for TESTING ONLY',
+          isMultiBotTemplate: false,
           package: {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',
@@ -154,7 +155,9 @@ describe('assetManager', () => {
         '1.0.3',
         'sampleConversationalCore',
         mockLocRef,
-        '0'
+        '0',
+        'webapp',
+        'dotnet'
       );
       expect(newBotLocationRef).toStrictEqual({
         path: '/path/to/npmbot',

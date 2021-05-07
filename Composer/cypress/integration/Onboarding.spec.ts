@@ -3,16 +3,16 @@
 
 context('Onboarding', () => {
   beforeEach(() => {
-    cy.visit('/home');
-    cy.createBot('TodoSample', 'Onboarding');
-    cy.visitPage('Design');
-    //enable onboarding setting
-    cy.visitPage('Composer Settings');
-    cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('Application Settings').click();
+    cy.createTestBot('TestSample', ({ id }) => {
+      cy.visit(`/bot/${id}`);
+      //enable onboarding setting
+      cy.visitPage('Composer settings', false);
+      cy.findByTestId('ProjectTree').within(() => {
+        cy.findByText('Application Settings').click();
+      });
+      cy.findByTestId('onboardingToggle').click();
+      cy.visitPage('Create');
     });
-    cy.findByTestId('onboardingToggle').click();
-    cy.visitPage('Design');
   });
 
   it('walk through product tour teaching bubbles', () => {

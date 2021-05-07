@@ -29,11 +29,15 @@ type Props = {
   luFile?: LuFile;
   labelingMenuVisible: boolean;
   onDefineEntity: (entityType: ToolbarLuEntityType, entityName?: string) => void;
-  onInsertEntity: (entityName: string) => void;
+  onInsertEntity: (entityName: string, entityType: string) => void;
+  options?: Partial<{
+    disabled: boolean;
+    tooltip: string;
+  }>;
 };
 
 export const LuEditorToolbar = React.memo((props: Props) => {
-  const { editor, luFile, labelingMenuVisible, className, onDefineEntity, onInsertEntity } = props;
+  const { editor, luFile, labelingMenuVisible, className, onDefineEntity, onInsertEntity, options } = props;
 
   const [insertEntityDisabled, setInsertEntityDisabled] = React.useState(true);
   const [tagEntityDisabled, setTagEntityDisabled] = React.useState(true);
@@ -55,7 +59,9 @@ export const LuEditorToolbar = React.memo((props: Props) => {
   const defineLuEntityItem: ICommandBarItemProps = React.useMemo(() => {
     return {
       key: 'defineLuEntityItem',
-      commandBarButtonAs: () => <DefineEntityButton onDefineEntity={onDefineEntity} />,
+      commandBarButtonAs: () => (
+        <DefineEntityButton disabled={options?.disabled} tooltip={options?.tooltip} onDefineEntity={onDefineEntity} />
+      ),
     };
   }, [onDefineEntity]);
 
@@ -64,10 +70,12 @@ export const LuEditorToolbar = React.memo((props: Props) => {
       key: 'useLuEntityItem',
       commandBarButtonAs: () => (
         <InsertEntityButton
+          disabled={options?.disabled}
           insertEntityDisabled={insertEntityDisabled}
           labelingMenuVisible={labelingMenuVisible}
           luFile={luFile}
           tagEntityDisabled={tagEntityDisabled}
+          tooltip={options?.tooltip}
           onInsertEntity={onInsertEntity}
         />
       ),

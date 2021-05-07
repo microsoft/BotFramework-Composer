@@ -15,7 +15,7 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
+import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType, FEEDVERSION } from '../../constants';
 import { TreeLink } from '../../components/ProjectTree/types';
 import { Dispatcher } from '../dispatchers';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
@@ -61,6 +61,16 @@ export const dispatcherState = atom<Dispatcher>({
 export const recentProjectsState = atom<any[]>({
   key: getFullyQualifiedKey('recentProjects'),
   default: [],
+});
+
+export const feedState = atom<{ tabs: any[]; whatsNewLinks: any[]; version: number; fetched: boolean }>({
+  key: getFullyQualifiedKey('feed'),
+  default: {
+    version: FEEDVERSION,
+    fetched: false,
+    tabs: [],
+    whatsNewLinks: [],
+  },
 });
 
 export const templateProjectsState = atom<BotTemplate[]>({
@@ -174,7 +184,7 @@ export const runtimeSettingsState = atom<{
   },
 });
 
-export const botEndpointsState = atom<Record<string, string>>({
+export const botEndpointsState = atom<Record<string, { url: string; port: number }>>({
   key: getFullyQualifiedKey('botEndpoints'),
   default: {},
 });
@@ -332,5 +342,25 @@ export const selectedTemplateReadMeState = atom<string>({
 
 export const isWebChatPanelVisibleState = atom<boolean>({
   key: getFullyQualifiedKey('isWebChatPanelVisible'),
+  default: false,
+});
+
+export const userHasNodeInstalledState = atom<boolean>({
+  key: getFullyQualifiedKey('userHasNodeInstalled'),
+  default: true,
+});
+
+export const warnAboutDotNetState = atom<boolean>({
+  key: getFullyQualifiedKey('warnAboutDotNetState'),
+  default: false,
+});
+
+export const orchestratorForSkillsDialogState = atom<boolean>({
+  key: getFullyQualifiedKey('orchestratorForSkillsDialogState'),
+  default: false,
+});
+
+export const warnAboutFunctionsState = atom<boolean>({
+  key: getFullyQualifiedKey('warnAboutFunctionsState'),
   default: false,
 });

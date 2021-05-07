@@ -48,14 +48,19 @@ describe('<StringField />', () => {
 
 describe('borderStyles', () => {
   it('does not apply border styles when transparentBorder is false', () => {
-    expect(borderStyles(false, false)).toEqual({});
+    expect(borderStyles(false, false, false)).toEqual({
+      fieldGroup: {
+        borderRadius: undefined,
+      },
+    });
   });
 
   it('applies a transparent border when there is no error', () => {
-    expect(borderStyles(true, false)).toMatchInlineSnapshot(`
+    expect(borderStyles(true, false, false)).toMatchInlineSnapshot(`
       Object {
         "fieldGroup": Object {
           "borderColor": "transparent",
+          "borderRadius": undefined,
           "selectors": Object {
             ":hover": Object {
               "borderColor": "#edebe9",
@@ -68,10 +73,11 @@ describe('borderStyles', () => {
   });
 
   it('does not apply a transparent border when there is an error', () => {
-    expect(borderStyles(true, true)).toMatchInlineSnapshot(`
+    expect(borderStyles(true, true, false)).toMatchInlineSnapshot(`
       Object {
         "fieldGroup": Object {
           "borderColor": undefined,
+          "borderRadius": undefined,
           "selectors": Object {
             ":hover": Object {
               "borderColor": undefined,

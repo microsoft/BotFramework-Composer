@@ -21,6 +21,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     expression,
     uiOptions,
     required,
+    hasIcon,
   } = props;
 
   const options: IDropdownOption[] = useMemo(() => {
@@ -68,6 +69,9 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
         responsiveMode={ResponsiveMode.large}
         selectedKey={value}
         styles={{
+          title: {
+            borderRadius: hasIcon ? '0 2px 2px 0' : undefined,
+          },
           errorMessage: { display: 'none' },
         }}
         onBlur={() => onBlur(id, value)}

@@ -4,6 +4,7 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
+import formatMessage from 'format-message';
 
 import {
   appUpdateState,
@@ -15,13 +16,17 @@ import {
   pageElementState,
   debugPanelExpansionState,
   debugPanelActiveTabState,
+  userHasNodeInstalledState,
+  applicationErrorState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
+import httpClient from '../../utils/httpUtil';
 
 import { setError } from './shared';
+import { flushExistingTasks } from './utils/project';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback(
@@ -30,7 +35,7 @@ export const applicationDispatcher = () => {
         const newAppUpdateState = {
           ...currentAppUpdate,
         };
-        if (status === AppUpdaterStatus.UPDATE_AVAILABLE) {
+        if (status === AppUpdaterStatus.UPDATE_AVAILABLE || status === AppUpdaterStatus.BREAKING_UPDATE_AVAILABLE) {
           newAppUpdateState.version = version;
         }
         if (status === AppUpdaterStatus.IDLE) {
@@ -130,7 +135,26 @@ export const applicationDispatcher = () => {
     }
   );
 
+  const checkNodeVersion = useRecoilCallback(({ set }: CallbackInterface) => async () => {
+    try {
+      const response = await httpClient.get(`/utilities/checkNode`);
+      const userHasNode = response.data?.userHasNode;
+      set(userHasNodeInstalledState, userHasNode);
+    } catch (err) {
+      set(applicationErrorState, {
+        message: formatMessage('Error checking node version'),
+        summary: err.message,
+      });
+    }
+  });
+
+  const performAppCleanupOnQuit = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    // shutdown any running bots to avoid orphaned processes
+    await flushExistingTasks(callbackHelpers);
+  });
+
   return {
+    checkNodeVersion,
     setAppUpdateStatus,
     setAppUpdateShowing,
     setAppUpdateError,
@@ -138,6 +162,7 @@ export const applicationDispatcher = () => {
     setMessage: debounce(setMessage, 500),
     onboardingSetComplete,
     onboardingAddCoachMarkRef,
+    performAppCleanupOnQuit,
     setCreationFlowStatus,
     setApplicationLevelError,
     setCreationFlowType,

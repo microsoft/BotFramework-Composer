@@ -4,6 +4,8 @@
 
 import * as express from 'express';
 
+import { logNetworkTraffic } from '../middleware/logNetworkTraffic';
+
 import {
   createBotFrameworkAuthenticationMiddleware,
   createCreateBotEndpointHandler,
@@ -26,6 +28,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.post(
     '/v3/conversations',
+    logNetworkTraffic,
     verifyBotFramework,
     createCreateBotEndpointHandler(state),
     createNewConversationHandler(state)
@@ -33,6 +36,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.post(
     '/v3/conversations/:conversationId/activities/:activityId',
+    logNetworkTraffic,
     verifyBotFramework,
     fetchConversation,
     createReplyToActivityHandler
@@ -40,6 +44,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.post(
     '/v3/conversations/:conversationId/attachments',
+    logNetworkTraffic,
     verifyBotFramework,
     createUploadAttachmentHandler(state)
   );
@@ -56,7 +61,7 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.post('/conversations/:conversationId/saveTranscript', fetchConversation, saveTranscriptHandler(state));
 
-  router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler(state));
+  router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler());
 
   return router;
 };

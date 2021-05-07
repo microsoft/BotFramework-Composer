@@ -43,6 +43,7 @@
     "react-dom": "16.13.1"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.27"
+    "@emotion/core": "^10.0.27",
+    "ajv": "7.2.3"
   }
 }

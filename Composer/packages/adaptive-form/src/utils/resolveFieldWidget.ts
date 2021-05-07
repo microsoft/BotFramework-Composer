@@ -66,7 +66,9 @@ export function resolveFieldWidget(params: {
       if (value.startsWith('=')) {
         return { field: isOneOf ? DefaultFields.IntellisenseExpressionField : IntellisenseExpressionFieldWithIcon };
       } else {
-        if (showIntellisense && isOneOf) {
+        if (schema.enum?.includes(value)) {
+          return { field: isOneOf ? DefaultFields.SelectField : SelectFieldWithIcon };
+        } else if (showIntellisense && isOneOf) {
           return { field: DefaultFields.IntellisenseTextField };
         } else if (showIntellisense && !isOneOf) {
           return { field: IntellisenseTextFieldWithIcon };

@@ -109,6 +109,7 @@ export enum SDKKinds {
   ReplaceDialog = 'Microsoft.ReplaceDialog',
   ResourceMultiLanguageGenerator = 'Microsoft.ResourceMultiLanguageGenerator',
   SendActivity = 'Microsoft.SendActivity',
+  SendHandoffActivity = 'Microsoft.SendHandoffActivity',
   SetProperties = 'Microsoft.SetProperties',
   SetProperty = 'Microsoft.SetProperty',
   SignOutUser = 'Microsoft.SignOutUser',

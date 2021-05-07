@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -17,6 +17,9 @@ import { isElectron } from './utils';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
+  scrollbar: {
+    alwaysConsumeMouseWheel: false,
+  },
   wordWrap: 'off',
   wordWrapColumn: 120,
   fontFamily: 'Courier',
@@ -73,7 +76,7 @@ const styles = {
       box-sizing: border-box;
       height: calc(${typeof height === 'string' ? height : `${height}px`} - ${heightAdj}px);
       > * {
-        opacity: ${editorOptions?.readOnly ? 0.4 : 1};
+        opacity: ${editorOptions?.readOnly && editorOptions?.fadedWhenReadOnly ? 0.4 : 1};
       }
       label: BaseEditor;
     `;
@@ -100,6 +103,7 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     fontFamily: overrides?.fontSettings?.fontFamily,
     fontSize: overrides?.fontSettings?.fontSize,
     fontWeight: Number(overrides?.fontSettings?.fontWeight),
+    fadedWhenReadOnly: overrides?.fadedWhenReadOnly !== undefined ? overrides.fadedWhenReadOnly : true,
   };
 };
 
@@ -120,6 +124,7 @@ export interface BaseEditorProps extends EditorProps {
   onChangeSettings?: (settings: CodeEditorSettings) => void;
   onBlur?: (id: string) => void;
   onFocus?: (id: string) => void;
+  styleOverrides?: SerializedStyles[];
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = (props) => {
@@ -139,6 +144,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
     editorSettings,
     onFocus,
     onBlur,
+    styleOverrides = [],
     ...rest
   } = props;
   const baseOptions = useMemo(() => assignDefined(defaultOptions, props.options), [props.options]);
@@ -235,14 +241,17 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   return (
     <React.Fragment>
       <div
-        css={styles.container({
-          hovered,
-          focused,
-          error: hasError,
-          warning: hasWarning,
-          height,
-          editorOptions,
-        })}
+        css={[
+          styles.container({
+            hovered,
+            focused,
+            error: hasError,
+            warning: hasWarning,
+            height,
+            editorOptions,
+          }),
+          ...styleOverrides,
+        ]}
         data-testid="BaseEditor"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}

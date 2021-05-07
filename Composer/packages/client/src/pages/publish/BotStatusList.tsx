@@ -7,21 +7,75 @@ import moment from 'moment';
 import formatMessage from 'format-message';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import React, { useState, Fragment, useMemo } from 'react';
+import React, { useState, Fragment, useMemo, useRef } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PublishResult } from '@bfc/shared';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
 import get from 'lodash/get';
+import { useCopyToClipboard } from '@bfc/ui-shared';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
 import { BotPublishHistory, BotStatus } from './type';
+
+const copiedCalloutStyles = {
+  root: {
+    padding: '10px',
+  },
+};
+
+type SkillManifestUrlFieldProps = {
+  urls: string[];
+};
+
+const SkillManifestUrlField = ({ urls }: SkillManifestUrlFieldProps) => {
+  const { isCopiedToClipboard, copyTextToClipboard, resetIsCopiedToClipboard } = useCopyToClipboard(urls[0]);
+
+  const calloutTarget = useRef<HTMLElement>();
+  const clipUrl = (url) => url.replace('azurewebsites.net/manifests/', 'azureweb...');
+  return (
+    <Fragment>
+      <TooltipHost
+        content={urls.map((url) => (
+          <div key={url} style={{ display: 'flex' }}>
+            {clipUrl(url)}
+            <IconButton iconProps={{ iconName: 'copy' }} onClick={() => navigator.clipboard.writeText(url)} />
+          </div>
+        ))}
+      >
+        <ActionButton
+          className="skill-manifest-copy-button"
+          title={urls[0]}
+          onClick={(e) => {
+            calloutTarget.current = e.target as HTMLElement;
+            copyTextToClipboard();
+          }}
+        >
+          {formatMessage('Copy Skill Manifest URL')}
+        </ActionButton>
+      </TooltipHost>
+      {isCopiedToClipboard && (
+        <Callout
+          setInitialFocus
+          calloutMaxWidth={200}
+          styles={copiedCalloutStyles}
+          target={calloutTarget.current}
+          onDismiss={resetIsCopiedToClipboard}
+        >
+          {formatMessage('Skill manifest URL was copied to the clipboard')}
+        </Callout>
+      )}
+    </Fragment>
+  );
+};
 
 export type BotStatusListProps = {
   botStatusList: BotStatus[];
@@ -50,8 +104,9 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
   const [currentSort, setSort] = useState({ key: 'Bot', descending: true });
 
   const displayedItems: BotStatus[] = useMemo(() => {
-    if (currentSort.key !== 'Bot') return botStatusList;
-    if (currentSort.descending) return botStatusList;
+    if (currentSort.key !== 'Bot' || currentSort.descending) {
+      return botStatusList.slice();
+    }
     return botStatusList.slice().reverse();
   }, [botStatusList, currentSort]);
 
@@ -141,6 +196,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       onRender: (item: BotStatus) => {
         return (
           <Checkbox
+            checked={checkedIds.includes(item.id)}
             disabled={disableCheckbox}
             label={item.name}
             styles={{
@@ -163,7 +219,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       name: formatMessage('Publish target'),
       className: 'publishTarget',
       fieldName: 'target',
-      minWidth: 100,
+      minWidth: 150,
       maxWidth: 200,
       isRowHeader: true,
       data: 'string',
@@ -241,6 +297,19 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
       data: 'string',
       onRender: (item: BotStatus) => {
         return <span>{item.comment}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'SkillManifest',
+      name: '',
+      className: 'skillManifest',
+      fieldName: 'skillManifestUrl',
+      minWidth: 134,
+      maxWidth: 150,
+      data: 'string',
+      onRender: (item: BotStatus) => {
+        return item?.skillManifestUrls.length > 0 && <SkillManifestUrlField urls={item.skillManifestUrls} />;
       },
       isPadded: true,
     },

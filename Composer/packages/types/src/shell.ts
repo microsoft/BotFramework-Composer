@@ -64,6 +64,21 @@ export type DisabledMenuActions = {
   reason: string;
 };
 
+export type Notification = {
+  type: 'info' | 'warning' | 'error' | 'pending' | 'success';
+  title: string;
+  description?: string;
+  retentionTime?: number;
+  link?: {
+    label: string;
+    onClick: () => void;
+  };
+  read?: boolean;
+  hidden?: boolean;
+  onRenderCardContent?: ((props: Notification) => JSX.Element) | React.FC<any>;
+  data?: Record<string, any>;
+};
+
 export type ApplicationContextApi = {
   navigateTo: (to: string, opts?: { state?: any; replace?: boolean }) => void;
   updateUserSettings: (settings: Partial<UserSettings>) => void;
@@ -74,6 +89,10 @@ export type ApplicationContextApi = {
   confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
   updateFlowZoomRate: (currentRate: number) => void;
   telemetryClient: TelemetryClient;
+  addNotification: (notification: Notification) => string;
+  deleteNotification: (id: string) => void;
+  markNotificationAsRead: (id: string) => void;
+  hideNotification: (id: string) => void;
 };
 
 export type ApplicationContext = {
@@ -128,6 +147,7 @@ export type ProjectContextApi = {
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   createQnATrigger: (id: string) => void;
+  stopBot: (projectId: string) => void;
   updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };
@@ -150,6 +170,7 @@ export type ProjectContext = {
   projectId: string;
   projectCollection: BotInProject[];
   dialogs: DialogInfo[];
+  topics: DialogInfo[];
   dialogSchemas: DialogSchemaFile[];
   lgFiles: LgFile[];
   luFiles: LuFile[];

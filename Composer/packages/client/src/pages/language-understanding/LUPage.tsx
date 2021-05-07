@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo, buildURL } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { localeState, luFilesState } from '../../recoilModel';
+import { localeState, luFilesSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 
@@ -26,7 +26,7 @@ const LUPage: React.FC<RouteComponentProps<{
   const { dialogId = '', projectId = '', skillId, luFileId = '' } = props;
   const actualProjectId = skillId ?? projectId;
   const locale = useRecoilValue(localeState(actualProjectId));
-  const luFiles = useRecoilValue(luFilesState(actualProjectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(actualProjectId));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
@@ -62,7 +62,6 @@ const LUPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
-      useDebugPane
       useNewTree
       data-testid="LUPage"
       dialogId={dialogId}
@@ -72,7 +71,7 @@ const LUPage: React.FC<RouteComponentProps<{
       pageMode={'language-understanding'}
       projectId={projectId}
       skillId={skillId}
-      title={formatMessage('User Input')}
+      title={formatMessage('User input')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >

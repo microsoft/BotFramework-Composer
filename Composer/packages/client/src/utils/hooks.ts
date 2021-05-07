@@ -14,6 +14,7 @@ import {
   currentProjectIdState,
   pluginPagesSelector,
   featureFlagsState,
+  projectMetaDataState,
   rootBotProjectIdSelector,
   schemasState,
 } from '../recoilModel';
@@ -49,12 +50,13 @@ export const useLinks = () => {
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const schemas = useRecoilValue(schemasState(projectId));
+  const { isRemote } = useRecoilValue(projectMetaDataState(projectId));
   const openedDialogId = designPageLocation.dialogId;
   const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
-    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, schemas.sdk, rootProjectId);
-  }, [projectId, openedDialogId, pluginPages, showFormDialog]);
+    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, schemas.sdk, isRemote, rootProjectId);
+  }, [projectId, openedDialogId, pluginPages, showFormDialog, isRemote]);
 
   return { topLinks: pageLinks, bottomLinks };
 };
@@ -66,12 +68,16 @@ export const useRouterCache = (to: string) => {
   const linksRef = useRef(topLinks.concat(bottomLinks));
   linksRef.current = topLinks.concat(bottomLinks);
 
+  // Tracks if the component is mounted.
+  const mountedRef = useRef(false);
+
   useEffect(() => {
     routerCache.cleanAll();
     setState({});
   }, [rootProjectId]);
 
   useEffect(() => {
+    mountedRef.current = true;
     globalHistory.listen(({ location }) => {
       const links = linksRef.current;
       const { href, origin } = location;
@@ -79,9 +85,16 @@ export const useRouterCache = (to: string) => {
       const target = find(links, (link) => uri.startsWith(link.to));
       if (target) {
         routerCache.set(target.to, uri);
-        setState(routerCache.getAll());
+        // Only update local state if the component is still mounted.
+        if (mountedRef.current) {
+          setState(routerCache.getAll());
+        }
       }
     });
+
+    return () => {
+      mountedRef.current = false;
+    };
   }, []);
 
   return state[to] || to;

@@ -15,10 +15,10 @@ export interface BotSettings {
 }
 
 export interface BotFeatureSettings {
-  useShowTypingMiddleware: boolean;
-  useInspectionMiddleware: boolean;
-  removeRecipientMention: boolean;
-  useSetSpeakMiddleware: boolean;
+  UseShowTypingMiddleware: boolean;
+  UseInspectionMiddleware: boolean;
+  RemoveRecipientMention: boolean;
+  UseSetSpeakMiddleware: boolean;
 }
 
 export interface BotSkillSettings {

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React, { Fragment, useEffect } from 'react';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { useRecoilValue } from 'recoil';
 
 import { Header } from './components/Header';
@@ -11,25 +10,34 @@ import { MainContainer } from './components/AppComponents/MainContainer';
 import { dispatcherState, userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
+import { setupIcons } from './setupIcons';
 
-initializeIcons(undefined, { disableWarnings: true });
+setupIcons();
 
 const Logger = () => {
   useInitializeLogger();
   return null;
 };
 
+const { ipcRenderer } = window;
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
-  const { fetchExtensions, fetchFeatureFlags } = useRecoilValue(dispatcherState);
+
+  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion, performAppCleanupOnQuit } = useRecoilValue(
+    dispatcherState
+  );
 
   useEffect(() => {
     loadLocale(appLocale);
   }, [appLocale]);
 
   useEffect(() => {
+    checkNodeVersion();
     fetchExtensions();
     fetchFeatureFlags();
+    ipcRenderer?.on('cleanup', (_event) => {
+      performAppCleanupOnQuit();
+    });
   }, []);
 
   return (

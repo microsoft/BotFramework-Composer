@@ -34,7 +34,14 @@ const mockSchemas = {
               description: 'Route',
               default: 'mockRoute',
             },
+            type: {
+              type: 'string',
+              title: 'Type',
+              description: 'Fully qualified type for the adapter',
+              default: 'Adapter.Full.Type.Mock',
+            },
           },
+          required: ['exampleName'],
         },
       },
     },
@@ -47,6 +54,7 @@ const mockSchemas = {
           subtitle: 'Connect to Fake Chat Client',
           helpLink: 'https://example.com/',
           order: ['route', 'exampleName'],
+          hidden: ['type'],
         },
       },
     },
@@ -72,17 +80,6 @@ describe('ExternalAdapterSettings', () => {
     setSettingsMock.mockClear();
   });
 
-  it('renders a link to the package manager', () => {
-    const { getByText } = renderWithRecoilAndCustomDispatchers(
-      <ExternalAdapterSettings projectId={PROJECT_ID} />,
-      initRecoilState
-    );
-
-    const link = getByText('the package manager');
-
-    expect(link.attributes.getNamedItem('href')?.value).toEqual('plugin/package-manager/package-manager');
-  });
-
   it('brings up the modal', () => {
     const { getByTestId, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
@@ -105,7 +102,7 @@ describe('ExternalAdapterSettings', () => {
   });
 
   it('sets settings on an adapter', async () => {
-    const { getByTestId, getByLabelText, getByText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
+    const { getByTestId, getByLabelText, queryByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
@@ -116,8 +113,9 @@ describe('ExternalAdapterSettings', () => {
     });
 
     await act(async () => {
+      const modal = getByTestId('adapterModal');
       await userEvent.type(getByLabelText('Example Name'), 'test text 12345', { delay: 50 });
-      userEvent.click(getByText('Create'));
+      userEvent.click(within(modal).getByText('Configure'));
     });
 
     const modal = queryByTestId('adapterModal');
@@ -129,20 +127,44 @@ describe('ExternalAdapterSettings', () => {
             name: 'Adapter.Mock',
             route: 'mockRoute',
             enabled: true,
+            type: 'Adapter.Full.Type.Mock',
           },
         ],
       },
-      'Adapter.Mock': { exampleName: 'test text 12345', route: 'mockRoute', $kind: 'Adapter.Mock' },
+      'Adapter.Mock': {
+        exampleName: 'test text 12345',
+        route: 'mockRoute',
+        $kind: 'Adapter.Mock',
+        type: 'Adapter.Full.Type.Mock',
+      },
     });
+  });
+
+  it('does not proceed if required settings are missing', async () => {
+    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
+      <ExternalAdapterSettings projectId={PROJECT_ID} />,
+      initRecoilState
+    );
+    const container = getByTestId('adapterSettings');
+    const configureButton = within(container).queryAllByText('Configure')[0];
+    act(() => {
+      fireEvent.click(configureButton);
+    });
+
+    const modal = getByTestId('adapterModal');
+    expect(within(modal).getByText('Configure')).toBeDisabled();
   });
 
   it('disables an adapter', async () => {
     const initStateWithAdapter = {
-      runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }] },
+      runtimeSettings: {
+        adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+      },
       'Adapter.Mock': {
         exampleName: 'example',
         route: 'mock',
         $kind: 'Adapter.Mock',
+        type: 'Adapter.Full.Type.Mock',
       },
     };
 
@@ -161,17 +183,22 @@ describe('ExternalAdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }] },
+        runtimeSettings: {
+          adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+        },
       })
     );
   });
 
   it('enables an adapter', async () => {
     const initStateWithAdapter = {
-      runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock' }] },
+      runtimeSettings: {
+        adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+      },
       'Adapter.Mock': {
         exampleName: 'example',
         route: 'mock',
+        type: 'Adapter.Full.Type.Mock',
       },
     };
 
@@ -190,7 +217,9 @@ describe('ExternalAdapterSettings', () => {
     expect(setSettingsMock).toHaveBeenLastCalledWith(
       PROJECT_ID,
       expect.objectContaining({
-        runtimeSettings: { adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock' }] },
+        runtimeSettings: {
+          adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
+        },
       })
     );
   });

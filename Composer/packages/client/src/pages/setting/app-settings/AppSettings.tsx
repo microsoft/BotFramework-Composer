@@ -46,8 +46,12 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     updateUserSettings({ codeEditor: { [key]: value } });
   };
 
-  const onLocaleChange = (appLocale: string) => {
-    updateUserSettings({ appLocale });
+  const onLocaleChange = async (appLocale: string) => {
+    await updateUserSettings({ appLocale });
+
+    setTimeout(() => {
+      document.getElementById('appLanguage')?.focus();
+    }, 100);
   };
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => {
@@ -96,12 +100,13 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     <div css={container}>
       <section css={section}>
         <section css={section}>
-          <h2>{formatMessage('Application Language settings')}</h2>
+          <h2>{formatMessage('Application language settings')}</h2>
           <SettingDropdown
-            description={formatMessage('This is the language used for Composer’s user interface.')}
+            id={'appLanguage'}
+            label={formatMessage('Composer language')}
             options={languageOptions}
             selected={userSettings.appLocale}
-            title={formatMessage('Application language')}
+            tooltip={formatMessage('This is the language used for Composer’s user interface.')}
             onChange={onLocaleChange}
           />
         </section>

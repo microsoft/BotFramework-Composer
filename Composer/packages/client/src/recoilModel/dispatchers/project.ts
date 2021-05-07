@@ -4,11 +4,12 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
+import { OpenConfirmModal } from '@bfc/ui-shared';
+import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus } from '../../constants';
+import { BotStatus, CreationFlowStatus, FEEDVERSION } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -28,22 +29,30 @@ import {
   createQnAOnState,
   creationFlowTypeState,
   currentProjectIdState,
+  currentPublishTargetState,
   dispatcherState,
+  feedState,
   fetchReadMePendingState,
   filePersistenceState,
   projectMetaDataState,
   selectedTemplateReadMeState,
   showCreateQnAFromUrlDialogState,
+  warnAboutDotNetState,
+  warnAboutFunctionsState,
+  settingsState,
+  creationFlowStatusState,
+  orchestratorForSkillsDialogState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
+import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
+import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 import {
   checkIfBotExistsInBotProjectFile,
   createNewBotFromTemplate,
-  createNewBotFromTemplateV2,
   fetchProjectDataById,
   flushExistingTasks,
   getSkillNameIdentifier,
@@ -59,6 +68,7 @@ import {
   removeRecentProject,
   resetBotStates,
   saveProject,
+  migrateToV2,
 } from './utils/project';
 
 export const projectDispatcher = () => {
@@ -68,15 +78,35 @@ export const projectDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
 
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const projectDialogsMap = await snapshot.getPromise(projectDialogsMapSelector);
+
+        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
         const botRuntimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
 
         set(botProjectIdsState, (currentProjects) => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
           return filtered;
         });
-        resetBotStates(callbackHelpers, projectIdToRemove);
+        await resetBotStates(callbackHelpers, projectIdToRemove);
+
+        const triggerName = await snapshot.getPromise(botDisplayNameState(projectIdToRemove));
+        const rootDialog = rootBotProjectId && projectDialogsMap[rootBotProjectId].find((dialog) => dialog.isRoot);
+        // remove the same identifier trigger in root bot
+        if (rootBotProjectId && rootDialog && rootDialog.triggers.length > 0) {
+          const index = rootDialog.triggers.findIndex((item) => item.displayName === triggerName);
+          if (index >= 0) {
+            const content = DialogdeleteTrigger(
+              projectDialogsMap[rootBotProjectId],
+              rootDialog?.id,
+              index,
+              async (trigger) => await dispatcher.deleteTrigger(rootBotProjectId, rootDialog?.id, trigger)
+            );
+            if (content) {
+              await dispatcher.updateDialog({ id: rootDialog?.id, content, projectId: rootBotProjectId });
+            }
+          }
+        }
         if (rootBotProjectId) {
           navigateToBot(callbackHelpers, rootBotProjectId, '');
         }
@@ -140,6 +170,7 @@ export const projectDispatcher = () => {
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
         navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
+        callbackHelpers.set(orchestratorForSkillsDialogState, true);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
@@ -167,6 +198,8 @@ export const projectDispatcher = () => {
         const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl);
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, endpointName);
+        // update appsetting
+        await dispatcher.setSkillAndAllowCaller(rootBotProjectId, projectId, endpointName);
         navigateToSkillBot(rootBotProjectId, projectId);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -212,6 +245,23 @@ export const projectDispatcher = () => {
     }
   );
 
+  const forceMigrate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    if (
+      await OpenConfirmModal(
+        formatMessage('Convert your project to the latest format'),
+        formatMessage(
+          'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
+        ),
+        { confirmText: formatMessage('Convert') }
+      )
+    ) {
+      callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
+      navigateTo(`/v2/projects/migrate/${projectId}`);
+    } else {
+      navigateTo(`/home`);
+    }
+  });
+
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       path: string,
@@ -225,7 +275,16 @@ export const projectDispatcher = () => {
         set(botOpeningState, true);
 
         await flushExistingTasks(callbackHelpers);
-        const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
+        const { projectId, mainDialog, requiresMigrate } = await openRootBotAndSkillsByPath(
+          callbackHelpers,
+          path,
+          storageId
+        );
+
+        if (requiresMigrate) {
+          await forceMigrate(projectId);
+          return;
+        }
 
         // ABS open Flow, update publishProfile & set alias for project after open project
         if (absData) {
@@ -233,10 +292,15 @@ export const projectDispatcher = () => {
 
           if (profile && alias) {
             const dispatcher = await snapshot.getPromise(dispatcherState);
+            const { publishTargets } = await snapshot.getPromise(settingsState(projectId));
             const newProfile = await getPublishProfileFromPayload(profile, source);
-
-            newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-
+            if (newProfile) {
+              const newPublishTargets = publishTargets
+                ? publishTargets.filter((item) => item.name !== newProfile.name)
+                : [];
+              newPublishTargets.push(newProfile);
+              dispatcher.setPublishTargets(newPublishTargets, projectId);
+            }
             await httpClient.post(`/projects/${projectId}/alias/set`, { alias });
           }
         }
@@ -281,8 +345,11 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
-
+      const { requiresMigrate } = await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
+      if (requiresMigrate) {
+        await forceMigrate(projectId);
+        return;
+      }
       // Post project creation
       set(projectMetaDataState(projectId), {
         isRootBot: true,
@@ -386,11 +453,14 @@ export const projectDispatcher = () => {
         preserveRoot,
         profile,
         source,
+        runtimeType,
+        runtimeLanguage,
+        isRoot,
       } = newProjectData;
 
       // starts the creation process and stores the jobID in state for tracking
-      const response = await createNewBotFromTemplateV2(
-        callbackHelpers,
+      const response = await httpClient.post(`/v2/projects`, {
+        storageId: 'default',
         templateId,
         templateVersion,
         name,
@@ -401,8 +471,11 @@ export const projectDispatcher = () => {
         templateDir,
         eTag,
         alias,
-        preserveRoot
-      );
+        preserveRoot,
+        runtimeType,
+        runtimeLanguage,
+        isRoot,
+      });
 
       if (response.data.jobId) {
         dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix, profile, source);
@@ -444,6 +517,42 @@ export const projectDispatcher = () => {
     }
   );
 
+  const migrateProjectTo = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      oldProjectId: string,
+      name: string,
+      description: string,
+      location: string,
+      runtimeLanguage: string,
+      runtimeType: string
+    ) => {
+      const { set, snapshot } = callbackHelpers;
+      try {
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        set(botOpeningState, true);
+
+        // starts the creation process and stores the jobID in state for tracking
+        const response = await migrateToV2(
+          callbackHelpers,
+          oldProjectId,
+          name,
+          description,
+          location,
+          runtimeLanguage,
+          runtimeType
+        );
+
+        if (response.data.jobId) {
+          dispatcher.updateCreationMessage(response.data.jobId);
+        }
+      } catch (ex) {
+        set(botProjectIdsState, []);
+        handleProjectFailure(callbackHelpers, ex);
+        navigateTo('/home');
+      }
+    }
+  );
+
   const deleteBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
       const { reset } = callbackHelpers;
@@ -473,9 +582,33 @@ export const projectDispatcher = () => {
     }
   });
 
+  const fetchFeed = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    const { set, snapshot } = callbackHelpers;
+    const { fetched } = await snapshot.getPromise(feedState);
+    if (fetched) return;
+
+    try {
+      const response = await httpClient.get(`/projects/feed`);
+      // feed version control
+      if (response.data.version === FEEDVERSION) {
+        set(feedState, { ...response.data, fetched: true });
+      } else {
+        logMessage(callbackHelpers, `Feed version expired`);
+      }
+    } catch (ex) {
+      logMessage(callbackHelpers, `Error in fetching feed projects: ${ex}`);
+    }
+  });
+
   const setBotStatus = useRecoilCallback<[string, BotStatus], void>(
     ({ set }: CallbackInterface) => (projectId: string, status: BotStatus) => {
       set(botStatusState(projectId), status);
+    }
+  );
+
+  const updateCurrentTarget = useRecoilCallback<[string, PublishTarget], void>(
+    ({ set }: CallbackInterface) => (projectId: string, currentTarget) => {
+      set(currentPublishTargetState(projectId), currentTarget);
     }
   );
 
@@ -519,10 +652,10 @@ export const projectDispatcher = () => {
   const updateCreationMessage = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       jobId: string,
-      templateId: string,
-      urlSuffix: string,
-      profile: any,
-      source: any
+      templateId?: string,
+      urlSuffix?: string,
+      profile?: any,
+      source?: any
     ) => {
       const timer = setInterval(async () => {
         try {
@@ -533,7 +666,7 @@ export const projectDispatcher = () => {
             const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
 
             callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
-            const { botFiles, projectData } = loadProjectData(response.data.result);
+            const { botFiles, projectData } = await loadProjectData(response.data.result);
             const projectId = response.data.result.id;
 
             if (creationFlowType === 'Skill') {
@@ -561,6 +694,7 @@ export const projectDispatcher = () => {
             } else {
               // failure
               callbackHelpers.set(botOpeningState, false);
+
               callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
@@ -594,7 +728,7 @@ export const projectDispatcher = () => {
       handleProjectFailure(callbackHelpers, err);
       callbackHelpers.set(
         selectedTemplateReadMeState,
-        formatMessage('### Error encountered when getting template readMe')
+        `### ${formatMessage('Error encountered when getting template read-me file')}`
       );
     } finally {
       callbackHelpers.set(fetchReadMePendingState, false);
@@ -605,14 +739,25 @@ export const projectDispatcher = () => {
     setError(callbackHelpers, error);
   });
 
+  const setWarnAboutDotNet = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutDotNetState, warn);
+  });
+
+  const setWarnAboutFunctions = useRecoilCallback((callbackHelpers: CallbackInterface) => (warn: boolean) => {
+    callbackHelpers.set(warnAboutFunctionsState, warn);
+  });
+
   return {
     openProject,
     createNewBot,
     createNewBotV2,
     deleteBot,
     saveProjectAs,
+    migrateProjectTo,
     fetchProjectById,
     fetchRecentProjects,
+    updateCurrentTarget,
+    fetchFeed,
     setBotStatus,
     saveTemplateId,
     updateBoilerplate,
@@ -626,6 +771,8 @@ export const projectDispatcher = () => {
     updateCreationMessage,
     setCurrentProjectId,
     setProjectError,
+    setWarnAboutDotNet,
+    setWarnAboutFunctions,
     fetchReadMe,
   };
 };

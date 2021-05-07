@@ -26,10 +26,12 @@ import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import moment from 'moment';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import debounce from 'lodash/debounce';
 
 import { FileTypes, nameRegex } from '../../constants';
 import { StorageFolder, File } from '../../recoilModel/types';
 import { getFileIconName, calculateTimeDiff } from '../../utils/fileUtil';
+import httpClient from '../../utils/httpUtil';
 
 // -------------------- Styles -------------------- //
 
@@ -173,10 +175,25 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const [folderName, setFolderName] = useState('');
   const [editMode, setEditMode] = useState(EditMode.NONE);
   const [nameError, setNameError] = useState('');
+  const [pathError, setPathError] = useState('');
+
+  const validate = debounce(async (path) => {
+    const response = await httpClient.get(`/storages/validate/${encodeURI(path)}`);
+    setPathError(response.data.errorMsg);
+  }, 300);
 
   useEffect(() => {
     setCurrentPath(initialPath);
   }, [focusedStorageFolder]);
+
+  //there is a network delay on the path validation. The error may not exist.
+  //the initialPath is always a valid directory
+  //so check and clear path error
+  useEffect(() => {
+    if (initialPath === currentPath) {
+      setPathError('');
+    }
+  }, [initialPath, currentPath]);
 
   const createOrUpdateFolder = async (index: number) => {
     const isValid = nameRegex.test(folderName);
@@ -309,7 +326,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     },
     {
       key: 'lastModified',
-      name: formatMessage('Date Modified'),
+      name: formatMessage('Date modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 100,
       maxWidth: 500,
@@ -480,6 +497,23 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       setCurrentPath(value as string);
     }
   };
+
+  const updatePathPending = (option?: IComboBoxOption, index?: number, value?: string) => {
+    if (!option && value) {
+      const path = value.replace(/\\/g, '/');
+      validate(value);
+      setCurrentPath(path as string);
+    }
+  };
+
+  const checkPath = () => {
+    return pathError
+      ? pathError
+      : operationMode.write && !focusedStorageFolder.writable
+      ? formatMessage('You do not have permission to save bots here')
+      : '';
+  };
+
   return (
     <Fragment>
       <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
@@ -489,24 +523,24 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             useComboBoxAsMenuWidth
             autoComplete={'on'}
             data-testid={'FileSelectorComboBox'}
-            errorMessage={
-              operationMode.write && !focusedStorageFolder.writable
-                ? formatMessage('You do not have permission to save bots here')
-                : ''
-            }
+            errorMessage={checkPath()}
             label={formatMessage('Location')}
             options={breadcrumbItems}
             selectedKey={currentPath}
+            styles={{ root: { width: '420px' } }}
             onChange={updatePath}
+            onPendingValueChanged={updatePathPending}
           />
-        </StackItem>
-        {operationMode.write && (
-          <StackItem align={'end'} styles={{ root: { marginBottom: 5 } }}>
-            <Link disabled={editMode !== EditMode.NONE} onClick={onCreateNewFolder}>
+          {operationMode.write && (
+            <Link
+              disabled={editMode !== EditMode.NONE}
+              styles={{ root: { marginTop: '5px' } }}
+              onClick={onCreateNewFolder}
+            >
               {formatMessage('Create new folder')}
             </Link>
-          </StackItem>
-        )}
+          )}
+        </StackItem>
       </Stack>
       <div css={detailListContainer} data-is-scrollable="true">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

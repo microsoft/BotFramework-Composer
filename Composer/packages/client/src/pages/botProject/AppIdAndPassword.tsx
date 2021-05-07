@@ -2,23 +2,24 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { mergeStyleSets } from '@uifabric/styling';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
-import { title } from './styles';
+import { inputFieldStyles, subtext, title } from './styles';
+import { GetAppInfoFromPublishProfileDialog } from './GetAppInfoFromPublishProfileDialog';
 // -------------------- Styles -------------------- //
 
 const labelContainer = css`
@@ -50,16 +51,6 @@ const appIdAndPasswordStyle = css`
   flex-direction: column;
 `;
 
-const customError = {
-  root: {
-    selectors: {
-      'p > span': {
-        width: '100%',
-      },
-    },
-  },
-};
-
 // -------------------- AppIdAndPassword -------------------- //
 
 type AppIdAndPasswordProps = {
@@ -86,6 +77,8 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
+  const [showImportDialog, setShowImportDialog] = useState(false);
+
   useEffect(() => {
     setLocalMicrosoftAppId(MicrosoftAppId ?? '');
     setLocalMicrosoftAppPassword(MicrosoftAppPassword ?? '');
@@ -113,32 +106,75 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
     });
   }, [projectId, mergedSettings, localMicrosoftAppId]);
 
+  const handleAddFromProfile = (appId: string, appPassword: string) => {
+    setLocalMicrosoftAppId(appId);
+    setLocalMicrosoftAppPassword(appPassword);
+    setSettings(projectId, {
+      ...mergedSettings,
+      MicrosoftAppId: appId,
+      MicrosoftAppPassword: appPassword,
+    });
+  };
+
   return (
-    <CollapsableWrapper title={formatMessage('App Id / Password')} titleStyle={title}>
+    <Fragment>
+      <div css={title}>{formatMessage('Microsoft App ID')}</div>
+      <div css={subtext}>
+        {formatMessage.rich(
+          'An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>',
+          {
+            a: ({ children }) => (
+              <Link key="app-id-settings-page" href={'https://aka.ms/composer-appid-learnmore'} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        )}
+      </div>
       <div css={appIdAndPasswordStyle}>
         <TextField
-          aria-label={formatMessage('Microsoft App Id')}
+          ariaLabel={formatMessage('Microsoft App Id')}
           data-testid={'MicrosoftAppId'}
           label={formatMessage('Microsoft App Id')}
-          placeholder={formatMessage('Enter Microsoft App Id')}
-          styles={customError}
+          placeholder={formatMessage('Type App Id')}
+          styles={inputFieldStyles}
           value={localMicrosoftAppId}
           onBlur={handleAppIdOnBlur}
           onChange={handleAppIdOnChange}
           onRenderLabel={onRenderLabel}
         />
         <TextField
-          aria-label={formatMessage('Microsoft App Password')}
+          ariaLabel={formatMessage('Microsoft App Password')}
           data-testid={'MicrosoftPassword'}
           label={formatMessage('Microsoft App Password')}
-          placeholder={formatMessage('Enter Microsoft App Password')}
-          styles={mergeStyleSets({ root: { marginTop: 15 } }, customError)}
+          placeholder={formatMessage('Type App Password')}
+          styles={inputFieldStyles}
           value={localMicrosoftAppPassword}
           onBlur={handleAppPasswordOnBlur}
           onChange={handleAppPasswordOnChange}
           onRenderLabel={onRenderLabel}
         />
+        <PrimaryButton
+          styles={{ root: { width: '230px', marginTop: '15px' } }}
+          text={formatMessage('Retrieve App ID')}
+          onClick={() => {
+            setShowImportDialog(true);
+          }}
+        />
       </div>
-    </CollapsableWrapper>
+      {showImportDialog && (
+        <GetAppInfoFromPublishProfileDialog
+          hidden={!showImportDialog}
+          projectId={projectId}
+          onCancel={() => {
+            setShowImportDialog(false);
+          }}
+          onOK={(info) => {
+            setShowImportDialog(false);
+            handleAddFromProfile(info.appId, info.appPassword || '');
+          }}
+        />
+      )}
+    </Fragment>
   );
 };

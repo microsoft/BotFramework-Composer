@@ -8,13 +8,19 @@ import { act, fireEvent, render, screen } from '@botframework-composer/test-util
 import React from 'react';
 
 import { ToolbarButtonMenu } from '../ToolbarButtonMenu';
-import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload } from '../../../lg/types';
+import { FunctionRefPayload, PropertyRefPayload, TemplateRefPayload } from '../../../types';
 
 (global as any).crypto = {
   getRandomValues: (arr: any[]) => crypto.randomBytes(arr.length),
 };
 
-jest.useFakeTimers();
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+afterAll(() => {
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
+});
 
 const templatePayload: TemplateRefPayload = {
   kind: 'template',

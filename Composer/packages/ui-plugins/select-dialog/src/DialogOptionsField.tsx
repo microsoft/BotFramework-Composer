@@ -4,11 +4,22 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension-client';
-import { FieldLabel, JsonField, SchemaField, IntellisenseTextField, WithTypeIcons } from '@bfc/adaptive-form';
+import { FieldLabel, IntellisenseTextField, OpenObjectField, WithTypeIcons, SchemaField } from '@bfc/adaptive-form';
 import Stack from 'office-ui-fabric-react/lib/components/Stack/Stack';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import Ajv, { AnySchemaObject } from 'ajv';
+
+const loadSchema = async (uri: string) => {
+  const res = await fetch(uri);
+  return res.body as AnySchemaObject;
+};
+
+const ajv = new Ajv({
+  loadSchema,
+  strict: false,
+});
 
 const IntellisenseTextFieldWithIcon = WithTypeIcons(IntellisenseTextField);
 
@@ -42,15 +53,21 @@ const styles = {
 
 const dropdownCalloutProps = { styles: { root: { minWidth: 140 } } };
 
-const getInitialSelectedKey = (value?: string | Record<string, unknown>, schema?: JSONSchema7): string => {
-  if (typeof value !== 'string' && schema) {
+const getSelectedKey = (
+  value?: string | Record<string, unknown>,
+  schema?: JSONSchema7,
+  validSchema = false
+): string => {
+  if (typeof value !== 'string' && schema && validSchema) {
     return 'form';
-  } else if (typeof value !== 'string' && !schema) {
-    return 'code';
+  } else if (typeof value !== 'string' && (!schema || !validSchema)) {
+    return 'object';
   } else {
     return 'expression';
   }
 };
+
+type JSONValidationStatus = 'valid' | 'inValid' | 'validating';
 
 const DialogOptionsField: React.FC<FieldProps> = ({
   description,
@@ -68,11 +85,39 @@ const DialogOptionsField: React.FC<FieldProps> = ({
     [dialog, dialogSchemas]
   );
 
-  const [selectedKey, setSelectedKey] = React.useState<string>(getInitialSelectedKey(options, schema));
+  const [selectedKey, setSelectedKey] = React.useState<string>();
+  const [validationStatus, setValidationStatus] = React.useState<JSONValidationStatus>('validating');
 
-  React.useLayoutEffect(() => {
-    setSelectedKey(getInitialSelectedKey(options, schema));
-  }, [dialog]);
+  const mountRef = React.useRef(false);
+
+  React.useEffect(() => {
+    mountRef.current = true;
+    if (schema && Object.keys(schema.properties || {}).length) {
+      (async () => {
+        setValidationStatus('validating');
+        try {
+          const validate = await ajv.compileAsync(schema, true);
+          const valid = validate(schema);
+
+          if (mountRef.current) {
+            setValidationStatus(valid ? 'valid' : 'inValid');
+            setSelectedKey(getSelectedKey(options, schema, true));
+          }
+        } catch (error) {
+          if (mountRef.current) {
+            setValidationStatus('inValid');
+            setSelectedKey(getSelectedKey(options, schema, false));
+          }
+        }
+      })();
+    } else {
+      setSelectedKey(getSelectedKey(options, schema, false));
+    }
+
+    return () => {
+      mountRef.current = false;
+    };
+  }, [schema]);
 
   const change = React.useCallback(
     (newOptions?: string | Record<string, any>) => {
@@ -84,13 +129,18 @@ const DialogOptionsField: React.FC<FieldProps> = ({
   const onDropdownChange = React.useCallback(
     (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
       if (option) {
-        setSelectedKey(option.key as string);
-        if (option.key === 'expression') {
+        // When the user switched between data types - either a string (expression) or an object (form or object) - we need to set
+        // options to undefined so we don't incorrectly pass a string to an object editor or pass an object to a string editor.
+
+        // If selectedKey is currently set to expression and the user is switching to form or object, set the value to undefined.
+        // If the user is switching to expression meaning the selectedKey is currently set to form or form, set the value to undefined.
+        if (option.key === 'expression' || selectedKey === 'expression') {
           change();
         }
+        setSelectedKey(option.key as string);
       }
     },
-    [change]
+    [change, selectedKey]
   );
 
   const typeOptions = React.useMemo<IDropdownOption[]>(() => {
@@ -98,24 +148,24 @@ const DialogOptionsField: React.FC<FieldProps> = ({
       {
         key: 'form',
         text: formatMessage('form'),
-        disabled: !schema || !Object.keys(schema).length,
+        disabled: !schema || validationStatus !== 'valid',
       },
       {
-        key: 'code',
-        text: formatMessage('code editor'),
+        key: 'object',
+        text: formatMessage('object'),
       },
       {
         key: 'expression',
         text: 'expression',
       },
     ];
-  }, [schema]);
+  }, [schema, validationStatus]);
 
   let Field = IntellisenseTextFieldWithIcon;
   if (selectedKey === 'form') {
     Field = SchemaField;
-  } else if (selectedKey === 'code') {
-    Field = JsonField;
+  } else if (selectedKey === 'object') {
+    Field = OpenObjectField;
   }
 
   return (
@@ -144,9 +194,9 @@ const DialogOptionsField: React.FC<FieldProps> = ({
         id={`${id}.options`}
         label={false}
         name={'options'}
-        schema={schema || {}}
+        schema={(selectedKey === 'form' ? schema : { type: 'object', additionalProperties: true }) || {}}
         uiOptions={{}}
-        value={options || selectedKey === 'expression' ? '' : {}}
+        value={options}
         onChange={change}
       />
     </React.Fragment>

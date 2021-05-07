@@ -4,14 +4,13 @@
 import formatMessage from 'format-message';
 import React from 'react';
 import { IDropdownOption, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
-import { CodeEditorSettings } from '@bfc/shared';
+import { CodeEditorSettings, extractTemplateNameFromExpression } from '@bfc/shared';
 
 import {
   AttachmentsStructuredResponseItem,
   AttachmentLayoutStructuredResponseItem,
   CommonModalityEditorProps,
 } from '../types';
-import { extractTemplateNameFromExpression } from '../../utils/structuredResponse';
 
 import { ModalityEditorContainer } from './ModalityEditorContainer';
 import { AttachmentArrayEditor } from './AttachmentArrayEditor';
@@ -46,7 +45,11 @@ const AttachmentModalityEditor = React.memo(
       (newItems: string[]) => {
         setItems(newItems);
         onUpdateResponseTemplate({
-          Attachments: { kind: 'Attachments', value: newItems.map((item) => `\${${item}()}`), valueType: 'direct' },
+          Attachments: {
+            kind: 'Attachments',
+            value: newItems.map((item) => `\${json(${item}())}`),
+            valueType: 'direct',
+          },
         });
       },
       [setItems, onUpdateResponseTemplate]
@@ -69,8 +72,8 @@ const AttachmentModalityEditor = React.memo(
           selected: attachmentLayout === 'list',
         },
         {
-          key: 'carousal',
-          text: formatMessage('Carousal'),
+          key: 'carousel',
+          text: formatMessage('Carousel'),
           selected: attachmentLayout === 'carousel',
         },
       ],

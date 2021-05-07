@@ -73,6 +73,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     hosted,
     schemas,
     flowZoomRate,
+    topics,
+    dialogs,
   } = shellData;
 
   const { updateFlowZoomRate } = shellApi;
@@ -104,6 +106,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
     customSchemas: customActionSchema ? [customActionSchema] : [],
+    topics,
+    dialogs,
   };
 
   const customFlowSchema: FlowUISchema = nodeContext.customSchemas.reduce((result, s) => {

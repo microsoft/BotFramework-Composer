@@ -13,6 +13,11 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Environment',
     },
+    tenantId: {
+      type: 'string',
+      title: 'Tenant Id',
+      description: 'The tenant id of Azure account.',
+    },
     hostname: {
       type: 'string',
       title: 'Custom webapp hostname (if not <name>-<env>)',
@@ -54,6 +59,9 @@ const schema: JSONSchema7 = {
           type: 'object',
           properties: {
             InstrumentationKey: {
+              type: 'string',
+            },
+            connectionString: {
               type: 'string',
             },
           },
@@ -135,6 +143,8 @@ const schema: JSONSchema7 = {
   default: {
     name: '<unique name in your subscription>',
     environment: 'dev',
+    tenantId: '<tenant id of your azure account>',
+    hostname: '<web application host name>',
     runtimeIdentifier: 'win-x64',
     resourceGroup: '<name of your resource group>',
     botName: '<name of your bot channel registration>',
@@ -143,6 +153,7 @@ const schema: JSONSchema7 = {
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
+        connectionString: '<connection string>',
       },
       cosmosDb: {
         cosmosDBEndpoint: '<endpoint url>',

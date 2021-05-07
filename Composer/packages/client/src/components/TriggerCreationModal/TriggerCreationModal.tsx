@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { userSettingsState } from '../../recoilModel/atoms';
-import { currentDialogState, dialogsSelectorFamily, localeState, luFilesState } from '../../recoilModel';
+import { currentDialogState, dialogsSelectorFamily, localeState, luFilesSelectorFamily } from '../../recoilModel';
 import { isRegExRecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -50,7 +50,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const isRegEx = isRegExRecognizerType(dialogFile);
   const regexIntents = (dialogFile?.content?.recognizer as RegexRecognizer)?.intents ?? [];
 
-  const luFiles = useRecoilValue(luFilesState(projectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const currentDialog = useRecoilValue(currentDialogState({ projectId, dialogId }));
   const luFile = luFiles.find((f) => f.id === `${currentDialog?.id}.${locale}`);

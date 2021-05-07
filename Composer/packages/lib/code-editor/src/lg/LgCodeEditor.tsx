@@ -107,11 +107,12 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
     quickSuggestions: true,
     wordBasedSuggestions: false,
     folding: true,
+    definitions: true,
     ...props.options,
   };
 
   const {
-    toolbarHidden,
+    toolbarOptions,
     lgOption,
     languageServer,
     onInit: onInitProp,
@@ -137,6 +138,10 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    if (props.options?.readOnly) {
+      return;
+    }
+
     if (!editor) return;
 
     if (!window.monacoServiceInstance) {
@@ -156,16 +161,34 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
             ['botbuilderlg'],
             connection
           );
+
           sendRequestWithRetry(languageClient, 'initializeDocuments', { lgOption, uri });
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLGEditorInstance = languageClient;
+
+          languageClient.onReady().then(() =>
+            languageClient.onNotification('GotoDefinition', (result) => {
+              if (lgOption?.projectId) {
+                onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
+              }
+            })
+          );
         },
       });
     } else {
-      sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      if (!props.options?.readOnly) {
+        sendRequestWithRetry(window.monacoLGEditorInstance, 'initializeDocuments', { lgOption, uri });
+      }
+      window.monacoLGEditorInstance.onReady().then(() =>
+        window.monacoLGEditorInstance.onNotification('GotoDefinition', (result) => {
+          if (lgOption?.projectId) {
+            onNavigateToLgPage?.(result.fileId, { templateId: result.templateId, line: result.line });
+          }
+        })
+      );
     }
-  }, [editor]);
+  }, [editor, onNavigateToLgPage]);
 
   const onInit: OnInit = (monaco) => {
     registerLGLanguage(monaco);
@@ -200,7 +223,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   );
 
   const navigateToLgPage = React.useCallback(() => {
-    onNavigateToLgPage?.(lgOption?.fileId ?? 'common', lgOption?.templateId);
+    onNavigateToLgPage?.(lgOption?.fileId ?? 'common', { templateId: lgOption?.templateId, line: undefined });
   }, [onNavigateToLgPage, lgOption]);
 
   const onExpandedEditorChange = React.useCallback(
@@ -247,7 +270,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
   return (
     <>
       <Stack verticalFill>
-        {!toolbarHidden && (
+        {toolbarOptions?.hidden !== true && (
           <EditorToolbar
             farItems={toolbarFarItems}
             lgTemplates={lgTemplates}

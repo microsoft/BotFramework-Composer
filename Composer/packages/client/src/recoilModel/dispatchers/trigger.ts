@@ -5,8 +5,8 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { BaseSchema, deleteActions, ITriggerCondition, LgTemplate, LgTemplateSamples, SDKKinds } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { luFilesState, schemasState, dialogState, localeState } from '../atoms/botState';
-import { dialogsSelectorFamily } from '../selectors';
+import { schemasState, dialogState, localeState } from '../atoms/botState';
+import { dialogsSelectorFamily, luFilesSelectorFamily, skillNameIdentifierByProjectIdSelector } from '../selectors';
 import {
   onChooseIntentKey,
   generateNewDialog,
@@ -16,6 +16,7 @@ import {
 } from '../../utils/dialogUtil';
 import { lgFilesSelectorFamily } from '../selectors/lg';
 import { dispatcherState } from '../atoms';
+import { createActionFromManifest } from '../utils/skill';
 
 import { setError } from './shared';
 
@@ -37,6 +38,74 @@ const getDesignerIdFromDialogPath = (dialog, path) => {
   return designerId;
 };
 
+const getNewDialogWithTrigger = async (
+  callbackHelpers: CallbackInterface,
+  projectId: string,
+  dialogId: string,
+  formData: TriggerFormData,
+  createLuIntent,
+  createLgTemplates
+) => {
+  const { snapshot } = callbackHelpers;
+  const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
+  const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
+  const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+  const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId }));
+  const schemas = await snapshot.getPromise(schemasState(projectId));
+  const locale = await snapshot.getPromise(localeState(projectId));
+
+  const lgFile = lgFiles.find((file) => file.id === `${dialogId}.${locale}`);
+  const luFile = luFiles.find((file) => file.id === `${dialogId}.${locale}`);
+
+  if (!luFile) throw new Error(`lu file ${dialogId} not found`);
+  if (!lgFile) throw new Error(`lg file ${dialogId} not found`);
+  if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+  const newDialog = generateNewDialog(dialogs, dialog.id, formData, schemas.sdk?.content);
+  const index = get(newDialog, 'content.triggers', []).length - 1;
+  if (formData.$kind === intentTypeKey && formData.triggerPhrases) {
+    const intent = { Name: formData.intent, Body: formData.triggerPhrases };
+    luFile && (await createLuIntent({ id: luFile.id, intent, projectId }));
+  } else if (formData.$kind === qnaMatcherKey) {
+    const designerId1 = getDesignerIdFromDialogPath(
+      newDialog,
+      `content.triggers[${index}].actions[0].actions[1].prompt`
+    );
+    const designerId2 = getDesignerIdFromDialogPath(
+      newDialog,
+      `content.triggers[${index}].actions[0].elseActions[0].activity`
+    );
+    const lgTemplates: LgTemplate[] = [
+      LgTemplateSamples.TextInputPromptForQnAMatcher(designerId1) as LgTemplate,
+      LgTemplateSamples.SendActivityForQnAMatcher(designerId2) as LgTemplate,
+    ];
+    await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
+  } else if (formData.$kind === onChooseIntentKey) {
+    const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[2].prompt`);
+    const designerId2 = getDesignerIdFromDialogPath(
+      newDialog,
+      `content.triggers[${index}].actions[3].elseActions[0].activity`
+    );
+    const lgTemplates: LgTemplate[] = [
+      LgTemplateSamples.textInputPromptForOnChooseIntent(designerId1) as LgTemplate,
+      LgTemplateSamples.onChooseIntentAdaptiveCard(designerId1) as LgTemplate,
+      LgTemplateSamples.whichOneDidYouMean(designerId1) as LgTemplate,
+      LgTemplateSamples.pickOne(designerId1) as LgTemplate,
+      LgTemplateSamples.getAnswerReadBack(designerId1) as LgTemplate,
+      LgTemplateSamples.getIntentReadBack(designerId1) as LgTemplate,
+      LgTemplateSamples.generateChoices(designerId1) as LgTemplate,
+      LgTemplateSamples.choice(designerId1) as LgTemplate,
+      LgTemplateSamples.SendActivityForOnChooseIntent(designerId2) as LgTemplate,
+    ];
+
+    await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
+  }
+  return {
+    id: newDialog.id,
+    projectId,
+    content: newDialog.content,
+  };
+};
+
 export const triggerDispatcher = () => {
   const createTrigger = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
@@ -48,75 +117,19 @@ export const triggerDispatcher = () => {
       try {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
-        const lgFiles = await snapshot.getPromise(lgFilesSelectorFamily(projectId));
-        const luFiles = await snapshot.getPromise(luFilesState(projectId));
-        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
-        const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId }));
-        const schemas = await snapshot.getPromise(schemasState(projectId));
-        const locale = await snapshot.getPromise(localeState(projectId));
-
         const { createLuIntent, createLgTemplates, updateDialog, selectTo } = dispatcher;
-
-        const lgFile = lgFiles.find((file) => file.id === `${dialogId}.${locale}`);
-        const luFile = luFiles.find((file) => file.id === `${dialogId}.${locale}`);
-
-        if (!luFile) throw new Error(`lu file ${dialogId} not found`);
-        if (!lgFile) throw new Error(`lg file ${dialogId} not found`);
-        if (!dialog) throw new Error(`dialog ${dialogId} not found`);
-        const newDialog = generateNewDialog(dialogs, dialog.id, formData, schemas.sdk?.content);
-        const index = get(newDialog, 'content.triggers', []).length - 1;
-        if (formData.$kind === intentTypeKey && formData.triggerPhrases) {
-          const intent = { Name: formData.intent, Body: formData.triggerPhrases };
-          luFile && (await createLuIntent({ id: luFile.id, intent, projectId }));
-        } else if (formData.$kind === qnaMatcherKey) {
-          const designerId1 = getDesignerIdFromDialogPath(
-            newDialog,
-            `content.triggers[${index}].actions[0].actions[1].prompt`
-          );
-          const designerId2 = getDesignerIdFromDialogPath(
-            newDialog,
-            `content.triggers[${index}].actions[0].elseActions[0].activity`
-          );
-          const lgTemplates: LgTemplate[] = [
-            LgTemplateSamples.TextInputPromptForQnAMatcher(designerId1) as LgTemplate,
-            LgTemplateSamples.SendActivityForQnAMatcher(designerId2) as LgTemplate,
-          ];
-          await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
-        } else if (formData.$kind === onChooseIntentKey) {
-          const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[4].prompt`);
-          const designerId2 = getDesignerIdFromDialogPath(
-            newDialog,
-            `content.triggers[${index}].actions[5].elseActions[0].activity`
-          );
-          const lgTemplates1: LgTemplate[] = [
-            LgTemplateSamples.TextInputPromptForOnChooseIntent(designerId1) as LgTemplate,
-            LgTemplateSamples.SendActivityForOnChooseIntent(designerId2) as LgTemplate,
-          ];
-
-          let lgTemplates2: LgTemplate[] = [
-            LgTemplateSamples.adaptiveCardJson as LgTemplate,
-            LgTemplateSamples.whichOneDidYouMean as LgTemplate,
-            LgTemplateSamples.pickOne as LgTemplate,
-            LgTemplateSamples.getAnswerReadBack as LgTemplate,
-            LgTemplateSamples.getIntentReadBack as LgTemplate,
-          ];
-          const commonlgFile = lgFiles.find(({ id }) => id === `common.${locale}`);
-
-          lgTemplates2 = lgTemplates2.filter(
-            (t) => commonlgFile?.templates.findIndex((clft) => clft.name === t.name) === -1
-          );
-
-          await createLgTemplates({ id: `common.${locale}`, templates: lgTemplates2, projectId });
-          await createLgTemplates({ id: lgFile.id, templates: lgTemplates1, projectId });
-        }
-        const dialogPayload = {
-          id: newDialog.id,
+        const dialogPayload = await getNewDialogWithTrigger(
+          callbackHelpers,
           projectId,
-          content: newDialog.content,
-        };
+          dialogId,
+          formData,
+          createLuIntent,
+          createLgTemplates
+        );
         await updateDialog(dialogPayload);
         if (autoSelected) {
-          await selectTo(projectId, newDialog.id, `triggers[${index}]`);
+          const index = get(dialogPayload.content, 'triggers', []).length - 1;
+          await selectTo(projectId, dialogPayload.id, `triggers[${index}]`);
         }
       } catch (ex) {
         setError(callbackHelpers, ex);
@@ -130,7 +143,7 @@ export const triggerDispatcher = () => {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
         const locale = await snapshot.getPromise(localeState(projectId));
-        const luFiles = await snapshot.getPromise(luFilesState(projectId));
+        const luFiles = await snapshot.getPromise(luFilesSelectorFamily(projectId));
         const luFile = luFiles.find((file) => file.id === `${dialogId}.${locale}`);
 
         const { removeLuIntent, removeLgTemplates } = dispatcher;
@@ -147,7 +160,7 @@ export const triggerDispatcher = () => {
         luFile &&
           deleteActions(
             actions,
-            (templateNames: string[]) => removeLgTemplates({ id: dialogId, templateNames, projectId }),
+            (templateNames: string[]) => removeLgTemplates({ id: `${dialogId}.${locale}`, templateNames, projectId }),
             (intentNames: string[]) =>
               Promise.all(intentNames.map((intentName) => removeLuIntent({ id: luFile.id, intentName, projectId })))
           );
@@ -158,7 +171,11 @@ export const triggerDispatcher = () => {
   );
 
   const createQnATrigger = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, dialogId: string) => {
+    (callbackHelpers: CallbackInterface) => async (
+      projectId: string,
+      dialogId: string,
+      autoSelectTrigger?: boolean
+    ) => {
       try {
         const { snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
@@ -170,7 +187,7 @@ export const triggerDispatcher = () => {
           (item) => item.$kind === SDKKinds.OnQnAMatch
         );
         if (!existedQnATrigger) {
-          await dispatcher.createTrigger(projectId, dialogId, defaultQnATriggerData);
+          await dispatcher.createTrigger(projectId, dialogId, defaultQnATriggerData, autoSelectTrigger);
         }
       } catch (ex) {
         setError(callbackHelpers, ex);
@@ -178,9 +195,47 @@ export const triggerDispatcher = () => {
     }
   );
 
+  const createTriggerForRemoteSkill = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      projectId: string,
+      dialogId: string,
+      formData: TriggerFormData,
+      skillId: string,
+      autoSelected = true
+    ) => {
+      try {
+        const { snapshot } = callbackHelpers;
+        const { createLuIntent, createLgTemplates, updateDialog, selectTo } = await snapshot.getPromise(
+          dispatcherState
+        );
+        const dialogPayload = await getNewDialogWithTrigger(
+          callbackHelpers,
+          projectId,
+          dialogId,
+          formData,
+          createLuIntent,
+          createLgTemplates
+        );
+        const index = get(dialogPayload.content, 'triggers', []).length - 1;
+        const skillsByProjectId = await snapshot.getPromise(skillNameIdentifierByProjectIdSelector);
+        const skillIdentifier = skillsByProjectId[skillId];
+        const actions: any = [];
+        actions.push(createActionFromManifest(skillIdentifier));
+        dialogPayload.content.triggers[index].actions = actions;
+
+        await updateDialog(dialogPayload);
+        if (autoSelected) {
+          await selectTo(projectId, dialogPayload.id, `triggers[${index}]`);
+        }
+      } catch (ex) {
+        setError(callbackHelpers, ex);
+      }
+    }
+  );
   return {
     createTrigger,
     deleteTrigger,
     createQnATrigger,
+    createTriggerForRemoteSkill,
   };
 };

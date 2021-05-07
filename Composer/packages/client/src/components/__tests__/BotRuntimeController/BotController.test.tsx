@@ -80,7 +80,7 @@ describe('<BotController />', () => {
       <BotController isControllerHidden={false} onHideController={jest.fn()} />,
       initRecoilState
     );
-    await findByText('Start all bots');
+    await findByText('Start all');
   });
 
   it('should stop all bots if Stop all bots is clicked', async () => {
@@ -138,5 +138,21 @@ describe('<BotController />', () => {
       initRecoilState
     );
     await findByText('Starting bots.. (1/4 running)');
+  });
+
+  it('should show bots are stopping', async () => {
+    const initRecoilState = ({ set }) => {
+      const projectIds = ['123a.234', '456a.234', '789a.234', '1323.sdf'];
+      set(botProjectIdsState, projectIds);
+      set(botStatusState(projectIds[0]), BotStatus.published);
+      set(botStatusState(projectIds[1]), BotStatus.publishing);
+      set(botStatusState(projectIds[2]), BotStatus.connected);
+      set(botStatusState(projectIds[3]), BotStatus.stopping);
+    };
+    const { findByText } = renderWithRecoil(
+      <BotController isControllerHidden={false} onHideController={jest.fn()} />,
+      initRecoilState
+    );
+    await findByText('Stopping bots.. (2/4 running)');
   });
 });

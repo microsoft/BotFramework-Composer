@@ -17,9 +17,11 @@ import {
   skillNameIdentifierByProjectIdSelector,
 } from '../../recoilModel';
 import { undoVersionState } from '../../recoilModel/undo/history';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 import { PropertyEditor } from './PropertyEditor';
 import { ManifestEditor } from './ManifestEditor';
+import useAssetsParsingState from './useAssetsParsingState';
 
 type PropertyViewProps = {
   projectId: string;
@@ -33,7 +35,7 @@ const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '',
   const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(projectId));
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const skills = useRecoilValue(skillsStateSelector);
-
+  const loading = useAssetsParsingState(projectId);
   const skillManifestFile = useMemo(() => {
     if (!isSkill) return undefined;
 
@@ -51,11 +53,13 @@ const PropertyPanel: React.FC<PropertyViewProps> = React.memo(({ projectId = '',
 
   return (
     <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
-      {isRemoteSkill && skillManifestFile ? (
-        <ManifestEditor formData={skillManifestFile} />
-      ) : (
-        <PropertyEditor key={focusPath + undoVersion} />
-      )}
+      {loading && <LoadingSpinner />}
+      {!loading &&
+        (isRemoteSkill && skillManifestFile ? (
+          <ManifestEditor formData={skillManifestFile} />
+        ) : (
+          <PropertyEditor key={focusPath + undoVersion} />
+        ))}
     </EditorExtension>
   );
 });
