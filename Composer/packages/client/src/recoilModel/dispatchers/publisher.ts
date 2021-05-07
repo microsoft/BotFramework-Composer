@@ -309,7 +309,8 @@ export const publisherDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       try {
         const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
-        if (currentBotStatus !== BotStatus.failed) {
+        // Change to "Stopping" status only if the Bot is not in a failed state or inactive state
+        if (currentBotStatus !== BotStatus.failed && currentBotStatus !== BotStatus.inactive) {
           set(botStatusState(projectId), BotStatus.stopping);
         }
 
