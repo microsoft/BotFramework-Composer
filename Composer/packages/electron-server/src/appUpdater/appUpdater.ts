@@ -8,15 +8,26 @@ import { app } from 'electron';
 import { prerelease as isNightly } from 'semver';
 import { AppUpdaterSettings } from '@bfc/shared';
 
-import logger from './utility/logger';
+import logger from '../utility/logger';
+
+import { breakingUpdates } from './breakingUpdates';
+
 const log = logger.extend('app-updater');
+
+export type BreakingUpdateMetaData = {
+  explicitCheck: boolean;
+  uxId: string;
+};
 
 let appUpdater: AppUpdater | undefined;
 export class AppUpdater extends EventEmitter {
+  private currentAppVersion = app.getVersion();
+
   private checkingForUpdate = false;
   private downloadingUpdate = false;
   private _downloadedUpdate = false;
   private explicitCheck = false;
+  private isBreakingUpdate = false;
   private updateInfo: UpdateInfo | undefined = undefined;
   private settings: AppUpdaterSettings = { autoDownload: false, useNightly: false };
 
@@ -25,6 +36,7 @@ export class AppUpdater extends EventEmitter {
 
     autoUpdater.allowDowngrade = false;
     autoUpdater.allowPrerelease = true;
+    autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = false; // we will explicitly call the install logic
 
     autoUpdater.on('error', this.onError.bind(this));
@@ -54,10 +66,8 @@ export class AppUpdater extends EventEmitter {
       this.emit('update-in-progress', this.updateInfo);
       return;
     }
-
     this.setFeedURL();
     this.determineUpdatePath();
-    autoUpdater.autoDownload = this.settings.autoDownload;
     autoUpdater.checkForUpdates();
   }
 
@@ -98,8 +108,28 @@ export class AppUpdater extends EventEmitter {
     log('Update available: %O', updateInfo);
     this.checkingForUpdate = false;
     this.updateInfo = updateInfo;
+
+    // check to see if the update will include breaking changes
+    const breakingUpdate = breakingUpdates
+      .map((predicate) => predicate(this.currentAppVersion, updateInfo.version))
+      .find((result) => result.breaking);
+    if (breakingUpdate) {
+      this.isBreakingUpdate = true;
+      // show custom UX for the breaking changes
+      this.emit('breaking-update-available', updateInfo, {
+        uxId: breakingUpdate.uxId,
+        explicitCheck: this.explicitCheck,
+      });
+      return;
+    }
+
+    // show standard update UX
     if (this.explicitCheck || !this.settings.autoDownload) {
+      this.isBreakingUpdate = false;
       this.emit('update-available', updateInfo);
+    } else {
+      // silently download
+      autoUpdater.downloadUpdate();
     }
   }
 
@@ -115,7 +145,7 @@ export class AppUpdater extends EventEmitter {
   private onDownloadProgress(progress: any) {
     log('Got update progress: %O', progress);
     this.downloadingUpdate = true;
-    if (this.explicitCheck || !this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload || this.isBreakingUpdate) {
       this.emit('progress', progress);
     }
   }
@@ -124,7 +154,7 @@ export class AppUpdater extends EventEmitter {
     log('Update downloaded: %O', updateInfo);
     this._downloadedUpdate = true;
     this.updateInfo = updateInfo;
-    if (this.explicitCheck || !this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload || this.isBreakingUpdate) {
       this.emit('update-downloaded', updateInfo);
     }
     this.resetToIdle();
@@ -158,12 +188,10 @@ export class AppUpdater extends EventEmitter {
   }
 
   private determineUpdatePath() {
-    const currentVersion = app.getVersion();
-
     // The following paths don't need to allow downgrade:
     //    nightly -> stable     (1.0.1-nightly.x.x -> 1.0.2)
     //    nightly -> nightly    (1.0.1-nightly.x.x -> 1.0.1-nightly.y.x)
-    if (isNightly(currentVersion)) {
+    if (isNightly(this.currentAppVersion)) {
       const targetChannel = this.settings.useNightly ? 'nightly' : 'stable';
       log(`Updating from nightly to ${targetChannel}. Not allowing downgrade.`);
       autoUpdater.allowDowngrade = false;
@@ -173,7 +201,7 @@ export class AppUpdater extends EventEmitter {
     // https://github.com/npm/node-semver/blob/v7.3.2/classes/semver.js#L127
     // The following path needs to allow downgrade to work:
     //    stable -> nightly     (1.0.1 -> 1.0.1-nightly.x.x)
-    if (!isNightly(currentVersion) && this.settings.useNightly) {
+    if (!isNightly(this.currentAppVersion) && this.settings.useNightly) {
       log(`Updating from stable to nightly. Allowing downgrade.`);
       autoUpdater.allowDowngrade = true;
       return;
