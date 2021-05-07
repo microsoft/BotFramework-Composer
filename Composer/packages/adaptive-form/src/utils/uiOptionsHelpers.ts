@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { FieldProps } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 import startCase from 'lodash/startCase';
 
 export function getUiLabel(props: FieldProps): string | false | undefined {
@@ -34,6 +35,11 @@ export function getUiDescription(props: FieldProps): string | undefined {
   return description || schema?.description;
 }
 
+const EXAMPLE_HEADER = formatMessage({
+  default: 'ex.',
+  description: 'short for "example", used for example values in form fields',
+});
+
 export function getUiPlaceholder(props: FieldProps): string | undefined {
   const { uiOptions, schema, value, placeholder } = props;
 
@@ -52,13 +58,13 @@ export function getUiPlaceholder(props: FieldProps): string | undefined {
       }
       return example;
     });
-    fieldUIPlaceholder = `ex. ${examplesStrings.join(', ')}`;
+    fieldUIPlaceholder = `${EXAMPLE_HEADER} ${examplesStrings.join(', ')}`;
   }
 
   if (fieldUIPlaceholder && schema.pattern) {
-    const regex = `${schema.pattern}`;
+    const { pattern } = schema;
     const placeholderExamples = fieldUIPlaceholder.split(',').map((example) => example.trim());
-    const filteredExamples = placeholderExamples.filter((example) => example.match(regex));
+    const filteredExamples = placeholderExamples.filter((example) => example.match(pattern));
     fieldUIPlaceholder = filteredExamples.join(', ');
   }
 

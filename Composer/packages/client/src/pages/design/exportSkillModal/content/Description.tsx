@@ -95,7 +95,15 @@ export const Description: React.FC<ContentProps> = ({
 
         return {
           hidden,
-          properties: { ...properties, [key]: { field: InlineLabelField, hideError: true, serializer } },
+          properties: {
+            ...properties,
+            [key]: {
+              field: InlineLabelField,
+              hideError: true,
+              serializer,
+              placeholder: schema.properties?.[key]?.placeholder,
+            },
+          },
         };
       },
       { hidden: [], properties: {} } as any
@@ -144,7 +152,6 @@ export const Description: React.FC<ContentProps> = ({
         $id: `${botName}-${uuid()}`,
         endpoints: [{}],
         skillName: botName,
-        ...mapValues(schema?.properties, 'default'),
         ...rest,
       },
     };
