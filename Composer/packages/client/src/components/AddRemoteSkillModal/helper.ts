@@ -4,6 +4,8 @@
 import formatMessage from 'format-message';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { DialogSetting } from '@botframework-composer/types';
+import { isUsingAdaptiveRuntimeKey, parseRuntimeKey } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -16,16 +18,37 @@ const conflictConfirmationPrompt = formatMessage(
 /**
  * Orchestrator Nuget Package can only be automatically imported into Adaptive .Net WebApps.
  */
-export const canImportOrchestrator = (runtimeKey?: string) => runtimeKey === 'adaptive-runtime-dotnet-webapp';
+export const canImportOrchestrator = (runtimeKey?: string) => isUsingAdaptiveRuntimeKey(runtimeKey);
 
-export const importOrchestrator = async (projectId: string, reloadProject, setApplicationLevelError) => {
-  const reqBody = {
-    package: 'Microsoft.Bot.Builder.AI.Orchestrator',
-    version: '4.13.1',
-    source: 'https://api.nuget.org/v3/index.json',
-    isUpdating: false,
-    isPreview: false,
-  };
+export const importOrchestrator = async (
+  projectId: string,
+  runtime: DialogSetting['runtime'],
+  reloadProject,
+  setApplicationLevelError
+) => {
+  const runtimeInfo = parseRuntimeKey(runtime?.key);
+
+  let reqBody;
+  if (runtimeInfo.runtimeLanguage === 'dotnet') {
+    reqBody = {
+      package: 'Microsoft.Bot.Builder.AI.Orchestrator',
+      version: '4.13.1',
+      source: 'https://api.nuget.org/v3/index.json',
+      isUpdating: false,
+      isPreview: false,
+    };
+  } else if (runtimeInfo.runtimeLanguage === 'js') {
+    reqBody = {
+      package: 'botbuilder-ai-orchestrator',
+      version: '4.13.1',
+      source: 'https://registry.npmjs.org/-/v1/search',
+      isUpdating: false,
+      isPreview: false,
+    };
+  } else {
+    return;
+  }
+
   try {
     const results = await httpClient.post(`projects/${projectId}/import`, reqBody);
     // check to see if there was a conflict that requires confirmation

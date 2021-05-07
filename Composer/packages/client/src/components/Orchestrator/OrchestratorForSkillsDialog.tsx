@@ -66,7 +66,12 @@ export const OrchestratorForSkillsDialog = () => {
       title={enableOrchestratorDialog.title}
       onDismiss={onDismissHandler}
     >
-      <EnableOrchestrator hideBackButton projectId={rootProjectId} onSubmit={handleOrchestratorSubmit} />
+      <EnableOrchestrator
+        hideBackButton
+        projectId={rootProjectId}
+        runtime={setting?.runtime}
+        onSubmit={handleOrchestratorSubmit}
+      />
     </DialogWrapper>
   );
 };

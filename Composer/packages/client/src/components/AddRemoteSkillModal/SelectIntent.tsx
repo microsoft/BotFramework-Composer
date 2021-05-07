@@ -253,6 +253,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       {showOrchestratorDialog ? (
         <EnableOrchestrator
           projectId={projectId}
+          runtime={runtime}
           onBack={() => {
             onUpdateTitle(selectIntentDialog.ADD_OR_EDIT_PHRASE(dialogId, manifest.name));
             setShowOrchestratorDialog(false);

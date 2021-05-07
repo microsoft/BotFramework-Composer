@@ -69,7 +69,7 @@ describe('<OrchestratorForSkillsDialog />', () => {
     expect(dialog).toBeNull();
   });
 
-  it('should not render OrchestratorForSkillsDialog if runtime is node', () => {
+  it('should not render OrchestratorForSkillsDialog if runtime is not supported', () => {
     const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
       set(settingsState('rootBotId'), {
@@ -88,14 +88,14 @@ describe('<OrchestratorForSkillsDialog />', () => {
         luFeatures: { enableCompositeEntities: false },
         customFunctions: [],
         importedLibraries: [],
-        runtime: { key: 'adaptive-runtime-node-webapp', command: '', path: '', customRuntime: false },
+        runtime: { key: 'node-webapp-v1', command: '', path: '', customRuntime: false },
       });
     });
     const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
   });
 
-  it('should not crash OrchestratorForSkillsDialog if runtime is missing or invalid', () => {
+  it('should not render OrchestratorForSkillsDialog if runtime is missing or invalid', () => {
     const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
       set(settingsState('rootBotId'), {
@@ -114,7 +114,7 @@ describe('<OrchestratorForSkillsDialog />', () => {
         luFeatures: { enableCompositeEntities: false },
         customFunctions: [],
         importedLibraries: [],
-        runtime: { key: 'adaptive-runtime-node-functions', command: '', path: '', customRuntime: false },
+        runtime: { key: '', command: '', path: '', customRuntime: false },
       });
     });
     const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
@@ -138,7 +138,53 @@ describe('<OrchestratorForSkillsDialog />', () => {
       userEvent.click(within(baseElement).getByTestId('import-orchestrator'));
     });
 
-    expect(importOrchestrator).toBeCalledWith('rootBotId', expect.anything(), expect.anything());
+    expect(importOrchestrator).toBeCalledWith(
+      'rootBotId',
+      { key: 'adaptive-runtime-dotnet-webapp' },
+      expect.anything(),
+      expect.anything()
+    );
+  });
+
+  it('should install Orchestrator package with adaptive node runtime', async () => {
+    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+      makeInitialState(set);
+
+      set(settingsState('rootBotId'), {
+        defaultLanguage: 'en-us',
+        languages: ['en-us'],
+        luis: {
+          authoringEndpoint: '',
+          name: '',
+          authoringKey: '',
+          defaultLanguage: '',
+          endpoint: '',
+          endpointKey: '',
+          environment: '',
+        },
+        qna: { endpointKey: '', subscriptionKey: '' },
+        luFeatures: { enableCompositeEntities: false },
+        customFunctions: [],
+        importedLibraries: [],
+        runtime: { key: 'adaptive-runtime-js-functions', command: '', path: '', customRuntime: false },
+      });
+    });
+
+    await act(async () => {
+      userEvent.click(within(baseElement).getByTestId('import-orchestrator'));
+    });
+
+    expect(importOrchestrator).toBeCalledWith(
+      'rootBotId',
+      {
+        key: 'adaptive-runtime-js-functions',
+        path: expect.anything(),
+        customRuntime: expect.anything(),
+        command: expect.anything(),
+      },
+      expect.anything(),
+      expect.anything()
+    );
   });
 
   it('should not install Orchestrator package when user clicks skip', async () => {
