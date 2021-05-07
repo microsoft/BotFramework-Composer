@@ -38,15 +38,20 @@ jobs:
         run: yarn
       - name: yarn build:dev
         run: yarn build:dev
-      - name: yarn lint
-        run: yarn lint:ci && yarn lint:extensions
-      - name: Coveralls
-        uses: coverallsapp/github-action@v1.1.1
-        continue-on-error: true
+        uses: actions/cache@v2
+        id: job-cached-build
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./Composer/coverage/lcov.info
-          base-path: ./Composer
+          path: ./*
+          key: ${{ github.sha }}
+      # - name: yarn lint
+      #   run: yarn lint:ci && yarn lint:extensions
+      # - name: Coveralls
+      #   uses: coverallsapp/github-action@v1.1.1
+      #   continue-on-error: true
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     path-to-lcov: ./Composer/coverage/lcov.info
+      #     base-path: ./Composer
 
   ci:
     name: Unit Tests
@@ -69,6 +74,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.15.5
+      - uses: actions/cache@v2
+        id: job-cached-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
       - name: yarn test matrix
         run: yarn workspace @${{ matrix['test-workspaces'] }} test
 
