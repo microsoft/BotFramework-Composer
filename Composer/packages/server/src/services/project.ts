@@ -528,6 +528,7 @@ export class BotProjectService {
         const newSettings: DialogSetting = {
           ...currentProject.settings,
           runtimeSettings: {
+            components: [],
             features: {
               showTyping: originalProject.settings?.feature?.UseShowTypingMiddleware || false,
               useInspection: originalProject.settings?.feature?.UseInspectionMiddleware || false,
