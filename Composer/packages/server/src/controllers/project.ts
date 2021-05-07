@@ -624,6 +624,14 @@ function createProjectV2(req: Request, res: Response) {
   });
 }
 
+function migrateProject(req: Request, res: Response) {
+  const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Migrating Bot Project');
+  BotProjectService.migrateProjectAsync(req, jobId);
+  res.status(202).json({
+    jobId: jobId,
+  });
+}
+
 async function getVariablesByProjectId(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
@@ -661,6 +669,7 @@ export const ProjectController = {
   saveProjectAs,
   createProject,
   createProjectV2,
+  migrateProject,
   getAllProjects,
   getRecentProjects,
   getFeed,

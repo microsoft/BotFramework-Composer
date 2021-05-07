@@ -19,10 +19,13 @@ const Logger = () => {
   return null;
 };
 
+const { ipcRenderer } = window;
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
 
-  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion } = useRecoilValue(dispatcherState);
+  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion, performAppCleanupOnQuit } = useRecoilValue(
+    dispatcherState
+  );
 
   useEffect(() => {
     loadLocale(appLocale);
@@ -32,6 +35,9 @@ export const App: React.FC = () => {
     checkNodeVersion();
     fetchExtensions();
     fetchFeatureFlags();
+    ipcRenderer?.on('cleanup', (_event) => {
+      performAppCleanupOnQuit();
+    });
   }, []);
 
   return (
