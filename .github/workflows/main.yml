@@ -38,7 +38,7 @@ jobs:
         run: yarn
       - name: yarn build:dev
         run: yarn build:dev
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         id: job-cached-build
         with:
           path: ./*
