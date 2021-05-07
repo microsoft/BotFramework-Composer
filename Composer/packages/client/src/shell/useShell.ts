@@ -272,8 +272,8 @@ export function useShell(source: EventSource, projectId: string): Shell {
     },
     updateFlowZoomRate,
     reloadProject: () => reloadProject(projectId),
-    stopBot: async (targetProjectId?: string) => {
-      stopSingleBot(targetProjectId ?? projectId);
+    stopBot: async (targetProjectId: string) => {
+      stopSingleBot(targetProjectId);
     },
     ...lgApi,
     ...luApi,
