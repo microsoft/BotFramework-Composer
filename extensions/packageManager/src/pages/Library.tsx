@@ -64,7 +64,7 @@ export interface PackageSourceFeed extends IDropdownOption {
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
-  const { projectId, reloadProject, projectCollection: allProjectCollection } = useProjectApi();
+  const { projectId, reloadProject, projectCollection: allProjectCollection, stopBot } = useProjectApi();
   const { setApplicationLevelError, navigateTo, confirm } = useApplicationApi();
   const telemetryClient: TelemetryClient = useTelemetryClient();
 
@@ -391,6 +391,7 @@ const Library: React.FC = () => {
 
   const importComponent = async (packageName, version, isUpdating, source) => {
     try {
+      stopBot(currentProjectId);
       const results = await installComponentAPI(currentProjectId, packageName, version, isUpdating, source);
 
       // check to see if there was a conflict that requires confirmation
@@ -424,7 +425,6 @@ const Library: React.FC = () => {
           setReadmeHidden(false);
         }
 
-        // reload modified content
         await reloadProject();
       }
     } catch (err) {
@@ -515,6 +515,7 @@ const Library: React.FC = () => {
         closeDialog();
         setWorking(strings.uninstallProgress);
         try {
+          stopBot(currentProjectId);
           const results = await uninstallComponentAPI(currentProjectId, selectedItem.name);
 
           if (results.data.success) {
