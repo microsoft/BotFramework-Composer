@@ -467,6 +467,11 @@ export const isAdaptiveRuntime = (settings): boolean => {
   return settings?.runtime?.key?.match(/^adaptive-runtime/) ? true : false;
 };
 
+export const isOldCustomRuntime = (settings): boolean => {
+  const keys = ['node-azurewebapp', 'csharp-azurewebapp'];
+  return keys.includes(settings?.runtime?.key);
+};
+
 export const isPVA = (settings): boolean => {
   return settings?.publishTargets?.some((target) => target.type === 'pva-publish-composer');
 };
@@ -836,6 +841,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
     mainDialog,
     projectId: rootBotProjectId,
     requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings) && !isPVA(botFiles.mergedSettings),
+    oldCustomRuntime: isOldCustomRuntime(botFiles.mergedSettings),
   };
 };
 

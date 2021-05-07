@@ -245,14 +245,16 @@ export const projectDispatcher = () => {
     }
   );
 
-  const forceMigrate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
-    if (await BotConvertConfirmDialog()) {
-      callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
-      navigateTo(`/v2/projects/migrate/${projectId}`);
-    } else {
-      navigateTo(`/home`);
+  const forceMigrate = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, containEjectedRuntime: boolean) => {
+      if (await BotConvertConfirmDialog(containEjectedRuntime)) {
+        callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
+        navigateTo(`/v2/projects/migrate/${projectId}`);
+      } else {
+        navigateTo(`/home`);
+      }
     }
-  });
+  );
 
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
@@ -267,14 +269,14 @@ export const projectDispatcher = () => {
         set(botOpeningState, true);
 
         await flushExistingTasks(callbackHelpers);
-        const { projectId, mainDialog, requiresMigrate } = await openRootBotAndSkillsByPath(
+        const { projectId, mainDialog, requiresMigrate, oldCustomRuntime } = await openRootBotAndSkillsByPath(
           callbackHelpers,
           path,
           storageId
         );
 
         if (requiresMigrate) {
-          await forceMigrate(projectId);
+          await forceMigrate(projectId, oldCustomRuntime);
           return;
         }
 

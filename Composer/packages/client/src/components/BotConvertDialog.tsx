@@ -10,7 +10,7 @@ const contentContainer = css`
   max-width: 444px;
 `;
 
-export const BotConvertConfirmDialog = () => {
+export const BotConvertConfirmDialog = (showSubContent: boolean) => {
   return OpenConfirmModal(formatMessage('Convert your project to the latest format'), '', {
     confirmText: formatMessage('Convert'),
     onRenderContent: () => (
@@ -20,21 +20,23 @@ export const BotConvertConfirmDialog = () => {
             'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
           )}
         </p>
-        <p>
-          {formatMessage.rich(
-            'If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>',
-            {
-              a: ({ children }) => (
-                <Link
-                  href="https://github.com/microsoft/botframework-components/blob/main/docs/overview.md"
-                  target="_blank"
-                >
-                  {children}
-                </Link>
-              ),
-            }
-          )}
-        </p>
+        {showSubContent && (
+          <p>
+            {formatMessage.rich(
+              'If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>',
+              {
+                a: ({ children }) => (
+                  <Link
+                    href="https://github.com/microsoft/botframework-components/blob/main/docs/overview.md"
+                    target="_blank"
+                  >
+                    {children}
+                  </Link>
+                ),
+              }
+            )}
+          </p>
+        )}
       </div>
     ),
   });
