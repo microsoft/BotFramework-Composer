@@ -21,10 +21,19 @@ export const BotConvertConfirmDialog = () => {
           )}
         </p>
         <p>
-          {formatMessage('If you have created custom components, you might need to rebuild them. ')}
-          <Link href="https://github.com/microsoft/botframework-components/blob/main/docs/overview.md" target="_blank">
-            Learn more about custom components.
-          </Link>
+          {formatMessage.rich(
+            'If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>',
+            {
+              a: ({ children }) => (
+                <Link
+                  href="https://github.com/microsoft/botframework-components/blob/main/docs/overview.md"
+                  target="_blank"
+                >
+                  {children}
+                </Link>
+              ),
+            }
+          )}
         </p>
       </div>
     ),

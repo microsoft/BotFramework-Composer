@@ -192,13 +192,15 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
               css={content}
               tabIndex={-1}
             >
-              <span css={blodText}>{item.title ?? ''}</span> <span>{item.message}</span>
+              <span css={blodText}>{item.title ?? ''}</span>
+              &nbsp;
+              <span>{item.message}</span>
+              &nbsp;
               <Link
                 hidden={!item.learnMore}
                 href="https://github.com/microsoft/botframework-components/blob/main/docs/overview.md"
                 target="_blank"
               >
-                {' '}
                 {item.learnMore}
               </Link>
             </div>
