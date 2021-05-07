@@ -367,11 +367,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
             const installedComponents = await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent));
             if (mergeResults) {
-              res.json({
-                success: true,
-                components: installedComponents,
-              });
-
               let runtimeLanguage = 'c#';
               if (
                 currentProject.settings.runtime.key === 'node-azurewebapp' ||
@@ -387,10 +382,14 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
                 !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
               ) {
                 const newSettings = await currentProject.getEnvSettings();
+                // guard against missing settings keys
                 if (!newSettings.runtimeSettings) {
                   newSettings.runtimeSettings = {
                     components: [],
                   };
+                }
+                if (!newSettings.runtimeSettings.components) {
+                  newSettings.runtimeSettings.components = [];
                 }
                 newSettings.runtimeSettings.components.push({
                   name: newlyInstalledPlugin.name,
@@ -399,6 +398,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
                 currentProject.updateEnvSettings(newSettings);
               }
               updateRecentlyUsed(installedComponents, runtimeLanguage);
+
+              res.json({
+                success: true,
+                components: installedComponents,
+              });
             } else {
               res.json({
                 success: false,
