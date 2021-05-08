@@ -41,6 +41,7 @@ const PROJECT_KEYS = [
   'api.updateDialogSchema',
   'api.createTrigger',
   'api.createQnATrigger',
+  'api.stopBot',
   'api.updateSkill',
   'api.updateRecognizer',
 ];
