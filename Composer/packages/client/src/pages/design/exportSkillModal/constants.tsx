@@ -287,8 +287,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Next'),
-        onClick: ({ onNext, generateManifest }) => () => {
-          // generateManifest();
+        onClick: ({ onNext }) => () => {
           onNext();
         },
       },
