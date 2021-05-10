@@ -233,7 +233,7 @@ export function CreateBotV2(props: CreateBotProps) {
   }, [currentTemplateId, props.fetchReadMe]);
 
   const dialogWrapperProps =
-    creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT_V2;
+    creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
   return (
     <Fragment>
