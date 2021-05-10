@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -12,7 +12,7 @@ import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
-import { currentProjectIdState } from '../../recoilModel';
+import { currentProjectIdState, schemaDiagnosticsSelectorFamily } from '../../recoilModel';
 import { ManageLuis } from '../ManageLuis/ManageLuis';
 import { ManageQNA } from '../ManageQNA/ManageQNA';
 import { dispatcherState, settingsState } from '../../recoilModel';
@@ -20,7 +20,7 @@ import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/u
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
 import { usePVACheck } from '../../hooks/usePVACheck';
-import { projectReadmeState } from '../../recoilModel/atoms';
+import { debugPanelActiveTabState, debugPanelExpansionState, projectReadmeState } from '../../recoilModel/atoms';
 
 import { GetStartedTask } from './GetStartedTask';
 import { NextStep } from './types';
@@ -42,7 +42,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
   const readme = useRecoilValue(projectReadmeState(projectId));
   const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
-
+  const schemaDiagnostics = useRecoilValue(schemaDiagnosticsSelectorFamily(projectId));
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
@@ -50,6 +50,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const [requiredNextSteps, setRequiredNextSteps] = useState<NextStep[]>([]);
   const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextStep[]>([]);
   const [optionalSteps, setOptionalSteps] = useState<NextStep[]>([]);
+  const setExpansion = useSetRecoilState(debugPanelExpansionState);
+  const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
   const [highlightQNA, setHighlightQNA] = useState<boolean>(false);
@@ -128,6 +130,28 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       JSON.parse(botProject.setting.publishTargets[0].configuration).hostname == ''
         ? true
         : false;
+
+    if (schemaDiagnostics.length) {
+      newNextSteps.push({
+        key: 'customActions',
+        label: formatMessage('Review deactivated custom actions'),
+        description: formatMessage('We detected {length} custom {obj} that are not support for Composer 2.0.', {
+          length: schemaDiagnostics.length,
+          obj: `component${schemaDiagnostics.length > 1 ? 's' : ''}`,
+        }),
+        required: true,
+        checked: false,
+        onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', {
+            taskName: 'customActionsCheck',
+            priority: 'required',
+          });
+          setExpansion(true);
+          setActiveTab('Diagnostics');
+        },
+        hideFeatureStep: false,
+      });
+    }
 
     if (props.requiresLUIS) {
       newNextSteps.push({
