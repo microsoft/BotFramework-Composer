@@ -47,6 +47,8 @@ const onRenderLabel = (props) => {
   );
 };
 
+const hiddenProfileTypes = ['pva-publish-composer'];
+
 export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const { name, setName, targetType, setTargetType, onDismiss, targets, types, onNext, setType, current } = props;
   const [errorMessage, setErrorMsg] = useState('');
@@ -71,7 +73,15 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   };
 
   const targetTypes = useMemo(() => {
-    return types.map((t) => ({ key: t.name, text: t.description }));
+    return (
+      types
+        // some profiles should not be able to be explicitly created
+        .filter((t) => {
+          const shouldBeHidden = hiddenProfileTypes.some((hiddenType) => hiddenType === t.name);
+          return !shouldBeHidden;
+        })
+        .map((t) => ({ key: t.name, text: t.description }))
+    );
   }, [types]);
 
   const updateType = useCallback(
