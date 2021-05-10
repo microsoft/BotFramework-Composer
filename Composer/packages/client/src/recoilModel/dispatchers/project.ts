@@ -339,9 +339,12 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      const { requiresMigrate } = await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
+      const { requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByProjectId(
+        callbackHelpers,
+        projectId
+      );
       if (requiresMigrate) {
-        await forceMigrate(projectId);
+        await forceMigrate(projectId, hasOldCustomRuntime);
         return;
       }
       // Post project creation
