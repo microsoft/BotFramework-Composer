@@ -282,8 +282,11 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: SelectDialogs,
     editJson: false,
     subText: () =>
-      formatMessage(
-        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more.'
+      formatMessage.rich(
+        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. <link>Learn more.</link>',
+        {
+          link: makeLink('https://aka.ms/bfcomposer-2-exportskill'),
+        }
       ),
     title: () => formatMessage('Select dialogs'),
   },
@@ -302,8 +305,11 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: SelectTriggers,
     editJson: false,
     subText: () =>
-      formatMessage(
-        'Triggers selected below will enable other bots to access the capabilities of your skill. Learn more.'
+      formatMessage.rich(
+        'Triggers selected below will enable other bots to access the capabilities of your skill. <link>Learn more.</link>',
+        {
+          link: makeLink('https://aka.ms/bfcomposer-2-exportskill'),
+        }
       ),
     title: () => formatMessage('Select triggers'),
   },

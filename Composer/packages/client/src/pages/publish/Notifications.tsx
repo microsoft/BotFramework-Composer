@@ -10,6 +10,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
+import { makeLink } from '../../constants';
 
 import { BotStatus } from './type';
 
@@ -124,15 +125,8 @@ export const getSkillPublishedNotificationCardProps = (
         ? formatMessage.rich(
             'Copy and share this URL with the bots that can connect to this skill. <link>Learn more.</link>',
             {
-              link: ({ children }) => (
-                <Link
-                  key={'republish-skill'}
-                  href={'https://docs.microsoft.com/en-us/composer/how-to-export-a-skill#republish-the-skill-to-azure'}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {children}
-                </Link>
+              link: makeLink(
+                'https://docs.microsoft.com/en-us/composer/how-to-export-a-skill#republish-the-skill-to-azure'
               ),
             }
           )
