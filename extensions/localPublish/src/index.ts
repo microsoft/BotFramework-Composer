@@ -128,7 +128,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     );
   };
 
-  private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
+  private publishAsync = async (botId: string, version: string, fullSettings: DialogSetting, project: any, user) => {
     try {
       let port;
       if (LocalPublisher.runningBots[botId]) {

@@ -10,6 +10,7 @@
     "watch": "yarn build --watch"
   },
   "dependencies": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "fs-extra": "^9.0.1",
     "path": "^0.12.7",
     "rimraf": "^3.0.2"
