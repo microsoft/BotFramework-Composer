@@ -20,7 +20,7 @@ import {
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
-import { CreateBotV2 } from '../../components/CreationFlow/v2/CreateBot';
+import { CreateBot } from '../../components/CreationFlow/v2/CreateBot';
 import { AddBotModal } from '../../components/CreationFlow/v2/AddBotModal';
 
 interface CreationModalProps {
@@ -164,7 +164,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const renderCreateOptions = () => {
     return (
-      <CreateBotV2
+      <CreateBot
         isOpen
         fetchReadMe={fetchReadMe}
         templates={templateProjects}

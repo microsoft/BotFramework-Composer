@@ -23,7 +23,7 @@ import { creationFlowTypeState, userHasNodeInstalledState } from '../../../recoi
 import { InstallDepModal } from '../../InstallDepModal';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 
-import { CreateBotV2 } from './CreateBot';
+import { CreateBot } from './CreateBot';
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
@@ -137,7 +137,7 @@ export function CreateOptionsV2(props: CreateOptionsProps) {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </DialogWrapper>
-      <CreateBotV2
+      <CreateBot
         fetchReadMe={fetchReadMe}
         isOpen={isOpenCreateModal}
         location={props.location}

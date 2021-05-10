@@ -121,7 +121,7 @@ type CreateBotProps = {
   fetchReadMe: (moduleName: string) => {};
 };
 
-export function CreateBotV2(props: CreateBotProps) {
+export function CreateBot(props: CreateBotProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
   const { isOpen, templates, onDismiss, onNext } = props;
