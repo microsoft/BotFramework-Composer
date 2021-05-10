@@ -33,7 +33,7 @@ const writeLocalFunctionsSetting = async (name: string, value: string, cwd: stri
   }
 };
 
-const writeAllLocalFunctionsSettings = async (fullSettings: DialogSetting, port: string, runtimePath: string, log) => {
+const writeAllLocalFunctionsSettings = async (fullSettings: DialogSetting, port: number, runtimePath: string, log) => {
   await writeLocalFunctionsSetting('MicrosoftAppPassword', fullSettings.MicrosoftAppPassword, runtimePath, log);
   await writeLocalFunctionsSetting(
     'luis:endpointKey',
