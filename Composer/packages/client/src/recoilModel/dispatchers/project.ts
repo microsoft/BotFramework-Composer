@@ -368,64 +368,6 @@ export const projectDispatcher = () => {
   const createNewBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
     const { set, snapshot } = callbackHelpers;
     try {
-      await flushExistingTasks(callbackHelpers);
-      set(botOpeningState, true);
-      const {
-        templateId,
-        name,
-        description,
-        location,
-        schemaUrl,
-        locale,
-        templateDir,
-        eTag,
-        urlSuffix,
-        alias,
-        preserveRoot,
-        profile,
-        source,
-      } = newProjectData;
-      const { projectId, mainDialog } = await createNewBotFromTemplate(
-        callbackHelpers,
-        templateId,
-        name,
-        description,
-        location,
-        schemaUrl,
-        locale,
-        templateDir,
-        eTag,
-        alias,
-        preserveRoot
-      );
-      set(botProjectIdsState, [projectId]);
-
-      if (profile) {
-        // ABS Create Flow, update publishProfile after create project
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        const newProfile = await getPublishProfileFromPayload(profile, source);
-
-        newProfile && dispatcher.setPublishTargets([newProfile], projectId);
-      }
-      // Post project creation
-      set(projectMetaDataState(projectId), {
-        isRootBot: true,
-        isRemote: false,
-      });
-      projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
-    } catch (ex) {
-      set(botProjectIdsState, []);
-      handleProjectFailure(callbackHelpers, ex);
-      navigateTo('/home');
-    } finally {
-      set(botOpeningState, false);
-    }
-  });
-
-  const createNewBotV2 = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
-    const { set, snapshot } = callbackHelpers;
-    try {
       const creationFlowType = await callbackHelpers.snapshot.getPromise(creationFlowTypeState);
 
       // flush existing tasks for new root bot creation
@@ -747,7 +689,6 @@ export const projectDispatcher = () => {
   return {
     openProject,
     createNewBot,
-    createNewBotV2,
     deleteBot,
     saveProjectAs,
     migrateProjectTo,

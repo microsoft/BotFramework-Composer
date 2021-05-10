@@ -38,7 +38,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     updateFolder,
     saveTemplateId,
     createNewBot,
-    createNewBotV2,
     openProject,
     addExistingSkillToBotProject,
     fetchReadMe,
@@ -111,7 +110,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         source: formData?.source,
         isRoot: false,
       };
-      createNewBotV2(newCreationBotData);
+      createNewBot(newCreationBotData);
     } else {
       createNewBot(newBotData);
     }

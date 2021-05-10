@@ -46,7 +46,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs,
     migrateProjectTo,
     fetchProjectById,
-    createNewBotV2,
+    createNewBot,
     fetchReadMe,
   } = useRecoilValue(dispatcherState);
 
@@ -147,7 +147,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     };
     TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
 
-    createNewBotV2(newBotData);
+    createNewBot(newBotData);
   };
 
   const handleSaveAs = (formData) => {
