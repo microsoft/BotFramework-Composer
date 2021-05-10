@@ -74,20 +74,15 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   const isPVABot = usePVACheck(projectId);
 
   useEffect(() => {
-    if (props.scrollToSectionId) {
-      const selectedItem: PivotItemKey = PivotItemKey[props.scrollToSectionId.slice(1)];
-      if (selectedItem) {
-        setSelectedKey(selectedItem);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     if (scrollToSectionId) {
       const htmlIdTagName = scrollToSectionId.replace('#', '');
-      for (const key in PivotItemKey) {
-        if (idsInTab[key].includes(htmlIdTagName)) {
-          setSelectedKey(key as PivotItemKey);
+      if (idsInTab[htmlIdTagName]) {
+        setSelectedKey(PivotItemKey[htmlIdTagName]);
+      } else {
+        for (const key in PivotItemKey) {
+          if (idsInTab[key].includes(htmlIdTagName)) {
+            setSelectedKey(key as PivotItemKey);
+          }
         }
       }
     }
