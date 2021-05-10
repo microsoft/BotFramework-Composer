@@ -749,6 +749,9 @@
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
   },
+  "components_of_kind_kind_are_not_supported_replace__de47f868": {
+    "message": "Components of $kind \"{ kind }\" are not supported. Replace with a different component or create a custom component."
+  },
   "composer_2_0_is_now_available_113ed532": {
     "message": "Composer 2.0 is now available!"
   },
@@ -1063,6 +1066,9 @@
   },
   "date_time_input_aa8ad315": {
     "message": "Date time input"
+  },
+  "deactivated_action_1da615d0": {
+    "message": "Deactivated action."
   },
   "debug_break_46cb5adb": {
     "message": "Debug Break"
@@ -1595,9 +1601,6 @@
   "external_skill_73e16d25": {
     "message": "External skill"
   },
-  "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
-    "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs."
-  },
   "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
     "message": "Extracting question-and-answer pairs from { url }"
   },
@@ -1859,6 +1862,9 @@
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first."
   },
+  "if_you_have_created_custom_components_you_might_ne_dc7cf128": {
+    "message": "If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>"
+  },
   "if_you_would_like_to_try_again_or_select_from_exis_f2f894b4": {
     "message": "If you would like to try again, or select from existing resources, please click “Back”."
   },
@@ -2089,6 +2095,9 @@
   },
   "learn_more_about_activities_134f453d": {
     "message": "Learn more about activities"
+  },
+  "learn_more_about_custom_actions_e7aa69e9": {
+    "message": "Learn more about custom actions"
   },
   "learn_more_about_endpoints_df156708": {
     "message": "Learn more about endpoints"
@@ -3125,6 +3134,9 @@
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
+  "review_deactivated_custom_actions_8db7540c": {
+    "message": "Review deactivated custom actions"
+  },
   "review_your_template_readme_2d6eae1e": {
     "message": "Review your template readme"
   },
@@ -3187,9 +3199,6 @@
   },
   "schema_24739a48": {
     "message": "Schema"
-  },
-  "schema_definition_not_found_in_sdk_schema_1102ce9b": {
-    "message": "Schema definition not found in sdk.schema."
   },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
     "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
@@ -3659,8 +3668,8 @@
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
   },
-  "the_capabilities_of_your_bot_are_defined_in_its_di_37d5670f": {
-    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more."
+  "the_capabilities_of_your_bot_are_defined_in_its_di_3391fc4b": {
+    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. <link>Learn more.</link>"
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
@@ -3905,6 +3914,9 @@
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
   },
+  "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
+  },
   "trigger_f0ee1fbf": {
     "message": "Trigger"
   },
@@ -3920,8 +3932,8 @@
   "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
     "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
   },
-  "triggers_selected_below_will_enable_other_bots_to__fd8353a5": {
-    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. Learn more."
+  "triggers_selected_below_will_enable_other_bots_to__49eb8fdb": {
+    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. <link>Learn more.</link>"
   },
   "true_1900d7ae": {
     "message": "true"
@@ -4061,6 +4073,9 @@
   "use_azure_qna_maker_to_extract_question_and_answer_942c2dcd": {
     "message": "Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. "
   },
+  "use_azure_qna_maker_to_extract_question_and_answer_d9f6bd68": {
+    "message": "Use Azure QnA Maker to extract question-and-answer pairs from online sources such as a website FAQ or product manual. Learn more. <link>Learn more about knowledge base sources.</link>"
+  },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Use custom LUIS authoring key"
   },
@@ -4159,6 +4174,9 @@
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"
+  },
+  "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
+    "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
