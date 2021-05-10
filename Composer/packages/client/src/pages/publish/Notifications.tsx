@@ -6,7 +6,6 @@ import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
