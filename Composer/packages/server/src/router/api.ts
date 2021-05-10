@@ -95,8 +95,7 @@ router.get('/runtime/templates', EjectController.getTemplates);
 router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 
 //assets
-router.get('/assets/projectTemplates', AssetController.getProjTemplates);
-router.post('/v2/assets/projectTemplates', AssetController.getProjTemplatesV2);
+router.post('/assets/projectTemplates', AssetController.getProjTemplates);
 router.get('/assets/templateReadme', AssetController.getTemplateReadMe);
 
 router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));

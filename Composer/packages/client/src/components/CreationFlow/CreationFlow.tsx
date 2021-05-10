@@ -32,7 +32,7 @@ type CreationFlowProps = RouteComponentProps<{}>;
 
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
-    fetchTemplatesV2,
+    fetchTemplates,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -80,7 +80,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
-    await fetchTemplatesV2([firstPartyTemplateFeed]);
+    await fetchTemplates([firstPartyTemplateFeed]);
     fetchFeed();
     fetchRecentProjects();
   };

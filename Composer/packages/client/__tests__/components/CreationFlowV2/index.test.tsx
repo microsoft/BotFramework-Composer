@@ -17,7 +17,7 @@ import {
 import { CreationFlowStatus } from '../../../src/constants';
 import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
 
-describe('<CreationFlowV2/>', () => {
+describe('<CreationFlow/>', () => {
   let locationMock;
   const createProjectMock = jest.fn();
   const initRecoilState = ({ set }) => {
@@ -29,7 +29,6 @@ describe('<CreationFlowV2/>', () => {
       fetchRecentProjects: jest.fn(),
       fetchFeed: jest.fn(),
       fetchTemplates: jest.fn(),
-      fetchTemplatesV2: jest.fn(),
       setCreationFlowStatus: jest.fn(),
       navTo: jest.fn(),
       saveTemplateId: jest.fn(),
