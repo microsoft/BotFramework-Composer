@@ -5,6 +5,7 @@ import { BotIndexer, validateSchema } from '@bfc/indexers';
 import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
+import { getFriendlyName } from '@bfc/shared';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
@@ -202,7 +203,21 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
     botAssets.dialogs.forEach((dialog) => {
       const diagnostics = validateSchema(dialog.id, dialog.content, sdkSchemaContent);
       fullDiagnostics.push(
-        ...diagnostics.map((d) => new SchemaDiagnostic(rootProjectId, projectId, dialog.id, `${dialog.id}.dialog`, d))
+        ...diagnostics.map((d) => {
+          let location = dialog.id;
+          if (d.path) {
+            const list = d.path.split('.');
+            let path = '';
+            location = [
+              location,
+              ...list.map((item) => {
+                path = `${path}${path ? '.' : ''}${item}`;
+                return getFriendlyName(lodashGet(dialog.content, path)) || '';
+              }),
+            ].join('>');
+          }
+          return new SchemaDiagnostic(rootProjectId, projectId, dialog.id, location, d);
+        })
       );
     });
     return fullDiagnostics;
