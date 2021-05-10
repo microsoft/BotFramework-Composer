@@ -15,7 +15,7 @@ import {
   templateProjectsState,
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
-import CreationFlowV2 from '../../../src/components/CreationFlow/CreationFlow';
+import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
 
 describe('<CreationFlowV2/>', () => {
   let locationMock;
@@ -81,7 +81,7 @@ describe('<CreationFlowV2/>', () => {
       history: { navigate },
     } = renderWithRouter(
       <RecoilRoot initializeState={initRecoilState}>
-        <CreationFlowV2 location={locationMock} />
+        <CreationFlow location={locationMock} />
       </RecoilRoot>
     );
 

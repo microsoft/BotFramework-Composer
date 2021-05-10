@@ -27,9 +27,10 @@ import { StorageFolder } from '../../recoilModel/types';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNotification';
 import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../recoilModel';
-import { LocationSelectContent } from './LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+
+import { LocationSelectContent } from './LocationSelectContent';
 
 // -------------------- Styles -------------------- //
 
@@ -105,7 +106,7 @@ type DefineConversationProps = {
   location: string;
 }>;
 
-const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
+const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const {
     onSubmit,
     onDismiss,
@@ -430,4 +431,4 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   );
 };
 
-export default DefineConversationV2;
+export default DefineConversation;

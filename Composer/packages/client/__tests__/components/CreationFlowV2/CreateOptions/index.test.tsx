@@ -5,7 +5,7 @@ import * as React from 'react';
 import { fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../../../testUtils';
-import { CreateOptionsV2 } from '../../../../src/components/CreationFlow/CreateOptions';
+import { CreateOptions } from '../../../../src/components/CreationFlow/CreateOptions';
 
 describe('<CreateOptionsV2/>', () => {
   const handleDismissMock = jest.fn();
@@ -31,7 +31,7 @@ describe('<CreateOptionsV2/>', () => {
 
   const renderComponent = () => {
     return renderWithRecoil(
-      <CreateOptionsV2
+      <CreateOptions
         fetchReadMe={handleFetchReadMeMock}
         path="create"
         templates={templates}

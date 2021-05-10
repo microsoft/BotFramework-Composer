@@ -22,15 +22,15 @@ import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
 import { ImportModal } from '../ImportModal/ImportModal';
-import { OpenProject } from './OpenProject';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-import { CreateOptionsV2 } from './CreateOptions';
-import DefineConversationV2 from './DefineConversation';
+import { OpenProject } from './OpenProject';
+import { CreateOptions } from './CreateOptions';
+import DefineConversation from './DefineConversation';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
-const CreationFlowV2: React.FC<CreationFlowProps> = () => {
+const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplatesV2,
     fetchStorages,
@@ -194,7 +194,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     <Fragment>
       <Home />
       <Router>
-        <DefineConversationV2
+        <DefineConversation
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="create/:runtimeLanguage/:templateId"
@@ -206,7 +206,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           }}
           onSubmit={handleSubmit}
         />
-        <DefineConversationV2
+        <DefineConversation
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="create/:templateId"
@@ -218,7 +218,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           }}
           onSubmit={handleSubmit}
         />
-        <CreateOptionsV2
+        <CreateOptions
           fetchReadMe={fetchReadMe}
           path="create"
           templates={templateProjects}
@@ -229,7 +229,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
         />
-        <DefineConversationV2
+        <DefineConversation
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path=":projectId/:templateId/save"
@@ -245,7 +245,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onOpen={openBot}
         />
-        <DefineConversationV2
+        <DefineConversation
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="migrate/:projectId"
@@ -261,4 +261,4 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   );
 };
 
-export default CreationFlowV2;
+export default CreationFlow;

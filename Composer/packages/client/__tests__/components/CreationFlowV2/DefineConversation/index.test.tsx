@@ -7,7 +7,7 @@ import { fireEvent, act, waitFor } from '@botframework-composer/test-utils';
 import { renderWithRecoil } from '../../../testUtils';
 import { StorageFolder } from '../../../../src/recoilModel/types';
 import { focusedStorageFolderState, storagesState } from '../../../../src/recoilModel';
-import DefineConversationV2 from '../../../../src/components/CreationFlow/DefineConversation';
+import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
 
 describe('<DefineConversationV2/>', () => {
   const onCurrentPathUpdateMock = jest.fn();
@@ -34,7 +34,7 @@ describe('<DefineConversationV2/>', () => {
   };
   function renderComponent() {
     return renderWithRecoil(
-      <DefineConversationV2
+      <DefineConversation
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         location={locationMock}

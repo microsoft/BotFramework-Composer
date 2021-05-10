@@ -34,7 +34,7 @@ type CreateOptionsProps = {
   fetchReadMe: (moduleName: string) => {};
 } & RouteComponentProps<{}>;
 
-export function CreateOptionsV2(props: CreateOptionsProps) {
+export function CreateOptions(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);

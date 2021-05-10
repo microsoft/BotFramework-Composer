@@ -19,7 +19,7 @@ import {
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import DefineConversationV2 from '../../components/CreationFlow/DefineConversation';
+import DefineConversation from '../../components/CreationFlow/DefineConversation';
 import { CreateBot } from '../../components/CreationFlow/CreateBot';
 import { AddBotModal } from '../../components/CreationFlow/AddBotModal';
 
@@ -150,7 +150,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const renderDefineConversation = () => {
     return (
-      <DefineConversationV2
+      <DefineConversation
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         templateId={templateId}
