@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { CommunicationColors, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -144,6 +144,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
   }));
 
   const [currentTargetName, setCurrentTargetName] = useState(publishTargets.length === 0 ? '' : publishTargets[0].name);
+
   const appId = useMemo(() => {
     if (publishTargets.length === 0) return '';
 
@@ -152,6 +153,12 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
     );
     return settings?.MicrosoftAppId || '';
   }, [publishTargets, currentTargetName]);
+
+  useEffect(() => {
+    if (publishTargets.length > 0) {
+      setCurrentTargetName(publishTargets[0].name);
+    }
+  }, [publishTargets.length]);
 
   return (
     <Fragment>
