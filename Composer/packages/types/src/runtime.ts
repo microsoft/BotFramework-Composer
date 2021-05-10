@@ -63,7 +63,7 @@ export type RuntimeTemplate = {
   eject?: (project: IBotProject, localDisk?: any, isReplace?: boolean) => Promise<string>;
 
   /** build method used for local publish */
-  build: (runtimePath: string, project: IBotProject) => Promise<void>;
+  build: (runtimePath: string, project: IBotProject, fullSettings?: DialogSetting, port?: string) => Promise<void>;
 
   run: (project: IBotProject, localDisk?: any) => Promise<void>;
 

@@ -14,6 +14,27 @@ import { IFileStorage } from './interface';
 const execAsync = promisify(exec);
 const removeDirAndFiles = promisify(rimraf);
 
+const writeLocalSetting = async (setting: string, value: string, cwd: string) => {
+  // only set if there is both a setting and a value.
+  if (setting && value && cwd) {
+    const { stderr: err } = await execAsync(`func settings add ${setting} ${value}`, { cwd: cwd });
+    if (err) {
+      throw new Error(err);
+    }
+  }
+};
+
+// eslint-disable-next-line security/detect-unsafe-regex
+const localhostRegex = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
+
+const isLocalhostUrl = (matchUrl: string) => {
+  return localhostRegex.test(matchUrl);
+};
+
+const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
+  return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
+};
+
 export default async (composer: any): Promise<void> => {
   const dotnetTemplatePath = path.resolve(__dirname, '../../../runtime/dotnet');
   const nodeTemplatePath = path.resolve(__dirname, '../../../runtime/node');
@@ -326,7 +347,7 @@ export default async (composer: any): Promise<void> => {
     key: 'adaptive-runtime-dotnet-webapp',
     name: 'C# - Web App',
     build: async (runtimePath: string, _project: any) => {
-      composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
+      composer.log(`BUILD THIS C# WEBAPP PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
 
       // TODO: capture output of this and store it somewhere useful
@@ -456,9 +477,26 @@ export default async (composer: any): Promise<void> => {
     name: 'C# - Functions',
     // startCommand: 'dotnet run',
     // path: dotnetTemplatePath,
-    build: async (runtimePath: string, _project: any) => {
-      composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
+    build: async (runtimePath: string, _project: any, fullSettings?: any, port?: string) => {
+      composer.log(`BUILD THIS C# FUNCTIONS PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
+
+      if (fullSettings && port) {
+        // we need to update the local.settings.json file with sensitive settings
+        await writeLocalSetting('MicrosoftAppPassword', fullSettings.MicrosoftAppPassword, runtimePath);
+        await writeLocalSetting(
+          'luis:endpointKey',
+          fullSettings.luis?.endpointKey || fullSettings.luis?.authoringKey,
+          runtimePath
+        );
+        await writeLocalSetting('qna:endpointKey', fullSettings.qna?.endpointKey, runtimePath);
+        let skillHostEndpoint;
+        if (isSkillHostUpdateRequired(fullSettings?.skillHostEndpoint)) {
+          // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+          skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+        }
+        await writeLocalSetting('SkillHostEndpoint', skillHostEndpoint, runtimePath);
+      }
 
       // TODO: capture output of this and store it somewhere useful
       const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${_project.name}.csproj`, {
@@ -629,7 +667,7 @@ export default async (composer: any): Promise<void> => {
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-js-functions',
     name: 'JS - Functions (preview)',
-    build: async (runtimePath: string, _project: any) => {
+    build: async (runtimePath: string, _project: any, fullSettings?: any, port?: string) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
       // install dev dependencies in production, make sure typescript is installed
@@ -640,6 +678,23 @@ export default async (composer: any): Promise<void> => {
       if (installErr) {
         // in order to not throw warning, we just log all warning and error message
         composer.log(`npm install timeout, ${installErr}`);
+      }
+
+      if (fullSettings && port) {
+        // we need to update the local.settings.json file with sensitive settings
+        await writeLocalSetting('MicrosoftAppPassword', fullSettings.MicrosoftAppPassword, runtimePath);
+        await writeLocalSetting(
+          'luis:endpointKey',
+          fullSettings.luis?.endpointKey || fullSettings.luis?.authoringKey,
+          runtimePath
+        );
+        await writeLocalSetting('qna:endpointKey', fullSettings.qna?.endpointKey, runtimePath);
+        let skillHostEndpoint;
+        if (isSkillHostUpdateRequired(fullSettings?.skillHostEndpoint)) {
+          // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+          skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+        }
+        await writeLocalSetting('SkillHostEndpoint', skillHostEndpoint, runtimePath);
       }
 
       composer.log('BUILD COMPLETE');
