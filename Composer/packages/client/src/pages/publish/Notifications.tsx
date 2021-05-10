@@ -124,9 +124,7 @@ export const getSkillPublishedNotificationCardProps = (
         ? formatMessage.rich(
             'Copy and share this URL with the bots that can connect to this skill. <link>Learn more.</link>',
             {
-              link: makeLink(
-                'https://docs.microsoft.com/en-us/composer/how-to-export-a-skill#republish-the-skill-to-azure'
-              ),
+              link: makeLink('http://aka.ms/bfcomposer-2-exportskill#republish-the-skill-to-azure'),
             }
           )
         : formatMessage(`Your skill could not be published.`),
