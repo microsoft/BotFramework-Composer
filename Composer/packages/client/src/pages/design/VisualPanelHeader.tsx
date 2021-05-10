@@ -18,7 +18,7 @@ import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designer
 import { getFocusPath } from '../../utils/navigation';
 import { TreeLink } from '../../components/ProjectTree/types';
 
-import { breadcrumbClass } from './styles';
+import * as pageStyles from './styles';
 
 type BreadcrumbItem = {
   key: string;
@@ -171,16 +171,18 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
   const items = breadcrumbs.map(createBreadcrumbItem);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
-      <Breadcrumb
-        ariaLabel={formatMessage('Navigation Path')}
-        data-testid="Breadcrumb"
-        items={items}
-        maxDisplayedItems={3}
-        styles={breadcrumbClass}
-        onReduceData={() => undefined}
-      />
-      <div style={{ padding: '10px' }}>
+    <div css={pageStyles.visualPanelHeaderContainer}>
+      <div css={pageStyles.visualPanelHeaderLeft}>
+        <Breadcrumb
+          ariaLabel={formatMessage('Navigation Path')}
+          data-testid="Breadcrumb"
+          items={items}
+          maxDisplayedItems={3}
+          styles={pageStyles.breadcrumbClass}
+          onReduceData={() => undefined}
+        />
+      </div>
+      <div css={pageStyles.visualPanelHeaderRight}>
         <ActionButton onClick={onShowCodeClick}>
           {showCode ? formatMessage('Hide code') : formatMessage('Show code')}
         </ActionButton>

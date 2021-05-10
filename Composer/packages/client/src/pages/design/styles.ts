@@ -103,9 +103,23 @@ export const formEditor = css`
   min-width: 300px;
 `;
 
+export const visualPanelHeaderContainer = css`
+  height: 65px;
+`;
+
+export const visualPanelHeaderLeft = css`
+  overflow: hidden;
+  float: left;
+  width: calc(100% - 100px);
+`;
+
+export const visualPanelHeaderRight = css`
+  float: right;
+  line-height: 65px;
+`;
+
 export const breadcrumbClass = mergeStyleSets({
   root: {
-    width: '500px',
     margin: '0',
     padding: '10px',
   },
