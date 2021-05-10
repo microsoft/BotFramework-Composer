@@ -7,6 +7,7 @@ import { fireEvent } from '@botframework-composer/test-utils';
 import { renderWithRecoil } from '../../../testUtils';
 import { CreateOptions } from '../../../../src/components/CreationFlow/CreateOptions';
 
+// TODO replace with new component test
 describe('<CreateOptions/>', () => {
   const handleDismissMock = jest.fn();
   const handleCreateNextMock = jest.fn();

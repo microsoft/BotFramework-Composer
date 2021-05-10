@@ -16,6 +16,7 @@ import {
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
 
+// TODO replace with new creation component
 describe('<CreationFlow/>', () => {
   let locationMock;
   const createProjectMock = jest.fn();
