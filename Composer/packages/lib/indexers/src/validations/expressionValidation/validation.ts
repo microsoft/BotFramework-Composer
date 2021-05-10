@@ -21,15 +21,12 @@ export const addReturnType = (currentType: number, newType: number) => {
 };
 
 export const checkStringExpression = (exp: string): number => {
-  //StringExpression always assumes string interpolation unless prefixed with =, producing a string
-  if (exp.trim().startsWith('=')) {
-    return Expression.parse(exp.trim().substring(1)).returnType;
-  }
-
-  return ReturnType.String;
+  const origin = exp.trim();
+  const traget = origin.startsWith('=') ? origin.substring(1) : origin;
+  return Expression.parse(traget).returnType;
 };
 
-export const checkExpression = (exp: any, required: boolean): number => {
+export const checkExpression = (exp: any, required: boolean, types: number[]): number => {
   if ((exp === undefined || '') && required) {
     throw new Error(EMPTY);
   }
@@ -53,7 +50,13 @@ export const checkExpression = (exp: any, required: boolean): number => {
       break;
     }
     case 'string': {
-      returnType = checkStringExpression(exp);
+      if (types.length === 1 && types[0] === ReturnType.String) {
+        //if there is only one schema type and the type is string, return the returnType directly
+        returnType = ReturnType.String;
+      } else {
+        returnType = checkStringExpression(exp);
+      }
+
       break;
     }
     default:

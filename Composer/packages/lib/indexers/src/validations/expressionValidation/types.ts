@@ -11,6 +11,7 @@ export const StringMapExpressionType = {
   object: ReturnType.Object,
   array: ReturnType.Array,
   integer: ReturnType.Number,
+  all: 31,
 };
 
 export type ExpressionParseResult = { [content: string]: number };
