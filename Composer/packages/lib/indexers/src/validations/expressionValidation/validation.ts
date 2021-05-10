@@ -22,6 +22,8 @@ export const addReturnType = (currentType: number, newType: number) => {
 
 export const checkStringExpression = (exp: string, isStringType: boolean): number => {
   const origin = exp.trim();
+
+  //no need to do parse if the string expression doesn't start with '='
   if (!origin.startsWith('=') && isStringType) {
     return ReturnType.String;
   }
