@@ -52,7 +52,6 @@ import { announcementState, boilerplateVersionState, recentProjectsState, templa
 import { logMessage, setError } from './../dispatchers/shared';
 import {
   checkIfBotExistsInBotProjectFile,
-  createNewBotFromTemplate,
   fetchProjectDataById,
   flushExistingTasks,
   getSkillNameIdentifier,
@@ -209,47 +208,11 @@ export const projectDispatcher = () => {
     }
   );
 
-  const addNewSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
-      const { set, snapshot } = callbackHelpers;
-      const dispatcher = await snapshot.getPromise(dispatcherState);
-      try {
-        const { templateId, name, description, location, schemaUrl, locale } = newProjectData;
-        set(botOpeningState, true);
-        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-        if (!rootBotProjectId) return;
-        const { projectId, mainDialog } = await createNewBotFromTemplate(
-          callbackHelpers,
-          templateId,
-          name,
-          description,
-          location,
-          schemaUrl,
-          locale
-        );
-        const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(name));
-        set(botNameIdentifierState(projectId), skillNameIdentifier);
-        set(projectMetaDataState(projectId), {
-          isRemote: false,
-          isRootBot: false,
-        });
-        set(botProjectIdsState, (current) => [...current, projectId]);
-        await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
-        return projectId;
-      } catch (ex) {
-        handleProjectFailure(callbackHelpers, ex);
-      } finally {
-        set(botOpeningState, false);
-      }
-    }
-  );
-
   const forceMigrate = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, containEjectedRuntime: boolean) => {
       if (await BotConvertConfirmDialog(containEjectedRuntime)) {
         callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
-        navigateTo(`/v2/projects/migrate/${projectId}`);
+        navigateTo(`/projects/migrate/${projectId}`);
       } else {
         navigateTo(`/home`);
       }
@@ -398,7 +361,7 @@ export const projectDispatcher = () => {
       } = newProjectData;
 
       // starts the creation process and stores the jobID in state for tracking
-      const response = await httpClient.post(`/v2/projects`, {
+      const response = await httpClient.post(`/projects`, {
         storageId: 'default',
         templateId,
         templateVersion,
@@ -701,7 +664,6 @@ export const projectDispatcher = () => {
     updateBoilerplate,
     getBoilerplateVersion,
     removeSkillFromBotProject,
-    addNewSkillToBotProject,
     addExistingSkillToBotProject,
     addRemoteSkillToBotProject,
     replaceSkillInBotProject,
