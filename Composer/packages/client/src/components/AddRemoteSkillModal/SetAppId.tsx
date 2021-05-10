@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { CommunicationColors, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -137,13 +137,20 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
   const { projectId, onDismiss, onNext, onGotoCreateProfile } = props;
   const settings = useRecoilValue(settingsState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
-  const { publishTargets = [], MicrosoftAppId = '' } = settings;
+  const { publishTargets = [] } = settings;
   const publishTargetOptions: IDropdownOption[] = publishTargets.map((target) => ({
     key: target.name,
     text: target.name,
   }));
 
   const [currentTargetName, setCurrentTargetName] = useState(publishTargets.length === 0 ? '' : publishTargets[0].name);
+  const appId = useMemo(() => {
+    if (publishTargets.length === 0) return '';
+    const { settings } = JSON.parse(
+      publishTargets.find((target) => target.name === currentTargetName)?.configuration || ''
+    );
+    return settings.MicrosoftAppId;
+  }, [publishTargets, currentTargetName]);
 
   return (
     <Fragment>
@@ -159,7 +166,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
           {publishTargets.length === 1 ? (
             <div style={{ margin: '0 0 40px 30px' }}>
               {renderMicrosoftAppId(
-                MicrosoftAppId,
+                appId,
                 formatMessage('Your bot’s Microsoft App Id'),
                 formatMessage('Microsoft App Id')
               )}
@@ -183,11 +190,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
                 />
               </div>
               <div>
-                {renderMicrosoftAppId(
-                  MicrosoftAppId,
-                  formatMessage('Microsoft App Id'),
-                  formatMessage('Microsoft App Id')
-                )}
+                {renderMicrosoftAppId(appId, formatMessage('Microsoft App Id'), formatMessage('Microsoft App Id'))}
               </div>
             </div>
           )}
@@ -203,7 +206,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
             disabled={publishTargets.length === 0}
             styles={buttonStyle}
             text={formatMessage('Next')}
-            onClick={() => onNext(MicrosoftAppId, currentTargetName)}
+            onClick={() => onNext(currentTargetName)}
           />
         </StackItem>
       </Stack>

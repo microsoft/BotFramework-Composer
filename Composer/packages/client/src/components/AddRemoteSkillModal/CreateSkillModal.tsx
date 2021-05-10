@@ -130,10 +130,12 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [createSkillDialogHidden, setCreateSkillDialogHidden] = useState(false);
 
   const publishTypes = useRecoilValue(publishTypesState(projectId));
-  const { languages, luFeatures, runtime, publishTargets = [] } = useRecoilValue(settingsState(projectId));
+  const { languages, luFeatures, runtime, publishTargets = [], MicrosoftAppId } = useRecoilValue(
+    settingsState(projectId)
+  );
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
-  const { updateRecognizer, setPublishTargets } = useRecoilValue(dispatcherState);
+  const { updateRecognizer, setMicrosoftAppProperties, setPublishTargets } = useRecoilValue(dispatcherState);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -200,17 +202,13 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     onDismiss();
   };
 
-  const handleGotoAddSkill = (MicrosoftAppId: string, publishTargetName: string) => {
-    setPublishTargets(
-      publishTargets.map((target) => {
-        if (target.name === publishTargetName) {
-          const configuration = JSON.parse(target.configuration);
-          configuration.settings.MicrosoftAppId = MicrosoftAppId;
-          target = { ...target, configuration: JSON.stringify(configuration) };
-        }
-        return target;
-      }),
-      projectId
+  const handleGotoAddSkill = (publishTargetName: string) => {
+    const profileTarget = publishTargets.find((target) => target.name === publishTargetName);
+    const configuration = JSON.parse(profileTarget?.configuration || '');
+    setMicrosoftAppProperties(
+      projectId,
+      configuration.settings.MicrosoftAppId,
+      configuration.settings.MicrosoftAppPassword
     );
 
     setShowSetAppIdDialog(false);
@@ -232,6 +230,12 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       });
     }
   }, [skillManifest]);
+
+  useEffect(() => {
+    if (MicrosoftAppId) {
+      setShowSetAppIdDialog(false);
+    }
+  }, [MicrosoftAppId]);
 
   return (
     <Fragment>
