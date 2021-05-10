@@ -62,8 +62,8 @@
   "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
     "message": "A skill bot that can be called from a host bot."
   },
-  "a_skill_is_a_bot_that_can_perform_a_set_of_tasks_o_950a3c95": {
-    "message": "A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform."
+  "a_skill_is_a_bot_that_can_perform_a_set_of_tasks_o_1573efef": {
+    "message": "A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform. <link>Learn more.</link>"
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A subscription key is created when you create a QnA Maker resource."
@@ -572,6 +572,9 @@
   "bot_files_created_986109df": {
     "message": "Bot files created"
   },
+  "bot_framework_composer_2_0_provides_more_built_in__c6abf11c": {
+    "message": "Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages."
+  },
   "bot_framework_composer_fae721be": {
     "message": "Bot Framework Composer"
   },
@@ -746,6 +749,9 @@
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
   },
+  "composer_2_0_is_now_available_113ed532": {
+    "message": "Composer 2.0 is now available!"
+  },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
   },
@@ -895,6 +901,9 @@
   },
   "copy_9748f9f": {
     "message": "Copy"
+  },
+  "copy_and_share_this_url_with_the_bots_that_can_con_61aa25ba": {
+    "message": "Copy and share this URL with the bots that can connect to this skill. <link>Learn more.</link>"
   },
   "copy_command_to_clipboard_4649910f": {
     "message": "Copy command to clipboard"
@@ -1562,6 +1571,9 @@
   "export_your_bot_604e651c": {
     "message": "Export your bot"
   },
+  "exporting_bot_as_a_skill_71a5aeca": {
+    "message": "Exporting bot as a skill..."
+  },
   "expression_7f906a13": {
     "message": "Expression"
   },
@@ -2020,9 +2032,6 @@
   },
   "kb_d9c53902": {
     "message": "KB"
-  },
-  "keep_this_url_handy_to_share_it_with_other_develop_bfd51fb0": {
-    "message": "Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
@@ -2552,6 +2561,9 @@
   "not_yet_published_669e37b3": {
     "message": "Not yet published"
   },
+  "note_if_your_bot_is_using_custom_actions_they_will_a500ed2": {
+    "message": "Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>"
+  },
   "notifications_cbfa7704": {
     "message": "Notifications"
   },
@@ -2896,9 +2908,6 @@
   },
   "publishing_target_46605bc5": {
     "message": "Publishing target"
-  },
-  "publishing_your_skill_b5957f9c": {
-    "message": "Publishing your skill..."
   },
   "pull_d1c3e8fe": {
     "message": "Pull"
@@ -3824,8 +3833,8 @@
   "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
     "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
-  "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+  "to_ensure_a_secure_connection_provide_the_app_id_o_9d7f7d41": {
+    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. <link>Learn more.</link>"
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
@@ -4004,8 +4013,14 @@
   "update_activity_2b05e6c6": {
     "message": "Update activity"
   },
+  "update_and_restart_b236a67": {
+    "message": "Update and restart"
+  },
   "update_available_b637d767": {
     "message": "Update available"
+  },
+  "update_cancelled_auto_update_has_been_turned_off_f_7f7e08d7": {
+    "message": "Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>"
   },
   "update_complete_c5163fbf": {
     "message": "Update complete"
@@ -4292,6 +4307,9 @@
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
   },
+  "your_bot_was_exported_to_a_skill_c9ad3d79": {
+    "message": "Your bot was exported to a skill"
+  },
   "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
     "message": "Your dialog for \"{ schemaId }\" was generated successfully."
   },
@@ -4309,9 +4327,6 @@
   },
   "your_skill_could_not_be_published_5bee6e6a": {
     "message": "Your skill could not be published."
-  },
-  "your_skill_is_ready_to_be_shared_6376eb3c": {
-    "message": "Your skill is ready to be shared!"
   },
   "your_subscription_list_is_empty_please_add_your_su_6b229c26": {
     "message": "Your subscription list is empty, please add your subscription, or login with another account."

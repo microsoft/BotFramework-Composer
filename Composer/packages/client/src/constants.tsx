@@ -164,6 +164,15 @@ export const Steps = {
   NONE: 'NONE',
 };
 
+// Used to create formatted links inside formatMessage.rich calls
+export const makeLink = (url: string) => {
+  return ({ children }) => (
+    <Link key={url} href={url} rel="noopener noreferrer" target="_blank">
+      {children}
+    </Link>
+  );
+};
+
 export const BotStatusesCopy = {
   get connected() {
     return formatMessage('Running');
@@ -265,8 +274,11 @@ export const DialogCreationCopy = {
   get IMPORT_QNA() {
     return {
       title: formatMessage('Add QnA Maker knowledge base'),
-      subText: formatMessage(
-        'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
+      subText: formatMessage.rich(
+        'Use Azure QnA Maker to extract question-and-answer pairs from online sources such as a website FAQ or product manual. Learn more. <link>Learn more about knowledge base sources.</link>',
+        {
+          link: makeLink('https://aka.ms/qna-data-source-content'),
+        }
       ),
     };
   },
