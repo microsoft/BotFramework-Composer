@@ -21,7 +21,7 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 
-import { CreationFlowStatus, DialogCreationCopy, nameRegex, nameRegexV2 } from '../../constants';
+import { CreationFlowStatus, DialogCreationCopy, nameRegex, botNameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
@@ -170,7 +170,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       required: true,
       validate: (value) => {
         const isPvaBot = templateId === 'pva';
-        const namePattern = isPvaBot ? nameRegex : nameRegexV2;
+        const namePattern = isPvaBot ? nameRegex : botNameRegex;
         if (!value || !namePattern.test(`${value}`)) {
           // botName is used as used when generating runtime namespaces which cannot start with a number
           if (value && !isNaN(+value.toString().charAt(0))) {

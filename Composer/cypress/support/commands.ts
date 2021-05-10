@@ -34,7 +34,7 @@ Cypress.Commands.add('createBot', (botName: string, callback: (bot: any) => void
     }
   };
 
-  cy.request('post', '/api/v2/projects', params).then((res) => {
+  cy.request('post', '/api/projects', params).then((res) => {
     const { jobId } = res.body;
     // install package can take a long time.
     cy.wait(20000);

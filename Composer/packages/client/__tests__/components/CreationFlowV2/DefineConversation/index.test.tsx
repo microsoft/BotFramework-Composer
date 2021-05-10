@@ -9,7 +9,7 @@ import { StorageFolder } from '../../../../src/recoilModel/types';
 import { focusedStorageFolderState, storagesState } from '../../../../src/recoilModel';
 import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
 
-describe('<DefineConversationV2/>', () => {
+describe('<DefineConversation/>', () => {
   const onCurrentPathUpdateMock = jest.fn();
   const onSubmitMock = jest.fn();
   const onDismissMock = jest.fn();

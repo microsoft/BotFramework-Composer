@@ -22,7 +22,7 @@ describe('<CreationFlow/>', () => {
   const createProjectMock = jest.fn();
   const initRecoilState = ({ set }) => {
     set(dispatcherState, {
-      createNewBotV2: createProjectMock,
+      createNewBot: createProjectMock,
       fetchStorages: jest.fn(),
       fetchTemplateProjects: jest.fn(),
       onboardingAddCoachMarkRef: jest.fn(),
