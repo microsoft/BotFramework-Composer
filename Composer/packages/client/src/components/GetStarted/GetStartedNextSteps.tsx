@@ -135,8 +135,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       newNextSteps.push({
         key: 'customActions',
         label: formatMessage('Review deactivated custom actions'),
-        description: formatMessage('We detected {length} custom components that are not support for Composer 2.0.', {
+        description: formatMessage('We detected {length} custom {obj} that are not support for Composer 2.0.', {
           length: schemaDiagnostics.length,
+          obj: `component${schemaDiagnostics.length > 1 ? 's' : ''}`,
         }),
         required: true,
         checked: false,

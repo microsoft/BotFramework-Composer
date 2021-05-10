@@ -269,14 +269,14 @@ export const projectDispatcher = () => {
         set(botOpeningState, true);
 
         await flushExistingTasks(callbackHelpers);
-        const { projectId, mainDialog, requiresMigrate, oldCustomRuntime } = await openRootBotAndSkillsByPath(
+        const { projectId, mainDialog, requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByPath(
           callbackHelpers,
           path,
           storageId
         );
 
         if (requiresMigrate) {
-          await forceMigrate(projectId, oldCustomRuntime);
+          await forceMigrate(projectId, hasOldCustomRuntime);
           return;
         }
 

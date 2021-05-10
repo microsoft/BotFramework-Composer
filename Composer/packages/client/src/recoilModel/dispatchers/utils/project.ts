@@ -841,7 +841,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
     mainDialog,
     projectId: rootBotProjectId,
     requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings) && !isPVA(botFiles.mergedSettings),
-    oldCustomRuntime: isOldCustomRuntime(botFiles.mergedSettings),
+    hasOldCustomRuntime: isOldCustomRuntime(botFiles.mergedSettings),
   };
 };
 
