@@ -7,16 +7,16 @@ import { createHistory, createMemorySource, LocationProvider } from '@reach/rout
 import { RecoilRoot } from 'recoil';
 import { getDefaultFeatureFlags } from '@bfc/shared';
 
-import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
 import {
   focusedStorageFolderState,
   creationFlowStatusState,
   dispatcherState,
   featureFlagsState,
+  templateProjectsState,
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
+import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
 
-// TODO replace with new creation component
 describe('<CreationFlow/>', () => {
   let locationMock;
   const createProjectMock = jest.fn();
@@ -36,6 +36,17 @@ describe('<CreationFlow/>', () => {
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
     set(featureFlagsState, getDefaultFeatureFlags());
+    set(templateProjectsState, [
+      {
+        id: '@microsoft/generator-bot-empty',
+        name: 'Empty Bot',
+        description: 'Yeoman generator for creating an empty bot built on the Azure Bot Framework.',
+        package: { packageName: '@microsoft/generator-bot-empty', packageSource: 'npm', packageVersion: '1.0.0' },
+        dotnetSupport: { functionsSupported: true, webAppSupported: true },
+        nodeSupport: { functionsSupported: true, webAppSupported: true },
+      },
+    ]);
+
     set(focusedStorageFolderState, {
       name: 'Desktop',
       parent: '/test-folder',
@@ -73,8 +84,8 @@ describe('<CreationFlow/>', () => {
       </RecoilRoot>
     );
 
-    navigate('create/EchoBot');
-    const node = await findByText('OK');
+    navigate('create/dotnet/%40microsoft%2Fgenerator-bot-empty');
+    const node = await findByText('Create');
 
     act(() => {
       fireEvent.click(node);
@@ -84,14 +95,25 @@ describe('<CreationFlow/>', () => {
     if (process.platform === 'win32') {
       expectedLocation = '\\test-folder\\Desktop';
     }
-
     expect(createProjectMock).toHaveBeenCalledWith({
       appLocale: 'en-US',
       description: '',
       location: expectedLocation,
-      name: 'EchoBot-1',
+      name: 'Empty',
       schemaUrl: '',
-      templateId: 'EchoBot',
+      templateId: '@microsoft/generator-bot-empty',
+      templateVersion: '1.0.0',
+      alias: undefined,
+      eTag: undefined,
+      preserveRoot: undefined,
+      qnqKbUrls: undefined,
+      runtimeType: 'webapp',
+      templateDir: undefined,
+      urlSuffix: undefined,
+      profile: undefined,
+      qnaKbUrls: undefined,
+      runtimeLanguage: 'dotnet',
+      source: undefined,
     });
   });
 });
