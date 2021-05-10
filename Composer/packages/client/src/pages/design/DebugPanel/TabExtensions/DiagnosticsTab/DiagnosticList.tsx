@@ -68,6 +68,10 @@ const tableCell = css`
   }
 `;
 
+const blodText = css`
+  font-weight: bold !important;
+`;
+
 const content = css`
   outline: none;
 `;
@@ -188,7 +192,17 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
               css={content}
               tabIndex={-1}
             >
-              {item.message}
+              <span css={blodText}>{item.title ?? ''}</span>
+              &nbsp;
+              <span>{item.message}</span>
+              &nbsp;
+              <Link
+                hidden={!item.learnMore}
+                href="https://github.com/microsoft/botframework-components/blob/main/docs/overview.md"
+                target="_blank"
+              >
+                {item.learnMore}
+              </Link>
             </div>
           </div>
         );
