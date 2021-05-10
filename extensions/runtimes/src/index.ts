@@ -14,14 +14,37 @@ import { IFileStorage } from './interface';
 const execAsync = promisify(exec);
 const removeDirAndFiles = promisify(rimraf);
 
-const writeLocalSetting = async (setting: string, value: string, cwd: string) => {
+/**
+ * Used to set values for Azure Functions runtime environment variables
+ * This is used to set the "sensitive values" when using Azure Functions
+ * @param name name of key
+ * @param value value of key
+ * @param cwd path where the command will be run
+ */
+const writeLocalFunctionsSetting = async (name: string, value: string, cwd: string) => {
   // only set if there is both a setting and a value.
-  if (setting && value && cwd) {
-    const { stderr: err } = await execAsync(`func settings add ${setting} ${value}`, { cwd: cwd });
+  if (name && value && cwd) {
+    const { stderr: err } = await execAsync(`func settings add ${name} ${value}`, { cwd: cwd });
     if (err) {
       throw new Error(err);
     }
   }
+};
+
+const writeAllLocalFunctionsSettings = async (fullSettings, port, runtimePath) => {
+  await writeLocalFunctionsSetting('MicrosoftAppPassword', fullSettings.MicrosoftAppPassword, runtimePath);
+  await writeLocalFunctionsSetting(
+    'luis:endpointKey',
+    fullSettings.luis?.endpointKey || fullSettings.luis?.authoringKey,
+    runtimePath
+  );
+  await writeLocalFunctionsSetting('qna:endpointKey', fullSettings.qna?.endpointKey, runtimePath);
+  let skillHostEndpoint;
+  if (isSkillHostUpdateRequired(fullSettings?.skillHostEndpoint)) {
+    // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+    skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+  }
+  await writeLocalFunctionsSetting('SkillHostEndpoint', skillHostEndpoint, runtimePath);
 };
 
 // eslint-disable-next-line security/detect-unsafe-regex
@@ -483,19 +506,7 @@ export default async (composer: any): Promise<void> => {
 
       if (fullSettings && port) {
         // we need to update the local.settings.json file with sensitive settings
-        await writeLocalSetting('MicrosoftAppPassword', fullSettings.MicrosoftAppPassword, runtimePath);
-        await writeLocalSetting(
-          'luis:endpointKey',
-          fullSettings.luis?.endpointKey || fullSettings.luis?.authoringKey,
-          runtimePath
-        );
-        await writeLocalSetting('qna:endpointKey', fullSettings.qna?.endpointKey, runtimePath);
-        let skillHostEndpoint;
-        if (isSkillHostUpdateRequired(fullSettings?.skillHostEndpoint)) {
-          // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
-          skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
-        }
-        await writeLocalSetting('SkillHostEndpoint', skillHostEndpoint, runtimePath);
+        await writeAllLocalFunctionsSettings(fullSettings, port, runtimePath);
       }
 
       // TODO: capture output of this and store it somewhere useful
@@ -682,19 +693,7 @@ export default async (composer: any): Promise<void> => {
 
       if (fullSettings && port) {
         // we need to update the local.settings.json file with sensitive settings
-        await writeLocalSetting('MicrosoftAppPassword', fullSettings.MicrosoftAppPassword, runtimePath);
-        await writeLocalSetting(
-          'luis:endpointKey',
-          fullSettings.luis?.endpointKey || fullSettings.luis?.authoringKey,
-          runtimePath
-        );
-        await writeLocalSetting('qna:endpointKey', fullSettings.qna?.endpointKey, runtimePath);
-        let skillHostEndpoint;
-        if (isSkillHostUpdateRequired(fullSettings?.skillHostEndpoint)) {
-          // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
-          skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
-        }
-        await writeLocalSetting('SkillHostEndpoint', skillHostEndpoint, runtimePath);
+        await writeAllLocalFunctionsSettings(fullSettings, port, runtimePath);
       }
 
       composer.log('BUILD COMPLETE');
