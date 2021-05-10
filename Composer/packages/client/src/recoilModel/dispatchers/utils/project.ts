@@ -715,7 +715,7 @@ export const migrateToV2 = async (
   runtimeLanguage: string,
   runtimeType: string
 ) => {
-  const jobId = await httpClient.post(`/v2/projects/migrate`, {
+  const jobId = await httpClient.post(`projects/migrate`, {
     storageId: 'default',
     oldProjectId,
     name,
