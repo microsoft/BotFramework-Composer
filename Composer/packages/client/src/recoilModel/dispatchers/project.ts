@@ -4,7 +4,6 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { OpenConfirmModal } from '@bfc/ui-shared';
 import { PublishTarget, QnABotTemplateId, RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
@@ -47,6 +46,7 @@ import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selec
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
 import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
 import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
+import { BotConvertConfirmDialog } from '../../components/BotConvertDialog';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -245,22 +245,16 @@ export const projectDispatcher = () => {
     }
   );
 
-  const forceMigrate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
-    if (
-      await OpenConfirmModal(
-        formatMessage('Convert your project to the latest format'),
-        formatMessage(
-          'This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed.'
-        ),
-        { confirmText: formatMessage('Convert') }
-      )
-    ) {
-      callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
-      navigateTo(`/v2/projects/migrate/${projectId}`);
-    } else {
-      navigateTo(`/home`);
+  const forceMigrate = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, containEjectedRuntime: boolean) => {
+      if (await BotConvertConfirmDialog(containEjectedRuntime)) {
+        callbackHelpers.set(creationFlowStatusState, CreationFlowStatus.MIGRATE);
+        navigateTo(`/v2/projects/migrate/${projectId}`);
+      } else {
+        navigateTo(`/home`);
+      }
     }
-  });
+  );
 
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
@@ -275,14 +269,14 @@ export const projectDispatcher = () => {
         set(botOpeningState, true);
 
         await flushExistingTasks(callbackHelpers);
-        const { projectId, mainDialog, requiresMigrate } = await openRootBotAndSkillsByPath(
+        const { projectId, mainDialog, requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByPath(
           callbackHelpers,
           path,
           storageId
         );
 
         if (requiresMigrate) {
-          await forceMigrate(projectId);
+          await forceMigrate(projectId, hasOldCustomRuntime);
           return;
         }
 
@@ -345,9 +339,12 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      const { requiresMigrate } = await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
+      const { requiresMigrate, hasOldCustomRuntime } = await openRootBotAndSkillsByProjectId(
+        callbackHelpers,
+        projectId
+      );
       if (requiresMigrate) {
-        await forceMigrate(projectId);
+        await forceMigrate(projectId, hasOldCustomRuntime);
         return;
       }
       // Post project creation
