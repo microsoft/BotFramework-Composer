@@ -24,7 +24,7 @@ const buttonStyle = { root: { marginLeft: '8px' } };
 type SetAppIdProps = {
   projectId: string;
   onDismiss: () => void;
-  onNext: (appId: string, targetName: string) => void;
+  onNext: (targetName: string) => void;
   onGotoCreateProfile: () => void;
 };
 const getCreateProfileDescription = (botName, handleCreateProfile) => ({
