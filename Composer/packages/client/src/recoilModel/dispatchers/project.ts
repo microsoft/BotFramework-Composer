@@ -19,7 +19,6 @@ import { projectIdCache } from '../../utils/projectCache';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import {
   botErrorState,
-  botNameIdentifierState,
   botOpeningMessage,
   botOpeningState,
   botProjectIdsState,
