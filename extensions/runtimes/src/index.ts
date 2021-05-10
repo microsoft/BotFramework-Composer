@@ -382,12 +382,12 @@ export default async (composer: any): Promise<void> => {
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-dotnet-webapp',
     name: 'C# - Web App',
-    build: async (runtimePath: string, _project: IBotProject) => {
+    build: async (runtimePath: string, project: IBotProject) => {
       composer.log(`BUILD THIS C# WEBAPP PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
 
       // TODO: capture output of this and store it somewhere useful
-      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${_project.name}.csproj`, {
+      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${project.name}.csproj`, {
         cwd: runtimePath,
       });
       if (initErr) {
@@ -395,7 +395,7 @@ export default async (composer: any): Promise<void> => {
       }
 
       composer.log('Run dotnet build...');
-      const { stderr: buildErr } = await execAsync(`dotnet build ${_project.name}.csproj`, { cwd: runtimePath });
+      const { stderr: buildErr } = await execAsync(`dotnet build ${project.name}.csproj`, { cwd: runtimePath });
       if (buildErr) {
         throw new Error(buildErr);
       }
@@ -406,11 +406,11 @@ export default async (composer: any): Promise<void> => {
       packageName: string,
       version: string,
       source: string,
-      _project: IBotProject,
+      project: IBotProject,
       isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
-      const command = `dotnet add ${_project.name}.csproj package "${packageName}"${
+      const command = `dotnet add ${project.name}.csproj package "${packageName}"${
         version ? ' --version="' + version + '"' : ''
       }${source ? ' --source="' + source + '"' : ''}${isPreview ? ' --prerelease' : ''}`;
       composer.log('EXEC:', command);
@@ -422,11 +422,11 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    uninstallComponent: async (runtimePath: string, packageName: string, _project: IBotProject): Promise<string> => {
+    uninstallComponent: async (runtimePath: string, packageName: string, project: IBotProject): Promise<string> => {
       // run dotnet install on the project
-      composer.log(`EXECUTE: dotnet remove ${_project.name}.csproj package ${packageName}`);
+      composer.log(`EXECUTE: dotnet remove ${project.name}.csproj package ${packageName}`);
       const { stderr: installError, stdout: installOutput } = await execAsync(
-        `dotnet remove  ${_project.name}.csproj package ${packageName}`,
+        `dotnet remove  ${project.name}.csproj package ${packageName}`,
         {
           cwd: path.join(runtimePath),
         }
@@ -518,7 +518,7 @@ export default async (composer: any): Promise<void> => {
     name: 'C# - Functions',
     // startCommand: 'dotnet run',
     // path: dotnetTemplatePath,
-    build: async (runtimePath: string, _project: IBotProject, fullSettings?: DialogSetting, port?: string) => {
+    build: async (runtimePath: string, project: IBotProject, fullSettings?: DialogSetting, port?: number) => {
       composer.log(`BUILD THIS C# FUNCTIONS PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
 
@@ -528,7 +528,7 @@ export default async (composer: any): Promise<void> => {
       }
 
       // TODO: capture output of this and store it somewhere useful
-      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${_project.name}.csproj`, {
+      const { stderr: initErr } = await execAsync(`dotnet user-secrets init --project ${project.name}.csproj`, {
         cwd: runtimePath,
       });
       if (initErr) {
@@ -536,7 +536,7 @@ export default async (composer: any): Promise<void> => {
       }
 
       composer.log('Run dotnet build...');
-      const { stderr: buildErr } = await execAsync(`dotnet build ${_project.name}.csproj`, { cwd: runtimePath });
+      const { stderr: buildErr } = await execAsync(`dotnet build ${project.name}.csproj`, { cwd: runtimePath });
       if (buildErr) {
         throw new Error(buildErr);
       }
@@ -547,11 +547,11 @@ export default async (composer: any): Promise<void> => {
       packageName: string,
       version: string,
       source: string,
-      _project: IBotProject,
+      project: IBotProject,
       isPreview = false
     ): Promise<string> => {
       // run dotnet install on the project
-      const command = `dotnet add ${_project.name}.csproj package "${packageName}"${
+      const command = `dotnet add ${project.name}.csproj package "${packageName}"${
         version ? ' --version="' + version + '"' : ''
       }${source ? ' --source="' + source + '"' : ''}${isPreview ? ' --prerelease' : ''}`;
       composer.log('EXEC:', command);
@@ -563,11 +563,11 @@ export default async (composer: any): Promise<void> => {
       }
       return installOutput;
     },
-    uninstallComponent: async (runtimePath: string, packageName: string, _project: IBotProject): Promise<string> => {
+    uninstallComponent: async (runtimePath: string, packageName: string, project: IBotProject): Promise<string> => {
       // run dotnet install on the project
-      composer.log(`EXECUTE: dotnet remove ${_project.name}.csproj package ${packageName}`);
+      composer.log(`EXECUTE: dotnet remove ${project.name}.csproj package ${packageName}`);
       const { stderr: installError, stdout: installOutput } = await execAsync(
-        `dotnet remove  ${_project.name}.csproj package ${packageName}`,
+        `dotnet remove  ${project.name}.csproj package ${packageName}`,
         {
           cwd: path.join(runtimePath),
         }
@@ -706,7 +706,7 @@ export default async (composer: any): Promise<void> => {
   composer.addRuntimeTemplate({
     key: 'adaptive-runtime-js-functions',
     name: 'JS - Functions (preview)',
-    build: async (runtimePath: string, _project: IBotProject, fullSettings?: DialogSetting, port?: string) => {
+    build: async (runtimePath: string, _project: IBotProject, fullSettings?: DialogSetting, port?: number) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
       // install dev dependencies in production, make sure typescript is installed
