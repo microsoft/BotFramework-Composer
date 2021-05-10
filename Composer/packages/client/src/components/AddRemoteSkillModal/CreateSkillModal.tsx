@@ -234,6 +234,10 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   useEffect(() => {
     if (MicrosoftAppId) {
       setShowSetAppIdDialog(false);
+      setTitle({
+        subText: '',
+        title: addSkillDialog.SKILL_MANIFEST_FORM.title,
+      });
     }
   }, [MicrosoftAppId]);
 

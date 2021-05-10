@@ -146,10 +146,11 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
   const [currentTargetName, setCurrentTargetName] = useState(publishTargets.length === 0 ? '' : publishTargets[0].name);
   const appId = useMemo(() => {
     if (publishTargets.length === 0) return '';
+
     const { settings } = JSON.parse(
-      publishTargets.find((target) => target.name === currentTargetName)?.configuration || ''
+      publishTargets.find((target) => target.name === currentTargetName)?.configuration || '{}'
     );
-    return settings.MicrosoftAppId;
+    return settings?.MicrosoftAppId || '';
   }, [publishTargets, currentTargetName]);
 
   return (
@@ -167,8 +168,8 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
             <div style={{ margin: '0 0 40px 30px' }}>
               {renderMicrosoftAppId(
                 appId,
-                formatMessage('Your bot’s Microsoft App Id'),
-                formatMessage('Microsoft App Id')
+                formatMessage('Your bot’s Microsoft App ID'),
+                formatMessage('Microsoft App ID')
               )}
             </div>
           ) : (
