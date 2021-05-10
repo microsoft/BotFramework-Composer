@@ -117,7 +117,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
 
   const [title, setTitle] = useState(addSkillDialog.SET_APP_ID);
-  const [showSetAppIdDialog, setshowSetAppIdDialog] = useState(true);
+  const [showSetAppIdDialog, setShowSetAppIdDialog] = useState(true);
   const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
     manifestUrl: '',
@@ -196,7 +196,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   };
 
   const handleDismiss = () => {
-    setshowSetAppIdDialog(true);
+    setShowSetAppIdDialog(true);
     onDismiss();
   };
 
@@ -213,7 +213,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       projectId
     );
 
-    setshowSetAppIdDialog(false);
+    setShowSetAppIdDialog(false);
     setTitle({
       subText: '',
       title: addSkillDialog.SKILL_MANIFEST_FORM.title,

@@ -199,6 +199,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
         <StackItem align={'end'}>
           <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
+            data-testid="SetAppIdNext"
             disabled={publishTargets.length === 0}
             styles={buttonStyle}
             text={formatMessage('Next')}
