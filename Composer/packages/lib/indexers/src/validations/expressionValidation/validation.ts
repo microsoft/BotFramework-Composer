@@ -20,10 +20,13 @@ export const addReturnType = (currentType: number, newType: number) => {
   return currentType | newType;
 };
 
-export const checkStringExpression = (exp: string): number => {
+export const checkStringExpression = (exp: string, isStringType: boolean): number => {
   const origin = exp.trim();
-  const traget = origin.startsWith('=') ? origin.substring(1) : origin;
-  return Expression.parse(traget).returnType;
+  if (!origin.startsWith('=') && isStringType) {
+    return ReturnType.String;
+  }
+
+  return Expression.parse(origin.substring(1)).returnType;
 };
 
 export const checkExpression = (exp: any, required: boolean, types: number[]): number => {
@@ -50,13 +53,7 @@ export const checkExpression = (exp: any, required: boolean, types: number[]): n
       break;
     }
     case 'string': {
-      if (types.length === 1 && types[0] === ReturnType.String) {
-        //if there is only one schema type and the type is string, return the returnType directly
-        returnType = ReturnType.String;
-      } else {
-        returnType = checkStringExpression(exp);
-      }
-
+      returnType = checkStringExpression(exp, types.length === 1 && types[0] === ReturnType.String);
       break;
     }
     default:
