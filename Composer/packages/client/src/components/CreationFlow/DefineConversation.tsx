@@ -21,15 +21,15 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 
-import { CreationFlowStatus, DialogCreationCopy, nameRegex, nameRegexV2 } from '../../../constants';
-import { FieldConfig, useForm } from '../../../hooks/useForm';
-import { StorageFolder } from '../../../recoilModel/types';
-import { createNotification } from '../../../recoilModel/dispatchers/notification';
-import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
-import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../../recoilModel';
-import { LocationSelectContent } from '../LocationSelectContent';
-import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
-import TelemetryClient from '../../../telemetry/TelemetryClient';
+import { CreationFlowStatus, DialogCreationCopy, nameRegex, nameRegexV2 } from '../../constants';
+import { FieldConfig, useForm } from '../../hooks/useForm';
+import { StorageFolder } from '../../recoilModel/types';
+import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNotification';
+import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../recoilModel';
+import { LocationSelectContent } from './LocationSelectContent';
+import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 // -------------------- Styles -------------------- //
 

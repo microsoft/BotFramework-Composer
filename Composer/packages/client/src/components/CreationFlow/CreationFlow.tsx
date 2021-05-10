@@ -8,7 +8,7 @@ import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
 
-import { CreationFlowStatus, firstPartyTemplateFeed } from '../../../constants';
+import { CreationFlowStatus, firstPartyTemplateFeed } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -17,13 +17,13 @@ import {
   currentProjectIdState,
   userSettingsState,
   templateProjectsState,
-} from '../../../recoilModel';
-import { localBotsDataSelector } from '../../../recoilModel/selectors/project';
-import Home from '../../../pages/home/Home';
-import { useProjectIdCache } from '../../../utils/hooks';
-import { ImportModal } from '../../ImportModal/ImportModal';
-import { OpenProject } from '../OpenProject';
-import TelemetryClient from '../../../telemetry/TelemetryClient';
+} from '../../recoilModel';
+import { localBotsDataSelector } from '../../recoilModel/selectors/project';
+import Home from '../../pages/home/Home';
+import { useProjectIdCache } from '../../utils/hooks';
+import { ImportModal } from '../ImportModal/ImportModal';
+import { OpenProject } from './OpenProject';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { CreateOptionsV2 } from './CreateOptions';
 import DefineConversationV2 from './DefineConversation';

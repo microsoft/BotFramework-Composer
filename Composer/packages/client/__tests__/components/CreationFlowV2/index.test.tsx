@@ -15,7 +15,7 @@ import {
   templateProjectsState,
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
-import CreationFlowV2 from '../../../src/components/CreationFlow/v2/CreationFlow';
+import CreationFlowV2 from '../../../src/components/CreationFlow/CreationFlow';
 
 describe('<CreationFlowV2/>', () => {
   let locationMock;

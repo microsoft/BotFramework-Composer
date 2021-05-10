@@ -5,7 +5,7 @@ import * as React from 'react';
 import { fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../../../testUtils';
-import { CreateOptionsV2 } from '../../../../src/components/CreationFlow/v2/CreateOptions';
+import { CreateOptionsV2 } from '../../../../src/components/CreationFlow/CreateOptions';
 
 describe('<CreateOptionsV2/>', () => {
   const handleDismissMock = jest.fn();

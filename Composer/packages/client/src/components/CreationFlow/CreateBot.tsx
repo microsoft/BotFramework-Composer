@@ -26,10 +26,10 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import msftIcon from '../../../images/msftIcon.svg';
-import { DialogCreationCopy } from '../../../constants';
-import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
-import TelemetryClient from '../../../telemetry/TelemetryClient';
+import msftIcon from '../../images/msftIcon.svg';
+import { DialogCreationCopy } from '../../constants';
+import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../recoilModel';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { TemplateDetailView } from './TemplateDetailView';
 

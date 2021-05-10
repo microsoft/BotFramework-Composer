@@ -17,11 +17,11 @@ import querystring from 'query-string';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
-import { DialogCreationCopy } from '../../../constants';
-import { getAliasFromPayload, isElectron } from '../../../utils/electronUtil';
-import { creationFlowTypeState, userHasNodeInstalledState } from '../../../recoilModel';
-import { InstallDepModal } from '../../InstallDepModal';
-import TelemetryClient from '../../../telemetry/TelemetryClient';
+import { DialogCreationCopy } from '../../constants';
+import { getAliasFromPayload, isElectron } from '../../utils/electronUtil';
+import { creationFlowTypeState, userHasNodeInstalledState } from '../../recoilModel';
+import { InstallDepModal } from '../InstallDepModal';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { CreateBot } from './CreateBot';
 

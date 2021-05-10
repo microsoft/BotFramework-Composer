@@ -19,9 +19,9 @@ import {
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
-import { CreateBot } from '../../components/CreationFlow/v2/CreateBot';
-import { AddBotModal } from '../../components/CreationFlow/v2/AddBotModal';
+import DefineConversationV2 from '../../components/CreationFlow/DefineConversation';
+import { CreateBot } from '../../components/CreationFlow/CreateBot';
+import { AddBotModal } from '../../components/CreationFlow/AddBotModal';
 
 interface CreationModalProps {
   onSubmit: () => void;
