@@ -3,13 +3,13 @@
     "message": "关于"
   },
   "actual_zoom_211ec99": {
-    "message": "实际缩放"
+    "message": "Actual Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "全部置于顶层"
   },
   "check_for_updates_12a70061": {
-    "message": "检查是否有更新"
+    "message": "检查更新"
   },
   "close_d634289d": {
     "message": "关闭"
@@ -18,7 +18,7 @@
     "message": "关闭窗口"
   },
   "composer_on_github_1e3782ef": {
-    "message": "GitHub 上的 Composer"
+    "message": "Composer on GitHub"
   },
   "copy_9748f9f": {
     "message": "复制"
@@ -45,7 +45,7 @@
     "message": "帮助"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "隐藏 Bot Framework Composer"
+    "message": "Hide Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "隐藏其他"
@@ -53,8 +53,8 @@
   "initializing_4e34f7d": {
     "message": "正在初始化..."
   },
-  "learn_more_about_bot_framework_2daca065": {
-    "message": "详细了解 Bot Framework"
+  "learn_more_about_bot_framework_f5fe280b": {
+    "message": "Learn more about Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "最小化"
@@ -66,7 +66,7 @@
     "message": "隐私声明"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "退出 Bot Framework Composer"
+    "message": "Quit Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "重做"
@@ -90,7 +90,7 @@
     "message": "开始说话"
   },
   "starting_server_721c37fd": {
-    "message": "正在启动服务器..."
+    "message": "Starting server..."
   },
   "stop_speaking_7b4b9834": {
     "message": "结束说话"

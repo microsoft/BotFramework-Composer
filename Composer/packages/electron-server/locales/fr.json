@@ -3,7 +3,7 @@
     "message": "À propos de"
   },
   "actual_zoom_211ec99": {
-    "message": "Zoom réel"
+    "message": "Actual Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Tout mettre au premier plan"
@@ -18,7 +18,7 @@
     "message": "Fermer la fenêtre"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer sur GitHub"
+    "message": "Composer on GitHub"
   },
   "copy_9748f9f": {
     "message": "Copier"
@@ -45,16 +45,16 @@
     "message": "Aide"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Masquer Bot Framework Composer"
+    "message": "Hide Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "Masquer les autres"
   },
   "initializing_4e34f7d": {
-    "message": "Initialisation..."
+    "message": "Initialisation en cours..."
   },
-  "learn_more_about_bot_framework_2daca065": {
-    "message": "En savoir plus sur Bot Framework"
+  "learn_more_about_bot_framework_f5fe280b": {
+    "message": "Learn more about Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Réduire"
@@ -66,7 +66,7 @@
     "message": "Déclaration de confidentialité"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Quitter Bot Framework Composer"
+    "message": "Quit Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "Rétablir"
@@ -90,7 +90,7 @@
     "message": "Commencer à parler"
   },
   "starting_server_721c37fd": {
-    "message": "Démarrage du serveur..."
+    "message": "Starting server..."
   },
   "stop_speaking_7b4b9834": {
     "message": "Arrêter de parler"
@@ -99,13 +99,13 @@
     "message": "Activer/désactiver les outils de développement"
   },
   "toggle_full_screen_272a0c5": {
-    "message": "Activer/désactiver le plein écran"
+    "message": "Plein écran"
   },
   "undo_a7be8fef": {
     "message": "Annuler"
   },
   "view_ba339f93": {
-    "message": "Voir"
+    "message": "Afficher"
   },
   "view_license_720d341a": {
     "message": "Voir la licence"
