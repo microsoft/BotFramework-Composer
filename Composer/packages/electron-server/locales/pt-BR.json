@@ -3,13 +3,13 @@
     "message": "Sobre"
   },
   "actual_zoom_211ec99": {
-    "message": "Zoom Real"
+    "message": "Actual Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Trazer todos para a frente"
   },
   "check_for_updates_12a70061": {
-    "message": "Verificar Se Há Atualizações"
+    "message": "Verificar Atualizações"
   },
   "close_d634289d": {
     "message": "Fechar"
@@ -18,7 +18,7 @@
     "message": "Fechar a Janela"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer no GitHub"
+    "message": "Composer on GitHub"
   },
   "copy_9748f9f": {
     "message": "Copiar"
@@ -45,16 +45,16 @@
     "message": "Ajuda"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Ocultar o Bot Framework Composer"
+    "message": "Hide Bot Framework Composer"
   },
   "hide_others_4204b552": {
-    "message": "Ocultar os Outros"
+    "message": "Ocultar Outros"
   },
   "initializing_4e34f7d": {
     "message": "Inicializando..."
   },
-  "learn_more_about_bot_framework_2daca065": {
-    "message": "Saiba Mais sobre o Bot Framework"
+  "learn_more_about_bot_framework_f5fe280b": {
+    "message": "Learn more about Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Minimizar"
@@ -66,7 +66,7 @@
     "message": "Política de Privacidade"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Encerrar o Bot Framework Composer"
+    "message": "Quit Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "Refazer"
@@ -90,16 +90,16 @@
     "message": "Começar a Falar"
   },
   "starting_server_721c37fd": {
-    "message": "Iniciando o servidor..."
+    "message": "Starting server..."
   },
   "stop_speaking_7b4b9834": {
     "message": "Parar de Falar"
   },
   "toggle_developer_tools_d2ef8ea7": {
-    "message": "Ativar/Desativar as Ferramentas para Desenvolvedores"
+    "message": "Ativar/Desativar Ferramentas para Desenvolvedores"
   },
   "toggle_full_screen_272a0c5": {
-    "message": "Ativar/Desativar a Tela Inteira"
+    "message": "Ativar/Desativar para Exibição em Tela Inteira"
   },
   "undo_a7be8fef": {
     "message": "Desfazer"
@@ -108,13 +108,13 @@
     "message": "Exibir"
   },
   "view_license_720d341a": {
-    "message": "Exibir a Licença"
+    "message": "Exibir Licença"
   },
   "window_171922c7": {
     "message": "Janela"
   },
   "zoom_f3e54d69": {
-    "message": "Zoom"
+    "message": "Aplicar Zoom"
   },
   "zoom_in_a781ccc7": {
     "message": "Ampliar"
