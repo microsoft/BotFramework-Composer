@@ -1,0 +1,52 @@
+{
+  "name": "docker-publisher",
+  "version": "1.0.0",
+  "main": "dist/extension.js",
+  "description": "Publish bot to Docker Images",
+  "scripts": {
+    "build": "node ../scripts/build.js",
+    "watch": "yarn build --watch"
+  },
+  "composer": {
+    "enabled": true,
+    "bundles": [
+      {
+        "id": "dockerPublish",
+        "path": "./dist/publish.js"
+      },
+      {
+        "id": "publish.js.map",
+        "path": "./dist/publish.js.map"
+      }
+    ],
+    "contributes": {
+      "views": {
+        "publish": [
+          {
+            "bundleId": "dockerPublish"
+          }
+        ]
+      }
+    }
+  },
+  "esbuild": {},
+  "author": {
+    "name": "Christiano Donke",
+    "email": "cdonke@outlook.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
+    "@bfc/extension-client": "file:../../Composer/packages/extension-client",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "office-ui-fabric-react": "7.71.0",
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
+    "@uifabric/fluent-theme": "^7.4.36"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.6",
+    "@types/react": "^16.9.53"
+  }
+}
