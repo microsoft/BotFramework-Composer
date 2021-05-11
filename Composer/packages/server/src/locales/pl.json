@@ -246,7 +246,7 @@
     "message": "> dodaj kilka przykładowych fraz, aby wyzwolić tę intencję:\n> — powiedz mi, jaka jest pogoda\n> — jaka jest pogoda w '{'city=Seattle'}'\n\n> definicje jednostek:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> dodaj kilka oczekiwanych odpowiedzi użytkownika:\n> — Przypomnij mi, że mam „{'itemTitle=kupić mleko'}'\n> — przypomnij, że „{'itemTitle'}”\n> — dodaj „{'itemTitle'}” do listy rzeczy do zrobienia\n>\n> definicje jednostek:\n> @ ml itemTitle\n"
+    "message": "> dodaj kilka oczekiwanych odpowiedzi użytkownika:\n> — Przypomnij mi, że mam '{'itemTitle=kupić mleko'}'\n> — przypomnij, że '{'itemTitle'}'\n> — dodaj '{'itemTitle'}' do listy rzeczy do zrobienia\n>\n> definicje jednostek:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Dodaj sugerowaną akcję"

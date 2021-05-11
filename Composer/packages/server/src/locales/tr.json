@@ -48,7 +48,7 @@
     "message": "Bu ada sahip bir profil zaten var."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer'de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
+    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer’de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
   },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
     "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
@@ -2235,7 +2235,7 @@
     "message": "Oturum Açın"
   },
   "login_to_azure_c0cb057e": {
-    "message": "Azure'da oturum açın"
+    "message": "Azure’da oturum açın"
   },
   "loop_for_each_item_e09537ae": {
     "message": "Döngü: Her öğe için"

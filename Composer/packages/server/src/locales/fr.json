@@ -12,7 +12,7 @@
     "message": "1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
   },
   "ErrorInfo_part1": {
-    "message": "Une erreur s'est produite dans l'éditeur de formulaire !"
+    "message": "Une erreur s’est produite dans l’éditeur de formulaire !"
   },
   "ErrorInfo_part2": {
     "message": "Les données sont probablement malformées ou des fonctionnalités sont manquantes dans Composer."
@@ -48,7 +48,7 @@
     "message": "Un profil de ce nom existe déjà."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Une propriété est une information collectée par votre bot. Le nom de propriété est le nom utilisé dans Composer, ce n'est pas nécessairement le même texte que celui qui apparaît dans les messages de votre bot."
+    "message": "Une propriété est une information collectée par votre bot. Le nom de propriété est le nom utilisé dans Composer, ce n’est pas nécessairement le même texte que celui qui apparaît dans les messages de votre bot."
   },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
     "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
@@ -243,10 +243,10 @@
     "message": "+ Ajouter une paire QnA"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> ajouter des exemples d'expressions pour déclencher cette intention :\n> - peux-tu me donner la météo\n> - comment est la météo à « {'city=Paris'} »\n\n> définitions d'entité :\n> @ ml city"
+    "message": "> ajouter des exemples d’expressions pour déclencher cette intention :\n> - peux-tu me donner la météo\n> - comment est la météo à « '{'city=Paris'}' »\n\n> définitions d’entité :\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> ajouter des réponses utilisateur attendues :\n> - peux-tu me rappeler de « {'itemTitle=acheter du lait'} »\n> - rappelle-moi de « {'itemTitle'} »\n> - ajouter « {'itemTitle'} » à ma liste de choses à faire\n>\n> définitions d'entité :\n> @ ml itemTitle\n"
+    "message": "> ajouter des réponses utilisateur attendues :\n> - peux-tu me rappeler de « '{'itemTitle=acheter du lait'}' »\n> - rappelle-moi de « '{'itemTitle'}' »\n> - ajouter « '{'itemTitle'}' » à ma liste de choses à faire\n>\n> définitions d’entité :\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Ajouter une action suggérée"
@@ -279,34 +279,34 @@
     "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
   },
   "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
-    "message": "Erreur pendant l'initialisation du serveur DirecLine"
+    "message": "Erreur pendant l’initialisation du serveur DirecLine"
   },
   "an_error_occurred_parsing_the_transcript_for_a_con_a47395c3": {
-    "message": "Erreur pendant l'analyse de la transcription d'une conversation"
+    "message": "Erreur pendant l’analyse de la transcription d’une conversation"
   },
   "an_error_occurred_receiving_an_activity_from_the_b_d734a7d": {
-    "message": "Erreur pendant la réception d'une activité du bot."
+    "message": "Erreur pendant la réception d’une activité du bot."
   },
   "an_error_occurred_saving_the_transcript_to_disk_f5cb0f7c": {
-    "message": "Erreur pendant l'enregistrement de la transcription sur le disque."
+    "message": "Erreur pendant l’enregistrement de la transcription sur le disque."
   },
   "an_error_occurred_saving_transcripts_be37b977": {
-    "message": "Erreur pendant l'enregistrement des transcriptions"
+    "message": "Erreur pendant l’enregistrement des transcriptions"
   },
   "an_error_occurred_sending_conversation_update_acti_85be9b0f": {
-    "message": "Erreur pendant l'envoi de l'activité de mise à jour de conversation au bot"
+    "message": "Erreur pendant l’envoi de l’activité de mise à jour de conversation au bot"
   },
   "an_error_occurred_starting_a_new_conversation_7586fd9f": {
-    "message": "Erreur pendant le démarrage d'une nouvelle conversation"
+    "message": "Erreur pendant le démarrage d’une nouvelle conversation"
   },
   "an_error_occurred_trying_to_save_the_transcript_to_a6efda6f": {
-    "message": "Erreur pendant la tentative d'enregistrement de la transcription sur le disque"
+    "message": "Erreur pendant la tentative d’enregistrement de la transcription sur le disque"
   },
   "an_error_occurred_validating_the_microsoft_app_id__c2b9dc19": {
-    "message": "Erreur pendant la validation de l'ID d'application Microsoft et du mot de passe d'application Microsoft."
+    "message": "Erreur pendant la validation de l’ID d’application Microsoft et du mot de passe d’application Microsoft."
   },
   "animation_card_1a7d75ff": {
-    "message": "Carte d'animation"
+    "message": "Carte d’animation"
   },
   "answer_4620913f": {
     "message": "Réponse"
@@ -675,7 +675,7 @@
     "message": "Aucune conversation correspondante."
   },
   "cannot_parse_attachment_c3e552a5": {
-    "message": "Impossible d'analyser la pièce jointe."
+    "message": "Impossible d’analyser la pièce jointe."
   },
   "cannot_upload_file_conversation_not_found_8a983504": {
     "message": "Impossible de charger le fichier. Conversation introuvable."
@@ -708,7 +708,7 @@
     "message": "Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test."
   },
   "click_the_start_button_to_test_your_bot_using_web__821e827c": {
-    "message": "Click the start button to test your bot using Web Chat or Emulator. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
+    "message": "Click the start button to test your bot using Web Chat or Emulator. If you don’t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
   },
   "click_to_sort_by_file_type_1b0c9bd": {
     "message": "Cliquer pour trier par type de fichier"
@@ -888,7 +888,7 @@
     "message": "Conversation terminée (activité EndOfConversation)"
   },
   "conversation_id_cannot_be_updated_2a973f13": {
-    "message": "Impossible de mettre à jour l'ID de conversation."
+    "message": "Impossible de mettre à jour l’ID de conversation."
   },
   "conversation_invoked_e960884e": {
     "message": "Conversation appelée"
@@ -927,7 +927,7 @@
     "message": "Impossible de se connecter au stockage."
   },
   "couldn_t_complete_the_update_a337a359": {
-    "message": "Impossible d'effectuer la mise à jour :"
+    "message": "Impossible d’effectuer la mise à jour :"
   },
   "create_132b3be1": {
     "message": "Créer"
@@ -1107,7 +1107,7 @@
     "message": "Define user input and trigger phrases to direct the conversation flow."
   },
   "define_your_bot_s_responses_add_phrase_variations__11aa55cb": {
-    "message": "Define your bot''s responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
+    "message": "Define your bot’s responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
   },
   "defined_in_475568fb": {
     "message": "Défini dans :"
@@ -1482,7 +1482,7 @@
     "message": "Erreur :"
   },
   "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
-    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+    "message": "Error attempting to parse Skill manifest. There could be an error in it’s format."
   },
   "error_checking_node_version_98bfbf4c": {
     "message": "Error checking node version"
@@ -1506,10 +1506,10 @@
     "message": "Error occurred building the bot"
   },
   "error_occurred_ejecting_runtime_8512129e": {
-    "message": "Erreur pendant l'éjection du runtime !"
+    "message": "Erreur pendant l’éjection du runtime !"
   },
   "error_occurred_error_event_3e7f8ad0": {
-    "message": "Une erreur s'est produite (événement Erreur)"
+    "message": "Une erreur s’est produite (événement Erreur)"
   },
   "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
     "message": "Error occurred trying to fetch runtime standard output"
@@ -1596,7 +1596,7 @@
     "message": "Extend your bot with reusable dialogs, bot response templates and custom actions."
   },
   "extension_settings_899ccb55": {
-    "message": "Paramètres d'extension"
+    "message": "Paramètres d’extension"
   },
   "external_connections_3415fea5": {
     "message": "External connections"
@@ -1611,7 +1611,7 @@
     "message": "Extracting question-and-answer pairs from { url }"
   },
   "fail_to_save_bot_578fa8aa": {
-    "message": "Échec d'enregistrement du bot"
+    "message": "Échec d’enregistrement du bot"
   },
   "failed_276786d": {
     "message": "Failed"
@@ -1809,7 +1809,7 @@
     "message": "J\"ai compris !"
   },
   "greeting_conversationupdate_activity_3eb99c15": {
-    "message": "Message d'accueil (activité ConversationUpdate)"
+    "message": "Message d’accueil (activité ConversationUpdate)"
   },
   "greeting_f906f962": {
     "message": "Salutations"
@@ -1908,7 +1908,7 @@
     "message": "Importation du contenu du bot depuis { targetName }..."
   },
   "in_order_to_use_the_response_editor_please_fix_you_570408e8": {
-    "message": "Pour pouvoir utiliser l'éditeur de réponse, corrigez d'abord les erreurs de votre modèle."
+    "message": "Pour pouvoir utiliser l’éditeur de réponse, corrigez d’abord les erreurs de votre modèle."
   },
   "in_production_5a70b8b4": {
     "message": "En production"
@@ -1926,10 +1926,10 @@
     "message": "Entrée"
   },
   "input_hint_37e0c163": {
-    "message": "Indicateur d'entrée : "
+    "message": "Indicateur d’entrée : "
   },
   "input_hint_ab89f368": {
-    "message": "Indicateur d'entrée"
+    "message": "Indicateur d’entrée"
   },
   "insert_a_property_reference_in_memory_95d27746": {
     "message": "Insérer une référence de propriété en mémoire"
@@ -1938,7 +1938,7 @@
     "message": "Insérer une référence de modèle"
   },
   "insert_an_adaptive_expression_pre_built_function_32b1583a": {
-    "message": "Insérer une fonction d'expression adaptative prédéfinie"
+    "message": "Insérer une fonction d’expression adaptative prédéfinie"
   },
   "insert_defined_entity_d1293781": {
     "message": "Insert defined entity"
@@ -2181,10 +2181,10 @@
     "message": "List entity"
   },
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
-    "message": "Liste des actions affichées sous forme de suggestions à l'utilisateur."
+    "message": "Liste des actions affichées sous forme de suggestions à l’utilisateur."
   },
   "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
-    "message": "Liste des pièces jointes avec leur type. Utilisée par les canaux pour afficher sous forme de cartes d'interface utilisateur d'autres types de fichier générique de pièce jointe."
+    "message": "Liste des pièces jointes avec leur type. Utilisée par les canaux pour afficher sous forme de cartes d’interface utilisateur d’autres types de fichier générique de pièce jointe."
   },
   "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
     "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
@@ -2385,7 +2385,7 @@
     "message": "Microsoft Logo"
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
-    "message": "Microsoft''s templates offer best practices for developing conversational bots."
+    "message": "Microsoft’s templates offer best practices for developing conversational bots."
   },
   "migrating_data_a35b3055": {
     "message": "Migrating data"
@@ -2562,7 +2562,7 @@
     "message": "Aucune mise à jour disponible"
   },
   "no_uploads_were_attached_as_a_part_of_the_request_63e92f54": {
-    "message": "Aucun chargement n'a été attaché dans le cadre de la demande."
+    "message": "Aucun chargement n’a été attaché dans le cadre de la demande."
   },
   "no_wildcard_ff439e76": {
     "message": "sans caractère générique"
@@ -2868,7 +2868,7 @@
     "message": "Provide a key in order to connect your bot to the Azure Speech service. "
   },
   "provide_access_tokens_8ead7563": {
-    "message": "Fournir des jetons d'accès"
+    "message": "Fournir des jetons d’accès"
   },
   "provide_arm_token_by_running_az_account_get_access_e9d825a4": {
     "message": "Fournir un jeton ARM en exécutant « az account get-access-token »"
@@ -2973,7 +2973,7 @@
     "message": "Clé d\"abonnement QnA Maker"
   },
   "qna_maker_subscription_key_is_required_to_start_yo_1892741": {
-    "message": "La clé d'abonnement QnA Maker est obligatoire pour démarrer votre bot localement et publier"
+    "message": "La clé d’abonnement QnA Maker est obligatoire pour démarrer votre bot localement et publier"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "Volet de navigation Qna"
@@ -3006,7 +3006,7 @@
     "message": "Redemander une entrée"
   },
   "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
-    "message": "Redemander l'entrée (événement Redemander dans le dialogue)"
+    "message": "Redemander l’entrée (événement Redemander dans le dialogue)"
   },
   "recent_f19e8c64": {
     "message": "Recent"
@@ -3225,7 +3225,7 @@
     "message": "Schéma"
   },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } n'existe pas, sélectionner un schéma à modifier ou en créer un"
+    "message": "{ schemaId } n’existe pas, sélectionner un schéma à modifier ou en créer un"
   },
   "schemas_74566170": {
     "message": "Schémas"
@@ -3315,7 +3315,7 @@
     "message": "Select dialogs"
   },
   "select_input_hint_267a6208": {
-    "message": "Sélectionner un indicateur d'entrée"
+    "message": "Sélectionner un indicateur d’entrée"
   },
   "select_language_to_delete_d1662d3d": {
     "message": "Sélectionner une langue à supprimer"
@@ -3627,7 +3627,7 @@
     "message": "Propriété suggérée { u } dans { cardType }"
   },
   "suggestion_for_card_or_activity_type_b257066a": {
-    "message": "Suggestion pour la carte ou l'activité : { type }"
+    "message": "Suggestion pour la carte ou l’activité : { type }"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonymes (facultatif)"
@@ -3681,10 +3681,10 @@
     "message": "Texte"
   },
   "text_if_you_proceed_to_switch_to_response_editor_y_5f975ffb": {
-    "message": "<text>Si vous basculez vers l'éditeur de réponse, vous perdez le contenu de votre modèle actuel et commencez avec une réponse vide. Voulez-vous continuer ?</text>"
+    "message": "<text>Si vous basculez vers l’éditeur de réponse, vous perdez le contenu de votre modèle actuel et commencez avec une réponse vide. Voulez-vous continuer ?</text>"
   },
   "text_to_use_response_editor_the_lg_template_needs__7c0b3936": {
-    "message": "<text>Pour utiliser l'éditeur de réponse, le modèle LG doit être un modèle de réponse d'activité. <a>Consultez ce document</a> pour en savoir plus.</text>"
+    "message": "<text>Pour utiliser l’éditeur de réponse, le modèle LG doit être un modèle de réponse d’activité. <a>Consultez ce document</a> pour en savoir plus.</text>"
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "Point de terminaison /api/messages de la compétence."
@@ -3768,7 +3768,7 @@
     "message": "There are no required properties."
   },
   "there_is_no_original_view_63a2eaed": {
-    "message": "Pas de vue d'origine"
+    "message": "Pas de vue d’origine"
   },
   "there_is_no_thumbnail_view_908fe5cc": {
     "message": "Pas de vue miniature"
@@ -3840,7 +3840,7 @@
     "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
   },
   "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
-    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
+    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "Ce type de déclencheur n\"est pas pris en charge par le module de reconnaissance de RegEx. Pour garantir l\"activation de ce déclencheur, changez le type de module de reconnaissance."
@@ -3876,7 +3876,7 @@
     "message": "To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step."
   },
   "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot’s AppID. <link>Learn more.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
     "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
@@ -3903,7 +3903,7 @@
     "message": "To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select."
   },
   "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
-    "message": "Pour effectuer des actions de provisionnement et de publication, Composer doit accéder à vos comptes Azure et MS Graph. Collez les jetons d'accès à partir de l'outil en ligne de commande az en utilisant les commandes surlignées ci-dessous."
+    "message": "Pour effectuer des actions de provisionnement et de publication, Composer doit accéder à vos comptes Azure et MS Graph. Collez les jetons d’accès à partir de l’outil en ligne de commande az en utilisant les commandes surlignées ci-dessous."
   },
   "to_run_this_bot_composer_needs_azure_functions_cor_bbbd0e7": {
     "message": "To run this bot, Composer needs Azure Functions Core Tools."
@@ -3921,7 +3921,7 @@
     "message": "Pour comprendre ce que dit l\"utilisateur, votre dialogue a besoin d\"un « module de reconnaissance » qui comprend des exemples de mots et de phrases utilisables par les utilisateurs."
   },
   "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
-    "message": "Pour comprendre ce que l'utilisateur dit, votre dialogue a besoin d'un « IRecognizer » qui contient des exemples de mots et de phrases que les utilisateurs peuvent utiliser."
+    "message": "Pour comprendre ce que l’utilisateur dit, votre dialogue a besoin d’un « IRecognizer » qui contient des exemples de mots et de phrases que les utilisateurs peuvent utiliser."
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "Dans quelle langue voulez-vous traduire votre bot ?"
@@ -3942,13 +3942,13 @@
     "message": "{ total } Mo"
   },
   "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
-    "message": "{ total, plural,\n     =1 {Redémarrer le bot}\n  other {Redémarrer tous les bots ({ running }/{ total } en cours d'exécution)}\n}"
+    "message": "{ total, plural,\n     =1 {Redémarrer le bot}\n  other {Redémarrer tous les bots ({ running }/{ total } en cours d’exécution)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
     "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
-    "message": "{ total, plural,\n     =1 {Démarrage du bot...}\n  other {Démarrage des bots... ({ running }/{ total } en cours d'exécution)}\n}"
+    "message": "{ total, plural,\n     =1 {Démarrage du bot...}\n  other {Démarrage des bots... ({ running }/{ total } en cours d’exécution)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
     "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
@@ -4149,7 +4149,7 @@
     "message": "L\"utilisateur est en train de taper"
   },
   "user_is_typing_typing_activity_cd938615": {
-    "message": "L'utilisateur tape du texte (activité Typing)"
+    "message": "L’utilisateur tape du texte (activité Typing)"
   },
   "user_topic_e3978941": {
     "message": "User Topic"
@@ -4257,10 +4257,10 @@
     "message": "Quel est le type de ce déclencheur ?"
   },
   "what_s_new_a9752a8e": {
-    "message": "What''s new"
+    "message": "What’s new"
   },
   "what_s_new_list_6fe719cb": {
-    "message": "What''s new list"
+    "message": "What’s new list"
   },
   "what_you_need_to_know_to_get_started_e2ab837a": {
     "message": "What you need to know to get started"
