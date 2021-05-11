@@ -104,17 +104,12 @@ export const formEditor = css`
 `;
 
 export const visualPanelHeaderContainer = css`
+  display: flex;
+  justify-content: space-between;
   height: 65px;
 `;
 
-export const visualPanelHeaderLeft = css`
-  overflow: hidden;
-  float: left;
-  width: calc(100% - 100px);
-`;
-
-export const visualPanelHeaderRight = css`
-  float: right;
+export const visualPanelHeaderShowCodeButton = css`
   line-height: 65px;
 `;
 

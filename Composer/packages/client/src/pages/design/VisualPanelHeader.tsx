@@ -172,17 +172,15 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
 
   return (
     <div css={pageStyles.visualPanelHeaderContainer}>
-      <div css={pageStyles.visualPanelHeaderLeft}>
-        <Breadcrumb
-          ariaLabel={formatMessage('Navigation Path')}
-          data-testid="Breadcrumb"
-          items={items}
-          maxDisplayedItems={3}
-          styles={pageStyles.breadcrumbClass}
-          onReduceData={() => undefined}
-        />
-      </div>
-      <div css={pageStyles.visualPanelHeaderRight}>
+      <Breadcrumb
+        ariaLabel={formatMessage('Navigation Path')}
+        data-testid="Breadcrumb"
+        items={items}
+        maxDisplayedItems={3}
+        styles={pageStyles.breadcrumbClass}
+        onReduceData={() => undefined}
+      />
+      <div css={pageStyles.visualPanelHeaderShowCodeButton}>
         <ActionButton onClick={onShowCodeClick}>
           {showCode ? formatMessage('Hide code') : formatMessage('Show code')}
         </ActionButton>
