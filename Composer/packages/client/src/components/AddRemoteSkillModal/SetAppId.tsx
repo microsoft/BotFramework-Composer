@@ -34,25 +34,27 @@ const getCreateProfileDescription = (botName, handleCreateProfile) => ({
     iconName: 'Error',
     color: SharedColors.orange20,
   },
-  title: formatMessage(`Create a publishing profile for {botName}`, { botName }),
-  description: formatMessage('Your root bot must have an Azure publishing profile.'),
+  title: formatMessage(`Add publishing profile for {botName}`, { botName }),
+  description: formatMessage(
+    'A publishing profile contains the information necessary to provision and publish your bot, including its App ID. '
+  ),
   link: {
-    text: formatMessage('Create a publishing profile'),
+    text: formatMessage('Create profile'),
     onClick: handleCreateProfile,
   },
 });
 
 const manifestUrl = () => ({
-  title: formatMessage('Get a skill manifest URL from the skill’s author'),
+  title: formatMessage('Enter skill manifest URL'),
   description: formatMessage(
-    'To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step.'
+    "To connect to a skill, your bot needs the information captured in the skill's manifest. Contact the author or publisher of the skill for this information."
   ),
 });
 
 const appIdInfo = () => ({
   title: formatMessage('Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list'),
   description: formatMessage(
-    'For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list.'
+    "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill's allowed callers list. Once you create a publishing profilem share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   ),
 });
 
@@ -155,10 +157,12 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
       iconName: 'Error',
       color: SharedColors.orange20,
     },
-    title: formatMessage('Set your Microsoft App ID and Password'),
-    description: formatMessage('Your root bot must have an associated Microsoft App ID and Password.'),
+    title: formatMessage('Select App ID and password'),
+    description: formatMessage(
+      'To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. '
+    ),
     link: {
-      text: formatMessage('Select your Microsoft App ID and Password'),
+      text: formatMessage('Select App ID and password'),
       onClick: handleNavigateToDevelopmentResources,
     },
   });
