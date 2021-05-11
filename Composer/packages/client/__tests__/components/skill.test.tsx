@@ -65,7 +65,7 @@ describe('<SkillForm />', () => {
         recoilInitState
       );
 
-      const urlInput = getByLabelText('Skill Manifest Url');
+      const urlInput = getByLabelText('Skill Manifest URL');
       act(() => {
         fireEvent.change(urlInput, {
           target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },

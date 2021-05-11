@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import React from 'react';
 import {
   webAppRuntimeKey,
   functionsRuntimeKey,
@@ -10,6 +11,7 @@ import {
 } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -52,15 +54,15 @@ export const Tips = {
 export const LUIS_REGIONS: IDropdownOption[] = [
   {
     key: 'westus',
-    text: formatMessage('westus'),
+    text: formatMessage('West US'),
   },
   {
     key: 'westeurope',
-    text: formatMessage('westeurope'),
+    text: formatMessage('West Europe'),
   },
   {
     key: 'australiaeast',
-    text: formatMessage('australiaeast'),
+    text: formatMessage('Australia East'),
   },
 ];
 
@@ -147,6 +149,7 @@ export enum CreationFlowStatus {
   NEW_FROM_SCRATCH = 'Scratch',
   NEW_FROM_TEMPLATE = 'Template',
   SAVEAS = 'Save as',
+  MIGRATE = 'Migrate',
   OPEN = 'Open',
   CLOSE = 'Close',
   NEW_SKILL = 'New Skill',
@@ -197,8 +200,10 @@ export const BotStatusesCopy = {
 export const DialogCreationCopy = {
   get CREATE_OPTIONS() {
     return {
-      title: formatMessage('Open your Azure Bot resource'),
-      subText: formatMessage('Do you want to create a new bot, or connect your Azure Bot resource to an existing bot?'),
+      title: formatMessage('Your new Azure Bot is available in Composer'),
+      subText: formatMessage(
+        'The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot.'
+      ),
     };
   },
   get CREATE_NEW_BOT() {
@@ -259,7 +264,7 @@ export const DialogCreationCopy = {
   },
   get IMPORT_QNA() {
     return {
-      title: formatMessage('Create new knowledge base'),
+      title: formatMessage('Add QnA Maker knowledge base'),
       subText: formatMessage(
         'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
       ),
@@ -321,10 +326,17 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
-      afterSubText: formatMessage(
-        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
-      ),
+      subText: (url: string) =>
+        formatMessage.rich(
+          `To connect to a skill, your bot needs the information captured in the skill's manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
+          {
+            link: ({ children }) => (
+              <Link key="learn-more-about-skills" href={url} rel="noopener noreferrer" target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        ),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
@@ -359,11 +371,8 @@ export const enableOrchestratorDialog = {
     return formatMessage('Enable Orchestrator');
   },
   get subText() {
-    return formatMessage('Enable orchestrator as the recognizer at the root dialog to add this skill');
-  },
-  get content() {
     return formatMessage(
-      'Multi-bot projects work best with the Orchestrator recognizer set at the root dialog. Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that can handle the intent. Orchestrator does not support entity extraction at the root dialog level.'
+      'A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill.'
     );
   },
 };
@@ -409,6 +418,7 @@ export const SupportedFileTypes = [
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
 
 export enum AppUpdaterStatus {
+  BREAKING_UPDATE_AVAILABLE,
   IDLE,
   UPDATE_AVAILABLE,
   UPDATE_UNAVAILABLE,
@@ -511,3 +521,6 @@ export const defaultTeamsManifest: TeamsManifest = {
   permissions: ['identity', 'messageTeamMembers'],
   validDomains: ['token.botframework.com'],
 };
+
+export const defaultBotPort = 3979;
+export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;

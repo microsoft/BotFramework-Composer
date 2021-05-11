@@ -60,7 +60,7 @@ export const CardWidget: React.FC<CardWidgetProps> = ({
       ? home.cardItem
       : imageCover
       ? home.mediaCardItem
-      : home.meidiaCardNoCoverItem;
+      : home.mediaCardNoCoverItem;
 
   const onImageLoading = (state: ImageLoadState) => {
     if (state === ImageLoadState.error) {

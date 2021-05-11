@@ -15,6 +15,7 @@ import {
   filePersistenceState,
   settingsState,
   runtimeStandardOutputDataState,
+  botProjectFileState,
 } from '../atoms/botState';
 import { openInEmulator } from '../../utils/navigation';
 import { botEndpointsState } from '../atoms';
@@ -29,11 +30,14 @@ import * as qnaUtil from '../../utils/qnaUtil';
 import { ClientStorage } from '../../utils/storage';
 import { RuntimeOutputData } from '../types';
 import { checkIfFunctionsMissing, missingFunctionsError } from '../../utils/runtimeErrors';
+import TelemetryClient from '../../telemetry/TelemetryClient';
+import { TunnelingSetupNotification } from '../../components/Notifications/TunnelingSetupNotification';
 
-import { BotStatus, Text } from './../../constants';
+import { BotStatus, Text, defaultBotEndpoint, defaultBotPort } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
 import { setRootBotSettingState } from './setting';
+import { createNotification, addNotificationInternal } from './notification';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -43,6 +47,7 @@ export const publishStorage = new ClientStorage(window.sessionStorage, 'publish'
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
+    TelemetryClient.track('PublishFailure', { message: typeof error === 'string' ? error : JSON.stringify(error) });
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
       set(botBuildTimeErrorState(projectId), { ...error, title });
@@ -59,11 +64,15 @@ export const publisherDispatcher = () => {
   };
 
   const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data: PublishResult, target) => {
-    const { endpointURL, status } = data;
+    TelemetryClient.track('PublishSuccess');
+    const { endpointURL, status, port } = data;
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
         set(botStatusState(projectId), BotStatus.connected);
-        set(botEndpointsState, (botEndpoints) => ({ ...botEndpoints, [projectId]: `${endpointURL}/api/messages` }));
+        set(botEndpointsState, (botEndpoints) => ({
+          ...botEndpoints,
+          [projectId]: { url: `${endpointURL}/api/messages`, port: port || defaultBotPort },
+        }));
       } else {
         set(botStatusState(projectId), BotStatus.starting);
       }
@@ -92,7 +101,7 @@ export const publisherDispatcher = () => {
   ) => {
     if (data == null) return;
     const { set, snapshot } = callbackHelpers;
-    const { endpointURL, status } = data;
+    const { endpointURL, status, port } = data;
 
     // remove job id in publish storage if published
     if (status === PUBLISH_SUCCESS || status === PUBLISH_FAILED) {
@@ -116,11 +125,34 @@ export const publisherDispatcher = () => {
             };
             setRootBotSettingState(callbackHelpers, projectId, updatedSettings);
           }
+
+          // display a notification for bots with remote skills the first time they are published
+          // for a given session.
+          const rootBotProjectFile = await snapshot.getPromise(botProjectFileState(rootBotId));
+          const notificationCache = publishStorage.get('notifications') || {};
+          if (
+            !notificationCache[rootBotId] &&
+            Object.values(rootBotProjectFile?.content?.skills ?? []).some((s) => s.remote)
+          ) {
+            const notification = createNotification({
+              type: 'info',
+              title: formatMessage('Setup tunneling software to test your remote skill'),
+              onRenderCardContent: TunnelingSetupNotification,
+              data: {
+                port,
+              },
+            });
+            addNotificationInternal(callbackHelpers, notification);
+            publishStorage.set('notifications', {
+              ...notificationCache,
+              [rootBotId]: true,
+            });
+          }
         }
         set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({
           ...botEndpoints,
-          [projectId]: `${endpointURL}/api/messages`,
+          [projectId]: { url: `${endpointURL}/api/messages`, port: port || defaultBotPort },
         }));
       } else if (status === PUBLISH_PENDING) {
         set(botStatusState(projectId), BotStatus.starting);
@@ -277,7 +309,8 @@ export const publisherDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       try {
         const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
-        if (currentBotStatus !== BotStatus.failed) {
+        // Change to "Stopping" status only if the Bot is not in a failed state or inactive state
+        if (currentBotStatus !== BotStatus.failed && currentBotStatus !== BotStatus.inactive) {
           set(botStatusState(projectId), BotStatus.stopping);
         }
 
@@ -305,7 +338,7 @@ export const publisherDispatcher = () => {
     const settings = await snapshot.getPromise(settingsState(projectId));
     try {
       openInEmulator(
-        botEndpoints[projectId] || 'http://localhost:3979/api/messages',
+        botEndpoints[projectId]?.url || defaultBotEndpoint,
         settings.MicrosoftAppId && settings.MicrosoftAppPassword
           ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
           : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
