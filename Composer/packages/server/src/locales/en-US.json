@@ -3362,6 +3362,9 @@
   "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
     "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
   },
+  "select_your_microsoft_app_id_and_password_74918f5d": {
+    "message": "Select your Microsoft App ID and Password"
+  },
   "selection_field_86d1dc94": {
     "message": "selection field"
   },
@@ -3412,6 +3415,9 @@
   },
   "set_up_service_b6d23e54": {
     "message": "Set up { service }"
+  },
+  "set_your_microsoft_app_id_and_password_46b5628c": {
+    "message": "Set your Microsoft App ID and Password"
   },
   "setting_things_up_8022afe8": {
     "message": "Setting things up..."
@@ -4370,8 +4376,11 @@
   "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
     "message": "Your QnA Maker is ready! It took { time } minutes to complete."
   },
-  "your_root_bot_must_have_an_associated_microsoft_ap_8aa56e3d": {
-    "message": "Your root bot must have an associated Microsoft App Id and Password to connect to a skill."
+  "your_root_bot_must_have_an_associated_microsoft_ap_91671242": {
+    "message": "Your root bot must have an associated Microsoft App ID and Password."
+  },
+  "your_root_bot_must_have_an_azure_publishing_profil_89055cfd": {
+    "message": "Your root bot must have an Azure publishing profile."
   },
   "your_skill_could_not_be_published_5bee6e6a": {
     "message": "Your skill could not be published."

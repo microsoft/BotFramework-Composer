@@ -42,18 +42,20 @@ const getCreateProfileDescription = (botName, handleCreateProfile) => ({
   },
 });
 
-const manifestUrl = {
+const manifestUrl = () => ({
   title: formatMessage('Get a skill manifest URL from the skill’s author'),
   description: formatMessage(
     'To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step.'
   ),
-};
-const appIdInfo = {
+});
+
+const appIdInfo = () => ({
   title: formatMessage('Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list'),
   description: formatMessage(
     'For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list.'
   ),
-};
+});
+
 type RenderItemProps = {
   title: string;
   description: string;
@@ -148,7 +150,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
     navigate(`/bot/${projectId}/botProjectsSettings/#LuisQna`);
   };
 
-  const setMSAppIdAndPassword = {
+  const setMSAppIdAndPassword = () => ({
     iconProps: {
       iconName: 'Error',
       color: SharedColors.orange20,
@@ -159,7 +161,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
       text: formatMessage('Select your Microsoft App ID and Password'),
       onClick: handleNavigateToDevelopmentResources,
     },
-  };
+  });
 
   const [currentTargetName, setCurrentTargetName] = useState(publishTargets.length === 0 ? '' : publishTargets[0].name);
 
@@ -183,13 +185,13 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
       {publishTargets.length === 0 ? (
         <Fragment>
           {renderItem(getCreateProfileDescription(botName, onGotoCreateProfile))}
-          {renderItem(setMSAppIdAndPassword)}
-          {renderItem(appIdInfo)}
-          {renderItem(manifestUrl)}
+          {renderItem(setMSAppIdAndPassword())}
+          {renderItem(appIdInfo())}
+          {renderItem(manifestUrl())}
         </Fragment>
       ) : (
         <Fragment>
-          {renderItem(appIdInfo)}
+          {renderItem(appIdInfo())}
           {publishTargets.length === 1 ? (
             <div style={{ margin: '0 0 40px 30px' }}>
               {renderMicrosoftAppId(
@@ -221,7 +223,8 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
               </div>
             </div>
           )}
-          {renderItem(manifestUrl)}
+          {renderItem(setMSAppIdAndPassword())}
+          {renderItem(manifestUrl())}
         </Fragment>
       )}
       <Stack>
