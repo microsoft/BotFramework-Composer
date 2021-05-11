@@ -1,356 +1,508 @@
 {
   "Microsoft.AdaptiveDialog": {
     "form": {
-      "description": "Tato možnost nakonfiguruje dialog řízený daty prostřednictvím kolekce událostí a akcí.",
-      "label": "Adaptivní dialog",
+      "description": "This configures a data driven dialog via a collection of events and actions.",
+      "label": "Adaptive dialog",
       "properties": {
         "recognizer": {
-          "description": "Aby dialog rozeznal, co mu uživatel říká, potřebuje Rozpoznávač a ukázková slova a věty, které uživatel může použít.",
+          "description": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use.",
           "label": "Language Understanding"
         }
       }
     }
   },
-  "Microsoft.BeginDialog": {
+  "Microsoft.Ask": {
+    "flow": {
+      "footer": {
+        "description": "= Default operation"
+      }
+    },
     "form": {
-      "label": "Zahájit nový dialog",
-      "subtitle": "Zahájit dialog"
+      "label": "Send a response to ask a question",
+      "subtitle": "Ask Activity"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Prompt for a file or an attachment",
+      "subtitle": "Attachment Input"
+    }
+  },
+  "Microsoft.BeginDialog": {
+    "flow": {
+      "footer": {
+        "description": "= Return value"
+      }
+    },
+    "form": {
+      "label": "Begin a new dialog",
+      "subtitle": "Begin Dialog"
     }
   },
   "Microsoft.BeginSkill": {
+    "flow": {
+      "footer": {
+        "description": "= Result"
+      }
+    },
     "form": {
-      "label": "Připojit k dovednosti",
-      "subtitle": "Dialog dovednosti"
+      "label": "Connect to a skill",
+      "subtitle": "Skill Dialog"
     }
   },
   "Microsoft.BreakLoop": {
     "form": {
-      "label": "Ukončit smyčku",
-      "subtitle": "Ukončit smyčku"
+      "label": "Break out of loop",
+      "subtitle": "Break out of loop"
     }
   },
   "Microsoft.CancelAllDialogs": {
+    "flow": {
+      "body": {
+        "description": "(Event)"
+      }
+    },
     "form": {
-      "label": "Zrušit všechny aktivní dialogy",
-      "subtitle": "Zrušit všechny dialogy"
+      "label": "Cancel all active dialogs",
+      "subtitle": "Cancel All Dialogs"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Prompt with multi-choice",
+      "subtitle": "Choice Input"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Prompt for confirmation",
+      "subtitle": "Confirm Input"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
-      "label": "Pokračovat ve smyčce",
-      "subtitle": "Pokračovat ve smyčce"
+      "label": "Continue loop",
+      "subtitle": "Continue loop"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Prompt for a date or a time",
+      "subtitle": "Date Time Input"
     }
   },
   "Microsoft.DebugBreak": {
     "form": {
-      "label": "Přerušit ladění"
+      "label": "Debug Break"
     }
   },
   "Microsoft.DeleteProperties": {
     "form": {
-      "label": "Odstranit vlastnosti",
-      "subtitle": "Odstranit vlastnosti"
+      "label": "Delete properties",
+      "subtitle": "Delete Properties"
     }
   },
   "Microsoft.DeleteProperty": {
     "form": {
-      "label": "Odstranit vlastnost",
-      "subtitle": "Odstranit vlastnost"
+      "label": "Delete a property",
+      "subtitle": "Delete Property"
     }
   },
   "Microsoft.EditActions": {
     "form": {
-      "label": "Upravit aktivní dialog",
-      "subtitle": "Upravit akce"
+      "label": "Modify active dialog",
+      "subtitle": "Edit Actions"
     }
   },
   "Microsoft.EditArray": {
+    "flow": {
+      "footer": {
+        "description": "= Result"
+      }
+    },
     "form": {
-      "label": "Upravit vlastnost pole",
-      "subtitle": "Upravit pole"
+      "label": "Edit an array property",
+      "subtitle": "Edit Array"
     }
   },
   "Microsoft.EmitEvent": {
+    "flow": {
+      "body": {
+        "description": "(Event)"
+      }
+    },
     "form": {
-      "label": "Vygenerovat vlastní událost",
-      "subtitle": "Vygenerovat událost"
+      "label": "Emit a custom event",
+      "subtitle": "Emit Event"
     }
   },
   "Microsoft.EndDialog": {
     "form": {
-      "label": "Ukončit tento dialog",
-      "subtitle": "Ukončit dialog"
+      "label": "End this dialog",
+      "subtitle": "End Dialog"
     }
   },
   "Microsoft.EndTurn": {
     "form": {
-      "label": "Ukončit repliku",
-      "subtitle": "Ukončit repliku"
+      "label": "End turn",
+      "subtitle": "End Turn"
     }
   },
   "Microsoft.Foreach": {
     "form": {
-      "label": "Smyčka: Pro každou položku",
+      "label": "Loop: For each item",
       "subtitle": "For Each"
     }
   },
   "Microsoft.ForeachPage": {
     "form": {
-      "label": "Smyčka: Pro každou stránku (více položek)",
-      "subtitle": "Pro každou stránku"
+      "label": "Loop: For each page (multiple items)",
+      "subtitle": "For Each Page"
+    }
+  },
+  "Microsoft.GetActivityMembers": {
+    "flow": {
+      "body": {
+        "description": "= ActivityId"
+      },
+      "footer": {
+        "description": "= Result property"
+      }
+    }
+  },
+  "Microsoft.GetConversationMembers": {
+    "flow": {
+      "footer": {
+        "description": "= Result property"
+      }
     }
   },
   "Microsoft.HttpRequest": {
+    "flow": {
+      "footer": {
+        "description": "= Result property"
+      }
+    },
     "form": {
-      "label": "Odeslat požadavek HTTP",
-      "subtitle": "Požadavek HTTP"
+      "label": "Send an HTTP request",
+      "subtitle": "Požadavek protokolu HTTP"
     }
   },
   "Microsoft.IfCondition": {
     "form": {
-      "label": "Větev: If/Else",
-      "subtitle": "Podmínka If"
+      "label": "Branch: If/Else",
+      "subtitle": "If Condition"
     }
   },
   "Microsoft.LogAction": {
     "form": {
       "label": "Přihlásit se ke konzole",
-      "subtitle": "Protokolovat akci"
-    }
-  },
-  "Microsoft.RepeatDialog": {
-    "form": {
-      "label": "Opakovat tento dialog",
-      "subtitle": "Opakovat dialog"
-    }
-  },
-  "Microsoft.ReplaceDialog": {
-    "form": {
-      "label": "Nahradit tento dialog",
-      "subtitle": "Nahradit dialog"
-    }
-  },
-  "Microsoft.SendActivity": {
-    "form": {
-      "label": "Odeslat odpověď",
-      "subtitle": "Aktivita Send"
-    }
-  },
-  "Microsoft.SetProperties": {
-    "form": {
-      "label": "Nastavit vlastnosti",
-      "subtitle": "Nastavit vlastnosti"
-    }
-  },
-  "Microsoft.SetProperty": {
-    "form": {
-      "label": "Nastavit vlastnost",
-      "subtitle": "Nastavit vlastnost"
-    }
-  },
-  "Microsoft.SignOutUser": {
-    "form": {
-      "label": "Odhlásit uživatele",
-      "subtitle": "Odhlásit uživatele"
-    }
-  },
-  "Microsoft.SwitchCondition": {
-    "form": {
-      "label": "Větev: Switch (více možností)",
-      "subtitle": "Přepnout podmínku"
-    }
-  },
-  "Microsoft.ThrowException": {
-    "form": {
-      "label": "Vyvolat výjimku",
-      "subtitle": "Vyvolat výjimku"
-    }
-  },
-  "Microsoft.TraceActivity": {
-    "form": {
-      "label": "Vygenerovat událost trasování",
-      "subtitle": "Aktivita Trace"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Pokud se chcete na něco zeptat, odešlete odpověď",
-      "subtitle": "Aktivita Ask"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Vyžádat soubor nebo přílohu",
-      "subtitle": "Vstup přílohy"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Zobrazit výzvu s více volbami",
-      "subtitle": "Vstup volby"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Vyžádat potvrzení",
-      "subtitle": "Potvrdit vstup"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Vyžádat datum nebo čas",
-      "subtitle": "Vstup data a času"
+      "subtitle": "Log Action"
     }
   },
   "Microsoft.NumberInput": {
     "form": {
-      "label": "Vyžádat číslo",
-      "subtitle": "Vstup čísla"
+      "label": "Prompt for a number",
+      "subtitle": "Number Input"
     }
   },
   "Microsoft.OAuthInput": {
+    "flow": {
+      "footer": {
+        "description": "= Token property"
+      }
+    },
     "form": {
-      "label": "Přihlášení OAuth",
-      "subtitle": "Vstup OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Vyžádat text",
-      "subtitle": "Textový vstup"
+      "label": "OAuth login",
+      "subtitle": "OAuth Input"
     }
   },
   "Microsoft.OnActivity": {
     "form": {
       "label": "Aktivity",
-      "subtitle": "Přijaté aktivity"
+      "subtitle": "Activity received"
+    },
+    "trigger": {
+      "label": "Activities (Activity received)",
+      "submenu": {
+        "label": "Activities"
+      }
     }
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Zpracovat podmínku, když se přiřadí entita",
-      "subtitle": "Aktivita EntityAssigned"
+      "label": "Handle a condition when an entity is assigned",
+      "subtitle": "EntityAssigned activity"
     }
   },
   "Microsoft.OnBeginDialog": {
     "form": {
-      "label": "Dialog začal",
-      "subtitle": "Událost zahájení dialogu"
+      "label": "Dialog started",
+      "subtitle": "Begin dialog event"
+    },
+    "trigger": {
+      "label": "Dialog started (Begin dialog event)",
+      "submenu": {
+        "label": "Dialog events"
+      }
     }
   },
   "Microsoft.OnCancelDialog": {
     "form": {
-      "label": "Dialog se zrušil",
-      "subtitle": "Zrušit událost dialogu"
+      "label": "Dialog cancelled",
+      "subtitle": "Cancel dialog event"
+    },
+    "trigger": {
+      "label": "Dialog cancelled (Cancel dialog event)"
+    }
+  },
+  "Microsoft.OnChooseIntent": {
+    "trigger": {
+      "label": "Duplicated intents recognized"
     }
   },
   "Microsoft.OnCondition": {
     "form": {
-      "label": "Zpracovat podmínku",
+      "label": "Handle a condition",
       "subtitle": "Podmínka"
     }
   },
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
-      "description": "Zpracovat události aktivované, když uživatel zahájí novou konverzaci s robotem",
+      "description": "Handle the events fired when a user begins a new conversation with the bot.",
       "label": "Pozdrav",
-      "subtitle": "Aktivita ConversationUpdate"
+      "subtitle": "ConversationUpdate activity"
+    },
+    "trigger": {
+      "label": "Greeting (ConversationUpdate activity)"
     }
   },
   "Microsoft.OnDialogEvent": {
     "form": {
-      "label": "Události dialogu",
-      "subtitle": "Událost dialogu"
+      "label": "Dialog events",
+      "subtitle": "Dialog event"
+    },
+    "trigger": {
+      "label": "Custom events"
     }
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Zpracovat podmínku, když skončily akce",
-      "subtitle": "Aktivita EndOfActions"
+      "label": "Handle a condition when actions have ended",
+      "subtitle": "EndOfActions activity"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
     "form": {
-      "label": "Konverzace skončila",
-      "subtitle": "Aktivita EndOfConversation"
+      "label": "Conversation ended",
+      "subtitle": "EndOfConversation activity"
+    },
+    "trigger": {
+      "label": "Conversation ended (EndOfConversation activity)"
     }
   },
   "Microsoft.OnError": {
     "form": {
-      "label": "Došlo k chybě",
-      "subtitle": "Událost chyby"
+      "label": "Výskyt chyby",
+      "subtitle": "Error event"
+    },
+    "trigger": {
+      "label": "Error occurred (Error event)"
     }
   },
   "Microsoft.OnEventActivity": {
     "form": {
-      "label": "Přijatá událost",
-      "subtitle": "Aktivita události"
+      "label": "Event received",
+      "subtitle": "Event activity"
+    },
+    "trigger": {
+      "label": "Event received (Event activity)"
     }
   },
   "Microsoft.OnHandoffActivity": {
     "form": {
-      "label": "Předání člověku",
-      "subtitle": "Aktivita Handoff"
+      "label": "Handover to human",
+      "subtitle": "Handoff activity"
+    },
+    "trigger": {
+      "label": "Handover to human (Handoff activity)"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Instalace se aktualizovala",
-      "subtitle": "Aktivita aktualizace instalace"
+      "label": "Installation updated",
+      "subtitle": "Installation updated activity"
     }
   },
   "Microsoft.OnIntent": {
     "form": {
-      "label": "Rozpoznal se záměr",
-      "subtitle": "Rozpoznal se záměr"
+      "label": "Intent recognized",
+      "subtitle": "Intent recognized"
+    },
+    "trigger": {
+      "label": "Intent recognized"
     }
   },
   "Microsoft.OnInvokeActivity": {
     "form": {
-      "label": "Vyvolala se konverzace",
-      "subtitle": "Aktivita Invoke"
+      "label": "Conversation invoked",
+      "subtitle": "Invoke activity"
+    },
+    "trigger": {
+      "label": "Conversation invoked (Invoke activity)"
     }
   },
   "Microsoft.OnMessageActivity": {
     "form": {
-      "label": "Přijala se zpráva",
-      "subtitle": "Aktivita přijetí zprávy"
+      "label": "Message received",
+      "subtitle": "Message received activity"
+    },
+    "trigger": {
+      "label": "Message received (Message received activity)"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
     "form": {
-      "label": "Odstranila se zpráva",
-      "subtitle": "Aktivita odstranění zprávy"
+      "label": "Message deleted",
+      "subtitle": "Message deleted activity"
+    },
+    "trigger": {
+      "label": "Message deleted (Message deleted activity)"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
     "form": {
-      "label": "Reakce na zprávu",
-      "subtitle": "Aktivita reakce na zprávu"
+      "label": "Message reaction",
+      "subtitle": "Message reaction activity"
+    },
+    "trigger": {
+      "label": "Message reaction (Message reaction activity)"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
     "form": {
-      "label": "Aktualizovala se zpráva",
-      "subtitle": "Aktivita aktualizace zprávy"
+      "label": "Message updated",
+      "subtitle": "Message updated activity"
+    },
+    "trigger": {
+      "label": "Message updated (Message updated activity)"
+    }
+  },
+  "Microsoft.OnQnAMatch": {
+    "trigger": {
+      "label": "QnA Intent recognized"
     }
   },
   "Microsoft.OnRepromptDialog": {
     "form": {
-      "label": "Požádat znovu o vstup",
-      "subtitle": "Událost dialogu nové výzvy"
+      "label": "Re-prompt for input",
+      "subtitle": "Reprompt dialog event"
+    },
+    "trigger": {
+      "label": "Re-prompt for input (Reprompt dialog event)"
     }
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "Uživatel píše",
-      "subtitle": "Aktivita Typing"
+      "label": "User is typing",
+      "subtitle": "Typing activity"
+    },
+    "trigger": {
+      "label": "User is typing (Typing activity)"
     }
   },
   "Microsoft.OnUnknownIntent": {
     "form": {
-      "label": "Neznámý záměr",
-      "subtitle": "Rozpoznal se neznámý záměr"
+      "label": "Unknown intent",
+      "subtitle": "Unknown intent recognized"
+    },
+    "trigger": {
+      "label": "Unknown intent"
+    }
+  },
+  "Microsoft.RepeatDialog": {
+    "form": {
+      "label": "Repeat this dialog",
+      "subtitle": "Repeat Dialog"
+    }
+  },
+  "Microsoft.ReplaceDialog": {
+    "form": {
+      "label": "Replace this dialog",
+      "subtitle": "Replace Dialog"
+    }
+  },
+  "Microsoft.SendActivity": {
+    "form": {
+      "label": "Send a response",
+      "subtitle": "Send Activity"
+    }
+  },
+  "Microsoft.SendHandoffActivity": {
+    "form": {
+      "label": "Send a handoff request",
+      "subtitle": "Send Handoff Activity"
+    },
+    "menu": {
+      "label": "Send Handoff Event"
+    }
+  },
+  "Microsoft.SetProperties": {
+    "form": {
+      "label": "Set properties",
+      "subtitle": "Nastavit vlastnosti"
+    }
+  },
+  "Microsoft.SetProperty": {
+    "form": {
+      "label": "Set a property",
+      "subtitle": "Nastavit vlastnost"
+    }
+  },
+  "Microsoft.SignOutUser": {
+    "form": {
+      "label": "Sign out user",
+      "subtitle": "Signout User"
+    }
+  },
+  "Microsoft.SwitchCondition": {
+    "form": {
+      "label": "Branch: Switch (multiple options)",
+      "subtitle": "Switch Condition"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Prompt for text",
+      "subtitle": "Zadávání textu"
+    }
+  },
+  "Microsoft.ThrowException": {
+    "flow": {
+      "body": {
+        "description": "= ErrorValue"
+      }
+    },
+    "form": {
+      "label": "Throw an exception",
+      "subtitle": "Throw an exception"
+    }
+  },
+  "Microsoft.TraceActivity": {
+    "form": {
+      "label": "Emit a trace event",
+      "subtitle": "Trace Activity"
+    }
+  },
+  "Microsoft.UpdateActivity": {
+    "flow": {
+      "header": {
+        "title": "Update activity"
+      }
+    },
+    "form": {
+      "label": "Update an activity",
+      "subtitle": "Update Activity"
     }
   }
 }

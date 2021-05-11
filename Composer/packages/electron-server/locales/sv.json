@@ -3,7 +3,7 @@
     "message": "Om"
   },
   "actual_zoom_211ec99": {
-    "message": "Faktisk zoom"
+    "message": "Actual Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Lägg alla överst"
@@ -18,7 +18,7 @@
     "message": "Stäng fönstret"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer på GitHub"
+    "message": "Composer on GitHub"
   },
   "copy_9748f9f": {
     "message": "Kopiera"
@@ -45,7 +45,7 @@
     "message": "Hjälp"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Dölj Bot Framework Composer"
+    "message": "Hide Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "Dölj övriga"
@@ -53,8 +53,8 @@
   "initializing_4e34f7d": {
     "message": "Initierar..."
   },
-  "learn_more_about_bot_framework_2daca065": {
-    "message": "Läs mer om Bot Framework"
+  "learn_more_about_bot_framework_f5fe280b": {
+    "message": "Learn more about Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Minimera"
@@ -66,16 +66,16 @@
     "message": "Sekretesspolicy"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Avsluta Bot Framework Composer"
+    "message": "Quit Bot Framework Composer"
   },
   "redo_363c58b7": {
-    "message": "Göra om"
+    "message": "Gör om"
   },
   "report_an_issue_f33f3ba5": {
-    "message": "Rapportera ett ärende"
+    "message": "Rapportera ett problem"
   },
   "select_all_cf7e0248": {
-    "message": "Välj alla"
+    "message": "Markera alla"
   },
   "services_ccd7bca0": {
     "message": "Tjänster"
@@ -87,19 +87,19 @@
     "message": "Tal"
   },
   "start_speaking_f8d406ff": {
-    "message": "Börja tala"
+    "message": "Start Speaking"
   },
   "starting_server_721c37fd": {
-    "message": "Startar servern..."
+    "message": "Starting server..."
   },
   "stop_speaking_7b4b9834": {
-    "message": "Sluta tala"
+    "message": "Stop Speaking"
   },
   "toggle_developer_tools_d2ef8ea7": {
     "message": "Växla utvecklarverktyg"
   },
   "toggle_full_screen_272a0c5": {
-    "message": "Växla till helskärm"
+    "message": "Toggle Full Screen"
   },
   "undo_a7be8fef": {
     "message": "Ångra"
@@ -108,7 +108,7 @@
     "message": "Vy"
   },
   "view_license_720d341a": {
-    "message": "Visa licens"
+    "message": "View License"
   },
   "window_171922c7": {
     "message": "Fönster"
