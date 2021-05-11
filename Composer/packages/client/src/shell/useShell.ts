@@ -50,6 +50,7 @@ import TelemetryClient from '../telemetry/TelemetryClient';
 import { lgFilesSelectorFamily } from '../recoilModel/selectors/lg';
 import { getMemoryVariables } from '../recoilModel/dispatchers/utils/project';
 import { createNotification } from '../recoilModel/dispatchers/notification';
+import { useBotOperations } from '../components/BotRuntimeController/useBotOperations';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -141,6 +142,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const triggerApi = useTriggerApi(projectId);
   const actionApi = useActionApi(projectId);
   const { dialogId, selected, focused, promptTab } = designPageLocation;
+  const { stopSingleBot } = useBotOperations();
 
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
@@ -270,6 +272,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
     },
     updateFlowZoomRate,
     reloadProject: () => reloadProject(projectId),
+    stopBot: (targetProjectId: string) => {
+      stopSingleBot(targetProjectId);
+    },
     ...lgApi,
     ...luApi,
     ...qnaApi,
