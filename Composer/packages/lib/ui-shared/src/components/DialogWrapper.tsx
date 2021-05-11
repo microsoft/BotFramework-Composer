@@ -103,7 +103,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
     children,
     dialogType,
     isBlocking,
-    customerStyle,
+    customerStyle = { dialog: {}, modal: {} },
     minWidth,
   } = props;
   /* add customer styles to the array */
