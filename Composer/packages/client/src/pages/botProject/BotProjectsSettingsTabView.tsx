@@ -76,9 +76,13 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   useEffect(() => {
     if (scrollToSectionId) {
       const htmlIdTagName = scrollToSectionId.replace('#', '');
-      for (const key in PivotItemKey) {
-        if (idsInTab[key].includes(htmlIdTagName)) {
-          setSelectedKey(key as PivotItemKey);
+      if (idsInTab[htmlIdTagName]) {
+        setSelectedKey(PivotItemKey[htmlIdTagName]);
+      } else {
+        for (const key in PivotItemKey) {
+          if (idsInTab[key].includes(htmlIdTagName)) {
+            setSelectedKey(key as PivotItemKey);
+          }
         }
       }
     }
