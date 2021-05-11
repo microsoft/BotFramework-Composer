@@ -9,7 +9,6 @@ import * as rp from 'request-promise';
 import archiver from 'archiver';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import { composeRenderFunction } from '@uifabric/utilities';
 import { DialogSetting } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';

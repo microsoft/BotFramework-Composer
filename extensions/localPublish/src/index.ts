@@ -2,31 +2,18 @@
 // Licensed under the MIT License.
 /* eslint-disable security/detect-non-literal-fs-filename */
 import { ChildProcess, spawn } from 'child_process';
-import path from 'path';
 import fs from 'fs';
-import { promisify } from 'util';
 
 import max from 'lodash/max';
-import portfinder from 'portfinder';
-import glob from 'globby';
-import rimraf from 'rimraf';
-import archiver from 'archiver';
-import { v4 as uuid } from 'uuid';
-import AdmZip from 'adm-zip';
-import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframework-composer/types';
-import killPort from 'kill-port';
 import map from 'lodash/map';
+import portfinder from 'portfinder';
+import { v4 as uuid } from 'uuid';
+import killPort from 'kill-port';
 import * as tcpPortUsed from 'tcp-port-used';
+import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframework-composer/types';
 
 import { RuntimeLogServer } from './runtimeLogServer';
 
-const removeDirAndFiles = promisify(rimraf);
-const mkdir = promisify(fs.mkdir);
-const readFile = promisify(fs.readFile);
-const readdir = promisify(fs.readdir);
-const stat = promisify(fs.stat);
-const copyFile = promisify(fs.copyFile);
-const unlink = promisify(fs.unlink);
 interface RunningBot {
   process?: ChildProcess;
   port?: number;
@@ -68,7 +55,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   public name = 'localpublish';
   public description = 'Publish bot to local runtime';
   static runningBots: { [key: string]: RunningBot } = {};
-  private readonly baseDir = path.resolve(__dirname, '../');
   private composer: IExtensionRegistration;
 
   constructor(composer: IExtensionRegistration) {
@@ -130,15 +116,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
     try {
-      // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
-      // and export the content into that folder as well.
       const runtime = this.composer.getRuntimeByProject(project);
-      if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
-        this.composer.log('Using managed runtime');
-
-        await this.initBot(project);
-        await this.saveContent(botId, version, project.dataDir, user);
-      } else if (project.settings.runtime.path && project.settings.runtime.command) {
+      if (project.settings.runtime.path && project.settings.runtime.command) {
         const runtimePath = project.getRuntimePath();
         await runtime.build(runtimePath, project);
       } else {
@@ -225,110 +204,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
-  removeRuntimeData = async (botId: string) => {
-    const targetDir = path.resolve(this.getBotsDir(), `./${botId}`);
-    if (!(await this.dirExist(targetDir))) {
-      return { msg: `runtime path ${targetDir} does not exist` };
-    }
-    try {
-      await removeDirAndFiles(targetDir);
-      return { msg: `successfully removed runtime data in ${targetDir}` };
-    } catch (e) {
-      throw new Error(`Failed to remove ${targetDir}`);
-    }
-  };
-
   setupRuntimeLogServer = async (projectId: string) => {
     await RuntimeLogServer.init();
     return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
-  };
-
-  private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
-
-  private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);
-
-  private getBotRuntimeDir = (botId: string) => path.resolve(this.getBotDir(botId), 'runtime');
-
-  private getBotAssetsDir = (botId: string) => path.resolve(this.getBotDir(botId));
-
-  private getHistoryDir = (botId: string) => path.resolve(this.getBotDir(botId), 'history');
-
-  private getManifestSrcDir = (srcDir: string) => path.resolve(srcDir, 'manifests');
-
-  private getDownloadPath = (botId: string, version: string) =>
-    path.resolve(this.getHistoryDir(botId), `${version}.zip`);
-
-  private botExist = async (botId: string) => {
-    try {
-      const status = await stat(this.getBotDir(botId));
-      return status.isDirectory();
-    } catch (error) {
-      return false;
-    }
-  };
-
-  private dirExist = async (dirPath: string) => {
-    try {
-      const status = await stat(dirPath);
-      return status.isDirectory();
-    } catch (error) {
-      return false;
-    }
-  };
-
-  private initBot = async (project) => {
-    this.composer.log('Initializing bot');
-    const botId = project.id;
-    const isExist = await this.botExist(botId);
-    // get runtime template
-
-    const runtime = this.composer.getRuntimeByProject(project);
-    try {
-      if (!isExist) {
-        const botDir = this.getBotDir(botId);
-        const runtimeDir = this.getBotRuntimeDir(botId);
-        // create bot dir
-        await mkdir(botDir, { recursive: true });
-        await mkdir(runtimeDir, { recursive: true });
-
-        // create ComposerDialogs and history folder
-        await mkdir(this.getBotAssetsDir(botId), { recursive: true });
-        await mkdir(this.getHistoryDir(botId), { recursive: true });
-
-        // copy runtime template in folder
-        this.composer.log('COPY FROM ', runtime.path, ' to ', runtimeDir);
-        await this.copyDir(runtime.path, runtimeDir);
-        await runtime.build(runtimeDir, project);
-      } else {
-        // stop bot
-        await this.stopBot(botId);
-        // get previous settings
-        // when changing type of runtime
-        const settings = JSON.parse(
-          await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
-            encoding: 'utf-8',
-          })
-        );
-        // TODO: Understand why this is required as it would never hit this function if runtime is ejected
-        if (settings.runtime?.key && settings.runtime?.key !== project.settings.runtime?.key) {
-          // in order to change runtime type
-          await removeDirAndFiles(this.getBotRuntimeDir(botId));
-          // copy runtime template in folder
-          await this.copyDir(runtime.path, this.getBotRuntimeDir(botId));
-          await runtime.build(this.getBotRuntimeDir(botId), project);
-        }
-      }
-    } catch (error) {
-      // delete the folder to make sure build again.
-      await removeDirAndFiles(this.getBotDir(botId));
-      throw error;
-    }
-  };
-
-  private saveContent = async (botId: string, version: string, srcDir: string, user: any) => {
-    this.composer.log('Packaging bot assets');
-    const dstPath = this.getDownloadPath(botId, version);
-    await this.zipBot(dstPath, srcDir);
   };
 
   // start bot in current version
@@ -348,18 +226,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
       }
 
-      // if not using custom runtime, update assets in tmp older
-      if (!settings.runtime || settings.runtime.customRuntime !== true) {
-        this.composer.log('Updating bot assets');
-        await this.restoreBot(botId, version);
-      } else {
-        // if a port (e.g. --port 5000) is configured in the custom runtime command try to parse and set this port
-        if (settings.runtime.command && settings.runtime.command.includes('--port')) {
-          try {
-            port = /--port (\d+)/.exec(settings.runtime.command)[1];
-          } catch (err) {
-            console.warn(`Custom runtime command has an invalid port argument.`);
-          }
+      // if a port (e.g. --port 5000) is configured in the custom runtime command try to parse and set this port
+      if (settings.runtime.command && settings.runtime.command.includes('--port')) {
+        try {
+          port = /--port (\d+)/.exec(settings.runtime.command)[1];
+        } catch (err) {
+          console.warn(`Custom runtime command has an invalid port argument.`);
         }
       }
 
@@ -377,8 +249,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
-    const customRuntimePath = project.getRuntimePath();
-    const botDir = settings.runtime?.customRuntime === true ? customRuntimePath : this.getBotRuntimeDir(botId);
+    const botDir = project.getRuntimePath();
 
     const commandAndArgs =
       settings.runtime?.customRuntime === true
@@ -395,7 +266,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       this.composer.log('Starting bot on port %d. (%s)', port, commandAndArgs.join(' '));
       const startCommand = commandAndArgs.shift();
 
-      let config: any[] = [];
+      let config: string[] = [];
       let skillHostEndpoint;
       if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
         // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
@@ -524,48 +395,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     });
   };
 
-  private restoreBot = async (botId: string, version: string) => {
-    const srcPath = this.getDownloadPath(botId, version);
-    const dstPath = this.getBotAssetsDir(botId);
-    await this.unZipBot(srcPath, dstPath);
-  };
-
-  private zipBot = async (dstPath: string, srcDir: string) => {
-    // delete previous and create new
-    if (fs.existsSync(dstPath)) {
-      await unlink(dstPath);
-    }
-    const files = await glob('**/*', {
-      cwd: srcDir,
-      dot: true,
-      ignore: ['runtime'],
-    });
-    return new Promise((resolve, reject) => {
-      const archive = archiver('zip');
-      const output = fs.createWriteStream(dstPath);
-      archive.pipe(output);
-
-      for (const file of files) {
-        archive.append(fs.createReadStream(path.join(srcDir, file)), {
-          name: file,
-        });
-      }
-      archive.finalize();
-      output.on('close', () => resolve(dstPath));
-      output.on('error', (err) => {
-        reject(err);
-      });
-    });
-  };
-
-  private unZipBot = async (srcPath: string, dstPath: string) => {
-    if (!fs.existsSync(srcPath)) {
-      throw new Error('no such version bot');
-    }
-    const zip = new AdmZip(srcPath);
-    zip.extractAllTo(dstPath, true);
-  };
-
   // make it public, so that able to stop runtime before switch ejected runtime.
   public stopBot = async (botId: string) => {
     const proc = LocalPublisher.runningBots[botId]?.process;
@@ -587,27 +416,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             });
         }, 1000);
       });
-    }
-  };
-
-  private copyDir = async (srcDir: string, dstDir: string) => {
-    if (!(await this.dirExist(srcDir))) {
-      throw new Error(`no such dir ${srcDir}`);
-    }
-    if (!(await this.dirExist(dstDir))) {
-      await mkdir(dstDir, { recursive: true });
-    }
-    const paths = await readdir(srcDir);
-    for (const subPath of paths) {
-      const srcPath = path.resolve(srcDir, subPath);
-      const dstPath = path.resolve(dstDir, subPath);
-      if (!(await stat(srcPath)).isDirectory()) {
-        // copy files
-        await copyFile(srcPath, dstPath);
-      } else {
-        // recursively copy dirs
-        await this.copyDir(srcPath, dstPath);
-      }
     }
   };
 
