@@ -323,6 +323,14 @@ export const MultiLanguagesDialog = {
 };
 
 export const addSkillDialog = {
+  get SET_APP_ID() {
+    return {
+      title: formatMessage('Connect to a skill'),
+      subText: formatMessage(
+        "To connect to a skill, your bot needs the information captured in the skill's manifest, and, for secure access, the skill needs to know your bot's App ID. Follow the steps below to proceed."
+      ),
+    };
+  },
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
