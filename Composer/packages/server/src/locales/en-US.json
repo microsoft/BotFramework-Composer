@@ -50,6 +50,9 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
   },
+  "a_publishing_profile_contains_the_information_nece_fc37192d": {
+    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID. "
+  },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
     "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
   },
@@ -235,6 +238,9 @@
   },
   "add_property_d381eba3": {
     "message": "Add Property"
+  },
+  "add_publishing_profile_for_botname_37f9d35c": {
+    "message": "Add publishing profile for { botName }"
   },
   "add_qna_maker_knowledge_base_c1b27b78": {
     "message": "Add QnA Maker knowledge base"
@@ -1010,6 +1016,9 @@
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
   },
+  "create_profile_33fafbf1": {
+    "message": "Create profile"
+  },
   "create_service_resources_386ef96b": {
     "message": "Create { service } resources"
   },
@@ -1427,6 +1436,9 @@
   "endpoints_ff946539": {
     "message": "Endpoints"
   },
+  "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
+    "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
+  },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
   },
@@ -1456,6 +1468,9 @@
   },
   "enter_skill_host_endpoint_url_7489a83f": {
     "message": "Enter Skill host endpoint URL"
+  },
+  "enter_skill_manifest_url_583d54f4": {
+    "message": "Enter skill manifest URL"
   },
   "entities_ef09392c": {
     "message": "Entities"
@@ -1696,6 +1711,9 @@
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
+  },
+  "for_security_purposes_your_bot_can_only_call_a_ski_a600c3ce": {
+    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill''s allowed callers list. Once you create a publishing profilem share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   },
   "form_b674666c": {
     "message": "form"
@@ -2879,6 +2897,9 @@
   "publish_models_9a36752a": {
     "message": "Publish models"
   },
+  "publish_profile_a4e8f07b": {
+    "message": "Publish profile"
+  },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
   },
@@ -3281,8 +3302,14 @@
   "select_an_event_type_3d7108f1": {
     "message": "Select an event type"
   },
+  "select_an_option_9f5dfb55": {
+    "message": "Select an option"
+  },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Select an schema to edit or create a new one"
+  },
+  "select_app_id_and_password_e901a31d": {
+    "message": "Select App ID and password"
   },
   "select_dialogs_f625e607": {
     "message": "Select dialogs"
@@ -3839,11 +3866,20 @@
   "title_ee03d132": {
     "message": "Title"
   },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_1f3ca6f7": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest, and, for secure access, the skill needs to know your bot''s App ID. Follow the steps below to proceed."
+  },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_53adb32b": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest. Contact the author or publisher of the skill for this information."
+  },
   "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
     "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_9d7f7d41": {
     "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. <link>Learn more.</link>"
+  },
+  "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
+    "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
@@ -4324,6 +4360,9 @@
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
+  },
+  "your_bot_s_microsoft_app_id_5f12844c": {
+    "message": "Your bot’s Microsoft App ID"
   },
   "your_bot_was_exported_to_a_skill_c9ad3d79": {
     "message": "Your bot was exported to a skill"

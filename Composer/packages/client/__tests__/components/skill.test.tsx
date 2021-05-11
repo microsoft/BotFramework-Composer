@@ -16,36 +16,54 @@ jest.mock('../../src//utils/httpUtil');
 
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
-let recoilInitState;
 const projectId = '123a.234';
 
-describe('Skill page', () => {
-  beforeEach(() => {
-    recoilInitState = ({ set }) => {
-      set(currentProjectIdState, projectId);
-
-      set(settingsState(projectId), {
-        luis: {
-          name: '',
-          authoringKey: '12345',
-          authoringEndpoint: 'testAuthoringEndpoint',
-          endpointKey: '12345',
-          endpoint: 'testEndpoint',
-          authoringRegion: 'westus',
-          defaultLanguage: 'en-us',
-          environment: 'composer',
-        },
-        qna: {
-          subscriptionKey: '12345',
-          qnaRegion: 'westus',
-          endpointKey: '',
-        },
-      });
-    };
-  });
-});
-
 describe('<SkillForm />', () => {
+  const recoilInitState = ({ set }) => {
+    set(currentProjectIdState, projectId);
+
+    set(settingsState(projectId), {
+      luis: {
+        name: '',
+        authoringKey: '12345',
+        authoringEndpoint: 'testAuthoringEndpoint',
+        endpointKey: '12345',
+        endpoint: 'testEndpoint',
+        authoringRegion: 'westus',
+        defaultLanguage: 'en-us',
+        environment: 'composer',
+      },
+      qna: {
+        subscriptionKey: '12345',
+        qnaRegion: 'westus',
+        endpointKey: '',
+      },
+      publishTargets: [
+        {
+          name: 'Test',
+          type: 'azurePublish',
+          configuration:
+            '{"name":"test","environment":"dev","tenantId":"xxx","runtimeIdentifier":"win-x64","resourceGroup":"<name of your resource group>","botName":"<name of your bot channel registration>","subscriptionId":"<id of your subscription>","region":"<region of your resource group>","settings":{"applicationInsights":{"InstrumentationKey":"<Instrumentation Key>"},"cosmosDb":{"cosmosDBEndpoint":"<endpoint url>","authKey":"<auth key>","databaseId":"botstate-db","containerId":"botstate-container"},"blobStorage":{"connectionString":"<connection string>","container":"<container>"}}}',
+          lastPublished: '2021-04-08T08:08:21.581Z',
+        },
+        {
+          name: 'Test1',
+          type: 'azurePublish',
+          configuration:
+            '{"name":"test1","environment":"dev","tenantId":"xxx","runtimeIdentifier":"win-x64","resourceGroup":"<name of your resource group>","botName":"<name of your bot channel registration>","subscriptionId":"<id of your subscription>","region":"<region of your resource group>","settings":{"applicationInsights":{"InstrumentationKey":"<Instrumentation Key>"},"cosmosDb":{"cosmosDBEndpoint":"<endpoint url>","authKey":"<auth key>","databaseId":"botstate-db","containerId":"botstate-container"},"blobStorage":{"connectionString":"<connection string>","container":"<container>"}}}',
+          lastPublished: '2021-04-08T07:23:29.077Z',
+        },
+        {
+          configuration:
+            '{"name":"test2","environment":"dev","tenantId":"xxx","runtimeIdentifier":"win-x64","resourceGroup":"<name of your resource group>","botName":"<name of your bot channel registration>","subscriptionId":"<id of your subscription>","region":"<region of your resource group>","settings":{"applicationInsights":{"InstrumentationKey":"<Instrumentation Key>"},"cosmosDb":{"cosmosDBEndpoint":"<endpoint url>","authKey":"<auth key>","databaseId":"botstate-db","containerId":"botstate-container"},"blobStorage":{"connectionString":"<connection string>","container":"<container>"}}}',
+          name: 'Test2',
+          type: 'azurePublish',
+          lastPublished: '2021-04-09T08:11:59.491Z',
+        },
+      ],
+    });
+  };
+
   it('should render the skill form, and update skill manifest URL', () => {
     try {
       jest.useFakeTimers();
@@ -55,7 +73,7 @@ describe('<SkillForm />', () => {
       const onDismiss = jest.fn();
       const addRemoteSkill = jest.fn();
       const addTriggerToRoot = jest.fn();
-      const { getByLabelText } = renderWithRecoil(
+      const { getByTestId, getByLabelText } = renderWithRecoil(
         <CreateSkillModal
           addRemoteSkill={addRemoteSkill}
           addTriggerToRoot={addTriggerToRoot}
@@ -65,10 +83,15 @@ describe('<SkillForm />', () => {
         recoilInitState
       );
 
+      const nextButton = getByTestId('SetAppIdNext');
+      nextButton.click();
+
       const urlInput = getByLabelText('Skill Manifest URL');
       act(() => {
         fireEvent.change(urlInput, {
-          target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
+          target: {
+            value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
+          },
         });
       });
 
