@@ -2,6 +2,63 @@
 # yarn lockfile v1
 
 
+"@azure/abort-controller@^1.0.0":
+  version "1.0.4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/abort-controller/-/@azure/abort-controller-1.0.4.tgz#fd3c4d46c8ed67aace42498c8e2270960250eafd"
+  integrity sha1-/TxNRsjtZ6rOQkmMjiJwlgJQ6v0=
+  dependencies:
+    tslib "^2.0.0"
+
+"@azure/arm-resources@2.1.0":
+  version "2.1.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-resources/-/@azure/arm-resources-2.1.0.tgz#bb7a3faca0c717656bef93c6f81ff6a9d1d8fa8b"
+  integrity sha1-u3o/rKDHF2Vr75PG+B/2qdHY+os=
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-subscriptions@2.0.0":
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-subscriptions/-/@azure/arm-subscriptions-2.0.0.tgz#4202740b7f65a9d0f16f7903579a615f5de45a92"
+  integrity sha1-QgJ0C39lqdDxb3kDV5phX13kWpI=
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/core-auth@^1.1.4":
+  version "1.3.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/core-auth/-/@azure/core-auth-1.3.0.tgz#0d55517cf0650aefe755669aca8a2f3724fcf536"
+  integrity sha1-DVVRfPBlCu/nVWaayoovNyT89TY=
+  dependencies:
+    "@azure/abort-controller" "^1.0.0"
+    tslib "^2.0.0"
+
+"@azure/ms-rest-azure-js@^2.0.1":
+  version "2.1.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/ms-rest-azure-js/-/@azure/ms-rest-azure-js-2.1.0.tgz#8c90b31468aeca3146b06c7144b386fd4827f64c"
+  integrity sha1-jJCzFGiuyjFGsGxxRLOG/Ugn9kw=
+  dependencies:
+    "@azure/core-auth" "^1.1.4"
+    "@azure/ms-rest-js" "^2.2.0"
+    tslib "^1.10.0"
+
+"@azure/ms-rest-js@^2.0.4", "@azure/ms-rest-js@^2.0.7", "@azure/ms-rest-js@^2.2.0":
+  version "2.5.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/ms-rest-js/-/@azure/ms-rest-js-2.5.0.tgz#a998ce3822e16528841e8ba9a7bd649a07ade461"
+  integrity sha1-qZjOOCLhZSiEHoupp71kmget5GE=
+  dependencies:
+    "@azure/core-auth" "^1.1.4"
+    abort-controller "^3.0.0"
+    form-data "^2.5.0"
+    node-fetch "^2.6.0"
+    tough-cookie "^3.0.1"
+    tslib "^1.10.0"
+    tunnel "0.0.6"
+    uuid "^3.3.2"
+    xml2js "^0.4.19"
+
 "@babel/code-frame@^7.0.0":
   version "7.12.13"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@babel/code-frame/-/@babel/code-frame-7.12.13.tgz#dcfc826beef65e75c50e21d3837d7d95798dd658"
@@ -404,12 +461,24 @@
     "@uifabric/set-version" "^7.0.24"
     tslib "^1.10.0"
 
+abort-controller@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/abort-controller/-/abort-controller-3.0.0.tgz#eaf54d53b62bae4138e809ca225c8439a6efb392"
+  integrity sha1-6vVNU7YrrkE46AnKIlyEOabvs5I=
+  dependencies:
+    event-target-shim "^5.0.0"
+
 ansi-styles@^3.2.1:
   version "3.2.1"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/ansi-styles/-/ansi-styles-3.2.1.tgz#41fbb20243e50b12be0f04b8dedbf07520ce841d"
   integrity sha1-QfuyAkPlCxK+DwS43tvwdSDOhB0=
   dependencies:
     color-convert "^1.9.0"
+
+asynckit@^0.4.0:
+  version "0.4.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
+  integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
 axios@^0.21.1:
   version "0.21.1"
@@ -486,6 +555,13 @@ color-name@1.1.3:
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha1-p9BVi9icQveV3UIyj3QIMcpTvCU=
 
+combined-stream@^1.0.6:
+  version "1.0.8"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
+  integrity sha1-w9RaizT9cwYxoRCoolIGgrMdWn8=
+  dependencies:
+    delayed-stream "~1.0.0"
+
 convert-source-map@^1.5.0:
   version "1.7.0"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/convert-source-map/-/convert-source-map-1.7.0.tgz#17a2cb882d7f77d3490585e2ce6c524424a3a442"
@@ -521,6 +597,11 @@ debug@^4.1.1:
   dependencies:
     ms "2.1.2"
 
+delayed-stream@~1.0.0:
+  version "1.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
+  integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
+
 error-ex@^1.3.1:
   version "1.3.2"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/error-ex/-/error-ex-1.3.2.tgz#b4ac40648107fdcdcfae242f428bea8a14d4f1bf"
@@ -532,6 +613,11 @@ escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
+
+event-target-shim@^5.0.0:
+  version "5.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
+  integrity sha1-XU0+vflYPWOlMzzi3rdICrKwV4k=
 
 express-serve-static-core@0.1.1:
   version "0.1.1"
@@ -547,6 +633,15 @@ follow-redirects@^1.10.0:
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.0.tgz#f5d260f95c5f8c105894491feee5dc8993b402fe"
   integrity sha512-0vRwd7RKQBTt+mgu87mtYeofLFZpTas2S9zY+jIeuLJMNvudIgF52nr19q40HOwH5RrhWIPuj9puybzSJiRrVg==
+
+form-data@^2.5.0:
+  version "2.5.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/form-data/-/form-data-2.5.1.tgz#f2cbec57b5e59e23716e128fe44d4e5dd23895f4"
+  integrity sha1-8svsV7XlniNxbhKP5E1OXdI4lfQ=
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.6"
+    mime-types "^2.1.12"
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -572,6 +667,11 @@ import-fresh@^3.1.0:
   dependencies:
     parent-module "^1.0.0"
     resolve-from "^4.0.0"
+
+ip-regex@^2.1.0:
+  version "2.1.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/ip-regex/-/ip-regex-2.1.0.tgz#fa78bf5d2e6913c911ce9f819ee5146bb6d844e9"
+  integrity sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=
 
 is-arrayish@^0.2.1:
   version "0.2.1"
@@ -617,10 +717,27 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+mime-db@1.47.0:
+  version "1.47.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/mime-db/-/mime-db-1.47.0.tgz#8cb313e59965d3c05cfbf898915a267af46a335c"
+  integrity sha1-jLMT5Zll08Bc+/iYkVomevRqM1w=
+
+mime-types@^2.1.12:
+  version "2.1.30"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/mime-types/-/mime-types-2.1.30.tgz#6e7be8b4c479825f85ed6326695db73f9305d62d"
+  integrity sha1-bnvotMR5gl+F7WMmaV23P5MF1i0=
+  dependencies:
+    mime-db "1.47.0"
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+
+node-fetch@^2.6.0:
+  version "2.6.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha1-BFvTI2Mfdu0uK1VXM5RBa2OaAFI=
 
 object-assign@^4.1.1:
   version "4.1.1"
@@ -698,6 +815,16 @@ prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
+psl@^1.1.28:
+  version "1.8.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
+  integrity sha1-kyb4vPsBOtzABf3/BWrM4CDlHCQ=
+
+punycode@^2.1.1:
+  version "2.1.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
+  integrity sha1-tYsBCsQMIsVldhbI0sLALHv0eew=
+
 react-dom@^16.13.0:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
@@ -745,6 +872,11 @@ safe-buffer@~5.1.1:
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha1-mR7GnSluAxN0fVm9/St0XDX4go0=
 
+sax@>=0.6.0:
+  version "1.2.4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
+  integrity sha1-KBYjTiN4vdxOU1T6tcqold9xANk=
+
 scheduler@^0.19.1:
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
@@ -770,15 +902,52 @@ to-fast-properties@^2.0.0:
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"
   integrity sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4=
 
+tough-cookie@^3.0.1:
+  version "3.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/tough-cookie/-/tough-cookie-3.0.1.tgz#9df4f57e739c26930a018184887f4adb7dca73b2"
+  integrity sha1-nfT1fnOcJpMKAYGEiH9K233Kc7I=
+  dependencies:
+    ip-regex "^2.1.0"
+    psl "^1.1.28"
+    punycode "^2.1.1"
+
 tslib@^1.10.0, tslib@^1.7.1:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
+tslib@^2.0.0:
+  version "2.2.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
+  integrity sha1-+yxHWXfjXiQTEe3iaTzuHsZpj1w=
+
+tunnel@0.0.6:
+  version "0.0.6"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/tunnel/-/tunnel-0.0.6.tgz#72f1314b34a5b192db012324df2cc587ca47f92c"
+  integrity sha1-cvExSzSlsZLbASMk3yzFh8pH+Sw=
+
 typescript@^3.9.6:
   version "3.9.9"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.9.tgz#e69905c54bc0681d0518bd4d587cc6f2d0b1a674"
   integrity sha512-kdMjTiekY+z/ubJCATUPlRDl39vXYiMV9iyeMuEuXZh2we6zz80uovNN2WlAxmmdE/Z/YQe+EbOEXB5RHEED3w==
+
+uuid@^3.3.2:
+  version "3.4.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
+  integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=
+
+xml2js@^0.4.19:
+  version "0.4.23"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
+  integrity sha1-oMaVFnUkIesqx1juTUzPWIQ+rGY=
+  dependencies:
+    sax ">=0.6.0"
+    xmlbuilder "~11.0.0"
+
+xmlbuilder@~11.0.0:
+  version "11.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
+  integrity sha1-vpuuHIoEbnazESdyY0fQrXACvrM=
 
 yaml@^1.7.2:
   version "1.10.2"

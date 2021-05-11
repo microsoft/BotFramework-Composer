@@ -36,6 +36,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@azure/arm-subscriptions": "2.0.0",
+    "@azure/ms-rest-js": "^2.0.7",
+    "@azure/arm-resources": "2.1.0",
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "react": "^16.13.0",
