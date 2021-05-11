@@ -4,6 +4,8 @@
 import { Diagnostic, LgFile, LuFile, DialogSetting, SchemaDefinitions, MicrosoftIDialog } from '@bfc/shared';
 import { ReturnType } from 'adaptive-expressions';
 
+//this is used to change the type like 'integer', 'boolean' to expression parse return type
+//the expression return type is number and can do bitwise to check if the type is match.
 export const StringMapExpressionType = {
   number: ReturnType.Number,
   string: ReturnType.String,
