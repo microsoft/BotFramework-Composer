@@ -1,356 +1,508 @@
 {
   "Microsoft.AdaptiveDialog": {
     "form": {
-      "description": "Bu, bir olaylar ve eylemler koleksiyonu aracılığıyla veri temelli bir iletişim kutusunu yapılandırır.",
-      "label": "Uyarlamalı diyalog",
+      "description": "This configures a data driven dialog via a collection of events and actions.",
+      "label": "Adaptive dialog",
       "properties": {
         "recognizer": {
-          "description": "Kullanıcının söylediklerinin anlaşılması için iletişim kutunuz, kullanıcıların kullanabileceği örnek sözcükleri ve tümceleri içeren bir \"Recognizer\" öğesine ihtiyaç duyar.",
-          "label": "Dil Anlama"
+          "description": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use.",
+          "label": "Language Understanding"
         }
       }
     }
   },
-  "Microsoft.BeginDialog": {
+  "Microsoft.Ask": {
+    "flow": {
+      "footer": {
+        "description": "= Default operation"
+      }
+    },
     "form": {
-      "label": "Yeni iletişim kutusu başlat",
-      "subtitle": "İletişim Kutusu Başlat"
+      "label": "Send a response to ask a question",
+      "subtitle": "Ask Activity"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Prompt for a file or an attachment",
+      "subtitle": "Attachment Input"
+    }
+  },
+  "Microsoft.BeginDialog": {
+    "flow": {
+      "footer": {
+        "description": "= Return value"
+      }
+    },
+    "form": {
+      "label": "Begin a new dialog",
+      "subtitle": "Begin Dialog"
     }
   },
   "Microsoft.BeginSkill": {
+    "flow": {
+      "footer": {
+        "description": "= Result"
+      }
+    },
     "form": {
-      "label": "Yeteneğe bağlan",
-      "subtitle": "Yetenek İletişim Kutusu"
+      "label": "Connect to a skill",
+      "subtitle": "Skill Dialog"
     }
   },
   "Microsoft.BreakLoop": {
     "form": {
-      "label": "Döngüden çık",
-      "subtitle": "Döngüden çık"
+      "label": "Break out of loop",
+      "subtitle": "Break out of loop"
     }
   },
   "Microsoft.CancelAllDialogs": {
+    "flow": {
+      "body": {
+        "description": "(Event)"
+      }
+    },
     "form": {
-      "label": "Tüm etkin iletişim kutularını iptal et",
-      "subtitle": "Tüm İletişim Kutularını İptal Et"
+      "label": "Cancel all active dialogs",
+      "subtitle": "Cancel All Dialogs"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Prompt with multi-choice",
+      "subtitle": "Choice Input"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Prompt for confirmation",
+      "subtitle": "Confirm Input"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
-      "label": "Döngüye devam et",
-      "subtitle": "Döngüye devam et"
+      "label": "Continue loop",
+      "subtitle": "Continue loop"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Prompt for a date or a time",
+      "subtitle": "Date Time Input"
     }
   },
   "Microsoft.DebugBreak": {
     "form": {
-      "label": "Hata Ayıklama Kesmesi"
+      "label": "Debug Break"
     }
   },
   "Microsoft.DeleteProperties": {
     "form": {
-      "label": "Özellikleri sil",
-      "subtitle": "Özellikleri Sil"
+      "label": "Delete properties",
+      "subtitle": "Delete Properties"
     }
   },
   "Microsoft.DeleteProperty": {
     "form": {
-      "label": "Özelliği sil",
-      "subtitle": "Özelliği Sil"
+      "label": "Delete a property",
+      "subtitle": "Delete Property"
     }
   },
   "Microsoft.EditActions": {
     "form": {
-      "label": "Etkin iletişim kutusunu değiştir",
-      "subtitle": "Eylemleri Düzenle"
+      "label": "Modify active dialog",
+      "subtitle": "Edit Actions"
     }
   },
   "Microsoft.EditArray": {
+    "flow": {
+      "footer": {
+        "description": "= Result"
+      }
+    },
     "form": {
-      "label": "Dizi özelliğini düzenle",
-      "subtitle": "Diziyi Düzenle"
+      "label": "Edit an array property",
+      "subtitle": "Edit Array"
     }
   },
   "Microsoft.EmitEvent": {
+    "flow": {
+      "body": {
+        "description": "(Event)"
+      }
+    },
     "form": {
-      "label": "Özel bir olay göster",
-      "subtitle": "Olay Göster"
+      "label": "Emit a custom event",
+      "subtitle": "Emit Event"
     }
   },
   "Microsoft.EndDialog": {
     "form": {
-      "label": "Bu iletişim kutusunu sonlandır",
-      "subtitle": "İletişim Kutusunu Sonlandır"
+      "label": "End this dialog",
+      "subtitle": "End Dialog"
     }
   },
   "Microsoft.EndTurn": {
     "form": {
-      "label": "Dönüşü sonlandır",
-      "subtitle": "Dönüşü Sonlandır"
+      "label": "End turn",
+      "subtitle": "End Turn"
     }
   },
   "Microsoft.Foreach": {
     "form": {
-      "label": "Döngü: Her öğe için",
-      "subtitle": "Her Biri İçin"
+      "label": "Loop: For each item",
+      "subtitle": "For Each"
     }
   },
   "Microsoft.ForeachPage": {
     "form": {
-      "label": "Döngü: Her sayfa için (birden çok öğe)",
-      "subtitle": "Her Sayfa İçin"
+      "label": "Loop: For each page (multiple items)",
+      "subtitle": "For Each Page"
+    }
+  },
+  "Microsoft.GetActivityMembers": {
+    "flow": {
+      "body": {
+        "description": "= ActivityId"
+      },
+      "footer": {
+        "description": "= Result property"
+      }
+    }
+  },
+  "Microsoft.GetConversationMembers": {
+    "flow": {
+      "footer": {
+        "description": "= Result property"
+      }
     }
   },
   "Microsoft.HttpRequest": {
+    "flow": {
+      "footer": {
+        "description": "= Result property"
+      }
+    },
     "form": {
-      "label": "HTTP isteği gönder",
+      "label": "Send an HTTP request",
       "subtitle": "HTTP İsteği"
     }
   },
   "Microsoft.IfCondition": {
     "form": {
-      "label": "Dal: If/Else",
-      "subtitle": "If Koşulu"
+      "label": "Branch: If/Else",
+      "subtitle": "If Condition"
     }
   },
   "Microsoft.LogAction": {
     "form": {
       "label": "Konsola kaydet",
-      "subtitle": "Eylemi Günlüğe Kaydet"
-    }
-  },
-  "Microsoft.RepeatDialog": {
-    "form": {
-      "label": "Bu iletişim kutusunu yinele",
-      "subtitle": "İletişim Kutusunu Yinele"
-    }
-  },
-  "Microsoft.ReplaceDialog": {
-    "form": {
-      "label": "Bu iletişim kutusunu değiştir",
-      "subtitle": "İletişim Kutusunu Değiştir"
-    }
-  },
-  "Microsoft.SendActivity": {
-    "form": {
-      "label": "Yanıt gönder",
-      "subtitle": "Gönderme Etkinliği"
-    }
-  },
-  "Microsoft.SetProperties": {
-    "form": {
-      "label": "Özellikleri ayarla",
-      "subtitle": "Özellikleri Ayarla"
-    }
-  },
-  "Microsoft.SetProperty": {
-    "form": {
-      "label": "Özellik ayarla",
-      "subtitle": "Özelliği Ayarla"
-    }
-  },
-  "Microsoft.SignOutUser": {
-    "form": {
-      "label": "Kullanıcının oturumunu kapat",
-      "subtitle": "Kullanıcının Oturumunu Kapat"
-    }
-  },
-  "Microsoft.SwitchCondition": {
-    "form": {
-      "label": "Dal: Switch (birden çok seçenek)",
-      "subtitle": "Switch Koşulu"
-    }
-  },
-  "Microsoft.ThrowException": {
-    "form": {
-      "label": "Özel durum oluşturun",
-      "subtitle": "Özel durum oluşturun"
-    }
-  },
-  "Microsoft.TraceActivity": {
-    "form": {
-      "label": "İzleme olayı göster",
-      "subtitle": "İzleme Etkinliği"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Soru sormak için bir yanıt gönderin",
-      "subtitle": "Soru Sorma Etkinliği"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Dosya veya ek iste",
-      "subtitle": "Ek Girişi"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Çoklu seçimli istem",
-      "subtitle": "Seçim Girişi"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Onay iste",
-      "subtitle": "Girişi Onayla"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Tarih veya saat iste",
-      "subtitle": "Tarih Saat Girişi"
+      "subtitle": "Log Action"
     }
   },
   "Microsoft.NumberInput": {
     "form": {
-      "label": "Sayı iste",
-      "subtitle": "Sayı Girişi"
+      "label": "Prompt for a number",
+      "subtitle": "Number Input"
     }
   },
   "Microsoft.OAuthInput": {
+    "flow": {
+      "footer": {
+        "description": "= Token property"
+      }
+    },
     "form": {
-      "label": "OAuth oturum açma",
-      "subtitle": "OAuth Girişi"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Metin iste",
-      "subtitle": "Metin Girişi"
+      "label": "OAuth login",
+      "subtitle": "OAuth Input"
     }
   },
   "Microsoft.OnActivity": {
     "form": {
       "label": "Etkinlikler",
-      "subtitle": "Etkinlik alındı"
+      "subtitle": "Activity received"
+    },
+    "trigger": {
+      "label": "Activities (Activity received)",
+      "submenu": {
+        "label": "Activities"
+      }
     }
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Varlık atandığında koşulu işle",
-      "subtitle": "EntityAssigned etkinliği"
+      "label": "Handle a condition when an entity is assigned",
+      "subtitle": "EntityAssigned activity"
     }
   },
   "Microsoft.OnBeginDialog": {
     "form": {
-      "label": "İletişim kutusu başlatıldı",
-      "subtitle": "İletişim kutusu olayı başlat"
+      "label": "Dialog started",
+      "subtitle": "Begin dialog event"
+    },
+    "trigger": {
+      "label": "Dialog started (Begin dialog event)",
+      "submenu": {
+        "label": "Dialog events"
+      }
     }
   },
   "Microsoft.OnCancelDialog": {
     "form": {
-      "label": "İletişim kutusu iptal edildi",
-      "subtitle": "İletişim kutusu olayını iptal et"
+      "label": "Dialog cancelled",
+      "subtitle": "Cancel dialog event"
+    },
+    "trigger": {
+      "label": "Dialog cancelled (Cancel dialog event)"
+    }
+  },
+  "Microsoft.OnChooseIntent": {
+    "trigger": {
+      "label": "Duplicated intents recognized"
     }
   },
   "Microsoft.OnCondition": {
     "form": {
-      "label": "Koşul işle",
+      "label": "Handle a condition",
       "subtitle": "Koşul"
     }
   },
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
-      "description": "Bir kullanıcı bot ile yeni bir konuşmaya başladığında tetiklenen olayları işleyin.",
+      "description": "Handle the events fired when a user begins a new conversation with the bot.",
       "label": "Karşılama",
-      "subtitle": "ConversationUpdate etkinliği"
+      "subtitle": "ConversationUpdate activity"
+    },
+    "trigger": {
+      "label": "Greeting (ConversationUpdate activity)"
     }
   },
   "Microsoft.OnDialogEvent": {
     "form": {
-      "label": "İletişim kutusu olayları",
-      "subtitle": "İletişim kutusu olayı"
+      "label": "Dialog events",
+      "subtitle": "Dialog event"
+    },
+    "trigger": {
+      "label": "Custom events"
     }
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Eylemler bittiğinde koşulu işle",
-      "subtitle": "EndOfActions etkinliği"
+      "label": "Handle a condition when actions have ended",
+      "subtitle": "EndOfActions activity"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
     "form": {
-      "label": "Konuşma sona erdi",
-      "subtitle": "EndOfConversation etkinliği"
+      "label": "Conversation ended",
+      "subtitle": "EndOfConversation activity"
+    },
+    "trigger": {
+      "label": "Conversation ended (EndOfConversation activity)"
     }
   },
   "Microsoft.OnError": {
     "form": {
       "label": "Hata oluştu",
-      "subtitle": "Hata olayı"
+      "subtitle": "Error event"
+    },
+    "trigger": {
+      "label": "Error occurred (Error event)"
     }
   },
   "Microsoft.OnEventActivity": {
     "form": {
-      "label": "Olay alındı",
-      "subtitle": "Olay etkinliği"
+      "label": "Event received",
+      "subtitle": "Event activity"
+    },
+    "trigger": {
+      "label": "Event received (Event activity)"
     }
   },
   "Microsoft.OnHandoffActivity": {
     "form": {
-      "label": "Kişiye devret",
-      "subtitle": "İletim etkinliği"
+      "label": "Handover to human",
+      "subtitle": "Handoff activity"
+    },
+    "trigger": {
+      "label": "Handover to human (Handoff activity)"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Yükleme güncelleştirildi",
-      "subtitle": "Güncelleştirilmiş yükleme etkinliği"
+      "label": "Installation updated",
+      "subtitle": "Installation updated activity"
     }
   },
   "Microsoft.OnIntent": {
     "form": {
-      "label": "Amaç tanındı",
-      "subtitle": "Amaç tanındı"
+      "label": "Intent recognized",
+      "subtitle": "Intent recognized"
+    },
+    "trigger": {
+      "label": "Intent recognized"
     }
   },
   "Microsoft.OnInvokeActivity": {
     "form": {
-      "label": "Konuşma çağrıldı",
-      "subtitle": "Çağırma etkinliği"
+      "label": "Conversation invoked",
+      "subtitle": "Invoke activity"
+    },
+    "trigger": {
+      "label": "Conversation invoked (Invoke activity)"
     }
   },
   "Microsoft.OnMessageActivity": {
     "form": {
-      "label": "İleti alındı",
-      "subtitle": "İleti alındı etkinliği"
+      "label": "Message received",
+      "subtitle": "Message received activity"
+    },
+    "trigger": {
+      "label": "Message received (Message received activity)"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
     "form": {
-      "label": "İleti silindi",
-      "subtitle": "İleti silindi etkinliği"
+      "label": "Message deleted",
+      "subtitle": "Message deleted activity"
+    },
+    "trigger": {
+      "label": "Message deleted (Message deleted activity)"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
     "form": {
-      "label": "İleti tepkisi",
-      "subtitle": "İleti tepkisi etkinliği"
+      "label": "Message reaction",
+      "subtitle": "Message reaction activity"
+    },
+    "trigger": {
+      "label": "Message reaction (Message reaction activity)"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
     "form": {
-      "label": "İleti güncelleştirildi",
-      "subtitle": "İleti güncelleştirdi etkinliği"
+      "label": "Message updated",
+      "subtitle": "Message updated activity"
+    },
+    "trigger": {
+      "label": "Message updated (Message updated activity)"
+    }
+  },
+  "Microsoft.OnQnAMatch": {
+    "trigger": {
+      "label": "QnA Intent recognized"
     }
   },
   "Microsoft.OnRepromptDialog": {
     "form": {
-      "label": "Girişi yeniden iste",
-      "subtitle": "Yeniden isteme iletişim kutusu olayı"
+      "label": "Re-prompt for input",
+      "subtitle": "Reprompt dialog event"
+    },
+    "trigger": {
+      "label": "Re-prompt for input (Reprompt dialog event)"
     }
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "Kullanıcı yazıyor",
-      "subtitle": "Yazma etkinliği"
+      "label": "User is typing",
+      "subtitle": "Typing activity"
+    },
+    "trigger": {
+      "label": "User is typing (Typing activity)"
     }
   },
   "Microsoft.OnUnknownIntent": {
     "form": {
-      "label": "Bilinmeyen amaç",
-      "subtitle": "Bilinmeyen amaç tanındı"
+      "label": "Unknown intent",
+      "subtitle": "Unknown intent recognized"
+    },
+    "trigger": {
+      "label": "Unknown intent"
+    }
+  },
+  "Microsoft.RepeatDialog": {
+    "form": {
+      "label": "Repeat this dialog",
+      "subtitle": "Repeat Dialog"
+    }
+  },
+  "Microsoft.ReplaceDialog": {
+    "form": {
+      "label": "Replace this dialog",
+      "subtitle": "Replace Dialog"
+    }
+  },
+  "Microsoft.SendActivity": {
+    "form": {
+      "label": "Send a response",
+      "subtitle": "Send Activity"
+    }
+  },
+  "Microsoft.SendHandoffActivity": {
+    "form": {
+      "label": "Send a handoff request",
+      "subtitle": "Send Handoff Activity"
+    },
+    "menu": {
+      "label": "Send Handoff Event"
+    }
+  },
+  "Microsoft.SetProperties": {
+    "form": {
+      "label": "Set properties",
+      "subtitle": "Özellikleri Ayarla"
+    }
+  },
+  "Microsoft.SetProperty": {
+    "form": {
+      "label": "Set a property",
+      "subtitle": "Özelliği Ayarla"
+    }
+  },
+  "Microsoft.SignOutUser": {
+    "form": {
+      "label": "Sign out user",
+      "subtitle": "Signout User"
+    }
+  },
+  "Microsoft.SwitchCondition": {
+    "form": {
+      "label": "Branch: Switch (multiple options)",
+      "subtitle": "Switch Condition"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Prompt for text",
+      "subtitle": "Metin Girişi"
+    }
+  },
+  "Microsoft.ThrowException": {
+    "flow": {
+      "body": {
+        "description": "= ErrorValue"
+      }
+    },
+    "form": {
+      "label": "Throw an exception",
+      "subtitle": "Throw an exception"
+    }
+  },
+  "Microsoft.TraceActivity": {
+    "form": {
+      "label": "Emit a trace event",
+      "subtitle": "Trace Activity"
+    }
+  },
+  "Microsoft.UpdateActivity": {
+    "flow": {
+      "header": {
+        "title": "Update activity"
+      }
+    },
+    "form": {
+      "label": "Update an activity",
+      "subtitle": "Update Activity"
     }
   }
 }

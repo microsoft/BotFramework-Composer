@@ -3,13 +3,13 @@
     "message": "Névjegy"
   },
   "actual_zoom_211ec99": {
-    "message": "Tényleges nagyítás/kicsinyítés"
+    "message": "Actual Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Legyen az összes előtérben"
   },
   "check_for_updates_12a70061": {
-    "message": "Frissítések keresése"
+    "message": "Frissítések ellenőrzése"
   },
   "close_d634289d": {
     "message": "Bezárás"
@@ -18,7 +18,7 @@
     "message": "Ablak bezárása"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer a GitHubon"
+    "message": "Composer on GitHub"
   },
   "copy_9748f9f": {
     "message": "Másolás"
@@ -45,7 +45,7 @@
     "message": "Súgó"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "A Bot Framework Composer elrejtése"
+    "message": "Hide Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "Egyebek elrejtése"
@@ -53,8 +53,8 @@
   "initializing_4e34f7d": {
     "message": "Inicializálás..."
   },
-  "learn_more_about_bot_framework_2daca065": {
-    "message": "További tudnivalók a Bot Frameworkről"
+  "learn_more_about_bot_framework_f5fe280b": {
+    "message": "Learn more about Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Kis méret"
@@ -63,10 +63,10 @@
     "message": "Beillesztés"
   },
   "privacy_statement_58986965": {
-    "message": "Adatvédelmi nyilatkozat"
+    "message": "Adatvédelmi szabályzat"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Kilépés a Bot Framework Composerből"
+    "message": "Quit Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "Mégis"
@@ -75,7 +75,7 @@
     "message": "Probléma bejelentése"
   },
   "select_all_cf7e0248": {
-    "message": "Az összes kijelölése"
+    "message": "Összes kijelölése"
   },
   "services_ccd7bca0": {
     "message": "Szolgáltatások"
@@ -87,13 +87,13 @@
     "message": "Beszéd"
   },
   "start_speaking_f8d406ff": {
-    "message": "Beszéd indítása"
+    "message": "Start Speaking"
   },
   "starting_server_721c37fd": {
-    "message": "Kiszolgáló indítása..."
+    "message": "Starting server..."
   },
   "stop_speaking_7b4b9834": {
-    "message": "Beszéd leállítása"
+    "message": "Stop Speaking"
   },
   "toggle_developer_tools_d2ef8ea7": {
     "message": "Fejlesztői eszközök be- és kikapcsolása"
@@ -117,7 +117,7 @@
     "message": "Nagyítás/kicsinyítés"
   },
   "zoom_in_a781ccc7": {
-    "message": "Nagyítás"
+    "message": "Közelítés"
   },
   "zoom_out_dc7d60d2": {
     "message": "Kicsinyítés"

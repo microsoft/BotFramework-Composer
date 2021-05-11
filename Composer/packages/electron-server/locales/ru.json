@@ -1,9 +1,9 @@
 {
   "about_70c18bba": {
-    "message": "О программе"
+    "message": "Сведения"
   },
   "actual_zoom_211ec99": {
-    "message": "Фактическое увеличение"
+    "message": "Actual Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Переместить все на передний план"
@@ -18,7 +18,7 @@
     "message": "Закрыть окно"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer на сайте GitHub"
+    "message": "Composer on GitHub"
   },
   "copy_9748f9f": {
     "message": "Копировать"
@@ -45,16 +45,16 @@
     "message": "Справка"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Скрыть Bot Framework Composer"
+    "message": "Hide Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "Скрыть другие"
   },
   "initializing_4e34f7d": {
-    "message": "Выполняется инициализация..."
+    "message": "Инициализация..."
   },
-  "learn_more_about_bot_framework_2daca065": {
-    "message": "Дополнительные сведения о Bot Framework"
+  "learn_more_about_bot_framework_f5fe280b": {
+    "message": "Learn more about Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Свернуть"
@@ -66,7 +66,7 @@
     "message": "Заявление о конфиденциальности"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Завершить работу Bot Framework Composer"
+    "message": "Quit Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "Вернуть"
@@ -90,7 +90,7 @@
     "message": "Начать проговаривание"
   },
   "starting_server_721c37fd": {
-    "message": "Выполняется запуск сервера..."
+    "message": "Starting server..."
   },
   "stop_speaking_7b4b9834": {
     "message": "Остановить проговаривание"
