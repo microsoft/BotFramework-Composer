@@ -110,4 +110,4 @@ export const findTypes = (schema: JSONSchema7): number[] => {
   }
 
   return Array.from(new Set<number>(types));
-}
+};
