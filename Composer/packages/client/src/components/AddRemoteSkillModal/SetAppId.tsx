@@ -16,6 +16,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { DefaultButton, IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import { navigate } from '@reach/router';
 
 import { settingsState, botDisplayNameState } from '../../recoilModel';
 
@@ -27,20 +28,20 @@ type SetAppIdProps = {
   onNext: (targetName: string) => void;
   onGotoCreateProfile: () => void;
 };
+
 const getCreateProfileDescription = (botName, handleCreateProfile) => ({
   iconProps: {
     iconName: 'Error',
     color: SharedColors.orange20,
   },
   title: formatMessage(`Create a publishing profile for {botName}`, { botName }),
-  description: formatMessage(
-    'Your root bot must have an associated Microsoft App Id and Password to connect to a skill.'
-  ),
+  description: formatMessage('Your root bot must have an Azure publishing profile.'),
   link: {
     text: formatMessage('Create a publishing profile'),
     onClick: handleCreateProfile,
   },
 });
+
 const manifestUrl = {
   title: formatMessage('Get a skill manifest URL from the skill’s author'),
   description: formatMessage(
@@ -143,6 +144,23 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
     text: target.name,
   }));
 
+  const handleNavigateToDevelopmentResources = () => {
+    navigate(`/bot/${projectId}/botProjectsSettings/#LuisQna`);
+  };
+
+  const setMSAppIdAndPassword = {
+    iconProps: {
+      iconName: 'Error',
+      color: SharedColors.orange20,
+    },
+    title: formatMessage('Set your Microsoft App ID and Password'),
+    description: formatMessage('Your root bot must have an associated Microsoft App ID and Password.'),
+    link: {
+      text: formatMessage('Select your Microsoft App ID and Password'),
+      onClick: handleNavigateToDevelopmentResources,
+    },
+  };
+
   const [currentTargetName, setCurrentTargetName] = useState(publishTargets.length === 0 ? '' : publishTargets[0].name);
 
   const appId = useMemo(() => {
@@ -165,6 +183,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
       {publishTargets.length === 0 ? (
         <Fragment>
           {renderItem(getCreateProfileDescription(botName, onGotoCreateProfile))}
+          {renderItem(setMSAppIdAndPassword)}
           {renderItem(appIdInfo)}
           {renderItem(manifestUrl)}
         </Fragment>
