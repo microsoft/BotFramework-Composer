@@ -12,7 +12,7 @@ import { ManageService } from '../ManageService/ManageService';
 import { currentProjectIdState } from '../../recoilModel';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 
-const QNA_REGIONS = [{ key: 'westus', text: 'westus' }];
+const QNA_REGIONS = [{ key: 'westus', text: 'West US' }];
 const QNA_TIERS = [
   { key: 'free', text: 'Free' },
   { key: 'paid', text: 'Paid' },
@@ -63,6 +63,7 @@ export const ManageQNA = (props: ManageQNAProps) => {
         '1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker'
       )}
       hidden={props.hidden}
+      introText={formatMessage('Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ. ')}
       learnMore={'https://aka.ms/composer-addqnamaker-learnmore'}
       regions={QNA_REGIONS}
       serviceKeyType={'QnAMaker'}

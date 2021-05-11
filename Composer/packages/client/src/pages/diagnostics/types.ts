@@ -3,6 +3,7 @@
 import { createSingleMessage, isDiagnosticWithInRange } from '@bfc/indexers';
 import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern } from '@bfc/shared';
 import get from 'lodash/get';
+import formatMessage from 'format-message';
 
 import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
@@ -17,6 +18,7 @@ export enum DiagnosticType {
   SKILL,
   SETTING,
   GENERAL,
+  SCHEMA,
 }
 
 export interface IDiagnosticInfo {
@@ -31,6 +33,8 @@ export interface IDiagnosticInfo {
   dialogPath?: string; //the data path in dialog
   resourceId: string; // id without locale
   getUrl: (hash?: string) => string;
+  learnMore?: string;
+  title?: string;
 }
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
@@ -45,6 +49,8 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   dialogPath?: string;
   resourceId: string;
   getUrl = () => '';
+  learnMore?: string;
+  title?: string;
 
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     this.rootProjectId = rootProjectId;
@@ -92,6 +98,16 @@ export class DialogDiagnostic extends DiagnosticInfo {
     const { rootProjectId, projectId, id, dialogPath = '' } = this;
     return convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, id, dialogPath);
   };
+}
+
+export class SchemaDiagnostic extends DialogDiagnostic {
+  type = DiagnosticType.SCHEMA;
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(rootProjectId, projectId, id, location, diagnostic);
+    this.message = diagnostic.message;
+    this.title = formatMessage('Deactivated action.');
+    this.learnMore = formatMessage('Learn more about custom actions');
+  }
 }
 
 export class SkillSettingDiagnostic extends DiagnosticInfo {

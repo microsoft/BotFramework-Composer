@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotIndexer } from '@bfc/indexers';
+import { BotIndexer, validateSchema } from '@bfc/indexers';
 import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
+import { getFriendlyName } from '@bfc/shared';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
@@ -18,6 +19,7 @@ import {
   BotDiagnostic,
   SettingDiagnostic,
   SkillSettingDiagnostic,
+  SchemaDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
@@ -176,7 +178,49 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
       });
     });
 
-    return [];
+    return diagnosticList;
+  },
+});
+
+export const schemaDiagnosticsSelectorFamily = selectorFamily({
+  key: 'schemaDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+
+    /**
+     * `botAssets.dialogSchema` contains all *.schema files loaded by project indexer. However, it actually messes up sdk.schema and *.dialog.schema.
+     * To get the correct sdk.schema content, current workaround is to filter schema by id.
+     *
+     * TODO: To fix it entirely, we need to differentiate dialog.schema from sdk.schema in indexer.
+     */
+    const sdkSchemaContent = botAssets.dialogSchemas.find((d) => d.id === '')?.content;
+    if (!sdkSchemaContent) return [];
+
+    const fullDiagnostics: DiagnosticInfo[] = [];
+    botAssets.dialogs.forEach((dialog) => {
+      const diagnostics = validateSchema(dialog.id, dialog.content, sdkSchemaContent);
+      fullDiagnostics.push(
+        ...diagnostics.map((d) => {
+          let location = dialog.id;
+          if (d.path) {
+            const list = d.path.split('.');
+            let path = '';
+            location = [
+              location,
+              ...list.map((item) => {
+                path = `${path}${path ? '.' : ''}${item}`;
+                return getFriendlyName(lodashGet(dialog.content, path)) || '';
+              }),
+            ].join('>');
+          }
+          return new SchemaDiagnostic(rootProjectId, projectId, dialog.id, location, d);
+        })
+      );
+    });
+    return fullDiagnostics;
   },
 });
 
@@ -257,6 +301,7 @@ export const diagnosticsSelectorFamily = selectorFamily({
     ...get(luDiagnosticsSelectorFamily(projectId)),
     ...get(lgDiagnosticsSelectorFamily(projectId)),
     ...get(qnaDiagnosticsSelectorFamily(projectId)),
+    ...get(schemaDiagnosticsSelectorFamily(projectId)),
   ],
 });
 

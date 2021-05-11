@@ -43,7 +43,7 @@ const builtInStyles = {
 
 const dialog = {
   title: {
-    fontWeight: FontWeights.bold,
+    fontWeight: FontWeights.semibold,
   },
 };
 

@@ -9,5 +9,5 @@ import { PVADialog } from './pvaDialog';
 it('should render', async () => {
   render(<PVADialog />);
 
-  expect(screen.getByText('Publish your bot assets from Composer directly into Power Virtual Agents.')).toBeTruthy();
+  expect(screen.getByText('Publish directly from Bot Framework Composer to Power Virtual Agents.')).toBeTruthy();
 });
