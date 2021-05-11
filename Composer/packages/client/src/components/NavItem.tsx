@@ -99,7 +99,9 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   const active = (pathname.startsWith(to) || match?.test(pathname)) ?? false;
 
-  const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
+  const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), [
+    labelName,
+  ]);
 
   const getIcon = (iconName: string) => {
     let navIcon;
