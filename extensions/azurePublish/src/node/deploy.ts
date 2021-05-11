@@ -222,7 +222,7 @@ export class BotProjectDeploy {
           .glob('**/*', {
             cwd: source,
             dot: true,
-            ignore: ['**/code.zip', '**/settings/appsettings.json'],
+            ignore: ['**/code.zip', '**/settings/appsettings.json', 'node_modules/**/*'],
           })
           .on('error', (err) => reject(err))
           .pipe(stream);
