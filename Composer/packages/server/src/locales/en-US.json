@@ -1709,8 +1709,8 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
-  "for_security_purposes_your_bot_can_only_call_a_ski_a600c3ce": {
-    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill''s allowed callers list. Once you create a publishing profilem share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
+  "for_security_purposes_your_bot_can_only_call_a_ski_fde80e2d": {
+    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profilem share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   },
   "form_b674666c": {
     "message": "form"
@@ -3869,14 +3869,14 @@
   "title_ee03d132": {
     "message": "Title"
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_1f3ca6f7": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest, and, for secure access, the skill needs to know your bot''s App ID. Follow the steps below to proceed."
+  "to_connect_to_a_skill_your_bot_needs_the_informati_409e03db": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest. Contact the author or publisher of the skill for this information."
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_53adb32b": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest. Contact the author or publisher of the skill for this information."
+  "to_connect_to_a_skill_your_bot_needs_the_informati_65b28231": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot''s App ID. Follow the steps below to proceed."
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
     "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
