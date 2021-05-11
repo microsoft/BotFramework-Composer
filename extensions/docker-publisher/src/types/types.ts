@@ -1,4 +1,5 @@
 import { IChoiceGroupOption } from 'office-ui-fabric-react';
+import { AzureDropDownData } from './azureTypes';
 
 export type RegistryFormData = {
   creationType: string;
@@ -20,6 +21,7 @@ export const RegistryTypeOptions: IChoiceGroupOption[] = [
 export const PageTypes = {
   RegistryConfig: 'registryConfig',
   RegistryType: 'registryType',
+  ACRConfig: 'acrConfig',
   Image: 'imageConfig',
   Review: 'review',
 };

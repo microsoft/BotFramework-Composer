@@ -2,7 +2,7 @@ import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { useState, useMemo, Fragment, useCallback } from 'react';
+import { useState, useMemo, Fragment, useCallback, useEffect, useRef } from 'react';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import {
   FontSizes,
@@ -17,6 +17,7 @@ import {
   TextField,
   TooltipHost,
   Icon,
+  Dropdown,
 } from 'office-ui-fabric-react';
 import {
   logOut,
@@ -28,9 +29,12 @@ import {
   TelemetryClient,
   useApplicationApi,
 } from '@bfc/extension-client';
-
+import { Subscription } from '@azure/arm-subscriptions/esm/models';
+import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
+import { AzureDropDownData } from '../types/azureTypes';
 import { RegistryFormData, RegistryTypeOptions, PageTypes } from '../types/types';
 import { ChooseRegistryAction } from './ChooseRegistryAction';
+import { getSubscriptions, getResourceGroups, getResources } from './api';
 
 /// Styles
 const ConfigureResourcesSectionDescription = styled(Text)`
@@ -66,6 +70,8 @@ const ConfigureResourcesPropertyLabel = styled(Label)`
   font-size: ${FluentTheme.fonts.medium.fontSize};
   font-weight: ${FontWeights.regular};
 `;
+
+const configureResourceDropdownStyles = { root: { paddingBottom: '4px', width: '300px' } };
 
 /// End Styles
 
@@ -115,15 +121,41 @@ export const DockerPublishingDialog: React.FC = () => {
       password: '',
       image: '',
       tag: 'latest',
+      subscriptionId: { id: '', text: '' },
+      resourceGroup: { id: '', text: '' },
+      containerRegistry: { id: '', text: '' },
     };
   };
 
+  const [subscriptions, setSubscriptions] = useState<Subscription[] | undefined>();
+  const [resourceGroups, setResourceGroups] = useState<ResourceGroup[] | undefined>();
+  const [subscription, setSubscription] = useState<AzureDropDownData | undefined>();
+  const [resourceGroup, setResourceGroup] = useState<AzureDropDownData | undefined>();
+  const [containerRegistry, setContainerRegistry] = useState<AzureDropDownData | undefined>();
+
+  const [acrs, setACRs] = useState<GenericResource[]>();
+  const isMounted = useRef<boolean>();
+  const [token, setToken] = useState<string | null>(null);
   const [page, setPage] = useState<string>(PageTypes.RegistryType);
   const [formData, setFormData] = useState<RegistryFormData>(getDefaultFormData());
+
+  const subscriptionOptions = useMemo(() => {
+    return subscriptions?.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
+  }, [subscriptions]);
+  const resourceGroupOptions = useMemo(() => {
+    return resourceGroups?.map((t) => ({ key: t.id, text: t.name }));
+  }, [resourceGroups]);
+  const acrOptions = useMemo(() => {
+    return acrs?.map((t) => ({ key: t.id, text: t.name }));
+  }, [acrs]);
 
   const isNextRegistryConfigDisabled = useMemo(() => {
     return Boolean(!formData.url || (formData.anonymous == false ? !formData.username || !formData.password : false));
   }, [formData.url, formData.anonymous, formData.username, formData.password]);
+  const isNextACRConfigDisabled = useMemo(() => {
+    return Boolean(!subscription?.id || !resourceGroup?.id || !formData.username || !formData.password);
+  }, [subscription?.id, resourceGroup?.id, formData.username, formData.password]);
+
   const isNextImageConfigDisabled = useMemo(() => {
     return Boolean(!formData.image || !formData.tag);
   }, [formData.image, formData.tag]);
@@ -145,6 +177,70 @@ export const DockerPublishingDialog: React.FC = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    // TODO: need to get the tenant id from the auth config when running as web app,
+    // for electron we will always fetch tenants.
+    if (userShouldProvideTokens()) {
+      const { accessToken } = getTokenFromCache();
+      setToken(accessToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      getSubscriptions(token)
+        .then((data) => {
+          if (isMounted.current) {
+            setSubscriptions(data);
+          }
+        })
+        .catch((err) => {
+          if (isMounted.current) {
+            // setSubscriptionsErrorMessage(err.message);
+          }
+        });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token && subscription?.id && resourceGroup?.id) {
+      getResources(token, subscription.id, resourceGroup.text).then((data) => {
+        setACRs(data.filter((el) => el.type === 'Microsoft.ContainerRegistry/registries'));
+      });
+    }
+  }, [resourceGroup, resourceGroup?.id]);
+
+  const loadResourceGroups = async () => {
+    if (token && subscription?.id) {
+      try {
+        const resourceGroups = await getResourceGroups(token, subscription.id);
+        if (isMounted.current) {
+          setResourceGroups(resourceGroups);
+        }
+      } catch (err) {
+        // todo: how do we handle API errors in this component
+        // eslint-disable-next-line no-console
+        console.log('ERROR', err);
+        if (isMounted.current) {
+          setResourceGroups(undefined);
+        }
+      }
+    } else {
+      setResourceGroups(undefined);
+    }
+  };
+
+  useEffect(() => {
+    loadResourceGroups();
+  }, [token, subscription?.id]);
 
   function updateFormData<K extends keyof RegistryFormData>(field: K, value: RegistryFormData[K]) {
     setFormData((current) => ({ ...current, [field]: value }));
@@ -173,6 +269,111 @@ export const DockerPublishingDialog: React.FC = () => {
         }}
       />
     </div>
+  );
+
+  const PageACRConfig = (
+    <ScrollablePane
+      data-is-scrollable="true"
+      scrollbarVisibility={ScrollbarVisibility.auto}
+      style={{ height: 'calc(100vh - 65px)' }}
+    >
+      <form style={{ width: '100%' }}>
+        <Stack>
+          <ConfigureResourcesSectionName>{formatMessage('Azure Details')}</ConfigureResourcesSectionName>
+          <ConfigureResourcesSectionDescription>
+            {formatMessage('Select your subscription, resource group and Azure Container Registry.')}
+          </ConfigureResourcesSectionDescription>
+
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Subscription')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('The subscription that will be billed for the resources.'))}
+            </Stack>
+            <Dropdown
+              options={subscriptionOptions}
+              placeholder={formatMessage('Select one')}
+              selectedKey={subscription?.id}
+              styles={configureResourceDropdownStyles}
+              onChange={(e, v) => {
+                setSubscription({ id: v.key as string, text: v.text });
+              }}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Resource group')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage(
+                  'A resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.'
+                )
+              )}
+            </Stack>
+            <Dropdown
+              disabled={!subscription?.id}
+              options={resourceGroupOptions}
+              selectedKey={resourceGroup?.id}
+              styles={configureResourceDropdownStyles}
+              onChange={(e, v) => {
+                setResourceGroup({ id: v.key as string, text: v.text });
+              }}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Container Registry')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('The Azure Container Registry Instance to publish the image.'))}
+            </Stack>
+            <Dropdown
+              disabled={!resourceGroup?.id}
+              options={acrOptions}
+              selectedKey={containerRegistry?.id}
+              styles={configureResourceDropdownStyles}
+              onChange={(e, v) => {
+                setContainerRegistry({ id: v.key as string, text: v.text });
+                updateFormData('url', `${v.text}.azurecr.io`);
+              }}
+            />
+          </Stack>
+
+          <ConfigureResourcesSectionName>{formatMessage('Authentication')}</ConfigureResourcesSectionName>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>{formatMessage('Username')}</ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('Registry Username'))}
+            </Stack>
+            <TextField
+              placeholder={formatMessage('Username')}
+              styles={configureResourceTextFieldStyles}
+              value={formData.username}
+              onChange={(e, v) => {
+                updateFormData('username', v);
+              }}
+            />
+          </Stack>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>{formatMessage('Password')}</ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('Registry Password'))}
+            </Stack>
+            <TextField
+              styles={configureResourceTextFieldStyles}
+              placeholder={formatMessage('Password')}
+              type="password"
+              value={formData.password}
+              onChange={(e, v) => {
+                updateFormData('password', v);
+              }}
+            />
+          </Stack>
+        </Stack>
+      </form>
+    </ScrollablePane>
   );
 
   const PageRegistryConfig = (
@@ -378,6 +579,8 @@ export const DockerPublishingDialog: React.FC = () => {
             onClick={() => {
               if (formData.creationType === 'local') {
                 setPageAndTitle(PageTypes.Image);
+              } else if (formData.creationType === 'acr') {
+                setPageAndTitle(PageTypes.ACRConfig);
               } else {
                 setPageAndTitle(PageTypes.RegistryConfig);
               }
@@ -392,7 +595,7 @@ export const DockerPublishingDialog: React.FC = () => {
           />
         </>
       );
-    } else if (page === PageTypes.RegistryConfig) {
+    } else if (page === PageTypes.RegistryConfig || page === PageTypes.ACRConfig) {
       return (
         <>
           <DefaultButton
@@ -405,7 +608,7 @@ export const DockerPublishingDialog: React.FC = () => {
           <PrimaryButton
             style={{ margin: '0 4px' }}
             text={formatMessage('Next')}
-            disabled={isNextRegistryConfigDisabled}
+            disabled={page === PageTypes.RegistryConfig ? isNextRegistryConfigDisabled : isNextACRConfigDisabled}
             onClick={() => {
               setPageAndTitle(PageTypes.Image);
             }}
@@ -428,6 +631,8 @@ export const DockerPublishingDialog: React.FC = () => {
             onClick={() => {
               if (formData.creationType === 'local') {
                 setPageAndTitle(PageTypes.RegistryType);
+              } else if (formData.creationType === 'acr') {
+                setPageAndTitle(PageTypes.ACRConfig);
               } else {
                 setPageAndTitle(PageTypes.RegistryConfig);
               }
@@ -493,6 +698,7 @@ export const DockerPublishingDialog: React.FC = () => {
       >
         <div style={{ flex: 1, minHeight: '230px' }}>
           {page === PageTypes.RegistryType && PageRegistry}
+          {page === PageTypes.ACRConfig && PageACRConfig}
           {page === PageTypes.RegistryConfig && PageRegistryConfig}
           {page === PageTypes.Image && PageImageConfig}
           {page === PageTypes.Review && PageReview}
