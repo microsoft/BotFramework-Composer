@@ -54,7 +54,7 @@ const manifestUrl = () => ({
 const appIdInfo = () => ({
   title: formatMessage('Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list'),
   description: formatMessage(
-    'For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profilem share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list.'
+    'For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profile, share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list.'
   ),
 });
 
