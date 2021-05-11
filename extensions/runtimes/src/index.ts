@@ -692,12 +692,6 @@ export default async (composer: any): Promise<void> => {
     ): Promise<string> => {
       // do stuff
       composer.log(`BUILD THIS JS PROJECT in ${runtimePath}`);
-      const { stderr: installErr } = await execAsync('npm install', {
-        cwd: path.resolve(runtimePath, '.'),
-      });
-      if (installErr) {
-        composer.log(installErr);
-      }
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '.');
     },
@@ -770,12 +764,6 @@ export default async (composer: any): Promise<void> => {
     ): Promise<string> => {
       // do stuff
       composer.log(`BUILD THIS JS PROJECT in ${runtimePath}`);
-      const { stderr: installErr } = await execAsync('npm ci', {
-        cwd: path.resolve(runtimePath, '.'),
-      });
-      if (installErr) {
-        composer.log(installErr);
-      }
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '.');
     },
