@@ -13,11 +13,13 @@ import {
   getARMTokenForTenant,
   useLocalStorage,
   useTelemetryClient,
+  TelemetryClient,
+  useApplicationApi,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { DeployLocation, AzureTenant } from '@botframework-composer/types';
+import { DeployLocation, AzureTenant, Notification } from '@botframework-composer/types';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { LoadingSpinner, ProvisionHandoff } from '@bfc/ui-shared';
+import { dialogStyle, LoadingSpinner, OpenConfirmModal, ProvisionHandoff } from '@bfc/ui-shared';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -77,7 +79,6 @@ type ProvisionFormData = {
 type ProvisonActionsStylingProps = {
   showSignout: boolean;
 };
-
 const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
@@ -166,9 +167,9 @@ const DialogTitle = {
     ),
   },
   REVIEW: {
-    title: formatMessage('Review & create'),
+    title: formatMessage('Review resources to be created'),
     subText: formatMessage(
-      'Please review the resources that will be created for your bot. Once these resources are provisioned, they will be available in your Azure portal.'
+      'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal.'
     ),
   },
   CONFIG_RESOURCES: {
@@ -268,6 +269,17 @@ const getHostname = (config) => {
   }
 };
 
+const getLogoutNotificationSettings = (description: string, type: Notification['type']) => {
+  return {
+    title: '',
+    retentionTime: 5000,
+    description: description,
+    type,
+    onRenderCardContent: (props) => (
+      <div style={{ padding: '0 16px 16px 16px', fontSize: '12px' }}>{props.description}</div>
+    ),
+  };
+};
 const getDefaultFormData = (currentProfile, defaults) => {
   return {
     creationType: defaults.creationType ?? 'create',
@@ -346,6 +358,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [handoffInstructions, setHandoffInstructions] = useState<string>('');
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
+  const { addNotification } = useApplicationApi();
   const updateHandoffInstructions = (resources) => {
     const createLuisResource = resources.filter((r) => r.key === 'luisPrediction').length > 0;
     const createLuisAuthoringResource = resources.filter((r) => r.key === 'luisAuthoring').length > 0;
@@ -363,8 +376,9 @@ export const AzureProvisionDialog: React.FC = () => {
     } --createLuisResource=${createLuisResource} --createLuisAuthoringResource=${createLuisAuthoringResource} --createCosmosDb=${createCosmosDb} --createStorage=${createStorage} --createAppInsights=${createAppInsights} --createQnAResource=${createQnAResource}`;
 
     const instructions = formatMessage(
-      'I am working on a Microsoft Bot Framework project, and I now require some Azure resources to be created.' +
-        ' Please follow the instructions below to create these resources and provide them to me.\n\n' +
+      'I am creating a conversational experience using Microsoft Bot Framework project.' +
+        ' For my project to work, Azure resources, including app registration, hosting, channels, Language Understanding, and QnA Maker, are required.' +
+        ' Below are the steps to create these resources.\n\n' +
         '1. Follow the instructions at the link below to run the provisioning command (seen below)\n' +
         '2. Copy and paste the resulting JSON and securely share it with me.\n\n' +
         'Provisoning Command:\n' +
@@ -739,21 +753,53 @@ export const AzureProvisionDialog: React.FC = () => {
     closeDialog();
   }, [importConfig]);
 
+  const signoutAndNotify = useCallback(async () => {
+    const isSignedOut = await logOut();
+    if (isSignedOut) {
+      addNotification(
+        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info')
+      );
+      closeDialog();
+    } else {
+      addNotification(
+        getLogoutNotificationSettings(
+          formatMessage(
+            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.'
+          ),
+          'error'
+        )
+      );
+    }
+  }, [addNotification]);
+
   const onRenderSecondaryText = useMemo(
     () => (props: IPersonaProps) => {
       return (
         <div
+          role="button"
           style={{ color: 'blue', cursor: 'pointer' }}
-          onClick={() => {
-            closeDialog();
-            logOut();
+          onClick={async () => {
+            const confirmed = await OpenConfirmModal(
+              formatMessage('Sign out of Azure'),
+              formatMessage(
+                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
+              ),
+              {
+                onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
+                confirmText: formatMessage('Sign out'),
+                cancelText: formatMessage('Cancel'),
+              }
+            );
+            if (confirmed) {
+              await signoutAndNotify();
+            }
           }}
         >
           {props.secondaryText}
         </div>
       );
     },
-    []
+    [signoutAndNotify]
   );
 
   const isNextDisabled = useMemo(() => {
@@ -920,7 +966,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 href="https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions"
                 target="_blank"
               >
-                {formatMessage('Learn More')}
+                {formatMessage('Learn more')}
               </LearnMoreLink>
             </Stack>
             <Dropdown
@@ -1195,6 +1241,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={formatMessage('Create')}
               onClick={() => {
                 const selectedResources = formData.requiredResources.concat(formData.enabledResources);
+                telemetryClient?.track('CreateProvisionStarted', { newResourceGroup: isNewResourceGroup });
                 onSubmit({
                   tenantId: formData.tenantId,
                   subscription: formData.subscriptionId,
@@ -1269,12 +1316,12 @@ export const AzureProvisionDialog: React.FC = () => {
     <Fragment>
       <ProvisionHandoff
         developerInstructions={formatMessage(
-          'Copy and share the following information with your Azure admin to provision resources on your behalf.'
+          'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
         )}
         handoffInstructions={handoffInstructions}
         hidden={!showHandoff}
         learnMoreLink="https://aka.ms/how-to-complete-provision-handoff"
-        title={formatMessage('Share resource request')}
+        title={formatMessage('Generate instructions for Azure administrator')}
         onBack={() => {
           setShowHandoff(false);
         }}

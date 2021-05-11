@@ -27,6 +27,7 @@ import { undoFunctionState } from '../../recoilModel/undo/history';
 import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { createQnAOnState, exportSkillModalInfoState } from '../../recoilModel/atoms/appState';
+import { OrchestratorForSkillsDialog } from '../../components/Orchestrator/OrchestratorForSkillsDialog';
 
 import CreationModal from './creationModal';
 
@@ -169,6 +170,8 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
         qnaFiles={qnaFiles}
         onSubmit={handleCreateQnA}
       />
+
+      <OrchestratorForSkillsDialog />
 
       {displaySkillManifestNameIdentifier && (
         <DisplayManifestModal

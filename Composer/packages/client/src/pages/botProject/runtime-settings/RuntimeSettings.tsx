@@ -142,9 +142,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const header = () => (
     <div css={subtext}>
-      {formatMessage(
-        'Configure Composer to start your bot using runtime code you can customize and control. Leave the field below blank if you don’t require customization.'
-      )}
+      {formatMessage('Configure the command used by Composer to start your bot application when testing locally.')}
     </div>
   );
 
@@ -275,7 +273,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           value={runtimeCommand}
           onBlur={() => handleRuntimeSettingOnBlur('command')}
           onChange={handleRuntimeSettingOnChange('command')}
-          onRenderLabel={onRenderLabel}
         />
       </div>
       {needsUpdate && (
