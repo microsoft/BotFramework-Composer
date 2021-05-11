@@ -1709,8 +1709,8 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
-  "for_security_purposes_your_bot_can_only_call_a_ski_fde80e2d": {
-    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profilem share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
+  "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
+    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profile, share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   },
   "form_b674666c": {
     "message": "form"
