@@ -110,7 +110,8 @@ export const visualPanelHeaderContainer = css`
 `;
 
 export const visualPanelHeaderShowCodeButton = css`
-  line-height: 65px;
+  align-items: center;
+  display: flex;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
