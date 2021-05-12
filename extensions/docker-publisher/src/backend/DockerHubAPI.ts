@@ -1,4 +1,5 @@
-import { IRepository, RepositoryAPIProps } from '../types/interfaces';
+import { IRepository } from '../types/interfaces';
+import { RepositoryAPIProps } from '../types/types';
 
 export class DockerHubAPI implements IRepository {
   password: string;
