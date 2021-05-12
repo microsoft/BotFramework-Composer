@@ -64,7 +64,7 @@ type PublishTargetsProps = {
 export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { projectId, scrollToSectionId = '' } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
-  const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
+  const { setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const [showPublishDialog, setShowingPublishDialog] = useState(false);
@@ -89,12 +89,6 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       }
     }
   }, [location, publishTargets]);
-
-  useEffect(() => {
-    if (projectId) {
-      getPublishTargetTypes(projectId);
-    }
-  }, [projectId]);
 
   useEffect(() => {
     if (publishTargetsRef.current && scrollToSectionId === '#addNewPublishProfile') {

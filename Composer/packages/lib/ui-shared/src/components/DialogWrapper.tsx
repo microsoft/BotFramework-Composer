@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Dialog, DialogType, IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
@@ -109,13 +109,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
   /* add customer styles to the array */
   styles[DialogTypes.Customer] = customerStyle;
 
-  const [currentStyle, setStyle] = useState(styles[dialogType]);
-
-  useEffect(() => {
-    if (dialogType) {
-      setStyle(styles[dialogType]);
-    }
-  }, [dialogType]);
+  const currentStyle = styles[dialogType];
 
   if (!isOpen) {
     return null;

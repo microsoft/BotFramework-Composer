@@ -467,6 +467,11 @@ export const isAdaptiveRuntime = (settings): boolean => {
   return settings?.runtime?.key?.match(/^adaptive-runtime/) ? true : false;
 };
 
+export const isOldCustomRuntime = (settings): boolean => {
+  const keys = ['node-azurewebapp', 'csharp-azurewebapp'];
+  return keys.includes(settings?.runtime?.key);
+};
+
 export const isPVA = (settings): boolean => {
   return settings?.publishTargets?.some((target) => target.type === 'pva-publish-composer');
 };
@@ -762,6 +767,8 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
 
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
   set(botProjectIdsState, [rootBotProjectId]);
+  // Get the publish types on opening
+  dispatcher.getPublishTargetTypes(rootBotProjectId);
   // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
   if (botFiles?.botProjectSpaceFiles?.length) {
@@ -836,6 +843,7 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
     mainDialog,
     projectId: rootBotProjectId,
     requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings) && !isPVA(botFiles.mergedSettings),
+    hasOldCustomRuntime: isOldCustomRuntime(botFiles.mergedSettings),
   };
 };
 
