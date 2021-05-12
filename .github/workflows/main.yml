@@ -36,12 +36,12 @@ jobs:
         run: yarn cache clean
       - name: yarn --update-checksums
         run: yarn --update-checksums
-      - name: yarn build:dev
-        run: yarn build:dev
+      - name: yarn build:ci
+        run: yarn build:ci
       - name: yarn lint
         run: yarn lint:ci && yarn lint:extensions
-      - name: yarn test:coverage
-        run: yarn test:coverage
+      - name: yarn test:ci
+        run: yarn test:ci
       - name: Coveralls
         uses: coverallsapp/github-action@v1.1.1
         continue-on-error: true
