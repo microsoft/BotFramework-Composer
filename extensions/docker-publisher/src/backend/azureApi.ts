@@ -1,30 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /* eslint-disable no-underscore-dangle */
-import axios from 'axios';
 import formatMessage from 'format-message';
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
-// import { AzureBotService } from '@azure/arm-botservice';
-// import { WebSiteManagementClient } from '@azure/arm-appservice';
-// import { ResourceNameAvailability } from '@azure/arm-appservice/esm/models';
-// import { CheckNameAvailabilityResponseBody } from '@azure/arm-botservice/esm/models';
-// import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 import sortBy from 'lodash/sortBy';
+import { AzureAPIStatus } from '../types/azureTypes';
 
-const logger = debug('composer:extension:dockerPublish');
-
-import {
-  AzureAPIStatus,
-  // AzureResourceProviderType,
-  // ResourcesItem,
-  // LuisAuthoringSupportLocation,
-  // LuisPublishSupportLocation,
-} from '../types/azureTypes';
+const logger = debug('composer:extension:docker-publish');
 
 /**
  * Retrieves the list of subscriptions from Azure
