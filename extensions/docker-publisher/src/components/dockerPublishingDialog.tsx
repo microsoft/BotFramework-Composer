@@ -19,28 +19,22 @@ import {
   Icon,
   Dropdown,
 } from 'office-ui-fabric-react';
-import {
-  logOut,
-  usePublishApi,
-  getTenants,
-  getARMTokenForTenant,
-  useLocalStorage,
-  useTelemetryClient,
-  TelemetryClient,
-  useApplicationApi,
-} from '@bfc/extension-client';
+import { usePublishApi } from '@bfc/extension-client';
 import { LoadingSpinner } from '@bfc/ui-shared';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
+
+import { ChooseRegistryAction } from './ChooseRegistryAction';
+import { TagPicker } from './TagPicker';
+
 import { AzureDropDownData } from '../types/azureTypes';
 import { RegistryFormData, RegistryTypeOptions, PageTypes } from '../types/types';
-import { ChooseRegistryAction } from './ChooseRegistryAction';
+import { IRepository } from '../types/interfaces';
+
 import { getSubscriptions, getResourceGroups, getResources } from '../backend/azureApi';
-import { TagPicker } from './TagPicker';
 import { ACRAPI } from '../backend/ACRAPI';
 import { DockerEngine } from '../backend/DockerEngine';
 import { DockerHubAPI } from '../backend/DockerHubAPI';
-import { IRepository } from '../types/interfaces';
 
 /// Styles
 const ConfigureResourcesSectionDescription = styled(Text)`
