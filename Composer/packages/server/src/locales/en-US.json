@@ -41,9 +41,6 @@
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
-  "a_newer_version_of_the_provisioning_scripts_has_be_85d3ad94": {
-    "message": "A newer version of the provisioning scripts has been found, and this project can be updated to the latest."
-  },
   "a_profile_with_that_name_already_exists_7c559958": {
     "message": "A profile with that name already exists."
   },
@@ -190,9 +187,6 @@
   },
   "add_custom_a376ce51": {
     "message": "Add Custom"
-  },
-  "add_custom_runtime_6b73dc44": {
-    "message": "Add custom runtime"
   },
   "add_entity_5f769994": {
     "message": "Add entity"
@@ -361,9 +355,6 @@
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "Are you sure you want to start over? Your progress will be lost."
-  },
-  "are_you_sure_you_want_to_stop_current_runtime_and__a5f883b2": {
-    "message": "Are you sure you want to stop current runtime and replace them?"
   },
   "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
     "message": "Are you sure you want to uninstall these extensions?"
@@ -1361,9 +1352,6 @@
   "edit_user_input_and_triggers_333c9a0e": {
     "message": "Edit user input and triggers"
   },
-  "ejecting_runtime_f6c90614": {
-    "message": "Ejecting runtime..."
-  },
   "emit_a_custom_event_78cf318b": {
     "message": "Emit a custom event"
   },
@@ -1496,9 +1484,6 @@
   "error_occurred_building_the_bot_7425aa09": {
     "message": "Error occurred building the bot"
   },
-  "error_occurred_ejecting_runtime_8512129e": {
-    "message": "Error occurred ejecting runtime!"
-  },
   "error_occurred_error_event_3e7f8ad0": {
     "message": "Error occurred (Error event)"
   },
@@ -1543,9 +1528,6 @@
   },
   "examples_c435f08c": {
     "message": "Examples"
-  },
-  "existing_files_in_scripts_folder_will_be_overwritt_afa8d787": {
-    "message": "Existing files in scripts/folder will be overwritten. Are you sure you want to continue?"
   },
   "expand_2f2fadbd": {
     "message": "Expand"
@@ -1759,9 +1741,6 @@
   },
   "get_a_key_bb364e3": {
     "message": "Get a key"
-  },
-  "get_a_new_copy_of_the_runtime_code_84970bf": {
-    "message": "Get a new copy of the runtime code"
   },
   "get_activity_members_11339605": {
     "message": "Get activity members"
@@ -2681,9 +2660,6 @@
   "options_3ab0ea65": {
     "message": "Options"
   },
-  "or_4f7d4edb": {
-    "message": "Or: "
-  },
   "orchestrator_downloading_language_model_e785be44": {
     "message": "Orchestrator: Downloading language model"
   },
@@ -3167,12 +3143,6 @@
   "running_c5a4998d": {
     "message": "Running"
   },
-  "runtime_already_exists_f181f5ec": {
-    "message": "Runtime already exists"
-  },
-  "runtime_code_location_4e94ee12": {
-    "message": "Runtime code location"
-  },
   "runtime_config_a2904ff9": {
     "message": "Runtime Config"
   },
@@ -3313,9 +3283,6 @@
   },
   "select_resource_edaf4ef5": {
     "message": "Select resource"
-  },
-  "select_runtime_version_to_add_d63d383b": {
-    "message": "Select runtime version to add"
   },
   "select_service_resources_326b206a": {
     "message": "Select { service } resources"
@@ -4049,14 +4016,8 @@
   "update_in_progress_f65e6b29": {
     "message": "Update in progress"
   },
-  "update_scripts_a3a483e": {
-    "message": "Update scripts"
-  },
   "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
     "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
-  },
-  "updating_scripts_e17a5722": {
-    "message": "Updating scripts... "
   },
   "url_22a5f3b8": {
     "message": "URL"
@@ -4084,9 +4045,6 @@
   },
   "use_custom_qna_maker_subscription_key_126e79df": {
     "message": "Use custom QnA Maker Subscription key"
-  },
-  "use_custom_runtime_d7d323fd": {
-    "message": "Use custom runtime"
   },
   "use_existing_resources_88d21106": {
     "message": "Use existing resources"

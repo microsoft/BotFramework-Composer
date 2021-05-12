@@ -11,8 +11,7 @@ import { ILuisConfig, FileInfo, IBotProject, RuntimeTemplate, DialogSetting } fr
 import { AzurePublishErrors } from './utils/errorHandler';
 import { BotProjectDeployLoggerType } from './types';
 
-const botPath = (projPath: string, runtime?: DialogSetting['runtime']) =>
-  isUsingAdaptiveRuntime(runtime) ? projPath : path.join(projPath, 'ComposerDialogs');
+const botPath = (projPath: string, runtime?: DialogSetting['runtime']) => projPath;
 
 type QnaConfigType = {
   subscriptionKey: string;
@@ -240,5 +239,5 @@ export async function build(project: IBotProject, path: string, settings: BuildS
   builder.rootDir = botPath(path, settings?.runtime);
   builder.setBuildConfig({ ...luisConfig, ...qnaConfig }, project.settings.downsampling);
   await builder.build(luFiles, qnaFiles, Array.from(files.values()) as FileInfo[], emptyFiles);
-  await builder.copyModelPathToBot(isUsingAdaptiveRuntime(settings?.runtime));
+  await builder.copyModelPathToBot();
 }
