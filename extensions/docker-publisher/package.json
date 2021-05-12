@@ -41,6 +41,7 @@
     "@azure/arm-resources": "2.1.0",
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
+    "@bfc/ui-shared": "../../Composer/packages/lib/ui-shared",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "office-ui-fabric-react": "7.71.0",

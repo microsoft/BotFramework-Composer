@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
-    "alwaysStrict": true,
-    "jsx": "react",
-    "esModuleInterop": true
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": false,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "types": ["node"]
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
