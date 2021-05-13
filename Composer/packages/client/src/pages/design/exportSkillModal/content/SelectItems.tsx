@@ -23,7 +23,7 @@ import formatMessage from 'format-message';
 const styles = {
   detailListContainer: css`
     flex-grow: 1;
-    height: 350px;
+    height: 310px;
     position: relative;
     overflow: hidden;
   `,
@@ -77,7 +77,7 @@ export const SelectItems: React.FC<SelectItemsProps> = ({ items, selection, tabl
       <Checkbox
         checked={selection.isAllSelected()}
         label={formatMessage('Select all')}
-        styles={{ root: { marginTop: '5px' } }}
+        styles={{ root: { marginTop: '10px' } }}
         onChange={handleToggleSelectAll}
       />
     </React.Fragment>
