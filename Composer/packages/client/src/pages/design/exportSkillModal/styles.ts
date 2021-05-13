@@ -24,7 +24,7 @@ export const styles = {
       width: '960px !important',
     },
     scrollableContent: {
-      overflow: 'hidden',
+      overflow: 'hidden' as 'hidden',
     },
   },
   container: css`
