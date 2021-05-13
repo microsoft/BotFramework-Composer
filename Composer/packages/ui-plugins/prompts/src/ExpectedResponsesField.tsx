@@ -22,7 +22,7 @@ const expectedResponsesPlaceholder = (id?: SDKKinds) => {
       `);
       break;
     case SDKKinds.RegexRecognizer:
-      placehold = formatMessage('ex. Book a flight to(?<toCity>.*)');
+      placehold = formatMessage('Add some regex patterns');
       break;
     default:
       break;
