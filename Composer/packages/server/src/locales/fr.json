@@ -18,7 +18,7 @@
     "message": "Les données sont probablement malformées ou des fonctionnalités sont manquantes dans Composer."
   },
   "ErrorInfo_part3": {
-    "message": "Essayez d\"accéder à un autre nœud dans l\"éditeur visuel."
+    "message": "Essayez d’accéder à un autre nœud dans l’éditeur visuel."
   },
   "a_add_from_package_manager_a_9eee7630": {
     "message": "<a>Add from package manager</a>"
@@ -36,10 +36,10 @@
     "message": "<a>Install ngrok</a> and run the following command to continue"
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
-    "message": "Un nom de base de connaissances ne peut pas contenir d\"espaces ni de caractères spéciaux. Utilisez des lettres, des chiffres, - ou _."
+    "message": "Un nom de base de connaissances ne peut pas contenir d’espaces ni de caractères spéciaux. Utilisez des lettres, des chiffres, - ou _."
   },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
-    "message": "Un minimap fournit une vue d\"ensemble de votre code source pour naviguer rapidement et comprendre le code."
+    "message": "Un minimap fournit une vue d’ensemble de votre code source pour naviguer rapidement et comprendre le code."
   },
   "a_newer_version_of_the_provisioning_scripts_has_be_85d3ad94": {
     "message": "Une version plus récente des scripts de provisionnement a été trouvée et ce projet peut être mis à jour vers cette version."
@@ -60,13 +60,13 @@
     "message": "Un schéma, ou formulaire, est la liste des propriétés qui seront collectées par votre bot."
   },
   "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
-    "message": "Bot de compétence qui peut être appelé à partir d\"un bot hôte."
+    "message": "Bot de compétence qui peut être appelé à partir d’un bot hôte."
   },
   "a_skill_is_a_bot_that_can_perform_a_set_of_tasks_o_950a3c95": {
     "message": "A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform."
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
-    "message": "Une clé d\"abonnement est créée quand vous créez une ressource QnA Maker."
+    "message": "Une clé d’abonnement est créée quand vous créez une ressource QnA Maker."
   },
   "a_valid_url_should_start_with_http_or_https_327b1a30": {
     "message": "Une URL valide doit commencer par http:// ou https://"
@@ -333,10 +333,10 @@
     "message": "Application name"
   },
   "application_settings_39e840c6": {
-    "message": "Paramètres d\"application"
+    "message": "Paramètres d’application"
   },
   "application_updates_bdf5f8b6": {
-    "message": "Mises à jour d\"application"
+    "message": "Mises à jour d’application"
   },
   "apply_my_azure_bot_resources_for_an_existing_bot_4979e343": {
     "message": "Apply my Azure Bot resources for an existing bot"
@@ -345,7 +345,7 @@
     "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
-    "message": "Voulez-vous vraiment quitter la visite guidée sur l\"intégration du produit ? Vous pouvez redémarrer la visite guidée dans les paramètres d\"intégration."
+    "message": "Voulez-vous vraiment quitter la visite guidée sur l’intégration du produit ? Vous pouvez redémarrer la visite guidée dans les paramètres d’intégration."
   },
   "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
     "message": "Voulez-vous vraiment supprimer le schéma de dialogue de formulaire « { id } » ?"
@@ -474,7 +474,7 @@
     "message": "Mise à jour automatique"
   },
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
-    "message": "Générez automatiquement des dialogues qui collectent les informations d\"un utilisateur pour gérer les conversations."
+    "message": "Générez automatiquement des dialogues qui collectent les informations d’un utilisateur pour gérer les conversations."
   },
   "available_as_skill_to_the_following_bots_dbcaffcd": {
     "message": "Available as skill to the following bots:"
@@ -606,7 +606,7 @@
     "message": "Le nom du bot est { botName }"
   },
   "bot_project_file_does_not_exist_a0864a2c": {
-    "message": "Le fichier projet de bot n\"existe pas."
+    "message": "Le fichier projet de bot n’existe pas."
   },
   "bot_project_location_3be47459": {
     "message": "Bot project location"
@@ -759,10 +759,10 @@
     "message": "Composer 2.0 is now available!"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
-    "message": "Composer ne peut pas encore traduire automatiquement votre bot.\nPour créer une traduction manuellement, Composer crée une copie du contenu de votre bot avec le nom de la langue supplémentaire. Ce contenu peut ensuite être traduit sans affecter la logique ou le flux d\"origine du bot, et vous pouvez passer d\"une langue à l\"autre pour vérifier que les réponses sont correctement traduites."
+    "message": "Composer ne peut pas encore traduire automatiquement votre bot.\nPour créer une traduction manuellement, Composer crée une copie du contenu de votre bot avec le nom de la langue supplémentaire. Ce contenu peut ensuite être traduit sans affecter la logique ou le flux d’origine du bot, et vous pouvez passer d’une langue à l’autre pour vérifier que les réponses sont correctement traduites."
   },
   "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
-    "message": "Composer inclut une fonctionnalité de télémétrie qui collecte des informations sur l\"utilisation. Il est important que l\"équipe de Composer comprenne comment l\"outil est utilisé pour pouvoir l\"améliorer."
+    "message": "Composer inclut une fonctionnalité de télémétrie qui collecte des informations sur l’utilisation. Il est important que l’équipe de Composer comprenne comment l’outil est utilisé pour pouvoir l’améliorer."
   },
   "composer_is_up_to_date_9118257d": {
     "message": "Composer est à jour."
@@ -792,7 +792,7 @@
     "message": "Composer va redémarrer."
   },
   "composer_will_update_the_next_time_you_close_the_a_d74264a1": {
-    "message": "Composer sera mis à jour dès que vous fermerez l\"application."
+    "message": "Composer sera mis à jour dès que vous fermerez l’application."
   },
   "composite_entity_8b5f67ba": {
     "message": "Composite entity"
@@ -819,7 +819,7 @@
     "message": "Configure your bot"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
-    "message": "Configure le modèle de langue par défaut à utiliser si aucun code de culture n\"est spécifié dans le nom de fichier (par défaut : en-us)"
+    "message": "Configure le modèle de langue par défaut à utiliser si aucun code de culture n’est spécifié dans le nom de fichier (par défaut : en-us)"
   },
   "confirm_6556b3a6": {
     "message": "Confirmer"
@@ -918,7 +918,7 @@
     "message": "Copy Icon"
   },
   "copy_project_location_to_clipboard_eb85c474": {
-    "message": "Copier l\"emplacement du projet dans le Presse-papiers"
+    "message": "Copier l’emplacement du projet dans le Presse-papiers"
   },
   "copy_skill_manifest_url_217975ba": {
     "message": "Copy Skill Manifest URL"
@@ -942,10 +942,10 @@
     "message": "Créer un dialogue"
   },
   "create_a_knowledge_base_from_scratch_or_import_kno_2eb38ac0": {
-    "message": "Créer une base de connaissances à partir de zéro ou importer des connaissances à partir d\"une URL ou de fichiers PDF"
+    "message": "Créer une base de connaissances à partir de zéro ou importer des connaissances à partir d’une URL ou de fichiers PDF"
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
-    "message": "Créer un nom pour le projet, utilisé pour nommer l\"application : (projectname-environment-LUfilename)"
+    "message": "Créer un nom pour le projet, utilisé pour nommer l’application : (projectname-environment-LUfilename)"
   },
   "create_a_new_bot_51ce70d3": {
     "message": "Create a new bot"
@@ -975,7 +975,7 @@
     "message": "Create and configure new Azure resources"
   },
   "create_bot_from_template_or_scratch_92f0fefa": {
-    "message": "Créer un bot à partir de zéro ou à partir d\"un modèle ?"
+    "message": "Créer un bot à partir de zéro ou à partir d’un modèle ?"
   },
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Créer une copie pour traduire le contenu de bot"
@@ -999,7 +999,7 @@
     "message": "Créer à partir de zéro"
   },
   "create_from_template_87e12c94": {
-    "message": "Créer à partir d\"un modèle"
+    "message": "Créer à partir d’un modèle"
   },
   "create_new_e0946c49": {
     "message": "Create new"
@@ -1098,7 +1098,7 @@
     "message": "Définir par type de valeur"
   },
   "define_conversation_objective_146d1cc6": {
-    "message": "Définir l\"objectif de conversation"
+    "message": "Définir l’objectif de conversation"
   },
   "define_new_entity_6c69b912": {
     "message": "Define new entity"
@@ -1122,7 +1122,7 @@
     "message": "Supprimer une propriété"
   },
   "delete_activity_6d881872": {
-    "message": "Supprimer l\"activité"
+    "message": "Supprimer l’activité"
   },
   "delete_bot_4b1527e4": {
     "message": "Delete bot"
@@ -1215,7 +1215,7 @@
     "message": "Le dialogue a été généré."
   },
   "dialog_input_schema_c7864fbd": {
-    "message": "Schéma d\"entrée de dialogue."
+    "message": "Schéma d’entrée de dialogue."
   },
   "dialog_interface_398bc493": {
     "message": "Interface de dialogue"
@@ -1251,7 +1251,7 @@
     "message": "Désactiver"
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
-    "message": "Affichez sur la ligne suivante les lignes dont la longueur dépasse la largeur de l\"éditeur."
+    "message": "Affichez sur la ligne suivante les lignes dont la longueur dépasse la largeur de l’éditeur."
   },
   "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
     "message": "Affichez le texte utilisé par le canal pour le restituer visuellement."
@@ -1269,7 +1269,7 @@
     "message": "Documentation"
   },
   "does_not_exist_3a34b418": {
-    "message": "N\"existe pas"
+    "message": "N’existe pas"
   },
   "done_1a4a010a": {
     "message": "Terminé !"
@@ -1398,7 +1398,7 @@
     "message": "Activez les numéros de ligne pour référencer les lignes de code par numéro."
   },
   "enable_multi_turn_extraction_8a168892": {
-    "message": "Activer l\"extraction multitour"
+    "message": "Activer l’extraction multitour"
   },
   "enable_orchestrator_cdbbd2c5": {
     "message": "Enable Orchestrator"
@@ -1458,7 +1458,7 @@
     "message": "Enter name for new resources"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
-    "message": "Entrer la clé d\"abonnement QnA Maker"
+    "message": "Entrer la clé d’abonnement QnA Maker"
   },
   "enter_skill_host_endpoint_url_7489a83f": {
     "message": "Enter Skill host endpoint URL"
@@ -1473,7 +1473,7 @@
     "message": "Environnement"
   },
   "equals_expression_47199f4e": {
-    "message": "Expression d\"égalité"
+    "message": "Expression d’égalité"
   },
   "error_98e81528": {
     "message": "Erreur"
@@ -1491,16 +1491,16 @@
     "message": "Error encountered when getting template read-me file"
   },
   "error_event_c079b608": {
-    "message": "Événement d\"erreur"
+    "message": "Événement d’erreur"
   },
   "error_fetching_runtime_templates_5e8a4701": {
     "message": "Erreur de récupération des modèles de runtime"
   },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
-    "message": "Erreur dans le schéma d\"interface utilisateur pour { title } : { errorMsg }\n{ options }"
+    "message": "Erreur dans le schéma d’interface utilisateur pour { title } : { errorMsg }\n{ options }"
   },
   "error_occurred_5549a6b4": {
-    "message": "Une erreur s\"est produite"
+    "message": "Une erreur s’est produite"
   },
   "error_occurred_building_the_bot_7425aa09": {
     "message": "Error occurred building the bot"
@@ -1605,7 +1605,7 @@
     "message": "External skill"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
-    "message": "Extrayez des paires QnA d\"un FAQ en ligne, de manuels de produit ou d\"autres fichiers. Les formats pris en charge sont .tsv, .pdf, .doc, .docx, .xlsx, qui contiennent des questions et des réponses à la suite. Découvrez plus d\"informations sur les sources de base de connaissances. Ignorez cette étape pour ajouter des questions et des réponses manuellement après la création. Le nombre de sources et la taille de fichier que vous pouvez ajouter dépendent de la référence SKU du service QnA. Découvrez plus d\"informations sur les références SKU de QnA Maker."
+    "message": "Extrayez des paires QnA d’un FAQ en ligne, de manuels de produit ou d’autres fichiers. Les formats pris en charge sont .tsv, .pdf, .doc, .docx, .xlsx, qui contiennent des questions et des réponses à la suite. Découvrez plus d’informations sur les sources de base de connaissances. Ignorez cette étape pour ajouter des questions et des réponses manuellement après la création. Le nombre de sources et la taille de fichier que vous pouvez ajouter dépendent de la référence SKU du service QnA. Découvrez plus d’informations sur les références SKU de QnA Maker."
   },
   "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
     "message": "Extracting question-and-answer pairs from { url }"
@@ -1632,7 +1632,7 @@
     "message": "Ensemble de champs"
   },
   "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
-    "message": "les champs doivent être l\"ensemble des chaînes ou tous les objets fieldset"
+    "message": "les champs doivent être l’ensemble des chaînes ou tous les objets fieldset"
   },
   "file_name_8fd421ff": {
     "message": "Nom de fichier"
@@ -1734,13 +1734,13 @@
     "message": "Form trigger"
   },
   "form_wide_operations_1c1a73eb": {
-    "message": "opérations à l\"échelle du formulaire"
+    "message": "opérations à l’échelle du formulaire"
   },
   "forms_preview_af001fab": {
     "message": "Formulaires (préversion)"
   },
   "fromtemplatename_does_not_exist_d429483c": {
-    "message": "fromTemplateName n\"existe pas"
+    "message": "fromTemplateName n’existe pas"
   },
   "full_description_for_fd03dbf8": {
     "message": "full description for"
@@ -1779,7 +1779,7 @@
     "message": "Get a skill manifest URL from the skill’s author"
   },
   "get_activity_members_11339605": {
-    "message": "Obtenir les membres de l\"activité"
+    "message": "Obtenir les membres de l’activité"
   },
   "get_conversation_members_71602275": {
     "message": "Obtenir les membres de la conversation"
@@ -1806,7 +1806,7 @@
     "message": "Go to Stack Overflow"
   },
   "got_it_2c06b54a": {
-    "message": "J\"ai compris !"
+    "message": "J’ai compris !"
   },
   "greeting_conversationupdate_activity_3eb99c15": {
     "message": "Message d’accueil (activité ConversationUpdate)"
@@ -1851,7 +1851,7 @@
     "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
   },
   "icon_name_is_file_c80dacae": {
-    "message": "le nom d\"{ icon } est { file }"
+    "message": "le nom d’{ icon } est { file }"
   },
   "iconname_file_icon_29976c8e": {
     "message": "Icône de fichier { iconName }"
@@ -1869,10 +1869,10 @@
     "message": "If this problem persists, please file an issue on <a>GitHub</a>"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
-    "message": "Si vous avez déjà un compte LUIS, fournissez les informations ci-dessous. Si vous n\"avez pas encore de compte, commencez par en créer un (gratuit)."
+    "message": "Si vous avez déjà un compte LUIS, fournissez les informations ci-dessous. Si vous n’avez pas encore de compte, commencez par en créer un (gratuit)."
   },
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
-    "message": "Si vous avez déjà un compte QNA, fournissez les informations ci-dessous. Si vous n\"avez pas encore de compte, commencez par en créer un (gratuit)."
+    "message": "Si vous avez déjà un compte QNA, fournissez les informations ci-dessous. Si vous n’avez pas encore de compte, commencez par en créer un (gratuit)."
   },
   "if_you_have_created_custom_components_you_might_ne_dc7cf128": {
     "message": "If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>"
@@ -2025,7 +2025,7 @@
     "message": "Chaîne interpolée ou expression à évaluer."
   },
   "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
-    "message": "Présentation des concepts clés et des éléments d\"expérience utilisateur de Composer."
+    "message": "Présentation des concepts clés et des éléments d’expérience utilisateur de Composer."
   },
   "invalid_file_path_to_save_the_transcript_54c92a51": {
     "message": "Chemin de fichier non valide pour enregistrer la transcription."
@@ -2037,7 +2037,7 @@
     "message": "est manquant ou vide"
   },
   "item_actions_cd903bde": {
-    "message": "Actions d\"élément"
+    "message": "Actions d’élément"
   },
   "item_added_f3910bed": {
     "message": "élément ajouté"
@@ -2097,7 +2097,7 @@
     "message": "LanguagePolicy"
   },
   "last_modified_time_is_time_b1497d3": {
-    "message": "L\"heure de la dernière modification est { time }"
+    "message": "L’heure de la dernière modification est { time }"
   },
   "layout_56d3a203": {
     "message": "Disposition : "
@@ -2223,7 +2223,7 @@
     "message": "Emplacement"
   },
   "location_is_location_8c17b5de": {
-    "message": "l\"emplacement est { location }"
+    "message": "l’emplacement est { location }"
   },
   "log_output_64a4dbec": {
     "message": "Sortie du journal"
@@ -2376,10 +2376,10 @@
     "message": "Microsoft App ID"
   },
   "microsoft_app_id_a7f3e591": {
-    "message": "ID d\"application Microsoft"
+    "message": "ID d’application Microsoft"
   },
   "microsoft_app_password_737ebc90": {
-    "message": "Mot de passe d\"application Microsoft"
+    "message": "Mot de passe d’application Microsoft"
   },
   "microsoft_logo_4378a7cb": {
     "message": "Microsoft Logo"
@@ -2415,7 +2415,7 @@
     "message": "Modifier ce dialogue"
   },
   "more_options_e89670cf": {
-    "message": "Plus d\"options"
+    "message": "Plus d’options"
   },
   "mostspecificselector_2cf1a6ae": {
     "message": "MostSpecificSelector"
@@ -2454,7 +2454,7 @@
     "message": "Nommez et enregistrez votre manifeste de compétence."
   },
   "name_cannot_be_found_at_the_location_27560dcb": {
-    "message": "{ name } est introuvable à l\"emplacement donné."
+    "message": "{ name } est introuvable à l’emplacement donné."
   },
   "name_copy_55d27c1a": {
     "message": "{ name }_Copy"
@@ -2577,7 +2577,7 @@
     "message": "Node (Preview)"
   },
   "not_a_single_template_e37f894": {
-    "message": "N\"est pas un seul modèle"
+    "message": "N’est pas un seul modèle"
   },
   "not_now_97efd947": {
     "message": "Pas maintenant"
@@ -2619,7 +2619,7 @@
     "message": "Objet"
   },
   "object_constant_77052b91": {
-    "message": "Constante d\"objet."
+    "message": "Constante d’objet."
   },
   "object_or_expression_89903fa1": {
     "message": "Objet ou expression"
@@ -2649,7 +2649,7 @@
     "message": "Once you publish your bot to Azure you will be ready to add connections."
   },
   "ondialogevents_types_3dc569b5": {
-    "message": "Types d\"OnDialogEvents"
+    "message": "Types d’OnDialogEvents"
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
     "message": "One or more options that are passed to the dialog that is called."
@@ -2661,7 +2661,7 @@
     "message": "Open GitHub"
   },
   "open_inline_editor_a5aabcfa": {
-    "message": "Ouvrir l\"éditeur inline"
+    "message": "Ouvrir l’éditeur inline"
   },
   "open_manifest_6c334f9": {
     "message": "Open manifest"
@@ -2688,10 +2688,10 @@
     "message": "Propriétés facultatives"
   },
   "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
-    "message": "Facultatif. La définition d\"une valeur maximale permet à votre bot de refuser une valeur trop grande et de redemander une nouvelle valeur à l\"utilisateur."
+    "message": "Facultatif. La définition d’une valeur maximale permet à votre bot de refuser une valeur trop grande et de redemander une nouvelle valeur à l’utilisateur."
   },
   "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
-    "message": "Facultatif. La définition d\"une valeur minimale permet à votre bot de refuser une valeur trop petite et de redemander une nouvelle valeur à l\"utilisateur."
+    "message": "Facultatif. La définition d’une valeur minimale permet à votre bot de refuser une valeur trop petite et de redemander une nouvelle valeur à l’utilisateur."
   },
   "options_3ab0ea65": {
     "message": "Options"
@@ -2703,16 +2703,16 @@
     "message": "Orchestrator: Downloading language model"
   },
   "orchestrator_recognizer_cf38b65a": {
-    "message": "Module de reconnaissance d\"orchestratreur"
+    "message": "Module de reconnaissance d’orchestratreur"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
-    "message": "fichier lg d\"origine introuvable dans le magasin"
+    "message": "fichier lg d’origine introuvable dans le magasin"
   },
   "origin_lu_file_not_found_in_store_19e5cc8f": {
-    "message": "fichier lu d\"origine introuvable dans le magasin"
+    "message": "fichier lu d’origine introuvable dans le magasin"
   },
   "original_ce7b7e64": {
-    "message": " - D\"origine"
+    "message": " - D’origine"
   },
   "other_1c6d9c79": {
     "message": "Autre"
@@ -2733,7 +2733,7 @@
     "message": "Numéro de page"
   },
   "parse_failed_at_name_error_8f562bda": {
-    "message": "Échec de l\"analyse sur { name } : { error }"
+    "message": "Échec de l’analyse sur { name } : { error }"
   },
   "paste_5963d1c1": {
     "message": "Coller"
@@ -2745,7 +2745,7 @@
     "message": "Entrez une valeur pour { key }"
   },
   "please_enter_an_event_name_a148275a": {
-    "message": "Entrez un nom d\"événement"
+    "message": "Entrez un nom d’événement"
   },
   "please_input_a_manifest_url_79cce9d5": {
     "message": "Please input a manifest URL"
@@ -2757,7 +2757,7 @@
     "message": "Connectez-vous pour continuer."
   },
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
-    "message": "Revenez sur Mode Création pour démarrer le tutoriel d\"intégration."
+    "message": "Revenez sur Mode Création pour démarrer le tutoriel d’intégration."
   },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
     "message": "Sélectionnez un fichier qna spécifique pour importer des questions et réponses"
@@ -2787,7 +2787,7 @@
     "message": "Prebuilt entity"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
-    "message": "appuyer sur Entrée pour ajouter cet élément ou sur TAB pour passer à l\"élément interactif suivant"
+    "message": "appuyer sur Entrée pour ajouter cet élément ou sur TAB pour passer à l’élément interactif suivant"
   },
   "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
     "message": "appuyer sur Entrée pour ajouter ce nom et passer à la ligne suivante, ou appuyez sur TAB pour passer au champ de valeur"
@@ -2823,7 +2823,7 @@
     "message": "Project Readme"
   },
   "prompt_configurations_ab47cd3f": {
-    "message": "Configurations d\"invite"
+    "message": "Configurations d’invite"
   },
   "prompt_for_a_date_or_a_time_d2df7f90": {
     "message": "Demander une date ou une heure"
@@ -2844,7 +2844,7 @@
     "message": "Description de propriété."
   },
   "property_editor_preferences_ad7a4b62": {
-    "message": "Préférences de l\"éditeur de propriété"
+    "message": "Préférences de l’éditeur de propriété"
   },
   "property_has_error_s_please_fix_the_error_s_for_th_e994c143": {
     "message": "La propriété a une ou plusieurs erreurs, corrigez-les."
@@ -2970,7 +2970,7 @@
     "message": "QnA Maker subscription key:"
   },
   "qna_maker_subscription_key_e009c9d9": {
-    "message": "Clé d\"abonnement QnA Maker"
+    "message": "Clé d’abonnement QnA Maker"
   },
   "qna_maker_subscription_key_is_required_to_start_yo_1892741": {
     "message": "La clé d’abonnement QnA Maker est obligatoire pour démarrer votre bot localement et publier"
@@ -2991,7 +2991,7 @@
     "message": "La question est vide maintenant"
   },
   "queued_d0e45c4b": {
-    "message": "En file d\"attente"
+    "message": "En file d’attente"
   },
   "quick_references_2ffbd14a": {
     "message": "Quick references"
@@ -3027,7 +3027,7 @@
     "message": "Rétablir"
   },
   "redo_is_not_supported_b743e4dc": {
-    "message": "La restauration n\"est pas prise en charge"
+    "message": "La restauration n’est pas prise en charge"
   },
   "refer_to_the_syntax_documentation_here_df8dc9b4": {
     "message": "Consultez la documentation de syntaxe ici."
@@ -3042,7 +3042,7 @@
     "message": "Regular expression entity"
   },
   "regular_expression_recognizer_44664557": {
-    "message": "Module de reconnaissance d\"expression régulière"
+    "message": "Module de reconnaissance d’expression régulière"
   },
   "release_1af20f26": {
     "message": "Version : "
@@ -3183,10 +3183,10 @@
     "message": "Bot racine de votre projet qui accueille les utilisateurs et peut appeler des compétences."
   },
   "root_bot_qna_maker_subscription_key_is_empty_7b7c8c4a": {
-    "message": "La clé d\"abonnement QnA Maker du bot racine est vide"
+    "message": "La clé d’abonnement QnA Maker du bot racine est vide"
   },
   "running_c5a4998d": {
-    "message": "En cours d\"exécution"
+    "message": "En cours d’exécution"
   },
   "runtime_already_exists_f181f5ec": {
     "message": "Le runtime existe déjà"
@@ -3207,10 +3207,10 @@
     "message": "Type de runtime"
   },
   "sample_phrases_5d78fa35": {
-    "message": "Exemples d\"expressions"
+    "message": "Exemples d’expressions"
   },
   "sample_phrases_are_phrases_a966b47f": {
-    "message": "Les exemples d\"expressions sont { phrases }"
+    "message": "Les exemples d’expressions sont { phrases }"
   },
   "save_11a80ec3": {
     "message": "Enregistrer"
@@ -3234,7 +3234,7 @@
     "message": "Scripts mis à jour."
   },
   "sdk_runtime_packages_22d8ed1a": {
-    "message": "Packages d\"exécution de SDK"
+    "message": "Packages d’exécution de SDK"
   },
   "search_280d00bd": {
     "message": "Rechercher"
@@ -3300,10 +3300,10 @@
     "message": "Tout sélectionner"
   },
   "select_an_activity_type_c982fcbe": {
-    "message": "Sélectionner un type d\"activité"
+    "message": "Sélectionner un type d’activité"
   },
   "select_an_event_type_3d7108f1": {
-    "message": "Sélectionner un type d\"événement"
+    "message": "Sélectionner un type d’événement"
   },
   "select_an_option_9f5dfb55": {
     "message": "Select an option"
@@ -3348,7 +3348,7 @@
     "message": "Select subscription"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
-    "message": "Sélectionnez la langue que le bot peut comprendre (entrée utilisateur) et dans laquelle il peut répondre (réponses du bot).\n    Pour que ce bot soit disponible dans d\"autres langues, cliquez sur « Ajouter » pour créer une copie de la langue par défaut et traduisez le contenu dans la nouvelle langue."
+    "message": "Sélectionnez la langue que le bot peut comprendre (entrée utilisateur) et dans laquelle il peut répondre (réponses du bot).\n    Pour que ce bot soit disponible dans d’autres langues, cliquez sur « Ajouter » pour créer une copie de la langue par défaut et traduisez le contenu dans la nouvelle langue."
   },
   "select_the_resource_group_and_region_in_which_your_51f85ff": {
     "message": "Select the resource group and region in which your { service } service will be created."
@@ -3465,7 +3465,7 @@
     "message": "Carte de connexion"
   },
   "sign_out_user_6845d640": {
-    "message": "Déconnecter l\"utilisateur"
+    "message": "Déconnecter l’utilisateur"
   },
   "skill_9b084d2e": {
     "message": "Compétence"
@@ -3483,7 +3483,7 @@
     "message": "Skill host endpoint URL"
   },
   "skill_host_endpoint_url_e68b65f6": {
-    "message": "URL du point de terminaison de l\"hôte de compétence"
+    "message": "URL du point de terminaison de l’hôte de compétence"
   },
   "skill_manifest_url_1094fcba": {
     "message": "Skill Manifest URL"
@@ -3501,16 +3501,16 @@
     "message": "Skip"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
-    "message": "Un problème s\"est produit lors de la tentative de tirage : { e }"
+    "message": "Un problème s’est produit lors de la tentative de tirage : { e }"
   },
   "something_went_wrong_d238c551": {
-    "message": "Un problème s\"est produit"
+    "message": "Un problème s’est produit"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
-    "message": "Nous sommes désolés, une erreur s\"est produite pendant la connexion du runtime de bot"
+    "message": "Nous sommes désolés, une erreur s’est produite pendant la connexion du runtime de bot"
   },
   "sorry_something_went_wrong_with_publishing_try_aga_306a48f5": {
-    "message": "Nous sommes désolés, une erreur s\"est produite pendant la publication. Réessayez ou quittez cette tâche."
+    "message": "Nous sommes désolés, une erreur s’est produite pendant la publication. Réessayez ou quittez cette tâche."
   },
   "sorted_a_to_z_915b2ed3": {
     "message": "Trié de A à Z"
@@ -3579,7 +3579,7 @@
     "message": "Démarrage"
   },
   "state_is_state_a2b8943": {
-    "message": "L\"état est { state }"
+    "message": "L’état est { state }"
   },
   "status_e7fdbe06": {
     "message": "État"
@@ -3660,7 +3660,7 @@
     "message": "templateName est manquant ou vide"
   },
   "terms_of_use_6542769b": {
-    "message": "Conditions d\"utilisation"
+    "message": "Conditions d’utilisation"
   },
   "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
     "message": "Test and debug your bots in Bot Framework Emulator"
@@ -3738,13 +3738,13 @@
     "message": "La page que vous recherchez est introuvable."
   },
   "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
-    "message": "Le type de propriété définit l\"entrée attendue. Le type peut être une liste (ou enum) de valeurs définies ou un format de données, par exemple, une date, un e-mail, un nombre ou une chaîne."
+    "message": "Le type de propriété définit l’entrée attendue. Le type peut être une liste (ou enum) de valeurs définies ou un format de données, par exemple, une date, un e-mail, un nombre ou une chaîne."
   },
   "the_return_type_does_not_match_2ae72548": {
     "message": "le type de retour ne correspond pas"
   },
   "the_root_bot_is_not_a_bot_project_d1495cf6": {
-    "message": "Le bot racine n\"est pas un projet de bot"
+    "message": "Le bot racine n’est pas un projet de bot"
   },
   "the_skill_you_tried_to_remove_from_the_project_is__2c0bd965": {
     "message": "La compétence que vous essayez de supprimer du projet est actuellement utilisée dans le ou les bots ci-dessous. Si vous supprimez cette compétence, les fichiers ne sont pas supprimés, mais votre bot fonctionne mal sans action supplémentaire."
@@ -3762,7 +3762,7 @@
     "message": "There are no optional properties."
   },
   "there_are_no_preview_features_at_this_time_a5c40953": {
-    "message": "Aucune fonctionnalité en préversion pour l\"instant."
+    "message": "Aucune fonctionnalité en préversion pour l’instant."
   },
   "there_are_no_required_properties_ba214ac5": {
     "message": "There are no required properties."
@@ -3783,19 +3783,19 @@
     "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
   },
   "there_was_an_error_74ed3c58": {
-    "message": "Une erreur s\"est produite"
+    "message": "Une erreur s’est produite"
   },
   "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
     "message": "There was an error accessing your Azure account: { errorMsg }"
   },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
-    "message": "Une erreur inattendue s\"est produite lors de l\"importation du contenu du bot dans <b>{ botName }</b>"
+    "message": "Une erreur inattendue s’est produite lors de l’importation du contenu du bot dans <b>{ botName }</b>"
   },
   "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
-    "message": "Une erreur inattendue s\"est produite lors du tirage du profil de publication <b>{ selectedTargetName }</b>"
+    "message": "Une erreur inattendue s’est produite lors du tirage du profil de publication <b>{ selectedTargetName }</b>"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
-    "message": "Une erreur s\"est produite durant la création de votre base de connaissances"
+    "message": "Une erreur s’est produite durant la création de votre base de connaissances"
   },
   "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
     "message": "This bot cannot be called as a skill since the allowed caller list is empty"
@@ -3804,31 +3804,31 @@
     "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
   },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
-    "message": "Cela configure un dialogue piloté par les données via une collection d\"événements et d\"actions."
+    "message": "Cela configure un dialogue piloté par les données via une collection d’événements et d’actions."
   },
   "this_dialog_has_no_trigger_yet_d1f1d173": {
-    "message": "Ce dialogue n\"a pas encore de déclencheur."
+    "message": "Ce dialogue n’a pas encore de déclencheur."
   },
   "this_is_a_required_field_acb9837e": {
     "message": "Ce champ est obligatoire."
   },
   "this_is_a_severity_diagnostic_58312674": {
-    "message": "Il s\"agit d\"un diagnostic { severity }"
+    "message": "Il s’agit d’un diagnostic { severity }"
   },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
-    "message": "Il s\"agit de la langue de bot que vous êtes en train de créer. Changez la langue active dans la liste déroulante ci-dessous."
+    "message": "Il s’agit de la langue de bot que vous êtes en train de créer. Changez la langue active dans la liste déroulante ci-dessous."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
-    "message": "Il s\"agit de la langue utilisée pour l\"interface utilisateur de Composer."
+    "message": "Il s’agit de la langue utilisée pour l’interface utilisateur de Composer."
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "Cette langue est copiée et utilisée comme base (et langue de secours) pour la traduction."
   },
   "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
-    "message": "Impossible d\"effectuer cette opération. Le bot fait déjà partie du projet de bot"
+    "message": "Impossible d’effectuer cette opération. Le bot fait déjà partie du projet de bot"
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
-    "message": "Impossible d\"effectuer cette opération. La compétence fait déjà partie du projet de bot"
+    "message": "Impossible d’effectuer cette opération. La compétence fait déjà partie du projet de bot"
   },
   "this_operation_will_overwrite_changes_made_to_prev_e746d44f": {
     "message": "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
@@ -3843,7 +3843,7 @@
     "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
-    "message": "Ce type de déclencheur n\"est pas pris en charge par le module de reconnaissance de RegEx. Pour garantir l\"activation de ce déclencheur, changez le type de module de reconnaissance."
+    "message": "Ce type de déclencheur n’est pas pris en charge par le module de reconnaissance de RegEx. Pour garantir l’activation de ce déclencheur, changez le type de module de reconnaissance."
   },
   "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
     "message": "Cette version du contenu est obsolète et votre dernier changement a été rejeté. Le contenu est automatiquement actualisé."
@@ -3918,7 +3918,7 @@
     "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
   },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
-    "message": "Pour comprendre ce que dit l\"utilisateur, votre dialogue a besoin d\"un « module de reconnaissance » qui comprend des exemples de mots et de phrases utilisables par les utilisateurs."
+    "message": "Pour comprendre ce que dit l’utilisateur, votre dialogue a besoin d’un « module de reconnaissance » qui comprend des exemples de mots et de phrases utilisables par les utilisateurs."
   },
   "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
     "message": "Pour comprendre ce que l’utilisateur dit, votre dialogue a besoin d’un « IRecognizer » qui contient des exemples de mots et de phrases que les utilisateurs peuvent utiliser."
@@ -3927,13 +3927,13 @@
     "message": "Dans quelle langue voulez-vous traduire votre bot ?"
   },
   "toggle_extension_e41de2d2": {
-    "message": "Activer/désactiver l\"extension"
+    "message": "Activer/désactiver l’extension"
   },
   "toggle_show_all_61f19d77": {
-    "message": "Activer/désactiver l\"affichage complet"
+    "message": "Activer/désactiver l’affichage complet"
   },
   "toolbar_bafd4228": {
-    "message": "barre d\"outils"
+    "message": "barre d’outils"
   },
   "topic_e820dbbd": {
     "message": "(Topic)"
@@ -4023,7 +4023,7 @@
     "message": "Annuler"
   },
   "undo_is_not_supported_ecd6f9fc": {
-    "message": "L\"annulation n\"est pas prise en charge"
+    "message": "L’annulation n’est pas prise en charge"
   },
   "uninstall_8730233": {
     "message": "Désinstaller"
@@ -4059,7 +4059,7 @@
     "message": "Mettre à jour une activité déjà envoyée pendant la conversation"
   },
   "update_activity_2b05e6c6": {
-    "message": "Mettre à jour l\"activité"
+    "message": "Mettre à jour l’activité"
   },
   "update_and_restart_b236a67": {
     "message": "Update and restart"
@@ -4116,7 +4116,7 @@
     "message": "Utiliser une région LUIS personnalisée"
   },
   "use_custom_qna_maker_subscription_key_126e79df": {
-    "message": "Utiliser une clé d\"abonnement QnA Maker personnalisée"
+    "message": "Utiliser une clé d’abonnement QnA Maker personnalisée"
   },
   "use_custom_runtime_d7d323fd": {
     "message": "Utiliser le runtime personnalisé"
@@ -4146,7 +4146,7 @@
     "message": "User input and bot responses"
   },
   "user_is_typing_790cb502": {
-    "message": "L\"utilisateur est en train de taper"
+    "message": "L’utilisateur est en train de taper"
   },
   "user_is_typing_typing_activity_cd938615": {
     "message": "L’utilisateur tape du texte (activité Typing)"
@@ -4212,7 +4212,7 @@
     "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
-    "message": "Nous devons définir les points de terminaison de la compétence pour permettre aux autres bots d\"interagir avec elle."
+    "message": "Nous devons définir les points de terminaison de la compétence pour permettre aux autres bots d’interagir avec elle."
   },
   "web_chat_c5ca7ab6": {
     "message": "Web Chat"
@@ -4236,10 +4236,10 @@
     "message": "West US"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
-    "message": "Que peut accomplir l\"utilisateur avec cette conversation ? Par exemple, BookATable, OrderACoffee, etc."
+    "message": "Que peut accomplir l’utilisateur avec cette conversation ? Par exemple, BookATable, OrderACoffee, etc."
   },
   "what_is_the_name_of_the_custom_event_b28a7b3": {
-    "message": "Quel est le nom de l\"événement personnalisé ?"
+    "message": "Quel est le nom de l’événement personnalisé ?"
   },
   "what_is_the_name_of_this_trigger_1d6db01": {
     "message": "What is the name of this trigger?"
@@ -4266,10 +4266,10 @@
     "message": "What you need to know to get started"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
-    "message": "Ce que votre bot dit à l\"utilisateur. Il s\"agit d\"un modèle utilisé pour créer le message sortant. Il peut comprendre des règles de génération de langage, des propriétés de la mémoire et d\"autres fonctionnalités.\n\nPar exemple, pour définir des variations qui sont choisies au hasard, écrivez :\n- bonjour\n- salut"
+    "message": "Ce que votre bot dit à l’utilisateur. Il s’agit d’un modèle utilisé pour créer le message sortant. Il peut comprendre des règles de génération de langage, des propriétés de la mémoire et d’autres fonctionnalités.\n\nPar exemple, pour définir des variations qui sont choisies au hasard, écrivez :\n- bonjour\n- salut"
   },
   "what_your_bot_says_to_the_user_visit_a_target_blan_7735479": {
-    "message": "Ce que votre bot dit à l\"utilisateur. Consultez <a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\"> la documentation</a> pour des informations de référence sur les fonctionnalités."
+    "message": "Ce que votre bot dit à l’utilisateur. Consultez <a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\"> la documentation</a> pour des informations de référence sur les fonctionnalités."
   },
   "when_deleting_a_language_only_the_content_will_be__8f7f8dee": {
     "message": "Quand vous supprimez une langue, seul le contenu est supprimé. Le flux et la logique de la conversation et du dialogue restent opérationnels."
@@ -4281,7 +4281,7 @@
     "message": "Quand plusieurs personnes utilisent des modèles, vous voulez pouvoir les utiliser indépendamment les uns des autres liés au contrôle de code source."
   },
   "which_activity_type_18333457": {
-    "message": "Quel type d\"activité ?"
+    "message": "Quel type d’activité ?"
   },
   "which_bot_do_you_want_to_open_974bb1e5": {
     "message": "Quel bot voulez-vous ouvrir ?"
@@ -4329,16 +4329,16 @@
     "message": "Vous êtes sur le point de supprimer la compétence de ce projet. La suppression de cette compétence ne supprime pas les fichiers."
   },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
-    "message": "Vous pouvez créer un bot à partir de zéro avec Composer ou commencer à partir d\"un modèle."
+    "message": "Vous pouvez créer un bot à partir de zéro avec Composer ou commencer à partir d’un modèle."
   },
   "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
     "message": "Vous pouvez uniquement vous connecter à une compétence dans le bot racine."
   },
   "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
-    "message": "Vous pouvez à tout moment activer ou désactiver la collecte de données dans les paramètres de l\"application."
+    "message": "Vous pouvez à tout moment activer ou désactiver la collecte de données dans les paramètres de l’application."
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
-    "message": "Vous n’\"êtes pas autorisé à enregistrer les bots ici"
+    "message": "Vous n’’êtes pas autorisé à enregistrer les bots ici"
   },
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
     "message": "Vous avez publié { name } sur { publishTarget }"
