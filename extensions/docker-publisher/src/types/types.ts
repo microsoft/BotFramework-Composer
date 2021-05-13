@@ -1,5 +1,8 @@
 import { IChoiceGroupOption } from 'office-ui-fabric-react';
 
+export type OnChangeDelegate = (event, value) => void;
+export type OnChoiceDelegate = (value) => void;
+
 export type RegistryFormData = {
   creationType: string;
   url: string;
