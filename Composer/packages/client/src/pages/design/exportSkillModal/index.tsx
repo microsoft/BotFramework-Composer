@@ -322,7 +322,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
                 const Button = primary ? PrimaryButton : DefaultButton;
 
-                const isDisabled = typeof disabled === 'function' ? disabled({ publishTargets }) : !!disabled;
+                const isDisabled =
+                  typeof disabled === 'function' ? disabled({ publishTarget: currentPublishTarget }) : !!disabled;
 
                 return (
                   <Button

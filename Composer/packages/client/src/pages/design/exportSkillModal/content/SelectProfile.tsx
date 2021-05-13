@@ -5,12 +5,15 @@
 import { css, jsx } from '@emotion/core';
 import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 import formatMessage from 'format-message';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
@@ -22,6 +25,16 @@ const styles = {
     height: 350px;
     overflow: auto;
   `,
+};
+
+const actionButton = {
+  root: {
+    fontSize: 14,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    marginLeft: 5,
+  },
 };
 
 const onRenderLabel = (props) => {
@@ -55,6 +68,25 @@ const onRenderLabel = (props) => {
   );
 };
 
+const onRenderInvalidProfileWarning = (hasValidProfile, handleShowCreateProfileDialog) => {
+  return (
+    <div>
+      <span>{formatMessage('Publish profile is missing App ID and host name. ')}</span>
+      {hasValidProfile ? (
+        <span>{formatMessage('Choose a valid publish profile to continue')}</span>
+      ) : (
+        <ActionButton
+          data-testid={'addNewPublishProfile'}
+          styles={actionButton}
+          onClick={handleShowCreateProfileDialog}
+        >
+          {formatMessage('Create a valid publish profile to continue')}
+        </ActionButton>
+      )}
+    </div>
+  );
+};
+
 export const getManifestId = (
   botName: string,
   skillManifests: SkillManifestFile[],
@@ -76,6 +108,24 @@ export const getManifestId = (
   return fileId;
 };
 
+const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element | null => {
+  const option = options?.[0];
+
+  return option ? (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <span>{option.text}</span>
+      {option.data && option.data.icon && (
+        <Icon
+          aria-hidden="true"
+          iconName={option.data.icon}
+          style={{ color: option.data.color, marginLeft: '8px', fontSize: '16px' }}
+          title={option.data.icon}
+        />
+      )}
+    </div>
+  ) : null;
+};
+
 export const SelectProfile: React.FC<ContentProps> = ({
   manifest,
   setSkillManifest,
@@ -93,6 +143,9 @@ export const SelectProfile: React.FC<ContentProps> = ({
   const { id, content } = manifest;
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
+
+  const [showCreateProfileDialog, setShowCreateProfileDialog] = useState(true);
+  const [selectedKey, setSelectedKey] = useState('');
 
   const handleCurrentProfileChange = useMemo(
     () => (_e, option?: IDropdownOption) => {
@@ -127,43 +180,61 @@ export const SelectProfile: React.FC<ContentProps> = ({
           },
           id: id,
         });
+        setSelectedKey(currentTarget.name);
       }
     } catch (err) {
       console.log(err.message);
     }
   }, [currentTarget]);
-  const isProfileValid = useMemo(() => {
+
+  const isValidProfile = (publishTarget) => {
     try {
-      if (!publishingTargets) {
-        return false;
-      }
-      const filteredProfile = publishingTargets.filter((item) => {
-        const config = JSON.parse(item.configuration);
-        return (
-          config.settings &&
-          config.settings.MicrosoftAppId &&
-          config.hostname &&
-          config.settings.MicrosoftAppId.length > 0 &&
-          config.hostname.length > 0
-        );
-      });
-      return filteredProfile.length > 0;
+      const config = JSON.parse(publishTarget.configuration);
+
+      return (
+        config.settings &&
+        config.settings.MicrosoftAppId &&
+        config.hostname &&
+        config.settings.MicrosoftAppId.length > 0 &&
+        config.hostname.length > 0
+      );
     } catch (err) {
       console.log(err.message);
       return false;
     }
+  };
+
+  const hasValidProfile = useMemo(() => {
+    if (!publishingTargets) return false;
+    const filteredProfile = publishingTargets.filter((item) => {
+      return isValidProfile(item);
+    });
+    return filteredProfile.length > 0;
   }, [publishingTargets]);
 
   const publishingOptions = useMemo(() => {
-    return publishingTargets.map((t) => ({
-      key: t.name,
-      text: t.name,
-    }));
+    return publishingTargets.map((t) =>
+      isValidProfile(t)
+        ? {
+            key: t.name,
+            text: t.name,
+          }
+        : {
+            key: t.name,
+            text: t.name,
+            data: { icon: 'TriangleSolid', color: NeutralColors.gray60 },
+          }
+    );
   }, [publishingTargets]);
 
   useEffect(() => {
     setPublishingTargets(settings.publishTargets || []);
     setCurrentTarget((settings.publishTargets || [])[0]);
+    if (!settings.publishTargets || settings.publishTargets.length === 0) {
+      setShowCreateProfileDialog(true);
+    } else {
+      setShowCreateProfileDialog(false);
+    }
   }, [settings]);
 
   useEffect(() => {
@@ -173,7 +244,11 @@ export const SelectProfile: React.FC<ContentProps> = ({
     }
   }, [id]);
 
-  return isProfileValid ? (
+  const handleShowCreateProfileDialog = () => {
+    setShowCreateProfileDialog(true);
+  };
+
+  return !showCreateProfileDialog ? (
     <div css={styles.container}>
       <Dropdown
         required
@@ -181,30 +256,37 @@ export const SelectProfile: React.FC<ContentProps> = ({
         label={formatMessage('Publishing Profile')}
         options={publishingOptions}
         placeholder={formatMessage('Select one')}
-        selectedKey={publishingOptions[0].key}
+        selectedKey={selectedKey}
         styles={{ root: { paddingBottom: '8px' } }}
         onChange={handleCurrentProfileChange}
+        onRenderTitle={onRenderTitle}
       />
-      <TextField
-        disabled
-        required
-        ariaLabel={formatMessage('The endpoint url')}
-        label={formatMessage('Endpoint Url')}
-        placeholder={formatMessage('The endpoint url of your web app resource')}
-        styles={{ root: { paddingBottom: '8px' } }}
-        value={endpointUrl}
-        onRenderLabel={onRenderLabel}
-      />
-      <TextField
-        disabled
-        required
-        ariaLabel={formatMessage('The app id of your application registration')}
-        label={formatMessage('Microsoft App Id')}
-        placeholder={formatMessage('The app id')}
-        styles={{ root: { paddingBottom: '8px' } }}
-        value={appId}
-        onRenderLabel={onRenderLabel}
-      />
+      {!isValidProfile(currentTarget) ? (
+        onRenderInvalidProfileWarning(hasValidProfile, handleShowCreateProfileDialog)
+      ) : (
+        <Fragment>
+          <TextField
+            disabled
+            required
+            ariaLabel={formatMessage('The endpoint url')}
+            label={formatMessage('Endpoint Url')}
+            placeholder={formatMessage('The endpoint url of your web app resource')}
+            styles={{ root: { paddingBottom: '8px' } }}
+            value={endpointUrl}
+            onRenderLabel={onRenderLabel}
+          />
+          <TextField
+            disabled
+            required
+            ariaLabel={formatMessage('The app id of your application registration')}
+            label={formatMessage('Microsoft App Id')}
+            placeholder={formatMessage('The app id')}
+            styles={{ root: { paddingBottom: '8px' } }}
+            value={appId}
+            onRenderLabel={onRenderLabel}
+          />
+        </Fragment>
+      )}
     </div>
   ) : (
     <div>
