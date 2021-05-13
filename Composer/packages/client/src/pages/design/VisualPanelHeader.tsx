@@ -17,6 +17,7 @@ import { getDialogData } from '../../utils/dialogUtil';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { getFocusPath } from '../../utils/navigation';
 import { TreeLink } from '../../components/ProjectTree/types';
+import { useResizeObserver } from '../../hooks/useResizeObserver';
 
 import * as pageStyles from './styles';
 
@@ -159,23 +160,17 @@ const defaultToggleButtonWidth = 100;
 const spaceBetweenContainers = 6;
 const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) => {
   const { showCode, projectId, onShowCodeClick, pluginConfig } = props;
+
   const breadcrumbs = useBreadcrumbs(projectId, pluginConfig);
+
   const toggleButtonContainerRef = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
+
   const [toggleButtonWidth, setToggleButtonWidth] = React.useState(defaultToggleButtonWidth);
   const [breadcrumbContainerWidth, setBreadcrumbContainerWidth] = React.useState<number | string>(
     `calc(100% - ${toggleButtonWidth}px)`
   );
-  // Resize observer callback to update the width of the breadcrumb container
-  const resizeObserverRef = React.useRef(
-    // @ts-ignore
-    new ResizeObserver((entries) => {
-      if (entries.length) {
-        const { width } = entries[0].contentRect;
-        setBreadcrumbContainerWidth(width - toggleButtonWidth - spaceBetweenContainers);
-      }
-    })
-  );
+
   // Set the width of the toggle button based on its text (locale)
   React.useEffect(() => {
     if (toggleButtonContainerRef.current) {
@@ -186,13 +181,15 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
       }
     }
   }, []);
+
   // Observe width changes of the container to re-set the available width for breadcrumb container
-  React.useEffect(() => {
-    if (containerRef.current) {
-      resizeObserverRef.current.observe(containerRef.current);
+  useResizeObserver<HTMLDivElement>(containerRef.current, (entries) => {
+    if (entries.length) {
+      const { width } = entries[0].contentRect;
+      setBreadcrumbContainerWidth(width - toggleButtonWidth - spaceBetweenContainers);
     }
-    return () => resizeObserverRef.current.disconnect();
-  }, []);
+  });
+
   const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
     return {
       key: breadcrumb.key,
