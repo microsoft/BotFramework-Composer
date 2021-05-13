@@ -155,11 +155,43 @@ const useBreadcrumbs = (projectId: string, pluginConfig?: PluginConfig) => {
   }, [currentDialog?.content, initialBreadcrumbArray]);
   return breadcrumbArray;
 };
-
+const defaultToggleButtonWidth = 100;
+const spaceBetweenContainers = 6;
 const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) => {
   const { showCode, projectId, onShowCodeClick, pluginConfig } = props;
   const breadcrumbs = useBreadcrumbs(projectId, pluginConfig);
-
+  const toggleButtonContainerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [toggleButtonWidth, setToggleButtonWidth] = React.useState(defaultToggleButtonWidth);
+  const [breadcrumbContainerWidth, setBreadcrumbContainerWidth] = React.useState<number | string>(
+    `calc(100% - ${toggleButtonWidth}px)`
+  );
+  // Resize observer callback to update the width of the breadcrumb container
+  const resizeObserverRef = React.useRef(
+    new ResizeObserver((entries) => {
+      if (entries.length) {
+        const { width } = entries[0].contentRect;
+        setBreadcrumbContainerWidth(width - toggleButtonWidth - spaceBetweenContainers);
+      }
+    })
+  );
+  // Set the width of the toggle button based on its text (locale)
+  React.useEffect(() => {
+    if (toggleButtonContainerRef.current) {
+      const toggleButton = toggleButtonContainerRef.current.querySelector<HTMLButtonElement>('button');
+      if (toggleButton) {
+        const { width } = toggleButton?.getBoundingClientRect();
+        setToggleButtonWidth(width);
+      }
+    }
+  }, []);
+  // Observe width changes of the container to re-set the available width for breadcrumb container
+  React.useEffect(() => {
+    if (containerRef.current) {
+      resizeObserverRef.current.observe(containerRef.current);
+    }
+    return () => resizeObserverRef.current.disconnect();
+  }, []);
   const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
     return {
       key: breadcrumb.key,
@@ -171,16 +203,16 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
   const items = breadcrumbs.map(createBreadcrumbItem);
 
   return (
-    <div css={pageStyles.visualPanelHeaderContainer}>
-      <Breadcrumb
-        ariaLabel={formatMessage('Navigation Path')}
-        data-testid="Breadcrumb"
-        items={items}
-        maxDisplayedItems={3}
-        styles={pageStyles.breadcrumbClass}
-        onReduceData={() => undefined}
-      />
-      <div css={pageStyles.visualPanelHeaderShowCodeButton}>
+    <div ref={containerRef} css={pageStyles.visualPanelHeaderContainer}>
+      <div style={{ width: breadcrumbContainerWidth }}>
+        <Breadcrumb
+          ariaLabel={formatMessage('Navigation Path')}
+          data-testid="Breadcrumb"
+          items={items}
+          styles={pageStyles.breadcrumbClass}
+        />
+      </div>
+      <div ref={toggleButtonContainerRef} css={pageStyles.visualPanelHeaderShowCodeButton}>
         <ActionButton onClick={onShowCodeClick}>
           {showCode ? formatMessage('Hide code') : formatMessage('Show code')}
         </ActionButton>

@@ -105,13 +105,13 @@ export const formEditor = css`
 
 export const visualPanelHeaderContainer = css`
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   height: 65px;
 `;
 
 export const visualPanelHeaderShowCodeButton = css`
-  align-items: center;
-  display: flex;
+  padding: 10px;
+  width: fit-content;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
