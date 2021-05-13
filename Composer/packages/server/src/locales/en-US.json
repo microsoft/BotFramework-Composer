@@ -515,6 +515,9 @@
   "been_used_5daccdb2": {
     "message": "Been used"
   },
+  "before_we_begin_7ae9c242": {
+    "message": "Before we begin"
+  },
   "begin_a_new_dialog_60249bd8": {
     "message": "Begin a new dialog"
   },
@@ -955,6 +958,9 @@
   },
   "create_a_publishing_profile_a79c6808": {
     "message": "Create a publishing profile"
+  },
+  "create_a_publishing_profile_for_botname_b82f4386": {
+    "message": "Create a publishing profile for { botName }"
   },
   "create_a_skill_in_your_bot_d7659e6b": {
     "message": "Create a skill in your bot"
@@ -1409,6 +1415,9 @@
   "endpoints_ff946539": {
     "message": "Endpoints"
   },
+  "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
+    "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
+  },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
   },
@@ -1679,6 +1688,9 @@
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
+  "for_security_purposes_your_bot_can_only_call_a_ski_4b0c81e0": {
+    "message": "For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list."
+  },
   "form_b674666c": {
     "message": "form"
   },
@@ -1747,6 +1759,9 @@
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
+  },
+  "get_a_skill_manifest_url_from_the_skill_s_author_7771e8b4": {
+    "message": "Get a skill manifest URL from the skill’s author"
   },
   "get_activity_members_11339605": {
     "message": "Get activity members"
@@ -2735,6 +2750,9 @@
   "please_select_a_trigger_type_67417abb": {
     "message": "Please select a trigger type"
   },
+  "please_setup_the_following_to_ensure_we_can_connec_2c5a2acb": {
+    "message": "Please setup the following to ensure we can connect to your remote skill successfully"
+  },
   "pop_out_editor_5528a187": {
     "message": "Pop out editor"
   },
@@ -2863,6 +2881,9 @@
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
+  },
+  "publish_profile_a4e8f07b": {
+    "message": "Publish profile"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
@@ -3269,6 +3290,9 @@
   "select_an_event_type_3d7108f1": {
     "message": "Select an event type"
   },
+  "select_an_option_9f5dfb55": {
+    "message": "Select an option"
+  },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Select an schema to edit or create a new one"
   },
@@ -3323,6 +3347,9 @@
   "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
     "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
   },
+  "select_your_microsoft_app_id_and_password_74918f5d": {
+    "message": "Select your Microsoft App ID and Password"
+  },
   "selection_field_86d1dc94": {
     "message": "selection field"
   },
@@ -3373,6 +3400,9 @@
   },
   "set_up_service_b6d23e54": {
     "message": "Set up { service }"
+  },
+  "set_your_microsoft_app_id_and_password_46b5628c": {
+    "message": "Set your Microsoft App ID and Password"
   },
   "setting_things_up_8022afe8": {
     "message": "Setting things up..."
@@ -3826,6 +3856,9 @@
   },
   "title_ee03d132": {
     "message": "Title"
+  },
+  "to_connect_to_a_skill_you_will_need_a_skill_s_mani_3d163597": {
+    "message": "To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step."
   },
   "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
     "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
@@ -4307,6 +4340,9 @@
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
   },
+  "your_bot_s_microsoft_app_id_5f12844c": {
+    "message": "Your bot’s Microsoft App ID"
+  },
   "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
     "message": "Your dialog for \"{ schemaId }\" was generated successfully."
   },
@@ -4321,6 +4357,12 @@
   },
   "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
     "message": "Your QnA Maker is ready! It took { time } minutes to complete."
+  },
+  "your_root_bot_must_have_an_associated_microsoft_ap_91671242": {
+    "message": "Your root bot must have an associated Microsoft App ID and Password."
+  },
+  "your_root_bot_must_have_an_azure_publishing_profil_89055cfd": {
+    "message": "Your root bot must have an Azure publishing profile."
   },
   "your_skill_could_not_be_published_5bee6e6a": {
     "message": "Your skill could not be published."
