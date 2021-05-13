@@ -2,7 +2,7 @@ import * as React from 'react';
 import formatMessage from 'format-message';
 import { useState, useEffect, useMemo } from 'react';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
-import { PageTypes } from '../../types/types';
+import { PageTypes } from '../../types';
 
 type Props = {
   page: string;

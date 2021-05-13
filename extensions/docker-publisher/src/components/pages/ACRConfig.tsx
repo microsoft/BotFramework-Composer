@@ -17,7 +17,7 @@ import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models'
 import { getSubscriptions, getResourceGroups, getResources } from '../../backend/azureApi';
 
 import { renderPropertyInfoIcon } from './utils';
-import { OnChangeDelegate } from '../../types/types';
+import { OnChangeDelegate } from '../../types';
 import { AzureDropDownData } from '../../types/azureTypes';
 
 type Props = {

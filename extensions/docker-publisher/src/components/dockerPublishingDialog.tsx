@@ -3,16 +3,12 @@ import { useState, useMemo, Fragment, useCallback, useEffect } from 'react';
 
 import { usePublishApi } from '@bfc/extension-client';
 
-import { PageRegistryType, DockerHubConfig, RegistryConfig, ACRConfig, Review, Footer } from './pages';
+import { PageRegistryType, DockerHubConfig, RegistryConfig, ImageConfig, ACRConfig, Review, Footer } from './pages';
 
-import { AzureDropDownData } from '../types/azureTypes';
-import { RegistryFormData, PageTypes } from '../types/types';
+import { RegistryFormData, PageTypes } from '../types';
 import { IRepository } from '../types/interfaces';
 
-import { ACRAPI } from '../backend/ACRAPI';
-import { DockerEngine } from '../backend/DockerEngine';
-import { DockerHubAPI } from '../backend/DockerHubAPI';
-import { ImageConfig } from './pages/ImageConfig';
+import { ACRAPI, DockerEngine, DockerHubAPI } from '../backend';
 
 export const DockerPublishingDialog: React.FC = () => {
   const {

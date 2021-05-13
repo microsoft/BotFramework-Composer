@@ -10,7 +10,7 @@ import {
   configureResourceTextFieldStyles,
 } from './styles';
 import { renderPropertyInfoIcon } from './utils';
-import { OnChangeDelegate, RegistryFormData, RegistryTypeOptions } from '../../types/types';
+import { OnChangeDelegate, RegistryFormData, RegistryTypeOptions } from '../../types';
 
 export const Review = ({
   creationType: controlledCreationType,

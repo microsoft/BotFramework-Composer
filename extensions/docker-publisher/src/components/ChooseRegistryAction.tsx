@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Stack, Text, Link } from 'office-ui-fabric-react';
-import { RegistryTypeOptions } from '../types/types';
+import { RegistryTypeOptions } from '../types';
 
 // ---------- Styles ---------- //
 

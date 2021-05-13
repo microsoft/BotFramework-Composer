@@ -1,4 +1,4 @@
-import { RepositoryAPIProps } from './types';
+import { RepositoryAPIProps } from '.';
 
 export interface DockerAPIError {
   Error: string;

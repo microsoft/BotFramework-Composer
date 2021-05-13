@@ -11,7 +11,7 @@ import {
   ConfigureResourcesPropertyLabel,
   configureResourceTextFieldStyles,
 } from './styles';
-import { OnChangeDelegate, OnChoiceDelegate } from '../../types/types';
+import { OnChangeDelegate, OnChoiceDelegate } from '../../types';
 import { IRepository } from '../../types/interfaces';
 
 import { TagPicker } from '../TagPicker';

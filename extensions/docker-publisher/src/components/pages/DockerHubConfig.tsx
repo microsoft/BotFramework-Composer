@@ -10,7 +10,7 @@ import {
   configureResourceTextFieldStyles,
 } from './styles';
 import { renderPropertyInfoIcon } from './utils';
-import { OnChangeDelegate } from '../../types/types';
+import { OnChangeDelegate } from '../../types';
 
 type Props = {
   username: string;

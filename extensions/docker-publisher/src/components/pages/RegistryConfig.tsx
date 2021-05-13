@@ -11,7 +11,7 @@ import {
   ConfigureResourcesPropertyLabel,
   configureResourceTextFieldStyles,
 } from './styles';
-import { OnChangeDelegate } from '../../types/types';
+import { OnChangeDelegate } from '../../types';
 
 type Props = {
   registryUrl: string;
