@@ -10,7 +10,7 @@ import {
   configureResourceTextFieldStyles,
 } from './styles';
 import { renderPropertyInfoIcon } from './utils';
-import { OnChangeDelegate, RegistryFormData, RegistryTypeOptions } from '../../types';
+import { OnChangeDelegate, RegistryConfigData, RegistryTypeOptions } from '../../types';
 
 export const Review = ({
   creationType: controlledCreationType,
@@ -19,7 +19,7 @@ export const Review = ({
   password: controlledPassword,
   image: controlledImageName,
   tag: controlledImageTag,
-}: RegistryFormData) => {
+}: RegistryConfigData) => {
   const [creationType, setCreationType] = useState<string>(controlledCreationType);
   const [registryUrl, setRegistryUrl] = useState(controlledRegistryUrl);
   const [username, setUsername] = useState(controlledUsername);

@@ -5,13 +5,14 @@ import { usePublishApi } from '@bfc/extension-client';
 
 import { PageRegistryType, DockerHubConfig, RegistryConfig, ImageConfig, ACRConfig, Review, Footer } from './pages';
 
-import { RegistryFormData, PageTypes } from '../types';
+import { RegistryConfigData, PageTypes, DefaultExtensionStates } from '../types';
 import { IRepository } from '../types/interfaces';
 
 import { ACRAPI, DockerEngine, DockerHubAPI } from '../backend';
 
 export const DockerPublishingDialog: React.FC = () => {
   const {
+    publishConfig,
     closeDialog,
     onBack,
     savePublishConfig,
@@ -20,15 +21,14 @@ export const DockerPublishingDialog: React.FC = () => {
     userShouldProvideTokens,
   } = usePublishApi();
 
-  const getDefaultFormData = () => {
+  const getDefaultFormData = (current, defaults: RegistryConfigData) => {
     return {
-      creationType: 'local',
-      url: '',
-      anonymous: true,
-      username: '',
-      password: '',
-      image: '',
-      tag: '',
+      creationType: current.creationType ?? defaults.creationType,
+      url: current?.url ?? defaults.url,
+      username: current?.username ?? defaults.username,
+      password: current?.password ?? defaults.password,
+      image: current?.image ?? defaults.image,
+      tag: current?.tag ?? defaults.tag,
     };
   };
 
@@ -38,23 +38,25 @@ export const DockerPublishingDialog: React.FC = () => {
 
   const [token, setToken] = useState<string | null>(null);
   const [page, setPage] = useState<string>(PageTypes.RegistryType);
-  const [formData, setFormData] = useState<RegistryFormData>(getDefaultFormData());
+  const [currentConfig, setCurrentConfig] = useState<RegistryConfigData>(
+    getDefaultFormData(publishConfig, DefaultExtensionStates)
+  );
 
   const isNextRegistryConfigDisabled = useMemo(() => {
-    return Boolean(!formData.url || !formData.username || !formData.password);
-  }, [formData.url, formData.username, formData.password]);
+    return Boolean(!currentConfig.url || !currentConfig.username || !currentConfig.password);
+  }, [currentConfig.url, currentConfig.username, currentConfig.password]);
 
   const isNextDockerHubConfigDisabled = useMemo(() => {
-    return Boolean(!formData.username || !formData.password);
-  }, [formData.username, formData.password]);
+    return Boolean(!currentConfig.username || !currentConfig.password);
+  }, [currentConfig.username, currentConfig.password]);
 
   const isNextImageConfigDisabled = useMemo(() => {
-    return Boolean(!formData.image || !formData.tag);
-  }, [formData.image, formData.tag]);
+    return Boolean(!currentConfig.image || !currentConfig.tag);
+  }, [currentConfig.image, currentConfig.tag]);
 
   const isNextRegistryTypeDisabled = useMemo(() => {
-    return Boolean(!formData.creationType || !environmentCheck);
-  }, [formData.creationType, environmentCheck]);
+    return Boolean(!currentConfig.creationType || !environmentCheck);
+  }, [currentConfig.creationType, environmentCheck]);
 
   useEffect(() => {
     // TODO: need to get the tenant id from the auth config when running as web app,
@@ -65,15 +67,19 @@ export const DockerPublishingDialog: React.FC = () => {
     }
   }, []);
 
-  function updateFormData<K extends keyof RegistryFormData>(field: K, value: RegistryFormData[K]) {
-    setFormData((current) => ({ ...current, [field]: value }));
+  function updateFormData<K extends keyof RegistryConfigData>(field: K, value: RegistryConfigData[K]) {
+    setCurrentConfig((current) => ({ ...current, [field]: value }));
   }
 
   useEffect(() => {
     if (repositoryApi) {
-      repositoryApi.UpdateProps({ url: formData.url, username: formData.username, password: formData.password });
+      repositoryApi.UpdateProps({
+        url: currentConfig.url,
+        username: currentConfig.username,
+        password: currentConfig.password,
+      });
     }
-  }, [formData.url, formData.username, formData.password]);
+  }, [currentConfig.url, currentConfig.username, currentConfig.password]);
 
   useEffect(() => {
     // Test Environment
@@ -83,37 +89,30 @@ export const DockerPublishingDialog: React.FC = () => {
   }, [repositoryApi]);
 
   useEffect(() => {
-    switch (formData.creationType) {
+    switch (currentConfig.creationType) {
       case 'local':
         setRepositoryApi(new DockerEngine());
         break;
       case 'acr':
-        setRepositoryApi(new ACRAPI({ url: formData.url, username: formData.username, password: formData.password }));
+        setRepositoryApi(
+          new ACRAPI({ url: currentConfig.url, username: currentConfig.username, password: currentConfig.password })
+        );
         break;
 
       case 'dockerhub':
-        setRepositoryApi(new DockerHubAPI({ username: formData.username, password: formData.password }));
+        setRepositoryApi(new DockerHubAPI({ username: currentConfig.username, password: currentConfig.password }));
         break;
 
       default:
         setRepositoryApi(undefined);
         break;
     }
-
-    // Clear all
-    for (let key in formData) {
-      if (key === 'creationType') {
-        continue;
-      }
-
-      updateFormData(key as keyof RegistryFormData, '');
-    }
-  }, [formData.creationType]);
+  }, [currentConfig.creationType]);
 
   const onSave = useCallback(() => {
-    savePublishConfig(formData);
+    savePublishConfig(currentConfig);
     closeDialog();
-  }, [formData]);
+  }, [currentConfig]);
 
   return (
     <Fragment>
@@ -128,7 +127,7 @@ export const DockerPublishingDialog: React.FC = () => {
         <div style={{ flex: 1, minHeight: '230px' }}>
           {page === PageTypes.RegistryType && (
             <PageRegistryType
-              creationType={formData.creationType}
+              creationType={currentConfig.creationType}
               onChoiceChanged={(choice) => {
                 updateFormData('creationType', choice);
               }}
@@ -136,11 +135,11 @@ export const DockerPublishingDialog: React.FC = () => {
           )}
           {page === PageTypes.ACRConfig && (
             <ACRConfig
-              creationType={formData.creationType}
+              creationType={currentConfig.creationType}
               token={token}
-              registryUrl={formData.url}
-              username={formData.username}
-              password={formData.password}
+              registryUrl={currentConfig.url}
+              username={currentConfig.username}
+              password={currentConfig.password}
               onRegistryUrlChanged={(e, v) => updateFormData('url', v)}
               onUsernameChanged={(e, v) => updateFormData('username', v)}
               onPasswordChanged={(e, v) => updateFormData('password', v)}
@@ -148,17 +147,17 @@ export const DockerPublishingDialog: React.FC = () => {
           )}
           {page === PageTypes.DockerHubConfig && (
             <DockerHubConfig
-              username={formData.username}
-              password={formData.password}
+              username={currentConfig.username}
+              password={currentConfig.password}
               usernameChanged={(e, v) => updateFormData('username', v)}
               passwordChanged={(e, v) => updateFormData('password', v)}
             />
           )}
           {page === PageTypes.RegistryConfig && (
             <RegistryConfig
-              registryUrl={formData.url}
-              username={formData.username}
-              password={formData.password}
+              registryUrl={currentConfig.url}
+              username={currentConfig.username}
+              password={currentConfig.password}
               onRegistryUrlChanged={(e, v) => updateFormData('url', v)}
               onUsernameChanged={(e, v) => updateFormData('username', v)}
               onPasswordChanged={(e, v) => updateFormData('password', v)}
@@ -166,9 +165,9 @@ export const DockerPublishingDialog: React.FC = () => {
           )}
           {page === PageTypes.Image && (
             <ImageConfig
-              creationType={formData.creationType}
-              imageName={formData.image}
-              imageTag={formData.tag}
+              creationType={currentConfig.creationType}
+              imageName={currentConfig.image}
+              imageTag={currentConfig.tag}
               repository={repositoryApi}
               onImageNameChanged={(e, v) => updateFormData('image', v)}
               onImageTagChanged={(e, v) => updateFormData('tag', v)}
@@ -176,13 +175,12 @@ export const DockerPublishingDialog: React.FC = () => {
           )}
           {page === PageTypes.Review && (
             <Review
-              creationType={formData.creationType}
-              url={formData.url}
-              username={formData.username}
-              password={formData.password}
-              image={formData.image}
-              tag={formData.tag}
-              anonymous={formData.anonymous}
+              creationType={currentConfig.creationType}
+              url={currentConfig.url}
+              username={currentConfig.username}
+              password={currentConfig.password}
+              image={currentConfig.image}
+              tag={currentConfig.tag}
             />
           )}
         </div>
@@ -200,7 +198,7 @@ export const DockerPublishingDialog: React.FC = () => {
         >
           <Footer
             page={page}
-            creationType={formData.creationType}
+            creationType={currentConfig.creationType}
             isNextRegistryTypeDisabled={isNextRegistryTypeDisabled}
             isNextImageConfigDisabled={isNextImageConfigDisabled}
             isNextRegistryConfigDisabled={isNextRegistryConfigDisabled}

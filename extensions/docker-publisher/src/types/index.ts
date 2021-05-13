@@ -3,14 +3,22 @@ import { IChoiceGroupOption } from 'office-ui-fabric-react';
 export type OnChangeDelegate = (event, value) => void;
 export type OnChoiceDelegate = (value) => void;
 
-export type RegistryFormData = {
+export type RegistryConfigData = {
   creationType: string;
   url: string;
-  anonymous: boolean;
   username: string;
   password: string;
   image: string;
   tag: string;
+};
+
+export const DefaultExtensionStates: RegistryConfigData = {
+  creationType: 'local',
+  url: '',
+  username: '',
+  password: '',
+  image: '',
+  tag: '',
 };
 
 export type RepositoryAPIProps = {

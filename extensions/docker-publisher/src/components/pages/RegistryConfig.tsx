@@ -71,14 +71,6 @@ export const RegistryConfig = ({
           <ConfigureResourcesSectionName>{formatMessage('Authentication')}</ConfigureResourcesSectionName>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-              <ConfigureResourcesPropertyLabel required>
-                {formatMessage('Authentication required')}
-              </ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon(formatMessage('Configure whether authentication to Registry is required'))}
-            </Stack>
-          </Stack>
-          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
-            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
               <ConfigureResourcesPropertyLabel>{formatMessage('Username')}</ConfigureResourcesPropertyLabel>
               {renderPropertyInfoIcon(formatMessage('Registry Username'))}
             </Stack>
