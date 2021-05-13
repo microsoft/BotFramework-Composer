@@ -13,6 +13,7 @@ import { wrapWithRecoil } from './testUtils';
 jest.mock('axios', () => ({
   create: jest.fn().mockReturnThis(),
   get: jest.fn(),
+  post: jest.fn(() => new Promise((resolve) => resolve({}))),
   request: jest.fn(),
   interceptors: {
     request: { use: jest.fn() },
@@ -26,10 +27,6 @@ jest.mock('../', () => ({
   interceptors: {
     request: { use: jest.fn() },
   },
-}));
-
-jest.mock('../src/telemetry/useInitializeLogger', () => ({
-  useInitializeLogger: jest.fn(),
 }));
 
 function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
