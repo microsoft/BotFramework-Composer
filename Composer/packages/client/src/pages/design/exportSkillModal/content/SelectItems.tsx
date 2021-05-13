@@ -77,7 +77,7 @@ export const SelectItems: React.FC<SelectItemsProps> = ({ items, selection, tabl
       <Checkbox
         checked={selection.isAllSelected()}
         label={formatMessage('Select all')}
-        styles={{ root: { marginTop: '10px' } }}
+        styles={{ root: { marginTop: '5px' } }}
         onChange={handleToggleSelectAll}
       />
     </React.Fragment>
