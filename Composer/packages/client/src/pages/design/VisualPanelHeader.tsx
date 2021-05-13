@@ -168,6 +168,7 @@ const VisualPanelHeader: React.FC<VisualPanelHeaderProps> = React.memo((props) =
   );
   // Resize observer callback to update the width of the breadcrumb container
   const resizeObserverRef = React.useRef(
+    // @ts-ignore
     new ResizeObserver((entries) => {
       if (entries.length) {
         const { width } = entries[0].contentRect;
