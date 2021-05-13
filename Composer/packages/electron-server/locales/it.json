@@ -3,13 +3,13 @@
     "message": "Informazioni su"
   },
   "actual_zoom_211ec99": {
-    "message": "Zoom effettivo"
+    "message": "Actual Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Porta tutto in primo piano"
   },
   "check_for_updates_12a70061": {
-    "message": "Controlla la disponibilità di aggiornamenti"
+    "message": "Controlla aggiornamenti"
   },
   "close_d634289d": {
     "message": "Chiudi"
@@ -18,7 +18,7 @@
     "message": "Chiudi finestra"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer in GitHub"
+    "message": "Composer on GitHub"
   },
   "copy_9748f9f": {
     "message": "Copia"
@@ -42,19 +42,19 @@
     "message": "File"
   },
   "help_4c4968b1": {
-    "message": "Guida"
+    "message": "?"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Nascondi Bot Framework Composer"
+    "message": "Hide Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "Nascondi altri"
   },
   "initializing_4e34f7d": {
-    "message": "Inizializzazione..."
+    "message": "Inizializzazione in corso..."
   },
-  "learn_more_about_bot_framework_2daca065": {
-    "message": "Altre informazioni su Bot Framework"
+  "learn_more_about_bot_framework_f5fe280b": {
+    "message": "Learn more about Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Riduci a icona"
@@ -66,7 +66,7 @@
     "message": "Informativa sulla privacy"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Esci da Bot Framework Composer"
+    "message": "Quit Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "Ripeti"
@@ -90,13 +90,13 @@
     "message": "Inizia lettura"
   },
   "starting_server_721c37fd": {
-    "message": "Avvio del server..."
+    "message": "Starting server..."
   },
   "stop_speaking_7b4b9834": {
     "message": "Interrompi lettura"
   },
   "toggle_developer_tools_d2ef8ea7": {
-    "message": "Attiva/Disattiva Strumenti di sviluppo"
+    "message": "Attiva/Disattiva strumenti di sviluppo"
   },
   "toggle_full_screen_272a0c5": {
     "message": "Attiva/Disattiva schermo intero"
