@@ -47,7 +47,7 @@ const AttachmentModalityEditor = React.memo(
         onUpdateResponseTemplate({
           Attachments: {
             kind: 'Attachments',
-            value: newItems.map((item) => `\${${item}()}`),
+            value: newItems.map((item) => `\${json(${item}())}`),
             valueType: 'direct',
           },
         });
