@@ -12,7 +12,6 @@ import { ACRAPI, DockerEngine, DockerHubAPI } from '../backend';
 
 export const DockerPublishingDialog: React.FC = () => {
   const {
-    publishConfig,
     closeDialog,
     onBack,
     savePublishConfig,
@@ -20,15 +19,16 @@ export const DockerPublishingDialog: React.FC = () => {
     getTokenFromCache,
     userShouldProvideTokens,
   } = usePublishApi();
+
   const getDefaultFormData = () => {
     return {
       creationType: 'local',
       url: '',
       anonymous: true,
-      username: 'cdonkecr',
-      password: 'xvLku1avRw+a9XwI3cijYwmC85GD+uUk',
+      username: '',
+      password: '',
       image: '',
-      tag: 'latest',
+      tag: '',
     };
   };
 
