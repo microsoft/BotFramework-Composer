@@ -71,9 +71,6 @@
           "title": "Схема",
           "description": "Схема для заполнения.",
           "anyOf": {
-            "0": {
-              "title": "Метасхема основной схемы"
-            },
             "1": {
               "title": "Ссылка на схему JSON",
               "description": "Ссылка на DIALOG-файл схемы JSON."
@@ -907,9 +904,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "Продолжить беседу (очередь)",
+      "description": "Продолжает определенную беседу (с помощью реализации StorageQueue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Свойство инструментария",
+          "description": "Незаконченное свойство для инструментария."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ИД",
+          "description": "Необязательный идентификатор диалога"
+        },
+        "disabled": {
+          "title": "Отключено",
+          "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
+        },
+        "conversationReference": {
+          "title": "Ссылка на беседу",
+          "description": "Ссылка на беседу. (ПРИМЕЧАНИЕ. Минимальные необходимые значения или ИД канала, беседа)."
+        },
+        "value": {
+          "title": "Значение",
+          "description": "Значение для отправки в activity.value."
+        },
+        "$kind": {
+          "title": "Вид объекта диалога",
+          "description": "Определяет допустимые свойства для настраиваемого компонента (из SCHEMA-файла диалога)"
+        },
+        "$designer": {
+          "title": "Сведения конструктора",
+          "description": "Дополнительные сведения для Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "Продолжение беседы позже (очередь)",
-      "description": "Продолжение беседы позже (через Хранилище очередей Azure).",
+      "description": "Продолжение беседы позже (с помощью реализации StorageQueue).",
       "patternProperties": {
         "^\\$": {
           "title": "Свойство инструментария",
@@ -1673,6 +1706,38 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "Получить ConversationReference",
+      "description": "Получает ConversationReference из текущего контекста и сохраняет его в свойстве для дальнейшего использования с действием ContinueConversation.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Свойство инструментария",
+          "description": "Незаконченное свойство для инструментария."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ИД",
+          "description": "Необязательный идентификатор диалога"
+        },
+        "property": {
+          "title": "Свойство",
+          "description": "Свойство (именованное расположение для хранения информации)."
+        },
+        "disabled": {
+          "title": "Отключено",
+          "description": "Необязательное условие, которое при выполнении (true) отключит это действие."
+        },
+        "$kind": {
+          "title": "Вид объекта диалога",
+          "description": "Определяет допустимые свойства для настраиваемого компонента (из SCHEMA-файла диалога)"
+        },
+        "$designer": {
+          "title": "Сведения конструктора",
+          "description": "Дополнительные сведения для Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "Переход к действию",
       "description": "Переход к действию по идентификатору.",
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "Компоненты, представляющие собой ActivityTemplate, который является шаблоном строк, действием или реализацией ActivityTemplate",
-      "oneOf": {
-        "1": {
-          "description": "Действие — это базовый тип обмена данными для протокола Bot Framework 3.0.",
-          "title": "Действие",
-          "properties": {
-            "type": {
-              "description": "Содержит тип действия. Возможные значения включают в себя: \"message\", \"contactRelationUpdate\",\n\"conversationUpdate\", \"typing\", \"endOfConversation\", \"event\", \"invoke\", \"deleteUserData\",\n\"messageUpdate\", \"messageDelete\", \"installationUpdate\", \"messageReaction\", \"suggestion\",\n\"trace\", \"handoff\".",
-              "title": "тип"
-            },
-            "id": {
-              "description": "Содержит идентификатор, однозначно определяющий действие в канале.",
-              "title": "идентификатор"
-            },
-            "timestamp": {
-              "description": "Содержит дату и время (в формате UTC) отправки сообщения, выраженные в формате ISO-8601.",
-              "title": "метка времени"
-            },
-            "localTimestamp": {
-              "description": "Содержит дату и время отправки сообщения (по местному времени) в формате\nISO-8601.\nНапример, 2016-09-23T13:07:49.4714686-07:00.",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "Содержит имя часового пояса, в котором было обработано сообщение по местному времени, выраженное в формате\nбазы данных часовых поясов IANA.\nНапример, America/Los_Angeles.",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "Содержит URL-адрес, указывающий конечную точку службы канала. Устанавливается каналом.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "Содержит идентификатор, однозначно определяющий канал. Устанавливается каналом.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "Идентифицирует отправителя сообщения.",
-              "title": "из"
-            },
-            "conversation": {
-              "description": "Идентифицирует беседу, к которой относится действие.",
-              "title": "беседа",
-              "properties": {
-                "isGroup": {
-                  "description": "Указывает, содержит ли беседа больше двух участников в момент\nсоздания действия",
-                  "title": "isGroup"
-                },
-                "conversationType": {
-                  "description": "Указывает тип беседы в каналах, различающих типы бесед",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "Идентификатор канала для пользователя или бота в этом канале (например: joe@smith.com, @joesmith или\n123456)",
-                  "title": "идентификатор"
-                },
-                "name": {
-                  "description": "Отображение понятного имени",
-                  "title": "имя"
-                },
-                "aadObjectId": {
-                  "description": "Идентификатор объекта этой учетной записи в Azure Active Directory (AAD)",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "Роль сущности за учетной записью (например: пользователь, бот и т. д.). Возможные значения:\n\"user\", \"bot\"",
-                  "title": "роль"
-                }
-              }
-            },
-            "recipient": {
-              "description": "Идентифицирует получателя сообщения.",
-              "title": "получатель"
-            },
-            "textFormat": {
-              "description": "Формат текстовых полей, по умолчанию: markdown. Возможные значения включают в себя: \"markdown\", \"plain\", \"xml\".",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "Указание макета для нескольких вложений. По умолчанию: list. Возможные значения: \"list\",\n\"carousel\"",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "Коллекция членов, добавленных в беседу.",
-              "title": "membersAdded",
-              "items": {
-                "description": "Сведения об учетной записи канала, необходимые для маршрутизации сообщения",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "Идентификатор канала для пользователя или бота в этом канале (например: joe@smith.com, @joesmith или\n123456)",
-                    "title": "идентификатор"
-                  },
-                  "name": {
-                    "description": "Отображение понятного имени",
-                    "title": "имя"
-                  },
-                  "aadObjectId": {
-                    "description": "Идентификатор объекта этой учетной записи в Azure Active Directory (AAD)",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "Роль сущности за учетной записью (например: пользователь, бот и т. д.). Возможные значения:\n\"user\", \"bot\"",
-                    "title": "роль"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "Коллекция членов, удаленных из беседы.",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "Коллекция реакций, добавленных в беседу.",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "Объект реакции на сообщение",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "Тип реакции на сообщение. Возможные значения включают в себя: \"like\", \"plusOne\".",
-                    "title": "тип"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "Коллекция реакций, удаленных из беседы.",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "Обновленное название раздела диалога.",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "Указывает, раскрывается ли предыдущая история канала.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "Имя языкового стандарта для содержимого текстового поля.\nИмя языкового стандарта представляет собой сочетание двух- или трехбуквенного кода языка и региональных параметров по ISO 639, связанного\nс языком,\nи двухбуквенного кода субкультуры по ISO 3166, связанного со страной или регионом.\nИмя языкового стандарта также может соответствовать допустимому тегу языка BCP-47.",
-              "title": "языковой стандарт"
-            },
-            "text": {
-              "description": "Текстовое содержимое сообщения.",
-              "title": "текст"
-            },
-            "speak": {
-              "description": "Текст для проговаривания.",
-              "title": "проговаривание"
-            },
-            "inputHint": {
-              "description": "Указывает, что делает ваш бот — принимает,\nожидает или игнорирует данные, введенные пользователем, после доставки сообщения клиенту. Возможные\nзначения включают в себя: \"acceptingInput\", \"ignoringInput\", \"expectingInput\".",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "Текст, отображаемый, когда канал не может визуализировать карточки.",
-              "title": "сводка"
-            },
-            "suggestedActions": {
-              "description": "Предлагаемые действия для действия.",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "Идентификаторы получателей, которым должны отображаться действия. Эти идентификаторы указываются относительно\nchannelId и подмножества всех получателей действия.",
-                  "title": "в",
-                  "items": {
-                    "title": "ИД",
-                    "description": "Идентификатор получателя."
-                  }
-                },
-                "actions": {
-                  "description": "Действия, которые могут быть показаны пользователю",
-                  "title": "действия",
-                  "items": {
-                    "description": "Действие, доступное для щелчка",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "Тип действия, реализуемого этой кнопкой. Возможные значения включают в себя следующее: \"openUrl\", \"imBack\",\n\"postBack\", \"playAudio\", \"playVideo\", \"showImage\", \"downloadFile\", \"signin\", \"call\",\n\"payment\", \"messageBack\".",
-                        "title": "тип"
-                      },
-                      "title": {
-                        "description": "Текстовое описание, отображаемое на кнопке",
-                        "title": "заголовок"
-                      },
-                      "image": {
-                        "description": "URL-адрес изображения, который появится на кнопке рядом с надписью",
-                        "title": "образ"
-                      },
-                      "text": {
-                        "description": "Текст для этого действия",
-                        "title": "текст"
-                      },
-                      "displayText": {
-                        "description": "(Необязательно) Текст, отображаемый в веб-канале беседы при нажатии кнопки",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "Дополнительный параметр для действия. Содержимое этого свойства зависит от типа ActionType.",
-                        "title": "значение"
-                      },
-                      "channelData": {
-                        "description": "Данные, относящиеся к определенному каналу, которые связаны с этим действием",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "Вложения",
-              "title": "вложения",
-              "items": {
-                "description": "Вложение в действие",
-                "title": "Вложение",
-                "properties": {
-                  "contentType": {
-                    "description": "mimetype/Contenttype для этого файла",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "URL-адрес содержимого",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "Внедренное содержимое",
-                    "title": "содержимое"
-                  },
-                  "name": {
-                    "description": "(Необязательно) Имя вложения",
-                    "title": "имя"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(Необязательно) Эскиз, связанный с вложением",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "Представляет сущности, упомянутые в сообщении.",
-              "title": "сущности",
-              "items": {
-                "description": "Объект метаданных, относящийся к действию",
-                "title": "Сущность",
-                "properties": {
-                  "type": {
-                    "description": "Тип этой сущности (интернационализированный идентификатор ресурса по RFC 3987)",
-                    "title": "тип"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "Содержит содержимое, специфическое для канала.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "Указывает, был ли получатель contactRelationUpdate добавлен в\nсписок контактов отправителя или удален из него.",
-              "title": "действие"
-            },
-            "replyToId": {
-              "description": "Содержит идентификатор сообщения, ответом на которое является это сообщение.",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "Описательная метка для действия.",
-              "title": "метка"
-            },
-            "valueType": {
-              "description": "Тип объекта значения для действия.",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "Значение, связанное с действием.",
-              "title": "значение"
-            },
-            "name": {
-              "description": "Имя операции, связанной с действием вызова или события.",
-              "title": "имя"
-            },
-            "relatesTo": {
-              "description": "Ссылка на другую беседу или другое действие.",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(Необязательно) Идентификатор действия для ссылки",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(Необязательно) Пользователь, участвующий в этой беседе",
-                  "title": "пользователь"
-                },
-                "bot": {
-                  "description": "Бот, участвующий в этой беседе",
-                  "title": "бот"
-                },
-                "conversation": {
-                  "description": "Ссылка на беседу",
-                  "title": "беседа"
-                },
-                "channelId": {
-                  "description": "Идентификатор канала",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "Конечная точка службы, в которой можно выполнить операции для указанной в ссылке беседы",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "Код для действий endOfConversation, указывающий причину завершения беседы.\nВозможные значения включают в себя: \"unknown\", \"completedSuccessfully\", \"userCancelled\", \"botTimedOut\",\n\"botIssuedInvalidMessage\", \"channelFailed\".",
-              "title": "код"
-            },
-            "expiration": {
-              "description": "Время, когда действие должно считаться \"просроченным\" и не должно быть\nпредставлено получателю.",
-              "title": "срок действия"
-            },
-            "importance": {
-              "description": "Важность действия. Возможные значения включают в себя: \"low\", \"normal\", \"high\".",
-              "title": "важность"
-            },
-            "deliveryMode": {
-              "description": "Указание доставки, сообщающее получателю об альтернативных путях доставки для действия.\nПо умолчанию используется режим доставки \"default\" (по умолчанию). Возможные значения включают в себя: \"normal\", \"notification\".",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "Список фраз и ссылок, которые должны выявлять подготовительные речевые и языковые системы",
-              "title": "listenFor",
-              "items": {
-                "title": "Фраза",
-                "description": "Фраза для прослушивания."
-              }
-            },
-            "textHighlights": {
-              "description": "Коллекция текстовых фрагментов, выделяемых, когда действие содержит значение ReplyToId.",
-              "title": "textHighlights",
-              "items": {
-                "description": "Ссылается на подстроку содержимого в другом поле",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "Определяет фрагмент текста для выделения",
-                    "title": "текст"
-                  },
-                  "occurrence": {
-                    "description": "Вхождение текстового поля в указанный текст, если существует несколько экземпляров.",
-                    "title": "вхождение"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "Дополнительное программное действие, сопровождающее этот запрос",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "Идентификатор этого действия",
-                  "title": "идентификатор"
-                },
-                "entities": {
-                  "description": "Сущности, которые связаны с этим действием",
-                  "title": "сущности"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "Компоненты, представляющие собой ActivityTemplate, который является шаблоном строк, действием или реализацией ActivityTemplate"
     },
     "Microsoft.IDialog": {
       "title": "Диалоговые окна Майкрософт",
@@ -2187,7 +1884,7 @@
       "title": "Распознаватели сущностей",
       "description": "Компоненты, производные от класса EntityRecognizer.",
       "oneOf": {
-        "0": {
+        "18": {
           "title": "Ссылка на Microsoft.IEntityRecognizer",
           "description": "Ссылка на DIALOG-файл Microsoft.IEntityRecognizer."
         }
@@ -2209,7 +1906,7 @@
       "title": "Триггеры Майкрософт",
       "description": "Компоненты, производные от класса OnCondition.",
       "oneOf": {
-        "0": {
+        "27": {
           "title": "Ссылка на Microsoft.ITrigger",
           "description": "Ссылка на DIALOG-файл Microsoft.ITrigger."
         }
@@ -2219,7 +1916,7 @@
       "title": "Селекторы",
       "description": "Компоненты, производные от класса TriggerSelector.",
       "oneOf": {
-        "0": {
+        "5": {
           "title": "Ссылка на Microsoft.ITriggerSelector",
           "description": "Ссылка на DIALOG-файл Microsoft.ITriggerSelector."
         }
@@ -2831,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "При назначении сущности",
-      "description": "Действия, выполняемые, когда требуется назначить сущность свойству.",
+      "description": "Actions to apply an operation on a property and value.",
       "patternProperties": {
         "^\\$": {
           "title": "Свойство инструментария",
@@ -2839,17 +2536,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Свойство",
-          "description": "Свойство, которое будет задано после выбора сущности."
-        },
-        "entity": {
-          "title": "Сущность",
-          "description": "Сущность, помещаемая в свойство"
-        },
         "operation": {
           "title": "Операция",
-          "description": "Операция для назначения сущности."
+          "description": "Operation filter on event."
+        },
+        "property": {
+          "title": "Свойство",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Значение",
+          "description": "Фильтр значений для события."
         },
         "condition": {
           "title": "Условие",
@@ -2951,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "При сущности свойстве",
-      "description": "Действия, выполняемые, когда требуется разрешить значение сущности.",
+      "description": "Actions to be performed when value is ambiguous for operator and property.",
       "patternProperties": {
         "^\\$": {
           "title": "Свойство инструментария",
@@ -2959,13 +2656,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Задаваемое свойство",
-          "description": "Свойство, которое будет задано после выбора сущности."
+        "operation": {
+          "title": "Операция",
+          "description": "Фильтр операции для события."
         },
-        "entity": {
-          "title": "Неоднозначная сущность",
-          "description": "Неоднозначная сущность"
+        "property": {
+          "title": "Свойство",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Неоднозначное значение",
+          "description": "Неоднозначный фильтр значения для события."
         },
         "condition": {
           "title": "Условие",
@@ -2994,8 +2695,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "При неоднозначном намерении",
-      "description": "Действия, выполняемые при неоднозначном намерении.",
+      "title": "On ambiguous intent",
+      "description": "Actions to perform on when an intent is ambiguous.",
       "patternProperties": {
         "^\\$": {
           "title": "Свойство инструментария",
@@ -3039,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "При свойстве выбора",
-      "description": "Действия, выполняемые при наличии нескольких возможных сопоставлений сущностей со свойствами.",
+      "description": "Действия, выполняемые при наличии нескольких возможных сопоставлений сущностей со свойствами и операциями.",
       "patternProperties": {
         "^\\$": {
           "title": "Свойство инструментария",
@@ -3047,26 +2748,6 @@
         }
       },
       "properties": {
-        "entity": {
-          "title": "Назначаемая сущность",
-          "description": "Сущность, назначаемая варианту выбора свойства"
-        },
-        "properties": {
-          "title": "Возможные свойства",
-          "description": "Свойства, доступные для выбора.",
-          "items": {
-            "title": "Имя свойства",
-            "description": "Возможное свойство для выбора."
-          }
-        },
-        "entities": {
-          "title": "Сущности",
-          "description": "Неоднозначные имена сущностей.",
-          "items": {
-            "title": "Имя сущности",
-            "description": "Выбираемое имя сущности."
-          }
-        },
         "condition": {
           "title": "Условие",
           "description": "Условие (выражение)."
@@ -4386,6 +4067,34 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "Отправка действия передачи",
+      "description": "Отправляет действие передачи для запуска запроса на передачу.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Свойство инструментария",
+          "description": "Незаконченное свойство для инструментария."
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "Контекст",
+          "description": "Контекст для отправки с запросом на передачу"
+        },
+        "transcript": {
+          "title": "расшифровка",
+          "description": "Расшифровка для отправки с запросом на передачу"
+        },
+        "$kind": {
+          "title": "Вид объекта диалога",
+          "description": "Определяет допустимые свойства для настраиваемого компонента (из SCHEMA-файла диалога)"
+        },
+        "$designer": {
+          "title": "Сведения конструктора",
+          "description": "Дополнительные сведения для Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "Задание свойства",
       "description": "Задайте одно или несколько значений свойств.",
@@ -4582,7 +4291,7 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
+    "Microsoft.TelemetryTrackEventAction": {
       "title": "Телеметрия — отслеживание события",
       "description": "Отслеживание пользовательского события с помощью зарегистрированного клиента телеметрии.",
       "patternProperties": {
@@ -4593,7 +4302,7 @@
       },
       "properties": {
         "id": {
-          "title": "Идентификатор",
+          "title": "ИД",
           "description": "Необязательный идентификатор диалога"
         },
         "disabled": {
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "Число",
           "description": "Числовая константа."
+        }
+      }
+    },
+    "schema": {
+      "title": "Метасхема основной схемы"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "Сведения об учетной записи канала, необходимые для маршрутизации сообщения",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "Идентификатор канала для пользователя или бота в этом канале (например: joe@smith.com, @joesmith или\n123456)",
+              "title": "идентификатор"
+            },
+            "name": {
+              "description": "Отображение понятного имени",
+              "title": "имя"
+            },
+            "aadObjectId": {
+              "description": "Идентификатор объекта этой учетной записи в Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Роль сущности за учетной записью (например: пользователь, бот и т. д.). Возможные значения:\n\"user\", \"bot\"",
+              "title": "роль"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "Сведения об учетной записи канала для беседы",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "Указывает, содержит ли беседа больше двух участников в момент\nсоздания действия",
+              "title": "isGroup"
+            },
+            "conversationType": {
+              "description": "Указывает тип беседы в каналах, различающих типы бесед",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "Идентификатор канала для пользователя или бота в этом канале (например: joe@smith.com, @joesmith или\n123456)",
+              "title": "идентификатор"
+            },
+            "name": {
+              "description": "Отображение понятного имени",
+              "title": "имя"
+            },
+            "aadObjectId": {
+              "description": "Идентификатор объекта этой учетной записи в Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Роль сущности за учетной записью (например: пользователь, бот и т. д.). Возможные значения:\n\"user\", \"bot\"",
+              "title": "роль"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "Объект реакции на сообщение",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "Тип реакции на сообщение. Возможные значения включают в себя: \"like\", \"plusOne\".",
+              "title": "тип"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "Действие, доступное для щелчка",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "Тип действия, реализуемого этой кнопкой. Возможные значения включают в себя следующее: \"openUrl\", \"imBack\",\n\"postBack\", \"playAudio\", \"playVideo\", \"showImage\", \"downloadFile\", \"signin\", \"call\",\n\"payment\", \"messageBack\".",
+              "title": "тип"
+            },
+            "title": {
+              "description": "Текстовое описание, отображаемое на кнопке",
+              "title": "заголовок"
+            },
+            "image": {
+              "description": "URL-адрес изображения, который появится на кнопке рядом с надписью",
+              "title": "образ"
+            },
+            "text": {
+              "description": "Текст для этого действия",
+              "title": "текст"
+            },
+            "displayText": {
+              "description": "(Необязательно) Текст, отображаемый в веб-канале беседы при нажатии кнопки",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "Дополнительный параметр для действия. Содержимое этого свойства зависит от типа ActionType.",
+              "title": "значение"
+            },
+            "channelData": {
+              "description": "Данные, относящиеся к определенному каналу, которые связаны с этим действием",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "Действия SuggestedActions, которые могут быть выполнены",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "Идентификаторы получателей, которым должны отображаться действия. Эти идентификаторы указываются относительно\nchannelId и подмножества всех получателей действия.",
+              "title": "в",
+              "items": {
+                "title": "Идентификатор",
+                "description": "Идентификатор получателя."
+              }
+            },
+            "actions": {
+              "description": "Действия, которые могут быть показаны пользователю",
+              "title": "действия"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "Вложение в действие",
+          "title": "Вложение",
+          "properties": {
+            "contentType": {
+              "description": "mimetype/Contenttype для этого файла",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "URL-адрес содержимого",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "Внедренное содержимое",
+              "title": "содержимое"
+            },
+            "name": {
+              "description": "(Необязательно) Имя вложения",
+              "title": "имя"
+            },
+            "thumbnailUrl": {
+              "description": "(Необязательно) Эскиз, связанный с вложением",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "Объект метаданных, относящийся к действию",
+          "title": "Сущность",
+          "properties": {
+            "type": {
+              "description": "Тип этой сущности (интернационализированный идентификатор ресурса по RFC 3987)",
+              "title": "тип"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "Объект, относящийся к определенной точке диалога",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(Необязательно) Идентификатор действия для ссылки",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(Необязательно) Пользователь, участвующий в этой беседе",
+              "title": "пользователь"
+            },
+            "bot": {
+              "description": "Бот, участвующий в этой беседе",
+              "title": "бот"
+            },
+            "conversation": {
+              "description": "Ссылка на беседу",
+              "title": "беседа"
+            },
+            "channelId": {
+              "description": "Идентификатор канала",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "Конечная точка службы, в которой можно выполнить операции для указанной в ссылке беседы",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "Ссылается на подстроку содержимого в другом поле",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "Определяет фрагмент текста для выделения",
+              "title": "текст"
+            },
+            "occurrence": {
+              "description": "Вхождение текстового поля в указанный текст, если существует несколько экземпляров.",
+              "title": "вхождение"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "Представляет ссылку на программное действие",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "Идентификатор этого действия",
+              "title": "идентификатор"
+            },
+            "entities": {
+              "description": "Сущности, которые связаны с этим действием",
+              "title": "сущности"
+            }
+          }
+        },
+        "Activity": {
+          "description": "Действие — это базовый тип обмена данными для протокола Bot Framework 3.0.",
+          "title": "Действие",
+          "properties": {
+            "type": {
+              "description": "Содержит тип действия. Возможные значения включают в себя: \"message\", \"contactRelationUpdate\",\n\"conversationUpdate\", \"typing\", \"endOfConversation\", \"event\", \"invoke\", \"deleteUserData\",\n\"messageUpdate\", \"messageDelete\", \"installationUpdate\", \"messageReaction\", \"suggestion\",\n\"trace\", \"handoff\".",
+              "title": "тип"
+            },
+            "id": {
+              "description": "Содержит идентификатор, однозначно определяющий действие в канале.",
+              "title": "идентификатор"
+            },
+            "timestamp": {
+              "description": "Содержит дату и время (в формате UTC) отправки сообщения, выраженные в формате ISO-8601.",
+              "title": "метка времени"
+            },
+            "localTimestamp": {
+              "description": "Содержит дату и время отправки сообщения (по местному времени) в формате\nISO-8601.\nНапример, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Содержит имя часового пояса, в котором было обработано сообщение по местному времени, выраженное в формате\nбазы данных часовых поясов IANA.\nНапример, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Содержит URL-адрес, указывающий конечную точку службы канала. Устанавливается каналом.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Содержит идентификатор, однозначно определяющий канал. Устанавливается каналом.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Идентифицирует отправителя сообщения.",
+              "title": "из"
+            },
+            "conversation": {
+              "description": "Идентифицирует беседу, к которой относится действие.",
+              "title": "беседа"
+            },
+            "recipient": {
+              "description": "Идентифицирует получателя сообщения.",
+              "title": "получатель"
+            },
+            "textFormat": {
+              "description": "Формат текстовых полей, по умолчанию: markdown. Возможные значения включают в себя: \"markdown\", \"plain\", \"xml\".",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "Указание макета для нескольких вложений. По умолчанию: list. Возможные значения: \"list\",\n\"carousel\"",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "Коллекция членов, добавленных в беседу.",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "Коллекция членов, удаленных из беседы.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "Коллекция реакций, добавленных в беседу.",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "Коллекция реакций, удаленных из беседы.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "Обновленное название раздела диалога.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Указывает, раскрывается ли предыдущая история канала.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "Имя языкового стандарта для содержимого текстового поля.\nИмя языкового стандарта представляет собой сочетание двух- или трехбуквенного кода языка и региональных параметров по ISO 639, связанного\nс языком,\nи двухбуквенного кода субкультуры по ISO 3166, связанного со страной или регионом.\nИмя языкового стандарта также может соответствовать допустимому тегу языка BCP-47.",
+              "title": "языковой стандарт"
+            },
+            "text": {
+              "description": "Текстовое содержимое сообщения.",
+              "title": "текст"
+            },
+            "speak": {
+              "description": "Текст для проговаривания.",
+              "title": "проговаривание"
+            },
+            "inputHint": {
+              "description": "Указывает, что делает ваш бот — принимает,\nожидает или игнорирует данные, введенные пользователем, после доставки сообщения клиенту. Возможные\nзначения включают в себя: \"acceptingInput\", \"ignoringInput\", \"expectingInput\".",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "Текст, отображаемый, когда канал не может визуализировать карточки.",
+              "title": "сводка"
+            },
+            "suggestedActions": {
+              "description": "Предлагаемые действия для действия.",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "Вложения",
+              "title": "вложения"
+            },
+            "entities": {
+              "description": "Представляет сущности, упомянутые в сообщении.",
+              "title": "сущности"
+            },
+            "channelData": {
+              "description": "Содержит содержимое, специфическое для канала.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Указывает, был ли получатель contactRelationUpdate добавлен в\nсписок контактов отправителя или удален из него.",
+              "title": "действие"
+            },
+            "replyToId": {
+              "description": "Содержит идентификатор сообщения, ответом на которое является это сообщение.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "Описательная метка для действия.",
+              "title": "метка"
+            },
+            "valueType": {
+              "description": "Тип объекта значения для действия.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "Значение, связанное с действием.",
+              "title": "значение"
+            },
+            "name": {
+              "description": "Имя операции, связанной с действием вызова или события.",
+              "title": "имя"
+            },
+            "relatesTo": {
+              "description": "Ссылка на другую беседу или другое действие.",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "Код для действий endOfConversation, указывающий причину завершения беседы.\nВозможные значения включают в себя: \"unknown\", \"completedSuccessfully\", \"userCancelled\", \"botTimedOut\",\n\"botIssuedInvalidMessage\", \"channelFailed\".",
+              "title": "код"
+            },
+            "expiration": {
+              "description": "Время, когда действие должно считаться \"просроченным\" и не должно быть\nпредставлено получателю.",
+              "title": "срок действия"
+            },
+            "importance": {
+              "description": "Важность действия. Возможные значения включают в себя: \"low\", \"normal\", \"high\".",
+              "title": "важность"
+            },
+            "deliveryMode": {
+              "description": "Указание доставки, сообщающее получателю об альтернативных путях доставки для действия.\nПо умолчанию используется режим доставки \"default\" (по умолчанию). Возможные значения включают в себя: \"normal\", \"notification\".",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "Список фраз и ссылок, которые должны выявлять подготовительные речевые и языковые системы",
+              "title": "listenFor",
+              "items": {
+                "title": "Фраза",
+                "description": "Фраза для прослушивания."
+              }
+            },
+            "textHighlights": {
+              "description": "Коллекция текстовых фрагментов, выделяемых, когда действие содержит значение ReplyToId.",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "Дополнительное программное действие, сопровождающее этот запрос",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }

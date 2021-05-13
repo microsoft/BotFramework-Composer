@@ -71,9 +71,6 @@
           "title": "스키마",
           "description": "채울 스키마입니다.",
           "anyOf": {
-            "0": {
-              "title": "핵심 스키마 메타스키마"
-            },
             "1": {
               "title": "JSON 스키마에 대한 참조",
               "description": "JSON 스키마 .dialog 파일에 대한 참조입니다."
@@ -907,9 +904,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "Continue conversation (Queue)",
+      "description": "Continue a specific conversation (via StorageQueue implementation).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "conversationReference": {
+          "title": "Conversation Reference",
+          "description": "A conversation reference. (NOTE: Minimum required values or channelId, conversation)."
+        },
+        "value": {
+          "title": "값",
+          "description": "activity.value로 보낼 값입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "나중에 대화 계속(큐)",
-      "description": "Azure Storage 큐를 통해 나중에 대화를 계속합니다.",
+      "description": "Continue conversation at later time (via StorageQueue implementation).",
       "patternProperties": {
         "^\\$": {
           "title": "도구 속성",
@@ -1673,6 +1706,38 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "Get ConversationReference",
+      "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "대화 ID(선택 사항)"
+        },
+        "property": {
+          "title": "속성",
+          "description": "속성(정보를 저장하도록 명명된 위치)입니다."
+        },
+        "disabled": {
+          "title": "사용 안 함",
+          "description": "true이면 이 작업을 사용하지 않도록 설정하는 선택적 조건입니다."
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "작업으로 이동",
       "description": "ID로 지정된 작업으로 이동합니다.",
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "문자열 템플릿인 ActivityTemplate, 활동 또는 ActivityTemplate 구현인 구성 요소입니다.",
-      "oneOf": {
-        "1": {
-          "description": "활동은 Bot Framework 3.0 프로토콜의 기본 통신 유형입니다.",
-          "title": "활동",
-          "properties": {
-            "type": {
-              "description": "활동 유형이 포함됩니다. 가능한 값: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "유형"
-            },
-            "id": {
-              "description": "채널에서 활동을 고유하게 식별하는 ID가 포함됩니다.",
-              "title": "ID"
-            },
-            "timestamp": {
-              "description": "메시지를 보낸 날짜와 시간(UTC)이 ISO-8601 형식으로 포함됩니다.",
-              "title": "타임스탬프"
-            },
-            "localTimestamp": {
-              "description": "메시지를 보낸 날짜와 시간(현지 시간)이 ISO-8601 형식으로\n포함됩니다.\n예: 2016-09-23T13:07:49.4714686-07:00.",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "메시지를 보낸 표준 시간대(현지 시간)의 이름이 IANA Time\nZone 데이터베이스 형식으로 포함됩니다.\n예: America/Los_Angeles.",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "채널의 서비스 엔드포인트를 지정하는 URL이 포함됩니다. 채널에서 설정됩니다.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "채널을 고유하게 식별하는 ID가 포함됩니다. 채널에서 설정됩니다.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "메시지 보낸 사람을 식별합니다.",
-              "title": "원본"
-            },
-            "conversation": {
-              "description": "활동이 속한 대화를 식별합니다.",
-              "title": "대화",
-              "properties": {
-                "isGroup": {
-                  "description": "활동 생성 시 대화의 참가자 수가 3명 이상이었는지\n여부를 나타냅니다.",
-                  "title": "isGroup"
-                },
-                "conversationType": {
-                  "description": "대화 유형을 구분하는 채널의 대화 유형을 나타냅니다.",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "이 채널에 있는 사용자 또는 봇의 채널 ID(예: joe@smith.com, @joesmith 또는\n123456)",
-                  "title": "ID"
-                },
-                "name": {
-                  "description": "식별 이름 표시",
-                  "title": "이름"
-                },
-                "aadObjectId": {
-                  "description": "AAD(Azure Active Directory) 내 이 계정의 개체 ID",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "계정의 기본 엔터티 역할(예: 사용자, 봇 등)입니다. 가능한 값은 다음과 같습니다.\n'user', 'bot'",
-                  "title": "역할"
-                }
-              }
-            },
-            "recipient": {
-              "description": "메시지 받는 사람을 식별합니다.",
-              "title": "받는 사람"
-            },
-            "textFormat": {
-              "description": "텍스트 필드의 형식입니다. 기본값: markdown. 가능한 값: 'markdown', 'plain', 'xml'",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "여러 첨부 파일의 레이아웃 힌트입니다. 기본값: list. 가능한 값: 'list',\n'carousel'",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "대화에 추가된 멤버 컬렉션입니다.",
-              "title": "membersAdded",
-              "items": {
-                "description": "메시지를 라우팅하는 데 필요한 채널 계정 정보입니다.",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "이 채널에 있는 사용자 또는 봇의 채널 ID(예: joe@smith.com, @joesmith 또는\n123456)",
-                    "title": "ID"
-                  },
-                  "name": {
-                    "description": "식별 이름 표시",
-                    "title": "이름"
-                  },
-                  "aadObjectId": {
-                    "description": "AAD(Azure Active Directory) 내 이 계정의 개체 ID",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "계정의 기본 엔터티 역할(예: 사용자, 봇 등)입니다. 가능한 값은 다음과 같습니다.\n'user', 'bot'",
-                    "title": "역할"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "대화에서 제거된 멤버 컬렉션입니다.",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "대화에 추가된 반응 컬렉션입니다.",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "메시지 반응 개체",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "메시지 반응 유형입니다. 가능한 값: 'like', 'plusOne'",
-                    "title": "유형"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "대화에서 제거된 반응 컬렉션입니다.",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "대화의 업데이트된 토픽 이름입니다.",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "채널의 이전 기록이 공개되었는지 여부를 나타냅니다.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "텍스트 필드 내용의 로캘 이름입니다.\n로캘 이름은 언어와 연결된 ISO 639 문화권 코드(2~3자) 및\n국가 또는 지역과 연결된 ISO 3166 하위 문화권 코드(2자)의\n조합입니다.\n로캘 이름은 유효한 BCP-47 언어 태그와 일치할 수도 있습니다.",
-              "title": "로캘"
-            },
-            "text": {
-              "description": "메시지의 텍스트 내용입니다.",
-              "title": "텍스트"
-            },
-            "speak": {
-              "description": "말할 텍스트입니다.",
-              "title": "말하기"
-            },
-            "inputHint": {
-              "description": "메시지가 클라이언트에 배달된 후의 사용자 입력이 봇에서\n수락되는지, 필요한지 또는 무시되는지를 나타냅니다.\n가능한 값: 'acceptingInput', 'ignoringInput', 'expectingInput'",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "채널에서 카드를 렌더링할 수 없는 경우에 표시할 텍스트입니다.",
-              "title": "요약"
-            },
-            "suggestedActions": {
-              "description": "활동에 대해 제안된 작업입니다.",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "작업이 표시되어야 하는 받는 사람 ID입니다. 이 ID는 channelId를 기준으로 하며,\n활동과 관련된 모든 받는 사람의 하위 집합입니다.",
-                  "title": "~",
-                  "items": {
-                    "title": "ID",
-                    "description": "수신자의 ID입니다."
-                  }
-                },
-                "actions": {
-                  "description": "사용자에게 표시할 수 있는 작업입니다.",
-                  "title": "작업",
-                  "items": {
-                    "description": "클릭 가능한 작업입니다.",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "이 단추에서 구현하는 작업 유형입니다. 가능한 값: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-                        "title": "유형"
-                      },
-                      "title": {
-                        "description": "단추에 표시되는 텍스트 설명입니다.",
-                        "title": "제목"
-                      },
-                      "image": {
-                        "description": "단추의 텍스트 레이블 옆에 표시할 이미지 URL입니다.",
-                        "title": "이미지"
-                      },
-                      "text": {
-                        "description": "이 작업의 텍스트입니다.",
-                        "title": "텍스트"
-                      },
-                      "displayText": {
-                        "description": "(선택 사항) 단추가 클릭된 경우 채팅 피드에 표시할 텍스트입니다.",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "작업의 보조 매개 변수입니다. 이 속성의 내용은 ActionType에 따라 다릅니다.",
-                        "title": "값"
-                      },
-                      "channelData": {
-                        "description": "이 작업과 연결된 채널별 데이터입니다.",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "첨부 파일",
-              "title": "첨부 파일",
-              "items": {
-                "description": "활동 내 첨부 파일입니다.",
-                "title": "첨부 파일",
-                "properties": {
-                  "contentType": {
-                    "description": "파일의 mimetype/Contenttype입니다.",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "콘텐츠 URL",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "포함된 콘텐츠",
-                    "title": "콘텐츠"
-                  },
-                  "name": {
-                    "description": "(선택 사항) 첨부 파일의 이름입니다.",
-                    "title": "이름"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(선택 사항) 첨부 파일과 연결된 썸네일입니다.",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "메시지에 언급된 엔터티를 나타냅니다.",
-              "title": "엔터티",
-              "items": {
-                "description": "활동과 관련된 메타데이터 개체입니다.",
-                "title": "엔터티",
-                "properties": {
-                  "type": {
-                    "description": "이 엔터티의 유형(RFC 3987 IRI)입니다.",
-                    "title": "유형"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "채널별 콘텐츠가 포함됩니다.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "contactRelationUpdate 받는 사람이 보낸 사람의 연락처 목록에서 추가 또는 제거되었는지\n여부를 나타냅니다.",
-              "title": "작업"
-            },
-            "replyToId": {
-              "description": "이 메시지가 회신으로 작성된 메시지의 ID가 포함됩니다.",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "활동을 설명하는 레이블입니다.",
-              "title": "레이블"
-            },
-            "valueType": {
-              "description": "활동의 값 개체 유형입니다.",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "활동과 연결된 값입니다.",
-              "title": "값"
-            },
-            "name": {
-              "description": "호출 또는 이벤트 활동과 연결된 작업의 이름입니다.",
-              "title": "이름"
-            },
-            "relatesTo": {
-              "description": "다른 대화 또는 활동에 대한 참조입니다.",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(선택 사항) 참조할 활동의 ID입니다.",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(선택 사항) 이 대화에 참여하는 사용자입니다.",
-                  "title": "사용자"
-                },
-                "bot": {
-                  "description": "이 대화에 참여하는 봇입니다.",
-                  "title": "봇"
-                },
-                "conversation": {
-                  "description": "대화 참조",
-                  "title": "대화"
-                },
-                "channelId": {
-                  "description": "채널 ID입니다.",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "참조된 대화와 관련된 작업을 수행할 수 있는 서비스 엔드포인트입니다.",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "대화가 종료된 이유를 나타내는 endOfConversation 활동 코드입니다.\n가능한 값: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "코드"
-            },
-            "expiration": {
-              "description": "활동이 \"만료된\" 것으로 간주되는 시간으로,\n받는 사람에게 표시되지 않아야 합니다.",
-              "title": "만료"
-            },
-            "importance": {
-              "description": "활동의 중요도입니다. 가능한 값: 'low', 'normal', 'high'",
-              "title": "중요도"
-            },
-            "deliveryMode": {
-              "description": "받는 사람에게 활동의 대체 배달 경로를 알리기 위한 배달 힌트입니다.\n기본 배달 모드는 \"default\"입니다. 가능한 값으로 'normal', 'notification' 등이 있습니다.",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "음성 및 언어 초기화 시스템이 수신 대기할 문구 및 참조 목록입니다.",
-              "title": "listenFor",
-              "items": {
-                "title": "문구",
-                "description": "수신 대기할 문구입니다."
-              }
-            },
-            "textHighlights": {
-              "description": "활동에 ReplyToId 값이 포함되어 있는 경우에 강조 표시할 텍스트 조각 컬렉션입니다.",
-              "title": "textHighlights",
-              "items": {
-                "description": "다른 필드 내의 콘텐츠 하위 문자열을 참조합니다.",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "강조 표시할 코드 조각 또는 텍스트를 정의합니다.",
-                    "title": "텍스트"
-                  },
-                  "occurrence": {
-                    "description": "참조된 텍스트 내의 텍스트 필드 항목입니다(여러 개가 있는 경우).",
-                    "title": "발생 빈도"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "이 요청에 수반되는 프로그래밍 방식 작업(선택 사항)입니다.",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "이 작업의 ID입니다.",
-                  "title": "ID"
-                },
-                "entities": {
-                  "description": "이 작업과 연결된 엔터티입니다.",
-                  "title": "엔터티"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "문자열 템플릿인 ActivityTemplate, 활동 또는 ActivityTemplate 구현인 구성 요소입니다."
     },
     "Microsoft.IDialog": {
       "title": "Microsoft 대화",
@@ -2187,7 +1884,7 @@
       "title": "엔터티 인식기",
       "description": "EntityRecognizer에서 파생된 구성 요소입니다.",
       "oneOf": {
-        "0": {
+        "18": {
           "title": "Microsoft.IEntityRecognizer에 대한 참조",
           "description": "Microsoft.IEntityRecognizer .dialog 파일에 대한 참조입니다."
         }
@@ -2209,7 +1906,7 @@
       "title": "Microsoft 트리거",
       "description": "OnCondition 클래스에서 파생된 구성 요소입니다.",
       "oneOf": {
-        "0": {
+        "27": {
           "title": "Microsoft.ITrigger에 대한 참조",
           "description": "Microsoft.ITrigger .dialog 파일에 대한 참조입니다."
         }
@@ -2219,7 +1916,7 @@
       "title": "선택기",
       "description": "TriggerSelector 클래스에서 파생된 구성 요소입니다.",
       "oneOf": {
-        "0": {
+        "5": {
           "title": "Microsoft.ITriggerSelector에 대한 참조",
           "description": "Microsoft.ITriggerSelector .dialog 파일에 대한 참조입니다."
         }
@@ -2831,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "엔터티 할당 시",
-      "description": "엔터티를 속성에 할당해야 하는 경우에 수행할 작업입니다.",
+      "description": "속성 및 값에 대한 연산을 적용하는 작업입니다.",
       "patternProperties": {
         "^\\$": {
           "title": "도구 속성",
@@ -2839,17 +2536,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "속성",
-          "description": "엔터티를 선택한 후에 설정되는 속성입니다."
-        },
-        "entity": {
-          "title": "엔터티",
-          "description": "속성에 추가되는 엔터티"
-        },
         "operation": {
           "title": "작업",
-          "description": "엔터티 할당 작업입니다."
+          "description": "이벤트에 대한 연산 필터입니다."
+        },
+        "property": {
+          "title": "속성",
+          "description": "이벤트에 대한 속성 필터입니다."
+        },
+        "value": {
+          "title": "값",
+          "description": "Value filter on event."
         },
         "condition": {
           "title": "조건",
@@ -2951,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "엔터티 선택 시",
-      "description": "엔터티 값을 확인해야 하는 경우에 수행할 작업입니다.",
+      "description": "연산자 및 속성에 대한 값이 모호한 경우 수행할 작업입니다.",
       "patternProperties": {
         "^\\$": {
           "title": "도구 속성",
@@ -2959,13 +2656,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "설정할 속성",
-          "description": "엔터티를 선택한 후에 설정되는 속성입니다."
+        "operation": {
+          "title": "작업",
+          "description": "Operation filter on event."
         },
-        "entity": {
-          "title": "모호한 엔터티",
-          "description": "모호한 엔터티"
+        "property": {
+          "title": "속성",
+          "description": "이벤트에 대한 속성 필터입니다."
+        },
+        "value": {
+          "title": "Ambiguous value",
+          "description": "Ambiguous value filter on event."
         },
         "condition": {
           "title": "조건",
@@ -2994,7 +2695,7 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "모호한 의도에서",
+      "title": "의도가 모호한 경우",
       "description": "의도가 모호한 경우에 수행할 작업입니다.",
       "patternProperties": {
         "^\\$": {
@@ -3039,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "속성 선택 시",
-      "description": "엔터티를 속성에 여러 번 매핑할 수 있는 경우에 수행할 작업입니다.",
+      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
       "patternProperties": {
         "^\\$": {
           "title": "도구 속성",
@@ -3047,26 +2748,6 @@
         }
       },
       "properties": {
-        "entity": {
-          "title": "할당되는 엔터티",
-          "description": "속성 선택 항목에 할당되는 엔터티"
-        },
-        "properties": {
-          "title": "가능한 속성",
-          "description": "선택할 속성입니다.",
-          "items": {
-            "title": "속성 이름",
-            "description": "선택할 수 있는 속성입니다."
-          }
-        },
-        "entities": {
-          "title": "엔터티",
-          "description": "엔터티 이름이 모호합니다.",
-          "items": {
-            "title": "엔터티 이름",
-            "description": "선택되는 엔터티 이름입니다."
-          }
-        },
         "condition": {
           "title": "조건",
           "description": "조건(식)입니다."
@@ -4386,6 +4067,34 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "Send a handoff activity",
+      "description": "Sends a handoff activity to trigger a handoff request.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "도구 속성",
+          "description": "확장 가능한 도구 속성입니다."
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "컨텍스트",
+          "description": "전달 요청과 함께 보낼 컨텍스트"
+        },
+        "transcript": {
+          "title": "transcript",
+          "description": "Transcript to send with the handoff request"
+        },
+        "$kind": {
+          "title": "대화 개체 종류",
+          "description": "대화 .schema 파일에서 구성 중인 구성 요소에 유효한 속성을 정의합니다."
+        },
+        "$designer": {
+          "title": "디자이너 정보",
+          "description": "Bot Framework Composer에 대한 추가 정보입니다."
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "속성 설정",
       "description": "하나 이상의 속성 값을 설정합니다.",
@@ -4582,7 +4291,7 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
+    "Microsoft.TelemetryTrackEventAction": {
       "title": "원격 분석 - 이벤트 추적",
       "description": "등록된 원격 분석 클라이언트를 사용하여 사용자 지정 이벤트를 추적합니다.",
       "patternProperties": {
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "숫자",
           "description": "숫자 상수입니다."
+        }
+      }
+    },
+    "schema": {
+      "title": "핵심 스키마 메타스키마"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "메시지를 라우팅하는 데 필요한 채널 계정 정보입니다.",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "이 채널에 있는 사용자 또는 봇의 채널 ID(예: joe@smith.com, @joesmith 또는\n123456)",
+              "title": "ID"
+            },
+            "name": {
+              "description": "식별 이름 표시",
+              "title": "이름"
+            },
+            "aadObjectId": {
+              "description": "AAD(Azure Active Directory) 내 이 계정의 개체 ID",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "계정의 기본 엔터티 역할(예: 사용자, 봇 등)입니다. 가능한 값은 다음과 같습니다.\n'user', 'bot'",
+              "title": "역할"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "대화의 채널 계정 정보입니다.",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "활동 생성 시 대화의 참가자 수가 3명 이상이었는지\n여부를 나타냅니다.",
+              "title": "isGroup"
+            },
+            "conversationType": {
+              "description": "대화 유형을 구분하는 채널의 대화 유형을 나타냅니다.",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "이 채널에 있는 사용자 또는 봇의 채널 ID(예: joe@smith.com, @joesmith 또는\n123456)",
+              "title": "ID"
+            },
+            "name": {
+              "description": "식별 이름 표시",
+              "title": "이름"
+            },
+            "aadObjectId": {
+              "description": "AAD(Azure Active Directory) 내 이 계정의 개체 ID",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "계정의 기본 엔터티 역할(예: 사용자, 봇 등)입니다. 가능한 값은 다음과 같습니다.\n'user', 'bot'",
+              "title": "역할"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "메시지 반응 개체",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "메시지 반응 유형입니다. 가능한 값: 'like', 'plusOne'",
+              "title": "형식"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "클릭 가능한 작업입니다.",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "이 단추에서 구현하는 작업 유형입니다. 가능한 값: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+              "title": "유형"
+            },
+            "title": {
+              "description": "단추에 표시되는 텍스트 설명입니다.",
+              "title": "제목"
+            },
+            "image": {
+              "description": "단추의 텍스트 레이블 옆에 표시할 이미지 URL입니다.",
+              "title": "이미지"
+            },
+            "text": {
+              "description": "이 작업의 텍스트입니다.",
+              "title": "텍스트"
+            },
+            "displayText": {
+              "description": "(선택 사항) 단추가 클릭된 경우 채팅 피드에 표시할 텍스트입니다.",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "작업의 보조 매개 변수입니다. 이 속성의 내용은 ActionType에 따라 다릅니다.",
+              "title": "값"
+            },
+            "channelData": {
+              "description": "이 작업과 연결된 채널별 데이터입니다.",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "수행할 수 있는 SuggestedActions입니다.",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "작업이 표시되어야 하는 받는 사람 ID입니다. 이 ID는 channelId를 기준으로 하며,\n활동과 관련된 모든 받는 사람의 하위 집합입니다.",
+              "title": "대상",
+              "items": {
+                "title": "ID",
+                "description": "수신자의 ID입니다."
+              }
+            },
+            "actions": {
+              "description": "사용자에게 표시할 수 있는 작업입니다.",
+              "title": "작업"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "활동 내 첨부 파일입니다.",
+          "title": "첨부 파일",
+          "properties": {
+            "contentType": {
+              "description": "파일의 mimetype/Contenttype입니다.",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "콘텐츠 URL",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "포함된 콘텐츠",
+              "title": "콘텐츠"
+            },
+            "name": {
+              "description": "(선택 사항) 첨부 파일의 이름입니다.",
+              "title": "이름"
+            },
+            "thumbnailUrl": {
+              "description": "(선택 사항) 첨부 파일과 연결된 썸네일입니다.",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "활동과 관련된 메타데이터 개체입니다.",
+          "title": "엔터티",
+          "properties": {
+            "type": {
+              "description": "이 엔터티의 유형(RFC 3987 IRI)입니다.",
+              "title": "형식"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "대화의 특정 지점과 관련된 개체입니다.",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(선택 사항) 참조할 활동의 ID입니다.",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(선택 사항) 이 대화에 참여하는 사용자입니다.",
+              "title": "사용자"
+            },
+            "bot": {
+              "description": "이 대화에 참여하는 봇입니다.",
+              "title": "봇"
+            },
+            "conversation": {
+              "description": "대화 참조",
+              "title": "대화"
+            },
+            "channelId": {
+              "description": "채널 ID입니다.",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "참조된 대화와 관련된 작업을 수행할 수 있는 서비스 엔드포인트입니다.",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "다른 필드 내의 콘텐츠 하위 문자열을 참조합니다.",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "강조 표시할 코드 조각 또는 텍스트를 정의합니다.",
+              "title": "텍스트"
+            },
+            "occurrence": {
+              "description": "참조된 텍스트 내의 텍스트 필드 항목입니다(여러 개가 있는 경우).",
+              "title": "발생 빈도"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "프로그래밍 방식 작업에 대한 참조를 나타냅니다.",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "이 작업의 ID입니다.",
+              "title": "ID"
+            },
+            "entities": {
+              "description": "이 작업과 연결된 엔터티입니다.",
+              "title": "엔터티"
+            }
+          }
+        },
+        "Activity": {
+          "description": "활동은 Bot Framework 3.0 프로토콜의 기본 통신 유형입니다.",
+          "title": "활동",
+          "properties": {
+            "type": {
+              "description": "활동 유형이 포함됩니다. 가능한 값: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "유형"
+            },
+            "id": {
+              "description": "채널에서 활동을 고유하게 식별하는 ID가 포함됩니다.",
+              "title": "ID"
+            },
+            "timestamp": {
+              "description": "메시지를 보낸 날짜와 시간(UTC)이 ISO-8601 형식으로 포함됩니다.",
+              "title": "타임스탬프"
+            },
+            "localTimestamp": {
+              "description": "메시지를 보낸 날짜와 시간(현지 시간)이 ISO-8601 형식으로\n포함됩니다.\n예: 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "메시지를 보낸 표준 시간대(현지 시간)의 이름이 IANA Time\nZone 데이터베이스 형식으로 포함됩니다.\n예: America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "채널의 서비스 엔드포인트를 지정하는 URL이 포함됩니다. 채널에서 설정됩니다.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "채널을 고유하게 식별하는 ID가 포함됩니다. 채널에서 설정됩니다.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "메시지 보낸 사람을 식별합니다.",
+              "title": "원본"
+            },
+            "conversation": {
+              "description": "활동이 속한 대화를 식별합니다.",
+              "title": "대화"
+            },
+            "recipient": {
+              "description": "메시지 받는 사람을 식별합니다.",
+              "title": "수신자"
+            },
+            "textFormat": {
+              "description": "텍스트 필드의 형식입니다. 기본값: markdown. 가능한 값: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "여러 첨부 파일의 레이아웃 힌트입니다. 기본값: list. 가능한 값: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "대화에 추가된 멤버 컬렉션입니다.",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "대화에서 제거된 멤버 컬렉션입니다.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "대화에 추가된 반응 컬렉션입니다.",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "대화에서 제거된 반응 컬렉션입니다.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "대화의 업데이트된 토픽 이름입니다.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "채널의 이전 기록이 공개되었는지 여부를 나타냅니다.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "텍스트 필드 내용의 로캘 이름입니다.\n로캘 이름은 언어와 연결된 ISO 639 문화권 코드(2~3자) 및\n국가 또는 지역과 연결된 ISO 3166 하위 문화권 코드(2자)의\n조합입니다.\n로캘 이름은 유효한 BCP-47 언어 태그와 일치할 수도 있습니다.",
+              "title": "로캘"
+            },
+            "text": {
+              "description": "메시지의 텍스트 내용입니다.",
+              "title": "텍스트"
+            },
+            "speak": {
+              "description": "말할 텍스트입니다.",
+              "title": "말하기"
+            },
+            "inputHint": {
+              "description": "메시지가 클라이언트에 배달된 후의 사용자 입력이 봇에서\n수락되는지, 필요한지 또는 무시되는지를 나타냅니다.\n가능한 값: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "채널에서 카드를 렌더링할 수 없는 경우에 표시할 텍스트입니다.",
+              "title": "요약"
+            },
+            "suggestedActions": {
+              "description": "활동에 대해 제안된 작업입니다.",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "첨부 파일",
+              "title": "첨부 파일"
+            },
+            "entities": {
+              "description": "메시지에 언급된 엔터티를 나타냅니다.",
+              "title": "엔터티"
+            },
+            "channelData": {
+              "description": "채널별 콘텐츠가 포함됩니다.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "contactRelationUpdate 받는 사람이 보낸 사람의 연락처 목록에서 추가 또는 제거되었는지\n여부를 나타냅니다.",
+              "title": "작업"
+            },
+            "replyToId": {
+              "description": "이 메시지가 회신으로 작성된 메시지의 ID가 포함됩니다.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "활동을 설명하는 레이블입니다.",
+              "title": "레이블"
+            },
+            "valueType": {
+              "description": "활동의 값 개체 유형입니다.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "활동과 연결된 값입니다.",
+              "title": "값"
+            },
+            "name": {
+              "description": "호출 또는 이벤트 활동과 연결된 작업의 이름입니다.",
+              "title": "이름"
+            },
+            "relatesTo": {
+              "description": "다른 대화 또는 활동에 대한 참조입니다.",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "대화가 종료된 이유를 나타내는 endOfConversation 활동 코드입니다.\n가능한 값: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "코드"
+            },
+            "expiration": {
+              "description": "활동이 \"만료된\" 것으로 간주되는 시간으로,\n받는 사람에게 표시되지 않아야 합니다.",
+              "title": "만료"
+            },
+            "importance": {
+              "description": "활동의 중요도입니다. 가능한 값: 'low', 'normal', 'high'",
+              "title": "중요도"
+            },
+            "deliveryMode": {
+              "description": "받는 사람에게 활동의 대체 배달 경로를 알리기 위한 배달 힌트입니다.\n기본 배달 모드는 \"default\"입니다. 가능한 값으로 'normal', 'notification' 등이 있습니다.",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "음성 및 언어 초기화 시스템이 수신 대기할 문구 및 참조 목록입니다.",
+              "title": "listenFor",
+              "items": {
+                "title": "문구",
+                "description": "수신 대기할 문구입니다."
+              }
+            },
+            "textHighlights": {
+              "description": "활동에 ReplyToId 값이 포함되어 있는 경우에 강조 표시할 텍스트 조각 컬렉션입니다.",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "이 요청에 수반되는 프로그래밍 방식 작업(선택 사항)입니다.",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }

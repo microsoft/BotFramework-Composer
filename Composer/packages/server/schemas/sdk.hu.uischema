@@ -11,13 +11,40 @@
       }
     }
   },
+  "Microsoft.Ask": {
+    "flow": {
+      "footer": {
+        "description": "= Default operation"
+      }
+    },
+    "form": {
+      "label": "Válasz küldése kérdés feltevéséhez",
+      "subtitle": "Tevékenység kérése"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Fájl vagy melléklet kérése",
+      "subtitle": "Melléklet bemenete"
+    }
+  },
   "Microsoft.BeginDialog": {
+    "flow": {
+      "footer": {
+        "description": "= Return value"
+      }
+    },
     "form": {
       "label": "Új párbeszéd elkezdése",
       "subtitle": "Párbeszéd elkezdése"
     }
   },
   "Microsoft.BeginSkill": {
+    "flow": {
+      "footer": {
+        "description": "= Result"
+      }
+    },
     "form": {
       "label": "Csatlakozás egy készséghez",
       "subtitle": "Készség párbeszéde"
@@ -30,15 +57,38 @@
     }
   },
   "Microsoft.CancelAllDialogs": {
+    "flow": {
+      "body": {
+        "description": "(Event)"
+      }
+    },
     "form": {
       "label": "Az összes aktív párbeszéd megszakítása",
       "subtitle": "Az összes párbeszéd megszakítása"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Adatkérés több választási lehetőséggel",
+      "subtitle": "Választási lehetőség bemenete"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Megerősítés kérése",
+      "subtitle": "Bemenet megerősítése"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
       "label": "Ciklus folytatása",
       "subtitle": "Ciklus folytatása"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Dátum vagy idő kérése",
+      "subtitle": "Dátum- és időbevitel"
     }
   },
   "Microsoft.DebugBreak": {
@@ -65,12 +115,22 @@
     }
   },
   "Microsoft.EditArray": {
+    "flow": {
+      "footer": {
+        "description": "= Result"
+      }
+    },
     "form": {
       "label": "Tömbtulajdonság szerkesztése",
       "subtitle": "Tömb szerkesztése"
     }
   },
   "Microsoft.EmitEvent": {
+    "flow": {
+      "body": {
+        "description": "(Event)"
+      }
+    },
     "form": {
       "label": "Egyéni esemény továbbítása",
       "subtitle": "Esemény továbbítása"
@@ -100,7 +160,29 @@
       "subtitle": "Minden egyes oldalhoz"
     }
   },
+  "Microsoft.GetActivityMembers": {
+    "flow": {
+      "body": {
+        "description": "= ActivityId"
+      },
+      "footer": {
+        "description": "= Result property"
+      }
+    }
+  },
+  "Microsoft.GetConversationMembers": {
+    "flow": {
+      "footer": {
+        "description": "= Result property"
+      }
+    }
+  },
   "Microsoft.HttpRequest": {
+    "flow": {
+      "footer": {
+        "description": "= Result property"
+      }
+    },
     "form": {
       "label": "HTTP-kérelem küldése",
       "subtitle": "HTTP-kérelem"
@@ -116,6 +198,226 @@
     "form": {
       "label": "Naplózás konzolra",
       "subtitle": "Naplózási művelet"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Szám kérése",
+      "subtitle": "Számbevitel"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "flow": {
+      "footer": {
+        "description": "= Token property"
+      }
+    },
+    "form": {
+      "label": "OAuth-bejelentkezés",
+      "subtitle": "OAuth-bemenet"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "Tevékenységek",
+      "subtitle": "Tevékenység érkezett"
+    },
+    "trigger": {
+      "label": "Tevékenységek (tevékenység érkezett)",
+      "submenu": {
+        "label": "Tevékenységek"
+      }
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "Feltétel kezelése entitás hozzárendelésekor",
+      "subtitle": "EntityAssigned tevékenység"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "Elindított párbeszéd",
+      "subtitle": "Párbeszédesemény indítása"
+    },
+    "trigger": {
+      "label": "Párbeszédpanel elindítva (párbeszédpanel-indítási esemény)",
+      "submenu": {
+        "label": "Párbeszédesemények"
+      }
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "Párbeszéd megszakítva",
+      "subtitle": "Párbeszédesemény megszakítása"
+    },
+    "trigger": {
+      "label": "Párbeszédpanel bezárva (párbeszédpanel-bezárási esemény)"
+    }
+  },
+  "Microsoft.OnChooseIntent": {
+    "trigger": {
+      "label": "Többször előforduló szándékok felismerve"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "Feltétel kezelése",
+      "subtitle": "Feltétel"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "A felhasználó által a robottal kezdeményezett új beszélgetés megkezdésekor aktivált események kezelése.",
+      "label": "Üdvözlés",
+      "subtitle": "ConversationUpdate tevékenység"
+    },
+    "trigger": {
+      "label": "Üdvözlés (ConversationUpdate tevékenység)"
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "Párbeszédesemények",
+      "subtitle": "Párbeszédesemény"
+    },
+    "trigger": {
+      "label": "Egyéni események"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "Feltétel kezelése a műveletek befejezése után",
+      "subtitle": "EndOfActions tevékenység"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "A beszélgetés véget ért",
+      "subtitle": "EndOfConversation tevékenység"
+    },
+    "trigger": {
+      "label": "Beszélgetés vége (EndOfConversation tevékenység)"
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "Hiba történt",
+      "subtitle": "Hibaesemény"
+    },
+    "trigger": {
+      "label": "Hiba történt (Error esemény)"
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "Esemény érkezett",
+      "subtitle": "Eseménytevékenység"
+    },
+    "trigger": {
+      "label": "Esemény érkezett (Event tevékenység)"
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "Átadás valós személynek",
+      "subtitle": "Átadási tevékenység"
+    },
+    "trigger": {
+      "label": "Átadás embernek (Handoff tevékenység)"
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "Telepítés frissítve",
+      "subtitle": "Telepítés – tevékenység frissítve"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "Felismert szándék",
+      "subtitle": "Felismert szándék"
+    },
+    "trigger": {
+      "label": "Felismert szándék"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "Beszélgetés meghívva",
+      "subtitle": "Meghívási tevékenység"
+    },
+    "trigger": {
+      "label": "Beszélgetés meghívva (Invoke tevékenység)"
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "Fogadott üzenet",
+      "subtitle": "Fogadott üzenet tevékenység"
+    },
+    "trigger": {
+      "label": "Üzenet érkezett (Üzenet érkezett tevékenység)"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "Üzenet törölve",
+      "subtitle": "Üzenet törölve tevékenység"
+    },
+    "trigger": {
+      "label": "Üzenet törölve (Üzenet törölve tevékenység)"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "Üzenetre érkezett reagálás",
+      "subtitle": "Üzenetre érkezett reagálás tevékenység"
+    },
+    "trigger": {
+      "label": "Üzenetreakció (Üzenetreakció tevékenység)"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "Üzenet frissítve",
+      "subtitle": "Üzenet frissítve tevékenység"
+    },
+    "trigger": {
+      "label": "Üzenet frissítve (Üzenet frissítve tevékenység)"
+    }
+  },
+  "Microsoft.OnQnAMatch": {
+    "trigger": {
+      "label": "Felismert QnA-szándék"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "Ismételt figyelmeztetés bevitelhez",
+      "subtitle": "Párbeszédesemény ismételt figyelmeztetése"
+    },
+    "trigger": {
+      "label": "Bemenet újrakérése (párbeszédpanel-újrakérési esemény)"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "A felhasználó éppen gépel",
+      "subtitle": "Gépelési tevékenység"
+    },
+    "trigger": {
+      "label": "A felhasználó gépel (Typing tevékenység)"
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "Ismeretlen szándék",
+      "subtitle": "Ismeretlen szándék felismerve"
+    },
+    "trigger": {
+      "label": "Ismeretlen szándék"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -134,6 +436,15 @@
     "form": {
       "label": "Válaszküldés",
       "subtitle": "Tevékenység küldése"
+    }
+  },
+  "Microsoft.SendHandoffActivity": {
+    "form": {
+      "label": "Send a handoff request",
+      "subtitle": "Send Handoff Activity"
+    },
+    "menu": {
+      "label": "Send Handoff Event"
     }
   },
   "Microsoft.SetProperties": {
@@ -160,7 +471,18 @@
       "subtitle": "Kapcsolófeltétel"
     }
   },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Szöveg kérése",
+      "subtitle": "Szövegbevitel"
+    }
+  },
   "Microsoft.ThrowException": {
+    "flow": {
+      "body": {
+        "description": "= ErrorValue"
+      }
+    },
     "form": {
       "label": "Kivétel előidézése",
       "subtitle": "Kivétel előidézése"
@@ -172,185 +494,15 @@
       "subtitle": "Nyomkövetési tevékenység"
     }
   },
-  "Microsoft.Ask": {
+  "Microsoft.UpdateActivity": {
+    "flow": {
+      "header": {
+        "title": "Tevékenység frissítése"
+      }
+    },
     "form": {
-      "label": "Válasz küldése kérdés feltevéséhez",
-      "subtitle": "Tevékenység kérése"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Fájl vagy melléklet kérése",
-      "subtitle": "Melléklet bemenete"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Adatkérés több választási lehetőséggel",
-      "subtitle": "Választási lehetőség bemenete"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Megerősítés kérése",
-      "subtitle": "Bemenet megerősítése"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Dátum vagy idő kérése",
-      "subtitle": "Dátum- és időbevitel"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Szám kérése",
-      "subtitle": "Számbevitel"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth-bejelentkezés",
-      "subtitle": "OAuth-bemenet"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Szöveg kérése",
-      "subtitle": "Szövegbevitel"
-    }
-  },
-  "Microsoft.OnActivity": {
-    "form": {
-      "label": "Tevékenységek",
-      "subtitle": "Tevékenység érkezett"
-    }
-  },
-  "Microsoft.OnAssignEntity": {
-    "form": {
-      "label": "Feltétel kezelése entitás hozzárendelésekor",
-      "subtitle": "EntityAssigned tevékenység"
-    }
-  },
-  "Microsoft.OnBeginDialog": {
-    "form": {
-      "label": "Elindított párbeszéd",
-      "subtitle": "Párbeszédesemény indítása"
-    }
-  },
-  "Microsoft.OnCancelDialog": {
-    "form": {
-      "label": "Párbeszéd megszakítva",
-      "subtitle": "Párbeszédesemény megszakítása"
-    }
-  },
-  "Microsoft.OnCondition": {
-    "form": {
-      "label": "Feltétel kezelése",
-      "subtitle": "Feltétel"
-    }
-  },
-  "Microsoft.OnConversationUpdateActivity": {
-    "form": {
-      "description": "A felhasználó által a robottal kezdeményezett új beszélgetés megkezdésekor aktivált események kezelése.",
-      "label": "Üdvözlés",
-      "subtitle": "ConversationUpdate tevékenység"
-    }
-  },
-  "Microsoft.OnDialogEvent": {
-    "form": {
-      "label": "Párbeszédesemények",
-      "subtitle": "Párbeszédesemény"
-    }
-  },
-  "Microsoft.OnEndOfActions": {
-    "form": {
-      "label": "Feltétel kezelése a műveletek befejezése után",
-      "subtitle": "EndOfActions tevékenység"
-    }
-  },
-  "Microsoft.OnEndOfConversationActivity": {
-    "form": {
-      "label": "A beszélgetés véget ért",
-      "subtitle": "EndOfConversation tevékenység"
-    }
-  },
-  "Microsoft.OnError": {
-    "form": {
-      "label": "Hiba történt",
-      "subtitle": "Hibaesemény"
-    }
-  },
-  "Microsoft.OnEventActivity": {
-    "form": {
-      "label": "Esemény érkezett",
-      "subtitle": "Eseménytevékenység"
-    }
-  },
-  "Microsoft.OnHandoffActivity": {
-    "form": {
-      "label": "Átadás valós személynek",
-      "subtitle": "Átadási tevékenység"
-    }
-  },
-  "Microsoft.OnInstallationUpdateActivity": {
-    "form": {
-      "label": "Telepítés frissítve",
-      "subtitle": "Telepítés – tevékenység frissítve"
-    }
-  },
-  "Microsoft.OnIntent": {
-    "form": {
-      "label": "Felismert szándék",
-      "subtitle": "Felismert szándék"
-    }
-  },
-  "Microsoft.OnInvokeActivity": {
-    "form": {
-      "label": "Beszélgetés meghívva",
-      "subtitle": "Meghívási tevékenység"
-    }
-  },
-  "Microsoft.OnMessageActivity": {
-    "form": {
-      "label": "Fogadott üzenet",
-      "subtitle": "Fogadott üzenet tevékenység"
-    }
-  },
-  "Microsoft.OnMessageDeleteActivity": {
-    "form": {
-      "label": "Üzenet törölve",
-      "subtitle": "Üzenet törölve tevékenység"
-    }
-  },
-  "Microsoft.OnMessageReactionActivity": {
-    "form": {
-      "label": "Üzenetre érkezett reagálás",
-      "subtitle": "Üzenetre érkezett reagálás tevékenység"
-    }
-  },
-  "Microsoft.OnMessageUpdateActivity": {
-    "form": {
-      "label": "Üzenet frissítve",
-      "subtitle": "Üzenet frissítve tevékenység"
-    }
-  },
-  "Microsoft.OnRepromptDialog": {
-    "form": {
-      "label": "Ismételt figyelmeztetés bevitelhez",
-      "subtitle": "Párbeszédesemény ismételt figyelmeztetése"
-    }
-  },
-  "Microsoft.OnTypingActivity": {
-    "form": {
-      "label": "A felhasználó éppen gépel",
-      "subtitle": "Gépelési tevékenység"
-    }
-  },
-  "Microsoft.OnUnknownIntent": {
-    "form": {
-      "label": "Ismeretlen szándék",
-      "subtitle": "Ismeretlen szándék felismerve"
+      "label": "Tevékenység frissítése",
+      "subtitle": "Update Activity"
     }
   }
 }

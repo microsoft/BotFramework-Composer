@@ -11,13 +11,40 @@
       }
     }
   },
+  "Microsoft.Ask": {
+    "flow": {
+      "footer": {
+        "description": "= Операция по умолчанию"
+      }
+    },
+    "form": {
+      "label": "Отправьте ответ, чтобы задать вопрос",
+      "subtitle": "Действие вопроса"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Подсказка для файла или вложения",
+      "subtitle": "Входные данные вложения"
+    }
+  },
   "Microsoft.BeginDialog": {
+    "flow": {
+      "footer": {
+        "description": "= Возвращаемое значение"
+      }
+    },
     "form": {
       "label": "Начать новый диалог",
       "subtitle": "Начало диалога"
     }
   },
   "Microsoft.BeginSkill": {
+    "flow": {
+      "footer": {
+        "description": "= Результат"
+      }
+    },
     "form": {
       "label": "Соединить с навыком",
       "subtitle": "Диалог навыков"
@@ -30,15 +57,38 @@
     }
   },
   "Microsoft.CancelAllDialogs": {
+    "flow": {
+      "body": {
+        "description": "(Событие)"
+      }
+    },
     "form": {
       "label": "Отменить все активные диалоги",
       "subtitle": "Отмена всех диалогов"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Предложение с множественным выбором",
+      "subtitle": "Входные данные для варианта выбора"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Подсказка для подтверждения",
+      "subtitle": "Подтверждение ввода"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
       "label": "Продолжить цикл",
       "subtitle": "Продолжить цикл"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Подсказка для даты или времени",
+      "subtitle": "Ввод даты и времени"
     }
   },
   "Microsoft.DebugBreak": {
@@ -65,12 +115,22 @@
     }
   },
   "Microsoft.EditArray": {
+    "flow": {
+      "footer": {
+        "description": "= Результат"
+      }
+    },
     "form": {
       "label": "Изменить свойство массива",
       "subtitle": "Изменение массива"
     }
   },
   "Microsoft.EmitEvent": {
+    "flow": {
+      "body": {
+        "description": "(Событие)"
+      }
+    },
     "form": {
       "label": "Выдача пользовательского события",
       "subtitle": "Выдача события"
@@ -100,7 +160,29 @@
       "subtitle": "Для каждой страницы"
     }
   },
+  "Microsoft.GetActivityMembers": {
+    "flow": {
+      "body": {
+        "description": "= ActivityId"
+      },
+      "footer": {
+        "description": "= Свойство результата"
+      }
+    }
+  },
+  "Microsoft.GetConversationMembers": {
+    "flow": {
+      "footer": {
+        "description": "= Свойство результата"
+      }
+    }
+  },
   "Microsoft.HttpRequest": {
+    "flow": {
+      "footer": {
+        "description": "= Свойство результата"
+      }
+    },
     "form": {
       "label": "Отправить HTTP-запрос",
       "subtitle": "HTTP-запрос"
@@ -116,6 +198,226 @@
     "form": {
       "label": "Вход в консоль",
       "subtitle": "Действие журнала"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Подсказка для числа",
+      "subtitle": "Ввод числа"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "flow": {
+      "footer": {
+        "description": "= Свойство маркера"
+      }
+    },
+    "form": {
+      "label": "Вход OAuth",
+      "subtitle": "Входные данные OAuth"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "Действия",
+      "subtitle": "Действие принято"
+    },
+    "trigger": {
+      "label": "Действия (получено действие)",
+      "submenu": {
+        "label": "Действия"
+      }
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "Обработка условия при назначении сущности",
+      "subtitle": "Действие EntityAssigned"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "Диалог начат",
+      "subtitle": "Событие начала диалога"
+    },
+    "trigger": {
+      "label": "Диалог начат (событие начала диалога).",
+      "submenu": {
+        "label": "События диалога"
+      }
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "Диалог отменен",
+      "subtitle": "Событие отмены диалога"
+    },
+    "trigger": {
+      "label": "Диалог отменен (событие отмены диалога)."
+    }
+  },
+  "Microsoft.OnChooseIntent": {
+    "trigger": {
+      "label": "Распознаны повторяющиеся намерения"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "Обработка условия",
+      "subtitle": "Условие"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "Обработка событий, создаваемых, когда пользователь начинает беседу с ботом.",
+      "label": "Приветствие",
+      "subtitle": "Действие ConversationUpdate"
+    },
+    "trigger": {
+      "label": "Приветствие (действие ConversationUpdate)."
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "События диалога",
+      "subtitle": "Событие диалога"
+    },
+    "trigger": {
+      "label": "Пользовательские события"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "Обработка условия при завершении действий",
+      "subtitle": "Действие EndOfActions"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "Беседа завершена",
+      "subtitle": "Действие EndOfConversation"
+    },
+    "trigger": {
+      "label": "Беседа завершена (действие EndOfConversation)."
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "Произошла ошибка",
+      "subtitle": "Событие ошибки"
+    },
+    "trigger": {
+      "label": "Произошла ошибка (событие ошибки)."
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "Событие получено",
+      "subtitle": "Действие события"
+    },
+    "trigger": {
+      "label": "Событие получено (действие Event)."
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "Передать человеку",
+      "subtitle": "Действие передачи"
+    },
+    "trigger": {
+      "label": "Передача человеку (действие Handoff)."
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "Установка обновлена",
+      "subtitle": "Действие обновления установки"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "Намерение распознано",
+      "subtitle": "Намерение распознано"
+    },
+    "trigger": {
+      "label": "Намерение распознано"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "Вызвана беседа",
+      "subtitle": "Действие вызова"
+    },
+    "trigger": {
+      "label": "Вызвана беседа (действие Invoke)."
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "Сообщение получено",
+      "subtitle": "Действие получения сообщения"
+    },
+    "trigger": {
+      "label": "Сообщение получено (действие получения сообщения)"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "Сообщение удалено",
+      "subtitle": "Действие удаления сообщения"
+    },
+    "trigger": {
+      "label": "Сообщение удалено (действие удаления сообщения)"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "Реакция на сообщение",
+      "subtitle": "Действие реакции на сообщение"
+    },
+    "trigger": {
+      "label": "Реакция на сообщение (действие реакции на сообщение)"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "Сообщение обновлено",
+      "subtitle": "Действие обновления сообщения"
+    },
+    "trigger": {
+      "label": "Сообщение обновлено (действие обновления сообщения)"
+    }
+  },
+  "Microsoft.OnQnAMatch": {
+    "trigger": {
+      "label": "Намерение вопросов и ответов распознано"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "Повторная подсказка для ввода",
+      "subtitle": "Событие повторной подсказки диалога"
+    },
+    "trigger": {
+      "label": "Повторить запрос на ввод (событие повторного запроса диалога)"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "Пользователь осуществляет ввод",
+      "subtitle": "Действие ввода"
+    },
+    "trigger": {
+      "label": "Пользователь осуществляет ввод (действие Typing)."
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "Неизвестное намерение",
+      "subtitle": "Распознано неизвестное намерение"
+    },
+    "trigger": {
+      "label": "Неизвестное намерение"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -134,6 +436,15 @@
     "form": {
       "label": "Отправить ответ",
       "subtitle": "Отправка действия"
+    }
+  },
+  "Microsoft.SendHandoffActivity": {
+    "form": {
+      "label": "Отправка запроса на передачу",
+      "subtitle": "Отправка действия передачи"
+    },
+    "menu": {
+      "label": "Отправка события передачи"
     }
   },
   "Microsoft.SetProperties": {
@@ -160,7 +471,18 @@
       "subtitle": "Условие Switch"
     }
   },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Подсказка для текста",
+      "subtitle": "Ввод текста"
+    }
+  },
   "Microsoft.ThrowException": {
+    "flow": {
+      "body": {
+        "description": "= ErrorValue"
+      }
+    },
     "form": {
       "label": "Вызвать исключение ",
       "subtitle": "Вызвать исключение "
@@ -172,185 +494,15 @@
       "subtitle": "Действие трассировки"
     }
   },
-  "Microsoft.Ask": {
+  "Microsoft.UpdateActivity": {
+    "flow": {
+      "header": {
+        "title": "Обновить действие"
+      }
+    },
     "form": {
-      "label": "Отправьте ответ, чтобы задать вопрос",
-      "subtitle": "Действие вопроса"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Подсказка для файла или вложения",
-      "subtitle": "Входные данные вложения"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Предложение с множественным выбором",
-      "subtitle": "Входные данные для варианта выбора"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Подсказка для подтверждения",
-      "subtitle": "Подтверждение ввода"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Подсказка для даты или времени",
-      "subtitle": "Ввод даты и времени"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Подсказка для числа",
-      "subtitle": "Ввод числа"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Вход OAuth",
-      "subtitle": "Входные данные OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Подсказка для текста",
-      "subtitle": "Ввод текста"
-    }
-  },
-  "Microsoft.OnActivity": {
-    "form": {
-      "label": "Действия",
-      "subtitle": "Действие принято"
-    }
-  },
-  "Microsoft.OnAssignEntity": {
-    "form": {
-      "label": "Обработка условия при назначении сущности",
-      "subtitle": "Действие EntityAssigned"
-    }
-  },
-  "Microsoft.OnBeginDialog": {
-    "form": {
-      "label": "Диалог начат",
-      "subtitle": "Событие начала диалога"
-    }
-  },
-  "Microsoft.OnCancelDialog": {
-    "form": {
-      "label": "Диалог отменен",
-      "subtitle": "Событие отмены диалога"
-    }
-  },
-  "Microsoft.OnCondition": {
-    "form": {
-      "label": "Обработка условия",
-      "subtitle": "Условие"
-    }
-  },
-  "Microsoft.OnConversationUpdateActivity": {
-    "form": {
-      "description": "Обработка событий, создаваемых, когда пользователь начинает беседу с ботом.",
-      "label": "Приветствие",
-      "subtitle": "Действие ConversationUpdate"
-    }
-  },
-  "Microsoft.OnDialogEvent": {
-    "form": {
-      "label": "События диалога",
-      "subtitle": "Событие диалога"
-    }
-  },
-  "Microsoft.OnEndOfActions": {
-    "form": {
-      "label": "Обработка условия при завершении действий",
-      "subtitle": "Действие EndOfActions"
-    }
-  },
-  "Microsoft.OnEndOfConversationActivity": {
-    "form": {
-      "label": "Беседа завершена",
-      "subtitle": "Действие EndOfConversation"
-    }
-  },
-  "Microsoft.OnError": {
-    "form": {
-      "label": "Произошла ошибка",
-      "subtitle": "Событие ошибки"
-    }
-  },
-  "Microsoft.OnEventActivity": {
-    "form": {
-      "label": "Событие получено",
-      "subtitle": "Действие события"
-    }
-  },
-  "Microsoft.OnHandoffActivity": {
-    "form": {
-      "label": "Передать человеку",
-      "subtitle": "Действие передачи"
-    }
-  },
-  "Microsoft.OnInstallationUpdateActivity": {
-    "form": {
-      "label": "Установка обновлена",
-      "subtitle": "Действие обновления установки"
-    }
-  },
-  "Microsoft.OnIntent": {
-    "form": {
-      "label": "Намерение распознано",
-      "subtitle": "Намерение распознано"
-    }
-  },
-  "Microsoft.OnInvokeActivity": {
-    "form": {
-      "label": "Вызвана беседа",
-      "subtitle": "Действие вызова"
-    }
-  },
-  "Microsoft.OnMessageActivity": {
-    "form": {
-      "label": "Сообщение получено",
-      "subtitle": "Действие получения сообщения"
-    }
-  },
-  "Microsoft.OnMessageDeleteActivity": {
-    "form": {
-      "label": "Сообщение удалено",
-      "subtitle": "Действие удаления сообщения"
-    }
-  },
-  "Microsoft.OnMessageReactionActivity": {
-    "form": {
-      "label": "Реакция на сообщение",
-      "subtitle": "Действие реакции на сообщение"
-    }
-  },
-  "Microsoft.OnMessageUpdateActivity": {
-    "form": {
-      "label": "Сообщение обновлено",
-      "subtitle": "Действие обновления сообщения"
-    }
-  },
-  "Microsoft.OnRepromptDialog": {
-    "form": {
-      "label": "Повторная подсказка для ввода",
-      "subtitle": "Событие повторной подсказки диалога"
-    }
-  },
-  "Microsoft.OnTypingActivity": {
-    "form": {
-      "label": "Пользователь осуществляет ввод",
-      "subtitle": "Действие ввода"
-    }
-  },
-  "Microsoft.OnUnknownIntent": {
-    "form": {
-      "label": "Неизвестное намерение",
-      "subtitle": "Распознано неизвестное намерение"
+      "label": "Обновление действия",
+      "subtitle": "Обновить действие"
     }
   }
 }
