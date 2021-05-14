@@ -909,40 +909,40 @@
       "description": "Continue a specific conversation (via StorageQueue implementation).",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
         },
         "conversationReference": {
           "title": "Conversation Reference",
           "description": "A conversation reference. (NOTE: Minimum required values or channelId, conversation)."
         },
         "value": {
-          "title": "Value",
-          "description": "Value to send in the activity.value."
+          "title": "値",
+          "description": "activity.value で送信する値です。"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
         }
       }
     },
     "Microsoft.ContinueConversationLater": {
       "title": "後で会話を続行する (キュー)",
-      "description": "Continue conversation at later time (via StorageQueue implementation).",
+      "description": "後で会話を続行します (StorageQueue の実装経由)。",
       "patternProperties": {
         "^\\$": {
           "title": "ツール プロパティ",
@@ -1711,30 +1711,30 @@
       "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
         },
         "property": {
-          "title": "Property",
-          "description": "Property (named location to store information)."
+          "title": "プロパティ",
+          "description": "プロパティ (情報を格納する場所の名前)。"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
         }
       }
     },
@@ -1885,8 +1885,8 @@
       "description": "EntityRecognizer から派生したコンポーネント。",
       "oneOf": {
         "18": {
-          "title": "Reference to Microsoft.IEntityRecognizer",
-          "description": "Reference to Microsoft.IEntityRecognizer .dialog file."
+          "title": "Microsoft.IEntityRecognizer への参照",
+          "description": "Microsoft.IEntityRecognizer .dialog ファイルへの参照。"
         }
       }
     },
@@ -1907,8 +1907,8 @@
       "description": "OnCondition クラスから派生したコンポーネント。",
       "oneOf": {
         "27": {
-          "title": "Reference to Microsoft.ITrigger",
-          "description": "Reference to Microsoft.ITrigger .dialog file."
+          "title": "Microsoft.ITrigger への参照",
+          "description": "Microsoft.ITrigger .dialog ファイルへの参照。"
         }
       }
     },
@@ -1917,8 +1917,8 @@
       "description": "TriggerSelector クラスから派生したコンポーネント。",
       "oneOf": {
         "5": {
-          "title": "Reference to Microsoft.ITriggerSelector",
-          "description": "Reference to Microsoft.ITriggerSelector .dialog file."
+          "title": "Microsoft.ITriggerSelector への参照",
+          "description": "Microsoft.ITriggerSelector .dialog ファイルへの参照。"
         }
       }
     },
@@ -2528,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "エンティティの割り当てで",
-      "description": "Actions to apply an operation on a property and value.",
+      "description": "プロパティと値に操作を適用するアクション。",
       "patternProperties": {
         "^\\$": {
           "title": "ツール プロパティ",
@@ -2538,14 +2538,14 @@
       "properties": {
         "operation": {
           "title": "操作",
-          "description": "Operation filter on event."
+          "description": "イベントの操作フィルター。"
         },
         "property": {
           "title": "プロパティ",
-          "description": "Property filter on event."
+          "description": "イベントのプロパティ フィルター。"
         },
         "value": {
-          "title": "Value",
+          "title": "値",
           "description": "Value filter on event."
         },
         "condition": {
@@ -2648,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "エンティティの選択で",
-      "description": "Actions to be performed when value is ambiguous for operator and property.",
+      "description": "演算子およびプロパティの値があいまいな場合に実行されるアクション。",
       "patternProperties": {
         "^\\$": {
           "title": "ツール プロパティ",
@@ -2657,12 +2657,12 @@
       },
       "properties": {
         "operation": {
-          "title": "Operation",
+          "title": "操作",
           "description": "Operation filter on event."
         },
         "property": {
-          "title": "Property",
-          "description": "Property filter on event."
+          "title": "プロパティ",
+          "description": "イベントのプロパティ フィルター。"
         },
         "value": {
           "title": "Ambiguous value",
@@ -2695,8 +2695,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "On ambiguous intent",
-      "description": "Actions to perform on when an intent is ambiguous.",
+      "title": "あいまいなインテントの場合",
+      "description": "インテントがあいまいな場合に実行するアクション。",
       "patternProperties": {
         "^\\$": {
           "title": "ツール プロパティ",
@@ -2740,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "プロパティの選択で",
-      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
+      "description": "プロパティおよび操作へのエンティティのマッピングが複数ある可能性がある場合に実行するアクション。",
       "patternProperties": {
         "^\\$": {
           "title": "ツール プロパティ",
@@ -4072,26 +4072,26 @@
       "description": "Sends a handoff activity to trigger a handoff request.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
         }
       },
       "properties": {
         "context": {
-          "title": "Context",
-          "description": "Context to send with the handoff request"
+          "title": "コンテキスト",
+          "description": "ハンドオフ要求と送信するコンテキスト"
         },
         "transcript": {
           "title": "transcript",
           "description": "Transcript to send with the handoff request"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
         }
       }
     },
@@ -4292,38 +4292,38 @@
       }
     },
     "Microsoft.TelemetryTrackEventAction": {
-      "title": "Telemetry - track event",
-      "description": "Track a custom event using the registered Telemetry Client.",
+      "title": "テレメトリ - イベントの追跡",
+      "description": "登録されているテレメトリ クライアントを使用してカスタム イベントを追跡します。",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "ツール プロパティ",
+          "description": "ツーリングの終了したプロパティを開きます。"
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "ダイアログの省略可能な ID"
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "無効",
+          "description": "true の場合はこのアクションを無効にするオプションの条件。"
         },
         "eventName": {
-          "title": "Event name",
-          "description": "The name of the event to track."
+          "title": "イベント名",
+          "description": "追跡するイベントの名前。"
         },
         "properties": {
-          "title": "Properties",
-          "description": "One or more properties to attach to the event being tracked."
+          "title": "プロパティ",
+          "description": "追跡中のイベントにアタッチする 1 つ以上のプロパティ。"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "ダイアログ オブジェクトのサブタイプ",
+          "description": "構成しているコンポーネントの有効なプロパティを定義します (ダイアログ .schema ファイルから)"
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "デザイナー情報",
+          "description": "Bot Framework Composer の補足情報。"
         }
       }
     },
@@ -4754,388 +4754,388 @@
       }
     },
     "schema": {
-      "title": "Core schema meta-schema"
+      "title": "コア スキーマのメタスキーマ"
     },
     "botframework.json": {
       "definitions": {
         "ChannelAccount": {
-          "description": "Channel account information needed to route a message",
+          "description": "メッセージをルーティングするために必要なチャネル アカウント情報",
           "title": "ChannelAccount",
           "properties": {
             "id": {
-              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-              "title": "id"
+              "description": "このチャネルのユーザーまたはボットのチャネル ID (例: joe@smith.com、@joesmith、または\n123456)",
+              "title": "ID"
             },
             "name": {
-              "description": "Display friendly name",
-              "title": "name"
+              "description": "フレンドリ名の表示",
+              "title": "名前"
             },
             "aadObjectId": {
-              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "description": "Azure Active Directory (AAD) 内のこのアカウントのオブジェクト ID",
               "title": "aadObjectId"
             },
             "role": {
-              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-              "title": "role"
+              "description": "アカウントの背後にあるエンティティのロール (例: User、Bot など)。可能な値は次のとおりです。\n'user'、'bot'",
+              "title": "役割"
             }
           }
         },
         "ConversationAccount": {
-          "description": "Channel account information for a conversation",
+          "description": "会話のチャネル アカウント情報",
           "title": "ConversationAccount",
           "properties": {
             "isGroup": {
-              "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+              "description": "アクティビティが生成された時点で会話に 2 人以上の参加者に含まれているか\nどうかを示します",
               "title": "isGroup"
             },
             "conversationType": {
-              "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+              "description": "会話の種類を区別するチャネルでの会話の種類を示します",
               "title": "conversationType"
             },
             "id": {
-              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-              "title": "id"
+              "description": "このチャネルのユーザーまたはボットのチャネル ID (例: joe@smith.com、@joesmith、または\n123456)",
+              "title": "ID"
             },
             "name": {
-              "description": "Display friendly name",
-              "title": "name"
+              "description": "フレンドリ名の表示",
+              "title": "名前"
             },
             "aadObjectId": {
-              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "description": "Azure Active Directory (AAD) 内のこのアカウントのオブジェクト ID",
               "title": "aadObjectId"
             },
             "role": {
-              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-              "title": "role"
+              "description": "アカウントの背後にあるエンティティのロール (例: User、Bot など)。可能な値は次のとおりです。\n'user'、'bot'",
+              "title": "役割"
             }
           }
         },
         "MessageReaction": {
-          "description": "Message reaction object",
+          "description": "メッセージのリアクション オブジェクト",
           "title": "MessageReaction",
           "properties": {
             "type": {
-              "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
-              "title": "type"
+              "description": "メッセージのリアクションの種類。使用できる値は、'like'、'plusOne' などです",
+              "title": "種類"
             }
           }
         },
         "CardAction": {
-          "description": "A clickable action",
+          "description": "クリック可能なアクション",
           "title": "CardAction",
           "properties": {
             "type": {
-              "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-              "title": "type"
+              "description": "このボタンによって実装されるアクションの種類。使用できる値は、'openUrl'、'imBack'、\n'postBack'、'playAudio'、'Playaudio'、'showImage'、'downloadFile'、'signin' 'call'、\n'payment'、'messageBack' などです",
+              "title": "種類"
             },
             "title": {
-              "description": "Text description which appears on the button",
-              "title": "title"
+              "description": "ボタンに表示されるテキストの説明",
+              "title": "タイトル"
             },
             "image": {
-              "description": "Image URL which will appear on the button, next to text label",
-              "title": "image"
+              "description": "テキスト ラベルの横にある、ボタンに表示されるイメージの URL",
+              "title": "イメージ"
             },
             "text": {
-              "description": "Text for this action",
-              "title": "text"
+              "description": "このアクションのテキスト",
+              "title": "テキスト"
             },
             "displayText": {
-              "description": "(Optional) text to display in the chat feed if the button is clicked",
+              "description": "(省略可能) ボタンがクリックされたときにチャット フィードに表示するテキスト",
               "title": "displayText"
             },
             "value": {
-              "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
-              "title": "value"
+              "description": "アクションの補足パラメーター。このプロパティの内容は ActionType によって異なります",
+              "title": "値"
             },
             "channelData": {
-              "description": "Channel-specific data associated with this action",
+              "description": "このアクションに関連付けられているチャネル固有のデータ",
               "title": "channelData"
             }
           }
         },
         "SuggestedActions": {
-          "description": "SuggestedActions that can be performed",
+          "description": "実行可能な SuggestedActions",
           "title": "SuggestedActions",
           "properties": {
             "to": {
-              "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
-              "title": "to",
+              "description": "アクションを表示する必要がある受信者の ID。 これらの ID は、channelId と\nアクティビティのすべての受信者のサブセットに関連しています",
+              "title": "へ",
               "items": {
-                "title": "Id",
-                "description": "Id of recipient."
+                "title": "ID",
+                "description": "受信者の ID。"
               }
             },
             "actions": {
-              "description": "Actions that can be shown to the user",
-              "title": "actions"
+              "description": "ユーザーに表示できるアクション",
+              "title": "アクション"
             }
           }
         },
         "Attachment": {
-          "description": "An attachment within an activity",
-          "title": "Attachment",
+          "description": "アクティビティ内の添付ファイル",
+          "title": "添付ファイル",
           "properties": {
             "contentType": {
-              "description": "mimetype/Contenttype for the file",
+              "description": "ファイルの mimetype/Contenttype",
               "title": "contentType"
             },
             "contentUrl": {
-              "description": "Content Url",
+              "description": "コンテンツ URL",
               "title": "contentUrl"
             },
             "content": {
-              "description": "Embedded content",
-              "title": "content"
+              "description": "埋め込みコンテンツ",
+              "title": "コンテンツ"
             },
             "name": {
-              "description": "(OPTIONAL) The name of the attachment",
-              "title": "name"
+              "description": "(省略可能) 添付ファイルの名前",
+              "title": "名前"
             },
             "thumbnailUrl": {
-              "description": "(OPTIONAL) Thumbnail associated with attachment",
+              "description": "(省略可能) 添付ファイルに関連付けられているサムネイル",
               "title": "thumbnailUrl"
             }
           }
         },
         "Entity": {
-          "description": "Metadata object pertaining to an activity",
-          "title": "Entity",
+          "description": "アクティビティに関連するメタデータ オブジェクト",
+          "title": "エンティティ",
           "properties": {
             "type": {
-              "description": "Type of this entity (RFC 3987 IRI)",
-              "title": "type"
+              "description": "このエンティティの種類 (RFC 3987 IRI)",
+              "title": "種類"
             }
           }
         },
         "ConversationReference": {
-          "description": "An object relating to a particular point in a conversation",
+          "description": "会話の特定のポイントに関連するオブジェクト",
           "title": "ConversationReference",
           "properties": {
             "activityId": {
-              "description": "(Optional) ID of the activity to refer to",
+              "description": "(省略可能) 参照するアクティビティの ID",
               "title": "activityId"
             },
             "user": {
-              "description": "(Optional) User participating in this conversation",
-              "title": "user"
+              "description": "(省略可能) この会話に参加しているユーザー",
+              "title": "ユーザー"
             },
             "bot": {
-              "description": "Bot participating in this conversation",
-              "title": "bot"
+              "description": "この会話に参加しているボット",
+              "title": "ボット"
             },
             "conversation": {
-              "description": "Conversation reference",
-              "title": "conversation"
+              "description": "会話のリファレンス",
+              "title": "会話"
             },
             "channelId": {
-              "description": "Channel ID",
+              "description": "チャネル ID",
               "title": "channelId"
             },
             "serviceUrl": {
-              "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+              "description": "参照された会話に関する操作が実行される可能性のあるサービス エンドポイント",
               "title": "serviceUrl"
             }
           }
         },
         "TextHighlight": {
-          "description": "Refers to a substring of content within another field",
+          "description": "別のフィールド内のコンテンツの部分文字列を参照します",
           "title": "TextHighlight",
           "properties": {
             "text": {
-              "description": "Defines the snippet of text to highlight",
-              "title": "text"
+              "description": "強調表示するテキストのスニペットを定義します",
+              "title": "テキスト"
             },
             "occurrence": {
-              "description": "Occurrence of the text field within the referenced text, if multiple exist.",
-              "title": "occurrence"
+              "description": "参照されているテキスト内のテキスト フィールドが複数存在する場合、その出現。",
+              "title": "出現"
             }
           }
         },
         "SemanticAction": {
-          "description": "Represents a reference to a programmatic action",
+          "description": "プログラムによるアクションへの参照を表します",
           "title": "SemanticAction",
           "properties": {
             "id": {
-              "description": "ID of this action",
-              "title": "id"
+              "description": "このアクションの ID",
+              "title": "ID"
             },
             "entities": {
-              "description": "Entities associated with this action",
-              "title": "entities"
+              "description": "このアクションに関連付けられているエンティティ",
+              "title": "エンティティ"
             }
           }
         },
         "Activity": {
-          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
-          "title": "Activity",
+          "description": "アクティビティは、Bot Framework 3.0 プロトコルの基本的な通信タイプです。",
+          "title": "アクティビティ",
           "properties": {
             "type": {
-              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "type"
+              "description": "アクティビティの種類が含まれています。使用できる値は次のとおりです: 'message'、'contactRelationUpdate'、\n'conversationUpdate'、'typing'、'endOfConversation'、'event'、'invoke'、'deleteUserData'、\n'messageUpdate'、'messageDelete'、'installationUpdate'、'messageReaction '、'suggestion'、\n'trace'、'handoff'",
+              "title": "種類"
             },
             "id": {
-              "description": "Contains an ID that uniquely identifies the activity on the channel.",
-              "title": "id"
+              "description": "チャネルのアクティビティを一意に識別する ID が含まれています。",
+              "title": "ID"
             },
             "timestamp": {
-              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
-              "title": "timestamp"
+              "description": "メッセージが送信された日付と時刻 (UTC で、ISO-8601 形式で表される) が含まれます。",
+              "title": "タイムスタンプ"
             },
             "localTimestamp": {
-              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "description": "メッセージが送信された日付と時刻 (現地時刻で、ISO-8601 形式で表される) が\n含まれます。\n例: 2016-09-23T13:07:49.4714686-07:00。",
               "title": "localTimestamp"
             },
             "localTimezone": {
-              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "description": "メッセージが現地時刻の、IANA タイム ゾーンのデータベース形式で表されたタイム ゾーンの名前が\n含まれています。\n例: America/Los_Angeles。",
               "title": "localTimezone"
             },
             "serviceUrl": {
-              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "description": "チャネルのサービス エンドポイントを指定する URL が含まれています。チャネルによって設定します。",
               "title": "serviceUrl"
             },
             "channelId": {
-              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "description": "チャネルを一意に識別する ID が含まれています。チャネルによって設定します。",
               "title": "channelId"
             },
             "from": {
-              "description": "Identifies the sender of the message.",
-              "title": "from"
+              "description": "メッセージの送信者を識別します。",
+              "title": "から"
             },
             "conversation": {
-              "description": "Identifies the conversation to which the activity belongs.",
-              "title": "conversation"
+              "description": "このアクティビティが属している会話を識別します。",
+              "title": "会話"
             },
             "recipient": {
-              "description": "Identifies the recipient of the message.",
-              "title": "recipient"
+              "description": "メッセージの受信者を識別します。",
+              "title": "受信者"
             },
             "textFormat": {
-              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "description": "テキスト フィールド Default:markdown の形式。使用できる値は 'markdown'、'plain'、'xml' などです",
               "title": "textFormat"
             },
             "attachmentLayout": {
-              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "description": "複数の添付ファイルのレイアウトのヒント。既定: list。使用できる値は、'list'、\n'carousel' などです",
               "title": "attachmentLayout"
             },
             "membersAdded": {
-              "description": "The collection of members added to the conversation.",
+              "description": "会話に追加されたメンバーのコレクション。",
               "title": "membersAdded"
             },
             "membersRemoved": {
-              "description": "The collection of members removed from the conversation.",
+              "description": "会話から削除されたメンバーのコレクション。",
               "title": "membersRemoved"
             },
             "reactionsAdded": {
-              "description": "The collection of reactions added to the conversation.",
+              "description": "会話に追加されたリアクションのコレクション。",
               "title": "reactionsAdded"
             },
             "reactionsRemoved": {
-              "description": "The collection of reactions removed from the conversation.",
+              "description": "会話から削除されたリアクションのコレクション。",
               "title": "reactionsRemoved"
             },
             "topicName": {
-              "description": "The updated topic name of the conversation.",
+              "description": "会話の更新されたトピック名。",
               "title": "topicName"
             },
             "historyDisclosed": {
-              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "description": "チャネルの以前の履歴が公開されているかどうかを示します。",
               "title": "historyDisclosed"
             },
             "locale": {
-              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
-              "title": "locale"
+              "description": "テキスト フィールドの内容のロケール名。\nロケール名は、言語に関連付けられている ISO 639 の 2 または 3 文字のカルチャ コードと\n国または\n地域に関連付けられている ISO 3166 の 2 文字のサブカルチャ コードの組み合わせです。\nロケール名は有効な BCP-47 言語タグに対応する場合もあります。",
+              "title": "ロケール"
             },
             "text": {
-              "description": "The text content of the message.",
-              "title": "text"
+              "description": "メッセージのテキスト コンテンツ。",
+              "title": "テキスト"
             },
             "speak": {
-              "description": "The text to speak.",
-              "title": "speak"
+              "description": "読み上げるテキスト。",
+              "title": "話す"
             },
             "inputHint": {
-              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "description": "メッセージがクライアントに配信された後に、\nボットがユーザーによる入力を受け入れるか、要求するか、または無視するかを示します。\n使用できる値は、'acceptingInput'、'ignoringInput'、'expectingInput' などです",
               "title": "inputHint"
             },
             "summary": {
-              "description": "The text to display if the channel cannot render cards.",
-              "title": "summary"
+              "description": "チャネルがカードをレンダリングできない場合に表示されるテキスト。",
+              "title": "概要"
             },
             "suggestedActions": {
-              "description": "The suggested actions for the activity.",
+              "description": "アクティビティに推奨されるアクション。",
               "title": "suggestedActions"
             },
             "attachments": {
-              "description": "Attachments",
-              "title": "attachments"
+              "description": "添付ファイル",
+              "title": "添付ファイル"
             },
             "entities": {
-              "description": "Represents the entities that were mentioned in the message.",
-              "title": "entities"
+              "description": "メッセージで言及されたエンティティを表します。",
+              "title": "エンティティ"
             },
             "channelData": {
-              "description": "Contains channel-specific content.",
+              "description": "チャネル固有のコンテンツが含まれています。",
               "title": "channelData"
             },
             "action": {
-              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
-              "title": "action"
+              "description": "contactRelationUpdate の受信者が送信者の連絡先リストに追加または削除されたかどうかを\n示します。",
+              "title": "アクション"
             },
             "replyToId": {
-              "description": "Contains the ID of the message to which this message is a reply.",
+              "description": "このメッセージの返信先メッセージの ID が含まれています。",
               "title": "replyToId"
             },
             "label": {
-              "description": "A descriptive label for the activity.",
-              "title": "label"
+              "description": "アクティビティの説明的なラベル。",
+              "title": "ラベル"
             },
             "valueType": {
-              "description": "The type of the activity's value object.",
+              "description": "アクティビティの値オブジェクトの種類。",
               "title": "valueType"
             },
             "value": {
-              "description": "A value that is associated with the activity.",
-              "title": "value"
+              "description": "アクティビティに関連付けられている値。",
+              "title": "値"
             },
             "name": {
-              "description": "The name of the operation associated with an invoke or event activity.",
-              "title": "name"
+              "description": "呼び出しまたはイベント アクティビティに関連付けられた操作の名前。",
+              "title": "名前"
             },
             "relatesTo": {
-              "description": "A reference to another conversation or activity.",
+              "description": "別の会話またはアクティビティへの参照。",
               "title": "relatesTo"
             },
             "code": {
-              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "code"
+              "description": "会話が終了した理由を示す endOfConversation アクティビティのコード。\n使用できる値は、'unknown'、'completedSuccessfully'、'userCancelled'、'botTimedOut'\n'botIssuedInvalidMessage'、'channelFailed' などです",
+              "title": "コード"
             },
             "expiration": {
-              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
-              "title": "expiration"
+              "description": "アクティビティが \"期限切れ\" と見なされる必要があり、受信者に表示することが\nできない時間。",
+              "title": "有効期限"
             },
             "importance": {
-              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
-              "title": "importance"
+              "description": "アクティビティの重要性。使用できる値は、'low'、'normal'、'high' などです",
+              "title": "重要度"
             },
             "deliveryMode": {
-              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "description": "アクティビティの受信者の代替配信パスに通知するための配信のヒント。\n既定の配信モードは \"既定\" です。使用できる値は 'normal'、'notification' などです",
               "title": "deliveryMode"
             },
             "listenFor": {
-              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "description": "音声および言語プライミング システムが聞き取る必要のある語句と参照のリスト",
               "title": "listenFor",
               "items": {
-                "title": "Phrase",
-                "description": "Phrase to listen for."
+                "title": "語句",
+                "description": "聞き取る語句。"
               }
             },
             "textHighlights": {
-              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "description": "アクティビティに ReplyToId 値が含まれているときに強調表示されるテキスト フラグメントのコレクション。",
               "title": "textHighlights"
             },
             "semanticAction": {
-              "description": "An optional programmatic action accompanying this request",
+              "description": "この要求に付随する、プログラムによるオプションのアクション",
               "title": "semanticAction"
             }
           }

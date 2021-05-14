@@ -14,7 +14,7 @@
   "Microsoft.Ask": {
     "flow": {
       "footer": {
-        "description": "= Default operation"
+        "description": "= Operação predefinida"
       }
     },
     "form": {
@@ -31,7 +31,7 @@
   "Microsoft.BeginDialog": {
     "flow": {
       "footer": {
-        "description": "= Return value"
+        "description": "= Valor de retorno"
       }
     },
     "form": {
@@ -42,7 +42,7 @@
   "Microsoft.BeginSkill": {
     "flow": {
       "footer": {
-        "description": "= Result"
+        "description": "= Resultado"
       }
     },
     "form": {
@@ -59,7 +59,7 @@
   "Microsoft.CancelAllDialogs": {
     "flow": {
       "body": {
-        "description": "(Event)"
+        "description": "(Evento)"
       }
     },
     "form": {
@@ -117,7 +117,7 @@
   "Microsoft.EditArray": {
     "flow": {
       "footer": {
-        "description": "= Result"
+        "description": "= Resultado"
       }
     },
     "form": {
@@ -128,7 +128,7 @@
   "Microsoft.EmitEvent": {
     "flow": {
       "body": {
-        "description": "(Event)"
+        "description": "(Evento)"
       }
     },
     "form": {
@@ -166,21 +166,21 @@
         "description": "= ActivityId"
       },
       "footer": {
-        "description": "= Result property"
+        "description": "= Propriedade do resultado"
       }
     }
   },
   "Microsoft.GetConversationMembers": {
     "flow": {
       "footer": {
-        "description": "= Result property"
+        "description": "= Propriedade do resultado"
       }
     }
   },
   "Microsoft.HttpRequest": {
     "flow": {
       "footer": {
-        "description": "= Result property"
+        "description": "= Propriedade do resultado"
       }
     },
     "form": {
@@ -209,7 +209,7 @@
   "Microsoft.OAuthInput": {
     "flow": {
       "footer": {
-        "description": "= Token property"
+        "description": "= Propriedade de token"
       }
     },
     "form": {
@@ -223,9 +223,9 @@
       "subtitle": "Atividade recebida"
     },
     "trigger": {
-      "label": "Activities (Activity received)",
+      "label": "Atividades (Atividade recebida)",
       "submenu": {
-        "label": "Activities"
+        "label": "Atividades"
       }
     }
   },
@@ -241,9 +241,9 @@
       "subtitle": "Iniciar evento de diálogo"
     },
     "trigger": {
-      "label": "Dialog started (Begin dialog event)",
+      "label": "Diálogo iniciado (Iniciar evento de diálogo)",
       "submenu": {
-        "label": "Dialog events"
+        "label": "Eventos de diálogo"
       }
     }
   },
@@ -253,12 +253,12 @@
       "subtitle": "Cancelar evento de diálogo"
     },
     "trigger": {
-      "label": "Dialog cancelled (Cancel dialog event)"
+      "label": "Diálogo cancelado (Cancelar evento de diálogo)"
     }
   },
   "Microsoft.OnChooseIntent": {
     "trigger": {
-      "label": "Duplicated intents recognized"
+      "label": "Intenções duplicadas reconhecidas"
     }
   },
   "Microsoft.OnCondition": {
@@ -274,7 +274,7 @@
       "subtitle": "Atividade ConversationUpdate"
     },
     "trigger": {
-      "label": "Greeting (ConversationUpdate activity)"
+      "label": "Saudação (atividade ConversationUpdate)"
     }
   },
   "Microsoft.OnDialogEvent": {
@@ -283,7 +283,7 @@
       "subtitle": "Evento de diálogo"
     },
     "trigger": {
-      "label": "Custom events"
+      "label": "Eventos personalizados"
     }
   },
   "Microsoft.OnEndOfActions": {
@@ -298,7 +298,7 @@
       "subtitle": "Atividade EndOfConversation"
     },
     "trigger": {
-      "label": "Conversation ended (EndOfConversation activity)"
+      "label": "Fim de conversa (atividade EndOfConversation)"
     }
   },
   "Microsoft.OnError": {
@@ -307,7 +307,7 @@
       "subtitle": "Evento de erro"
     },
     "trigger": {
-      "label": "Error occurred (Error event)"
+      "label": "Ocorreu um erro (Evento de erro)"
     }
   },
   "Microsoft.OnEventActivity": {
@@ -316,7 +316,7 @@
       "subtitle": "Atividade de evento"
     },
     "trigger": {
-      "label": "Event received (Event activity)"
+      "label": "Evento recebido (Atividade de evento)"
     }
   },
   "Microsoft.OnHandoffActivity": {
@@ -325,7 +325,7 @@
       "subtitle": "Atividade de handoff"
     },
     "trigger": {
-      "label": "Handover to human (Handoff activity)"
+      "label": "Entrega a humano (Atividade de entrega)"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
@@ -340,7 +340,7 @@
       "subtitle": "Intenção reconhecida"
     },
     "trigger": {
-      "label": "Intent recognized"
+      "label": "Intenção reconhecida"
     }
   },
   "Microsoft.OnInvokeActivity": {
@@ -349,7 +349,7 @@
       "subtitle": "Invocar atividade"
     },
     "trigger": {
-      "label": "Conversation invoked (Invoke activity)"
+      "label": "Conversa invocada (Atividade de invocação)"
     }
   },
   "Microsoft.OnMessageActivity": {
@@ -358,7 +358,7 @@
       "subtitle": "Atividade de mensagem recebida"
     },
     "trigger": {
-      "label": "Message received (Message received activity)"
+      "label": "Mensagem recebida (Atividade de mensagem recebida)"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
@@ -367,7 +367,7 @@
       "subtitle": "Atividade de mensagem eliminada"
     },
     "trigger": {
-      "label": "Message deleted (Message deleted activity)"
+      "label": "Mensagem eliminada (Atividade de mensagem eliminada)"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
@@ -376,7 +376,7 @@
       "subtitle": "Atividade de reação da mensagem"
     },
     "trigger": {
-      "label": "Message reaction (Message reaction activity)"
+      "label": "Reação a mensagem (Atividade de reação a mensagem)"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
@@ -385,12 +385,12 @@
       "subtitle": "Atividade de mensagem atualizada"
     },
     "trigger": {
-      "label": "Message updated (Message updated activity)"
+      "label": "Mensagem atualizada (Atividade de mensagem atualizada)"
     }
   },
   "Microsoft.OnQnAMatch": {
     "trigger": {
-      "label": "QnA Intent recognized"
+      "label": "Intenção de FAQ reconhecida"
     }
   },
   "Microsoft.OnRepromptDialog": {
@@ -399,7 +399,7 @@
       "subtitle": "Voltar a pedir evento de diálogo"
     },
     "trigger": {
-      "label": "Re-prompt for input (Reprompt dialog event)"
+      "label": "Pedir novamente a entrada (Evento de diálogo de novo pedido)"
     }
   },
   "Microsoft.OnTypingActivity": {
@@ -408,7 +408,7 @@
       "subtitle": "Atividade de escrita"
     },
     "trigger": {
-      "label": "User is typing (Typing activity)"
+      "label": "O utilizador está a escrever (Atividade de escrita)"
     }
   },
   "Microsoft.OnUnknownIntent": {
@@ -417,7 +417,7 @@
       "subtitle": "Intenção desconhecida reconhecida"
     },
     "trigger": {
-      "label": "Unknown intent"
+      "label": "Intenção desconhecida"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -440,11 +440,11 @@
   },
   "Microsoft.SendHandoffActivity": {
     "form": {
-      "label": "Send a handoff request",
-      "subtitle": "Send Handoff Activity"
+      "label": "Enviar um pedido de handoff",
+      "subtitle": "Enviar Atividade de Handoff"
     },
     "menu": {
-      "label": "Send Handoff Event"
+      "label": "Enviar Evento de Handoff"
     }
   },
   "Microsoft.SetProperties": {
@@ -497,12 +497,12 @@
   "Microsoft.UpdateActivity": {
     "flow": {
       "header": {
-        "title": "Update activity"
+        "title": "Atualizar atividade"
       }
     },
     "form": {
-      "label": "Update an activity",
-      "subtitle": "Update Activity"
+      "label": "Atualizar uma atividade",
+      "subtitle": "Atualizar Atividade"
     }
   }
 }

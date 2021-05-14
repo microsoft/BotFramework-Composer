@@ -50,6 +50,9 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "En egenskap är en informationsenhet som din robot samlar in. Egenskapsnamnet är det namn som används i Composer. Det är inte nödvändigtvis samma text som visas i robotens meddelanden."
   },
+  "a_publishing_profile_contains_the_information_nece_fc37192d": {
+    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID. "
+  },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
     "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
   },
@@ -195,7 +198,7 @@
     "message": "Lägg till anpassad körning"
   },
   "add_entity_5f769994": {
-    "message": "Add entity"
+    "message": "Lägg till entitet"
   },
   "add_more_to_this_response_d45bdfda": {
     "message": "Lägg till mer i det här svaret"
@@ -236,6 +239,9 @@
   "add_property_d381eba3": {
     "message": "Lägg till egenskap"
   },
+  "add_publishing_profile_for_botname_37f9d35c": {
+    "message": "Add publishing profile for { botName }"
+  },
   "add_qna_maker_knowledge_base_c1b27b78": {
     "message": "Add QnA Maker knowledge base"
   },
@@ -267,7 +273,7 @@
     "message": "Allowed Callers"
   },
   "almost_there_f90939cb": {
-    "message": "Almost there!"
+    "message": "Nästan klart!"
   },
   "an_app_id_is_used_for_communication_between_your_b_255025e1": {
     "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
@@ -330,7 +336,7 @@
     "message": "Application language settings"
   },
   "application_name_67a279e2": {
-    "message": "Application name"
+    "message": "Programnamn"
   },
   "application_settings_39e840c6": {
     "message": "Programinställningar"
@@ -441,7 +447,7 @@
     "message": "Minst en fråga krävs"
   },
   "attachment_deffe5a9": {
-    "message": "Attachment"
+    "message": "Bifogad fil"
   },
   "attachment_input_212dcb98": {
     "message": "Attachment input"
@@ -456,7 +462,7 @@
     "message": "Ljudkort"
   },
   "australia_east_b7af6cc": {
-    "message": "Australia East"
+    "message": "Australien, östra"
   },
   "authentication_error_39e996c5": {
     "message": "Authentication Error"
@@ -480,13 +486,13 @@
     "message": "Available as skill to the following bots:"
   },
   "azure_connections_9e63f716": {
-    "message": "Azure connections"
+    "message": "Azure-anslutningar"
   },
   "azure_directory_d9065529": {
-    "message": "Azure directory"
+    "message": "Azure-katalog"
   },
   "azure_functions_5e23be5c": {
-    "message": "Azure Functions"
+    "message": "Azure-funktioner"
   },
   "azure_functions_required_2a035b48": {
     "message": "Azure Functions required"
@@ -501,10 +507,10 @@
     "message": "Azure QnA Maker"
   },
   "azure_resource_group_cee486e6": {
-    "message": "Azure resource group"
+    "message": "Azure-resursgrupp"
   },
   "azure_subscription_4671d043": {
-    "message": "Azure subscription"
+    "message": "Azure-prenumeration"
   },
   "azure_web_app_d834cb4c": {
     "message": "Azure Web App"
@@ -514,9 +520,6 @@
   },
   "been_used_5daccdb2": {
     "message": "Har använts"
-  },
-  "before_we_begin_7ae9c242": {
-    "message": "Before we begin"
   },
   "begin_a_new_dialog_60249bd8": {
     "message": "Påbörja en ny dialogruta"
@@ -663,7 +666,7 @@
     "message": "Avbryt alla aktiva dialogrutor"
   },
   "cancel_all_dialogs_7b35fa0e": {
-    "message": "Cancel all dialogs"
+    "message": "Avbryt alla dialogrutor"
   },
   "cancel_caeb1e68": {
     "message": "Avbryt"
@@ -681,7 +684,7 @@
     "message": "Det går inte att ladda upp filen. Konversationen hittades inte."
   },
   "carousel_a2321ac9": {
-    "message": "Carousel"
+    "message": "Karusell"
   },
   "change_recognizer_3145b93d": {
     "message": "Ändra identifieringsobjekt"
@@ -768,25 +771,25 @@
     "message": "Composer har uppdaterats."
   },
   "composer_language_f958f3bf": {
-    "message": "Composer language"
+    "message": "Composer-språk"
   },
   "composer_logo_ba2048a0": {
     "message": "Composer-logotyp"
   },
   "composer_needs_azure_functions_36138382": {
-    "message": "Composer needs Azure Functions"
+    "message": "Composer-behov Azure Functions"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer behöver .NET Core SDK"
   },
   "composer_runtime_error_b0efe05": {
-    "message": "Composer Runtime Error"
+    "message": "Composerkörningsfel"
   },
   "composer_settings_c8c622cf": {
     "message": "Composer settings"
   },
   "composer_tutorials_5e79e495": {
-    "message": "Composer tutorials"
+    "message": "Composer-självstudier"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer kommer att startas om."
@@ -795,28 +798,28 @@
     "message": "Composer uppdateras nästa gång du stänger appen."
   },
   "composite_entity_8b5f67ba": {
-    "message": "Composite entity"
+    "message": "Sammansatt entitet"
   },
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
   "configuration_e186200": {
-    "message": "Configuration"
+    "message": "Konfiguration"
   },
   "configure_adapter_2f621249": {
-    "message": "Configure adapter"
+    "message": "Konfigurera nätverkskort"
   },
   "configure_and_publish_7f53bc9a": {
-    "message": "Configure and publish"
+    "message": "Konfigurera och publicera"
   },
   "configure_ecb97e30": {
-    "message": "Configure"
+    "message": "Konfigurera"
   },
   "configure_the_command_used_by_composer_to_start_yo_f4231dc6": {
-    "message": "Configure the command used by Composer to start your bot application when testing locally."
+    "message": "Konfigurera det kommando som används av Composer för att starta bot-programmet när du testar lokalt."
   },
   "configure_your_bot_7483e4a": {
-    "message": "Configure your bot"
+    "message": "Konfigurera bot"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Konfigurerar standardspråkmodellen som ska användas om det inte finns någon kulturkod i filnamnet (standardinställning: en-us)"
@@ -828,10 +831,10 @@
     "message": "Bekräfta val"
   },
   "confirm_input_7e58417e": {
-    "message": "Confirm input"
+    "message": "Bekräfta indata"
   },
   "confirm_skill_endpoints_6eb184cf": {
-    "message": "Confirm skill endpoints"
+    "message": "Bekräfta Färdighetsslutpunkter"
   },
   "confirmation_fec87d65": {
     "message": "Bekräftelse"
@@ -840,7 +843,7 @@
     "message": "Bekräftelsemodellen måste ha en rubrik."
   },
   "conflicting_changes_detected_6c282985": {
-    "message": "Conflicting changes detected"
+    "message": "Andringar i konflikt har upptäckts"
   },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Grattis! Din modell har publicerats."
@@ -852,16 +855,16 @@
     "message": "Anslut till QnA KnowledgeBase"
   },
   "connect_to_speech_service_9d877e37": {
-    "message": "Connect to Speech Service"
+    "message": "Ansluta till taltjänst"
   },
   "connect_with_the_community_to_ask_and_answer_quest_aeec8c4f": {
     "message": "Connect with the community to ask and answer questions about Composer"
   },
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
-    "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
+    "message": "Anslut din bot till Microsoft Teams och WebChat eller aktivera DirectLine Speech."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
-    "message": "Connect your bot to Teams, external channels, or enable speech."
+    "message": "Anslut din bot till Teams, externa kanaler eller aktivera tal."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Ansluter till <b>{ source }</b> för att importera bot-innehåll..."
@@ -870,7 +873,7 @@
     "message": "Ansluter till <b>{ targetName }</b> för att importera bot-innehåll..."
   },
   "connections_917ef4e4": {
-    "message": "Connections"
+    "message": "Anslutningar"
   },
   "continue_ac067716": {
     "message": "Fortsätt"
@@ -879,7 +882,7 @@
     "message": "Fortsätt loop"
   },
   "continue_setting_up_your_development_environment_b_5ec84955": {
-    "message": "Continue setting up your development environment by adding LUIS keys."
+    "message": "Fortsätt konfigurera din utvecklingsmiljö genom att lägga till LUIS nycklar."
   },
   "conversation_ended_a8bd37dd": {
     "message": "Konversationem avslutades"
@@ -900,22 +903,22 @@
     "message": "ConversationUpdate-aktivitet"
   },
   "convert_583eb59d": {
-    "message": "Convert"
+    "message": "Konvertera"
   },
   "convert_your_project_to_the_latest_format_a28e824c": {
-    "message": "Convert your project to the latest format"
+    "message": "Konvertera projektet till senaste formatet"
   },
   "copy_9748f9f": {
     "message": "Kopiera"
   },
   "copy_command_to_clipboard_4649910f": {
-    "message": "Copy command to clipboard"
+    "message": "Kopiera kommandot till Urklipp"
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Kopiera innehåll för översättning"
   },
   "copy_icon_4cc3a18e": {
-    "message": "Copy Icon"
+    "message": "Kopiera-ikon"
   },
   "copy_project_location_to_clipboard_eb85c474": {
     "message": "Kopiera projektplats till Urklipp"
@@ -948,7 +951,7 @@
     "message": "Skapa ett namn för projektet som ska användas för att namnge programmet: (projektnamn-miljö-LUfilename)"
   },
   "create_a_new_bot_51ce70d3": {
-    "message": "Create a new bot"
+    "message": "Skapa en ny bot"
   },
   "create_a_new_dialog_21d84b82": {
     "message": "Skapa en ny dialogruta"
@@ -957,13 +960,10 @@
     "message": "Skapa ett nytt formulärdialogschema genom att klicka på + ovan."
   },
   "create_a_publish_profile_to_continue_1e2fa5a0": {
-    "message": "Create a publish profile to continue"
+    "message": "Skapa en publicerings profil för att försätta"
   },
   "create_a_publishing_profile_a79c6808": {
-    "message": "Create a publishing profile"
-  },
-  "create_a_publishing_profile_for_botname_b82f4386": {
-    "message": "Create a publishing profile for { botName }"
+    "message": "Skapa en publiceringsprofil"
   },
   "create_a_skill_in_your_bot_d7659e6b": {
     "message": "Skapa en kompetens i din bot"
@@ -972,7 +972,7 @@
     "message": "Skapa en utlösare"
   },
   "create_and_configure_new_azure_resources_302c574a": {
-    "message": "Create and configure new Azure resources"
+    "message": "Skapa och konfigurera nya Azure-resurser"
   },
   "create_bot_from_template_or_scratch_92f0fefa": {
     "message": "Vill du skapa robot från en mall eller från grunden?"
@@ -981,7 +981,7 @@
     "message": "Skapa en kopia för att översätta robotinnehåll"
   },
   "create_custom_knowledge_base_e1cad195": {
-    "message": "Create custom knowledge base"
+    "message": "Skapa anpassad kunskapsbas"
   },
   "create_folder_error_38aa86f5": {
     "message": "Fel vid skapande av mapp"
@@ -1002,7 +1002,7 @@
     "message": "Skapa från mall"
   },
   "create_new_e0946c49": {
-    "message": "Create new"
+    "message": "Skapa ny"
   },
   "create_new_folder_19d3faa4": {
     "message": "Skapa ny mapp"
@@ -1011,22 +1011,25 @@
     "message": "Skapa ny kunskapsbas"
   },
   "create_new_publish_profile_e27c0950": {
-    "message": "Create new publish profile"
+    "message": "Skapa ny publiceringsprofil"
+  },
+  "create_profile_33fafbf1": {
+    "message": "Create profile"
   },
   "create_service_resources_386ef96b": {
-    "message": "Create { service } resources"
+    "message": "Skapa {service} resurser"
   },
   "create_your_first_bot_a23748c1": {
-    "message": "Create your first bot"
+    "message": "Skapa din första bot"
   },
   "creating_knowledge_base_e391b132": {
-    "message": "Creating knowledge base..."
+    "message": "Skapar kunskapsbas..."
   },
   "creating_qna_maker_7c88df84": {
-    "message": "Creating QnA Maker"
+    "message": "Skapar QnA Maker"
   },
   "creating_resources_af3aec2f": {
-    "message": "Creating resources..."
+    "message": "Skapar resurser..."
   },
   "current_40c0812f": {
     "message": " – Aktuell"
@@ -1068,10 +1071,10 @@
     "message": "Datum eller tid"
   },
   "date_time_input_aa8ad315": {
-    "message": "Date time input"
+    "message": "Inmatning av datum/tid"
   },
   "deactivated_action_1da615d0": {
-    "message": "Deactivated action."
+    "message": "Inaktiverad åtgärd."
   },
   "debug_break_46cb5adb": {
     "message": "Felsökningsavbrott"
@@ -1104,10 +1107,10 @@
     "message": "Define new entity"
   },
   "define_user_input_and_trigger_phrases_to_direct_th_d473c5c": {
-    "message": "Define user input and trigger phrases to direct the conversation flow."
+    "message": "Definiera användarindata och utlösa fraser för att dirigera konversationsflödet."
   },
   "define_your_bot_s_responses_add_phrase_variations__11aa55cb": {
-    "message": "Define your bot''s responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
+    "message": "Definiera dina botssvar, lägg till frasvariationer, kör enkla uttryck baserat på kontext eller läs mer i svarsminnet."
   },
   "defined_in_475568fb": {
     "message": "Definierat i:"
@@ -1125,13 +1128,13 @@
     "message": "Ta bort aktivitet"
   },
   "delete_bot_4b1527e4": {
-    "message": "Delete bot"
+    "message": "Ta bort bot"
   },
   "delete_bot_73586104": {
     "message": "Ta bort robot"
   },
   "delete_fd07d6ad": {
-    "message": "Delete?"
+    "message": "Ta bort?"
   },
   "delete_form_dialog_schema_c8e28229": {
     "message": "Ta bort formulärdialogschema?"
@@ -1143,7 +1146,7 @@
     "message": "Ta bort egenskaper"
   },
   "delete_property_4a0e0df6": {
-    "message": "Delete property"
+    "message": "Ta bort egenskap"
   },
   "delete_property_da7646f6": {
     "message": "Ta bort egenskap?"
@@ -1155,13 +1158,13 @@
     "message": "Det gick inte att ta bort { dialogId }."
   },
   "deleting_one_source_file_will_also_delete_qna_file_f3afd698": {
-    "message": "Deleting one source file will also delete qna files with the same name on other locales"
+    "message": "Om du tar bort en källfil tas även QNA-filer med samma namn bort på andra språk"
   },
   "description_436c48d7": {
     "message": "Beskrivning"
   },
   "development_resources_67364176": {
-    "message": "Development resources"
+    "message": "Utvecklingsresurser"
   },
   "diagnostic_description_msg_9ddd1be": {
     "message": "Diagnostikbeskrivning { msg }"
@@ -1197,7 +1200,7 @@
     "message": "Dialog avbröts (händelsen Avbryt dialog)"
   },
   "dialog_d99c0378": {
-    "message": "Dialog"
+    "message": "Dialogruta"
   },
   "dialog_data_61d5539b": {
     "message": "Dialogrutedata"
@@ -1242,10 +1245,10 @@
     "message": "DialogFactory saknar schema."
   },
   "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+    "message": "{dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  andra {# bots have}\n} har hittats.\n            {dialogNum, select,\n      0 {}\n  other {Navigera i sökresultaten genom att hålla ned piltangenten}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
-    "message": "Dialogs, triggers, and actions"
+    "message": "Dialogrupt, tlösare och åtgärder"
   },
   "disable_a5c05db3": {
     "message": "Inaktivera"
@@ -1266,7 +1269,7 @@
     "message": "Vill du fortsätta?"
   },
   "documentation_d82f6eec": {
-    "message": "Documentation"
+    "message": "Dokumentation"
   },
   "does_not_exist_3a34b418": {
     "message": "Finns inte"
@@ -1278,10 +1281,10 @@
     "message": "Klart"
   },
   "download_emulator_c8fb3403": {
-    "message": "Download Emulator"
+    "message": "Hämta emulator"
   },
   "download_icon_2e0d10": {
-    "message": "Download Icon"
+    "message": "Nedladdningsikon"
   },
   "download_now_and_install_when_you_close_composer_e241ed74": {
     "message": "Ladda ned nu och installera när du stänger Composer."
@@ -1290,7 +1293,7 @@
     "message": "Laddar ned..."
   },
   "due_to_the_following_error_we_were_unable_to_succe_9185fddf": {
-    "message": "Due to the following error, we were unable to successfully add your selected { service } keys to your bot project:"
+    "message": "På grund av följande fel gick det inte att lägga till dina valda {service}-nycklar till bot-projektet:"
   },
   "duplicate_31cec192": {
     "message": "Duplicera"
@@ -1320,13 +1323,13 @@
     "message": "Redigera en färdighet"
   },
   "edit_actions_7c33a630": {
-    "message": "Edit actions"
+    "message": "Redigera åtgärder"
   },
   "edit_an_array_property_5d886011": {
     "message": "Redigera en matrisegenskap"
   },
   "edit_array_c56a18cc": {
-    "message": "Edit array"
+    "message": "Redigera matris"
   },
   "edit_bot_responses_34bd1a28": {
     "message": "Edit bot responses"
@@ -1341,7 +1344,7 @@
     "message": "Redigera i JSON"
   },
   "edit_in_power_virtual_agents_56ee7ac2": {
-    "message": "Edit in Power Virtual Agents"
+    "message": "Redigera in Power Virtual Agents"
   },
   "edit_kb_name_5e2d8c5b": {
     "message": "Redigera kunskapsbasnamn"
@@ -1350,7 +1353,7 @@
     "message": "Redigera egenskap"
   },
   "edit_publishing_profile_e40a0bf1": {
-    "message": "Edit publishing profile"
+    "message": "Redigera publiceringsprofil"
   },
   "edit_schema_a2ab5695": {
     "message": "Redigera schema"
@@ -1359,13 +1362,13 @@
     "message": "Redigera källa"
   },
   "edit_this_intent_in_a_user_input_view_a_c75f4893": {
-    "message": "Edit this intent in<a>User input view</a>"
+    "message": "Redigera den här avsikten i<a>Visning av användarindata</a>"
   },
   "edit_this_template_in_a_bot_response_view_a_7236985f": {
     "message": "Redigera den här mallen i <a>vyn Robotsvar</a>"
   },
   "edit_user_input_and_triggers_333c9a0e": {
-    "message": "Edit user input and triggers"
+    "message": "Redigera användarindata och utlösare"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Matar ut körning..."
@@ -1392,7 +1395,7 @@
     "message": "Aktivera"
   },
   "enable_app_insights_99b6c116": {
-    "message": "Enable App Insights"
+    "message": "Aktivera App Insights"
   },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Aktivera radnummer så att du kan referera till kodrader med nummer."
@@ -1401,19 +1404,19 @@
     "message": "Aktivera extrahering av flera turer"
   },
   "enable_orchestrator_cdbbd2c5": {
-    "message": "Enable Orchestrator"
+    "message": "Aktivera initierare"
   },
   "enable_speech_e30d6a2a": {
-    "message": "Enable Speech"
+    "message": "Aktivera tal"
   },
   "enable_speech_e4a16f1c": {
-    "message": "Enable speech"
+    "message": "Aktivera tal"
   },
   "enabled_ba7cab66": {
     "message": "Aktiverat"
   },
   "end_dialog_88fa2f7a": {
-    "message": "End dialog"
+    "message": "Avsluta dialogruta"
   },
   "end_this_dialog_3ed0d50b": {
     "message": "Avsluta den här dialogrutan"
@@ -1425,7 +1428,7 @@
     "message": "EndOfConversation-aktivitet"
   },
   "endpoint_url_eddd8ea9": {
-    "message": "Endpoint Url"
+    "message": "Slutpunktens webbadress"
   },
   "endpoints_ff946539": {
     "message": "Slutpunkter"
@@ -1434,7 +1437,7 @@
     "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
-    "message": "Enter a manifest URL to add a new skill to your bot."
+    "message": "Ange en manifest-URL så att du kan lägga till en ny färdighet i roboten."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "Ange ett maxvärde"
@@ -1443,25 +1446,28 @@
     "message": "Ange ett minsta värde"
   },
   "enter_a_url_to_import_qna_resource_223ded92": {
-    "message": "Enter a URL to Import QnA resource"
+    "message": "Ange en URL för att importera QnA-resursen"
   },
   "enter_cognitive_service_region_a0f684a4": {
-    "message": "Enter cognitive service region"
+    "message": "Ange kognitivttjänsteområde"
   },
   "enter_cognitive_services_key_b78e4b55": {
-    "message": "Enter cognitive services key"
+    "message": "Ange Cognitive Services-nyckel"
   },
   "enter_name_for_new_resource_group_96fe8ea8": {
-    "message": "Enter name for new resource group"
+    "message": "Ange namn för ny resursgrupp"
   },
   "enter_name_for_new_resources_d5ccd6a7": {
-    "message": "Enter name for new resources"
+    "message": "Ange namn för nya resurser"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
     "message": "Ange QnA Maker-prenumerationsnyckel"
   },
   "enter_skill_host_endpoint_url_7489a83f": {
-    "message": "Enter Skill host endpoint URL"
+    "message": "Ange slutpunkts-URL för kompetensvärd"
+  },
+  "enter_skill_manifest_url_583d54f4": {
+    "message": "Enter skill manifest URL"
   },
   "entities_ef09392c": {
     "message": "Entiteter"
@@ -1481,14 +1487,14 @@
   "error_afac7133": {
     "message": "Fel:"
   },
-  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
-    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  "error_attempting_to_parse_skill_manifest_there_cou_27675668": {
+    "message": "Error attempting to parse Skill manifest. There could be an error in its format."
   },
   "error_checking_node_version_98bfbf4c": {
-    "message": "Error checking node version"
+    "message": "Fel vid kontroll av nodversion"
   },
   "error_encountered_when_getting_template_read_me_fi_b9199689": {
-    "message": "Error encountered when getting template read-me file"
+    "message": "Ett fel uppstod när mallfilen Read-Me hämtades"
   },
   "error_event_c079b608": {
     "message": "Felhändelse"
@@ -1503,7 +1509,7 @@
     "message": "Ett fel har inträffat"
   },
   "error_occurred_building_the_bot_7425aa09": {
-    "message": "Error occurred building the bot"
+    "message": "Ett fel uppstod när bot skapades"
   },
   "error_occurred_ejecting_runtime_8512129e": {
     "message": "Ett fel inträffade vid körningsutmatning!"
@@ -1521,10 +1527,10 @@
     "message": "Fel vid schemabearbetning"
   },
   "error_provisioning_25835400": {
-    "message": "Error provisioning."
+    "message": "Fel vid etablering."
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
-    "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
+    "message": "{errorsCount, plural,\n     = 0 {No errors}\n     = 1 {One error}\n  Andra {# fel}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -1548,7 +1554,7 @@
     "message": "Händelser"
   },
   "everything_you_need_to_build_sophisticated_convers_9c00cc01": {
-    "message": "Everything you need to build sophisticated conversational experiences"
+    "message": "Allt du behöver för att skapa avancerade upplevelser"
   },
   "examples_c435f08c": {
     "message": "Exempel"
@@ -1560,28 +1566,28 @@
     "message": "Visa"
   },
   "expand_debug_panel_6f04e9f2": {
-    "message": "Expand Debug Panel"
+    "message": "Visa felsökningspanelen"
   },
   "expand_navigation_20330d1d": {
     "message": "Visa navigering"
   },
   "expected_responses_1dca1864": {
-    "message": "Expected responses"
+    "message": "Förväntade svar"
   },
   "expecting_4df12c00": {
     "message": "Förväntar"
   },
   "export_as_skill_764cf284": {
-    "message": "Export as skill"
+    "message": "Exportera som färdighet"
   },
   "export_as_zip_133b7ec": {
-    "message": "Export as .zip"
+    "message": "Exportera som .zip"
   },
   "export_json_2e2981f5": {
     "message": "Exportera JSON"
   },
   "export_your_bot_604e651c": {
-    "message": "Export your bot"
+    "message": "Exportera din bot"
   },
   "expression_7f906a13": {
     "message": "Uttryck"
@@ -1593,28 +1599,28 @@
     "message": "Uttryck att utvärdera."
   },
   "extend_your_bot_with_reusable_dialogs_bot_response_64f9ca51": {
-    "message": "Extend your bot with reusable dialogs, bot response templates and custom actions."
+    "message": "Utöka din bot med återanvändbara dialogrutor, mallar för botssvar och anpassade åtgärder."
   },
   "extension_settings_899ccb55": {
     "message": "Tilläggsinställningar"
   },
   "external_connections_3415fea5": {
-    "message": "External connections"
+    "message": "Externa anslutningar"
   },
   "external_skill_73e16d25": {
-    "message": "External skill"
+    "message": "Extern färdighet"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "Extrahera frågepar från vanliga frågor och svar online, produkthandböcker och andra filer. Format som stöds är tsv, pdf, doc, docx och xlsx, vilka innehåller frågor och svar i följd. Läs mer om kunskapsbaskällor. Hoppa över det här steget om du vill lägga till frågor och svar manuellt när du har skapat dem. Antal källor och filstorlekar som du kan lägga till beror på vilken QnA-tjänst-SKU du väljer. Läs mer om QnA Maker SKU:er."
   },
   "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
-    "message": "Extracting question-and-answer pairs from { url }"
+    "message": "ExtraheraQnA-par från { url }"
   },
   "fail_to_save_bot_578fa8aa": {
     "message": "Det gick inte att spara roboten"
   },
   "failed_276786d": {
-    "message": "Failed"
+    "message": "Misslyckades"
   },
   "false_2f39ee6d": {
     "message": "falskt"
@@ -1623,7 +1629,7 @@
     "message": "Falskt"
   },
   "faq_website_source_47b5c924": {
-    "message": "FAQ website (source)"
+    "message": "Vanliga frågor och svar (källa)"
   },
   "fetching_form_dialog_schema_templates_failed_44e2dd63": {
     "message": "Det gick inte att hämta schemamallarna för formulärdialog."
@@ -1656,13 +1662,13 @@
     "message": "Filter"
   },
   "find_additional_template_specific_guidance_for_set_d7256573": {
-    "message": "Find additional template-specific guidance for setting up your bot."
+    "message": "Hitta ytterligare mall-specifik vägledning för att konfigurera din bot."
   },
   "find_and_install_more_external_services_to_your_bo_37ef3f0c": {
-    "message": "Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>"
+    "message": "Hitta och installera fler externa tjänster till bot-projektet i <a>paket hanteraren</a>. Mer information finns i dokumentationen för <a2>att lägga till externa anslutningar. </a2>"
   },
   "find_dialogs_339a3f87": {
-    "message": "Find dialogs"
+    "message": "Sök dialogrutor"
   },
   "find_dialogs_or_topics_c986d1e6": {
     "message": "Find dialogs or topics"
@@ -1698,13 +1704,13 @@
     "message": "For each"
   },
   "for_each_page_198e66f4": {
-    "message": "For each page"
+    "message": "För varje sida"
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "När det gäller egenskaper av typen lista (eller uppräkning) godkänner din robot bara de värden som du definierar. När dialogen har skapats kan du tillhandahålla synonymer för varje enskilt värde."
   },
-  "for_security_purposes_your_bot_can_only_call_a_ski_4b0c81e0": {
-    "message": "For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list."
+  "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
+    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profile, share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   },
   "form_b674666c": {
     "message": "form"
@@ -1775,9 +1781,6 @@
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Hämta en ny kopia av körningskoden"
   },
-  "get_a_skill_manifest_url_from_the_skill_s_author_7771e8b4": {
-    "message": "Get a skill manifest URL from the skill’s author"
-  },
   "get_activity_members_11339605": {
     "message": "Hämta aktivitetsmedlemmar"
   },
@@ -1788,7 +1791,7 @@
     "message": "get remote file fail"
   },
   "get_started_76ed4cb9": {
-    "message": "Get started"
+    "message": "Kom igång"
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
     "message": "Get started with Bot Framework Composer"
@@ -1803,7 +1806,7 @@
     "message": "Gå till QnA-vysida."
   },
   "go_to_stack_overflow_e525148": {
-    "message": "Go to Stack Overflow"
+    "message": "Gå till Stack Overflow"
   },
   "got_it_2c06b54a": {
     "message": "Jag fattar!"
@@ -1842,7 +1845,7 @@
     "message": "Start"
   },
   "http_request_b6394895": {
-    "message": "HTTP request"
+    "message": "HTTP-begäran"
   },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
     "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
@@ -1860,10 +1863,10 @@
     "message": "{ id } finns redan. Ange ett unikt filnamn."
   },
   "if_azure_resources_and_subscription_are_managed_by_e36717f6": {
-    "message": "If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot."
+    "message": "Om Azure-resurser och prenumeration hanteras av andra använder du följande information för att begära att de resurser som du behöver skapar och kör din bot."
   },
   "if_condition_d4383ce9": {
-    "message": "If condition"
+    "message": "Om-villkor"
   },
   "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
     "message": "If this problem persists, please file an issue on <a>GitHub</a>"
@@ -1962,7 +1965,7 @@
     "message": "Install Azure Functions"
   },
   "install_error_a9319839": {
-    "message": "Install Error"
+    "message": "Installationsfel"
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Installera Microsoft .NET Core SDK"
@@ -1971,7 +1974,7 @@
     "message": "Install .NET Core SDK"
   },
   "install_node_js_1857298c": {
-    "message": "Install Node.js"
+    "message": "Installera Node.js "
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Installera dagligen förhandsversioner av Composer, så att du har åtkomst till och kan testa de senaste funktionerna. <a>Läs mer</a>."
@@ -1980,7 +1983,7 @@
     "message": "Installera uppdateringen och starta om Composer."
   },
   "instructions_2f88ee72": {
-    "message": "Instructions"
+    "message": "Instruktioner"
   },
   "integer_7f378275": {
     "message": "heltal"
@@ -1998,7 +2001,7 @@
     "message": "Heltal eller uttryck"
   },
   "integrating_with_power_virtual_agents_14c007cf": {
-    "message": "Integrating with Power Virtual Agents"
+    "message": "Integrering med virtuella motoragenter"
   },
   "intent_2291200b": {
     "message": "Avsikt"
@@ -2013,7 +2016,7 @@
     "message": "intentName saknas eller är tomt"
   },
   "intents_9b8593e0": {
-    "message": "Intents"
+    "message": "Avsikter"
   },
   "interpolated_string_c96053f2": {
     "message": "Interpolerad sträng."
@@ -2052,7 +2055,7 @@
     "message": "kB"
   },
   "keep_this_url_handy_to_share_it_with_other_develop_bfd51fb0": {
-    "message": "Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab."
+    "message": "Ha den här URL-adressen till hands för att dela den med andra utvecklare som ska använda den i sina bot-projekt. Du hittar den här webbadressen på fliken projektinställningar."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Nyckeln får inte vara tom"
@@ -2214,7 +2217,7 @@
     "message": "Lokal kompetens."
   },
   "localization_2e29f01e": {
-    "message": "Localization"
+    "message": "Lokalisering"
   },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Leta reda på bot-filen och reparera länken"
@@ -2256,7 +2259,7 @@
     "message": "lu-filen finns redan"
   },
   "lu_file_format_and_syntax_8211b0c9": {
-    "message": "LU file format and syntax"
+    "message": "Filformat och syntax för LU"
   },
   "lu_file_id_not_found_8732d33e": {
     "message": "LU-filen { id } hittades inte"
@@ -2286,7 +2289,7 @@
     "message": "LUIS-region krävs"
   },
   "machine_learned_entity_baec1ae5": {
-    "message": "Machine learned entity"
+    "message": "Datorns lärda entitet"
   },
   "main_dialog_eed5c847": {
     "message": "Huvuddialogruta"
@@ -2373,7 +2376,7 @@
     "message": "Meddelande uppdaterat (aktiviteten Meddelande uppdaterat)"
   },
   "microsoft_app_id_9c9dc559": {
-    "message": "Microsoft App ID"
+    "message": "ID för Microsoft-app"
   },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft-app-ID"
@@ -2382,10 +2385,10 @@
     "message": "Microsoft-applösenord"
   },
   "microsoft_logo_4378a7cb": {
-    "message": "Microsoft Logo"
+    "message": "Microsoft-logotyp"
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
-    "message": "Microsoft''s templates offer best practices for developing conversational bots."
+    "message": "Microsofts mallar erbjuder bästa praxis för utveckling av konversationsrobotar."
   },
   "migrating_data_a35b3055": {
     "message": "Migrating data"
@@ -2424,10 +2427,10 @@
     "message": "Flytta"
   },
   "move_down_4a9c9b18": {
-    "message": "Move down"
+    "message": "Flytta ned"
   },
   "move_up_2440f707": {
-    "message": "Move up"
+    "message": "Flytta upp"
   },
   "ms_teams_15993b97": {
     "message": "MS Teams"
@@ -2538,7 +2541,7 @@
     "message": "[inget namn]"
   },
   "no_prebuilt_entities_found_a1015451": {
-    "message": "no prebuilt entities found"
+    "message": "inga förbyggda entiteter hittades."
   },
   "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
     "message": "No profiles were found containing a Microsoft App ID."
@@ -2568,7 +2571,7 @@
     "message": "inget jokertecken"
   },
   "node_js_required_89c1c708": {
-    "message": "Node.js required"
+    "message": "Node.js krävs"
   },
   "node_menu_e2aa8092": {
     "message": "Nodmeny"
@@ -2613,7 +2616,7 @@
     "message": "OAuth-inloggning"
   },
   "object_33fc75c0": {
-    "message": "object"
+    "message": "objekt"
   },
   "object_345070f6": {
     "message": "Objekt"
@@ -2652,7 +2655,7 @@
     "message": "OnDialogEvents-typer"
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
-    "message": "One or more options that are passed to the dialog that is called."
+    "message": "Ett eller flera alternativ som skickas till den dialogruta som anropas."
   },
   "open_e0beb7b9": {
     "message": "Öppna"
@@ -2724,7 +2727,7 @@
     "message": "Utdata"
   },
   "overview_58268c72": {
-    "message": "Overview"
+    "message": "Översikt"
   },
   "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
     "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
@@ -2765,17 +2768,14 @@
   "please_select_a_trigger_type_67417abb": {
     "message": "Välj en typ av utlösare"
   },
-  "please_setup_the_following_to_ensure_we_can_connec_2c5a2acb": {
-    "message": "Please setup the following to ensure we can connect to your remote skill successfully"
-  },
   "pop_out_editor_5528a187": {
-    "message": "Pop out editor"
+    "message": "Popup-textredigeringsprogram"
   },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
-    "message": "Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there."
+    "message": "Botar för Power Virtual Agents kan inte köras just nu. Publicera boten på virtuella motoragenter och testa den där."
   },
   "power_virtual_agents_bots_cannot_use_this_function_fcfeaf62": {
-    "message": "Power Virtual Agents bots cannot use this functionality at this time."
+    "message": "Bot för Power Virtual Agents kan för tillfället inte använda den här funktionen."
   },
   "power_virtual_agents_topics_count_9043ab47": {
     "message": "Power Virtual Agents Topics ({ count })"
@@ -2793,7 +2793,7 @@
     "message": "tryck på Retur om du vill lägga till det här namnet och gå vidare till nästa rad, eller tryck på tabbtangenten om du vill gå till värdefältet"
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
-    "message": "Press Shift+Enter to insert a new line"
+    "message": "Infoga en ny rad genom att trycka på Skift+Retur"
   },
   "preview_features_e279bac5": {
     "message": "Förhandsgranskningsfunktioner"
@@ -2808,7 +2808,7 @@
     "message": "föregående mapp"
   },
   "pricing_tier_c2ff8573": {
-    "message": "Pricing tier"
+    "message": "Prisnivå"
   },
   "privacy_statement_da69ebc6": {
     "message": "Sekretesspolicy"
@@ -2820,7 +2820,7 @@
     "message": "{ progress } % av { total }"
   },
   "project_readme_68f88d88": {
-    "message": "Project Readme"
+    "message": "Information om Project"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "Promptkonfigurationer"
@@ -2865,7 +2865,7 @@
     "message": "Egenskapstyp"
   },
   "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
-    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
+    "message": "Tillhandahåll en nyckel för att ansluta din bot till Azure Speech service. "
   },
   "provide_access_tokens_8ead7563": {
     "message": "Ange åtkomsttoken"
@@ -2880,7 +2880,7 @@
     "message": "Etableringsfel"
   },
   "provision_partially_completed_b0120a72": {
-    "message": "Provision partially completed"
+    "message": "Tillhandahållningen har delvis slutförts"
   },
   "provision_success_d6a6e437": {
     "message": "Etableringen lyckades"
@@ -2898,7 +2898,7 @@
     "message": "Publicera modeller"
   },
   "publish_profile_a4e8f07b": {
-    "message": "Publish profile"
+    "message": "Publicera profil"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Publicera valda robotar"
@@ -2907,10 +2907,10 @@
     "message": "Publicera mål"
   },
   "publish_your_bot_9099e323": {
-    "message": "Publish your bot"
+    "message": "Publicera dina botar"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
-    "message": "Publish your bot to Azure and manage published bots here."
+    "message": "Publicera din bot till Azure och hantera publicerad botar här."
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Publicera dina robotar"
@@ -2919,10 +2919,10 @@
     "message": "Publicerat"
   },
   "publisher_bf6195cf": {
-    "message": "Publisher"
+    "message": "Utgivare"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
-    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
+    "message": "Publicerar {Count, plural,\n     = 1 {en bot}\n  Andra {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Publicerar"
@@ -2931,16 +2931,16 @@
     "message": "Det gick inte att publicera { name } till { publishTarget }."
   },
   "publishing_profile_6d7064ce": {
-    "message": "Publishing Profile"
+    "message": "Publiceringsprofil"
   },
   "publishing_profile_a2cd5d52": {
-    "message": "Publishing profile"
+    "message": "Publiceringsprofil"
   },
   "publishing_target_46605bc5": {
     "message": "Publiceringsmål"
   },
   "publishing_your_skill_b5957f9c": {
-    "message": "Publishing your skill..."
+    "message": "Publicerar din färdighet..."
   },
   "pull_d1c3e8fe": {
     "message": "Hämta"
@@ -2955,19 +2955,19 @@
     "message": "QnA-avsikt känns igen"
   },
   "qna_intent_recognized_6760e56d": {
-    "message": "QnA intent recognized"
+    "message": "QnA-avsikt identifierad"
   },
   "qna_maker_introduction_c2e426a": {
-    "message": "QnA Maker introduction"
+    "message": "QnA Maker inledning"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>"
+    "message": "QnA Maker är en Azure Cognitive Services som kan extrahera frågor och svar från vanliga frågor om webbplatser. <a>Läs mer. </a> Använda en befintlig nyckel från Azure eller skapa en ny nyckel. <a2>Läs mer</a2>"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>"
+    "message": "QnA Maker är en Azure Cognitive Services som kan extrahera frågor och svar från vanliga frågor om webbplatser. <a>Läs mer. </a> Använda en befintlig nyckel från Azure eller skapa en ny nyckel. <a2>Läs mer</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
-    "message": "QnA Maker subscription key:"
+    "message": "QnA Maker-prenumerationsnyckel:"
   },
   "qna_maker_subscription_key_e009c9d9": {
     "message": "QnA Maker-prenumerationsnyckel"
@@ -2979,7 +2979,7 @@
     "message": "QNA-navigeringsfönster"
   },
   "qna_region_5d2a4bce": {
-    "message": "QnA region"
+    "message": "QnA-region"
   },
   "question_9121487": {
     "message": "Fråga"
@@ -2994,7 +2994,7 @@
     "message": "Köad"
   },
   "quick_references_2ffbd14a": {
-    "message": "Quick references"
+    "message": "Snabb referenser"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -3009,7 +3009,7 @@
     "message": "Fråga efter indata igen (händelsen Fråga om dialog igen)"
   },
   "recent_f19e8c64": {
-    "message": "Recent"
+    "message": "Senaste"
   },
   "recognizer_type_dc591e16": {
     "message": "Typ av identifieringsobjekt"
@@ -3018,10 +3018,10 @@
     "message": "Identifieringsobjekt"
   },
   "recommended_7101829e": {
-    "message": "Recommended"
+    "message": "Rekommenderas"
   },
   "recommended_actions_befdd1a": {
-    "message": "Recommended actions"
+    "message": "Rekommenderade åtgärder"
   },
   "redo_363c58b7": {
     "message": "Göra om"
@@ -3039,7 +3039,7 @@
     "message": "Region"
   },
   "regular_expression_entity_e1cb91ce": {
-    "message": "Regular expression entity"
+    "message": "Entitet för reguljära uttryck"
   },
   "regular_expression_recognizer_44664557": {
     "message": "Identifieringsobjekt för reguljärt uttryck"
@@ -3069,13 +3069,13 @@
     "message": "Ta bort alla textsvar"
   },
   "remove_attachment_81f30aa3": {
-    "message": "Remove attachment"
+    "message": "Ta bort bilaga"
   },
   "remove_f47dc62a": {
     "message": "Ta bort"
   },
   "remove_item_5877e701": {
-    "message": "Remove item"
+    "message": "Ta bort objekt"
   },
   "remove_this_dialog_6146716c": {
     "message": "Ta bort den här dialogen"
@@ -3093,7 +3093,7 @@
     "message": "Ta bort variant"
   },
   "removing_content_from_action_node_bb6a825e": {
-    "message": "Removing content from action node"
+    "message": "Tar bort innehåll från åtgärdsnod"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "Upprepa den här dialogrutan"
@@ -3120,19 +3120,19 @@
     "message": "{ requiredText } | Prioritet: { priority }"
   },
   "reset_view_d5f8245a": {
-    "message": "Reset view"
+    "message": "Återställ vy"
   },
   "resource_group_982beb22": {
-    "message": "Resource Group"
+    "message": "Resursgrupp"
   },
   "resource_group_name_a8f7e7ce": {
-    "message": "Resource group name"
+    "message": "Namn på resursgrupp"
   },
   "resource_name_817b6e75": {
-    "message": "Resource name"
+    "message": "Resursnamn"
   },
   "resources_ccefab27": {
-    "message": "Resources"
+    "message": "Resurser"
   },
   "response_alternatives_will_be_selected_at_random_f_552dd090": {
     "message": "Response alternatives will be selected at random for a more dynamic conversation."
@@ -3150,7 +3150,7 @@
     "message": "Starta om konversation – samma användar-ID"
   },
   "retrieve_app_id_59f07cf4": {
-    "message": "Retrieve App ID"
+    "message": "Hämta App-ID"
   },
   "retrieve_app_id_from_publishing_profile_b6643a25": {
     "message": "Retrieve App ID from publishing profile"
@@ -3159,7 +3159,7 @@
     "message": "Granska och generera"
   },
   "review_deactivated_custom_actions_8db7540c": {
-    "message": "Review deactivated custom actions"
+    "message": "Granska inaktiverade anpassade åtgärder"
   },
   "review_your_template_readme_2d6eae1e": {
     "message": "Review your template readme"
@@ -3168,7 +3168,7 @@
     "message": "Återta"
   },
   "root_6b5104ad": {
-    "message": "(root)"
+    "message": "(rot)"
   },
   "root_bot_7bb35314": {
     "message": "Rot-bot."
@@ -3198,7 +3198,7 @@
     "message": "Körningskonfiguration"
   },
   "runtime_language_da49617a": {
-    "message": "Runtime Language"
+    "message": "CLR språk"
   },
   "runtime_log_9069fda7": {
     "message": "Runtime log."
@@ -3216,7 +3216,7 @@
     "message": "Spara"
   },
   "save_app_id_f64b6102": {
-    "message": "Save App ID"
+    "message": "Spara App-ID"
   },
   "save_your_skill_manifest_63bf5f26": {
     "message": "Spara ditt färdighetsmanifest"
@@ -3224,8 +3224,8 @@
   "schema_24739a48": {
     "message": "Schema"
   },
-  "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } finns inte. Välj ett schema att redigera eller skapa ett nytt"
+  "schemaid_doesn_t_exist_select_a_schema_to_edit_or__5a4b9035": {
+    "message": "{ schemaId } doesn''t exist; select a schema to edit or create a new one"
   },
   "schemas_74566170": {
     "message": "Scheman"
@@ -3240,10 +3240,10 @@
     "message": "Sök"
   },
   "search_4a044e7c": {
-    "message": "Search ..."
+    "message": "Sök ..."
   },
   "search_entities_3ecdb6d": {
-    "message": "Search entities"
+    "message": "Sök efter entiteter"
   },
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Sök efter tillägg på NPM"
@@ -3252,7 +3252,7 @@
     "message": "Sök efter funktioner"
   },
   "search_prebuilt_entities_e52c0f35": {
-    "message": "Search prebuilt entities"
+    "message": "Sök i förbyggda entiteter"
   },
   "search_properties_5bf3d868": {
     "message": "Sök efter egenskaper"
@@ -3261,37 +3261,37 @@
     "message": "Sök efter mallar"
   },
   "see_details_15c93092": {
-    "message": "See details"
+    "message": "Se information"
   },
   "see_instructions_87eb4251": {
-    "message": "See instructions"
+    "message": "Se instruktioner"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Välj en robot"
   },
   "select_a_dialog_134385f2": {
-    "message": "Select a dialog"
+    "message": "Välj en dialogruta"
   },
   "select_a_dialog_or_topic_4df93d0f": {
-    "message": "Select a dialog or topic"
+    "message": "Välj en dialog eller ett ämne"
   },
   "select_a_publish_target_d4530c94": {
     "message": "Välj ett publiceringsmål"
   },
   "select_a_publishing_profile_a2eb4e86": {
-    "message": "Select a publishing profile"
+    "message": "Välj en publiceringsprofil"
   },
   "select_a_resource_group_b536a26d": {
-    "message": "Select a resource group"
+    "message": "Välj en resursgrupp"
   },
   "select_a_subscription_446b44e6": {
-    "message": "Select a subscription"
+    "message": "Välj en prenumeration"
   },
   "select_a_template_874fe803": {
-    "message": "Select a template"
+    "message": "Välj en mall"
   },
   "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
-    "message": "Select a trigger in the left<br />navigation to see actions"
+    "message": "Välj en utlösare i vänster<br />navigering för att se åtgärder"
   },
   "select_a_trigger_type_219bb52f": {
     "message": "Välj en utlösartyp"
@@ -3306,13 +3306,16 @@
     "message": "Välj en händelsetyp"
   },
   "select_an_option_9f5dfb55": {
-    "message": "Select an option"
+    "message": "Välj ett alternativ"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Välj ett schema att redigera eller skapa ett nytt"
   },
+  "select_app_id_and_password_e901a31d": {
+    "message": "Select App ID and password"
+  },
   "select_dialogs_f625e607": {
-    "message": "Select dialogs"
+    "message": "Välj dialogrutor"
   },
   "select_input_hint_267a6208": {
     "message": "Välj indatatips"
@@ -3321,7 +3324,7 @@
     "message": "Välj ett språk att ta bort"
   },
   "select_one_b647b384": {
-    "message": "Select one"
+    "message": "Välj en"
   },
   "select_options_9ee7b227": {
     "message": "Välj alternativ"
@@ -3330,40 +3333,37 @@
     "message": "Välj egenskapstyp"
   },
   "select_publishing_profile_a3f478e2": {
-    "message": "Select publishing profile"
+    "message": "Välj publiceringsprofil"
   },
   "select_region_42a80a8e": {
-    "message": "Select region"
+    "message": "Välj region"
   },
   "select_resource_edaf4ef5": {
-    "message": "Select resource"
+    "message": "Välj resurs"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Välj den körningsversion som ska läggas till"
   },
   "select_service_resources_326b206a": {
-    "message": "Select { service } resources"
+    "message": "Välj {service} resurser"
   },
   "select_subscription_c5678611": {
-    "message": "Select subscription"
+    "message": "Välj prenumeration"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "Välj det språk som roboten ska förstå (användarindata) och besvara (robotsvar).\n    Om du vill göra den här roboten tillgänglig på andra språk, så klicka på Lägg till och skapa en kopia av standardspråket och översätt innehållet till det nya språket."
   },
   "select_the_resource_group_and_region_in_which_your_51f85ff": {
-    "message": "Select the resource group and region in which your { service } service will be created."
+    "message": "Välj den resursgrupp och region där din {service} tjänst ska skapas."
   },
   "select_triggers_5ff033ae": {
-    "message": "Select triggers"
+    "message": "Välj utlösare"
   },
   "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+    "message": "Välj din Azure-katalog och välj sedan den prenumeration där du vill ha din nya service {service}-resurs."
   },
   "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
-    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
-  },
-  "select_your_microsoft_app_id_and_password_74918f5d": {
-    "message": "Select your Microsoft App ID and Password"
+    "message": "Välj din Azure-katalog och välj sedan den prenumeration där din befintliga {service}-resurs finns."
   },
   "selection_field_86d1dc94": {
     "message": "urvalsfält"
@@ -3378,7 +3378,7 @@
     "message": "Skicka en HTTP-begäran"
   },
   "send_handoff_activity_651ee597": {
-    "message": "Send handoff activity"
+    "message": "Skicka överlämningsaktivitet"
   },
   "send_messages_c48b239": {
     "message": "Skicka meddelanden"
@@ -3387,7 +3387,7 @@
     "message": "Meningsomslutning"
   },
   "service_resource_name_56566aab": {
-    "message": "{ service } resource name"
+    "message": "{ service } resursnamn"
   },
   "session_expired_12aaf414": {
     "message": "Sessionen har upphört"
@@ -3405,25 +3405,22 @@
     "message": "Konfigurera egenskaper"
   },
   "set_up_continuous_deployment_devops_4919f626": {
-    "message": "Set up continuous deployment (DevOps)"
+    "message": "Konfigurera kontinuerlig distribution (DevOps)"
   },
   "set_up_language_understanding_f51f4884": {
-    "message": "Set up Language Understanding"
+    "message": "Konfigurera språkförståelse"
   },
   "set_up_qna_maker_170a4422": {
-    "message": "Set up QnA Maker"
+    "message": "Ställ in QnA Maker"
   },
   "set_up_service_b6d23e54": {
-    "message": "Set up { service }"
-  },
-  "set_your_microsoft_app_id_and_password_46b5628c": {
-    "message": "Set your Microsoft App ID and Password"
+    "message": "Konfigurera { service }"
   },
   "setting_things_up_8022afe8": {
     "message": "Ställer in saker..."
   },
   "setting_up_bot_framework_emulator_40f455db": {
-    "message": "Setting up Bot Framework Emulator"
+    "message": "Konfigurerar Bot Framework Emulator"
   },
   "settings_5aa0fd0c": {
     "message": "Inställningar"
@@ -3438,10 +3435,10 @@
     "message": "Menyn Inställningar"
   },
   "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
-    "message": "Setup tunneling software to test your remote skill"
+    "message": "Installera tunneprogram för att testa din fjärrkompetens"
   },
   "short_description_for_6abb9a1b": {
-    "message": "short description for"
+    "message": "kort beskrivning av"
   },
   "show_all_diagnostics_c11f4e09": {
     "message": "Visa all diagnostik"
@@ -3456,7 +3453,7 @@
     "message": "Visa nycklar"
   },
   "show_response_editor_90bd8b49": {
-    "message": "Show response editor"
+    "message": "Visa svarsredigeringsprogrammet"
   },
   "show_skill_manifest_5d0abde1": {
     "message": "Visa färdighetsmanifest"
@@ -3471,7 +3468,7 @@
     "message": "Kompetens"
   },
   "skill_configuration_5e4bfbcd": {
-    "message": "Skill configuration"
+    "message": "Kunskapskonfiguration"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "Namn på färdighetsdialog"
@@ -3480,25 +3477,25 @@
     "message": "Färdighetsslutpunkt"
   },
   "skill_host_endpoint_url_702c277c": {
-    "message": "Skill host endpoint URL"
+    "message": "Slutpunkts-URL för kompetensvärd"
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Slutpunkts-URL för kompetensvärd"
   },
   "skill_manifest_url_1094fcba": {
-    "message": "Skill Manifest URL"
+    "message": "URL för färdighetsmanifest"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
-    "message": "Skill manifest URL was copied to the clipboard"
+    "message": "URL för kunskapsmanifest kopierades till Urklipp"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"
   },
   "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
-    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>"
+    "message": "Färdigheter kan \"anropas\" av externa botar. Tillåt andra botar att anropa din färdighet genom att lägga till deras app-ID i listan nedan. <a>Läs mer</a>"
   },
   "skip_bcb86160": {
-    "message": "Skip"
+    "message": "Hoppa över"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Något hände vid försök att hämta: { e }"
@@ -3540,7 +3537,7 @@
     "message": "Ange en layout för bifogade filer när det finns fler än en."
   },
   "specify_an_existing_bot_to_connect_to_your_azure_b_3c632ffa": {
-    "message": "Specify an existing bot to connect to your Azure Bot resource."
+    "message": "Ange en befintlig bot för att ansluta till Azure bot-resursen."
   },
   "speech_16063aed": {
     "message": "Tal"
@@ -3555,7 +3552,7 @@
     "message": "Stack Overflow"
   },
   "start_and_stop_local_bot_runtimes_98f94e21": {
-    "message": "Start and stop local bot runtimes"
+    "message": "Starta och stoppa lokala robotkörningar."
   },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Starta och stoppa lokala robotkörningar enskilt."
@@ -3570,7 +3567,7 @@
     "message": "Börja om?"
   },
   "start_this_bot_ef51fbc2": {
-    "message": "Start this bot"
+    "message": "Starta den här bot"
   },
   "start_typing_kind_or_b0c305da": {
     "message": "Börja skriva { kind } eller"
@@ -3594,7 +3591,7 @@
     "message": "Stoppa robot"
   },
   "stop_this_bot_6cce6509": {
-    "message": "Stop this bot"
+    "message": "Stoppa den här bot"
   },
   "stopping_e4de5f4a": {
     "message": "Stoppar"
@@ -3612,13 +3609,13 @@
     "message": "Skicka in"
   },
   "submit_a_feature_request_151d280c": {
-    "message": "Submit a feature request"
+    "message": "Skicka en funktionsbegäran"
   },
   "subscription_15330b8a": {
-    "message": "Subscription"
+    "message": "Prenumeration"
   },
   "subscription_id_250f5e1f": {
-    "message": "Subscription Id:"
+    "message": "Prenumerations-ID:"
   },
   "suggested_actions_94d06bfa": {
     "message": "Föreslagna åtgärder"
@@ -3633,10 +3630,10 @@
     "message": "Synonymer (valfritt)"
   },
   "system_topic_44cfbac8": {
-    "message": "System Topic"
+    "message": "Systemämne"
   },
   "take_a_product_tour_a2892d17": {
-    "message": "Take a product tour"
+    "message": "Vill du gå till produktvisningen?"
   },
   "target_da92f4e6": {
     "message": "Mål"
@@ -3645,7 +3642,7 @@
     "message": "TB"
   },
   "teams_manifest_59d7fb0e": {
-    "message": "Teams Manifest"
+    "message": "Gruppmanifest"
   },
   "teams_manifest_for_your_bot_7d0ec7ea": {
     "message": "Teams manifest for your bot:"
@@ -3690,13 +3687,13 @@
     "message": "Färdighetens slutpunkt /API/messages."
   },
   "the_app_id_9c6d6a9a": {
-    "message": "The app id"
+    "message": "App-ID"
   },
   "the_app_id_of_your_application_registration_16fba1a9": {
     "message": "The app id of your application registration"
   },
   "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
-    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
+    "message": "Azure bot som skapats i Azure Bot Service* innehåller bot-resurser som kan användas som grund för en ny bot eller för att lägga till eller ersätta resurser för en befintlig bot."
   },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
@@ -3708,7 +3705,7 @@
     "message": "Den dialog som du försökte ta bort används för närvarande i nedanstående dialog(er). Om du tar bort den här dialogen kommer din robot att fungera utan ytterligare åtgärder."
   },
   "the_endpoint_url_7c04ee13": {
-    "message": "The endpoint url"
+    "message": "Slutpunkts-URL:en"
   },
   "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
     "message": "The endpoint url of your web app resource"
@@ -3780,13 +3777,13 @@
     "message": "There was a problem loading Azure directories. { errMessage }"
   },
   "there_was_a_problem_with_the_authentication_access_3ca717f6": {
-    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
+    "message": "Det uppstod ett problem med åtkomsttoken för autentisering. Stäng den här dialogrutan och försök igen. Om du vill uppmanas att ange åtkomsttoken igen, ta bort den från programmets lagringsplats."
   },
   "there_was_an_error_74ed3c58": {
     "message": "Ett fel uppstod"
   },
   "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
-    "message": "There was an error accessing your Azure account: { errorMsg }"
+    "message": "Ett fel uppstod vid åtkomst till ditt Azure-konto: {errorMsg}"
   },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
     "message": "Det uppstod ett oväntat fel när robotinnehåll importerades till <b> { botName } </b>"
@@ -3839,8 +3836,8 @@
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
     "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
   },
-  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
-    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
+  "this_publishing_profile_profilename_is_no_longer_s_941d10e0": {
+    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "Den här typen av utlösare stöds inte av RegEx-identifieringsobjektet. Om du vill försäkra dig om att utlösaren har aktiverats, så ändra typ av identifieringsobjekt."
@@ -3872,14 +3869,20 @@
   "title_ee03d132": {
     "message": "Rubrik"
   },
-  "to_connect_to_a_skill_you_will_need_a_skill_s_mani_3d163597": {
-    "message": "To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step."
+  "to_connect_to_a_skill_your_bot_needs_the_informati_409e03db": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest. Contact the author or publisher of the skill for this information."
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  "to_connect_to_a_skill_your_bot_needs_the_informati_65b28231": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot''s App ID. Follow the steps below to proceed."
+  },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+    "message": "Om du vill säkerställa en säker anslutning anger du app-ID: t för dem botar som kan ansluta till din färdighet.  Om du inte har den här informationen kan du också lägga till den här informationen i färdighetskonfiguration. Läs mer."
+  },
+  "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
+    "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "Mer information finns <a>i det här dokumentet</a>."
@@ -3954,7 +3957,7 @@
     "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
   },
   "trigger_f0ee1fbf": {
-    "message": "Trigger"
+    "message": "Utlösare"
   },
   "trigger_group_79a00ac6": {
     "message": "Trigger group"
@@ -3990,7 +3993,7 @@
     "message": "Skriv och tryck på Retur"
   },
   "type_app_id_a37decdf": {
-    "message": "Type App Id"
+    "message": "Typ av app-ID"
   },
   "type_app_password_8084ff36": {
     "message": "Type App Password"
@@ -4041,7 +4044,7 @@
     "message": "Okänt tillstånd"
   },
   "unnamed_4c8565a0": {
-    "message": "Unnamed"
+    "message": "Namnlös"
   },
   "unread_notifications_indicator_e2ca00d5": {
     "message": "Unread notifications Indicator"
@@ -4095,7 +4098,7 @@
     "message": "URL"
   },
   "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+    "message": "URL-adressen måste börja med http:// eller https://"
   },
   "use_azure_bot_to_create_a_new_conversation_1a116a65": {
     "message": "Use Azure Bot to create a new conversation"
@@ -4215,7 +4218,7 @@
     "message": "Vi behöver definiera färdighetens slutpunkter så att andra robotar tillåts att samverka med den."
   },
   "web_chat_c5ca7ab6": {
-    "message": "Web Chat"
+    "message": "Webbchatt"
   },
   "webchat_log_b7213a9e": {
     "message": "Webchattlogg."
@@ -4230,10 +4233,10 @@
     "message": "Welcome to Composer!"
   },
   "west_europe_75ac94f4": {
-    "message": "West Europe"
+    "message": "Europa, västra"
   },
   "west_us_51d3fdbb": {
-    "message": "West US"
+    "message": "Västra USA"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
     "message": "Vad kan användaren uppnå genom den här konversationen? Exempelvis BookATable, OrderACoffee osv."
@@ -4260,7 +4263,7 @@
     "message": "What''s new"
   },
   "what_s_new_list_6fe719cb": {
-    "message": "What''s new list"
+    "message": "Lista av nyheter"
   },
   "what_you_need_to_know_to_get_started_e2ab837a": {
     "message": "What you need to know to get started"
@@ -4296,7 +4299,7 @@
     "message": "Vilken händelse?"
   },
   "working_with_packages_dbdddbe9": {
-    "message": "Working with packages"
+    "message": "Arbeta med paket"
   },
   "write_an_expression_8773ea5c": {
     "message": "Skriv ett uttryck"
@@ -4311,7 +4314,7 @@
     "message": "Ja"
   },
   "yes_delete_d43476ee": {
-    "message": "Yes, delete"
+    "message": "Ja, ta bort"
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "Du har redan ett kunskapsbas med det namnet. Välj ett annat namn och försök igen."
@@ -4376,17 +4379,11 @@
   "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
     "message": "Your QnA Maker is ready! It took { time } minutes to complete."
   },
-  "your_root_bot_must_have_an_associated_microsoft_ap_91671242": {
-    "message": "Your root bot must have an associated Microsoft App ID and Password."
-  },
-  "your_root_bot_must_have_an_azure_publishing_profil_89055cfd": {
-    "message": "Your root bot must have an Azure publishing profile."
-  },
   "your_skill_could_not_be_published_5bee6e6a": {
     "message": "Your skill could not be published."
   },
   "your_skill_is_ready_to_be_shared_6376eb3c": {
-    "message": "Your skill is ready to be shared!"
+    "message": "Din färdighet är klar att delas!"
   },
   "your_subscription_list_is_empty_please_add_your_su_6b229c26": {
     "message": "Your subscription list is empty, please add your subscription, or login with another account."
@@ -4395,9 +4392,9 @@
     "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
   },
   "zoom_in_3205e865": {
-    "message": "Zoom in"
+    "message": "Zooma in"
   },
   "zoom_out_e4302632": {
-    "message": "Zoom out"
+    "message": "Zooma ut"
   }
 }
