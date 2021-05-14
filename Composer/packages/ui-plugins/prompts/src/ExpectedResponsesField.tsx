@@ -8,11 +8,11 @@ import formatMessage from 'format-message';
 import { LuMetaData, LuType } from '@bfc/shared';
 
 const expectedResponsesPlaceholder = (id?: SDKKinds) => {
-  let placehold = '';
+  let placeholderText = '';
   switch (id) {
     case SDKKinds.CrossTrainedRecognizerSet:
     case SDKKinds.LuisRecognizer:
-      placehold = formatMessage(`> add some expected user responses:
+      placeholderText = formatMessage(`> add some expected user responses:
       > - Please remind me to '{itemTitle=buy milk}'
       > - remind me to '{itemTitle}'
       > - add '{itemTitle}' to my todo list
@@ -22,12 +22,12 @@ const expectedResponsesPlaceholder = (id?: SDKKinds) => {
       `);
       break;
     case SDKKinds.RegexRecognizer:
-      placehold = formatMessage('Add some regex patterns');
+      placeholderText = formatMessage('Add regex pattern');
       break;
     default:
       break;
   }
-  return placehold;
+  return placeholderText;
 };
 
 const ExpectedResponsesField: React.FC<FieldProps> = (props) => {
