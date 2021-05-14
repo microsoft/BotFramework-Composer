@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 import { PageNames } from '@bfc/shared';
 import camelCase from 'lodash/camelCase';
 
-import { currentProjectIdState, featureFlagsState, userSettingsState } from '../recoilModel';
+import { currentProjectIdState, dispatcherState, featureFlagsState, userSettingsState } from '../recoilModel';
 import { getPageName } from '../utils/getPageName';
 import { useLocation } from '../utils/hooks';
 
@@ -15,6 +15,7 @@ import TelemetryClient from './TelemetryClient';
 const { ipcRenderer } = window;
 
 export const useInitializeLogger = () => {
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
   const rootProjectId = useRecoilValue(currentProjectIdState);
   const { telemetry } = useRecoilValue(userSettingsState);
   const featureFlags = useRecoilValue(featureFlagsState);
@@ -33,6 +34,12 @@ export const useInitializeLogger = () => {
   const page = useMemo<PageNames>(() => getPageName(pathname), [pathname]);
 
   TelemetryClient.setup(telemetry, { rootProjectId, page, ...reducedFeatureFlags });
+
+  useEffect(() => {
+    // Update user settings when the user opens the app to ensure
+    // the data collection settings on the server are current
+    updateUserSettings();
+  }, []);
 
   useEffect(() => {
     ipcRenderer?.on('session-update', (_event, name) => {
