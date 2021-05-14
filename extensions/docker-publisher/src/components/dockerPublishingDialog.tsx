@@ -23,7 +23,7 @@ export const DockerPublishingDialog: React.FC = () => {
 
   const getDefaultFormData = (current, defaults: RegistryConfigData) => {
     return {
-      creationType: current.creationType ?? defaults.creationType,
+      creationType: current?.creationType ?? defaults.creationType,
       url: current?.url ?? defaults.url,
       username: current?.username ?? defaults.username,
       password: current?.password ?? defaults.password,
@@ -110,7 +110,7 @@ export const DockerPublishingDialog: React.FC = () => {
   }, [currentConfig.creationType]);
 
   const onSave = useCallback(() => {
-    savePublishConfig(currentConfig);
+    savePublishConfig({ target: currentConfig });
     closeDialog();
   }, [currentConfig]);
 
