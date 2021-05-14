@@ -211,7 +211,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           setIsRestartButtonDisabled(false);
         }
       },
-      700,
+      1000,
       { leading: true }
     ),
     []
