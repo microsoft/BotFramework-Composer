@@ -48,11 +48,11 @@ export const topLinks = (
       isDisabledForPVA: false,
     },
     {
-      to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
-      iconName: 'BotProjectsSettings',
-      labelName: formatMessage('Configure'),
-      disabled: !botLoaded,
-      match: /botProjectsSettings/,
+      to: linkBase + `language-generation/${openedDialogId}`,
+      iconName: 'Robot',
+      labelName: formatMessage('Bot responses'),
+      disabled: !botLoaded || skillIsRemote,
+      match: /language-generation\/[a-zA-Z0-9_-]+$/,
       isDisabledForPVA: false,
     },
     {
@@ -64,20 +64,20 @@ export const topLinks = (
       isDisabledForPVA: false,
     },
     {
-      to: linkBase + `language-generation/${openedDialogId}`,
-      iconName: 'Robot',
-      labelName: formatMessage('Bot responses'),
-      disabled: !botLoaded || skillIsRemote,
-      match: /language-generation\/[a-zA-Z0-9_-]+$/,
-      isDisabledForPVA: false,
-    },
-    {
       to: linkBase + `knowledge-base/${openedDialogId}`,
       iconName: 'QnAIcon',
       labelName: formatMessage('Knowledge base'),
       disabled: !botLoaded || skillIsRemote,
       match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
       isDisabledForPVA: isPVASchema,
+    },
+    {
+      to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
+      iconName: 'BotProjectsSettings',
+      labelName: formatMessage('Configure'),
+      disabled: !botLoaded,
+      match: /botProjectsSettings/,
+      isDisabledForPVA: false,
     },
     ...(showFormDialog
       ? [
