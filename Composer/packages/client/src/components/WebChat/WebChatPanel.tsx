@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo, useEffect, useState, useRef } from 'react';
+import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import {
   ConversationActivityTraffic,
@@ -11,6 +11,7 @@ import {
 import { AxiosResponse } from 'axios';
 import formatMessage from 'format-message';
 import { v4 as uuid } from 'uuid';
+import throttle from 'lodash/throttle';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { BotStatus } from '../../constants';
@@ -55,9 +56,10 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   const { projectId, botUrl, secrets, botName, activeLocale, botStatus } = botData;
   const [chats, setChatData] = useState<Record<string, ChatData>>({});
   const [currentConversation, setCurrentConversation] = useState<string>('');
+  const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
+  const [isRestartButtonDisabled, setIsRestartButtonDisabled] = useState(false);
   const conversationService = useMemo(() => new ConversationService(directlineHostUrl), [directlineHostUrl]);
   const webChatPanelRef = useRef<HTMLDivElement>(null);
-  const [currentRestartOption, onSetRestartOption] = useState<RestartOption>(RestartOption.NewUserID);
   const webChatTrafficChannel = useRef<WebSocket>();
 
   useEffect(() => {
@@ -134,6 +136,14 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     }
   }, [botUrl]);
 
+  useEffect(() => {
+    if (botStatus !== BotStatus.inactive && botStatus !== BotStatus.connected && botStatus !== BotStatus.failed) {
+      setIsRestartButtonDisabled(true);
+    } else {
+      setIsRestartButtonDisabled(false);
+    }
+  }, [botStatus]);
+
   const sendInitialActivities = async (chatData: ChatData) => {
     try {
       await conversationService.sendInitialActivity(chatData.conversationId, [chatData.user]);
@@ -176,24 +186,36 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
     };
   }, [isWebChatPanelVisible]);
 
-  const onRestartConversationClick = async (oldConversationId: string, requireNewUserId: boolean) => {
-    try {
-      TelemetryClient.track('WebChatConversationRestarted', {
-        restartType: requireNewUserId ? 'NewUserId' : 'SameUserId',
-      });
-      const chatData = await conversationService.restartConversation(
-        chats[oldConversationId],
-        requireNewUserId,
-        activeLocale,
-        secrets
-      );
-      setConversationData(chatData);
-      sendInitialActivities(chatData);
-      clearWebChatLogs(projectId);
-    } catch (ex) {
-      // DL errors are handled through socket above.
-    }
-  };
+  const handleThrottledRestart: (oldChatData: ChatData, requireNewUserId: boolean) => void = useCallback(
+    throttle(
+      async (oldChatData: ChatData, requireNewUserId: boolean) => {
+        try {
+          setIsRestartButtonDisabled(true);
+          const chatData = await conversationService.restartConversation(
+            oldChatData,
+            requireNewUserId,
+            activeLocale,
+            secrets
+          );
+
+          TelemetryClient.track('WebChatConversationRestarted', {
+            restartType: requireNewUserId ? 'NewUserId' : 'SameUserId',
+          });
+
+          setConversationData(chatData);
+          sendInitialActivities(chatData);
+          clearWebChatLogs(projectId);
+        } catch (ex) {
+          // DL errors are handled through socket above.
+        } finally {
+          setIsRestartButtonDisabled(false);
+        }
+      },
+      700,
+      { leading: true }
+    ),
+    []
+  );
 
   const onSaveTranscriptClick = async (conversationId: string) => {
     try {
@@ -233,6 +255,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
         botName={botName}
         conversationId={currentConversation}
         currentRestartOption={currentRestartOption}
+        isRestartButtonDisabled={isRestartButtonDisabled}
         onCloseWebChat={() => {
           setWebChatPanelVisibility(false);
           TelemetryClient.track('WebChatPaneClosed');
@@ -241,7 +264,9 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
           openBotInEmulator(projectId);
           TelemetryClient.track('EmulatorButtonClicked', { isRoot: true, projectId, location: 'WebChatPane' });
         }}
-        onRestartConversation={onRestartConversationClick}
+        onRestartConversation={(oldConversationId: string, requireNewUserId: boolean) =>
+          handleThrottledRestart(chats[oldConversationId], requireNewUserId)
+        }
         onSaveTranscript={onSaveTranscriptClick}
         onSetRestartOption={onSetRestartOption}
       />
