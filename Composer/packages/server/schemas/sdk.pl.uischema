@@ -223,9 +223,9 @@
       "subtitle": "Odebrano działanie"
     },
     "trigger": {
-      "label": "Activities (Activity received)",
+      "label": "Działania (działanie odebrane)",
       "submenu": {
-        "label": "Activities"
+        "label": "Działania"
       }
     }
   },
@@ -241,9 +241,9 @@
       "subtitle": "Zdarzenie rozpoczęcia dialogu"
     },
     "trigger": {
-      "label": "Dialog started (Begin dialog event)",
+      "label": "Dialog został rozpoczęty (zdarzenie rozpoczęcia dialogu)",
       "submenu": {
-        "label": "Dialog events"
+        "label": "Zdarzenia dialogu"
       }
     }
   },
@@ -253,12 +253,12 @@
       "subtitle": "Anuluj zdarzenie dialogu"
     },
     "trigger": {
-      "label": "Dialog cancelled (Cancel dialog event)"
+      "label": "Dialog został anulowany (zdarzenie anulowania dialogu)"
     }
   },
   "Microsoft.OnChooseIntent": {
     "trigger": {
-      "label": "Duplicated intents recognized"
+      "label": "Rozpoznano zduplikowane zamiary"
     }
   },
   "Microsoft.OnCondition": {
@@ -274,7 +274,7 @@
       "subtitle": "Działanie ConversationUpdate"
     },
     "trigger": {
-      "label": "Greeting (ConversationUpdate activity)"
+      "label": "Powitanie (działanie ConversationUpdate)"
     }
   },
   "Microsoft.OnDialogEvent": {
@@ -283,7 +283,7 @@
       "subtitle": "Zdarzenie dialogu"
     },
     "trigger": {
-      "label": "Custom events"
+      "label": "Zdarzenia niestandardowe"
     }
   },
   "Microsoft.OnEndOfActions": {
@@ -298,7 +298,7 @@
       "subtitle": "Działanie: koniec konwersacji"
     },
     "trigger": {
-      "label": "Conversation ended (EndOfConversation activity)"
+      "label": "Konwersacja została zakończona (działanie EndOfConversation)"
     }
   },
   "Microsoft.OnError": {
@@ -307,7 +307,7 @@
       "subtitle": "Zdarzenie błędu"
     },
     "trigger": {
-      "label": "Error occurred (Error event)"
+      "label": "Wystąpił błąd (zdarzenie błędu)"
     }
   },
   "Microsoft.OnEventActivity": {
@@ -316,7 +316,7 @@
       "subtitle": "Działanie: zdarzenie"
     },
     "trigger": {
-      "label": "Event received (Event activity)"
+      "label": "Odebrano zdarzenie (działanie zdarzenia)"
     }
   },
   "Microsoft.OnHandoffActivity": {
@@ -325,7 +325,7 @@
       "subtitle": "Działanie: przekazanie"
     },
     "trigger": {
-      "label": "Handover to human (Handoff activity)"
+      "label": "Przekierowanie do człowieka (działanie przekazania)"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
@@ -340,7 +340,7 @@
       "subtitle": "Rozpoznano intencję"
     },
     "trigger": {
-      "label": "Intent recognized"
+      "label": "Rozpoznano intencję"
     }
   },
   "Microsoft.OnInvokeActivity": {
@@ -349,7 +349,7 @@
       "subtitle": "Działanie: wywołanie"
     },
     "trigger": {
-      "label": "Conversation invoked (Invoke activity)"
+      "label": "Konwersacja została wywołana (działanie wywołania)"
     }
   },
   "Microsoft.OnMessageActivity": {
@@ -358,7 +358,7 @@
       "subtitle": "Działanie: odebranie wiadomości"
     },
     "trigger": {
-      "label": "Message received (Message received activity)"
+      "label": "Odebrano wiadomość (działanie odebrania wiadomości)"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
@@ -367,7 +367,7 @@
       "subtitle": "Działanie: usunięcie wiadomości"
     },
     "trigger": {
-      "label": "Message deleted (Message deleted activity)"
+      "label": "Wiadomość została usunięta (działanie usunięcia wiadomości)"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
@@ -376,7 +376,7 @@
       "subtitle": "Działanie: reakcja na wiadomość"
     },
     "trigger": {
-      "label": "Message reaction (Message reaction activity)"
+      "label": "Reakcja na wiadomość (działanie reakcji na wiadomość)"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
@@ -385,12 +385,12 @@
       "subtitle": "Działanie zaktualizowania wiadomości"
     },
     "trigger": {
-      "label": "Message updated (Message updated activity)"
+      "label": "Zaktualizowano wiadomość (działanie zaktualizowania wiadomości)"
     }
   },
   "Microsoft.OnQnAMatch": {
     "trigger": {
-      "label": "QnA Intent recognized"
+      "label": "Rozpoznano zamiar usługi QnA"
     }
   },
   "Microsoft.OnRepromptDialog": {
@@ -399,7 +399,7 @@
       "subtitle": "Zdarzenie ponownego monitu w dialogu"
     },
     "trigger": {
-      "label": "Re-prompt for input (Reprompt dialog event)"
+      "label": "Ponownie monituj o dane wejściowe (zdarzenie ponownego monitowania dla dialogu)"
     }
   },
   "Microsoft.OnTypingActivity": {
@@ -408,7 +408,7 @@
       "subtitle": "Działanie: pisanie"
     },
     "trigger": {
-      "label": "User is typing (Typing activity)"
+      "label": "Użytkownik pisze (działanie pisania)"
     }
   },
   "Microsoft.OnUnknownIntent": {
@@ -417,7 +417,7 @@
       "subtitle": "Rozpoznano nieznaną intencję"
     },
     "trigger": {
-      "label": "Unknown intent"
+      "label": "Nieznana intencja"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -497,11 +497,11 @@
   "Microsoft.UpdateActivity": {
     "flow": {
       "header": {
-        "title": "Update activity"
+        "title": "Aktualizuj działanie"
       }
     },
     "form": {
-      "label": "Update an activity",
+      "label": "Aktualizuj działanie",
       "subtitle": "Update Activity"
     }
   }

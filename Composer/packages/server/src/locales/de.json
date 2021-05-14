@@ -3,13 +3,13 @@
     "message": "0 Bytes"
   },
   "1_using_the_azure_portal_please_create_a_language__7e2eb65c": {
-    "message": "1. Using the Azure portal, please create a Language Understanding resource.\n2. Once created, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
+    "message": "1. Mithilfe des Microsoft Azure-Portals erstellen Sie eine Language Understanding-Ressource.\n2. Nach der Erstellung teilen Sie mir die resultierenden Anmeldeinformationen sicher mit, wie unter dem unten stehenden Link beschrieben.\n\nDetaillierte Anweisungen:\nhttps://aka.ms/bfcomposerhandoffluis"
   },
   "1_using_the_azure_portal_please_create_a_qnamaker__a060ac82": {
-    "message": "1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
+    "message": "1. Mithilfe des Microsoft Azure Portals, erstellen Sie bitte eine QnAMaker-Ressource in meinem Namen.\n2. Sobald die Ressource eingerichtet ist, teilen Sie die daraus resultierenden Anmeldedaten sicher mit mir, wie unter dem folgenden Link beschrieben.\n\nDetaillierte Anweisungen:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
   },
   "1_using_the_azure_portal_please_create_a_speech_re_6326f2f5": {
-    "message": "1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
+    "message": "1. Mithilfe des Microsoft Azure Portals, erstellen Sie bitte eine Sprachressource in meinem Namen.\n2. Sobald die Ressource eingerichtet ist, teilen Sie die daraus resultierenden Anmeldedaten sicher mit mir, wie unter dem folgenden Link beschrieben.\n\nDetaillierte Anweisungen:\nhttps://aka.ms/bfcomposerhandoffdls"
   },
   "ErrorInfo_part1": {
     "message": "Fehler im Formular-Editor."
@@ -21,10 +21,10 @@
     "message": "Versuchen Sie, zu einem anderen Knoten im visuellen Editor zu navigieren."
   },
   "a_add_from_package_manager_a_9eee7630": {
-    "message": "<a>Add from package manager</a>"
+    "message": "<a>Aus Paket-Manager hinzufügen</a>"
   },
   "a_bot_that_consists_of_multiple_bots_or_connects_t_f3bc4bd": {
-    "message": "A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill."
+    "message": "Ein Bot, der mehrere Bots umfasst oder eine Verbindung mit Skills (Multi-Bot-Projekt) herstellt, benötigt Orchestrator zum Ermitteln und Weiterleiten von Benutzereingaben an den entsprechenden Bot oder Skill."
   },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "Eine Dialogdatei muss einen Namen besitzen."
@@ -33,7 +33,7 @@
     "message": "Ein Formulardialog ermöglicht Ihrem Bot das Sammeln von Informationen."
   },
   "a_install_ngrok_a_and_run_the_following_command_to_634f3414": {
-    "message": "<a>Install ngrok</a> and run the following command to continue"
+    "message": "<a>Installieren Sie ngrok</a>, und führen Sie den folgenden Befehl aus, um fortzufahren"
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "Der Name einer Wissensdatenbank darf keine Leerzeichen oder Sonderzeichen enthalten. Verwenden Sie Buchstaben, Ziffern, Bindestriche (-) oder Unterstriche (_)."
@@ -50,11 +50,14 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "Eine Eigenschaft ist eine Information, die von Ihrem Bot gesammelt wird. Der Eigenschaftsname ist der Name, der in Composer verwendet wird. Es handelt sich nicht unbedingt um den gleichen Text, der in den Nachrichten Ihres Bots angezeigt wird."
   },
+  "a_publishing_profile_contains_the_information_nece_fc37192d": {
+    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID. "
+  },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
-    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
+    "message": "Ein Veröffentlichungsprofil enthält die Informationen, die zum Bereitstellen und Veröffentlichen Ihres Bots erforderlich sind, einschließlich der zugehörigen App-ID."
   },
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
-    "message": "A publishing profile provides the secure connectivity required to publish your bot."
+    "message": "Ein Veröffentlichungsprofil bietet die sichere Konnektivität, die zum Veröffentlichen Ihres Bots erforderlich ist."
   },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "Ein Schema oder Formular ist die Liste der Eigenschaften, die Ihr Bot erfassen wird."
@@ -63,7 +66,7 @@
     "message": "Ein Skill-Bot, der von einem Host-Bot aufgerufen werden kann."
   },
   "a_skill_is_a_bot_that_can_perform_a_set_of_tasks_o_950a3c95": {
-    "message": "A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform."
+    "message": "Ein Skill ist ein Bot, der eine Reihe von Aufgaben eines oder mehrerer Bots ausführen kann.  Um Ihren Bot als Skill verfügbar zu machen, benötigt er ein Manifest – eine JSON-Datei, die die Aktionen beschreibt, die der Skill ausführen kann."
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "Beim Erstellen einer QnA Maker-Ressource wird ein Abonnementschlüssel erstellt."
@@ -99,7 +102,7 @@
     "message": "Aktion nicht im Fokus"
   },
   "actions_are_the_main_component_of_a_trigger_they_a_8e3af9b9": {
-    "message": "Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur."
+    "message": "Aktionen sind die Hauptkomponente eines Auslösers. Sie ermöglichen es Ihrem Bot, Maßnahmen zu ergreifen, sei es als Reaktion auf Benutzereingaben oder andere Ereignisse, die auftreten können."
   },
   "actions_copied_2821ab27": {
     "message": "Aktionen kopiert"
@@ -150,7 +153,7 @@
     "message": "Hinzufügen"
   },
   "add_a_bot_58522e81": {
-    "message": "Add a bot"
+    "message": "Bot hinzufügen"
   },
   "add_a_dialog_e378aa3a": {
     "message": "Dialog hinzufügen"
@@ -168,25 +171,25 @@
     "message": "Skill hinzufügen"
   },
   "add_a_skill_host_endpoint_so_your_skills_can_relia_950a7614": {
-    "message": "Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>."
+    "message": "Fügen Sie einen Skillhost-Endpunkt hinzu, damit Ihre Skills zuverlässig eine Verbindung mit ihrem Stamm-Bot herstellen können. <a>Weitere Informationen</a>."
   },
   "add_allowed_callers_7188d3d4": {
-    "message": "Add allowed callers"
+    "message": "Zulässige Aufrufer hinzufügen"
   },
   "add_alternative_662902c1": {
-    "message": "Add alternative"
+    "message": "Alternative hinzufügen"
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Alternative Formulierung hinzufügen"
   },
   "add_an_existing_bot_5a9cc5b1": {
-    "message": "Add an existing bot"
+    "message": "Vorhandenen Bot hinzufügen"
   },
   "add_connections_d720a32e": {
-    "message": "Add connections"
+    "message": "Verbindungen hinzufügen"
   },
   "add_connections_to_make_your_bot_available_in_webc_5ae0b1de": {
-    "message": "Add connections to make your bot available in Webchat, Direct Line Speech, Microsoft Teams and more. <a>Learn more.</a>"
+    "message": "Fügen Sie Verbindungen hinzu, um Ihren Bot in Webchat, Direct Line Speech, Microsoft Teams und vielem mehr verfügbar zu machen. <a>Weitere Informationen.</a>"
   },
   "add_custom_a376ce51": {
     "message": "Benutzerdefiniert hinzufügen"
@@ -195,7 +198,7 @@
     "message": "Benutzerdefinierte Runtime hinzufügen"
   },
   "add_entity_5f769994": {
-    "message": "Add entity"
+    "message": "Entität hinzufügen"
   },
   "add_more_to_this_response_d45bdfda": {
     "message": "Dieser Antwort weitere Informationen hinzufügen"
@@ -213,7 +216,7 @@
     "message": "Neue Anlage hinzufügen"
   },
   "add_new_caller_4a72bd0c": {
-    "message": "Add new caller"
+    "message": "Neuen Aufrufer hinzufügen"
   },
   "add_new_extension_19b82b77": {
     "message": "Neue Erweiterung hinzufügen"
@@ -225,28 +228,31 @@
     "message": "Neue Frage hinzufügen"
   },
   "add_new_trigger_dc8e80b4": {
-    "message": "Add new trigger"
+    "message": "Neuen Auslöser hinzufügen"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Hier neue Validierungsregel hinzufügen"
   },
   "add_packages_3ab0558c": {
-    "message": "Add packages"
+    "message": "Pakete hinzufügen"
   },
   "add_property_d381eba3": {
     "message": "Eigenschaft hinzufügen"
   },
+  "add_publishing_profile_for_botname_37f9d35c": {
+    "message": "Add publishing profile for { botName }"
+  },
   "add_qna_maker_knowledge_base_c1b27b78": {
-    "message": "Add QnA Maker knowledge base"
+    "message": "QnA Maker-Wissensdatenbank hinzufügen"
   },
   "add_qna_pair_16c228f0": {
     "message": "+ QnA-Paar hinzufügen"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> Fügen Sie einige Beispielausdrücke hinzu, mit denen diese Absicht ausgelöst wird:\n> – Informiere mich über das Wetter\n> – Wie ist das Wetter in '{'city=Seattle'}'\n\n> Entitätsdefinitionen:\n> @ ml city"
+    "message": "> Fügen Sie einige Beispielausdrücke hinzu, mit denen diese Absicht ausgelöst wird:\n> – Informiere mich über das Wetter\n> – Wie ist das Wetter in {'city=Seattle'}\n\n> Entitätsdefinitionen:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> Fügen Sie einige erwartete Benutzerantworten hinzu:\n> – Erinnere mich an '{'itemTitle=Milch kaufen'}'\n> – Erinnerung an '{'itemTitle'}'\n> –'{'itemTitle'}' meiner Aufgabenliste hinzufügen\n>\n> Entitätsdefinitionen:\n> @ ml itemTitle\n"
+    "message": "> Fügen Sie einige erwartete Benutzerantworten hinzu:\n> – Erinnere mich an \"{'itemTitle=Milch kaufen'}\"\n> – Erinnerung an \"{'itemTitle'}\"\n> –\"{'itemTitle'}\" meiner Aufgabenliste hinzufügen\n>\n> Entitätsdefinitionen:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Vorgeschlagene Aktion hinzufügen"
@@ -264,19 +270,19 @@
     "message": "Alle"
   },
   "allowed_callers_31b26262": {
-    "message": "Allowed Callers"
+    "message": "Zulässige Aufrufer"
   },
   "almost_there_f90939cb": {
-    "message": "Almost there!"
+    "message": "Fast geschafft!"
   },
   "an_app_id_is_used_for_communication_between_your_b_255025e1": {
-    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
+    "message": "Eine App-ID wird für die Kommunikation zwischen Ihrem Bot und Skills, Diensten, Websites oder Anwendungen verwendet. Verwenden Sie eine vorhandene App-ID oder generieren Sie automatisch eine App-ID, wenn Sie ein Veröffentlichungsprofil für diesen Bot erstellen. <a>Weitere Informationen</a>"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "Beim Erstellen eines LUIS-Kontos wird automatisch ein Erstellungsschlüssel erstellt."
   },
   "an_azure_tenant_must_be_set_in_order_to_provision__a223f1b8": {
-    "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
+    "message": "Es muss ein Azure-Mandant festgelegt werden, um Ressourcen bereitzustellen. Versuchen Sie, das Veröffentlichungsprofil neu zu erstellen, und versuchen Sie es noch mal."
   },
   "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
     "message": "Verbindungsfehler beim Initialisieren des Direct Line-Servers."
@@ -327,10 +333,10 @@
     "message": "Beliebige Zeichenfolge"
   },
   "application_language_settings_85b1f06": {
-    "message": "Application language settings"
+    "message": "Anwendungsspracheinstellungen"
   },
   "application_name_67a279e2": {
-    "message": "Application name"
+    "message": "Anwendungsname"
   },
   "application_settings_39e840c6": {
     "message": "Anwendungseinstellungen"
@@ -339,10 +345,10 @@
     "message": "Anwendungsupdates"
   },
   "apply_my_azure_bot_resources_for_an_existing_bot_4979e343": {
-    "message": "Apply my Azure Bot resources for an existing bot"
+    "message": "Meine Azure-Bot-Ressourcen für einen vorhandenen Bot anwenden"
   },
   "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
-    "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
+    "message": "Möchten Sie Ihren Bot wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden, und Ihr Bot und alle zugehörigen Dateien im Bot-Projektordner werden dauerhaft gelöscht. Ihre Azure-Ressourcen bleiben unverändert."
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "Möchten Sie die Tour zum Onboarding von Produkten beenden? Sie können die Tour in den Onboardingeinstellungen neu starten."
@@ -354,7 +360,7 @@
     "message": "Möchten Sie \"{ propertyName }\" entfernen?"
   },
   "are_you_sure_you_want_to_remove_targetname_this_wi_b3ddce54": {
-    "message": "Are you sure you want to remove { targetName }? This will remove only the profile and will not delete provisioned resources."
+    "message": "Sind Sie sicher, dass Sie { targetName } entfernen möchten? Dadurch wird nur das Profil entfernt und bereitgestellte Ressourcen werden nicht gelöscht."
   },
   "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
     "message": "Möchten Sie diese Eigenschaft entfernen?"
@@ -384,67 +390,67 @@
     "message": "Frage stellen"
   },
   "ask_a_question_confirmation_434ad620": {
-    "message": "Ask a question - confirmation"
+    "message": "Frage stellen – Bestätigung"
   },
   "ask_a_question_date_or_time_6e896738": {
-    "message": "Ask a question - date or time"
+    "message": "Frage stellen – Datum oder Uhrzeit"
   },
   "ask_a_question_file_or_attachment_eebb66b2": {
-    "message": "Ask a question - file or attachment"
+    "message": "Frage stellen – Datei oder Anlage"
   },
   "ask_a_question_multi_choice_5fce9e3e": {
-    "message": "Ask a question - multi choice"
+    "message": "Frage stellen – Mehrfachauswahl"
   },
   "ask_a_question_number_28cb66b1": {
-    "message": "Ask a question - number"
+    "message": "Frage stellen – Nummer"
   },
   "ask_a_question_oauth_login_8ec5ccd5": {
-    "message": "Ask a question - OAuth login"
+    "message": "Frage stellen – OAuth-Anmeldung"
   },
   "ask_a_question_send_activity_19848af2": {
-    "message": "Ask a question - send activity"
+    "message": "Frage stellen – Sendeaktivität"
   },
   "ask_a_question_text_ba993a5e": {
-    "message": "Ask a question - text"
+    "message": "Frage stellen – Text"
   },
   "ask_a_question_to_collect_user_input_choice_c1fbb541": {
-    "message": "Ask a question to collect user input (choice)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (Auswahl)"
   },
   "ask_a_question_to_collect_user_input_confirmation_29c70209": {
-    "message": "Ask a question to collect user input (confirmation)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (Bestätigung)"
   },
   "ask_a_question_to_collect_user_input_date_or_time_3a8659ee": {
-    "message": "Ask a question to collect user input (date or time)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (Datum oder Uhrzeit)"
   },
   "ask_a_question_to_collect_user_input_file_or_attac_dccad24b": {
-    "message": "Ask a question to collect user input (file or attachment)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (Datei oder Anlage)"
   },
   "ask_a_question_to_collect_user_input_number_b3abe981": {
-    "message": "Ask a question to collect user input (number)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (Nummer)"
   },
   "ask_a_question_to_collect_user_input_oauth_login_5347b7fc": {
-    "message": "Ask a question to collect user input (OAuth login)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (OAuth-Anmeldung)"
   },
   "ask_a_question_to_collect_user_input_send_activity_eb3dd7ab": {
-    "message": "Ask a question to collect user input (send activity)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (Sendeaktivität)"
   },
   "ask_a_question_to_collect_user_input_text_5d8adc89": {
-    "message": "Ask a question to collect user input (text)"
+    "message": "Stellen Sie eine Frage zum Erfassen der Benutzereingabe (Text)"
   },
   "ask_activity_7bb716b4": {
-    "message": "Ask activity"
+    "message": "Frageaktivität"
   },
   "ask_the_skill_owner_for_the_url_and_provide_your_b_70a8b361": {
-    "message": "Ask the skill owner for the URL and provide your bot’s App ID"
+    "message": "Fragen Sie den Skillbesitzer nach der URL, und geben Sie die App-ID Ihres Bots an"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "Mindestens eine Frage ist erforderlich."
   },
   "attachment_deffe5a9": {
-    "message": "Attachment"
+    "message": "Anlage"
   },
   "attachment_input_212dcb98": {
-    "message": "Attachment input"
+    "message": "Anlageneingabe"
   },
   "attachment_layout_b42b242": {
     "message": "Anlagenlayout"
@@ -456,10 +462,10 @@
     "message": "Audiokarte"
   },
   "australia_east_b7af6cc": {
-    "message": "Australia East"
+    "message": "Australien, Osten"
   },
   "authentication_error_39e996c5": {
-    "message": "Authentication Error"
+    "message": "Authentifizierungsfehler"
   },
   "authoring_canvas_18802e39": {
     "message": "Erstellungsbereich"
@@ -477,22 +483,22 @@
     "message": "Generieren Sie automatisch Dialoge, die zur Verwaltung von Unterhaltungen Informationen von einem Benutzer erfassen."
   },
   "available_as_skill_to_the_following_bots_dbcaffcd": {
-    "message": "Available as skill to the following bots:"
+    "message": "Als Skill für die folgenden Bots verfügbar:"
   },
   "azure_connections_9e63f716": {
-    "message": "Azure connections"
+    "message": "Azure-Verbindungen"
   },
   "azure_directory_d9065529": {
-    "message": "Azure directory"
+    "message": "Azure-Verzeichnis"
   },
   "azure_functions_5e23be5c": {
     "message": "Azure Functions"
   },
   "azure_functions_required_2a035b48": {
-    "message": "Azure Functions required"
+    "message": "Azure Functions erforderlich"
   },
   "azure_functions_runtime_not_installed_bc24e100": {
-    "message": "Azure Functions runtime not installed."
+    "message": "Azure Functions-Runtime ist nicht installiert."
   },
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
@@ -501,10 +507,10 @@
     "message": "Azure QnA Maker"
   },
   "azure_resource_group_cee486e6": {
-    "message": "Azure resource group"
+    "message": "Azure-Ressourcengruppe"
   },
   "azure_subscription_4671d043": {
-    "message": "Azure subscription"
+    "message": "Azure-Abonnement"
   },
   "azure_web_app_d834cb4c": {
     "message": "Azure Web App"
@@ -515,9 +521,6 @@
   "been_used_5daccdb2": {
     "message": "Wurde verwendet"
   },
-  "before_we_begin_7ae9c242": {
-    "message": "Before we begin"
-  },
   "begin_a_new_dialog_60249bd8": {
     "message": "Neuen Dialog starten"
   },
@@ -525,7 +528,7 @@
     "message": "Remoteskilldialog starten"
   },
   "begin_dialog_154ebbf9": {
-    "message": "Begin dialog"
+    "message": "Dialog starten"
   },
   "begin_dialog_event_285bc650": {
     "message": "Ereignis \"Dialog starten\""
@@ -576,7 +579,7 @@
     "message": "Botdateien erstellt"
   },
   "bot_framework_composer_2_0_provides_more_built_in__c6abf11c": {
-    "message": "Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages."
+    "message": "Der Bot Framework Composer 2.0 bietet weitere integrierte Funktionen, sodass Sie komplexe Bots schnell erstellen können. Aktualisieren Sie auf Composer 2.0 für erweiterte Bot-Vorlagen, vordefinierte Komponenten und eine Runtime, die vollständig durch Pakete erweiterbar ist."
   },
   "bot_framework_composer_fae721be": {
     "message": "Bot Framework Composer"
@@ -585,7 +588,7 @@
     "message": "Graues Symbol für Bot Framework Composer"
   },
   "bot_framework_composer_requires_node_js_in_order_t_de385f76": {
-    "message": "Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node."
+    "message": "Der Bot Framework Composer erfordert Node.js, um einen neuen Bot zu erstellen und auszuführen. Klicken Sie auf \"Node.js installieren\", um die neueste Version zu installieren. Sie müssen den Composer nach der Installation des Knotens neu starten."
   },
   "bot_framework_emulator_fefd4a59": {
     "message": "Bot Framework Emulator"
@@ -600,7 +603,7 @@
     "message": "Botsprache (aktiv)"
   },
   "bot_name_cannot_start_with_a_number_or_space_3a5c6fc1": {
-    "message": "Bot name cannot start with a number or space"
+    "message": "Der Botname darf nicht mit einer Zahl oder einem Leerzeichen beginnen"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "Der Name des Bots ist \"{ botName }\"."
@@ -609,7 +612,7 @@
     "message": "Die Botprojektdatei ist nicht vorhanden."
   },
   "bot_project_location_3be47459": {
-    "message": "Bot project location"
+    "message": "Bot-Projektspeicherort"
   },
   "bot_projects_settings_list_view_ab58e5d": {
     "message": "Liste von Bot-Projekteinstellungen"
@@ -618,7 +621,7 @@
     "message": "Navigationsbereich für Bot-Projekteinstellungen"
   },
   "bot_response_ec6f4a8c": {
-    "message": "Bot response"
+    "message": "Botantwort"
   },
   "bot_responses_4617b4a2": {
     "message": "Botantworten"
@@ -642,7 +645,7 @@
     "message": "Schleife verlassen"
   },
   "build_a_continuous_integration_and_deployment_ci_c_79188c70": {
-    "message": "Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates."
+    "message": "Erstellen Sie eine Continuous Integration and Deployment-Pipeline (CI/CD) mit Azure Resource Manager-Vorlagen."
   },
   "building_5e8a3c1d": {
     "message": "Erstellung"
@@ -657,13 +660,13 @@
     "message": "Wird berechnet..."
   },
   "call_skills_24416f61": {
-    "message": "Call skills"
+    "message": "Skills aufrufen"
   },
   "cancel_all_active_dialogs_335b1623": {
     "message": "Alle aktiven Dialoge abbrechen"
   },
   "cancel_all_dialogs_7b35fa0e": {
-    "message": "Cancel all dialogs"
+    "message": "Alle Dialoge abbrechen"
   },
   "cancel_caeb1e68": {
     "message": "Abbrechen"
@@ -681,7 +684,7 @@
     "message": "Die Datei kann nicht hochgeladen werden. Die Unterhaltung wurde nicht gefunden."
   },
   "carousel_a2321ac9": {
-    "message": "Carousel"
+    "message": "Karussell"
   },
   "change_recognizer_3145b93d": {
     "message": "Erkennungsmodul ändern"
@@ -690,7 +693,7 @@
     "message": "Suchen Sie nach Updates, und installieren Sie diese automatisch."
   },
   "choice_input_369b0c57": {
-    "message": "Choice input"
+    "message": "Auswahleingabe"
   },
   "choice_name_fe8411f4": {
     "message": "Auswahlname"
@@ -705,10 +708,10 @@
     "message": "Alle löschen"
   },
   "click_start_and_your_bot_will_be_up_and_running_on_424c29da": {
-    "message": "Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test."
+    "message": "Klicken Sie auf \"Starten\", und Ihr Bot wird ausgeführt. Nach dem ausführen können Sie \"In Webchat öffnen\" auswählen, um zu testen."
   },
   "click_the_start_button_to_test_your_bot_using_web__821e827c": {
-    "message": "Click the start button to test your bot using Web Chat or Emulator. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
+    "message": "Klicken Sie auf die Schaltfläche \"Starten\", um Ihren Bot über Webchat oder Emulator zu testen. Wenn der Bot Framework Emulator nicht installiert ist, können Sie ihn <a>hier</a> herunterladen."
   },
   "click_to_sort_by_file_type_1b0c9bd": {
     "message": "Klicken, um nach Dateityp zu sortieren"
@@ -717,25 +720,25 @@
     "message": "Schließen"
   },
   "close_webchat_b26d03e1": {
-    "message": "Close WebChat"
+    "message": "Webchat schließen"
   },
   "cognitive_service_region_87c668be": {
-    "message": "Cognitive Service Region"
+    "message": "Cognitive Services-Region"
   },
   "cognitive_services_key_fcfd093f": {
-    "message": "Cognitive services key"
+    "message": "Cognitive Services-Schlüssel"
   },
   "collapse_34080b4d": {
     "message": "Reduzieren"
   },
   "collapse_debug_panel_2841f8ba": {
-    "message": "Collapse Debug Panel"
+    "message": "Debugpanel reduzieren"
   },
   "collapse_navigation_17228b95": {
     "message": "Navigation reduzieren"
   },
   "collect_information_about_the_use_and_performance__39c61db9": {
-    "message": "Collect information about the use and performance of your bot."
+    "message": "Sammeln Sie Informationen über die Nutzung und Leistung Ihres Bots."
   },
   "comment_7ef1428e": {
     "message": "Kommentar"
@@ -747,16 +750,16 @@
     "message": "Häufig"
   },
   "complete_your_publishing_profile_7240d0d6": {
-    "message": "Complete your publishing profile"
+    "message": "Veröffentlichungsprofil abschließen"
   },
   "component_stacktrace_e24b1983": {
     "message": "Komponentenstapelüberwachung:"
   },
   "components_of_kind_kind_are_not_supported_replace__de47f868": {
-    "message": "Components of $kind \"{ kind }\" are not supported. Replace with a different component or create a custom component."
+    "message": "Komponenten von $kind \"{ kind }\" werden nicht unterstützt. Ersetzen Sie dies durch eine andere Komponente, oder erstellen Sie eine benutzerdefinierte Komponente."
   },
   "composer_2_0_is_now_available_113ed532": {
-    "message": "Composer 2.0 is now available!"
+    "message": "Composer 2.0 ist jetzt verfügbar!"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer kann Ihren Bot noch nicht automatisch übersetzen.\nUm manuell eine Übersetzung zu erstellen, erstellt Composer eine Kopie des Inhalts Ihres Bots mit dem Namen der zusätzlichen Sprache. Dieser Inhalt kann dann ohne Auswirkungen auf die ursprüngliche Botlogik oder den ursprünglichen Botflow übersetzt werden, und Sie können zwischen Sprachen wechseln, um sicherzustellen, dass die Antworten richtig und angemessen übersetzt werden."
@@ -783,7 +786,7 @@
     "message": "Composer Runtime Error"
   },
   "composer_settings_c8c622cf": {
-    "message": "Composer settings"
+    "message": "Composer-Einstellungen"
   },
   "composer_tutorials_5e79e495": {
     "message": "Composer tutorials"
@@ -801,7 +804,7 @@
     "message": "ConditionalSelector"
   },
   "configuration_e186200": {
-    "message": "Configuration"
+    "message": "Konfiguration"
   },
   "configure_adapter_2f621249": {
     "message": "Configure adapter"
@@ -810,7 +813,7 @@
     "message": "Configure and publish"
   },
   "configure_ecb97e30": {
-    "message": "Configure"
+    "message": "Konfigurieren"
   },
   "configure_the_command_used_by_composer_to_start_yo_f4231dc6": {
     "message": "Configure the command used by Composer to start your bot application when testing locally."
@@ -855,7 +858,7 @@
     "message": "Connect to Speech Service"
   },
   "connect_with_the_community_to_ask_and_answer_quest_aeec8c4f": {
-    "message": "Connect with the community to ask and answer questions about Composer"
+    "message": "Verbindung mit der Community herstellen, um Fragen zu Composer zu stellen und zu beantworten"
   },
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
     "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
@@ -870,7 +873,7 @@
     "message": "Es wird eine Verbindung mit <b>{ targetName }</b> zum Importieren von Bot-Inhalten hergestellt..."
   },
   "connections_917ef4e4": {
-    "message": "Connections"
+    "message": "Verbindungen"
   },
   "continue_ac067716": {
     "message": "Weiter"
@@ -900,7 +903,7 @@
     "message": "ConversationUpdate-Aktivität"
   },
   "convert_583eb59d": {
-    "message": "Convert"
+    "message": "Konvertieren"
   },
   "convert_your_project_to_the_latest_format_a28e824c": {
     "message": "Convert your project to the latest format"
@@ -909,7 +912,7 @@
     "message": "Kopieren"
   },
   "copy_command_to_clipboard_4649910f": {
-    "message": "Copy command to clipboard"
+    "message": "Befehl in Zwischenablage kopieren"
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Inhalt zur Übersetzung kopieren"
@@ -921,7 +924,7 @@
     "message": "Projektspeicherort in die Zwischenablage kopieren"
   },
   "copy_skill_manifest_url_217975ba": {
-    "message": "Copy Skill Manifest URL"
+    "message": "Skillmanifest-URL kopieren"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Es konnte keine Verbindung mit dem Speicher hergestellt werden."
@@ -962,9 +965,6 @@
   "create_a_publishing_profile_a79c6808": {
     "message": "Create a publishing profile"
   },
-  "create_a_publishing_profile_for_botname_b82f4386": {
-    "message": "Create a publishing profile for { botName }"
-  },
   "create_a_skill_in_your_bot_d7659e6b": {
     "message": "Skill in Ihrem Bot erstellen"
   },
@@ -1002,7 +1002,7 @@
     "message": "Aus Vorlage erstellen"
   },
   "create_new_e0946c49": {
-    "message": "Create new"
+    "message": "Neu erstellen"
   },
   "create_new_folder_19d3faa4": {
     "message": "Neuen Ordner erstellen"
@@ -1012,6 +1012,9 @@
   },
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
+  },
+  "create_profile_33fafbf1": {
+    "message": "Create profile"
   },
   "create_service_resources_386ef96b": {
     "message": "Create { service } resources"
@@ -1101,7 +1104,7 @@
     "message": "Ziel der Unterhaltung definieren"
   },
   "define_new_entity_6c69b912": {
-    "message": "Define new entity"
+    "message": "Neue Entität definieren"
   },
   "define_user_input_and_trigger_phrases_to_direct_th_d473c5c": {
     "message": "Define user input and trigger phrases to direct the conversation flow."
@@ -1125,13 +1128,13 @@
     "message": "Aktivität löschen"
   },
   "delete_bot_4b1527e4": {
-    "message": "Delete bot"
+    "message": "Bot löschen"
   },
   "delete_bot_73586104": {
     "message": "Bot löschen"
   },
   "delete_fd07d6ad": {
-    "message": "Delete?"
+    "message": "Löschen?"
   },
   "delete_form_dialog_schema_c8e28229": {
     "message": "Formulardialogschema löschen?"
@@ -1143,7 +1146,7 @@
     "message": "Eigenschaften löschen"
   },
   "delete_property_4a0e0df6": {
-    "message": "Delete property"
+    "message": "Eigenschaft löschen"
   },
   "delete_property_da7646f6": {
     "message": "Eigenschaft löschen?"
@@ -1266,7 +1269,7 @@
     "message": "Möchten Sie den Vorgang fortsetzen?"
   },
   "documentation_d82f6eec": {
-    "message": "Documentation"
+    "message": "Dokumentation"
   },
   "does_not_exist_3a34b418": {
     "message": "Nicht vorhanden"
@@ -1326,10 +1329,10 @@
     "message": "Arrayeigenschaft bearbeiten"
   },
   "edit_array_c56a18cc": {
-    "message": "Edit array"
+    "message": "Array bearbeiten"
   },
   "edit_bot_responses_34bd1a28": {
-    "message": "Edit bot responses"
+    "message": "Botantworten bearbeiten"
   },
   "edit_c5fbea07": {
     "message": "Bearbeiten"
@@ -1380,7 +1383,7 @@
     "message": "Ablaufverfolgungsereignis ausgeben"
   },
   "emit_event_f36b4a87": {
-    "message": "Emit event"
+    "message": "Ereignis ausgeben"
   },
   "empty_bot_template_that_routes_to_qna_configuratio_21531414": {
     "message": "Leere Botvorlage mit Weiterleitung an die QnA-Konfiguration"
@@ -1413,7 +1416,7 @@
     "message": "Aktiviert"
   },
   "end_dialog_88fa2f7a": {
-    "message": "End dialog"
+    "message": "Dialog beenden"
   },
   "end_this_dialog_3ed0d50b": {
     "message": "Diesen Dialog beenden"
@@ -1425,13 +1428,13 @@
     "message": "EndOfConversation-Aktivität"
   },
   "endpoint_url_eddd8ea9": {
-    "message": "Endpoint Url"
+    "message": "Endpunkt-URL"
   },
   "endpoints_ff946539": {
     "message": "Endpunkte"
   },
   "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
-    "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
+    "message": "Stellen Sie sicher, dass sich die Microsoft-App-ID Ihres Bots in der Liste der zulässigen Aufrufer des Skills befindet"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
@@ -1463,6 +1466,9 @@
   "enter_skill_host_endpoint_url_7489a83f": {
     "message": "Enter Skill host endpoint URL"
   },
+  "enter_skill_manifest_url_583d54f4": {
+    "message": "Enter skill manifest URL"
+  },
   "entities_ef09392c": {
     "message": "Entitäten"
   },
@@ -1481,8 +1487,8 @@
   "error_afac7133": {
     "message": "Fehler:"
   },
-  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
-    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  "error_attempting_to_parse_skill_manifest_there_cou_27675668": {
+    "message": "Error attempting to parse Skill manifest. There could be an error in its format."
   },
   "error_checking_node_version_98bfbf4c": {
     "message": "Error checking node version"
@@ -1512,7 +1518,7 @@
     "message": "Fehler (Ereignis \"Error\")"
   },
   "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
-    "message": "Error occurred trying to fetch runtime standard output"
+    "message": "Fehler beim Abrufen der Laufzeit-Standardausgabe"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Fügen Sie dem customFunctions-Feld der Einstellung unbekannte Funktionen hinzu."
@@ -1572,7 +1578,7 @@
     "message": "Erwartet:"
   },
   "export_as_skill_764cf284": {
-    "message": "Export as skill"
+    "message": "Als Skill exportieren"
   },
   "export_as_zip_133b7ec": {
     "message": "Export as .zip"
@@ -1599,7 +1605,7 @@
     "message": "Erweiterungseinstellungen"
   },
   "external_connections_3415fea5": {
-    "message": "External connections"
+    "message": "Externe Verbindungen"
   },
   "external_skill_73e16d25": {
     "message": "External skill"
@@ -1614,7 +1620,7 @@
     "message": "Fehler beim Speichern des Bots."
   },
   "failed_276786d": {
-    "message": "Failed"
+    "message": "Fehler"
   },
   "false_2f39ee6d": {
     "message": "FALSE"
@@ -1653,7 +1659,7 @@
     "message": "Nach Dateinamen filtern"
   },
   "filter_e3398407": {
-    "message": "Filter"
+    "message": "Filtern"
   },
   "find_additional_template_specific_guidance_for_set_d7256573": {
     "message": "Find additional template-specific guidance for setting up your bot."
@@ -1665,13 +1671,13 @@
     "message": "Find dialogs"
   },
   "find_dialogs_or_topics_c986d1e6": {
-    "message": "Find dialogs or topics"
+    "message": "Dialogfelder oder Themen suchen"
   },
   "find_pre_built_adaptive_expressions_b106308e": {
-    "message": "Find pre-built Adaptive expressions"
+    "message": "Vordefinierte adaptive Ausdrücke suchen"
   },
   "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
-    "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
+    "message": "Beenden Sie die Einrichtung Ihrer Umgebung und die Bereitstellung von Ressourcen, damit Sie Ihren Bot veröffentlichen können."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1695,22 +1701,22 @@
     "message": "Schriftbreite"
   },
   "for_each_7ec2e376": {
-    "message": "For each"
+    "message": "Für jede"
   },
   "for_each_page_198e66f4": {
-    "message": "For each page"
+    "message": "Für jede Seite"
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "Für Eigenschaften vom Typ \"list\" (oder \"enum\") akzeptiert Ihr Bot nur die von Ihnen definierten Werte. Nachdem Ihr Dialog generiert wurde, können Sie Synonyme für jeden Wert angeben."
   },
-  "for_security_purposes_your_bot_can_only_call_a_ski_4b0c81e0": {
-    "message": "For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list."
+  "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
+    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profile, share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   },
   "form_b674666c": {
-    "message": "form"
+    "message": "Formular"
   },
   "form_dialog_7327a4ff": {
-    "message": "Form dialog"
+    "message": "Formulardialog"
   },
   "form_dialog_error_ba7c37fe": {
     "message": "Fehler im Formulardialog."
@@ -1725,13 +1731,13 @@
     "message": "Formular-Editor"
   },
   "form_field_8566629d": {
-    "message": "Form field"
+    "message": "Formularfeld"
   },
   "form_title_baf85c7e": {
     "message": "Formulartitel"
   },
   "form_trigger_e8828303": {
-    "message": "Form trigger"
+    "message": "Formularauslöser"
   },
   "form_wide_operations_1c1a73eb": {
     "message": "Formularweite Vorgänge"
@@ -1743,7 +1749,7 @@
     "message": "\"fromTemplateName\" ist nicht vorhanden."
   },
   "full_description_for_fd03dbf8": {
-    "message": "full description for"
+    "message": "vollständige Beschreibung für"
   },
   "gb_7570760e": {
     "message": "GB"
@@ -1752,13 +1758,13 @@
     "message": "Allgemein"
   },
   "generate_and_publish_4f218960": {
-    "message": "Generate and Publish"
+    "message": "Generieren und Veröffentlichen"
   },
   "generate_dialog_b80a85b2": {
     "message": "Dialog generieren"
   },
   "generate_instructions_for_azure_administrator_1cb21884": {
-    "message": "Generate instructions for Azure administrator"
+    "message": "Anweisungen für Azure-Administrator generieren"
   },
   "generating_dialog_for_schemaid_51b2744f": {
     "message": "Fehler beim Generieren des Dialogs für \"{ schemaId }\"."
@@ -1770,13 +1776,10 @@
     "message": "Ihr Dialog wird mit dem Schema \"{ schemaId }\" generiert, bitte warten..."
   },
   "get_a_key_bb364e3": {
-    "message": "Get a key"
+    "message": "Schlüssel abrufen"
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Neue Kopie des Runtimecodes abrufen"
-  },
-  "get_a_skill_manifest_url_from_the_skill_s_author_7771e8b4": {
-    "message": "Get a skill manifest URL from the skill’s author"
   },
   "get_activity_members_11339605": {
     "message": "Teilnehmer an der Aktivität abrufen"
@@ -1785,13 +1788,13 @@
     "message": "Teilnehmer an der Unterhaltung abrufen"
   },
   "get_remote_file_fail_37ef94c5": {
-    "message": "get remote file fail"
+    "message": "Fehler beim Abrufen der Remotedatei"
   },
   "get_started_76ed4cb9": {
-    "message": "Get started"
+    "message": "Erste Schritte"
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
-    "message": "Get started with Bot Framework Composer"
+    "message": "Erste Schritte mit Bot Framework Composer"
   },
   "getting_template_910a4116": {
     "message": "Vorlage wird abgerufen"
@@ -1803,7 +1806,7 @@
     "message": "Wechseln Sie zur QnA-Seite mit der Gesamtansicht."
   },
   "go_to_stack_overflow_e525148": {
-    "message": "Go to Stack Overflow"
+    "message": "Zu Stack Overflow wechseln"
   },
   "got_it_2c06b54a": {
     "message": "OK!"
@@ -1842,13 +1845,13 @@
     "message": "Home"
   },
   "http_request_b6394895": {
-    "message": "HTTP request"
+    "message": "HTTP-Anforderung"
   },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
-    "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
+    "message": "Ich erstelle eine Konversationserfahrung mit dem Microsoft Bot Framework-Projekt. Damit mein Projekt funktioniert, benötigt es Azure-Ressourcen einschließlich { service }. Im Folgenden finden Sie die Schritte zum Erstellen dieser Ressourcen.\n\n{ instructions }"
   },
   "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
-    "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
+    "message": "Ich möchte den Inhalt der Vorlage in der Datei behalten, nur von dieser Antwort dereferenzieren (Hinweis: Behalten Sie den Inhalt, wenn Sie ihn derzeit oder an anderer Stelle wiederverwenden möchten)"
   },
   "icon_name_is_file_c80dacae": {
     "message": "Der Name von \"{ icon }\" lautet \"{ file }\"."
@@ -1863,10 +1866,10 @@
     "message": "If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot."
   },
   "if_condition_d4383ce9": {
-    "message": "If condition"
+    "message": "If-Bedingung"
   },
   "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
-    "message": "If this problem persists, please file an issue on <a>GitHub</a>"
+    "message": "Wenn dieses Problem weiterhin besteht, melden Sie ein Issue auf <a>GitHub</a>"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "Wenn Sie bereits ein LUIS-Konto besitzen, geben Sie die folgenden Informationen an. Wenn Sie noch kein Konto besitzen, erstellen Sie zuerst ein (kostenloses) Konto."
@@ -1875,10 +1878,10 @@
     "message": "Wenn Sie bereits ein QnA-Konto besitzen, geben Sie die folgenden Informationen an. Wenn Sie noch kein Konto besitzen, erstellen Sie zuerst ein (kostenloses) Konto."
   },
   "if_you_have_created_custom_components_you_might_ne_dc7cf128": {
-    "message": "If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>"
+    "message": "Wenn Sie benutzerdefinierte Komponenten erstellt haben, müssen Sie diese möglicherweise neu erstellen. <a>Weitere Informationen zu benutzerdefinierte Komponenten.</a>"
   },
   "if_you_would_like_to_try_again_or_select_from_exis_f2f894b4": {
-    "message": "If you would like to try again, or select from existing resources, please click “Back”."
+    "message": "Klicken Sie auf \"Zurück\", um es noch mal zu versuchen, oder wählen Sie eine der vorhandenen Ressourcen aus."
   },
   "ignoring_dc76ef87": {
     "message": "Wird ignoriert"
@@ -1887,19 +1890,19 @@
     "message": "Als neu importieren"
   },
   "import_new_url_and_overwrite_5e463747": {
-    "message": "Import new URL and overwrite"
+    "message": "Neue URL importieren und überschreiben"
   },
   "import_schema_75659c5f": {
     "message": "Schema importieren"
   },
   "import_url_62402b7c": {
-    "message": "Import URL"
+    "message": "URL importieren"
   },
   "import_your_bot_to_new_project_8751d82f": {
     "message": "Importieren Sie Ihren Bot in neues Projekt."
   },
   "importing_a_publishing_profile_6fb3cd96": {
-    "message": "Importing a publishing profile"
+    "message": "Veröffentlichungsprofil importieren"
   },
   "importing_b_botname_b_from_sourcename_f7410826": {
     "message": "<b>{ botName }</b> wird aus \"{ sourceName }\" importiert..."
@@ -1941,10 +1944,10 @@
     "message": "Vordefinierte Funktion für adaptiven Ausdruck einfügen"
   },
   "insert_defined_entity_d1293781": {
-    "message": "Insert defined entity"
+    "message": "Definierte Entität einfügen"
   },
   "insert_entity_3a9dbd5d": {
-    "message": "Insert entity"
+    "message": "Entität einfügen"
   },
   "insert_prebuilt_functions_22b05f8": {
     "message": "Vordefinierte Funktionen einfügen"
@@ -1959,16 +1962,16 @@
     "message": "Vorlagenverweis einfügen"
   },
   "install_azure_functions_d607f182": {
-    "message": "Install Azure Functions"
+    "message": "Azure Functions installieren"
   },
   "install_error_a9319839": {
-    "message": "Install Error"
+    "message": "Installationsfehler"
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Microsoft .NET Core SDK installieren"
   },
   "install_net_core_sdk_67e62ca9": {
-    "message": "Install .NET Core SDK"
+    "message": ".NET Core SDK installieren"
   },
   "install_node_js_1857298c": {
     "message": "Install Node.js"
@@ -1980,7 +1983,7 @@
     "message": "Installieren Sie das Update, und starten Sie Composer neu."
   },
   "instructions_2f88ee72": {
-    "message": "Instructions"
+    "message": "Anweisungen"
   },
   "integer_7f378275": {
     "message": "Integer"
@@ -2004,7 +2007,7 @@
     "message": "Absicht"
   },
   "intent_name_e9831403": {
-    "message": "Intent name: "
+    "message": "Name der Absicht: "
   },
   "intent_recognized_c3840853": {
     "message": "Absicht erkannt"
@@ -2013,7 +2016,7 @@
     "message": "\"intentName\" fehlt oder ist leer."
   },
   "intents_9b8593e0": {
-    "message": "Intents"
+    "message": "Absichten"
   },
   "interpolated_string_c96053f2": {
     "message": "Interpolierte Zeichenfolge."
@@ -2046,7 +2049,7 @@
     "message": "{ itemCount, plural,\n     =0 {Keine Schemas}\n     =1 {Ein Schema}\n  other {# Schemas}\n} gefunden.\n            { itemCount, select,\n      0 {}\n  other {Drücken Sie die NACH-UNTEN-TASTE, um die Suchergebnisse zu durchlaufen}\n}"
   },
   "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__d18758bb": {
-    "message": "Just add a QnA key and you’ll be ready to talk to your bot."
+    "message": "Fügen Sie einfach einen QnA-Schlüssel hinzu, und Sie können mit Ihrem Bot sprechen."
   },
   "kb_d9c53902": {
     "message": "KB"
@@ -2064,19 +2067,19 @@
     "message": "Schlüssel müssen eindeutig sein."
   },
   "knowledge_base_31e6868e": {
-    "message": "Knowledge base"
+    "message": "Wissensdatenbank"
   },
   "knowledge_base_name_7d83bbe4": {
     "message": "Name der Wissensdatenbank"
   },
   "knowledge_qna_1a599dcf": {
-    "message": "Knowledge (QnA)"
+    "message": "Wissen (QnA)"
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } – L{ endLine }:{ endCharacter } "
   },
   "label_entity_45d7b842": {
-    "message": "Label entity"
+    "message": "Bezeichnungsentität"
   },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
@@ -2085,13 +2088,13 @@
     "message": "Language Understanding"
   },
   "language_understanding_authoring_key_74a41a4": {
-    "message": "Language Understanding authoring key"
+    "message": "Language Understanding-Erstellungsschlüssel"
   },
   "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
-    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>"
+    "message": "Language Understanding (LUIS) ist ein Azure Cognitive Service, der Machine Learning verwendet, um die Eingabe natürlicher Sprachen zu verstehen und den Konversationsfluss zu lenken. <a>Weitere Informationen. </a> Verwenden Sie einen vorhandenen Language Understanding(LUIS)-Schlüssel aus Azure, oder erstellen Sie einen neuen Schlüssel. <a2>Weitere Informationen</a2>"
   },
   "language_understanding_region_ec8fb05c": {
-    "message": "Language Understanding region"
+    "message": "Language Understanding-Region"
   },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
@@ -2103,7 +2106,7 @@
     "message": "Layout:"
   },
   "learn_about_adaptive_expressions_fb1b6c3c": {
-    "message": "Learn about Adaptive expressions"
+    "message": "Informationen zu adaptiven Ausdrücken"
   },
   "learn_more_a79a7918": {
     "message": "Weitere Informationen"
@@ -2112,7 +2115,7 @@
     "message": "Weitere Informationen zu Aktivitäten"
   },
   "learn_more_about_custom_actions_e7aa69e9": {
-    "message": "Learn more about custom actions"
+    "message": "Weitere Informationen zu benutzerdefinierten Aktionen"
   },
   "learn_more_about_endpoints_df156708": {
     "message": "Weitere Informationen zu Endpunkten"
@@ -2121,7 +2124,7 @@
     "message": "Weitere Informationen zu Manifesten"
   },
   "learn_more_about_orchestrator_c070e031": {
-    "message": "Learn more about Orchestrator"
+    "message": "Weitere Informationen zum Orchestrator"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Weitere Informationen zu Skillmanifesten"
@@ -2145,7 +2148,7 @@
     "message": "Sprach-Generator-Datei bereits vorhanden"
   },
   "lg_file_format_and_syntax_244103fb": {
-    "message": "LG file format and syntax"
+    "message": "LG-Dateiformat und -Syntax"
   },
   "lg_file_id_not_found_6bd6869b": {
     "message": "LG-Datei \"{ id }\" nicht gefunden"
@@ -2178,7 +2181,7 @@
     "message": "Liste – { count } Werte"
   },
   "list_entity_a3502e75": {
-    "message": "List entity"
+    "message": "Entität auflisten"
   },
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "Liste der Aktionen, die als Vorschläge für den Benutzer gerendert werden."
@@ -2187,7 +2190,7 @@
     "message": "Liste der Anlagen mit dem zugehörigen Typ. Wird von Kanälen verwendet, um Benutzeroberflächenkarten oder andere generische Dateianlagetypen zu rendern."
   },
   "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
-    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
+    "message": "Liste der Sprachen, die der Bot verstehen (Benutzereingabe) und auf die er reagieren kann (Antworten des Bots). Um diesen Bot in anderen Sprachen verfügbar zu machen, klicken Sie auf \"Sprachen verwalten\". Damit erstellen Sie eine Kopie der Standardsprachversion und können den Inhalt in die neue Sprache übersetzen."
   },
   "list_view_e33843f0": {
     "message": "Listenansicht"
@@ -2199,10 +2202,10 @@
     "message": "Laden"
   },
   "loading_keys_22ceedc": {
-    "message": "Loading keys..."
+    "message": "Schlüssel werden geladen..."
   },
   "loading_subscription_f0a868a1": {
-    "message": "Loading subscription..."
+    "message": "Abonnement wird geladen..."
   },
   "local_bot_runtime_manager_812cbd0c": {
     "message": "Lokaler Bot-Runtime-Manager"
@@ -2214,7 +2217,7 @@
     "message": "Lokaler Skill."
   },
   "localization_2e29f01e": {
-    "message": "Localization"
+    "message": "Lokalisierung"
   },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Suchen Sie die Bot-Datei, und reparieren Sie die Verknüpfung."
@@ -2271,13 +2274,13 @@
     "message": "LUIS"
   },
   "luis_authoring_key_2cfdf05": {
-    "message": "LUIS authoring key:"
+    "message": "LUIS-Erstellungsschlüssel:"
   },
   "luis_authoring_key_is_required_with_the_current_re_464f655e": {
     "message": "Für die aktuelle Einstellung des Erkennungsmoduls ist ein LUIS-Erstellungsschlüssel erforderlich, damit Sie Ihren Bot lokal starten und veröffentlichen können."
   },
   "luis_authoring_region_a1d18730": {
-    "message": "Luis authoring region"
+    "message": "LUIS-Erstellungsregion"
   },
   "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
     "message": "Für die aktuelle Einstellung des Erkennungsmoduls ist ein LUIS-Schlüssel erforderlich, damit Sie Ihren Bot lokal starten und veröffentlichen können."
@@ -2310,16 +2313,16 @@
     "message": "Manifest-Editor"
   },
   "manifest_url_a6250c02": {
-    "message": "Manifest URL"
+    "message": "Manifest-URL"
   },
   "manifest_url_can_not_be_accessed_ba43fc31": {
-    "message": "Manifest URL can not be accessed"
+    "message": "Auf die Manifest-URL kann nicht zugegriffen werden"
   },
   "manifest_version_1edc004a": {
     "message": "Manifestversion"
   },
   "manually_add_question_and_answer_pairs_to_create_a_39089442": {
-    "message": "Manually add question and answer pairs to create a knowledge base"
+    "message": "Zum Erstellen einer Wissensdatenbank Frage- und-Antwort-Paare manuell hinzufügen"
   },
   "maximum_f0e8e5e4": {
     "message": "Maximum"
@@ -2373,7 +2376,7 @@
     "message": "Nachricht aktualisiert (Aktivität \"Message updated\")"
   },
   "microsoft_app_id_9c9dc559": {
-    "message": "Microsoft App ID"
+    "message": "Microsoft-App-ID"
   },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft-App-ID"
@@ -2382,16 +2385,16 @@
     "message": "Microsoft-App-Kennwort"
   },
   "microsoft_logo_4378a7cb": {
-    "message": "Microsoft Logo"
+    "message": "Microsoft-Logo"
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
   },
   "migrating_data_a35b3055": {
-    "message": "Migrating data"
+    "message": "Daten werden migriert"
   },
   "migrating_to_composer_bc304b5d": {
-    "message": "Migrating to Composer"
+    "message": "Migration zu Composer"
   },
   "minimap_beb3be27": {
     "message": "Minimap"
@@ -2424,10 +2427,10 @@
     "message": "Verschieben"
   },
   "move_down_4a9c9b18": {
-    "message": "Move down"
+    "message": "Nach unten"
   },
   "move_up_2440f707": {
-    "message": "Move up"
+    "message": "Nach oben"
   },
   "ms_teams_15993b97": {
     "message": "MS Teams"
@@ -2481,10 +2484,10 @@
     "message": "Navigationspfad"
   },
   "need_another_template_send_us_a_request_5cf2a4d5": {
-    "message": "Need another template? Send us a request"
+    "message": "Benötigen Sie eine andere Vorlage? Senden Sie uns eine Anfrage"
   },
   "net_required_97928257": {
-    "message": ".NET required"
+    "message": ".NET erforderlich"
   },
   "new_template_49e6f0f2": {
     "message": "Neue Vorlage"
@@ -2505,16 +2508,16 @@
     "message": "Weiter"
   },
   "no_azure_directories_were_found_6dfe6f6f": {
-    "message": "No Azure Directories were found."
+    "message": "Es wurden keine Azure-Verzeichnisse gefunden."
   },
   "no_editor_for_type_8b5593c5": {
     "message": "Kein Editor für { type }"
   },
   "no_entities_found_a8e8bd19": {
-    "message": "no entities found"
+    "message": "Es wurden keine Entitäten gefunden"
   },
   "no_existing_service_resources_were_found_in_this_s_ca2f1745": {
-    "message": "No existing { service } resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin."
+    "message": "In diesem Abonnement wurden keine vorhandenen { service }-Ressourcen gefunden. Wählen Sie ein anderes Abonnement aus, oder klicken Sie auf \"Zurück\", um eine neue Ressource zu erstellen oder eine Ressourcenanforderung zur Übergabe an Ihren Azure-Administrator zu generieren."
   },
   "no_extensions_installed_4b925277": {
     "message": "Keine Erweiterungen installiert"
@@ -2526,7 +2529,7 @@
     "message": "Keine Funktionen gefunden."
   },
   "no_items_found_4a6f55d5": {
-    "message": "no items found"
+    "message": "keine Elemente gefunden"
   },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "KEINE LU-DATEI MIT DEM NAMEN \"{ id }\" VORHANDEN"
@@ -2541,7 +2544,7 @@
     "message": "no prebuilt entities found"
   },
   "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
-    "message": "No profiles were found containing a Microsoft App ID."
+    "message": "Es wurden keine Profile mit einer Microsoft-App-ID gefunden."
   },
   "no_properties_found_6f777f6e": {
     "message": "Keine Eigenschaften gefunden."
@@ -2550,7 +2553,7 @@
     "message": "KEINE QNA-DATEI MIT DEM NAMEN \"{ id }\" VORHANDEN"
   },
   "no_recent_bots_f4cf7d0a": {
-    "message": "No recent bots"
+    "message": "Keine aktuellen Bots"
   },
   "no_search_results_1ba50423": {
     "message": "Keine Suchergebnisse"
@@ -2574,7 +2577,7 @@
     "message": "Knotenmenü"
   },
   "node_preview_cbcd8fb": {
-    "message": "Node (Preview)"
+    "message": "Knoten (Vorschau)"
   },
   "not_a_single_template_e37f894": {
     "message": "Keine einzelne Vorlage"
@@ -2586,7 +2589,7 @@
     "message": "Noch nicht veröffentlicht"
   },
   "note_if_your_bot_is_using_custom_actions_they_will_a500ed2": {
-    "message": "Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>"
+    "message": "Hinweis: Wenn Ihr Bot benutzerdefinierte Aktionen verwendet, werden diese in Composer 2.0 nicht unterstützt. <a>Weitere Informationen zum Aktualisieren auf Composer 2.0.</a>"
   },
   "notifications_cbfa7704": {
     "message": "Benachrichtigungen"
@@ -2613,7 +2616,7 @@
     "message": "OAuth-Anmeldung"
   },
   "object_33fc75c0": {
-    "message": "object"
+    "message": "Objekt"
   },
   "object_345070f6": {
     "message": "Objekt"
@@ -2646,34 +2649,34 @@
     "message": "Onboarding"
   },
   "once_you_publish_your_bot_to_azure_you_will_be_rea_93048067": {
-    "message": "Once you publish your bot to Azure you will be ready to add connections."
+    "message": "Nachdem Sie Ihren Bot in Azure veröffentlicht haben, können Sie Verbindungen hinzufügen."
   },
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents-Typen"
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
-    "message": "One or more options that are passed to the dialog that is called."
+    "message": "Eine oder mehrere Optionen, die an den aufgerufenen Dialog übergeben werden."
   },
   "open_e0beb7b9": {
     "message": "Öffnen"
   },
   "open_github_811d5819": {
-    "message": "Open GitHub"
+    "message": "GitHub öffnen"
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Inline-Editor öffnen"
   },
   "open_manifest_6c334f9": {
-    "message": "Open manifest"
+    "message": "Manifest öffnen"
   },
   "open_notification_panel_5796edb3": {
     "message": "Benachrichtigungspanel öffnen"
   },
   "open_teams_416aae5c": {
-    "message": "Open Teams"
+    "message": "Teams öffnen"
   },
   "open_the_product_tour_to_learn_about_bot_framework_4e6e7227": {
-    "message": "Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>"
+    "message": "Öffnen Sie die Produkttour, um Informationen zum Bot Framework Composer zu erhalten oder <Link>neuen Bot erstellen</Link>"
   },
   "open_web_chat_23601990": {
     "message": "Webchat öffnen"
@@ -2700,7 +2703,7 @@
     "message": "Oder:"
   },
   "orchestrator_downloading_language_model_e785be44": {
-    "message": "Orchestrator: Downloading language model"
+    "message": "Orchestrator: Sprachmodell wird heruntergeladen"
   },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator-Erkennungsmodul"
@@ -2718,16 +2721,16 @@
     "message": "Sonstiges"
   },
   "our_privacy_statement_is_located_at_a_https_go_mic_56534925": {
-    "message": "Our privacy statement is located at <a>https://go.microsoft.com/fwlink/?LinkID=824704</a>. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices."
+    "message": "Unsere Datenschutzerklärung finden Sie unter <a>https://go.microsoft.com/fwlink/?LinkID=824704</a>. Weitere Informationen zur Datenerfassung und -nutzung finden Sie in der Hilfedokumentation und in unserer Datenschutzerklärung. Die Nutzung der Software gilt als Ihre Zustimmung zu diesen Praktiken."
   },
   "output_5023cf84": {
     "message": "Ausgabe"
   },
   "overview_58268c72": {
-    "message": "Overview"
+    "message": "Übersicht"
   },
   "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
-    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
+    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT-Lizenz</p><p>Berechtigung wird hiermit kostenlos an jede Person erteilt, die eine Kopie dieser Software und der zugehörigen Dokumentationsdateien (die \"Software\") erhält, um mit der Software ohne Einschränkung zu handeln, einschließlich und ohne Einschränkung der Rechte, Kopien der Software zu verwenden, zu kopieren, zu modifizieren, zusammenzuführen, zu veröffentlichen, zu vertreiben, unterzulizenzieren und/oder zu verkaufen, und Personen, denen die Software zur Verfügung gestellt wird, zu erlauben, dies zu tun, unter den folgenden Bedingungen:</p><p>Der obige Copyright-Hinweis und dieser Genehmigungshinweis müssen in allen Kopien oder wesentlichen Teilen der Software enthalten sein.</p><p>DIE SOFTWARE WIRD OHNE MÄNGELGEWÄHR UND OHNE JEGLICHE AUSDRÜCKLICHE ODER STILLSCHWEIGENDE GARANTIE BEREITGESTELLT, EINSCHLIESSLICH, ABER NICHT BESCHRÄNKT AUF DIE GARANTIE DER MARKTGÄNGIGKEIT, DER EIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND DER NICHTVERLETZUNG VON RECHTEN. IN KEINEM FALL KÖNNEN DIE AUTOREN ODER URHEBER FÜR IRGENDWELCHE ANSPRÜCHE, SCHÄDEN ODER ANDERE HAFTUNGEN HAFTBAR GEMACHT WERDEN, SEI ES BEI EINER KLAGE AUS VERTRAG, UNERLAUBTER HANDLUNG ODER ANDERWEITIG, DIE DURCH ODER IM ZUSAMMENHANG MIT DER SOFTWARE ODER DER VERWENDUNG ODER ANDEREN HANDLUNGEN MIT DER SOFTWARE ENTSTEHEN.</p>"
   },
   "page_number_cdee4179": {
     "message": "Seitenzahl"
@@ -2748,7 +2751,7 @@
     "message": "Geben Sie einen Ereignisnamen ein."
   },
   "please_input_a_manifest_url_79cce9d5": {
-    "message": "Please input a manifest URL"
+    "message": "Geben Sie eine Manifest-URL ein"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Geben Sie ein RegEx-Muster ein."
@@ -2765,26 +2768,23 @@
   "please_select_a_trigger_type_67417abb": {
     "message": "Wählen Sie einen Triggertyp aus."
   },
-  "please_setup_the_following_to_ensure_we_can_connec_2c5a2acb": {
-    "message": "Please setup the following to ensure we can connect to your remote skill successfully"
-  },
   "pop_out_editor_5528a187": {
-    "message": "Pop out editor"
+    "message": "Editor per Pop entfernen"
   },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
-    "message": "Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there."
+    "message": "Bots für Power Virtual Agents können zurzeit nicht ausgeführt werden. Veröffentlichen Sie den Bot für Power Virtual Agents, und testen Sie ihn dort."
   },
   "power_virtual_agents_bots_cannot_use_this_function_fcfeaf62": {
-    "message": "Power Virtual Agents bots cannot use this functionality at this time."
+    "message": "Bots für Power Virtual Agents können diese Funktionalität zu diesem Zeitpunkt nicht verwenden."
   },
   "power_virtual_agents_topics_count_9043ab47": {
-    "message": "Power Virtual Agents Topics ({ count })"
+    "message": "Power Virtual Agents-Themen ({ count })"
   },
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents-Logo"
   },
   "prebuilt_entity_21ebcdc6": {
-    "message": "Prebuilt entity"
+    "message": "Vordefinierte Entität"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "Drücken Sie die EINGABETASTE, um dieses Element hinzuzufügen, oder die TAB-TASTE, um zum nächsten interaktiven Element zu wechseln."
@@ -2793,7 +2793,7 @@
     "message": "Drücken Sie die EINGABETASTE, um diesen Namen hinzuzufügen und zur nächsten Zeile zu wechseln, oder die TAB-TASTE, um zum Wertfeld zu wechseln."
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
-    "message": "Press Shift+Enter to insert a new line"
+    "message": "Drücken Sie UMSCHALT+EINGABETASTE, um eine neue Zeile einzufügen"
   },
   "preview_features_e279bac5": {
     "message": "Vorschaufeatures"
@@ -2808,7 +2808,7 @@
     "message": "vorheriger Ordner"
   },
   "pricing_tier_c2ff8573": {
-    "message": "Pricing tier"
+    "message": "Tarif"
   },
   "privacy_statement_da69ebc6": {
     "message": "Datenschutzerklärung"
@@ -2820,7 +2820,7 @@
     "message": "{ progress } % von { total }"
   },
   "project_readme_68f88d88": {
-    "message": "Project Readme"
+    "message": "Projekt-Readme"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "Konfigurationen von Äußerungen"
@@ -2865,7 +2865,7 @@
     "message": "Eigenschaftstyp"
   },
   "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
-    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
+    "message": "Geben Sie einen Schlüssel an, um Ihren Bot mit dem Azure-Sprachdienst zu verbinden. "
   },
   "provide_access_tokens_8ead7563": {
     "message": "Zugriffstoken angeben"
@@ -2880,7 +2880,7 @@
     "message": "Bereitstellungsfehler"
   },
   "provision_partially_completed_b0120a72": {
-    "message": "Provision partially completed"
+    "message": "Bereitstellung teilweise abgeschlossen"
   },
   "provision_success_d6a6e437": {
     "message": "Bereitstellung erfolgreich"
@@ -2898,7 +2898,7 @@
     "message": "Modelle veröffentlichen"
   },
   "publish_profile_a4e8f07b": {
-    "message": "Publish profile"
+    "message": "Veröffentlichungsprofil"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Ausgewählte Bots veröffentlichen"
@@ -2907,10 +2907,10 @@
     "message": "Ziel veröffentlichen"
   },
   "publish_your_bot_9099e323": {
-    "message": "Publish your bot"
+    "message": "Bot veröffentlichen"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
-    "message": "Publish your bot to Azure and manage published bots here."
+    "message": "Veröffentlichen Sie Ihren Bot in Azure, und verwalten Sie hier veröffentlichte Bots."
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Bots veröffentlichen"
@@ -2919,10 +2919,10 @@
     "message": "Veröffentlicht"
   },
   "publisher_bf6195cf": {
-    "message": "Publisher"
+    "message": "Herausgeber"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
-    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
+    "message": "Veröffentlichung von { count, plural,\n     =1 {one bot}\n  andere {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Veröffentlichung"
@@ -2931,16 +2931,16 @@
     "message": "Fehler beim Veröffentlichen von \"{ name }\" in \"{ publishTarget }\"."
   },
   "publishing_profile_6d7064ce": {
-    "message": "Publishing Profile"
+    "message": "Veröffentlichungsprofil"
   },
   "publishing_profile_a2cd5d52": {
-    "message": "Publishing profile"
+    "message": "Veröffentlichungsprofil"
   },
   "publishing_target_46605bc5": {
     "message": "Veröffentlichungsziel"
   },
   "publishing_your_skill_b5957f9c": {
-    "message": "Publishing your skill..."
+    "message": "Ihr Skill wird veröffentlicht..."
   },
   "pull_d1c3e8fe": {
     "message": "Pullen"
@@ -2955,19 +2955,19 @@
     "message": "QnA-Absicht erkannt"
   },
   "qna_intent_recognized_6760e56d": {
-    "message": "QnA intent recognized"
+    "message": "QnA-Absicht erkannt"
   },
   "qna_maker_introduction_c2e426a": {
-    "message": "QnA Maker introduction"
+    "message": "QnA Maker – Einführung"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>"
+    "message": "QnA Maker ist ein Azure Cognitive Services, der Frage-und-Antwort-Paare aus einer Website-FAQ extrahieren kann. <a>Weitere Informationen.</a> Verwenden Sie einen vorhandenen Schlüssel von Azure oder erstellen Sie einen neuen Schlüssel. <a2>Weitere Informationen</a2>"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>"
+    "message": "QnA Maker ist ein Azure Cognitive Services, der Frage-und-Antwort-Paare aus einer Website-FAQ extrahieren kann. <a>Weitere Informationen.</a> Verwenden Sie einen vorhandenen Schlüssel von Azure oder erstellen Sie einen neuen Schlüssel. <a2>Weitere Informationen</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
-    "message": "QnA Maker subscription key:"
+    "message": "QnA Maker-Abonnementschlüssel:"
   },
   "qna_maker_subscription_key_e009c9d9": {
     "message": "QnA Maker-Abonnementschlüssel"
@@ -2979,7 +2979,7 @@
     "message": "QnA-Navigationsbereich"
   },
   "qna_region_5d2a4bce": {
-    "message": "QnA region"
+    "message": "QnA-Region"
   },
   "question_9121487": {
     "message": "Frage"
@@ -2994,7 +2994,7 @@
     "message": "In Warteschlange eingereiht"
   },
   "quick_references_2ffbd14a": {
-    "message": "Quick references"
+    "message": "Kurzreferenzen"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -3009,7 +3009,7 @@
     "message": "Erneute Aufforderung zur Eingabe (Ereignis \"Reprompt dialog\")"
   },
   "recent_f19e8c64": {
-    "message": "Recent"
+    "message": "Zuletzt verwendet"
   },
   "recognizer_type_dc591e16": {
     "message": "Erkennungsmodultyp"
@@ -3018,10 +3018,10 @@
     "message": "Erkennungsmodule"
   },
   "recommended_7101829e": {
-    "message": "Recommended"
+    "message": "Empfohlen"
   },
   "recommended_actions_befdd1a": {
-    "message": "Recommended actions"
+    "message": "Empfohlene Aktionen"
   },
   "redo_363c58b7": {
     "message": "Wiederholen"
@@ -3039,7 +3039,7 @@
     "message": "Region"
   },
   "regular_expression_entity_e1cb91ce": {
-    "message": "Regular expression entity"
+    "message": "Regulärausdrucks-Entität"
   },
   "regular_expression_recognizer_44664557": {
     "message": "Erkennungsmodul für reguläre Ausdrücke"
@@ -3069,13 +3069,13 @@
     "message": "Alle Textantworten entfernen"
   },
   "remove_attachment_81f30aa3": {
-    "message": "Remove attachment"
+    "message": "Anlage entfernen"
   },
   "remove_f47dc62a": {
     "message": "Entfernen"
   },
   "remove_item_5877e701": {
-    "message": "Remove item"
+    "message": "Element entfernen"
   },
   "remove_this_dialog_6146716c": {
     "message": "Diesen Dialog entfernen"
@@ -3093,7 +3093,7 @@
     "message": "Variante entfernen"
   },
   "removing_content_from_action_node_bb6a825e": {
-    "message": "Removing content from action node"
+    "message": "Inhalt wird aus Aktionsknoten entfernt"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "Diesen Dialog wiederholen"
@@ -3102,7 +3102,7 @@
     "message": "Diesen Dialog ersetzen"
   },
   "report_a_bug_or_request_a_feature_36eb52c7": {
-    "message": "Report a bug or request a feature"
+    "message": "Einen Fehler melden oder eine Funktion anfordern"
   },
   "reprompt_dialog_event_c42d2c33": {
     "message": "Ereignis für Wiederholungsdialogfeld"
@@ -3120,22 +3120,22 @@
     "message": "{ requiredText } | Priorität: { priority }"
   },
   "reset_view_d5f8245a": {
-    "message": "Reset view"
+    "message": "Sicht zurücksetzen"
   },
   "resource_group_982beb22": {
-    "message": "Resource Group"
+    "message": "Ressourcengruppe"
   },
   "resource_group_name_a8f7e7ce": {
-    "message": "Resource group name"
+    "message": "Ressourcengruppenname"
   },
   "resource_name_817b6e75": {
-    "message": "Resource name"
+    "message": "Name der Ressource"
   },
   "resources_ccefab27": {
-    "message": "Resources"
+    "message": "Ressourcen"
   },
   "response_alternatives_will_be_selected_at_random_f_552dd090": {
-    "message": "Response alternatives will be selected at random for a more dynamic conversation."
+    "message": "Antwortalternativen werden nach dem Zufallsprinzip für eine dynamischere Konversation ausgewählt."
   },
   "response_is_response_3cd62f8f": {
     "message": "Antwort: { response }"
@@ -3150,25 +3150,25 @@
     "message": "Unterhaltung neu starten: dieselbe Benutzer-ID"
   },
   "retrieve_app_id_59f07cf4": {
-    "message": "Retrieve App ID"
+    "message": "App-ID abrufen"
   },
   "retrieve_app_id_from_publishing_profile_b6643a25": {
-    "message": "Retrieve App ID from publishing profile"
+    "message": "App-ID aus Veröffentlichungsprofil abrufen"
   },
   "review_and_generate_63dec712": {
     "message": "Überprüfen und generieren"
   },
   "review_deactivated_custom_actions_8db7540c": {
-    "message": "Review deactivated custom actions"
+    "message": "Deaktivierte benutzerdefinierte Aktionen überprüfen"
   },
   "review_your_template_readme_2d6eae1e": {
-    "message": "Review your template readme"
+    "message": "Vorlageninfodatei überprüfen"
   },
   "rollback_26326307": {
     "message": "Rollback"
   },
   "root_6b5104ad": {
-    "message": "(root)"
+    "message": "(Stamm)"
   },
   "root_bot_7bb35314": {
     "message": "Root-Bot."
@@ -3198,10 +3198,10 @@
     "message": "Runtimekonfiguration"
   },
   "runtime_language_da49617a": {
-    "message": "Runtime Language"
+    "message": "Runtime-Sprache"
   },
   "runtime_log_9069fda7": {
-    "message": "Runtime log."
+    "message": "Laufzeitprotokoll."
   },
   "runtime_type_f9e2419b": {
     "message": "Laufzeittyp"
@@ -3216,7 +3216,7 @@
     "message": "Speichern"
   },
   "save_app_id_f64b6102": {
-    "message": "Save App ID"
+    "message": "App-ID speichern"
   },
   "save_your_skill_manifest_63bf5f26": {
     "message": "Skillmanifest speichern"
@@ -3224,8 +3224,8 @@
   "schema_24739a48": {
     "message": "Schema"
   },
-  "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } ist nicht vorhanden. Wählen Sie ein Schema zum Bearbeiten aus, oder erstellen Sie ein neues Schema."
+  "schemaid_doesn_t_exist_select_a_schema_to_edit_or__5a4b9035": {
+    "message": "{ schemaId } doesn''t exist; select a schema to edit or create a new one"
   },
   "schemas_74566170": {
     "message": "Schemas"
@@ -3240,10 +3240,10 @@
     "message": "Suchen"
   },
   "search_4a044e7c": {
-    "message": "Search ..."
+    "message": "Suchen..."
   },
   "search_entities_3ecdb6d": {
-    "message": "Search entities"
+    "message": "Entitäten suchen"
   },
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "In npm nach Erweiterungen suchen"
@@ -3252,7 +3252,7 @@
     "message": "Funktionen suchen"
   },
   "search_prebuilt_entities_e52c0f35": {
-    "message": "Search prebuilt entities"
+    "message": "Vordefinierte Entitäten suchen"
   },
   "search_properties_5bf3d868": {
     "message": "Eigenschaften suchen"
@@ -3261,37 +3261,37 @@
     "message": "Vorlagen suchen"
   },
   "see_details_15c93092": {
-    "message": "See details"
+    "message": "Details anzeigen"
   },
   "see_instructions_87eb4251": {
-    "message": "See instructions"
+    "message": "Anweisungen anzeigen"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Bot auswählen"
   },
   "select_a_dialog_134385f2": {
-    "message": "Select a dialog"
+    "message": "Dialogfeld auswählen"
   },
   "select_a_dialog_or_topic_4df93d0f": {
-    "message": "Select a dialog or topic"
+    "message": "Dialogfeld oder Thema auswählen"
   },
   "select_a_publish_target_d4530c94": {
     "message": "Veröffentlichungsziel auswählen"
   },
   "select_a_publishing_profile_a2eb4e86": {
-    "message": "Select a publishing profile"
+    "message": "Veröffentlichungsprofil auswählen"
   },
   "select_a_resource_group_b536a26d": {
-    "message": "Select a resource group"
+    "message": "Wählen Sie eine Ressourcengruppe aus."
   },
   "select_a_subscription_446b44e6": {
-    "message": "Select a subscription"
+    "message": "Abonnement auswählen"
   },
   "select_a_template_874fe803": {
-    "message": "Select a template"
+    "message": "Wählen Sie eine Vorlage aus"
   },
   "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
-    "message": "Select a trigger in the left<br />navigation to see actions"
+    "message": "Wählen Sie einen Auslöser in der linken<br />Navigation aus, um Aktionen anzuzeigen."
   },
   "select_a_trigger_type_219bb52f": {
     "message": "Triggertyp auswählen"
@@ -3306,13 +3306,16 @@
     "message": "Ereignistyp auswählen"
   },
   "select_an_option_9f5dfb55": {
-    "message": "Select an option"
+    "message": "Option auswählen"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Schema zum Bearbeiten auswählen oder neues Schema erstellen"
   },
+  "select_app_id_and_password_e901a31d": {
+    "message": "Select App ID and password"
+  },
   "select_dialogs_f625e607": {
-    "message": "Select dialogs"
+    "message": "Dialogfelder auswählen"
   },
   "select_input_hint_267a6208": {
     "message": "Eingabehinweis auswählen"
@@ -3321,7 +3324,7 @@
     "message": "Die zu löschende Sprache auswählen"
   },
   "select_one_b647b384": {
-    "message": "Select one"
+    "message": "Eine auswählen"
   },
   "select_options_9ee7b227": {
     "message": "Optionen auswählen"
@@ -3330,40 +3333,37 @@
     "message": "Eigenschaftstyp auswählen"
   },
   "select_publishing_profile_a3f478e2": {
-    "message": "Select publishing profile"
+    "message": "Veröffentlichungsprofil auswählen"
   },
   "select_region_42a80a8e": {
-    "message": "Select region"
+    "message": "Region auswählen"
   },
   "select_resource_edaf4ef5": {
-    "message": "Select resource"
+    "message": "Ressource auswählen"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Hinzuzufügende Runtimeversion auswählen"
   },
   "select_service_resources_326b206a": {
-    "message": "Select { service } resources"
+    "message": "{ service }-Ressourcen auswählen"
   },
   "select_subscription_c5678611": {
-    "message": "Select subscription"
+    "message": "Abonnement auswählen"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "Wählen Sie die Sprache aus, die der Bot verstehen (Benutzereingabe) und auf die er reagieren kann (Antworten des Bots).\n    Um diesen Bot in anderen Sprachen verfügbar zu machen, klicken Sie auf \"Hinzufügen\". Damit erstellen Sie eine Kopie der Standardsprachversion und können den Inhalt in die neue Sprache übersetzen."
   },
   "select_the_resource_group_and_region_in_which_your_51f85ff": {
-    "message": "Select the resource group and region in which your { service } service will be created."
+    "message": "Wählen Sie die Ressourcengruppe und Region aus, in der der { service }-Dienst erstellt wird."
   },
   "select_triggers_5ff033ae": {
-    "message": "Select triggers"
+    "message": "Auslöser auswählen"
   },
   "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+    "message": "Wählen Sie Ihr Azure-Verzeichnis aus und wählen Sie dann das Abonnement, in dem Sie Ihre neue { service }-Ressource haben möchten."
   },
   "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
-    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
-  },
-  "select_your_microsoft_app_id_and_password_74918f5d": {
-    "message": "Select your Microsoft App ID and Password"
+    "message": "Wählen Sie Ihr Azure-Verzeichnis aus und wählen Sie dann das Abonnement, in dem sich Ihre vorhandene { service }-Ressource befindet."
   },
   "selection_field_86d1dc94": {
     "message": "Auswahlfeld"
@@ -3378,7 +3378,7 @@
     "message": "HTTP-Anforderung senden"
   },
   "send_handoff_activity_651ee597": {
-    "message": "Send handoff activity"
+    "message": "Übergabeaktivität senden"
   },
   "send_messages_c48b239": {
     "message": "Nachrichten senden"
@@ -3387,7 +3387,7 @@
     "message": "Satzumbruch"
   },
   "service_resource_name_56566aab": {
-    "message": "{ service } resource name"
+    "message": "{ service }-Ressourcenname"
   },
   "session_expired_12aaf414": {
     "message": "Sitzung abgelaufen"
@@ -3405,25 +3405,22 @@
     "message": "Eigenschaften festlegen"
   },
   "set_up_continuous_deployment_devops_4919f626": {
-    "message": "Set up continuous deployment (DevOps)"
+    "message": "Continuous Deployment einrichten (DevOps)"
   },
   "set_up_language_understanding_f51f4884": {
-    "message": "Set up Language Understanding"
+    "message": "Language Understanding einrichten"
   },
   "set_up_qna_maker_170a4422": {
-    "message": "Set up QnA Maker"
+    "message": "QnA Maker einrichten"
   },
   "set_up_service_b6d23e54": {
-    "message": "Set up { service }"
-  },
-  "set_your_microsoft_app_id_and_password_46b5628c": {
-    "message": "Set your Microsoft App ID and Password"
+    "message": "{ service } einrichten"
   },
   "setting_things_up_8022afe8": {
     "message": "Die Einrichtung läuft..."
   },
   "setting_up_bot_framework_emulator_40f455db": {
-    "message": "Setting up Bot Framework Emulator"
+    "message": "Bot Framework Emulator wird eingerichtet"
   },
   "settings_5aa0fd0c": {
     "message": "Einstellungen"
@@ -3438,10 +3435,10 @@
     "message": "Menü \"Einstellungen\""
   },
   "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
-    "message": "Setup tunneling software to test your remote skill"
+    "message": "Tunneling-Software einrichten, um Ihren Remoteskill zu testen"
   },
   "short_description_for_6abb9a1b": {
-    "message": "short description for"
+    "message": "Kurzbeschreibung für"
   },
   "show_all_diagnostics_c11f4e09": {
     "message": "Alle Diagnosen anzeigen"
@@ -3456,7 +3453,7 @@
     "message": "Schlüssel anzeigen"
   },
   "show_response_editor_90bd8b49": {
-    "message": "Show response editor"
+    "message": "Antwort-Editor anzeigen"
   },
   "show_skill_manifest_5d0abde1": {
     "message": "Skillmanifest anzeigen"
@@ -3471,7 +3468,7 @@
     "message": "Skill"
   },
   "skill_configuration_5e4bfbcd": {
-    "message": "Skill configuration"
+    "message": "Skill-Konfiguration"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "Name des Skilldialogs"
@@ -3480,25 +3477,25 @@
     "message": "Skillendpunkt"
   },
   "skill_host_endpoint_url_702c277c": {
-    "message": "Skill host endpoint URL"
+    "message": "URL für Skillhost-Endpunkt"
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "URL für Skillhost-Endpunkt"
   },
   "skill_manifest_url_1094fcba": {
-    "message": "Skill Manifest URL"
+    "message": "Skillmanifest-URL"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
-    "message": "Skill manifest URL was copied to the clipboard"
+    "message": "Die Skillmanifest-URL wurde in die Zwischenablage kopiert"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "Manifest für \"{ skillName }\""
   },
   "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
-    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>"
+    "message": "Skills können von externen Bots \"aufgerufen\" werden. Erlauben Sie anderen Bots, Ihren Skill aufzurufen, indem Sie deren App-IDs zur Liste unten hinzufügen. <a>Weitere Informationen</a>"
   },
   "skip_bcb86160": {
-    "message": "Skip"
+    "message": "Überspringen"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Fehler beim Versuch, einen Pullvorgang auszuführen: { e }"
@@ -3540,7 +3537,7 @@
     "message": "Geben Sie ein Anlagenlayout an, wenn mehrere vorhanden sind."
   },
   "specify_an_existing_bot_to_connect_to_your_azure_b_3c632ffa": {
-    "message": "Specify an existing bot to connect to your Azure Bot resource."
+    "message": "Geben Sie einen vorhandenen Bot an, um eine Verbindung mit Ihrer Azure Bot-Ressource herzustellen."
   },
   "speech_16063aed": {
     "message": "Speech"
@@ -3555,7 +3552,7 @@
     "message": "Stack Overflow"
   },
   "start_and_stop_local_bot_runtimes_98f94e21": {
-    "message": "Start and stop local bot runtimes"
+    "message": "Starten und beenden Sie die lokalen Bot-Runtimes"
   },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Starten und beenden Sie die lokalen Bot-Runtimes einzeln."
@@ -3570,7 +3567,7 @@
     "message": "Von vorne beginnen?"
   },
   "start_this_bot_ef51fbc2": {
-    "message": "Start this bot"
+    "message": "Diesen bot starten"
   },
   "start_typing_kind_or_b0c305da": {
     "message": "Beginnen Sie mit der Eingabe von { kind } oder"
@@ -3594,7 +3591,7 @@
     "message": "Bot beenden"
   },
   "stop_this_bot_6cce6509": {
-    "message": "Stop this bot"
+    "message": "Diesen Bot beenden"
   },
   "stopping_e4de5f4a": {
     "message": "Wird beendet"
@@ -3612,13 +3609,13 @@
     "message": "Senden"
   },
   "submit_a_feature_request_151d280c": {
-    "message": "Submit a feature request"
+    "message": "Featureanforderung senden"
   },
   "subscription_15330b8a": {
-    "message": "Subscription"
+    "message": "Abonnement"
   },
   "subscription_id_250f5e1f": {
-    "message": "Subscription Id:"
+    "message": "Abonnement-ID:"
   },
   "suggested_actions_94d06bfa": {
     "message": "Empfohlene Aktionen"
@@ -3633,10 +3630,10 @@
     "message": "Synonyme (optional)"
   },
   "system_topic_44cfbac8": {
-    "message": "System Topic"
+    "message": "Systemthema"
   },
   "take_a_product_tour_a2892d17": {
-    "message": "Take a product tour"
+    "message": "Produkttour unternehmen"
   },
   "target_da92f4e6": {
     "message": "Ziel"
@@ -3645,13 +3642,13 @@
     "message": "TB"
   },
   "teams_manifest_59d7fb0e": {
-    "message": "Teams Manifest"
+    "message": "Teams-Manifest"
   },
   "teams_manifest_for_your_bot_7d0ec7ea": {
-    "message": "Teams manifest for your bot:"
+    "message": "Teams-Manifest für Ihren Bot:"
   },
   "teams_requires_a_few_more_steps_to_get_your_connec_320c55f2": {
-    "message": "Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how."
+    "message": "Teams erfordert ein paar weitere Schritte, um die Verbindung herzustellen und zu betreiben. Folgen Sie den Anweisungen auf unserer Dokumentationsseite, um zu erfahren, wie."
   },
   "template_name_c37cf8d9": {
     "message": "Vorlagenname:"
@@ -3663,16 +3660,16 @@
     "message": "Nutzungsbedingungen"
   },
   "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
-    "message": "Test and debug your bots in Bot Framework Emulator"
+    "message": "Testen und Debuggen Ihrer Bots im Bot Framework Emulator"
   },
   "test_in_emulator_b1b3c278": {
     "message": "Test im Emulator"
   },
   "test_with_web_chat_and_emulator_d0f87a81": {
-    "message": "Test with Web Chat and Emulator"
+    "message": "Mit Webchat und Emulator testen"
   },
   "test_with_web_chat_or_emulator_4edda954": {
-    "message": "Test with Web Chat or Emulator"
+    "message": "Mit Webchat oder Emulator testen"
   },
   "test_your_bot_3cd1f4bb": {
     "message": "Testen Sie Ihren Bot."
@@ -3690,28 +3687,28 @@
     "message": "Der /api/messages-Endpunkt für den Skill."
   },
   "the_app_id_9c6d6a9a": {
-    "message": "The app id"
+    "message": "Die App-ID"
   },
   "the_app_id_of_your_application_registration_16fba1a9": {
-    "message": "The app id of your application registration"
+    "message": "Die App-ID der Anwendungsregistrierung"
   },
   "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
-    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
+    "message": "Der in Azure Bot Services erstellte Azure-Bot enthält Bot-Ressourcen, die als Grundlage für einen neuen Bot verwendet werden können, oder um Ressourcen eines vorhandenen Bots hinzuzufügen oder zu ersetzen."
   },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
-    "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
+    "message": "Die Seite \"Bot-Antworten\" ist der Ort, an dem sich der Editor für die Language Generation (LG) befindet. Von hier aus können Benutzer alle LG-Vorlagen anzeigen und bearbeiten."
   },
   "the_capabilities_of_your_bot_are_defined_in_its_di_37d5670f": {
-    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more."
+    "message": "Die Fähigkeiten Ihres Bots werden in seinen Dialogen und Auslösern definiert. Ausgewählte Dialoge werden in das Manifest aufgenommen. Interne Dialoge oder Aktionen sind möglicherweise für andere Bots nicht relevant. Erfahren Sie mehr."
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "Der Dialog, den Sie zu löschen versuchen, wird derzeit in den folgenden Dialogen verwendet. Wenn Sie diesen Dialog entfernen und keine weitere Aktion ausführen, funktioniert Ihr Bot nicht mehr."
   },
   "the_endpoint_url_7c04ee13": {
-    "message": "The endpoint url"
+    "message": "Die Endpunkt-URL"
   },
   "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
-    "message": "The endpoint url of your web app resource"
+    "message": "Die Endpunkt-URL Ihrer Web-App-Ressource"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "Der Dateiname darf nicht leer sein."
@@ -3720,13 +3717,13 @@
     "message": "Die folgenden LuFiles sind ungültig: \n"
   },
   "the_following_service_keys_have_been_successfully__29b5672a": {
-    "message": "The following { service } keys have been successfully added to your bot project:"
+    "message": "Die folgenden { service }-Schlüssel wurden Ihrem Bot-Projekt erfolgreich hinzugefügt:"
   },
   "the_following_service_resource_was_successfully_cr_1381acb2": {
-    "message": "The following { service } resource was successfully created and added to your bot project:"
+    "message": "Die folgende { service }-Ressource wurde erfolgreich erstellt und zu Ihrem Bot-Projekt hinzugefügt:"
   },
   "the_main_dialog_is_the_foundation_of_every_bot_cre_d4a938ff": {
-    "message": "The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot."
+    "message": "Der Hauptdialog ist die Grundlage für jeden im Composer erstellten Bot. Es gibt nur ein Hauptdialogfeld, und alle anderen Dialogfelder sind Unterelemente dieses Dialogfelds. Er wird jedes Mal initialisiert, wenn Ihr Bot ausgeführt wird, und ist der Einstiegspunkt in den Bot."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "Das Manifest kann bei Bedarf manuell bearbeitet und optimiert werden."
@@ -3753,19 +3750,19 @@
     "message": "Das Ziel für die Veröffentlichung Ihres Bots"
   },
   "the_user_input_page_is_where_the_language_understa_c9262f3f": {
-    "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."
+    "message": "Die Seite \"Benutzereingabe\" ist der Ort, an dem sich der Editor für das Language Understanding befindet. Von hier aus können Benutzer alle LU-Vorlagen anzeigen und bearbeiten."
   },
   "there_are_no_notifications_e81eab8d": {
     "message": "Es liegen keine Benachrichtigungen vor."
   },
   "there_are_no_optional_properties_b664c20f": {
-    "message": "There are no optional properties."
+    "message": "Es liegen keine optionalen Eigenschaften vor."
   },
   "there_are_no_preview_features_at_this_time_a5c40953": {
     "message": "Zurzeit sind keine Vorschaufeatures vorhanden."
   },
   "there_are_no_required_properties_ba214ac5": {
-    "message": "There are no required properties."
+    "message": "Es liegen keine erforderlichen Eigenschaften vor."
   },
   "there_is_no_original_view_63a2eaed": {
     "message": "Es liegt keine Originalansicht vor."
@@ -3774,19 +3771,19 @@
     "message": "Es liegt keine Miniaturansicht vor."
   },
   "there_was_a_problem_getting_the_access_token_for_t_69f5a5e2": {
-    "message": "There was a problem getting the access token for the current Azure directory. { errMessage }"
+    "message": "Beim Abrufen des Zugriffstokens für das aktuelle Azure-Verzeichnis ist ein Problem aufgetreten. { errMessage }"
   },
   "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
-    "message": "There was a problem loading Azure directories. { errMessage }"
+    "message": "Beim Laden von Azure-Verzeichnissen ist ein Problem aufgetreten. { errMessage }"
   },
   "there_was_a_problem_with_the_authentication_access_3ca717f6": {
-    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
+    "message": "Bei der Authentifizierung ist ein Problem mit dem Zugriffstoken aufgetreten. Schließen Sie dieses Dialogfeld und versuchen Sie es erneut. Um erneut zur Eingabe des Zugriffstokens aufgefordert zu werden, löschen Sie es aus dem lokalen Speicher der Anwendung."
   },
   "there_was_an_error_74ed3c58": {
     "message": "Fehler"
   },
   "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
-    "message": "There was an error accessing your Azure account: { errorMsg }"
+    "message": "Fehler beim Zugriff auf Ihr Azure-Konto: { errorMsg }"
   },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
     "message": "Unerwarteter Fehler beim Importieren von Bot-Inhalten in <b>{ botName }</b>."
@@ -3798,10 +3795,10 @@
     "message": "Fehler beim Erstellen der Wissensdatenbank."
   },
   "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
-    "message": "This bot cannot be called as a skill since the allowed caller list is empty"
+    "message": "Dieser Bot kann nicht als Skill aufgerufen werden, da die Liste der zulässigen Anrufer leer ist."
   },
   "this_cognitive_service_account_is_already_set_as_t_841165f7": {
-    "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
+    "message": "Dieses kognitive Dienstkonto ist bereits als Standard für einen anderen Bot festgelegt. Möchten Sie diesen Dienst aktivieren, ohne ihn als Standard festzulegen?"
   },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "Hiermit wird ein datengesteuerter Dialog über eine Sammlung von Ereignissen und Aktionen konfiguriert."
@@ -3831,16 +3828,16 @@
     "message": "Dieser Vorgang kann nicht abgeschlossen werden. Der Skill ist bereits Teil des Botprojekts."
   },
   "this_operation_will_overwrite_changes_made_to_prev_e746d44f": {
-    "message": "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
+    "message": "Durch diesen Vorgang werden Änderungen, die an zuvor importierten Dateien vorgenommen wurden, überschrieben. Möchten Sie fortfahren?"
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "Mit dieser Option können Ihre Benutzer mehrere Werte für diese Eigenschaft angeben."
   },
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
-    "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
+    "message": "Dieses Projekt wurde in einer älteren Version des Composers erstellt. Um dieses Projekt in Composer 2.0 zu öffnen, müssen wir Ihr Projekt kopieren und es in das neueste Format konvertieren. Ihr Originalprojekt wird dabei nicht verändert."
   },
-  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
-    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
+  "this_publishing_profile_profilename_is_no_longer_s_941d10e0": {
+    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "Dieser Triggertyp wird vom RegEx-Erkennungsmodul nicht unterstützt. Ändern Sie den Erkennungsmodultyp, um sicherzustellen, dass dieser Trigger ausgelöst wird."
@@ -3867,19 +3864,25 @@
     "message": "Tipps"
   },
   "title_connection_eaec11f8": {
-    "message": "{ title } connection"
+    "message": "{ title }-Verbindung"
   },
   "title_ee03d132": {
     "message": "Titel"
   },
-  "to_connect_to_a_skill_you_will_need_a_skill_s_mani_3d163597": {
-    "message": "To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step."
+  "to_connect_to_a_skill_your_bot_needs_the_informati_409e03db": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest. Contact the author or publisher of the skill for this information."
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  "to_connect_to_a_skill_your_bot_needs_the_informati_65b28231": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot''s App ID. Follow the steps below to proceed."
+  },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+    "message": "Um eine sichere Verbindung zu gewährleisten, geben Sie die App-ID der Bots an, die sich mit Ihrem Skill verbinden können.  Wenn Sie diese Informationen nicht haben, können Sie diese Informationen auch in der Skill-Konfiguration hinzufügen. Weitere Informationen."
+  },
+  "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
+    "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "Weitere Informationen finden Sie in <a>diesem Dokument</a>."
@@ -3897,25 +3900,25 @@
     "message": "> Weitere Informationen zum QnA-Dateiformat finden Sie in der Dokumentation unter\n> { QNA_HELP }"
   },
   "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
-    "message": "To learn more about the { title }, <a>visit its documentation page</a>."
+    "message": "Um mehr über { title } zu erfahren, <a>besuchen Sie seine Dokumentationsseite</a>."
   },
   "to_make_your_bot_available_as_a_remote_skill_you_w_be5a6e3f": {
-    "message": "To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select."
+    "message": "Um Ihren Bot als Remote-Skill verfügbar zu machen, müssen Sie Azure-Ressourcen bereitstellen. Dieser Vorgang kann einige Minuten dauern, je nachdem, welche Ressourcen Sie auswählen."
   },
   "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
     "message": "Composer benötigt zum Ausführen von Bereitstellungs- und Veröffentlichungsaktionen Zugriff auf Ihre Azure- und MS Graph-Konten. Fügen Sie mithilfe der unten markierten Befehle Zugriffstoken über das az-Befehlszeilentool ein."
   },
   "to_run_this_bot_composer_needs_azure_functions_cor_bbbd0e7": {
-    "message": "To run this bot, Composer needs Azure Functions Core Tools."
+    "message": "Um diesen Bot auszuführen, benötigt Composer die Azure Functions Core Tools."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "Um diesen Bot auszuführen, benötigt Composer das .NET Core SDK."
   },
   "to_test_run_and_publish_your_bot_it_needs_azure_re_e33d8fd": {
-    "message": "To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels. Other resources, such as language understanding and storage are optional. A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources."
+    "message": "Um Ihren Bot zu testen, auszuführen und zu veröffentlichen, benötigt er Azure-Ressourcen wie App-Registrierung, Hosting und Kanäle. Andere Ressourcen, wie z. B. Language Understanding und Speicher, sind optional. Ein Veröffentlichungsprofil enthält alle Informationen, die für die Bereitstellung und Veröffentlichung Ihres Bots erforderlich sind, einschließlich seiner Azure-Ressourcen."
   },
   "to_understand_natural_language_input_and_direct_th_fc982d4a": {
-    "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
+    "message": "Um Eingaben in natürlicher Sprache zu verstehen und den Gesprächsfluss zu steuern, benötigt Ihr Bot einen Language Understanding-Dienst. "
   },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
     "message": "Um zu verstehen, was der Benutzer sagt, benötigt Ihr Dialog ein so genanntes Erkennungsmodul. Dieses enthält Beispielwörter und Sätze, die Benutzer möglicherweise verwenden."
@@ -3936,7 +3939,7 @@
     "message": "6Symbolleiste"
   },
   "topic_e820dbbd": {
-    "message": "(Topic)"
+    "message": "(Thema)"
   },
   "total_mb_531a3721": {
     "message": "{ total } MB"
@@ -3945,31 +3948,31 @@
     "message": "{ total, plural,\n     =1 {Bot neu starten}\n  other {Alle Bots neu starten ({ running }/{ total } running)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
+    "message": "{ total, plural,\n     =1 {Start bot}\n  andere {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Bot wird gestartet..}\n  other {Bots werden gestartet... ({ running }/{ total } running)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  andere {Stopping bots.. ({ running }/{ total } running)}\n}"
   },
   "trigger_f0ee1fbf": {
-    "message": "Trigger"
+    "message": "Auslöser"
   },
   "trigger_group_79a00ac6": {
-    "message": "Trigger group"
+    "message": "Gruppe \"Auslöser\""
   },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
-    "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
+    "message": "Auslöserphrasen sind Eingaben von Benutzern, die zum Trainieren Ihres LUIS-Modells verwendet werden. Dies folgt dem .lu-Dateiformat."
   },
   "trigger_phrases_f6754fa": {
     "message": "Triggerausdrücke"
   },
   "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
-    "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
+    "message": "Auslöser sind die Hauptkomponente eines Dialogs, mit ihnen fangen Sie Ereignisse ab und reagieren auf sie. Jeder Auslöser hat eine Bedingung und eine Sammlung von Aktionen, die ausgeführt werden, wenn die Bedingung erfüllt ist."
   },
   "triggers_selected_below_will_enable_other_bots_to__fd8353a5": {
-    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. Learn more."
+    "message": "Die unten ausgewählten Auslöser ermöglichen es anderen Bots, auf die Fähigkeiten Ihres Skills zuzugreifen. Erfahren Sie mehr."
   },
   "true_1900d7ae": {
     "message": "TRUE"
@@ -3984,19 +3987,19 @@
     "message": "Testen Sie neue Features in der Vorschau, und helfen Sie uns, den Composer zu verbessern. Sie können sie jederzeit aktivieren oder deaktivieren."
   },
   "type_a_name_for_this_knowledge_base_ab07b439": {
-    "message": "Type a name for this knowledge base"
+    "message": "Geben Sie einen Namen für diese Wissensdatenbank ein"
   },
   "type_and_press_enter_33a2905d": {
     "message": "Eingeben und EINGABETASTE drücken"
   },
   "type_app_id_a37decdf": {
-    "message": "Type App Id"
+    "message": "App-ID eingeben"
   },
   "type_app_password_8084ff36": {
-    "message": "Type App Password"
+    "message": "App-Kennwort eingeben"
   },
   "type_application_name_24f02dbe": {
-    "message": "Type application name"
+    "message": "Anwendungsnamen eingeben"
   },
   "type_c8106334": {
     "message": "Typ"
@@ -4008,13 +4011,13 @@
     "message": "Namen des Formulardialogschemas eingeben"
   },
   "type_language_understanding_authoring_key_515790d0": {
-    "message": "Type Language Understanding authoring key"
+    "message": "Language Understanding-Erstellungsschlüssel eingeben"
   },
   "type_or_paste_url_763adeb4": {
-    "message": "Type or paste URL"
+    "message": "URL eingeben oder einfügen"
   },
   "type_subscription_key_ab5ab9a6": {
-    "message": "Type subscription key"
+    "message": "Abonnementschlüssel eingeben"
   },
   "typing_activity_6b634ae": {
     "message": "Eingabeaktivität"
@@ -4041,13 +4044,13 @@
     "message": "Unbekannter Status"
   },
   "unnamed_4c8565a0": {
-    "message": "Unnamed"
+    "message": "Unbenannt"
   },
   "unread_notifications_indicator_e2ca00d5": {
-    "message": "Unread notifications Indicator"
+    "message": "Indikator für ungelesene Benachrichtigungen"
   },
   "unsupported_publishing_profile_ad088e54": {
-    "message": "Unsupported publishing profile"
+    "message": "Nicht unterstütztes Veröffentlichungsprofil"
   },
   "unused_8d193e3": {
     "message": "Nicht verwendet"
@@ -4062,13 +4065,13 @@
     "message": "Aktivität aktualisieren"
   },
   "update_and_restart_b236a67": {
-    "message": "Update and restart"
+    "message": "Aktualisieren und neu starten"
   },
   "update_available_b637d767": {
     "message": "Update verfügbar"
   },
   "update_cancelled_auto_update_has_been_turned_off_f_7f7e08d7": {
-    "message": "Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>"
+    "message": "Update abgebrochen. Die automatische Aktualisierung wurde für diese Version abgeschaltet. Sie können jederzeit aktualisieren, indem Sie <b>Hilfe > Nach Updates suchen.</b> wählen."
   },
   "update_complete_c5163fbf": {
     "message": "Update abgeschlossen"
@@ -4095,19 +4098,19 @@
     "message": "URL"
   },
   "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+    "message": "Eine URL muss mit \"http://\" oder \"https://\" beginnen"
   },
   "use_azure_bot_to_create_a_new_conversation_1a116a65": {
-    "message": "Use Azure Bot to create a new conversation"
+    "message": "Verwenden Sie Azure Bot, um eine neue Unterhaltung zu erstellen"
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
-    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ."
+    "message": "Verwenden Sie Azure QnA Maker, um einen einfachen Frage-und-Antwort-Bot aus einer Website-FAQ zu erstellen."
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_b24bef9f": {
-    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ. "
+    "message": "Verwenden Sie Azure QnA Maker, um einen einfachen Frage-und-Antwort-Bot aus einer Website-FAQ zu erstellen. "
   },
   "use_azure_qna_maker_to_extract_question_and_answer_942c2dcd": {
-    "message": "Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. "
+    "message": "Verwenden Sie Azure QnA Maker, um Frage-Antwort-Paare aus einer Online-FAQ zu extrahieren. "
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Benutzerdefinierten LUIS-Erstellungsschlüssel verwenden"
@@ -4122,16 +4125,16 @@
     "message": "Benutzerdefinierte Runtime verwenden"
   },
   "use_existing_resources_88d21106": {
-    "message": "Use existing resources"
+    "message": "Vorhandene Ressourcen verwenden"
   },
   "use_machine_learning_to_understand_natural_languag_53f12465": {
-    "message": "Use machine learning to understand natural language input and direct the conversation flow."
+    "message": "Verwenden Sie Machine Learning, um die Eingabe natürlicher Sprachen zu verstehen und den Konversationsfluss zu lenken."
   },
   "use_orchestrator_for_multi_bot_projects_bots_that__1b481cdd": {
-    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
+    "message": "Verwenden Sie Orchestrator für Multi-Bot -Projekte (Bots, die aus mehreren Bots bestehen oder mit Skills verbunden sind)."
   },
   "use_speech_to_enable_voice_input_and_output_for_yo_742c511d": {
-    "message": "Use Speech to enable voice input and output for your bot."
+    "message": "Verwenden Sie \"Sprache\", um die Spracheingabe und -ausgabe für Ihren Bot zu aktivieren."
   },
   "used_3d895705": {
     "message": "Verwendet"
@@ -4143,7 +4146,7 @@
     "message": "Benutzereingabe"
   },
   "user_input_and_bot_responses_2a9b67b1": {
-    "message": "User input and bot responses"
+    "message": "Benutzereingabe und Bot-Antworten"
   },
   "user_is_typing_790cb502": {
     "message": "Eingabe durch Benutzer"
@@ -4152,7 +4155,7 @@
     "message": "Benutzereingabe (Aktivität \"Typing\")"
   },
   "user_topic_e3978941": {
-    "message": "User Topic"
+    "message": "Benutzerthema"
   },
   "validation_b10c677c": {
     "message": "Überprüfung"
@@ -4176,7 +4179,7 @@
     "message": "Dialog anzeigen"
   },
   "view_documentation_samples_and_extensions_285b9404": {
-    "message": "View documentation, samples, and extensions"
+    "message": "Dokumentation, Beispiele und Erweiterungen anzeigen"
   },
   "view_kb_c382e495": {
     "message": "Wissensdatenbank anzeigen"
@@ -4188,10 +4191,10 @@
     "message": "In npm anzeigen"
   },
   "view_readme_30ed498f": {
-    "message": "View Readme"
+    "message": "Infodatei anzeigen"
   },
   "visit_a_this_page_a_to_learn_more_about_entity_def_c7c862a9": {
-    "message": "Visit <a>this page</a> to learn more about entity definition."
+    "message": "Besuchen Sie <a>diese Seite</a>, um mehr über die Entitätsdefinition zu erfahren."
   },
   "visual_editor_216472d": {
     "message": "Visueller Editor"
@@ -4203,19 +4206,19 @@
     "message": "Warnung"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
-    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
+    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  andere {# warnings}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"
   },
   "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
-    "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
+    "message": "Es wurde festgestellt, dass { length } benutzerdefinierten { obj } nicht für Composer 2.0 unterstützt werden."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "Wir müssen die Endpunkte für den Skill definieren, damit andere Bots damit interagieren können."
   },
   "web_chat_c5ca7ab6": {
-    "message": "Web Chat"
+    "message": "Webchat"
   },
   "webchat_log_b7213a9e": {
     "message": "Webchatprotokoll."
@@ -4224,16 +4227,16 @@
     "message": "Willkommen"
   },
   "welcome_to_bot_framework_composer_b4f92694": {
-    "message": "Welcome to Bot Framework Composer"
+    "message": "Willkommen bei Bot Framework Composer"
   },
   "welcome_to_composer_7147714a": {
-    "message": "Welcome to Composer!"
+    "message": "Willkommen bei Composer!"
   },
   "west_europe_75ac94f4": {
-    "message": "West Europe"
+    "message": "Europa, Westen"
   },
   "west_us_51d3fdbb": {
-    "message": "West US"
+    "message": "USA, Westen"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
     "message": "Was kann der Benutzer durch diese Unterhaltung erreichen? Beispiel: TischReservieren, KaffeeBestellen usw."
@@ -4242,7 +4245,7 @@
     "message": "Wie lautet der Name des benutzerdefinierten Ereignisses?"
   },
   "what_is_the_name_of_this_trigger_1d6db01": {
-    "message": "What is the name of this trigger?"
+    "message": "Wie lautet der Name dieses Auslösers?"
   },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "Wie lautet der Name dieses Triggers?"
@@ -4257,13 +4260,13 @@
     "message": "Wie lautet der Typ dieses Triggers?"
   },
   "what_s_new_a9752a8e": {
-    "message": "What''s new"
+    "message": "Neuigkeiten"
   },
   "what_s_new_list_6fe719cb": {
-    "message": "What''s new list"
+    "message": "Liste der Neuigkeiten"
   },
   "what_you_need_to_know_to_get_started_e2ab837a": {
-    "message": "What you need to know to get started"
+    "message": "Was Sie wissen müssen, um loszulegen"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "Hiermit können Sie definieren, was Ihr Bot zum Benutzer sagt. Mit dieser Vorlage wird die ausgehende Nachricht erstellt. Die Vorlage kann Language Generation-Regeln, Eigenschaften aus dem Arbeitsspeicher und andere Features enthalten.\n\nUm beispielsweise Variationen zu definieren, die nach dem Zufallsprinzip ausgewählt werden, schreiben Sie:\n- Hallo\n- Hi"
@@ -4287,16 +4290,16 @@
     "message": "Welcher Bot soll geöffnet werden?"
   },
   "which_bot_would_you_like_to_add_to_your_project_e31270db": {
-    "message": "Which bot would you like to add to your project"
+    "message": "Welchen Bot möchten Sie zu Ihrem Projekt hinzufügen"
   },
   "which_bots_can_connect_to_this_skill_5bf8421d": {
-    "message": "Which bots can connect to this skill?"
+    "message": "Welche Bots können sich mit diesem Skill verbinden?"
   },
   "which_event_6e655d2b": {
     "message": "Welches Ereignis?"
   },
   "working_with_packages_dbdddbe9": {
-    "message": "Working with packages"
+    "message": "Arbeiten mit Paketen"
   },
   "write_an_expression_8773ea5c": {
     "message": "Ausdruck schreiben"
@@ -4311,7 +4314,7 @@
     "message": "Ja"
   },
   "yes_delete_d43476ee": {
-    "message": "Yes, delete"
+    "message": "Ja, löschen"
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "Sie verfügen bereits über eine Wissensdatenbank mit diesem Namen. Wählen Sie einen anderen Namen aus, und versuchen Sie es noch mal."
@@ -4323,7 +4326,7 @@
     "message": "Sie sind im Begriff, Projektdateien aus den ausgewählten Veröffentlichungsprofilen per Pull abzurufen. Das aktuelle Projekt wird durch die abgerufenen Dateien überschrieben und automatisch als Sicherung gespeichert. Sie können diese Sicherung später jederzeit abrufen."
   },
   "you_are_about_to_remove_modalitytitle_content_from_c51efe05": {
-    "message": "You are about to remove { modalityTitle } content from this action node. Are you sure you want to proceed?"
+    "message": "Sie sind im Begriff, den Inhalt von { modalityTitle } aus diesem Aktionsknoten zu entfernen. Sind Sie sicher, dass Sie fortfahren möchten?"
   },
   "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
     "message": "Sie sind im Begriff, den Skill aus diesem Projekt zu entfernen. Durch das Entfernen dieses Skills werden die Dateien nicht gelöscht."
@@ -4344,22 +4347,22 @@
     "message": "Sie haben \"{ name }\" erfolgreich in \"{ publishTarget }\" veröffentlicht."
   },
   "you_re_ready_to_go_18ee8dac": {
-    "message": "You’re ready to go!"
+    "message": "Es ist alles bereit!"
   },
   "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
-    "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"
+    "message": "Ihr Bot ist nur mit einem LUIS-Autorenschlüssel konfiguriert, der ein Limit von 1.000 Aufrufen pro Monat hat. Wenn Ihr Bot dieses Limit erreicht, veröffentlichen Sie ihn mit einem <a>Veröffentlichungsprofil</a> in Azure, um die Tests fortzusetzen.<a2>Weitere Informationen</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Ihr Bot verwendet LUIS und QnA zur Erkennung natürlicher Sprache."
   },
   "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
-    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+    "message": "Ihr Bot-Projekt wird nicht ausgeführt. <actionButton>Starten Sie Ihren Bot</actionButton>"
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
-    "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
+    "message": "Ihr Bot-Projekt wird ausgeführt. <actionButton>Test im Webchat</actionButton>"
   },
   "your_bot_s_microsoft_app_id_5f12844c": {
-    "message": "Your bot’s Microsoft App ID"
+    "message": "Die Microsoft-App-ID Ihres Bots"
   },
   "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
     "message": "Ihr Dialog für \"{ schemaId }\" wurde erfolgreich generiert."
@@ -4368,36 +4371,30 @@
     "message": "Ihre Wissensdatenbank ist bereit!"
   },
   "your_new_azure_bot_is_available_in_composer_2756367a": {
-    "message": "Your new Azure Bot is available in Composer"
+    "message": "Ihr neuer Azure-Bot ist im Composer verfügbar"
   },
   "your_new_bot_is_almost_ready_1bb596e": {
-    "message": "Your new bot is almost ready!"
+    "message": "Ihr neuer Bot ist fast bereit!"
   },
   "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
-    "message": "Your QnA Maker is ready! It took { time } minutes to complete."
-  },
-  "your_root_bot_must_have_an_associated_microsoft_ap_91671242": {
-    "message": "Your root bot must have an associated Microsoft App ID and Password."
-  },
-  "your_root_bot_must_have_an_azure_publishing_profil_89055cfd": {
-    "message": "Your root bot must have an Azure publishing profile."
+    "message": "Ihr QnA Maker ist bereit! Es hat { time } Minuten gedauert, um den Vorgang abzuschließen."
   },
   "your_skill_could_not_be_published_5bee6e6a": {
-    "message": "Your skill could not be published."
+    "message": "Ihr Skill konnte nicht veröffentlicht werden."
   },
   "your_skill_is_ready_to_be_shared_6376eb3c": {
-    "message": "Your skill is ready to be shared!"
+    "message": "Ihr Skill ist bereit zur Freigabe!"
   },
   "your_subscription_list_is_empty_please_add_your_su_6b229c26": {
-    "message": "Your subscription list is empty, please add your subscription, or login with another account."
+    "message": "Ihre Abonnementliste ist leer, bitte fügen Sie Ihr Abonnement hinzu, oder melden Sie sich mit einem anderen Konto an."
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
-    "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
+    "message": "Ihr Teams-Adapter ist für Ihren veröffentlichten Bot konfiguriert. Kopieren Sie das Manifest, öffnen Sie App Studio in Teams und fügen Sie das Manifest hinzu, damit Sie Ihren Bot in Teams testen können"
   },
   "zoom_in_3205e865": {
-    "message": "Zoom in"
+    "message": "Vergrößern"
   },
   "zoom_out_e4302632": {
-    "message": "Zoom out"
+    "message": "Verkleinern"
   }
 }
