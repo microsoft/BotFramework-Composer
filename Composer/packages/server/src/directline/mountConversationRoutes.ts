@@ -65,15 +65,5 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler());
 
-  router.put('/conversations/cleanup', (req, res) => {
-    try {
-      WebSocketServer.cleanUpAll();
-    } finally {
-      res.status(200).json({
-        message: 'Cleaned up conversation server',
-      });
-    }
-  });
-
   return router;
 };
