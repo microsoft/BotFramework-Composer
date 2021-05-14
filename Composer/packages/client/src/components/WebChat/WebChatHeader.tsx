@@ -127,11 +127,11 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
             : formatMessage('Restart Conversation - new user ID')
         }
         title="restart-conversation"
-        onClick={async () => {
+        onClick={() => {
           if (currentRestartOption === RestartOption.SameUserID) {
-            await onRestartConversation(conversationId, false);
+            onRestartConversation(conversationId, false);
           } else {
-            await onRestartConversation(conversationId, true);
+            onRestartConversation(conversationId, true);
           }
         }}
       />
