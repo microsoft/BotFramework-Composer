@@ -76,7 +76,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
-      ? formatMessage("Error attempting to parse Skill manifest. There could be an error in it's format.")
+      ? formatMessage('Error attempting to parse Skill manifest. There could be an error in its format.')
       : formatMessage('Manifest URL can not be accessed');
 
     setFormDataErrors({ ...error, manifestUrl: message });
