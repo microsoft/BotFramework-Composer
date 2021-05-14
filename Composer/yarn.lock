@@ -4072,10 +4072,10 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20210505.243104":
-  version "4.10.0-daily.20210505.243104"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20210505.243104.tgz#9fbe5f2d80b4d0bd0dbe69aae0c6c3cbee33e4d6"
-  integrity sha1-n75fLYC00L0Nvmmq4MbDy+4z5NY=
+"@microsoft/bf-generate-library@^4.14.0-preview.20210513.fff2961":
+  version "4.14.0-preview.20210513.fff2961"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-generate-library/-/bf-generate-library-4.14.0-preview.20210513.fff2961.tgz#38f0b9e23016567a4e41fcecc9fa472819b16dde"
+  integrity sha512-9nBMIBpOaZlAz/SLgSPREFmFxrZlpNRSJIXubPFEmw6cZuoUbFQ48AITjZMmz/8gmWMikAyLy+WaalLLNGNB3Q==
   dependencies:
     "@microsoft/bf-lu" latest
     adaptive-expressions next
