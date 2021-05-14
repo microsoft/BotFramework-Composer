@@ -64,7 +64,7 @@ type PublishTargetsProps = {
 export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { projectId, scrollToSectionId = '' } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
-  const { setPublishTargets } = useRecoilValue(dispatcherState);
+  const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const [showPublishDialog, setShowingPublishDialog] = useState(false);
@@ -74,6 +74,12 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const [current, setCurrent] = useState<{ index: number; item: PublishTarget } | null>(null);
 
   const { location } = useLocation();
+
+  useEffect(() => {
+    if (projectId) {
+      getPublishTargetTypes(projectId);
+    }
+  }, [projectId]);
 
   useEffect(() => {
     if (location.hash === '#completePublishProfile') {
