@@ -203,6 +203,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       };
     }
   };
+
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
     if (LocalPublisher.runningBots[botId]) {
@@ -612,6 +613,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   static stopAll = () => {
+    RuntimeLogServer.cleanUpAll();
     for (const botId in LocalPublisher.runningBots) {
       const bot = LocalPublisher.runningBots[botId];
       // Kill the bot process AND all child processes

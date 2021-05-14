@@ -80,4 +80,18 @@ export class RuntimeLogServer {
       })
     );
   }
+
+  public static cleanUpAll(): void {
+    for (const projectId in this.sockets) {
+      this.sockets[projectId]?.close();
+
+      if (this.servers[projectId]) {
+        this.servers[projectId]?.close();
+      }
+    }
+
+    if (this.restServer) {
+      this.restServer.close();
+    }
+  }
 }

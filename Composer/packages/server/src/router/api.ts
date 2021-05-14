@@ -79,6 +79,7 @@ router.get('/provision/:projectId/:type/resources', ProvisionController.getResou
 router.post('/provision/:projectId/:type', ProvisionController.provision);
 
 // publishing
+router.get('/publish/cleanup', PublishController.cleanUpRuntimes);
 router.get('/publish/runtimeLogUrl/:projectId', PublishController.setupRuntimeLogForBot);
 router.get('/publish/types', PublishController.getTypes);
 router.get('/publish/:projectId/status/:target/:jobId', PublishController.status);

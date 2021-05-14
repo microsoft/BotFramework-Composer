@@ -346,6 +346,16 @@ export const PublishController = {
       message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
     });
   },
+  cleanUpRuntimes: async () => {
+    const profile = defaultPublishConfig;
+    const extensionName = profile.type;
+    if (profile && extensionImplementsMethod(extensionName, 'stopAll')) {
+      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.stopAll;
+      if (typeof pluginMethod === 'function') {
+        pluginMethod.call(null);
+      }
+    }
+  },
   setupRuntimeLogForBot: async (req, res) => {
     log('Setting up runtime log server');
     const profile = defaultPublishConfig;
@@ -366,7 +376,6 @@ export const PublishController = {
       }
     }
   },
-
   pull: async (req, res) => {
     log('Starting pull');
     const target = req.params.target;

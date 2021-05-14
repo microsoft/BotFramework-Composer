@@ -10,6 +10,7 @@ import { UpdateInfo } from 'electron-updater';
 import fixPath from 'fix-path';
 import formatMessage from 'format-message';
 import { mkdirp } from 'fs-extra';
+import fetch from 'node-fetch';
 
 import { initAppMenu } from './appMenu';
 import { AppUpdater, BreakingUpdateMetaData } from './appUpdater';
@@ -312,6 +313,7 @@ async function run() {
   });
 
   app.on('before-quit', () => {
+    await fetch();
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
     mainWindow?.webContents.send('cleanup');

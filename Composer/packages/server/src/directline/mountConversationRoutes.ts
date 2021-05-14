@@ -19,6 +19,7 @@ import {
 } from './middleware';
 import DLServerContext from './store/dlServerState';
 import { getWebSocketPort } from './utils/socketPort';
+import { WebSocketServer } from './utils/webSocketServer';
 
 export const mountConversationsRoutes = (dlServerState: DLServerContext): express.Router => {
   const router = express.Router();
@@ -62,6 +63,8 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
   router.post('/conversations/:conversationId/saveTranscript', fetchConversation, saveTranscriptHandler(state));
 
   router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler());
+
+  router.get('/conversations/cleanup', WebSocketServer.cleanUpAll);
 
   return router;
 };
