@@ -327,7 +327,7 @@ export const addSkillDialog = {
     return {
       title: formatMessage('Connect to a skill'),
       subText: formatMessage(
-        "To connect to a skill, your bot needs the information captured in the skill's manifest, and, for secure access, the skill needs to know your bot's App ID. Follow the steps below to proceed."
+        "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot's App ID. Follow the steps below to proceed."
       ),
     };
   },
@@ -336,7 +336,7 @@ export const addSkillDialog = {
       title: formatMessage('Add a skill'),
       subText: (url: string) =>
         formatMessage.rich(
-          `To connect to a skill, your bot needs the information captured in the skill's manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
+          `To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
           {
             link: ({ children }) => (
               <Link key="learn-more-about-skills" href={url} rel="noopener noreferrer" target="_blank">
