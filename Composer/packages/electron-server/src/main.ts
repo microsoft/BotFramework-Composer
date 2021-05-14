@@ -312,8 +312,17 @@ async function run() {
     }
   });
 
-  app.on('before-quit', () => {
-    await fetch();
+  app.on('before-quit', async () => {
+    const baseUrl = getBaseUrl();
+    try {
+      await fetch(`${baseUrl}/api/publish/cleanup`, {
+        method: 'PUT',
+        body: undefined,
+      });
+    } catch (ex) {
+      log('Error occured in cleanup');
+    }
+
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
     mainWindow?.webContents.send('cleanup');

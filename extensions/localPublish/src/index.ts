@@ -612,16 +612,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
-  static stopAll = () => {
+  public stopAll = async () => {
     RuntimeLogServer.cleanUpAll();
     for (const botId in LocalPublisher.runningBots) {
-      const bot = LocalPublisher.runningBots[botId];
-      // Kill the bot process AND all child processes
-      try {
-        process.kill(isWin ? bot.process.pid : -bot.process.pid);
-      } catch (err) {
-        // swallow this error which happens if the child process is already gone
-      }
+      await killPort(LocalPublisher.runningBots[botId].port);
       delete LocalPublisher.runningBots[botId];
     }
   };

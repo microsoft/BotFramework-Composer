@@ -36,7 +36,6 @@ import { mountDirectLineRoutes } from './directline/mountDirectlineRoutes';
 import { mountAttachmentRoutes } from './directline/mountAttachmentRoutes';
 import { cleanHostedBots } from './utility/cleanHostedBots';
 import { getVersion } from './utility/getVersion';
-import { WebSocketServer as DLSocketServer } from './directline/utils/webSocketServer';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');

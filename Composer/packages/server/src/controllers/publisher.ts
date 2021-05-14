@@ -15,6 +15,7 @@ import AssetService from '../services/asset';
 import logger from '../logger';
 import { LocationRef } from '../models/bot/interface';
 import { TelemetryService } from '../services/telemetry';
+import { WebSocketServer } from '../directline/utils/webSocketServer';
 
 const log = logger.extend('publisher-controller');
 
@@ -346,14 +347,21 @@ export const PublishController = {
       message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
     });
   },
-  cleanUpRuntimes: async () => {
-    const profile = defaultPublishConfig;
-    const extensionName = profile.type;
-    if (profile && extensionImplementsMethod(extensionName, 'stopAll')) {
-      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.stopAll;
-      if (typeof pluginMethod === 'function') {
-        pluginMethod.call(null);
+  cleanUpRuntimes: async (req, res) => {
+    try {
+      const profile = defaultPublishConfig;
+      const extensionName = profile.type;
+      if (profile && extensionImplementsMethod(extensionName, 'stopAll')) {
+        const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.stopAll;
+        if (typeof pluginMethod === 'function') {
+          pluginMethod.call(null);
+        }
+        WebSocketServer.cleanUpAll();
       }
+    } finally {
+      res.status(200).json({
+        message: 'Cleaned up runtime',
+      });
     }
   },
   setupRuntimeLogForBot: async (req, res) => {

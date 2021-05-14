@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 //
 
+import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
 
 import { logNetworkTraffic } from '../middleware/logNetworkTraffic';
@@ -64,7 +65,15 @@ export const mountConversationsRoutes = (dlServerState: DLServerContext): expres
 
   router.get('/conversations/:conversationId/transcripts', fetchConversation, getTranscriptHandler());
 
-  router.get('/conversations/cleanup', WebSocketServer.cleanUpAll);
+  router.put('/conversations/cleanup', (req, res) => {
+    try {
+      WebSocketServer.cleanUpAll();
+    } finally {
+      res.status(200).json({
+        message: 'Cleaned up conversation server',
+      });
+    }
+  });
 
   return router;
 };
