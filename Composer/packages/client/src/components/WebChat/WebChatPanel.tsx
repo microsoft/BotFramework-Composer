@@ -137,11 +137,7 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
   }, [botUrl]);
 
   useEffect(() => {
-    if (botStatus === BotStatus.connected) {
-      setIsRestartButtonDisabled(false);
-    } else {
-      setIsRestartButtonDisabled(true);
-    }
+    setIsRestartButtonDisabled(botStatus !== BotStatus.connected);
   }, [botStatus]);
 
   const sendInitialActivities = async (chatData: ChatData) => {
