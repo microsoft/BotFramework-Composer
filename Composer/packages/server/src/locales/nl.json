@@ -2871,10 +2871,10 @@
     "message": "Geef toegangstokens op"
   },
   "provide_arm_token_by_running_az_account_get_access_e9d825a4": {
-    "message": "Geef een ARM-token op door 'az account get-access-token' uit te voeren"
+    "message": "Geef een ARM-token op door \"az account get-access-token\" uit te voeren"
   },
   "provide_graph_token_by_running_az_account_get_acce_6d27a279": {
-    "message": "Geef een grafiektoken op door 'az account get-access-token  --resource-type ms-graph' uit te voeren"
+    "message": "Geef een grafiektoken op door \"az account get-access-token  --resource-type ms-graph\" uit te voeren"
   },
   "provision_failure_983d3844": {
     "message": "Inrichtingsfout"
@@ -3492,7 +3492,7 @@
     "message": "Manifest voor { skillName }"
   },
   "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
-    "message": "Vaardigheden kunnen worden aangeroepen door externe bots. Sta andere bots toe uw vaardigheid aan te roepen door de App-Id's van de bots toe te voegen aan de lijst hieronder. <a>Meer informatie</a>"
+    "message": "Vaardigheden kunnen worden aangeroepen door externe bots. Sta andere bots toe uw vaardigheid aan te roepen door de App-Id’s van de bots toe te voegen aan de lijst hieronder. <a>Meer informatie</a>"
   },
   "skip_bcb86160": {
     "message": "Overslaan"

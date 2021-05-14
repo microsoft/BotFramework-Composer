@@ -48,7 +48,7 @@
     "message": "Bu ada sahip bir profil zaten var."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer'de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
+    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer’de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
   },
   "a_publishing_profile_contains_the_information_nece_fc37192d": {
     "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID. "
@@ -708,7 +708,7 @@
     "message": "Tümünü temizle"
   },
   "click_start_and_your_bot_will_be_up_and_running_on_424c29da": {
-    "message": "Başlat'a tıkladığınızda botunuz çalışır duruma gelir. Çalışmaya başladıktan sonra, test etmek için \"Web Sohbeti’nde aç\" seçeneğini belirleyebilirsiniz."
+    "message": "Başlat’a tıkladığınızda botunuz çalışır duruma gelir. Çalışmaya başladıktan sonra, test etmek için \"Web Sohbeti’nde aç\" seçeneğini belirleyebilirsiniz."
   },
   "click_the_start_button_to_test_your_bot_using_web__821e827c": {
     "message": "Web Sohbeti veya Emulator’ı kullanarak botunuzu test etmek için başlat düğmesine tıklayın. Bot Framework Emulator henüz yüklü değilse, <a>buradan</a> indirebilirsiniz."
@@ -861,7 +861,7 @@
     "message": "Composer ile ilgili soru sormak ve soruları yanıtlamak için toplulukla bağlantı kurun"
   },
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
-    "message": "Botunuzu Microsoft Teams’e ve Web Sohbeti’ne bağlayın ya da DirectLine Speech'i etkinleştirin."
+    "message": "Botunuzu Microsoft Teams’e ve Web Sohbeti’ne bağlayın ya da DirectLine Speech’i etkinleştirin."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
     "message": "Botunuzu Teams’e ve dış kanallara bağlayın ya da konuşmayı etkinleştirin."
@@ -1428,7 +1428,7 @@
     "message": "EndOfConversation etkinliği"
   },
   "endpoint_url_eddd8ea9": {
-    "message": "Uç nokta URL'si"
+    "message": "Uç nokta URL’si"
   },
   "endpoints_ff946539": {
     "message": "Uç Noktalar"
@@ -1971,7 +1971,7 @@
     "message": "Microsoft .NET Core SDK yükle"
   },
   "install_net_core_sdk_67e62ca9": {
-    "message": ".NET Core SDK'sını yükle"
+    "message": ".NET Core SDK’sını yükle"
   },
   "install_node_js_1857298c": {
     "message": "Node.js’yi yükle"
@@ -2091,7 +2091,7 @@
     "message": "Language Understanding yazma anahtarı"
   },
   "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
-    "message": "Language Understanding (LUIS), doğal dil girişini anlamak ve konuşma akışını yönlendirmek için makine öğrenmesi kullanan bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'daki mevcut bir Language Understanding (LUIS) anahtarını kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
+    "message": "Language Understanding (LUIS), doğal dil girişini anlamak ve konuşma akışını yönlendirmek için makine öğrenmesi kullanan bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure’daki mevcut bir Language Understanding (LUIS) anahtarını kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
   },
   "language_understanding_region_ec8fb05c": {
     "message": "Language Understanding bölgesi"
@@ -2238,7 +2238,7 @@
     "message": "Oturum Açın"
   },
   "login_to_azure_c0cb057e": {
-    "message": "Azure'da oturum açın"
+    "message": "Azure’da oturum açın"
   },
   "loop_for_each_item_e09537ae": {
     "message": "Döngü: Her öğe için"
@@ -2589,7 +2589,7 @@
     "message": "Henüz yayımlanmadı"
   },
   "note_if_your_bot_is_using_custom_actions_they_will_a500ed2": {
-    "message": "Not: Botunuz özel eylemler kullanıyorsa Composer 2.0'da desteklenmez. <a>Composer 2.0’a güncelleştirme hakkında daha fazla bilgi edinin.</a>"
+    "message": "Not: Botunuz özel eylemler kullanıyorsa Composer 2.0’da desteklenmez. <a>Composer 2.0’a güncelleştirme hakkında daha fazla bilgi edinin.</a>"
   },
   "notifications_cbfa7704": {
     "message": "Bildirimler"
@@ -2649,7 +2649,7 @@
     "message": "Ekleme"
   },
   "once_you_publish_your_bot_to_azure_you_will_be_rea_93048067": {
-    "message": "Botunuzu Azure'da yayımladığınızda bağlantı eklemeye hazır olursunuz."
+    "message": "Botunuzu Azure’da yayımladığınızda bağlantı eklemeye hazır olursunuz."
   },
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents Türleri"
@@ -2772,7 +2772,7 @@
     "message": "Açılır pencere düzenleyicisi"
   },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
-    "message": "Power Virtual Agents botları şu anda çalıştırılamıyor. Botu Power Virtual Agents'ta yayımlayın ve orada test edin."
+    "message": "Power Virtual Agents botları şu anda çalıştırılamıyor. Botu Power Virtual Agents’ta yayımlayın ve orada test edin."
   },
   "power_virtual_agents_bots_cannot_use_this_function_fcfeaf62": {
     "message": "Power Virtual Agents botları şu anda bu işlevselliği kullanamıyor."
@@ -2910,7 +2910,7 @@
     "message": "Botunuzu yayımlayın"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
-    "message": "Botunuzu Azure'da yayımlayın ve yayımlanan botları burada yönetin."
+    "message": "Botunuzu Azure’da yayımlayın ve yayımlanan botları burada yönetin."
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Robotlarınızı yayımlayın"
@@ -2961,10 +2961,10 @@
     "message": "Soru-Cevap Oluşturma tanıtımı"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
-    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi.</a2>"
+    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure’dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi.</a2>"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
-    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
+    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure’dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
     "message": "Soru-Cevap Oluşturma aboneliği anahtarı:"
@@ -3486,7 +3486,7 @@
     "message": "Beceri Bildirimi URL’si"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
-    "message": "Beceri bildirimi URL'si panoya kopyalandı"
+    "message": "Beceri bildirimi URL’si panoya kopyalandı"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Bildirimi"
@@ -3660,7 +3660,7 @@
     "message": "Kullanım Koşulları"
   },
   "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
-    "message": "Bot Framework Emulator'da botlarınızı test edin ve bunların hatalarını ayıklayın"
+    "message": "Bot Framework Emulator’da botlarınızı test edin ve bunların hatalarını ayıklayın"
   },
   "test_in_emulator_b1b3c278": {
     "message": "Emulator\"da Test Et"
@@ -3705,10 +3705,10 @@
     "message": "Silmeye çalıştığınız iletişim kutusu şu anda aşağıdaki iletişim kutularında kullanılıyor. Bu iletişim kutusunun kaldırılması, Botunuzun ek bir eylem olmadan hatalı çalışmasına yol açabilir."
   },
   "the_endpoint_url_7c04ee13": {
-    "message": "Uç nokta URL'si"
+    "message": "Uç nokta URL’si"
   },
   "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
-    "message": "Web uygulaması kaynağınızın uç nokta URL'si"
+    "message": "Web uygulaması kaynağınızın uç nokta URL’si"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "Dosya adı boş olamaz"
@@ -4104,13 +4104,13 @@
     "message": "Yeni bir konuşma oluşturmak için Azure Bot kullanın"
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
-    "message": "Bir web sitesi SSS'sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın."
+    "message": "Bir web sitesi SSS’sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın."
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_b24bef9f": {
-    "message": "Bir web sitesi SSS'sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın. "
+    "message": "Bir web sitesi SSS’sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın. "
   },
   "use_azure_qna_maker_to_extract_question_and_answer_942c2dcd": {
-    "message": "Çevrimiçi bir SSS'den soru-yanıt çiftleri ayıklamak için Azure Soru-Cevap Oluşturma kullanın. "
+    "message": "Çevrimiçi bir SSS’den soru-yanıt çiftleri ayıklamak için Azure Soru-Cevap Oluşturma kullanın. "
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Özel LUIS yazma anahtarını kullanın"
@@ -4350,7 +4350,7 @@
     "message": "Artık hazırsınız!"
   },
   "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
-    "message": "Botunuz yalnızca aylık 1.000 çağrı sınırı olan bir LUIS yazma anahtarıyla yapılandırılır. Botunuz bu sınıra ulaşırsa, teste devam etmek için bir <a>yayımlama profili</a> kullanarak botunuzu Azure'da yayımlayın.<a2>Daha fazla bilgi</a2>"
+    "message": "Botunuz yalnızca aylık 1.000 çağrı sınırı olan bir LUIS yazma anahtarıyla yapılandırılır. Botunuz bu sınıra ulaşırsa, teste devam etmek için bir <a>yayımlama profili</a> kullanarak botunuzu Azure’da yayımlayın.<a2>Daha fazla bilgi</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Botunuz, doğal dil anlama için LUIS ve Soru-Cevap kullanıyor."
@@ -4389,7 +4389,7 @@
     "message": "Abonelik listeniz boş, lütfen aboneliğinizi ekleyin veya başka bir hesapla oturum açın."
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
-    "message": "Teams bağdaştırıcınız, yayımlanmış botunuz için yapılandırıldı. Botunuzu Teams’te test edebilmeniz için bildirimi kopyalayın, Teams’te App Studio'yu açın ve bildirimi ekleyin"
+    "message": "Teams bağdaştırıcınız, yayımlanmış botunuz için yapılandırıldı. Botunuzu Teams’te test edebilmeniz için bildirimi kopyalayın, Teams’te App Studio’yu açın ve bildirimi ekleyin"
   },
   "zoom_in_3205e865": {
     "message": "Yakınlaştır"
