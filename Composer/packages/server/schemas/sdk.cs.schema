@@ -71,9 +71,6 @@
           "title": "Schéma",
           "description": "Schéma, které se má vyplnit",
           "anyOf": {
-            "0": {
-              "title": "Metaschéma hlavního schématu"
-            },
             "1": {
               "title": "Odkaz na schéma JSON",
               "description": "Odkaz na soubor .dialog schématu JSON"
@@ -907,9 +904,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "Pokračovat v konverzaci (fronta)",
+      "description": "Pokračuje v konkrétní konverzaci (prostřednictvím implementace StorageQueue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Vlastnost nástrojů",
+          "description": "Otevřít ukončenou vlastnost pro nástroje"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Nepovinné ID pro dialog"
+        },
+        "disabled": {
+          "title": "Zakázáno",
+          "description": "Nepovinná podmínka, která zakáže tuto akci, pokud se vyhodnotí jako true"
+        },
+        "conversationReference": {
+          "title": "Odkaz na konverzaci",
+          "description": "Odkaz na konverzaci. (POZNÁMKA: Minimální požadované hodnoty nebo vlastnosti channelId a conversation)."
+        },
+        "value": {
+          "title": "Hodnota",
+          "description": "Hodnota, která se pošle v activity.value"
+        },
+        "$kind": {
+          "title": "Druh objektu dialogu",
+          "description": "Určuje platné vlastnosti pro součást, kterou konfigurujete (ze souboru .schema dialogu)."
+        },
+        "$designer": {
+          "title": "Informace o návrháři",
+          "description": "Informace navíc pro Bot Framework Composer"
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "Pokračovat v konverzaci později (fronta)",
-      "description": "Pokračovat v konverzaci později (přes frontu služby Azure Storage)",
+      "description": "Pokračovat v konverzaci později (prostřednictvím implementace StorageQueue).",
       "patternProperties": {
         "^\\$": {
           "title": "Vlastnost nástrojů",
@@ -1673,6 +1706,38 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "Získat ConversationReference",
+      "description": "Z aktuálního kontextu získá třídu ConversationReference a uloží ji do vlastnosti, aby mohla být použita v rámci akce ContinueConversation.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Vlastnost nástrojů",
+          "description": "Otevřít ukončenou vlastnost pro nástroje"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "ID",
+          "description": "Nepovinné ID pro dialog"
+        },
+        "property": {
+          "title": "Vlastnost",
+          "description": "Vlastnost (pojmenované umístění, kde se dají uchovávat informace)"
+        },
+        "disabled": {
+          "title": "Zakázáno",
+          "description": "Nepovinná podmínka, která zakáže tuto akci, pokud se vyhodnotí jako true"
+        },
+        "$kind": {
+          "title": "Druh objektu dialogu",
+          "description": "Určuje platné vlastnosti pro součást, kterou konfigurujete (ze souboru .schema dialogu)."
+        },
+        "$designer": {
+          "title": "Informace o návrháři",
+          "description": "Informace navíc pro Bot Framework Composer"
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "Přejít na akci",
       "description": "Přejít na akci podle ID",
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "Komponenty, které jsou ActivityTemplate, což je šablona řetězce, aktivita nebo implementace ActivityTemplate",
-      "oneOf": {
-        "1": {
-          "description": "Aktivita je základní typ komunikace pro protokol Bot Framework 3.0.",
-          "title": "Aktivita",
-          "properties": {
-            "type": {
-              "description": "Obsahuje typ aktivity. Mezi možné hodnoty patří message, contactRelationUpdate,\nconversationUpdate, typing, endOfConversation, event, invoke, deleteUserData,\nmessageUpdate, messageDelete, installationUpdate, messageReaction, suggestion,\ntrace, handoff",
-              "title": "type"
-            },
-            "id": {
-              "description": "Obsahuje ID, které jedinečně identifikuje aktivitu na kanálu.",
-              "title": "id"
-            },
-            "timestamp": {
-              "description": "Obsahuje datum a čas, kdy se zpráva odeslala, ve formátu UTC vyjádřeném ve formátu ISO-8601",
-              "title": "timestamp"
-            },
-            "localTimestamp": {
-              "description": "Obsahuje datum a čas, kdy se zpráva odeslala. Používá se místní čas ve formátu\nISO-8601.\nPříklad: 2016-09-23T13:07:49.4714686-07:00",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "Obsahuje název časového pásma, ze kterého přišla zpráva. Používá se místní čas vyjádřený ve formátu\ndatabáze časových pásem IANA.\nPříklad: America/Los Angeles",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "Obsahuje adresu URL, která určuje koncový bod služby kanálu. Nastavuje ji sám kanál.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "Obsahuje ID, které jedinečně identifikuje kanál. Nastavuje ho sám kanál.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "Identifikuje odesílatele zprávy.",
-              "title": "from"
-            },
-            "conversation": {
-              "description": "Identifikuje konverzaci, ke které patří aktivita.",
-              "title": "conversation",
-              "properties": {
-                "isGroup": {
-                  "description": "Určuje, jestli konverzace ve chvíli, kdy se vygenerovala aktivita, obsahuje více než dva\núčastníky.",
-                  "title": "isGroup"
-                },
-                "conversationType": {
-                  "description": "Určuje typ konverzace v kanálech, které rozlišují mezi typy konverzací.",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "ID kanálu pro uživatele nebo robota na tomto kanálu (příklad: joe@smith.com, @joesmith nebo\n123456)",
-                  "title": "id"
-                },
-                "name": {
-                  "description": "Zobrazovaný popisný název",
-                  "title": "name"
-                },
-                "aadObjectId": {
-                  "description": "ID objektu tohoto účtu v Azure Active Directory (AAD)",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "Role entity, která stojí za účtem (příklad: uživatel, robot atd.). Mezi možné hodnoty patří:\nuser, bot",
-                  "title": "role"
-                }
-              }
-            },
-            "recipient": {
-              "description": "Identifikuje příjemce zprávy",
-              "title": "recipient"
-            },
-            "textFormat": {
-              "description": "Formát textových polí Default:markdown. Mezi možné hodnoty patří: markdown, plain, xml",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "Informace o rozložení pro více příloh. Výchozí: list. Mezi možné hodnoty patří: list,\ncarousel",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "Kolekce členů, kteří se přidali do konverzace",
-              "title": "membersAdded",
-              "items": {
-                "description": "Informace o účtu kanálu potřebné ke směrování zprávy",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "ID kanálu pro uživatele nebo robota na tomto kanálu (příklad: joe@smith.com, @joesmith nebo\n123456)",
-                    "title": "id"
-                  },
-                  "name": {
-                    "description": "Zobrazovaný popisný název",
-                    "title": "name"
-                  },
-                  "aadObjectId": {
-                    "description": "ID objektu tohoto účtu v Azure Active Directory (AAD)",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "Role entity, která stojí za účtem (příklad: uživatel, robot atd.). Mezi možné hodnoty patří:\nuser, bot",
-                    "title": "role"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "Kolekce členů, kteří se odebrali z konverzace",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "Kolekce reakcí, které se přidaly do konverzace",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "Objekt reakce na zprávu",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "Typ reakce na zprávu. Mezi možné hodnoty patří: like, plusOne",
-                    "title": "type"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "Kolekce reakcí, které se odebraly z konverzace",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "Název aktualizovaného tématu konverzace",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "Určuje, jestli se odhalí dřívější historie kanálu.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "Název národního prostředí obsahu textového pole\nNázev národního prostředí je kombinace dvou- nebo třímístného kódu ISO 639 jazykové verze přidruženého\nk jazyku\na dvoumístného kódu ISO 3166 dílčí jazykové verze přidruženého k zemi nebo oblasti.\nNázev národního prostředí může odpovídat i platné značce jazyka BCP-47.",
-              "title": "locale"
-            },
-            "text": {
-              "description": "Textový obsah zprávy",
-              "title": "text"
-            },
-            "speak": {
-              "description": "Text, který se má vyslovit",
-              "title": "speak"
-            },
-            "inputHint": {
-              "description": "Určuje, jestli bot přijímá,\nočekává nebo ignoruje uživatelský vstup poté, co se zpráva doručila klientovi. Mezi možné hodnoty\npatří: acceptingInput, ignoringInput, expectingInput",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "Text, který se má zobrazit, pokud kanál nebude moct vykreslit karty",
-              "title": "summary"
-            },
-            "suggestedActions": {
-              "description": "Navrhované akce pro aktivitu",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "ID příjemců, kterým by se akce měly zobrazovat. Tato ID jsou relativní\nk channelId a jsou podmnožinou všech příjemců aktivity.",
-                  "title": "to",
-                  "items": {
-                    "title": "ID",
-                    "description": "ID příjemce"
-                  }
-                },
-                "actions": {
-                  "description": "Akce, které se dají zobrazit uživateli",
-                  "title": "actions",
-                  "items": {
-                    "description": "Akce, na kterou se dá kliknout",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "Typ akce, kterou implementuje toto tlačítko. Mezi možné hodnoty patří: openUrl, imBack,\npostBack, playAudio, playVideo, showImage, downloadFile, signin, call,\npayment, messageBack",
-                        "title": "type"
-                      },
-                      "title": {
-                        "description": "Textový popis, který se zobrazí na tlačítku",
-                        "title": "title"
-                      },
-                      "image": {
-                        "description": "Adresa URL obrázku, která se zobrazí na tlačítku vedle textového popisku",
-                        "title": "image"
-                      },
-                      "text": {
-                        "description": "Text pro tuto akci",
-                        "title": "text"
-                      },
-                      "displayText": {
-                        "description": "(Nepovinné) Text, který se má zobrazit v kanálu chatu, když se klikne na tlačítko",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "Dodatečný parametr pro akci. Obsah této vlastnosti závisí na ActionType.",
-                        "title": "value"
-                      },
-                      "channelData": {
-                        "description": "Data specifická pro kanál přidružená k této akci",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "Přílohy",
-              "title": "attachments",
-              "items": {
-                "description": "Příloha v aktivitě",
-                "title": "Attachment",
-                "properties": {
-                  "contentType": {
-                    "description": "mimetype/Contenttype pro soubor",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "Adresa URL obsahu",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "Vložený obsah",
-                    "title": "content"
-                  },
-                  "name": {
-                    "description": "(NEPOVINNÉ) Název přílohy",
-                    "title": "name"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(NEPOVINNÉ) Miniatura přidružená k příloze",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "Představuje entity, které se zmínily ve zprávě",
-              "title": "entities",
-              "items": {
-                "description": "Objekt metadat, který patří určité aktivitě",
-                "title": "Entita",
-                "properties": {
-                  "type": {
-                    "description": "Typ této entity (RFC 3987 IRI)",
-                    "title": "type"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "Obsahuje obsah specifický pro kanál.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "Určuje, jestli se příjemce operace contactRelationUpdate přidal nebo odebral\nze seznamu kontaktů odesílatele.",
-              "title": "action"
-            },
-            "replyToId": {
-              "description": "Obsahuje ID zprávy, na kterou tato zpráva reaguje",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "Výstižný popisek pro aktivitu",
-              "title": "label"
-            },
-            "valueType": {
-              "description": "Typ objektu hodnoty aktivity",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "Hodnota, která je přidružená k aktivitě",
-              "title": "value"
-            },
-            "name": {
-              "description": "Název operace přidružené k aktivitě volání nebo události",
-              "title": "name"
-            },
-            "relatesTo": {
-              "description": "Odkaz na jinou konverzaci nebo aktivitu",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(Nepovinné) ID aktivity, na kterou se má odkazovat",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(Nepovinné) Uživatel, který se účastní této konverzace",
-                  "title": "user"
-                },
-                "bot": {
-                  "description": "Robot, který se účastní této konverzace",
-                  "title": "bot"
-                },
-                "conversation": {
-                  "description": "Odkaz na konverzaci",
-                  "title": "conversation"
-                },
-                "channelId": {
-                  "description": "ID kanálu",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "Koncový bod služby, kde je možné provádět operace týkající se odkazované konverzace",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "Kód aktivity endOfConversation, který označuje, proč konverzace skončila.\nMezi možné hodnoty patří: unknown, completedSuccessfully, userCancelled, botTimedOut,\nbotIssuedInvalidMessage, channelFailed",
-              "title": "code"
-            },
-            "expiration": {
-              "description": "Čas, kdy se má platnost aktivity považovat za vypršenou a neměla by se\nodesílat příjemci",
-              "title": "expiration"
-            },
-            "importance": {
-              "description": "Důležitost aktivity. Mezi možné hodnoty patří: low, normal, high",
-              "title": "importance"
-            },
-            "deliveryMode": {
-              "description": "Informace o doručování, která příjemci oznamuje alternativní cesty doručování pro aktivitu.\nVýchozí režim doručování je default. Mezi možné hodnoty patří: normal, notification",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "Seznam frází a odkazů, kterým by systémy pro řeč a jazyk měly naslouchat",
-              "title": "listenFor",
-              "items": {
-                "title": "Phrase",
-                "description": "Fráze, kterým se má naslouchat"
-              }
-            },
-            "textHighlights": {
-              "description": "Kolekce částí textů, které se mají zvýraznit, když aktivita obsahuje hodnotu ReplyTold",
-              "title": "textHighlights",
-              "items": {
-                "description": "Odkazuje se na podřetězec obsahu v jiném poli",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "Definuje fragment textu, který se má zvýraznit.",
-                    "title": "text"
-                  },
-                  "occurrence": {
-                    "description": "Výskyt textového pole v odkazovaném textu, pokud jich existuje více",
-                    "title": "occurrence"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "Nepovinná programová akce, která doprovází tento požadavek",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "ID této akce",
-                  "title": "id"
-                },
-                "entities": {
-                  "description": "Entity přidružené k této akci",
-                  "title": "entities"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "Komponenty, které jsou ActivityTemplate, což je šablona řetězce, aktivita nebo implementace ActivityTemplate"
     },
     "Microsoft.IDialog": {
       "title": "Dialogy Microsoftu",
@@ -2187,7 +1884,7 @@
       "title": "Rozpoznávač entit",
       "description": "Komponenty, které se odvozují z objektu EntityRecognizer",
       "oneOf": {
-        "0": {
+        "18": {
           "title": "Odkaz na Microsoft.IEntityRecognizer",
           "description": "Odkaz na soubor .dialog rozhraní Microsoft.IEntityRecognizer"
         }
@@ -2209,7 +1906,7 @@
       "title": "Microsoft Triggers",
       "description": "Komponenty, které se odvozují z třídy OnCondition",
       "oneOf": {
-        "0": {
+        "27": {
           "title": "Odkaz na Microsoft.ITrigger",
           "description": "Odkaz na soubor .dialog rozhraní Microsoft.ITrigger"
         }
@@ -2219,7 +1916,7 @@
       "title": "Selektory",
       "description": "Komponenty, které se odvozují z třídy TriggerSelector",
       "oneOf": {
-        "0": {
+        "5": {
           "title": "Odkaz na Microsoft.ITriggerSelector",
           "description": "Odkaz na soubor .dialog rozhraní Microsoft.ITriggerSelector"
         }
@@ -2831,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "Při přiřazení entity",
-      "description": "Akce, které se mají provést, když se má entita přiřadit k vlastnosti",
+      "description": "Akce, která má uplatnit operaci na vlastnost a hodnotu",
       "patternProperties": {
         "^\\$": {
           "title": "Vlastnost nástrojů",
@@ -2839,17 +2536,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Vlastnost",
-          "description": "Vlastnost, která se nastaví po výběru entity"
-        },
-        "entity": {
-          "title": "Entita",
-          "description": "Entita, která se vkládá do vlastnosti"
-        },
         "operation": {
           "title": "Operace",
-          "description": "Operace pro přiřazení entity"
+          "description": "Filtr operací události"
+        },
+        "property": {
+          "title": "Vlastnost",
+          "description": "Filtr vlastností události"
+        },
+        "value": {
+          "title": "Hodnota",
+          "description": "Filtr hodnot události"
         },
         "condition": {
           "title": "Podmínka",
@@ -2951,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "Při výběru entity",
-      "description": "Akce, které se mají provést, když se musí vyhodnotit hodnota entity",
+      "description": "Akce, které se mají provést, pokud je hodnota operátoru a vlastnosti nejednoznačná",
       "patternProperties": {
         "^\\$": {
           "title": "Vlastnost nástrojů",
@@ -2959,13 +2656,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Vlastnost, která se má nastavit",
-          "description": "Vlastnost, která se nastaví po výběru entity"
+        "operation": {
+          "title": "Operace",
+          "description": "Filtr operací události"
         },
-        "entity": {
-          "title": "Nejednoznačná entita",
-          "description": "Nejednoznačná entita"
+        "property": {
+          "title": "Vlastnost",
+          "description": "Filtr vlastností události"
+        },
+        "value": {
+          "title": "Nejednoznačná hodnota",
+          "description": "Nejednoznačný filtr hodnot události"
         },
         "condition": {
           "title": "Podmínka",
@@ -3039,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "Při volbě vlastnosti",
-      "description": "Akce, které se mají provést, když existuje několik možných mapování entit na vlastnosti",
+      "description": "Akce, které se mají provést, když existuje několik možných mapování entit na vlastnosti a operace.",
       "patternProperties": {
         "^\\$": {
           "title": "Vlastnost nástrojů",
@@ -3047,26 +2748,6 @@
         }
       },
       "properties": {
-        "entity": {
-          "title": "Entita, která se přiřazuje",
-          "description": "Entita, která se přiřazuje k volbě vlastnosti"
-        },
-        "properties": {
-          "title": "Možné vlastnosti",
-          "description": "Vlastnosti, ze kterých se volí",
-          "items": {
-            "title": "Název vlastnosti",
-            "description": "Možné vlastnosti, které se dají zvolit"
-          }
-        },
-        "entities": {
-          "title": "Entity",
-          "description": "Názvy nejednoznačných entit",
-          "items": {
-            "title": "Název entity",
-            "description": "Názvy entit, ze kterých se volí"
-          }
-        },
         "condition": {
           "title": "Podmínka",
           "description": "Podmínka (výraz)"
@@ -4386,6 +4067,34 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "Odeslat aktivitu handoff",
+      "description": "Odešle aktivitu handoff, která aktivuje žádost handoff.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Vlastnost nástrojů",
+          "description": "Otevřít ukončenou vlastnost pro nástroje"
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "Kontext",
+          "description": "Kontext, který se má odeslat spolu se žádostí o předání"
+        },
+        "transcript": {
+          "title": "přepis",
+          "description": "Přepis, který se odešle společně s žádostí handoff"
+        },
+        "$kind": {
+          "title": "Druh objektu dialogu",
+          "description": "Určuje platné vlastnosti pro součást, kterou konfigurujete (ze souboru .schema dialogu)."
+        },
+        "$designer": {
+          "title": "Informace o návrháři",
+          "description": "Informace navíc pro Bot Framework Composer"
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "Nastavit vlastnost",
       "description": "Nastaví jednu nebo více hodnot vlastností.",
@@ -4582,7 +4291,7 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
+    "Microsoft.TelemetryTrackEventAction": {
       "title": "Telemetrie – Sledovat událost",
       "description": "Umožňuje sledovat vlastní událost pomocí registrovaného klienta telemetrie.",
       "patternProperties": {
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "Číslo",
           "description": "Číselná konstanta"
+        }
+      }
+    },
+    "schema": {
+      "title": "Metaschéma hlavního schématu"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "Informace o účtu kanálu potřebné ke směrování zprávy",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "ID kanálu pro uživatele nebo robota na tomto kanálu (příklad: joe@smith.com, @joesmith nebo\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Zobrazovaný popisný název",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "ID objektu tohoto účtu v Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role entity, která stojí za účtem (příklad: uživatel, robot atd.). Mezi možné hodnoty patří:\nuser, bot",
+              "title": "role"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "Informace o účtu kanálu pro konverzaci",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "Určuje, jestli konverzace ve chvíli, kdy se vygenerovala aktivita, obsahuje více než dva\núčastníky.",
+              "title": "isGroup"
+            },
+            "conversationType": {
+              "description": "Určuje typ konverzace v kanálech, které rozlišují mezi typy konverzací.",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "ID kanálu pro uživatele nebo robota na tomto kanálu (příklad: joe@smith.com, @joesmith nebo\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Zobrazovaný popisný název",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "ID objektu tohoto účtu v Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role entity, která stojí za účtem (příklad: uživatel, robot atd.). Mezi možné hodnoty patří:\nuser, bot",
+              "title": "role"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "Objekt reakce na zprávu",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "Typ reakce na zprávu. Mezi možné hodnoty patří: like, plusOne",
+              "title": "type"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "Akce, na kterou se dá kliknout",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "Typ akce, kterou implementuje toto tlačítko. Mezi možné hodnoty patří: openUrl, imBack,\npostBack, playAudio, playVideo, showImage, downloadFile, signin, call,\npayment, messageBack",
+              "title": "type"
+            },
+            "title": {
+              "description": "Textový popis, který se zobrazí na tlačítku",
+              "title": "title"
+            },
+            "image": {
+              "description": "Adresa URL obrázku, která se zobrazí na tlačítku vedle textového popisku",
+              "title": "image"
+            },
+            "text": {
+              "description": "Text pro tuto akci",
+              "title": "text"
+            },
+            "displayText": {
+              "description": "(Nepovinné) Text, který se má zobrazit v kanálu chatu, když se klikne na tlačítko",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "Dodatečný parametr pro akci. Obsah této vlastnosti závisí na ActionType.",
+              "title": "value"
+            },
+            "channelData": {
+              "description": "Data specifická pro kanál přidružená k této akci",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "SuggestedActions, které se dají provést",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "ID příjemců, kterým by se akce měly zobrazovat. Tato ID jsou relativní\nk channelId a jsou podmnožinou všech příjemců aktivity.",
+              "title": "to",
+              "items": {
+                "title": "ID",
+                "description": "ID příjemce"
+              }
+            },
+            "actions": {
+              "description": "Akce, které se dají zobrazit uživateli",
+              "title": "actions"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "Příloha v aktivitě",
+          "title": "Attachment",
+          "properties": {
+            "contentType": {
+              "description": "mimetype/Contenttype pro soubor",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "Adresa URL obsahu",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "Vložený obsah",
+              "title": "content"
+            },
+            "name": {
+              "description": "(NEPOVINNÉ) Název přílohy",
+              "title": "name"
+            },
+            "thumbnailUrl": {
+              "description": "(NEPOVINNÉ) Miniatura přidružená k příloze",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "Objekt metadat, který patří určité aktivitě",
+          "title": "Entita",
+          "properties": {
+            "type": {
+              "description": "Typ této entity (RFC 3987 IRI)",
+              "title": "type"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "Objekt související s konkrétním bodem v konverzaci",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(Nepovinné) ID aktivity, na kterou se má odkazovat",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(Nepovinné) Uživatel, který se účastní této konverzace",
+              "title": "user"
+            },
+            "bot": {
+              "description": "Robot, který se účastní této konverzace",
+              "title": "bot"
+            },
+            "conversation": {
+              "description": "Odkaz na konverzaci",
+              "title": "conversation"
+            },
+            "channelId": {
+              "description": "ID kanálu",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "Koncový bod služby, kde je možné provádět operace týkající se odkazované konverzace",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "Odkazuje se na podřetězec obsahu v jiném poli",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "Definuje fragment textu, který se má zvýraznit.",
+              "title": "text"
+            },
+            "occurrence": {
+              "description": "Výskyt textového pole v odkazovaném textu, pokud jich existuje více",
+              "title": "occurrence"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "Představuje odkaz na programovou akci",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "ID této akce",
+              "title": "id"
+            },
+            "entities": {
+              "description": "Entity přidružené k této akci",
+              "title": "entities"
+            }
+          }
+        },
+        "Activity": {
+          "description": "Aktivita je základní typ komunikace pro protokol Bot Framework 3.0.",
+          "title": "Aktivita",
+          "properties": {
+            "type": {
+              "description": "Obsahuje typ aktivity. Mezi možné hodnoty patří message, contactRelationUpdate,\nconversationUpdate, typing, endOfConversation, event, invoke, deleteUserData,\nmessageUpdate, messageDelete, installationUpdate, messageReaction, suggestion,\ntrace, handoff",
+              "title": "type"
+            },
+            "id": {
+              "description": "Obsahuje ID, které jedinečně identifikuje aktivitu na kanálu.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Obsahuje datum a čas, kdy se zpráva odeslala, ve formátu UTC vyjádřeném ve formátu ISO-8601",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Obsahuje datum a čas, kdy se zpráva odeslala. Používá se místní čas ve formátu\nISO-8601.\nPříklad: 2016-09-23T13:07:49.4714686-07:00",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Obsahuje název časového pásma, ze kterého přišla zpráva. Používá se místní čas vyjádřený ve formátu\ndatabáze časových pásem IANA.\nPříklad: America/Los Angeles",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Obsahuje adresu URL, která určuje koncový bod služby kanálu. Nastavuje ji sám kanál.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Obsahuje ID, které jedinečně identifikuje kanál. Nastavuje ho sám kanál.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifikuje odesílatele zprávy.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifikuje konverzaci, ke které patří aktivita.",
+              "title": "conversation"
+            },
+            "recipient": {
+              "description": "Identifikuje příjemce zprávy",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Formát textových polí Default:markdown. Mezi možné hodnoty patří: markdown, plain, xml",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "Informace o rozložení pro více příloh. Výchozí: list. Mezi možné hodnoty patří: list,\ncarousel",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "Kolekce členů, kteří se přidali do konverzace",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "Kolekce členů, kteří se odebrali z konverzace",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "Kolekce reakcí, které se přidaly do konverzace",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "Kolekce reakcí, které se odebraly z konverzace",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "Název aktualizovaného tématu konverzace",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Určuje, jestli se odhalí dřívější historie kanálu.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "Název národního prostředí obsahu textového pole\nNázev národního prostředí je kombinace dvou- nebo třímístného kódu ISO 639 jazykové verze přidruženého\nk jazyku\na dvoumístného kódu ISO 3166 dílčí jazykové verze přidruženého k zemi nebo oblasti.\nNázev národního prostředí může odpovídat i platné značce jazyka BCP-47.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "Textový obsah zprávy",
+              "title": "text"
+            },
+            "speak": {
+              "description": "Text, který se má vyslovit",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Určuje, jestli bot přijímá,\nočekává nebo ignoruje uživatelský vstup poté, co se zpráva doručila klientovi. Mezi možné hodnoty\npatří: acceptingInput, ignoringInput, expectingInput",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "Text, který se má zobrazit, pokud kanál nebude moct vykreslit karty",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "Navrhované akce pro aktivitu",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "Přílohy",
+              "title": "attachments"
+            },
+            "entities": {
+              "description": "Představuje entity, které se zmínily ve zprávě",
+              "title": "entities"
+            },
+            "channelData": {
+              "description": "Obsahuje obsah specifický pro kanál.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Určuje, jestli se příjemce operace contactRelationUpdate přidal nebo odebral\nze seznamu kontaktů odesílatele.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Obsahuje ID zprávy, na kterou tato zpráva reaguje",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "Výstižný popisek pro aktivitu",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "Typ objektu hodnoty aktivity",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "Hodnota, která je přidružená k aktivitě",
+              "title": "value"
+            },
+            "name": {
+              "description": "Název operace přidružené k aktivitě volání nebo události",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "Odkaz na jinou konverzaci nebo aktivitu",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "Kód aktivity endOfConversation, který označuje, proč konverzace skončila.\nMezi možné hodnoty patří: unknown, completedSuccessfully, userCancelled, botTimedOut,\nbotIssuedInvalidMessage, channelFailed",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "Čas, kdy se má platnost aktivity považovat za vypršenou a neměla by se\nodesílat příjemci",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "Důležitost aktivity. Mezi možné hodnoty patří: low, normal, high",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "Informace o doručování, která příjemci oznamuje alternativní cesty doručování pro aktivitu.\nVýchozí režim doručování je default. Mezi možné hodnoty patří: normal, notification",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "Seznam frází a odkazů, kterým by systémy pro řeč a jazyk měly naslouchat",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Fráze, kterým se má naslouchat"
+              }
+            },
+            "textHighlights": {
+              "description": "Kolekce částí textů, které se mají zvýraznit, když aktivita obsahuje hodnotu ReplyTold",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "Nepovinná programová akce, která doprovází tento požadavek",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }

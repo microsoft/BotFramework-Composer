@@ -11,13 +11,40 @@
       }
     }
   },
+  "Microsoft.Ask": {
+    "flow": {
+      "footer": {
+        "description": "= 默认操作"
+      }
+    },
+    "form": {
+      "label": "发送响应以提出问题",
+      "subtitle": "提问活动"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "提示输入文件或附件",
+      "subtitle": "附件输入"
+    }
+  },
   "Microsoft.BeginDialog": {
+    "flow": {
+      "footer": {
+        "description": "= 返回值"
+      }
+    },
     "form": {
       "label": "开始新对话",
       "subtitle": "开始对话"
     }
   },
   "Microsoft.BeginSkill": {
+    "flow": {
+      "footer": {
+        "description": "= 结果"
+      }
+    },
     "form": {
       "label": "连接到技能",
       "subtitle": "技能对话"
@@ -30,15 +57,38 @@
     }
   },
   "Microsoft.CancelAllDialogs": {
+    "flow": {
+      "body": {
+        "description": "(事件)"
+      }
+    },
     "form": {
       "label": "取消所有活动对话",
       "subtitle": "取消所有对话"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "带多项选择的提示语",
+      "subtitle": "选项输入"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "提示进行确认",
+      "subtitle": "确认输入"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
       "label": "继续循环",
       "subtitle": "继续循环"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "提示输入日期或时间",
+      "subtitle": "日期/时间输入"
     }
   },
   "Microsoft.DebugBreak": {
@@ -65,12 +115,22 @@
     }
   },
   "Microsoft.EditArray": {
+    "flow": {
+      "footer": {
+        "description": "= 结果"
+      }
+    },
     "form": {
       "label": "编辑数组属性",
       "subtitle": "编辑数组"
     }
   },
   "Microsoft.EmitEvent": {
+    "flow": {
+      "body": {
+        "description": "(事件)"
+      }
+    },
     "form": {
       "label": "发出自定义事件",
       "subtitle": "发出事件"
@@ -100,7 +160,29 @@
       "subtitle": "对于每个页面"
     }
   },
+  "Microsoft.GetActivityMembers": {
+    "flow": {
+      "body": {
+        "description": "= ActivityId"
+      },
+      "footer": {
+        "description": "= 结果属性"
+      }
+    }
+  },
+  "Microsoft.GetConversationMembers": {
+    "flow": {
+      "footer": {
+        "description": "= 结果属性"
+      }
+    }
+  },
   "Microsoft.HttpRequest": {
+    "flow": {
+      "footer": {
+        "description": "= 结果属性"
+      }
+    },
     "form": {
       "label": "发送 HTTP 请求",
       "subtitle": "HTTP 请求"
@@ -116,6 +198,226 @@
     "form": {
       "label": "登录控制台",
       "subtitle": "记录操作"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "提示输入数字",
+      "subtitle": "数字输入"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "flow": {
+      "footer": {
+        "description": "= 令牌属性"
+      }
+    },
+    "form": {
+      "label": "OAuth 登录",
+      "subtitle": "OAuth 输入"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "活动",
+      "subtitle": "已收到活动"
+    },
+    "trigger": {
+      "label": "活动(收到的活动)",
+      "submenu": {
+        "label": "活动"
+      }
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "在分配实体时处理条件",
+      "subtitle": "EntityAssigned 活动"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "已开始对话",
+      "subtitle": "开始对话事件"
+    },
+    "trigger": {
+      "label": "对话已开始(“对话开始”事件)",
+      "submenu": {
+        "label": "对话事件"
+      }
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "已取消对话",
+      "subtitle": "取消对话事件"
+    },
+    "trigger": {
+      "label": "已取消对话(“取消对话”事件)"
+    }
+  },
+  "Microsoft.OnChooseIntent": {
+    "trigger": {
+      "label": "已识别的重复意向"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "处理条件",
+      "subtitle": "条件"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "处理在用户开始与机器人进行新对话时触发的事件。",
+      "label": "问候语",
+      "subtitle": "ConversationUpdate 活动"
+    },
+    "trigger": {
+      "label": "问候语(ConversationUpdate 活动)"
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "对话事件",
+      "subtitle": "对话事件"
+    },
+    "trigger": {
+      "label": "自定义事件"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "在操作结束时处理条件",
+      "subtitle": "EndOfActions 活动"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "已结束对话",
+      "subtitle": "EndOfConversation 活动"
+    },
+    "trigger": {
+      "label": "对话已结束(EndOfConversation 活动)"
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "出错了",
+      "subtitle": "错误事件"
+    },
+    "trigger": {
+      "label": "出错(“错误”事件)"
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "已收到事件",
+      "subtitle": "事件活动"
+    },
+    "trigger": {
+      "label": "已收到事件(Event 活动)"
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "转接到人工",
+      "subtitle": "转接活动"
+    },
+    "trigger": {
+      "label": "移交给人类(Handoff 活动)"
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "已更新安装",
+      "subtitle": "“已更新安装”活动"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "已识别意向",
+      "subtitle": "已识别意向"
+    },
+    "trigger": {
+      "label": "已识别的意向"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "已调用对话",
+      "subtitle": "调用活动"
+    },
+    "trigger": {
+      "label": "已调用对话(Invoke 活动)"
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "已收到消息",
+      "subtitle": "“已收到消息”活动"
+    },
+    "trigger": {
+      "label": "已收到消息(“已收到消息”活动)"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "已删除消息",
+      "subtitle": "“已删除消息”活动"
+    },
+    "trigger": {
+      "label": "已删除消息(“已删除消息”活动)"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "消息反应",
+      "subtitle": "“消息反应”活动"
+    },
+    "trigger": {
+      "label": "消息回应(“消息回应”活动)"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "已更新消息",
+      "subtitle": "“已更新消息”活动"
+    },
+    "trigger": {
+      "label": "已更新消息(“已更新消息”活动)"
+    }
+  },
+  "Microsoft.OnQnAMatch": {
+    "trigger": {
+      "label": "已识别 QnA 意向"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "重新提示输入",
+      "subtitle": "重新提示对话事件"
+    },
+    "trigger": {
+      "label": "重新提示输入(“重新提示对话”事件)"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "用户正在键入",
+      "subtitle": "“键入”活动"
+    },
+    "trigger": {
+      "label": "用户正在键入(Typing 活动)"
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "未知意向",
+      "subtitle": "已识别未知意向"
+    },
+    "trigger": {
+      "label": "未知意向"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -134,6 +436,15 @@
     "form": {
       "label": "发送响应",
       "subtitle": "发送活动"
+    }
+  },
+  "Microsoft.SendHandoffActivity": {
+    "form": {
+      "label": "发送转接",
+      "subtitle": "发送转接活动"
+    },
+    "menu": {
+      "label": "发送转接事件"
     }
   },
   "Microsoft.SetProperties": {
@@ -160,7 +471,18 @@
       "subtitle": "切换条件"
     }
   },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "提示输入文本",
+      "subtitle": "文本输入"
+    }
+  },
   "Microsoft.ThrowException": {
+    "flow": {
+      "body": {
+        "description": "= ErrorValue"
+      }
+    },
     "form": {
       "label": "抛出异常 ",
       "subtitle": "抛出异常 "
@@ -172,185 +494,15 @@
       "subtitle": "跟踪活动"
     }
   },
-  "Microsoft.Ask": {
+  "Microsoft.UpdateActivity": {
+    "flow": {
+      "header": {
+        "title": "更新活动"
+      }
+    },
     "form": {
-      "label": "发送响应以提出问题",
-      "subtitle": "提问活动"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "提示输入文件或附件",
-      "subtitle": "附件输入"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "带多项选择的提示语",
-      "subtitle": "选项输入"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "提示进行确认",
-      "subtitle": "确认输入"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "提示输入日期或时间",
-      "subtitle": "日期/时间输入"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "提示输入数字",
-      "subtitle": "数字输入"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth 登录",
-      "subtitle": "OAuth 输入"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "提示输入文本",
-      "subtitle": "文本输入"
-    }
-  },
-  "Microsoft.OnActivity": {
-    "form": {
-      "label": "活动",
-      "subtitle": "已收到活动"
-    }
-  },
-  "Microsoft.OnAssignEntity": {
-    "form": {
-      "label": "在分配实体时处理条件",
-      "subtitle": "EntityAssigned 活动"
-    }
-  },
-  "Microsoft.OnBeginDialog": {
-    "form": {
-      "label": "已开始对话",
-      "subtitle": "开始对话事件"
-    }
-  },
-  "Microsoft.OnCancelDialog": {
-    "form": {
-      "label": "已取消对话",
-      "subtitle": "取消对话事件"
-    }
-  },
-  "Microsoft.OnCondition": {
-    "form": {
-      "label": "处理条件",
-      "subtitle": "条件"
-    }
-  },
-  "Microsoft.OnConversationUpdateActivity": {
-    "form": {
-      "description": "处理在用户开始与机器人进行新对话时触发的事件。",
-      "label": "问候语",
-      "subtitle": "ConversationUpdate 活动"
-    }
-  },
-  "Microsoft.OnDialogEvent": {
-    "form": {
-      "label": "对话事件",
-      "subtitle": "对话事件"
-    }
-  },
-  "Microsoft.OnEndOfActions": {
-    "form": {
-      "label": "在操作结束时处理条件",
-      "subtitle": "EndOfActions 活动"
-    }
-  },
-  "Microsoft.OnEndOfConversationActivity": {
-    "form": {
-      "label": "已结束对话",
-      "subtitle": "EndOfConversation 活动"
-    }
-  },
-  "Microsoft.OnError": {
-    "form": {
-      "label": "出错了",
-      "subtitle": "错误事件"
-    }
-  },
-  "Microsoft.OnEventActivity": {
-    "form": {
-      "label": "已收到事件",
-      "subtitle": "事件活动"
-    }
-  },
-  "Microsoft.OnHandoffActivity": {
-    "form": {
-      "label": "转接到人工",
-      "subtitle": "转接活动"
-    }
-  },
-  "Microsoft.OnInstallationUpdateActivity": {
-    "form": {
-      "label": "已更新安装",
-      "subtitle": "“已更新安装”活动"
-    }
-  },
-  "Microsoft.OnIntent": {
-    "form": {
-      "label": "已识别意向",
-      "subtitle": "已识别意向"
-    }
-  },
-  "Microsoft.OnInvokeActivity": {
-    "form": {
-      "label": "已调用对话",
-      "subtitle": "调用活动"
-    }
-  },
-  "Microsoft.OnMessageActivity": {
-    "form": {
-      "label": "已收到消息",
-      "subtitle": "“已收到消息”活动"
-    }
-  },
-  "Microsoft.OnMessageDeleteActivity": {
-    "form": {
-      "label": "已删除消息",
-      "subtitle": "“已删除消息”活动"
-    }
-  },
-  "Microsoft.OnMessageReactionActivity": {
-    "form": {
-      "label": "消息反应",
-      "subtitle": "“消息反应”活动"
-    }
-  },
-  "Microsoft.OnMessageUpdateActivity": {
-    "form": {
-      "label": "已更新消息",
-      "subtitle": "“已更新消息”活动"
-    }
-  },
-  "Microsoft.OnRepromptDialog": {
-    "form": {
-      "label": "重新提示输入",
-      "subtitle": "重新提示对话事件"
-    }
-  },
-  "Microsoft.OnTypingActivity": {
-    "form": {
-      "label": "用户正在键入",
-      "subtitle": "“键入”活动"
-    }
-  },
-  "Microsoft.OnUnknownIntent": {
-    "form": {
-      "label": "未知意向",
-      "subtitle": "已识别未知意向"
+      "label": "更新活动",
+      "subtitle": "更新活动"
     }
   }
 }

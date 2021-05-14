@@ -71,9 +71,6 @@
           "title": "結構描述",
           "description": "要填入的結構描述。",
           "anyOf": {
-            "0": {
-              "title": "核心結構描述的中繼結構描述"
-            },
             "1": {
               "title": "JSON 結構描述的參考",
               "description": "JSON 結構描述 .dialog 檔案的參考。"
@@ -907,9 +904,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "繼續對話 (佇列)",
+      "description": "繼續特定交談 (透過 StorageQueue 的執行)。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具屬性",
+          "description": "工具的開放式屬性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "識別碼",
+          "description": "對話的選擇性識別碼"
+        },
+        "disabled": {
+          "title": "已停用",
+          "description": "選擇性條件，若為 true，則會停用此動作。"
+        },
+        "conversationReference": {
+          "title": "對話參考",
+          "description": "對話參考。(注意: 需要的最小值或 channelId、對話)。"
+        },
+        "value": {
+          "title": "值",
+          "description": "要在 activity.value 中傳送的值。"
+        },
+        "$kind": {
+          "title": "對話物件的種類",
+          "description": "為您所設定的元件定義有效屬性 (從對話 .schema 檔案)"
+        },
+        "$designer": {
+          "title": "設計工具資訊",
+          "description": "Bot Framework Composer 的其他資訊。"
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "稍後繼續交談 (佇列)",
-      "description": "稍後繼續交談 (透過 Azure 儲存體佇列)。",
+      "description": "稍後再繼續交談 (透過 StorageQueue 實作)。",
       "patternProperties": {
         "^\\$": {
           "title": "工具屬性",
@@ -1673,6 +1706,38 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "取得 ConversationReference",
+      "description": "從目前的內容取得 ConversationReference，並將其儲存在屬性中，使它可與 ContinueConversation 動作一起使用。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具屬性",
+          "description": "工具的開放式屬性。"
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "識別碼",
+          "description": "對話的選擇性識別碼"
+        },
+        "property": {
+          "title": "屬性",
+          "description": "屬性 (儲存資訊的具名位置)。"
+        },
+        "disabled": {
+          "title": "已停用",
+          "description": "選擇性條件，若為 true，則會停用此動作。"
+        },
+        "$kind": {
+          "title": "對話物件的種類",
+          "description": "為您所設定的元件定義有效屬性 (從對話 .schema 檔案)"
+        },
+        "$designer": {
+          "title": "設計工具資訊",
+          "description": "Bot Framework Composer 的其他資訊。"
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "前往動作",
       "description": "依識別碼移至動作。",
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "屬於 ActivityTemplate 的元件，其為字串範本、活動或 ActivityTemplate 的實作",
-      "oneOf": {
-        "1": {
-          "description": "活動是 Bot Framework 3.0 通訊協定的基本通訊類型。",
-          "title": "活動",
-          "properties": {
-            "type": {
-              "description": "包含活動類型。可能的值包括: 'message'、'contactRelationUpdate'、\n'conversationUpdate'、'typing'、'endOfConversation'、'event'、'invoke'、'deleteUserData'、\n'messageUpdate'、'messageDelete'、'installationUpdate'、'messageReaction'、'suggestion'、\n'trace'、'handoff'",
-              "title": "類型"
-            },
-            "id": {
-              "description": "包含可識別頻道上活動的唯一識別碼。",
-              "title": "識別碼"
-            },
-            "timestamp": {
-              "description": "包含傳送訊息的日期和時間，以 UTC ISO-8601 格式表示。",
-              "title": "時間戳記"
-            },
-            "localTimestamp": {
-              "description": "包含傳送訊息的日期和時間，以當地時間 ISO-8601\n格式表示。\n例如，2016-09-23T13:07:49.4714686-07:00。",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "包含此訊息所在時區的名稱，以當地時間 IANA 時區\n資料庫格式表示。\n例如，America/Los_Angeles。",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "包含指定通道服務端點的 URL。由通道設定。",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "包含可識別頻道的唯一識別碼。由頻道設定。",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "識別訊息的寄件者。",
-              "title": "從"
-            },
-            "conversation": {
-              "description": "識別活動所屬的交談。",
-              "title": "交談",
-              "properties": {
-                "isGroup": {
-                  "description": "指出產生活動時，交談是否包含兩個以上的\n參與者",
-                  "title": "IsGroup"
-                },
-                "conversationType": {
-                  "description": "表示通道中的交談類型，可區別交談類型",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "使用者或 Bot 在此通道上的通道識別碼 (例如: joe@smith.com、@joesmith 或\n123456)",
-                  "title": "識別碼"
-                },
-                "name": {
-                  "description": "顯示易記名稱",
-                  "title": "名稱"
-                },
-                "aadObjectId": {
-                  "description": "此帳戶在 Azure Active Directory (AAD) 中的物件識別碼",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "此帳戶背後的實體角色 (例如: 使用者、Bot 等)。可能的值包括:\n'user'、'bot'",
-                  "title": "角色"
-                }
-              }
-            },
-            "recipient": {
-              "description": "識別訊息的收件者。",
-              "title": "收件者"
-            },
-            "textFormat": {
-              "description": "文字欄位的格式。預設: markdown。可能的值包括: 'markdown'、'plain'、'xml'",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "多個附件的版面配置提示。預設: list。可能的值包括: 'list'、\n'carousel'",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "新增至交談的成員集合。",
-              "title": "membersAdded",
-              "items": {
-                "description": "路由訊息所需的通道帳戶資訊",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "使用者或 Bot 在此通道上的通道識別碼 (例如: joe@smith.com、@joesmith 或\n123456)",
-                    "title": "識別碼"
-                  },
-                  "name": {
-                    "description": "顯示易記名稱",
-                    "title": "名稱"
-                  },
-                  "aadObjectId": {
-                    "description": "此帳戶在 Azure Active Directory (AAD) 中的物件識別碼",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "此帳戶背後的實體角色 (例如: 使用者、Bot 等)。可能的值包括:\n'user'、'bot'",
-                    "title": "角色"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "從交談中移除的成員集合。",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "新增至交談的表情符號集合。",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "訊息表情符號物件",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "訊息表情符號類型。可能的值包括: 'like'、'plusOne'",
-                    "title": "類型"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "從交談中移除的表情符號集合。",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "更新的交談主題名稱。",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "指出是否公開先前的頻道記錄。",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "文字欄位內容的地區設定名稱。\n地區設定名稱是下列兩者的組合: 與語言相關聯的 ISO 639 (兩個或三個字母的\n文化特性代碼)，\n以及與國家或地區相關聯的 ISO 3166 (兩個字母次文化特性代碼)。\n地區設定名稱也可對應到有效的 BCP-47 語言標記。",
-              "title": "地區設定"
-            },
-            "text": {
-              "description": "訊息的文字內容。",
-              "title": "文字"
-            },
-            "speak": {
-              "description": "要說的文字。",
-              "title": "說話"
-            },
-            "inputHint": {
-              "description": "指出訊息傳遞給用戶端之後，\n您的 Bot 要接受、必須有或忽略使用者輸入。可能的\n值包括: 'acceptingInput'、'ignoringInput'、'expectingInput'",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "通道無法轉譯卡片時要顯示的文字。",
-              "title": "摘要"
-            },
-            "suggestedActions": {
-              "description": "活動的建議動作。",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "應顯示動作的收件者識別碼。這些識別碼與\nchannelId 及活動所有收件者的子集相關",
-                  "title": "到",
-                  "items": {
-                    "title": "識別碼",
-                    "description": "收件者的識別碼。"
-                  }
-                },
-                "actions": {
-                  "description": "可向使用者顯示的動作",
-                  "title": "動作",
-                  "items": {
-                    "description": "可按式動作",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "此按鈕所實作的動作類型。可能的值包括: 'openUrl'、'imBack'、\n'postBack'、'playAudio'、'playVideo'、'showImage'、'downloadFile'、'signin'、'call'、\n'payment'、'messageBack'",
-                        "title": "類型"
-                      },
-                      "title": {
-                        "description": "顯示在按鈕上的文字描述",
-                        "title": "標題"
-                      },
-                      "image": {
-                        "description": "將顯示在按鈕上文字標籤旁的影像 URL",
-                        "title": "影像"
-                      },
-                      "text": {
-                        "description": "此動作的文字",
-                        "title": "文字"
-                      },
-                      "displayText": {
-                        "description": "(選擇性) 按一下按鈕時要在聊天摘要中顯示的文字",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "動作的增補參數。這個屬性的內容視 ActionType 而定",
-                        "title": "值"
-                      },
-                      "channelData": {
-                        "description": "與此動作相關聯的通道特定資料",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "附件",
-              "title": "附件",
-              "items": {
-                "description": "活動中的附件",
-                "title": "附件",
-                "properties": {
-                  "contentType": {
-                    "description": "檔案的 mimetype/Contenttype",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "內容 URL",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "嵌入式內容",
-                    "title": "內容"
-                  },
-                  "name": {
-                    "description": "(選擇性) 附件的名稱",
-                    "title": "名稱"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(選擇性) 與附件相關聯的縮圖",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "代表訊息中曾提及的實體。",
-              "title": "實體",
-              "items": {
-                "description": "與活動有關的中繼資料物件",
-                "title": "實體",
-                "properties": {
-                  "type": {
-                    "description": "此實體的類型 (RFC 3987 IRI)",
-                    "title": "類型"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "包含頻道特定的內容。",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "指出是否已將 contactRelationUpdate 的收件者新增至寄件者的連絡人清單\n或從中移出。",
-              "title": "動作"
-            },
-            "replyToId": {
-              "description": "包含此訊息為回覆的訊息識別碼。",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "活動的描述性標籤。",
-              "title": "標籤"
-            },
-            "valueType": {
-              "description": "活動值物件的類型。",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "與活動相關聯的值。",
-              "title": "值"
-            },
-            "name": {
-              "description": "與叫用或事件活動相關聯的作業名稱。",
-              "title": "名稱"
-            },
-            "relatesTo": {
-              "description": "其他交談或活動的參考。",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(選擇性) 要參考的活動識別碼",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(選擇性) 參與此交談的使用者",
-                  "title": "使用者"
-                },
-                "bot": {
-                  "description": "參與此交談的 Bot",
-                  "title": "Bot"
-                },
-                "conversation": {
-                  "description": "交談參考",
-                  "title": "交談"
-                },
-                "channelId": {
-                  "description": "通道識別碼",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "可執行與參考交談相關作業的服務端點",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "endOfConversation 活動的代碼，指出交談結束的原因。\n可能的值包括: 'unknown'、'completedSuccessfully'、'userCancelled'、'botTimedOut'、\n'botIssuedInvalidMessage'、'channelFailed'",
-              "title": "代碼"
-            },
-            "expiration": {
-              "description": "活動應視為「已過期」且不應\n呈現給收件者的時間。",
-              "title": "到期"
-            },
-            "importance": {
-              "description": "活動的重要性。可能的值包括: 'low'、'normal'、'high'",
-              "title": "重要性"
-            },
-            "deliveryMode": {
-              "description": "傳遞提示，通知收件者活動的替代傳遞路徑。\n預設傳遞模式為 \"default\"。可能的值包括: 'normal'、'notification'",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "語音和語言預備系統應聽取的片語和參考清單",
-              "title": "listenFor",
-              "items": {
-                "title": "片語",
-                "description": "要聽取的片語。"
-              }
-            },
-            "textHighlights": {
-              "description": "活動包含 ReplyToId 值時，要醒目提示的文字片段集合。",
-              "title": "textHighlights",
-              "items": {
-                "description": "參考其他欄位內容的子字串",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "定義要醒目提示的文字片段",
-                    "title": "文字"
-                  },
-                  "occurrence": {
-                    "description": "文字欄位在參考文字中的出現次數 (若有多個)。",
-                    "title": "出現次數"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "此要求隨附的選擇性程式設計動作",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "此動作的識別碼",
-                  "title": "識別碼"
-                },
-                "entities": {
-                  "description": "與此動作相關聯的實體",
-                  "title": "實體"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "屬於 ActivityTemplate 的元件，其為字串範本、活動或 ActivityTemplate 的實作"
     },
     "Microsoft.IDialog": {
       "title": "Microsoft 對話",
@@ -2187,7 +1884,7 @@
       "title": "實體識別器",
       "description": "衍生自 EntityRecognizer 的元件。",
       "oneOf": {
-        "0": {
+        "18": {
           "title": "Microsoft.IEntityRecognizer 的參考",
           "description": "Microsoft.IEntityRecognizer .dialog 檔案的參考。"
         }
@@ -2209,7 +1906,7 @@
       "title": "Microsoft Triggers",
       "description": "衍生自 OnCondition 類別的元件。",
       "oneOf": {
-        "0": {
+        "27": {
           "title": "Microsoft.ITrigger 的參考",
           "description": "Microsoft.ITrigger .dialog 檔案的參考。"
         }
@@ -2219,7 +1916,7 @@
       "title": "選取器",
       "description": "衍生自 TriggerSelector 類別的元件。",
       "oneOf": {
-        "0": {
+        "5": {
           "title": "Microsoft.ITriggerSelector 的參考",
           "description": "Microsoft.ITriggerSelector .dialog 檔案的參考。"
         }
@@ -2831,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "實體指派時",
-      "description": "實體應指派給屬性時要採取的動作。",
+      "description": "Actions to apply an operation on a property and value.",
       "patternProperties": {
         "^\\$": {
           "title": "工具屬性",
@@ -2839,17 +2536,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "屬性",
-          "description": "選取實體後將會設定的屬性。"
-        },
-        "entity": {
-          "title": "實體",
-          "description": "正在放入屬性的實體"
-        },
         "operation": {
           "title": "作業",
-          "description": "用於指派實體的作業。"
+          "description": "Operation filter on event."
+        },
+        "property": {
+          "title": "屬性",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "值",
+          "description": "事件的值篩選。"
         },
         "condition": {
           "title": "條件",
@@ -2951,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "選擇實體時",
-      "description": "必須解析實體值時要執行的動作。",
+      "description": "Actions to be performed when value is ambiguous for operator and property.",
       "patternProperties": {
         "^\\$": {
           "title": "工具屬性",
@@ -2959,13 +2656,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "要設定的屬性",
-          "description": "選取實體後將會設定的屬性。"
+        "operation": {
+          "title": "作業",
+          "description": "事件的作業篩選。"
         },
-        "entity": {
-          "title": "不明確的實體",
-          "description": "不明確的實體"
+        "property": {
+          "title": "屬性",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "不明確的值",
+          "description": "事件的值篩選不明確。"
         },
         "condition": {
           "title": "條件",
@@ -2994,8 +2695,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "意圖不明確時",
-      "description": "意圖不明確時要執行的動作。",
+      "title": "On ambiguous intent",
+      "description": "Actions to perform on when an intent is ambiguous.",
       "patternProperties": {
         "^\\$": {
           "title": "工具屬性",
@@ -3039,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "選擇屬性時",
-      "description": "在屬性可能有多個實體對應時要採取的動作。",
+      "description": "在屬性及作業可能有多個實體對應時要採取的動作。",
       "patternProperties": {
         "^\\$": {
           "title": "工具屬性",
@@ -3047,26 +2748,6 @@
         }
       },
       "properties": {
-        "entity": {
-          "title": "正在指派的實體",
-          "description": "正在指派給屬性選擇的實體"
-        },
-        "properties": {
-          "title": "可能的屬性",
-          "description": "要在其中選擇的屬性。",
-          "items": {
-            "title": "屬性名稱",
-            "description": "可能的屬性選擇。"
-          }
-        },
-        "entities": {
-          "title": "實體",
-          "description": "不明確的實體名稱。",
-          "items": {
-            "title": "實體名稱",
-            "description": "要在其中選擇的實體名稱。"
-          }
-        },
         "condition": {
           "title": "條件",
           "description": "條件 (運算式)。"
@@ -4386,6 +4067,34 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "傳送移交活動",
+      "description": "傳送移交活動以觸發移交要求。",
+      "patternProperties": {
+        "^\\$": {
+          "title": "工具屬性",
+          "description": "工具的開放式屬性。"
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "內容",
+          "description": "要與移交要求一起傳送的內容"
+        },
+        "transcript": {
+          "title": "轉錄內容",
+          "description": "要傳送給移交要求的轉錄內容"
+        },
+        "$kind": {
+          "title": "對話物件的種類",
+          "description": "為您所設定的元件定義有效屬性 (從對話 .schema 檔案)"
+        },
+        "$designer": {
+          "title": "設計工具資訊",
+          "description": "Bot Framework Composer 的其他資訊。"
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "設定屬性",
       "description": "設定一或多個屬性值。",
@@ -4582,7 +4291,7 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
+    "Microsoft.TelemetryTrackEventAction": {
       "title": "遙測 - 追蹤事件",
       "description": "使用已註冊的遙測用戶端追蹤自訂事件。",
       "patternProperties": {
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "數字",
           "description": "數字常數。"
+        }
+      }
+    },
+    "schema": {
+      "title": "核心結構描述的中繼結構描述"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "路由訊息所需的通道帳戶資訊",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "使用者或 Bot 在此通道上的通道識別碼 (例如: joe@smith.com、@joesmith 或\n123456)",
+              "title": "識別碼"
+            },
+            "name": {
+              "description": "顯示易記名稱",
+              "title": "名稱"
+            },
+            "aadObjectId": {
+              "description": "此帳戶在 Azure Active Directory (AAD) 中的物件識別碼",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "此帳戶背後的實體角色 (例如: 使用者、Bot 等)。可能的值包括:\n'user'、'bot'",
+              "title": "角色"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "交談的通道帳戶資訊",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "指出產生活動時，交談是否包含兩個以上的\n參與者",
+              "title": "IsGroup"
+            },
+            "conversationType": {
+              "description": "表示通道中的交談類型，可區別交談類型",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "使用者或 Bot 在此通道上的通道識別碼 (例如: joe@smith.com、@joesmith 或\n123456)",
+              "title": "識別碼"
+            },
+            "name": {
+              "description": "顯示易記名稱",
+              "title": "名稱"
+            },
+            "aadObjectId": {
+              "description": "此帳戶在 Azure Active Directory (AAD) 中的物件識別碼",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "此帳戶背後的實體角色 (例如: 使用者、Bot 等)。可能的值包括:\n'user'、'bot'",
+              "title": "角色"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "訊息表情符號物件",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "訊息表情符號類型。可能的值包括: 'like'、'plusOne'",
+              "title": "類型"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "可按式動作",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "此按鈕所實作的動作類型。可能的值包括: 'openUrl'、'imBack'、\n'postBack'、'playAudio'、'playVideo'、'showImage'、'downloadFile'、'signin'、'call'、\n'payment'、'messageBack'",
+              "title": "類型"
+            },
+            "title": {
+              "description": "顯示在按鈕上的文字描述",
+              "title": "標題"
+            },
+            "image": {
+              "description": "將顯示在按鈕上文字標籤旁的影像 URL",
+              "title": "影像"
+            },
+            "text": {
+              "description": "此動作的文字",
+              "title": "文字"
+            },
+            "displayText": {
+              "description": "(選擇性) 按一下按鈕時要在聊天摘要中顯示的文字",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "動作的增補參數。這個屬性的內容視 ActionType 而定",
+              "title": "值"
+            },
+            "channelData": {
+              "description": "與此動作相關聯的通道特定資料",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "可執行的 SuggestedActions",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "應顯示動作的收件者識別碼。這些識別碼與\nchannelId 及活動所有收件者的子集相關",
+              "title": "到",
+              "items": {
+                "title": "識別碼",
+                "description": "收件者的識別碼。"
+              }
+            },
+            "actions": {
+              "description": "可向使用者顯示的動作",
+              "title": "動作"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "活動中的附件",
+          "title": "附件",
+          "properties": {
+            "contentType": {
+              "description": "檔案的 mimetype/Contenttype",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "內容 URL",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "嵌入式內容",
+              "title": "內容"
+            },
+            "name": {
+              "description": "(選擇性) 附件的名稱",
+              "title": "名稱"
+            },
+            "thumbnailUrl": {
+              "description": "(選擇性) 與附件相關聯的縮圖",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "與活動有關的中繼資料物件",
+          "title": "實體",
+          "properties": {
+            "type": {
+              "description": "此實體的類型 (RFC 3987 IRI)",
+              "title": "類型"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "與交談中特定點相關的物件",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(選擇性) 要參考的活動識別碼",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(選擇性) 參與此交談的使用者",
+              "title": "使用者"
+            },
+            "bot": {
+              "description": "參與此交談的 Bot",
+              "title": "Bot"
+            },
+            "conversation": {
+              "description": "交談參考",
+              "title": "交談"
+            },
+            "channelId": {
+              "description": "通道識別碼",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "可執行與參考交談相關作業的服務端點",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "參考其他欄位內容的子字串",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "定義要醒目提示的文字片段",
+              "title": "文字"
+            },
+            "occurrence": {
+              "description": "文字欄位在參考文字中的出現次數 (若有多個)。",
+              "title": "出現次數"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "代表程式設計動作的參考",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "此動作的識別碼",
+              "title": "識別碼"
+            },
+            "entities": {
+              "description": "與此動作相關聯的實體",
+              "title": "實體"
+            }
+          }
+        },
+        "Activity": {
+          "description": "活動是 Bot Framework 3.0 通訊協定的基本通訊類型。",
+          "title": "活動",
+          "properties": {
+            "type": {
+              "description": "包含活動類型。可能的值包括: 'message'、'contactRelationUpdate'、\n'conversationUpdate'、'typing'、'endOfConversation'、'event'、'invoke'、'deleteUserData'、\n'messageUpdate'、'messageDelete'、'installationUpdate'、'messageReaction'、'suggestion'、\n'trace'、'handoff'",
+              "title": "類型"
+            },
+            "id": {
+              "description": "包含可識別頻道上活動的唯一識別碼。",
+              "title": "識別碼"
+            },
+            "timestamp": {
+              "description": "包含傳送訊息的日期和時間，以 UTC ISO-8601 格式表示。",
+              "title": "時間戳記"
+            },
+            "localTimestamp": {
+              "description": "包含傳送訊息的日期和時間，以當地時間 ISO-8601\n格式表示。\n例如，2016-09-23T13:07:49.4714686-07:00。",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "包含此訊息所在時區的名稱，以當地時間 IANA 時區\n資料庫格式表示。\n例如，America/Los_Angeles。",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "包含指定通道服務端點的 URL。由通道設定。",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "包含可識別頻道的唯一識別碼。由頻道設定。",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "識別訊息的寄件者。",
+              "title": "從"
+            },
+            "conversation": {
+              "description": "識別活動所屬的交談。",
+              "title": "交談"
+            },
+            "recipient": {
+              "description": "識別訊息的收件者。",
+              "title": "收件者"
+            },
+            "textFormat": {
+              "description": "文字欄位的格式。預設: markdown。可能的值包括: 'markdown'、'plain'、'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "多個附件的版面配置提示。預設: list。可能的值包括: 'list'、\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "新增至交談的成員集合。",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "從交談中移除的成員集合。",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "新增至交談的表情符號集合。",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "從交談中移除的表情符號集合。",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "更新的交談主題名稱。",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "指出是否公開先前的頻道記錄。",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "文字欄位內容的地區設定名稱。\n地區設定名稱是下列兩者的組合: 與語言相關聯的 ISO 639 (兩個或三個字母的\n文化特性代碼)，\n以及與國家或地區相關聯的 ISO 3166 (兩個字母次文化特性代碼)。\n地區設定名稱也可對應到有效的 BCP-47 語言標記。",
+              "title": "地區設定"
+            },
+            "text": {
+              "description": "訊息的文字內容。",
+              "title": "文字"
+            },
+            "speak": {
+              "description": "要說的文字。",
+              "title": "說話"
+            },
+            "inputHint": {
+              "description": "指出訊息傳遞給用戶端之後，\n您的 Bot 要接受、必須有或忽略使用者輸入。可能的\n值包括: 'acceptingInput'、'ignoringInput'、'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "通道無法轉譯卡片時要顯示的文字。",
+              "title": "摘要"
+            },
+            "suggestedActions": {
+              "description": "活動的建議動作。",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "附件",
+              "title": "附件"
+            },
+            "entities": {
+              "description": "代表訊息中曾提及的實體。",
+              "title": "實體"
+            },
+            "channelData": {
+              "description": "包含頻道特定的內容。",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "指出是否已將 contactRelationUpdate 的收件者新增至寄件者的連絡人清單\n或從中移出。",
+              "title": "動作"
+            },
+            "replyToId": {
+              "description": "包含此訊息為回覆的訊息識別碼。",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "活動的描述性標籤。",
+              "title": "標籤"
+            },
+            "valueType": {
+              "description": "活動值物件的類型。",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "與活動相關聯的值。",
+              "title": "值"
+            },
+            "name": {
+              "description": "與叫用或事件活動相關聯的作業名稱。",
+              "title": "名稱"
+            },
+            "relatesTo": {
+              "description": "其他交談或活動的參考。",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "endOfConversation 活動的代碼，指出交談結束的原因。\n可能的值包括: 'unknown'、'completedSuccessfully'、'userCancelled'、'botTimedOut'、\n'botIssuedInvalidMessage'、'channelFailed'",
+              "title": "代碼"
+            },
+            "expiration": {
+              "description": "活動應視為「已過期」且不應\n呈現給收件者的時間。",
+              "title": "到期"
+            },
+            "importance": {
+              "description": "活動的重要性。可能的值包括: 'low'、'normal'、'high'",
+              "title": "重要性"
+            },
+            "deliveryMode": {
+              "description": "傳遞提示，通知收件者活動的替代傳遞路徑。\n預設傳遞模式為 \"default\"。可能的值包括: 'normal'、'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "語音和語言預備系統應聽取的片語和參考清單",
+              "title": "listenFor",
+              "items": {
+                "title": "片語",
+                "description": "要聽取的片語。"
+              }
+            },
+            "textHighlights": {
+              "description": "活動包含 ReplyToId 值時，要醒目提示的文字片段集合。",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "此要求隨附的選擇性程式設計動作",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }
