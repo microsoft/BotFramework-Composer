@@ -71,9 +71,6 @@
           "title": "Séma",
           "description": "Kitöltendő séma.",
           "anyOf": {
-            "0": {
-              "title": "Magséma metasémája"
-            },
             "1": {
               "title": "Hivatkozás a JSON-sémára",
               "description": "Hivatkozás a JSON-séma .dialog fájljára."
@@ -907,9 +904,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "Continue conversation (Queue)",
+      "description": "Continue a specific conversation (via StorageQueue implementation).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "conversationReference": {
+          "title": "Conversation Reference",
+          "description": "A conversation reference. (NOTE: Minimum required values or channelId, conversation)."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "Beszélgetés folytatása később (üzenetsor)",
-      "description": "Beszélgetés folytatása később (Azure Storage-üzenetsor használatával).",
+      "description": "Continue conversation at later time (via StorageQueue implementation).",
       "patternProperties": {
         "^\\$": {
           "title": "Eszköztulajdonság",
@@ -1673,6 +1706,38 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "Get ConversationReference",
+      "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "property": {
+          "title": "Property",
+          "description": "Property (named location to store information)."
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "Ugrás a műveletre",
       "description": "Megnyit egy műveletet az azonosítója alapján.",
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft tevékenységsablonok",
-      "description": "Olyan összetevők, amelyek kategóriája tevékenységsablon (amely egy sztringsablon), egy tevékenység vagy egy tevékenységsablon implementálása",
-      "oneOf": {
-        "1": {
-          "description": "A tevékenység a Bot Framework 3.0 protokoll alapvető kommunikációs típusa.",
-          "title": "Tevékenység",
-          "properties": {
-            "type": {
-              "description": "A tevékenység típusát tartalmazza. A lehetséges értékek a következők: „message”, „contactRelationUpdate”,\n„conversationUpdate”, „typing”, „endOfConversation”, „event”, „invoke”, „deleteUserData”,\n„messageUpdate”, „messageDelete”, „installationUpdate”, „messageReaction”, „suggestion”,\n„trace”, „handoff”",
-              "title": "type"
-            },
-            "id": {
-              "description": "Egy olyan azonosítót tartalmaz, amely egyedileg azonosítja a tevékenységet a csatornán.",
-              "title": "id"
-            },
-            "timestamp": {
-              "description": "Az üzenet elküldésének dátumát és időpontját tartalmazza az UTC időzóna szerint, ISO-8601 formátumban.",
-              "title": "timestamp"
-            },
-            "localTimestamp": {
-              "description": "Az üzenet elküldésének dátumát és időpontját tartalmazza a helyi időzóna szerint, ISO-8601\nformátumban.\nPéldául: 2016-09-23T13:07:49.4714686-07:00.",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "Az időzóna nevét tartalmazza, amelyben az üzenet helyi idő szerint el lett küldve, az IANA időzóna-\nadatbázis formátumának megfelelően.\nPéldául: America/Los_Angeles.",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "A csatorna szolgáltatásvégpontját meghatározó URL-címet tartalmazza. Ezt a csatorna állítja be.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "Egy olyan azonosítót tartalmaz, amely egyedileg azonosítja a csatornát. Ezt a csatorna állítja be.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "Az üzenet küldőjét azonosítja.",
-              "title": "from"
-            },
-            "conversation": {
-              "description": "Azonosítja a beszélgetést, amelyhez a tevékenység tartozik.",
-              "title": "conversation",
-              "properties": {
-                "isGroup": {
-                  "description": "Azt jelzi, hogy a beszélgetés kettőnél több résztvevőt tartalmazott-e a\ntevékenység létrehozásakor",
-                  "title": "isGroup"
-                },
-                "conversationType": {
-                  "description": "A beszélgetés típusát jelöli olyan csatornák esetében, amelyek különbséget tesznek a beszélgetéstípusok között",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "A csatornához tartozó felhasználó vagy robot csatornaazonosítója (például: joe@smith.com vagy @joesmith vagy\n123456)",
-                  "title": "id"
-                },
-                "name": {
-                  "description": "Rövid név",
-                  "title": "name"
-                },
-                "aadObjectId": {
-                  "description": "Ennek a fióknak az objektumazonosítója az Azure Active Directory (AAD) szolgáltatásban",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "A fiókhoz tartozó entitás szerepköre (például: felhasználó, robot stb.). A lehetséges értékek:\n„user”, „bot”",
-                  "title": "role"
-                }
-              }
-            },
-            "recipient": {
-              "description": "Az üzenet címzettjét azonosítja.",
-              "title": "recipient"
-            },
-            "textFormat": {
-              "description": "A szövegmezők formátuma. Az alapértelmezett érték: „markdown”, „plain”, „xml”. A lehetséges értékek a következők: „markdown”, „plain”, „xml”",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "A több melléklet esetére vonatkozó elrendezési tipp. Alapértelmezett érték: list. Az egyéb lehetséges értékek következők: „list”,\n„carousel”",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "A beszélgetéshez hozzáadott tagok gyűjteménye.",
-              "title": "membersAdded",
-              "items": {
-                "description": "Az üzenet továbbításához szükséges csatornafiók-információ",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "A csatornához tartozó felhasználó vagy robot csatornaazonosítója (például: joe@smith.com vagy @joesmith vagy\n123456)",
-                    "title": "id"
-                  },
-                  "name": {
-                    "description": "Rövid név",
-                    "title": "name"
-                  },
-                  "aadObjectId": {
-                    "description": "Ennek a fióknak az objektumazonosítója az Azure Active Directory (AAD) szolgáltatásban",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "A fiókhoz tartozó entitás szerepköre (például: felhasználó, robot stb.). A lehetséges értékek:\n„user”, „bot”",
-                    "title": "role"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "A beszélgetésből eltávolított tagok gyűjteménye.",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "A beszélgetéshez hozzáadott reagálások gyűjteménye.",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "Az üzenetre érkezett reagálás objektuma",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "Az üzenetre érkezett reagálás típusa. A lehetséges értékek a következők: „like”, „plusOne”",
-                    "title": "type"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "A beszélgetésből eltávolított reagálások gyűjteménye.",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "A beszélgetés témakörének frissített neve.",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "Jelzi, hogy a csatorna előzményei közzé vannak-e téve.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "A szövegmező tartalmának területi beállítása.\nA területi beállítás neve egy nyelvet megjelölő, két- vagy hárombetűs ISO 639 kulturális kódból\nés egy országot vagy régiót\nmegjelölő, kétbetűs ISO 3166 szubkulturális kódból áll.\nA területi beállítás neve lehet egy érvényes BCP-47 nyelvi címke is.",
-              "title": "locale"
-            },
-            "text": {
-              "description": "Az üzenet szöveges tartalma.",
-              "title": "text"
-            },
-            "speak": {
-              "description": "Az elmondandó szöveg.",
-              "title": "speak"
-            },
-            "inputHint": {
-              "description": "Azt jelzi, hogy a robot elfogadja,\nelvárja vagy figyelmen kívül hagyja a felhasználói adatbevitelt, miután az üzenet kézbesítve lett\naz ügyfélnek. A lehetséges értékek a következők: „acceptingInput”, „ignoringInput”, „expectingInput”",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "A megjelenítendő szöveg, ha a csatorna nem tudja megjeleníteni a kártyákat.",
-              "title": "summary"
-            },
-            "suggestedActions": {
-              "description": "A tevékenységhez javasolt műveletek.",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "Azon címzettek azonosítója, akik számára a műveleteknek meg kell jelenniük. Ezek az azonosítók a\nchannelId csatornaazonosítóhoz viszonyíthatók, és a tevékenység összes címzettjének részhalmazát jelölik",
-                  "title": "to",
-                  "items": {
-                    "title": "Azonosító",
-                    "description": "A címzett azonosítója."
-                  }
-                },
-                "actions": {
-                  "description": "A felhasználó számára megjeleníthető műveletek",
-                  "title": "actions",
-                  "items": {
-                    "description": "Kattintható művelet",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "A gomb által végrehajtott művelet típusa. A lehetséges értékek a következők: „openUrl”, „imBack”,\n„postBack”, „playAudio”, „playVideo”, „showImage”, „downloadFile”, „signin”, „call”,\n„payment”, „messageBack”",
-                        "title": "type"
-                      },
-                      "title": {
-                        "description": "A gombon megjelenő szöveges leírás",
-                        "title": "title"
-                      },
-                      "image": {
-                        "description": "A gombon a szöveges címke mellett megjelenítendő kép URL-címe",
-                        "title": "image"
-                      },
-                      "text": {
-                        "description": "A művelet szövege",
-                        "title": "text"
-                      },
-                      "displayText": {
-                        "description": "(Opcionális) A csevegés folyamában megjelenítendő szöveg, ha a felhasználó a gombra kattint",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "Kiegészítő paraméter műveletekhez. Ennek a tulajdonságnak a tartalma a művelet típusától függ",
-                        "title": "value"
-                      },
-                      "channelData": {
-                        "description": "Az ehhez a művelethez tartozó csatornaspecifikus adatok",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "Mellékletek",
-              "title": "attachments",
-              "items": {
-                "description": "Egy tevékenységben található melléklet",
-                "title": "Melléklet",
-                "properties": {
-                  "contentType": {
-                    "description": "A fájl mimetype/Contenttype tartalomtípusa",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "Tartalom URL-címe",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "Beágyazott tartalom",
-                    "title": "content"
-                  },
-                  "name": {
-                    "description": "(OPCIONÁLIS) A melléklet neve",
-                    "title": "name"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(OPCIONÁLIS) A melléklethez tartozó miniatűr",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "Az üzenetben megemlített entitásokat jelöli.",
-              "title": "entities",
-              "items": {
-                "description": "Egy tevékenységhez kapcsolódó metaadat-objektum",
-                "title": "Entitás",
-                "properties": {
-                  "type": {
-                    "description": "Az adott entitás típusa (RFC 3987 IRI)",
-                    "title": "type"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "Csatornaspecifikus tartalmakat tartalmaz.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "Jelzi, hogy a ContactRelationUpdate címzettje hozzá lett-e adva vagy el lett-e távolítva a\nküldő partnerlistájáról.",
-              "title": "action"
-            },
-            "replyToId": {
-              "description": "Azon üzenet azonosítóját tartalmazza, amelyre ez az üzenet a válasz.",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "A tevékenység leírását tartalmazó címke.",
-              "title": "label"
-            },
-            "valueType": {
-              "description": "A tevékenység értékobjektumának típusa.",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "A tevékenységhez tartozó érték.",
-              "title": "value"
-            },
-            "name": {
-              "description": "Egy meghívás vagy esemény tevékenységéhez tartozó művelet neve.",
-              "title": "name"
-            },
-            "relatesTo": {
-              "description": "Hivatkozás egy másik beszélgetésre vagy tevékenységre.",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(Opcionális) A tevékenység azonosítója a hivatkozáshoz",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(Opcionális) A beszélgetésben részt vevő felhasználó",
-                  "title": "user"
-                },
-                "bot": {
-                  "description": "A beszélgetésben részt vevő robot",
-                  "title": "bot"
-                },
-                "conversation": {
-                  "description": "Beszélgetés hivatkozása",
-                  "title": "conversation"
-                },
-                "channelId": {
-                  "description": "Csatorna azonosítója",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "Szolgáltatásvégpont, ahol a hivatkozott beszélgetéshez kapcsolódó műveletek elvégezhetők",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "Az endOfConversation tevékenységek azon kódja, amely jelzi, hogy a beszélgetés miért ért véget.\nLehetséges értékek: „unknown”, „completedSuccessfully”, „userCancelled”, „botTimedOut”,\n„botIssuedInvalidMessage”, „channelFailed”",
-              "title": "code"
-            },
-            "expiration": {
-              "description": "Az az időpont, amikortól a rendszer „lejártnak” tekinti a tevékenységet, és nem jeleníti meg\na címzettnek.",
-              "title": "expiration"
-            },
-            "importance": {
-              "description": "A tevékenység fontossága. A lehetséges értékek a következők: „low”, „normal”, „high”",
-              "title": "importance"
-            },
-            "deliveryMode": {
-              "description": "Egy kézbesítési tipp, amely a tevékenység alternatív kézbesítési útvonalait jelzi a címzett számára.\nAz alapértelmezett kézbesítési mód a „default” (alapértelmezett).",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "Azon kifejezések és referenciák listája, amelyekre a beszéd- és nyelvbetanító rendszereknek figyelniük kell",
-              "title": "listenFor",
-              "items": {
-                "title": "Kifejezés",
-                "description": "Figyelendő kifejezések."
-              }
-            },
-            "textHighlights": {
-              "description": "A kiemelendő szövegrészletek gyűjteménye, ha a tevékenység tartalmaz egy ReplyTold értéket.",
-              "title": "textHighlights",
-              "items": {
-                "description": "Egy másik mezőben található tartalom karakterláncrészére utal",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "Meghatározza a kiemelendő szöveg kódrészletét",
-                    "title": "text"
-                  },
-                  "occurrence": {
-                    "description": "A szövegmező megjelenése a hivatkozott szövegben, ha több is létezik.",
-                    "title": "occurrence"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "A kérést kísérő opcionális programozott művelet",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "A művelet azonosítója",
-                  "title": "id"
-                },
-                "entities": {
-                  "description": "Az ehhez a művelethez tartozó entitások",
-                  "title": "entities"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "Olyan összetevők, amelyek kategóriája tevékenységsablon (amely egy sztringsablon), egy tevékenység vagy egy tevékenységsablon implementálása"
     },
     "Microsoft.IDialog": {
       "title": "Microsoft-párbeszédpanelek",
@@ -2187,9 +1884,9 @@
       "title": "Entitásértelmezők",
       "description": "Az EntityRecognizerből származó összetevők.",
       "oneOf": {
-        "0": {
-          "title": "Hivatkozás a Microsoft.IEntityRecognizerre",
-          "description": "Hivatkozás a Microsoft.IEntityRecognizer .dialog fájljára."
+        "18": {
+          "title": "Reference to Microsoft.IEntityRecognizer",
+          "description": "Reference to Microsoft.IEntityRecognizer .dialog file."
         }
       }
     },
@@ -2209,9 +1906,9 @@
       "title": "Microsoft triggerek",
       "description": "Az OnCondition osztályból származó összetevők.",
       "oneOf": {
-        "0": {
-          "title": "Hivatkozás a Microsoft.ITriggerre",
-          "description": "Hivatkozás a Microsoft.ITrigger .dialog fájljára."
+        "27": {
+          "title": "Reference to Microsoft.ITrigger",
+          "description": "Reference to Microsoft.ITrigger .dialog file."
         }
       }
     },
@@ -2219,9 +1916,9 @@
       "title": "Szelektorok",
       "description": "A TriggerSelector osztályból származó összetevők.",
       "oneOf": {
-        "0": {
-          "title": "Hivatkozás a Microsoft.ITriggerSelectorra",
-          "description": "Hivatkozás a Microsoft.ITriggerSelector .dialog fájljára."
+        "5": {
+          "title": "Reference to Microsoft.ITriggerSelector",
+          "description": "Reference to Microsoft.ITriggerSelector .dialog file."
         }
       }
     },
@@ -2831,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "Entitás hozzárendelésekor",
-      "description": "Egy entitás tulajdonsághoz rendelésekor elvégzendő műveletek.",
+      "description": "Actions to apply an operation on a property and value.",
       "patternProperties": {
         "^\\$": {
           "title": "Beállítható tulajdonság",
@@ -2839,17 +2536,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Tulajdonság",
-          "description": "Tulajdonság, amely az entitás kiválasztása után lesz beállítva."
-        },
-        "entity": {
-          "title": "Entitás",
-          "description": "Entitás beillesztése egy tulajdonságba"
-        },
         "operation": {
           "title": "Művelet",
-          "description": "Entitás hozzárendelésének művelete."
+          "description": "Operation filter on event."
+        },
+        "property": {
+          "title": "Tulajdonság",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value filter on event."
         },
         "condition": {
           "title": "Feltétel",
@@ -2951,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "Entitás választásakor",
-      "description": "Végrehajtandó műveletek, amikor egy entitás értékét fel kell oldani.",
+      "description": "Actions to be performed when value is ambiguous for operator and property.",
       "patternProperties": {
         "^\\$": {
           "title": "Beállítható tulajdonság",
@@ -2959,13 +2656,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Beállítandó tulajdonság",
-          "description": "Tulajdonság, amely az entitás kiválasztása után lesz beállítva."
+        "operation": {
+          "title": "Operation",
+          "description": "Operation filter on event."
         },
-        "entity": {
-          "title": "Nem egyértelmű entitás",
-          "description": "Nem egyértelmű entitás"
+        "property": {
+          "title": "Property",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Ambiguous value",
+          "description": "Ambiguous value filter on event."
         },
         "condition": {
           "title": "Feltétel",
@@ -2994,8 +2695,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "Nem egyértelmű szándék esetén",
-      "description": "Nem egyértelmű szándék esetén végrehajtandó műveletek.",
+      "title": "On ambiguous intent",
+      "description": "Actions to perform on when an intent is ambiguous.",
       "patternProperties": {
         "^\\$": {
           "title": "Beállítható tulajdonság",
@@ -3039,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "Tulajdonság választásakor",
-      "description": "Elvégzendő műveletek, ha az entitások többféleképpen rendelhetők hozzá a tulajdonságokhoz.",
+      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
       "patternProperties": {
         "^\\$": {
           "title": "Beállítható tulajdonság",
@@ -3047,26 +2748,6 @@
         }
       },
       "properties": {
-        "entity": {
-          "title": "Hozzárendelendő entitás",
-          "description": "Entitás hozzárendelése egy tulajdonság-lehetőséghez"
-        },
-        "properties": {
-          "title": "Lehetséges tulajdonságok",
-          "description": "A tulajdonságok, amelyek közül választani kell.",
-          "items": {
-            "title": "Tulajdonság neve",
-            "description": "Lehetséges választható tulajdonság."
-          }
-        },
-        "entities": {
-          "title": "Entitások",
-          "description": "Nem egyértelmű entitásnevek.",
-          "items": {
-            "title": "Entitás neve",
-            "description": "Az entitásnevek, amelyek közül választani kell."
-          }
-        },
         "condition": {
           "title": "Feltétel",
           "description": "Feltétel (kifejezés)."
@@ -4386,6 +4067,34 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "Send a handoff activity",
+      "description": "Sends a handoff activity to trigger a handoff request.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "Context",
+          "description": "Context to send with the handoff request"
+        },
+        "transcript": {
+          "title": "transcript",
+          "description": "Transcript to send with the handoff request"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "Tulajdonság beállítása",
       "description": "Egy vagy több tulajdonságérték beállítása.",
@@ -4582,39 +4291,39 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetria - nyomkövetési esemény",
-      "description": "Egyéni esemény nyomon követése a regisztrált telemetriaügyféllel.",
+    "Microsoft.TelemetryTrackEventAction": {
+      "title": "Telemetry - track event",
+      "description": "Track a custom event using the registered Telemetry Client.",
       "patternProperties": {
         "^\\$": {
-          "title": "Beállítható tulajdonság",
-          "description": "Nyitott végű, beállítható tulajdonság."
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
         }
       },
       "properties": {
         "id": {
-          "title": "Azonosító",
-          "description": "A párbeszéd opcionális azonosítója"
+          "title": "Id",
+          "description": "Optional id for the dialog"
         },
         "disabled": {
-          "title": "Letiltva",
-          "description": "Opcionális feltétel, amely igaz érték esetén letiltja ezt a műveletet."
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
         },
         "eventName": {
-          "title": "Eseménynév",
-          "description": "A nyomon követni kívánt esemény neve."
+          "title": "Event name",
+          "description": "The name of the event to track."
         },
         "properties": {
-          "title": "Tulajdonságok",
-          "description": "A nyomon követett eseményhez csatolni kívánt egy vagy több tulajdonság."
+          "title": "Properties",
+          "description": "One or more properties to attach to the event being tracked."
         },
         "$kind": {
-          "title": "Párbeszédobjektum fajtája",
-          "description": "Meghatározza a konfigurált összetevő érvényes tulajdonságait (egy párbeszéd-sémafájlból)"
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
         },
         "$designer": {
-          "title": "Tervezői információ",
-          "description": "További információk a Bot Framework Composerhez."
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
         }
       }
     },
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "Szám",
           "description": "Számkonstans."
+        }
+      }
+    },
+    "schema": {
+      "title": "Core schema meta-schema"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "Channel account information needed to route a message",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "Channel account information for a conversation",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+              "title": "isGroup"
+            },
+            "conversationType": {
+              "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "Message reaction object",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+              "title": "type"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "A clickable action",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+              "title": "type"
+            },
+            "title": {
+              "description": "Text description which appears on the button",
+              "title": "title"
+            },
+            "image": {
+              "description": "Image URL which will appear on the button, next to text label",
+              "title": "image"
+            },
+            "text": {
+              "description": "Text for this action",
+              "title": "text"
+            },
+            "displayText": {
+              "description": "(Optional) text to display in the chat feed if the button is clicked",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+              "title": "value"
+            },
+            "channelData": {
+              "description": "Channel-specific data associated with this action",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "SuggestedActions that can be performed",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+              "title": "to",
+              "items": {
+                "title": "Id",
+                "description": "Id of recipient."
+              }
+            },
+            "actions": {
+              "description": "Actions that can be shown to the user",
+              "title": "actions"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "An attachment within an activity",
+          "title": "Attachment",
+          "properties": {
+            "contentType": {
+              "description": "mimetype/Contenttype for the file",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "Content Url",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "Embedded content",
+              "title": "content"
+            },
+            "name": {
+              "description": "(OPTIONAL) The name of the attachment",
+              "title": "name"
+            },
+            "thumbnailUrl": {
+              "description": "(OPTIONAL) Thumbnail associated with attachment",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "Metadata object pertaining to an activity",
+          "title": "Entity",
+          "properties": {
+            "type": {
+              "description": "Type of this entity (RFC 3987 IRI)",
+              "title": "type"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "An object relating to a particular point in a conversation",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(Optional) ID of the activity to refer to",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(Optional) User participating in this conversation",
+              "title": "user"
+            },
+            "bot": {
+              "description": "Bot participating in this conversation",
+              "title": "bot"
+            },
+            "conversation": {
+              "description": "Conversation reference",
+              "title": "conversation"
+            },
+            "channelId": {
+              "description": "Channel ID",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "Refers to a substring of content within another field",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "Defines the snippet of text to highlight",
+              "title": "text"
+            },
+            "occurrence": {
+              "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+              "title": "occurrence"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "Represents a reference to a programmatic action",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "ID of this action",
+              "title": "id"
+            },
+            "entities": {
+              "description": "Entities associated with this action",
+              "title": "entities"
+            }
+          }
+        },
+        "Activity": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation"
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments"
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities"
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }
