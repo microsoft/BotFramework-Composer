@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 //
 
-import { StatusCodes } from 'http-status-codes';
 import * as express from 'express';
 
 import { logNetworkTraffic } from '../middleware/logNetworkTraffic';
@@ -20,7 +19,6 @@ import {
 } from './middleware';
 import DLServerContext from './store/dlServerState';
 import { getWebSocketPort } from './utils/socketPort';
-import { WebSocketServer } from './utils/webSocketServer';
 
 export const mountConversationsRoutes = (dlServerState: DLServerContext): express.Router => {
   const router = express.Router();
