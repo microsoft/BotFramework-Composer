@@ -20,15 +20,6 @@ jest.mock('axios', () => ({
   },
 }));
 
-jest.mock('../', () => ({
-  create: jest.fn().mockReturnThis(),
-  get: jest.fn(),
-  request: jest.fn(),
-  interceptors: {
-    request: { use: jest.fn() },
-  },
-}));
-
 function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
   return {
     ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
