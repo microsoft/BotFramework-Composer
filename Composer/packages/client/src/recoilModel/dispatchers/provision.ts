@@ -90,7 +90,7 @@ export const provisionDispatcher = () => {
         });
 
         // call provision status api interval to update the state.
-        updateProvisionStatus(
+        await updateProvisionStatus(
           callbackHelpers,
           result.data.id,
           projectId,
@@ -99,6 +99,10 @@ export const provisionDispatcher = () => {
           notification.id
         );
       } catch (error) {
+        TelemetryClient.track('ProvisioningProfileCreateFailure', {
+          message: error.response?.data || 'Error when provision target',
+        });
+
         // set notification
         const notification = createNotification(
           getProvisionFailureNotification(error.response?.data || 'Error when provision target')
@@ -164,6 +168,9 @@ export const provisionDispatcher = () => {
           if (response.data.status !== 500) {
             notification = getProvisionPendingNotification(response.data.message);
           } else {
+            TelemetryClient.track('ProvisioningProfileCreateFailure', {
+              message: response.data.message,
+            });
             notification = getProvisionFailureNotification(response.data.message);
             isCleanTimer = true;
           }

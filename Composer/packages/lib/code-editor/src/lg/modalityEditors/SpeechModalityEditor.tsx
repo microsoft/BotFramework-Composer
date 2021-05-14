@@ -95,7 +95,7 @@ const SpeechModalityEditor = React.memo(
     return (
       <ModalityEditorContainer
         contentDescription="One of the variations added below will be selected at random by the LG library."
-        contentTitle={formatMessage('Response Variations')}
+        contentTitle={formatMessage('Responses')}
         disableRemoveModality={disableRemoveModality}
         dropdownOptions={inputHintOptions}
         dropdownPrefix={formatMessage('Input hint: ')}

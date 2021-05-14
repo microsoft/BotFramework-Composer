@@ -199,22 +199,30 @@ export function CreateBotV2(props: CreateBotProps) {
 
   useEffect(() => {
     const itemKey = selectedProgLang.props.itemKey;
+    let newTemplates: BotTemplate[] = [];
     if (itemKey === csharpFeedKey) {
-      const newTemplates = templates.filter((template) => {
+      newTemplates = templates.filter((template) => {
         return template.dotnetSupport;
       });
-      setDisplayedTemplates(newTemplates);
     } else if (itemKey === nodeFeedKey) {
-      const newTemplates = templates.filter((template) => {
+      newTemplates = templates.filter((template) => {
         return template.nodeSupport;
       });
-      setDisplayedTemplates(newTemplates);
     }
+    if (creationFlowType === 'Skill') {
+      newTemplates = newTemplates.filter((template) => {
+        return !template.isMultiBotTemplate;
+      });
+    }
+    setDisplayedTemplates(newTemplates);
   }, [templates, selectedProgLang]);
 
   useEffect(() => {
     if (displayedTemplates?.[0]?.id) {
       setCurrentTemplateId(displayedTemplates[0].id);
+      setTimeout(() => {
+        selectedTemplate.setIndexSelected(0, true, false);
+      }, 0);
     }
   }, [displayedTemplates]);
 
@@ -270,7 +278,14 @@ export function CreateBotV2(props: CreateBotProps) {
           </div>
         </div>
         <DialogFooter>
-          <Link href={templateRequestUrl} styles={{ root: { fontSize: '12px', float: 'left' } }} target="_blank">
+          <Link
+            href={templateRequestUrl}
+            styles={{ root: { fontSize: '12px', float: 'left' } }}
+            target="_blank"
+            onClick={() => {
+              TelemetryClient.track('NeedAnotherTemplateClicked');
+            }}
+          >
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>

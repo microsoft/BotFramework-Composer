@@ -34,11 +34,11 @@ export const GetStarted: React.FC<GetStartedProps> = (props) => {
   const renderTabs = () => {
     return (
       <Stack grow styles={{ root: { alignSelf: 'flex-start', padding: '0 20px' } }}>
-        <Pivot>
-          <PivotItem headerText={formatMessage('Next steps')}>
+        <Pivot styles={{ link: { fontSize: '20px' }, linkIsSelected: { fontSize: '20px' } }}>
+          <PivotItem headerText={formatMessage('Get started')}>
             <GetStartedNextSteps {...props} />
           </PivotItem>
-          <PivotItem headerText={formatMessage('Learning')}>
+          <PivotItem headerText={formatMessage('Learn more')}>
             <GetStartedLearn projectId={projectId} onDismiss={onDismiss} />
           </PivotItem>
         </Pivot>

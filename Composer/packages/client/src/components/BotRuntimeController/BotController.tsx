@@ -73,7 +73,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
 
   const [botsStartOperationCompleted, setBotsStartOperationCompleted] = useState(false);
-  const [areBotsStarting, setBotsStarting] = useState(false);
+  const [areBotsProcessing, setBotsProcessing] = useState(false);
   const [startPanelButtonText, setStartPanelButtonText] = useState('');
   const { startAllBots, stopAllBots } = useBotOperations();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
@@ -99,7 +99,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   }, [projectCollection, errors]);
 
   useEffect(() => {
-    const botsStarting =
+    const botsProcessing =
       startAllBotsOperationQueued ||
       projectCollection.some(({ status }) => {
         return (
@@ -111,25 +111,39 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
           status == BotStatus.stopping
         );
       });
-    setBotsStarting(botsStarting);
+    setBotsProcessing(botsProcessing);
 
     const botOperationsCompleted = projectCollection.some(
       ({ status }) => status === BotStatus.connected || status === BotStatus.failed
     );
     setBotsStartOperationCompleted(botOperationsCompleted);
 
-    if (botsStarting) {
+    if (botsProcessing) {
       setStatusIconClass(undefined);
-      setStartPanelButtonText(
-        formatMessage(
-          `{
-          total, plural,
-            =1 {Starting bot..}
-          other {Starting bots.. ({running}/{total} running)}
-        }`,
-          { running: runningBots.projectIds.length, total: runningBots.totalBots }
-        )
-      );
+      const botsStopping = projectCollection.some(({ status }) => status == BotStatus.stopping);
+      if (botsStopping) {
+        setStartPanelButtonText(
+          formatMessage(
+            `{
+            total, plural,
+              =1 {Stopping bot..}
+            other {Stopping bots.. ({running}/{total} running)}
+          }`,
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+      } else {
+        setStartPanelButtonText(
+          formatMessage(
+            `{
+            total, plural,
+              =1 {Starting bot..}
+            other {Starting bots.. ({running}/{total} running)}
+          }`,
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+      }
       return;
     }
 
@@ -161,7 +175,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         `{
         total, plural,
           =1 {Start bot}
-          other {Start all bots}
+          other {Start all}
       }`,
         { total: runningBots.totalBots }
       )
@@ -223,7 +237,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             aria-roledescription={formatMessage('Bot Controller')}
             ariaDescription={startPanelButtonText}
             data-testid={'startBotButton'}
-            disabled={disableStartBots || areBotsStarting}
+            disabled={disableStartBots || areBotsProcessing}
             iconProps={{
               iconName: statusIconClass,
               styles: {
@@ -232,6 +246,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
                 },
               },
             }}
+            id={'startBotPanelElement'}
             menuAs={() => null}
             styles={{
               root: {
@@ -259,7 +274,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             title={startPanelButtonText}
             onClick={handleClick}
           >
-            {areBotsStarting && (
+            {areBotsProcessing && (
               <Spinner
                 size={SpinnerSize.small}
                 styles={{
@@ -274,7 +289,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
-            ariaDescription={formatMessage('Open start bots panel')}
+            ariaDescription={formatMessage('Start and stop local bot runtimes')}
             data-testid="StartBotsPanel"
             disabled={disableStartBots}
             iconProps={{
@@ -295,7 +310,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
               },
               rootHovered: { background: transparentBackground, color: NeutralColors.white },
             }}
-            title={formatMessage('Open start bots panel')}
+            title={formatMessage('Start and stop local bot runtimes')}
             onClick={onSplitButtonClick}
           />
         </div>

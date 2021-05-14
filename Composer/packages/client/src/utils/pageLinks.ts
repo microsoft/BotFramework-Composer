@@ -42,17 +42,17 @@ export const topLinks = (
     {
       to: linkBase + `dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
-      labelName: formatMessage('Design'),
+      labelName: formatMessage('Create'),
       disabled: !botLoaded,
       match: /(bot\/[0-9.]+)$|(bot\/[0-9.]+\/skill\/[0-9.]+)$/,
       isDisabledForPVA: false,
     },
     {
-      to: linkBase + `language-generation/${openedDialogId}`,
-      iconName: 'Robot',
-      labelName: formatMessage('Bot responses'),
-      disabled: !botLoaded || skillIsRemote,
-      match: /language-generation\/[a-zA-Z0-9_-]+$/,
+      to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
+      iconName: 'BotProjectsSettings',
+      labelName: formatMessage('Configure'),
+      disabled: !botLoaded,
+      match: /botProjectsSettings/,
       isDisabledForPVA: false,
     },
     {
@@ -64,27 +64,20 @@ export const topLinks = (
       isDisabledForPVA: false,
     },
     {
+      to: linkBase + `language-generation/${openedDialogId}`,
+      iconName: 'Robot',
+      labelName: formatMessage('Bot responses'),
+      disabled: !botLoaded || skillIsRemote,
+      match: /language-generation\/[a-zA-Z0-9_-]+$/,
+      isDisabledForPVA: false,
+    },
+    {
       to: linkBase + `knowledge-base/${openedDialogId}`,
       iconName: 'QnAIcon',
-      labelName: formatMessage('QnA'),
+      labelName: formatMessage('Knowledge base'),
       disabled: !botLoaded || skillIsRemote,
       match: /knowledge-base\/[a-zA-Z0-9_-]+$/,
       isDisabledForPVA: isPVASchema,
-    },
-    {
-      to: `/bot/${rootProjectId || projectId}/publish`,
-      iconName: 'CloudUpload',
-      labelName: formatMessage('Publish'),
-      disabled: !botLoaded,
-      isDisabledForPVA: false,
-    },
-    {
-      to: `/bot/${rootProjectId || projectId}/botProjectsSettings`,
-      iconName: 'BotProjectsSettings',
-      labelName: formatMessage('Project settings'),
-      disabled: !botLoaded,
-      match: /botProjectsSettings/,
-      isDisabledForPVA: false,
     },
     ...(showFormDialog
       ? [
@@ -93,10 +86,17 @@ export const topLinks = (
             iconName: 'Table',
             labelName: formatMessage('Forms (preview)'),
             disabled: !botLoaded || skillIsRemote,
-            isDisabledForPVA: false,
+            isDisabledForPVA: isPVASchema,
           },
         ]
       : []),
+    {
+      to: `/bot/${rootProjectId || projectId}/publish`,
+      iconName: 'CloudUpload',
+      labelName: formatMessage('Publish'),
+      disabled: !botLoaded,
+      isDisabledForPVA: false,
+    },
   ];
 
   if (pluginPages.length > 0) {

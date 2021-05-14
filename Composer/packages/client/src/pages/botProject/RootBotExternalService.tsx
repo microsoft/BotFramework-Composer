@@ -17,6 +17,7 @@ import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 
 import {
   dispatcherState,
@@ -151,6 +152,9 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
+  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
+  const rootLuisEndpointKey = groupLUISEndpointKey.root;
+
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
@@ -179,6 +183,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
+  const linkToPublishProfile = `/bot/${rootBotProjectId}/publish/all#addNewPublishProfile`;
 
   const handleRootLUISKeyOnChange = (e, value) => {
     if (value) {
@@ -331,10 +336,10 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
 
   return (
     <Fragment>
-      <div css={title}>{formatMessage('Language Understanding')}</div>
+      <div css={title}>{formatMessage('Azure Language Understanding')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          '<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>.',
+          'Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>',
           {
             a: ({ children }) => (
               <Link key="luis-root-bot-settings-page" href={'https://www.luis.ai/'} target="_blank">
@@ -355,11 +360,11 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       </div>
       <div css={externalServiceContainerStyle}>
         <TextField
-          ariaLabel={formatMessage('LUIS application name')}
+          ariaLabel={formatMessage('Application name')}
           data-testid={'rootLUISApplicationName'}
           id={'luisName'}
-          label={formatMessage('LUIS application name')}
-          placeholder={formatMessage('Enter LUIS application name')}
+          label={formatMessage('Application name')}
+          placeholder={formatMessage('Type application name')}
           styles={inputFieldStyles}
           value={localRootLuisName}
           onBlur={handleRootLUISNameOnBlur}
@@ -368,12 +373,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <div ref={luisKeyFieldRef}>
           <TextField
-            ariaLabel={formatMessage('LUIS authoring key')}
+            ariaLabel={formatMessage('Language Understanding authoring key')}
             data-testid={'rootLUISAuthoringKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             id={'luisAuthoringKey'}
-            label={formatMessage('LUIS authoring key')}
-            placeholder={formatMessage('Enter LUIS authoring key')}
+            label={formatMessage('Language Understanding authoring key')}
+            placeholder={formatMessage('Type Language Understanding authoring key')}
             required={isLUISKeyNeeded}
             styles={inputFieldStyles}
             value={localRootLuisKey}
@@ -384,12 +389,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <div ref={luisRegionFieldRef}>
           <Dropdown
-            ariaLabel={formatMessage('LUIS region')}
+            ariaLabel={formatMessage('Language Understanding region')}
             data-testid={'rootLUISRegion'}
             id={'luisRegion'}
-            label={formatMessage('LUIS region')}
+            label={formatMessage('Language Understanding region')}
             options={LUIS_REGIONS}
-            placeholder={formatMessage('Enter LUIS region')}
+            placeholder={formatMessage('Select region')}
             required={isLUISKeyNeeded}
             selectedKey={localRootLuisRegion}
             styles={inputFieldStyles}
@@ -406,16 +411,39 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <PrimaryButton
           disabled={displayManageLuis || displayManageQNA}
-          styles={{ root: { width: '130px', marginTop: '15px' } }}
-          text={formatMessage('Get LUIS keys')}
+          styles={{ root: { width: '250px', marginTop: '15px' } }}
+          text={formatMessage('Set up Language Understanding')}
           onClick={() => {
             setDisplayManageLuis(true);
           }}
         />
-        <div css={title}>{formatMessage('QnA Maker')}</div>
+        {localRootLuisKey && !rootLuisEndpointKey && (
+          <MessageBar messageBarType={MessageBarType.info} styles={{ root: { width: '75%', marginTop: 20 } }}>
+            {formatMessage.rich(
+              'Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>',
+              {
+                a: ({ children }) => (
+                  <Link key="luis-endpoint-key-info" href={linkToPublishProfile}>
+                    {children}
+                  </Link>
+                ),
+                a2: ({ children }) => (
+                  <Link
+                    key="luis-endpoint-key-limits-info"
+                    href={'https://aka.ms/composer-settings-luislimits'}
+                    target="_blank"
+                  >
+                    {children}
+                  </Link>
+                ),
+              }
+            )}
+          </MessageBar>
+        )}
+        <div css={title}>{formatMessage('Azure QnA Maker')}</div>
         <div css={subtext}>
           {formatMessage.rich(
-            'Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more</a2>.',
+            'QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>',
             {
               a: ({ children }) => (
                 <Link key="qna-root-bot-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">
@@ -441,7 +469,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             id={'qnaKey'}
             label={formatMessage('QnA Maker Subscription key')}
-            placeholder={formatMessage('Enter QnA Maker Subscription key')}
+            placeholder={formatMessage('Type subscription key')}
             required={isQnAKeyNeeded}
             styles={inputFieldStyles}
             value={localRootQnAKey}
@@ -452,8 +480,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         </div>
         <PrimaryButton
           disabled={displayManageLuis || displayManageQNA}
-          styles={{ root: { width: '130px', marginTop: '15px' } }}
-          text={formatMessage('Get QnA key')}
+          styles={{ root: { width: '250px', marginTop: '15px' } }}
+          text={formatMessage('Set up QnA Maker')}
           onClick={() => {
             setDisplayManageQNA(true);
           }}

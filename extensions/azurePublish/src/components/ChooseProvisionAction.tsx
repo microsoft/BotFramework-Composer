@@ -75,16 +75,23 @@ const LearnMoreLink = styled(Link)`
 const CreateActionContent = () => {
   return (
     <Content>
+      <Title>{formatMessage('Create new resources')}</Title>
       <Summary>
         <Text>
           {formatMessage(
-            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to '
+            'Select this option when you want to provision new Azure resources and publish a bot. A subscription to'
           )}
         </Text>
+        &nbsp;
         <LearnMoreLink href="https://aka.ms/azureSignUpPage" target="_blank">
           {formatMessage('Microsoft Azure')}
         </LearnMoreLink>
-        <Text>{formatMessage(' is required.')}</Text>
+        &nbsp;
+        <Text>{formatMessage('is required.')}</Text>
+        &nbsp;
+        <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
+          {formatMessage('Learn more')}
+        </LearnMoreLink>
       </Summary>
       <Details>
         <Instruction>
@@ -96,27 +103,29 @@ const CreateActionContent = () => {
         <Instruction>
           <InstructionTitle>{formatMessage('Step 2')}</InstructionTitle>
           <InstructionDetails>
-            <Text>
-              {formatMessage(
-                'Select tenant and subscription, enter resource group name and resource name, and select region.'
-              )}
-            </Text>
+            <Text>{formatMessage('Select Azure subscription and resource group name')}</Text>
           </InstructionDetails>
         </Instruction>
         <Instruction>
           <InstructionTitle>{formatMessage('Step 3')}</InstructionTitle>
           <InstructionDetails>
-            <Text>
-              {formatMessage(
-                'Review and create new resources. Once provisioned these resources will be available in your Azure portal.'
-              )}
-            </Text>
+            <Text>{formatMessage('Select and name your new resources')}</Text>
+          </InstructionDetails>
+        </Instruction>
+        <Instruction>
+          <InstructionTitle>{formatMessage('Step 4')}</InstructionTitle>
+          <InstructionDetails>
+            <Text>{formatMessage('Review and confirm resources to be created')}</Text>
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
-        {formatMessage('Learn More')}
-      </LearnMoreLink>
+      <Summary>
+        <Text>{formatMessage('Once provisioned, your new resources will be available in the Azure portal.')}</Text>
+        &nbsp;
+        <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
+          {formatMessage('Learn More')}
+        </LearnMoreLink>
+      </Summary>
     </Content>
   );
 };
@@ -124,15 +133,19 @@ const CreateActionContent = () => {
 const ImportActionContent = () => {
   return (
     <Content>
-      <Title>{formatMessage('Import existing resources')}</Title>
+      <Title>{formatMessage('Use existing resources')}</Title>
       <Summary>
         <p>
-          <Text>{formatMessage('Select this option to import existing Azure resources and publish a bot.')}</Text>
+          <Text>
+            {formatMessage(
+              'Select this option if you have access to existing Azure resources and their associated values.'
+            )}
+          </Text>
         </p>
         <p>
           <Text>
             {formatMessage(
-              'Edit the JSON file in the Publish Configuration field. You will need to find the values of associated resources in your Azure portal. A list of required and optional resources may include:'
+              'Copy and paste the JSON file containing the values of your existing Azure resources, from the Azure portal. This file includes values for some or all of the following:'
             )}
           </Text>
         </p>
@@ -163,7 +176,7 @@ const ImportActionContent = () => {
           <Text>- {formatMessage('Microsoft QnA Maker')}</Text>
         </ResourceTitle>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publish-bot#import-existing-azure-resources">
+      <LearnMoreLink href="https://aka.ms/composer-getstarted-importpublishing" target="_blank">
         {formatMessage('Learn More')}
       </LearnMoreLink>
     </Content>
@@ -203,7 +216,7 @@ const GenerateActionContent = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publish-bot#handoff-to-admin">
+      <LearnMoreLink href="https://aka.ms/composer-publishingprofile-handoffadmin" target="_blank">
         {formatMessage('Learn More')}
       </LearnMoreLink>
     </Content>

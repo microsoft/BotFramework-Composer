@@ -18,6 +18,7 @@ const babelConfig = {
     require.resolve('@babel/plugin-transform-runtime'),
     require.resolve('@babel/plugin-proposal-optional-chaining'),
     require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
+    require.resolve('@babel/plugin-transform-named-capturing-groups-regex'),
   ],
 };
 

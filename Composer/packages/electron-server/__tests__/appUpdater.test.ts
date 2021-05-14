@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { AppUpdater } from '../src/appUpdater';
+
 const mockAutoUpdater = {
   allowDowngrade: false,
   autoDownload: false,
@@ -23,14 +25,13 @@ jest.mock('electron', () => ({
   },
 }));
 
-import { AppUpdater } from '../src/appUpdater';
-
 describe('App updater', () => {
   let appUpdater: AppUpdater;
   beforeEach(() => {
     mockAutoUpdater.allowDowngrade = false;
     mockAutoUpdater.autoDownload = false;
     appUpdater = AppUpdater.getInstance();
+    (appUpdater as any).currentAppVersion = mockGetVersion();
     (appUpdater as any).checkingForUpdate = false;
     (appUpdater as any).downloadingUpdate = false;
     (appUpdater as any)._downloadedUpdate = false;
@@ -45,12 +46,10 @@ describe('App updater', () => {
   });
 
   it('should check for updates from the nightly repo', () => {
-    (appUpdater as any).settings.autoDownload = true;
     (appUpdater as any).settings.useNightly = true;
     appUpdater.checkForUpdates(true);
 
     expect(mockAutoUpdater.checkForUpdates).toHaveBeenCalled();
-    expect(mockAutoUpdater.autoDownload).toBe(true);
     expect((appUpdater as any).explicitCheck).toBe(true);
     expect(mockAutoUpdater.setFeedURL).toHaveBeenCalledWith({
       provider: 'github',
@@ -89,10 +88,9 @@ describe('App updater', () => {
   });
 
   it('should not allow a downgrade when checking for updates from nightly to (stable or nightly)', () => {
-    mockGetVersion.mockReturnValueOnce('0.0.1-nightly.12345.abcdef');
+    (appUpdater as any).currentAppVersion = '0.0.1-nightly.12345.abcdef';
     mockAutoUpdater.allowDowngrade = true;
     appUpdater.checkForUpdates();
-
     expect(mockAutoUpdater.allowDowngrade).toBe(false);
   });
 

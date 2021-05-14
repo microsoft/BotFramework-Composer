@@ -65,7 +65,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const {
     getPublishHistory,
     getPublishStatusV2,
-    getPublishTargetTypes,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
@@ -105,18 +104,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     return currentBotList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
   }, [checkedSkillIds]);
 
-  // The publishTypes are loaded from the server and put into the publishTypesState per project
-  // The botProjectSpaceSelector maps the publishTypes to the project bots.
-  // The localBotsDataSelector uses botProjectSpaceSelector
-  // The botPropertyData uses localBotsDataSelector
-  // When the botPropertyData is used (like in the canPull method), the publishTypes must be loaded for the current project.
-  // Otherwise the botPropertyData publishTypes will always be empty and this component won't function properly.
-  useEffect(() => {
-    if (projectId) {
-      getPublishTargetTypes(projectId);
-    }
-  }, [projectId]);
-
   const canPull = useMemo(() => {
     return selectedBots.some((bot) => {
       const { publishTypes, publishTargets } = botPropertyData[bot.id];
@@ -143,7 +130,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const decoded = props.location?.search ? decodeURIComponent(props.location.search) : '';
   const { publishTargetName, url } = querystring.parse(decoded);
   const [skillManifestUrl, setSkillManifestUrl] = useState('');
-  const [completionRequired, setCompletionRequired] = useState<boolean>(false);
 
   useEffect(() => {
     if (publishTargetName && botStatusList.length > 0 && skillPublishStatus === SKILL_PUBLISH_STATUS.INITIAL) {
@@ -276,11 +262,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   // pop out get started if #getstarted is in the URL
   useEffect(() => {
-    if (location.hash === '#addNewPublishProfile') {
+    if (location.hash === '#addNewPublishProfile' || location.hash === '#completePublishProfile') {
       setActiveTab('addNewPublishProfile');
-    } else if (location.hash === '#completePublishProfile') {
-      setActiveTab('addNewPublishProfile');
-      setCompletionRequired(true);
     }
   }, [location]);
 
@@ -329,7 +312,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
                   type: 'error',
                   title: formatMessage('Unsupported publishing profile'),
                   description: formatMessage(
-                    "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it's configuration or create a new one.",
+                    'This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one.',
                     { profileName: target.name }
                   ),
                 });
@@ -498,7 +481,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             </div>
           </div>
         </PivotItem>
-        <PivotItem headerText={formatMessage('Publishing Profile')} itemKey={'addNewPublishProfile'}>
+        <PivotItem headerText={formatMessage('Publishing profile')} itemKey={'addNewPublishProfile'}>
           <Stack horizontal verticalFill styles={{ root: { borderTop: '1px solid #CCC' } }}>
             {botProjectData && botProjectData.length > 1 && (
               <Stack.Item styles={{ root: { width: '175px', borderRight: '1px solid #CCC' } }}>
@@ -510,7 +493,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               </Stack.Item>
             )}
             <Stack.Item align="stretch" styles={{ root: { flexGrow: 1, overflow: 'auto', maxHeight: '100%' } }}>
-              <PublishTargets completePartial={completionRequired} projectId={provisionProject} />
+              <PublishTargets projectId={provisionProject} />
             </Stack.Item>
           </Stack>
         </PivotItem>

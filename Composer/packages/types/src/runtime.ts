@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { IBotProject } from './server';
 import { DialogSetting } from './settings';
 
@@ -36,6 +35,7 @@ export type BotTemplate = {
   id: string;
   name: string;
   description: string;
+  isMultiBotTemplate?: boolean;
   nodeSupport?: EnvSupport;
   dotnetSupport?: EnvSupport;
   /* absolute path */
@@ -62,7 +62,7 @@ export type RuntimeTemplate = {
   eject?: (project: IBotProject, localDisk?: any, isReplace?: boolean) => Promise<string>;
 
   /** build method used for local publish */
-  build: (runtimePath: string, project: IBotProject) => Promise<void>;
+  build: (runtimePath: string, project: IBotProject, fullSettings?: DialogSetting, port?: number) => Promise<void>;
 
   run: (project: IBotProject, localDisk?: any) => Promise<void>;
 

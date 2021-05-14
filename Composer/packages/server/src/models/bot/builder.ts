@@ -121,7 +121,16 @@ export class Builder {
       await this.runQnaBuild(interruptionQnaFiles);
       await this.runOrchestratorBuild(orchestratorBuildFiles, emptyFiles);
     } catch (error) {
-      throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
+      // handle this special error case where QnA Maker returns this uninformative error.
+      // in their portal, it is accompanied by a message about the search service limits
+      // (A free search is limited to 3 indexes, which can be used up quickly)
+      if (error.text === 'Qnamaker build failed: Runtime error.') {
+        throw new Error(
+          'QnA Maker build failed: This error may indicate that your Search service requires an upgrade. For information about the Search service limits, see here: https://docs.microsoft.com/en-us/azure/search/search-limits-quotas-capacity'
+        );
+      } else {
+        throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
+      }
     }
   };
 
