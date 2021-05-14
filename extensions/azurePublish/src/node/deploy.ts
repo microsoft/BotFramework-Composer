@@ -277,9 +277,10 @@ export class BotProjectDeploy {
           `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
         );
       } else {
+        const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
         throw createCustomizeError(
           AzurePublishErrors.DEPLOY_ZIP_ERROR,
-          `The hostname is invalid, please check if hostname/name-environment matches your target resource(webapp/function) name`
+          `There was a problem publishing bot assets (zip deploy). ${errorMessage}`
         );
       }
     }
