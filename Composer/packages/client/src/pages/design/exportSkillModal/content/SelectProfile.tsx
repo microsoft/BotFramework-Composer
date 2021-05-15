@@ -11,9 +11,9 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
@@ -25,16 +25,6 @@ const styles = {
     height: 350px;
     overflow: auto;
   `,
-};
-
-const actionButton = {
-  root: {
-    fontSize: 14,
-    fontWeight: FontWeights.regular,
-    color: SharedColors.cyanBlue10,
-    paddingLeft: 0,
-    marginLeft: 5,
-  },
 };
 
 const onRenderLabel = (props) => {
@@ -70,20 +60,10 @@ const onRenderLabel = (props) => {
 
 const onRenderInvalidProfileWarning = (hasValidProfile, handleShowCreateProfileDialog) => {
   return (
-    <div>
-      <span>{formatMessage('Publish profile is missing App ID and host name. ')}</span>
-      {hasValidProfile ? (
-        <span>{formatMessage('Choose a valid publish profile to continue')}</span>
-      ) : (
-        <ActionButton
-          data-testid={'addNewPublishProfile'}
-          styles={actionButton}
-          onClick={handleShowCreateProfileDialog}
-        >
-          {formatMessage('Create a valid publish profile to continue')}
-        </ActionButton>
-      )}
-    </div>
+    <MessageBar dismissButtonAriaLabel="Close" isMultiline={false} messageBarType={MessageBarType.warning}>
+      {formatMessage('Publish profile is missing App ID and host name. ')}
+      {hasValidProfile && formatMessage('Choose a valid publish profile to continue')}
+    </MessageBar>
   );
 };
 
@@ -114,7 +94,7 @@ const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element | nu
   return option ? (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <span>{option.text}</span>
-      {option.data && option.data.icon && (
+      {option.data?.icon && (
         <Icon
           aria-hidden="true"
           iconName={option.data.icon}
@@ -204,37 +184,22 @@ export const SelectProfile: React.FC<ContentProps> = ({
     }
   };
 
-  const hasValidProfile = useMemo(() => {
-    if (!publishingTargets) return false;
-    const filteredProfile = publishingTargets.filter((item) => {
-      return isValidProfile(item);
-    });
-    return filteredProfile.length > 0;
-  }, [publishingTargets]);
+  const hasValidProfile = useMemo(() => !!publishingTargets.some((target) => isValidProfile(target)), [
+    publishingTargets,
+  ]);
 
   const publishingOptions = useMemo(() => {
-    return publishingTargets.map((t) =>
-      isValidProfile(t)
-        ? {
-            key: t.name,
-            text: t.name,
-          }
-        : {
-            key: t.name,
-            text: t.name,
-            data: { icon: 'TriangleSolid', color: NeutralColors.gray60 },
-          }
-    );
+    return publishingTargets.map((t) => ({
+      key: t.name,
+      text: t.name,
+      data: !isValidProfile(t) ? { icon: 'TriangleSolid', color: NeutralColors.gray60 } : undefined,
+    }));
   }, [publishingTargets]);
 
   useEffect(() => {
     setPublishingTargets(settings.publishTargets || []);
     setCurrentTarget((settings.publishTargets || [])[0]);
-    if (!settings.publishTargets || settings.publishTargets.length === 0) {
-      setShowCreateProfileDialog(true);
-    } else {
-      setShowCreateProfileDialog(false);
-    }
+    setShowCreateProfileDialog(!settings.publishTargets || settings.publishTargets.length === 0);
   }, [settings]);
 
   useEffect(() => {
@@ -279,8 +244,8 @@ export const SelectProfile: React.FC<ContentProps> = ({
             disabled
             required
             ariaLabel={formatMessage('The app id of your application registration')}
-            label={formatMessage('Microsoft App Id')}
-            placeholder={formatMessage('The app id')}
+            label={formatMessage('Microsoft App ID')}
+            placeholder={formatMessage('The App ID')}
             styles={{ root: { paddingBottom: '8px' } }}
             value={appId}
             onRenderLabel={onRenderLabel}
