@@ -227,7 +227,7 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
             <EmptyView verticalFill horizontalAlign="center" verticalAlign="center">
               <Text variant="large">
                 {schemaId
-                  ? formatMessage(`{schemaId} doesn't exists, select an schema to edit or create a new one`, {
+                  ? formatMessage(`{schemaId} doesn't exist; select a schema to edit or create a new one`, {
                       schemaId,
                     })
                   : formatMessage('Select an schema to edit or create a new one')}

@@ -170,6 +170,15 @@ export const settingsDispatcher = () => {
     }
   );
 
+  const setMicrosoftAppProperties = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (projectId: string, appId: string, password: string) => {
+      set(settingsState(projectId), (currentValue) => ({
+        ...currentValue,
+        MicrosoftAppId: appId,
+        MicrosoftAppPassword: password,
+      }));
+    }
+  );
   const setCustomRuntime = useRecoilCallback(() => async (projectId: string, isOn: boolean) => {
     setRuntimeField(projectId, 'customRuntime', isOn);
   });
@@ -270,6 +279,7 @@ export const settingsDispatcher = () => {
     setRuntimeSettings,
     setPublishTargets,
     setRuntimeField,
+    setMicrosoftAppProperties,
     setImportedLibraries,
     setCustomRuntime,
     setQnASettings,
