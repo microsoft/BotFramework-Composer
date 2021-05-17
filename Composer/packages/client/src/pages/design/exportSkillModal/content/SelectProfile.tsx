@@ -13,7 +13,6 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
