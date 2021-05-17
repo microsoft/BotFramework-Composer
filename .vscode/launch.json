@@ -50,6 +50,22 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Server: Dev",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["start:server:dev"],
+      "restart": true,
+      "outFiles": [
+        "${workspaceRoot}/Composer/packages/server/build/**/*.js",
+        "${workspaceRoot}/extensions/**/*.js"
+      ],
+      "sourceMaps": true,
+      //"preLaunchTask": "server: build",
+      "outputCapture": "std",
+      "cwd": "${workspaceFolder}/Composer"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Server: Launch",
       "program": "${workspaceFolder}/Composer/packages/server/build/init.js",
       "env": {
