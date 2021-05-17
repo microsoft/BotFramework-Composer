@@ -1,9 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Stack, Text, Link } from 'office-ui-fabric-react';
+
 import { RegistryTypeOptions } from '../types';
 
 // ---------- Styles ---------- //

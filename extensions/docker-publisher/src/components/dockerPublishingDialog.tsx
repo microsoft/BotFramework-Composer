@@ -1,14 +1,15 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import { useState, useMemo, Fragment, useCallback, useEffect } from 'react';
-
 import { usePublishApi } from '@bfc/extension-client';
-
-import { PageRegistryType, DockerHubConfig, RegistryConfig, ImageConfig, ACRConfig, Review, Footer } from './pages';
 
 import { RegistryConfigData, PageTypes, DefaultExtensionStates } from '../types';
 import { IRepository } from '../types/interfaces';
-
 import { ACRAPI, DockerEngine, DockerHubAPI } from '../backend';
+
+import { PageRegistryType, DockerHubConfig, RegistryConfig, ImageConfig, ACRConfig, Review, Footer } from './pages';
 
 export const DockerPublishingDialog: React.FC = () => {
   const {
@@ -136,31 +137,31 @@ export const DockerPublishingDialog: React.FC = () => {
           {page === PageTypes.ACRConfig && (
             <ACRConfig
               creationType={currentConfig.creationType}
-              token={token}
-              registryUrl={currentConfig.url}
-              username={currentConfig.username}
               password={currentConfig.password}
+              registryUrl={currentConfig.url}
+              token={token}
+              username={currentConfig.username}
+              onPasswordChanged={(e, v) => updateFormData('password', v)}
               onRegistryUrlChanged={(e, v) => updateFormData('url', v)}
               onUsernameChanged={(e, v) => updateFormData('username', v)}
-              onPasswordChanged={(e, v) => updateFormData('password', v)}
             />
           )}
           {page === PageTypes.DockerHubConfig && (
             <DockerHubConfig
-              username={currentConfig.username}
               password={currentConfig.password}
-              usernameChanged={(e, v) => updateFormData('username', v)}
               passwordChanged={(e, v) => updateFormData('password', v)}
+              username={currentConfig.username}
+              usernameChanged={(e, v) => updateFormData('username', v)}
             />
           )}
           {page === PageTypes.RegistryConfig && (
             <RegistryConfig
+              password={currentConfig.password}
               registryUrl={currentConfig.url}
               username={currentConfig.username}
-              password={currentConfig.password}
+              onPasswordChanged={(e, v) => updateFormData('password', v)}
               onRegistryUrlChanged={(e, v) => updateFormData('url', v)}
               onUsernameChanged={(e, v) => updateFormData('username', v)}
-              onPasswordChanged={(e, v) => updateFormData('password', v)}
             />
           )}
           {page === PageTypes.Image && (
@@ -176,11 +177,11 @@ export const DockerPublishingDialog: React.FC = () => {
           {page === PageTypes.Review && (
             <Review
               creationType={currentConfig.creationType}
+              image={currentConfig.image}
+              password={currentConfig.password}
+              tag={currentConfig.tag}
               url={currentConfig.url}
               username={currentConfig.username}
-              password={currentConfig.password}
-              image={currentConfig.image}
-              tag={currentConfig.tag}
             />
           )}
         </div>
@@ -197,17 +198,17 @@ export const DockerPublishingDialog: React.FC = () => {
           }}
         >
           <Footer
-            page={page}
+            closeDialog={closeDialog}
             creationType={currentConfig.creationType}
-            isNextRegistryTypeDisabled={isNextRegistryTypeDisabled}
-            isNextImageConfigDisabled={isNextImageConfigDisabled}
-            isNextRegistryConfigDisabled={isNextRegistryConfigDisabled}
             isNextACRConfigDisabled={isNextRegistryConfigDisabled}
             isNextDockerHubConfigDisabled={isNextDockerHubConfigDisabled}
-            onNext={(p) => setPage(p)}
+            isNextImageConfigDisabled={isNextImageConfigDisabled}
+            isNextRegistryConfigDisabled={isNextRegistryConfigDisabled}
+            isNextRegistryTypeDisabled={isNextRegistryTypeDisabled}
+            page={page}
             setTitle={setTitle}
-            closeDialog={closeDialog}
             onBack={onBack}
+            onNext={(p) => setPage(p)}
             onSave={onSave}
           />
         </div>

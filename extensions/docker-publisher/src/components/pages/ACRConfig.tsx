@@ -1,7 +1,18 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import formatMessage from 'format-message';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { ScrollablePane, ScrollbarVisibility, Stack, Dropdown, TextField } from 'office-ui-fabric-react';
+import { Subscription } from '@azure/arm-subscriptions/esm/models';
+import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
+
+import { getSubscriptions, getResourceGroups, getResources } from '../../backend/azureApi';
+import { OnChangeDelegate } from '../../types';
+import { AzureDropDownData } from '../../types/azureTypes';
+
+import { renderPropertyInfoIcon } from './utils';
 import {
   ConfigureResourcesSectionName,
   ConfigureResourcesSectionDescription,
@@ -11,14 +22,6 @@ import {
   configureResourceTextFieldStyles,
   configureResourceDropdownStyles,
 } from './styles';
-
-import { Subscription } from '@azure/arm-subscriptions/esm/models';
-import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
-import { getSubscriptions, getResourceGroups, getResources } from '../../backend/azureApi';
-
-import { renderPropertyInfoIcon } from './utils';
-import { OnChangeDelegate } from '../../types';
-import { AzureDropDownData } from '../../types/azureTypes';
 
 type Props = {
   creationType: string;
@@ -225,8 +228,8 @@ export const ACRConfig = ({
               {renderPropertyInfoIcon(formatMessage('Registry Password'))}
             </Stack>
             <TextField
-              styles={configureResourceTextFieldStyles}
               placeholder={formatMessage('Password')}
+              styles={configureResourceTextFieldStyles}
               type="password"
               value={password}
               onChange={(e, v) => onPasswordChanged(e, v)}

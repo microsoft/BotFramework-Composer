@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IRepository } from '../types/interfaces';
 import { RepositoryAPIProps } from '../types';
 

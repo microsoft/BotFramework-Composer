@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { PageRegistryType } from './RegistryType';
 import { DockerHubConfig } from './DockerHubConfig';
 import { RegistryConfig } from './RegistryConfig';

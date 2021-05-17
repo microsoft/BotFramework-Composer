@@ -1,7 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import formatMessage from 'format-message';
 import { useState, useEffect } from 'react';
 import { ScrollablePane, ScrollbarVisibility, Stack, TextField } from 'office-ui-fabric-react';
+
+import { OnChangeDelegate, RegistryConfigData, RegistryTypeOptions } from '../../types';
+
 import {
   ConfigureResourcesSectionName,
   configureResourcePropertyStackTokens,
@@ -10,7 +16,6 @@ import {
   configureResourceTextFieldStyles,
 } from './styles';
 import { renderPropertyInfoIcon } from './utils';
-import { OnChangeDelegate, RegistryConfigData, RegistryTypeOptions } from '../../types';
 
 export const Review = ({
   creationType: controlledCreationType,
@@ -49,7 +54,7 @@ export const Review = ({
               <ConfigureResourcesPropertyLabel>{formatMessage('Registry Kind')}</ConfigureResourcesPropertyLabel>
             </Stack>
             <TextField
-              readOnly={true}
+              readOnly
               styles={configureResourceTextFieldStyles}
               value={RegistryTypeOptions.find((el) => el.key == creationType).text}
             />
@@ -60,7 +65,7 @@ export const Review = ({
               <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
                 <ConfigureResourcesPropertyLabel>{formatMessage('Registry:')}</ConfigureResourcesPropertyLabel>
               </Stack>
-              <TextField readOnly={true} styles={configureResourceTextFieldStyles} value={registryUrl} />
+              <TextField readOnly styles={configureResourceTextFieldStyles} value={registryUrl} />
             </Stack>
           )}
 
@@ -70,14 +75,14 @@ export const Review = ({
                 <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
                   <ConfigureResourcesPropertyLabel>{formatMessage('Username:')}</ConfigureResourcesPropertyLabel>
                 </Stack>
-                <TextField readOnly={true} styles={configureResourceTextFieldStyles} value={username} />
+                <TextField readOnly styles={configureResourceTextFieldStyles} value={username} />
               </Stack>
 
               <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
                 <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
                   <ConfigureResourcesPropertyLabel>{formatMessage('Password:')}</ConfigureResourcesPropertyLabel>
                 </Stack>
-                <TextField type="password" readOnly={true} styles={configureResourceTextFieldStyles} value={password} />
+                <TextField readOnly styles={configureResourceTextFieldStyles} type="password" value={password} />
               </Stack>
             </>
           )}
@@ -86,7 +91,7 @@ export const Review = ({
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
               <ConfigureResourcesPropertyLabel>{formatMessage('Image:')}</ConfigureResourcesPropertyLabel>
             </Stack>
-            <TextField readOnly={true} styles={configureResourceTextFieldStyles} value={`${imageName}:${imageTag}`} />
+            <TextField readOnly styles={configureResourceTextFieldStyles} value={`${imageName}:${imageTag}`} />
           </Stack>
         </Stack>
       </form>

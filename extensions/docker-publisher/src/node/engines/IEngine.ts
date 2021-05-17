@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ExecResult, RegistryConfigData } from '../../types';
 import { DockerContext } from '../../types/dockerTypes';
 import { execAsync } from '../../utils/fs';

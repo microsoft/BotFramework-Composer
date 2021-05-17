@@ -1,5 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import { useState, useEffect, useMemo } from 'react';
+
 import { OnChoiceDelegate } from '../../types';
 import { ChooseRegistryAction } from '../ChooseRegistryAction';
 

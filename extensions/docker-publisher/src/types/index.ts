@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IChoiceGroupOption } from 'office-ui-fabric-react';
 
 export type OnChangeDelegate = (event, value) => void;

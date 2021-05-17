@@ -1,10 +1,14 @@
-import { IEngine } from './IEngine';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { DockerContext, Steps } from '../../types/dockerTypes';
 import { execAsync } from '../../utils/fs';
 
+import { IEngine } from './IEngine';
+
 export class ACR extends IEngine {
   async verify(context: DockerContext): Promise<boolean> {
-    const [registry, name, tag] = context.imageName.split(/\/|\:/);
+    const [registry, name, tag] = context.imageName.split(/\/|:/);
     const token = Buffer.from(`${context.username}:${context.password}`).toString('base64');
     const url = `https://${registry}/acr/v1/${name}/_tags`;
 

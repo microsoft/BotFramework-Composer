@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IEngine } from './IEngine';
 import { LocalDocker } from './Local';
 import { ACR } from './ACR';

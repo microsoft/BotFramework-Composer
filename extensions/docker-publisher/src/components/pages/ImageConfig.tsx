@@ -1,7 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import formatMessage from 'format-message';
 import { ScrollablePane, ScrollbarVisibility, Stack, TextField } from 'office-ui-fabric-react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { LoadingSpinner } from '@bfc/ui-shared';
+
+import { OnChangeDelegate, OnChoiceDelegate } from '../../types';
+import { IRepository } from '../../types/interfaces';
+import { TagPicker } from '../TagPicker';
+
 import { renderPropertyInfoIcon } from './utils';
 import {
   ConfigureResourcesSectionName,
@@ -11,11 +20,6 @@ import {
   ConfigureResourcesPropertyLabel,
   configureResourceTextFieldStyles,
 } from './styles';
-import { OnChangeDelegate, OnChoiceDelegate } from '../../types';
-import { IRepository } from '../../types/interfaces';
-
-import { TagPicker } from '../TagPicker';
-import { LoadingSpinner } from '@bfc/ui-shared';
 
 type Props = {
   creationType: string;
@@ -92,8 +96,8 @@ export const ImageConfig = ({
       <TagPicker
         disabled={!imageName}
         newTagName={isNewTagName ? 'latest' : undefined}
-        tagNames={imageTags}
         selectedTagName={isNewTagName ? undefined : imageTag}
+        tagNames={imageTags}
         onChange={(choice) => {
           setIsNewTagName(choice.isNew);
           setImageTag(choice.name);

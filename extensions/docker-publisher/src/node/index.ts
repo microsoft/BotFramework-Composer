@@ -1,4 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import path from 'path';
+
 import {
   PublishPlugin,
   IExtensionRegistration,
@@ -6,11 +10,12 @@ import {
   PublishResult,
   PublishResponse,
 } from '@botframework-composer/types';
+import { pathExists, readJson, writeJson } from 'fs-extra';
 
 import { RegistryConfigData, ConfigSettings } from '../types';
 import { DockerContext, Status, Steps } from '../types/dockerTypes';
+
 import { DockerEngines, IEngine } from './engines';
-import { pathExists, readJson, writeJson } from 'fs-extra';
 
 type PublishConfig = {
   target: RegistryConfigData;
@@ -138,12 +143,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     private pushImage = async (dockerContext: DockerContext) => {
       this.logger(Steps.PUSH_IMAGE, 'Starting');
 
-      try {
-        const stdout = await this.dockerEngine.push(dockerContext);
-        stdout.split('\n').map((line) => this.logger(Steps.PUSH_IMAGE, line, 200));
-      } catch (err) {
-        throw err;
-      }
+      const stdout = await this.dockerEngine.push(dockerContext);
+      stdout.split('\n').map((line) => this.logger(Steps.PUSH_IMAGE, line, 200));
     };
 
     private verifyImageCreation = async (dockerContext: DockerContext) => {
@@ -205,7 +206,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     }
     private parseLogToString(): string {
       let str = '';
-      for (let k in this.currentStatus.log) {
+      for (const k in this.currentStatus.log) {
         str += `---\n${k}:\n${this.currentStatus.log[k]
           .map((item) => `  ${JSON.stringify(item, null, 2)}`)
           .join('\n')}\n\n`;

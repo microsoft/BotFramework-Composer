@@ -1,7 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import formatMessage from 'format-message';
 import { useState, useEffect, useMemo } from 'react';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
+
 import { PageTypes } from '../../types';
 
 type Props = {
@@ -166,9 +170,9 @@ export const Footer = ({
         }}
       />
       <PrimaryButton
+        disabled={isNextImageConfigDisabled}
         style={{ margin: '0 4px' }}
         text={formatMessage('Next')}
-        disabled={isNextImageConfigDisabled}
         onClick={() => {
           setPageAndTitle(PageTypes.Review);
         }}
@@ -219,9 +223,9 @@ export const Footer = ({
         }}
       />
       <PrimaryButton
+        disabled={isDefaultFooterNextButtonDisabled}
         style={{ margin: '0 4px' }}
         text={formatMessage('Next')}
-        disabled={isDefaultFooterNextButtonDisabled}
         onClick={() => {
           setPageAndTitle(PageTypes.Image);
         }}

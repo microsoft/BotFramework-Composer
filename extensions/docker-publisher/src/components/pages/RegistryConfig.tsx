@@ -1,7 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import formatMessage from 'format-message';
 import { ScrollablePane, ScrollbarVisibility, Stack, TextField } from 'office-ui-fabric-react';
 import { useState, useEffect } from 'react';
+
+import { OnChangeDelegate } from '../../types';
+
 import { renderPropertyInfoIcon } from './utils';
 import {
   ConfigureResourcesSectionName,
@@ -11,7 +17,6 @@ import {
   ConfigureResourcesPropertyLabel,
   configureResourceTextFieldStyles,
 } from './styles';
-import { OnChangeDelegate } from '../../types';
 
 type Props = {
   registryUrl: string;

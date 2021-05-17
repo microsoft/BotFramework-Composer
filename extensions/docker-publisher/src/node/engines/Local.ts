@@ -1,6 +1,10 @@
-import { IEngine } from './IEngine';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { execAsync } from '../../utils/fs';
 import { DockerContext, Steps } from '../../types/dockerTypes';
+
+import { IEngine } from './IEngine';
 
 export class LocalDocker extends IEngine {
   async push(context: DockerContext): Promise<string> {

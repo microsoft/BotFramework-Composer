@@ -1,7 +1,12 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
 import { exec } from 'child_process';
+
 import { ExecResult } from '../types';
 
 const mkdir = promisify(fs.mkdir);

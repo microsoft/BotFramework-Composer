@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { RepositoryAPIProps } from '../types';
 import { IRepository } from '../types/interfaces';
 
@@ -38,7 +41,7 @@ export class ACRAPI implements IRepository {
     });
 
     if (response.status == 200) {
-      let result = await response.json();
+      const result = await response.json();
       return result;
     }
 

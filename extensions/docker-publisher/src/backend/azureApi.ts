@@ -9,6 +9,7 @@ import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models'
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 import sortBy from 'lodash/sortBy';
+
 import { AzureAPIStatus } from '../types/azureTypes';
 
 const logger = debug('composer:extension:docker-publish');
