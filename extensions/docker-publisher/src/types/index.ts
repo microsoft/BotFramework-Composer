@@ -12,6 +12,17 @@ export type RegistryConfigData = {
   tag: string;
 };
 
+export type ConfigSettings = RegistryConfigData & {
+  botPath: string;
+  botId: string;
+  botName: string;
+};
+
+export type ExecResult = {
+  stdout: string;
+  stderr: string;
+};
+
 export const DefaultExtensionStates: RegistryConfigData = {
   creationType: 'local',
   url: '',
