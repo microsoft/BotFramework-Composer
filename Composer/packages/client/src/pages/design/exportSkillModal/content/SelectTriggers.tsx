@@ -20,12 +20,19 @@ const getLabel = (kind: SDKKinds, uiSchema) => {
   return label || kind.replace('Microsoft.', '');
 };
 
-export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSelectedTriggers, projectId }) => {
+export const SelectTriggers: React.FC<ContentProps> = ({
+  selectedDialogs,
+  selectedTriggers,
+  setSelectedTriggers,
+  projectId,
+}) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
   const items = useMemo(() => {
-    const { triggers = [] } = dialogs.find(({ isRoot }) => isRoot) || ({} as DialogInfo);
+    const triggers: ITrigger[] = dialogs
+      .filter((dialog) => dialog.isRoot || selectedDialogs.findIndex((item) => item.id === dialog.id) > -1)
+      .reduce((accumulator, dialog) => accumulator.concat(dialog.triggers), [] as ITrigger[]);
 
     return triggers
       .filter(isSupportedTrigger)
