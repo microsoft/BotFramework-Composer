@@ -1,58 +1,218 @@
 import path from 'path';
 import {
-  DialogSetting,
   PublishPlugin,
   IExtensionRegistration,
-  AuthParameters,
   IBotProject,
-  ProcessStatus,
-  UserIdentity,
+  PublishResult,
+  PublishResponse,
 } from '@botframework-composer/types';
 
-interface RegistrySettings {
-  hostname: string;
-  username: string;
-  password: string;
-}
-interface PublishConfig {
-  botId: string;
-  version: string;
-  registry: RegistrySettings;
+import { RegistryConfigData, ConfigSettings } from '../types';
+import { DockerContext, Status, Steps } from '../types/dockerTypes';
+import { DockerEngines, IEngine } from './engines';
+import { pathExists, readJson, writeJson } from 'fs-extra';
+
+type PublishConfig = {
+  target: RegistryConfigData;
   fullSettings: any;
-}
+};
+
+const PERSIST_HISTORY = true;
 
 export default async (composer: IExtensionRegistration): Promise<void> => {
   class DockerPublisher implements PublishPlugin<PublishConfig> {
-    private composer: IExtensionRegistration;
-    public name: string;
-    public description: string;
-    public bundleId: string;
+    private readonly composer: IExtensionRegistration;
+
     private readonly baseDir = path.resolve(__dirname, '../');
+    private readonly assetsDir = path.resolve(this.baseDir, 'assets');
+
+    public readonly name: string;
+    public readonly description: string;
+    public readonly bundleId: string;
+    private dockerEngine: IEngine;
+
+    private publishHistories: Record<string, PublishResult[]>;
+    private historyFilePath: string;
+
+    private currentStatus: Status = {
+      status: -1,
+      message: '',
+      log: {},
+    };
+
+    private logger = (step: string, message: string, status?: number) => {
+      this.currentStatus.status = status;
+      this.currentStatus.message = message;
+      if (!this.currentStatus.log[step]) {
+        this.currentStatus.log[step] = [];
+      }
+      this.currentStatus.log[step].push(message);
+
+      composer.log({
+        status: step,
+        message: message,
+      });
+    };
+
+    /*******************************************************************************************************************************/
+    /* These methods deal with the publishing history displayed in the Composer UI */
+    /*******************************************************************************************************************************/
+    private updateHistory = async (profileName: string, newHistory: PublishResult) => {
+      if (!this.publishHistories) {
+        this.publishHistories = {};
+      }
+      if (!this.publishHistories[profileName]) {
+        this.publishHistories[profileName] = [];
+      }
+      this.publishHistories[profileName].unshift(newHistory);
+
+      if (PERSIST_HISTORY) {
+        await writeJson(this.historyFilePath, this.publishHistories);
+      }
+    };
+    private loadHistoryFromFile = async () => {
+      if (await pathExists(this.historyFilePath)) {
+        this.publishHistories = await readJson(this.historyFilePath);
+      }
+    };
 
     constructor(name: string, description: string, bundleId: string) {
       this.name = name;
       this.description = description;
       this.bundleId = bundleId;
+
+      this.publishHistories = {};
+      this.historyFilePath = path.resolve(__dirname, '../../publishHistory.txt');
+      if (PERSIST_HISTORY) {
+        this.loadHistoryFromFile();
+      }
     }
 
-    private buildDockerFile = async () => {};
+    /*******************************************************************************************************************************/
+    /* These methods deal with image building and publishing */
+    /*******************************************************************************************************************************/
+    private startPublishing = async (settings: ConfigSettings) => {
+      const dockerContext: DockerContext = {
+        ...settings,
+        dockerfile: path.resolve(this.assetsDir, 'Dockerfile'),
+        imageName: this.dockerEngine.mountImageName(settings),
+        registry: settings.url,
+        logger: (stdout, stderr) => {
+          this.logger(stdout, stderr);
+        },
+      };
 
-    private triggerDockerBuild = async () => {};
+      try {
+        await this.buildImage(dockerContext);
+      } catch (err) {
+        this.logger(Steps.BUILD_IMAGE, err, 500);
+        return;
+      }
 
-    private pushToRegistry = async (registry: RegistrySettings) => {};
+      try {
+        await this.pushImage(dockerContext);
+      } catch (err) {
+        this.logger(Steps.PUSH_IMAGE, err, 500);
+        return;
+      }
 
-    publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
-      const { registry, fullSettings } = config;
-      this.composer.log('Starting publish');
+      try {
+        await this.verifyImageCreation(dockerContext);
+      } catch (err) {
+        this.logger(Steps.VERIFY_IMAGE, err, 500);
+        return;
+      }
     };
 
-    private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
+    private buildImage = async (dockerContext: DockerContext) => {
+      this.logger(Steps.BUILD_IMAGE, 'Starting');
+      const { stdout, stderr } = await this.dockerEngine.buildImage(dockerContext);
 
-    private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);
+      if (stderr) {
+        throw new Error(stderr);
+      }
 
-    private getBotRuntimeDir = (botId: string) => path.resolve(this.getBotDir(botId), 'runtime');
+      stdout.split('\n').map((line) => this.logger(Steps.BUILD_IMAGE, line, 200));
+    };
 
-    private getBotAssetsDir = (botId: string) => path.resolve(this.getBotDir(botId));
+    private pushImage = async (dockerContext: DockerContext) => {
+      this.logger(Steps.PUSH_IMAGE, 'Starting');
+
+      try {
+        const stdout = await this.dockerEngine.push(dockerContext);
+        stdout.split('\n').map((line) => this.logger(Steps.PUSH_IMAGE, line, 200));
+      } catch (err) {
+        throw err;
+      }
+    };
+
+    private verifyImageCreation = async (dockerContext: DockerContext) => {
+      this.logger(Steps.VERIFY_IMAGE, 'Starting');
+      const success = await this.dockerEngine.verify(dockerContext);
+
+      if (success) {
+        this.logger(Steps.VERIFY_IMAGE, `Image '${dockerContext.imageName}' created succesfully`, 200);
+      } else {
+        throw new Error('Failed to verify image');
+      }
+    };
+
+    /*******************************************************************************************************************************/
+    /* These methods come from the interface */
+    /*******************************************************************************************************************************/
+    getHistory = async (config: PublishConfig, project: IBotProject): Promise<PublishResult[]> => {
+      const profileName = config.fullSettings.profileName;
+
+      if (this.publishHistories?.[profileName]) {
+        return this.publishHistories[profileName];
+      }
+
+      return [];
+    };
+
+    publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
+      const { target } = config;
+
+      this.dockerEngine = DockerEngines.Factory(target.creationType);
+
+      const mergedSettings: ConfigSettings = {
+        ...target,
+        botId: project.id,
+        botPath: path.resolve(project.dir, '..'),
+        botName: project.name,
+      };
+
+      await this.startPublishing(mergedSettings);
+
+      await this.updateHistory(config.fullSettings.profileName, this.publishResultFromStatus().result);
+
+      return this.publishResultFromStatus();
+    };
+
+    /*******************************************************************************************************************************/
+    /* These methods are helpers */
+    /*******************************************************************************************************************************/
+    private publishResultFromStatus(): PublishResponse {
+      return {
+        status: this.currentStatus.status,
+        result: {
+          message: this.currentStatus.message,
+          status: this.currentStatus.status,
+          log: this.parseLogToString(),
+          time: new Date().toString(),
+        },
+      };
+    }
+    private parseLogToString(): string {
+      let str = '';
+      for (let k in this.currentStatus.log) {
+        str += `---\n${k}:\n${this.currentStatus.log[k]
+          .map((item) => `  ${JSON.stringify(item, null, 2)}`)
+          .join('\n')}\n\n`;
+      }
+
+      return str;
+    }
   }
 
   const publisher = new DockerPublisher('dockerPublish', 'Publish bot to Docker Images', 'dockerPublish');
