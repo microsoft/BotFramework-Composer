@@ -47,7 +47,10 @@
     "office-ui-fabric-react": "7.71.0",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
-    "@uifabric/fluent-theme": "^7.4.36"
+    "@uifabric/fluent-theme": "^7.4.36",
+    "portfinder": "^1.0.28",
+    "ws": "^7.4.4",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "typescript": "^3.9.6",
