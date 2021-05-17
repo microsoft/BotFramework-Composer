@@ -23,9 +23,12 @@ export const styles = {
       maxWidth: '80% !important',
       width: '960px !important',
     },
+    scrollableContent: {
+      overflow: 'hidden' as 'hidden',
+    },
   },
   container: css`
-    height: 520px;
+    height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
