@@ -1,4 +1,5 @@
-import { IRepository, RepositoryAPIProps } from '../types/interfaces';
+import { RepositoryAPIProps } from '../types';
+import { IRepository } from '../types/interfaces';
 
 export class ACRAPI implements IRepository {
   url: string;
@@ -6,12 +7,12 @@ export class ACRAPI implements IRepository {
 
   constructor(props?: RepositoryAPIProps) {
     this.url = props.url;
-    this.token = btoa(`${props.username}:${props.password}`);
+    this.token = Buffer.from(`${props.username}:${props.password}`).toString('base64');
   }
 
   public UpdateProps(props?: RepositoryAPIProps) {
     this.url = props.url;
-    this.token = btoa(`${props.username}:${props.password}`);
+    this.token = Buffer.from(`${props.username}:${props.password}`).toString('base64');
   }
 
   public testEnvironment(): Promise<boolean> {
@@ -19,8 +20,8 @@ export class ACRAPI implements IRepository {
   }
 
   public async getTags(imageName: string): Promise<string[]> {
-    let url = encodeURIComponent(`https://${this.url}/acr/v1/${imageName.trim()}/_tags`);
-    let options: RequestInit = {
+    const url = encodeURIComponent(`https://${this.url}/acr/v1/${imageName.trim()}/_tags`);
+    const options: RequestInit = {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
