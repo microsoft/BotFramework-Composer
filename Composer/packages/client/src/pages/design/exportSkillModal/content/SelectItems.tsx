@@ -23,7 +23,7 @@ import formatMessage from 'format-message';
 const styles = {
   detailListContainer: css`
     flex-grow: 1;
-    height: 350px;
+    height: 310px;
     position: relative;
     overflow: hidden;
   `,
