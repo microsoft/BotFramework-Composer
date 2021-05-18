@@ -52,13 +52,14 @@ for (const localePath of localePaths) {
           errorCount += 1;
         }
       }
-      if (/(\p{L})'(\p{L})/.exec(msg)) {
+      if (/\p{L}'\p{L}/u.exec(msg)) {
         console.log(src, `fixing single quote between letters`);
-        fixedMessage = fixedMessage.replace(/(\p{L})'(\p{L})/g, '$1\u2019$2'); // U+2019 is ’
+        fixedMessage = fixedMessage.replace(/(\p{L})'(\p{L})/gu, '$1’$2');
       }
-      if (/(\p{L})"(\p{L})/.exec(msg)) {
+
+      if (/\p{L}"\p{L}/u.exec(msg) && !dirent.name.includes('ko')) {
         console.log(src, `replacing double quote between letters with single`);
-        fixedMessage = fixedMessage.replace(/(\p{L})"(\p{L})/g, '$1\u2019$2'); // U+2019 is ’
+        fixedMessage = fixedMessage.replace(/(\p{L})"(\p{L})/gu, '$1’$2');
       }
       if (/([^']\{')|('\}[^'])/.exec(msg)) {
         console.log(src, `fixing incorrect brace quoting`);
@@ -70,7 +71,9 @@ for (const localePath of localePaths) {
 
     fs.writeFileSync(fileName, JSON.stringify(objectOut, null, 2));
   }
-  console.log(`${errorCount} error${errorCount === 1 ? '' : 's'} found that can't be autofixed`);
+
+  if (errorCount > 0) console.log(`${errorCount} error(s) found that can't be autofixed`);
+
   totalCount += errorCount;
 }
 
