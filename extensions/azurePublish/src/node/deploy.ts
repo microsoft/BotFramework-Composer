@@ -249,16 +249,18 @@ export class BotProjectDeploy {
           message: 'Zip upload processed successfully.',
         });
         return true;
+      } else if (statusResponse.data.provisioningState === 'Failed') {
+        throw new Error(`Zip upload processing failed. ${statusResponse.data.status_text}`);
       }
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `Waiting for processing of zip upload. ${statusResponse.data.status_text}`,
+        message: `Waiting for zip upload processing. ${statusResponse.data.status_text}`,
       });
       return false;
     } catch (err) {
       const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
-      throw new Error(`Failed to get status of zip upload processing. ${errorMessage}`);
+      throw new Error(`Getting status of zip upload processing failed. ${errorMessage}`);
     }
   }
 
