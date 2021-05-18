@@ -10,7 +10,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { JSONSchema7 } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
-import { SkillManifestFile } from '@bfc/shared';
+import { PublishTarget, SkillManifestFile } from '@bfc/shared';
 import { navigate } from '@reach/router';
 import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
@@ -141,6 +141,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           );
         });
         if (isCreateProfileFromSkill && currentTarget) {
+          handleGenerateManifest(currentTarget);
           const skillPublishPenddingNotificationCard = getSkillPendingNotificationCardProps();
           publishNotificationRef.current = createNotification(skillPublishPenddingNotificationCard);
           addNotification(publishNotificationRef.current);
@@ -188,7 +189,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     [mergedSettings, projectId, isAdaptive, skillConfiguration, runtimeSettings]
   );
 
-  const handleGenerateManifest = () => {
+  const handleGenerateManifest = (currentTarget?: PublishTarget) => {
     const manifest = generateSkillManifest(
       schema,
       skillManifest,
@@ -198,7 +199,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       qnaFiles,
       selectedTriggers,
       selectedDialogs,
-      currentPublishTarget,
+      currentTarget || currentPublishTarget,
       projectId
     );
     setSkillManifest(manifest);
@@ -276,7 +277,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       onDismiss={handleDismiss}
     >
       <div css={styles.container}>
-        <p>
+        <p style={{ height: '38px' }}>
           {typeof subText === 'function' && subText()}
           {helpLink && (
             <React.Fragment>

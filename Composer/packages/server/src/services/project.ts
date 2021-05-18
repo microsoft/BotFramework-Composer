@@ -528,6 +528,7 @@ export class BotProjectService {
         const newSettings: DialogSetting = {
           ...currentProject.settings,
           runtimeSettings: {
+            components: [],
             features: {
               showTyping: originalProject.settings?.feature?.UseShowTypingMiddleware || false,
               useInspection: originalProject.settings?.feature?.UseInspectionMiddleware || false,
@@ -536,7 +537,10 @@ export class BotProjectService {
                 ? { voiceFontName: 'en-US-AriaNeural', fallbackToTextForSpeechIfEmpty: true }
                 : undefined,
               blobTranscript: originalProject.settings?.blobStorage?.connectionString
-                ? originalProject.settings?.blobStorage
+                ? {
+                    connectionString: originalProject.settings.blobStorage.connectionString,
+                    containerName: originalProject.settings.blobStorage.container,
+                  }
                 : {},
             },
             telemetry: {
