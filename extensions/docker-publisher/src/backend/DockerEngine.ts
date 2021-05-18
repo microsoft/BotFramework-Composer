@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IRepository, RepositoryAPIProps } from '../types/interfaces';
+import { RepositoryAPIProps } from '../types';
+import { IRepository } from '../types/interfaces';
 
 export class DockerEngine implements IRepository {
   constructor();

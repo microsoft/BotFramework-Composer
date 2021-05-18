@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { ConfigSettings, ExecResult } from '../../types';
 import { DockerContext, Steps } from '../../types/dockerTypes';
 import { execAsync } from '../../utils/fs';
@@ -39,7 +38,7 @@ export class ACR extends IEngine {
 
   async push(context: DockerContext): Promise<ExecResult> {
     if (!(await this.Login(context))) {
-      throw new Error('Login failed');
+      return { stdout: undefined, stderr: 'Failed login' };
     }
 
     const command = `docker push ${context.imageName}`;

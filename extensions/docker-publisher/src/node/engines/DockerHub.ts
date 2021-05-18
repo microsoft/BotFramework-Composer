@@ -15,7 +15,12 @@ type Authentication = {
 export class DockerHub extends IEngine {
   async verify(context: DockerContext): Promise<boolean> {
     const [username, name, tag] = context.imageName.split(/\/|:/);
-    const token = await this.GetDockerHubToken({ username: context.username, password: context.password });
+    const { token, success } = await this.GetDockerHubToken({ username: context.username, password: context.password });
+
+    if (!success) {
+      context.logger(Steps.VERIFY_IMAGE, token, 500);
+      return false;
+    }
 
     const tagUrl = `https://hub.docker.com/v2/repositories/${username}/${name}/tags`;
     const response = await fetch(tagUrl, {
@@ -39,7 +44,7 @@ export class DockerHub extends IEngine {
     }
   }
 
-  private async GetDockerHubToken(authentication: Authentication): Promise<string> {
+  private async GetDockerHubToken(authentication: Authentication): Promise<{ token: string; success: boolean }> {
     const response = await fetch('https://hub.docker.com/v2/users/login/', {
       method: 'POST',
       body: JSON.stringify(authentication),
@@ -49,12 +54,15 @@ export class DockerHub extends IEngine {
     });
 
     if (!response.ok) {
-      throw await response.text();
+      return {
+        success: false,
+        token: await response.text(),
+      };
     }
 
     const { token } = await response.json();
 
-    return token;
+    return { token: token, success: true };
   }
 
   mountImageName(settings: ConfigSettings): string {
@@ -63,7 +71,7 @@ export class DockerHub extends IEngine {
 
   async push(context: DockerContext): Promise<ExecResult> {
     if (!(await this.Login(context))) {
-      return undefined;
+      return { stdout: undefined, stderr: 'Failed login' };
     }
 
     const command = `docker push ${context.imageName}`;
