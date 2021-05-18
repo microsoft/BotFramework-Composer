@@ -52,13 +52,13 @@ for (const localePath of localePaths) {
           errorCount += 1;
         }
       }
-      if (/(\p{L}|\s|\w)'(\p{L}|\w)/.exec(msg)) {
+      if (/(\p{L})'(\p{L})/.exec(msg)) {
         console.log(src, `fixing single quote between letters`);
-        fixedMessage = fixedMessage.replace(/(\p{L}|\s|\w)'(\p{L}|\w)/g, '$1\u2019$2'); // U+2019 is ’
+        fixedMessage = fixedMessage.replace(/(\p{L})'(\p{L})/g, '$1\u2019$2'); // U+2019 is ’
       }
-      if (/(\p{L}|\s|\w)"(\p{L}|\w)/.exec(msg)) {
+      if (/(\p{L})"(\p{L})/.exec(msg)) {
         console.log(src, `replacing double quote between letters with single`);
-        fixedMessage = fixedMessage.replace(/(\p{L}|\s|\w)"(\p{L}|\w)/g, '$1\u2019$2'); // U+2019 is ’
+        fixedMessage = fixedMessage.replace(/(\p{L})"(\p{L})/g, '$1\u2019$2'); // U+2019 is ’
       }
       if (/([^']\{')|('\}[^'])/.exec(msg)) {
         console.log(src, `fixing incorrect brace quoting`);
