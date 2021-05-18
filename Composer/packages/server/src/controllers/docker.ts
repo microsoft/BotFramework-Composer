@@ -1,14 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 import { Request, Response } from 'express';
 
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
+import { execAsync } from '../utility/process';
 
 const getLocalTags = async (image: string): Promise<string[]> => {
   const command = `docker images ${image} --format "{{.Tag}}"`;
   const { stderr, stdout } = await execAsync(command);
-  const versions = stdout.split(/[\r\n]+/).filter((i) => i);
+  const versions = stdout?.split(/[\r\n]+/).filter((i) => i);
 
   if (stderr) {
     throw stderr;
@@ -84,22 +83,24 @@ const getTags = async (req: Request, res: Response) => {
   }
 };
 
-const checkDockerVersion = async (req: Request, res: Response) => {
+async function checkDockerVersion(req: Request, res: Response) {
   try {
-    const { stderr: checkDockerError, stdout: dockeVersion } = await execAsync('docker -v');
+    const { stderr: checkDockerError } = await execAsync('docker version');
 
     if (checkDockerError) {
       throw new Error('Docker not found.');
     }
 
+    const { stdout: dockerVersion } = await execAsync('docker -v');
+
     res.status(200).json({
       userHasDocker: true,
-      DockerVersion: dockeVersion,
+      DockerVersion: dockerVersion,
     });
   } catch (err) {
     res.status(200).json({ userHasDocker: false });
   }
-};
+}
 
 export const DockerEngineController = {
   getTags,
