@@ -4,6 +4,7 @@
 import { IEngine } from './IEngine';
 import { LocalDocker } from './Local';
 import { ACR } from './ACR';
+import { DockerHub } from './DockerHub';
 
 export { IEngine };
 
@@ -17,7 +18,7 @@ export class DockerEngines {
         return new ACR();
 
       case 'dockerhub':
-        throw 'not implented';
+        return new DockerHub();
 
       case 'custom':
         throw 'not implented';

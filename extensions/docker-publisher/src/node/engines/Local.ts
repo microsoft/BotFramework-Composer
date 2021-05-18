@@ -3,13 +3,18 @@
 
 import { execAsync } from '../../utils/fs';
 import { DockerContext, Steps } from '../../types/dockerTypes';
+import { ConfigSettings, ExecResult } from '../../types';
 
 import { IEngine } from './IEngine';
 
 export class LocalDocker extends IEngine {
-  async push(context: DockerContext): Promise<string> {
+  mountImageName(settings: ConfigSettings): string {
+    return `${settings.image}:${settings.tag}`;
+  }
+
+  async push(context: DockerContext): Promise<ExecResult> {
     context.logger(Steps.PUSH_IMAGE, 'Not required for Local images', 200);
-    return Promise.resolve('');
+    return Promise.resolve({ stdout: 'Not required for Local images', stderr: undefined });
   }
 
   async verify(context: DockerContext): Promise<boolean> {

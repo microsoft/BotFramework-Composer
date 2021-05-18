@@ -18,6 +18,7 @@ import { DockerContext, Status, Steps } from '../types/dockerTypes';
 import { DockerEngines, IEngine } from './engines';
 
 type PublishConfig = {
+  profileName: string;
   target: RegistryConfigData;
   fullSettings: any;
 };
@@ -134,7 +135,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       const { stdout, stderr } = await this.dockerEngine.buildImage(dockerContext);
 
       if (stderr) {
-        throw new Error(stderr);
+        this.logger(Steps.BUILD_IMAGE, stderr, 500);
       }
 
       stdout.split('\n').map((line) => this.logger(Steps.BUILD_IMAGE, line, 200));
@@ -143,8 +144,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     private pushImage = async (dockerContext: DockerContext) => {
       this.logger(Steps.PUSH_IMAGE, 'Starting');
 
-      const stdout = await this.dockerEngine.push(dockerContext);
-      stdout.split('\n').map((line) => this.logger(Steps.PUSH_IMAGE, line, 200));
+      const { stdout, stderr } = await this.dockerEngine.push(dockerContext);
+
+      if (!stderr) {
+        stdout.split('\n').map((line) => this.logger(Steps.PUSH_IMAGE, line, 200));
+      }
     };
 
     private verifyImageCreation = async (dockerContext: DockerContext) => {
@@ -154,7 +158,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       if (success) {
         this.logger(Steps.VERIFY_IMAGE, `Image '${dockerContext.imageName}' created succesfully`, 200);
       } else {
-        throw new Error('Failed to verify image');
+        this.logger(Steps.VERIFY_IMAGE, 'Failed to verify image', 500);
       }
     };
 
@@ -162,7 +166,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     /* These methods come from the interface */
     /*******************************************************************************************************************************/
     getHistory = async (config: PublishConfig, project: IBotProject): Promise<PublishResult[]> => {
-      const profileName = config.fullSettings.profileName;
+      const profileName = config.profileName;
 
       if (this.publishHistories?.[profileName]) {
         return this.publishHistories[profileName];
@@ -172,7 +176,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
 
     publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
-      const { target } = config;
+      const { target, profileName } = config;
 
       this.dockerEngine = DockerEngines.Factory(target.creationType);
 
@@ -184,8 +188,15 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       };
 
       await this.startPublishing(mergedSettings);
+      this.logger(
+        Steps.FINISHING,
+        `To start the container, use the following command: ${this.buildRunCommand(
+          this.dockerEngine.mountImageName(mergedSettings)
+        )}`,
+        200
+      );
 
-      await this.updateHistory(config.fullSettings.profileName, this.publishResultFromStatus().result);
+      await this.updateHistory(profileName, this.publishResultFromStatus().result);
 
       return this.publishResultFromStatus();
     };
@@ -213,6 +224,25 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       }
 
       return str;
+    }
+    private buildRunCommand(imageName: string): string {
+      const args: string[] = [];
+
+      args.push('docker');
+      args.push('run');
+      args.push('--port 80:80');
+      args.push('--port 443:443');
+      args.push('--port 5000:5000');
+      args.push('--port 5001:5001');
+
+      args.push('--env "MicrosoftAppId=<YOUR MICROSOFT APP ID>"');
+      args.push('--env "LuisEnpointKey=<YOUR LUIS ENDPOINT KEY>"');
+      args.push('--env "QnAEnpointKey=<YOUR QNA ENDPOINT KEY>"');
+      args.push('--env "SkillHostEndpoint=<YOUR SKILL HOST ENDPOINT>"');
+
+      args.push(imageName);
+
+      return args.join(' ');
     }
   }
 

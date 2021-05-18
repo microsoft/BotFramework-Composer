@@ -7,39 +7,63 @@ import { execAsync } from '../../utils/fs';
 
 import { IEngine } from './IEngine';
 
-export class ACR extends IEngine {
-  async verify(context: DockerContext): Promise<boolean> {
-    const [registry, name, tag] = context.imageName.split(/\/|:/);
-    const token = Buffer.from(`${context.username}:${context.password}`).toString('base64');
-    const url = `https://${registry}/acr/v1/${name}/_tags`;
+type Authentication = {
+  username: string;
+  password: string;
+};
 
-    const response = await fetch(url, {
+export class DockerHub extends IEngine {
+  async verify(context: DockerContext): Promise<boolean> {
+    const [username, name, tag] = context.imageName.split(/\/|:/);
+    const token = await this.GetDockerHubToken({ username: context.username, password: context.password });
+
+    const tagUrl = `https://hub.docker.com/v2/repositories/${username}/${name}/tags`;
+    const response = await fetch(tagUrl, {
       method: 'GET',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-type': 'application/json',
-        Authorization: `Basic ${token}`,
       },
     });
 
     if (response.status == 200) {
-      const { tags } = await response.json();
+      const { results } = await response.json();
+      const tags = results.map((o) => o.name);
 
       context.logger(Steps.PUSH_IMAGE, `Found ${tags.length} tags: ${JSON.stringify(tags)}`, response.status);
 
-      return tags.find((t) => t.name === tag) !== undefined;
+      return tags.find((t) => t === tag) !== undefined;
     } else {
       context.logger(Steps.PUSH_IMAGE, await response.text(), response.status);
       return false;
     }
   }
 
+  private async GetDockerHubToken(authentication: Authentication): Promise<string> {
+    const response = await fetch('https://hub.docker.com/v2/users/login/', {
+      method: 'POST',
+      body: JSON.stringify(authentication),
+      headers: {
+        'Content-type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw await response.text();
+    }
+
+    const { token } = await response.json();
+
+    return token;
+  }
+
   mountImageName(settings: ConfigSettings): string {
-    return `${settings.url}/${settings.image}:${settings.tag}`;
+    return `${settings.username}/${settings.image}:${settings.tag}`;
   }
 
   async push(context: DockerContext): Promise<ExecResult> {
     if (!(await this.Login(context))) {
-      throw new Error('Login failed');
+      return undefined;
     }
 
     const command = `docker push ${context.imageName}`;
@@ -53,8 +77,8 @@ export class ACR extends IEngine {
   }
 
   private async Login(context: DockerContext): Promise<boolean> {
-    context.logger(Steps.PUSH_IMAGE, 'Logging in to ACR');
-    const command = `docker login --username ${context.username} --password ${context.password} ${context.registry}`;
+    context.logger(Steps.PUSH_IMAGE, 'Logging in to Docker Hub');
+    const command = `docker login --username ${context.username} --password ${context.password}`;
     const { stdout, stderr } = await execAsync(command);
 
     if (!stderr) {

@@ -21,4 +21,5 @@ export const Steps = {
   BUILD_IMAGE: 'Image build',
   VERIFY_IMAGE: 'Verifying image creation',
   PUSH_IMAGE: 'Pushing image',
+  FINISHING: 'Finishing',
 };
