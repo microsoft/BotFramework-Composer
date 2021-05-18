@@ -21,6 +21,7 @@ describe('<WebChatHeader />', () => {
     onSaveTranscript: mockOnSaveTranscript,
     onOpenBotInEmulator: jest.fn(),
     onCloseWebChat: jest.fn(),
+    isRestartButtonDisabled: false,
   };
 
   afterEach(() => {
@@ -43,6 +44,7 @@ describe('<WebChatHeader />', () => {
       onSaveTranscript: mockOnSaveTranscript,
       onOpenBotInEmulator: jest.fn(),
       onCloseWebChat: jest.fn(),
+      isRestartButtonDisabled: false,
     };
 
     const { findByText } = render(<WebChatHeader {...props} />);
@@ -68,6 +70,7 @@ describe('<WebChatHeader />', () => {
       onSaveTranscript: mockOnSaveTranscript,
       onOpenBotInEmulator: jest.fn(),
       onCloseWebChat: jest.fn(),
+      isRestartButtonDisabled: false,
     };
 
     const { findByText } = render(<WebChatHeader {...props} />);
