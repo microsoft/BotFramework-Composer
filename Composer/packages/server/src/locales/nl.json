@@ -201,7 +201,7 @@
     "message": "Meer toevoegen aan dit antwoord"
   },
   "add_multiple_comma_separated_synonyms_2639283f": {
-    "message": "Meerdere door komma\"s gescheiden synoniemen toevoegen"
+    "message": "Meerdere door komma’s gescheiden synoniemen toevoegen"
   },
   "add_new_916f2665": {
     "message": "Nieuw item toevoegen"
@@ -465,7 +465,7 @@
     "message": "Ontwerpcanvas"
   },
   "authoring_region_to_use_e_g_westus_westeurope_aust_d43d5245": {
-    "message": "Ontwerpregio\"s die moeten worden gebruikt (bijvoorbeeld westus, westeurope, australiaeast)"
+    "message": "Ontwerpregio’s die moeten worden gebruikt (bijvoorbeeld westus, westeurope, australiaeast)"
   },
   "authoring_region_to_use_westus_qna_maker_resource__4588c2f9": {
     "message": "Ontwerpregio die moet worden gebruikt (westus) (QnA Maker-resourcelocatie)"
@@ -1605,7 +1605,7 @@
     "message": "External skill"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
-    "message": "Haal combinaties van vraag en antwoord op uit veelgestelde vragen online, producthandleidingen of andere bestanden. Ondersteunde indelingen zijn TSV, PDF, DOC, DOCX en XLSX, met op elkaar volgende vragen en antwoorden. Meer informatie over bronnen met knowledge bases. Sla deze stap over om vragen en antwoorden handmatig toe te voegen na het maken. Het aantal bronnen en de bestandsgrootte die u kunt toevoegen, is afhankelijk van de SKU voor de QnA-service die u kiest. Meer informatie over SKU\"s voor de QnA-service."
+    "message": "Haal combinaties van vraag en antwoord op uit veelgestelde vragen online, producthandleidingen of andere bestanden. Ondersteunde indelingen zijn TSV, PDF, DOC, DOCX en XLSX, met op elkaar volgende vragen en antwoorden. Meer informatie over bronnen met knowledge bases. Sla deze stap over om vragen en antwoorden handmatig toe te voegen na het maken. Het aantal bronnen en de bestandsgrootte die u kunt toevoegen, is afhankelijk van de SKU voor de QnA-service die u kiest. Meer informatie over SKU’s voor de QnA-service."
   },
   "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
     "message": "Extracting question-and-answer pairs from { url }"
@@ -2043,7 +2043,7 @@
     "message": "item toegevoegd"
   },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
-    "message": "{ itemCount, plural,\n     =0 {Geen schema\"s}\n     =1 {Eén schema}\n  other {# schema\"s}\n} zijn gevonden.\n            { itemCount, selecteer,\n      0 {}\n  other {druk op pijl-omlaag om door de zoekresultaten te navigeren}\n}"
+    "message": "{ itemCount, plural,\n     =0 {Geen schema’s}\n     =1 {Eén schema}\n  other {# schema’s}\n} zijn gevonden.\n            { itemCount, selecteer,\n      0 {}\n  other {druk op pijl-omlaag om door de zoekresultaten te navigeren}\n}"
   },
   "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__d18758bb": {
     "message": "Just add a QnA key and you’ll be ready to talk to your bot."
@@ -3228,7 +3228,7 @@
     "message": "{ schemaId } bestaat niet, selecteer een schema dat u wilt bewerken of maak een nieuw schema"
   },
   "schemas_74566170": {
-    "message": "Schema\"s"
+    "message": "Schema’s"
   },
   "scripts_successfully_updated_3a75d57f": {
     "message": "De scripts zijn bijgewerkt."
