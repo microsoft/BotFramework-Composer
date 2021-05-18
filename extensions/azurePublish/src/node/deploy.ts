@@ -7,9 +7,10 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 import archiver from 'archiver';
+import axios from 'axios';
+import throttle from 'lodash/throttle';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import { composeRenderFunction } from '@uifabric/utilities';
 import { DialogSetting } from '@botframework-composer/types';
 
 import { BotProjectDeployConfig, BotProjectDeployLoggerType } from './types';
@@ -238,6 +239,29 @@ export class BotProjectDeploy {
     }
   }
 
+  private async checkZipDeployStatus(token: string, statusUrl: string) {
+    try {
+      const statusResponse = await axios.get(statusUrl, { headers: { Authorization: `Bearer ${token}` } });
+
+      if (statusResponse.data.provisioningState === 'Succeeded') {
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: 'Zip upload processed successfully.',
+        });
+        return true;
+      }
+
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `Waiting for processing of zip upload. ${statusResponse.data.status_text}`,
+      });
+      return false;
+    } catch (err) {
+      const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
+      throw new Error(`Failed to get status of zip upload processing. ${errorMessage}`);
+    }
+  }
+
   // Upload the zip file to Azure
   // DOCS HERE: https://docs.microsoft.com/en-us/azure/app-service/deploy-zip
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
@@ -257,17 +281,27 @@ export class BotProjectDeploy {
     });
 
     try {
-      const response = await rp.post({
-        uri: publishEndpoint,
-        auth: {
-          bearer: token,
-        },
-        body: fileReadStream,
+      const response = await axios.post(publishEndpoint, fileReadStream, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/x-zip-compressed' },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response,
-      });
+
+      if (response.status === 202) {
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: `Waiting for processing of zip upload.`,
+        });
+
+        const checkStatus = throttle(async () => {
+          return await this.checkZipDeployStatus(token, response.headers.location);
+        }, 5000);
+
+        let done = false;
+        while (!done) {
+          done = await checkStatus();
+        }
+      }
     } catch (err) {
       // close file read stream
       fileReadStream.close();
