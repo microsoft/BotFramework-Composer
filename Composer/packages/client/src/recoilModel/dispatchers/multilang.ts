@@ -22,9 +22,9 @@ import {
   botDisplayNameState,
 } from './../atoms/botState';
 
-const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: string[]): any[] => {
+const copyLanguageResources = (prevFiles: any[], fromLanguage: string, toLanguages: string[]): any[] => {
   const copiedFiles: any = [];
-  const copyOriginFiles = files.filter(({ id }) => getExtension(id) === fromLanguage);
+  const copyOriginFiles = prevFiles.filter(({ id }) => getExtension(id) === fromLanguage);
 
   for (const file of copyOriginFiles) {
     for (const toLanguage of toLanguages) {
@@ -37,7 +37,13 @@ const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: 
     }
   }
 
-  return copiedFiles;
+  // do not overwrite existed file
+  const existedFileMap: Record<string, boolean> = {};
+  prevFiles.forEach((file) => {
+    existedFileMap[file.id] = true;
+  });
+
+  return copiedFiles.filter((file) => !existedFileMap[file.id]);
 };
 
 // pull out target language file
@@ -92,9 +98,9 @@ export const multilangDispatcher = () => {
       const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
-      set(lgFilesSelectorFamily(projectId), (oldLgFiles) => {
-        const addedLgFiles = copyLanguageResources(oldLgFiles, defaultLang, languages);
-        return [...oldLgFiles, ...addedLgFiles];
+      set(lgFilesSelectorFamily(projectId), (prevLgFiles) => {
+        const addedLgFiles = copyLanguageResources(prevLgFiles, defaultLang, languages);
+        return [...prevLgFiles, ...addedLgFiles];
       });
       set(luFilesSelectorFamily(projectId), (prevluFiles) => {
         const addedLuFiles = copyLanguageResources(prevluFiles, defaultLang, languages);
