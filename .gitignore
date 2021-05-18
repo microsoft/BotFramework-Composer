@@ -401,3 +401,4 @@ Composer/.vscode/
 docker-compose.override.yml
 
 *.tsbuildinfo
+extensions/publishHistory.txt
