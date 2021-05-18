@@ -6,7 +6,14 @@
   "scripts": {
     "build": "node ../scripts/build.js",
     "watch": "yarn build --watch",
-    "lint": "eslint --quiet --ext .ts,.tsx ."
+    "lint": "eslint --quiet --ext .ts,.tsx .",
+    "test": "yarn test:ui && yarn test:node",
+    "test:ui": "jest --config jest.config.ui.js",
+    "test:node": "jest --config jest.config.node.js",
+    "test:single": "jest DockerHub.test.ts --config jest.config.node.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "composer": {
     "enabled": true,
@@ -66,7 +73,12 @@
     "eslint-plugin-security": "1.4.0"
   },
   "devDependencies": {
+    "@botframework-composer/test-utils": "file:../../Composer/packages/test-utils",
+    "@babel/plugin-transform-runtime": "^7.14.3",
     "typescript": "^3.9.6",
-    "@types/react": "^16.9.53"
+    "@types/react": "^16.9.53",
+    "@types/jest": "^26.0.15",
+    "jest": "^26.0.15",
+    "ts-jest": "^26.0.15"
   }
 }
