@@ -243,10 +243,10 @@
     "message": "+ QnA-paar toevoegen"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> voeg enkele voorbeelden van zinnen toe om deze intentie te activeren:\n> -kunt u me vertellen hoe het weer is?\n> -hoe is het weer in {city=Seattle}\n\n> entiteitsdefinities:\n> @ ml city"
+    "message": "> voeg enkele voorbeelden van zinnen toe om deze intentie te activeren:\n> -kunt u me vertellen hoe het weer is?\n> -hoe is het weer in '{'city=Seattle'}'\n\n> entiteitsdefinities:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> voeg enkele verwachte gebruikersantwoorden toe:\n> herinner mij eraan om {itemTitle=melk te kopen}\n>: herinner mij eraan om {itemTitle}\n> -voeg {itemTitle} toe aan mijn takenlijst\n>\n> entiteitsdefinities:\n> @ ml itemTitle\n"
+    "message": "> voeg enkele verwachte gebruikersantwoorden toe:\n> herinner mij eraan om '{'itemTitle=melk te kopen'}'\n>: herinner mij eraan om '{'itemTitle'}'\n> -voeg '{'itemTitle'}' toe aan mijn takenlijst\n>\n> entiteitsdefinities:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Aanbevolen actie toevoegen"
