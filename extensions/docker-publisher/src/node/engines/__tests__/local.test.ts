@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConfigSettings, ExecResult } from '../../types';
-import { execAsync } from '../../utils/fs';
-import { DockerContext } from '../../types/dockerTypes';
+import { ConfigSettings, ExecResult } from '../../../types';
+import { execAsync } from '../../../utils/fs';
+import { DockerContext } from '../../../types/dockerTypes';
 
-import { IEngine } from './IEngine';
-import { LocalDocker } from './Local';
+import { IEngine } from '../IEngine';
+import { LocalDocker } from '../Local';
 
-jest.mock('../../utils/fs', () => ({
+jest.mock('../../../utils/fs', () => ({
   execAsync: jest.fn(),
 }));
 
@@ -56,7 +56,7 @@ describe('Test ACR Docker Engine', () => {
 
   describe('Test Verify Image', () => {
     it('Image is created', async () => {
-      execAsync.mockImplementation(
+      (execAsync as jest.Mock).mockImplementation(
         async (command: string): Promise<ExecResult> => {
           return Promise.resolve({ stdout: 'Image digest Id', stderr: undefined });
         }
@@ -67,7 +67,7 @@ describe('Test ACR Docker Engine', () => {
     });
 
     it('Image is NOT created', async () => {
-      execAsync.mockImplementation(
+      (execAsync as jest.Mock).mockImplementation(
         async (command: string): Promise<ExecResult> => {
           return Promise.resolve({ stdout: undefined, stderr: 'Erro message' });
         }

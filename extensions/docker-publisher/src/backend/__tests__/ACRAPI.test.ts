@@ -3,10 +3,10 @@
 
 import { fetch } from 'node-fetch';
 
-import { IRepository } from '../types/interfaces';
-import { RepositoryAPIProps } from '../types';
+import { IRepository } from '../../types/interfaces';
+import { RepositoryAPIProps } from '../../types';
 
-import { ACRAPI } from './ACRAPI';
+import { ACRAPI } from '../ACRAPI';
 
 jest.mock('node-fetch', () => ({
   fetch: jest.fn(),

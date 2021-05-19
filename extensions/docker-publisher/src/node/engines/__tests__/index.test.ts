@@ -1,11 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ACR } from './ACR';
-import { DockerHub } from './DockerHub';
-import { LocalDocker } from './Local';
-
-import { DockerEngines } from './index';
+import { ACR } from '../ACR';
+import { DockerHub } from '../DockerHub';
+import { LocalDocker } from '../Local';
+import { DockerEngines } from '../index';
 
 describe('Test Docker Engine Factory', () => {
   it("When engine is 'local'", () => {

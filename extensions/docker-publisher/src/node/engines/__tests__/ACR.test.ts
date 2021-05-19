@@ -3,14 +3,14 @@
 
 import { fetch } from 'node-fetch';
 
-import { ConfigSettings, ExecResult } from '../../types';
-import { DockerContext } from '../../types/dockerTypes';
-import { execAsync } from '../../utils/fs';
+import { ConfigSettings, ExecResult } from '../../../types';
+import { DockerContext } from '../../../types/dockerTypes';
+import { execAsync } from '../../../utils/fs';
 
-import { IEngine } from './IEngine';
-import { ACR } from './ACR';
+import { IEngine } from '../IEngine';
+import { ACR } from '../ACR';
 
-jest.mock('../../utils/fs', () => ({
+jest.mock('../../../utils/fs', () => ({
   execAsync: jest.fn(),
 }));
 
@@ -56,7 +56,7 @@ describe('Test ACR Docker Engine', () => {
 
   describe('Test Push Image', () => {
     it('Pushed with success', async () => {
-      execAsync.mockImplementation(
+      (execAsync as jest.Mock).mockImplementation(
         async (command: string): Promise<ExecResult> => {
           if (command.indexOf('login') > 0) {
             return Promise.resolve({ stdout: 'LOGIN WITH SUCCESS', stderr: undefined });
@@ -73,7 +73,7 @@ describe('Test ACR Docker Engine', () => {
 
     describe('Push with error', () => {
       it('Failed login', async () => {
-        execAsync.mockImplementation(
+        (execAsync as jest.Mock).mockImplementation(
           async (command: string): Promise<ExecResult> => {
             if (command.indexOf('login') > 0) {
               return Promise.resolve({ stdout: undefined, stderr: 'INVALID USER' });
@@ -89,7 +89,7 @@ describe('Test ACR Docker Engine', () => {
       });
 
       it('Failed push', async () => {
-        execAsync.mockImplementation(
+        (execAsync as jest.Mock).mockImplementation(
           async (command: string): Promise<ExecResult> => {
             if (command.indexOf('login') > 0) {
               return Promise.resolve({ stdout: 'SUCCESS', stderr: undefined });

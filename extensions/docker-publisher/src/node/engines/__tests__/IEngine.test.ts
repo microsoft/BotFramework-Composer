@@ -3,12 +3,11 @@
 
 import { pathExistsSync } from 'fs-extra';
 
-import { ConfigSettings, ExecResult } from '../../types';
-import { DockerContext } from '../../types/dockerTypes';
-import * as fs from '../../utils/fs';
-import { execAsync } from '../../utils/fs';
+import { ConfigSettings, ExecResult } from '../../../types';
+import { DockerContext } from '../../../types/dockerTypes';
+import { execAsync } from '../../../utils/fs';
 
-import { IEngine } from './IEngine';
+import { IEngine } from '../IEngine';
 
 class DummyEngine extends IEngine {
   mountImageName(settings: ConfigSettings): string {
@@ -22,7 +21,7 @@ class DummyEngine extends IEngine {
   }
 }
 
-jest.mock('../../utils/fs', () => ({
+jest.mock('../../../utils/fs', () => ({
   execAsync: jest.fn(),
 }));
 
@@ -43,7 +42,7 @@ describe('Test IEngine Abstract class implemented Methods', () => {
 
   describe('Test BuildImage', () => {
     it('When success', async () => {
-      execAsync.mockImplementation(
+      (execAsync as jest.Mock).mockImplementation(
         async (command: string): Promise<ExecResult> => {
           return Promise.resolve({ stdout: 'true', stderr: undefined });
         }
@@ -55,7 +54,7 @@ describe('Test IEngine Abstract class implemented Methods', () => {
     });
 
     it('When not success', async () => {
-      execAsync.mockImplementation(
+      (execAsync as jest.Mock).mockImplementation(
         async (command: string): Promise<ExecResult> => {
           return Promise.resolve({ stdout: undefined, stderr: 'true' });
         }

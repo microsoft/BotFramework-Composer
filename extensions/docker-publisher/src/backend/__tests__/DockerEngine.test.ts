@@ -3,10 +3,10 @@
 
 import { fetch } from 'node-fetch';
 
-import { IRepository } from '../types/interfaces';
-import { RepositoryAPIProps } from '../types';
+import { IRepository } from '../../types/interfaces';
+import { RepositoryAPIProps } from '../../types';
 
-import { DockerEngine } from './DockerEngine';
+import { DockerEngine } from '../DockerEngine';
 
 jest.mock('node-fetch', () => ({
   fetch: jest.fn(),
