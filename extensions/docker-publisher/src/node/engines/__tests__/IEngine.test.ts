@@ -6,7 +6,6 @@ import { pathExistsSync } from 'fs-extra';
 import { ConfigSettings, ExecResult } from '../../../types';
 import { DockerContext } from '../../../types/dockerTypes';
 import { execAsync } from '../../../utils/fs';
-
 import { IEngine } from '../IEngine';
 
 class DummyEngine extends IEngine {

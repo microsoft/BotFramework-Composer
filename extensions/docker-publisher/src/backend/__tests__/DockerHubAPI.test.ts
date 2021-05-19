@@ -5,7 +5,6 @@ import { fetch } from 'node-fetch';
 
 import { IRepository } from '../../types/interfaces';
 import { RepositoryAPIProps } from '../../types';
-
 import { DockerHubAPI } from '../DockerHubAPI';
 
 jest.mock('node-fetch', () => ({

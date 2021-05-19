@@ -4,7 +4,6 @@
 import { ConfigSettings, ExecResult } from '../../../types';
 import { DockerContext } from '../../../types/dockerTypes';
 import { execAsync } from '../../../utils/fs';
-
 import { IEngine } from '../IEngine';
 import { CustomRegistry } from '../CustomRegistry';
 
