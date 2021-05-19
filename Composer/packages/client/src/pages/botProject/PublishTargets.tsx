@@ -76,6 +76,12 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { location } = useLocation();
 
   useEffect(() => {
+    if (projectId) {
+      getPublishTargetTypes(projectId);
+    }
+  }, [projectId]);
+
+  useEffect(() => {
     if (location.hash === '#completePublishProfile') {
       if (publishTargets && publishTargets.length > 0) {
         // clear the hash so that the dialog doesn't open again.
@@ -89,12 +95,6 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       }
     }
   }, [location, publishTargets]);
-
-  useEffect(() => {
-    if (projectId) {
-      getPublishTargetTypes(projectId);
-    }
-  }, [projectId]);
 
   useEffect(() => {
     if (publishTargetsRef.current && scrollToSectionId === '#addNewPublishProfile') {
