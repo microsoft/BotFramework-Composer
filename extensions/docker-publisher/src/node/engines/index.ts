@@ -5,6 +5,7 @@ import { IEngine } from './IEngine';
 import { LocalDocker } from './Local';
 import { ACR } from './ACR';
 import { DockerHub } from './DockerHub';
+import { CustomRegistry } from './CustomRegistry';
 
 export { IEngine };
 
@@ -21,7 +22,7 @@ export class DockerEngines {
         return new DockerHub();
 
       case 'custom':
-        throw 'not implented';
+        return new CustomRegistry();
 
       default:
         throw new Error('Invalid docker engine');
