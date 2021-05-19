@@ -8,7 +8,6 @@ import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 import archiver from 'archiver';
 import axios from 'axios';
-import throttle from 'lodash/throttle';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { DialogSetting } from '@botframework-composer/types';
@@ -239,29 +238,40 @@ export class BotProjectDeploy {
     }
   }
 
-  private async checkZipDeployStatus(token: string, statusUrl: string) {
-    try {
-      const statusResponse = await axios.get(statusUrl, { headers: { Authorization: `Bearer ${token}` } });
+  private async waitForZipDeploy(token: string, statusUrl: string): Promise<void> {
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: `Waiting for zip upload processing.`,
+    });
 
-      if (statusResponse.data.provisioningState === 'Succeeded') {
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: 'Zip upload processed successfully.',
-        });
-        return true;
-      } else if (statusResponse.data.provisioningState === 'Failed') {
-        throw new Error(`Zip upload processing failed. ${statusResponse.data.status_text}`);
-      }
+    return new Promise((resolve, reject) => {
+      const timerId = setInterval(async () => {
+        try {
+          const statusResponse = await axios.get(statusUrl, { headers: { Authorization: `Bearer ${token}` } });
 
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `Waiting for zip upload processing. ${statusResponse.data.status_text}`,
-      });
-      return false;
-    } catch (err) {
-      const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
-      throw new Error(`Getting status of zip upload processing failed. ${errorMessage}`);
-    }
+          if (statusResponse.data.provisioningState === 'Succeeded') {
+            this.logger({
+              status: BotProjectDeployLoggerType.DEPLOY_INFO,
+              message: 'Zip upload processed successfully.',
+            });
+            clearInterval(timerId);
+            resolve();
+          } else if (statusResponse.data.provisioningState === 'Failed') {
+            clearInterval(timerId);
+            reject(`Zip upload processing failed. ${statusResponse.data.status_text}`);
+          } else {
+            this.logger({
+              status: BotProjectDeployLoggerType.DEPLOY_INFO,
+              message: `Waiting for zip upload processing. ${statusResponse.data.status_text}`,
+            });
+          }
+        } catch (err) {
+          const errorMessage = JSON.stringify(err, Object.getOwnPropertyNames(err));
+          clearInterval(timerId);
+          reject(`Getting status of zip upload processing failed. ${errorMessage}`);
+        }
+      }, 5000);
+    });
   }
 
   // Upload the zip file to Azure
@@ -290,19 +300,7 @@ export class BotProjectDeploy {
       });
 
       if (response.status === 202) {
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Waiting for processing of zip upload.`,
-        });
-
-        const checkStatus = throttle(async () => {
-          return await this.checkZipDeployStatus(token, response.headers.location);
-        }, 5000);
-
-        let done = false;
-        while (!done) {
-          done = await checkStatus();
-        }
+        await this.waitForZipDeploy(token, response.headers.location);
       }
     } catch (err) {
       // close file read stream
