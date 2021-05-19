@@ -14,7 +14,7 @@
   "Microsoft.Ask": {
     "flow": {
       "footer": {
-        "description": "= Default operation"
+        "description": "= Varsayılan işlem"
       }
     },
     "form": {
@@ -31,7 +31,7 @@
   "Microsoft.BeginDialog": {
     "flow": {
       "footer": {
-        "description": "= Return value"
+        "description": "= Dönüş değeri"
       }
     },
     "form": {
@@ -42,7 +42,7 @@
   "Microsoft.BeginSkill": {
     "flow": {
       "footer": {
-        "description": "= Result"
+        "description": "= Sonuç"
       }
     },
     "form": {
@@ -59,7 +59,7 @@
   "Microsoft.CancelAllDialogs": {
     "flow": {
       "body": {
-        "description": "(Event)"
+        "description": "(Olay)"
       }
     },
     "form": {
@@ -117,7 +117,7 @@
   "Microsoft.EditArray": {
     "flow": {
       "footer": {
-        "description": "= Result"
+        "description": "= Sonuç"
       }
     },
     "form": {
@@ -128,7 +128,7 @@
   "Microsoft.EmitEvent": {
     "flow": {
       "body": {
-        "description": "(Event)"
+        "description": "(Olay)"
       }
     },
     "form": {
@@ -166,21 +166,21 @@
         "description": "= ActivityId"
       },
       "footer": {
-        "description": "= Result property"
+        "description": "= Sonuç özelliği"
       }
     }
   },
   "Microsoft.GetConversationMembers": {
     "flow": {
       "footer": {
-        "description": "= Result property"
+        "description": "= Sonuç özelliği"
       }
     }
   },
   "Microsoft.HttpRequest": {
     "flow": {
       "footer": {
-        "description": "= Result property"
+        "description": "= Sonuç özelliği"
       }
     },
     "form": {
@@ -209,7 +209,7 @@
   "Microsoft.OAuthInput": {
     "flow": {
       "footer": {
-        "description": "= Token property"
+        "description": "= Belirteç özelliği"
       }
     },
     "form": {
@@ -223,9 +223,9 @@
       "subtitle": "Etkinlik alındı"
     },
     "trigger": {
-      "label": "Activities (Activity received)",
+      "label": "Etkinlikler (Alınan etkinlik)",
       "submenu": {
-        "label": "Activities"
+        "label": "Etkinlikler"
       }
     }
   },
@@ -241,9 +241,9 @@
       "subtitle": "İletişim kutusu olayı başlat"
     },
     "trigger": {
-      "label": "Dialog started (Begin dialog event)",
+      "label": "İletişim kutusu başlatıldı (İletişim kutusunu başlatma olayı)",
       "submenu": {
-        "label": "Dialog events"
+        "label": "İletişim kutusu olayları"
       }
     }
   },
@@ -253,12 +253,12 @@
       "subtitle": "İletişim kutusu olayını iptal et"
     },
     "trigger": {
-      "label": "Dialog cancelled (Cancel dialog event)"
+      "label": "İletişim kutusu iptal edildi (İletişim kutusunu iptal etme olayı)"
     }
   },
   "Microsoft.OnChooseIntent": {
     "trigger": {
-      "label": "Duplicated intents recognized"
+      "label": "Yinelenen amaçlar tanındı"
     }
   },
   "Microsoft.OnCondition": {
@@ -274,7 +274,7 @@
       "subtitle": "ConversationUpdate etkinliği"
     },
     "trigger": {
-      "label": "Greeting (ConversationUpdate activity)"
+      "label": "Karşılama (ConversationUpdate etkinliği)"
     }
   },
   "Microsoft.OnDialogEvent": {
@@ -283,7 +283,7 @@
       "subtitle": "İletişim kutusu olayı"
     },
     "trigger": {
-      "label": "Custom events"
+      "label": "Özel olaylar"
     }
   },
   "Microsoft.OnEndOfActions": {
@@ -298,7 +298,7 @@
       "subtitle": "EndOfConversation etkinliği"
     },
     "trigger": {
-      "label": "Conversation ended (EndOfConversation activity)"
+      "label": "Konuşma sona erdi (EndOfConversation etkinliği)"
     }
   },
   "Microsoft.OnError": {
@@ -307,7 +307,7 @@
       "subtitle": "Hata olayı"
     },
     "trigger": {
-      "label": "Error occurred (Error event)"
+      "label": "Hata oluştu (Hata olayı)"
     }
   },
   "Microsoft.OnEventActivity": {
@@ -316,7 +316,7 @@
       "subtitle": "Olay etkinliği"
     },
     "trigger": {
-      "label": "Event received (Event activity)"
+      "label": "Olay alındı (Olay etkinliği)"
     }
   },
   "Microsoft.OnHandoffActivity": {
@@ -325,7 +325,7 @@
       "subtitle": "İletim etkinliği"
     },
     "trigger": {
-      "label": "Handover to human (Handoff activity)"
+      "label": "Kullanıcıya devret (Devretme etkinliği)"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
@@ -340,7 +340,7 @@
       "subtitle": "Amaç tanındı"
     },
     "trigger": {
-      "label": "Intent recognized"
+      "label": "Amaç tanındı"
     }
   },
   "Microsoft.OnInvokeActivity": {
@@ -349,7 +349,7 @@
       "subtitle": "Çağırma etkinliği"
     },
     "trigger": {
-      "label": "Conversation invoked (Invoke activity)"
+      "label": "Konuşma çağrıldı (Çağırma etkinliği)"
     }
   },
   "Microsoft.OnMessageActivity": {
@@ -358,7 +358,7 @@
       "subtitle": "İleti alındı etkinliği"
     },
     "trigger": {
-      "label": "Message received (Message received activity)"
+      "label": "İleti alındı (İleti alındı etkinliği)"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
@@ -367,7 +367,7 @@
       "subtitle": "İleti silindi etkinliği"
     },
     "trigger": {
-      "label": "Message deleted (Message deleted activity)"
+      "label": "İleti silindi (İleti silindi etkinliği)"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
@@ -376,7 +376,7 @@
       "subtitle": "İleti tepkisi etkinliği"
     },
     "trigger": {
-      "label": "Message reaction (Message reaction activity)"
+      "label": "İleti tepkisi (İleti tepkisi etkinliği)"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
@@ -385,12 +385,12 @@
       "subtitle": "İleti güncelleştirdi etkinliği"
     },
     "trigger": {
-      "label": "Message updated (Message updated activity)"
+      "label": "İleti güncelleştirildi (İleti güncelleştirildi etkinliği)"
     }
   },
   "Microsoft.OnQnAMatch": {
     "trigger": {
-      "label": "QnA Intent recognized"
+      "label": "Soru-Cevap Amacı tanındı"
     }
   },
   "Microsoft.OnRepromptDialog": {
@@ -399,7 +399,7 @@
       "subtitle": "Yeniden isteme iletişim kutusu olayı"
     },
     "trigger": {
-      "label": "Re-prompt for input (Reprompt dialog event)"
+      "label": "Girişi yeniden iste (Yeniden isteme iletişim kutusu olayı)"
     }
   },
   "Microsoft.OnTypingActivity": {
@@ -408,7 +408,7 @@
       "subtitle": "Yazma etkinliği"
     },
     "trigger": {
-      "label": "User is typing (Typing activity)"
+      "label": "Kullanıcı yazıyor (Yazma etkinliği)"
     }
   },
   "Microsoft.OnUnknownIntent": {
@@ -417,7 +417,7 @@
       "subtitle": "Bilinmeyen amaç tanındı"
     },
     "trigger": {
-      "label": "Unknown intent"
+      "label": "Bilinmeyen amaç"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -440,11 +440,11 @@
   },
   "Microsoft.SendHandoffActivity": {
     "form": {
-      "label": "Send a handoff request",
-      "subtitle": "Send Handoff Activity"
+      "label": "İletim isteği gönderin",
+      "subtitle": "İletim Etkinliği Gönder"
     },
     "menu": {
-      "label": "Send Handoff Event"
+      "label": "İletim Olayı Gönder"
     }
   },
   "Microsoft.SetProperties": {
@@ -497,12 +497,12 @@
   "Microsoft.UpdateActivity": {
     "flow": {
       "header": {
-        "title": "Update activity"
+        "title": "Etkinliği güncelleştirme"
       }
     },
     "form": {
-      "label": "Update an activity",
-      "subtitle": "Update Activity"
+      "label": "Etkinliği güncelleştir",
+      "subtitle": "Güncelleştirme Etkinliği"
     }
   }
 }

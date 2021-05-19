@@ -3,13 +3,13 @@
     "message": "0 bájt"
   },
   "1_using_the_azure_portal_please_create_a_language__7e2eb65c": {
-    "message": "1. Using the Azure portal, please create a Language Understanding resource.\n2. Once created, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
+    "message": "1. Az Azure Portalon hozzon létre egy Language Understanding erőforrást.\n2. A létrehozás után az alábbi hivatkozásnak megfelelően biztonságosan megoszthatja velem az így kapott hitelesítő adatokat.\n\nRészletes útmutató:\nhttps://aka.ms/bfcomposerhandoffluis"
   },
   "1_using_the_azure_portal_please_create_a_qnamaker__a060ac82": {
-    "message": "1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
+    "message": "1. Az Azure Portalon hozzon létre egy QnAMaker erőforrást a nevemben.\n2. A kiépítés után az alábbi hivatkozásnak megfelelően biztonságosan megoszthatja velem az így kapott hitelesítő adatokat.\n\nRészletes útmutató:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
   },
   "1_using_the_azure_portal_please_create_a_speech_re_6326f2f5": {
-    "message": "1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
+    "message": "1. Az Azure Portalon hozzon létre egy Speech erőforrást a nevemben.\n2. A kiépítés után az alábbi hivatkozásnak megfelelően biztonságosan megoszthatja velem az így kapott hitelesítő adatokat.\n\nRészletes útmutató:\nhttps://aka.ms/bfcomposerhandoffdls"
   },
   "ErrorInfo_part1": {
     "message": "Hiba történt az űrlapszerkesztőben."
@@ -21,10 +21,10 @@
     "message": "Próbáljon meg egy másik csomópontra lépni a vizualizációszerkesztőben."
   },
   "a_add_from_package_manager_a_9eee7630": {
-    "message": "<a>Add from package manager</a>"
+    "message": "<a>Hozzáadás csomagkezelőből</a>"
   },
   "a_bot_that_consists_of_multiple_bots_or_connects_t_f3bc4bd": {
-    "message": "A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill."
+    "message": "A több robotból álló vagy a képességekhez csatlakozó robotoknak (azaz a több robotos projekteknek) szükségük van az Orchestratorre, hogy a felhasználó által bevitt adatokat a megfelelő robothoz vagy képességhez tudják irányítani."
   },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "a párbeszédfájlnak névvel kell rendelkeznie"
@@ -33,7 +33,7 @@
     "message": "Az űrlap-párbeszédpanel lehetővé teszi, hogy a robotja információkat gyűjtsön."
   },
   "a_install_ngrok_a_and_run_the_following_command_to_634f3414": {
-    "message": "<a>Install ngrok</a> and run the following command to continue"
+    "message": "A folytatáshoz <a>telepítse az ngrokot</a>, és futtassa az alábbi parancsot"
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "A tudásbázis neve nem tartalmazhat szóközöket és speciális karaktereket. Betűk, számok, - vagy _ karakterek használhatók."
@@ -50,11 +50,14 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "A tulajdonságok a robot által gyűjtött információk. A tulajdonságnév a Composer eszközben használt elnevezés, nem feltétlenül azonos a robot üzeneteiben megjelenő szöveggel."
   },
+  "a_publishing_profile_contains_the_information_nece_fc37192d": {
+    "message": "A közzétételi profil tartalmazza a robot kiépítéséhez és közzétételéhez szükséges információkat, például az alkalmazásazonosítót is. "
+  },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
-    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
+    "message": "A közzétételi profil tartalmazza a robot kiépítéséhez és közzétételéhez szükséges információkat, például az alkalmazásazonosítót is."
   },
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
-    "message": "A publishing profile provides the secure connectivity required to publish your bot."
+    "message": "A közzétételi profil a bot közzétételéhez szükséges biztonságos kapcsolatot biztosítja."
   },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A séma vagy űrlap a bot által gyűjtött tulajdonságok listája."
@@ -63,7 +66,7 @@
     "message": "A képességbotokat a gazdabotokból lehet hívni."
   },
   "a_skill_is_a_bot_that_can_perform_a_set_of_tasks_o_950a3c95": {
-    "message": "A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform."
+    "message": "A képesség egy olyan robot, amely egy vagy több roboton feladatokat tud elvégezni. Ha képességként szeretne használni egy robotot, akkor szükség lesz hozzá egy jegyzékfájlra, amely egy olyan JSON-fájl, amely leírja a végrehajtható műveleteket."
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A QnA Maker-erőforrások létrehozásakor egy előfizetési kulcs jön létre."
@@ -99,7 +102,7 @@
     "message": "Művelet szűrése törölve"
   },
   "actions_are_the_main_component_of_a_trigger_they_a_8e3af9b9": {
-    "message": "Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur."
+    "message": "A műveletek az eseményindítók fő összetevői; ők teszik lehetővé, hogy a robot elvégezze a szükséges műveleteket akár a felhasználói bevitelre válaszul, akár bármilyen más eseményre reagálva."
   },
   "actions_copied_2821ab27": {
     "message": "Másolt műveletek"
@@ -150,7 +153,7 @@
     "message": "Hozzáadás"
   },
   "add_a_bot_58522e81": {
-    "message": "Add a bot"
+    "message": "Robot hozzáadása"
   },
   "add_a_dialog_e378aa3a": {
     "message": "Párbeszéd hozzáadása"
@@ -168,25 +171,25 @@
     "message": "Készség hozzáadása"
   },
   "add_a_skill_host_endpoint_so_your_skills_can_relia_950a7614": {
-    "message": "Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>."
+    "message": "Vegyen fel egy képességhez tartozó végpontot, hogy a képességek megbízhatóan csatlakozhassanak a gyökérszintű robothoz. <a>További információ</a>."
   },
   "add_allowed_callers_7188d3d4": {
-    "message": "Add allowed callers"
+    "message": "Engedélyezett hívók hozzáadása"
   },
   "add_alternative_662902c1": {
-    "message": "Add alternative"
+    "message": "Alternatíva hozzáadása"
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Alternatív megfogalmazás hozzáadása"
   },
   "add_an_existing_bot_5a9cc5b1": {
-    "message": "Add an existing bot"
+    "message": "Meglévő robot hozzáadása"
   },
   "add_connections_d720a32e": {
-    "message": "Add connections"
+    "message": "Kapcsolatok hozzáadása"
   },
   "add_connections_to_make_your_bot_available_in_webc_5ae0b1de": {
-    "message": "Add connections to make your bot available in Webchat, Direct Line Speech, Microsoft Teams and more. <a>Learn more.</a>"
+    "message": "Adjon hozzá kapcsolatokat, hogy a robot elérhető legyen a Webchatben, a Direct Line Speechben, a Microsoft Teamsben és más megoldásokban. <a>További információ</a>."
   },
   "add_custom_a376ce51": {
     "message": "Egyéni hozzáadása"
@@ -195,7 +198,7 @@
     "message": "Egyéni futtatókörnyezet hozzáadása"
   },
   "add_entity_5f769994": {
-    "message": "Add entity"
+    "message": "Entitás hozzáadása"
   },
   "add_more_to_this_response_d45bdfda": {
     "message": "Továbbiak hozzáadása ehhez a válaszhoz"
@@ -213,7 +216,7 @@
     "message": "Új melléklet hozzáadása"
   },
   "add_new_caller_4a72bd0c": {
-    "message": "Add new caller"
+    "message": "Új hívó hozzáadása"
   },
   "add_new_extension_19b82b77": {
     "message": "Új bővítmény hozzáadása"
@@ -225,19 +228,22 @@
     "message": "Új kérdés hozzáadása"
   },
   "add_new_trigger_dc8e80b4": {
-    "message": "Add new trigger"
+    "message": "Új trigger hozzáadása"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Itt adható hozzá új érvényesítési szabály"
   },
   "add_packages_3ab0558c": {
-    "message": "Add packages"
+    "message": "Csomagok hozzáadása"
   },
   "add_property_d381eba3": {
     "message": "Tulajdonság hozzáadása"
   },
+  "add_publishing_profile_for_botname_37f9d35c": {
+    "message": "Közzétételi profil hozzáadása a következőhöz: {botName}"
+  },
   "add_qna_maker_knowledge_base_c1b27b78": {
-    "message": "Add QnA Maker knowledge base"
+    "message": "QnA Maker-tudásbázis hozzáadása"
   },
   "add_qna_pair_16c228f0": {
     "message": "+ Kérdés-válasz pár hozzáadása"
@@ -264,19 +270,19 @@
     "message": "Mind"
   },
   "allowed_callers_31b26262": {
-    "message": "Allowed Callers"
+    "message": "Engedélyezett hívók"
   },
   "almost_there_f90939cb": {
-    "message": "Almost there!"
+    "message": "Mindjárt készen vagyunk!"
   },
   "an_app_id_is_used_for_communication_between_your_b_255025e1": {
-    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
+    "message": "Az alkalmazásazonosító a robot és a képességek, a szolgáltatások, a webhelyek és az alkalmazások közötti kommunikációra használható. Használhat már meglévő alkalmazásazonosítót, de automatikusan is létrehozhat egyet, amikor ennek a robotnak a közzétételi profilját hozza létre. <a>További információ</a>"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "LUIS-fiók létrehozásakor automatikusan létrejön egy szerzői kulcs."
   },
   "an_azure_tenant_must_be_set_in_order_to_provision__a223f1b8": {
-    "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
+    "message": "Az erőforrások kiépítéséhez be kell állítani egy Azure-bérlőt. Próbálja meg újra létrehozni a közzétételi profilt, majd próbálkozzon újra."
   },
   "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
     "message": "Hiba történt a DirectLine-kiszolgálóhoz való kapcsolódás közben"
@@ -327,10 +333,10 @@
     "message": "bármilyen sztring"
   },
   "application_language_settings_85b1f06": {
-    "message": "Application language settings"
+    "message": "Alkalmazás nyelvi beállításai"
   },
   "application_name_67a279e2": {
-    "message": "Application name"
+    "message": "Alkalmazásnév"
   },
   "application_settings_39e840c6": {
     "message": "Alkalmazásbeállítások"
@@ -339,10 +345,10 @@
     "message": "Alkalmazásfrissítések"
   },
   "apply_my_azure_bot_resources_for_an_existing_bot_4979e343": {
-    "message": "Apply my Azure Bot resources for an existing bot"
+    "message": "Az Azure Bot-erőforrásaim alkalmazása meglévő robotra"
   },
   "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
-    "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
+    "message": "Biztos, hogy törölni szeretné a robotot? Ez a művelet nem vonható vissza, és a robot, valamint a robot projektmappájában található összes kapcsolódó fájl véglegesen törlődik. Az Azure-erőforrások változatlanok maradnak."
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "Biztosan kilép az Előkészítési termékbemutatóból? Az előkészítési beállításoknál bármikor újraindíthatja a bemutatót."
@@ -354,7 +360,7 @@
     "message": "Biztosan eltávolítja a következőt: { propertyName }?"
   },
   "are_you_sure_you_want_to_remove_targetname_this_wi_b3ddce54": {
-    "message": "Are you sure you want to remove { targetName }? This will remove only the profile and will not delete provisioned resources."
+    "message": "Biztosan eltávolítja a következőt: { targetName }? Ezzel csak a profilt távolítja el, a kiépített erőforrásokat azonban nem törli."
   },
   "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
     "message": "Eltávolítja ezt a tulajdonságot?"
@@ -384,67 +390,67 @@
     "message": "Kérdés küldése"
   },
   "ask_a_question_confirmation_434ad620": {
-    "message": "Ask a question - confirmation"
+    "message": "Kérdés feltevése – megerősítés"
   },
   "ask_a_question_date_or_time_6e896738": {
-    "message": "Ask a question - date or time"
+    "message": "Kérdés feltevése – dátum vagy idő"
   },
   "ask_a_question_file_or_attachment_eebb66b2": {
-    "message": "Ask a question - file or attachment"
+    "message": "Kérdés feltevése – fájl vagy melléklet"
   },
   "ask_a_question_multi_choice_5fce9e3e": {
-    "message": "Ask a question - multi choice"
+    "message": "Kérdés feltevése – választás több lehetőség közül"
   },
   "ask_a_question_number_28cb66b1": {
-    "message": "Ask a question - number"
+    "message": "Kérdés feltevése – szám"
   },
   "ask_a_question_oauth_login_8ec5ccd5": {
-    "message": "Ask a question - OAuth login"
+    "message": "Kérdés feltevése – OAuth-bejelentkezés"
   },
   "ask_a_question_send_activity_19848af2": {
-    "message": "Ask a question - send activity"
+    "message": "Kérdés feltevése – küldési tevékenység"
   },
   "ask_a_question_text_ba993a5e": {
-    "message": "Ask a question - text"
+    "message": "Kérdés feltevése – szöveg"
   },
   "ask_a_question_to_collect_user_input_choice_c1fbb541": {
-    "message": "Ask a question to collect user input (choice)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (választás)"
   },
   "ask_a_question_to_collect_user_input_confirmation_29c70209": {
-    "message": "Ask a question to collect user input (confirmation)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (megerősítés)"
   },
   "ask_a_question_to_collect_user_input_date_or_time_3a8659ee": {
-    "message": "Ask a question to collect user input (date or time)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (dátum vagy idő)"
   },
   "ask_a_question_to_collect_user_input_file_or_attac_dccad24b": {
-    "message": "Ask a question to collect user input (file or attachment)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (fájl vagy melléklet)"
   },
   "ask_a_question_to_collect_user_input_number_b3abe981": {
-    "message": "Ask a question to collect user input (number)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (szám)"
   },
   "ask_a_question_to_collect_user_input_oauth_login_5347b7fc": {
-    "message": "Ask a question to collect user input (OAuth login)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (OAuth-bejelentkezés)"
   },
   "ask_a_question_to_collect_user_input_send_activity_eb3dd7ab": {
-    "message": "Ask a question to collect user input (send activity)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (küldési tevékenység)"
   },
   "ask_a_question_to_collect_user_input_text_5d8adc89": {
-    "message": "Ask a question to collect user input (text)"
+    "message": "Kérdés feltevése felhasználói adatbevitel gyűjtéséhez (szöveg)"
   },
   "ask_activity_7bb716b4": {
-    "message": "Ask activity"
+    "message": "Kérdező tevékenység"
   },
   "ask_the_skill_owner_for_the_url_and_provide_your_b_70a8b361": {
-    "message": "Ask the skill owner for the URL and provide your bot’s App ID"
+    "message": "A képesség szerzőjétől kérje el az URL-címet, és adja meg a robot alkalmazásazonosítóját"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "Legalább egy kérdés megadása kötelező"
   },
   "attachment_deffe5a9": {
-    "message": "Attachment"
+    "message": "Melléklet"
   },
   "attachment_input_212dcb98": {
-    "message": "Attachment input"
+    "message": "Melléklet bevitelként"
   },
   "attachment_layout_b42b242": {
     "message": "Melléklet elrendezése"
@@ -456,10 +462,10 @@
     "message": "Hangkártya"
   },
   "australia_east_b7af6cc": {
-    "message": "Australia East"
+    "message": "Ausztrália keleti régiója"
   },
   "authentication_error_39e996c5": {
-    "message": "Authentication Error"
+    "message": "Hitelesítési hiba"
   },
   "authoring_canvas_18802e39": {
     "message": "Szerkesztővászon"
@@ -477,22 +483,22 @@
     "message": "Párbeszédek automatikus létrehozása, amelyek adatokat gyűjtenek az adott felhasználótól a beszélgetések kezelése céljából."
   },
   "available_as_skill_to_the_following_bots_dbcaffcd": {
-    "message": "Available as skill to the following bots:"
+    "message": "Képességként elérhető a következő robotok számára:"
   },
   "azure_connections_9e63f716": {
-    "message": "Azure connections"
+    "message": "Azure-kapcsolatok"
   },
   "azure_directory_d9065529": {
-    "message": "Azure directory"
+    "message": "Azure-címtár"
   },
   "azure_functions_5e23be5c": {
-    "message": "Azure Functions"
+    "message": "Azure-függvények"
   },
   "azure_functions_required_2a035b48": {
-    "message": "Azure Functions required"
+    "message": "Az Azure Functions szükséges"
   },
   "azure_functions_runtime_not_installed_bc24e100": {
-    "message": "Azure Functions runtime not installed."
+    "message": "Az Azure Functions-futtatókörnyezet nincs telepítve."
   },
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
@@ -501,10 +507,10 @@
     "message": "Azure QnA Maker"
   },
   "azure_resource_group_cee486e6": {
-    "message": "Azure resource group"
+    "message": "Azure-beli erőforráscsoport"
   },
   "azure_subscription_4671d043": {
-    "message": "Azure subscription"
+    "message": "Azure-előfizetés"
   },
   "azure_web_app_d834cb4c": {
     "message": "Azure Web App"
@@ -515,9 +521,6 @@
   "been_used_5daccdb2": {
     "message": "Használva"
   },
-  "before_we_begin_7ae9c242": {
-    "message": "Before we begin"
-  },
   "begin_a_new_dialog_60249bd8": {
     "message": "Új párbeszéd elkezdése"
   },
@@ -525,7 +528,7 @@
     "message": "Új távoli készségpárbeszéd indítása."
   },
   "begin_dialog_154ebbf9": {
-    "message": "Begin dialog"
+    "message": "Párbeszéd elkezdése"
   },
   "begin_dialog_event_285bc650": {
     "message": "Párbeszédesemény indítása"
@@ -576,7 +579,7 @@
     "message": "Létrehozott botfájlok"
   },
   "bot_framework_composer_2_0_provides_more_built_in__c6abf11c": {
-    "message": "Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages."
+    "message": "A Bot Framework Composer 2.0 még több beépített funkciót kínál, amelyekkel gyorsan létrehozhat összetett robotokat is. Frissítsen a Composer 2.0-ra, hogy használhassa a speciális robotsablonokat, az előre elkészített összetevőket, valamint egy olyan közös nyelvi futtatókörnyezetet, amely csomagokkal teljes mértékben bővíthető."
   },
   "bot_framework_composer_fae721be": {
     "message": "Bot Framework Composer"
@@ -585,7 +588,7 @@
     "message": "a bot framework composer szürke ikonja"
   },
   "bot_framework_composer_requires_node_js_in_order_t_de385f76": {
-    "message": "Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node."
+    "message": "A Bot Framework Composernek szüksége van a Node.js-re, hogy új robotot tudjon létrehozni és futtatni. A legújabb verziót a „Node.js telepítése“ lehetőségre kattintva telepítheti. A Node telepítését követően újra kell indítania a Composert."
   },
   "bot_framework_emulator_fefd4a59": {
     "message": "Bot Framework Emulator"
@@ -600,7 +603,7 @@
     "message": "Robot nyelve (aktív)"
   },
   "bot_name_cannot_start_with_a_number_or_space_3a5c6fc1": {
-    "message": "Bot name cannot start with a number or space"
+    "message": "A robot neve nem kezdődhet számmal"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "A robot neve { botName }"
@@ -609,7 +612,7 @@
     "message": "A robot projektfájlja nem létezik."
   },
   "bot_project_location_3be47459": {
-    "message": "Bot project location"
+    "message": "Robotprojekt helye"
   },
   "bot_projects_settings_list_view_ab58e5d": {
     "message": "A botprojektek beállításainak listanézete"
@@ -618,7 +621,7 @@
     "message": "Botprojektek beállításainak navigációs panelje"
   },
   "bot_response_ec6f4a8c": {
-    "message": "Bot response"
+    "message": "Robot válasza"
   },
   "bot_responses_4617b4a2": {
     "message": "A robot válasza"
@@ -642,7 +645,7 @@
     "message": "Ciklus megszakítása"
   },
   "build_a_continuous_integration_and_deployment_ci_c_79188c70": {
-    "message": "Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates."
+    "message": "Létrehozhat egy folyamatos integrációs és terjesztési (CI/CD-) folyamatot az Azure Resource Manager-sablonok használatával."
   },
   "building_5e8a3c1d": {
     "message": "Buildelés"
@@ -657,13 +660,13 @@
     "message": "Számítás..."
   },
   "call_skills_24416f61": {
-    "message": "Call skills"
+    "message": "Képességek meghívása"
   },
   "cancel_all_active_dialogs_335b1623": {
     "message": "Az összes aktív párbeszéd megszakítása"
   },
   "cancel_all_dialogs_7b35fa0e": {
-    "message": "Cancel all dialogs"
+    "message": "Az összes párbeszéd megszakítása"
   },
   "cancel_caeb1e68": {
     "message": "Mégse"
@@ -681,7 +684,7 @@
     "message": "A fájl nem tölthető fel. A beszélgetés nem található."
   },
   "carousel_a2321ac9": {
-    "message": "Carousel"
+    "message": "Forgótár"
   },
   "change_recognizer_3145b93d": {
     "message": "Változásértelmező"
@@ -690,7 +693,7 @@
     "message": "Frissítések automatikus keresése és telepítése."
   },
   "choice_input_369b0c57": {
-    "message": "Choice input"
+    "message": "Választási lehetőség bevitelként"
   },
   "choice_name_fe8411f4": {
     "message": "Választási lehetőség neve"
@@ -705,10 +708,10 @@
     "message": "Az összes törlése"
   },
   "click_start_and_your_bot_will_be_up_and_running_on_424c29da": {
-    "message": "Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test."
+    "message": "Kattintson az Indítás gombra, és a robotja elindul. Ha fut, a teszteléshez válassza a „Megnyitás a Webchatben“ lehetőséget."
   },
   "click_the_start_button_to_test_your_bot_using_web__821e827c": {
-    "message": "Click the start button to test your bot using Web Chat or Emulator. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
+    "message": "Az Indítás gombra kattintva tesztelje a robotot a webchat vagy az Emulator használatával. Ha még nincs telepítve a Bot Framework Emulator, <a>innen</a> letöltheti."
   },
   "click_to_sort_by_file_type_1b0c9bd": {
     "message": "Kattintson a fájltípus szerinti rendezési szempontra"
@@ -717,25 +720,25 @@
     "message": "Bezárás"
   },
   "close_webchat_b26d03e1": {
-    "message": "Close WebChat"
+    "message": "Webchat bezárása"
   },
   "cognitive_service_region_87c668be": {
-    "message": "Cognitive Service Region"
+    "message": "Cognitive Service-régió"
   },
   "cognitive_services_key_fcfd093f": {
-    "message": "Cognitive services key"
+    "message": "Kognitív szolgáltatások kulcsa"
   },
   "collapse_34080b4d": {
     "message": "Összecsukás"
   },
   "collapse_debug_panel_2841f8ba": {
-    "message": "Collapse Debug Panel"
+    "message": "Hibakeresési panel összecsukása"
   },
   "collapse_navigation_17228b95": {
     "message": "Navigáció összecsukása"
   },
   "collect_information_about_the_use_and_performance__39c61db9": {
-    "message": "Collect information about the use and performance of your bot."
+    "message": "Információkat gyűjthet a robot használatáról és teljesítményéről."
   },
   "comment_7ef1428e": {
     "message": "Megjegyzés"
@@ -747,16 +750,16 @@
     "message": "Gyakori"
   },
   "complete_your_publishing_profile_7240d0d6": {
-    "message": "Complete your publishing profile"
+    "message": "A közzétételi profil kitöltése"
   },
   "component_stacktrace_e24b1983": {
     "message": "Összetevő veremkivonata:"
   },
   "components_of_kind_kind_are_not_supported_replace__de47f868": {
-    "message": "Components of $kind \"{ kind }\" are not supported. Replace with a different component or create a custom component."
+    "message": "A(z) „{ kind }“ típusú összetevők nem támogatottak. Cserélje másik összetevőre, vagy létrehozhat egy egyéni összetevőt is."
   },
   "composer_2_0_is_now_available_113ed532": {
-    "message": "Composer 2.0 is now available!"
+    "message": "Már elérhető a Composer 2.0!"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "A Composer még nem tudja automatikusan lefordítani a robotot.\nA fordítás manuális elkészítéséhez a Composer létre fog hozni egy másolatot a robot tartalmáról a további nyelv nevével. Ez a tartalom ezután az eredeti robotlogika vagy folyamat befolyásolása nélkül lefordítható, és szabadon lehet váltani a nyelvek között annak biztosításához, hogy a válaszok fordítása helyes és megfelelő legyen."
@@ -768,25 +771,25 @@
     "message": "A Composer naprakész."
   },
   "composer_language_f958f3bf": {
-    "message": "Composer language"
+    "message": "Composer nyelve"
   },
   "composer_logo_ba2048a0": {
     "message": "Composer-embléma"
   },
   "composer_needs_azure_functions_36138382": {
-    "message": "Composer needs Azure Functions"
+    "message": "A Composer használatához Azure Functions szükséges"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "A Composer futtatásához a .NET Core SDK szükséges"
   },
   "composer_runtime_error_b0efe05": {
-    "message": "Composer Runtime Error"
+    "message": "Composer futásidejű hibája"
   },
   "composer_settings_c8c622cf": {
-    "message": "Composer settings"
+    "message": "A Composer beállításai"
   },
   "composer_tutorials_5e79e495": {
-    "message": "Composer tutorials"
+    "message": "Composer-útmutatók"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "A Composer újraindul."
@@ -795,28 +798,28 @@
     "message": "A Composer az alkalmazás legközelebbi bezárásakor frissülni fog."
   },
   "composite_entity_8b5f67ba": {
-    "message": "Composite entity"
+    "message": "Összetett entitás"
   },
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
   "configuration_e186200": {
-    "message": "Configuration"
+    "message": "Konfiguráció"
   },
   "configure_adapter_2f621249": {
-    "message": "Configure adapter"
+    "message": "Adapter konfigurálása"
   },
   "configure_and_publish_7f53bc9a": {
-    "message": "Configure and publish"
+    "message": "Konfigurálás és közzététel"
   },
   "configure_ecb97e30": {
-    "message": "Configure"
+    "message": "Konfigurálás"
   },
   "configure_the_command_used_by_composer_to_start_yo_f4231dc6": {
-    "message": "Configure the command used by Composer to start your bot application when testing locally."
+    "message": "A Composer által a robotalkalmazás indításához használt parancs konfigurálása helyi teszteléshez."
   },
   "configure_your_bot_7483e4a": {
-    "message": "Configure your bot"
+    "message": "A robot konfigurálása"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Konfigurálja az alapértelmezett nyelvi modell használatát arra az esetre, ha a fájlnévben nem szerepel kulturális kód (alapértelmezett: en-us)"
@@ -828,10 +831,10 @@
     "message": "Lehetőségek jóváhagyása"
   },
   "confirm_input_7e58417e": {
-    "message": "Confirm input"
+    "message": "Bevitel megerősítése"
   },
   "confirm_skill_endpoints_6eb184cf": {
-    "message": "Confirm skill endpoints"
+    "message": "Készségvégpontok megerősítése"
   },
   "confirmation_fec87d65": {
     "message": "Megerősítés"
@@ -840,7 +843,7 @@
     "message": "A megerősítési ablaknak rendelkeznie kell névvel."
   },
   "conflicting_changes_detected_6c282985": {
-    "message": "Conflicting changes detected"
+    "message": "A rendszer ütköző módosításokat észlelt"
   },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Gratulálunk! A modell közzététele sikeresen megtörtént."
@@ -852,16 +855,16 @@
     "message": "Csatlakozás a QnA-tudásbázishoz"
   },
   "connect_to_speech_service_9d877e37": {
-    "message": "Connect to Speech Service"
+    "message": "Csatlakozás a beszédfelismerési szolgáltatáshoz"
   },
   "connect_with_the_community_to_ask_and_answer_quest_aeec8c4f": {
-    "message": "Connect with the community to ask and answer questions about Composer"
+    "message": "Lépjen kapcsolatba a közösséggel, ahol választ kaphat a Composerrel kapcsolatos kérdéseire"
   },
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
-    "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
+    "message": "Csatlakoztassa a robotot a Microsoft Teams és a WebChat szolgáltatáshoz, vagy engedélyezze a DirectLine-beszédfelismerést."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
-    "message": "Connect your bot to Teams, external channels, or enable speech."
+    "message": "Csatlakoztassa a robotot a Teamshez, külső csatornákhoz vagy engedélyezze a beszédfelismerést."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Csatlakozás a következőhöz: <b>{ source }</b>, a bot tartalmának importálásához..."
@@ -870,7 +873,7 @@
     "message": "Csatlakozás a következőköz: <b>{ targetName }</b> a bot tartalmának importálásához..."
   },
   "connections_917ef4e4": {
-    "message": "Connections"
+    "message": "Kapcsolatok"
   },
   "continue_ac067716": {
     "message": "Folytatás"
@@ -879,7 +882,7 @@
     "message": "Ciklus folytatása"
   },
   "continue_setting_up_your_development_environment_b_5ec84955": {
-    "message": "Continue setting up your development environment by adding LUIS keys."
+    "message": "A fejlesztői környezet beállításának folytatása LUIS-kulcsok hozzáadásával."
   },
   "conversation_ended_a8bd37dd": {
     "message": "A beszélgetés véget ért"
@@ -900,28 +903,28 @@
     "message": "ConversationUpdate tevékenység"
   },
   "convert_583eb59d": {
-    "message": "Convert"
+    "message": "Konvertálás"
   },
   "convert_your_project_to_the_latest_format_a28e824c": {
-    "message": "Convert your project to the latest format"
+    "message": "A projekt átalakítása a legújabb formátumba"
   },
   "copy_9748f9f": {
     "message": "Másolás"
   },
   "copy_command_to_clipboard_4649910f": {
-    "message": "Copy command to clipboard"
+    "message": "Parancs másolása a vágólapra"
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Tartalom másolása fordításhoz"
   },
   "copy_icon_4cc3a18e": {
-    "message": "Copy Icon"
+    "message": "Másolás ikon"
   },
   "copy_project_location_to_clipboard_eb85c474": {
     "message": "Projekt helyének másolása a vágólapra"
   },
   "copy_skill_manifest_url_217975ba": {
-    "message": "Copy Skill Manifest URL"
+    "message": "A képességjegyzék URL-címének másolása"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Nem sikerült csatlakozni a tárolóhoz."
@@ -948,7 +951,7 @@
     "message": "Adjon meg egy projektnevet, amely az alkalmazás elnevezéséhez használható: (projectname-environment-LUfilename)"
   },
   "create_a_new_bot_51ce70d3": {
-    "message": "Create a new bot"
+    "message": "Új robot létrehozása"
   },
   "create_a_new_dialog_21d84b82": {
     "message": "Új párbeszéd létrehozása"
@@ -957,13 +960,10 @@
     "message": "Hozzon létre egy új űrlappárbeszédpanel-sémát a fenti + gombra kattintva."
   },
   "create_a_publish_profile_to_continue_1e2fa5a0": {
-    "message": "Create a publish profile to continue"
+    "message": "A folytatáshoz hozzon létre egy közzétételi profilt"
   },
   "create_a_publishing_profile_a79c6808": {
-    "message": "Create a publishing profile"
-  },
-  "create_a_publishing_profile_for_botname_b82f4386": {
-    "message": "Create a publishing profile for { botName }"
+    "message": "Közzétételi profil létrehozása"
   },
   "create_a_skill_in_your_bot_d7659e6b": {
     "message": "Képesség létrehozása a boton belül"
@@ -972,7 +972,7 @@
     "message": "Trigger létrehozása"
   },
   "create_and_configure_new_azure_resources_302c574a": {
-    "message": "Create and configure new Azure resources"
+    "message": "Új Azure-erőforrások létrehozása és konfigurálása"
   },
   "create_bot_from_template_or_scratch_92f0fefa": {
     "message": "A robotot sablonból vagy teljesen az alapoktól szeretné létrehozni?"
@@ -981,7 +981,7 @@
     "message": "Másolat létrehozása a robot tartalmának fordításához"
   },
   "create_custom_knowledge_base_e1cad195": {
-    "message": "Create custom knowledge base"
+    "message": "Egyéni tudásbázis létrehozása"
   },
   "create_folder_error_38aa86f5": {
     "message": "Mappalétrehozási hiba"
@@ -1002,7 +1002,7 @@
     "message": "Létrehozás sablonból"
   },
   "create_new_e0946c49": {
-    "message": "Create new"
+    "message": "Új létrehozása"
   },
   "create_new_folder_19d3faa4": {
     "message": "Új mappa létrehozása"
@@ -1011,22 +1011,25 @@
     "message": "Új tudásbázis létrehozása"
   },
   "create_new_publish_profile_e27c0950": {
-    "message": "Create new publish profile"
+    "message": "Új közzétételi profil létrehozása"
+  },
+  "create_profile_33fafbf1": {
+    "message": "Profil létrehozása"
   },
   "create_service_resources_386ef96b": {
-    "message": "Create { service } resources"
+    "message": "{ service }-erőforrások létrehozása"
   },
   "create_your_first_bot_a23748c1": {
-    "message": "Create your first bot"
+    "message": "Az első robot létrehozása"
   },
   "creating_knowledge_base_e391b132": {
-    "message": "Creating knowledge base..."
+    "message": "Tudásbázis létrehozása..."
   },
   "creating_qna_maker_7c88df84": {
-    "message": "Creating QnA Maker"
+    "message": "QnA Maker létrehozása"
   },
   "creating_resources_af3aec2f": {
-    "message": "Creating resources..."
+    "message": "Erőforrások létrehozása..."
   },
   "current_40c0812f": {
     "message": "– Aktuális"
@@ -1068,10 +1071,10 @@
     "message": "Dátum vagy idő"
   },
   "date_time_input_aa8ad315": {
-    "message": "Date time input"
+    "message": "Dátum- és időbevitel"
   },
   "deactivated_action_1da615d0": {
-    "message": "Deactivated action."
+    "message": "A művelet inaktiválva."
   },
   "debug_break_46cb5adb": {
     "message": "Hibakeresési töréspont"
@@ -1101,13 +1104,13 @@
     "message": "A beszélgetési célkitűzés meghatározása"
   },
   "define_new_entity_6c69b912": {
-    "message": "Define new entity"
+    "message": "Új entitás megadása"
   },
   "define_user_input_and_trigger_phrases_to_direct_th_d473c5c": {
-    "message": "Define user input and trigger phrases to direct the conversation flow."
+    "message": "A beszélgetési folyamat közvetlen eléréséhez adja meg a felhasználói bevitelt és a triggerkifejezéseket."
   },
   "define_your_bot_s_responses_add_phrase_variations__11aa55cb": {
-    "message": "Define your bot''s responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
+    "message": "Adja meg a robot válaszait, adjon hozzá kifejezés-variációkat, hozzon létre egyszerű kifejezéseket a környezet alapján, vagy tekintse meg a társalgási memóriát."
   },
   "defined_in_475568fb": {
     "message": "Meghatározva a következőben:"
@@ -1125,13 +1128,13 @@
     "message": "Tevékenység törlése"
   },
   "delete_bot_4b1527e4": {
-    "message": "Delete bot"
+    "message": "Robot törlése"
   },
   "delete_bot_73586104": {
     "message": "Robot törlése"
   },
   "delete_fd07d6ad": {
-    "message": "Delete?"
+    "message": "Törli?"
   },
   "delete_form_dialog_schema_c8e28229": {
     "message": "Eltávolítja az elemet a párbeszédsémából?"
@@ -1143,7 +1146,7 @@
     "message": "Tulajdonságok törlése"
   },
   "delete_property_4a0e0df6": {
-    "message": "Delete property"
+    "message": "Tulajdonság törlése"
   },
   "delete_property_da7646f6": {
     "message": "Törli a tulajdonságot?"
@@ -1155,13 +1158,13 @@
     "message": "A(z) „{ dialogId }” törlése nem sikerült."
   },
   "deleting_one_source_file_will_also_delete_qna_file_f3afd698": {
-    "message": "Deleting one source file will also delete qna files with the same name on other locales"
+    "message": "Egy forrásfájl törlésével minden más területi beállításokkal rendelkező azonos nevű QnA-fájlt is töröl"
   },
   "description_436c48d7": {
     "message": "Leírás"
   },
   "development_resources_67364176": {
-    "message": "Development resources"
+    "message": "Fejlesztői erőforrások"
   },
   "diagnostic_description_msg_9ddd1be": {
     "message": "Diagnosztikai leírás { msg }"
@@ -1197,7 +1200,7 @@
     "message": "Párbeszédpanel bezárva (párbeszédpanel-bezárási esemény)"
   },
   "dialog_d99c0378": {
-    "message": "Dialog"
+    "message": "Párbeszédpanel"
   },
   "dialog_data_61d5539b": {
     "message": "Párbeszéd adatai"
@@ -1242,10 +1245,10 @@
     "message": "DialogFactory hiányzó sémája."
   },
   "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {Egy robot sem}\n     =1 {Egy robot}\n  other {# robot}\n} található.\n            { dialogNum, select,\n      0 {}\n  other {A le nyíl billentyűvel navigálhat a keresési eredmények között}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
-    "message": "Dialogs, triggers, and actions"
+    "message": "Párbeszédpanelek, triggerek és műveletek"
   },
   "disable_a5c05db3": {
     "message": "Letiltás"
@@ -1266,7 +1269,7 @@
     "message": "Folytatja?"
   },
   "documentation_d82f6eec": {
-    "message": "Documentation"
+    "message": "Dokumentáció"
   },
   "does_not_exist_3a34b418": {
     "message": "Nem létezik"
@@ -1278,10 +1281,10 @@
     "message": "Kész"
   },
   "download_emulator_c8fb3403": {
-    "message": "Download Emulator"
+    "message": "Emulátor letöltése"
   },
   "download_icon_2e0d10": {
-    "message": "Download Icon"
+    "message": "Letöltés ikon"
   },
   "download_now_and_install_when_you_close_composer_e241ed74": {
     "message": "Letöltés most, majd telepítés a Composer bezárásakor."
@@ -1290,7 +1293,7 @@
     "message": "Letöltés..."
   },
   "due_to_the_following_error_we_were_unable_to_succe_9185fddf": {
-    "message": "Due to the following error, we were unable to successfully add your selected { service } keys to your bot project:"
+    "message": "A következő hiba miatt nem sikerült felvenni a kiválasztott { service }-kulcsokat a robotprojektbe:"
   },
   "duplicate_31cec192": {
     "message": "Másolat készítése"
@@ -1320,16 +1323,16 @@
     "message": "Készség szerkesztése"
   },
   "edit_actions_7c33a630": {
-    "message": "Edit actions"
+    "message": "Műveletek szerkesztése"
   },
   "edit_an_array_property_5d886011": {
     "message": "Tömbtulajdonság szerkesztése"
   },
   "edit_array_c56a18cc": {
-    "message": "Edit array"
+    "message": "Tömb szerkesztése"
   },
   "edit_bot_responses_34bd1a28": {
-    "message": "Edit bot responses"
+    "message": "Robotválaszok szerkesztése"
   },
   "edit_c5fbea07": {
     "message": "Szerkesztés"
@@ -1341,7 +1344,7 @@
     "message": "Szerkesztés JSON formátumban"
   },
   "edit_in_power_virtual_agents_56ee7ac2": {
-    "message": "Edit in Power Virtual Agents"
+    "message": "Szerkesztés a Power Virtual Agentsben"
   },
   "edit_kb_name_5e2d8c5b": {
     "message": "Tudásbázis nevének szerkesztése"
@@ -1350,7 +1353,7 @@
     "message": "Tulajdonság szerkesztése"
   },
   "edit_publishing_profile_e40a0bf1": {
-    "message": "Edit publishing profile"
+    "message": "Közzétételi profil szerkesztése"
   },
   "edit_schema_a2ab5695": {
     "message": "Séma szerkesztése"
@@ -1359,13 +1362,13 @@
     "message": "Forrás szerkesztése"
   },
   "edit_this_intent_in_a_user_input_view_a_c75f4893": {
-    "message": "Edit this intent in<a>User input view</a>"
+    "message": "A szándék szerkesztése<a>Felhasználói adatbeviteli nézetben</a>"
   },
   "edit_this_template_in_a_bot_response_view_a_7236985f": {
     "message": "A sablon szerkesztése <a>botválasznézetben</a>"
   },
   "edit_user_input_and_triggers_333c9a0e": {
-    "message": "Edit user input and triggers"
+    "message": "Felhasználói bevitel és triggerek szerkesztése"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Futtatókörnyezet kiadása..."
@@ -1380,7 +1383,7 @@
     "message": "Nyomkövetési esemény továbbítása"
   },
   "emit_event_f36b4a87": {
-    "message": "Emit event"
+    "message": "Esemény továbbítása"
   },
   "empty_bot_template_that_routes_to_qna_configuratio_21531414": {
     "message": "Üres botsablon, amely a QnA-konfigurációra mutat"
@@ -1392,7 +1395,7 @@
     "message": "Engedélyezés"
   },
   "enable_app_insights_99b6c116": {
-    "message": "Enable App Insights"
+    "message": "App Insights engedélyezése"
   },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Annak engedélyezése, hogy a sorok számai szám alapján hivatkozzanak a kódsorokra."
@@ -1401,19 +1404,19 @@
     "message": "Többszörös kivonatolás engedélyezése"
   },
   "enable_orchestrator_cdbbd2c5": {
-    "message": "Enable Orchestrator"
+    "message": "Orchestrator engedélyezése"
   },
   "enable_speech_e30d6a2a": {
-    "message": "Enable Speech"
+    "message": "Beszédfelismerés engedélyezése"
   },
   "enable_speech_e4a16f1c": {
-    "message": "Enable speech"
+    "message": "Beszédfelismerés engedélyezése"
   },
   "enabled_ba7cab66": {
     "message": "Engedélyezve"
   },
   "end_dialog_88fa2f7a": {
-    "message": "End dialog"
+    "message": "Párbeszédpanel bezárása"
   },
   "end_this_dialog_3ed0d50b": {
     "message": "A párbeszéd bezárása"
@@ -1425,16 +1428,16 @@
     "message": "EndOfConversation tevékenység"
   },
   "endpoint_url_eddd8ea9": {
-    "message": "Endpoint Url"
+    "message": "Végpont URL-címe"
   },
   "endpoints_ff946539": {
     "message": "Végpontok"
   },
   "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
-    "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
+    "message": "Ügyeljen rá, hogy a robot Microsoft-alkalmazásazonosítója szerepeljen a képesség engedélyezett hívóinak listáján"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
-    "message": "Enter a manifest URL to add a new skill to your bot."
+    "message": "Jegyzék URL-címének beírása egy új képesség a robothoz történő hozzáadásához."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "Adjon meg egy maximális értéket"
@@ -1443,25 +1446,28 @@
     "message": "Adjon meg egy minimális értéket"
   },
   "enter_a_url_to_import_qna_resource_223ded92": {
-    "message": "Enter a URL to Import QnA resource"
+    "message": "Adja meg a QnA-erőforrás importálásához használandó URL-címet"
   },
   "enter_cognitive_service_region_a0f684a4": {
-    "message": "Enter cognitive service region"
+    "message": "Cognitive Services-régió megadása"
   },
   "enter_cognitive_services_key_b78e4b55": {
-    "message": "Enter cognitive services key"
+    "message": "Cognitive Services-kulcs megadása"
   },
   "enter_name_for_new_resource_group_96fe8ea8": {
-    "message": "Enter name for new resource group"
+    "message": "Adja meg az új erőforráscsoport nevét"
   },
   "enter_name_for_new_resources_d5ccd6a7": {
-    "message": "Enter name for new resources"
+    "message": "Adja meg az új erőforrások nevét"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
     "message": "Adja meg a QnA Maker előfizetési kulcsát"
   },
   "enter_skill_host_endpoint_url_7489a83f": {
-    "message": "Enter Skill host endpoint URL"
+    "message": "Adja meg a képesség gazdavégpontjának az URL-címét"
+  },
+  "enter_skill_manifest_url_583d54f4": {
+    "message": "Adja meg a képességjegyzék URL-címét"
   },
   "entities_ef09392c": {
     "message": "Entitások"
@@ -1481,14 +1487,14 @@
   "error_afac7133": {
     "message": "Hiba:"
   },
-  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
-    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  "error_attempting_to_parse_skill_manifest_there_cou_27675668": {
+    "message": "Hiba történt a képességjegyzék elemzésére tett kísérlet során. Lehetséges, hogy a formátuma hibás."
   },
   "error_checking_node_version_98bfbf4c": {
-    "message": "Error checking node version"
+    "message": "Hiba történt a csomópont verziójának ellenőrzésekor"
   },
   "error_encountered_when_getting_template_read_me_fi_b9199689": {
-    "message": "Error encountered when getting template read-me file"
+    "message": "Hiba történt a sablon információs fájljának beolvasásakor"
   },
   "error_event_c079b608": {
     "message": "Hibaesemény"
@@ -1503,7 +1509,7 @@
     "message": "Hiba történt"
   },
   "error_occurred_building_the_bot_7425aa09": {
-    "message": "Error occurred building the bot"
+    "message": "Hiba történt a robot létrehozásakor"
   },
   "error_occurred_ejecting_runtime_8512129e": {
     "message": "Hiba történt a futtatókörnyezet kiadása közben."
@@ -1512,7 +1518,7 @@
     "message": "Hiba történt (Error esemény)"
   },
   "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
-    "message": "Error occurred trying to fetch runtime standard output"
+    "message": "Hiba történt a közös nyelvi futtatókörnyezet standard kimenetének beolvasásakor"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Adja meg az ismeretlen függvényeket a beállítás customFunctions mezőjében."
@@ -1521,10 +1527,10 @@
     "message": "Hiba a séma feldolgozása során"
   },
   "error_provisioning_25835400": {
-    "message": "Error provisioning."
+    "message": "Hiba a kiépítés közben."
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
-    "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
+    "message": "{ errorsCount, plural,\n     =0 {Nincsenek hibák}\n     =1 {Egy hiba}\n  other {# hiba}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -1548,7 +1554,7 @@
     "message": "Események"
   },
   "everything_you_need_to_build_sophisticated_convers_9c00cc01": {
-    "message": "Everything you need to build sophisticated conversational experiences"
+    "message": "Minden, amire szüksége van a kifinomult társalgási élmények kialakításához"
   },
   "examples_c435f08c": {
     "message": "Példák"
@@ -1560,28 +1566,28 @@
     "message": "Kibontás"
   },
   "expand_debug_panel_6f04e9f2": {
-    "message": "Expand Debug Panel"
+    "message": "Hibakeresési panel kibontása"
   },
   "expand_navigation_20330d1d": {
     "message": "Navigáció kibontása"
   },
   "expected_responses_1dca1864": {
-    "message": "Expected responses"
+    "message": "Várt válaszok"
   },
   "expecting_4df12c00": {
     "message": "Várakozás"
   },
   "export_as_skill_764cf284": {
-    "message": "Export as skill"
+    "message": "Exportálás készségként"
   },
   "export_as_zip_133b7ec": {
-    "message": "Export as .zip"
+    "message": "Exportálás .zip-fájlként"
   },
   "export_json_2e2981f5": {
     "message": "JSON exportálása"
   },
   "export_your_bot_604e651c": {
-    "message": "Export your bot"
+    "message": "A robot exportálása"
   },
   "expression_7f906a13": {
     "message": "Kifejezés"
@@ -1593,28 +1599,28 @@
     "message": "Kiértékelendő kifejezés."
   },
   "extend_your_bot_with_reusable_dialogs_bot_response_64f9ca51": {
-    "message": "Extend your bot with reusable dialogs, bot response templates and custom actions."
+    "message": "Kibővítheti a robotot újrafelhasználható párbeszédpanelekkel, robot-válaszsablonokkal és egyéni műveletekkel."
   },
   "extension_settings_899ccb55": {
     "message": "Bővítménybeállítások"
   },
   "external_connections_3415fea5": {
-    "message": "External connections"
+    "message": "Külső kapcsolatok"
   },
   "external_skill_73e16d25": {
-    "message": "External skill"
+    "message": "Külső képesség"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "Kérdés-válasz párok kinyerése online GYIK-ból, termékkézikönyvekből vagy más fájlokból. A támogatott formátumok a .tsv, a .pdf, a .doc, a .docx, az .xlsx, ha sorozatban kérdéseket és válaszokat tartalmaznak. További információk a tudásbázis forrásairól. Hagyja ki ezt a lépést, ha a létrehozás után kézzel szeretne hozzáadni kérdéseket és válaszokat. A hozzáadható források száma és fájlmérete a kiválasztott QnA-szolgáltatás termékváltozatától függ. További információ a QnA Maker termékváltozatairól."
   },
   "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
-    "message": "Extracting question-and-answer pairs from { url }"
+    "message": "Kérdés- és válaszpárok kinyerése a következőből: { url }"
   },
   "fail_to_save_bot_578fa8aa": {
     "message": "Nem sikerült menteni a botot"
   },
   "failed_276786d": {
-    "message": "Failed"
+    "message": "Sikertelen"
   },
   "false_2f39ee6d": {
     "message": "hamis"
@@ -1623,7 +1629,7 @@
     "message": "Hamis"
   },
   "faq_website_source_47b5c924": {
-    "message": "FAQ website (source)"
+    "message": "GYIK-webhely (forrás)"
   },
   "fetching_form_dialog_schema_templates_failed_44e2dd63": {
     "message": "Nem sikerült beolvasni az űrlap párbeszédsémájának sablonjait."
@@ -1653,25 +1659,25 @@
     "message": "Szűrés fájlnév alapján"
   },
   "filter_e3398407": {
-    "message": "Filter"
+    "message": "Szűrő"
   },
   "find_additional_template_specific_guidance_for_set_d7256573": {
-    "message": "Find additional template-specific guidance for setting up your bot."
+    "message": "További sablonspecifikus útmutatást kereshet a robot beállításához."
   },
   "find_and_install_more_external_services_to_your_bo_37ef3f0c": {
-    "message": "Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>"
+    "message": "A <a>csomagkezelő</a> további külső szolgáltatásokat kereshet és telepíthet a robotprojektbe. További útmutatásért tekintse meg a <a2>külső kapcsolatok hozzáadásának</a2> dokumentációját."
   },
   "find_dialogs_339a3f87": {
-    "message": "Find dialogs"
+    "message": "Párbeszédpanelek keresése"
   },
   "find_dialogs_or_topics_c986d1e6": {
-    "message": "Find dialogs or topics"
+    "message": "Párbeszédpanelek vagy témakörök keresése"
   },
   "find_pre_built_adaptive_expressions_b106308e": {
-    "message": "Find pre-built Adaptive expressions"
+    "message": "Előre elkészített adaptív kifejezések keresése"
   },
   "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
-    "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
+    "message": "Végezze el a környezet beállítását és az erőforrások kiépítését, hogy közzétehesse a robotot."
   },
   "firstselector_a3daca5d": {
     "message": "Első szelektor"
@@ -1695,22 +1701,22 @@
     "message": "Betűvastagság"
   },
   "for_each_7ec2e376": {
-    "message": "For each"
+    "message": "A következők mindegyikéhez"
   },
   "for_each_page_198e66f4": {
-    "message": "For each page"
+    "message": "Minden egyes oldalhoz"
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "A lista (vagy enumerálás) típusú tulajdonságok esetében a robot csak a megadott értékeket fogadja el. A párbeszédpanel létrehozása után az egyes értékekhez szinonimákat adhat meg."
   },
-  "for_security_purposes_your_bot_can_only_call_a_ski_4b0c81e0": {
-    "message": "For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list."
+  "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
+    "message": "Biztonsági okokból a robot csak akkor tud meghívni egy képességet, ha a Microsoft-alkalmazásazonosítója a képesség engedélyezett hívóinak listájában szerepel. Miután létrehozott egy közzétételi profilt, ossza meg robotja alkalmazásazonosítóját a képesség szerzőjével, hogy hozzáadhassa. Előfordulhat, hogy a képesség alkalmazásazonosítóját a gyökérszintű robot engedélyezett meghívóinak listájába is fel kell vennie."
   },
   "form_b674666c": {
-    "message": "form"
+    "message": "űrlap"
   },
   "form_dialog_7327a4ff": {
-    "message": "Form dialog"
+    "message": "Űrlap párbeszédpanelje"
   },
   "form_dialog_error_ba7c37fe": {
     "message": "Az űrlapbeli párbeszéddel kapcsolatos hiba"
@@ -1725,13 +1731,13 @@
     "message": "űrlapszerkesztő"
   },
   "form_field_8566629d": {
-    "message": "Form field"
+    "message": "Űrlapmező"
   },
   "form_title_baf85c7e": {
     "message": "űrlap címe"
   },
   "form_trigger_e8828303": {
-    "message": "Form trigger"
+    "message": "Űrlaptrigger"
   },
   "form_wide_operations_1c1a73eb": {
     "message": "egész űrlapot érintő műveletek"
@@ -1743,7 +1749,7 @@
     "message": "a fromTemplateName nem létezik"
   },
   "full_description_for_fd03dbf8": {
-    "message": "full description for"
+    "message": "teljes leírás:"
   },
   "gb_7570760e": {
     "message": "GB"
@@ -1752,13 +1758,13 @@
     "message": "Általános"
   },
   "generate_and_publish_4f218960": {
-    "message": "Generate and Publish"
+    "message": "Létrehozás és közzététel"
   },
   "generate_dialog_b80a85b2": {
     "message": "Párbeszéd létrehozása"
   },
   "generate_instructions_for_azure_administrator_1cb21884": {
-    "message": "Generate instructions for Azure administrator"
+    "message": "Útmutató létrehozása Azure-rendszergazdák számára"
   },
   "generating_dialog_for_schemaid_51b2744f": {
     "message": "Párbeszédpanel létrehozása a következő számára: { schemaId }"
@@ -1770,13 +1776,10 @@
     "message": "Folyamatban van a párbeszéd létrehozása a(z) { schemaId } séma használatával, kis türelmet..."
   },
   "get_a_key_bb364e3": {
-    "message": "Get a key"
+    "message": "Kulcs beszerzése"
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "A futtatókörnyezet-kód egy új másolatának beszerzése"
-  },
-  "get_a_skill_manifest_url_from_the_skill_s_author_7771e8b4": {
-    "message": "Get a skill manifest URL from the skill’s author"
   },
   "get_activity_members_11339605": {
     "message": "Tevékenységekhez tartozó tagok beolvasása"
@@ -1785,13 +1788,13 @@
     "message": "Beszélgetés tagjainak beolvasása"
   },
   "get_remote_file_fail_37ef94c5": {
-    "message": "get remote file fail"
+    "message": "távoli fájl beolvasása sikertelen"
   },
   "get_started_76ed4cb9": {
-    "message": "Get started"
+    "message": "Első lépések"
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
-    "message": "Get started with Bot Framework Composer"
+    "message": "A Bot Framework Composer használatba vétele"
   },
   "getting_template_910a4116": {
     "message": "Sablon beolvasása folyamatban"
@@ -1803,7 +1806,7 @@
     "message": "A QnA teljes nézetű oldalának megnyitása."
   },
   "go_to_stack_overflow_e525148": {
-    "message": "Go to Stack Overflow"
+    "message": "Ugrás a Stack Overflow webhelyre"
   },
   "got_it_2c06b54a": {
     "message": "Rendben"
@@ -1842,13 +1845,13 @@
     "message": "Kezdőlap"
   },
   "http_request_b6394895": {
-    "message": "HTTP request"
+    "message": "HTTP-kérelem"
   },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
-    "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
+    "message": "Egy beszélgetési felületet készítek egy Microsoft Bot Framework-projekt használatával. A projekthez olyan Azure-erőforrásokra van szükség, mint a(z) { service }. Ezek az erőforrások az alábbi lépésekkel hozhatók létre.\n\n{ instructions }"
   },
   "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
-    "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
+    "message": "Szeretném megtartani a sablon tartalmát a fájlban, de meg szeretném szüntetni a hivatkozást erre a válaszra (tipp: tartsa meg a tartalmat, ha jelenleg használja, vagy ha később használni tervezi azt egy másik helyen)"
   },
   "icon_name_is_file_c80dacae": {
     "message": "A(z) { icon } neve: { file }"
@@ -1860,13 +1863,13 @@
     "message": "A(z) { id } már létezik. Adjon meg egy egyedi fájlnevet."
   },
   "if_azure_resources_and_subscription_are_managed_by_e36717f6": {
-    "message": "If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot."
+    "message": "Ha az Azure-erőforrásokat és -előfizetést mások kezelik, a következő adatok használatával kérheti a robot létrehozásához és futtatásához szükséges erőforrások létrehozását."
   },
   "if_condition_d4383ce9": {
-    "message": "If condition"
+    "message": "Ha feltétel"
   },
   "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
-    "message": "If this problem persists, please file an issue on <a>GitHub</a>"
+    "message": "Ha a probléma nem oldódik meg, jelentse a <a>GitHubon</a>"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "Ha már van LUIS-fiókja, adja meg az alábbi adatokat. Ha még nincs fiókja, először hozzon létre egy (ingyenes) fiókot."
@@ -1875,10 +1878,10 @@
     "message": "Ha már van QNA-fiókja, adja meg az alábbi adatokat. Ha még nincs fiókja, először hozzon létre egy (ingyenes) fiókot."
   },
   "if_you_have_created_custom_components_you_might_ne_dc7cf128": {
-    "message": "If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>"
+    "message": "Ha egyéni összetevőket is létrehozott, előfordulhat, hogy azokat újra létre kell hoznia. <a>További információ az egyéni összetevőkről.</a>"
   },
   "if_you_would_like_to_try_again_or_select_from_exis_f2f894b4": {
-    "message": "If you would like to try again, or select from existing resources, please click “Back”."
+    "message": "Ha újra szeretné próbálni, vagy meglévő erőforrások közül szeretne választani, kattintson a „Vissza“ gombra."
   },
   "ignoring_dc76ef87": {
     "message": "Mellőzés"
@@ -1887,19 +1890,19 @@
     "message": "Importálás újként"
   },
   "import_new_url_and_overwrite_5e463747": {
-    "message": "Import new URL and overwrite"
+    "message": "Új URL-cím importálása és felülírás"
   },
   "import_schema_75659c5f": {
     "message": "Séma importálása"
   },
   "import_url_62402b7c": {
-    "message": "Import URL"
+    "message": "URL-cím importálása"
   },
   "import_your_bot_to_new_project_8751d82f": {
     "message": "A bot importálása új projektbe"
   },
   "importing_a_publishing_profile_6fb3cd96": {
-    "message": "Importing a publishing profile"
+    "message": "Közzétételi profil importálása"
   },
   "importing_b_botname_b_from_sourcename_f7410826": {
     "message": "A(z) <b>{ botName }</b> importálása innen: { sourceName }..."
@@ -1941,10 +1944,10 @@
     "message": "Adaptív kifejezés előre elkészített függvényének beszúrása"
   },
   "insert_defined_entity_d1293781": {
-    "message": "Insert defined entity"
+    "message": "Definiált entitás beszúrása"
   },
   "insert_entity_3a9dbd5d": {
-    "message": "Insert entity"
+    "message": "Entitás beszúrása"
   },
   "insert_prebuilt_functions_22b05f8": {
     "message": "Előre elkészített függvények beszúrása"
@@ -1959,19 +1962,19 @@
     "message": "Sablonhivatkozás beszúrása"
   },
   "install_azure_functions_d607f182": {
-    "message": "Install Azure Functions"
+    "message": "Az Azure Functions telepítése"
   },
   "install_error_a9319839": {
-    "message": "Install Error"
+    "message": "Telepítési hiba"
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "A Microsoft .NET Core SDK telepítése"
   },
   "install_net_core_sdk_67e62ca9": {
-    "message": "Install .NET Core SDK"
+    "message": "A .NET Core SDK telepítése"
   },
   "install_node_js_1857298c": {
-    "message": "Install Node.js"
+    "message": "Node.js telepítése"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "Telepítse a Composer előzetes verzióit naponta a legújabb funkciók eléréséhez és teszteléséhez. <a>További információ</a>."
@@ -1980,7 +1983,7 @@
     "message": "Telepítse a frissítést, és indítsa újra a Composert."
   },
   "instructions_2f88ee72": {
-    "message": "Instructions"
+    "message": "Útmutató"
   },
   "integer_7f378275": {
     "message": "egész szám"
@@ -1998,13 +2001,13 @@
     "message": "Egész szám vagy kifejezés"
   },
   "integrating_with_power_virtual_agents_14c007cf": {
-    "message": "Integrating with Power Virtual Agents"
+    "message": "Integrálás a Power Virtual Agents-szel"
   },
   "intent_2291200b": {
     "message": "Szándék"
   },
   "intent_name_e9831403": {
-    "message": "Intent name: "
+    "message": "Szándék neve: "
   },
   "intent_recognized_c3840853": {
     "message": "Felismert szándék"
@@ -2013,7 +2016,7 @@
     "message": "Az intentName hiányzik vagy üres"
   },
   "intents_9b8593e0": {
-    "message": "Intents"
+    "message": "Szándékok"
   },
   "interpolated_string_c96053f2": {
     "message": "Interpolált sztring."
@@ -2046,13 +2049,13 @@
     "message": "{ itemCount, plural,\n     =0 {Niem talált sémát}\n     =1 {Egy sémát talált}\n  other {# schemas}\n} a rendszer.\n            { itemCount, select,\n      0 {}\n  other {A keresési eredmények között a Le nyíl billentyűvel navigálhat}\n}"
   },
   "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__d18758bb": {
-    "message": "Just add a QnA key and you’ll be ready to talk to your bot."
+    "message": "Egyszerűen adjon hozzá egy QnA-kulcsot, és máris beszélhet a bottal."
   },
   "kb_d9c53902": {
     "message": "KB"
   },
   "keep_this_url_handy_to_share_it_with_other_develop_bfd51fb0": {
-    "message": "Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab."
+    "message": "Tartsa kéznél az URL-címet, hogy megoszthassa azt más fejlesztőkkel a robotprojektjeikben való használathoz. Ez az URL-cím megtalálható a projekt beállításlapján."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "A kulcs nem lehet üres"
@@ -2064,19 +2067,19 @@
     "message": "A kulcsoknak egyedinek kell lenniük"
   },
   "knowledge_base_31e6868e": {
-    "message": "Knowledge base"
+    "message": "Tudásbázis"
   },
   "knowledge_base_name_7d83bbe4": {
     "message": "Tudásbázis neve"
   },
   "knowledge_qna_1a599dcf": {
-    "message": "Knowledge (QnA)"
+    "message": "Tudástár (QnA)"
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "Sor { startLine }:{ startCharacter } – Sor { endLine }:{ endCharacter } "
   },
   "label_entity_45d7b842": {
-    "message": "Label entity"
+    "message": "Címke entitás"
   },
   "language_generation_1876f6d6": {
     "message": "Nyelvgenerálás"
@@ -2085,13 +2088,13 @@
     "message": "Nyelvtanulás"
   },
   "language_understanding_authoring_key_74a41a4": {
-    "message": "Language Understanding authoring key"
+    "message": "A Language Understanding (LUIS) szerzői kulcsa"
   },
   "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
-    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>"
+    "message": "A Language Understanding (LUIS) egy Azure Cognitive Services-szolgáltatás, amely gépi tanulást használ a természetes nyelvi bevitelek megértéséhez és a beszélgetés irányításához. <a>További információ.</a> Használhat már meglévő Language Understanding- (LUIS-) kulcsot az Azure-ból, vagy létrehozhat egy újat. <a2>További információ</a2>"
   },
   "language_understanding_region_ec8fb05c": {
-    "message": "Language Understanding region"
+    "message": "Language Understanding-régió"
   },
   "languagepolicy_e754ad28": {
     "message": "Nyelvi szabályzat"
@@ -2103,7 +2106,7 @@
     "message": "Elrendezés: "
   },
   "learn_about_adaptive_expressions_fb1b6c3c": {
-    "message": "Learn about Adaptive expressions"
+    "message": "Információ az adaptív kifejezésekről"
   },
   "learn_more_a79a7918": {
     "message": "További információ"
@@ -2112,7 +2115,7 @@
     "message": "További információ a tevékenységekről"
   },
   "learn_more_about_custom_actions_e7aa69e9": {
-    "message": "Learn more about custom actions"
+    "message": "További információ az egyéni műveletekről"
   },
   "learn_more_about_endpoints_df156708": {
     "message": "További információ a végpontokról"
@@ -2121,7 +2124,7 @@
     "message": "További információ a jegyzékfájlokról"
   },
   "learn_more_about_orchestrator_c070e031": {
-    "message": "Learn more about Orchestrator"
+    "message": "További információ az Orchestratorről"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "További információ a képességjegyzékről"
@@ -2136,7 +2139,7 @@
     "message": "Kilép a termékbemutatóból?"
   },
   "lg_e6ee5b4a": {
-    "message": "LG"
+    "message": "Nyelvgenerálás"
   },
   "lg_editor_ee0184e6": {
     "message": "LG-szerkesztő"
@@ -2145,7 +2148,7 @@
     "message": "a nyelvgenerálási fájl már létezik"
   },
   "lg_file_format_and_syntax_244103fb": {
-    "message": "LG file format and syntax"
+    "message": "Nyelvgenerálási fájlformátum és szintaxis"
   },
   "lg_file_id_not_found_6bd6869b": {
     "message": "A(z) { id } nyelvgenerálási fájl nem található"
@@ -2178,7 +2181,7 @@
     "message": "lista – { count } érték"
   },
   "list_entity_a3502e75": {
-    "message": "List entity"
+    "message": "Lista entitás"
   },
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "Műveletlista, amely javaslatként jelenik meg a felhasználó számára."
@@ -2187,7 +2190,7 @@
     "message": "A mellékletek listája és típusa. A csatornák az UI-kártyaként vagy más általános fájlmelléklettípusként való megjelenítéshez használják."
   },
   "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
-    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
+    "message": "Azon nyelvek listája, amelyeket a bot érteni fog (felhasználói bevitel), és amelyen válaszolni fog (bot válasza). Ha a botot más nyelven is elérhetővé szeretné tenni, kattintson a Nyelvek kezelése gombra az alapértelmezett nyelv másolatának létrehozásához, amelynek tartalmát aztán lefordíthatja az új nyelvre."
   },
   "list_view_e33843f0": {
     "message": "Listanézet"
@@ -2199,10 +2202,10 @@
     "message": "Betöltés"
   },
   "loading_keys_22ceedc": {
-    "message": "Loading keys..."
+    "message": "Kulcsok betöltése..."
   },
   "loading_subscription_f0a868a1": {
-    "message": "Loading subscription..."
+    "message": "Előfizetések betöltése..."
   },
   "local_bot_runtime_manager_812cbd0c": {
     "message": "Helyi bot-futtatókörnyezet kezelője"
@@ -2214,7 +2217,7 @@
     "message": "Helyi képesség."
   },
   "localization_2e29f01e": {
-    "message": "Localization"
+    "message": "Honosítás"
   },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Keresse meg a bot fájlját, és javítsa a hivatkozást"
@@ -2247,7 +2250,7 @@
     "message": "Ismétlődések"
   },
   "lu_15572a02": {
-    "message": "LU"
+    "message": "Nyelvtanulás"
   },
   "lu_editor_d09fb2b0": {
     "message": "Nyelvtanulási szerkesztő"
@@ -2256,7 +2259,7 @@
     "message": "lu-fájl már létezik"
   },
   "lu_file_format_and_syntax_8211b0c9": {
-    "message": "LU file format and syntax"
+    "message": "Nyelvtanulási fájlformátum és szintaxis"
   },
   "lu_file_id_not_found_8732d33e": {
     "message": "A(z) { id } nyelvtanulási fájl nem található"
@@ -2271,13 +2274,13 @@
     "message": "LUIS"
   },
   "luis_authoring_key_2cfdf05": {
-    "message": "LUIS authoring key:"
+    "message": "A LUIS szerzői kulcsa:"
   },
   "luis_authoring_key_is_required_with_the_current_re_464f655e": {
     "message": "Az értelmező jelenlegi beállítása mellett LUIS-szerzői kulcs szükséges a bot helyileg történő elindításához és közzétételéhez"
   },
   "luis_authoring_region_a1d18730": {
-    "message": "Luis authoring region"
+    "message": "A Luis szerzői régiója"
   },
   "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
     "message": "Az értelmező jelenlegi beállítása mellett LUIS-kulcs szükséges a bot helyileg történő elindításához és közzétételéhez"
@@ -2286,7 +2289,7 @@
     "message": "A LUIS-régió megadása kötelező"
   },
   "machine_learned_entity_baec1ae5": {
-    "message": "Machine learned entity"
+    "message": "Géppel megtanult entitás"
   },
   "main_dialog_eed5c847": {
     "message": "Fő párbeszéd"
@@ -2310,16 +2313,16 @@
     "message": "jegyzékfájl-szerkesztő"
   },
   "manifest_url_a6250c02": {
-    "message": "Manifest URL"
+    "message": "Jegyzékfájl URL-címe"
   },
   "manifest_url_can_not_be_accessed_ba43fc31": {
-    "message": "Manifest URL can not be accessed"
+    "message": "A jegyzékfájl URL-címe nem érhető el"
   },
   "manifest_version_1edc004a": {
     "message": "Jegyzék verziója"
   },
   "manually_add_question_and_answer_pairs_to_create_a_39089442": {
-    "message": "Manually add question and answer pairs to create a knowledge base"
+    "message": "Kérdés-válasz párok manuális hozzáadásával tudásbázist hozhat létre"
   },
   "maximum_f0e8e5e4": {
     "message": "Maximum"
@@ -2373,7 +2376,7 @@
     "message": "Üzenet frissítve (Üzenet frissítve tevékenység)"
   },
   "microsoft_app_id_9c9dc559": {
-    "message": "Microsoft App ID"
+    "message": "Microsoft-alkalmazásazonosító"
   },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft-alkalmazásazonosító"
@@ -2382,16 +2385,16 @@
     "message": "Microsoft-alkalmazás jelszava"
   },
   "microsoft_logo_4378a7cb": {
-    "message": "Microsoft Logo"
+    "message": "A Microsoft emblémája"
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
-    "message": "Microsoft''s templates offer best practices for developing conversational bots."
+    "message": "A Microsoft sablonjai ajánlott eljárásként használhatók a beszélgető robotok fejlesztéséhez."
   },
   "migrating_data_a35b3055": {
-    "message": "Migrating data"
+    "message": "Adatok migrálása"
   },
   "migrating_to_composer_bc304b5d": {
-    "message": "Migrating to Composer"
+    "message": "Migrálás a Composerre"
   },
   "minimap_beb3be27": {
     "message": "Minitérkép"
@@ -2424,10 +2427,10 @@
     "message": "Áthelyezés"
   },
   "move_down_4a9c9b18": {
-    "message": "Move down"
+    "message": "Lejjebb"
   },
   "move_up_2440f707": {
-    "message": "Move up"
+    "message": "Feljebb"
   },
   "ms_teams_15993b97": {
     "message": "MS Teams"
@@ -2481,10 +2484,10 @@
     "message": "Navigációs útvonal"
   },
   "need_another_template_send_us_a_request_5cf2a4d5": {
-    "message": "Need another template? Send us a request"
+    "message": "Másik sablonra van szüksége? Kérés küldése"
   },
   "net_required_97928257": {
-    "message": ".NET required"
+    "message": ".NET szükséges"
   },
   "new_template_49e6f0f2": {
     "message": "Új sablon"
@@ -2505,16 +2508,16 @@
     "message": "Tovább"
   },
   "no_azure_directories_were_found_6dfe6f6f": {
-    "message": "No Azure Directories were found."
+    "message": "Nem található Azure-könyvtár."
   },
   "no_editor_for_type_8b5593c5": {
     "message": "Nincs szerkesztő a következőhöz: { type }"
   },
   "no_entities_found_a8e8bd19": {
-    "message": "no entities found"
+    "message": "nem találhatók entitások"
   },
   "no_existing_service_resources_were_found_in_this_s_ca2f1745": {
-    "message": "No existing { service } resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin."
+    "message": "Ebben az előfizetésben nem található a(z) { service } szolgáltatáshoz tartozó erőforrás. Válasszon egy másik előfizetést, vagy a „Vissza“ lehetőségre kattintva létrehozhat egy új erőforrást, vagy létrehozhat és elküldhet egy erőforrás-kérelmet az Azure-rendszergazdának."
   },
   "no_extensions_installed_4b925277": {
     "message": "Nincsenek telepített bővítmények"
@@ -2526,7 +2529,7 @@
     "message": "Nem találhatók függvények"
   },
   "no_items_found_4a6f55d5": {
-    "message": "no items found"
+    "message": "nem találhatók elemek"
   },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NEM TALÁLHATÓ { id } NEVŰ NYELVTANULÁSI FÁJL"
@@ -2538,10 +2541,10 @@
     "message": "[nincs név]"
   },
   "no_prebuilt_entities_found_a1015451": {
-    "message": "no prebuilt entities found"
+    "message": "Nem találhatók előre összeállított entitások."
   },
   "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
-    "message": "No profiles were found containing a Microsoft App ID."
+    "message": "Nem található Microsoft-alkalmazásazonosítót tartalmazó profil."
   },
   "no_properties_found_6f777f6e": {
     "message": "Nem találhatók tulajdonságok"
@@ -2550,7 +2553,7 @@
     "message": "NEM TALÁLHATÓ { id } NEVŰ QNA-FÁJL"
   },
   "no_recent_bots_f4cf7d0a": {
-    "message": "No recent bots"
+    "message": "Nincsenek legutóbbi robotok"
   },
   "no_search_results_1ba50423": {
     "message": "Nincsenek keresési eredmények"
@@ -2568,13 +2571,13 @@
     "message": "nincs helyettesítő karakter"
   },
   "node_js_required_89c1c708": {
-    "message": "Node.js required"
+    "message": "Node.js szükséges"
   },
   "node_menu_e2aa8092": {
     "message": "Csomópont menü"
   },
   "node_preview_cbcd8fb": {
-    "message": "Node (Preview)"
+    "message": "Csomópont (előzetes verzió)"
   },
   "not_a_single_template_e37f894": {
     "message": "Nem egy önálló sablon"
@@ -2586,7 +2589,7 @@
     "message": "Még nincs közzétéve"
   },
   "note_if_your_bot_is_using_custom_actions_they_will_a500ed2": {
-    "message": "Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>"
+    "message": "Megjegyzés: Ha a robot egyéni műveleteket használ, azokat a 2.0-s verzió már nem támogatja. <a>További információ a Composer 2.0-s verziójára való frissítésről.</a>"
   },
   "notifications_cbfa7704": {
     "message": "Értesítések"
@@ -2613,7 +2616,7 @@
     "message": "OAuth-bejelentkezés"
   },
   "object_33fc75c0": {
-    "message": "object"
+    "message": "objektum"
   },
   "object_345070f6": {
     "message": "Objektum"
@@ -2646,34 +2649,34 @@
     "message": "Előkészítés"
   },
   "once_you_publish_your_bot_to_azure_you_will_be_rea_93048067": {
-    "message": "Once you publish your bot to Azure you will be ready to add connections."
+    "message": "Ha már közzétette a robotot az Azure-ban, kapcsolatokat is hozzáadhat."
   },
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents-típusok"
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
-    "message": "One or more options that are passed to the dialog that is called."
+    "message": "Egy vagy több beállítás, amelyek át lesznek adva a meghívott párbeszédnek."
   },
   "open_e0beb7b9": {
     "message": "Megnyitás"
   },
   "open_github_811d5819": {
-    "message": "Open GitHub"
+    "message": "A GitHub megnyitása"
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Beágyazott szerkesztő megnyitása"
   },
   "open_manifest_6c334f9": {
-    "message": "Open manifest"
+    "message": "Jegyzékfájl megnyitása"
   },
   "open_notification_panel_5796edb3": {
     "message": "Értesítési panel megnyitása"
   },
   "open_teams_416aae5c": {
-    "message": "Open Teams"
+    "message": "A Teams megnyitása"
   },
   "open_the_product_tour_to_learn_about_bot_framework_4e6e7227": {
-    "message": "Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>"
+    "message": "A termékismertetőt használva megismerkedhet a Bot Framework Composerrel, vagy <Link>hozzon létre egy új robotot</Link>"
   },
   "open_web_chat_23601990": {
     "message": "Webes csevegés megnyitása"
@@ -2700,7 +2703,7 @@
     "message": "Vagy: "
   },
   "orchestrator_downloading_language_model_e785be44": {
-    "message": "Orchestrator: Downloading language model"
+    "message": "Orchestrator: nyelvi modell letöltése"
   },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator-értelmező"
@@ -2718,16 +2721,16 @@
     "message": "Egyéb"
   },
   "our_privacy_statement_is_located_at_a_https_go_mic_56534925": {
-    "message": "Our privacy statement is located at <a>https://go.microsoft.com/fwlink/?LinkID=824704</a>. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices."
+    "message": "Adatvédelmi nyilatkozatunk a következő címen található: <a>https://go.microsoft.com/fwlink/?LinkID=824704</a>. A súgó dokumentációjában és az adatvédelmi nyilatkozatban további információt talál az adatok gyűjtéséről és felhasználásáról. A szoftver használatával beleegyezését adja ezekhez."
   },
   "output_5023cf84": {
     "message": "Kimenet"
   },
   "overview_58268c72": {
-    "message": "Overview"
+    "message": "Áttekintés"
   },
   "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
-    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
+    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT Licenc</p><p>Ezennel ingyenesen engedélyt adunk minden személy számára, aki rendelkezik ennek a szoftvernek egy példányával és a hozzá kapcsolódó dokumentációs fájlokkal (a „Szoftverrel“), hogy korlátozás nélkül használja a Szoftvert, beleértve a korlátozás nélküli használati, másolási, módosítási, egyesítési, közzétételi, kiadási, terjesztési, továbbliencelési és/vagy értékesítési jogokat a Szoftver példányaira vonatkozóan, valamint hogy engedélyezzék ezt azon személyek számára, akiknek a Szoftver rendelkezésére van bocsátva, az alábbi feltételek szerint:</p><p>A fenti szerzői jogi közleményt és ezt az engedélyezési közleményt csatolni kell a Szoftver minden példányához vagy jelentős részeihez.</p><p>A SZOFTVERT JELEN ÁLLAPOTÁBAN, BÁRMILYEN KONKRÉT VAGY VÉLELMEZETT GARANCIA VAGY JÓTÁLLÁS NÉLKÜL KÍNÁLJUK, BELEÉRTVE TÖBBEK KÖZÖTT AZ ÉRTÉKESÍTÉSRE VONATKOZÓ GARANCIÁKAT, A MEGHATÁROZOTT CÉLOKRA VALÓ ALKALMASSÁGOT ÉS A JOGBITORLÁS-MENTESSÉGRE VONATKOZÓ GARANCIÁT. A SZERZŐK VAGY A JOGTULAJDONOSOK SEMMILYEN KÖRÜLMÉNYEK KÖZÖTT NEM VÁLLALNAK SEMMILYEN FELELŐSSÉGET KÁRTÉRÍTÉSEKRE, KÖLTSÉGMEGTÉRÍTÉSEKRE VAGY MÁSFÉLE KÖTELEZETTSÉGRE SEM SZERZŐDÉSES ALAPON, SEM GONDATLANSÁGBÓL EREDŐEN, SEM MÁSFÉLE MÓDON, FÜGGETLENÜL ATTÓL, HOGY A KÁR A SZOFTVERBŐL, A SZOFTVER ÚTJÁN VAGY A SZOFTVERREL KAPCSOLATBAN VAGY A SZOFTVER BÁRMINEMŰ HASZNÁLATÁBÓL EREDŐEN KELETKEZIK.</p>"
   },
   "page_number_cdee4179": {
     "message": "Oldalszám"
@@ -2748,7 +2751,7 @@
     "message": "Adjon meg egy eseménynevet"
   },
   "please_input_a_manifest_url_79cce9d5": {
-    "message": "Please input a manifest URL"
+    "message": "Adjon meg a jegyzékfájl URL-címét"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Adja meg a regEx-mintát"
@@ -2765,26 +2768,23 @@
   "please_select_a_trigger_type_67417abb": {
     "message": "Válasszon ki egy triggertípust"
   },
-  "please_setup_the_following_to_ensure_we_can_connec_2c5a2acb": {
-    "message": "Please setup the following to ensure we can connect to your remote skill successfully"
-  },
   "pop_out_editor_5528a187": {
-    "message": "Pop out editor"
+    "message": "Előugró szerkesztő"
   },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
-    "message": "Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there."
+    "message": "A Power Virtual Agents-robotok jelenleg nem futtathatók. Tegye közzé a robotot a Power Virtual Agentsben, és tesztelje ott."
   },
   "power_virtual_agents_bots_cannot_use_this_function_fcfeaf62": {
-    "message": "Power Virtual Agents bots cannot use this functionality at this time."
+    "message": "A Power Virtual Agents-robotok jelenleg nem használhatják ezt a funkciót."
   },
   "power_virtual_agents_topics_count_9043ab47": {
-    "message": "Power Virtual Agents Topics ({ count })"
+    "message": "Power Virtual Agents – témakörök ({ count })"
   },
   "powervirtualagents_logo_11858924": {
     "message": "A PowerVirtualAgents emblémája"
   },
   "prebuilt_entity_21ebcdc6": {
-    "message": "Prebuilt entity"
+    "message": "Előre összeállított entitás"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "nyomja le az Enter billentyűt az elem hozzáadásához, vagy a Tab billentyűt, hogy a következő interaktív elemre lépjen"
@@ -2793,7 +2793,7 @@
     "message": "nyomja le az Enter billentyűt a név hozzáadásához és a következő sorra ugráshoz, vagy nyomja le a Tab billentyűt, hogy a következő értékmezőre lépjen"
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
-    "message": "Press Shift+Enter to insert a new line"
+    "message": "Új sor beszúrásához nyomja le a Shift+Enter billentyűkombinációt"
   },
   "preview_features_e279bac5": {
     "message": "Előzetes funkciók"
@@ -2808,7 +2808,7 @@
     "message": "előző mappa"
   },
   "pricing_tier_c2ff8573": {
-    "message": "Pricing tier"
+    "message": "Tarifacsomag"
   },
   "privacy_statement_da69ebc6": {
     "message": "Adatvédelmi nyilatkozat"
@@ -2820,7 +2820,7 @@
     "message": "{ progress }% kész, összesen: { total }"
   },
   "project_readme_68f88d88": {
-    "message": "Project Readme"
+    "message": "Projekt információs fájlja"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "További javaslatok konfigurációi"
@@ -2865,7 +2865,7 @@
     "message": "Tulajdonság típusa"
   },
   "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
-    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
+    "message": "Adjon meg egy kulcsot annak érdekében, hogy a robotot csatlakoztassa az Azure Speech beszédfelismerési szolgáltatáshoz. "
   },
   "provide_access_tokens_8ead7563": {
     "message": "Hozzáférési jogkivonatok megadása"
@@ -2880,7 +2880,7 @@
     "message": "A kiépítés nem sikerült"
   },
   "provision_partially_completed_b0120a72": {
-    "message": "Provision partially completed"
+    "message": "A kiépítés részben kész"
   },
   "provision_success_d6a6e437": {
     "message": "A kiépítés sikerült"
@@ -2898,7 +2898,7 @@
     "message": "Modellek közzététele"
   },
   "publish_profile_a4e8f07b": {
-    "message": "Publish profile"
+    "message": "Közzétételi profil"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Kijelölt botok közzététele"
@@ -2907,10 +2907,10 @@
     "message": "Cél közzététele"
   },
   "publish_your_bot_9099e323": {
-    "message": "Publish your bot"
+    "message": "Saját robot közzététele"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
-    "message": "Publish your bot to Azure and manage published bots here."
+    "message": "A robot közzététele az Azure-ban és a közzétett botok kezelése."
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Botok közzététele"
@@ -2919,10 +2919,10 @@
     "message": "Közzétéve"
   },
   "publisher_bf6195cf": {
-    "message": "Publisher"
+    "message": "Közzétevő"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
-    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
+    "message": "{ count, plural,\n     =1 {Egy robot}\n  other {# robot}\n} közzététele"
   },
   "publishing_d63a8f2d": {
     "message": "Közzététel"
@@ -2931,16 +2931,16 @@
     "message": "A(z) { name } { publishTarget } helyre való közzététele nem sikerült."
   },
   "publishing_profile_6d7064ce": {
-    "message": "Publishing Profile"
+    "message": "Közzétételi profil"
   },
   "publishing_profile_a2cd5d52": {
-    "message": "Publishing profile"
+    "message": "Közzétételi profil"
   },
   "publishing_target_46605bc5": {
     "message": "Cél közzététele"
   },
   "publishing_your_skill_b5957f9c": {
-    "message": "Publishing your skill..."
+    "message": "A képesség közzététele..."
   },
   "pull_d1c3e8fe": {
     "message": "Lekérés"
@@ -2955,19 +2955,19 @@
     "message": "Felismert QnA-szándék"
   },
   "qna_intent_recognized_6760e56d": {
-    "message": "QnA intent recognized"
+    "message": "Felismert kérdés-válasz-szándék"
   },
   "qna_maker_introduction_c2e426a": {
-    "message": "QnA Maker introduction"
+    "message": "A QnA Maker bemutatása"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>"
+    "message": "A QnA Maker egy olyan Azure Cognitive Services-szolgáltatás, amely képes a kérdés-válasz párok kivonatolására egy webhely-GYIK-ból. <a>További információ. </a> Használhat egy meglévő kulcsot az Azure-ból, vagy létrehozhat egy új kulcsot. <a2>További információ.</a2>"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>"
+    "message": "A QnA Maker egy olyan Azure Cognitive Services-szolgáltatás, amely képes a kérdés-válasz párok kivonatolására egy webhely-GYIK-ból. <a>További információ. </a> Használhat egy meglévő kulcsot az Azure-ból, vagy létrehozhat egy új kulcsot. <a2>További információ</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
-    "message": "QnA Maker subscription key:"
+    "message": "QnA Maker előfizetési kulcsa:"
   },
   "qna_maker_subscription_key_e009c9d9": {
     "message": "QnA Maker előfizetési kulcsa"
@@ -2979,7 +2979,7 @@
     "message": "QnA navigációs ablaktáblája"
   },
   "qna_region_5d2a4bce": {
-    "message": "QnA region"
+    "message": "QnA-régió"
   },
   "question_9121487": {
     "message": "Kérdés"
@@ -2994,7 +2994,7 @@
     "message": "Várólistán"
   },
   "quick_references_2ffbd14a": {
-    "message": "Quick references"
+    "message": "Gyorshivatkozások"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -3009,7 +3009,7 @@
     "message": "Bemenet újrakérése (párbeszédpanel-újrakérési esemény)"
   },
   "recent_f19e8c64": {
-    "message": "Recent"
+    "message": "Legutóbbi"
   },
   "recognizer_type_dc591e16": {
     "message": "Értelmező típusa"
@@ -3018,10 +3018,10 @@
     "message": "Értelmezők"
   },
   "recommended_7101829e": {
-    "message": "Recommended"
+    "message": "Ajánlott"
   },
   "recommended_actions_befdd1a": {
-    "message": "Recommended actions"
+    "message": "Javasolt műveletek"
   },
   "redo_363c58b7": {
     "message": "Mégis"
@@ -3036,10 +3036,10 @@
     "message": "A RegEx { intent } már meg van határozva"
   },
   "region_939f2a6c": {
-    "message": "Region"
+    "message": "Régió"
   },
   "regular_expression_entity_e1cb91ce": {
-    "message": "Regular expression entity"
+    "message": "Reguláriskifejezés-entitás"
   },
   "regular_expression_recognizer_44664557": {
     "message": "Reguláris kifejezés értelmező"
@@ -3069,13 +3069,13 @@
     "message": "Minden szöveges válasz eltávolítása"
   },
   "remove_attachment_81f30aa3": {
-    "message": "Remove attachment"
+    "message": "Melléklet eltávolítása"
   },
   "remove_f47dc62a": {
     "message": "Eltávolítás"
   },
   "remove_item_5877e701": {
-    "message": "Remove item"
+    "message": "Elem eltávolítása"
   },
   "remove_this_dialog_6146716c": {
     "message": "A párbeszédpanel eltávolítása"
@@ -3093,7 +3093,7 @@
     "message": "Változat eltávolítása"
   },
   "removing_content_from_action_node_bb6a825e": {
-    "message": "Removing content from action node"
+    "message": "Tartalom eltávolítása a műveleti csomópontból"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "A párbeszéd ismétlése"
@@ -3102,7 +3102,7 @@
     "message": "A párbeszéd cseréje"
   },
   "report_a_bug_or_request_a_feature_36eb52c7": {
-    "message": "Report a bug or request a feature"
+    "message": "Hiba bejelentése vagy funkció kérése"
   },
   "reprompt_dialog_event_c42d2c33": {
     "message": "Párbeszédesemény ismételt figyelmeztetése"
@@ -3120,22 +3120,22 @@
     "message": "{ requiredText } | Prioritás: { priority }"
   },
   "reset_view_d5f8245a": {
-    "message": "Reset view"
+    "message": "Nézet alaphelyzetbe állítása"
   },
   "resource_group_982beb22": {
-    "message": "Resource Group"
+    "message": "Erőforráscsoport"
   },
   "resource_group_name_a8f7e7ce": {
-    "message": "Resource group name"
+    "message": "Erőforráscsoport neve"
   },
   "resource_name_817b6e75": {
-    "message": "Resource name"
+    "message": "Erőforrás neve"
   },
   "resources_ccefab27": {
-    "message": "Resources"
+    "message": "Erőforrások"
   },
   "response_alternatives_will_be_selected_at_random_f_552dd090": {
-    "message": "Response alternatives will be selected at random for a more dynamic conversation."
+    "message": "Válaszként használható alternatívák véletlenszerűen lesznek kiválasztva a dinamikusabb beszélgetés érdekében."
   },
   "response_is_response_3cd62f8f": {
     "message": "Válasz: { response }"
@@ -3150,25 +3150,25 @@
     "message": "Beszélgetés újraindítása – ugyanaz a felhasználói azonosító"
   },
   "retrieve_app_id_59f07cf4": {
-    "message": "Retrieve App ID"
+    "message": "Alkalmazásazonosító beolvasása"
   },
   "retrieve_app_id_from_publishing_profile_b6643a25": {
-    "message": "Retrieve App ID from publishing profile"
+    "message": "Alkalmazásazonosító beolvasása a közzétételi profilból"
   },
   "review_and_generate_63dec712": {
     "message": "Áttekintés és létrehozás"
   },
   "review_deactivated_custom_actions_8db7540c": {
-    "message": "Review deactivated custom actions"
+    "message": "Inaktivált egyéni műveletek áttekintése"
   },
   "review_your_template_readme_2d6eae1e": {
-    "message": "Review your template readme"
+    "message": "A sablon Fontos fájljának áttekintése"
   },
   "rollback_26326307": {
     "message": "Visszaállítás"
   },
   "root_6b5104ad": {
-    "message": "(root)"
+    "message": "(gyökér)"
   },
   "root_bot_7bb35314": {
     "message": "Gyökérszintű bot."
@@ -3198,10 +3198,10 @@
     "message": "Futtatókörnyezet konfigurációja"
   },
   "runtime_language_da49617a": {
-    "message": "Runtime Language"
+    "message": "Futásidejű nyelv"
   },
   "runtime_log_9069fda7": {
-    "message": "Runtime log."
+    "message": "Futási napló."
   },
   "runtime_type_f9e2419b": {
     "message": "Futtatókörnyezet típusa"
@@ -3216,7 +3216,7 @@
     "message": "Mentés"
   },
   "save_app_id_f64b6102": {
-    "message": "Save App ID"
+    "message": "Alkalmazásazonosító mentése"
   },
   "save_your_skill_manifest_63bf5f26": {
     "message": "Képességjegyzék mentése"
@@ -3224,7 +3224,7 @@
   "schema_24739a48": {
     "message": "Séma"
   },
-  "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
+  "schemaid_doesn_t_exist_select_a_schema_to_edit_or__5a4b9035": {
     "message": "A(z) { schemaId } nem létezik, válasszon sémát a szerkesztéshez, vagy hozzon létre újat"
   },
   "schemas_74566170": {
@@ -3240,10 +3240,10 @@
     "message": "Keresés"
   },
   "search_4a044e7c": {
-    "message": "Search ..."
+    "message": "Keresés ..."
   },
   "search_entities_3ecdb6d": {
-    "message": "Search entities"
+    "message": "Entitások keresése"
   },
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Bővítmények keresése az npm-en"
@@ -3252,7 +3252,7 @@
     "message": "Függvények keresése"
   },
   "search_prebuilt_entities_e52c0f35": {
-    "message": "Search prebuilt entities"
+    "message": "Előre összeállított entitások keresése"
   },
   "search_properties_5bf3d868": {
     "message": "Tulajdonságok keresése"
@@ -3261,37 +3261,37 @@
     "message": "Sablonok keresése"
   },
   "see_details_15c93092": {
-    "message": "See details"
+    "message": "Részletek megtekintése"
   },
   "see_instructions_87eb4251": {
-    "message": "See instructions"
+    "message": "Lásd az utasításokat"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Válasszon robotot"
   },
   "select_a_dialog_134385f2": {
-    "message": "Select a dialog"
+    "message": "Párbeszédpanel kiválasztása"
   },
   "select_a_dialog_or_topic_4df93d0f": {
-    "message": "Select a dialog or topic"
+    "message": "Válasszon ki egy párbeszédpanelt vagy egy témakört"
   },
   "select_a_publish_target_d4530c94": {
     "message": "Közzétételi cél kiválasztása"
   },
   "select_a_publishing_profile_a2eb4e86": {
-    "message": "Select a publishing profile"
+    "message": "Válasszon közzétételi profilt"
   },
   "select_a_resource_group_b536a26d": {
-    "message": "Select a resource group"
+    "message": "Erőforráscsoport kiválasztása"
   },
   "select_a_subscription_446b44e6": {
-    "message": "Select a subscription"
+    "message": "Válasszon ki egy előfizetést"
   },
   "select_a_template_874fe803": {
-    "message": "Select a template"
+    "message": "Sablonválasztás"
   },
   "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
-    "message": "Select a trigger in the left<br />navigation to see actions"
+    "message": "Válasszon ki egy triggert a bal<br />navigációs ablaktáblán a műveletek megjelenítéséhez"
   },
   "select_a_trigger_type_219bb52f": {
     "message": "Triggertípus kiválasztása"
@@ -3306,13 +3306,16 @@
     "message": "Válasszon ki egy eseménytípust"
   },
   "select_an_option_9f5dfb55": {
-    "message": "Select an option"
+    "message": "Válasszon egy lehetőséget"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Válassza ki a szerkeszteni kívánt sémát, vagy hozzon létre újat"
   },
+  "select_app_id_and_password_e901a31d": {
+    "message": "Válasszon alkalmazásazonosítót és -jelszót"
+  },
   "select_dialogs_f625e607": {
-    "message": "Select dialogs"
+    "message": "Párbeszédpanelek kiválasztása"
   },
   "select_input_hint_267a6208": {
     "message": "Bemenetválasztási javaslat"
@@ -3321,7 +3324,7 @@
     "message": "A törölni kívánt nyelv kiválasztása"
   },
   "select_one_b647b384": {
-    "message": "Select one"
+    "message": "Válasszon egyet"
   },
   "select_options_9ee7b227": {
     "message": "Beállítások kiválasztása"
@@ -3330,40 +3333,37 @@
     "message": "Tulajdonságtípus kiválasztása"
   },
   "select_publishing_profile_a3f478e2": {
-    "message": "Select publishing profile"
+    "message": "Közzétételi profil kiválasztása"
   },
   "select_region_42a80a8e": {
-    "message": "Select region"
+    "message": "Válasszon régiót"
   },
   "select_resource_edaf4ef5": {
-    "message": "Select resource"
+    "message": "Erőforrás kiválasztása"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "A hozzáadni kívánt futtatókörnyezet-verzió kiválasztása"
   },
   "select_service_resources_326b206a": {
-    "message": "Select { service } resources"
+    "message": "{ service }-erőforrások kiválasztása"
   },
   "select_subscription_c5678611": {
-    "message": "Select subscription"
+    "message": "Előfizetés kiválasztása"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "Válassza ki a nyelvet, amelyet a robot érteni fog (felhasználói adatbevitel), és amelyen válaszolni fog (robot válasza).\n    Ha a robotot más nyelven is elérhetővé szeretné tenni, kattintson a „Hozzáadás” gombra, hogy létrehozza az alapértelmezett nyelv másolatát, majd fordítsa le a tartalmat az új nyelvre."
   },
   "select_the_resource_group_and_region_in_which_your_51f85ff": {
-    "message": "Select the resource group and region in which your { service } service will be created."
+    "message": "Válassza ki azt az erőforráscsoportot és-régiót, amelyben a(z) { service } szolgáltatás létre lesz hozva."
   },
   "select_triggers_5ff033ae": {
-    "message": "Select triggers"
+    "message": "Triggerek kiválasztása"
   },
   "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+    "message": "Válassza ki az Azure-címtárat, majd válassza ki azt az előfizetést, ahol az új { service }-erőforrást el szeretné helyezni."
   },
   "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
-    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
-  },
-  "select_your_microsoft_app_id_and_password_74918f5d": {
-    "message": "Select your Microsoft App ID and Password"
+    "message": "Válassza ki az Azure-címtárat, majd válassza ki azt az előfizetést, ahol a meglévő { service }-erőforrás található."
   },
   "selection_field_86d1dc94": {
     "message": "kiválasztási mező"
@@ -3378,7 +3378,7 @@
     "message": "HTTP-kérelem küldése"
   },
   "send_handoff_activity_651ee597": {
-    "message": "Send handoff activity"
+    "message": "Átadási tevékenység küldése"
   },
   "send_messages_c48b239": {
     "message": "Üzenetek küldése"
@@ -3387,7 +3387,7 @@
     "message": "Mondattörés"
   },
   "service_resource_name_56566aab": {
-    "message": "{ service } resource name"
+    "message": "{ service }-erőforrás neve"
   },
   "session_expired_12aaf414": {
     "message": "A munkamenet lejárt"
@@ -3405,25 +3405,22 @@
     "message": "Tulajdonságok beállítása"
   },
   "set_up_continuous_deployment_devops_4919f626": {
-    "message": "Set up continuous deployment (DevOps)"
+    "message": "A folyamatos üzembe helyezés beállítása (DevOps)"
   },
   "set_up_language_understanding_f51f4884": {
-    "message": "Set up Language Understanding"
+    "message": "Az Azure Language Understanding beállítása"
   },
   "set_up_qna_maker_170a4422": {
-    "message": "Set up QnA Maker"
+    "message": "QnA Maker beállítása"
   },
   "set_up_service_b6d23e54": {
-    "message": "Set up { service }"
-  },
-  "set_your_microsoft_app_id_and_password_46b5628c": {
-    "message": "Set your Microsoft App ID and Password"
+    "message": "A(z) { service } beállítása"
   },
   "setting_things_up_8022afe8": {
     "message": "Beállítás..."
   },
   "setting_up_bot_framework_emulator_40f455db": {
-    "message": "Setting up Bot Framework Emulator"
+    "message": "A Bot Framework Emulator beállítása"
   },
   "settings_5aa0fd0c": {
     "message": "Beállítások"
@@ -3438,10 +3435,10 @@
     "message": "Beállítások menü"
   },
   "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
-    "message": "Setup tunneling software to test your remote skill"
+    "message": "A távoli képesség teszteléséhez állítson be alagútkezelő szoftvert"
   },
   "short_description_for_6abb9a1b": {
-    "message": "short description for"
+    "message": "Rövid leírás"
   },
   "show_all_diagnostics_c11f4e09": {
     "message": "Az összes diagnosztika megjelenítése"
@@ -3456,7 +3453,7 @@
     "message": "Kulcsok megjelenítése"
   },
   "show_response_editor_90bd8b49": {
-    "message": "Show response editor"
+    "message": "Válaszszerkesztő megjelenítése"
   },
   "show_skill_manifest_5d0abde1": {
     "message": "Képességjegyzék megjelenítése"
@@ -3471,7 +3468,7 @@
     "message": "Képesség"
   },
   "skill_configuration_5e4bfbcd": {
-    "message": "Skill configuration"
+    "message": "Képességkonfiguráció"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "Készség párbeszédneve"
@@ -3480,25 +3477,25 @@
     "message": "Készség végpontja"
   },
   "skill_host_endpoint_url_702c277c": {
-    "message": "Skill host endpoint URL"
+    "message": "Képesség gazdavégpontjának URL-címe"
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Képesség gazdavégpontjának URL-címe"
   },
   "skill_manifest_url_1094fcba": {
-    "message": "Skill Manifest URL"
+    "message": "Képességjegyzék URL-címe"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
-    "message": "Skill manifest URL was copied to the clipboard"
+    "message": "A képességjegyzék URL-címe a vágólapra lett másolva"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } jegyzék"
   },
   "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
-    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>"
+    "message": "A képességek külső robotok által is „hívhatók”. Az alábbi listához hozzáadva alkalmazásazonosítóikat engedélyezheti a többi robotnak a képesség meghívását. <a>További információ</a>"
   },
   "skip_bcb86160": {
-    "message": "Skip"
+    "message": "Kihagyás"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Valami történt a következő lekérésére tett kísérlet során: { e }"
@@ -3540,7 +3537,7 @@
     "message": "Adjon meg egy melléklet-elrendezést, ha egynél több van."
   },
   "specify_an_existing_bot_to_connect_to_your_azure_b_3c632ffa": {
-    "message": "Specify an existing bot to connect to your Azure Bot resource."
+    "message": "Adjon meg egy, az Azure Bot-erőforráshoz való csatlakoztatandó meglévő robotot."
   },
   "speech_16063aed": {
     "message": "Beszéd"
@@ -3555,7 +3552,7 @@
     "message": "Stack Overflow"
   },
   "start_and_stop_local_bot_runtimes_98f94e21": {
-    "message": "Start and stop local bot runtimes"
+    "message": "A helyi robot-futtatókörnyezetek indítása és leállítása."
   },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "A helyi bot-futtatókörnyezetek egyenkénti indítása és leállítása."
@@ -3570,7 +3567,7 @@
     "message": "Újrakezdi?"
   },
   "start_this_bot_ef51fbc2": {
-    "message": "Start this bot"
+    "message": "A robot indítása"
   },
   "start_typing_kind_or_b0c305da": {
     "message": "Kezdje beírni: { kind } vagy"
@@ -3594,7 +3591,7 @@
     "message": "Bot leállítása"
   },
   "stop_this_bot_6cce6509": {
-    "message": "Stop this bot"
+    "message": "A robot leállítása"
   },
   "stopping_e4de5f4a": {
     "message": "Leállítás folyamatban"
@@ -3612,13 +3609,13 @@
     "message": "Küldés"
   },
   "submit_a_feature_request_151d280c": {
-    "message": "Submit a feature request"
+    "message": "Funkciókérés küldése"
   },
   "subscription_15330b8a": {
-    "message": "Subscription"
+    "message": "Előfizetés"
   },
   "subscription_id_250f5e1f": {
-    "message": "Subscription Id:"
+    "message": "Előfizetés azonosítója:"
   },
   "suggested_actions_94d06bfa": {
     "message": "Javasolt műveletek"
@@ -3633,10 +3630,10 @@
     "message": "Szinonimák (nem kötelező)"
   },
   "system_topic_44cfbac8": {
-    "message": "System Topic"
+    "message": "Rendszertémakör"
   },
   "take_a_product_tour_a2892d17": {
-    "message": "Take a product tour"
+    "message": "Termékbemutató megtekintése"
   },
   "target_da92f4e6": {
     "message": "Cél"
@@ -3645,13 +3642,13 @@
     "message": "TB"
   },
   "teams_manifest_59d7fb0e": {
-    "message": "Teams Manifest"
+    "message": "Teams-jegyzékfájl"
   },
   "teams_manifest_for_your_bot_7d0ec7ea": {
-    "message": "Teams manifest for your bot:"
+    "message": "A Teams jegyzékfájlja a robotról:"
   },
   "teams_requires_a_few_more_steps_to_get_your_connec_320c55f2": {
-    "message": "Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how."
+    "message": "A Teams még néhány lépést igényel a kapcsolat létrehozásához. További információért kövesse dokumentációs oldalunk utasításait."
   },
   "template_name_c37cf8d9": {
     "message": "Sablon neve: "
@@ -3663,16 +3660,16 @@
     "message": "Használati feltételek"
   },
   "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
-    "message": "Test and debug your bots in Bot Framework Emulator"
+    "message": "A robotok tesztelése és hibakeresése a Bot Framework Emulatorral"
   },
   "test_in_emulator_b1b3c278": {
     "message": "Teszt az Emulatorban"
   },
   "test_with_web_chat_and_emulator_d0f87a81": {
-    "message": "Test with Web Chat and Emulator"
+    "message": "Tesztelés webes csevegés és emulátor használatával"
   },
   "test_with_web_chat_or_emulator_4edda954": {
-    "message": "Test with Web Chat or Emulator"
+    "message": "Tesztelés webes csevegés vagy emulátor használatával"
   },
   "test_your_bot_3cd1f4bb": {
     "message": "A robot tesztelése"
@@ -3690,28 +3687,28 @@
     "message": "A készség /api/messages végpontja."
   },
   "the_app_id_9c6d6a9a": {
-    "message": "The app id"
+    "message": "Az alkalmazás azonosítója"
   },
   "the_app_id_of_your_application_registration_16fba1a9": {
-    "message": "The app id of your application registration"
+    "message": "Az alkalmazásregisztráció alkalmazásazonosítója"
   },
   "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
-    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
+    "message": "Az Azure Bot Servicesben létrehozott Azure-robot olyan robot-erőforrásokat tartalmaz, amelyek egy új robot alapjaként, illetve meglévő robot erőforrásainak hozzáadásához vagy cseréjéhez használhatók."
   },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
-    "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
+    "message": "A Language Generation (LG) szerkesztője a robot válaszainak oldalán található. Innen kiindulva a felhasználók megtekinthetik és szerkeszthetik az összes LG-sablont."
   },
   "the_capabilities_of_your_bot_are_defined_in_its_di_37d5670f": {
-    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more."
+    "message": "A robot képességeit a párbeszédek és eseményindítók határozzák meg. A kijelölt párbeszédek szerepelni fognak a jegyzékfájlban. Lehetséges, hogy a belső párbeszédek vagy műveletek más robotok esetében nem relevánsak. További információ."
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "A törölni kívánt párbeszédet jelenleg az alábbi párbeszéd(ek) használja/használják. A párbeszéd eltávolítása miatt a robot további művelet hiányában meghibásodna."
   },
   "the_endpoint_url_7c04ee13": {
-    "message": "The endpoint url"
+    "message": "A végpont URL-címe"
   },
   "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
-    "message": "The endpoint url of your web app resource"
+    "message": "A webalkalmazás-erőforrás végponti URL-címe"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "A fájlnév nem lehet üres"
@@ -3720,13 +3717,13 @@
     "message": "A következő nyelvtanulási fájl(ok) érvénytelen(ek): \n"
   },
   "the_following_service_keys_have_been_successfully__29b5672a": {
-    "message": "The following { service } keys have been successfully added to your bot project:"
+    "message": "A következő { service } kulcsokat sikeresen hozzáadta a robotprojekthez:"
   },
   "the_following_service_resource_was_successfully_cr_1381acb2": {
-    "message": "The following { service } resource was successfully created and added to your bot project:"
+    "message": "A következő { service } erőforrás sikeresen létrejött és hozzá lett adva a robotprojekthez:"
   },
   "the_main_dialog_is_the_foundation_of_every_bot_cre_d4a938ff": {
-    "message": "The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot."
+    "message": "A Composerben létrehozott összes robot alapja a fő párbeszéd. Csak egy fő párbeszéd létezik, az összes többi a fő párbeszéd gyermeke. A fő párbeszéd minden alkalommal inicializálódik, amikor a robot fut, és belépési pontként szolgál a robotba."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "A jegyzék szükség esetén kézzel szerkeszthető és finomhangolható."
@@ -3753,19 +3750,19 @@
     "message": "A bot közzétételi célhelye"
   },
   "the_user_input_page_is_where_the_language_understa_c9262f3f": {
-    "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."
+    "message": "A Language Understanding szerkesztője a felhasználói bemeneti oldalon található. Innen kiindulva a felhasználók megtekinthetik és szerkeszthetik az összes Language Understanding-sablont."
   },
   "there_are_no_notifications_e81eab8d": {
     "message": "Nincsenek értesítések."
   },
   "there_are_no_optional_properties_b664c20f": {
-    "message": "There are no optional properties."
+    "message": "Nincsenek választható tulajdonságok."
   },
   "there_are_no_preview_features_at_this_time_a5c40953": {
     "message": "Jelenleg nincsenek előzetes funkciók."
   },
   "there_are_no_required_properties_ba214ac5": {
-    "message": "There are no required properties."
+    "message": "Nincsenek kötelező tulajdonságok."
   },
   "there_is_no_original_view_63a2eaed": {
     "message": "Nincs eredeti nézet"
@@ -3774,19 +3771,19 @@
     "message": "Nincs miniatűr nézet"
   },
   "there_was_a_problem_getting_the_access_token_for_t_69f5a5e2": {
-    "message": "There was a problem getting the access token for the current Azure directory. { errMessage }"
+    "message": "Probléma merült fel a jelenlegi Azure-címtárhoz szükséges hozzáférési jogkivonat megszerzésekor. { errMessage }"
   },
   "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
-    "message": "There was a problem loading Azure directories. { errMessage }"
+    "message": "Hiba történt az Azure-címtárak betöltése során. { errMessage }"
   },
   "there_was_a_problem_with_the_authentication_access_3ca717f6": {
-    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
+    "message": "Hiba történt a hitelesítési hozzáférési jogkivonattal. Zárja be ezt a párbeszédpanelt, és próbálkozzon újra. A hozzáférési jogkivonat újbóli megadására vonatkozó kérés megjelenésekor törölje azt az alkalmazás helyi tárolójából."
   },
   "there_was_an_error_74ed3c58": {
     "message": "Hiba történt."
   },
   "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
-    "message": "There was an error accessing your Azure account: { errorMsg }"
+    "message": "Hiba történt az Azure-fiókja elérése közben: {errorMsg}"
   },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
     "message": "Váratlan hiba történt a bottartalom importálásakor a következőbe: <b>{ botName }</b>"
@@ -3798,10 +3795,10 @@
     "message": "Hiba történt a KB létrehozásakor"
   },
   "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
-    "message": "This bot cannot be called as a skill since the allowed caller list is empty"
+    "message": "Ez a robot nem nevezhető képességnek, mert az engedélyezett hívók listája üres"
   },
   "this_cognitive_service_account_is_already_set_as_t_841165f7": {
-    "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
+    "message": "Ez a kognitív szolgáltatásfiók már be van állítva alapértelmezettként egy másik robotnál. Szeretné engedélyezni ezt a szolgáltatást az alapértelmezettként való beállítása nélkül?"
   },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "Események és műveletek gyűjteményén keresztül konfigurál egy adatalapú párbeszédet."
@@ -3831,16 +3828,16 @@
     "message": "Ez a művelet nem hajtható végre. A képesség már része a robotprojektnek"
   },
   "this_operation_will_overwrite_changes_made_to_prev_e746d44f": {
-    "message": "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
+    "message": "Ez a művelet felülírja a korábban importált fájlok módosításait. Folytatja?"
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "Ez a beállítás lehetővé teszi, hogy a felhasználók több értéket adjanak a tulajdonságnak."
   },
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
-    "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
+    "message": "Ezt a projektet a Composer régebbi verziójában hozták létre. A projekt megnyitásához a Composer 2.0-s verziójában le kell másolnunk a projektet, és konvertálnunk kell a legújabb formátumra. Az eredeti projekt nem fog megváltozni."
   },
-  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
-    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
+  "this_publishing_profile_profilename_is_no_longer_s_941d10e0": {
+    "message": "Ez a közzétételi profil ({ profileName }) már nem támogatott. Ön több Azure-bérlőnek is tagja, és a profilhoz társítania kell egy bérlőazonosítót. Szerkesztheti a profilt úgy, hogy hozzáadja a „tenantId” tulajdonságot a konfigurációhoz, vagy létre is hozhat egy új profilt."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "Ezt az indító típust nem támogatja a RegEx-értelmező. Az aktiválás kilövésének biztosításához módosítsa a értelmező típusát."
@@ -3867,19 +3864,25 @@
     "message": "tippek"
   },
   "title_connection_eaec11f8": {
-    "message": "{ title } connection"
+    "message": "{ title } kapcsolat"
   },
   "title_ee03d132": {
     "message": "Cím"
   },
-  "to_connect_to_a_skill_you_will_need_a_skill_s_mani_3d163597": {
-    "message": "To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step."
+  "to_connect_to_a_skill_your_bot_needs_the_informati_409e03db": {
+    "message": "A képességhez való kapcsolódáshoz a robotnak tartalmaznia kell a rögzített információkat a képesség jegyzékfájljában. Az adatokért forduljon a képesség szerzőjéhez vagy közzétevőjéhez."
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  "to_connect_to_a_skill_your_bot_needs_the_informati_65b28231": {
+    "message": "A képességhez való csatlakozáshoz szüksége van a képesség jegyzékfájljában rögzített információkra, a biztonságos hozzáférés érdekében pedig a képességnek ismernie kell a robot alkalmazásazonosítóját. A folytatáshoz kövesse az alábbi lépéseket."
+  },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
+    "message": "A képességhez való csatlakozáshoz a robotnak szüksége van a képesség jegyzékfájljában rögzített információkra, a biztonságos hozzáférés érdekében pedig a képességnek ismernie kell a robot alkalmazásazonosítóját. <link>További információ.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+    "message": "Biztonságos kapcsolat biztosításához adja meg azon robotok alkalmazásazonosítóját, amelyek a képességéhez csatlakozhatnak. Ha nem rendelkezik ezzel az információval, a képességkonfigurációban is felveheti ezt az információt. További információ."
+  },
+  "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
+    "message": "A biztonságos kapcsolat biztosításához a távoli képességnek ismernie kell a robot Microsoft-alkalmazásazonosítóját. "
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "További információért <a>tekintse meg ezt a dokumentumot</a>."
@@ -3897,25 +3900,25 @@
     "message": "> A QnA fájlformátummal kapcsolatban további információért olvassa el a következő helyen található dokumentációt:\n> { QNA_HELP }"
   },
   "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
-    "message": "To learn more about the { title }, <a>visit its documentation page</a>."
+    "message": "A { title } további információiért <a>látogasson el a dokumentációs oldalára</a>."
   },
   "to_make_your_bot_available_as_a_remote_skill_you_w_be5a6e3f": {
-    "message": "To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select."
+    "message": "Ahhoz, hogy a robot elérhető legyen távoli képességként, Azure-erőforrásokat kell kiépíteni. Ez a folyamat a kiválasztott erőforrásoktól függően eltarthat néhány percig."
   },
   "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
     "message": "A kiépítési és a közzétételi műveletek végrehajtásához a Composernek hozzáféréssel kell rendelkeznie az Azure- és az MS Graph-fiókokhoz. Illessze be a hozzáférési jogkivonatokat a parancssori eszközből az alább kijelölt parancsok használatával."
   },
   "to_run_this_bot_composer_needs_azure_functions_cor_bbbd0e7": {
-    "message": "To run this bot, Composer needs Azure Functions Core Tools."
+    "message": "A robot futtatásához a Composernek szüksége van az Azure Functions Core Tools csomagra."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "A robot futtatásához a Composernek a .NET Core SDK-ra van szüksége."
   },
   "to_test_run_and_publish_your_bot_it_needs_azure_re_e33d8fd": {
-    "message": "To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels. Other resources, such as language understanding and storage are optional. A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources."
+    "message": "A robot teszteléséhez, futtatásához és közzétételéhez Azure-erőforrásokra, például alkalmazásregisztrációra, üzemeltetésre és csatornákra van szükség. Egyéb források, például a nyelvtanulás és a tárhely nem kötelezőek. A közzétételi profil tartalmazza a robot kiépítéséhez és közzétételéhez szükséges összes információt, beleértve az Azure-erőforrásokat is."
   },
   "to_understand_natural_language_input_and_direct_th_fc982d4a": {
-    "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
+    "message": "A természetes nyelv megértéséhez és a beszélgetés irányításához a robotnak nyelvtanulási szolgáltatásra van szüksége. "
   },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
     "message": "A felhasználó által mondottak megértéséhez a párbeszédnek olyan értelmezőre van szüksége, amely a felhasználók által használható példaszavakat és -mondatokat tartalmaz."
@@ -3936,7 +3939,7 @@
     "message": "eszköztár"
   },
   "topic_e820dbbd": {
-    "message": "(Topic)"
+    "message": "(Témakör)"
   },
   "total_mb_531a3721": {
     "message": "{ total } MB"
@@ -3945,31 +3948,31 @@
     "message": "{ total, plural,\n     =1 {Restart bot}\n  other {Restart all bots ({ running }/{ total } running)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
+    "message": "{total, plural,\n     =1 {Robot indítása}\n  other {Összes indítása}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
+    "message": "{ total, plural,\n     =1 {Robot leállítása..}\n  other {Robotok leállítása.. ({ running }/{ total } fut)}\n}"
   },
   "trigger_f0ee1fbf": {
     "message": "Trigger"
   },
   "trigger_group_79a00ac6": {
-    "message": "Trigger group"
+    "message": "Csoport aktiválása"
   },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
-    "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
+    "message": "A triggerkifejezések a felhasználóktól származó olyan bevitelek, amelyeket a LUIS modell betanítására lehet használni. Ez a .lu fájlformátumot követi."
   },
   "trigger_phrases_f6754fa": {
     "message": "Triggerkifejezések"
   },
   "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
-    "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
+    "message": "A párbeszéd fő alkotóelemei a triggerek, amelyek megadják, hogyan észleli az eseményeket, és hogyan válaszol rájuk. Minden trigger rendelkezik egy feltétellel és egy műveletcsoporttal, amelyet a feltétel teljesülésekor végrehajt."
   },
   "triggers_selected_below_will_enable_other_bots_to__fd8353a5": {
-    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. Learn more."
+    "message": "Az alább kiválasztott triggerek lehetővé teszik, hogy más robotok is hozzáférjenek a képességekhez. Részletek."
   },
   "true_1900d7ae": {
     "message": "igaz"
@@ -3984,19 +3987,19 @@
     "message": "Próbálja ki az új előzetes funkciókat, és segítsen nekünk a Composer fejlesztésében. A funkciókat bármikor be-vagy kikapcsolhatja."
   },
   "type_a_name_for_this_knowledge_base_ab07b439": {
-    "message": "Type a name for this knowledge base"
+    "message": "Adjon nevet a tudásbázisnak"
   },
   "type_and_press_enter_33a2905d": {
     "message": "Írja be, és nyomja le az Enter billentyűt"
   },
   "type_app_id_a37decdf": {
-    "message": "Type App Id"
+    "message": "Írja be az alkalmazás azonosítóját"
   },
   "type_app_password_8084ff36": {
-    "message": "Type App Password"
+    "message": "Írja be az alkalmazásjelszót"
   },
   "type_application_name_24f02dbe": {
-    "message": "Type application name"
+    "message": "Írja be az alkalmazás nevét"
   },
   "type_c8106334": {
     "message": "Típus"
@@ -4008,13 +4011,13 @@
     "message": "Írja be az űrlappárbeszédpanel-séma nevét"
   },
   "type_language_understanding_authoring_key_515790d0": {
-    "message": "Type Language Understanding authoring key"
+    "message": "Írja be a Language Understanding szerzői kulcsot"
   },
   "type_or_paste_url_763adeb4": {
-    "message": "Type or paste URL"
+    "message": "Írja vagy illessze be az URL-címet"
   },
   "type_subscription_key_ab5ab9a6": {
-    "message": "Type subscription key"
+    "message": "Írja be az előfizetői azonosítót"
   },
   "typing_activity_6b634ae": {
     "message": "Gépelési tevékenység"
@@ -4041,13 +4044,13 @@
     "message": "Ismeretlen állapot"
   },
   "unnamed_4c8565a0": {
-    "message": "Unnamed"
+    "message": "Névtelen"
   },
   "unread_notifications_indicator_e2ca00d5": {
-    "message": "Unread notifications Indicator"
+    "message": "Olvasatlan értesítések jelzője"
   },
   "unsupported_publishing_profile_ad088e54": {
-    "message": "Unsupported publishing profile"
+    "message": "Nem támogatott közzétételi profil"
   },
   "unused_8d193e3": {
     "message": "Nincs használatban"
@@ -4062,13 +4065,13 @@
     "message": "Tevékenység frissítése"
   },
   "update_and_restart_b236a67": {
-    "message": "Update and restart"
+    "message": "Frissítés és újraindítás"
   },
   "update_available_b637d767": {
     "message": "Frissítés érhető el"
   },
   "update_cancelled_auto_update_has_been_turned_off_f_7f7e08d7": {
-    "message": "Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>"
+    "message": "A frissítés leállt. Ebben a kiadásban az automatikus frissítés ki lett kapcsolva. A <b>Súgó > Frissítések keresése</b> lehetőség kiválasztásával bármikor frissíthet."
   },
   "update_complete_c5163fbf": {
     "message": "A frissítés elkészült"
@@ -4092,22 +4095,22 @@
     "message": "A szkriptek frissítése folyamatban van... "
   },
   "url_22a5f3b8": {
-    "message": "URL"
+    "message": "URL-cím"
   },
   "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+    "message": "Az URL-címnek a http:// vagy a https:// karaktersorral kell kezdődnie"
   },
   "use_azure_bot_to_create_a_new_conversation_1a116a65": {
-    "message": "Use Azure Bot to create a new conversation"
+    "message": "Új beszélgetés létrehozása az Azure Bot használatával"
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
-    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ."
+    "message": "Az Azure QnA Makerrel létrehozhat egy egyszerű kérdés-válasz robotot egy webhely gyakori kérdéseiből."
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_b24bef9f": {
-    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ. "
+    "message": "Az Azure QnA Makerrel létrehozhat egy egyszerű kérdés-válasz robotot egy webhely gyakori kérdéseiből. "
   },
   "use_azure_qna_maker_to_extract_question_and_answer_942c2dcd": {
-    "message": "Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. "
+    "message": "Az Azure QnA Makerrel kérdés-válasz párokat nyerhet ki egy online GYIK dokumentumból. "
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Egyéni LUIS szerzői kulcs használata"
@@ -4122,16 +4125,16 @@
     "message": "Egyéni futtatókörnyezet használata"
   },
   "use_existing_resources_88d21106": {
-    "message": "Use existing resources"
+    "message": "Meglévő erőforrások használata"
   },
   "use_machine_learning_to_understand_natural_languag_53f12465": {
-    "message": "Use machine learning to understand natural language input and direct the conversation flow."
+    "message": "Gépi tanulás segítségével meg lehet érteni a természetes nyelvi bemeneteket és irányítani lehet a beszélgetési folyamatot."
   },
   "use_orchestrator_for_multi_bot_projects_bots_that__1b481cdd": {
-    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
+    "message": "Használjon vezénylőket a többrobotos projektekhez (több robotból álló vagy képességhez való csatlakozásra használt robotok)."
   },
   "use_speech_to_enable_voice_input_and_output_for_yo_742c511d": {
-    "message": "Use Speech to enable voice input and output for your bot."
+    "message": "A Beszédfelismerés használatával engedélyezi a robot számára a hangbemenetet és -kimenetet."
   },
   "used_3d895705": {
     "message": "Használatban"
@@ -4143,7 +4146,7 @@
     "message": "Felhasználói adatbevitel"
   },
   "user_input_and_bot_responses_2a9b67b1": {
-    "message": "User input and bot responses"
+    "message": "Felhasználói bemenetek és a robot válaszai"
   },
   "user_is_typing_790cb502": {
     "message": "A felhasználó éppen gépel"
@@ -4152,7 +4155,7 @@
     "message": "A felhasználó gépel (Typing tevékenység)"
   },
   "user_topic_e3978941": {
-    "message": "User Topic"
+    "message": "Felhasználói témakör"
   },
   "validation_b10c677c": {
     "message": "Érvényesítés"
@@ -4176,7 +4179,7 @@
     "message": "Nézet párbeszédpanel"
   },
   "view_documentation_samples_and_extensions_285b9404": {
-    "message": "View documentation, samples, and extensions"
+    "message": "Dokumentáció, minták és bővítmények megtekintése"
   },
   "view_kb_c382e495": {
     "message": "KB megtekintése"
@@ -4188,10 +4191,10 @@
     "message": "Megtekintés npm-en"
   },
   "view_readme_30ed498f": {
-    "message": "View Readme"
+    "message": "Tudnivalók megtekintése"
   },
   "visit_a_this_page_a_to_learn_more_about_entity_def_c7c862a9": {
-    "message": "Visit <a>this page</a> to learn more about entity definition."
+    "message": "Ha többet szeretne megtudni az entitás definíciójáról, látogasson el <a>erre az oldalra</a>."
   },
   "visual_editor_216472d": {
     "message": "Vizualizációszerkesztő"
@@ -4203,19 +4206,19 @@
     "message": "Figyelmeztetés"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
-    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
+    "message": "{ warningsCount, plural,\n     =0 {Nincsenek figyelmeztetések}\n     =1 {Egy figyelmeztetés}\n  other {# figyelmeztetés}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"
   },
   "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
-    "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
+    "message": "Olyan { length } méretű egyéni { obj } elemeket észleltünk, amelyek nem támogatják a Composer 2.0-t."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "Meg kell határoznunk a készség végpontjait, hogy más robotok kommunikálhassanak vele."
   },
   "web_chat_c5ca7ab6": {
-    "message": "Web Chat"
+    "message": "Webes csevegés"
   },
   "webchat_log_b7213a9e": {
     "message": "Webchat-napló."
@@ -4224,16 +4227,16 @@
     "message": "Üdvözöljük"
   },
   "welcome_to_bot_framework_composer_b4f92694": {
-    "message": "Welcome to Bot Framework Composer"
+    "message": "Üdvözli a Bot Framework Composer"
   },
   "welcome_to_composer_7147714a": {
-    "message": "Welcome to Composer!"
+    "message": "Üdvözli a Composer!"
   },
   "west_europe_75ac94f4": {
-    "message": "West Europe"
+    "message": "Nyugat-Európa"
   },
   "west_us_51d3fdbb": {
-    "message": "West US"
+    "message": "USA nyugati régiója"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
     "message": "Mit tud elérni a felhasználó ezzel a beszélgetéssel? Például: BookATable, OrderACoffee stb."
@@ -4242,7 +4245,7 @@
     "message": "Mi az egyéni esemény neve?"
   },
   "what_is_the_name_of_this_trigger_1d6db01": {
-    "message": "What is the name of this trigger?"
+    "message": "Mi a trigger neve?"
   },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "Mi a trigger neve?"
@@ -4257,13 +4260,13 @@
     "message": "Milyen típusú ez a trigger?"
   },
   "what_s_new_a9752a8e": {
-    "message": "What''s new"
+    "message": "Újdonságok"
   },
   "what_s_new_list_6fe719cb": {
-    "message": "What''s new list"
+    "message": "Újdonságok listája"
   },
   "what_you_need_to_know_to_get_started_e2ab837a": {
-    "message": "What you need to know to get started"
+    "message": "Tudnivalók az első lépésekről"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "A bot mit mond a felhasználónak. Ez a kimenő üzenet létrehozásához használt sablon. Ide tartozhat a nyelvgenerálási szabályok, a memória tulajdonságai és egyéb funkciók.\n\nA véletlenszerűen kiválasztott változatok meghatározásához például írja be a következőt:\n-Hello\n-Hi"
@@ -4287,16 +4290,16 @@
     "message": "Melyik robotot szeretné megnyitni?"
   },
   "which_bot_would_you_like_to_add_to_your_project_e31270db": {
-    "message": "Which bot would you like to add to your project"
+    "message": "Melyik robotot szeretné hozzáadni a projekthez?"
   },
   "which_bots_can_connect_to_this_skill_5bf8421d": {
-    "message": "Which bots can connect to this skill?"
+    "message": "Melyik robotok csatlakozhatnak ehhez a képességhez?"
   },
   "which_event_6e655d2b": {
     "message": "Melyik esemény?"
   },
   "working_with_packages_dbdddbe9": {
-    "message": "Working with packages"
+    "message": "Csomagok használata"
   },
   "write_an_expression_8773ea5c": {
     "message": "Kifejezés írása"
@@ -4311,7 +4314,7 @@
     "message": "Igen"
   },
   "yes_delete_d43476ee": {
-    "message": "Yes, delete"
+    "message": "Igen, törlöm"
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "Már van ilyen nevű tudásbázis. Válasszon másik nevet, és próbálkozzon újra."
@@ -4323,7 +4326,7 @@
     "message": "A kiválasztott közzétételi profilokból kívánja lekérni a projektfájlokat. A lekért fájlok felül fogják írni az aktuális projektet, de előtte a projektről biztonsági másolat készül. A biztonsági másolatot a jövőben bármikor visszaállíthatja."
   },
   "you_are_about_to_remove_modalitytitle_content_from_c51efe05": {
-    "message": "You are about to remove { modalityTitle } content from this action node. Are you sure you want to proceed?"
+    "message": "A(z) { modalityTitle } tartalom eltávolítását tervezi a műveleti csomópontból. Biztosan folytatja?"
   },
   "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
     "message": "Arra készül, hogy eltávolítsa a képesség ebből a projektből. A képesség eltávolítása nem törli a fájlokat."
@@ -4344,22 +4347,22 @@
     "message": "Sikeresen közzétette a(z) { name } elemet itt: { publishTarget }"
   },
   "you_re_ready_to_go_18ee8dac": {
-    "message": "You’re ready to go!"
+    "message": "Készen áll!"
   },
   "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
-    "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"
+    "message": "A robot csak egy LUIS szerzői kulccsal lett konfigurálva, amely legfeljebb havi 1000 hívást tesz lehetővé. Ha a robot eléri ezt a korlátot, tegye közzé az Azure-ban egy <a>közzétételi profillal</a> a tesztelés folytatásához.<a2>További információ</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "A bot LUIS-t és QNA használ a természetes nyelvek tanulásához."
   },
   "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
-    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+    "message": "A robotprojekt nem fut. <actionButton>Robot indítása</actionButton>"
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
-    "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
+    "message": "A robotprojekt fut. <actionButton>Tesztelés webes csevegésben</actionButton>"
   },
   "your_bot_s_microsoft_app_id_5f12844c": {
-    "message": "Your bot’s Microsoft App ID"
+    "message": "A robot Microsoft-alkalmazásazonosítója"
   },
   "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
     "message": "Sikerült létrehozni a(z) { schemaId } párbeszédpaneljét."
@@ -4368,36 +4371,30 @@
     "message": "A tudásbázis elkészült!"
   },
   "your_new_azure_bot_is_available_in_composer_2756367a": {
-    "message": "Your new Azure Bot is available in Composer"
+    "message": "Az új Azure Bot elérhető a Composerben"
   },
   "your_new_bot_is_almost_ready_1bb596e": {
-    "message": "Your new bot is almost ready!"
+    "message": "Az új robot majdnem készen áll!"
   },
   "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
-    "message": "Your QnA Maker is ready! It took { time } minutes to complete."
-  },
-  "your_root_bot_must_have_an_associated_microsoft_ap_91671242": {
-    "message": "Your root bot must have an associated Microsoft App ID and Password."
-  },
-  "your_root_bot_must_have_an_azure_publishing_profil_89055cfd": {
-    "message": "Your root bot must have an Azure publishing profile."
+    "message": "A QnA Maker elkészült! A folyamat { time } percet vett igénybe."
   },
   "your_skill_could_not_be_published_5bee6e6a": {
-    "message": "Your skill could not be published."
+    "message": "A képesség közzététele nem sikerült."
   },
   "your_skill_is_ready_to_be_shared_6376eb3c": {
-    "message": "Your skill is ready to be shared!"
+    "message": "A képesség készen áll a megosztásra!"
   },
   "your_subscription_list_is_empty_please_add_your_su_6b229c26": {
-    "message": "Your subscription list is empty, please add your subscription, or login with another account."
+    "message": "Az előfizetési listája üres. Adjon hozzá előfizetést, vagy jelentkezzen be egy másik fiókkal."
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
-    "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
+    "message": "A Teams adaptere konfigurálva lett a közzétett robothoz. A robot Teamsben történő teszteléséhez készítsen másolatot a jegyzékről, nyissa meg a Teamsben az App Studiót, és adja hozzá a jegyzéket."
   },
   "zoom_in_3205e865": {
-    "message": "Zoom in"
+    "message": "Nagyítás"
   },
   "zoom_out_e4302632": {
-    "message": "Zoom out"
+    "message": "Kicsinyítés"
   }
 }
