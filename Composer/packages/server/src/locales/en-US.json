@@ -47,6 +47,9 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
   },
+  "a_publishing_profile_contains_the_information_nece_fc37192d": {
+    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID. "
+  },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
     "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
   },
@@ -229,6 +232,9 @@
   },
   "add_property_d381eba3": {
     "message": "Add Property"
+  },
+  "add_publishing_profile_for_botname_37f9d35c": {
+    "message": "Add publishing profile for { botName }"
   },
   "add_qna_maker_knowledge_base_c1b27b78": {
     "message": "Add QnA Maker knowledge base"
@@ -998,6 +1004,9 @@
   "create_new_publish_profile_e27c0950": {
     "message": "Create new publish profile"
   },
+  "create_profile_33fafbf1": {
+    "message": "Create profile"
+  },
   "create_service_resources_386ef96b": {
     "message": "Create { service } resources"
   },
@@ -1412,6 +1421,9 @@
   "endpoints_ff946539": {
     "message": "Endpoints"
   },
+  "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
+    "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
+  },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
   },
@@ -1442,6 +1454,9 @@
   "enter_skill_host_endpoint_url_7489a83f": {
     "message": "Enter Skill host endpoint URL"
   },
+  "enter_skill_manifest_url_583d54f4": {
+    "message": "Enter skill manifest URL"
+  },
   "entities_ef09392c": {
     "message": "Entities"
   },
@@ -1460,8 +1475,8 @@
   "error_afac7133": {
     "message": "Error:"
   },
-  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
-    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  "error_attempting_to_parse_skill_manifest_there_cou_27675668": {
+    "message": "Error attempting to parse Skill manifest. There could be an error in its format."
   },
   "error_checking_node_version_98bfbf4c": {
     "message": "Error checking node version"
@@ -1675,6 +1690,9 @@
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
+  },
+  "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
+    "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profile, share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   },
   "form_b674666c": {
     "message": "form"
@@ -2855,6 +2873,9 @@
   "publish_models_9a36752a": {
     "message": "Publish models"
   },
+  "publish_profile_a4e8f07b": {
+    "message": "Publish profile"
+  },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
   },
@@ -3173,8 +3194,8 @@
   "schema_24739a48": {
     "message": "Schema"
   },
-  "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
+  "schemaid_doesn_t_exist_select_a_schema_to_edit_or__5a4b9035": {
+    "message": "{ schemaId } doesn''t exist; select a schema to edit or create a new one"
   },
   "schemas_74566170": {
     "message": "Schemas"
@@ -3254,8 +3275,14 @@
   "select_an_event_type_3d7108f1": {
     "message": "Select an event type"
   },
+  "select_an_option_9f5dfb55": {
+    "message": "Select an option"
+  },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Select an schema to edit or create a new one"
+  },
+  "select_app_id_and_password_e901a31d": {
+    "message": "Select App ID and password"
   },
   "select_dialogs_f625e607": {
     "message": "Select dialogs"
@@ -3776,8 +3803,8 @@
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
     "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
   },
-  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
-    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
+  "this_publishing_profile_profilename_is_no_longer_s_941d10e0": {
+    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type."
@@ -3809,11 +3836,20 @@
   "title_ee03d132": {
     "message": "Title"
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  "to_connect_to_a_skill_your_bot_needs_the_informati_409e03db": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest. Contact the author or publisher of the skill for this information."
+  },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_65b28231": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot''s App ID. Follow the steps below to proceed."
+  },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
     "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+  },
+  "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
+    "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "To learn more, <a>visit this document</a>."
@@ -4282,6 +4318,9 @@
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
+  },
+  "your_bot_s_microsoft_app_id_5f12844c": {
+    "message": "Your bot’s Microsoft App ID"
   },
   "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
     "message": "Your dialog for \"{ schemaId }\" was generated successfully."
