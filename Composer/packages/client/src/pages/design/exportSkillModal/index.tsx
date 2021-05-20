@@ -277,7 +277,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       onDismiss={handleDismiss}
     >
       <div css={styles.container}>
-        <p>
+        <p style={{ height: '38px' }}>
           {typeof subText === 'function' && subText()}
           {helpLink && (
             <React.Fragment>
