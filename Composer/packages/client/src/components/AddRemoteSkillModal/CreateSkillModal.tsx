@@ -42,7 +42,8 @@ export interface SkillFormDataErrors {
   name?: string;
 }
 
-export const urlRegex = /^http[s]?:\/\/\w+/;
+const urlRegex = /^http[s]?:\/\/\w+/;
+const filePathRegex = /([^<>/\\\|:""\*\?]+\.\w+$)/;
 export const skillNameRegex = /^\w[-\w]*$/;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
@@ -59,8 +60,11 @@ export const validateManifestUrl = async ({ formData, formDataErrors, setFormDat
 
   if (!manifestUrl) {
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest URL') });
-  } else if (!urlRegex.test(manifestUrl)) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('URL should start with http:// or https://') });
+  } else if (!urlRegex.test(manifestUrl) && !filePathRegex.test(manifestUrl)) {
+    setFormDataErrors({
+      ...errors,
+      manifestUrl: formatMessage('URL should start with http:// or https:// or file path of your system'),
+    });
   } else {
     setFormDataErrors({});
   }
