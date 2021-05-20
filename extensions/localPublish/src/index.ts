@@ -222,7 +222,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
   };
 
-// start bot in current version
+  // start bot in current version
   private setBot = async (botId: string, version: string, settings: any, project: any, port: number) => {
     // get port, and stop previous bot if exist
     try {
