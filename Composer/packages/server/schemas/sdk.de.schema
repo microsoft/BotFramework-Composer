@@ -905,44 +905,44 @@
       }
     },
     "Microsoft.ContinueConversation": {
-      "title": "Continue conversation (Queue)",
-      "description": "Continue a specific conversation (via StorageQueue implementation).",
+      "title": "Unterhaltung fortsetzen (Warteschlange)",
+      "description": "Hiermit wird eine bestimmte Unterhaltung fortgesetzt (über die StorageQueue-Implementierung).",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Tooleigenschaft",
+          "description": "Eine ergebnisoffene Eigenschaft für Tools."
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "Eine optionale ID für den Dialog."
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "Deaktiviert",
+          "description": "Eine optionale Bedingung, die bei Festlegung auf TRUE diese Aktion deaktiviert."
         },
         "conversationReference": {
-          "title": "Conversation Reference",
-          "description": "A conversation reference. (NOTE: Minimum required values or channelId, conversation)."
+          "title": "Unterhaltungsverweis",
+          "description": "Ein Unterhaltungsverweis. (HINWEIS: erforderliche Mindestwerte oder channelId, conversation)."
         },
         "value": {
-          "title": "Value",
-          "description": "Value to send in the activity.value."
+          "title": "Wert",
+          "description": "Wert, der in \"activity.value\" gesendet werden soll."
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Art des Dialogobjekts",
+          "description": "Hiermit werden die gültigen Eigenschaften für die Komponente definiert, die Sie konfigurieren (aus einer SCHEMA-Dialogdatei)."
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Designerinformationen",
+          "description": "Zusätzliche Informationen für den Bot Framework Composer."
         }
       }
     },
     "Microsoft.ContinueConversationLater": {
       "title": "Unterhaltung später fortsetzen (Warteschlange)",
-      "description": "Continue conversation at later time (via StorageQueue implementation).",
+      "description": "Hiermit wird die Unterhaltung zu einem späteren Zeitpunkt fortgesetzt (über die StorageQueue-Implementierung).",
       "patternProperties": {
         "^\\$": {
           "title": "Tooleigenschaft",
@@ -1707,34 +1707,34 @@
       }
     },
     "Microsoft.GetConversationReference": {
-      "title": "Get ConversationReference",
-      "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
+      "title": "ConversationReference abrufen",
+      "description": "Ruft die ConversationReference aus dem aktuellen Kontext ab und speichert sie in der Eigenschaft, damit sie mit der ContinueConversation-Aktion verwendet werden kann.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Tooleigenschaft",
+          "description": "Eine ergebnisoffene Eigenschaft für Tools."
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "Eine optionale ID für den Dialog."
         },
         "property": {
-          "title": "Property",
-          "description": "Property (named location to store information)."
+          "title": "Eigenschaft",
+          "description": "Eine Eigenschaft (benannter Speicherort zum Speichern von Informationen)."
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "Deaktiviert",
+          "description": "Eine optionale Bedingung, die bei Festlegung auf TRUE diese Aktion deaktiviert."
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Art des Dialogobjekts",
+          "description": "Hiermit werden die gültigen Eigenschaften für die Komponente definiert, die Sie konfigurieren (aus einer SCHEMA-Dialogdatei)."
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Designerinformationen",
+          "description": "Zusätzliche Informationen für den Bot Framework Composer."
         }
       }
     },
@@ -1885,8 +1885,8 @@
       "description": "Die Komponenten, die von EntityRecognizer abgeleitet werden.",
       "oneOf": {
         "18": {
-          "title": "Reference to Microsoft.IEntityRecognizer",
-          "description": "Reference to Microsoft.IEntityRecognizer .dialog file."
+          "title": "Verweis auf Microsoft.IEntityRecognizer",
+          "description": "Ein Verweis auf die DIALOG-Datei \"Microsoft.IEntityRecognizer\"."
         }
       }
     },
@@ -1907,8 +1907,8 @@
       "description": "Die Komponenten, die von der OnCondition-Klasse abgeleitet werden.",
       "oneOf": {
         "27": {
-          "title": "Reference to Microsoft.ITrigger",
-          "description": "Reference to Microsoft.ITrigger .dialog file."
+          "title": "Verweis auf Microsoft.ITrigger",
+          "description": "Ein Verweis auf die DIALOG-Datei \"Microsoft.ITrigger\"."
         }
       }
     },
@@ -1917,8 +1917,8 @@
       "description": "Die Komponenten, die von der TriggerSelector-Klasse abgeleitet werden.",
       "oneOf": {
         "5": {
-          "title": "Reference to Microsoft.ITriggerSelector",
-          "description": "Reference to Microsoft.ITriggerSelector .dialog file."
+          "title": "Verweis auf Microsoft.ITriggerSelector",
+          "description": "Ein Verweis auf die DIALOG-Datei \"Microsoft.ITriggerSelector\"."
         }
       }
     },
@@ -2528,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "Bei Entitätszuweisung",
-      "description": "Actions to apply an operation on a property and value.",
+      "description": "Aktionen zum Anwenden eines Vorgangs auf eine Eigenschaft und einen Wert.",
       "patternProperties": {
         "^\\$": {
           "title": "Tooleigenschaft",
@@ -2538,15 +2538,15 @@
       "properties": {
         "operation": {
           "title": "Vorgang",
-          "description": "Operation filter on event."
+          "description": "Vorgangsfilter nach Ereignis."
         },
         "property": {
           "title": "Eigenschaft",
-          "description": "Property filter on event."
+          "description": "Eigenschaftsfilter nach Ereignis."
         },
         "value": {
-          "title": "Value",
-          "description": "Value filter on event."
+          "title": "Wert",
+          "description": "Wertfilter für Ereignis."
         },
         "condition": {
           "title": "Bedingung",
@@ -2648,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "Bei Auswahl einer Entität",
-      "description": "Actions to be performed when value is ambiguous for operator and property.",
+      "description": "Auszuführende Aktionen, wenn der Wert für \"Operator\" und \"Eigenschaft\" nicht eindeutig ist.",
       "patternProperties": {
         "^\\$": {
           "title": "Tooleigenschaft",
@@ -2657,16 +2657,16 @@
       },
       "properties": {
         "operation": {
-          "title": "Operation",
-          "description": "Operation filter on event."
+          "title": "Vorgang",
+          "description": "Vorgangsfilter für Ereignis."
         },
         "property": {
-          "title": "Property",
-          "description": "Property filter on event."
+          "title": "Eigenschaft",
+          "description": "Eigenschaftsfilter nach Ereignis."
         },
         "value": {
-          "title": "Ambiguous value",
-          "description": "Ambiguous value filter on event."
+          "title": "Mehrdeutiger Wert",
+          "description": "Mehrdeutiger Wertfilter für Ereignis."
         },
         "condition": {
           "title": "Bedingung",
@@ -2695,8 +2695,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "On ambiguous intent",
-      "description": "Actions to perform on when an intent is ambiguous.",
+      "title": "Bei mehrdeutiger Absicht",
+      "description": "Aktionen, die ausgeführt werden sollen, wenn eine Absicht nicht eindeutig ist.",
       "patternProperties": {
         "^\\$": {
           "title": "Tooleigenschaft",
@@ -2740,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "Bei Auswahl einer Eigenschaft",
-      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
+      "description": "Aktionen, die ausgeführt werden sollen, wenn mehrere mögliche Zuordnungen von Entitäten zu Eigenschaften und Vorgängen vorhanden sind.",
       "patternProperties": {
         "^\\$": {
           "title": "Tooleigenschaft",
@@ -4068,30 +4068,30 @@
       }
     },
     "Microsoft.SendHandoffActivity": {
-      "title": "Send a handoff activity",
-      "description": "Sends a handoff activity to trigger a handoff request.",
+      "title": "Übergabeaktivität senden",
+      "description": "Sendet eine Übergabeaktivität zum Auslösen einer Übergabeanforderung.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Tooleigenschaft",
+          "description": "Eine ergebnisoffene Eigenschaft für Tools."
         }
       },
       "properties": {
         "context": {
-          "title": "Context",
-          "description": "Context to send with the handoff request"
+          "title": "Kontext",
+          "description": "Kontext, der mit der Übergabeanforderung gesendet werden soll"
         },
         "transcript": {
-          "title": "transcript",
-          "description": "Transcript to send with the handoff request"
+          "title": "Transkript",
+          "description": "Transkript, das mit der Übergabeanforderung gesendet werden soll"
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Art des Dialogobjekts",
+          "description": "Hiermit werden die gültigen Eigenschaften für die Komponente definiert, die Sie konfigurieren (aus einer SCHEMA-Dialogdatei)."
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Designerinformationen",
+          "description": "Zusätzliche Informationen für den Bot Framework Composer."
         }
       }
     },
@@ -4292,38 +4292,38 @@
       }
     },
     "Microsoft.TelemetryTrackEventAction": {
-      "title": "Telemetry - track event",
-      "description": "Track a custom event using the registered Telemetry Client.",
+      "title": "Telemetrie – Ereignis nachverfolgen",
+      "description": "Hiermit wird ein benutzerdefiniertes Ereignis mithilfe des registrierten Telemetrieclients nachverfolgt.",
       "patternProperties": {
         "^\\$": {
-          "title": "Tooling property",
-          "description": "Open ended property for tooling."
+          "title": "Tooleigenschaft",
+          "description": "Eine ergebnisoffene Eigenschaft für Tools."
         }
       },
       "properties": {
         "id": {
-          "title": "Id",
-          "description": "Optional id for the dialog"
+          "title": "ID",
+          "description": "Eine optionale ID für den Dialog."
         },
         "disabled": {
-          "title": "Disabled",
-          "description": "Optional condition which if true will disable this action."
+          "title": "Deaktiviert",
+          "description": "Eine optionale Bedingung, die bei Festlegung auf TRUE diese Aktion deaktiviert."
         },
         "eventName": {
-          "title": "Event name",
-          "description": "The name of the event to track."
+          "title": "Ereignisname",
+          "description": "Der Name des Ereignisses, das nachverfolgt werden soll."
         },
         "properties": {
-          "title": "Properties",
-          "description": "One or more properties to attach to the event being tracked."
+          "title": "Eigenschaften",
+          "description": "Mindestens eine Eigenschaft, die an das nachzuverfolgende Ereignis angefügt werden soll."
         },
         "$kind": {
-          "title": "Kind of dialog object",
-          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+          "title": "Art des Dialogobjekts",
+          "description": "Hiermit werden die gültigen Eigenschaften für die Komponente definiert, die Sie konfigurieren (aus einer SCHEMA-Dialogdatei)."
         },
         "$designer": {
-          "title": "Designer information",
-          "description": "Extra information for the Bot Framework Composer."
+          "title": "Designerinformationen",
+          "description": "Zusätzliche Informationen für den Bot Framework Composer."
         }
       }
     },
@@ -4754,388 +4754,388 @@
       }
     },
     "schema": {
-      "title": "Core schema meta-schema"
+      "title": "Metaschema des Kernschemas"
     },
     "botframework.json": {
       "definitions": {
         "ChannelAccount": {
-          "description": "Channel account information needed to route a message",
+          "description": "Die Kanalkontoinformationen, die zum Weiterleiten einer Nachricht erforderlich sind.",
           "title": "ChannelAccount",
           "properties": {
             "id": {
-              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-              "title": "id"
+              "description": "Die Kanal-ID für den Benutzer oder Bot in diesem Kanal (Beispiel: joe@smith.com oder @joesmith oder\n123456).",
+              "title": "ID"
             },
             "name": {
-              "description": "Display friendly name",
-              "title": "name"
+              "description": "Anzeigenamen anzeigen",
+              "title": "Name"
             },
             "aadObjectId": {
-              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "description": "Die Objekt-ID dieses Kontos in Azure Active Directory (AAD).",
               "title": "aadObjectId"
             },
             "role": {
-              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-              "title": "role"
+              "description": "Die Rolle der Entität hinter dem Konto (Beispiel: Benutzer, Bot usw.). Mögliche Werte:\n\"user\", \"bot\"",
+              "title": "Rolle"
             }
           }
         },
         "ConversationAccount": {
-          "description": "Channel account information for a conversation",
+          "description": "Kanalkontoinformationen für eine Unterhaltung.",
           "title": "ConversationAccount",
           "properties": {
             "isGroup": {
-              "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+              "description": "Hiermit wird angegeben, ob zum Zeitpunkt, als die Aktivität generiert wurde, mehr als\nzwei Teilnehmer an der Unterhaltung beteiligt waren.",
               "title": "isGroup"
             },
             "conversationType": {
-              "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+              "description": "Hiermit wird der Typ der Unterhaltung in Kanälen angegeben, die zwischen verschiedenen Typen von Unterhaltungen unterscheiden.",
               "title": "conversationType"
             },
             "id": {
-              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
-              "title": "id"
+              "description": "Die Kanal-ID für den Benutzer oder Bot in diesem Kanal (Beispiel: joe@smith.com oder @joesmith oder\n123456).",
+              "title": "ID"
             },
             "name": {
-              "description": "Display friendly name",
-              "title": "name"
+              "description": "Anzeigenamen anzeigen",
+              "title": "Name"
             },
             "aadObjectId": {
-              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "description": "Die Objekt-ID dieses Kontos in Azure Active Directory (AAD).",
               "title": "aadObjectId"
             },
             "role": {
-              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-              "title": "role"
+              "description": "Die Rolle der Entität hinter dem Konto (Beispiel: Benutzer, Bot usw.). Mögliche Werte:\n\"user\", \"bot\"",
+              "title": "Rolle"
             }
           }
         },
         "MessageReaction": {
-          "description": "Message reaction object",
+          "description": "Objekt zur Reaktion auf Nachrichten",
           "title": "MessageReaction",
           "properties": {
             "type": {
-              "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
-              "title": "type"
+              "description": "Der Typ der Reaktion auf Nachrichten. Mögliche Werte: \"like\", \"plusOne\"",
+              "title": "Typ"
             }
           }
         },
         "CardAction": {
-          "description": "A clickable action",
+          "description": "Eine Aktion, auf die geklickt werden kann.",
           "title": "CardAction",
           "properties": {
             "type": {
-              "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-              "title": "type"
+              "description": "Der Typ der durch diese Schaltfläche implementierten Aktion. Mögliche Werte: \"openUrl\", \"imBack\",\n\"postBack\", \"playAudio\", \"playVideo\", \"showImage\", \"downloadFile\", \"signin\", \"call\",\n\"payment\", \"messageBack\"",
+              "title": "Typ"
             },
             "title": {
-              "description": "Text description which appears on the button",
-              "title": "title"
+              "description": "Die Textbeschreibung, die auf der Schaltfläche angezeigt wird.",
+              "title": "Titel"
             },
             "image": {
-              "description": "Image URL which will appear on the button, next to text label",
-              "title": "image"
+              "description": "Die Bild-URL, die auf der Schaltfläche neben der Textbezeichnung angezeigt wird.",
+              "title": "Bild"
             },
             "text": {
-              "description": "Text for this action",
-              "title": "text"
+              "description": "Der Text für diese Aktion.",
+              "title": "Text"
             },
             "displayText": {
-              "description": "(Optional) text to display in the chat feed if the button is clicked",
+              "description": "(Optional) Text, der im Chatfeed angezeigt wird, wenn auf die Schaltfläche geklickt wird.",
               "title": "displayText"
             },
             "value": {
-              "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
-              "title": "value"
+              "description": "Zusätzlicher Parameter für die Aktion. Der Inhalt dieser Eigenschaft hängt vom ActionType ab.",
+              "title": "Wert"
             },
             "channelData": {
-              "description": "Channel-specific data associated with this action",
+              "description": "Kanalspezifische Daten, die dieser Aktion zugeordnet sind.",
               "title": "channelData"
             }
           }
         },
         "SuggestedActions": {
-          "description": "SuggestedActions that can be performed",
+          "description": "SuggestedActions, die ausgeführt werden können.",
           "title": "SuggestedActions",
           "properties": {
             "to": {
-              "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
-              "title": "to",
+              "description": "IDs der Empfänger, denen die Aktionen angezeigt werden sollen.  Diese IDs beziehen sich auf die\nChannel-ID und sind eine Teilmenge aller Empfänger der Aktivität.",
+              "title": "An",
               "items": {
-                "title": "Id",
-                "description": "Id of recipient."
+                "title": "ID",
+                "description": "Die ID des Empfängers."
               }
             },
             "actions": {
-              "description": "Actions that can be shown to the user",
-              "title": "actions"
+              "description": "Aktionen, die dem Benutzer angezeigt werden können.",
+              "title": "Aktionen"
             }
           }
         },
         "Attachment": {
-          "description": "An attachment within an activity",
-          "title": "Attachment",
+          "description": "Eine Anlage innerhalb einer Aktivität.",
+          "title": "Anlage",
           "properties": {
             "contentType": {
-              "description": "mimetype/Contenttype for the file",
+              "description": "Der Mimetyp/Inhaltstyp für die Datei.",
               "title": "contentType"
             },
             "contentUrl": {
-              "description": "Content Url",
+              "description": "Die Inhalts-URL.",
               "title": "contentUrl"
             },
             "content": {
-              "description": "Embedded content",
-              "title": "content"
+              "description": "Der eingebettete Inhalt.",
+              "title": "Inhalt"
             },
             "name": {
-              "description": "(OPTIONAL) The name of the attachment",
-              "title": "name"
+              "description": "(OPTIONAL) Der Name der Anlage.",
+              "title": "Name"
             },
             "thumbnailUrl": {
-              "description": "(OPTIONAL) Thumbnail associated with attachment",
+              "description": "(OPTIONAL) Die Miniaturansicht, die mit der Anlage verknüpft ist.",
               "title": "thumbnailUrl"
             }
           }
         },
         "Entity": {
-          "description": "Metadata object pertaining to an activity",
-          "title": "Entity",
+          "description": "Ein Metadatenobjekt, das sich auf eine Aktivität bezieht.",
+          "title": "Entität",
           "properties": {
             "type": {
-              "description": "Type of this entity (RFC 3987 IRI)",
-              "title": "type"
+              "description": "Der Typ dieser Entität (RFC 3987 IRI).",
+              "title": "Typ"
             }
           }
         },
         "ConversationReference": {
-          "description": "An object relating to a particular point in a conversation",
+          "description": "Ein Objekt, das sich auf einen bestimmten Punkt in einer Unterhaltung bezieht.",
           "title": "ConversationReference",
           "properties": {
             "activityId": {
-              "description": "(Optional) ID of the activity to refer to",
+              "description": "(Optional) Die ID der Aktivität, auf die verwiesen werden soll.",
               "title": "activityId"
             },
             "user": {
-              "description": "(Optional) User participating in this conversation",
-              "title": "user"
+              "description": "(Optional) Der Benutzer, der an dieser Unterhaltung teilnimmt.",
+              "title": "Benutzer"
             },
             "bot": {
-              "description": "Bot participating in this conversation",
-              "title": "bot"
+              "description": "Der Bot, der an dieser Unterhaltung teilnimmt.",
+              "title": "Bot"
             },
             "conversation": {
-              "description": "Conversation reference",
-              "title": "conversation"
+              "description": "Unterhaltungsverweis",
+              "title": "Unterhaltung"
             },
             "channelId": {
-              "description": "Channel ID",
+              "description": "Kanal-ID",
               "title": "channelId"
             },
             "serviceUrl": {
-              "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+              "description": "Der Dienstendpunkt, auf dem Vorgänge zu der Unterhaltung ausgeführt werden können, auf die verwiesen wurde.",
               "title": "serviceUrl"
             }
           }
         },
         "TextHighlight": {
-          "description": "Refers to a substring of content within another field",
+          "description": "Hiermit wird auf eine Teilzeichenfolge des Inhalts in einem anderen Feld verwiesen.",
           "title": "TextHighlight",
           "properties": {
             "text": {
-              "description": "Defines the snippet of text to highlight",
-              "title": "text"
+              "description": "Hiermit wird der Textausschnitt definiert, der hervorgehoben werden soll.",
+              "title": "Text"
             },
             "occurrence": {
-              "description": "Occurrence of the text field within the referenced text, if multiple exist.",
-              "title": "occurrence"
+              "description": "Das Vorkommen des Textfelds innerhalb des referenzierten Texts, wenn mehrere Felder vorhanden sind.",
+              "title": "Vorkommen"
             }
           }
         },
         "SemanticAction": {
-          "description": "Represents a reference to a programmatic action",
+          "description": "Repräsentiert einen Verweis auf eine programmgesteuerte Aktion.",
           "title": "SemanticAction",
           "properties": {
             "id": {
-              "description": "ID of this action",
-              "title": "id"
+              "description": "Die ID dieser Aktion.",
+              "title": "ID"
             },
             "entities": {
-              "description": "Entities associated with this action",
-              "title": "entities"
+              "description": "Die Entitäten, die dieser Aktion zugeordnet sind.",
+              "title": "Entitäten"
             }
           }
         },
         "Activity": {
-          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
-          "title": "Activity",
+          "description": "Eine Aktivität ist der grundlegende Kommunikationstyp für das Bot Framework 3.0-Protokoll.",
+          "title": "Aktivität",
           "properties": {
             "type": {
-              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "type"
+              "description": "Enthält den Aktivitätstyp. Mögliche Werte sind: \"message\", \"contactRelationUpdate\",\n\"conversationUpdate\", \"typing\", \"endOfConversation\", \"event\", \"invoke\", \"deleteUserData\",\n\"messageUpdate\", \"messageDelete\", \"installationUpdate\", \"messageReaction\", \"suggestion\",\n\"trace\", \"handoff\"",
+              "title": "Typ"
             },
             "id": {
-              "description": "Contains an ID that uniquely identifies the activity on the channel.",
-              "title": "id"
+              "description": "Enthält eine ID, die die Aktivität im Kanal eindeutig identifiziert.",
+              "title": "ID"
             },
             "timestamp": {
-              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
-              "title": "timestamp"
+              "description": "Enthält das Datum und die Uhrzeit, zu dem/der die Nachricht gesendet wurde (UTC), ausgedrückt im ISO 8601-Format.",
+              "title": "Zeitstempel"
             },
             "localTimestamp": {
-              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "description": "Enthält das Datum und die Uhrzeit, zu dem/der die Nachricht gesendet wurde (Ortszeit),\nausgedrückt im ISO 8601-Format.\nBeispiel: 2016-09-23T13:07:49.4714686-07:00.",
               "title": "localTimestamp"
             },
             "localTimezone": {
-              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "description": "Enthält den Namen der Zeitzone, in der die Nachricht gesendet wurde (Ortszeit), ausgedrückt\nim IANA-Zeitzonen-Datenbankformat.\nBeispiel: America/Los_Angeles.",
               "title": "localTimezone"
             },
             "serviceUrl": {
-              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "description": "Enthält die URL, die den Dienstendpunkt des Kanals angibt. Wird durch den Kanal festgelegt.",
               "title": "serviceUrl"
             },
             "channelId": {
-              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "description": "Enthält eine ID, die den Kanal eindeutig identifiziert. Wird durch den Kanal festgelegt.",
               "title": "channelId"
             },
             "from": {
-              "description": "Identifies the sender of the message.",
-              "title": "from"
+              "description": "Hiermit wird der Absender der Nachricht identifiziert.",
+              "title": "Von"
             },
             "conversation": {
-              "description": "Identifies the conversation to which the activity belongs.",
-              "title": "conversation"
+              "description": "Hiermit wird die Unterhaltung identifiziert, zu der die Aktivität gehört.",
+              "title": "Unterhaltung"
             },
             "recipient": {
-              "description": "Identifies the recipient of the message.",
-              "title": "recipient"
+              "description": "Hiermit wird der Empfänger der Nachricht identifiziert.",
+              "title": "Empfänger"
             },
             "textFormat": {
-              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "description": "Format für Textfelder. Standardwert: \"markdown\". Mögliche Werte: \"markdown\", \"plain\", \"xml\"",
               "title": "textFormat"
             },
             "attachmentLayout": {
-              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "description": "Der Layouthinweis für mehrere Anlagen. Standardwert: \"list\". Mögliche Werte: \"list\",\n\"carousel\"",
               "title": "attachmentLayout"
             },
             "membersAdded": {
-              "description": "The collection of members added to the conversation.",
+              "description": "Die Sammlung der Member, die der Unterhaltung hinzugefügt werden.",
               "title": "membersAdded"
             },
             "membersRemoved": {
-              "description": "The collection of members removed from the conversation.",
+              "description": "Die Sammlung der Member, die aus der Unterhaltung entfernt werden.",
               "title": "membersRemoved"
             },
             "reactionsAdded": {
-              "description": "The collection of reactions added to the conversation.",
+              "description": "Die Sammlung der Reaktionen, die der Unterhaltung hinzugefügt wurden.",
               "title": "reactionsAdded"
             },
             "reactionsRemoved": {
-              "description": "The collection of reactions removed from the conversation.",
+              "description": "Die Sammlung von Reaktionen, die aus der Unterhaltung entfernt wurden.",
               "title": "reactionsRemoved"
             },
             "topicName": {
-              "description": "The updated topic name of the conversation.",
+              "description": "Der aktualisierte Name des Unterhaltungsthemas.",
               "title": "topicName"
             },
             "historyDisclosed": {
-              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "description": "Hiermit wird angegeben, ob der vorherige Verlauf des Kanals offen gelegt wird.",
               "title": "historyDisclosed"
             },
             "locale": {
-              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
-              "title": "locale"
+              "description": "Ein Gebietsschemaname für den Inhalt des Textfelds.\nDer Gebietsschemaname ist eine Kombination aus einem zwei- oder dreistelligen\nISO 639-Kulturcode, der einer Sprache\nzugeordnet ist, und einem untergeordneten zwei- oder dreistelligen ISO 3166-Kulturcode, der einem Land oder einer Region zugeordnet ist.\nDer Gebietsschemaname kann auch einem gültigen BCP-47-Sprachtag entsprechen.",
+              "title": "Gebietsschema"
             },
             "text": {
-              "description": "The text content of the message.",
-              "title": "text"
+              "description": "Der Textinhalt der Nachricht.",
+              "title": "Text"
             },
             "speak": {
-              "description": "The text to speak.",
-              "title": "speak"
+              "description": "Der Text, der gesprochen werden soll.",
+              "title": "Sprechen"
             },
             "inputHint": {
-              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "description": "Hiermit wird angezeigt, ob Ihr Bot eine\nBenutzereingabe akzeptiert, erwartet oder ignoriert, nachdem die Nachricht an den Client\nübermittelt wurde. Mögliche Werte: \"acceptingInput\", \"ignoringInput\", \"expectingInput\"",
               "title": "inputHint"
             },
             "summary": {
-              "description": "The text to display if the channel cannot render cards.",
-              "title": "summary"
+              "description": "Der anzuzeigende Text, wenn der Kanal keine Karten rendern kann.",
+              "title": "Zusammenfassung"
             },
             "suggestedActions": {
-              "description": "The suggested actions for the activity.",
+              "description": "Die vorgeschlagenen Aktionen für die Aktivität.",
               "title": "suggestedActions"
             },
             "attachments": {
-              "description": "Attachments",
-              "title": "attachments"
+              "description": "Anlagen",
+              "title": "Anlagen"
             },
             "entities": {
-              "description": "Represents the entities that were mentioned in the message.",
-              "title": "entities"
+              "description": "Hiermit werden die Entitäten dargestellt, die in der Nachricht erwähnt wurden.",
+              "title": "Entitäten"
             },
             "channelData": {
-              "description": "Contains channel-specific content.",
+              "description": "Enthält kanalspezifische Inhalte.",
               "title": "channelData"
             },
             "action": {
-              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
-              "title": "action"
+              "description": "Hiermit wird angegeben, ob der Empfänger eines contactRelationUpdate der Kontaktliste des\nAbsenders hinzugefügt oder daraus entfernt wurde.",
+              "title": "Aktion"
             },
             "replyToId": {
-              "description": "Contains the ID of the message to which this message is a reply.",
+              "description": "Enthält die ID der Nachricht, auf die diese Nachricht eine Antwort ist.",
               "title": "replyToId"
             },
             "label": {
-              "description": "A descriptive label for the activity.",
-              "title": "label"
+              "description": "Eine Bezeichnung mit einer Beschreibung für die Aktivität.",
+              "title": "Beschriftung"
             },
             "valueType": {
-              "description": "The type of the activity's value object.",
+              "description": "Der Typ des Wertobjekts der Aktivität.",
               "title": "valueType"
             },
             "value": {
-              "description": "A value that is associated with the activity.",
-              "title": "value"
+              "description": "Ein Wert, der der Aktivität zugeordnet ist.",
+              "title": "Wert"
             },
             "name": {
-              "description": "The name of the operation associated with an invoke or event activity.",
-              "title": "name"
+              "description": "Der Name des Vorgangs, der einer Aufruf- oder Ereignisaktivität zugeordnet ist.",
+              "title": "Name"
             },
             "relatesTo": {
-              "description": "A reference to another conversation or activity.",
+              "description": "Ein Verweis auf eine andere Unterhaltung oder Aktivität.",
               "title": "relatesTo"
             },
             "code": {
-              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "code"
+              "description": "Der Code für endOfConversation-Aktivitäten, der angibt, warum die Unterhaltung beendet wurde.\nMögliche Werte: \"unknown\", \"completedSuccessfully\", \"userCancelled\", \"botTimedOut\",\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "Code"
             },
             "expiration": {
-              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
-              "title": "expiration"
+              "description": "Der Zeitpunkt, zu dem die Aktivität als \"abgelaufen\" angesehen werden und dem\nEmpfänger nicht angezeigt werden soll.",
+              "title": "Ablauf"
             },
             "importance": {
-              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
-              "title": "importance"
+              "description": "Die Relevanz der Aktivität. Mögliche Werte: \"low\", \"normal\", \"high\"",
+              "title": "Relevanz"
             },
             "deliveryMode": {
-              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "description": "Ein Zustellungshinweis, der dem Empfänger alternative Zustellungspfade für die Aktivität mitteilt.\nDer standardmäßige Zustellungsmodus ist \"default\". Mögliche Werte: \"normal\", \"notification\"",
               "title": "deliveryMode"
             },
             "listenFor": {
-              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "description": "Eine Liste der Ausdrücke und Verweise, auf die Systeme zur Verbesserung der Spracherkennung lauschen sollen.",
               "title": "listenFor",
               "items": {
-                "title": "Phrase",
-                "description": "Phrase to listen for."
+                "title": "Ausdruck",
+                "description": "Der Ausdruck, auf den gelauscht werden soll."
               }
             },
             "textHighlights": {
-              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "description": "Die Sammlung von Textfragmenten, die hervorgehoben werden sollen, wenn die Aktivität einen ReplyToId-Wert enthält.",
               "title": "textHighlights"
             },
             "semanticAction": {
-              "description": "An optional programmatic action accompanying this request",
+              "description": "Eine optionale programmgesteuerte Aktion, die diese Anforderung begleitet.",
               "title": "semanticAction"
             }
           }

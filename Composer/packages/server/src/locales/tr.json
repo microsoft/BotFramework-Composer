@@ -3,28 +3,28 @@
     "message": "0 Bayt"
   },
   "1_using_the_azure_portal_please_create_a_language__7e2eb65c": {
-    "message": "1. Using the Azure portal, please create a Language Understanding resource.\n2. Once created, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
+    "message": "1. Azure portalı kullanıyorum, lütfen bir Language Understanding kaynağı oluşturun.\n2. Oluşturulduktan sonra, elde edilen kimlik bilgilerini benimle aşağıdaki bağlantıda açıklandığı gibi güvenli bir şekilde paylaşın.\n\nAyrıntılı yönergeler:\nhttps://aka.ms/bfcomposerhandoffluis"
   },
   "1_using_the_azure_portal_please_create_a_qnamaker__a060ac82": {
-    "message": "1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
+    "message": "1. Azure portalı kullanıyorum, lütfen benim adıma bir Soru-Cevap Oluşturma kaynağı oluşturun.\n2. Sağlandıktan sonra, elde edilen kimlik bilgilerini benimle aşağıdaki bağlantıda açıklandığı gibi güvenli bir şekilde paylaşın.\n\nAyrıntılı yönergeler:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
   },
   "1_using_the_azure_portal_please_create_a_speech_re_6326f2f5": {
-    "message": "1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
+    "message": "1. Azure portalı kullanıyorum, lütfen benim adıma bir Konuşma kaynağı oluşturun.\n2. Sağlandıktan sonra, elde edilen kimlik bilgilerini benimle aşağıdaki bağlantıda açıklandığı gibi güvenli bir şekilde paylaşın.\n\nAyrıntılı yönergeler:\nhttps://aka.ms/bfcomposerhandoffdls"
   },
   "ErrorInfo_part1": {
     "message": "Form düzenleyicisinde bir hata oluştu!"
   },
   "ErrorInfo_part2": {
-    "message": "Bunun nedeni büyük olasılıkla Composer’daki hatalı biçimlendirilmiş veriler veya eksik işlevsellik olabilir."
+    "message": "Bunun nedeni büyük olasılıkla Composer\"daki hatalı biçimlendirilmiş veriler veya eksik işlevsellik olabilir."
   },
   "ErrorInfo_part3": {
     "message": "Görsel düzenleyicide başka bir düğüme gitmeyi deneyin."
   },
   "a_add_from_package_manager_a_9eee7630": {
-    "message": "<a>Add from package manager</a>"
+    "message": "<a>Paket yöneticisinden ekle</a>"
   },
   "a_bot_that_consists_of_multiple_bots_or_connects_t_f3bc4bd": {
-    "message": "A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill."
+    "message": "Birden çok bottan oluşan veya becerilere (çoklu bot projesi) bağlanan bir bot, Orchestrator’ın kullanıcı girişini algılayıp uygun bota veya beceriye yönlendirmesini gerektirir."
   },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "iletişim kutusu dosyasının bir adı olmalıdır"
@@ -33,7 +33,7 @@
     "message": "Form iletişim kutusu, botunuzun bilgi parçalarını toplamasını sağlar."
   },
   "a_install_ngrok_a_and_run_the_following_command_to_634f3414": {
-    "message": "<a>Install ngrok</a> and run the following command to continue"
+    "message": "<a>ngrok öğesini yükleyin</a> ve devam etmek için aşağıdaki komutu çalıştırın"
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "Bilgi bankası adı boşluk veya özel karakter içeremez. Harf, rakam, - veya _ kullanın."
@@ -48,13 +48,16 @@
     "message": "Bu ada sahip bir profil zaten var."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer’de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
+    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer'de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
+  },
+  "a_publishing_profile_contains_the_information_nece_fc37192d": {
+    "message": "Yayımlama profili, botunuzun Uygulama Kimliği de dahil olmak üzere botunuzu sağlamak ve yayımlamak için gereken bilgileri içerir. "
   },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
-    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
+    "message": "Yayımlama profili, botunuzun Uygulama Kimliği de dahil olmak üzere botunuzu sağlamak ve yayımlamak için gereken bilgileri içerir."
   },
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
-    "message": "A publishing profile provides the secure connectivity required to publish your bot."
+    "message": "Yayımlama profili, botunuzu yayımlamak için gerekli olan güvenli bağlantıyı sağlar."
   },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "Şema veya form, botunuzun toplayacağı özelliklerin listesidir."
@@ -63,7 +66,7 @@
     "message": "Konak botundan çağrılabilecek beceri botu."
   },
   "a_skill_is_a_bot_that_can_perform_a_set_of_tasks_o_950a3c95": {
-    "message": "A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform."
+    "message": "Beceri, bir veya daha fazla botta bir görev kümesi gerçekleştirebilecek bir bottur.  Botunuzun bir beceri olarak kullanıma sunulması için botunuz becerinin gerçekleştirebileceği eylemleri açıklayan bir bildirim - JSON dosyası gerektirir."
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "Bir Soru-Cevap Oluşturma kaynağı oluşturduğunuzda bir abonelik anahtarı oluşturulur."
@@ -99,7 +102,7 @@
     "message": "Eylem odaklı değil"
   },
   "actions_are_the_main_component_of_a_trigger_they_a_8e3af9b9": {
-    "message": "Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur."
+    "message": "Eylemler bir tetikleyicinin ana bileşenidir. Bunlar, botunuzun kullanıcı girişine veya gerçekleşebilecek başka bir olaya yanıt olarak eylem yapmasını sağlar."
   },
   "actions_copied_2821ab27": {
     "message": "Eylemler kopyalandı"
@@ -150,7 +153,7 @@
     "message": "Ekle"
   },
   "add_a_bot_58522e81": {
-    "message": "Add a bot"
+    "message": "Bot ekleyin"
   },
   "add_a_dialog_e378aa3a": {
     "message": "İletişim kutusu ekleyin"
@@ -168,25 +171,25 @@
     "message": "Yetenek ekle"
   },
   "add_a_skill_host_endpoint_so_your_skills_can_relia_950a7614": {
-    "message": "Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>."
+    "message": "Becerilerinizin kök botunuza güvenle bağlanabilmesi için bir beceri konağı uç noktası ekleyin. <a>Daha fazla bilgi edinin</a>."
   },
   "add_allowed_callers_7188d3d4": {
-    "message": "Add allowed callers"
+    "message": "İzin verilen çağıran ekle"
   },
   "add_alternative_662902c1": {
-    "message": "Add alternative"
+    "message": "Alternatif ekle"
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Alternatif ifade ekle"
   },
   "add_an_existing_bot_5a9cc5b1": {
-    "message": "Add an existing bot"
+    "message": "Mevcut botu ekle"
   },
   "add_connections_d720a32e": {
-    "message": "Add connections"
+    "message": "Bağlantı ekle"
   },
   "add_connections_to_make_your_bot_available_in_webc_5ae0b1de": {
-    "message": "Add connections to make your bot available in Webchat, Direct Line Speech, Microsoft Teams and more. <a>Learn more.</a>"
+    "message": "Botunuzu Web Sohbeti, Direct Line Speech, Microsoft Teams ve daha fazlasında kullanıma sunmak için bağlantılar ekleyin. <a>Daha fazla bilgi edinin.</a>"
   },
   "add_custom_a376ce51": {
     "message": "Özel Ekleyin"
@@ -195,7 +198,7 @@
     "message": "Özel çalışma zamanı ekle"
   },
   "add_entity_5f769994": {
-    "message": "Add entity"
+    "message": "Varlık ekle"
   },
   "add_more_to_this_response_d45bdfda": {
     "message": "Bu yanıta daha fazlasını ekleyin"
@@ -213,7 +216,7 @@
     "message": "Yeni ek ekleyin"
   },
   "add_new_caller_4a72bd0c": {
-    "message": "Add new caller"
+    "message": "Yeni çağıran ekle"
   },
   "add_new_extension_19b82b77": {
     "message": "Yeni uzantı ekle"
@@ -225,19 +228,22 @@
     "message": "Yeni soru ekle"
   },
   "add_new_trigger_dc8e80b4": {
-    "message": "Add new trigger"
+    "message": "Yeni tetikleyici ekle"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Yeni doğrulama kuralını buraya ekleyin"
   },
   "add_packages_3ab0558c": {
-    "message": "Add packages"
+    "message": "Paket ekle"
   },
   "add_property_d381eba3": {
     "message": "Özellik Ekle"
   },
+  "add_publishing_profile_for_botname_37f9d35c": {
+    "message": "{ botName } için yayımlama profili ekleyin"
+  },
   "add_qna_maker_knowledge_base_c1b27b78": {
-    "message": "Add QnA Maker knowledge base"
+    "message": "Soru-Cevap Oluşturma bilgi bankası ekle"
   },
   "add_qna_pair_16c228f0": {
     "message": "+ Soru-Cevap Çifti Ekle"
@@ -264,19 +270,19 @@
     "message": "Tümü"
   },
   "allowed_callers_31b26262": {
-    "message": "Allowed Callers"
+    "message": "İzin Verilen Çağıranlar"
   },
   "almost_there_f90939cb": {
-    "message": "Almost there!"
+    "message": "Neredeyse bitti!"
   },
   "an_app_id_is_used_for_communication_between_your_b_255025e1": {
-    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
+    "message": "Botunuz ile beceriler, hizmetler, web siteleri veya uygulamalar arasındaki iletişim için bir Uygulama Kimliği kullanılır. Bu bot için yayımlama profili oluştururken mevcut bir Uygulama Kimliği kullanın veya otomatik olarak bir Uygulama Kimliği oluşturun. <a>Daha fazla bilgi</a>"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "Bir LUIS hesabı oluşturduğunuzda, bir yazma anahtarı otomatik olarak oluşturulur."
   },
   "an_azure_tenant_must_be_set_in_order_to_provision__a223f1b8": {
-    "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
+    "message": "Kaynakları sağlamak için bir Azure kiracısı ayarlanmalıdır. Yayımlama profilini yeniden oluşturmayı deneyin ve tekrar deneyin."
   },
   "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
     "message": "DirectLine sunucusuna bağlanılırken ve sunucu başlatılırken bir hata oluştu"
@@ -327,10 +333,10 @@
     "message": "herhangi bir dize"
   },
   "application_language_settings_85b1f06": {
-    "message": "Application language settings"
+    "message": "Uygulama dili ayarları"
   },
   "application_name_67a279e2": {
-    "message": "Application name"
+    "message": "Uygulama adı"
   },
   "application_settings_39e840c6": {
     "message": "Uygulama Ayarları"
@@ -339,13 +345,13 @@
     "message": "Uygulama Güncelleştirmeleri"
   },
   "apply_my_azure_bot_resources_for_an_existing_bot_4979e343": {
-    "message": "Apply my Azure Bot resources for an existing bot"
+    "message": "Mevcut bir bot için Azure Bot kaynaklarımı uygula"
   },
   "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
-    "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
+    "message": "Botunuzu silmek istediğinizden emin misiniz? Bu eylem geri alınamaz ve botunuz ile bot proje klasöründeki ilgili tüm dosyalar kalıcı olarak silinir. Azure kaynaklarınız değişmeden kalır."
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
-    "message": "Ekleme Ürünü Turu’ndan çıkmak istediğinizden emin misiniz? Turu ekleme ayarlarında yeniden başlatabilirsiniz."
+    "message": "Ekleme Ürünü Turu\"ndan çıkmak istediğinizden emin misiniz? Turu ekleme ayarlarında yeniden başlatabilirsiniz."
   },
   "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
     "message": "\"{ id }\" form iletişim şemasını kaldırmak istediğinizden emin misiniz?"
@@ -354,7 +360,7 @@
     "message": "\"{ propertyName }\" öğesini kaldırmak istediğinizden emin misiniz?"
   },
   "are_you_sure_you_want_to_remove_targetname_this_wi_b3ddce54": {
-    "message": "Are you sure you want to remove { targetName }? This will remove only the profile and will not delete provisioned resources."
+    "message": "{ targetName } öğesini kaldırmak istediğinizden emin misiniz? Bu işlem yalnızca profili kaldırır ve sağlanan kaynakları silmez."
   },
   "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
     "message": "Bu özelliği kaldırmak istediğinizden emin misiniz?"
@@ -384,67 +390,67 @@
     "message": "Soru sorun"
   },
   "ask_a_question_confirmation_434ad620": {
-    "message": "Ask a question - confirmation"
+    "message": "Soru sorun - onay"
   },
   "ask_a_question_date_or_time_6e896738": {
-    "message": "Ask a question - date or time"
+    "message": "Soru sorun - tarih veya saat"
   },
   "ask_a_question_file_or_attachment_eebb66b2": {
-    "message": "Ask a question - file or attachment"
+    "message": "Soru sorun - dosya veya ek"
   },
   "ask_a_question_multi_choice_5fce9e3e": {
-    "message": "Ask a question - multi choice"
+    "message": "Soru sorun - çoklu seçim"
   },
   "ask_a_question_number_28cb66b1": {
-    "message": "Ask a question - number"
+    "message": "Soru sorun - sayı"
   },
   "ask_a_question_oauth_login_8ec5ccd5": {
-    "message": "Ask a question - OAuth login"
+    "message": "Soru sorun - OAuth oturum açma"
   },
   "ask_a_question_send_activity_19848af2": {
-    "message": "Ask a question - send activity"
+    "message": "Soru sorun - gönderme etkinliği"
   },
   "ask_a_question_text_ba993a5e": {
-    "message": "Ask a question - text"
+    "message": "Soru sorun - metin"
   },
   "ask_a_question_to_collect_user_input_choice_c1fbb541": {
-    "message": "Ask a question to collect user input (choice)"
+    "message": "Kullanıcı girişi toplamak için soru sorun (seçim)"
   },
   "ask_a_question_to_collect_user_input_confirmation_29c70209": {
-    "message": "Ask a question to collect user input (confirmation)"
+    "message": "Kullanıcı girişi toplamak için soru sorun (onay)"
   },
   "ask_a_question_to_collect_user_input_date_or_time_3a8659ee": {
-    "message": "Ask a question to collect user input (date or time)"
+    "message": "Kullanıcı girişi toplamak için bir soru sorun (tarih veya saat)"
   },
   "ask_a_question_to_collect_user_input_file_or_attac_dccad24b": {
-    "message": "Ask a question to collect user input (file or attachment)"
+    "message": "Kullanıcı girişi toplamak için bir soru sorun (dosya veya ek)"
   },
   "ask_a_question_to_collect_user_input_number_b3abe981": {
-    "message": "Ask a question to collect user input (number)"
+    "message": "Kullanıcı girişi toplamak için soru sorun (sayı)"
   },
   "ask_a_question_to_collect_user_input_oauth_login_5347b7fc": {
-    "message": "Ask a question to collect user input (OAuth login)"
+    "message": "Kullanıcı girişi toplamak için soru sorun (OAuth oturum açma)"
   },
   "ask_a_question_to_collect_user_input_send_activity_eb3dd7ab": {
-    "message": "Ask a question to collect user input (send activity)"
+    "message": "Kullanıcı girişi toplamak için soru sorun (gönderme etkinliği)"
   },
   "ask_a_question_to_collect_user_input_text_5d8adc89": {
-    "message": "Ask a question to collect user input (text)"
+    "message": "Kullanıcı girişi toplamak için soru sorun (metin)"
   },
   "ask_activity_7bb716b4": {
-    "message": "Ask activity"
+    "message": "Soru sorma etkinliği"
   },
   "ask_the_skill_owner_for_the_url_and_provide_your_b_70a8b361": {
-    "message": "Ask the skill owner for the URL and provide your bot’s App ID"
+    "message": "Beceri sahibinden URL’yi isteyin ve botunuzun Uygulama Kimliğini sağlayın"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "En az bir soru gerekiyor"
   },
   "attachment_deffe5a9": {
-    "message": "Attachment"
+    "message": "Ek"
   },
   "attachment_input_212dcb98": {
-    "message": "Attachment input"
+    "message": "Ek girişi"
   },
   "attachment_layout_b42b242": {
     "message": "Ek düzeni"
@@ -456,10 +462,10 @@
     "message": "Ses kartı"
   },
   "australia_east_b7af6cc": {
-    "message": "Australia East"
+    "message": "Doğu Avustralya"
   },
   "authentication_error_39e996c5": {
-    "message": "Authentication Error"
+    "message": "Kimlik Doğrulama Hatası"
   },
   "authoring_canvas_18802e39": {
     "message": "Yazma tuvali"
@@ -477,46 +483,43 @@
     "message": "Konuşmaları yönetmek için kullanıcıdan bilgi toplayan iletişim kutularını otomatik olarak oluşturun."
   },
   "available_as_skill_to_the_following_bots_dbcaffcd": {
-    "message": "Available as skill to the following bots:"
+    "message": "Şu botlara beceri olarak kullanıma sunulmuştur:"
   },
   "azure_connections_9e63f716": {
-    "message": "Azure connections"
+    "message": "Azure bağlantıları"
   },
   "azure_directory_d9065529": {
-    "message": "Azure directory"
+    "message": "Azure dizini"
   },
   "azure_functions_5e23be5c": {
-    "message": "Azure Functions"
+    "message": "Azure İşlevleri"
   },
   "azure_functions_required_2a035b48": {
-    "message": "Azure Functions required"
+    "message": "Azure İşlevleri gereklidir"
   },
   "azure_functions_runtime_not_installed_bc24e100": {
-    "message": "Azure Functions runtime not installed."
+    "message": "Azure İşlevleri çalışma zamanı yüklenmedi."
   },
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
   },
   "azure_qna_maker_fd153eb7": {
-    "message": "Azure QnA Maker"
+    "message": "Azure Soru-Cevap Oluşturma"
   },
   "azure_resource_group_cee486e6": {
-    "message": "Azure resource group"
+    "message": "Azure kaynak grubu"
   },
   "azure_subscription_4671d043": {
-    "message": "Azure subscription"
+    "message": "Azure aboneliği"
   },
   "azure_web_app_d834cb4c": {
-    "message": "Azure Web App"
+    "message": "Azure Web Uygulaması"
   },
   "back_2900f52a": {
     "message": "Geri"
   },
   "been_used_5daccdb2": {
     "message": "Kullanıldı"
-  },
-  "before_we_begin_7ae9c242": {
-    "message": "Before we begin"
   },
   "begin_a_new_dialog_60249bd8": {
     "message": "Yeni bir iletişim kutusu başlat"
@@ -525,7 +528,7 @@
     "message": "Uzak bir yetenek iletişim kutusu başlatın."
   },
   "begin_dialog_154ebbf9": {
-    "message": "Begin dialog"
+    "message": "Diyaloğu başlat"
   },
   "begin_dialog_event_285bc650": {
     "message": "İletişim kutusu olayı başlat"
@@ -576,7 +579,7 @@
     "message": "Bot dosyaları oluşturuldu"
   },
   "bot_framework_composer_2_0_provides_more_built_in__c6abf11c": {
-    "message": "Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages."
+    "message": "Bot Framework Composer 2.0, karmaşık botları hızla oluşturabilmeniz için daha fazla yerleşik özellik sağlar. Gelişmiş bot şablonları, önceden oluşturulmuş bileşenler ve paketler aracılığıyla tam olarak genişletilebilir çalışma zamanı için Composer 2.0’a güncelleştirin."
   },
   "bot_framework_composer_fae721be": {
     "message": "Bot Framework Composer"
@@ -585,7 +588,7 @@
     "message": "Bot Framework Composer simgesi gri"
   },
   "bot_framework_composer_requires_node_js_in_order_t_de385f76": {
-    "message": "Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node."
+    "message": "Bot Framework Composer, yeni bir bot oluşturmak ve çalıştırmak için Node.js gerektirir. En son sürümü yüklemek için \"Node.js yükle\" seçeneğine tıklayın. Düğümü yükledikten sonra Composer’ı yeniden başlatmanız gerekir."
   },
   "bot_framework_emulator_fefd4a59": {
     "message": "Bot Framework Emulator"
@@ -600,7 +603,7 @@
     "message": "Bot dili (etkin)"
   },
   "bot_name_cannot_start_with_a_number_or_space_3a5c6fc1": {
-    "message": "Bot name cannot start with a number or space"
+    "message": "Bot adı bir rakamla veya boşlukla başlayamaz"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot adı: { botName }"
@@ -609,7 +612,7 @@
     "message": "Bot proje dosyası yok."
   },
   "bot_project_location_3be47459": {
-    "message": "Bot project location"
+    "message": "Bot projesi konumu"
   },
   "bot_projects_settings_list_view_ab58e5d": {
     "message": "Bot projeleri ayar listesi görünümü"
@@ -618,7 +621,7 @@
     "message": "Bot Projesi Ayarları Gezinti Bölmesi"
   },
   "bot_response_ec6f4a8c": {
-    "message": "Bot response"
+    "message": "Bot yanıtı"
   },
   "bot_responses_4617b4a2": {
     "message": "Bot yanıtları"
@@ -642,7 +645,7 @@
     "message": "Döngüden çık"
   },
   "build_a_continuous_integration_and_deployment_ci_c_79188c70": {
-    "message": "Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates."
+    "message": "Azure Resource Manager şablonlarıyla bir sürekli tümleştirme ve dağıtım (CI/CD) işlem hattı oluşturun."
   },
   "building_5e8a3c1d": {
     "message": "Oluşturuluyor"
@@ -657,13 +660,13 @@
     "message": "Hesaplanıyor..."
   },
   "call_skills_24416f61": {
-    "message": "Call skills"
+    "message": "Çağrı becerileri"
   },
   "cancel_all_active_dialogs_335b1623": {
     "message": "Tüm etkin iletişim kutularını iptal et"
   },
   "cancel_all_dialogs_7b35fa0e": {
-    "message": "Cancel all dialogs"
+    "message": "Tüm iletişim kutularını iptal et"
   },
   "cancel_caeb1e68": {
     "message": "İptal Et"
@@ -681,7 +684,7 @@
     "message": "Dosya karşıya yüklenemiyor. Konuşma bulunamadı."
   },
   "carousel_a2321ac9": {
-    "message": "Carousel"
+    "message": "Döngü"
   },
   "change_recognizer_3145b93d": {
     "message": "Tanıyıcıyı Değiştir"
@@ -690,7 +693,7 @@
     "message": "Güncelleştirmeleri denetleyin ve otomatik olarak yükleyin."
   },
   "choice_input_369b0c57": {
-    "message": "Choice input"
+    "message": "Seçim girişi"
   },
   "choice_name_fe8411f4": {
     "message": "Seçim Adı"
@@ -705,10 +708,10 @@
     "message": "Tümünü temizle"
   },
   "click_start_and_your_bot_will_be_up_and_running_on_424c29da": {
-    "message": "Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test."
+    "message": "Başlat'a tıkladığınızda botunuz çalışır duruma gelir. Çalışmaya başladıktan sonra, test etmek için \"Web Sohbeti’nde aç\" seçeneğini belirleyebilirsiniz."
   },
   "click_the_start_button_to_test_your_bot_using_web__821e827c": {
-    "message": "Click the start button to test your bot using Web Chat or Emulator. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
+    "message": "Web Sohbeti veya Emulator’ı kullanarak botunuzu test etmek için başlat düğmesine tıklayın. Bot Framework Emulator henüz yüklü değilse, <a>buradan</a> indirebilirsiniz."
   },
   "click_to_sort_by_file_type_1b0c9bd": {
     "message": "Dosya türüne göre sıralamak için tıklayın"
@@ -717,25 +720,25 @@
     "message": "Kapat"
   },
   "close_webchat_b26d03e1": {
-    "message": "Close WebChat"
+    "message": "Web Sohbetini kapat"
   },
   "cognitive_service_region_87c668be": {
-    "message": "Cognitive Service Region"
+    "message": "Bilişsel Hizmet Bölgesi"
   },
   "cognitive_services_key_fcfd093f": {
-    "message": "Cognitive services key"
+    "message": "Bilişsel hizmetler anahtarı"
   },
   "collapse_34080b4d": {
     "message": "Daralt"
   },
   "collapse_debug_panel_2841f8ba": {
-    "message": "Collapse Debug Panel"
+    "message": "Hata Ayıklama Panelini Daralt"
   },
   "collapse_navigation_17228b95": {
     "message": "Gezinmeyi Daralt"
   },
   "collect_information_about_the_use_and_performance__39c61db9": {
-    "message": "Collect information about the use and performance of your bot."
+    "message": "Botunuzun kullanımı ve performansı hakkında bilgi toplayın."
   },
   "comment_7ef1428e": {
     "message": "Yorum"
@@ -747,16 +750,16 @@
     "message": "Yaygın"
   },
   "complete_your_publishing_profile_7240d0d6": {
-    "message": "Complete your publishing profile"
+    "message": "Yayımlama profilinizi tamamlayın"
   },
   "component_stacktrace_e24b1983": {
     "message": "Bileşen Yığın İzlemesi:"
   },
   "components_of_kind_kind_are_not_supported_replace__de47f868": {
-    "message": "Components of $kind \"{ kind }\" are not supported. Replace with a different component or create a custom component."
+    "message": "$kind \"{ kind }\" bileşenleri desteklenmiyor. Farklı bir bileşenle değiştirin veya özel bir bileşen oluşturun."
   },
   "composer_2_0_is_now_available_113ed532": {
-    "message": "Composer 2.0 is now available!"
+    "message": "Composer 2.0 kullanıma sunuldu!"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer botunuzu henüz otomatik olarak çeviremez.\nKendiniz bir çeviri oluşturmak için Composer, ek dilin adı ile botunuzun içeriğinin bir kopyasını oluşturur. Bu içerik daha sonra özgün bot mantığını ya da akışını etkilemeden çevrilebilir. Yanıtların doğru ve uygun şekilde çevrilmesini sağlamak için diller arasında geçiş yapabilirsiniz."
@@ -768,25 +771,25 @@
     "message": "Composer güncel durumda."
   },
   "composer_language_f958f3bf": {
-    "message": "Composer language"
+    "message": "Composer dili"
   },
   "composer_logo_ba2048a0": {
     "message": "Composer Logosu"
   },
   "composer_needs_azure_functions_36138382": {
-    "message": "Composer needs Azure Functions"
+    "message": "Composer için Azure İşlevleri gerekiyor"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer için .NET Core SDK gerekiyor"
   },
   "composer_runtime_error_b0efe05": {
-    "message": "Composer Runtime Error"
+    "message": "Composer Çalışma Zamanı Hatası"
   },
   "composer_settings_c8c622cf": {
-    "message": "Composer settings"
+    "message": "Composer ayarları"
   },
   "composer_tutorials_5e79e495": {
-    "message": "Composer tutorials"
+    "message": "Composer öğreticileri"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer yeniden başlatılacak."
@@ -795,28 +798,28 @@
     "message": "Composer, uygulamayı bir sonraki kapatışınızda güncelleştirilir."
   },
   "composite_entity_8b5f67ba": {
-    "message": "Composite entity"
+    "message": "Bileşik varlık"
   },
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
   "configuration_e186200": {
-    "message": "Configuration"
+    "message": "Yapılandırma"
   },
   "configure_adapter_2f621249": {
-    "message": "Configure adapter"
+    "message": "Bağdaştırıcıyı yapılandır"
   },
   "configure_and_publish_7f53bc9a": {
-    "message": "Configure and publish"
+    "message": "Yapılandır ve yayımla"
   },
   "configure_ecb97e30": {
-    "message": "Configure"
+    "message": "Yapılandır"
   },
   "configure_the_command_used_by_composer_to_start_yo_f4231dc6": {
-    "message": "Configure the command used by Composer to start your bot application when testing locally."
+    "message": "Yerel olarak test ederken bot uygulamanızı başlatmak için Composer tarafından kullanılan komutu yapılandırın."
   },
   "configure_your_bot_7483e4a": {
-    "message": "Configure your bot"
+    "message": "Botunuzu yapılandırın"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Dosya adında bir kültür kodu yoksa kullanılacak varsayılan dil modelini yapılandırır (Varsayılan: tr-TR)"
@@ -828,10 +831,10 @@
     "message": "Seçenekleri Onayla"
   },
   "confirm_input_7e58417e": {
-    "message": "Confirm input"
+    "message": "Girişi onayla"
   },
   "confirm_skill_endpoints_6eb184cf": {
-    "message": "Confirm skill endpoints"
+    "message": "Beceri uç noktalarını onayla"
   },
   "confirmation_fec87d65": {
     "message": "Onay"
@@ -840,7 +843,7 @@
     "message": "Onayın kalıcı olması için bir başlığı olmalıdır."
   },
   "conflicting_changes_detected_6c282985": {
-    "message": "Conflicting changes detected"
+    "message": "Çakışan değişiklikler algılandı"
   },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Tebrikler! Modeliniz başarıyla yayımlandı."
@@ -849,19 +852,19 @@
     "message": "Yeteneğe bağlan"
   },
   "connect_to_qna_knowledgebase_4b324132": {
-    "message": "Soru-Cevap Bilgi Bankası’na Bağlan"
+    "message": "Soru-Cevap Bilgi Bankası\"na Bağlan"
   },
   "connect_to_speech_service_9d877e37": {
-    "message": "Connect to Speech Service"
+    "message": "Konuşma Hizmetine bağlan"
   },
   "connect_with_the_community_to_ask_and_answer_quest_aeec8c4f": {
-    "message": "Connect with the community to ask and answer questions about Composer"
+    "message": "Composer ile ilgili soru sormak ve soruları yanıtlamak için toplulukla bağlantı kurun"
   },
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
-    "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
+    "message": "Botunuzu Microsoft Teams’e ve Web Sohbeti’ne bağlayın ya da DirectLine Speech'i etkinleştirin."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
-    "message": "Connect your bot to Teams, external channels, or enable speech."
+    "message": "Botunuzu Teams’e ve dış kanallara bağlayın ya da konuşmayı etkinleştirin."
   },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
     "message": "Bot içeriğini içeri aktarmak için <b>{ source }</b> ile bağlantı kuruluyor..."
@@ -870,7 +873,7 @@
     "message": "Bot içeriğini içeri aktarmak için <b>{ targetName }</b> ile bağlantı kuruluyor..."
   },
   "connections_917ef4e4": {
-    "message": "Connections"
+    "message": "Bağlantılar"
   },
   "continue_ac067716": {
     "message": "Devam"
@@ -879,7 +882,7 @@
     "message": "Döngüye devam et"
   },
   "continue_setting_up_your_development_environment_b_5ec84955": {
-    "message": "Continue setting up your development environment by adding LUIS keys."
+    "message": "LUIS anahtarları ekleyerek geliştirme ortamınızı ayarlamaya devam edin."
   },
   "conversation_ended_a8bd37dd": {
     "message": "Konuşma sona erdi"
@@ -900,28 +903,28 @@
     "message": "ConversationUpdate etkinliği"
   },
   "convert_583eb59d": {
-    "message": "Convert"
+    "message": "Dönüştür"
   },
   "convert_your_project_to_the_latest_format_a28e824c": {
-    "message": "Convert your project to the latest format"
+    "message": "Projenizi en son biçime dönüştürün"
   },
   "copy_9748f9f": {
     "message": "Kopyala"
   },
   "copy_command_to_clipboard_4649910f": {
-    "message": "Copy command to clipboard"
+    "message": "Komutu panoya kopyalayın"
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Çeviri için içeriği kopyala"
   },
   "copy_icon_4cc3a18e": {
-    "message": "Copy Icon"
+    "message": "Simgeyi Kopyala"
   },
   "copy_project_location_to_clipboard_eb85c474": {
     "message": "Proje konumunu panoya kopyalayın"
   },
   "copy_skill_manifest_url_217975ba": {
-    "message": "Copy Skill Manifest URL"
+    "message": "Beceri Bildirimi URL’sini kopyala"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Depolama alanına bağlanılamadı."
@@ -948,7 +951,7 @@
     "message": "Şu uygulamayı adlandırmak üzere kullanılacak proje için bir ad oluşturun: (projectname-environment-LUfilename)"
   },
   "create_a_new_bot_51ce70d3": {
-    "message": "Create a new bot"
+    "message": "Yeni bir bot oluşturun"
   },
   "create_a_new_dialog_21d84b82": {
     "message": "Yeni bir iletişim kutusu oluşturun"
@@ -957,13 +960,10 @@
     "message": "Yukarıdaki + işaretine tıklayarak yeni bir form iletişim kutusu şeması oluşturun."
   },
   "create_a_publish_profile_to_continue_1e2fa5a0": {
-    "message": "Create a publish profile to continue"
+    "message": "Devam etmek için bir yayımlama profili oluşturun"
   },
   "create_a_publishing_profile_a79c6808": {
-    "message": "Create a publishing profile"
-  },
-  "create_a_publishing_profile_for_botname_b82f4386": {
-    "message": "Create a publishing profile for { botName }"
+    "message": "Yayımlama profili oluşturun"
   },
   "create_a_skill_in_your_bot_d7659e6b": {
     "message": "Botunuzda bir beceri oluşturun"
@@ -972,7 +972,7 @@
     "message": "Tetikleyici oluşturun"
   },
   "create_and_configure_new_azure_resources_302c574a": {
-    "message": "Create and configure new Azure resources"
+    "message": "Yeni Azure kaynakları oluşturun ve yapılandırın"
   },
   "create_bot_from_template_or_scratch_92f0fefa": {
     "message": "Şablondan veya sıfırdan bot oluşturulsun mu?"
@@ -981,7 +981,7 @@
     "message": "Bot içeriğini çevirmek için kopya oluştur"
   },
   "create_custom_knowledge_base_e1cad195": {
-    "message": "Create custom knowledge base"
+    "message": "Özel bilgi bankası oluştur"
   },
   "create_folder_error_38aa86f5": {
     "message": "Klasör Oluşturma Hatası"
@@ -993,7 +993,7 @@
     "message": "Bilgi bankasından oluştur (Soru-Cevap Oluşturma)"
   },
   "create_from_qna_7aa9dcbb": {
-    "message": "Soru-Cevap’tan oluştur"
+    "message": "Soru-Cevap\"tan oluştur"
   },
   "create_from_scratch_485c3045": {
     "message": "Sıfırdan oluştur"
@@ -1002,7 +1002,7 @@
     "message": "Şablondan oluştur"
   },
   "create_new_e0946c49": {
-    "message": "Create new"
+    "message": "Yeni oluştur"
   },
   "create_new_folder_19d3faa4": {
     "message": "Yeni klasör oluştur"
@@ -1011,22 +1011,25 @@
     "message": "Yeni KB oluştur"
   },
   "create_new_publish_profile_e27c0950": {
-    "message": "Create new publish profile"
+    "message": "Yeni yayımlama profili ekleyin"
+  },
+  "create_profile_33fafbf1": {
+    "message": "Profil oluştur"
   },
   "create_service_resources_386ef96b": {
-    "message": "Create { service } resources"
+    "message": "{ service } kaynakları oluşturun"
   },
   "create_your_first_bot_a23748c1": {
-    "message": "Create your first bot"
+    "message": "İlk botunuzu oluşturun"
   },
   "creating_knowledge_base_e391b132": {
-    "message": "Creating knowledge base..."
+    "message": "Bilgi bankası oluşturuluyor..."
   },
   "creating_qna_maker_7c88df84": {
-    "message": "Creating QnA Maker"
+    "message": "Soru-Cevap Oluşturma oluşturuluyor"
   },
   "creating_resources_af3aec2f": {
-    "message": "Creating resources..."
+    "message": "Kaynaklar oluşturuluyor..."
   },
   "current_40c0812f": {
     "message": " - Geçerli"
@@ -1068,10 +1071,10 @@
     "message": "Tarih veya saat"
   },
   "date_time_input_aa8ad315": {
-    "message": "Date time input"
+    "message": "Tarih saat girişi"
   },
   "deactivated_action_1da615d0": {
-    "message": "Deactivated action."
+    "message": "Devre dışı bırakılmış eylem."
   },
   "debug_break_46cb5adb": {
     "message": "Hata Ayıklama Kesmesi"
@@ -1101,13 +1104,13 @@
     "message": "Konuşma amacını tanımla"
   },
   "define_new_entity_6c69b912": {
-    "message": "Define new entity"
+    "message": "Yeni varlık tanımlayın"
   },
   "define_user_input_and_trigger_phrases_to_direct_th_d473c5c": {
-    "message": "Define user input and trigger phrases to direct the conversation flow."
+    "message": "Konuşma akışını yönlendirmek için kullanıcı girişi ve tetikleyici tümcecikleri tanımlayın."
   },
   "define_your_bot_s_responses_add_phrase_variations__11aa55cb": {
-    "message": "Define your bot''s responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
+    "message": "Botunuzun yanıtlarını tanımlayın, tümcecik varyasyonları ekleyin, bağlama göre basit ifadeler yürütün veya konuşma belleğine bakın."
   },
   "defined_in_475568fb": {
     "message": "Şurada tanımlı:"
@@ -1125,13 +1128,13 @@
     "message": "Etkinliği sil"
   },
   "delete_bot_4b1527e4": {
-    "message": "Delete bot"
+    "message": "Botu sil"
   },
   "delete_bot_73586104": {
     "message": "Botu Sil"
   },
   "delete_fd07d6ad": {
-    "message": "Delete?"
+    "message": "Silinsin mi?"
   },
   "delete_form_dialog_schema_c8e28229": {
     "message": "Form iletişim kutusu şeması silinsin mi?"
@@ -1143,7 +1146,7 @@
     "message": "Özellikleri sil"
   },
   "delete_property_4a0e0df6": {
-    "message": "Delete property"
+    "message": "Özelliği sil"
   },
   "delete_property_da7646f6": {
     "message": "Özellik silinsin mi?"
@@ -1155,13 +1158,13 @@
     "message": "\"{ dialogId }\" silinemedi."
   },
   "deleting_one_source_file_will_also_delete_qna_file_f3afd698": {
-    "message": "Deleting one source file will also delete qna files with the same name on other locales"
+    "message": "Bir kaynak dosyasının silinmesi aynı zamanda diğer yerel ayarlarda aynı ada sahip soru-cevap dosyalarını da siler"
   },
   "description_436c48d7": {
     "message": "Açıklama"
   },
   "development_resources_67364176": {
-    "message": "Development resources"
+    "message": "Geliştirme kaynakları"
   },
   "diagnostic_description_msg_9ddd1be": {
     "message": "Tanılama Açıklaması: { msg }"
@@ -1197,7 +1200,7 @@
     "message": "İletişim kutusu iptal edildi (İletişim kutusunu iptal etme olayı)"
   },
   "dialog_d99c0378": {
-    "message": "Dialog"
+    "message": "Diyalog"
   },
   "dialog_data_61d5539b": {
     "message": "İletişim kutusu verileri"
@@ -1239,13 +1242,13 @@
     "message": "{ value } adlı iletişim kutusu zaten var."
   },
   "dialogfactory_missing_schema_5c3255c4": {
-    "message": "DialogFactory’de şema eksik."
+    "message": "DialogFactory\"de şema eksik."
   },
   "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {Bot bulunamadı}\n     =1 {Bir bot bulundu}\n  other {# bot bulundu}\n}.\n            { dialogNum, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
-    "message": "Dialogs, triggers, and actions"
+    "message": "Diyaloglar, tetikleyiciler ve eylemler"
   },
   "disable_a5c05db3": {
     "message": "Devre Dışı Bırak"
@@ -1266,7 +1269,7 @@
     "message": "Devam etmek istiyor musunuz?"
   },
   "documentation_d82f6eec": {
-    "message": "Documentation"
+    "message": "Belgeler"
   },
   "does_not_exist_3a34b418": {
     "message": "Yok"
@@ -1278,19 +1281,19 @@
     "message": "Bitti"
   },
   "download_emulator_c8fb3403": {
-    "message": "Download Emulator"
+    "message": "Öykünücüyü İndir"
   },
   "download_icon_2e0d10": {
-    "message": "Download Icon"
+    "message": "İndirme Simgesi"
   },
   "download_now_and_install_when_you_close_composer_e241ed74": {
-    "message": "Şimdi indirin ve Composer’ı kapattığınızda yükleyin."
+    "message": "Şimdi indirin ve Composer\"ı kapattığınızda yükleyin."
   },
   "downloading_bb6fb34b": {
     "message": "İndiriliyor..."
   },
   "due_to_the_following_error_we_were_unable_to_succe_9185fddf": {
-    "message": "Due to the following error, we were unable to successfully add your selected { service } keys to your bot project:"
+    "message": "Şu hata nedeniyle, seçili { service } anahtarlarınızı bot projenize başarıyla ekleyemedik:"
   },
   "duplicate_31cec192": {
     "message": "Çoğalt"
@@ -1320,16 +1323,16 @@
     "message": "Yeteneği düzenle"
   },
   "edit_actions_7c33a630": {
-    "message": "Edit actions"
+    "message": "Eylemleri düzenle"
   },
   "edit_an_array_property_5d886011": {
     "message": "Dizi özelliğini düzenle"
   },
   "edit_array_c56a18cc": {
-    "message": "Edit array"
+    "message": "Diziyi düzenle"
   },
   "edit_bot_responses_34bd1a28": {
-    "message": "Edit bot responses"
+    "message": "Bot yanıtlarını düzenle"
   },
   "edit_c5fbea07": {
     "message": "Düzenle"
@@ -1341,7 +1344,7 @@
     "message": "JSON dosyasında düzenle"
   },
   "edit_in_power_virtual_agents_56ee7ac2": {
-    "message": "Edit in Power Virtual Agents"
+    "message": "Power Virtual Agents’ta düzenleyin"
   },
   "edit_kb_name_5e2d8c5b": {
     "message": "KB adını düzenle"
@@ -1350,7 +1353,7 @@
     "message": "Özelliği Düzenle"
   },
   "edit_publishing_profile_e40a0bf1": {
-    "message": "Edit publishing profile"
+    "message": "Yayımlama profilini düzenle"
   },
   "edit_schema_a2ab5695": {
     "message": "Şemayı düzenle"
@@ -1359,13 +1362,13 @@
     "message": "Kaynağı düzenle"
   },
   "edit_this_intent_in_a_user_input_view_a_c75f4893": {
-    "message": "Edit this intent in<a>User input view</a>"
+    "message": "Bu amacı <a>Kullanıcı girişi görünümünde</a> düzenleyin"
   },
   "edit_this_template_in_a_bot_response_view_a_7236985f": {
     "message": "Bu şablonu <a>Bot Yanıtı görünümünde</a> düzenleyin"
   },
   "edit_user_input_and_triggers_333c9a0e": {
-    "message": "Edit user input and triggers"
+    "message": "Kullanıcı girişini ve tetikleyicileri düzenle"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Çalışma zamanı çıkarılıyor..."
@@ -1380,7 +1383,7 @@
     "message": "İzleme olayı göster"
   },
   "emit_event_f36b4a87": {
-    "message": "Emit event"
+    "message": "Olayı göster"
   },
   "empty_bot_template_that_routes_to_qna_configuratio_21531414": {
     "message": "Soru-cevap yapılandırmasına yönlendiren boş bot şablonu"
@@ -1392,7 +1395,7 @@
     "message": "Etkinleştir"
   },
   "enable_app_insights_99b6c116": {
-    "message": "Enable App Insights"
+    "message": "Uygulama İçgörülerini Etkinleştir"
   },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Kod satırlarına numaraya göre başvurmak için satır numaralarını etkinleştirin."
@@ -1401,19 +1404,19 @@
     "message": "Çok aşamalı ayıklamayı etkinleştir"
   },
   "enable_orchestrator_cdbbd2c5": {
-    "message": "Enable Orchestrator"
+    "message": "Orchestrator'ı etkinleştir"
   },
   "enable_speech_e30d6a2a": {
-    "message": "Enable Speech"
+    "message": "Konuşmayı Etkinleştir"
   },
   "enable_speech_e4a16f1c": {
-    "message": "Enable speech"
+    "message": "Konuşmayı etkinleştir"
   },
   "enabled_ba7cab66": {
     "message": "Etkin"
   },
   "end_dialog_88fa2f7a": {
-    "message": "End dialog"
+    "message": "İletişim kutusunu sonlandır"
   },
   "end_this_dialog_3ed0d50b": {
     "message": "Bu iletişim kutusunu sonlandır"
@@ -1425,16 +1428,16 @@
     "message": "EndOfConversation etkinliği"
   },
   "endpoint_url_eddd8ea9": {
-    "message": "Endpoint Url"
+    "message": "Uç nokta URL'si"
   },
   "endpoints_ff946539": {
     "message": "Uç Noktalar"
   },
   "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
-    "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
+    "message": "Botunuzun Microsoft Uygulama Kimliğinin, becerinin izin verilen çağıranlar listesinde olduğundan emin olun"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
-    "message": "Enter a manifest URL to add a new skill to your bot."
+    "message": "Botunuza yeni bir beceri eklemek için bir bildirim URL’si girin."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "En yüksek değeri girin"
@@ -1443,25 +1446,28 @@
     "message": "En düşük değeri girin"
   },
   "enter_a_url_to_import_qna_resource_223ded92": {
-    "message": "Enter a URL to Import QnA resource"
+    "message": "Soru-Cevap kaynağını İçeri aktarmak için bir URL girin"
   },
   "enter_cognitive_service_region_a0f684a4": {
-    "message": "Enter cognitive service region"
+    "message": "Bilişsel hizmet bölgesini girin"
   },
   "enter_cognitive_services_key_b78e4b55": {
-    "message": "Enter cognitive services key"
+    "message": "Bilişsel hizmetler anahtarını girin"
   },
   "enter_name_for_new_resource_group_96fe8ea8": {
-    "message": "Enter name for new resource group"
+    "message": "Yeni kaynak grubu için ad girin"
   },
   "enter_name_for_new_resources_d5ccd6a7": {
-    "message": "Enter name for new resources"
+    "message": "Yeni kaynaklar için ad girin"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
     "message": "Soru-Cevap Oluşturma Aboneliği anahtarını girin"
   },
   "enter_skill_host_endpoint_url_7489a83f": {
-    "message": "Enter Skill host endpoint URL"
+    "message": "Beceri konağı uç noktası URL’sini girin"
+  },
+  "enter_skill_manifest_url_583d54f4": {
+    "message": "Beceri bildirimi URL’sini girin"
   },
   "entities_ef09392c": {
     "message": "Varlıklar"
@@ -1481,14 +1487,14 @@
   "error_afac7133": {
     "message": "Hata:"
   },
-  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
-    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  "error_attempting_to_parse_skill_manifest_there_cou_27675668": {
+    "message": "Beceri bildirimi ayrıştırılmaya çalışılırken hata oluştu. Biçiminde bir hata olabilir."
   },
   "error_checking_node_version_98bfbf4c": {
-    "message": "Error checking node version"
+    "message": "Düğüm sürümü denetlenirken hata oluştu"
   },
   "error_encountered_when_getting_template_read_me_fi_b9199689": {
-    "message": "Error encountered when getting template read-me file"
+    "message": "Şablon benioku dosyası alınırken hatayla karşılaşıldı"
   },
   "error_event_c079b608": {
     "message": "Hata olayı"
@@ -1503,7 +1509,7 @@
     "message": "Hata oluştu"
   },
   "error_occurred_building_the_bot_7425aa09": {
-    "message": "Error occurred building the bot"
+    "message": "Bot oluşturulurken hata oluştu"
   },
   "error_occurred_ejecting_runtime_8512129e": {
     "message": "Çalışma zamanı çıkarılırken hata oluştu!"
@@ -1512,7 +1518,7 @@
     "message": "Hata oluştu (Hata olayı)"
   },
   "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
-    "message": "Error occurred trying to fetch runtime standard output"
+    "message": "Çalışma zamanı standart çıkışı getirilmeye çalışılırken hata oluştu"
   },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
     "message": "{ error } Lütfen bilinmeyen işlevleri ayarın customFunctions alanına ekleyin."
@@ -1521,10 +1527,10 @@
     "message": "Şema İşlenirken Hata Oluştu"
   },
   "error_provisioning_25835400": {
-    "message": "Error provisioning."
+    "message": "Sağlama sırasında hata oluştu."
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
-    "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
+    "message": "{ errorsCount, plural,\n     =0 {Hata yok}\n     =1 {Bir hata}\n  other {# hata}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -1548,7 +1554,7 @@
     "message": "Olaylar"
   },
   "everything_you_need_to_build_sophisticated_convers_9c00cc01": {
-    "message": "Everything you need to build sophisticated conversational experiences"
+    "message": "Kapsamlı konuşma deneyimleri oluşturmak için ihtiyacınız olan her şey"
   },
   "examples_c435f08c": {
     "message": "Örnekler"
@@ -1560,28 +1566,28 @@
     "message": "Genişlet"
   },
   "expand_debug_panel_6f04e9f2": {
-    "message": "Expand Debug Panel"
+    "message": "Hata Ayıklama Panelini Genişlet"
   },
   "expand_navigation_20330d1d": {
     "message": "Gezintiyi Genişlet"
   },
   "expected_responses_1dca1864": {
-    "message": "Expected responses"
+    "message": "Beklenen yanıtlar"
   },
   "expecting_4df12c00": {
     "message": "Bekleniyor"
   },
   "export_as_skill_764cf284": {
-    "message": "Export as skill"
+    "message": "Yetenek olarak dışarı aktar"
   },
   "export_as_zip_133b7ec": {
-    "message": "Export as .zip"
+    "message": ".zip olarak dışarı aktar"
   },
   "export_json_2e2981f5": {
     "message": "JSON dosyasını dışarı aktar"
   },
   "export_your_bot_604e651c": {
-    "message": "Export your bot"
+    "message": "Botunuzu dışarı aktarın"
   },
   "expression_7f906a13": {
     "message": "İfade"
@@ -1593,28 +1599,28 @@
     "message": "Değerlendirilecek ifade."
   },
   "extend_your_bot_with_reusable_dialogs_bot_response_64f9ca51": {
-    "message": "Extend your bot with reusable dialogs, bot response templates and custom actions."
+    "message": "Botunuzu yeniden kullanılabilir diyaloglar, bot yanıtı şablonları ve özel eylemler ile genişletin."
   },
   "extension_settings_899ccb55": {
     "message": "Uzantı Ayarları"
   },
   "external_connections_3415fea5": {
-    "message": "External connections"
+    "message": "Dış bağlantılar"
   },
   "external_skill_73e16d25": {
-    "message": "External skill"
+    "message": "Dış beceri"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
-    "message": "Çevrimiçi bir SSS’den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx’tir. Bilgi bankası kaynakları hakkında daha fazla bilgi edinin. Oluşturma işleminden sonra soruları ve yanıtları kendiniz eklemek için bu adımı atlayın. Ekleyebileceğiniz kaynak sayısı ve dosya boyutu, seçtiğiniz Soru-Cevap hizmeti SKU’suna bağlıdır. Soru-Cevap Oluşturma SKU’ları hakkında daha fazla bilgi edinin."
+    "message": "Çevrimiçi bir SSS\"den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx\"tir. Bilgi bankası kaynakları hakkında daha fazla bilgi edinin. Oluşturma işleminden sonra soruları ve yanıtları kendiniz eklemek için bu adımı atlayın. Ekleyebileceğiniz kaynak sayısı ve dosya boyutu, seçtiğiniz Soru-Cevap hizmeti SKU\"suna bağlıdır. Soru-Cevap Oluşturma SKU\"ları hakkında daha fazla bilgi edinin."
   },
   "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
-    "message": "Extracting question-and-answer pairs from { url }"
+    "message": "{ url } adresinden soru-cevap çiftleri ayıklanıyor"
   },
   "fail_to_save_bot_578fa8aa": {
     "message": "Bot kaydedilemedi"
   },
   "failed_276786d": {
-    "message": "Failed"
+    "message": "Başarısız"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1623,7 +1629,7 @@
     "message": "False"
   },
   "faq_website_source_47b5c924": {
-    "message": "FAQ website (source)"
+    "message": "SSS web sitesi (kaynak)"
   },
   "fetching_form_dialog_schema_templates_failed_44e2dd63": {
     "message": "Form iletişim kutusu şema şablonları getirilemedi."
@@ -1653,25 +1659,25 @@
     "message": "Dosya adına göre filtrele"
   },
   "filter_e3398407": {
-    "message": "Filter"
+    "message": "Filtrele"
   },
   "find_additional_template_specific_guidance_for_set_d7256573": {
-    "message": "Find additional template-specific guidance for setting up your bot."
+    "message": "Botunuzu ayarlamak için şablona özgü ek rehber bulun."
   },
   "find_and_install_more_external_services_to_your_bo_37ef3f0c": {
-    "message": "Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>"
+    "message": "<a>Paket yöneticisinde</a> daha fazla dış hizmet bulun ve bunları bot projenize yükleyin. Daha fazla rehberlik için <a2>dış bağlantılar ekleme</a2> belgelerine bakın."
   },
   "find_dialogs_339a3f87": {
-    "message": "Find dialogs"
+    "message": "Diyalog bul"
   },
   "find_dialogs_or_topics_c986d1e6": {
-    "message": "Find dialogs or topics"
+    "message": "İletişim kutularını veya konuları bulun"
   },
   "find_pre_built_adaptive_expressions_b106308e": {
-    "message": "Find pre-built Adaptive expressions"
+    "message": "Önceden oluşturulmuş Uyarlamalı ifadeleri bulun"
   },
   "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
-    "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
+    "message": "Botunuzu yayımlayabilmeniz için ortamınızı ayarlamayı ve kaynaklarınızı sağlamayı tamamlayın."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1698,19 +1704,19 @@
     "message": "For each"
   },
   "for_each_page_198e66f4": {
-    "message": "For each page"
+    "message": "Her sayfa için"
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "Tür listesinin (veya sabit listesi) özellikleri için botunuz yalnızca tanımladığınız değerleri kabul eder. İletişim kutunuz oluşturulduktan sonra her bir değer için eş anlamlılar sağlayabilirsiniz."
   },
-  "for_security_purposes_your_bot_can_only_call_a_ski_4b0c81e0": {
-    "message": "For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list."
+  "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
+    "message": "Güvenlik nedeniyle, botunuz yalnızca Microsoft Uygulama Kimliği becerinin izin verilen çağıranlar listesindeyse bir beceri çağırabilir. Bir yayınlama profili oluşturduktan sonra, botunuzun Uygulama Kimliğini eklemek için becerinin yazarıyla paylaşın. Ayrıca, becerinin Uygulama Kimliğini, kök botun izin verilen çağıranlar listesine de eklemeniz gerekebilir."
   },
   "form_b674666c": {
     "message": "form"
   },
   "form_dialog_7327a4ff": {
-    "message": "Form dialog"
+    "message": "Form iletişim kutusu"
   },
   "form_dialog_error_ba7c37fe": {
     "message": "Form iletişim kutusu hatası"
@@ -1725,13 +1731,13 @@
     "message": "form düzenleyicisi"
   },
   "form_field_8566629d": {
-    "message": "Form field"
+    "message": "Form alanı"
   },
   "form_title_baf85c7e": {
     "message": "form başlığı"
   },
   "form_trigger_e8828303": {
-    "message": "Form trigger"
+    "message": "Form tetikleyicisi"
   },
   "form_wide_operations_1c1a73eb": {
     "message": "form genelindeki işlemler"
@@ -1743,7 +1749,7 @@
     "message": "fromTemplateName yok"
   },
   "full_description_for_fd03dbf8": {
-    "message": "full description for"
+    "message": "şunun tam açıklaması:"
   },
   "gb_7570760e": {
     "message": "GB"
@@ -1752,13 +1758,13 @@
     "message": "Genel"
   },
   "generate_and_publish_4f218960": {
-    "message": "Generate and Publish"
+    "message": "Oluştur ve Yayımla"
   },
   "generate_dialog_b80a85b2": {
     "message": "İletişim kutusu oluştur"
   },
   "generate_instructions_for_azure_administrator_1cb21884": {
-    "message": "Generate instructions for Azure administrator"
+    "message": "Azure yöneticisi için yönergeler oluşturun"
   },
   "generating_dialog_for_schemaid_51b2744f": {
     "message": "\"{ schemaId }\" için iletişim kutusu oluşturuluyor"
@@ -1770,13 +1776,10 @@
     "message": "\"{ schemaId }\" şeması kullanılarak iletişim kutunuz oluşturuluyor, lütfen bekleyin..."
   },
   "get_a_key_bb364e3": {
-    "message": "Get a key"
+    "message": "Anahtar alın"
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Çalışma zamanı kodunun yeni bir kopyasını alın"
-  },
-  "get_a_skill_manifest_url_from_the_skill_s_author_7771e8b4": {
-    "message": "Get a skill manifest URL from the skill’s author"
   },
   "get_activity_members_11339605": {
     "message": "Etkinlik üyelerini alın"
@@ -1785,13 +1788,13 @@
     "message": "Konuşma üyelerini alın"
   },
   "get_remote_file_fail_37ef94c5": {
-    "message": "get remote file fail"
+    "message": "uzak dosya alınamadı"
   },
   "get_started_76ed4cb9": {
-    "message": "Get started"
+    "message": "Kullanmaya başlayın"
   },
   "get_started_with_bot_framework_composer_57a6d38b": {
-    "message": "Get started with Bot Framework Composer"
+    "message": "Bot Framework Composer’ı kullanmaya başlayın"
   },
   "getting_template_910a4116": {
     "message": "Şablon alınıyor"
@@ -1803,7 +1806,7 @@
     "message": "Soru-Cevap toplam görünüm sayfasına gidin."
   },
   "go_to_stack_overflow_e525148": {
-    "message": "Go to Stack Overflow"
+    "message": "Stack Overflow’a git"
   },
   "got_it_2c06b54a": {
     "message": "Anladım!"
@@ -1842,13 +1845,13 @@
     "message": "Giriş"
   },
   "http_request_b6394895": {
-    "message": "HTTP request"
+    "message": "HTTP isteği"
   },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
-    "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
+    "message": "Microsoft Bot Framework projesini kullanarak bir konuşma deneyimi oluşturuyorum. Projemin çalışması için { service } dahil olmak üzere Azure kaynakları gerekiyor. Aşağıda bu kaynakları oluşturma adımları verilmiştir.\n\n{ instructions }"
   },
   "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
-    "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
+    "message": "Şablon içeriğini dosyada tutmak istiyorum, yalnızca bu yanıttan başvuru yapmak istiyorum (ipucu: şu anda başka bir konumda yeniden kullanıyorsanız veya bunu planlıyorsanız bu içeriği koruyun)"
   },
   "icon_name_is_file_c80dacae": {
     "message": "{ icon } adı: { file }"
@@ -1860,13 +1863,13 @@
     "message": "{ id } zaten var. Lütfen benzersiz bir dosya adı girin."
   },
   "if_azure_resources_and_subscription_are_managed_by_e36717f6": {
-    "message": "If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot."
+    "message": "Azure kaynakları ve aboneliği başkaları tarafından yönetiliyorsa botunuzu oluşturmak ve çalıştırmak için ihtiyaç duyduğunuz kaynakların oluşturulmasını istemek üzere aşağıdaki bilgileri kullanın."
   },
   "if_condition_d4383ce9": {
-    "message": "If condition"
+    "message": "If koşulu"
   },
   "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
-    "message": "If this problem persists, please file an issue on <a>GitHub</a>"
+    "message": "Bu sorun devam ederse lütfen <a>GitHub</a>’da bir sorun bildirin"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "Zaten bir LUIS hesabınız varsa, aşağıdaki bilgileri sağlayın. Henüz bir hesabınız yoksa, önce (ücretsiz) bir hesap oluşturun."
@@ -1875,10 +1878,10 @@
     "message": "Zaten bir Soru-Cevap hesabınız varsa, aşağıdaki bilgileri sağlayın. Henüz bir hesabınız yoksa, önce (ücretsiz) bir hesap oluşturun."
   },
   "if_you_have_created_custom_components_you_might_ne_dc7cf128": {
-    "message": "If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>"
+    "message": "Özel bileşenler oluşturduysanız bunları yeniden oluşturmanız gerekebilir. <a>Özel bileşenler hakkında daha fazla bilgi edinin.</a>"
   },
   "if_you_would_like_to_try_again_or_select_from_exis_f2f894b4": {
-    "message": "If you would like to try again, or select from existing resources, please click “Back”."
+    "message": "Yeniden denemek veya mevcut kaynaklar arasından seçim yapmak istiyorsanız lütfen \"Geri\" seçeneğine tıklayın."
   },
   "ignoring_dc76ef87": {
     "message": "Yoksayılıyor"
@@ -1887,19 +1890,19 @@
     "message": "Yeni olarak içeri aktar"
   },
   "import_new_url_and_overwrite_5e463747": {
-    "message": "Import new URL and overwrite"
+    "message": "Yeni URL’yi içeri aktar ve üzerine yaz"
   },
   "import_schema_75659c5f": {
     "message": "Şemayı içeri aktar"
   },
   "import_url_62402b7c": {
-    "message": "Import URL"
+    "message": "URL’yi içeri aktar"
   },
   "import_your_bot_to_new_project_8751d82f": {
     "message": "Botunuzu yeni projeye aktarın"
   },
   "importing_a_publishing_profile_6fb3cd96": {
-    "message": "Importing a publishing profile"
+    "message": "Yayımlama profilini içeri aktarın"
   },
   "importing_b_botname_b_from_sourcename_f7410826": {
     "message": "<b>{ sourceName }</b> kaynağındaki { botName } içeri aktarılıyor..."
@@ -1941,10 +1944,10 @@
     "message": "Uyarlamalı ifade önceden oluşturulmuş işlevi ekleyin"
   },
   "insert_defined_entity_d1293781": {
-    "message": "Insert defined entity"
+    "message": "Tanımlanan varlığı ekle"
   },
   "insert_entity_3a9dbd5d": {
-    "message": "Insert entity"
+    "message": "Varlık ekle"
   },
   "insert_prebuilt_functions_22b05f8": {
     "message": "Önceden oluşturulmuş işlevleri ekleyin"
@@ -1959,28 +1962,28 @@
     "message": "Şablon başvurusu ekleyin"
   },
   "install_azure_functions_d607f182": {
-    "message": "Install Azure Functions"
+    "message": "Azure İşlevleri’ni yükle"
   },
   "install_error_a9319839": {
-    "message": "Install Error"
+    "message": "Yükleme Hatası"
   },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "Microsoft .NET Core SDK yükle"
   },
   "install_net_core_sdk_67e62ca9": {
-    "message": "Install .NET Core SDK"
+    "message": ".NET Core SDK'sını yükle"
   },
   "install_node_js_1857298c": {
-    "message": "Install Node.js"
+    "message": "Node.js’yi yükle"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
-    "message": "En son özelliklere erişmek ve bunları test etmek için Composer’ın yayın öncesi sürümlerini günlük olarak yükleyin. <a>Daha fazla bilgi edinin</a>."
+    "message": "En son özelliklere erişmek ve bunları test etmek için Composer\"ın yayın öncesi sürümlerini günlük olarak yükleyin. <a>Daha fazla bilgi edinin</a>."
   },
   "install_the_update_and_restart_composer_fac30a61": {
-    "message": "Güncelleştirmeyi yükleyin ve Composer’ı yeniden başlatın."
+    "message": "Güncelleştirmeyi yükleyin ve Composer\"ı yeniden başlatın."
   },
   "instructions_2f88ee72": {
-    "message": "Instructions"
+    "message": "Yönergeler"
   },
   "integer_7f378275": {
     "message": "tamsayı"
@@ -1998,13 +2001,13 @@
     "message": "Tamsayı veya ifade"
   },
   "integrating_with_power_virtual_agents_14c007cf": {
-    "message": "Integrating with Power Virtual Agents"
+    "message": "Power Virtual Agents ile tümleştirme"
   },
   "intent_2291200b": {
     "message": "Amaç"
   },
   "intent_name_e9831403": {
-    "message": "Intent name: "
+    "message": "Amaç adı: "
   },
   "intent_recognized_c3840853": {
     "message": "Amaç tanındı"
@@ -2013,7 +2016,7 @@
     "message": "intentName eksik veya boş"
   },
   "intents_9b8593e0": {
-    "message": "Intents"
+    "message": "Amaçlar"
   },
   "interpolated_string_c96053f2": {
     "message": "Düz metin arasına kod eklenmiş dize."
@@ -2046,13 +2049,13 @@
     "message": "{ itemCount, plural,\n     =0 {Sıfır şema}\n     =1 {Bir şema}\n  other {# şema}\n} bulundu.\n            { itemCount, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
   },
   "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__d18758bb": {
-    "message": "Just add a QnA key and you’ll be ready to talk to your bot."
+    "message": "Yalnızca bir Soru-Cevap anahtarı eklediğinizde botunuzla konuşmaya hazır olacaksınız."
   },
   "kb_d9c53902": {
     "message": "KB"
   },
   "keep_this_url_handy_to_share_it_with_other_develop_bfd51fb0": {
-    "message": "Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab."
+    "message": "Bu URL’yi diğer geliştiricilerin bot projelerinde kullanmak üzere bunlarla paylaşmak için URL’ye kolayca erişin. Bu URL’yi proje ayarları sekmesinde bulabilirsiniz."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Anahtar boş olamaz"
@@ -2064,19 +2067,19 @@
     "message": "Anahtarlar benzersiz olmalıdır"
   },
   "knowledge_base_31e6868e": {
-    "message": "Knowledge base"
+    "message": "Bilgi bankası"
   },
   "knowledge_base_name_7d83bbe4": {
     "message": "Bilgi bankası adı"
   },
   "knowledge_qna_1a599dcf": {
-    "message": "Knowledge (QnA)"
+    "message": "Bilgi (Soru-Cevap)"
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
   },
   "label_entity_45d7b842": {
-    "message": "Label entity"
+    "message": "Etiket varlığı"
   },
   "language_generation_1876f6d6": {
     "message": "Dil Oluşturma"
@@ -2085,13 +2088,13 @@
     "message": "Dil Anlama"
   },
   "language_understanding_authoring_key_74a41a4": {
-    "message": "Language Understanding authoring key"
+    "message": "Language Understanding yazma anahtarı"
   },
   "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
-    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>"
+    "message": "Language Understanding (LUIS), doğal dil girişini anlamak ve konuşma akışını yönlendirmek için makine öğrenmesi kullanan bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'daki mevcut bir Language Understanding (LUIS) anahtarını kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
   },
   "language_understanding_region_ec8fb05c": {
-    "message": "Language Understanding region"
+    "message": "Language Understanding bölgesi"
   },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
@@ -2103,7 +2106,7 @@
     "message": "Düzen:"
   },
   "learn_about_adaptive_expressions_fb1b6c3c": {
-    "message": "Learn about Adaptive expressions"
+    "message": "Uyarlamalı ifadeler hakkında bilgi edinin"
   },
   "learn_more_a79a7918": {
     "message": "Daha fazla bilgi"
@@ -2112,7 +2115,7 @@
     "message": "Etkinlikler hakkında daha fazla bilgi edinin"
   },
   "learn_more_about_custom_actions_e7aa69e9": {
-    "message": "Learn more about custom actions"
+    "message": "Özel eylemler hakkında daha fazla bilgi edinin"
   },
   "learn_more_about_endpoints_df156708": {
     "message": "Uç noktalar hakkında daha fazla bilgi edinin"
@@ -2121,7 +2124,7 @@
     "message": "Bildirimler hakkında daha fazla bilgi edinin"
   },
   "learn_more_about_orchestrator_c070e031": {
-    "message": "Learn more about Orchestrator"
+    "message": "Düzenleyici hakkında daha fazla bilgi edinin"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Beceri bildirimleri hakkında daha fazla bilgi edinin"
@@ -2145,7 +2148,7 @@
     "message": "LG dosyası zaten var"
   },
   "lg_file_format_and_syntax_244103fb": {
-    "message": "LG file format and syntax"
+    "message": "LG dosya biçimi ve söz dizimi"
   },
   "lg_file_id_not_found_6bd6869b": {
     "message": "{ id } LG dosyası bulunamadı"
@@ -2178,7 +2181,7 @@
     "message": "liste - { count } değer"
   },
   "list_entity_a3502e75": {
-    "message": "List entity"
+    "message": "Liste varlığı"
   },
   "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
     "message": "Kullanıcıya öneri olarak işlenen eylemlerin listesi."
@@ -2187,7 +2190,7 @@
     "message": "Türleri ile birlikte eklerin listesi. Kanallar tarafından kullanıcı arabirimi kartları veya diğer genel dosya eki türleri olarak işlenmek için kullanılır."
   },
   "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
-    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
+    "message": "Botun anlayabileceği (Kullanıcı girişi) ve yanıtlayabileceği (Bot yanıtları) dillerin listesi. Bu botu diğer dillerde kullanıma sunmak için varsayılan dilin bir kopyasını oluşturmak üzere ‘Dilleri yönet‘ seçeneğine tıklayın ve içeriği yeni dile çevirin."
   },
   "list_view_e33843f0": {
     "message": "Liste görünümü"
@@ -2199,10 +2202,10 @@
     "message": "Yükleniyor"
   },
   "loading_keys_22ceedc": {
-    "message": "Loading keys..."
+    "message": "Anahtarlar yükleniyor..."
   },
   "loading_subscription_f0a868a1": {
-    "message": "Loading subscription..."
+    "message": "Abonelik yükleniyor..."
   },
   "local_bot_runtime_manager_812cbd0c": {
     "message": "Yerel bot çalışma zamanı yöneticisi"
@@ -2214,7 +2217,7 @@
     "message": "Yerel Beceri."
   },
   "localization_2e29f01e": {
-    "message": "Localization"
+    "message": "Yerelleştirme"
   },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
     "message": "Bot dosyasını bulup bağlantıyı onarın"
@@ -2235,7 +2238,7 @@
     "message": "Oturum Açın"
   },
   "login_to_azure_c0cb057e": {
-    "message": "Azure’da oturum açın"
+    "message": "Azure'da oturum açın"
   },
   "loop_for_each_item_e09537ae": {
     "message": "Döngü: Her öğe için"
@@ -2256,7 +2259,7 @@
     "message": "lu dosyası zaten var"
   },
   "lu_file_format_and_syntax_8211b0c9": {
-    "message": "LU file format and syntax"
+    "message": "LU dosya biçimi ve söz dizimi"
   },
   "lu_file_id_not_found_8732d33e": {
     "message": "{ id } LU dosyası bulunamadı"
@@ -2271,13 +2274,13 @@
     "message": "LUIS"
   },
   "luis_authoring_key_2cfdf05": {
-    "message": "LUIS authoring key:"
+    "message": "LUIS yazma anahtarı:"
   },
   "luis_authoring_key_is_required_with_the_current_re_464f655e": {
     "message": "Botunuzu yerel olarak başlatıp yayımlamak için geçerli tanıyıcı ayarıyla LUIS yazma anahtarı gerekiyor"
   },
   "luis_authoring_region_a1d18730": {
-    "message": "Luis authoring region"
+    "message": "LUIS yazma bölgesi"
   },
   "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
     "message": "Botunuzu yerel olarak başlatıp yayımlamak için geçerli tanıyıcı ayarıyla LUIS anahtarı gerekiyor"
@@ -2286,7 +2289,7 @@
     "message": "LUIS bölgesi gerekiyor"
   },
   "machine_learned_entity_baec1ae5": {
-    "message": "Machine learned entity"
+    "message": "Makine öğrenimli varlık"
   },
   "main_dialog_eed5c847": {
     "message": "Ana iletişim kutusu"
@@ -2310,16 +2313,16 @@
     "message": "bildirim düzenleyicisi"
   },
   "manifest_url_a6250c02": {
-    "message": "Manifest URL"
+    "message": "Bildirim URL’si"
   },
   "manifest_url_can_not_be_accessed_ba43fc31": {
-    "message": "Manifest URL can not be accessed"
+    "message": "Bildirim URL’sine erişilemiyor"
   },
   "manifest_version_1edc004a": {
     "message": "Bildirim Sürümü"
   },
   "manually_add_question_and_answer_pairs_to_create_a_39089442": {
-    "message": "Manually add question and answer pairs to create a knowledge base"
+    "message": "Bilgi bankası oluşturmak için soru ve yanıt çiftlerini kendiniz ekleyin"
   },
   "maximum_f0e8e5e4": {
     "message": "En çok"
@@ -2373,7 +2376,7 @@
     "message": "İleti güncelleştirildi (İleti güncelleştirildi etkinliği)"
   },
   "microsoft_app_id_9c9dc559": {
-    "message": "Microsoft App ID"
+    "message": "Microsoft Uygulama Kimliği"
   },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft Uygulama Kimliği"
@@ -2382,16 +2385,16 @@
     "message": "Microsoft Uygulama Parolası"
   },
   "microsoft_logo_4378a7cb": {
-    "message": "Microsoft Logo"
+    "message": "Microsoft Logosu"
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
-    "message": "Microsoft''s templates offer best practices for developing conversational bots."
+    "message": "Microsoft şablonları konuşma botlarını geliştirmeye yönelik en iyi uygulamaları sunar."
   },
   "migrating_data_a35b3055": {
-    "message": "Migrating data"
+    "message": "Veriler geçiriliyor"
   },
   "migrating_to_composer_bc304b5d": {
-    "message": "Migrating to Composer"
+    "message": "Composer’a geçiriliyor"
   },
   "minimap_beb3be27": {
     "message": "Mini Harita"
@@ -2424,10 +2427,10 @@
     "message": "Taşı"
   },
   "move_down_4a9c9b18": {
-    "message": "Move down"
+    "message": "Aşağı taşı"
   },
   "move_up_2440f707": {
-    "message": "Move up"
+    "message": "Yukarı taşı"
   },
   "ms_teams_15993b97": {
     "message": "MS Teams"
@@ -2481,10 +2484,10 @@
     "message": "Gezinti Yolu"
   },
   "need_another_template_send_us_a_request_5cf2a4d5": {
-    "message": "Need another template? Send us a request"
+    "message": "Başka bir şablon mu gerekiyor? Bize bir istek gönderin"
   },
   "net_required_97928257": {
-    "message": ".NET required"
+    "message": ".NET gereklidir"
   },
   "new_template_49e6f0f2": {
     "message": "Yeni şablon"
@@ -2505,16 +2508,16 @@
     "message": "Sonraki"
   },
   "no_azure_directories_were_found_6dfe6f6f": {
-    "message": "No Azure Directories were found."
+    "message": "Azure Dizinleri bulunamadı."
   },
   "no_editor_for_type_8b5593c5": {
     "message": "{ type } için Düzenleyici Yok"
   },
   "no_entities_found_a8e8bd19": {
-    "message": "no entities found"
+    "message": "varlık bulunamadı"
   },
   "no_existing_service_resources_were_found_in_this_s_ca2f1745": {
-    "message": "No existing { service } resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin."
+    "message": "Bu abonelikte mevcut { service } kaynağı bulunamadı. Farklı bir abonelik seçin veya yeni bir kaynak oluşturmak için ya da Azure yöneticinize iletmek üzere bir kaynak isteği oluşturmak için \"Geri\" seçeneğine tıklayın."
   },
   "no_extensions_installed_4b925277": {
     "message": "Yüklü uzantı yok"
@@ -2526,7 +2529,7 @@
     "message": "İşlev bulunamadı"
   },
   "no_items_found_4a6f55d5": {
-    "message": "no items found"
+    "message": "öğe bulunamadı"
   },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "{ id } ADLI LU DOSYASI YOK"
@@ -2538,10 +2541,10 @@
     "message": "[adsız]"
   },
   "no_prebuilt_entities_found_a1015451": {
-    "message": "no prebuilt entities found"
+    "message": "önceden oluşturulmuş varlık bulunamadı"
   },
   "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
-    "message": "No profiles were found containing a Microsoft App ID."
+    "message": "Microsoft Uygulama Kimliği içeren profil bulunamadı."
   },
   "no_properties_found_6f777f6e": {
     "message": "Özellik bulunamadı"
@@ -2550,7 +2553,7 @@
     "message": "{ id } ADLI SORU-CEVAP DOSYASI YOK"
   },
   "no_recent_bots_f4cf7d0a": {
-    "message": "No recent bots"
+    "message": "Son bot yok"
   },
   "no_search_results_1ba50423": {
     "message": "Arama sonucu yok"
@@ -2568,13 +2571,13 @@
     "message": "joker karakter yok"
   },
   "node_js_required_89c1c708": {
-    "message": "Node.js required"
+    "message": "Node.js gereklidir"
   },
   "node_menu_e2aa8092": {
     "message": "Düğüm menüsü"
   },
   "node_preview_cbcd8fb": {
-    "message": "Node (Preview)"
+    "message": "Düğüm (Önizleme)"
   },
   "not_a_single_template_e37f894": {
     "message": "Tek bir şablon değil"
@@ -2586,7 +2589,7 @@
     "message": "Henüz yayımlanmadı"
   },
   "note_if_your_bot_is_using_custom_actions_they_will_a500ed2": {
-    "message": "Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>"
+    "message": "Not: Botunuz özel eylemler kullanıyorsa Composer 2.0'da desteklenmez. <a>Composer 2.0’a güncelleştirme hakkında daha fazla bilgi edinin.</a>"
   },
   "notifications_cbfa7704": {
     "message": "Bildirimler"
@@ -2613,7 +2616,7 @@
     "message": "OAuth oturum açma"
   },
   "object_33fc75c0": {
-    "message": "object"
+    "message": "nesne"
   },
   "object_345070f6": {
     "message": "Nesne"
@@ -2646,34 +2649,34 @@
     "message": "Ekleme"
   },
   "once_you_publish_your_bot_to_azure_you_will_be_rea_93048067": {
-    "message": "Once you publish your bot to Azure you will be ready to add connections."
+    "message": "Botunuzu Azure'da yayımladığınızda bağlantı eklemeye hazır olursunuz."
   },
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents Türleri"
   },
   "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
-    "message": "One or more options that are passed to the dialog that is called."
+    "message": "Çağrılan iletişim kutusuna geçirilen bir veya daha fazla seçenek."
   },
   "open_e0beb7b9": {
     "message": "Aç"
   },
   "open_github_811d5819": {
-    "message": "Open GitHub"
+    "message": "GitHub'ı aç"
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Satır içi düzenleyiciyi aç"
   },
   "open_manifest_6c334f9": {
-    "message": "Open manifest"
+    "message": "Bildirimi aç"
   },
   "open_notification_panel_5796edb3": {
     "message": "Bildirim panelini aç"
   },
   "open_teams_416aae5c": {
-    "message": "Open Teams"
+    "message": "Teams’i Aç"
   },
   "open_the_product_tour_to_learn_about_bot_framework_4e6e7227": {
-    "message": "Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>"
+    "message": "Bot Framework Composer hakkında bilgi edinmek için ürün turunu açın veya <Link>yeni bir bot oluşturun</Link>"
   },
   "open_web_chat_23601990": {
     "message": "Web Sohbetini Aç"
@@ -2700,7 +2703,7 @@
     "message": "Veya: "
   },
   "orchestrator_downloading_language_model_e785be44": {
-    "message": "Orchestrator: Downloading language model"
+    "message": "Düzenleyici: Dil modeli indiriliyor"
   },
   "orchestrator_recognizer_cf38b65a": {
     "message": "Orchestrator tanıyıcı"
@@ -2718,16 +2721,16 @@
     "message": "Diğer"
   },
   "our_privacy_statement_is_located_at_a_https_go_mic_56534925": {
-    "message": "Our privacy statement is located at <a>https://go.microsoft.com/fwlink/?LinkID=824704</a>. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices."
+    "message": "Gizlilik bildirimimiz <a>https://go.microsoft.com/fwlink/?LinkID=824704</a> adresinde bulunuyor. Yardım belgelerinde ve gizlilik bildirimimizde veri toplama ve kullanma hakkında daha fazla bilgi edinebilirsiniz. Yazılımı kullanımınız, bu uygulamalara verdiğiniz onaya göre gerçekleşir."
   },
   "output_5023cf84": {
     "message": "Çıkış"
   },
   "overview_58268c72": {
-    "message": "Overview"
+    "message": "Genel Bakış"
   },
   "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
-    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
+    "message": "<p>Telif hakkı (c) Microsoft Corporation.</p><p>MIT Lisansı</p><p>Bu yazılımın bir kopyasını ve ilgili belge dosyalarını (“Yazılım”) alan herkese aşağıdaki koşullara bağlı şekilde ücretsiz olarak sınırlama olmadan Yazılımı kullanma, kopyalama, değiştirme, birleştirme, yayınlama, dağıtma, alt lisanslama ve/veya kopyalarını satma ve Yazılımın satıldığı kişilere yukarıdaki işlemlerin gerçekleştirilmesi için yetki verme de dahil olmak üzere Yazılımın ticaretini yapmaları için izin verilir:</p><p>Yukarıdaki telif hakkı bildirimi ve bu izin bildirimi, Yazılımın tüm kopyalarına veya önemli kısımlarına eklenir.</p><p>YAZILIM, TİCARİ UYGUNLUK, BELİRLİ BİR AMACA UYGUNLUK VE İHLAL ETMEME GARANTİLERİ DAHİL ANCAK BUNLARLA SINIRLI OLMAMAK KAYDIYLA AÇIK VEYA ZIMNİ HİÇBİR GARANTİ OLMAKSIZIN \" OLDUĞU GİBİ\" SUNULMAKTADIR. YAZARLAR VEYA TELİF HAKKI SAHİPLERİ, YAZILIMLA VEYA YAZILIMIN KULLANIMI VEYA YAZILIMDAKİ DİĞER İŞLEMLER İLE BAĞLANTILI OLARAK ORTAYA ÇIKAN SÖZLEŞMEYE BAĞLI VEYA HAKSIZ FİİL SORUMLULUĞU OLUP OLMADIĞINA BAKILMAKSIZIN HİÇBİR DURUMDA HİÇBİR TALEP, ZARAR VEYA DİĞER YÜKÜMLÜLÜKLERDEN SORUMLU OLMAYACAKTIR.</p>"
   },
   "page_number_cdee4179": {
     "message": "Sayfa numarası"
@@ -2748,7 +2751,7 @@
     "message": "Lütfen bir olay adı girin"
   },
   "please_input_a_manifest_url_79cce9d5": {
-    "message": "Please input a manifest URL"
+    "message": "Lütfen bir bildirim URL’si girin"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Lütfen normal ifade deseni girin"
@@ -2760,31 +2763,28 @@
     "message": "Ekleme öğreticisini başlatmak için lütfen Tasarım Görünümüne dönün."
   },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
-    "message": "Lütfen Soru-Cevap’ı içeri aktarmak için belirli bir Soru-Cevap dosyası seçin"
+    "message": "Lütfen Soru-Cevap\"ı içeri aktarmak için belirli bir Soru-Cevap dosyası seçin"
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "Lütfen bir tetikleyici türü seçin"
   },
-  "please_setup_the_following_to_ensure_we_can_connec_2c5a2acb": {
-    "message": "Please setup the following to ensure we can connect to your remote skill successfully"
-  },
   "pop_out_editor_5528a187": {
-    "message": "Pop out editor"
+    "message": "Açılır pencere düzenleyicisi"
   },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
-    "message": "Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there."
+    "message": "Power Virtual Agents botları şu anda çalıştırılamıyor. Botu Power Virtual Agents'ta yayımlayın ve orada test edin."
   },
   "power_virtual_agents_bots_cannot_use_this_function_fcfeaf62": {
-    "message": "Power Virtual Agents bots cannot use this functionality at this time."
+    "message": "Power Virtual Agents botları şu anda bu işlevselliği kullanamıyor."
   },
   "power_virtual_agents_topics_count_9043ab47": {
-    "message": "Power Virtual Agents Topics ({ count })"
+    "message": "Power Virtual Agents Konu Başlıkları ({ count })"
   },
   "powervirtualagents_logo_11858924": {
     "message": "PowerVirtualAgents Logosu"
   },
   "prebuilt_entity_21ebcdc6": {
-    "message": "Prebuilt entity"
+    "message": "Önceden oluşturulmuş varlık"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "bu öğeyi eklemek için ENTER tuşuna veya bir sonraki etkileşimli öğeye gitmek için Sekme tuşuna basın"
@@ -2793,7 +2793,7 @@
     "message": "bu adı eklemek ve sonraki satıra ilerlemek için ENTER tuşuna basın veya değer alanına ilerlemek için Sekme tuşuna basın"
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
-    "message": "Press Shift+Enter to insert a new line"
+    "message": "Yeni bir satır eklemek için Shift+Enter tuşlarına basın"
   },
   "preview_features_e279bac5": {
     "message": "Önizleme özellikleri"
@@ -2808,7 +2808,7 @@
     "message": "önceki klasör"
   },
   "pricing_tier_c2ff8573": {
-    "message": "Pricing tier"
+    "message": "Fiyatlandırma katmanı"
   },
   "privacy_statement_da69ebc6": {
     "message": "Gizlilik bildirimi"
@@ -2820,7 +2820,7 @@
     "message": "{ total } içinde %{ progress }"
   },
   "project_readme_68f88d88": {
-    "message": "Project Readme"
+    "message": "Proje Benioku Dosyası"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "İstem Yapılandırmaları"
@@ -2865,7 +2865,7 @@
     "message": "Özellik Türü"
   },
   "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
-    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
+    "message": "Botunuzu Azure Konuşma hizmetine bağlamak için bir anahtar sağlayın. "
   },
   "provide_access_tokens_8ead7563": {
     "message": "Erişim belirteçlerini belirtin"
@@ -2880,7 +2880,7 @@
     "message": "Sağlanamadı"
   },
   "provision_partially_completed_b0120a72": {
-    "message": "Provision partially completed"
+    "message": "Sağlama kısmen tamamlandı"
   },
   "provision_success_d6a6e437": {
     "message": "Başarıyla sağlandı"
@@ -2898,7 +2898,7 @@
     "message": "Yayımlama modelleri"
   },
   "publish_profile_a4e8f07b": {
-    "message": "Publish profile"
+    "message": "Yayımlama profili"
   },
   "publish_selected_bots_825bc03a": {
     "message": "Seçili botları yayımlayın"
@@ -2907,10 +2907,10 @@
     "message": "Yayımlama hedefi"
   },
   "publish_your_bot_9099e323": {
-    "message": "Publish your bot"
+    "message": "Botunuzu yayımlayın"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
-    "message": "Publish your bot to Azure and manage published bots here."
+    "message": "Botunuzu Azure'da yayımlayın ve yayımlanan botları burada yönetin."
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Robotlarınızı yayımlayın"
@@ -2919,10 +2919,10 @@
     "message": "Yayımlandı"
   },
   "publisher_bf6195cf": {
-    "message": "Publisher"
+    "message": "Yayımcı"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
-    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
+    "message": "{ count, plural,\n     =1 {Bir bot}\n  other {# bot}\n} yayımlanıyor"
   },
   "publishing_d63a8f2d": {
     "message": "Yayımlama"
@@ -2931,16 +2931,16 @@
     "message": "{ name }, { publishTarget } hedefinde yayımlanamadı."
   },
   "publishing_profile_6d7064ce": {
-    "message": "Publishing Profile"
+    "message": "Yayımlama Profili"
   },
   "publishing_profile_a2cd5d52": {
-    "message": "Publishing profile"
+    "message": "Yayımlama profili"
   },
   "publishing_target_46605bc5": {
     "message": "Yayımlama hedefi"
   },
   "publishing_your_skill_b5957f9c": {
-    "message": "Publishing your skill..."
+    "message": "Beceriniz yayımlanıyor..."
   },
   "pull_d1c3e8fe": {
     "message": "Çek"
@@ -2955,19 +2955,19 @@
     "message": "Soru-Cevap amacı tanındı"
   },
   "qna_intent_recognized_6760e56d": {
-    "message": "QnA intent recognized"
+    "message": "Soru-Cevap amacı tanındı"
   },
   "qna_maker_introduction_c2e426a": {
-    "message": "QnA Maker introduction"
+    "message": "Soru-Cevap Oluşturma tanıtımı"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>"
+    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi.</a2>"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
-    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>"
+    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
-    "message": "QnA Maker subscription key:"
+    "message": "Soru-Cevap Oluşturma aboneliği anahtarı:"
   },
   "qna_maker_subscription_key_e009c9d9": {
     "message": "Soru-Cevap Oluşturma Aboneliği anahtarı"
@@ -2979,7 +2979,7 @@
     "message": "Soru-Cevap Gezinti Bölmesi"
   },
   "qna_region_5d2a4bce": {
-    "message": "QnA region"
+    "message": "Soru-Cevap bölgesi"
   },
   "question_9121487": {
     "message": "Soru"
@@ -2994,7 +2994,7 @@
     "message": "Kuyruğa alındı"
   },
   "quick_references_2ffbd14a": {
-    "message": "Quick references"
+    "message": "Hızlı başvurular"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -3009,7 +3009,7 @@
     "message": "Girişi yeniden iste (Yeniden isteme iletişim kutusu olayı)"
   },
   "recent_f19e8c64": {
-    "message": "Recent"
+    "message": "Son"
   },
   "recognizer_type_dc591e16": {
     "message": "Tanıyıcı Türü"
@@ -3018,10 +3018,10 @@
     "message": "Tanıyıcılar"
   },
   "recommended_7101829e": {
-    "message": "Recommended"
+    "message": "Önerilen"
   },
   "recommended_actions_befdd1a": {
-    "message": "Recommended actions"
+    "message": "Önerilen eylemler"
   },
   "redo_363c58b7": {
     "message": "Yinele"
@@ -3036,10 +3036,10 @@
     "message": "{ intent } normal ifadesi zaten tanımlandı"
   },
   "region_939f2a6c": {
-    "message": "Region"
+    "message": "Bölge"
   },
   "regular_expression_entity_e1cb91ce": {
-    "message": "Regular expression entity"
+    "message": "Normal ifade varlığı"
   },
   "regular_expression_recognizer_44664557": {
     "message": "Normal ifade tanıyıcı"
@@ -3069,13 +3069,13 @@
     "message": "Tüm metin yanıtlarını kaldırın"
   },
   "remove_attachment_81f30aa3": {
-    "message": "Remove attachment"
+    "message": "Eki kaldır"
   },
   "remove_f47dc62a": {
     "message": "Kaldır"
   },
   "remove_item_5877e701": {
-    "message": "Remove item"
+    "message": "Öğeyi kaldır"
   },
   "remove_this_dialog_6146716c": {
     "message": "Bu iletişim kutusunu kaldır"
@@ -3093,7 +3093,7 @@
     "message": "Varyasyonu kaldırın"
   },
   "removing_content_from_action_node_bb6a825e": {
-    "message": "Removing content from action node"
+    "message": "İçerik, eylem düğümünden kaldırılıyor"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "Bu iletişim kutusunu yinele"
@@ -3102,7 +3102,7 @@
     "message": "Bu iletişim kutusunu değiştir"
   },
   "report_a_bug_or_request_a_feature_36eb52c7": {
-    "message": "Report a bug or request a feature"
+    "message": "Bir hata bildirin veya bir özellik isteyin"
   },
   "reprompt_dialog_event_c42d2c33": {
     "message": "Yeniden isteme iletişim kutusu olayı"
@@ -3120,22 +3120,22 @@
     "message": "{ requiredText } | Öncelik: { priority }"
   },
   "reset_view_d5f8245a": {
-    "message": "Reset view"
+    "message": "Görünümü sıfırla"
   },
   "resource_group_982beb22": {
-    "message": "Resource Group"
+    "message": "Kaynak Grubu"
   },
   "resource_group_name_a8f7e7ce": {
-    "message": "Resource group name"
+    "message": "Kaynak grubu adı"
   },
   "resource_name_817b6e75": {
-    "message": "Resource name"
+    "message": "Kaynak adı"
   },
   "resources_ccefab27": {
-    "message": "Resources"
+    "message": "Kaynaklar"
   },
   "response_alternatives_will_be_selected_at_random_f_552dd090": {
-    "message": "Response alternatives will be selected at random for a more dynamic conversation."
+    "message": "Daha dinamik bir konuşma için yanıt alternatifleri rastgele seçilir."
   },
   "response_is_response_3cd62f8f": {
     "message": "Yanıt: { response }"
@@ -3150,25 +3150,25 @@
     "message": "Konuşmayı Yeniden Başlat - aynı kullanıcı kimliği"
   },
   "retrieve_app_id_59f07cf4": {
-    "message": "Retrieve App ID"
+    "message": "Uygulama Kimliğini al"
   },
   "retrieve_app_id_from_publishing_profile_b6643a25": {
-    "message": "Retrieve App ID from publishing profile"
+    "message": "Yayımlama profilinden Uygulama Kimliğini alın"
   },
   "review_and_generate_63dec712": {
     "message": "Gözden geçirin ve oluşturun"
   },
   "review_deactivated_custom_actions_8db7540c": {
-    "message": "Review deactivated custom actions"
+    "message": "Devre dışı bırakılan özel eylemleri gözden geçirin"
   },
   "review_your_template_readme_2d6eae1e": {
-    "message": "Review your template readme"
+    "message": "Şablonunuzun benioku dosyasını gözden geçirin"
   },
   "rollback_26326307": {
     "message": "Geri alma"
   },
   "root_6b5104ad": {
-    "message": "(root)"
+    "message": "(kök)"
   },
   "root_bot_7bb35314": {
     "message": "Kök bot."
@@ -3198,10 +3198,10 @@
     "message": "Çalışma Zamanı Yapılandırması"
   },
   "runtime_language_da49617a": {
-    "message": "Runtime Language"
+    "message": "Çalışma Zamanı Dili"
   },
   "runtime_log_9069fda7": {
-    "message": "Runtime log."
+    "message": "Çalışma zamanı günlüğü."
   },
   "runtime_type_f9e2419b": {
     "message": "Çalışma zamanı türü"
@@ -3216,7 +3216,7 @@
     "message": "Kaydet"
   },
   "save_app_id_f64b6102": {
-    "message": "Save App ID"
+    "message": "Uygulama Kimliğini kaydet"
   },
   "save_your_skill_manifest_63bf5f26": {
     "message": "Beceri bildiriminizi kaydedin"
@@ -3224,8 +3224,8 @@
   "schema_24739a48": {
     "message": "Şema"
   },
-  "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } yok. Düzenlenecek şemayı seçin veya yeni bir şema oluşturun"
+  "schemaid_doesn_t_exist_select_a_schema_to_edit_or__5a4b9035": {
+    "message": "{ schemaId } yok; düzenlenecek şemayı seçin veya yeni bir şema oluşturun"
   },
   "schemas_74566170": {
     "message": "Şemalar"
@@ -3240,19 +3240,19 @@
     "message": "Ara"
   },
   "search_4a044e7c": {
-    "message": "Search ..."
+    "message": "Ara..."
   },
   "search_entities_3ecdb6d": {
-    "message": "Search entities"
+    "message": "Varlıkları arayın"
   },
   "search_for_extensions_on_npm_c5ca65d9": {
-    "message": "NPM’de uzantıları ara"
+    "message": "NPM\"de uzantıları ara"
   },
   "search_functions_4a1afbc3": {
     "message": "İşlev arayın"
   },
   "search_prebuilt_entities_e52c0f35": {
-    "message": "Search prebuilt entities"
+    "message": "Önceden oluşturulmuş varlıkları ara"
   },
   "search_properties_5bf3d868": {
     "message": "Özellik arayın"
@@ -3261,37 +3261,37 @@
     "message": "Şablon arayın"
   },
   "see_details_15c93092": {
-    "message": "See details"
+    "message": "Ayrıntılara bakın"
   },
   "see_instructions_87eb4251": {
-    "message": "See instructions"
+    "message": "Yönergelere bakın"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "Bot Seçin"
   },
   "select_a_dialog_134385f2": {
-    "message": "Select a dialog"
+    "message": "Diyalog seçin"
   },
   "select_a_dialog_or_topic_4df93d0f": {
-    "message": "Select a dialog or topic"
+    "message": "Diyalog veya konu seçin"
   },
   "select_a_publish_target_d4530c94": {
     "message": "Yayımlama hedefi seçin"
   },
   "select_a_publishing_profile_a2eb4e86": {
-    "message": "Select a publishing profile"
+    "message": "Yayımlama profili seçin"
   },
   "select_a_resource_group_b536a26d": {
-    "message": "Select a resource group"
+    "message": "Kaynak grubu seçin"
   },
   "select_a_subscription_446b44e6": {
-    "message": "Select a subscription"
+    "message": "Abonelik seçin"
   },
   "select_a_template_874fe803": {
-    "message": "Select a template"
+    "message": "Şablon seçin"
   },
   "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
-    "message": "Select a trigger in the left<br />navigation to see actions"
+    "message": "Eylemleri görmek için sol<br />gezintide bir tetikleyici seçin"
   },
   "select_a_trigger_type_219bb52f": {
     "message": "Tetikleyici türünü seçin"
@@ -3306,13 +3306,16 @@
     "message": "Olay türü seçin"
   },
   "select_an_option_9f5dfb55": {
-    "message": "Select an option"
+    "message": "Bir seçenek belirleyin"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Düzenlenecek şemayı seçin veya yeni bir şema oluşturun"
   },
+  "select_app_id_and_password_e901a31d": {
+    "message": "Uygulama Kimliği ve parola seçin"
+  },
   "select_dialogs_f625e607": {
-    "message": "Select dialogs"
+    "message": "Diyalogları seçin"
   },
   "select_input_hint_267a6208": {
     "message": "Giriş ipucunu seçin"
@@ -3321,7 +3324,7 @@
     "message": "Silinecek dili seçin"
   },
   "select_one_b647b384": {
-    "message": "Select one"
+    "message": "Birini seçin"
   },
   "select_options_9ee7b227": {
     "message": "Seçenekleri belirleyin"
@@ -3330,40 +3333,37 @@
     "message": "Özellik türü seçin"
   },
   "select_publishing_profile_a3f478e2": {
-    "message": "Select publishing profile"
+    "message": "Yayımlama profili seçin"
   },
   "select_region_42a80a8e": {
-    "message": "Select region"
+    "message": "Bölge seçin"
   },
   "select_resource_edaf4ef5": {
-    "message": "Select resource"
+    "message": "Kaynak seçin"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Eklenecek çalışma zamanı sürümünü seçin"
   },
   "select_service_resources_326b206a": {
-    "message": "Select { service } resources"
+    "message": "{ service } kaynaklarını seçin"
   },
   "select_subscription_c5678611": {
-    "message": "Select subscription"
+    "message": "Abonelik seçin"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "Botun anlayabileceği (Kullanıcı girişi) ve yanıtlayabileceği (Bot yanıtları) dili seçin.\n    Bu botu diğer dillerde kullanıma sunmak için, varsayılan dilin bir kopyasını oluşturmak üzere \"Ekle\" seçeneğine tıklayın ve içeriği yeni dile çevirin."
   },
   "select_the_resource_group_and_region_in_which_your_51f85ff": {
-    "message": "Select the resource group and region in which your { service } service will be created."
+    "message": "{ service } hizmetinizin oluşturulacağı kaynak grubunu ve bölgeyi seçin."
   },
   "select_triggers_5ff033ae": {
-    "message": "Select triggers"
+    "message": "Tetikleyicileri seçin"
   },
   "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
-    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+    "message": "Azure dizininizi seçin ve ardından yeni { service } kaynağınızın bulunmasını istediğiniz aboneliği seçin."
   },
   "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
-    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
-  },
-  "select_your_microsoft_app_id_and_password_74918f5d": {
-    "message": "Select your Microsoft App ID and Password"
+    "message": "Azure dizininizi seçin ve ardından mevcut { service } kaynağınızın bulunduğu aboneliği seçin."
   },
   "selection_field_86d1dc94": {
     "message": "seçim alanı"
@@ -3378,7 +3378,7 @@
     "message": "HTTP isteği gönder"
   },
   "send_handoff_activity_651ee597": {
-    "message": "Send handoff activity"
+    "message": "İletim etkinliği gönder"
   },
   "send_messages_c48b239": {
     "message": "İleti Gönder"
@@ -3387,7 +3387,7 @@
     "message": "Tümce kaydırma"
   },
   "service_resource_name_56566aab": {
-    "message": "{ service } resource name"
+    "message": "{ service } kaynak adı"
   },
   "session_expired_12aaf414": {
     "message": "Oturumun süresi doldu"
@@ -3405,31 +3405,28 @@
     "message": "Özellikleri ayarla"
   },
   "set_up_continuous_deployment_devops_4919f626": {
-    "message": "Set up continuous deployment (DevOps)"
+    "message": "Sürekli dağıtımı ayarlayın (DevOps)"
   },
   "set_up_language_understanding_f51f4884": {
-    "message": "Set up Language Understanding"
+    "message": "Language Understanding’i ayarlayın"
   },
   "set_up_qna_maker_170a4422": {
-    "message": "Set up QnA Maker"
+    "message": "Soru-Cevap Oluşturma’yı ayarlayın"
   },
   "set_up_service_b6d23e54": {
-    "message": "Set up { service }"
-  },
-  "set_your_microsoft_app_id_and_password_46b5628c": {
-    "message": "Set your Microsoft App ID and Password"
+    "message": "{ service } hizmetini ayarla"
   },
   "setting_things_up_8022afe8": {
     "message": "Ayarlar yapılıyor..."
   },
   "setting_up_bot_framework_emulator_40f455db": {
-    "message": "Setting up Bot Framework Emulator"
+    "message": "Bot Framework Emulator ayarlanıyor"
   },
   "settings_5aa0fd0c": {
     "message": "Ayarlar"
   },
   "settings_contains_detailed_information_about_your__54aa601d": {
-    "message": "Ayarlar, botunuz ile ilgili ayrıntılı bilgiler içerir. Güvenlik nedenleriyle bu bilgiler varsayılan olarak gizlenir. Botunuzu test etmek veya Azure’da yayımlamak için bu ayarları sağlamanız gerekebilir."
+    "message": "Ayarlar, botunuz ile ilgili ayrıntılı bilgiler içerir. Güvenlik nedenleriyle bu bilgiler varsayılan olarak gizlenir. Botunuzu test etmek veya Azure\"da yayımlamak için bu ayarları sağlamanız gerekebilir."
   },
   "settings_editor_b5246933": {
     "message": "Ayarlar düzenleyicisi"
@@ -3438,10 +3435,10 @@
     "message": "Ayarlar menüsü"
   },
   "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
-    "message": "Setup tunneling software to test your remote skill"
+    "message": "Uzak becerinizi test etmek için tünel oluşturma yazılımını ayarlayın"
   },
   "short_description_for_6abb9a1b": {
-    "message": "short description for"
+    "message": "şunun kısa açıklaması:"
   },
   "show_all_diagnostics_c11f4e09": {
     "message": "Tüm Tanılamayı Göster"
@@ -3456,7 +3453,7 @@
     "message": "Anahtarları göster"
   },
   "show_response_editor_90bd8b49": {
-    "message": "Show response editor"
+    "message": "Yanıt düzenleyicisini göster"
   },
   "show_skill_manifest_5d0abde1": {
     "message": "Beceri bildirimini göster"
@@ -3471,7 +3468,7 @@
     "message": "Beceri"
   },
   "skill_configuration_5e4bfbcd": {
-    "message": "Skill configuration"
+    "message": "Beceri yapılandırması"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "Yetenek İletişim Kutusu Adı"
@@ -3480,25 +3477,25 @@
     "message": "Yetenek Uç Noktası"
   },
   "skill_host_endpoint_url_702c277c": {
-    "message": "Skill host endpoint URL"
-  },
-  "skill_host_endpoint_url_e68b65f6": {
     "message": "Beceri konağı uç noktası URL’si"
   },
+  "skill_host_endpoint_url_e68b65f6": {
+    "message": "Beceri konağı uç noktası URL\"si"
+  },
   "skill_manifest_url_1094fcba": {
-    "message": "Skill Manifest URL"
+    "message": "Beceri Bildirimi URL’si"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
-    "message": "Skill manifest URL was copied to the clipboard"
+    "message": "Beceri bildirimi URL'si panoya kopyalandı"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Bildirimi"
   },
   "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
-    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>"
+    "message": "Beceriler, dış botlar tarafından \"çağrılabilir\". Diğer botların Uygulama Kimliklerini aşağıdaki listeye ekleyerek bu botların becerinizi çağırmasını sağlayın. <a>Daha fazla bilgi</a>"
   },
   "skip_bcb86160": {
-    "message": "Skip"
+    "message": "Atla"
   },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
     "message": "Çekmeye çalışılırken bir sorun oluştu: { e }"
@@ -3513,10 +3510,10 @@
     "message": "Ne yazık ki yayımlama sırasında bir sorun oluştu. Yeniden deneyin veya bu görevden çıkın."
   },
   "sorted_a_to_z_915b2ed3": {
-    "message": "A’dan Z’ye sıralandı"
+    "message": "A\"dan Z\"ye sıralandı"
   },
   "sorted_z_to_a_722f1567": {
-    "message": "Z’den A’ya sıralandı"
+    "message": "Z\"den A\"ya sıralandı"
   },
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Boşluk ve özel karakterlere izin verilmez."
@@ -3540,7 +3537,7 @@
     "message": "Birden fazla ek düzeni olduğunda bir ek düzeni belirtin."
   },
   "specify_an_existing_bot_to_connect_to_your_azure_b_3c632ffa": {
-    "message": "Specify an existing bot to connect to your Azure Bot resource."
+    "message": "Azure Bot kaynağınıza bağlanmak için mevcut bir bot belirtin."
   },
   "speech_16063aed": {
     "message": "Konuşma"
@@ -3555,7 +3552,7 @@
     "message": "Stack Overflow"
   },
   "start_and_stop_local_bot_runtimes_98f94e21": {
-    "message": "Start and stop local bot runtimes"
+    "message": "Yerel bot çalışma zamanlarını başlatıp durdurun"
   },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
     "message": "Yerel bot çalışma zamanlarını tek tek başlatıp durdurun."
@@ -3570,7 +3567,7 @@
     "message": "Baştan başlatılsın mı?"
   },
   "start_this_bot_ef51fbc2": {
-    "message": "Start this bot"
+    "message": "Bu botu başlat"
   },
   "start_typing_kind_or_b0c305da": {
     "message": "{ kind } yazmaya başlayın veya"
@@ -3594,7 +3591,7 @@
     "message": "Botu durdur"
   },
   "stop_this_bot_6cce6509": {
-    "message": "Stop this bot"
+    "message": "Bu botu durdur"
   },
   "stopping_e4de5f4a": {
     "message": "Durduruluyor"
@@ -3612,13 +3609,13 @@
     "message": "Gönder"
   },
   "submit_a_feature_request_151d280c": {
-    "message": "Submit a feature request"
+    "message": "Özellik isteği gönderin"
   },
   "subscription_15330b8a": {
-    "message": "Subscription"
+    "message": "Abonelik"
   },
   "subscription_id_250f5e1f": {
-    "message": "Subscription Id:"
+    "message": "Abonelik kimliği:"
   },
   "suggested_actions_94d06bfa": {
     "message": "Önerilen Eylemler"
@@ -3633,10 +3630,10 @@
     "message": "Eş Anlamlılar (İsteğe Bağlı)"
   },
   "system_topic_44cfbac8": {
-    "message": "System Topic"
+    "message": "Sistem Konu Başlığı"
   },
   "take_a_product_tour_a2892d17": {
-    "message": "Take a product tour"
+    "message": "Ürün turuna katılın"
   },
   "target_da92f4e6": {
     "message": "Hedef"
@@ -3645,13 +3642,13 @@
     "message": "TB"
   },
   "teams_manifest_59d7fb0e": {
-    "message": "Teams Manifest"
+    "message": "Teams Bildirimi"
   },
   "teams_manifest_for_your_bot_7d0ec7ea": {
-    "message": "Teams manifest for your bot:"
+    "message": "Botunuzun Teams bildirimi:"
   },
   "teams_requires_a_few_more_steps_to_get_your_connec_320c55f2": {
-    "message": "Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how."
+    "message": "Teams, bağlantınızı çalışır duruma getirmek için birkaç adım daha gerektirir. Nasıl yapılacağını öğrenmek için belgeler sayfamızdaki yönergeleri izleyin."
   },
   "template_name_c37cf8d9": {
     "message": "Şablon adı:"
@@ -3663,16 +3660,16 @@
     "message": "Kullanım Koşulları"
   },
   "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
-    "message": "Test and debug your bots in Bot Framework Emulator"
+    "message": "Bot Framework Emulator'da botlarınızı test edin ve bunların hatalarını ayıklayın"
   },
   "test_in_emulator_b1b3c278": {
-    "message": "Emulator’da Test Et"
+    "message": "Emulator\"da Test Et"
   },
   "test_with_web_chat_and_emulator_d0f87a81": {
-    "message": "Test with Web Chat and Emulator"
+    "message": "Web Sohbeti ve Öykünücü ile test et"
   },
   "test_with_web_chat_or_emulator_4edda954": {
-    "message": "Test with Web Chat or Emulator"
+    "message": "Web Sohbeti veya Öykünücü ile test et"
   },
   "test_your_bot_3cd1f4bb": {
     "message": "Botunuzu test edin"
@@ -3690,28 +3687,28 @@
     "message": "Yeteneğin /api/messages uç noktası."
   },
   "the_app_id_9c6d6a9a": {
-    "message": "The app id"
+    "message": "Uygulama kimliği"
   },
   "the_app_id_of_your_application_registration_16fba1a9": {
-    "message": "The app id of your application registration"
+    "message": "Uygulama kaydınızın uygulama kimliği"
   },
   "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
-    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
+    "message": "Azure Bot Hizmetlerinde oluşturulan Azure Bot, yeni bir bot için temel olarak kullanılabilecek veya mevcut bir botun kaynaklarını eklemek ya da değiştirmek için kullanılabilecek bot kaynakları içeriyor."
   },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
-    "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
+    "message": "Bot Yanıtları sayfası, Dil Oluşturma (LG) düzenleyicisinin bulunduğu yerdir. Kullanıcılar buradan tüm LG şablonlarını görüntüleyebilir ve düzenleyebilir."
   },
   "the_capabilities_of_your_bot_are_defined_in_its_di_37d5670f": {
-    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more."
+    "message": "Botunuzun özellikleri diyaloglarında ve tetikleyicilerinde tanımlanır. Seçili diyaloglar bildirime dahil edilir. İç diyaloglar veya eylemler diğer botlarla ilgili olmayabilir. Daha fazla bilgi."
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "Silmeye çalıştığınız iletişim kutusu şu anda aşağıdaki iletişim kutularında kullanılıyor. Bu iletişim kutusunun kaldırılması, Botunuzun ek bir eylem olmadan hatalı çalışmasına yol açabilir."
   },
   "the_endpoint_url_7c04ee13": {
-    "message": "The endpoint url"
+    "message": "Uç nokta URL'si"
   },
   "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
-    "message": "The endpoint url of your web app resource"
+    "message": "Web uygulaması kaynağınızın uç nokta URL'si"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "Dosya adı boş olamaz"
@@ -3720,13 +3717,13 @@
     "message": "Şu LU Dosyaları geçersiz: \n"
   },
   "the_following_service_keys_have_been_successfully__29b5672a": {
-    "message": "The following { service } keys have been successfully added to your bot project:"
+    "message": "Şu { service } anahtarları bot projenize başarıyla eklendi:"
   },
   "the_following_service_resource_was_successfully_cr_1381acb2": {
-    "message": "The following { service } resource was successfully created and added to your bot project:"
+    "message": "Şu { service } kaynağı başarıyla oluşturuldu ve bot projenize eklendi:"
   },
   "the_main_dialog_is_the_foundation_of_every_bot_cre_d4a938ff": {
-    "message": "The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot."
+    "message": "Ana diyalog, Composer’da oluşturulan her botun temelidir. Yalnızca bir ana diyalog vardır ve diğer tüm diyaloglar bunun alt öğesidir. Ana diyalog, botunuz her çalıştırıldığında başlatılır ve bota yönelik giriş noktasıdır."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "Bildirim, gerekli durumlarda el ile düzenlenebilir ve geliştirilebilir."
@@ -3753,19 +3750,19 @@
     "message": "Botunuzu yayımladığınız hedef"
   },
   "the_user_input_page_is_where_the_language_understa_c9262f3f": {
-    "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."
+    "message": "Kullanıcı Girişi sayfası, Language Understanding düzenleyicisinin bulunduğu yerdir. Kullanıcılar buradan tüm Language Understanding şablonlarını görüntüleyebilir ve düzenleyebilir."
   },
   "there_are_no_notifications_e81eab8d": {
     "message": "Bildirim yok."
   },
   "there_are_no_optional_properties_b664c20f": {
-    "message": "There are no optional properties."
+    "message": "İsteğe bağlı özellik yok."
   },
   "there_are_no_preview_features_at_this_time_a5c40953": {
     "message": "Şu anda önizleme özelliği yok."
   },
   "there_are_no_required_properties_ba214ac5": {
-    "message": "There are no required properties."
+    "message": "Gerekli özellik yok."
   },
   "there_is_no_original_view_63a2eaed": {
     "message": "Özgün görünüm yok"
@@ -3774,19 +3771,19 @@
     "message": "Küçük resim görünümü yok"
   },
   "there_was_a_problem_getting_the_access_token_for_t_69f5a5e2": {
-    "message": "There was a problem getting the access token for the current Azure directory. { errMessage }"
+    "message": "Geçerli Azure dizininin erişim belirteci alınırken bir sorun oluştu. { errMessage }"
   },
   "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
-    "message": "There was a problem loading Azure directories. { errMessage }"
+    "message": "Azure dizinleri yüklenirken bir sorun oluştu. { errMessage }"
   },
   "there_was_a_problem_with_the_authentication_access_3ca717f6": {
-    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
+    "message": "Kimlik doğrulaması erişim belirteciyle ilgili bir sorun oluştu. Bu iletişim kutusunu kapatıp yeniden deneyin. Erişim belirtecinin yeniden sağlanmasının istenmesi için bunu uygulama yerel depolama alanından kaldırın."
   },
   "there_was_an_error_74ed3c58": {
     "message": "Bir hata oluştu"
   },
   "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
-    "message": "There was an error accessing your Azure account: { errorMsg }"
+    "message": "Azure hesabınıza erişilirken bir hata oluştu: { errorMsg }"
   },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
     "message": "Bot içeriği <b>{ botName }</b> botuna aktarılırken beklenmeyen bir hata oluştu"
@@ -3795,13 +3792,13 @@
     "message": "<b>{ selectedTargetName }</b> yayımlama profilinden çekilirken beklenmeyen bir hata oluştu"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
-    "message": "BB’niz oluşturulurken hata oluştu"
+    "message": "BB\"niz oluşturulurken hata oluştu"
   },
   "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
-    "message": "This bot cannot be called as a skill since the allowed caller list is empty"
+    "message": "İzin verilen çağıran listesi boş olduğundan bu bot beceri olarak çağrılamaz"
   },
   "this_cognitive_service_account_is_already_set_as_t_841165f7": {
-    "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
+    "message": "Bu bilişsel hizmet hesabı zaten başka bir bot için varsayılan olarak ayarlandı. Bu hizmeti varsayılan olarak ayarlamadan etkinleştirmek istiyor musunuz?"
   },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "Bu, bir olaylar ve eylemler koleksiyonu aracılığıyla veri temelli bir iletişim kutusunu yapılandırır."
@@ -3819,7 +3816,7 @@
     "message": "Bu, şu anda yazmakta olduğunuz bot dilidir. Aşağıdaki açılır menüden etkin dili değiştirin."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
-    "message": "Bu, Composer’ın kullanıcı arabirimi için kullanılan dildir."
+    "message": "Bu, Composer\"ın kullanıcı arabirimi için kullanılan dildir."
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "Bu dil, çeviri temeli (ve temel dili) olarak kopyalanır ve kullanılır."
@@ -3831,16 +3828,16 @@
     "message": "Bu işlem tamamlanamıyor. Özellik zaten Bot Projesinin bir parçası"
   },
   "this_operation_will_overwrite_changes_made_to_prev_e746d44f": {
-    "message": "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
+    "message": "Bu işlem, önceden içeri aktarılan dosyalarda yapılan değişikliklerin üzerine yazar. Devam etmek istiyor musunuz?"
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "Bu seçenek, kullanıcılarınızın bu özellik için birden çok değer vermesini sağlar."
   },
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
-    "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
+    "message": "Bu proje, Composer’ın eski bir sürümünde oluşturulmuş. Bu projeyi Composer 2.0’da açmak için projenizi kopyalayıp en son biçime dönüştürmemiz gerekiyor. Özgün projeniz değiştirilmeyecek."
   },
-  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
-    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
+  "this_publishing_profile_profilename_is_no_longer_s_941d10e0": {
+    "message": "Bu yayımlama profili ({ profileName }) artık desteklenmiyor. Birden çok Azure kiracısının üyesisiniz ve profilin kendisiyle ilişkilendirilmiş bir kiracı kimliğine sahip olması gerekir. Profilin yapılandırmasına `tenantId` özelliğini ekleyerek profili düzenleyebilir ya da yeni bir profil oluşturabilirsiniz."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "Bu tetikleyici türü, normal ifade tanıyıcısı tarafından desteklenmiyor. Bu tetikleyicinin tetiklendiğinden emin olmak için tanıyıcı türünü değiştirin."
@@ -3867,19 +3864,25 @@
     "message": "ipuçları"
   },
   "title_connection_eaec11f8": {
-    "message": "{ title } connection"
+    "message": "{ title } bağlantısı"
   },
   "title_ee03d132": {
     "message": "Başlık"
   },
-  "to_connect_to_a_skill_you_will_need_a_skill_s_mani_3d163597": {
-    "message": "To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step."
+  "to_connect_to_a_skill_your_bot_needs_the_informati_409e03db": {
+    "message": "Bir beceriye bağlanmak için, botunuzun beceri bildiriminde yer alan bilgilere ihtiyacı vardır. Bu bilgiler için becerinin yazarı veya yayıncısıyla iletişime geçin."
   },
-  "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
-    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  "to_connect_to_a_skill_your_bot_needs_the_informati_65b28231": {
+    "message": "Bir beceriye bağlanmak için, botunuzun becerinin bildiriminde yakalanan bilgilere ihtiyacı vardır ve güvenli erişim için becerinin botunuzun Uygulama Kimliğini bilmesi gerekir. Devam etmek için aşağıdaki adımları izleyin."
+  },
+  "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
+    "message": "Bir beceriye bağlanmak için botunuz becerinin bot bildiriminde yakalanan bilgilere ihtiyaç duyar ve güvenli erişim için becerinin, botunuzun Uygulama Kimliğini bilmesi gerekir. <link>Daha fazla bilgi.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+    "message": "Güvenli bir bağlantı sağlamak için becerinize bağlanılabilecek botların Uygulama Kimliğini sağlayın. Bu bilgilere sahip değilseniz bu bilgileri Beceri Yapılandırmasına da ekleyebilirsiniz. Daha fazla bilgi."
+  },
+  "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
+    "message": "Güvenli bir bağlantı sağlamak için, uzak becerinin botunuzun Microsoft Uygulama Kimliğini bilmesi gerekir."
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "Daha fazla bilgi için <a>bu belgeye bakın</a>."
@@ -3897,25 +3900,25 @@
     "message": "> Soru-Cevap dosya biçimi hakkında daha fazla bilgi edinmek için şu adresteki belgeleri okuyun\n> { QNA_HELP }"
   },
   "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
-    "message": "To learn more about the { title }, <a>visit its documentation page</a>."
+    "message": "{ title } hakkında daha fazla bilgi edinmek için <a>belgeler sayfasını ziyaret edin</a>."
   },
   "to_make_your_bot_available_as_a_remote_skill_you_w_be5a6e3f": {
-    "message": "To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select."
+    "message": "Botunuzu uzak bir beceri olarak kullanıma sunmak için Azure kaynaklarını sağlamanız gerekir. Bu işlem, seçtiğiniz kaynaklara bağlı olarak birkaç dakika sürebilir."
   },
   "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
     "message": "Composer’ın, hazırlama ve yayımlama eylemleri gerçekleştirmesi için Azure ve MS Graph hesaplarınıza erişmesi gerekiyor. Aşağıda vurgulanan komutları kullanarak az komut satırı aracından erişim belirteçlerini yapıştırın."
   },
   "to_run_this_bot_composer_needs_azure_functions_cor_bbbd0e7": {
-    "message": "To run this bot, Composer needs Azure Functions Core Tools."
+    "message": "Composer, bu botu çalıştırmak için Azure Functions Core Tools gerektirir."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "Bu botu çalıştırmak için Composer, .NET Core SDK gerektiriyor."
   },
   "to_test_run_and_publish_your_bot_it_needs_azure_re_e33d8fd": {
-    "message": "To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels. Other resources, such as language understanding and storage are optional. A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources."
+    "message": "Botunuzu test etmek, çalıştırmak ve yayımlamak için uygulama kaydı, barındırma ve kanallar gibi Azure kaynakları gerekir. Dil anlama ve depolama alanı gibi diğer kaynaklar isteğe bağlıdır. Yayımlama profili, botunuzu sağlamak ve yayımlamak için botun Azure kaynakları dahil gerekli tüm bilgileri içerir."
   },
   "to_understand_natural_language_input_and_direct_th_fc982d4a": {
-    "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
+    "message": "Doğal dil girişini anlamak ve konuşma akışını yönlendirmek için botunuz bir dil anlama hizmetine ihtiyaç duyar. "
   },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
     "message": "Kullanıcının söylediklerinin anlaşılması için iletişim kutunuz, kullanıcıların kullanabileceği örnek sözcükleri ve tümceleri içeren bir \"Recognizer\" öğesine ihtiyaç duyar."
@@ -3936,7 +3939,7 @@
     "message": "araç çubuğu"
   },
   "topic_e820dbbd": {
-    "message": "(Topic)"
+    "message": "(Konu Başlığı)"
   },
   "total_mb_531a3721": {
     "message": "{ total } MB"
@@ -3945,31 +3948,31 @@
     "message": "{ total, plural,\n     =1 {Botu yeniden başlat}\n  other {Tüm botları yeniden başlat ({ total } bot içinden { running } bot çalışıyor)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
+    "message": "{ total, plural,\n     =1 {Botu başlat}\n  other {Tümünü başlat}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Bot başlatılıyor...}\n  other {Botlar başlatılıyor... ({ total } bot içinden { running } bot çalışıyor)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
+    "message": "{ total, plural,\n     =1 {Bot durduruluyor...}\n  other {Botlar durduruluyor... ({ total } bot içinden { running } bot çalışıyor)}\n}"
   },
   "trigger_f0ee1fbf": {
-    "message": "Trigger"
+    "message": "Tetikleyici"
   },
   "trigger_group_79a00ac6": {
-    "message": "Trigger group"
+    "message": "Tetikleyici grubu"
   },
   "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
-    "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
+    "message": "Tetikleyici tümcecikleri, LUIS modelinizi eğitmek için kullanılacak olan, kullanıcılardan gelen girişlerdir. Bu, .lu dosya biçimini izler."
   },
   "trigger_phrases_f6754fa": {
     "message": "Tetikleyici tümcecikleri"
   },
   "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
-    "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
+    "message": "Tetikleyiciler bir diyaloğun ana bileşenidir, olayları nasıl yakaladığınız ve yanıtladığınızla ilişkilidirler. Her tetikleyicinin bir koşulu ve koşul karşılandığında yürütülecek eylemler koleksiyonu vardır."
   },
   "triggers_selected_below_will_enable_other_bots_to__fd8353a5": {
-    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. Learn more."
+    "message": "Aşağıda seçilen tetikleyiciler, diğer botların becerinizin özelliklerine erişebilmesini sağlar. Daha fazla bilgi."
   },
   "true_1900d7ae": {
     "message": "true"
@@ -3981,22 +3984,22 @@
     "message": "TrueSelector"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
-    "message": "Önizlemedeki yeni özellikleri deneyin ve Composer’ı geliştirmemize yardımcı olun. Bu özellikleri istediğiniz zaman etkinleştirebilir veya devre dışı bırakabilirsiniz."
+    "message": "Önizlemedeki yeni özellikleri deneyin ve Composer\"ı geliştirmemize yardımcı olun. Bu özellikleri istediğiniz zaman etkinleştirebilir veya devre dışı bırakabilirsiniz."
   },
   "type_a_name_for_this_knowledge_base_ab07b439": {
-    "message": "Type a name for this knowledge base"
+    "message": "Bu bilgi bankası için bir ad yazın"
   },
   "type_and_press_enter_33a2905d": {
     "message": "Yazın ve ENTER tuşuna basın"
   },
   "type_app_id_a37decdf": {
-    "message": "Type App Id"
+    "message": "Uygulama Kimliğini yazın"
   },
   "type_app_password_8084ff36": {
-    "message": "Type App Password"
+    "message": "Uygulama Parolasını Yazın"
   },
   "type_application_name_24f02dbe": {
-    "message": "Type application name"
+    "message": "Uygulama adını yazın"
   },
   "type_c8106334": {
     "message": "Yazın"
@@ -4008,13 +4011,13 @@
     "message": "Form iletişim kutusu şeması adını yazın"
   },
   "type_language_understanding_authoring_key_515790d0": {
-    "message": "Type Language Understanding authoring key"
+    "message": "Language Understanding yazma anahtarını yazın"
   },
   "type_or_paste_url_763adeb4": {
-    "message": "Type or paste URL"
+    "message": "URL yazın veya yapıştırın"
   },
   "type_subscription_key_ab5ab9a6": {
-    "message": "Type subscription key"
+    "message": "Abonelik anahtarını yazın"
   },
   "typing_activity_6b634ae": {
     "message": "Yazma etkinliği"
@@ -4041,13 +4044,13 @@
     "message": "Bilinmeyen Durum"
   },
   "unnamed_4c8565a0": {
-    "message": "Unnamed"
+    "message": "Adsız"
   },
   "unread_notifications_indicator_e2ca00d5": {
-    "message": "Unread notifications Indicator"
+    "message": "Okunmamış bildirimler Göstergesi"
   },
   "unsupported_publishing_profile_ad088e54": {
-    "message": "Unsupported publishing profile"
+    "message": "Desteklenmeyen yayımlama profili"
   },
   "unused_8d193e3": {
     "message": "Kullanılmayan"
@@ -4062,13 +4065,13 @@
     "message": "Etkinliği güncelleştir"
   },
   "update_and_restart_b236a67": {
-    "message": "Update and restart"
+    "message": "Güncelleştir ve yeniden başlat"
   },
   "update_available_b637d767": {
     "message": "Güncelleştirme var"
   },
   "update_cancelled_auto_update_has_been_turned_off_f_7f7e08d7": {
-    "message": "Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>"
+    "message": "Güncelleştirme iptal edildi. Otomatik güncelleştirme bu sürüm için kapatıldı. İstediğiniz zaman <b>Yardım > Güncelleştirmeleri denetle</b> seçeneğini belirleyerek güncelleştirebilirsiniz."
   },
   "update_complete_c5163fbf": {
     "message": "Güncelleştirme tamamlandı"
@@ -4095,19 +4098,19 @@
     "message": "URL"
   },
   "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+    "message": "URL, http:// veya https:// ile başlamalıdır"
   },
   "use_azure_bot_to_create_a_new_conversation_1a116a65": {
-    "message": "Use Azure Bot to create a new conversation"
+    "message": "Yeni bir konuşma oluşturmak için Azure Bot kullanın"
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
-    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ."
+    "message": "Bir web sitesi SSS'sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın."
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_b24bef9f": {
-    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ. "
+    "message": "Bir web sitesi SSS'sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın. "
   },
   "use_azure_qna_maker_to_extract_question_and_answer_942c2dcd": {
-    "message": "Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. "
+    "message": "Çevrimiçi bir SSS'den soru-yanıt çiftleri ayıklamak için Azure Soru-Cevap Oluşturma kullanın. "
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Özel LUIS yazma anahtarını kullanın"
@@ -4122,16 +4125,16 @@
     "message": "Özel çalışma zamanı kullan"
   },
   "use_existing_resources_88d21106": {
-    "message": "Use existing resources"
+    "message": "Mevcut kaynakları kullan"
   },
   "use_machine_learning_to_understand_natural_languag_53f12465": {
-    "message": "Use machine learning to understand natural language input and direct the conversation flow."
+    "message": "Doğal dil girişini anlamak ve konuşma akışını yönlendirmek için makine öğrenmesi kullanın."
   },
   "use_orchestrator_for_multi_bot_projects_bots_that__1b481cdd": {
-    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
+    "message": "Çoklu bot projeleri (birden çok bottan oluşan veya becerilere bağlanan botlar) için Orchestrator'ı kullanın."
   },
   "use_speech_to_enable_voice_input_and_output_for_yo_742c511d": {
-    "message": "Use Speech to enable voice input and output for your bot."
+    "message": "Botunuz için ses girişini ve çıkışını etkinleştirmek üzere Konuşma’yı kullanın."
   },
   "used_3d895705": {
     "message": "Kullanılan"
@@ -4143,7 +4146,7 @@
     "message": "Kullanıcı girişi"
   },
   "user_input_and_bot_responses_2a9b67b1": {
-    "message": "User input and bot responses"
+    "message": "Kullanıcı girişi ve bot yanıtları"
   },
   "user_is_typing_790cb502": {
     "message": "Kullanıcı yazıyor"
@@ -4152,7 +4155,7 @@
     "message": "Kullanıcı yazıyor (Yazma etkinliği)"
   },
   "user_topic_e3978941": {
-    "message": "User Topic"
+    "message": "Kullanıcı Konu Başlığı"
   },
   "validation_b10c677c": {
     "message": "Doğrulama"
@@ -4176,22 +4179,22 @@
     "message": "İletişim kutusunu görüntüle"
   },
   "view_documentation_samples_and_extensions_285b9404": {
-    "message": "View documentation, samples, and extensions"
+    "message": "Belgeleri, örnekleri ve uzantıları görüntüleyin"
   },
   "view_kb_c382e495": {
-    "message": "BB’yi görüntüle"
+    "message": "BB\"yi görüntüle"
   },
   "view_log_6d51af5e": {
     "message": "Günlüğü görüntüle"
   },
   "view_on_npm_2051324d": {
-    "message": "NPM’de görüntüle"
+    "message": "NPM\"de görüntüle"
   },
   "view_readme_30ed498f": {
-    "message": "View Readme"
+    "message": "Benioku Dosyasını Görüntüle"
   },
   "visit_a_this_page_a_to_learn_more_about_entity_def_c7c862a9": {
-    "message": "Visit <a>this page</a> to learn more about entity definition."
+    "message": "Varlık tanımı hakkında daha fazla bilgi edinmek için <a>bu sayfayı</a> ziyaret edin."
   },
   "visual_editor_216472d": {
     "message": "Görsel düzenleyici"
@@ -4203,19 +4206,19 @@
     "message": "Uyarı"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
-    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
+    "message": "{ warningsCount, plural,\n     =0 {Uyarı yok}\n     =1 {Bir uyarı}\n  other {# uyarı}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"
   },
   "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
-    "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
+    "message": "Composer 2.0 için desteklenmeyen { length } özel { obj } algıladık."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "Diğer botların yetenekle etkileşime girmesini sağlamak için yeteneğin uç noktalarını tanımlamamız gerekiyor."
   },
   "web_chat_c5ca7ab6": {
-    "message": "Web Chat"
+    "message": "Web Sohbeti"
   },
   "webchat_log_b7213a9e": {
     "message": "Web sohbeti günlüğü."
@@ -4224,16 +4227,16 @@
     "message": "Hoş Geldiniz"
   },
   "welcome_to_bot_framework_composer_b4f92694": {
-    "message": "Welcome to Bot Framework Composer"
+    "message": "Bot Framework Composer’a hoş geldiniz"
   },
   "welcome_to_composer_7147714a": {
-    "message": "Welcome to Composer!"
+    "message": "Composer’a hoş geldiniz!"
   },
   "west_europe_75ac94f4": {
-    "message": "West Europe"
+    "message": "Batı Avrupa"
   },
   "west_us_51d3fdbb": {
-    "message": "West US"
+    "message": "Batı ABD"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
     "message": "Kullanıcı bu konuşma aracılığıyla neler gerçekleştirebilir? Örneğin, YerAyırtma, KahveSiparişi vb."
@@ -4242,7 +4245,7 @@
     "message": "Özel olayın adı nedir?"
   },
   "what_is_the_name_of_this_trigger_1d6db01": {
-    "message": "What is the name of this trigger?"
+    "message": "Bu tetikleyicinin adı nedir?"
   },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "Bu tetikleyicinin adı nedir?"
@@ -4257,13 +4260,13 @@
     "message": "Bu tetikleyicinin türü nedir?"
   },
   "what_s_new_a9752a8e": {
-    "message": "What''s new"
+    "message": "Yenilikler"
   },
   "what_s_new_list_6fe719cb": {
-    "message": "What''s new list"
+    "message": "Yenilikler listesi"
   },
   "what_you_need_to_know_to_get_started_e2ab837a": {
-    "message": "What you need to know to get started"
+    "message": "Kullanmaya başlamak için bilmeniz gerekenler"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "Botunuzun kullanıcıya söyledikleri. Bu, giden iletiyi oluşturmak için kullanılan bir şablondur. Dil oluşturma kurallarını, bellekteki özellikleri ve diğer özellikleri içerebilir.\n\nÖrneğin, rastgele seçilecek varyasyonları tanımlamak için şunu yazın:\n- merhaba\n- selam"
@@ -4287,16 +4290,16 @@
     "message": "Hangi botu açmak istiyorsunuz?"
   },
   "which_bot_would_you_like_to_add_to_your_project_e31270db": {
-    "message": "Which bot would you like to add to your project"
+    "message": "Projenize hangi botu eklemek istiyorsunuz?"
   },
   "which_bots_can_connect_to_this_skill_5bf8421d": {
-    "message": "Which bots can connect to this skill?"
+    "message": "Bu beceriye hangi botlar bağlanabilir?"
   },
   "which_event_6e655d2b": {
     "message": "Hangi olay?"
   },
   "working_with_packages_dbdddbe9": {
-    "message": "Working with packages"
+    "message": "Paketlerle çalışma"
   },
   "write_an_expression_8773ea5c": {
     "message": "Bir ifade yazın"
@@ -4311,7 +4314,7 @@
     "message": "Evet"
   },
   "yes_delete_d43476ee": {
-    "message": "Yes, delete"
+    "message": "Evet, silinsin"
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "Bu ada sahip bir KB zaten var. Başka bir ad seçip yeniden deneyin."
@@ -4323,7 +4326,7 @@
     "message": "Seçili yayımlama profillerinden proje dosyalarını çekmek üzeresiniz. Çekilen dosyalar tarafından geçerli projenin üzerine yazılacak ve otomatik olarak yedekleme şeklinde kaydedilecek. Yedeklemeyi gelecekte dilediğiniz zaman alabilirsiniz."
   },
   "you_are_about_to_remove_modalitytitle_content_from_c51efe05": {
-    "message": "You are about to remove { modalityTitle } content from this action node. Are you sure you want to proceed?"
+    "message": "Bu eylem düğümünden { modalityTitle } içeriğini kaldırmak üzeresiniz. Devam etmek istediğinizden emin misiniz?"
   },
   "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
     "message": "Beceriyi bu projeden kaldırmak üzeresiniz. Bu beceri kaldırıldığında dosyalar silinmez."
@@ -4344,22 +4347,22 @@
     "message": "{ name } öğesi { publishTarget } hedefinde başarıyla yayımlandı"
   },
   "you_re_ready_to_go_18ee8dac": {
-    "message": "You’re ready to go!"
+    "message": "Artık hazırsınız!"
   },
   "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
-    "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"
+    "message": "Botunuz yalnızca aylık 1.000 çağrı sınırı olan bir LUIS yazma anahtarıyla yapılandırılır. Botunuz bu sınıra ulaşırsa, teste devam etmek için bir <a>yayımlama profili</a> kullanarak botunuzu Azure'da yayımlayın.<a2>Daha fazla bilgi</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Botunuz, doğal dil anlama için LUIS ve Soru-Cevap kullanıyor."
   },
   "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
-    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+    "message": "Bot projeniz çalışmıyor. <actionButton>Botunuzu başlatın</actionButton>"
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
-    "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
+    "message": "Bot projeniz çalışıyor. <actionButton>Web Sohbeti’nde test et</actionButton>"
   },
   "your_bot_s_microsoft_app_id_5f12844c": {
-    "message": "Your bot’s Microsoft App ID"
+    "message": "Botunuzun Microsoft Uygulama Kimliği"
   },
   "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
     "message": "\"{ schemaId }\" için iletişim kutunuz başarıyla oluşturuldu."
@@ -4368,36 +4371,30 @@
     "message": "Bilgi bankanız hazır!"
   },
   "your_new_azure_bot_is_available_in_composer_2756367a": {
-    "message": "Your new Azure Bot is available in Composer"
+    "message": "Yeni Azure Botunuz Composer’da kullanılabilir"
   },
   "your_new_bot_is_almost_ready_1bb596e": {
-    "message": "Your new bot is almost ready!"
+    "message": "Yeni botunuz neredeyse hazır!"
   },
   "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
-    "message": "Your QnA Maker is ready! It took { time } minutes to complete."
-  },
-  "your_root_bot_must_have_an_associated_microsoft_ap_91671242": {
-    "message": "Your root bot must have an associated Microsoft App ID and Password."
-  },
-  "your_root_bot_must_have_an_azure_publishing_profil_89055cfd": {
-    "message": "Your root bot must have an Azure publishing profile."
+    "message": "Soru-Cevap Oluşturma hazır! Tamamlanması { time } dakika sürdü."
   },
   "your_skill_could_not_be_published_5bee6e6a": {
-    "message": "Your skill could not be published."
+    "message": "Beceriniz yayımlanamadı."
   },
   "your_skill_is_ready_to_be_shared_6376eb3c": {
-    "message": "Your skill is ready to be shared!"
+    "message": "Beceriniz paylaşılmaya hazır!"
   },
   "your_subscription_list_is_empty_please_add_your_su_6b229c26": {
-    "message": "Your subscription list is empty, please add your subscription, or login with another account."
+    "message": "Abonelik listeniz boş, lütfen aboneliğinizi ekleyin veya başka bir hesapla oturum açın."
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
-    "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
+    "message": "Teams bağdaştırıcınız, yayımlanmış botunuz için yapılandırıldı. Botunuzu Teams’te test edebilmeniz için bildirimi kopyalayın, Teams’te App Studio'yu açın ve bildirimi ekleyin"
   },
   "zoom_in_3205e865": {
-    "message": "Zoom in"
+    "message": "Yakınlaştır"
   },
   "zoom_out_e4302632": {
-    "message": "Zoom out"
+    "message": "Uzaklaştır"
   }
 }

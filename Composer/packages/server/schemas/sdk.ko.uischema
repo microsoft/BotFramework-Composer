@@ -14,7 +14,7 @@
   "Microsoft.Ask": {
     "flow": {
       "footer": {
-        "description": "= Default operation"
+        "description": "= 기본값 작업"
       }
     },
     "form": {
@@ -31,7 +31,7 @@
   "Microsoft.BeginDialog": {
     "flow": {
       "footer": {
-        "description": "= Return value"
+        "description": "= 반환 값"
       }
     },
     "form": {
@@ -42,7 +42,7 @@
   "Microsoft.BeginSkill": {
     "flow": {
       "footer": {
-        "description": "= Result"
+        "description": "= 결과"
       }
     },
     "form": {
@@ -59,7 +59,7 @@
   "Microsoft.CancelAllDialogs": {
     "flow": {
       "body": {
-        "description": "(Event)"
+        "description": "(이벤트)"
       }
     },
     "form": {
@@ -117,7 +117,7 @@
   "Microsoft.EditArray": {
     "flow": {
       "footer": {
-        "description": "= Result"
+        "description": "= 결과"
       }
     },
     "form": {
@@ -128,7 +128,7 @@
   "Microsoft.EmitEvent": {
     "flow": {
       "body": {
-        "description": "(Event)"
+        "description": "(이벤트)"
       }
     },
     "form": {
@@ -166,21 +166,21 @@
         "description": "= ActivityId"
       },
       "footer": {
-        "description": "= Result property"
+        "description": "= 결과 속성"
       }
     }
   },
   "Microsoft.GetConversationMembers": {
     "flow": {
       "footer": {
-        "description": "= Result property"
+        "description": "= 결과 속성"
       }
     }
   },
   "Microsoft.HttpRequest": {
     "flow": {
       "footer": {
-        "description": "= Result property"
+        "description": "= 결과 속성"
       }
     },
     "form": {
@@ -209,7 +209,7 @@
   "Microsoft.OAuthInput": {
     "flow": {
       "footer": {
-        "description": "= Token property"
+        "description": "= 토큰 속성"
       }
     },
     "form": {
@@ -223,9 +223,9 @@
       "subtitle": "활동 받음"
     },
     "trigger": {
-      "label": "Activities (Activity received)",
+      "label": "활동(활동 받음)",
       "submenu": {
-        "label": "Activities"
+        "label": "활동"
       }
     }
   },
@@ -241,9 +241,9 @@
       "subtitle": "대화 시작 이벤트"
     },
     "trigger": {
-      "label": "Dialog started (Begin dialog event)",
+      "label": "대화가 시작됨(대화 시작 이벤트)",
       "submenu": {
-        "label": "Dialog events"
+        "label": "대화 이벤트"
       }
     }
   },
@@ -253,12 +253,12 @@
       "subtitle": "대화 취소 이벤트"
     },
     "trigger": {
-      "label": "Dialog cancelled (Cancel dialog event)"
+      "label": "대화가 취소됨(대화 취소 이벤트)"
     }
   },
   "Microsoft.OnChooseIntent": {
     "trigger": {
-      "label": "Duplicated intents recognized"
+      "label": "중복된 의도 인식됨"
     }
   },
   "Microsoft.OnCondition": {
@@ -274,7 +274,7 @@
       "subtitle": "ConversationUpdate 활동"
     },
     "trigger": {
-      "label": "Greeting (ConversationUpdate activity)"
+      "label": "인사말(ConversationUpdate 활동)"
     }
   },
   "Microsoft.OnDialogEvent": {
@@ -283,7 +283,7 @@
       "subtitle": "대화 이벤트"
     },
     "trigger": {
-      "label": "Custom events"
+      "label": "사용자 지정 이벤트"
     }
   },
   "Microsoft.OnEndOfActions": {
@@ -298,7 +298,7 @@
       "subtitle": "EndOfConversation 활동"
     },
     "trigger": {
-      "label": "Conversation ended (EndOfConversation activity)"
+      "label": "대화가 종료됨(EndOfConversation 활동)"
     }
   },
   "Microsoft.OnError": {
@@ -307,7 +307,7 @@
       "subtitle": "오류 이벤트"
     },
     "trigger": {
-      "label": "Error occurred (Error event)"
+      "label": "오류가 발생함(오류 이벤트)"
     }
   },
   "Microsoft.OnEventActivity": {
@@ -316,7 +316,7 @@
       "subtitle": "이벤트 활동"
     },
     "trigger": {
-      "label": "Event received (Event activity)"
+      "label": "이벤트를 받음(이벤트 활동)"
     }
   },
   "Microsoft.OnHandoffActivity": {
@@ -325,7 +325,7 @@
       "subtitle": "핸드오프 활동"
     },
     "trigger": {
-      "label": "Handover to human (Handoff activity)"
+      "label": "인간에게 핸드오버(핸드오프 활동)"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
@@ -340,7 +340,7 @@
       "subtitle": "의도 인식됨"
     },
     "trigger": {
-      "label": "Intent recognized"
+      "label": "의도 인식됨"
     }
   },
   "Microsoft.OnInvokeActivity": {
@@ -349,7 +349,7 @@
       "subtitle": "호출 활동"
     },
     "trigger": {
-      "label": "Conversation invoked (Invoke activity)"
+      "label": "대화가 호출됨(호출 활동)"
     }
   },
   "Microsoft.OnMessageActivity": {
@@ -358,7 +358,7 @@
       "subtitle": "메시지 받음 활동"
     },
     "trigger": {
-      "label": "Message received (Message received activity)"
+      "label": "메시지를 받음(메시지를 받음 활동)"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
@@ -367,7 +367,7 @@
       "subtitle": "메시지 삭제됨 활동"
     },
     "trigger": {
-      "label": "Message deleted (Message deleted activity)"
+      "label": "메시지가 삭제됨(메시지가 삭제됨 활동)"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
@@ -376,7 +376,7 @@
       "subtitle": "메시지 반응 활동"
     },
     "trigger": {
-      "label": "Message reaction (Message reaction activity)"
+      "label": "메시지 반응(메시지 반응 활동)"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
@@ -385,12 +385,12 @@
       "subtitle": "메시지 업데이트됨 활동"
     },
     "trigger": {
-      "label": "Message updated (Message updated activity)"
+      "label": "메시지가 업데이트됨(메시지가 업데이트됨 활동)"
     }
   },
   "Microsoft.OnQnAMatch": {
     "trigger": {
-      "label": "QnA Intent recognized"
+      "label": "QnA 의도 인식됨"
     }
   },
   "Microsoft.OnRepromptDialog": {
@@ -399,7 +399,7 @@
       "subtitle": "대화 요청 메시지 다시 표시 이벤트"
     },
     "trigger": {
-      "label": "Re-prompt for input (Reprompt dialog event)"
+      "label": "입력 요청 프롬프트 다시 표시(대화 요청 프롬프트 다시 표시 이벤트)"
     }
   },
   "Microsoft.OnTypingActivity": {
@@ -408,7 +408,7 @@
       "subtitle": "입력 활동"
     },
     "trigger": {
-      "label": "User is typing (Typing activity)"
+      "label": "사용자가 입력하는 중(입력하는 중 활동)"
     }
   },
   "Microsoft.OnUnknownIntent": {
@@ -417,7 +417,7 @@
       "subtitle": "알 수 없는 의도 인식됨"
     },
     "trigger": {
-      "label": "Unknown intent"
+      "label": "알 수 없는 의도"
     }
   },
   "Microsoft.RepeatDialog": {
@@ -440,11 +440,11 @@
   },
   "Microsoft.SendHandoffActivity": {
     "form": {
-      "label": "Send a handoff request",
-      "subtitle": "Send Handoff Activity"
+      "label": "전달 요청 보내기",
+      "subtitle": "전달 활동 보내기"
     },
     "menu": {
-      "label": "Send Handoff Event"
+      "label": "전달 이벤트 보내기"
     }
   },
   "Microsoft.SetProperties": {
@@ -497,12 +497,12 @@
   "Microsoft.UpdateActivity": {
     "flow": {
       "header": {
-        "title": "Update activity"
+        "title": "활동 업데이트"
       }
     },
     "form": {
-      "label": "Update an activity",
-      "subtitle": "Update Activity"
+      "label": "활동 업데이트",
+      "subtitle": "활동 업데이트"
     }
   }
 }
