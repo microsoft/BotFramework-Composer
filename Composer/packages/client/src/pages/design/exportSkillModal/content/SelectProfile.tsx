@@ -13,11 +13,13 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { botDisplayNameState, dispatcherState, settingsState, skillManifestsState } from '../../../../recoilModel';
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
 import { ContentProps, VERSION_REGEX } from '../constants';
+import { PublishProfileWrapperDialog } from '../../../botProject/WrapperPublishProfieDialog';
 
 const styles = {
   container: css`
@@ -57,11 +59,17 @@ const onRenderLabel = (props) => {
   );
 };
 
-const onRenderInvalidProfileWarning = (hasValidProfile, handleShowCreateProfileDialog) => {
+const onRenderInvalidProfileWarning = (hasValidProfile, handleShowPublishProfileWrapperDialog) => {
   return (
     <MessageBar dismissButtonAriaLabel="Close" isMultiline={false} messageBarType={MessageBarType.warning}>
       {formatMessage('Publish profile is missing App ID and host name. ')}
-      {hasValidProfile && formatMessage('Choose a valid publish profile to continue')}
+      {hasValidProfile ? (
+        formatMessage('Choose a valid publish profile to continue')
+      ) : (
+        <Link onClick={handleShowPublishProfileWrapperDialog}>
+          {formatMessage('Create a valid publish profile to continue')}
+        </Link>
+      )}
     </MessageBar>
   );
 };
@@ -125,6 +133,11 @@ export const SelectProfile: React.FC<ContentProps> = ({
 
   const [showCreateProfileDialog, setShowCreateProfileDialog] = useState(true);
   const [selectedKey, setSelectedKey] = useState('');
+  const [showPublishProfileWrapperDialog, setShowPublishProfileWrapperDialog] = useState(false);
+
+  const handleShowPublishProfileWrapperDialog = () => {
+    setShowPublishProfileWrapperDialog(!showPublishProfileWrapperDialog);
+  };
 
   const handleCurrentProfileChange = useMemo(
     () => (_e, option?: IDropdownOption) => {
@@ -208,56 +221,60 @@ export const SelectProfile: React.FC<ContentProps> = ({
     }
   }, [id]);
 
-  const handleShowCreateProfileDialog = () => {
-    setShowCreateProfileDialog(true);
-  };
-
-  return !showCreateProfileDialog ? (
-    <div css={styles.container}>
-      <Dropdown
-        required
-        ariaLabel={formatMessage('Select a publishing profile')}
-        label={formatMessage('Publishing Profile')}
-        options={publishingOptions}
-        placeholder={formatMessage('Select one')}
-        selectedKey={selectedKey}
-        styles={{ root: { paddingBottom: '8px' } }}
-        onChange={handleCurrentProfileChange}
-        onRenderTitle={onRenderTitle}
-      />
-      {!isValidProfile(currentTarget) ? (
-        onRenderInvalidProfileWarning(hasValidProfile, handleShowCreateProfileDialog)
+  return (
+    <Fragment>
+      {!showCreateProfileDialog ? (
+        <div css={styles.container}>
+          <Dropdown
+            required
+            ariaLabel={formatMessage('Select a publishing profile')}
+            label={formatMessage('Publishing Profile')}
+            options={publishingOptions}
+            placeholder={formatMessage('Select one')}
+            selectedKey={selectedKey}
+            styles={{ root: { paddingBottom: '8px' } }}
+            onChange={handleCurrentProfileChange}
+            onRenderTitle={onRenderTitle}
+          />
+          {!isValidProfile(currentTarget) ? (
+            onRenderInvalidProfileWarning(hasValidProfile, handleShowPublishProfileWrapperDialog)
+          ) : (
+            <Fragment>
+              <TextField
+                disabled
+                required
+                ariaLabel={formatMessage('The endpoint url')}
+                label={formatMessage('Endpoint Url')}
+                placeholder={formatMessage('The endpoint url of your web app resource')}
+                styles={{ root: { paddingBottom: '8px' } }}
+                value={endpointUrl}
+                onRenderLabel={onRenderLabel}
+              />
+              <TextField
+                disabled
+                required
+                ariaLabel={formatMessage('The app id of your application registration')}
+                label={formatMessage('Microsoft App ID')}
+                placeholder={formatMessage('The App ID')}
+                styles={{ root: { paddingBottom: '8px' } }}
+                value={appId}
+                onRenderLabel={onRenderLabel}
+              />
+            </Fragment>
+          )}
+        </div>
       ) : (
-        <Fragment>
-          <TextField
-            disabled
-            required
-            ariaLabel={formatMessage('The endpoint url')}
-            label={formatMessage('Endpoint Url')}
-            placeholder={formatMessage('The endpoint url of your web app resource')}
-            styles={{ root: { paddingBottom: '8px' } }}
-            value={endpointUrl}
-            onRenderLabel={onRenderLabel}
-          />
-          <TextField
-            disabled
-            required
-            ariaLabel={formatMessage('The app id of your application registration')}
-            label={formatMessage('Microsoft App ID')}
-            placeholder={formatMessage('The App ID')}
-            styles={{ root: { paddingBottom: '8px' } }}
-            value={appId}
-            onRenderLabel={onRenderLabel}
-          />
-        </Fragment>
+        <div>
+          <CreatePublishProfileDialog onShowPublishProfileWrapperDialog={handleShowPublishProfileWrapperDialog} />
+        </div>
       )}
-    </div>
-  ) : (
-    <div>
-      <CreatePublishProfileDialog
-        projectId={projectId}
-        onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
-      />
-    </div>
+      {showPublishProfileWrapperDialog && (
+        <PublishProfileWrapperDialog
+          projectId={projectId}
+          onClose={handleShowPublishProfileWrapperDialog}
+          onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
+        />
+      )}
+    </Fragment>
   );
 };
