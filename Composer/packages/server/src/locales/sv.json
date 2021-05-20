@@ -1245,7 +1245,7 @@
     "message": "DialogFactory saknar schema."
   },
   "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
-    "message": "{dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  andra {# bots have}\n} har hittats.\n            {dialogNum, select,\n      0 {}\n  other {Navigera i sökresultaten genom att hålla ned piltangenten}\n}"
+    "message": "{dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} har hittats.\n            {dialogNum, select,\n      0 {}\n  other {Navigera i sökresultaten genom att hålla ned piltangenten}\n}"
   },
   "dialogs_triggers_and_actions_8a39ffea": {
     "message": "Dialogrupt, tlösare och åtgärder"
@@ -3954,7 +3954,7 @@
     "message": "{ total, plural,\n     =1 {Startar robot...}\n  other {Startar robotar... ({ running }/{ total } körs)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other { total } running)}\n}"
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n other {Stopping bots... ({ running }/{ total } running) }\n}"
   },
   "trigger_f0ee1fbf": {
     "message": "Utlösare"

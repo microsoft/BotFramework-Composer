@@ -127,7 +127,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             `{
             total, plural,
               =1 {Stopping bot..}
-            other {Stopping bots.. ({running}/{total} running)}
+            other {Stopping bots.. ({running}/# running)}
           }`,
             { running: runningBots.projectIds.length, total: runningBots.totalBots }
           )
@@ -138,7 +138,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             `{
             total, plural,
               =1 {Starting bot..}
-            other {Starting bots.. ({running}/{total} running)}
+            other {Starting bots.. ({running}/# running)}
           }`,
             { running: runningBots.projectIds.length, total: runningBots.totalBots }
           )
@@ -160,7 +160,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             `{
           total, plural,
             =1 {Restart bot}
-          other {Restart all bots ({running}/{total} running)}
+          other {Restart all bots ({running}/# running)}
         }`,
             { running: runningBots.projectIds.length, total: runningBots.totalBots }
           )

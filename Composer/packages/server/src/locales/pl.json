@@ -3954,7 +3954,7 @@
     "message": "{ total, plural,\n     =1 {Trwa uruchamianie bota...}\n  other {Trwa uruchamianie botów... (uruchomione: { running }/{ total })}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other { total } running)}\n}"
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n other {Stopping bots... ({ running }/{ total } running) }\n}"
   },
   "trigger_f0ee1fbf": {
     "message": "Wyzwalacz"

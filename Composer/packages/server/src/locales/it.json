@@ -2922,7 +2922,7 @@
     "message": "Autore"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
-    "message": "Pubblicazione di {Count, Plural,\n     = 1 {un bot}\n  altri {# bot}\n}"
+    "message": "Pubblicazione di {count, plural,\n     =1 {un bot}\n  other {# bot}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Pubblicazione"
@@ -3954,7 +3954,7 @@
     "message": "{ total, plural,\n     =1 {Avvio del bot..}\n  other {Avvio dei bot.. ({ running }/{ total } running)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Arresto del bot..}\n  other {Arresto dei bot.. ({ in esecuzione }/{ totale } in esecuzione)}\n}"
+    "message": "{ total, plural,\n     =1 {Arresto del bot..}\n  other {Arresto dei bot.. ({ running }/{ totale } in esecuzione)}\n}"
   },
   "trigger_f0ee1fbf": {
     "message": "Trigger"

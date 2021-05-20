@@ -2922,7 +2922,7 @@
     "message": "Издатель"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
-    "message": "Публикуем {Count, Plural,\n     = 1 {одного бота}\n  other {# ботов}\n}"
+    "message": "Публикуем {count, plural,\n     =1 {одного бота}\n  other {# ботов}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Публикация"

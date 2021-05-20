@@ -3944,17 +3944,17 @@
   "total_mb_531a3721": {
     "message": "{ total }MB"
   },
-  "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
-    "message": "{ total, plural,\n     =1 {Restart bot}\n  other {Restart all bots ({ running }/{ total } running)}\n}"
+  "total_plural_1_restart_bot_other_restart_all_bots__c4d40bb4": {
+    "message": "{ total, plural,\n     =1 {Restart bot}\n  other {Restart all bots ({ running }/# running)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
     "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
   },
-  "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
-    "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
+  "total_plural_1_starting_bot_other_starting_bots_ru_937cedb": {
+    "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/# running)}\n}"
   },
-  "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
+  "total_plural_1_stopping_bot_other_stopping_bots_ru_ab4f149b": {
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/# running)}\n}"
   },
   "trigger_f0ee1fbf": {
     "message": "Trigger"

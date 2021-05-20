@@ -1530,7 +1530,7 @@
     "message": "预配出错。"
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
-    "message": "{ errorCount，复数，\n     =0 {无错误}\n     =1 {一个错误}\n  其他 {# 个错误}\n}"
+    "message": "{ errorCount,复数,\n     =0 {无错误}\n     =1 {一个错误}\n  other {# 个错误}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -3954,7 +3954,7 @@
     "message": "{ total, plural,\n     =1 {正在启动机器人..}\n  other {正在启动机器人..({ running } 个正在运行(共 { total } 个))}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other { total } running)}\n}"
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n other {Stopping bots... ({ running }/{ total } running) }\n}"
   },
   "trigger_f0ee1fbf": {
     "message": "触发器"
