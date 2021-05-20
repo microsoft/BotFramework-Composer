@@ -15,7 +15,7 @@
     "message": "Form düzenleyicisinde bir hata oluştu!"
   },
   "ErrorInfo_part2": {
-    "message": "Bunun nedeni büyük olasılıkla Composer\"daki hatalı biçimlendirilmiş veriler veya eksik işlevsellik olabilir."
+    "message": "Bunun nedeni büyük olasılıkla Composer’daki hatalı biçimlendirilmiş veriler veya eksik işlevsellik olabilir."
   },
   "ErrorInfo_part3": {
     "message": "Görsel düzenleyicide başka bir düğüme gitmeyi deneyin."
@@ -48,7 +48,7 @@
     "message": "Bu ada sahip bir profil zaten var."
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer'de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
+    "message": "Özellik, botunuzun toplayacağı bir bilgi parçasıdır. Özellik adı, Composer’de kullanılan addır. Botunuzun iletilerinde görünecek metinle aynı olması gerekmez."
   },
   "a_publishing_profile_contains_the_information_nece_fc37192d": {
     "message": "Yayımlama profili, botunuzun Uygulama Kimliği de dahil olmak üzere botunuzu sağlamak ve yayımlamak için gereken bilgileri içerir. "
@@ -351,7 +351,7 @@
     "message": "Botunuzu silmek istediğinizden emin misiniz? Bu eylem geri alınamaz ve botunuz ile bot proje klasöründeki ilgili tüm dosyalar kalıcı olarak silinir. Azure kaynaklarınız değişmeden kalır."
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
-    "message": "Ekleme Ürünü Turu\"ndan çıkmak istediğinizden emin misiniz? Turu ekleme ayarlarında yeniden başlatabilirsiniz."
+    "message": "Ekleme Ürünü Turu’ndan çıkmak istediğinizden emin misiniz? Turu ekleme ayarlarında yeniden başlatabilirsiniz."
   },
   "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
     "message": "\"{ id }\" form iletişim şemasını kaldırmak istediğinizden emin misiniz?"
@@ -708,7 +708,7 @@
     "message": "Tümünü temizle"
   },
   "click_start_and_your_bot_will_be_up_and_running_on_424c29da": {
-    "message": "Başlat'a tıkladığınızda botunuz çalışır duruma gelir. Çalışmaya başladıktan sonra, test etmek için \"Web Sohbeti’nde aç\" seçeneğini belirleyebilirsiniz."
+    "message": "Başlat’a tıkladığınızda botunuz çalışır duruma gelir. Çalışmaya başladıktan sonra, test etmek için \"Web Sohbeti’nde aç\" seçeneğini belirleyebilirsiniz."
   },
   "click_the_start_button_to_test_your_bot_using_web__821e827c": {
     "message": "Web Sohbeti veya Emulator’ı kullanarak botunuzu test etmek için başlat düğmesine tıklayın. Bot Framework Emulator henüz yüklü değilse, <a>buradan</a> indirebilirsiniz."
@@ -852,7 +852,7 @@
     "message": "Yeteneğe bağlan"
   },
   "connect_to_qna_knowledgebase_4b324132": {
-    "message": "Soru-Cevap Bilgi Bankası\"na Bağlan"
+    "message": "Soru-Cevap Bilgi Bankası’na Bağlan"
   },
   "connect_to_speech_service_9d877e37": {
     "message": "Konuşma Hizmetine bağlan"
@@ -861,7 +861,7 @@
     "message": "Composer ile ilgili soru sormak ve soruları yanıtlamak için toplulukla bağlantı kurun"
   },
   "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
-    "message": "Botunuzu Microsoft Teams’e ve Web Sohbeti’ne bağlayın ya da DirectLine Speech'i etkinleştirin."
+    "message": "Botunuzu Microsoft Teams’e ve Web Sohbeti’ne bağlayın ya da DirectLine Speech’i etkinleştirin."
   },
   "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
     "message": "Botunuzu Teams’e ve dış kanallara bağlayın ya da konuşmayı etkinleştirin."
@@ -993,7 +993,7 @@
     "message": "Bilgi bankasından oluştur (Soru-Cevap Oluşturma)"
   },
   "create_from_qna_7aa9dcbb": {
-    "message": "Soru-Cevap\"tan oluştur"
+    "message": "Soru-Cevap’tan oluştur"
   },
   "create_from_scratch_485c3045": {
     "message": "Sıfırdan oluştur"
@@ -1242,7 +1242,7 @@
     "message": "{ value } adlı iletişim kutusu zaten var."
   },
   "dialogfactory_missing_schema_5c3255c4": {
-    "message": "DialogFactory\"de şema eksik."
+    "message": "DialogFactory’de şema eksik."
   },
   "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
     "message": "{ dialogNum, plural,\n     =0 {Bot bulunamadı}\n     =1 {Bir bot bulundu}\n  other {# bot bulundu}\n}.\n            { dialogNum, select,\n      0 {}\n  other {Arama sonuçlarında gezinmek için aşağı ok tuşuna basın}\n}"
@@ -1287,7 +1287,7 @@
     "message": "İndirme Simgesi"
   },
   "download_now_and_install_when_you_close_composer_e241ed74": {
-    "message": "Şimdi indirin ve Composer\"ı kapattığınızda yükleyin."
+    "message": "Şimdi indirin ve Composer’ı kapattığınızda yükleyin."
   },
   "downloading_bb6fb34b": {
     "message": "İndiriliyor..."
@@ -1404,7 +1404,7 @@
     "message": "Çok aşamalı ayıklamayı etkinleştir"
   },
   "enable_orchestrator_cdbbd2c5": {
-    "message": "Orchestrator'ı etkinleştir"
+    "message": "Orchestrator’ı etkinleştir"
   },
   "enable_speech_e30d6a2a": {
     "message": "Konuşmayı Etkinleştir"
@@ -1428,7 +1428,7 @@
     "message": "EndOfConversation etkinliği"
   },
   "endpoint_url_eddd8ea9": {
-    "message": "Uç nokta URL'si"
+    "message": "Uç nokta URL’si"
   },
   "endpoints_ff946539": {
     "message": "Uç Noktalar"
@@ -1611,7 +1611,7 @@
     "message": "Dış beceri"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
-    "message": "Çevrimiçi bir SSS\"den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx\"tir. Bilgi bankası kaynakları hakkında daha fazla bilgi edinin. Oluşturma işleminden sonra soruları ve yanıtları kendiniz eklemek için bu adımı atlayın. Ekleyebileceğiniz kaynak sayısı ve dosya boyutu, seçtiğiniz Soru-Cevap hizmeti SKU\"suna bağlıdır. Soru-Cevap Oluşturma SKU\"ları hakkında daha fazla bilgi edinin."
+    "message": "Çevrimiçi bir SSS’den, ürün el kitaplarından veya diğer dosyalardan Soru-Cevap çiftleri ayıklayın. Desteklenen biçimler, sıralı soru ve yanıtlar içeren .tsv, .pdf, .doc, .docx, .xlsx’tir. Bilgi bankası kaynakları hakkında daha fazla bilgi edinin. Oluşturma işleminden sonra soruları ve yanıtları kendiniz eklemek için bu adımı atlayın. Ekleyebileceğiniz kaynak sayısı ve dosya boyutu, seçtiğiniz Soru-Cevap hizmeti SKU’suna bağlıdır. Soru-Cevap Oluşturma SKU’ları hakkında daha fazla bilgi edinin."
   },
   "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
     "message": "{ url } adresinden soru-cevap çiftleri ayıklanıyor"
@@ -1971,16 +1971,16 @@
     "message": "Microsoft .NET Core SDK yükle"
   },
   "install_net_core_sdk_67e62ca9": {
-    "message": ".NET Core SDK'sını yükle"
+    "message": ".NET Core SDK’sını yükle"
   },
   "install_node_js_1857298c": {
     "message": "Node.js’yi yükle"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
-    "message": "En son özelliklere erişmek ve bunları test etmek için Composer\"ın yayın öncesi sürümlerini günlük olarak yükleyin. <a>Daha fazla bilgi edinin</a>."
+    "message": "En son özelliklere erişmek ve bunları test etmek için Composer’ın yayın öncesi sürümlerini günlük olarak yükleyin. <a>Daha fazla bilgi edinin</a>."
   },
   "install_the_update_and_restart_composer_fac30a61": {
-    "message": "Güncelleştirmeyi yükleyin ve Composer\"ı yeniden başlatın."
+    "message": "Güncelleştirmeyi yükleyin ve Composer’ı yeniden başlatın."
   },
   "instructions_2f88ee72": {
     "message": "Yönergeler"
@@ -2091,7 +2091,7 @@
     "message": "Language Understanding yazma anahtarı"
   },
   "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
-    "message": "Language Understanding (LUIS), doğal dil girişini anlamak ve konuşma akışını yönlendirmek için makine öğrenmesi kullanan bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'daki mevcut bir Language Understanding (LUIS) anahtarını kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
+    "message": "Language Understanding (LUIS), doğal dil girişini anlamak ve konuşma akışını yönlendirmek için makine öğrenmesi kullanan bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure’daki mevcut bir Language Understanding (LUIS) anahtarını kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
   },
   "language_understanding_region_ec8fb05c": {
     "message": "Language Understanding bölgesi"
@@ -2238,7 +2238,7 @@
     "message": "Oturum Açın"
   },
   "login_to_azure_c0cb057e": {
-    "message": "Azure'da oturum açın"
+    "message": "Azure’da oturum açın"
   },
   "loop_for_each_item_e09537ae": {
     "message": "Döngü: Her öğe için"
@@ -2649,7 +2649,7 @@
     "message": "Ekleme"
   },
   "once_you_publish_your_bot_to_azure_you_will_be_rea_93048067": {
-    "message": "Botunuzu Azure'da yayımladığınızda bağlantı eklemeye hazır olursunuz."
+    "message": "Botunuzu Azure’da yayımladığınızda bağlantı eklemeye hazır olursunuz."
   },
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents Türleri"
@@ -2661,7 +2661,7 @@
     "message": "Aç"
   },
   "open_github_811d5819": {
-    "message": "GitHub'ı aç"
+    "message": "GitHub’ı aç"
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Satır içi düzenleyiciyi aç"
@@ -2763,7 +2763,7 @@
     "message": "Ekleme öğreticisini başlatmak için lütfen Tasarım Görünümüne dönün."
   },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
-    "message": "Lütfen Soru-Cevap\"ı içeri aktarmak için belirli bir Soru-Cevap dosyası seçin"
+    "message": "Lütfen Soru-Cevap’ı içeri aktarmak için belirli bir Soru-Cevap dosyası seçin"
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "Lütfen bir tetikleyici türü seçin"
@@ -2772,7 +2772,7 @@
     "message": "Açılır pencere düzenleyicisi"
   },
   "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
-    "message": "Power Virtual Agents botları şu anda çalıştırılamıyor. Botu Power Virtual Agents'ta yayımlayın ve orada test edin."
+    "message": "Power Virtual Agents botları şu anda çalıştırılamıyor. Botu Power Virtual Agents’ta yayımlayın ve orada test edin."
   },
   "power_virtual_agents_bots_cannot_use_this_function_fcfeaf62": {
     "message": "Power Virtual Agents botları şu anda bu işlevselliği kullanamıyor."
@@ -2910,7 +2910,7 @@
     "message": "Botunuzu yayımlayın"
   },
   "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
-    "message": "Botunuzu Azure'da yayımlayın ve yayımlanan botları burada yönetin."
+    "message": "Botunuzu Azure’da yayımlayın ve yayımlanan botları burada yönetin."
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Robotlarınızı yayımlayın"
@@ -2961,10 +2961,10 @@
     "message": "Soru-Cevap Oluşturma tanıtımı"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
-    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi.</a2>"
+    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure’dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi.</a2>"
   },
   "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
-    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure'dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
+    "message": "Soru-Cevap Oluşturma, bir web sitesi SSS’sinden soru-cevap çiftleri ayıklayabilen bir Azure Bilişsel Hizmetidir. <a>Daha fazla bilgi.</a> Azure’dan mevcut bir anahtarı kullanın veya yeni bir anahtar oluşturun. <a2>Daha fazla bilgi</a2>"
   },
   "qna_maker_subscription_key_a645be58": {
     "message": "Soru-Cevap Oluşturma aboneliği anahtarı:"
@@ -3246,7 +3246,7 @@
     "message": "Varlıkları arayın"
   },
   "search_for_extensions_on_npm_c5ca65d9": {
-    "message": "NPM\"de uzantıları ara"
+    "message": "NPM’de uzantıları ara"
   },
   "search_functions_4a1afbc3": {
     "message": "İşlev arayın"
@@ -3426,7 +3426,7 @@
     "message": "Ayarlar"
   },
   "settings_contains_detailed_information_about_your__54aa601d": {
-    "message": "Ayarlar, botunuz ile ilgili ayrıntılı bilgiler içerir. Güvenlik nedenleriyle bu bilgiler varsayılan olarak gizlenir. Botunuzu test etmek veya Azure\"da yayımlamak için bu ayarları sağlamanız gerekebilir."
+    "message": "Ayarlar, botunuz ile ilgili ayrıntılı bilgiler içerir. Güvenlik nedenleriyle bu bilgiler varsayılan olarak gizlenir. Botunuzu test etmek veya Azure’da yayımlamak için bu ayarları sağlamanız gerekebilir."
   },
   "settings_editor_b5246933": {
     "message": "Ayarlar düzenleyicisi"
@@ -3480,13 +3480,13 @@
     "message": "Beceri konağı uç noktası URL’si"
   },
   "skill_host_endpoint_url_e68b65f6": {
-    "message": "Beceri konağı uç noktası URL\"si"
+    "message": "Beceri konağı uç noktası URL’si"
   },
   "skill_manifest_url_1094fcba": {
     "message": "Beceri Bildirimi URL’si"
   },
   "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
-    "message": "Beceri bildirimi URL'si panoya kopyalandı"
+    "message": "Beceri bildirimi URL’si panoya kopyalandı"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Bildirimi"
@@ -3510,10 +3510,10 @@
     "message": "Ne yazık ki yayımlama sırasında bir sorun oluştu. Yeniden deneyin veya bu görevden çıkın."
   },
   "sorted_a_to_z_915b2ed3": {
-    "message": "A\"dan Z\"ye sıralandı"
+    "message": "A’dan Z’ye sıralandı"
   },
   "sorted_z_to_a_722f1567": {
-    "message": "Z\"den A\"ya sıralandı"
+    "message": "Z’den A’ya sıralandı"
   },
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Boşluk ve özel karakterlere izin verilmez."
@@ -3660,10 +3660,10 @@
     "message": "Kullanım Koşulları"
   },
   "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
-    "message": "Bot Framework Emulator'da botlarınızı test edin ve bunların hatalarını ayıklayın"
+    "message": "Bot Framework Emulator’da botlarınızı test edin ve bunların hatalarını ayıklayın"
   },
   "test_in_emulator_b1b3c278": {
-    "message": "Emulator\"da Test Et"
+    "message": "Emulator’da Test Et"
   },
   "test_with_web_chat_and_emulator_d0f87a81": {
     "message": "Web Sohbeti ve Öykünücü ile test et"
@@ -3705,10 +3705,10 @@
     "message": "Silmeye çalıştığınız iletişim kutusu şu anda aşağıdaki iletişim kutularında kullanılıyor. Bu iletişim kutusunun kaldırılması, Botunuzun ek bir eylem olmadan hatalı çalışmasına yol açabilir."
   },
   "the_endpoint_url_7c04ee13": {
-    "message": "Uç nokta URL'si"
+    "message": "Uç nokta URL’si"
   },
   "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
-    "message": "Web uygulaması kaynağınızın uç nokta URL'si"
+    "message": "Web uygulaması kaynağınızın uç nokta URL’si"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "Dosya adı boş olamaz"
@@ -3792,7 +3792,7 @@
     "message": "<b>{ selectedTargetName }</b> yayımlama profilinden çekilirken beklenmeyen bir hata oluştu"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
-    "message": "BB\"niz oluşturulurken hata oluştu"
+    "message": "BB’niz oluşturulurken hata oluştu"
   },
   "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
     "message": "İzin verilen çağıran listesi boş olduğundan bu bot beceri olarak çağrılamaz"
@@ -3816,7 +3816,7 @@
     "message": "Bu, şu anda yazmakta olduğunuz bot dilidir. Aşağıdaki açılır menüden etkin dili değiştirin."
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
-    "message": "Bu, Composer\"ın kullanıcı arabirimi için kullanılan dildir."
+    "message": "Bu, Composer’ın kullanıcı arabirimi için kullanılan dildir."
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "Bu dil, çeviri temeli (ve temel dili) olarak kopyalanır ve kullanılır."
@@ -3984,7 +3984,7 @@
     "message": "TrueSelector"
   },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
-    "message": "Önizlemedeki yeni özellikleri deneyin ve Composer\"ı geliştirmemize yardımcı olun. Bu özellikleri istediğiniz zaman etkinleştirebilir veya devre dışı bırakabilirsiniz."
+    "message": "Önizlemedeki yeni özellikleri deneyin ve Composer’ı geliştirmemize yardımcı olun. Bu özellikleri istediğiniz zaman etkinleştirebilir veya devre dışı bırakabilirsiniz."
   },
   "type_a_name_for_this_knowledge_base_ab07b439": {
     "message": "Bu bilgi bankası için bir ad yazın"
@@ -4104,13 +4104,13 @@
     "message": "Yeni bir konuşma oluşturmak için Azure Bot kullanın"
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
-    "message": "Bir web sitesi SSS'sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın."
+    "message": "Bir web sitesi SSS’sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın."
   },
   "use_azure_qna_maker_to_create_a_simple_question_an_b24bef9f": {
-    "message": "Bir web sitesi SSS'sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın. "
+    "message": "Bir web sitesi SSS’sinden basit bir soru ve yanıt botu oluşturmak için Azure Soru-Cevap Oluşturma kullanın. "
   },
   "use_azure_qna_maker_to_extract_question_and_answer_942c2dcd": {
-    "message": "Çevrimiçi bir SSS'den soru-yanıt çiftleri ayıklamak için Azure Soru-Cevap Oluşturma kullanın. "
+    "message": "Çevrimiçi bir SSS’den soru-yanıt çiftleri ayıklamak için Azure Soru-Cevap Oluşturma kullanın. "
   },
   "use_custom_luis_authoring_key_9c71470b": {
     "message": "Özel LUIS yazma anahtarını kullanın"
@@ -4131,7 +4131,7 @@
     "message": "Doğal dil girişini anlamak ve konuşma akışını yönlendirmek için makine öğrenmesi kullanın."
   },
   "use_orchestrator_for_multi_bot_projects_bots_that__1b481cdd": {
-    "message": "Çoklu bot projeleri (birden çok bottan oluşan veya becerilere bağlanan botlar) için Orchestrator'ı kullanın."
+    "message": "Çoklu bot projeleri (birden çok bottan oluşan veya becerilere bağlanan botlar) için Orchestrator’ı kullanın."
   },
   "use_speech_to_enable_voice_input_and_output_for_yo_742c511d": {
     "message": "Botunuz için ses girişini ve çıkışını etkinleştirmek üzere Konuşma’yı kullanın."
@@ -4182,13 +4182,13 @@
     "message": "Belgeleri, örnekleri ve uzantıları görüntüleyin"
   },
   "view_kb_c382e495": {
-    "message": "BB\"yi görüntüle"
+    "message": "BB’yi görüntüle"
   },
   "view_log_6d51af5e": {
     "message": "Günlüğü görüntüle"
   },
   "view_on_npm_2051324d": {
-    "message": "NPM\"de görüntüle"
+    "message": "NPM’de görüntüle"
   },
   "view_readme_30ed498f": {
     "message": "Benioku Dosyasını Görüntüle"
@@ -4350,7 +4350,7 @@
     "message": "Artık hazırsınız!"
   },
   "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
-    "message": "Botunuz yalnızca aylık 1.000 çağrı sınırı olan bir LUIS yazma anahtarıyla yapılandırılır. Botunuz bu sınıra ulaşırsa, teste devam etmek için bir <a>yayımlama profili</a> kullanarak botunuzu Azure'da yayımlayın.<a2>Daha fazla bilgi</a2>"
+    "message": "Botunuz yalnızca aylık 1.000 çağrı sınırı olan bir LUIS yazma anahtarıyla yapılandırılır. Botunuz bu sınıra ulaşırsa, teste devam etmek için bir <a>yayımlama profili</a> kullanarak botunuzu Azure’da yayımlayın.<a2>Daha fazla bilgi</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Botunuz, doğal dil anlama için LUIS ve Soru-Cevap kullanıyor."
@@ -4389,7 +4389,7 @@
     "message": "Abonelik listeniz boş, lütfen aboneliğinizi ekleyin veya başka bir hesapla oturum açın."
   },
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
-    "message": "Teams bağdaştırıcınız, yayımlanmış botunuz için yapılandırıldı. Botunuzu Teams’te test edebilmeniz için bildirimi kopyalayın, Teams’te App Studio'yu açın ve bildirimi ekleyin"
+    "message": "Teams bağdaştırıcınız, yayımlanmış botunuz için yapılandırıldı. Botunuzu Teams’te test edebilmeniz için bildirimi kopyalayın, Teams’te App Studio’yu açın ve bildirimi ekleyin"
   },
   "zoom_in_3205e865": {
     "message": "Yakınlaştır"

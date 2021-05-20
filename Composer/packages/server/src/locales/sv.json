@@ -1530,7 +1530,7 @@
     "message": "Fel vid etablering."
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
-    "message": "{errorsCount, plural,\n     = 0 {No errors}\n     = 1 {One error}\n  Andra {# fel}\n}"
+    "message": "{errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# fel}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
@@ -2922,7 +2922,7 @@
     "message": "Utgivare"
   },
   "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
-    "message": "Publicerar {Count, plural,\n     = 1 {en bot}\n  Andra {# bots}\n}"
+    "message": "Publicerar {Count, plural,\n     =1 {en bot}\n  other {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "Publicerar"
@@ -3948,13 +3948,13 @@
     "message": "{ total, plural,\n     =1 {Starta om robot}\n  other {Starta om alla robotar ({ running }/{ total } körs)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  andra {Start all}\n}"
+    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Startar robot...}\n  other {Startar robotar... ({ running }/{ total } körs)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
-    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  andra {Stopping bots.. ({ running }/{ total } running)}\n}"
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other { total } running)}\n}"
   },
   "trigger_f0ee1fbf": {
     "message": "Utlösare"
@@ -4206,7 +4206,7 @@
     "message": "Varning"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
-    "message": "{warningsCount, plural,\n     = 0 {inga varningar}\n     = 1 {en varning}\n  Övriga {# varningar}\n}"
+    "message": "{warningsCount, plural,\n     =0 {inga varningar}\n     =1 {en varning}\n  other {# varningar}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"

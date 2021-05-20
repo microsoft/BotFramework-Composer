@@ -3492,7 +3492,7 @@
     "message": "Manifest voor { skillName }"
   },
   "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
-    "message": "Vaardigheden kunnen worden aangeroepen door externe bots. Sta andere bots toe uw vaardigheid aan te roepen door de App-Id's van de bots toe te voegen aan de lijst hieronder. <a>Meer informatie</a>"
+    "message": "Vaardigheden kunnen worden aangeroepen door externe bots. Sta andere bots toe uw vaardigheid aan te roepen door de App-Id’s van de bots toe te voegen aan de lijst hieronder. <a>Meer informatie</a>"
   },
   "skip_bcb86160": {
     "message": "Overslaan"

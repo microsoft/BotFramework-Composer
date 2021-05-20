@@ -41,27 +41,30 @@ for (const localePath of localePaths) {
         errorCount += 1;
       }
 
-      if (/\{.*plural.*}/.exec(msg)) {
+      if (/\{[\s\S]*plural[\s\S]*}/.exec(fixedMessage)) {
         // if we're in a "plural" rules section...
+
         if (/=\s+\d+/.exec(fixedMessage)) {
           console.log(src, `removing whitespace between number and =`);
-          fixedMessage = fixedMessage.replace(/=\s+(\d+)/g, '=$1');
+          fixedMessage = fixedMessage.replace(/=\s+(\d+)/gu, '=$1');
         }
         if (/=\d+/.exec(msg) && !/other/.exec(msg)) {
-          console.log(src, `missing 'other' clause`);
-          errorCount += 1;
+          console.log(src, `repairing missing 'other' clause`);
+          fixedMessage = fixedMessage.replace(/\n(\s+)[^=0-9]+\s*(\{.*\})/gu, (m, p1, p2) => {
+            return `\n${p1}other ${p2}`;
+          });
         }
       }
-      if (/\p{L}'\p{L}/u.exec(msg)) {
+      if (/\p{L}'\p{L}/u.exec(fixedMessage)) {
         console.log(src, `fixing single quote between letters`);
         fixedMessage = fixedMessage.replace(/(\p{L})'(\p{L})/gu, '$1’$2');
       }
 
-      if (/\p{L}"\p{L}/u.exec(msg) && !dirent.name.includes('ko')) {
+      if (/\p{L}"\p{L}/u.exec(fixedMessage) && !dirent.name.includes('ko')) {
         console.log(src, `replacing double quote between letters with single`);
         fixedMessage = fixedMessage.replace(/(\p{L})"(\p{L})/gu, '$1’$2');
       }
-      if (/([^']\{')|('\}[^'])/.exec(msg)) {
+      if (/([^']\{')|('\}[^'])/.exec(fixedMessage)) {
         console.log(src, `fixing incorrect brace quoting`);
         fixedMessage = fixedMessage.replace(/([^']\{')/g, "'{'").replace(/('\}[^'])/g, "'}'");
       }

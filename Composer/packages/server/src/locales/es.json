@@ -249,7 +249,7 @@
     "message": "+ Agregar par PyR"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> agregue algunas frases de ejemplo para desencadenar esta intención:\n> - dime el tiempo\n-¿cómo es el tiempo en \"{'city=Seattle'}\"?\n\nDefiniciones de entidad:\n> @ ml city"
+    "message": "> agregue algunas frases de ejemplo para desencadenar esta intención:\n> - dime el tiempo\n-¿cómo es el tiempo en '{'city=Seattle'}'?\n\nDefiniciones de entidad:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
     "message": "> agregue algunas respuestas de usuario esperadas:\n> - Recuérdame que \"{\"itemTitle=compre leche\"}\"\n> - Recuérdame que \"{\" itemTitle \"}\"\n> - agregue \"{\"itemTitle\"}\" a mi lista de tareas pendientes\n>\n> definiciones de entidad:\n> @ ml itemTitle\n"
@@ -4206,7 +4206,7 @@
     "message": "Advertencia"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
-    "message": "{ warningsCount, plural,\n     = 0 {Sin advertencias}\n     = 1 {Una advertencia}\n  Other {# advertencias}\n}"
+    "message": "{ warningsCount, plural,\n     =0 {Sin advertencias}\n     =1 {Una advertencia}\n  other {# advertencias}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"

@@ -1530,7 +1530,7 @@
     "message": "Při zřizování nastala chyba"
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
-    "message": "{errorsCount, plural,\n     = 0 {Žádné chyby}\n     = 1 {Jedna chyba}\n  other {# chyby}\n}"
+    "message": "{errorsCount, plural,\n     =0 {Žádné chyby}\n     =1 {Jedna chyba}\n  other {# chyby}\n}"
   },
   "errorsmsg_8f5d3d85": {
     "message": "{ errorsMsg }"
