@@ -69,7 +69,8 @@
     "eslint-plugin-notice": "0.9.10",
     "eslint-plugin-prettier": "3.1.3",
     "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-security": "1.4.0"
+    "eslint-plugin-security": "1.4.0",
+    "buffer": "^6.0.3"
   },
   "devDependencies": {
     "@botframework-composer/test-utils": "file:../../Composer/packages/test-utils",
