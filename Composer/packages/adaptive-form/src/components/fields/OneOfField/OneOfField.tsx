@@ -5,7 +5,7 @@
 
 import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import { jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme/lib/fluent';
+import { FluentTheme } from '@uifabric/fluent-theme/lib/fluent';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -41,14 +41,20 @@ const styles = {
     dropdown: { height: '100%' },
   },
   nestedDropdown: {
-    caretDown: { color: SharedColors.cyanBlue10 },
-    caretDownWrapper: { height: '20px', lineHeight: '20px' },
-    root: { flexBasis: 'auto', paddingBottom: '-4px' },
+    root: {
+      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown': {
+        color: FluentTheme.palette.themeDarker,
+      },
+      ':focus-within .ms-Dropdown-title, :focus-within .ms-Dropdown-caretDown': {
+        color: FluentTheme.palette.accent,
+      },
+    },
+    caretDown: { fontSize: FluentTheme.fonts.xSmall.fontSize, color: FluentTheme.palette.accent },
+    dropdownOptionText: { fontSize: FluentTheme.fonts.small.fontSize },
     title: {
       border: 'none',
-      color: SharedColors.cyanBlue10,
-      height: '20px',
-      lineHeight: '20px',
+      fontSize: FluentTheme.fonts.small.fontSize,
+      color: FluentTheme.palette.accent,
     },
   },
 };
@@ -127,7 +133,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
         label={selectedSchema.type !== 'object' ? false : undefined}
         placeholder={placeholder}
         schema={selectedSchema}
-        transparentBorder={false}
         uiOptions={props.uiOptions}
       />
     );
