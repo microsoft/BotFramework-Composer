@@ -71,9 +71,6 @@
           "title": "Schema",
           "description": "Schema att fylla i.",
           "anyOf": {
-            "0": {
-              "title": "Metaschema för kärnschema"
-            },
             "1": {
               "title": "Referens till JSON-schema",
               "description": "Referens till JSON-schemats .dialog-fil."
@@ -907,9 +904,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "Continue conversation (Queue)",
+      "description": "Continue a specific conversation (via StorageQueue implementation).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "conversationReference": {
+          "title": "Conversation Reference",
+          "description": "A conversation reference. (NOTE: Minimum required values or channelId, conversation)."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "Fortsätt konversation senare (kö)",
-      "description": "Fortsätt konversationen vid ett senare tillfälle (via Azure Storage-kö).",
+      "description": "Continue conversation at later time (via StorageQueue implementation).",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1673,6 +1706,38 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "Get ConversationReference",
+      "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "property": {
+          "title": "Property",
+          "description": "Property (named location to store information)."
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "Gå till åtgärd",
       "description": "Gå till en åtgärd efter ID.",
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "ActivityTemplate-komponenter kan vara strängmallar, aktiviteter eller en implementeringar av ActivityTemplate",
-      "oneOf": {
-        "1": {
-          "description": "En aktivitet är den grundläggande kommunikationstypen för Bot Framework 3.0-protokollet.",
-          "title": "Aktivitet",
-          "properties": {
-            "type": {
-              "description": "Innehåller aktivitetstypen. Möjliga värden är: message, contactRelationUpdate,\nconversationUpdate, typing, endOfConversation, event, invoke, deleteUserData,\nmessageUpdate, messageDelete, installationUpdate, messageReaction, suggestion,\ntrace, handoff",
-              "title": "typ"
-            },
-            "id": {
-              "description": "Innehåller ett ID som unikt identifierar aktiviteten på kanalen.",
-              "title": "ID"
-            },
-            "timestamp": {
-              "description": "Innehåller datum och tid då meddelandet skickades, i UTC, uttryckt i ISO-8601-format.",
-              "title": "tidsstämpel"
-            },
-            "localTimestamp": {
-              "description": "Innehåller datum och tid då meddelandet skickades, i lokal tid, uttryckt i ISO-8601\n-format.\nExempel: 2016-09-23T13:07:49.4714686-07:00.",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "Innehåller namnet på den tidszon där meddelandet, i lokal tid, uttryckt i IANA\ntidszonsdatabasformat.\nExempel: America/Los_Angeles.",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "Innehåller den URL som anger kanalens tjänstslutpunkt. Ställs in av kanalen.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "Innehåller ett ID som unikt identifierar kanalen. Ställs in av kanalen.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "Identifierar meddelandets avsändare.",
-              "title": "från"
-            },
-            "conversation": {
-              "description": "Identifierar den konversation som aktiviteten tillhör.",
-              "title": "konversation",
-              "properties": {
-                "isGroup": {
-                  "description": "Indikerar om konversationen innehåller mer än två deltagare vid den tidpunkt då\naktiviteten genereras",
-                  "title": "isGroup"
-                },
-                "conversationType": {
-                  "description": "Indikerar typen av konversation i kanaler som skiljer mellan konversationstyper",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "Kanal-ID för användaren eller roboten på den här kanalen (exempel: joe@smith.com, @joesmith eller\n123456)",
-                  "title": "ID"
-                },
-                "name": {
-                  "description": "Visa användarvänligt namn",
-                  "title": "namn"
-                },
-                "aadObjectId": {
-                  "description": "Det här kontots objekt-ID i Azure Active Directory (AAD)",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "Rollen för entiteten bakom kontot (exempelvis Användare, Robot, osv). Möjliga värden är:\nanvändare, robot",
-                  "title": "roll"
-                }
-              }
-            },
-            "recipient": {
-              "description": "Identifierar meddelandets mottagare.",
-              "title": "mottagare"
-            },
-            "textFormat": {
-              "description": "Format på textfält: Default:markdown. Möjliga värden är markdown, plain, xml",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "Layouttips för flera bilagor. Standardinställning: list. Möjliga värden är list,\ncarousel",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "Mängden medlemmar som har lagts till i konversationen.",
-              "title": "membersAdded",
-              "items": {
-                "description": "Kanalkontoinformation som behövs för att vidarekoppla ett meddelande",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "Kanal-ID för användaren eller roboten på den här kanalen (exempel: joe@smith.com, @joesmith eller\n123456)",
-                    "title": "ID"
-                  },
-                  "name": {
-                    "description": "Visa användarvänligt namn",
-                    "title": "namn"
-                  },
-                  "aadObjectId": {
-                    "description": "Det här kontots objekt-ID i Azure Active Directory (AAD)",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "Rollen för entiteten bakom kontot (exempelvis Användare, Robot, osv). Möjliga värden är:\nanvändare, robot",
-                    "title": "roll"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "Mängden medlemmar som har tagits bort från konversationen.",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "Mängden reaktioner som har lagts till i konversationen.",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "Meddelandereaktionsobjekt",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "Meddelandereaktionstyp. Möjliga värden är: like, plusOne",
-                    "title": "typ"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "Mängden reaktioner som har tagits bort från konversationen.",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "Konversationens uppdaterade ämnesnamn.",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "Indikerar om kanalens tidigare historik har avslöjats.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "Ett namn för nationella inställningar för textfältets innehåll.\nNamnet för nationella inställningar är en kombination av en kulturkod bestående av en två eller tre ISO 639-bokstäver associerad\nmed ett språk\noch en ISO 3166-tvåbokstavs subkulturkod associerad till ett land eller en region.\nNamnet för nationella inställningar kan också motsvara en giltig BCP-47-språktagg.",
-              "title": "nationella inställningar"
-            },
-            "text": {
-              "description": "Meddelandets textinnehåll.",
-              "title": "text"
-            },
-            "speak": {
-              "description": "Den text som ska talas.",
-              "title": "tala"
-            },
-            "inputHint": {
-              "description": "Indikerar om din robot accepterar,\nförväntar sig eller ignorerar användarindata efter det att meddelandet har levererats till klienten. Möjliga\nvärden är: acceptingInput, ignoringInput, expectingInput",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "Den text som ska visas om kanalen inte kan återge kort.",
-              "title": "sammanfattning"
-            },
-            "suggestedActions": {
-              "description": "De föreslagna åtgärderna för aktiviteten.",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "ID:n för de mottagare som åtgärderna ska visas för. Dessa ID:n är relativa till det \nchannelId och en delmängd av aktivitetens alla mottagare",
-                  "title": "till",
-                  "items": {
-                    "title": "ID",
-                    "description": "Mottagarens ID."
-                  }
-                },
-                "actions": {
-                  "description": "Åtgärder som kan visas för användaren",
-                  "title": "åtgärder",
-                  "items": {
-                    "description": "En klickningsbar åtgärd",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "Den typ av åtgärd som implementeras av den här knappen. Möjliga värden är: openUrl, imBack,\npostBack, playAudio, playVideo, showImage, downloadFile, signin', call,\nbetalning, messageBack",
-                        "title": "typ"
-                      },
-                      "title": {
-                        "description": "Textbeskrivning som visas på knappen",
-                        "title": "rubrik"
-                      },
-                      "image": {
-                        "description": "Avbildnings-URL som visas på knappen, bredvid textetiketten",
-                        "title": "avbildning"
-                      },
-                      "text": {
-                        "description": "Text för den här åtgärden",
-                        "title": "text"
-                      },
-                      "displayText": {
-                        "description": "(Valfritt) Text som ska visas i chattfeeden om användaren klickar på knappen",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "Extra parameter för åtgärd. Innehållet i den här egenskapen beror på åtgärdstypen",
-                        "title": "värde"
-                      },
-                      "channelData": {
-                        "description": "Programspecifika data som är associerade till den här åtgärden",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "Bifogade filer",
-              "title": "bifogade filer",
-              "items": {
-                "description": "En bifogad fil i en aktivitet",
-                "title": "Bifogad fil",
-                "properties": {
-                  "contentType": {
-                    "description": "MimeType/ContentType för filen",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "Innehålls-URL",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "Inbäddat innehåll",
-                    "title": "innehåll"
-                  },
-                  "name": {
-                    "description": "(VALFRITT) Namnet på bilagan",
-                    "title": "namn"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(VALFRITT) Miniatyr som är associerad till bilagan",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "Representerar de entiteter som nämndes i meddelandet.",
-              "title": "entiteter",
-              "items": {
-                "description": "Metadataobjekt som tillhör en aktivitet",
-                "title": "Entitet",
-                "properties": {
-                  "type": {
-                    "description": "Entitetstyp (RFC 3987 IRI)",
-                    "title": "typ"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "Innehåller kanalspecifikt innehåll.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "Indikerar om mottagaren av en contactRelationUpdate har lagts till eller tagits bort från\navsändarens kontaktlista.",
-              "title": "åtgärd"
-            },
-            "replyToId": {
-              "description": "Innehåller ID:t för det meddelande som det här meddelandet är ett svar på.",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "En beskrivande etikett för aktiviteten.",
-              "title": "etikett"
-            },
-            "valueType": {
-              "description": "Aktivitetsvärdeobjektets typ.",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "Ett värde som är associerat till aktiviteten.",
-              "title": "värde"
-            },
-            "name": {
-              "description": "Namnet på åtgärden som är kopplad till en anrops- eller händelseaktivitet.",
-              "title": "namn"
-            },
-            "relatesTo": {
-              "description": "En referens till en annan konversation eller aktivitet.",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(Valfritt) ID för aktiviteten att referera till",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(Valfritt) Användare som deltar i den här konversationen",
-                  "title": "användare"
-                },
-                "bot": {
-                  "description": "Roboten deltar i den här konversationen",
-                  "title": "robot"
-                },
-                "conversation": {
-                  "description": "Konversationsreferens",
-                  "title": "konversation"
-                },
-                "channelId": {
-                  "description": "Kanal-ID",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "Tjänstens slutpunkt där åtgärder avseende den refererade konversationen kan utföras",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "Den kod för endOfConversation-aktiviteter som indikerar varför konversationen avslutades.\nMöjliga värden är: unknown, completedSuccessfully, userCancelled, botTimedOut,\nbotIssuedInvalidMessage, channelFailed",
-              "title": "kod"
-            },
-            "expiration": {
-              "description": "Den tid då aktiviteten ska anses ha \"upphört\" och inte ska\npresenteras för mottagaren.",
-              "title": "upphörande"
-            },
-            "importance": {
-              "description": "Aktivitetens betydelse. Möjliga värden är: låg, normal, hög",
-              "title": "prioritet"
-            },
-            "deliveryMode": {
-              "description": "Ett leveranstips som signalerar till mottagarens alternativa leveranssökvägar för aktiviteten.\nStandardleverans läget är standard. Möjliga värden är: normal, meddelande",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "Lista med fraser och referenser som tal- och språkprepareringssystem ska lyssna efter",
-              "title": "listenFor",
-              "items": {
-                "title": "Fras",
-                "description": "Fras att lyssna efter."
-              }
-            },
-            "textHighlights": {
-              "description": "Mängden textfragment som ska markeras när aktiviteten innehåller ett ReplyToId-värde.",
-              "title": "textHighlights",
-              "items": {
-                "description": "Refererar till en delsträng av innehållet i ett annat fält",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "Definierar innehållsavsnitt för den text som ska markeras",
-                    "title": "text"
-                  },
-                  "occurrence": {
-                    "description": "Förekomst av textfältet inom den refererade texten, om det finns flera.",
-                    "title": "förekomst"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "En valfri programåtgärd som medföljer denna begäran",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "ID för den här åtgärden",
-                  "title": "ID"
-                },
-                "entities": {
-                  "description": "Entiteter som är kopplade till den här åtgärden",
-                  "title": "entiteter"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "ActivityTemplate-komponenter kan vara strängmallar, aktiviteter eller en implementeringar av ActivityTemplate"
     },
     "Microsoft.IDialog": {
       "title": "Microsoft-dialoger",
@@ -2187,9 +1884,9 @@
       "title": "Entitetsidentifieringsobjekt",
       "description": "Komponenter som härleds från EntityRecognizer.",
       "oneOf": {
-        "0": {
-          "title": "Referens till Microsoft.IEntityRecognizer",
-          "description": "Referens till .dialog-filen för Microsoft.IEntityRecognizer."
+        "18": {
+          "title": "Reference to Microsoft.IEntityRecognizer",
+          "description": "Reference to Microsoft.IEntityRecognizer .dialog file."
         }
       }
     },
@@ -2209,9 +1906,9 @@
       "title": "Microsoft-utlösare",
       "description": "Komponenter som härleds från OnCondition-klassen.",
       "oneOf": {
-        "0": {
-          "title": "Referens till Microsoft.ITrigger",
-          "description": "Referens till .dialog-filen för Microsoft.ITrigger."
+        "27": {
+          "title": "Reference to Microsoft.ITrigger",
+          "description": "Reference to Microsoft.ITrigger .dialog file."
         }
       }
     },
@@ -2219,9 +1916,9 @@
       "title": "Väljare",
       "description": "Komponenter som härleds från TriggerSelector-klassen.",
       "oneOf": {
-        "0": {
-          "title": "Referens till Microsoft.ITriggerSelector",
-          "description": "Referens till .dialog-filen för Microsoft.ITriggerSelector."
+        "5": {
+          "title": "Reference to Microsoft.ITriggerSelector",
+          "description": "Reference to Microsoft.ITriggerSelector .dialog file."
         }
       }
     },
@@ -2831,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "Om entitetstilldelning",
-      "description": "Åtgärder som ska vidtas när en egenskap ska tilldelas en entitet.",
+      "description": "Actions to apply an operation on a property and value.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2839,17 +2536,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Egenskap",
-          "description": "Egenskap som ska anges när entiteten har valts."
-        },
-        "entity": {
-          "title": "Entitet",
-          "description": "Entitet placeras i egenskap"
-        },
         "operation": {
           "title": "Åtgärd",
-          "description": "Åtgärd för att tilldela entitet."
+          "description": "Operation filter on event."
+        },
+        "property": {
+          "title": "Egenskap",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value filter on event."
         },
         "condition": {
           "title": "Villkor",
@@ -2951,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "Att välja entitet",
-      "description": "Åtgärder som ska utföras när ett enhetsvärde måste matchas.",
+      "description": "Actions to be performed when value is ambiguous for operator and property.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2959,13 +2656,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Egenskap som ska konfigureras",
-          "description": "Egenskap som ska anges när entiteten har valts."
+        "operation": {
+          "title": "Operation",
+          "description": "Operation filter on event."
         },
-        "entity": {
-          "title": "Tvetydig entitet",
-          "description": "Tvetydig entitet"
+        "property": {
+          "title": "Property",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Ambiguous value",
+          "description": "Ambiguous value filter on event."
         },
         "condition": {
           "title": "Villkor",
@@ -2994,8 +2695,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "Vid tvetydig avsikt",
-      "description": "Åtgärder som ska genomföras när en avsikt är tvetydig.",
+      "title": "On ambiguous intent",
+      "description": "Actions to perform on when an intent is ambiguous.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3039,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "Att välja egenskap",
-      "description": "Åtgärder som ska vidtas när det finns flera möjliga mappningar av entiteter till egenskaper.",
+      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3047,26 +2748,6 @@
         }
       },
       "properties": {
-        "entity": {
-          "title": "Entitet tilldelas",
-          "description": "Entitet tilldelas till egenskapsval"
-        },
-        "properties": {
-          "title": "Möjliga egenskaper",
-          "description": "Egenskaper att välja mellan.",
-          "items": {
-            "title": "Egenskapsnamn",
-            "description": "Möjlig egenskap att välja."
-          }
-        },
-        "entities": {
-          "title": "Entiteter",
-          "description": "Tvetydiga entitetsnamn.",
-          "items": {
-            "title": "Entitetsnamn",
-            "description": "Entitetsnamn att välja mellan."
-          }
-        },
         "condition": {
           "title": "Villkor",
           "description": "Villkor (uttryck)."
@@ -4386,6 +4067,34 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "Send a handoff activity",
+      "description": "Sends a handoff activity to trigger a handoff request.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "Context",
+          "description": "Context to send with the handoff request"
+        },
+        "transcript": {
+          "title": "transcript",
+          "description": "Transcript to send with the handoff request"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "Konfigurera egenskap",
       "description": "Ange ett eller flera egenskapsvärden.",
@@ -4582,39 +4291,39 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetri – spårningshändelse",
-      "description": "Spåra en anpassad händelse med hjälp av den registrerade telemetriklienten.",
+    "Microsoft.TelemetryTrackEventAction": {
+      "title": "Telemetry - track event",
+      "description": "Track a custom event using the registered Telemetry Client.",
       "patternProperties": {
         "^\\$": {
-          "title": "Verktygsegenskap",
-          "description": "Öppen egenskap för verktyg."
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
         }
       },
       "properties": {
         "id": {
-          "title": "ID",
-          "description": "Valfritt ID för dialogrutan"
+          "title": "Id",
+          "description": "Optional id for the dialog"
         },
         "disabled": {
-          "title": "Inaktiverat",
-          "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
         },
         "eventName": {
-          "title": "Händelsenamn",
-          "description": "Namnet på den händelse som ska spåras."
+          "title": "Event name",
+          "description": "The name of the event to track."
         },
         "properties": {
-          "title": "Egenskaper",
-          "description": "En eller flera egenskaper att bifoga till händelsen som spåras."
+          "title": "Properties",
+          "description": "One or more properties to attach to the event being tracked."
         },
         "$kind": {
-          "title": "Variant av dialogruteobjekt",
-          "description": "Definierar de giltiga egenskaperna för den komponent du konfigurerar (från en dialog.schema-fil)"
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
         },
         "$designer": {
-          "title": "Designerinformation",
-          "description": "Extra information för Bot Framework Composer."
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
         }
       }
     },
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "Nummer",
           "description": "Nummerkonstant."
+        }
+      }
+    },
+    "schema": {
+      "title": "Core schema meta-schema"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "Channel account information needed to route a message",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "Channel account information for a conversation",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+              "title": "isGroup"
+            },
+            "conversationType": {
+              "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "Message reaction object",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+              "title": "type"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "A clickable action",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+              "title": "type"
+            },
+            "title": {
+              "description": "Text description which appears on the button",
+              "title": "title"
+            },
+            "image": {
+              "description": "Image URL which will appear on the button, next to text label",
+              "title": "image"
+            },
+            "text": {
+              "description": "Text for this action",
+              "title": "text"
+            },
+            "displayText": {
+              "description": "(Optional) text to display in the chat feed if the button is clicked",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+              "title": "value"
+            },
+            "channelData": {
+              "description": "Channel-specific data associated with this action",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "SuggestedActions that can be performed",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+              "title": "to",
+              "items": {
+                "title": "Id",
+                "description": "Id of recipient."
+              }
+            },
+            "actions": {
+              "description": "Actions that can be shown to the user",
+              "title": "actions"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "An attachment within an activity",
+          "title": "Attachment",
+          "properties": {
+            "contentType": {
+              "description": "mimetype/Contenttype for the file",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "Content Url",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "Embedded content",
+              "title": "content"
+            },
+            "name": {
+              "description": "(OPTIONAL) The name of the attachment",
+              "title": "name"
+            },
+            "thumbnailUrl": {
+              "description": "(OPTIONAL) Thumbnail associated with attachment",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "Metadata object pertaining to an activity",
+          "title": "Entity",
+          "properties": {
+            "type": {
+              "description": "Type of this entity (RFC 3987 IRI)",
+              "title": "type"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "An object relating to a particular point in a conversation",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(Optional) ID of the activity to refer to",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(Optional) User participating in this conversation",
+              "title": "user"
+            },
+            "bot": {
+              "description": "Bot participating in this conversation",
+              "title": "bot"
+            },
+            "conversation": {
+              "description": "Conversation reference",
+              "title": "conversation"
+            },
+            "channelId": {
+              "description": "Channel ID",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "Refers to a substring of content within another field",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "Defines the snippet of text to highlight",
+              "title": "text"
+            },
+            "occurrence": {
+              "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+              "title": "occurrence"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "Represents a reference to a programmatic action",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "ID of this action",
+              "title": "id"
+            },
+            "entities": {
+              "description": "Entities associated with this action",
+              "title": "entities"
+            }
+          }
+        },
+        "Activity": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation"
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments"
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities"
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }
