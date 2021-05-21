@@ -116,6 +116,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
     updateAllowedCallers
   );
 
+  // Reset array cache when user switches between project settings
   const didMount = React.useRef(false);
   React.useEffect(() => {
     if (didMount.current) {
