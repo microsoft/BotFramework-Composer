@@ -9,8 +9,7 @@
     "lint": "eslint --quiet --ext .ts,.tsx .",
     "test": "yarn test:ui && yarn test:node",
     "test:ui": "jest --config jest.config.ui.js",
-    "test:node": "jest --config jest.config.node.js",
-    "test:single": "jest DockerHub.test.ts --config jest.config.node.js"
+    "test:node": "jest --config jest.config.node.js"
   },
   "jest": {
     "testEnvironment": "node"
