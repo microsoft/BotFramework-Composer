@@ -125,7 +125,7 @@ export const DockerPublishingDialog: React.FC = () => {
           justifyContent: 'space-between',
         }}
       >
-        <div style={{ flex: 1, minHeight: '230px' }}>
+        <div style={{ flex: 1 }}>
           {page === PageTypes.RegistryType && (
             <PageRegistryType
               creationType={currentConfig.creationType}
