@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Buffer } from 'buffer';
+
 import { RepositoryAPIProps } from '../types';
 import { IRepository } from '../types/interfaces';
-import { Buffer } from 'buffer';
 
 export class ACRAPI implements IRepository {
   url: string;
