@@ -16,6 +16,7 @@ interface ArrayItemState<ItemType> {
   arrayItems: ArrayItem<ItemType>[];
   handleChange: ArrayChangeHandler<ItemType>;
   addItem: (newItem: ItemType) => void;
+  handleResetCache: (newItem: ItemType[]) => void;
 }
 
 const generateArrayItems = <ItemType = unknown>(value: ItemType[] = []): ArrayItem<ItemType>[] => {
@@ -97,5 +98,9 @@ export function useArrayItems<ItemType = unknown>(
     handleChange(cache.concat(createArrayItem(newItem)));
   };
 
-  return { arrayItems: cache, handleChange, addItem };
+  const handleResetCache = (items: ItemType[]) => {
+    setCache(generateArrayItems(items));
+  };
+
+  return { arrayItems: cache, handleChange, addItem, handleResetCache };
 }
