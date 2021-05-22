@@ -86,7 +86,8 @@
     "l10n:extractJson": "node scripts/l10n-extractJson.js",
     "l10n:transform": "node scripts/l10n-transform.js",
     "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp ./packages",
-    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas && rimraf l10ntemp",
+    "l10n:babel:extensions": "babel --config-file ./babel.l10n.config.js --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp ../extensions",
+    "l10n": "yarn l10n:babel && yarn l10n:babel:extensions && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas && rimraf l10ntemp",
     "l10n:check": "node scripts/l10nCheck.js"
   },
   "husky": {
