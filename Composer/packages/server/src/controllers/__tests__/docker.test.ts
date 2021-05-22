@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { fetch } from 'node-fetch';
 
 import { DockerEngineController } from '../docker';
 import { execAsync } from '../../utility/process';
@@ -11,15 +10,8 @@ jest.mock('../../utility/process', () => ({
   execAsync: jest.fn(),
 }));
 
-jest.mock('node-fetch', () => ({
-  fetch: jest.fn(),
-}));
-
 let res: Response = {} as Response;
 
-beforeAll(() => {
-  window.fetch = fetch;
-});
 beforeEach(() => {
   res = ({
     json: jest.fn(),
@@ -144,7 +136,7 @@ describe('Get Tags', () => {
         body: {},
       } as Request;
 
-      (fetch as jest.Mock).mockImplementation(
+      window.fetch = jest.fn().mockImplementation(
         (Request: string): Promise<any> => {
           return Promise.resolve({
             status: 200,
@@ -171,7 +163,7 @@ describe('Get Tags', () => {
         body: {},
       } as Request;
 
-      (fetch as jest.Mock).mockImplementation(
+      window.fetch = jest.fn().mockImplementation(
         (Request: string): Promise<any> => {
           return Promise.resolve({
             status: 404,
@@ -200,7 +192,7 @@ describe('Get Tags', () => {
         body: {},
       } as Request;
 
-      (fetch as jest.Mock).mockImplementation(
+      window.fetch = jest.fn().mockImplementation(
         (Request: string): Promise<any> => {
           return Promise.resolve({
             status: 401,
@@ -227,7 +219,7 @@ describe('Get Tags', () => {
         body: {},
       } as Request;
 
-      (fetch as jest.Mock).mockImplementation(
+      window.fetch = jest.fn().mockImplementation(
         (Request: string): Promise<any> => {
           if (Request.indexOf('/login') > 0) {
             return Promise.resolve({
@@ -264,7 +256,7 @@ describe('Get Tags', () => {
         body: {},
       } as Request;
 
-      (fetch as jest.Mock).mockImplementation(
+      window.fetch = jest.fn().mockImplementation(
         (Request: string): Promise<any> => {
           if (Request.indexOf('/login') > 0) {
             return Promise.resolve({
