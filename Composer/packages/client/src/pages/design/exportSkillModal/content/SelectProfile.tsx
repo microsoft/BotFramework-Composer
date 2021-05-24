@@ -19,7 +19,7 @@ import { botDisplayNameState, dispatcherState, settingsState, skillManifestsStat
 import { CreatePublishProfileDialog } from '../../../botProject/CreatePublishProfileDialog';
 import { iconStyle } from '../../../botProject/runtime-settings/style';
 import { ContentProps, VERSION_REGEX } from '../constants';
-import { PublishProfileWrapperDialog } from '../../../botProject/WrapperPublishProfieDialog';
+import { PublishProfileWrapperDialog } from '../../../botProject/PublishProfieWrapperDialog';
 
 const styles = {
   container: css`
@@ -136,7 +136,11 @@ export const SelectProfile: React.FC<ContentProps> = ({
   const [showPublishProfileWrapperDialog, setShowPublishProfileWrapperDialog] = useState(false);
 
   const handleShowPublishProfileWrapperDialog = () => {
-    setShowPublishProfileWrapperDialog(!showPublishProfileWrapperDialog);
+    setShowPublishProfileWrapperDialog(true);
+  };
+
+  const handleHiddenPublishProfileWrapperDialog = () => {
+    setShowPublishProfileWrapperDialog(false);
   };
 
   const handleCurrentProfileChange = useMemo(
@@ -271,7 +275,8 @@ export const SelectProfile: React.FC<ContentProps> = ({
       {showPublishProfileWrapperDialog && (
         <PublishProfileWrapperDialog
           projectId={projectId}
-          onClose={handleShowPublishProfileWrapperDialog}
+          onClose={handleHiddenPublishProfileWrapperDialog}
+          onOpen={handleShowPublishProfileWrapperDialog}
           onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
         />
       )}
