@@ -249,10 +249,10 @@
     "message": "+ QnA-Paar hinzufügen"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> Fügen Sie einige Beispielausdrücke hinzu, mit denen diese Absicht ausgelöst wird:\n> – Informiere mich über das Wetter\n> – Wie ist das Wetter in'{'city=Seattle'}'\n> Entitätsdefinitionen:\n> @ ml city"
+    "message": "> Fügen Sie einige Beispielausdrücke hinzu, mit denen diese Absicht ausgelöst wird:\n> – Informiere mich über das Wetter\n> – Wie ist das Wetter in '{'city=Seattle'}'\n> Entitätsdefinitionen:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> Fügen Sie einige erwartete Benutzerantworten hinzu:\n> – Erinnere mich an '{'itemTitle=Milch kaufen'}'\n> – Erinnerung an '{'itemTitle'}'\n> –'{'itemTitle'}' meiner Aufgabenliste hinzufügen\n>\n> Entitätsdefinitionen:\n> @ ml itemTitle\n"
+    "message": "> Fügen Sie einige erwartete Benutzerantworten hinzu:\n> – Erinnere mich an \"{'itemTitle=Milch kaufen'}\"\n> – Erinnerung an \"{'itemTitle'}\"\n> –\"{'itemTitle'}\" meiner Aufgabenliste hinzufügen\n>\n> Entitätsdefinitionen:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Vorgeschlagene Aktion hinzufügen"
@@ -3948,7 +3948,7 @@
     "message": "{ total, plural,\n     =1 {Bot neu starten}\n  other {Alle Bots neu starten ({ running }/{ total } running)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
+    "message": "{ total, plural,\n     =1 {Start bot}\n  andere {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Bot wird gestartet..}\n  other {Bots werden gestartet... ({ running }/{ total } running)}\n}"
@@ -4206,7 +4206,7 @@
     "message": "Warnung"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
-    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
+    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  andere {# warnings}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"

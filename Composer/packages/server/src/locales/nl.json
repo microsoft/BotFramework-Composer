@@ -51,7 +51,7 @@
     "message": "Een eigenschap is een gegevensfragment dat door uw bot wordt verzameld. De naam van de eigenschap is de naam die wordt gebruikt in Composer. Dit is niet noodzakelijkerwijs dezelfde tekst die wordt weergegeven in de berichten van de bot."
   },
   "a_publishing_profile_contains_the_information_nece_fc37192d": {
-    "message": "Een publicatieprofiel bevat de informatie die nodig is voor het inrichten en publiceren van uw bot, inclusief de app-id. "
+    "message": "Een publicatieprofiel bevat de informatie die nodig is voor het inrichten en publiceren van uw bot, inclusief de App-id. "
   },
   "a_publishing_profile_contains_the_information_nece_fffc0a35": {
     "message": "Een publicatieprofiel bevat de informatie die nodig is voor het inrichten en publiceren van uw bot, inclusief de app-id."
@@ -1710,7 +1710,7 @@
     "message": "Voor eigenschappen van het type list (of enum) accepteert uw bot alleen de waarden die u definieert. Nadat het dialoogvenster is gegenereerd, kunt u synoniemen voor elke waarde opgeven."
   },
   "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
-    "message": "Uit veiligheidsoverwegingen kan uw bot alleen een vaardigheid aanroepen als de Microsoft App-id in de lijst met toegestane oproepende functies van de vaardigheid staat. Nadat u een publicatieprofiel hebt gemaakt, deelt u de App-id van de bot met de auteur van de vaardigheid om deze toe te voegen. Mogelijk moet u de app-id van de vaardigheid ook opnemen in de lijst met toegestane oproepende functies van de hoofdbot."
+    "message": "Uit veiligheidsoverwegingen kan uw bot alleen een vaardigheid aanroepen als de Microsoft App-id in de lijst met toegestane oproepende functies van de vaardigheid staat. Nadat u een publicatieprofiel hebt gemaakt, deelt u de App-id van de bot met de auteur van de vaardigheid om deze toe te voegen. Mogelijk moet u de App-id van de vaardigheid ook opnemen in de lijst met toegestane oproepende functies van de hoofdbot."
   },
   "form_b674666c": {
     "message": "formulier"
@@ -3873,16 +3873,16 @@
     "message": "Als u verbinding wilt maken met een vaardigheid, moet uw bot de gegevens hebben die zijn vastgelegd in het manifest van de vaardigheid. Neem contact op met de auteur of uitgever van de vaardigheid voor deze informatie."
   },
   "to_connect_to_a_skill_your_bot_needs_the_informati_65b28231": {
-    "message": "Als u verbinding wilt maken met een vaardigheid, moet uw bot de gegevens hebben die zijn vastgelegd in het vaardighedenmanifest van de bot, en voor beveiligde toegang, moet de vaardigheid de app-id van uw bot kennen. Volg de onderstaande stappen om door te gaan."
+    "message": "Als u verbinding wilt maken met een vaardigheid, moet uw bot de gegevens hebben die zijn vastgelegd in het vaardighedenmanifest van de bot, en voor beveiligde toegang, moet de vaardigheid de App-id van uw bot kennen. Volg de onderstaande stappen om door te gaan."
   },
   "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
-    "message": "Als u verbinding wilt maken met een vaardigheid, moet uw bot de gegevens hebben die zijn vastgelegd in het manifest van de vaardigheid van de bot, en voor beveiligde toegang, moet de vaardigheid de app-id van uw bot kennen. <link>Meer informatie.</link>"
+    "message": "Als u verbinding wilt maken met een vaardigheid, moet uw bot de gegevens hebben die zijn vastgelegd in het manifest van de vaardigheid van de bot, en voor beveiligde toegang, moet de vaardigheid de App-id van uw bot kennen. <link>Meer informatie.</link>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
     "message": "Voor een veilige verbinding geeft u de App-is op van de bots die verbinding kunnen maken met uw vaardigheid. Als u niet over deze informatie beschikt, kunt u deze informatie ook toevoegen in de Vaardigheidsconfiguratie. Meer informatie."
   },
   "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
-    "message": "Voor een veilige verbinding moet de externe vaardigheid de Microsoft App-ID van uw bot kennen. "
+    "message": "Voor een veilige verbinding moet de externe vaardigheid de Microsoft App-id van uw bot kennen. "
   },
   "to_learn_more_a_visit_this_document_a_ce188d8": {
     "message": "<a>Raadpleeg dit document</a> voor meer informatie."
