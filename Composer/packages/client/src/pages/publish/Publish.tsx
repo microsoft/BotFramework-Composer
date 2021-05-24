@@ -65,7 +65,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const {
     getPublishHistory,
     getPublishStatusV2,
-    getPublishTargetTypes,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
@@ -104,18 +103,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const selectedBots = useMemo(() => {
     return currentBotList.filter((bot) => checkedSkillIds.some((id) => bot.id === id));
   }, [checkedSkillIds]);
-
-  // The publishTypes are loaded from the server and put into the publishTypesState per project
-  // The botProjectSpaceSelector maps the publishTypes to the project bots.
-  // The localBotsDataSelector uses botProjectSpaceSelector
-  // The botPropertyData uses localBotsDataSelector
-  // When the botPropertyData is used (like in the canPull method), the publishTypes must be loaded for the current project.
-  // Otherwise the botPropertyData publishTypes will always be empty and this component won't function properly.
-  useEffect(() => {
-    if (projectId) {
-      getPublishTargetTypes(projectId);
-    }
-  }, [projectId]);
 
   const canPull = useMemo(() => {
     return selectedBots.some((bot) => {
@@ -325,7 +312,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
                   type: 'error',
                   title: formatMessage('Unsupported publishing profile'),
                   description: formatMessage(
-                    "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it's configuration or create a new one.",
+                    'This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one.',
                     { profileName: target.name }
                   ),
                 });

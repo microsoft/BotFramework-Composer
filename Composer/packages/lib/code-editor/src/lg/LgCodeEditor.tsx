@@ -305,6 +305,7 @@ export const LgCodeEditor = (props: LgCodeEditorProps) => {
           hidden={false}
           modalProps={{
             isBlocking: true,
+            isClickableOutsideFocusTrap: true,
             styles: { main: { maxWidth: '840px !important', width: '840px !important' } },
           }}
           onDismiss={() => {

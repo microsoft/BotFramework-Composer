@@ -13,6 +13,7 @@ import { wrapWithRecoil } from './testUtils';
 jest.mock('axios', () => ({
   create: jest.fn().mockReturnThis(),
   get: jest.fn(),
+  post: jest.fn(() => new Promise((resolve) => resolve({}))),
   request: jest.fn(),
   interceptors: {
     request: { use: jest.fn() },

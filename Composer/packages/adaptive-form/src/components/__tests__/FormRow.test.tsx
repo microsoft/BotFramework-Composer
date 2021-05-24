@@ -12,7 +12,6 @@ const field: FormRowProps = {
   onChange: jest.fn(),
   row: '',
   definitions: {},
-  depth: 0,
   id: 'test',
   name: 'row',
   schema: {
