@@ -3948,7 +3948,7 @@
     "message": "{ total, plural,\n     =1 {Reiniciar bot}\n  other {Reiniciar todos os bots ({ running }/{ total } em execução)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  outros {Start all}\n}"
+    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Iniciando bot...}\n  other {Iniciando os bots... ({ running }/{ total } em execução)}\n}"
@@ -4206,7 +4206,7 @@
     "message": "Aviso"
   },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
-    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  outros {# warnings}\n}"
+    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
   },
   "warningsmsg_e2c04bfe": {
     "message": "{ warningsMsg }"

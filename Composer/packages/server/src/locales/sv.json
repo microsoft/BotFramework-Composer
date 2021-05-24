@@ -3948,7 +3948,7 @@
     "message": "{ total, plural,\n     =1 {Starta om robot}\n  other {Starta om alla robotar ({ running }/{ total } körs)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
-    "message": "{ total, plural,\n     =1 {Start bot}\n  andra {Start all}\n}"
+    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Startar robot...}\n  other {Startar robotar... ({ running }/{ total } körs)}\n}"
