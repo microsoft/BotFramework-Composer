@@ -15,7 +15,6 @@ jest.mock('../../../../utils/resolveFieldWidget', () => ({
 
 const defaultProps = {
   onChange: jest.fn(),
-  depth: 0,
   schema: {},
   definitions: {},
   id: 'test',
