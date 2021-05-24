@@ -87,6 +87,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
       minWidth={500}
       modalProps={{
         isBlocking: true,
+        isClickableOutsideFocusTrap: true,
       }}
       onDismiss={onCancel}
     >
