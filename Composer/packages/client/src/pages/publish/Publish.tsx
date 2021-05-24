@@ -312,7 +312,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
                   type: 'error',
                   title: formatMessage('Unsupported publishing profile'),
                   description: formatMessage(
-                    "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it's configuration or create a new one.",
+                    'This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to its configuration or create a new one.',
                     { profileName: target.name }
                   ),
                 });
