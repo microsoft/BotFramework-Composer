@@ -37,7 +37,7 @@ describe('Schema Editor', () => {
     const { baseElement, findAllByText, findByLabelText, getByPlaceholderText } = renderSchemaEditor({
       updateDialogSchema,
     });
-    const [add] = await findAllByText('Add');
+    const [add] = await findAllByText('Add new');
 
     add.click();
 
@@ -77,7 +77,7 @@ describe('Schema Editor', () => {
     const { baseElement, findAllByText, findByLabelText, getByPlaceholderText } = renderSchemaEditor({
       updateDialogSchema,
     });
-    const [, add] = await findAllByText('Add');
+    const [, add] = await findAllByText('Add new');
 
     add.click();
 

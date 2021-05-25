@@ -70,7 +70,6 @@ const AdapterModal = (props: Props) => {
         <div data-testid="adapterModal">
           <ObjectField
             definitions={{}}
-            depth={0}
             id={''}
             name={''}
             schema={schema}
