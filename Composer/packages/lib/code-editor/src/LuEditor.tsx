@@ -7,6 +7,7 @@ import { EditorDidMount, Monaco } from '@monaco-editor/react';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
+import omit from 'lodash/omit';
 import { MonacoLanguageClient, MonacoServices } from 'monaco-languageclient';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -16,7 +17,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
+import { EditorPopExpandDialog } from './components/EditorPopExpandDialog';
 import { defaultPlaceholder, LU_HELP } from './constants';
+import { useEditorToolbarPopExpandItem } from './hooks/useEditorToolbarPopExpandItem';
 import { registerLULanguage } from './languages';
 import { getDefaultMlEntityName } from './lu/constants';
 import { useLuEntities } from './lu/hooks/useLuEntities';
@@ -63,7 +66,8 @@ const LuSectionLink = withTooltip(
 );
 
 const sectionLinkTokens = { childrenGap: 4 };
-export interface LULSPEditorProps extends BaseEditorProps {
+
+export type LULSPEditorProps = BaseEditorProps & {
   luOption?: LUOption;
   helpURL?: string;
   luFile?: LuFile;
@@ -82,7 +86,7 @@ export interface LULSPEditorProps extends BaseEditorProps {
   }>;
   telemetryClient: TelemetryClient;
   onNavigateToLuPage?: (luFileId: string, luSectionId?: string) => void;
-}
+};
 
 const defaultLUServer = {
   path: '/lu-language-server',
@@ -142,6 +146,8 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     placeholder = defaultPlaceholder,
     helpURL = LU_HELP,
     telemetryClient,
+    popExpandOptions,
+    onChange,
     ...restProps
   } = props;
   const luServer = languageServer || defaultLUServer;
@@ -151,6 +157,9 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     const { projectId, fileId, sectionId } = luOption;
     editorId = [projectId, fileId, sectionId].join('/');
   }
+
+  const { toolbarItem, isExpanded, dismiss } = useEditorToolbarPopExpandItem(popExpandOptions);
+  const farItems = React.useMemo(() => (toolbarItem ? [toolbarItem] : []), [toolbarItem]);
 
   const [editor, setEditor] = useState<any>();
   const entities = useLuEntities(luFile);
@@ -274,6 +283,24 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     [editor, entities]
   );
 
+  const onExpandedEditorChange = React.useCallback(
+    (newValue: string) => {
+      editor?.getModel()?.setValue(newValue);
+      onChange(newValue);
+    },
+    [editor, onChange]
+  );
+
+  const change = React.useCallback(
+    (newValue: string, isFlush?: boolean) => {
+      // Only invoke callback if it's user edits and not setValue call
+      if (!isFlush) {
+        onChange(newValue);
+      }
+    },
+    [onChange]
+  );
+
   const insertEntity = useCallback(
     (entityName: string, entityType: string, source: 'toolbar' | 'floatingMenu' = 'toolbar') => {
       if (editor) {
@@ -303,6 +330,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         {toolbarOptions?.hidden !== true && (
           <LuEditorToolbar
             editor={editor}
+            farItems={farItems}
             labelingMenuVisible={labelingMenuVisible}
             luFile={luFile}
             options={toolbarOptions}
@@ -320,6 +348,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
           language="lu"
           options={options}
           theme="lu"
+          onChange={change}
           onInit={onInit}
         />
         {onNavigateToLuPage && luOption && (
@@ -337,6 +366,16 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         onInsertEntity={insertEntity}
         onMenuToggled={onLabelingMenuToggled}
       />
+      {isExpanded && (
+        <EditorPopExpandDialog<LULSPEditorProps>
+          popExpandOptions={popExpandOptions}
+          {...omit(props, ['popExpandOptions'])}
+          EditorComponent={LuEditor}
+          height={400}
+          onChange={onExpandedEditorChange}
+          onDismiss={dismiss}
+        />
+      )}
     </>
   );
 };
