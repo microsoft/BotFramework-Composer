@@ -76,9 +76,6 @@ export const useStringArray = <T extends ArrayBasedStructuredResponseItem>(
         setTemplateId(id);
         onUpdateResponseTemplate({ [kind]: { kind, value: [], valueType: 'direct' } });
         onRemoveTemplate(id);
-      } else if (fixedNewItems.length === 1 && !/\r?\n/g.test(fixedNewItems[0].value) && lgOption?.templateId) {
-        onUpdateResponseTemplate({ [kind]: { kind, value: [fixedNewItems[0].value], valueType: 'direct' } });
-        onTemplateChange(id, '');
       } else {
         setTemplateId(id);
         onUpdateResponseTemplate({ [kind]: { kind, value: [`\${${id}()}`], valueType: 'template' } });
