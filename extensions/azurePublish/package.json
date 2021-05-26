@@ -1,7 +1,7 @@
 {
   "name": "azurePublish",
   "version": "1.0.0",
-  "description": "Publish bot to an Azure Web App (Preview)",
+  "description": "Publish bot to an Azure Web App",
   "main": "dist/extension.js",
   "license": "MIT",
   "scripts": {
@@ -85,7 +85,8 @@
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "bl": "^4.0.3"
+    "bl": "^4.0.3",
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.9.6",

@@ -1,12 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FeedName } from '@botframework-composer/types/src';
+import {
+  webAppRuntimeKey,
+  functionsRuntimeKey,
+  csharpFeedKey,
+  nodeFeedKey,
+  TeamsManifest,
+} from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
+
+export const FEEDVERSION = 1;
 
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
@@ -44,15 +52,15 @@ export const Tips = {
 export const LUIS_REGIONS: IDropdownOption[] = [
   {
     key: 'westus',
-    text: formatMessage('westus'),
+    text: formatMessage('West US'),
   },
   {
     key: 'westeurope',
-    text: formatMessage('westeurope'),
+    text: formatMessage('West Europe'),
   },
   {
     key: 'australiaeast',
-    text: formatMessage('australiaeast'),
+    text: formatMessage('Australia East'),
   },
 ];
 
@@ -86,6 +94,12 @@ export const Text = {
   },
   get DOTNETFAILURE() {
     return formatMessage('Composer needs .NET Core SDK');
+  },
+  get FUNCTIONSFAILURE() {
+    return formatMessage('Composer needs Azure Functions');
+  },
+  get BOTRUNTIMEERROR() {
+    return formatMessage('Composer Runtime Error');
   },
 };
 
@@ -135,6 +149,7 @@ export enum CreationFlowStatus {
   SAVEAS = 'Save as',
   OPEN = 'Open',
   CLOSE = 'Close',
+  NEW_SKILL = 'New Skill',
 }
 
 export type CreationFlowType = 'Bot' | 'Skill';
@@ -160,7 +175,7 @@ export const BotStatusesCopy = {
     return formatMessage('Inactive');
   },
   get failed() {
-    return formatMessage('Failed to start');
+    return formatMessage('Failed');
   },
   get loading() {
     return formatMessage('Building');
@@ -230,6 +245,12 @@ export const DialogCreationCopy = {
       subText: formatMessage('Which bot do you want to open?'),
     };
   },
+  get SELECT_LOCATION_ABS() {
+    return {
+      title: formatMessage('Select a Bot'),
+      subText: formatMessage('Specify an existing bot to connect to your Azure Bot resource.'),
+    };
+  },
   get SELECT_DESTINATION() {
     return {
       title: formatMessage('Set destination folder'),
@@ -238,7 +259,7 @@ export const DialogCreationCopy = {
   },
   get IMPORT_QNA() {
     return {
-      title: formatMessage('Create New Knowledge Base'),
+      title: formatMessage('Create new knowledge base'),
       subText: formatMessage(
         'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
       ),
@@ -300,14 +321,50 @@ export const addSkillDialog = {
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
-      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+      preSubText: formatMessage(`Skills extend your bot's conversational capabilities . To know more about skills`),
+      afterSubText: formatMessage(
+        `To make sure the skill will work correctly, we perform some validation checks. When you’re ready to add a skill, enter the Skill manifest URL provided to you by the skill author.`
+      ),
     };
   },
   get SKILL_MANIFEST_FORM_EDIT() {
     return {
       title: formatMessage('Edit a skill'),
-      subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+      subText: formatMessage('Enter a manifest URL to add a new skill to your bot.'),
     };
+  },
+};
+
+export const selectIntentDialog = {
+  SELECT_INTENT: (name: string, skill: string) => {
+    return {
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Select intents to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
+      subText: formatMessage(`These intents will trigger this skill from ${name}`),
+    };
+  },
+  ADD_OR_EDIT_PHRASE: (name: string, skill: string) => {
+    return {
+      // eslint-disable-next-line format-message/literal-pattern
+      title: formatMessage(`Add or edit phrases to trigger ${skill} skill`),
+      // eslint-disable-next-line format-message/literal-pattern
+      subText: formatMessage(`These phrases will trigger this skill from ${name}`),
+    };
+  },
+};
+
+export const enableOrchestratorDialog = {
+  get title() {
+    return formatMessage('Enable Orchestrator Recognizer');
+  },
+  get subText() {
+    return formatMessage('Enable Orchestrator as the recognizer for routing to other skills');
+  },
+  get content() {
+    return formatMessage(
+      'Multi-bot projects work best with the Orchestrator recognizer set at the dispatching dialog (typically the root dialog). Orchestrator helps identify and dispatch user intents from the root dialog to the respective skill that handles the intent. Orchestrator does not support entity extraction. If you plan to combine entity extraction and routing at the root dialog, use LUIS instead.'
+    );
   },
 };
 
@@ -366,7 +423,8 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const nameRegexV2 = /^[a-zA-Z0-9_]+$/;
 
-export const invalidNameCharRegex = /[^a-z^A-Z^0-9^_]/g;
+export const invalidNameCharRegex = /[^a-zA-Z0-9-_]/g;
+export const invalidNameCharRegexV2 = /[^a-zA-Z0-9_]/g;
 
 export const authConfig = {
   // for web login
@@ -399,25 +457,57 @@ export const triggerNotSupportedWarning = () =>
     'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
   );
 
-export const feedDictionary: { [key in FeedName]: string } = {
-  firstPartyCsharp:
-    'https://registry.npmjs.org/-/v1/search?text=conversationalcore+scope:microsoft&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5',
-  firstPartyNode: '',
-};
+export const firstPartyTemplateFeed =
+  'https://registry.npmjs.org/-/v1/search?text=generator+keywords:bf-template+scope:microsoft'; // +maintainer:botframework
 
 // TODO: replace language options with available languages pertinent to the selected template (issue #5554)
 export const defaultPrimaryLanguage = 'english';
 
-export const mockLanguageOptions: IDropdownOption[] = [
-  { key: defaultPrimaryLanguage, text: 'English' },
-  { key: 'spanish', text: 'Spanish' },
+export const runtimeLanguageOptions: IDropdownOption[] = [
+  { key: nodeFeedKey, text: 'Node' },
+  { key: csharpFeedKey, text: 'Dot Net' },
 ];
 
 export const defaultRuntime = 'azureWebApp';
 
 export const runtimeOptions: IDropdownOption[] = [
-  { key: defaultRuntime, text: 'Azure Web App' },
-  { key: 'azureFunctions', text: 'Azure Functions' },
+  { key: webAppRuntimeKey, text: 'Azure Web App' },
+  { key: functionsRuntimeKey, text: 'Azure Functions' },
 ];
 
 export const onboardingDisabled = false;
+
+export const defaultTeamsManifest: TeamsManifest = {
+  $schema: 'https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json',
+  manifestVersion: '1.9',
+  version: '1.0.0',
+  id: '',
+  packageName: '',
+  developer: {
+    name: 'contoso',
+    websiteUrl: 'https://contoso.com',
+    privacyUrl: 'https://cotoso.com/privacy',
+    termsOfUseUrl: 'https://contoso.com/terms',
+  },
+  icons: {
+    color: '',
+    outline: '',
+  },
+  name: {
+    short: '',
+    full: '',
+  },
+  description: {
+    short: '',
+    full: '',
+  },
+  accentColor: '#FFFFFF',
+  bots: [
+    {
+      botId: '',
+      scopes: ['personal'],
+    },
+  ],
+  permissions: ['identity', 'messageTeamMembers'],
+  validDomains: ['token.botframework.com'],
+};

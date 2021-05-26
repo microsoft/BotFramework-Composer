@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
 import { jsx } from '@emotion/core';
 import { BotIndexer } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
@@ -10,6 +10,7 @@ import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import {
   dispatcherState,
@@ -21,12 +22,11 @@ import {
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { FieldWithCustomButton } from '../../components/FieldWithCustomButton';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { LUIS_REGIONS } from '../../constants';
 
-import { title } from './styles';
+import { subtext, title } from './styles';
 // -------------------- Styles -------------------- //
 
 const externalServiceContainerStyle = css`
@@ -55,9 +55,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
   const skillLuisKey = groupLUISAuthoringKey[projectId];
-  const groupLUISEndpointKey = get(sensitiveGroupManageProperty, 'luis.endpointKey', {});
-  const rootLuisEndpointKey = groupLUISEndpointKey.root;
-  const skillLuisEndpointKey = groupLUISEndpointKey[projectId];
   const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
   const rootLuisRegion = groupLUISRegion.root;
   const skillLuisRegion = groupLUISRegion[projectId];
@@ -73,7 +70,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
   const isQnAKeyNeeded = BotIndexer.shouldUseQnA(dialogs, qnaFiles);
 
   const luisKeyFieldRef = useRef<HTMLDivElement>(null);
-  const luisEndpointKeyFieldRef = useRef<HTMLDivElement>(null);
   const luisRegionFieldRef = useRef<HTMLDivElement>(null);
   const qnaKeyFieldRef = useRef<HTMLDivElement>(null);
 
@@ -141,18 +137,29 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
     });
   };
 
-  const handleLUISEndpointKeyOnBlur = (value) => {
-    setSettings(projectId, {
-      ...mergedSettings,
-      luis: { ...mergedSettings.luis, endpointKey: value ?? '' },
-    });
-  };
-
   return (
-    <CollapsableWrapper title={formatMessage('External services')} titleStyle={title}>
+    <Fragment>
+      <div css={title}>{formatMessage('Language Understanding')}</div>
+      <div css={subtext}>
+        {formatMessage.rich(
+          '<a>Language Understanding Intelligent Service (LUIS)</a> is a machine learning-driven recognition service that enables advanced conversational capabilities. If you already have LUIS keys you’d like to use, you can paste them below. To fetch existing keys from Azure or create new keys, you can click “Get LUIS keys”. <a2>Learn more</a2>.',
+          {
+            a: ({ children }) => (
+              <Link key="luis-skill-settings-page" href={'https://www.luis.ai/'} target="_blank">
+                {children}
+              </Link>
+            ),
+            a2: ({ children }) => (
+              <Link key="luis-skill-settings-page" href={'https://aka.ms/composer-luis-learnmore'} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        )}
+      </div>
       <div css={externalServiceContainerStyle}>
         <TextField
-          aria-label={formatMessage('LUIS application name')}
+          ariaLabel={formatMessage('LUIS application name')}
           data-testid={'skillLUISApplicationName'}
           id={'luisName'}
           label={formatMessage('LUIS application name')}
@@ -176,18 +183,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             onBlur={handleLUISKeyOnBlur}
           />
         </div>
-        <div ref={luisEndpointKeyFieldRef}>
-          <FieldWithCustomButton
-            ariaLabel={formatMessage('LUIS endpoint key')}
-            buttonText={formatMessage('Use custom LUIS endpoint key')}
-            id={'luisEndpointKey'}
-            label={formatMessage('LUIS endpoint key')}
-            placeholder={formatMessage('Enter LUIS endpoint key')}
-            placeholderOnDisable={rootLuisEndpointKey}
-            value={skillLuisEndpointKey}
-            onBlur={handleLUISEndpointKeyOnBlur}
-          />
-        </div>
         <div ref={luisRegionFieldRef}>
           <FieldWithCustomButton
             ariaLabel={formatMessage('LUIS region')}
@@ -201,6 +196,28 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
             value={skillLuisRegion}
             onBlur={handleLUISRegionOnBlur}
           />
+        </div>
+        <div css={title}>{formatMessage('QnA Maker')}</div>
+        <div css={subtext}>
+          {formatMessage.rich(
+            'Integrate with <a>QnA Maker</a> to provide bot content from easy-to-manage knowledge bases. If you already have a QnA key you’d like to use, you can paste it below. To fetch an existing key from Azure or create a new key, you can click “Get QnA key”. <a2>Learn more.</a2>',
+            {
+              a: ({ children }) => (
+                <Link key="qna-skill-settings-page" href={'https://www.qnamaker.ai/'} target="_blank">
+                  {children}
+                </Link>
+              ),
+              a2: ({ children }) => (
+                <Link
+                  key="qna-skill-settings-page"
+                  href={'https://aka.ms/composer-addqnamaker-learnmore'}
+                  target="_blank"
+                >
+                  {children}
+                </Link>
+              ),
+            }
+          )}
         </div>
         <div ref={qnaKeyFieldRef}>
           <FieldWithCustomButton
@@ -217,6 +234,6 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           />
         </div>
       </div>
-    </CollapsableWrapper>
+    </Fragment>
   );
 };

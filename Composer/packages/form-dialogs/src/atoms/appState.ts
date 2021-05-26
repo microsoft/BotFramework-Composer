@@ -124,7 +124,6 @@ export const formDialogSchemaJsonSelector = selector({
     let jsonObject: object = {
       $schema: schemaDraftUrl,
       type: 'object',
-      $requires: ['standard.schema'],
     };
 
     if (propertyCards.length) {

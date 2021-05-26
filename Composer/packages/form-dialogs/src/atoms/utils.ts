@@ -29,8 +29,9 @@ export const templateTypeToJsonSchemaType = (cardData: PropertyCardData, templat
 };
 
 const $refToRef = ($ref: string) => {
-  const [, ref] = $ref.match(/template:(.*)\.schema/);
-  return ref;
+  const [, ref] = $ref.match(/^template:(.*?)(\.template)?$/);
+  // Lower case is necessary because in generator parser dereferencing always converts to lower case
+  return ref.toLowerCase();
 };
 
 export const jsonSchemaTypeToTemplateType = (
@@ -166,7 +167,7 @@ export const getDuplicateName = (name: string, allNames: readonly string[]) => {
 const spreadCardDataNormal = (propertyType: string, cardValues: Record<string, any>) => {
   cardValues = cardValues.items ?? cardValues;
   return {
-    $ref: `template:${propertyType}.schema`,
+    $ref: `template:${propertyType}`,
     ...cardValues,
   };
 };

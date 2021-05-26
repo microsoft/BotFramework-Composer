@@ -37,7 +37,7 @@ const styles = {
     margin-right: 3px;
   `,
   dropdown: {
-    title: { ...sharedFieldIconStyles, height: '100%' },
+    title: { ...sharedFieldIconStyles, height: '100%', borderRadius: '2px 0 0 2px', borderRight: 'none' },
     dropdown: { height: '100%' },
   },
   nestedDropdown: {
@@ -100,9 +100,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   };
 
   const renderField = () => {
-    if (!selectedSchema || Array.isArray(selectedSchema.type) || !selectedSchema.type) {
-      return null;
-    }
     // attempt to get a placeholder with the selected schema
     const placeholder = getUiPlaceholder({ ...props, schema: selectedSchema }) || props.placeholder;
     const enumOptions = selectedSchema?.enum as string[];
@@ -121,6 +118,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
       <Field
         key={selectedSchema.type}
         expression={expression}
+        hasIcon={options.length > 1 || !isNested}
         {...props}
         {...customProps}
         css={{ label: 'ExpressionFieldValue' }}

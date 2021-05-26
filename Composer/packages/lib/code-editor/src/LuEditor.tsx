@@ -48,7 +48,7 @@ const LuSectionLink = withTooltip(
   {
     content: (
       <Text variant="small">
-        {formatMessage.rich('Edit this intent in<a>User Input view</a>', {
+        {formatMessage.rich('Edit this intent in<a>User input view</a>', {
           a: ({ children }) => (
             <Text key="pageLink" variant="small">
               <Icon iconName="People" styles={botIconStyles} />
@@ -75,7 +75,11 @@ export interface LULSPEditorProps extends BaseEditorProps {
         path: string;
       }
     | string;
-  toolbarHidden?: boolean;
+  toolbarOptions?: Partial<{
+    hidden: boolean;
+    disabled: boolean;
+    tooltip: string;
+  }>;
   telemetryClient: TelemetryClient;
   onNavigateToLuPage?: (luFileId: string, luSectionId?: string) => void;
 }
@@ -120,15 +124,16 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     autoClosingBrackets: 'always' as const,
     autoIndent: 'full' as const,
     folding: true,
+    definitions: true,
     lightbulb: {
       enabled: true,
     },
-    contextmenu: false,
+    contextmenu: true,
     ...props.options,
   };
 
   const {
-    toolbarHidden,
+    toolbarOptions,
     onNavigateToLuPage,
     luOption,
     luFile,
@@ -153,7 +158,24 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   const [labelingMenuVisible, setLabelingMenuVisible] = useState(false);
   const editorDomRef = useRef<HTMLElement | null>(null);
 
+  const onLuNavigationMsg = (
+    languageClient: MonacoLanguageClient,
+    onNavigateToLuPage: ((luFileId: string, luSectionId?: string | undefined) => void) | undefined
+  ) => {
+    return languageClient.onReady().then(() =>
+      languageClient.onNotification('LuGotoDefinition', (result) => {
+        if (luOption?.projectId) {
+          onNavigateToLuPage?.(result.fileId, result.intent);
+        }
+      })
+    );
+  };
+
   useEffect(() => {
+    if (props.options?.readOnly) {
+      return;
+    }
+
     if (!editor) return;
 
     if (!window.monacoServiceInstance) {
@@ -169,7 +191,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         webSocket,
         onConnection: (connection: MessageConnection) => {
           const languageClient = createLanguageClient(formatMessage('LU Language Client'), ['lu'], connection);
-
+          onLuNavigationMsg(languageClient, onNavigateToLuPage);
           const m = monacoRef.current;
           if (m) {
             // this is the correct way to combine key codes in Monaco
@@ -190,6 +212,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
               editor.executeEdits(uri, edits);
             })
           );
+
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
           window.monacoLUEditorInstance = languageClient;
@@ -198,6 +221,8 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     } else {
       const m = monacoRef.current;
       const languageClient = window.monacoLUEditorInstance;
+      onLuNavigationMsg(languageClient, onNavigateToLuPage);
+
       if (m) {
         // this is the correct way to combine keycodes in Monaco
         // eslint-disable-next-line no-bitwise
@@ -208,7 +233,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       }
       sendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
     }
-  }, [editor]);
+  }, [editor, onNavigateToLuPage]);
 
   const onInit: OnInit = (monaco) => {
     registerLULanguage(monaco);
@@ -275,11 +300,12 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   return (
     <>
       <Stack verticalFill>
-        {!toolbarHidden && (
+        {toolbarOptions?.hidden !== true && (
           <LuEditorToolbar
             editor={editor}
             labelingMenuVisible={labelingMenuVisible}
             luFile={luFile}
+            options={toolbarOptions}
             onDefineEntity={defineEntity}
             onInsertEntity={insertEntity}
           />

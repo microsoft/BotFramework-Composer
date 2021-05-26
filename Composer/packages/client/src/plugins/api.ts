@@ -20,7 +20,7 @@ interface AuthAPI {
   getAccessToken: (options: AuthParameters) => Promise<string>; // returns an access token
   getARMTokenForTenant: (tenantId: string) => Promise<string>; // returns an ARM access token for specified tenant
   getTenants: () => Promise<AzureTenant[]>; // signs a user in and returns available Azure tenants for the user
-  logOut: () => Promise<void>;
+  logOut: () => Promise<boolean>;
 }
 
 interface PublishAPI {
@@ -35,7 +35,9 @@ interface PublishAPI {
   getName?: () => string;
   savePublishConfig?: (config: PublishConfig) => void;
   getTokenFromCache?: () => { accessToken: string; graphToken: string };
+  /** @deprecated use `userShouldProvideTokens` instead */
   isGetTokenFromUser?: () => boolean;
+  userShouldProvideTokens?: () => boolean;
   getTenantIdFromCache?: () => string;
   setTenantId?: (value: string) => void;
 }
@@ -62,6 +64,7 @@ class API implements IAPI {
       savePublishConfig: undefined,
       getTokenFromCache: undefined,
       isGetTokenFromUser: undefined,
+      userShouldProvideTokens: undefined,
       getTenantIdFromCache: undefined,
       setTenantId: undefined,
     };

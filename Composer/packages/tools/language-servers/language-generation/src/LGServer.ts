@@ -3,7 +3,7 @@
 import path from 'path';
 
 import URI from 'vscode-uri';
-import { IConnection, TextDocuments } from 'vscode-languageserver';
+import { IConnection, MarkupKind, TextDocuments } from 'vscode-languageserver';
 import formatMessage from 'format-message';
 import {
   Diagnostic,
@@ -30,6 +30,7 @@ import isEqual from 'lodash/isEqual';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
+import { LgTemplate } from '@botframework-composer/types';
 
 import { LgParser } from './lgParser';
 import {
@@ -277,11 +278,11 @@ export class LGServer {
       const curLocale = this.getLocale(fileId);
       const fileIdWitoutLocale = this.removeLocaleInId(fileId);
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      this._templateDefinitions = {};
       for (const file of lgTextFiles) {
         //Only stroe templates in other LG files
         if (this.removeLocaleInId(file.id) !== fileIdWitoutLocale && this.getLocale(file.id) === curLocale) {
           const lgTemplates = await this._lgParser.parse(file.id, file.content, lgTextFiles);
-          this._templateDefinitions = {};
           for (const template of lgTemplates.templates) {
             this._templateDefinitions[template.name] = {
               fileId: file.id,
@@ -337,11 +338,16 @@ export class LGServer {
     if (diagnostics.length) {
       return Promise.resolve(null);
     }
-    const wordRange = getRangeAtPosition(document, params.position);
+    const wordRange = getRangeAtPosition(document, params.position, true);
     let word = document.getText(wordRange);
     const matchItem = allTemplates.find((u) => u.name === word);
     if (matchItem) {
-      const hoveritem: Hover = { contents: [matchItem.body] };
+      const hoveritem: Hover = {
+        contents: {
+          kind: MarkupKind.Markdown,
+          value: `~~~\n${this.buildHoverTemplateInfo(matchItem)}\n~~~`,
+        },
+      };
       return Promise.resolve(hoveritem);
     }
     if (word.startsWith('builtin.')) {
@@ -365,6 +371,18 @@ export class LGServer {
       return Promise.resolve(hoveritem);
     }
     return Promise.resolve(null);
+  }
+
+  private buildHoverTemplateInfo(template: LgTemplate) {
+    let templateName = '';
+    if (template.parameters.length > 0) {
+      templateName = `# ${template.name}(${template.parameters.join(', ')})`;
+    } else {
+      templateName = `# ${template.name}`;
+    }
+
+    const templateBody = template.body;
+    return [templateName, templateBody].join('\n');
   }
 
   private getExplicitReturnType(numReturnType: number): string[] {
@@ -619,7 +637,7 @@ export class LGServer {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return [];
     const position = params.position;
-    const range = getRangeAtPosition(document, position);
+    const range = getRangeAtPosition(document, position, true);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
     const memoryVariblesRootCompletionList: CompletionItem[] = [];
@@ -652,7 +670,7 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const position = params.position;
-    const range = getRangeAtPosition(document, position);
+    const range = getRangeAtPosition(document, position, true);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
     const includesDot = wordAtCurRange.includes('.');

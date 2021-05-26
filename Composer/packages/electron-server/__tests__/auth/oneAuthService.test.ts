@@ -25,8 +25,10 @@ describe('OneAuth Serivce', () => {
     id: 'myAccount',
     realm: 'myTenant',
   };
+
+  const tomorrow = Date.now() + 1000 * 60 * 60 * 24;
   const mockCredential = {
-    expiresOn: 9999,
+    expiresOn: tomorrow,
     value: 'someToken',
   };
   const mockOneAuth = {
@@ -56,6 +58,7 @@ describe('OneAuth Serivce', () => {
   beforeEach(() => {
     jest.resetModules();
     oneAuthService = new OneAuthInstance();
+    // eslint-disable-next-line no-underscore-dangle
     (oneAuthService as any)._oneAuth = mockOneAuth;
     mockOneAuth.acquireCredentialInteractively.mockClear();
     mockOneAuth.acquireCredentialSilently.mockClear();
@@ -169,38 +172,82 @@ describe('OneAuth Serivce', () => {
     const result = await service.getAccessToken({});
 
     expect(result).toEqual({ accessToken: '', acquiredAt: 0, expiryTime: 99999999999 });
+    // reset node env
+    process.env.NODE_ENV = 'test';
   });
 
-  it('should get a list of tenants', async () => {
-    const mockTenants = [
-      {
-        tenantId: 'tenant1',
-      },
-      {
-        tenantId: 'tenant2',
-      },
-      {
-        tenantId: 'tenant3',
-      },
-    ];
-    mockFetch.mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValue({ value: mockTenants }),
+  describe('#getTenants', () => {
+    it('should get a list of tenants', async () => {
+      const mockTenants = [
+        {
+          tenantId: 'tenant1',
+        },
+        {
+          tenantId: 'tenant2',
+        },
+        {
+          tenantId: 'tenant3',
+        },
+      ];
+      mockFetch.mockResolvedValueOnce({
+        json: jest.fn().mockResolvedValue({ value: mockTenants }),
+      });
+      const tenants = await oneAuthService.getTenants();
+
+      // it should have initialized
+      expect(mockOneAuth.setLogPiiEnabled).toHaveBeenCalled();
+      expect(mockOneAuth.setLogCallback).toHaveBeenCalled();
+      expect(mockOneAuth.initialize).toHaveBeenCalled();
+
+      // it should have signed in
+      expect(mockOneAuth.signInInteractively).toHaveBeenCalled();
+      expect((oneAuthService as any).signedInARMAccount).toEqual(mockAccount);
+
+      // it should have called the tenants API
+      expect(mockFetch).toHaveBeenCalledWith('https://management.azure.com/tenants?api-version=2020-01-01', {
+        headers: {
+          Authorization: 'Bearer someToken',
+        },
+      });
+
+      expect(tenants).toBe(mockTenants);
     });
-    const tenants = await oneAuthService.getTenants();
 
-    // it should have initialized
-    expect(mockOneAuth.setLogPiiEnabled).toHaveBeenCalled();
-    expect(mockOneAuth.setLogCallback).toHaveBeenCalled();
-    expect(mockOneAuth.initialize).toHaveBeenCalled();
+    it('should not attempt to sign in if token already fetched', async () => {
+      const mockTenants = [
+        {
+          tenantId: 'tenant1',
+        },
+        {
+          tenantId: 'tenant2',
+        },
+        {
+          tenantId: 'tenant3',
+        },
+      ];
+      mockFetch.mockResolvedValueOnce({
+        json: jest.fn().mockResolvedValue({ value: mockTenants }),
+      });
+      (oneAuthService as any).signedInARMAccount = { some: 'account' };
+      (oneAuthService as any).tenantToken = 'cached-token';
+      const tenants = await oneAuthService.getTenants();
 
-    // it should have signed in
-    expect(mockOneAuth.signInInteractively).toHaveBeenCalled();
-    expect((oneAuthService as any).signedInARMAccount).toEqual(mockAccount);
+      // it should have initialized
+      expect(mockOneAuth.setLogPiiEnabled).toHaveBeenCalled();
+      expect(mockOneAuth.setLogCallback).toHaveBeenCalled();
+      expect(mockOneAuth.initialize).toHaveBeenCalled();
 
-    // it should have called the tenants API
-    expect(mockFetch.mock.calls[0][0]).toBe('https://management.azure.com/tenants?api-version=2020-01-01');
+      expect(mockOneAuth.signInInteractively).not.toHaveBeenCalled();
 
-    expect(tenants).toBe(mockTenants);
+      // it should have called the tenants API
+      expect(mockFetch).toHaveBeenCalledWith('https://management.azure.com/tenants?api-version=2020-01-01', {
+        headers: {
+          Authorization: 'Bearer cached-token',
+        },
+      });
+
+      expect(tenants).toBe(mockTenants);
+    });
   });
 
   it('should throw an error if something goes wrong while getting a list of tenants', async () => {
@@ -210,15 +257,19 @@ describe('OneAuth Serivce', () => {
   });
 
   it('should get an ARM token for a tenant', async () => {
-    mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({ credential: { value: 'someARMToken' } });
-    (oneAuthService as any).signedInARMAccount = {};
+    mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({
+      credential: { value: 'someARMToken', expiresOn: tomorrow },
+    });
+    (oneAuthService as any).signedInARMAccount = { id: 'someAccount' };
     const result = await oneAuthService.getARMTokenForTenant('someTenant');
 
     expect(result).toBe('someARMToken');
   });
 
   it('should get an ARM token for a tenant interactively if interaction is required', async () => {
-    mockOneAuth.acquireCredentialInteractively.mockReturnValueOnce({ credential: { value: 'someARMToken' } });
+    mockOneAuth.acquireCredentialInteractively.mockReturnValueOnce({
+      credential: { value: 'someARMToken', expiresOn: tomorrow },
+    });
     mockOneAuth.acquireCredentialSilently.mockRejectedValueOnce({ error: { status: 2 /* Interaction Required */ } });
     (oneAuthService as any).signedInARMAccount = {};
     const result = await oneAuthService.getARMTokenForTenant('someTenant');

@@ -10,8 +10,9 @@ const BotStructureTemplate = {
   entry: '${BOTNAME}.dialog',
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
-  qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
-  sourceQnA: 'knowledge-base/source/${FILENAME}.source.qna',
+  manifestLu: 'manifests/${FILENAME}.lu',
+  qna: 'knowledge-base/${LOCALE}/${BOTNAME}.${LOCALE}.qna',
+  sourceQnA: 'knowledge-base/source/${FILENAME}.source.${LOCALE}.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
@@ -22,7 +23,7 @@ const BotStructureTemplate = {
     entry: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog',
     lg: 'dialogs/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
-    qna: 'dialogs/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
+    qna: 'dialogs/${DIALOGNAME}/knowledge-base/${LOCALE}/${DIALOGNAME}.${LOCALE}.qna',
     sourceQnA: 'dialogs/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
     recognizer: 'dialogs/${DIALOGNAME}/recognizers/${RECOGNIZERNAME}',
@@ -32,6 +33,13 @@ const BotStructureTemplate = {
   botProject: '${BOTNAME}.botproj',
   recognizer: 'recognizers/${RECOGNIZERNAME}',
   crossTrainConfig: 'settings/${CROSSTRAINCONFIGNAME}',
+  // PVA
+  topics: {
+    entry: 'topics/${DIALOGNAME}/${DIALOGNAME}.dialog',
+    lg: 'topics/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
+    lu: 'topics/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    dialogSchema: 'topics/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
+  },
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -39,8 +47,11 @@ const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
 
 // parse QnA source file name: [dialogId].[fileId].source.qna, ignore locale for now.
 // [fileId].source.qna would store to bot root folder.
-const parseSourceFileName = (name: string, locale: string) => {
-  const fileType = FileExtensions.SourceQnA;
+const parseSourceFileName = (name: string) => {
+  const tokens = name.split('.');
+  const locale = tokens[2];
+
+  const fileType = `.source.${locale}.qna`;
   const id = Path.basename(name, fileType);
 
   let dialogId = '',
@@ -83,10 +94,17 @@ export const BotStructureFilesPatterns = [
   'dialogs/*/*.json',
 ];
 
+export const PVATopicFilePatterns = [
+  templateInterpolate(BotStructureTemplate.topics.entry, { DIALOGNAME: '*' }),
+  templateInterpolate(BotStructureTemplate.topics.dialogSchema, { DIALOGNAME: '*' }),
+  'topics/*/language-generation/**/*.lg',
+  'topics/*/language-understanding/**/*.lu',
+];
+
 // parse file name: [fileId].[locale].[fileType]
 export const parseFileName = (name: string, defaultLocale: string) => {
-  if (name.endsWith(FileExtensions.SourceQnA)) {
-    return parseSourceFileName(name, defaultLocale);
+  if (isSourceQnAFile(name)) {
+    return parseSourceFileName(name);
   }
   const fileType = Path.extname(name);
   const id = Path.basename(name, fileType);
@@ -104,6 +122,13 @@ export const parseFileName = (name: string, defaultLocale: string) => {
 
 export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
 export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config.json');
+
+export const defaultManifestFilePath = (botName: string, fileName: string): string => {
+  return templateInterpolate(BotStructureTemplate.manifestLu, {
+    BOTNAME: botName,
+    FILENAME: fileName,
+  });
+};
 
 export const defaultFilePath = (
   botName: string,
@@ -172,10 +197,11 @@ export const defaultFilePath = (
   const DIALOGNAME = dialogId;
   const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
-  if (fileType === FileExtensions.SourceQnA) {
+  if (fileType === `.source.${locale}.qna`) {
     if (endpoint) {
       return templateInterpolate(Path.join(endpoint, BotStructureTemplate.sourceQnA), {
         FILENAME: fileId,
+        LOCALE,
         DIALOGNAME,
       });
     }
@@ -183,6 +209,7 @@ export const defaultFilePath = (
       isRootFile || !dialogId ? BotStructureTemplate.sourceQnA : BotStructureTemplate.dialogs.sourceQnA;
     return templateInterpolate(TemplatePath, {
       FILENAME: fileId,
+      LOCALE,
       DIALOGNAME,
     });
   }
@@ -260,4 +287,17 @@ export const serializeFiles = async (fileStorage, rootPath, botName, preserveRoo
       await fileStorage.rename(realFilePath, targetFilePath);
     }
   }
+};
+
+const isSourceQnAFile = (name: string) => {
+  const tokens = name.split('.');
+  if (tokens && tokens.length === 4) {
+    const source = tokens[1];
+    const fileType = tokens[3];
+    if (source === 'source' && `.${fileType}` === FileExtensions.Qna) {
+      return true;
+    }
+    return false;
+  }
+  return false;
 };

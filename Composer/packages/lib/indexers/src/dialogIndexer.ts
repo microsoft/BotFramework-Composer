@@ -223,6 +223,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
           const dialog: DialogInfo = {
             isRoot,
+            isTopic: file.relativePath.startsWith('topics/'),
             ...parse(id, dialogJson, botName),
           };
           dialogs.push(dialog);
