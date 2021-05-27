@@ -297,15 +297,25 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                 kind: 'doubleConfirm',
                 checkboxLabel: (
                   <div>
-                    {formatMessage('I agree to the ')}
-                    <a href="https://aka.ms/bots/terms/channels" rel="noreferrer" target="_blank">
-                      {formatMessage('Microsoft Channel Publication Terms')}
-                    </a>
-                    {formatMessage(' and the ')}
-                    <a href="https://privacy.microsoft.com/en-us/privacystatement" rel="noreferrer" target="_blank">
-                      {formatMessage('Microsoft Privacy Statement')}
-                    </a>
-                    {formatMessage(' for my deployment to the Microsoft Teams channel.')}
+                    {formatMessage.rich(
+                      'I agree to the <a>Microsoft Channel Publication Terms</a> and the <a2>Microsoft Privacy Statement</a2> for my deployment to the Microsoft Teams channel.',
+                      {
+                        a: ({ children }) => (
+                          <a href="https://aka.ms/bots/terms/channels" rel="noreferrer" target="_blank">
+                            {children}
+                          </a>
+                        ),
+                        a2: ({ children }) => (
+                          <a
+                            href="https://privacy.microsoft.com/en-us/privacystatement"
+                            rel="noreferrer"
+                            target="_blank"
+                          >
+                            {children}
+                          </a>
+                        ),
+                      }
+                    )}
                   </div>
                 ),
               },
