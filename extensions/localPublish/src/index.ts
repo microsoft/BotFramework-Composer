@@ -452,7 +452,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const configList: string[] = [];
     if (config.MicrosoftAppPassword) {
       configList.push('--MicrosoftAppPassword');
-      configList.push(config.MicrosoftAppPassword);
+      configList.push(`'${config.MicrosoftAppPassword}'`);
     }
     if (config.luis && (config.luis.endpointKey || config.luis.authoringKey)) {
       configList.push('--luis:endpointKey');
