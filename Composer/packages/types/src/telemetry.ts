@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FeedType, RuntimeType } from './creation';
 import { TelemetrySettings } from './settings';
 
 export type ServerSettings = Partial<{ telemetry: TelemetrySettings }>;
@@ -71,6 +72,7 @@ type BotProjectEvents = {
   CreateNewBotProjectFromExample: { template: string };
   CreateNewBotProjectStarted: { template: string };
   CreateNewBotProjectCompleted: { template: string; status: number };
+  CreateNewBotProjectFailed: { reason: string; template: string; status: number };
   BotProjectOpened: { method: 'toolbar' | 'callToAction' | 'list'; projectId?: string };
   StartAllBotsButtonClicked: undefined;
   StartBotButtonClicked: { isRoot: boolean; location: string; projectId: string };
@@ -119,6 +121,10 @@ type ResourcesItem = {
 };
 
 type PublishingEvents = {
+  CreateProvisionStarted: { newResourceGroup: boolean };
+  PublishStartBtnClick: undefined;
+  PublishSuccess: undefined;
+  PublishFailure: { message: string };
   NewPublishingProfileStarted: undefined;
   NewPublishingProfileSaved: { type: string; msAppId?: string; subscriptionId?: string };
   PublishingProfileStarted: { target: string; projectId: string; msAppId?: string; subscriptionId?: string };
@@ -131,6 +137,14 @@ type PublishingEvents = {
   ProvisionCancel: undefined;
   ProvisionShowHandoff: undefined;
   ProvisionAddResourcesCancel: undefined;
+  ProvisioningProfileCreateFailure: { message: string };
+};
+
+type CreationEvents = {
+  NewBotDialogOpened: { fromAbsHandoff: boolean; isSkillBot: boolean };
+  CreationCancelled: undefined;
+  NeedAnotherTemplateClicked: undefined;
+  CreationExecuted: { runtimeChoice: RuntimeType; runtimeLanguage: FeedType; isPva: boolean; isAbs: boolean };
 };
 
 type AppSettingsEvents = {
@@ -237,7 +251,8 @@ export type TelemetryEvents = ApplicationEvents &
   WebChatEvents &
   LuEditorEvents &
   OrchestratorEvents &
-  PropertyEditorEvents;
+  PropertyEditorEvents &
+  CreationEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 

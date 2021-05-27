@@ -24,6 +24,7 @@ import { RuntimeSettings } from './RuntimeSettings';
 import AdapterSection from './adapters/AdapterSection';
 import { SkillHostEndPoint } from './SkillHostEndPoint';
 import { AllowedCallers } from './AllowedCallers';
+import { tabContentContainer } from './styles';
 
 // -------------------- Styles -------------------- //
 
@@ -75,9 +76,13 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
   useEffect(() => {
     if (scrollToSectionId) {
       const htmlIdTagName = scrollToSectionId.replace('#', '');
-      for (const key in PivotItemKey) {
-        if (idsInTab[key].includes(htmlIdTagName)) {
-          setSelectedKey(key as PivotItemKey);
+      if (idsInTab[htmlIdTagName]) {
+        setSelectedKey(PivotItemKey[htmlIdTagName]);
+      } else {
+        for (const key in PivotItemKey) {
+          if (idsInTab[key].includes(htmlIdTagName)) {
+            setSelectedKey(key as PivotItemKey);
+          }
         }
       }
     }
@@ -95,28 +100,32 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
         }}
       >
         <PivotItem data-testid="overviewTab" headerText={formatMessage('Overview')} itemKey={PivotItemKey.Basics}>
-          <BotProjectInfo isRootBot={isRootBot} projectId={projectId} />
-          <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
+          <div css={tabContentContainer}>
+            <BotProjectInfo isRootBot={isRootBot} projectId={projectId} />
+            <RuntimeSettings projectId={projectId} scrollToSectionId={scrollToSectionId} />
+          </div>
         </PivotItem>
         <PivotItem
           data-testid="developmentResourcesTab"
           headerButtonProps={isPVABot ? disabledPivotStyle : {}}
-          headerText={formatMessage('Development Resources')}
+          headerText={formatMessage('Development resources')}
           itemKey={PivotItemKey.LuisQna}
           onRenderItemLink={() => {
             if (isPVABot) {
               return (
                 <DisableFeatureToolTip isPVABot={isPVABot}>
-                  {formatMessage('Development Resources')}
+                  {formatMessage('Development resources')}
                 </DisableFeatureToolTip>
               );
             } else {
-              return <Fragment>{formatMessage('Development Resources')}</Fragment>;
+              return <Fragment>{formatMessage('Development resources')}</Fragment>;
             }
           }}
         >
-          <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
-          <AppIdAndPassword projectId={projectId} />
+          <div css={tabContentContainer}>
+            <ExternalService projectId={projectId} scrollToSectionId={scrollToSectionId} />
+            <AppIdAndPassword projectId={projectId} />
+          </div>
         </PivotItem>
         {isRootBot && (
           <PivotItem
@@ -134,7 +143,9 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
               }
             }}
           >
-            <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />
+            <div css={tabContentContainer}>
+              <AdapterSection projectId={projectId} scrollToSectionId={scrollToSectionId} />
+            </div>
           </PivotItem>
         )}
         <PivotItem
@@ -145,23 +156,27 @@ export const BotProjectSettingsTabView: React.FC<RouteComponentProps<{
             if (isPVABot) {
               return (
                 <DisableFeatureToolTip isPVABot={isPVABot}>
-                  {formatMessage('Skill Configuration')}
+                  {formatMessage('Skill configuration')}
                 </DisableFeatureToolTip>
               );
             } else {
-              return <Fragment>{formatMessage('Skill Configuration')}</Fragment>;
+              return <Fragment>{formatMessage('Skill configuration')}</Fragment>;
             }
           }}
         >
-          {isRootBot && <SkillHostEndPoint projectId={projectId} />}
-          <AllowedCallers projectId={projectId} />
+          <div css={tabContentContainer}>
+            {isRootBot && <SkillHostEndPoint projectId={projectId} />}
+            <AllowedCallers projectId={projectId} />
+          </div>
         </PivotItem>
         <PivotItem
           data-testid="localizationTab"
           headerText={formatMessage('Localization')}
           itemKey={PivotItemKey.Language}
         >
-          <BotLanguage projectId={projectId} />
+          <div css={tabContentContainer}>
+            <BotLanguage projectId={projectId} />
+          </div>
         </PivotItem>
       </Pivot>
     </div>

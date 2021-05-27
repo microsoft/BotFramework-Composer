@@ -76,7 +76,7 @@ export const userDispatcher = () => {
   });
 
   const updateUserSettings = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (settings: Partial<UserSettingsPayload>) => {
+    (callbackHelpers: CallbackInterface) => async (settings: Partial<UserSettingsPayload> = {}) => {
       const { set } = callbackHelpers;
       if (settings.appLocale != null) {
         await loadLocale(settings.appLocale);

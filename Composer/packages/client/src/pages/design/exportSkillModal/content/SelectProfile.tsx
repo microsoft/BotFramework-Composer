@@ -76,7 +76,14 @@ export const getManifestId = (
   return fileId;
 };
 
-export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManifest, value, onChange, projectId }) => {
+export const SelectProfile: React.FC<ContentProps> = ({
+  manifest,
+  setSkillManifest,
+  value,
+  onChange,
+  projectId,
+  onUpdateIsCreateProfileFromSkill,
+}) => {
   const [publishingTargets, setPublishingTargets] = useState<PublishTarget[]>([]);
   const [currentTarget, setCurrentTarget] = useState<PublishTarget>();
   const { updateCurrentTarget } = useRecoilValue(dispatcherState);
@@ -201,7 +208,10 @@ export const SelectProfile: React.FC<ContentProps> = ({ manifest, setSkillManife
     </div>
   ) : (
     <div>
-      <CreatePublishProfileDialog projectId={projectId}></CreatePublishProfileDialog>
+      <CreatePublishProfileDialog
+        projectId={projectId}
+        onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
+      />
     </div>
   );
 };

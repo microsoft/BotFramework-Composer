@@ -10,22 +10,35 @@ import formatMessage from 'format-message';
 import { ActionButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useBoolean } from '@uifabric/react-hooks';
 import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { SharedColors } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { isShowAuthDialog } from '../../utils/auth';
 
 import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { actionButton } from './styles';
 
 // -------------------- CreatePublishProfileDialog -------------------- //
 
 type CreatePublishProfileDialogProps = {
   projectId: string;
+  onUpdateIsCreateProfileFromSkill: (isCreateProfileFromSkill: boolean) => void;
+};
+
+// -------------------- Style -------------------- //
+const actionButton = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    marginLeft: 5,
+  },
 };
 
 export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, onUpdateIsCreateProfileFromSkill } = props;
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
@@ -61,6 +74,7 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
         minWidth={960}
         modalProps={{
           isBlocking: true,
+          isClickableOutsideFocusTrap: true,
         }}
         onDismiss={toggleHideDialog}
       >
@@ -102,6 +116,7 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
           setPublishTargets={setPublishTargets}
           targets={publishTargets || []}
           types={publishTypes}
+          onUpdateIsCreateProfileFromSkill={onUpdateIsCreateProfileFromSkill}
         />
       ) : null}
     </Fragment>

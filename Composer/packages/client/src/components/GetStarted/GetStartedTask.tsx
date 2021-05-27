@@ -17,14 +17,14 @@ type TaskProps = {
 };
 
 const getStartedStepStyle = (disabled?: boolean) => css`
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   pointer-events: ${disabled ? 'none' : 'auto'};
   opacity: ${disabled ? 0.4 : 1};
 `;
 
 const stepDescriptionStyle = css`
   margin-left: 36px;
-  font-size: 12px;
+  font-size: 14px;
   color: ${NeutralColors.gray120};
   margin-top: -4px;
 `;

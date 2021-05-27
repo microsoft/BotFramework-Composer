@@ -7,7 +7,10 @@ import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 import { useRecognizerConfig } from '../useRecognizerConfig';
 import { EditorExtensionContext } from '../../EditorExtensionContext';
 
-const shellData = { currentDialog: { content: {} } };
+const shellData = {
+  currentDialog: { content: {} },
+  schemas: { sdk: { content: { definitions: { foo: 'foo schema', bar: 'bar schema' } } } },
+};
 const plugins = {
   uiSchema: {
     foo: {
@@ -19,6 +22,11 @@ const plugins = {
       form: {},
       menu: {},
       recognizer: { displayName: 'recognizer 2' },
+    },
+    notInAppSchema: {
+      form: {},
+      menu: {},
+      recognizer: { displayName: 'not in app schema' },
     },
   },
 };
@@ -42,5 +50,10 @@ describe('useRecognizerConfig', () => {
         displayName: 'recognizer 2',
       },
     ]);
+  });
+
+  it("omits recognizer config that isn't in the schema", () => {
+    const { result } = renderHook(() => useRecognizerConfig(), { wrapper });
+    expect(Object.keys(result.current.recognizers)).not.toContain('notInAppSchema');
   });
 });

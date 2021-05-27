@@ -211,7 +211,7 @@ const initialDialogShape = () => ({
         $designer: {
           id: generateDesignerId(),
         },
-        condition: '=count(dialog.candidates)',
+        condition: '=string(count(dialog.candidates))',
         cases: [
           {
             value: '0',
