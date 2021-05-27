@@ -10,10 +10,10 @@ import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlacehol
 import { ErrorMessage } from './ErrorMessage';
 
 const schemaField = {
-  container: (depth = 0) => css`
+  container: (isRoot?: boolean) => css`
     display: flex;
     flex-direction: column;
-    margin: 10px ${depth === 0 ? 18 : 0}px;
+    margin: 10px ${isRoot ? 18 : 0}px;
 
     label: SchemaFieldContainer;
   `,
@@ -34,6 +34,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     expression,
     onBlur,
     id,
+    isRoot,
     ...rest
   } = props;
   const formUIOptions = useFormConfig();
@@ -108,7 +109,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
   };
 
   return (
-    <div className={className} css={schemaField.container(props.depth)}>
+    <div className={className} css={schemaField.container(isRoot)}>
       <FieldWidget {...fieldProps} />
       {!hideError && !uiOptions.hideError && error}
     </div>

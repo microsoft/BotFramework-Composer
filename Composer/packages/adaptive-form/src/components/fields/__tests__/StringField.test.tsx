@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, fireEvent } from '@botframework-composer/test-utils';
 
-import { StringField, borderStyles } from '../StringField';
+import { StringField } from '../StringField';
 
 import { fieldProps } from './testUtils';
 
@@ -43,49 +43,5 @@ describe('<StringField />', () => {
   it('uses a fallback aria label', () => {
     const { container } = renderSubject({ label: '' });
     expect(container.querySelector('[aria-label="string field"]')).toBeInTheDocument();
-  });
-});
-
-describe('borderStyles', () => {
-  it('does not apply border styles when transparentBorder is false', () => {
-    expect(borderStyles(false, false, false)).toEqual({
-      fieldGroup: {
-        borderRadius: undefined,
-      },
-    });
-  });
-
-  it('applies a transparent border when there is no error', () => {
-    expect(borderStyles(true, false, false)).toMatchInlineSnapshot(`
-      Object {
-        "fieldGroup": Object {
-          "borderColor": "transparent",
-          "borderRadius": undefined,
-          "selectors": Object {
-            ":hover": Object {
-              "borderColor": "#edebe9",
-            },
-          },
-          "transition": "border-color 0.1s linear",
-        },
-      }
-    `);
-  });
-
-  it('does not apply a transparent border when there is an error', () => {
-    expect(borderStyles(true, true, false)).toMatchInlineSnapshot(`
-      Object {
-        "fieldGroup": Object {
-          "borderColor": undefined,
-          "borderRadius": undefined,
-          "selectors": Object {
-            ":hover": Object {
-              "borderColor": undefined,
-            },
-          },
-          "transition": "border-color 0.1s linear",
-        },
-      }
-    `);
   });
 });
