@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension-client';
 import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { nameRegex } from '../../../constants';
 
@@ -243,8 +246,19 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     content: AddCallers,
     subText: () =>
-      formatMessage(
-        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more.'
+      formatMessage.rich(
+        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. <a>Learn more.</a>',
+        {
+          a: ({ children }) => (
+            <Link
+              key="export-skill-learn-more"
+              href={'https://docs.microsoft.com/en-us/composer/how-to-publish-skill?tabs=v2x'}
+              target="_blank"
+            >
+              {children}
+            </Link>
+          ),
+        }
       ),
     title: () => formatMessage('Which bots can connect to this skill?'),
   },
@@ -275,8 +289,19 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: SelectDialogs,
     editJson: false,
     subText: () =>
-      formatMessage(
-        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more.'
+      formatMessage.rich(
+        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. <a>Learn more.</a>',
+        {
+          a: ({ children }) => (
+            <Link
+              key="export-skill-learn-more"
+              href={'https://docs.microsoft.com/en-us/composer/how-to-publish-skill?tabs=v2x'}
+              target="_blank"
+            >
+              {children}
+            </Link>
+          ),
+        }
       ),
     title: () => formatMessage('Select dialogs'),
   },
@@ -295,8 +320,19 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: SelectTriggers,
     editJson: false,
     subText: () =>
-      formatMessage(
-        'Triggers selected below will enable other bots to access the capabilities of your skill. Learn more.'
+      formatMessage.rich(
+        'Triggers selected below will enable other bots to access the capabilities of your skill. <a>Learn more.</a>',
+        {
+          a: ({ children }) => (
+            <Link
+              key="export-skill-learn-more"
+              href={'https://docs.microsoft.com/en-us/composer/how-to-publish-skill?tabs=v2x'}
+              target="_blank"
+            >
+              {children}
+            </Link>
+          ),
+        }
       ),
     title: () => formatMessage('Select triggers'),
   },
