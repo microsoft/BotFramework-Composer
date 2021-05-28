@@ -3,46 +3,72 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Split } from '@geoffcox/react-splitter';
-import React, { useState } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { renderThinSplitter } from '../../../../../components/Split/ThinSplitter';
 import { DebugPanelTabHeaderProps } from '../types';
+import { DiagnosticInfo } from '../../../../diagnostics/types';
+import { dispatcherState, showErrorDiagnosticsState, showWarningDiagnosticsState } from '../../../../../recoilModel';
 
 import { DiagnosticList } from './DiagnosticList';
-import { DiagnosticsStatusFilter } from './DiagnosticsStatusFilter';
 import { Severity, useDiagnosticsData } from './useDiagnostics';
+import { DiagnosticsFilters } from './DiagnosticFilters';
+
+const runWarningFilter = (item: DiagnosticInfo, showWarnings: boolean) => {
+  return showWarnings && item.severity === Severity.Warning;
+};
+
+const runErrorFilter = (item: DiagnosticInfo, showErrors: boolean) => {
+  return showErrors && item.severity === Severity.Error;
+};
+
+const runProjectFilter = (projectsToFilter: string[], item: DiagnosticInfo) => {
+  return projectsToFilter.includes(item.projectId);
+};
 
 export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
-  const [filterType, setFilterType] = useState(Severity.Error);
   const diagnostics = useDiagnosticsData();
+  const { setWarningDiagnosticsFilter: setShowWarnings, setErrorDiagnosticsFilter: setShowErrors } = useRecoilValue(
+    dispatcherState
+  );
+  const showWarnings = useRecoilValue(showWarningDiagnosticsState);
+  const showErrors = useRecoilValue(showErrorDiagnosticsState);
+  const [projectsToFilter, setProjectsToFilter] = useState<string[]>([]);
 
-  const changeFilterType = (type) => {
-    setFilterType(type);
-  };
+  const filteredDiagnosticItems = useMemo(() => {
+    const filtered = diagnostics.filter((diagnostic) => {
+      return (
+        runProjectFilter(projectsToFilter, diagnostic) &&
+        (runErrorFilter(diagnostic, showErrors) || runWarningFilter(diagnostic, showWarnings))
+      );
+    });
+    return filtered;
+  }, [projectsToFilter, showWarnings, showErrors, diagnostics]);
 
   if (!isActive) {
     return null;
   }
 
   return (
-    <Split
-      resetOnDoubleClick
-      css={{
-        height: '100%',
-        display: !isActive ? 'none' : 'block',
-        overflow: 'auto',
-      }}
-      initialPrimarySize="160px"
-      minPrimarySize="140px"
-      minSecondarySize="600px"
-      renderSplitter={renderThinSplitter}
-      splitterSize="5px"
-    >
-      <DiagnosticsStatusFilter filterType={filterType} onChangeFilterType={changeFilterType} />
-      <div data-testid="DiagnosticList-Container" style={{ height: '100%', overflow: 'auto' }}>
-        <DiagnosticList diagnosticItems={diagnostics.filter((d) => d.severity === filterType)} />
+    <Fragment>
+      <div
+        css={{
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
+        <DiagnosticsFilters
+          projectsToFilter={projectsToFilter}
+          setProjectsToFilter={setProjectsToFilter}
+          setShowErrors={setShowErrors}
+          setShowWarnings={setShowWarnings}
+          showErrors={showErrors}
+          showWarnings={showWarnings}
+        />
       </div>
-    </Split>
+      <div data-testid="DiagnosticList-Container" style={{ height: '100%', overflow: 'auto' }}>
+        <DiagnosticList diagnosticItems={filteredDiagnosticItems} />
+      </div>
+    </Fragment>
   );
 };

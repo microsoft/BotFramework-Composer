@@ -18,6 +18,8 @@ import {
   debugPanelActiveTabState,
   userHasNodeInstalledState,
   applicationErrorState,
+  showErrorDiagnosticsState,
+  showWarningDiagnosticsState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -153,6 +155,16 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
+  const setErrorDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    set(showWarningDiagnosticsState, false);
+    set(showErrorDiagnosticsState, true);
+  });
+
+  const setWarningDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    set(showWarningDiagnosticsState, true);
+    set(showErrorDiagnosticsState, false);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -169,5 +181,7 @@ export const applicationDispatcher = () => {
     setPageElementState,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setErrorDiagnosticsFilter,
+    setWarningDiagnosticsFilter,
   };
 };

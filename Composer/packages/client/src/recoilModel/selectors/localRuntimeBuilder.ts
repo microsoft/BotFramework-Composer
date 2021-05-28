@@ -69,6 +69,9 @@ export const buildConfigurationSelector = selector({
   get: ({ get }) => {
     const localProjects = get(localBotsWithoutErrorsSelector);
     const rootBotId = get(rootBotProjectIdSelector);
+    if (!rootBotId) {
+      return [];
+    }
 
     return localProjects
       .filter((projectId: string) => {
