@@ -25,6 +25,7 @@ import { BotStatus } from '../../constants';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
 import { usePVACheck } from '../../hooks/usePVACheck';
 
+import { isBotStarting } from './utils';
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
 import { BotRuntimeStatus } from './BotRuntimeStatus';
@@ -101,16 +102,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   useEffect(() => {
     const botsProcessing =
       startAllBotsOperationQueued ||
-      projectCollection.some(({ status }) => {
-        return (
-          status === BotStatus.publishing ||
-          status === BotStatus.published ||
-          status == BotStatus.pending ||
-          status == BotStatus.queued ||
-          status == BotStatus.starting ||
-          status == BotStatus.stopping
-        );
-      });
+      projectCollection.some(({ status }) => isBotStarting(status) || status == BotStatus.stopping);
     setBotsProcessing(botsProcessing);
 
     const botOperationsCompleted = projectCollection.some(
@@ -156,14 +148,10 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
         setStatusIconClass('Refresh');
 
         setStartPanelButtonText(
-          formatMessage(
-            `{
-          total, plural,
-            =1 {Restart bot}
-          other {Restart all bots ({running}/{total} running)}
-        }`,
-            { running: runningBots.projectIds.length, total: runningBots.totalBots }
-          )
+          formatMessage(`{ total, plural, =1 {Restart bot}other {Restart all bots ({running}/{total} running)}}`, {
+            running: runningBots.projectIds.length,
+            total: runningBots.totalBots,
+          })
         );
         return;
       }

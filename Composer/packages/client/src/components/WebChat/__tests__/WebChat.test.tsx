@@ -8,9 +8,17 @@ import { WebChatComposerProps, WebChatComposer } from '../WebChatComposer';
 import { ConversationService } from '../utils/conversationService';
 import { ChatData } from '../types';
 
-URL.createObjectURL = jest.fn();
+const originalCreateObjectURL = URL.createObjectURL;
 
 describe('<WebChat />', () => {
+  beforeAll(() => {
+    URL.createObjectURL = jest.fn();
+  });
+
+  afterAll(() => {
+    URL.createObjectURL = originalCreateObjectURL;
+  });
+
   it('should not render webchat if no conversation or chat data', async () => {
     const props: WebChatComposerProps = {
       currentConversation: '',

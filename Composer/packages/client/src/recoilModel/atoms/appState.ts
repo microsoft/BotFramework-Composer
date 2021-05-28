@@ -364,3 +364,18 @@ export const warnAboutFunctionsState = atom<boolean>({
   key: getFullyQualifiedKey('warnAboutFunctionsState'),
   default: false,
 });
+
+export const showErrorDiagnosticsState = atom<boolean>({
+  key: getFullyQualifiedKey('showErrorDiagnostics'),
+  default: true,
+});
+
+export const showWarningDiagnosticsState = atom<boolean>({
+  key: getFullyQualifiedKey('showWarningDiagnostics'),
+  default: false,
+});
+
+export const projectsForDiagnosticsFilterState = atom<string[]>({
+  key: getFullyQualifiedKey('projectsForDiagnosticsFilter'),
+  default: [],
+});

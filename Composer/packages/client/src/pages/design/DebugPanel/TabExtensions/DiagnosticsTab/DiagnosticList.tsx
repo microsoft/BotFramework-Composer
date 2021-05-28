@@ -9,6 +9,7 @@ import {
   SelectionMode,
   IColumn,
   CheckboxVisibility,
+  ConstrainMode,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -19,13 +20,23 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 
-import { IDiagnosticInfo } from '../../../../diagnostics/types';
-import { botDisplayNameState, botProjectSpaceSelector, exportSkillModalInfoState } from '../../../../../recoilModel';
+import {
+  botDisplayNameState,
+  botProjectSpaceSelector,
+  exportSkillModalInfoState,
+  localeState,
+  rootBotProjectIdSelector,
+} from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
 
+import { IDiagnosticInfo } from './types';
+
 // -------------------- Styles -------------------- //
+
+const maxHeightDetailsList = 45;
 
 const icons = {
   Error: { iconName: 'StatusErrorFull', color: SharedColors.red10 },
@@ -57,7 +68,7 @@ const typeIcon = (icon) => css`
 `;
 
 const detailList = css`
-  overflow-x: hidden;
+  height: calc(100% - 55px);
 `;
 
 const tableCell = css`
@@ -106,11 +117,13 @@ const BotNameRender: React.FC<{ item: IDiagnosticInfo }> = ({ item }) => {
 export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems }) => {
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const locale = useRecoilValue(localeState(rootBotId ?? ''));
 
-  const getSkillName = (projectId: string) =>
+  const getProjectName = (projectId: string) =>
     botProjectSpace.find((bot) => bot.projectId === projectId)?.name ?? projectId;
 
-  const staticColumns = [
+  const staticColumns: IColumn[] = [
     {
       key: 'Icon',
       name: '',
@@ -137,11 +150,12 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isPadded: true,
       isSorted: true,
       isSortedDescending: false,
-      onColumnClick: () => {
+      onColumnClick: (event) => {
         const newColumns = columns.slice();
         newColumns[1].isSorted = true;
         newColumns[1].isSortedDescending = !columns[1].isSortedDescending;
         setColumns(newColumns);
+        event.stopPropagation();
       },
     },
     {
@@ -154,6 +168,10 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isResizable: true,
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
+        let locationPath = item.location;
+        if (item.friendlyLocationBreadcrumb) {
+          locationPath = item.friendlyLocationBreadcrumb.join(' > ');
+        }
         return (
           <div css={tableCell}>
             <Link
@@ -166,7 +184,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
                 }
               }}
             >
-              {item.location}
+              {locationPath}
             </Link>
           </div>
         );
@@ -216,30 +234,39 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
     setColumns(staticColumns);
   }, [diagnosticItems]);
 
-  const sortFactor = columns[1].isSortedDescending ? 1 : -1;
-  const displayedDiagnosticItems = diagnosticItems.sort((a, b) => {
-    const aName = getSkillName(a.projectId);
-    const bName = getSkillName(b.projectId);
-    if (aName < bName) {
-      return sortFactor;
-    } else if (aName > bName) {
-      return -sortFactor;
-    } else {
-      return a.location < b.location ? sortFactor : -sortFactor;
-    }
-  });
+  const displayedDiagnosticItems = useMemo(() => {
+    const sortFactor = columns[1].isSortedDescending ? 1 : -1;
+    return diagnosticItems.sort((a, b) => {
+      // Error before Warning
+      const severityComparator = a.severity.localeCompare(b.severity);
+      if (severityComparator === 0) {
+        // Sort by name
+        return sortFactor * getProjectName(a.projectId).localeCompare(getProjectName(b.projectId), locale);
+      }
+      return severityComparator;
+    });
+  }, [diagnosticItems, columns]);
 
   return (
-    <DetailsList
-      isHeaderVisible
-      checkboxVisibility={CheckboxVisibility.hidden}
-      columns={columns}
-      css={detailList}
-      items={displayedDiagnosticItems}
-      layoutMode={DetailsListLayoutMode.justified}
-      selectionMode={SelectionMode.single}
-      setKey="none"
-      onRenderDetailsHeader={onRenderDetailsHeader}
-    />
+    <ScrollablePane>
+      <DetailsList
+        isHeaderVisible
+        checkboxVisibility={CheckboxVisibility.hidden}
+        columns={columns}
+        constrainMode={ConstrainMode.unconstrained}
+        css={detailList}
+        items={displayedDiagnosticItems}
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionMode={SelectionMode.single}
+        setKey="none"
+        styles={{
+          root: {
+            maxHeight: `calc(100% - ${maxHeightDetailsList}px)`,
+            selectors: {},
+          },
+        }}
+        onRenderDetailsHeader={onRenderDetailsHeader}
+      />
+    </ScrollablePane>
   );
 };

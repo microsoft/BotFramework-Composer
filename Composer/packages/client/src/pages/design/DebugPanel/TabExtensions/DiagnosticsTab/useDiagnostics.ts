@@ -3,9 +3,10 @@
 
 import { useRecoilValue } from 'recoil';
 
-import { IDiagnosticInfo } from '../../../../diagnostics/types';
 import { allDiagnosticsSelectorFamily } from '../../../../../recoilModel';
-import { DiagnosticSeverity } from '../../../../diagnostics/types';
+
+import { IDiagnosticInfo } from './types';
+import { DiagnosticSeverity } from './types';
 
 export const Severity = {
   Error: DiagnosticSeverity[0],

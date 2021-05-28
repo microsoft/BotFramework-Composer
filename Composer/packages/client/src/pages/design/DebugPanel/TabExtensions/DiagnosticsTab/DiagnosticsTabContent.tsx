@@ -3,46 +3,99 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Split } from '@geoffcox/react-splitter';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { renderThinSplitter } from '../../../../../components/Split/ThinSplitter';
 import { DebugPanelTabHeaderProps } from '../types';
+import { dispatcherState, showErrorDiagnosticsState, showWarningDiagnosticsState } from '../../../../../recoilModel';
 
+import { IDiagnosticInfo } from './types';
 import { DiagnosticList } from './DiagnosticList';
-import { DiagnosticsStatusFilter } from './DiagnosticsStatusFilter';
 import { Severity, useDiagnosticsData } from './useDiagnostics';
+import { DiagnosticsFilters } from './DiagnosticFilters';
+
+const severityFilterHeight = 45;
 
 export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
-  const [filterType, setFilterType] = useState(Severity.Error);
   const diagnostics = useDiagnosticsData();
+  const { setWarningDiagnosticsFilter, setErrorDiagnosticsFilter } = useRecoilValue(dispatcherState);
+  const showWarnings = useRecoilValue(showWarningDiagnosticsState);
+  const showErrors = useRecoilValue(showErrorDiagnosticsState);
+  const [projectsToFilter, setProjectsToFilter] = useState<string[]>([]);
+  const [errorCount, setErrorCount] = useState<number>(0);
+  const [warningCount, setWarningCount] = useState<number>(0);
+  const [filteredDiagnostics, setFilteredDiagnostics] = useState<IDiagnosticInfo[]>([]);
 
-  const changeFilterType = (type) => {
-    setFilterType(type);
-  };
+  useEffect(() => {
+    let errorCt = 0;
+    let warningCt = 0;
+    const filteredItems = diagnostics.filter((diagnostic) => {
+      const projectFilter = projectsToFilter.includes(diagnostic.projectId);
+      if (!projectFilter) {
+        return false;
+      }
+
+      let errorFilter = false;
+      if (diagnostic.severity === Severity.Error) {
+        errorCt++;
+        if (showErrors) {
+          errorFilter = true;
+        }
+      }
+
+      let warningFilter = false;
+      if (diagnostic.severity === Severity.Warning) {
+        warningCt++;
+        if (showWarnings) {
+          warningFilter = true;
+        }
+      }
+      return warningFilter || errorFilter;
+    });
+    setErrorCount(errorCt);
+    setWarningCount(warningCt);
+    setFilteredDiagnostics(filteredItems);
+  }, [projectsToFilter, showWarnings, showErrors, diagnostics]);
 
   if (!isActive) {
     return null;
   }
 
   return (
-    <Split
-      resetOnDoubleClick
+    <div
       css={{
         height: '100%',
-        display: !isActive ? 'none' : 'block',
-        overflow: 'auto',
+        width: '100%',
       }}
-      initialPrimarySize="160px"
-      minPrimarySize="140px"
-      minSecondarySize="600px"
-      renderSplitter={renderThinSplitter}
-      splitterSize="5px"
     >
-      <DiagnosticsStatusFilter filterType={filterType} onChangeFilterType={changeFilterType} />
-      <div data-testid="DiagnosticList-Container" style={{ height: '100%', overflow: 'auto' }}>
-        <DiagnosticList diagnosticItems={diagnostics.filter((d) => d.severity === filterType)} />
+      <div
+        css={{
+          height: `${severityFilterHeight}px`,
+          display: 'flex',
+          flex: '1 1 auto',
+          alignItems: 'center',
+          padding: '0 16px',
+        }}
+      >
+        <DiagnosticsFilters
+          errorCount={errorCount}
+          projectsToFilter={projectsToFilter}
+          setErrorFilter={setErrorDiagnosticsFilter}
+          setProjectsToFilter={setProjectsToFilter}
+          setWarningFilter={setWarningDiagnosticsFilter}
+          showErrors={showErrors}
+          showWarnings={showWarnings}
+          warningCount={warningCount}
+        />
       </div>
-    </Split>
+      <div
+        css={{
+          height: `calc(100% - ${severityFilterHeight}px)`,
+          position: 'relative',
+        }}
+      >
+        <DiagnosticList diagnosticItems={filteredDiagnostics} />
+      </div>
+    </div>
   );
 };
