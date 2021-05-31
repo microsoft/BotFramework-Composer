@@ -1,14 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension-client';
 import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { nameRegex } from '../../../constants';
 

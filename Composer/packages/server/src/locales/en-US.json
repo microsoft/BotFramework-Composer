@@ -221,9 +221,6 @@
   "add_new_extension_19b82b77": {
     "message": "Add new extension"
   },
-  "add_new_propertyname_bedf7dc6": {
-    "message": "Add new { propertyName }"
-  },
   "add_new_question_85612b7f": {
     "message": "Add new question"
   },
@@ -2498,9 +2495,6 @@
   "new_update_available_30534ea5": {
     "message": "New update available"
   },
-  "new_value_3c1ce474": {
-    "message": "New value"
-  },
   "newsectionplaceholdersectionname_5fc0d21": {
     "message": "_NewSectionPlaceHolderSectionName"
   },
@@ -2785,12 +2779,6 @@
   },
   "prebuilt_entity_21ebcdc6": {
     "message": "Prebuilt entity"
-  },
-  "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
-    "message": "press Enter to add this item or Tab to move to the next interactive element"
-  },
-  "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
-    "message": "press Enter to add this name and advance to the next row, or press Tab to advance to the value field"
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
     "message": "Press Shift+Enter to insert a new line"
@@ -3698,8 +3686,8 @@
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
   },
-  "the_capabilities_of_your_bot_are_defined_in_its_di_37d5670f": {
-    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more."
+  "the_capabilities_of_your_bot_are_defined_in_its_di_1a1a6232": {
+    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots."
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
@@ -3878,8 +3866,8 @@
   "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
     "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
-  "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+  "to_ensure_a_secure_connection_provide_the_app_id_o_61ccd30d": {
+    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration."
   },
   "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
     "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
@@ -3929,6 +3917,9 @@
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "To which language will you be translating your bot?"
   },
+  "toggle_details_cf95a620": {
+    "message": "Toggle Details"
+  },
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
@@ -3971,8 +3962,8 @@
   "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
     "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
   },
-  "triggers_selected_below_will_enable_other_bots_to__fd8353a5": {
-    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. Learn more."
+  "triggers_selected_below_will_enable_other_bots_to__5357aadf": {
+    "message": "Triggers selected below will enable other bots to access the capabilities of your skill."
   },
   "true_1900d7ae": {
     "message": "true"
