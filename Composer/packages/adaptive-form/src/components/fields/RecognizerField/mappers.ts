@@ -10,5 +10,6 @@ export const mapListItemsToRecognizerSchema = (item: any, recognizerConfigs: Rec
 export const mapRecognizerSchemaToListItems = (recognizerSchema: RecognizerSchema) => {
   const { id, displayName, description } = recognizerSchema;
   const recognizerName = typeof displayName === 'function' ? displayName({}) : displayName;
-  return { key: id, text: recognizerName || id, description: description };
+  const recognizerDescription = typeof description === 'function' ? description({}) : description;
+  return { key: id, text: recognizerName || id, description: recognizerDescription };
 };

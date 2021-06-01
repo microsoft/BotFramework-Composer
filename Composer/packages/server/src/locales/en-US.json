@@ -221,9 +221,6 @@
   "add_new_extension_19b82b77": {
     "message": "Add new extension"
   },
-  "add_new_propertyname_bedf7dc6": {
-    "message": "Add new { propertyName }"
-  },
   "add_new_question_85612b7f": {
     "message": "Add new question"
   },
@@ -686,6 +683,9 @@
   "carousel_a2321ac9": {
     "message": "Carousel"
   },
+  "change_dcaa253a": {
+    "message": "Change"
+  },
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
   },
@@ -700,6 +700,12 @@
   },
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
+  },
+  "choose_a_recognizer_type_fa398753": {
+    "message": "Choose a recognizer type"
+  },
+  "choose_a_valid_publish_profile_to_continue_d4bd0b96": {
+    "message": "Choose a valid publish profile to continue"
   },
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
@@ -970,6 +976,9 @@
   },
   "create_a_trigger_40e74743": {
     "message": "Create a trigger"
+  },
+  "create_a_valid_publish_profile_to_continue_2425bea1": {
+    "message": "Create a valid publish profile to continue"
   },
   "create_and_configure_new_azure_resources_302c574a": {
     "message": "Create and configure new Azure resources"
@@ -1415,6 +1424,9 @@
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
+  "enables_you_to_customize_your_own_recognizer_by_ed_c79b2f3b": {
+    "message": "Enables you to customize your own recognizer by editing JSON in the form"
+  },
   "end_dialog_88fa2f7a": {
     "message": "End dialog"
   },
@@ -1801,6 +1813,18 @@
   },
   "github_c7cc3613": {
     "message": "GitHub"
+  },
+  "gives_your_bot_the_ability_to_detect_and_route_use_48c2bdc2": {
+    "message": "Gives your bot the ability to detect and route user input to an appropriate skill or to a subsequent language understanding models"
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_7072a9c5": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns"
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_8170cf3d": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on luis modal"
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_c315fe1d": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on a cross trained recognizer set."
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Go to QnA all-up view page."
@@ -2498,9 +2522,6 @@
   "new_update_available_30534ea5": {
     "message": "New update available"
   },
-  "new_value_3c1ce474": {
-    "message": "New value"
-  },
   "newsectionplaceholdersectionname_5fc0d21": {
     "message": "_NewSectionPlaceHolderSectionName"
   },
@@ -2705,8 +2726,8 @@
   "orchestrator_downloading_language_model_e785be44": {
     "message": "Orchestrator: Downloading language model"
   },
-  "orchestrator_recognizer_cf38b65a": {
-    "message": "Orchestrator recognizer"
+  "orchestrator_recognizer_intents_only_86883251": {
+    "message": "Orchestrator recognizer (Intents only)"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "origin lg file not found in store"
@@ -2785,12 +2806,6 @@
   },
   "prebuilt_entity_21ebcdc6": {
     "message": "Prebuilt entity"
-  },
-  "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
-    "message": "press Enter to add this item or Tab to move to the next interactive element"
-  },
-  "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
-    "message": "press Enter to add this name and advance to the next row, or press Tab to advance to the value field"
   },
   "press_shift_enter_to_insert_a_new_line_2a5a970f": {
     "message": "Press Shift+Enter to insert a new line"
@@ -2899,6 +2914,9 @@
   },
   "publish_profile_a4e8f07b": {
     "message": "Publish profile"
+  },
+  "publish_profile_is_missing_app_id_and_host_name_49d72218": {
+    "message": "Publish profile is missing App ID and host name. "
   },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
@@ -3011,8 +3029,8 @@
   "recent_f19e8c64": {
     "message": "Recent"
   },
-  "recognizer_type_dc591e16": {
-    "message": "Recognizer Type"
+  "recognizer_dispatch_type_309452a6": {
+    "message": "Recognizer/Dispatch type"
   },
   "recognizers_cefce9d1": {
     "message": "Recognizers"
@@ -3686,8 +3704,8 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
   },
-  "the_app_id_9c6d6a9a": {
-    "message": "The app id"
+  "the_app_id_352b6bc6": {
+    "message": "The App ID"
   },
   "the_app_id_of_your_application_registration_16fba1a9": {
     "message": "The app id of your application registration"
@@ -3928,6 +3946,9 @@
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "To which language will you be translating your bot?"
+  },
+  "toggle_details_cf95a620": {
+    "message": "Toggle Details"
   },
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
