@@ -73,8 +73,10 @@ context('breadcrumb', () => {
   it('can create different kinds of triggers ', () => {
     cy.visitPage('Create');
     cy.findByTestId('DialogHeader-TestBot_TestSample').click();
-    cy.findByTestId('recognizerTypeDropdown').click();
+    // cy.findByText('Change').click();
+    cy.findByTestId('openRecognizerDialog').click();
     cy.findByText('Regular expression recognizer').click();
+    cy.findByText('Done').click();
 
     //onintent trigger
     cy.findByTestId('DialogHeader-TestBot_TestSample').within(() => {
