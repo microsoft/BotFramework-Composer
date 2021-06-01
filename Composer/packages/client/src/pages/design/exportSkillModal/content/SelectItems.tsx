@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   CheckboxVisibility,
   DetailsList,
@@ -73,9 +73,9 @@ export const SelectItems: React.FC<SelectItemsProps> = ({ items, selection, tabl
             layoutMode={DetailsListLayoutMode.justified}
             selection={selection}
             selectionMode={SelectionMode.multiple}
+            onRenderCheckbox={onRenderCheckbox}
             onRenderDetailsHeader={onRenderDetailsHeader}
             onRenderRow={onRenderRow}
-            onRenderCheckbox={onRenderCheckbox}
           />
         </ScrollablePane>
       </div>
