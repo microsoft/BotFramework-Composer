@@ -63,7 +63,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
-    "@monaco-editor/react": "^3.1.0",
+    "@monaco-editor/react": "^3.8.3",
     "json-schema-defaults": "^0.4.0",
     "lodash": "^4.17.19",
     "monaco-editor": "^0.19.0",
@@ -73,6 +73,5 @@
     "vscode-ws-jsonrpc": "^0.1.1",
     "@uifabric/fluent-theme": "^7.1.4",
     "@fluentui/react-icons": "^0.3.9"
-
   }
 }
