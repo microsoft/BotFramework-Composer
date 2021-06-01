@@ -19,6 +19,7 @@ import { getDetailsListItems } from './getDetailsListItems';
 const recognizerStyle = css`
   display: flex;
   justify-content: space-between;
+  font-weight: 600;
 `;
 type RecognizerListItem = {
   key: string;
@@ -69,19 +70,16 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
-      {/* <Dropdown
-        ariaLabel={formatMessage('Recognizer Type')}
-        data-testid="recognizerTypeDropdown"
-        label={formatMessage('Recognizer Type')}
-        options={dropdownOptions}
-        responsiveMode={ResponsiveMode.large}
-        selectedKey={currentRecognizer?.id}
-        onChange={submit}
-      /> */}
-      <div>{formatMessage('Recognizer/Dispatch type')}</div>
+      <div style={{ fontWeight: 600 }}>{formatMessage('Recognizer/Dispatch type')}</div>
       <div css={recognizerStyle} data-testid="recognizerTypeList">
-        <span>{currentRecognizer?.displayName}</span>
-        <span onClick={() => setShowDialog(true)}>{formatMessage('Change')}</span>
+        <span>
+          {typeof currentRecognizer?.displayName === 'function'
+            ? currentRecognizer?.displayName({})
+            : currentRecognizer?.displayName}
+        </span>
+        <span style={{ fontSize: 'small', color: 'blue', marginBottom: '10px' }} onClick={() => setShowDialog(true)}>
+          {formatMessage('Change')}
+        </span>
       </div>
       <Dialog
         dialogContentProps={{
@@ -107,7 +105,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
                 return (
                   <div>
                     <div>{item.text}</div>
-                    <div>{item.description}</div>
+                    <div style={{ whiteSpace: 'normal' }}>{item.description}</div>
                   </div>
                 );
               },
@@ -115,6 +113,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
           ]}
           isHeaderVisible={false}
           items={detailsListItems}
+          selection={selection}
           selectionMode={SelectionMode.single}
         />
         <DialogFooter>
