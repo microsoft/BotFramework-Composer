@@ -19,8 +19,7 @@ import { getDetailsListItems } from './getDetailsListItems';
 const recognizerStyle = css`
   display: flex;
   justify-content: space-between;
-  font-weight: 600;
-  margin: '5px 0px 10px 0px';
+  margin: 5px 0px 10px 0px;
 `;
 type RecognizerListItem = {
   key: string;
@@ -78,7 +77,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
             ? currentRecognizer?.displayName({})
             : currentRecognizer?.displayName}
         </span>
-        <span style={{ fontSize: 'small', color: '#0078D4' }} onClick={() => setShowDialog(true)}>
+        <span style={{ color: '#0078D4' }} onClick={() => setShowDialog(true)}>
           {formatMessage('Change')}
         </span>
       </div>
