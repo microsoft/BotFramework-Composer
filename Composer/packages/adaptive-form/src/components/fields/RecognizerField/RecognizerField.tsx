@@ -77,7 +77,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
             ? currentRecognizer?.displayName({})
             : currentRecognizer?.displayName}
         </span>
-        <span style={{ color: '#0078D4' }} onClick={() => setShowDialog(true)}>
+        <span data-testid="openRecognizerDialog" style={{ color: '#0078D4' }} onClick={() => setShowDialog(true)}>
           {formatMessage('Change')}
         </span>
       </div>
