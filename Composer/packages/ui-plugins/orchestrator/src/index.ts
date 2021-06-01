@@ -16,7 +16,11 @@ const config: PluginConfig = {
           }
           return !checkForOrchestratorSchema(shellData.schemas?.sdk);
         },
-        displayName: () => formatMessage('Orchestrator recognizer'),
+        displayName: () => formatMessage('Orchestrator recognizer (Intents only)'),
+        description: () =>
+          formatMessage(
+            'Gives your bot the ability to detect and route user input to an appropriate skill or to a subsequent language understanding models'
+          ),
         isSelected: (_, dialog: DialogInfo) => {
           return dialog.luProvider === SDKKinds.OrchestratorRecognizer;
         },
