@@ -363,6 +363,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       <LuLabelingMenu
         editor={editor}
         luFile={luFile}
+        shouldRenderBelowFabricLayer={!!popExpandOptions}
         onInsertEntity={insertEntity}
         onMenuToggled={onLabelingMenuToggled}
       />
