@@ -10,11 +10,16 @@ const FallbackRecognizerJsonEditor: RecognizerOptions = {
   displayName: () => formatMessage('Custom recognizer'),
   seedNewRecognizer: () => ({}),
   recognizerEditor: CustomRecognizerField,
+  description: () => formatMessage('Enables you to customize your own recognizer by editing JSON in the form'),
 };
 
 export const DefaultRecognizerSchema: RecognizerUISchema = {
   [SDKKinds.RegexRecognizer]: {
     displayName: () => formatMessage('Regular expression recognizer'),
+    description: () =>
+      formatMessage(
+        'Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns'
+      ),
     intentEditor: RegexIntentField,
     renameIntent: (intentName, newIntentName, shellData, shellApi) => {
       const { currentDialog } = shellData;

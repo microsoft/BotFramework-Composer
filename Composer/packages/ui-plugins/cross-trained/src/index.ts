@@ -10,6 +10,10 @@ const config: PluginConfig = {
     [SDKKinds.CrossTrainedRecognizerSet]: {
       recognizer: {
         displayName: () => formatMessage('Default recognizer'),
+        description: () =>
+          formatMessage(
+            'Gives your bot the ability to extract intent and entity data from an utterance based on a cross trained recognizer set.'
+          ),
         isSelected: (data, dialog: DialogInfo) => {
           if (dialog.luProvider === SDKKinds.OrchestratorRecognizer) return false;
           return typeof data === 'string' && data.endsWith('.lu.qna');
