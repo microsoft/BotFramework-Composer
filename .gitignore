@@ -399,3 +399,13 @@ Composer/.vscode/
 docker-compose.override.yml
 
 *.tsbuildinfo
+
+# yarn 2 - https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# not using zero installs right now
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*

@@ -2,3 +2,10 @@
 **/lib
 **/dist
 **/node_modules
+
+# yarn 2 - https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# not using zero installs right now
+.yarn
+.pnp.*
+**/.yarn
+**/.pnp.*

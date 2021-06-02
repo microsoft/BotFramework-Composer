@@ -95,8 +95,8 @@ const hasChanges = (name, lastModified) => {
 };
 
 const install = async (name, extPath) => {
-  console.log(`[%s] yarn install --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, name);
-  execSync(`yarn --production=false --frozen-lockfile ${FORCE ? '--force' : ''}`, { cwd: extPath, stdio: 'inherit' });
+  console.log(`[%s] yarn install --immutable`, name);
+  execSync(`yarn`, { cwd: extPath, stdio: 'inherit' });
 };
 
 async function main() {
