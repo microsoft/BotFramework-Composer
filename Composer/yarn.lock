@@ -12,17 +12,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apidevtools/json-schema-ref-parser@npm:9.0.7, @apidevtools/json-schema-ref-parser@npm:^9.0.6":
-  version: 9.0.7
-  resolution: "@apidevtools/json-schema-ref-parser@npm:9.0.7::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40apidevtools%2Fjson-schema-ref-parser%2F-%2F%40apidevtools%2Fjson-schema-ref-parser-9.0.7.tgz"
-  dependencies:
-    "@jsdevtools/ono": ^7.1.3
-    call-me-maybe: ^1.0.1
-    js-yaml: ^3.13.1
-  checksum: 2daf465e5d9c3ab15c3bdafa1577c4d7fdb65ecfc9a71e165110aed773e0dea2651ba1b9ddd1714421b4fe8f33c6469641fa01b2ede2ecd004b1813f07f6d443
-  languageName: node
-  linkType: hard
-
 "@apidevtools/json-schema-ref-parser@npm:^9.0.1":
   version: 9.0.6
   resolution: "@apidevtools/json-schema-ref-parser@npm:9.0.6"
@@ -31,36 +20,6 @@ __metadata:
     call-me-maybe: ^1.0.1
     js-yaml: ^3.13.1
   checksum: 120138e50195106d5cd5bf4a92c628d341096af69c3742552419974d2a0a95dc7e7c35c447c5bbf6e117126471c9eba1fbc6937e111584b8077c8c20e506b0de
-  languageName: node
-  linkType: hard
-
-"@apidevtools/openapi-schemas@npm:^2.0.4":
-  version: 2.1.0
-  resolution: "@apidevtools/openapi-schemas@npm:2.1.0::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40apidevtools%2Fopenapi-schemas%2F-%2F%40apidevtools%2Fopenapi-schemas-2.1.0.tgz"
-  checksum: e711ccc629d4447a1239444e67bf2306867357aa00d8c6de854da7c92b532012d9b49673940757e07a1fa62bc2c421c1a2d7a665fb4f70689b7ef89339064dea
-  languageName: node
-  linkType: hard
-
-"@apidevtools/swagger-methods@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@apidevtools/swagger-methods@npm:3.0.2::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40apidevtools%2Fswagger-methods%2F-%2F%40apidevtools%2Fswagger-methods-3.0.2.tgz"
-  checksum: 33e49da22dc6668e51aee11cc9634d3039a24da8e0e8edf7a889ff72e3882905ac222a8970be5e41918d66286e20027f849ff665a7f540563f887a5cec85befb
-  languageName: node
-  linkType: hard
-
-"@apidevtools/swagger-parser@npm:10.0.2":
-  version: 10.0.2
-  resolution: "@apidevtools/swagger-parser@npm:10.0.2::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40apidevtools%2Fswagger-parser%2F-%2F%40apidevtools%2Fswagger-parser-10.0.2.tgz"
-  dependencies:
-    "@apidevtools/json-schema-ref-parser": ^9.0.6
-    "@apidevtools/openapi-schemas": ^2.0.4
-    "@apidevtools/swagger-methods": ^3.0.2
-    "@jsdevtools/ono": ^7.1.3
-    call-me-maybe: ^1.0.1
-    z-schema: ^4.2.3
-  peerDependencies:
-    openapi-types: ">=7"
-  checksum: 7009a50e6cad6b7482687295784c79bd869f28a535631c82e3d6fe9ec4e33755867972922ba5cb480b6f62f7ac417d4837a8a5e62fd353c76209ee05608cda3d
   languageName: node
   linkType: hard
 
@@ -4892,7 +4851,7 @@ __metadata:
     "@botframework-composer/types": "*"
     "@microsoft/bf-dialog": 4.13.1
     "@microsoft/bf-dispatcher": ^4.11.0-beta.20201016.393c6b2
-    "@microsoft/bf-generate-library": ^4.10.0-daily.20210317.224602
+    "@microsoft/bf-generate-library": 4.10.0-daily.20210317.224602
     "@microsoft/bf-lu": 4.14.0-dev.20210408.1a5070e
     "@microsoft/bf-orchestrator": 4.13.0-rc0
     "@types/archiver": ^3.1.0
@@ -6343,23 +6302,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/bf-generate-library@npm:^4.10.0-daily.20210317.224602":
-  version: 4.10.0-daily.20210506.243376
-  resolution: "@microsoft/bf-generate-library@npm:4.10.0-daily.20210506.243376::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40microsoft%2Fbf-generate-library%2F-%2F%40microsoft%2Fbf-generate-library-4.10.0-daily.20210506.243376.tgz"
+"@microsoft/bf-generate-library@npm:4.10.0-daily.20210317.224602":
+  version: 4.10.0-daily.20210317.224602
+  resolution: "@microsoft/bf-generate-library@npm:4.10.0-daily.20210317.224602::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40microsoft%2Fbf-generate-library%2F-%2F%40microsoft%2Fbf-generate-library-4.10.0-daily.20210317.224602.tgz"
   dependencies:
-    "@microsoft/bf-lu": latest
-    adaptive-expressions: next
-    ajv: ^8.2.0
-    botbuilder-lg: next
+    "@microsoft/bf-lu": rc
+    adaptive-expressions: 4.11.1
+    ajv: ^6.9.1
+    botbuilder-lg: 4.11.1
     clone: ^2.1.2
-    fs-extra: ^10.0.0
-    globby: ^11.0.3
-    json-schema-merge-allof: ^0.8.1
-    json-schema-ref-parser: ^9.0.7
-    openapi-types: ^8.0.0
+    fs-extra: ^8.1.0
+    globby: ^11.0.1
+    json-schema-merge-allof: ^0.6.0
+    json-schema-ref-parser: ^7.1.0
+    openapi-types: ^1.3.5
     seedrandom: ~3.0.5
-    swagger-parser: ^10.0.2
-  checksum: e66c082ac6ff2e573b34580d458a9d245bc7096a13367e9b7c2f1c3f9ba8d6ca5c03a7f16e1665d49910206598d12252ceea0a3c23b48b07eda099be4eeb21e4
+    swagger-parser: ^8.0.4
+  checksum: 3602abb73302ad19d5a3094389fdd7e69ffa0f0c17c872cf899e6ef1ede51080adb5927491a315f8b6326872bf42b2611fa71a3674780e2db51a8bbd1aebcfc6
   languageName: node
   linkType: hard
 
@@ -6435,16 +6394,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/bf-lu@npm:latest":
-  version: 4.10.0-dev.20200730.3786d10
-  resolution: "@microsoft/bf-lu@npm:4.10.0-dev.20200730.3786d10::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40microsoft%2Fbf-lu%2F-%2F%40microsoft%2Fbf-lu-4.10.0-dev.20200730.3786d10.tgz"
+"@microsoft/bf-lu@npm:rc":
+  version: 4.13.3
+  resolution: "@microsoft/bf-lu@npm:4.13.3::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40microsoft%2Fbf-lu%2F-%2F%40microsoft%2Fbf-lu-4.13.3.tgz"
   dependencies:
-    "@azure/cognitiveservices-luis-authoring": 4.0.0-preview.1
-    "@azure/ms-rest-azure-js": 2.0.1
-    "@oclif/command": ~1.5.19
-    "@oclif/errors": ~1.2.2
     "@types/node-fetch": ~2.5.5
-    antlr4: ^4.7.2
+    antlr4: ~4.8.0
+    axios: ~0.21.1
     chalk: 2.4.1
     console-stream: ^0.1.1
     deep-equal: ^1.0.1
@@ -6452,12 +6408,13 @@ __metadata:
     fs-extra: ^8.1.0
     get-stdin: ^6.0.0
     globby: ^10.0.1
+    https-proxy-agent: ^5.0.0
     intercept-stdout: ^0.1.2
     lodash: ^4.17.19
     node-fetch: ~2.6.0
     semver: ^5.5.1
-    tslib: ^1.10.0
-  checksum: 1bec0b0efa6f7440b37d879993c4cff0db5a6387afef4611c02207f7a3e59f7e84ad72a5b7441eb0b7361534037dc2a90b1e42e83151cc6749c4b4d84f94e3d8
+    tslib: ^2.0.3
+  checksum: 4aac3a0cddb15188836e9270675c8d559182e79595b597c8290d6c48032d3b3418c3f456e7540d754ef25d21c3119ae88b726342158a8dc3c82cd121afc08362
   languageName: node
   linkType: hard
 
@@ -6491,6 +6448,13 @@ __metadata:
   version: 1.10.128
   resolution: "@microsoft/load-themed-styles@npm:1.10.128"
   checksum: 3ec66a1f877aaeb012bb5d7c049afb0808677bd713784bab9c0b606bdb72925245daee4c5f91847c001e5d3c9fd0fd9b55a83bd44a5a87d7679d93ffc9b931a7
+  languageName: node
+  linkType: hard
+
+"@microsoft/recognizers-text-data-types-timex-expression@npm:1.1.4":
+  version: 1.1.4
+  resolution: "@microsoft/recognizers-text-data-types-timex-expression@npm:1.1.4::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40microsoft%2Frecognizers-text-data-types-timex-expression%2F-%2F%40microsoft%2Frecognizers-text-data-types-timex-expression-1.1.4.tgz"
+  checksum: 710f1193294dcb179f0fd09f1c9c97bc6eddca130b57e6ddace3a4ed74cf7cebe71c5bf3bb294e545194ec9f6c6b7260e0d788c85f6d80c5cc7d60764102e3de
   languageName: node
   linkType: hard
 
@@ -7145,13 +7109,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/btoa-lite@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@types/btoa-lite@npm:1.0.0::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40types%2Fbtoa-lite%2F-%2F%40types%2Fbtoa-lite-1.0.0.tgz"
-  checksum: e9f9edf746903f7465924fed3ba45914f1236083897dc3fea30052a40791795e6ea26cdaab717cdc0cb785711a0860c74eb5f476376982b5a365ade1635cb039
-  languageName: node
-  linkType: hard
-
 "@types/classnames@npm:^2.2.9":
   version: 2.2.11
   resolution: "@types/classnames@npm:2.2.11"
@@ -7521,22 +7478,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.isequal@npm:^4.5.5":
-  version: 4.5.5
-  resolution: "@types/lodash.isequal@npm:4.5.5::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40types%2Flodash.isequal%2F-%2F%40types%2Flodash.isequal-4.5.5.tgz"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 141df617686010657bb3e46b21facce2dd15b771fdfebd9df2f3d6fd3603d6336b64da4027257402c640f71b65d91eca9305b53d282cf604bcbb88e662034aad
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*":
-  version: 4.14.170
-  resolution: "@types/lodash@npm:4.14.170::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40types%2Flodash%2F-%2F%40types%2Flodash-4.14.170.tgz"
-  checksum: 5ecc968649e764e3204435ba5125a3645e5e83963069a26b9307791698bf47ed9c2bd0f97488d9537eb4753d4bae596e5fa6187437a5b04bf47aba78fa553d50
-  languageName: node
-  linkType: hard
-
 "@types/lodash@npm:^4.14.146":
   version: 4.14.146
   resolution: "@types/lodash@npm:4.14.146"
@@ -7620,6 +7561,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 66b5b056d53e7bbc92f2bb543713dfcf0e818cb033470fd28e5c8db6e79e8cd7c717c68910c19666e6baa3b58b13019cb8810f3756e4234953e24c578f04fa65
+  languageName: node
+  linkType: hard
+
+"@types/moment-timezone@npm:^0.5.13":
+  version: 0.5.13
+  resolution: "@types/moment-timezone@npm:0.5.13::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40types%2Fmoment-timezone%2F-%2F%40types%2Fmoment-timezone-0.5.13.tgz"
+  dependencies:
+    moment: ">=2.14.0"
+  checksum: c089c46c7b53e9ed7b896f746e3a7111a1ba27e3c1a4e8a5ced76fad046895a076c2cd4bfc85d03c6e6ad74873659fe425abda001f5dc2f29e6e767f1731e38f
   languageName: node
   linkType: hard
 
@@ -8111,13 +8061,6 @@ __metadata:
 "@types/xmldom@npm:^0.1.29":
   version: 0.1.30
   resolution: "@types/xmldom@npm:0.1.30"
-  checksum: 7b195da37ca63bcba37df495706333ec0bb7232cda5c2c146e27babce0434a0ab1684b0254c9ae6d4c571b18ef1d77b4ec8edc264fd1b7d67db9f85800bf50ba
-  languageName: node
-  linkType: hard
-
-"@types/xmldom@npm:^0.1.30":
-  version: 0.1.30
-  resolution: "@types/xmldom@npm:0.1.30::__archiveUrl=https%3A%2F%2Fbotbuilder.myget.org%2FF%2Fbotframework-cli%2Fnpm%2F%40types%2Fxmldom%2F-%2F%40types%2Fxmldom-0.1.30.tgz"
   checksum: 7b195da37ca63bcba37df495706333ec0bb7232cda5c2c146e27babce0434a0ab1684b0254c9ae6d4c571b18ef1d77b4ec8edc264fd1b7d67db9f85800bf50ba
   languageName: node
   linkType: hard
@@ -8976,6 +8919,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"adaptive-expressions@npm:4.11.1":
+  version: 4.11.1
+  resolution: "adaptive-expressions@npm:4.11.1"
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression": 1.1.4
+    "@types/atob-lite": ^2.0.0
+    "@types/lru-cache": ^5.1.0
+    "@types/moment-timezone": ^0.5.13
+    "@types/xmldom": ^0.1.29
+    antlr4ts: 0.5.0-alpha.3
+    atob-lite: ^2.0.0
+    big-integer: ^1.6.48
+    d3-format: ^1.4.4
+    jspath: ^0.4.0
+    lodash: ^4.17.19
+    lru-cache: ^5.1.1
+    moment: ^2.25.1
+    moment-timezone: ^0.5.28
+  checksum: 9f93061f72a59df465e29f447d9a493d9c7afff47e830e41cabf690b31978dd8d6558b24e5d0f73c36829d90071e560750e3716935d5e96b122af96b83942a96
+  languageName: node
+  linkType: hard
+
 "adaptive-expressions@npm:4.12.0-rc1":
   version: 4.12.0-rc1
   resolution: "adaptive-expressions@npm:4.12.0-rc1"
@@ -8998,34 +8963,6 @@ __metadata:
     xmldom: ^0.4.0
     xpath: ^0.0.32
   checksum: 8a022c5e9ed8a189c27d4d7330107a0d9362c58921b7093c0965a7199a62c42c119bbfa33e34c5108b44f8cc5335ca58c72226a26aca0f53842d3d2910bb4cc9
-  languageName: node
-  linkType: hard
-
-"adaptive-expressions@npm:4.14.0-dev.c9564c1, adaptive-expressions@npm:next":
-  version: 4.14.0-dev.c9564c1
-  resolution: "adaptive-expressions@npm:4.14.0-dev.c9564c1"
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression": 1.3.0
-    "@types/atob-lite": ^2.0.0
-    "@types/btoa-lite": ^1.0.0
-    "@types/lodash.isequal": ^4.5.5
-    "@types/lru-cache": ^5.1.0
-    "@types/xmldom": ^0.1.30
-    antlr4ts: 0.5.0-alpha.3
-    atob-lite: ^2.0.0
-    big-integer: ^1.6.48
-    btoa-lite: ^1.0.0
-    d3-format: ^1.4.4
-    dayjs: ^1.10.3
-    jspath: ^0.4.0
-    lodash.isequal: ^4.5.0
-    lru-cache: ^5.1.1
-    uuid: ^8.3.2
-    x2js: ^3.4.0
-    xml2js: ^0.4.23
-    xmldom: ^0.5.0
-    xpath: ^0.0.32
-  checksum: 688c993ee60ac44597389077c7ce10ee1412ec9ea4679ee74a72fbfb2e35b42ae14c491966a24266fff4a6ab76d86c6455539f911470657ed6aba90c79d15552
   languageName: node
   linkType: hard
 
@@ -9183,18 +9120,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.2.0":
-  version: 8.5.0
-  resolution: "ajv@npm:8.5.0"
-  dependencies:
-    fast-deep-equal: ^3.1.1
-    json-schema-traverse: ^1.0.0
-    require-from-string: ^2.0.2
-    uri-js: ^4.2.2
-  checksum: 91274ac6627004c68467e8a05643b448d5581e77218c0331527d080c494cd24b5713c662ad8632fb2e46cbe5c9475aa73c8385ed59fa44b5813ff1c5e7b066c8
-  languageName: node
-  linkType: hard
-
 "ally.js@npm:^1.4.1":
   version: 1.4.1
   resolution: "ally.js@npm:1.4.1"
@@ -9325,13 +9250,6 @@ __metadata:
   version: 0.3.2
   resolution: "ansicolors@npm:0.3.2"
   checksum: 0da3223f0a13de431eca509ab4d4d72843c575e3cdb49f7f7bdf682b77914a3edeb73db204c77363f7b4aeefe72147ccbbe50835c83e218743e304116bb43252
-  languageName: node
-  linkType: hard
-
-"antlr4@npm:^4.7.2":
-  version: 4.9.2
-  resolution: "antlr4@npm:4.9.2"
-  checksum: d105bea9c89b495395b350205a1c672cb6cb0882668f7f78ece26ea501b261306f5d57e961a8da26a66215f023af40811baffdeac0f1a4903eaceda415f81e56
   languageName: node
   linkType: hard
 
@@ -10647,6 +10565,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"botbuilder-lg@npm:4.11.1":
+  version: 4.11.1
+  resolution: "botbuilder-lg@npm:4.11.1"
+  dependencies:
+    adaptive-expressions: 4.11.1
+    antlr4ts: 0.5.0-alpha.3
+    lodash: ^4.17.19
+    path: ^0.12.7
+    uuid: ^3.4.0
+  checksum: 7fe83d5b55b270eef18e34489a32b4a08b656c6e6cb6194e54e17ba480f6afd661a25bead6b2fdcd68436e6315c975749e64030c4243994cff7b2d9844b11386
+  languageName: node
+  linkType: hard
+
 "botbuilder-lg@npm:4.12.0-rc1":
   version: 4.12.0-rc1
   resolution: "botbuilder-lg@npm:4.12.0-rc1"
@@ -10657,19 +10588,6 @@ __metadata:
     path: ^0.12.7
     uuid: ^8.3.2
   checksum: c8bd720109d4c6d00c4dccd2133fd265840f8bf8eb0ae4900b3fc8803ddfe7bca4d8bff71c8b94f00d261e6dae83a09388c144955a4b7e6e35a168bc20e32e12
-  languageName: node
-  linkType: hard
-
-"botbuilder-lg@npm:next":
-  version: 4.14.0-dev.c9564c1
-  resolution: "botbuilder-lg@npm:4.14.0-dev.c9564c1"
-  dependencies:
-    adaptive-expressions: 4.14.0-dev.c9564c1
-    antlr4ts: 0.5.0-alpha.3
-    lodash: ^4.17.19
-    path: ^0.12.7
-    uuid: ^8.3.2
-  checksum: ecdc621cfdf5b745409ecb84879f1bc31ef18027e41f83b817737ea0064cd18e11ec439b15a1039405a6c871f14da5239c6bdc1a49b607a4ef32001ce4ec511c
   languageName: node
   linkType: hard
 
@@ -11071,13 +10989,6 @@ __metadata:
   dependencies:
     node-int64: ^0.4.0
   checksum: 0e374cf3e0c4c2c97f403f575b5fbf0ce7b61cb270160201ee5aff0a7ee8859df2daa5bbb8a2547de7ace52d244ae6575a5dfca3a5dc5bec89c1f030b6873fa0
-  languageName: node
-  linkType: hard
-
-"btoa-lite@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "btoa-lite@npm:1.0.0"
-  checksum: d41fc7dc9f111a0082e1d67554ecdd3add151920bf5f3fbb9bdffd5c67b2e247a8c2a060607e8a2acd518eeb1b75d8a0828c36717f710ceebe0e88eb487a7394
   languageName: node
   linkType: hard
 
@@ -12435,7 +12346,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compute-lcm@npm:^1.1.0, compute-lcm@npm:^1.1.2":
+"compute-lcm@npm:^1.1.0":
   version: 1.1.2
   resolution: "compute-lcm@npm:1.1.2"
   dependencies:
@@ -17207,17 +17118,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "fs-extra@npm:10.0.0"
-  dependencies:
-    graceful-fs: ^4.2.0
-    jsonfile: ^6.0.1
-    universalify: ^2.0.0
-  checksum: 84632d143fe3125b8c3c2b1fedbbdfcfb84fc3e087522b4e138cc07edf574619925713a6609f6d5e53ede2e31ab319c7d528ea4a4a770ba6622a16bf4447cd8b
-  languageName: node
-  linkType: hard
-
 "fs-extra@npm:^3.0.0":
   version: 3.0.1
   resolution: "fs-extra@npm:3.0.1"
@@ -17926,20 +17826,6 @@ fsevents@~2.1.2:
     merge2: ^1.3.0
     slash: ^3.0.0
   checksum: e7239e9e468c3692aec31dc97b5efc13dd21edf38820baeda98118ade39f475c4ff9e7610859eb4a3c75277ca2616e371265fec3c626aba5db4335bc41c59ac7
-  languageName: node
-  linkType: hard
-
-"globby@npm:^11.0.3":
-  version: 11.0.3
-  resolution: "globby@npm:11.0.3"
-  dependencies:
-    array-union: ^2.1.0
-    dir-glob: ^3.0.1
-    fast-glob: ^3.1.1
-    ignore: ^5.1.4
-    merge2: ^1.3.0
-    slash: ^3.0.0
-  checksum: f17da0f869918656ec8c16c15ad100f025fbd13e4c157286cf340811eb1355a7d06dde77be1685a7a051970ec6abeff96a9b2a1a97525f84bc94fbd518c1d1db
   languageName: node
   linkType: hard
 
@@ -20871,14 +20757,14 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"json-schema-merge-allof@npm:^0.8.1":
-  version: 0.8.1
-  resolution: "json-schema-merge-allof@npm:0.8.1"
+"json-schema-merge-allof@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "json-schema-merge-allof@npm:0.6.0"
   dependencies:
-    compute-lcm: ^1.1.2
+    compute-lcm: ^1.1.0
     json-schema-compare: ^0.2.2
-    lodash: ^4.17.20
-  checksum: 2ac8688c4905f1690e52fec72593657a5246446d1843ce4af3d33bfba4182b3aca8c7bdeec253c0aaeafd1e45c386b271e1d5856f0da3969748631d96f0306a6
+    lodash: ^4.17.4
+  checksum: 51c86326b9d5b85ed153740e560cf7b00bff4a956a9ef2cff8367c367b4f4c5aecb77d2f51bc4b76046590da22f2bc7fca1bd41d63eecf022469e0549d688d2a
   languageName: node
   linkType: hard
 
@@ -20893,12 +20779,14 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"json-schema-ref-parser@npm:^9.0.7":
-  version: 9.0.7
-  resolution: "json-schema-ref-parser@npm:9.0.7"
+"json-schema-ref-parser@npm:^7.1.0, json-schema-ref-parser@npm:^7.1.3":
+  version: 7.1.4
+  resolution: "json-schema-ref-parser@npm:7.1.4"
   dependencies:
-    "@apidevtools/json-schema-ref-parser": 9.0.7
-  checksum: 2c9ebbc359b29198ad27866f3f7b9ea692f6bd6fa9e76d9333cec216c97c8b026d3548b59d91b3b5b83363d0ffb220c1706115f84645d1f7155216704bddcd06
+    call-me-maybe: ^1.0.1
+    js-yaml: ^3.13.1
+    ono: ^6.0.0
+  checksum: 9ef715480d485e8a79ab956c54cfb01565597d8a3950d17af9423651a38ad40785ceb0d819d08281975a3f3a4e8dfe13c7c8a1e0f5662909153b21e4877449ab
   languageName: node
   linkType: hard
 
@@ -22844,7 +22732,16 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.15.1, moment@npm:^2.24.0, moment@npm:^2.27.0, moment@npm:^2.29.1":
+"moment-timezone@npm:^0.5.28":
+  version: 0.5.33
+  resolution: "moment-timezone@npm:0.5.33"
+  dependencies:
+    moment: ">= 2.9.0"
+  checksum: d4e72a3514a2885ab26b1cbc640e2f4785c997f9de28bb48bf3994ef137b0a560ca8f07eb07f11121e1223eef0c3bce4bc647b911111481a6a066bbc61285f99
+  languageName: node
+  linkType: hard
+
+"moment@npm:>= 2.9.0, moment@npm:>=2.14.0, moment@npm:^2.15.1, moment@npm:^2.24.0, moment@npm:^2.25.1, moment@npm:^2.27.0, moment@npm:^2.29.1":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 86729013febf7160de5b93da69273dd304d674b0224f9544b3abd09a87671ddd2cdd57598261ce57588910d63747ffd5590965e83c790d8bf327083c0e0a06e0
@@ -23950,6 +23847,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"ono@npm:^6.0.0":
+  version: 6.0.1
+  resolution: "ono@npm:6.0.1"
+  checksum: b80d267a554d8143723fbc27be4ceed38524034f4be0ee9d2d459704aa57d23961295aa5d2fd231c3dc6a44a72e18d01727e3abc6171b0d3c5eaa2fa169f4666
+  languageName: node
+  linkType: hard
+
 "open@npm:^6.3.0":
   version: 6.4.0
   resolution: "open@npm:6.4.0"
@@ -23969,10 +23873,17 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"openapi-types@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "openapi-types@npm:8.0.0"
-  checksum: ae344841778ce034ba41197ef60f7a15ff6a4fd3b7ec07aea879584cf9ca57f8e3183d0ca1f3362ed0b27d22b24b74945888b96ed7c62311af3861fb7cd74e3f
+"openapi-schemas@npm:^1.0.2":
+  version: 1.0.3
+  resolution: "openapi-schemas@npm:1.0.3"
+  checksum: e4f10d08b87d167f284e37b711d8c5714494bbc5ab3b4f86156415d6b57890408237c231e7e185dbc2c5131c038e5f1f9c7c5a6a051922e92aa2b4edfcd5eea2
+  languageName: node
+  linkType: hard
+
+"openapi-types@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "openapi-types@npm:1.3.5"
+  checksum: 3d0d088e95d9e00124e21d434714a5fb9917b2cdc2a31efc53349201bc14968ef6378cc0067e000316a4cbd5926b924d9fa49507e25b5381a7eb1f02c8365926
   languageName: node
   linkType: hard
 
@@ -29652,12 +29563,25 @@ resolve@^1.15.1:
   languageName: node
   linkType: hard
 
-"swagger-parser@npm:^10.0.2":
-  version: 10.0.2
-  resolution: "swagger-parser@npm:10.0.2"
+"swagger-methods@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "swagger-methods@npm:2.0.2"
+  checksum: 850886fca4c8095af2a133e849401c3f208d5b4a3ba4fe6ce9d0888ea795e1ac194e90d6f3a670015f0c2e81ca84a310b3c4a8c83acbf85866043394d51a8f6a
+  languageName: node
+  linkType: hard
+
+"swagger-parser@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "swagger-parser@npm:8.0.4"
   dependencies:
-    "@apidevtools/swagger-parser": 10.0.2
-  checksum: 072361451e49a88561e4b9e635927a85884e0ac6e8c5e684020362a4a63658004c78564f0bd9245b16998f98825cb2bb23f3a0bf77fa0ccdae31197d45cc8c98
+    call-me-maybe: ^1.0.1
+    json-schema-ref-parser: ^7.1.3
+    ono: ^6.0.0
+    openapi-schemas: ^1.0.2
+    openapi-types: ^1.3.5
+    swagger-methods: ^2.0.1
+    z-schema: ^4.2.2
+  checksum: c2d7b67c8972b6234cee7b6c18ba8201a702f2f85163ddc218064e03a18870fc07d2a2e3040276dabb2de9e492d1c627c8faf55aa85898046037e12d0643377e
   languageName: node
   linkType: hard
 
@@ -30951,13 +30875,6 @@ typescript@^3.8.3:
   version: 1.0.0
   resolution: "universalify@npm:1.0.0"
   checksum: d74303a8d9ff18598804f3e9f261c9376cad55b81a92346f086e59261803ae75bef347044dd6a25549eb3b1490c0dd106dc07154cd7ccad8f037fdae947c125d
-  languageName: node
-  linkType: hard
-
-"universalify@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "universalify@npm:2.0.0"
-  checksum: 36bfbdc97bd4b483596e66ea65e20663f5ab9ec3650157d99b075b7f97afcdefe46bbb23f89171dd75595d398cea3769a5b6d7130f5c66cae2a0f00904780f62
   languageName: node
   linkType: hard
 
@@ -32738,13 +32655,6 @@ typescript@^3.8.3:
   languageName: node
   linkType: hard
 
-"xmldom@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "xmldom@npm:0.5.0"
-  checksum: da2d23fe8e562331983788d7b711a310b94f51455c7339deaceb4e271a26f65598c7f0ea3cb5d32bc6701f920837639f83f597951e8cca885f45885ff5dd1ae2
-  languageName: node
-  linkType: hard
-
 "xmlhttprequest-ts@npm:^1.0.1":
   version: 1.0.1
   resolution: "xmlhttprequest-ts@npm:1.0.1"
@@ -33081,7 +32991,7 @@ typescript@^3.8.3:
   languageName: node
   linkType: hard
 
-"z-schema@npm:^4.2.3":
+"z-schema@npm:^4.2.2":
   version: 4.2.3
   resolution: "z-schema@npm:4.2.3"
   dependencies:
