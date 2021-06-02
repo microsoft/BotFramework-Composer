@@ -34,8 +34,8 @@ jobs:
       #      ${{ runner.os }}-yarn-new-
       - name: Clear global yarn cache
         run: yarn cache clean
-      - name: yarn --update-checksums
-        run: yarn --update-checksums
+      - name: yarn
+        run: yarn
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
