@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "author": "andy.brown@microsoft.com",
   "license": "MIT",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "rimraf lib && tsc",
     "prepublishOnly": "npm run build"

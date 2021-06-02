@@ -14,7 +14,6 @@
     "test": "jest",
     "prepare": "yarn build",
     "watch": "yarn build --watch"
-
   },
   "keywords": [
     "botframework",
@@ -31,8 +30,8 @@
   "dependencies": {
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
-    "react-markdown": "^5.0.3",
-    "office-ui-fabric-react": "7.71.0"
+    "office-ui-fabric-react": "7.71.0",
+    "react-markdown": "^5.0.3"
   },
   "devDependencies": {
     "@botframework-composer/test-utils": "*",

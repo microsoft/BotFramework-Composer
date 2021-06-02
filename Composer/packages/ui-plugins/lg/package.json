@@ -24,10 +24,10 @@
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
     "format-message": "^6.2.3",
-    "office-ui-fabric-react": "^7.121.11"
+    "office-ui-fabric-react": "^7.121.11",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
@@ -37,8 +37,8 @@
     "@types/react-dom": "16.9.5"
   },
   "dependencies": {
-    "@bfc/shared": "*",
     "@bfc/indexers": "*",
+    "@bfc/shared": "*",
     "@bfc/ui-shared": "*",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27"
