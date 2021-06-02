@@ -6,6 +6,9 @@
   "files": [
     "lib"
   ],
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "scripts": {
     "build": "yarn clean && tsc",
     "clean": "rimraf lib",

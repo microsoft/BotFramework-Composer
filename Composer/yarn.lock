@@ -4855,7 +4855,7 @@ __metadata:
     tslib: ^2.0.0
     typescript: 3.9.2
     wait-on: ^5.3.0
-    wsrun: ^5.2.0
+    wsrun: ^5.2.4
   languageName: unknown
   linkType: soft
 
@@ -32625,7 +32625,7 @@ typescript@^3.8.3:
   languageName: node
   linkType: hard
 
-"wsrun@npm:^5.2.0":
+"wsrun@npm:^5.2.4":
   version: 5.2.4
   resolution: "wsrun@npm:5.2.4"
   dependencies:
