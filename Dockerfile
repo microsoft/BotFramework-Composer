@@ -20,7 +20,7 @@ WORKDIR /src/Composer
 COPY ./Composer .
 COPY ./extensions ../extensions
 # run yarn install as a distinct layer
-RUN yarn install --frozen-lock-file $YARN_ARGS
+RUN yarn install --immutable $YARN_ARGS
 ENV NODE_OPTIONS "--max-old-space-size=6114"
 ENV NODE_ENV "production"
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
@@ -42,7 +42,7 @@ COPY --from=build /src/Composer/packages ./packages
 COPY --from=build /src/extensions ../extensions
 
 ENV NODE_ENV "production"
-RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
+RUN yarn --production --immutable --force $YARN_ARGS && yarn cache clean
 
 FROM base
 ENV NODE_ENV "production"

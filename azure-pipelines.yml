@@ -17,11 +17,10 @@ jobs:
       vmImage: ubuntu-latest
 
     steps:
-
       - task: UseDotNet@2
         inputs:
-          packageType: 'runtime'
-          version: '3.1.x'
+          packageType: "runtime"
+          version: "3.1.x"
       - task: NodeTool@0
         displayName: "Use Node 14.15.5"
         inputs:
@@ -29,7 +28,7 @@ jobs:
       - task: Bash@3
         displayName: "Adding myGet source"
         inputs:
-          targetType: 'inline'
+          targetType: "inline"
           script:
             # Write your commands here
             dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json
@@ -40,7 +39,7 @@ jobs:
         inputs:
           key: cypress | $(Agent.OS) | Composer/yarn.lock
           path: /home/vsts/.cache/Cypress
-      - script: yarn --frozen-lock-file
+      - script: yarn --immutable
         displayName: yarn install
         workingDirectory: Composer
       - script: yarn build
