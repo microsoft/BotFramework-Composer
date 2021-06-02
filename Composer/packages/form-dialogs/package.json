@@ -20,26 +20,26 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "react-beautiful-dnd": "^13.0.0",
-    "@bfc/ui-shared": "*"
+    "@bfc/ui-shared": "*",
+    "react-beautiful-dnd": "^13.0.0"
   },
   "peerDependencies": {
-    "recoil": "^0.0.13",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "lodash": "^4.17.19",
-    "format-message": "^6.2.3",
-    "office-ui-fabric-react": "^7.121.11",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@uifabric/fluent-theme": "^7.1.107",
-    "@uifabric/react-hooks": "^7.4.12"
+    "@uifabric/react-hooks": "^7.4.12",
+    "format-message": "^6.2.3",
+    "lodash": "^4.17.19",
+    "office-ui-fabric-react": "^7.121.11",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "recoil": "^0.0.13"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.146",
     "@types/react": "^16.8.18",
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-dom": "^16.8.4",
-    "@types/lodash": "^4.14.146",
     "@types/recoil": "^0.0.1",
     "rimraf": "^2.6.3"
   }

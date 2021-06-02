@@ -16,8 +16,8 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "@botframework-composer/types": "*",
     "@botframework-composer/test-utils": "*",
+    "@botframework-composer/types": "*",
     "@types/react": "16.9.23",
     "react": "16.13.1",
     "react-dom": "16.13.1",
