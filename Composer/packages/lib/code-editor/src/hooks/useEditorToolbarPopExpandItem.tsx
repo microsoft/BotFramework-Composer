@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { createSvgIcon } from '@fluentui/react-icons';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
+import { FluentTheme } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import React from 'react';
@@ -15,10 +15,10 @@ const itemButtonStyles = {
     fontSize: FluentTheme.fonts.small.fontSize,
     height: defaultMenuHeight,
   },
-  menuIcon: { fontSize: 8, color: NeutralColors.black },
+  menuIcon: { fontSize: 8, color: FluentTheme.palette.black },
 };
 
-const svgIconStyle = { fill: NeutralColors.black, margin: '0 4px', width: 16, height: 16 };
+const svgIconStyle = { fill: FluentTheme.palette.black, margin: '0 4px', width: 16, height: 16 };
 
 const popExpandSvgIcon = (
   <svg fill="none" height="16" viewBox="0 0 10 10" width="16" xmlns="http://www.w3.org/2000/svg">
