@@ -35,7 +35,8 @@ jobs:
       - name: Clear global yarn cache
         run: yarn cache clean
       - name: yarn
-        run: yarn
+        # don't update lockfiles
+        run: yarn --immutable
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
