@@ -48,6 +48,7 @@ const onRenderLabel = (props) => {
 };
 
 const hiddenProfileTypes = ['pva-publish-composer'];
+// const hiddenProfileTypes = ['pva-publish-composer', 'azurePublishNew'];
 
 export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
   const { name, setName, targetType, setTargetType, onDismiss, targets, types, onNext, setType, current } = props;
