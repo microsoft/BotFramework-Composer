@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { RecognizerSchema } from '@bfc/extension-client';
+
 import { RecognizerListItem } from './RecognizerField';
 
 export const mapListItemsToRecognizerSchema = (item: RecognizerListItem, recognizerConfigs: RecognizerSchema[]) => {
