@@ -21,7 +21,9 @@ const recognizerStyle = css`
   justify-content: space-between;
   margin: 5px 0px 10px 0px;
 `;
-type RecognizerListItem = {
+const AzureBlue = '#0078D4';
+
+export type RecognizerListItem = {
   key: string;
   text: string;
   description: string;
@@ -51,7 +53,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         }
       },
     });
-  }, []);
+  }, [setSelectedRecognizer]);
 
   const submit = useCallback((): void => {
     if (!selectedRecognizer) return;
@@ -77,7 +79,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
             ? currentRecognizer?.displayName({})
             : currentRecognizer?.displayName}
         </span>
-        <span data-testid="openRecognizerDialog" style={{ color: '#0078D4' }} onClick={() => setShowDialog(true)}>
+        <span data-testid="openRecognizerDialog" style={{ color: AzureBlue }} onClick={() => setShowDialog(true)}>
           {formatMessage('Change')}
         </span>
       </div>
@@ -90,6 +92,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         minWidth={450}
         modalProps={{
           isBlocking: true,
+          isClickableOutsideFocusTrap: true,
         }}
         onDismiss={() => setShowDialog(false)}
       >
@@ -99,7 +102,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
             {
               key: 'recognizer',
               name: 'Recognizer type',
-              fieldName: 'Recognizer type',
               minWidth: 70,
               onRender: (item) => {
                 return (
