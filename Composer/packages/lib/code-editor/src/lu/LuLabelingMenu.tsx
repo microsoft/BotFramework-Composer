@@ -20,14 +20,25 @@ type Props = {
   luFile?: LuFile;
   onMenuToggled?: (visible: boolean) => void;
   onInsertEntity: (entityName: string, entityType: string, method: 'toolbar' | 'floatingMenu') => void;
+  shouldRenderBelowFabricLayer?: boolean;
 };
 
-export const LuLabelingMenu = ({ editor, luFile, onMenuToggled, onInsertEntity }: Props) => {
+export const LuLabelingMenu = ({
+  editor,
+  luFile,
+  onMenuToggled,
+  onInsertEntity,
+  shouldRenderBelowFabricLayer = true,
+}: Props) => {
   const [menuTargetElm, setMenuTargetElm] = useState<HTMLElement | null>(null);
 
   React.useEffect(() => {
     onMenuToggled?.(!!menuTargetElm);
   }, [menuTargetElm]);
+
+  const menuCalloutProps = React.useMemo(() => (shouldRenderBelowFabricLayer ? calloutProps : undefined), [
+    shouldRenderBelowFabricLayer,
+  ]);
 
   const callback = React.useCallback(
     (data?: { selectedDomElement: HTMLElement; selectedText: string; lineContent: string; selection: any }) => {
@@ -96,7 +107,7 @@ export const LuLabelingMenu = ({ editor, luFile, onMenuToggled, onInsertEntity }
 
   return menuTargetElm && !noEntities ? (
     <ContextualMenu
-      calloutProps={calloutProps}
+      calloutProps={menuCalloutProps}
       {...menuProps}
       directionalHint={DirectionalHint.bottomLeftEdge}
       hidden={false}
