@@ -87,7 +87,7 @@ __metadata:
 
 "@bfc/extension@file:../../Composer/packages/extension::locator=package-manager%40workspace%3A.":
   version: 1.0.0
-  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=45d73c&locator=package-manager%40workspace%3A."
+  resolution: "@bfc/extension@file:../../Composer/packages/extension#../../Composer/packages/extension::hash=92837f&locator=package-manager%40workspace%3A."
   dependencies:
     "@botframework-composer/types": "*"
     "@types/debug": ^4.1.5
@@ -100,7 +100,7 @@ __metadata:
     passport: ^0.4.1
     path-to-regexp: ^6.1.0
     tar: ^6.0.5
-  checksum: d4395cb421adb92c3e9e27a1a8cb51ba8086bf166ce421531af3b03324d83486324aa0a4f8430ae485989bba80ed45c5d1b5ee0ea4be940309425c2ccfc69276
+  checksum: 3e7a36dad42187c359b2c96141c0c0fbc1c25e46d73e4d9bcafbc2282f6f316b832c7dddda3b47bf33b6fcd709a41fe37ae3e9722734cfe4ce648e750d0ca93e
   languageName: node
   linkType: hard
 
