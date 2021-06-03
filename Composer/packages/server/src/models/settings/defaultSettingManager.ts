@@ -21,7 +21,6 @@ const newSettingsValuePath = [
   'luis.authoringEndpoint',
   'skillConfiguration',
   'customFunctions',
-  'crossTrain',
 ];
 
 const discardedSettingsValuePath = ['downsampling.maxUtteranceAllowed'];

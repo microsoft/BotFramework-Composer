@@ -161,11 +161,13 @@ export class Builder {
   public setBuildConfig(
     config: IConfig,
     downSamplingConfig: DownSamplingConfig,
-    crossTrainingSetting: CrossTrainingSetting
+    crossTrainingSetting?: { inter?: boolean; intra?: boolean }
   ) {
     this.config = config;
     this.downSamplingConfig = downSamplingConfig;
-    this.crossTrainingSetting = crossTrainingSetting;
+    if (!crossTrainingSetting) return;
+    if (crossTrainingSetting.inter) this.crossTrainingSetting.inter = crossTrainingSetting.inter;
+    if (crossTrainingSetting.intra) this.crossTrainingSetting.intra = crossTrainingSetting.intra;
   }
 
   public get locale(): string {
