@@ -2607,7 +2607,7 @@
     "message": "Sayı veya ifade"
   },
   "oauth_activities_are_not_available_for_testing_in__2207dcef": {
-    "message": "OAuth etkinlikleri henüz Composer içinde test için kullanılamıyor. Lütfen OAuth eylemlerini test etmek için Bot Framework Emulator'ı kullanmaya devam edin."
+    "message": "OAuth etkinlikleri henüz Composer içinde test için kullanılamıyor. Lütfen OAuth eylemlerini test etmek için Bot Framework Emulator’ı kullanmaya devam edin."
   },
   "oauth_login_b6aa9534": {
     "message": "OAuth oturum açma"
@@ -3903,7 +3903,7 @@
     "message": "To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select."
   },
   "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
-    "message": "Composer'ın, hazırlama ve yayımlama eylemleri gerçekleştirmesi için Azure ve MS Graph hesaplarınıza erişmesi gerekiyor. Aşağıda vurgulanan komutları kullanarak az komut satırı aracından erişim belirteçlerini yapıştırın."
+    "message": "Composer’ın, hazırlama ve yayımlama eylemleri gerçekleştirmesi için Azure ve MS Graph hesaplarınıza erişmesi gerekiyor. Aşağıda vurgulanan komutları kullanarak az komut satırı aracından erişim belirteçlerini yapıştırın."
   },
   "to_run_this_bot_composer_needs_azure_functions_cor_bbbd0e7": {
     "message": "To run this bot, Composer needs Azure Functions Core Tools."
