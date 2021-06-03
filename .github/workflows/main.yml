@@ -37,6 +37,8 @@ jobs:
       - name: yarn
         # don't update lockfiles
         run: yarn --immutable
+      - name: check bin
+        run: ls -la node_modules/.bin
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
