@@ -12,14 +12,6 @@ export const runtimeSettingsStyle = css`
   box-sizing: border-box;
 `;
 
-export const runtimeControls = css`
-  color: ${colors.gray(130)};
-  font-size: ${FontSizes.smallPlus};
-  & > h1 {
-    margin-top: 0;
-  }
-`;
-
 export const runtimeToggle = css`
   display: flex;
   margin-top: 10px;

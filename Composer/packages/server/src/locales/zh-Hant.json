@@ -2,8 +2,14 @@
   "0_bytes_a1e1cdb3": {
     "message": "0 個位元組"
   },
-  "5_minute_intro_7ea06d2b": {
-    "message": "5 分鐘簡介"
+  "1_using_the_azure_portal_please_create_a_language__7e2eb65c": {
+    "message": "1. Using the Azure portal, please create a Language Understanding resource.\n2. Once created, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffluis"
+  },
+  "1_using_the_azure_portal_please_create_a_qnamaker__a060ac82": {
+    "message": "1. Using the Azure portal, please create a QnAMaker resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffqnamaker"
+  },
+  "1_using_the_azure_portal_please_create_a_speech_re_6326f2f5": {
+    "message": "1. Using the Azure portal, please create a Speech resource on my behalf.\n2. Once provisioned, securely share the resulting credentials with me as described in the link below.\n\nDetailed instructions:\nhttps://aka.ms/bfcomposerhandoffdls"
   },
   "ErrorInfo_part1": {
     "message": "表單編輯器中發生錯誤!"
@@ -14,11 +20,20 @@
   "ErrorInfo_part3": {
     "message": "嘗試巡覽至視覺化編輯器中的其他節點。"
   },
+  "a_add_from_package_manager_a_9eee7630": {
+    "message": "<a>Add from package manager</a>"
+  },
+  "a_bot_that_consists_of_multiple_bots_or_connects_t_f3bc4bd": {
+    "message": "A bot that consists of multiple bots or connects to skills (multi-bot project) needs Orchestrator to detect and route user input to the appropriate bot or skill."
+  },
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "對話檔案必須有名稱"
   },
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
     "message": "表單對話方塊可讓您的 Bot 收集資訊。"
+  },
+  "a_install_ngrok_a_and_run_the_following_command_to_634f3414": {
+    "message": "<a>Install ngrok</a> and run the following command to continue"
   },
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "知識庫名稱不能包含空格或特殊字元。使用字母、數字、- 或 _。"
@@ -35,11 +50,20 @@
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
     "message": "屬性即為您的 Bot 會收集的資訊。屬性名稱是在 Composer 中使用的名稱; 但不一定是顯示在 Bot 訊息中的相同文字。"
   },
+  "a_publishing_profile_contains_the_information_nece_fffc0a35": {
+    "message": "A publishing profile contains the information necessary to provision and publish your bot, including its App ID."
+  },
+  "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
+    "message": "A publishing profile provides the secure connectivity required to publish your bot."
+  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
-    "message": "A schema, or form, is the list of properties your bot will collect."
+    "message": "結構描述 (或稱表單) 是 Bot 要收集的屬性清單。"
   },
   "a_skill_bot_that_can_be_called_from_a_host_bot_a833d0": {
-    "message": "A skill bot that can be called from a host bot."
+    "message": "可從主機 Bot 呼叫的技能 Bot。"
+  },
+  "a_skill_is_a_bot_that_can_perform_a_set_of_tasks_o_950a3c95": {
+    "message": "A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform."
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "您建立 QnA Maker 資源時，會建立訂用帳戶金鑰。"
@@ -52,6 +76,9 @@
   },
   "accepted_values_b4224bcd": {
     "message": "接受的值"
+  },
+  "accepting_40ba3b70": {
+    "message": "接受"
   },
   "accepts_multiple_values_73658f63": {
     "message": "接受多個值"
@@ -71,6 +98,9 @@
   "action_unfocused_18a2800e": {
     "message": "非焦點動作"
   },
+  "actions_are_the_main_component_of_a_trigger_they_a_8e3af9b9": {
+    "message": "Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur."
+  },
   "actions_copied_2821ab27": {
     "message": "已複製動作"
   },
@@ -79,9 +109,6 @@
   },
   "actions_cut_929f4c37": {
     "message": "已剪下動作"
-  },
-  "actions_define_b_how_the_bot_responds_b_to_a_certa_890a71f4": {
-    "message": "動作會定義 <b>Bot 如何回應</b>特定觸發程序。"
   },
   "actions_deleted_355c359a": {
     "message": "已刪除動作"
@@ -99,10 +126,13 @@
     "message": "已移動動作"
   },
   "active_language_6d001457": {
-    "message": "Active language"
+    "message": "使用中語言"
   },
   "activities_125193f7": {
     "message": "活動"
+  },
+  "activities_activity_received_cff408b2": {
+    "message": "活動 (已接收活動)"
   },
   "activity_13915493": {
     "message": "活動"
@@ -110,14 +140,20 @@
   "activity_received_2f20fa9d": {
     "message": "已收到活動"
   },
+  "adaptive_card_785723e3": {
+    "message": "調適型卡片"
+  },
   "adaptive_dialog_61a05dde": {
     "message": "自適性對話"
   },
   "add_8523c19b": {
     "message": "新增"
   },
+  "add_a_bot_58522e81": {
+    "message": "Add a bot"
+  },
   "add_a_dialog_e378aa3a": {
-    "message": "Add a dialog"
+    "message": "新增對話方塊"
   },
   "add_a_new_key_5c208c29": {
     "message": "新增金鑰"
@@ -128,53 +164,80 @@
   "add_a_new_value_24ca14ac": {
     "message": "新增值"
   },
-  "add_a_publish_profile_fca2263a": {
-    "message": "新增發行設定檔"
-  },
   "add_a_skill_46d2b71c": {
     "message": "新增技能"
   },
-  "add_a_trigger_c6861401": {
-    "message": "Add a trigger"
+  "add_a_skill_host_endpoint_so_your_skills_can_relia_950a7614": {
+    "message": "Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>."
   },
-  "add_a_welcome_message_9e1480b2": {
-    "message": "新增歡迎訊息"
+  "add_allowed_callers_7188d3d4": {
+    "message": "Add allowed callers"
+  },
+  "add_alternative_662902c1": {
+    "message": "Add alternative"
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ 新增替代字詞"
   },
-  "add_an_intent_trigger_a9acc149": {
-    "message": "新增意圖觸發程序"
+  "add_an_existing_bot_5a9cc5b1": {
+    "message": "Add an existing bot"
+  },
+  "add_connections_d720a32e": {
+    "message": "Add connections"
+  },
+  "add_connections_to_make_your_bot_available_in_webc_5ae0b1de": {
+    "message": "Add connections to make your bot available in Webchat, Direct Line Speech, Microsoft Teams and more. <a>Learn more.</a>"
+  },
+  "add_custom_a376ce51": {
+    "message": "新增自訂"
   },
   "add_custom_runtime_6b73dc44": {
     "message": "新增自訂執行階段"
   },
+  "add_entity_5f769994": {
+    "message": "Add entity"
+  },
+  "add_more_to_this_response_d45bdfda": {
+    "message": "在此回應新增更多內容"
+  },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "新增多個逗號分隔的同義字"
+  },
+  "add_new_916f2665": {
+    "message": "新增"
   },
   "add_new_answer_9de3808e": {
     "message": "新增答案"
   },
+  "add_new_attachment_546a68c": {
+    "message": "新增附件"
+  },
+  "add_new_caller_4a72bd0c": {
+    "message": "Add new caller"
+  },
   "add_new_extension_19b82b77": {
     "message": "新增延伸模組"
-  },
-  "add_new_knowledge_base_1a3afed3": {
-    "message": "Add new knowledge base"
   },
   "add_new_propertyname_bedf7dc6": {
     "message": "新增 { propertyName }"
   },
-  "add_new_publish_profile_93345a07": {
-    "message": "Add new publish profile"
-  },
   "add_new_question_85612b7f": {
     "message": "新增問題"
+  },
+  "add_new_trigger_dc8e80b4": {
+    "message": "Add new trigger"
   },
   "add_new_validation_rule_here_eb675ccf": {
     "message": "在此新增驗證規則"
   },
+  "add_packages_3ab0558c": {
+    "message": "Add packages"
+  },
   "add_property_d381eba3": {
     "message": "新增屬性"
+  },
+  "add_qna_maker_knowledge_base_c1b27b78": {
+    "message": "Add QnA Maker knowledge base"
   },
   "add_qna_pair_16c228f0": {
     "message": "+ 新增 QnA 配對"
@@ -185,8 +248,8 @@
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
     "message": "> 新增一些預期的使用者回應:\n> - 請提醒我 '{'itemTitle=購買牛奶'}'\n> - 提醒我 '{'itemTitle'}'\n> - 將 '{'itemTitle'}' 新增至我的待辦事項清單\n>\n> 實體定義:\n> @ ml itemTitle\n"
   },
-  "add_welcome_message_49d9ded9": {
-    "message": "新增歡迎訊息"
+  "add_suggested_action_baf855ca": {
+    "message": "新增建議的動作"
   },
   "advanced_events_2cbfa47d": {
     "message": "進階事件"
@@ -195,13 +258,55 @@
     "message": "進階選項"
   },
   "advanced_settings_view_json_b83638b4": {
-    "message": "Advanced Settings View (json)"
+    "message": "進階設定檢視 (JSON)"
   },
   "all_4321c3a1": {
     "message": "全部"
   },
+  "allowed_callers_31b26262": {
+    "message": "Allowed Callers"
+  },
+  "almost_there_f90939cb": {
+    "message": "Almost there!"
+  },
+  "an_app_id_is_used_for_communication_between_your_b_255025e1": {
+    "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
+  },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
     "message": "當您建立 LUIS 帳戶時，會自動建立撰寫金鑰。"
+  },
+  "an_azure_tenant_must_be_set_in_order_to_provision__a223f1b8": {
+    "message": "An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again."
+  },
+  "an_error_occurred_connecting_initializing_the_dire_fc7b50be": {
+    "message": "初始化 DirectLine 伺服器時發生錯誤"
+  },
+  "an_error_occurred_parsing_the_transcript_for_a_con_a47395c3": {
+    "message": "剖析交談的文字記錄時發生錯誤"
+  },
+  "an_error_occurred_receiving_an_activity_from_the_b_d734a7d": {
+    "message": "從 Bot 接收活動時發生錯誤。"
+  },
+  "an_error_occurred_saving_the_transcript_to_disk_f5cb0f7c": {
+    "message": "將文字記錄儲存至磁碟時，發生錯誤。"
+  },
+  "an_error_occurred_saving_transcripts_be37b977": {
+    "message": "儲存文字記錄時發生錯誤"
+  },
+  "an_error_occurred_sending_conversation_update_acti_85be9b0f": {
+    "message": "對 Bot 傳送交談更新活動時發生錯誤"
+  },
+  "an_error_occurred_starting_a_new_conversation_7586fd9f": {
+    "message": "開始新的交談時發生錯誤"
+  },
+  "an_error_occurred_trying_to_save_the_transcript_to_a6efda6f": {
+    "message": "嘗試將文字記錄儲存到磁碟時發生錯誤"
+  },
+  "an_error_occurred_validating_the_microsoft_app_id__c2b9dc19": {
+    "message": "驗證 Microsoft 應用程式識別碼與 Microsoft 應用程式密碼時發生錯誤。"
+  },
+  "animation_card_1a7d75ff": {
+    "message": "動畫卡片"
   },
   "answer_4620913f": {
     "message": "答案"
@@ -221,14 +326,11 @@
   "any_string_f22dc2e1": {
     "message": "任何字串"
   },
-  "app_id_password_424f613a": {
-    "message": "App Id / Password"
+  "application_language_settings_85b1f06": {
+    "message": "Application language settings"
   },
-  "application_language_f100f3e0": {
-    "message": "應用程式語言"
-  },
-  "application_language_settings_26f82dfc": {
-    "message": "Application Language settings"
+  "application_name_67a279e2": {
+    "message": "Application name"
   },
   "application_settings_39e840c6": {
     "message": "應用程式設定"
@@ -236,8 +338,11 @@
   "application_updates_bdf5f8b6": {
     "message": "應用程式更新"
   },
-  "apr_9_2020_3c8b47d7": {
-    "message": "2020 年 4 月 9 日"
+  "apply_my_azure_bot_resources_for_an_existing_bot_4979e343": {
+    "message": "Apply my Azure Bot resources for an existing bot"
+  },
+  "are_you_sure_you_want_to_delete_your_bot_this_acti_214a9e11": {
+    "message": "Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged."
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "確定要結束「上線產品導覽」嗎? 您可以在上線設定中重新啟動此導覽。"
@@ -248,8 +353,11 @@
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "確定要移除 \"{ propertyName }\" 嗎?"
   },
+  "are_you_sure_you_want_to_remove_targetname_this_wi_b3ddce54": {
+    "message": "Are you sure you want to remove { targetName }? This will remove only the profile and will not delete provisioned resources."
+  },
   "are_you_sure_you_want_to_remove_this_property_5bfb9cb5": {
-    "message": "Are you sure you want to remove this property?"
+    "message": "確定要移除此屬性嗎?"
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "確定要重頭開始嗎? 您的進度將會遺失。"
@@ -275,17 +383,83 @@
   "ask_a_question_92ef7e0c": {
     "message": "詢問問題"
   },
-  "ask_activity_82c174e2": {
-    "message": "Ask Activity"
+  "ask_a_question_confirmation_434ad620": {
+    "message": "Ask a question - confirmation"
+  },
+  "ask_a_question_date_or_time_6e896738": {
+    "message": "Ask a question - date or time"
+  },
+  "ask_a_question_file_or_attachment_eebb66b2": {
+    "message": "Ask a question - file or attachment"
+  },
+  "ask_a_question_multi_choice_5fce9e3e": {
+    "message": "Ask a question - multi choice"
+  },
+  "ask_a_question_number_28cb66b1": {
+    "message": "Ask a question - number"
+  },
+  "ask_a_question_oauth_login_8ec5ccd5": {
+    "message": "Ask a question - OAuth login"
+  },
+  "ask_a_question_send_activity_19848af2": {
+    "message": "Ask a question - send activity"
+  },
+  "ask_a_question_text_ba993a5e": {
+    "message": "Ask a question - text"
+  },
+  "ask_a_question_to_collect_user_input_choice_c1fbb541": {
+    "message": "Ask a question to collect user input (choice)"
+  },
+  "ask_a_question_to_collect_user_input_confirmation_29c70209": {
+    "message": "Ask a question to collect user input (confirmation)"
+  },
+  "ask_a_question_to_collect_user_input_date_or_time_3a8659ee": {
+    "message": "Ask a question to collect user input (date or time)"
+  },
+  "ask_a_question_to_collect_user_input_file_or_attac_dccad24b": {
+    "message": "Ask a question to collect user input (file or attachment)"
+  },
+  "ask_a_question_to_collect_user_input_number_b3abe981": {
+    "message": "Ask a question to collect user input (number)"
+  },
+  "ask_a_question_to_collect_user_input_oauth_login_5347b7fc": {
+    "message": "Ask a question to collect user input (OAuth login)"
+  },
+  "ask_a_question_to_collect_user_input_send_activity_eb3dd7ab": {
+    "message": "Ask a question to collect user input (send activity)"
+  },
+  "ask_a_question_to_collect_user_input_text_5d8adc89": {
+    "message": "Ask a question to collect user input (text)"
+  },
+  "ask_activity_7bb716b4": {
+    "message": "Ask activity"
+  },
+  "ask_the_skill_owner_for_the_url_and_provide_your_b_70a8b361": {
+    "message": "Ask the skill owner for the URL and provide your bot’s App ID"
   },
   "at_least_one_question_is_required_6f287e04": {
     "message": "至少需要一個問題"
   },
-  "attachment_input_e0ece49c": {
-    "message": "附件輸入"
+  "attachment_deffe5a9": {
+    "message": "Attachment"
   },
-  "australia_6a25c95b": {
-    "message": "澳洲"
+  "attachment_input_212dcb98": {
+    "message": "Attachment input"
+  },
+  "attachment_layout_b42b242": {
+    "message": "附件版面配置"
+  },
+  "attachments_694cf227": {
+    "message": "附件"
+  },
+  "audio_card_8587cf83": {
+    "message": "音訊卡片"
+  },
+  "australia_east_b7af6cc": {
+    "message": "Australia East"
+  },
+  "authentication_error_39e996c5": {
+    "message": "Authentication Error"
   },
   "authoring_canvas_18802e39": {
     "message": "製作畫布"
@@ -300,7 +474,40 @@
     "message": "自動更新"
   },
   "automatically_generate_dialogs_that_collect_inform_e7cf619e": {
-    "message": "Automatically generate dialogs that collect information from a user to manage conversations."
+    "message": "自動產生從使用者收集資訊以管理交談的對話方塊。"
+  },
+  "available_as_skill_to_the_following_bots_dbcaffcd": {
+    "message": "Available as skill to the following bots:"
+  },
+  "azure_connections_9e63f716": {
+    "message": "Azure connections"
+  },
+  "azure_directory_d9065529": {
+    "message": "Azure directory"
+  },
+  "azure_functions_5e23be5c": {
+    "message": "Azure Functions"
+  },
+  "azure_functions_required_2a035b48": {
+    "message": "Azure Functions required"
+  },
+  "azure_functions_runtime_not_installed_bc24e100": {
+    "message": "Azure Functions runtime not installed."
+  },
+  "azure_language_understanding_5fc42020": {
+    "message": "Azure Language Understanding"
+  },
+  "azure_qna_maker_fd153eb7": {
+    "message": "Azure QnA Maker"
+  },
+  "azure_resource_group_cee486e6": {
+    "message": "Azure resource group"
+  },
+  "azure_subscription_4671d043": {
+    "message": "Azure subscription"
+  },
+  "azure_web_app_d834cb4c": {
+    "message": "Azure Web App"
   },
   "back_2900f52a": {
     "message": "備份"
@@ -308,23 +515,23 @@
   "been_used_5daccdb2": {
     "message": "曾經使用"
   },
+  "before_we_begin_7ae9c242": {
+    "message": "Before we begin"
+  },
   "begin_a_new_dialog_60249bd8": {
     "message": "開始新的對話"
   },
   "begin_a_remote_skill_dialog_93e47189": {
     "message": "開始遠端技能對話。"
   },
-  "begin_dialog_12e2becf": {
-    "message": "開始對話"
+  "begin_dialog_154ebbf9": {
+    "message": "Begin dialog"
   },
   "begin_dialog_event_285bc650": {
     "message": "開始對話事件"
   },
   "begindialog_a5594562": {
     "message": "BeginDialog"
-  },
-  "ben_brown_99c12d19": {
-    "message": "Ben Brown"
   },
   "boolean_6000988a": {
     "message": "布林值"
@@ -351,22 +558,25 @@
     "message": "布林值。"
   },
   "bot_416bf08d": {
-    "message": "bot"
+    "message": "Bot"
   },
   "bot_7926b66d": {
     "message": "Bot"
   },
-  "bot_asks_5e9f0202": {
-    "message": "Bot 詢問"
-  },
   "bot_content_was_successfully_imported_5a07ae64": {
-    "message": "Bot content was successfully imported."
+    "message": "已成功匯入 Bot 內容。"
   },
   "bot_controller_319b408d": {
-    "message": "Bot Controller"
+    "message": "Bot 控制器"
   },
-  "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
-    "message": "Bot Framework Composer 可讓開發人員及多個專業領域的小組，利用 Bot Framework 中的最新元件 (SDK、LG、LU) 及宣告式檔案格式，完全不需要撰寫程式碼，就能建置各式各樣的交談體驗。"
+  "bot_endpoint_not_available_in_the_request_43c381f8": {
+    "message": "要求中未提供 Bot 端點"
+  },
+  "bot_files_created_986109df": {
+    "message": "已建立 Bot 檔案"
+  },
+  "bot_framework_composer_2_0_provides_more_built_in__c6abf11c": {
+    "message": "Bot Framework Composer 2.0 provides more built-in capabilities so you can build complex bots quickly. Update to Composer 2.0 for advanced bot templates, prebuilt components, and a runtime that is fully extensible through packages."
   },
   "bot_framework_composer_fae721be": {
     "message": "Bot Framework Composer"
@@ -374,14 +584,14 @@
   "bot_framework_composer_icon_gray_fa72d3d6": {
     "message": "Bot Framework Composer 圖示灰色"
   },
-  "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
-    "message": "Bot Framework Composer 是視覺化製作畫布，可透過 Microsoft Bot Framework 技術堆疊建置 Bot 及其他類型的交談應用程式。在 Composer 中，您將能夠找到建置最新、最先進交談體驗所需的所有工具。"
+  "bot_framework_composer_requires_node_js_in_order_t_de385f76": {
+    "message": "Bot Framework Composer requires Node.js in order to create and run a new bot. Click “Install Node.js” to install the latest version. You will need to restart Composer after installing Node."
   },
-  "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
-    "message": "Bot Framework Composer 是開放原始碼視覺化製作畫布，可供開發人員及多個專業領域的小組用來建置 Bot。Composer 整合了 LUIS 和 QnA Maker，並允許使用語言產生來精密地撰寫 Bot 回應。"
+  "bot_framework_emulator_fefd4a59": {
+    "message": "Bot Framework Emulator"
   },
-  "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
-    "message": "Bot Framework 提供建置交談式應用程式最全方位的體驗。"
+  "bot_is_botname_c5af0c89": {
+    "message": "Bot 為 { botName }"
   },
   "bot_language_6cf30c2": {
     "message": "Bot 語言"
@@ -389,8 +599,8 @@
   "bot_language_active_7cf9dc78": {
     "message": "Bot 語言 (使用中)"
   },
-  "bot_management_and_configurations_b7dadd69": {
-    "message": "Bot management and configurations"
+  "bot_name_cannot_start_with_a_number_or_space_3a5c6fc1": {
+    "message": "Bot name cannot start with a number or space"
   },
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot 名稱為 { botName }"
@@ -398,11 +608,17 @@
   "bot_project_file_does_not_exist_a0864a2c": {
     "message": "Bot 專案檔不存在。"
   },
+  "bot_project_location_3be47459": {
+    "message": "Bot project location"
+  },
   "bot_projects_settings_list_view_ab58e5d": {
-    "message": "Bot projects settings list View"
+    "message": "Bot 專案設定清單檢視"
   },
   "bot_projects_settings_navigation_pane_c2074a5f": {
-    "message": "Bot Projects Settings Navigation Pane"
+    "message": "Bot 專案設定瀏覽窗格"
+  },
+  "bot_response_ec6f4a8c": {
+    "message": "Bot response"
   },
   "bot_responses_4617b4a2": {
     "message": "Bot 回應"
@@ -419,26 +635,20 @@
   "branch_if_else_391e5681": {
     "message": "分支: if/else"
   },
-  "branch_if_else_992cf9bf": {
-    "message": "分支: If/Else"
-  },
-  "branch_if_else_f6a36f1d": {
-    "message": "分支: if/else"
-  },
   "branch_switch_multiple_options_95c6a326": {
     "message": "分支: 切換 (多個選項)"
   },
   "break_out_of_loop_ab30157c": {
     "message": "中斷迴圈"
   },
-  "build_your_first_bot_f9c3e427": {
-    "message": "建置您的第一個 Bot"
+  "build_a_continuous_integration_and_deployment_ci_c_79188c70": {
+    "message": "Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates."
   },
   "building_5e8a3c1d": {
-    "message": "Building"
+    "message": "正在建置"
   },
   "building_runtime_22f11a1f": {
-    "message": "Building runtime"
+    "message": "正在建置執行階段"
   },
   "bytes_74acea97": {
     "message": "位元組"
@@ -446,11 +656,14 @@
   "calculating_17b21be7": {
     "message": "正在計算..."
   },
+  "call_skills_24416f61": {
+    "message": "Call skills"
+  },
   "cancel_all_active_dialogs_335b1623": {
     "message": "取消所有使用中的對話"
   },
-  "cancel_all_dialogs_32144c45": {
-    "message": "取消所有對話"
+  "cancel_all_dialogs_7b35fa0e": {
+    "message": "Cancel all dialogs"
   },
   "cancel_caeb1e68": {
     "message": "取消"
@@ -458,14 +671,26 @@
   "cancel_dialog_event_cc671dee": {
     "message": "取消對話事件"
   },
+  "cannot_find_a_matching_conversation_d6344e4a": {
+    "message": "找不到相符的交談。"
+  },
+  "cannot_parse_attachment_c3e552a5": {
+    "message": "無法剖析附件。"
+  },
+  "cannot_upload_file_conversation_not_found_8a983504": {
+    "message": "無法上傳檔案。找不到交談。"
+  },
+  "carousel_a2321ac9": {
+    "message": "Carousel"
+  },
   "change_recognizer_3145b93d": {
     "message": "變更識別器"
   },
   "check_for_updates_and_install_them_automatically_50337340": {
     "message": "檢查是否有更新，並自動進行安裝。"
   },
-  "choice_input_f75a2353": {
-    "message": "選擇輸入"
+  "choice_input_369b0c57": {
+    "message": "Choice input"
   },
   "choice_name_fe8411f4": {
     "message": "選擇名稱"
@@ -476,20 +701,14 @@
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "選擇建立 Bot 的方式"
   },
-  "choose_one_2c4277df": {
-    "message": "選擇一個"
-  },
-  "chris_whitten_11df1f35": {
-    "message": "Chris Whitten"
-  },
   "clear_all_da755751": {
     "message": "全部清除"
   },
-  "click_on_the_b_add_b_button_in_the_toolbar_and_sel_4daf351a": {
-    "message": "按一下工具列中的 [新增]<b></b> 按鈕，然後選取 [新增觸發程序]<b></b>。在<b>建立觸發程序精靈</b>中，將<b>觸發程序類型</b>設定為 [識別到意圖]<i></i>，並設定<b>觸發程序名稱</b>和<b>觸發程序片語</b>。然後在視覺化編輯器中新增動作。"
+  "click_start_and_your_bot_will_be_up_and_running_on_424c29da": {
+    "message": "Click start and your bot will be up and running. Once it’s running, you can select “Open in WebChat” to test."
   },
-  "click_the_b_add_b_button_in_the_toolbar_and_select_79001156": {
-    "message": "按一下工具列中的 [新增]<b></b> 按鈕，然後從下拉式功能表中選取 [新增觸發程序]<b></b>。"
+  "click_the_start_button_to_test_your_bot_using_web__821e827c": {
+    "message": "Click the start button to test your bot using Web Chat or Emulator. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
   },
   "click_to_sort_by_file_type_1b0c9bd": {
     "message": "按一下以依檔案類型排序"
@@ -497,47 +716,77 @@
   "close_d634289d": {
     "message": "關閉"
   },
+  "close_webchat_b26d03e1": {
+    "message": "Close WebChat"
+  },
+  "cognitive_service_region_87c668be": {
+    "message": "Cognitive Service Region"
+  },
+  "cognitive_services_key_fcfd093f": {
+    "message": "Cognitive services key"
+  },
   "collapse_34080b4d": {
     "message": "摺疊"
   },
+  "collapse_debug_panel_2841f8ba": {
+    "message": "Collapse Debug Panel"
+  },
   "collapse_navigation_17228b95": {
     "message": "摺疊瀏覽"
+  },
+  "collect_information_about_the_use_and_performance__39c61db9": {
+    "message": "Collect information about the use and performance of your bot."
   },
   "comment_7ef1428e": {
     "message": "註解"
   },
   "comments_e07bcbe3": {
-    "message": "Comments"
+    "message": "註解"
   },
   "common_7911ab4b": {
-    "message": "Common"
+    "message": "通用"
+  },
+  "complete_your_publishing_profile_7240d0d6": {
+    "message": "Complete your publishing profile"
   },
   "component_stacktrace_e24b1983": {
     "message": "元件堆疊追蹤:"
+  },
+  "components_of_kind_kind_are_not_supported_replace__de47f868": {
+    "message": "Components of $kind \"{ kind }\" are not supported. Replace with a different component or create a custom component."
+  },
+  "composer_2_0_is_now_available_113ed532": {
+    "message": "Composer 2.0 is now available!"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
     "message": "Composer 目前尚無法自動翻譯您的 Bot。\n若要手動建立翻譯，Composer 會使用其他語言名稱來建立 Bot 的內容複本。然後，您就能在不影響原始 Bot 邏輯或流程的情況下翻譯此內容，並能在語言之間進行切換，以確保正確且適當地翻譯回應。"
   },
   "composer_includes_a_telemetry_feature_that_collect_8fd7bfbf": {
-    "message": "Composer includes a telemetry feature that collects usage information. It is important that the Composer team understands how the tool is being used so that it can be improved."
-  },
-  "composer_introduction_98a93701": {
-    "message": "Composer 簡介"
+    "message": "Composer 包含收集使用量資訊的遙測功能。Composer 小組務必了解工具的使用方式，使其能夠改進。"
   },
   "composer_is_up_to_date_9118257d": {
     "message": "Composer 是最新版本。"
   },
-  "composer_language_is_the_language_of_composer_ui_c23a57b6": {
-    "message": "Composer language is the language of Composer UI"
+  "composer_language_f958f3bf": {
+    "message": "Composer language"
   },
   "composer_logo_ba2048a0": {
     "message": "Composer 標誌"
   },
+  "composer_needs_azure_functions_36138382": {
+    "message": "Composer needs Azure Functions"
+  },
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer 需要 .NET Core SDK"
   },
-  "composer_settings_31b04099": {
-    "message": "Composer Settings"
+  "composer_runtime_error_b0efe05": {
+    "message": "Composer Runtime Error"
+  },
+  "composer_settings_c8c622cf": {
+    "message": "Composer settings"
+  },
+  "composer_tutorials_5e79e495": {
+    "message": "Composer tutorials"
   },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer 將會重新啟動。"
@@ -545,11 +794,29 @@
   "composer_will_update_the_next_time_you_close_the_a_d74264a1": {
     "message": "Composer 將會在您下次關閉應用程式時更新。"
   },
+  "composite_entity_8b5f67ba": {
+    "message": "Composite entity"
+  },
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
-  "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
-    "message": "設定 Composer 以使用您可自訂及控制的執行階段程式碼來啟動 Bot。"
+  "configuration_e186200": {
+    "message": "Configuration"
+  },
+  "configure_adapter_2f621249": {
+    "message": "Configure adapter"
+  },
+  "configure_and_publish_7f53bc9a": {
+    "message": "Configure and publish"
+  },
+  "configure_ecb97e30": {
+    "message": "Configure"
+  },
+  "configure_the_command_used_by_composer_to_start_yo_f4231dc6": {
+    "message": "Configure the command used by Composer to start your bot application when testing locally."
+  },
+  "configure_your_bot_7483e4a": {
+    "message": "Configure your bot"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "設定檔案名稱中沒有文化特性代碼時要使用的預設語言模型 (預設: zh-tw)"
@@ -560,8 +827,11 @@
   "confirm_choices_db8e99fb": {
     "message": "確認選擇"
   },
-  "confirm_input_bf996e7a": {
-    "message": "確認輸入"
+  "confirm_input_7e58417e": {
+    "message": "Confirm input"
+  },
+  "confirm_skill_endpoints_6eb184cf": {
+    "message": "Confirm skill endpoints"
   },
   "confirmation_fec87d65": {
     "message": "確認"
@@ -569,11 +839,11 @@
   "confirmation_modal_must_have_a_title_b0816e0b": {
     "message": "確認強制回應必須有標題。"
   },
+  "conflicting_changes_detected_6c282985": {
+    "message": "Conflicting changes detected"
+  },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "恭喜! 已成功發佈您的模型。"
-  },
-  "connect_a_remote_skill_10cf0724": {
-    "message": "Connect a remote skill"
   },
   "connect_to_a_skill_53c9dff0": {
     "message": "連線到技能"
@@ -581,38 +851,77 @@
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "連線到 QnA 知識庫"
   },
+  "connect_to_speech_service_9d877e37": {
+    "message": "Connect to Speech Service"
+  },
+  "connect_with_the_community_to_ask_and_answer_quest_aeec8c4f": {
+    "message": "Connect with the community to ask and answer questions about Composer"
+  },
+  "connect_your_bot_to_microsoft_teams_and_webchat_or_90a228b8": {
+    "message": "Connect your bot to Microsoft Teams and WebChat, or enable DirectLine Speech."
+  },
+  "connect_your_bot_to_teams_external_channels_or_ena_687b7580": {
+    "message": "Connect your bot to Teams, external channels, or enable speech."
+  },
   "connecting_to_b_source_b_to_import_bot_content_106cf675": {
-    "message": "Connecting to <b>{ source }</b> to import bot content..."
+    "message": "正在連線至 <b>{ source }</b> 以匯入 Bot 內容..."
   },
   "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
-    "message": "Connecting to <b>{ targetName }</b> to import bot content..."
+    "message": "正在連線至 <b> { targetName } </b> 以匯入 Bot 內容..."
+  },
+  "connections_917ef4e4": {
+    "message": "Connections"
+  },
+  "continue_ac067716": {
+    "message": "繼續"
   },
   "continue_loop_22635585": {
     "message": "繼續迴圈"
   },
+  "continue_setting_up_your_development_environment_b_5ec84955": {
+    "message": "Continue setting up your development environment by adding LUIS keys."
+  },
   "conversation_ended_a8bd37dd": {
     "message": "已結束交談"
+  },
+  "conversation_ended_endofconversation_activity_41d0c83f": {
+    "message": "已結束對話 (EndOfConversation 活動)"
+  },
+  "conversation_id_cannot_be_updated_2a973f13": {
+    "message": "無法更新交談識別碼。"
   },
   "conversation_invoked_e960884e": {
     "message": "已叫用交談"
   },
-  "conversational_core_preview_template_is_available__ba9b43b8": {
-    "message": "Conversational Core preview template is available since you have that feature turned on."
-  },
-  "conversational_core_template_899e3082": {
-    "message": "Conversational Core Template"
+  "conversation_invoked_invoke_activity_71efde42": {
+    "message": "已叫用對話 (叫用活動)"
   },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate 活動"
   },
+  "convert_583eb59d": {
+    "message": "Convert"
+  },
+  "convert_your_project_to_the_latest_format_a28e824c": {
+    "message": "Convert your project to the latest format"
+  },
   "copy_9748f9f": {
     "message": "複製"
+  },
+  "copy_command_to_clipboard_4649910f": {
+    "message": "Copy command to clipboard"
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "複製要翻譯的內容"
   },
+  "copy_icon_4cc3a18e": {
+    "message": "Copy Icon"
+  },
   "copy_project_location_to_clipboard_eb85c474": {
-    "message": "Copy project location to clipboard"
+    "message": "將專案位置複製到剪貼簿"
+  },
+  "copy_skill_manifest_url_217975ba": {
+    "message": "Copy Skill Manifest URL"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "無法連線到儲存體。"
@@ -638,23 +947,32 @@
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "建立要用來命名應用程式的專案名稱: (專案名稱-環境-LU 檔案名稱)"
   },
+  "create_a_new_bot_51ce70d3": {
+    "message": "Create a new bot"
+  },
   "create_a_new_dialog_21d84b82": {
     "message": "建立新的對話"
   },
   "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
     "message": "按一下上方的 [+]，建立新的表單對話方塊結構描述。"
   },
-  "create_a_new_skill_e961ff28": {
-    "message": "Create a new skill"
+  "create_a_publish_profile_to_continue_1e2fa5a0": {
+    "message": "Create a publish profile to continue"
   },
-  "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
-    "message": "建立新的技能資訊清單，或選取您要編輯的技能資訊清單"
+  "create_a_publishing_profile_a79c6808": {
+    "message": "Create a publishing profile"
+  },
+  "create_a_publishing_profile_for_botname_b82f4386": {
+    "message": "Create a publishing profile for { botName }"
   },
   "create_a_skill_in_your_bot_d7659e6b": {
-    "message": "Create a skill in your bot"
+    "message": "在您的 Bot 中建立技能"
   },
   "create_a_trigger_40e74743": {
     "message": "建立觸發程序"
+  },
+  "create_and_configure_new_azure_resources_302c574a": {
+    "message": "Create and configure new Azure resources"
   },
   "create_bot_from_template_or_scratch_92f0fefa": {
     "message": "要從範本或從頭開始建立 Bot?"
@@ -662,8 +980,8 @@
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "建立複本以翻譯 Bot 內容"
   },
-  "create_edit_skill_manifest_1c1b14fe": {
-    "message": "建立/編輯技能資訊清單"
+  "create_custom_knowledge_base_e1cad195": {
+    "message": "Create custom knowledge base"
   },
   "create_folder_error_38aa86f5": {
     "message": "建立資料夾錯誤"
@@ -683,14 +1001,8 @@
   "create_from_template_87e12c94": {
     "message": "從範本建立"
   },
-  "create_kb_e78571ba": {
-    "message": "建立 KB"
-  },
-  "create_knowledge_base_from_scratch_afe4d2a2": {
-    "message": "從頭開始建立知識庫"
-  },
-  "create_new_empty_bot_21cf0ea3": {
-    "message": "建立新的空白 Bot"
+  "create_new_e0946c49": {
+    "message": "Create new"
   },
   "create_new_folder_19d3faa4": {
     "message": "建立新的資料夾"
@@ -698,20 +1010,23 @@
   "create_new_kb_1c4f86a0": {
     "message": "建立新的 KB"
   },
-  "create_new_knowledge_base_d15d6873": {
-    "message": "建立新的知識庫"
+  "create_new_publish_profile_e27c0950": {
+    "message": "Create new publish profile"
   },
-  "create_new_knowledge_base_e14d07a5": {
-    "message": "建立新的知識庫"
+  "create_service_resources_386ef96b": {
+    "message": "Create { service } resources"
   },
-  "create_new_knowledge_base_from_scratch_638c4fd2": {
-    "message": "從頭開始建立新的知識庫"
+  "create_your_first_bot_a23748c1": {
+    "message": "Create your first bot"
   },
-  "create_or_edit_skill_manifest_8ad98da9": {
-    "message": "建立或編輯技能資訊清單"
+  "creating_knowledge_base_e391b132": {
+    "message": "Creating knowledge base..."
   },
-  "creating_your_knowledge_base_ef4f9872": {
-    "message": "正在建立您的知識庫"
+  "creating_qna_maker_7c88df84": {
+    "message": "Creating QnA Maker"
+  },
+  "creating_resources_af3aec2f": {
+    "message": "Creating resources..."
   },
   "current_40c0812f": {
     "message": " - 目前"
@@ -726,22 +1041,22 @@
     "message": "自訂識別器"
   },
   "custom_runtime_426aa34f": {
-    "message": "Custom runtime"
+    "message": "自訂執行階段"
   },
   "cut_c8c92681": {
     "message": "剪下"
   },
   "data_collection_32efe1e7": {
-    "message": "Data collection"
+    "message": "資料收集"
   },
   "data_collection_7db2e237": {
-    "message": "Data Collection"
+    "message": "資料收集"
   },
   "data_loading_4c9bb9f6": {
     "message": "正在載入資料..."
   },
   "data_transferring_between_services_c0971544": {
-    "message": "Data transferring between services"
+    "message": "在服務之間傳輸資料"
   },
   "date_ee500367": {
     "message": "日期"
@@ -749,20 +1064,23 @@
   "date_modified_18beced9": {
     "message": "修改日期"
   },
-  "date_modified_e1c8ac8f": {
-    "message": "修改日期"
-  },
   "date_or_time_d30bcc7d": {
     "message": "日期或時間"
   },
-  "date_time_input_2416ffc1": {
-    "message": "日期時間輸入"
+  "date_time_input_aa8ad315": {
+    "message": "Date time input"
+  },
+  "deactivated_action_1da615d0": {
+    "message": "Deactivated action."
   },
   "debug_break_46cb5adb": {
     "message": "偵錯中斷"
   },
   "debug_break_870a75df": {
     "message": "偵錯中斷"
+  },
+  "debug_panel_header_2ee4d70c": {
+    "message": "偵錯面板標頭"
   },
   "debugging_options_20e2e9da": {
     "message": "偵錯選項"
@@ -771,9 +1089,6 @@
     "message": "預設語言"
   },
   "default_language_a976938d": {
-    "message": "DEFAULT LANGUAGE"
-  },
-  "default_language_b11c37db": {
     "message": "預設語言"
   },
   "default_recognizer_9c06c1a3": {
@@ -784,6 +1099,15 @@
   },
   "define_conversation_objective_146d1cc6": {
     "message": "定義交談目標"
+  },
+  "define_new_entity_6c69b912": {
+    "message": "Define new entity"
+  },
+  "define_user_input_and_trigger_phrases_to_direct_th_d473c5c": {
+    "message": "Define user input and trigger phrases to direct the conversation flow."
+  },
+  "define_your_bot_s_responses_add_phrase_variations__11aa55cb": {
+    "message": "Define your bot''s responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
   },
   "defined_in_475568fb": {
     "message": "定義於:"
@@ -800,68 +1124,80 @@
   "delete_activity_6d881872": {
     "message": "刪除活動"
   },
+  "delete_bot_4b1527e4": {
+    "message": "Delete bot"
+  },
   "delete_bot_73586104": {
     "message": "刪除 Bot"
   },
+  "delete_fd07d6ad": {
+    "message": "Delete?"
+  },
   "delete_form_dialog_schema_c8e28229": {
-    "message": "Delete form dialog schema?"
+    "message": "要刪除表單對話方塊結構描述嗎?"
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "刪除知識庫"
   },
-  "delete_properties_8bc77b42": {
-    "message": "刪除屬性"
-  },
   "delete_properties_c49a7892": {
     "message": "刪除屬性"
   },
-  "delete_property_b3786fa0": {
-    "message": "刪除屬性"
+  "delete_property_4a0e0df6": {
+    "message": "Delete property"
   },
   "delete_property_da7646f6": {
-    "message": "Delete property?"
+    "message": "要刪除屬性嗎?"
   },
   "delete_this_bot_fb78e519": {
-    "message": "Delete this bot"
+    "message": "刪除此 Bot"
   },
   "deleting_dialogid_failed_1d7cc05a": {
     "message": "刪除 \"{ dialogId }\" 失敗。"
   },
-  "describe_your_skill_88554792": {
-    "message": "描述您的技能"
+  "deleting_one_source_file_will_also_delete_qna_file_f3afd698": {
+    "message": "Deleting one source file will also delete qna files with the same name on other locales"
   },
   "description_436c48d7": {
     "message": "描述"
   },
-  "design_51b2812a": {
-    "message": "設計"
+  "development_resources_67364176": {
+    "message": "Development resources"
+  },
+  "diagnostic_description_msg_9ddd1be": {
+    "message": "診斷描述 { msg }"
   },
   "diagnostic_links_228dc6fe": {
-    "message": "diagnostic links"
-  },
-  "diagnostic_list_29813310": {
-    "message": "Diagnostic list"
+    "message": "診斷連結"
   },
   "diagnostic_list_89b39c2e": {
-    "message": "Diagnostic List"
+    "message": "診斷清單"
   },
   "diagnostic_message_msg_5387e951": {
-    "message": "Diagnostic Message { msg }"
+    "message": "診斷訊息 { msg }"
   },
   "diagnostic_type_e1979c21": {
-    "message": "Diagnostic type"
+    "message": "診斷類型"
   },
   "diagnostics_a11880f6": {
-    "message": "Diagnostics"
+    "message": "診斷"
   },
   "diagnostics_pane_2d77c390": {
-    "message": "Diagnostics Pane"
+    "message": "診斷窗格"
+  },
+  "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
+    "message": "顯示錯誤與警告的診斷索引標籤。"
   },
   "dialog_68ba69ba": {
     "message": "(對話)"
   },
   "dialog_cancelled_767b512a": {
     "message": "已取消對話"
+  },
+  "dialog_cancelled_cancel_dialog_event_3eba3d7e": {
+    "message": "已取消對話方塊 (取消對話方塊事件)"
+  },
+  "dialog_d99c0378": {
+    "message": "Dialog"
   },
   "dialog_data_61d5539b": {
     "message": "對話資料"
@@ -872,11 +1208,11 @@
   "dialog_events_f1b2e2a0": {
     "message": "對話事件"
   },
-  "dialog_generation_failed_3c73e599": {
-    "message": "Dialog generation failed."
+  "dialog_generation_has_failed_550f0927": {
+    "message": "對話方塊產生失敗。"
   },
   "dialog_generation_was_successful_be280943": {
-    "message": "Dialog generation was successful."
+    "message": "對話方塊產生成功。"
   },
   "dialog_input_schema_c7864fbd": {
     "message": "對話輸入結構描述。"
@@ -896,32 +1232,41 @@
   "dialog_started_912507c": {
     "message": "已開始對話"
   },
+  "dialog_started_begin_dialog_event_751dc07e": {
+    "message": "已啟動對話方塊 (開始對話方塊事件)"
+  },
   "dialog_with_the_name_value_already_exists_62838518": {
     "message": "名稱為 { value } 的對話方塊已經存在。"
   },
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory 缺少結構描述。"
   },
-  "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "找到 { dialogNum, plural,\n     =0 {0 個 Bot}\n     =1 {1 個 Bot}\n  other {# 個 Bot}\n}。\n            { dialogNum, select,\n      0 {}\n  other {請按向下鍵瀏覽搜尋結果}\n}"
+  "dialognum_plural_0_no_bots_have_1_one_bot_has_othe_549c9b69": {
+    "message": "{ dialogNum, plural,\n     =0 {No bots have}\n     =1 {One bot has}\n  other {# bots have}\n} been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  },
+  "dialogs_triggers_and_actions_8a39ffea": {
+    "message": "Dialogs, triggers, and actions"
   },
   "disable_a5c05db3": {
     "message": "停用"
   },
-  "discover_and_use_components_that_can_be_installed__49e308bf": {
-    "message": "Discover and use components that can be installed into your bot."
-  },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "將超過編輯器寬度的行顯示在下一行。"
   },
+  "display_text_used_by_the_channel_to_render_visuall_4e4ab704": {
+    "message": "通道用於以視覺化方式轉譯的顯示文字。"
+  },
   "do_you_want_to_proceed_cd35aa38": {
-    "message": "Do you want to proceed?"
+    "message": "您要繼續嗎?"
   },
   "do_you_want_to_update_b_existingprojectname_b_c34014f": {
-    "message": "Do you want to update <b>{ existingProjectName }</b>"
+    "message": "要更新 <b>{ existingProjectName }</b> 嗎"
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "是否要繼續?"
+  },
+  "documentation_d82f6eec": {
+    "message": "Documentation"
   },
   "does_not_exist_3a34b418": {
     "message": "不存在"
@@ -932,11 +1277,20 @@
   "done_54e3d4b6": {
     "message": "完成"
   },
+  "download_emulator_c8fb3403": {
+    "message": "Download Emulator"
+  },
+  "download_icon_2e0d10": {
+    "message": "Download Icon"
+  },
   "download_now_and_install_when_you_close_composer_e241ed74": {
     "message": "立即下載並在您關閉 Composer 時安裝。"
   },
   "downloading_bb6fb34b": {
     "message": "正在下載..."
+  },
+  "due_to_the_following_error_we_were_unable_to_succe_9185fddf": {
+    "message": "Due to the following error, we were unable to successfully add your selected { service } keys to your bot project:"
   },
   "duplicate_31cec192": {
     "message": "重複"
@@ -950,26 +1304,32 @@
   "duplicate_name_d295a09d": {
     "message": "名稱重複"
   },
+  "duplicate_root_dialog_name_287ab65b": {
+    "message": "重複根對話方塊名稱"
+  },
   "duplicated_intents_recognized_d3908424": {
     "message": "識別到重複的意圖"
+  },
+  "e_g_azurebot_e09f6769": {
+    "message": "例如 AzureBot"
   },
   "early_adopters_e8db7999": {
     "message": "早期採用者"
   },
-  "edit_a_publish_profile_30ebab3e": {
-    "message": "編輯發行設定檔"
-  },
   "edit_a_skill_5665d9ac": {
     "message": "編輯技能"
   },
-  "edit_actions_b38e9fac": {
-    "message": "編輯動作"
+  "edit_actions_7c33a630": {
+    "message": "Edit actions"
   },
   "edit_an_array_property_5d886011": {
     "message": "編輯陣列屬性"
   },
-  "edit_array_4ab37c8": {
-    "message": "編輯陣列"
+  "edit_array_c56a18cc": {
+    "message": "Edit array"
+  },
+  "edit_bot_responses_34bd1a28": {
+    "message": "Edit bot responses"
   },
   "edit_c5fbea07": {
     "message": "編輯"
@@ -980,17 +1340,32 @@
   "edit_in_json_75d0d754": {
     "message": "在 JSON 中編輯"
   },
+  "edit_in_power_virtual_agents_56ee7ac2": {
+    "message": "Edit in Power Virtual Agents"
+  },
   "edit_kb_name_5e2d8c5b": {
     "message": "編輯 KB 名稱"
   },
   "edit_property_dd6a1172": {
     "message": "編輯屬性"
   },
+  "edit_publishing_profile_e40a0bf1": {
+    "message": "Edit publishing profile"
+  },
   "edit_schema_a2ab5695": {
     "message": "編輯結構描述"
   },
   "edit_source_45af68b4": {
     "message": "編輯來源"
+  },
+  "edit_this_intent_in_a_user_input_view_a_c75f4893": {
+    "message": "Edit this intent in<a>User input view</a>"
+  },
+  "edit_this_template_in_a_bot_response_view_a_7236985f": {
+    "message": "在 <a>[Bot 回應] 檢視</a>中編輯此範本"
+  },
+  "edit_user_input_and_triggers_333c9a0e": {
+    "message": "Edit user input and triggers"
   },
   "ejecting_runtime_f6c90614": {
     "message": "正在退出執行階段..."
@@ -1004,8 +1379,11 @@
   "emit_a_trace_event_f653ae84": {
     "message": "發出追蹤事件"
   },
-  "emit_event_32aa6583": {
-    "message": "發出事件"
+  "emit_event_f36b4a87": {
+    "message": "Emit event"
+  },
+  "empty_bot_template_that_routes_to_qna_configuratio_21531414": {
+    "message": "路由至 qna 組態的 Bot 範本為空白"
   },
   "empty_qna_icon_34c180c6": {
     "message": "空白 QnA 圖示"
@@ -1013,26 +1391,32 @@
   "enable_6f5d1328": {
     "message": "啟用"
   },
+  "enable_app_insights_99b6c116": {
+    "message": "Enable App Insights"
+  },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "啟用行號以依數字參考程式碼行。"
   },
   "enable_multi_turn_extraction_8a168892": {
     "message": "啟用多回合擷取"
   },
-  "enable_the_new_conversational_core_template_built__df338773": {
-    "message": "Enable the new conversational core template built on the component model"
+  "enable_orchestrator_cdbbd2c5": {
+    "message": "Enable Orchestrator"
+  },
+  "enable_speech_e30d6a2a": {
+    "message": "Enable Speech"
+  },
+  "enable_speech_e4a16f1c": {
+    "message": "Enable speech"
   },
   "enabled_ba7cab66": {
     "message": "已啟用"
   },
-  "end_dialog_8f562a4c": {
-    "message": "結束對話"
+  "end_dialog_88fa2f7a": {
+    "message": "End dialog"
   },
   "end_this_dialog_3ed0d50b": {
     "message": "結束此對話"
-  },
-  "end_turn_6ab71cea": {
-    "message": "結束回合"
   },
   "end_turn_ca85b3d4": {
     "message": "結束回合"
@@ -1040,11 +1424,17 @@
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation 活動"
   },
-  "endpoints_ff946539": {
-    "message": "Endpoints"
+  "endpoint_url_eddd8ea9": {
+    "message": "Endpoint Url"
   },
-  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
-    "message": "輸入資訊清單 URL，以將新技能新增至您的 Bot。"
+  "endpoints_ff946539": {
+    "message": "端點"
+  },
+  "ensure_your_bot_s_microsoft_app_id_is_on_the_skill_a73799fb": {
+    "message": "Ensure your bot’s Microsoft App ID is on the skill’s allowed callers list"
+  },
+  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
+    "message": "Enter a manifest URL to add a new skill to your bot."
   },
   "enter_a_max_value_14e8ba52": {
     "message": "輸入最大值"
@@ -1052,38 +1442,32 @@
   "enter_a_min_value_c3030813": {
     "message": "輸入最小值"
   },
-  "enter_a_url_7b4d6063": {
-    "message": "Enter a URL"
+  "enter_a_url_to_import_qna_resource_223ded92": {
+    "message": "Enter a URL to Import QnA resource"
   },
-  "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
-    "message": "輸入 URL 或瀏覽以上傳檔案 "
+  "enter_cognitive_service_region_a0f684a4": {
+    "message": "Enter cognitive service region"
   },
-  "enter_luis_application_name_df312e75": {
-    "message": "Enter LUIS application name"
+  "enter_cognitive_services_key_b78e4b55": {
+    "message": "Enter cognitive services key"
   },
-  "enter_luis_authoring_key_c59f8f1f": {
-    "message": "Enter LUIS authoring key"
+  "enter_name_for_new_resource_group_96fe8ea8": {
+    "message": "Enter name for new resource group"
   },
-  "enter_luis_endpoint_key_f8eb30f5": {
-    "message": "Enter LUIS endpoint key"
-  },
-  "enter_luis_region_2316eceb": {
-    "message": "Enter LUIS region"
-  },
-  "enter_microsoft_app_id_c92101b0": {
-    "message": "Enter Microsoft App Id"
-  },
-  "enter_microsoft_app_password_b0926c39": {
-    "message": "Enter Microsoft App Password"
+  "enter_name_for_new_resources_d5ccd6a7": {
+    "message": "Enter name for new resources"
   },
   "enter_qna_maker_subscription_key_d26b4bad": {
-    "message": "Enter QnA Maker Subscription key"
+    "message": "輸入 QnA Maker 訂用帳戶金鑰"
   },
-  "enter_skill_host_endpoint_url_e22eeab5": {
-    "message": "Enter Skill host endpoint url"
+  "enter_skill_host_endpoint_url_7489a83f": {
+    "message": "Enter Skill host endpoint URL"
   },
   "entities_ef09392c": {
     "message": "實體"
+  },
+  "entity_defined_in_lu_files_entity_1812c172": {
+    "message": "lu 檔案中定義的實體: { entity }"
   },
   "environment_68aed6d3": {
     "message": "環境"
@@ -1097,23 +1481,53 @@
   "error_afac7133": {
     "message": "錯誤:"
   },
+  "error_attempting_to_parse_skill_manifest_there_cou_dee89499": {
+    "message": "Error attempting to parse Skill manifest. There could be an error in it''s format."
+  },
+  "error_checking_node_version_98bfbf4c": {
+    "message": "Error checking node version"
+  },
+  "error_encountered_when_getting_template_read_me_fi_b9199689": {
+    "message": "Error encountered when getting template read-me file"
+  },
   "error_event_c079b608": {
     "message": "錯誤事件"
+  },
+  "error_fetching_runtime_templates_5e8a4701": {
+    "message": "擷取執行階段範本時發生錯誤"
   },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
     "message": "{ title } 的 UI 結構描述中發生錯誤: { errorMsg }\n{ options }"
   },
-  "error_occured_ejecting_runtime_76bb48e7": {
-    "message": "退出執行階段時發生錯誤!"
-  },
   "error_occurred_5549a6b4": {
     "message": "發生錯誤"
   },
+  "error_occurred_building_the_bot_7425aa09": {
+    "message": "Error occurred building the bot"
+  },
+  "error_occurred_ejecting_runtime_8512129e": {
+    "message": "退出執行階段時發生錯誤!"
+  },
+  "error_occurred_error_event_3e7f8ad0": {
+    "message": "發生錯誤 (錯誤事件)"
+  },
+  "error_occurred_trying_to_fetch_runtime_standard_ou_d0677f2d": {
+    "message": "Error occurred trying to fetch runtime standard output"
+  },
   "error_please_add_unknown_functions_to_setting_s_cu_14b4abf8": {
-    "message": "{ error } Please add unknown functions to setting''s customFunctions field."
+    "message": "{ error } 請將未知函數新增至設定的 customFunctions 欄位。"
   },
   "error_processing_schema_2c707cf3": {
     "message": "處理結構描述時發生錯誤"
+  },
+  "error_provisioning_25835400": {
+    "message": "Error provisioning."
+  },
+  "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
+    "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
+  },
+  "errorsmsg_8f5d3d85": {
+    "message": "{ errorsMsg }"
   },
   "event_activity_2067a94b": {
     "message": "事件活動"
@@ -1127,11 +1541,14 @@
   "event_received_457f99d6": {
     "message": "已收到事件"
   },
+  "event_received_event_activity_45ffed05": {
+    "message": "已接收事件 (事件活動)"
+  },
   "events_cf7a8c50": {
     "message": "事件"
   },
-  "example_bot_list_9be1d563": {
-    "message": "範例 Bot 清單"
+  "everything_you_need_to_build_sophisticated_convers_9c00cc01": {
+    "message": "Everything you need to build sophisticated conversational experiences"
   },
   "examples_c435f08c": {
     "message": "範例"
@@ -1142,17 +1559,29 @@
   "expand_2f2fadbd": {
     "message": "展開"
   },
+  "expand_debug_panel_6f04e9f2": {
+    "message": "Expand Debug Panel"
+  },
   "expand_navigation_20330d1d": {
     "message": "展開瀏覽"
   },
-  "expected_responses_intent_intentname_44b051c": {
-    "message": "預期的回應 (意圖: #{ intentName })"
+  "expected_responses_1dca1864": {
+    "message": "Expected responses"
+  },
+  "expecting_4df12c00": {
+    "message": "必須是"
+  },
+  "export_as_skill_764cf284": {
+    "message": "Export as skill"
+  },
+  "export_as_zip_133b7ec": {
+    "message": "Export as .zip"
   },
   "export_json_2e2981f5": {
-    "message": "Export JSON"
+    "message": "匯出 JSON"
   },
-  "export_this_bot_as_zip_c4bfddf2": {
-    "message": "Export this bot as .zip"
+  "export_your_bot_604e651c": {
+    "message": "Export your bot"
   },
   "expression_7f906a13": {
     "message": "運算式"
@@ -1163,26 +1592,29 @@
   "expression_to_evaluate_ce4095b1": {
     "message": "要評估的運算式。"
   },
-  "extensions_7250a0bb": {
-    "message": "延伸模組"
+  "extend_your_bot_with_reusable_dialogs_bot_response_64f9ca51": {
+    "message": "Extend your bot with reusable dialogs, bot response templates and custom actions."
   },
-  "external_resources_will_not_be_changed_c08b0009": {
-    "message": "外部資源將不會變更。"
+  "extension_settings_899ccb55": {
+    "message": "延伸模組設定"
   },
-  "external_services_da7820ce": {
-    "message": "External services"
+  "external_connections_3415fea5": {
+    "message": "External connections"
+  },
+  "external_skill_73e16d25": {
+    "message": "External skill"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
     "message": "從線上常見問題集、產品手冊或其他檔案中擷取問答配對。支援的格式為 .tsv、.pdf、.doc、.docx、.xlsx，並依序包含問答。深入了解知識庫來源。跳過此步驟可在建立後手動新增問答。您可以新增的來源數和檔案大小取決於您所選 QnA 服務 SKU。深入了解 QnA Maker SKU。"
   },
-  "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
-    "message": "從線上常見問題集、產品手冊或其他檔案中擷取問答配對。支援的格式為 .tsv、.pdf、.doc、.docx、.xlsx，並依序包含問答。 "
+  "extracting_question_and_answer_pairs_from_url_bb3f73bb": {
+    "message": "Extracting question-and-answer pairs from { url }"
   },
-  "extracting_qna_pairs_from_url_b0331bba": {
-    "message": "正在從 { url } 擷取 QNA 配對"
+  "fail_to_save_bot_578fa8aa": {
+    "message": "無法儲存 Bot"
   },
-  "failed_to_start_1edb0dbe": {
-    "message": "Failed to start"
+  "failed_276786d": {
+    "message": "Failed"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1190,8 +1622,11 @@
   "false_eef8c169": {
     "message": "False"
   },
+  "faq_website_source_47b5c924": {
+    "message": "FAQ website (source)"
+  },
   "fetching_form_dialog_schema_templates_failed_44e2dd63": {
-    "message": "Fetching form dialog schema templates failed."
+    "message": "擷取表單對話方塊結構描述範本失敗。"
   },
   "field_set_6e7d7f67": {
     "message": "欄位集"
@@ -1211,8 +1646,32 @@
   "file_type_fd1ba7ee": {
     "message": "檔案類型"
   },
-  "filter_dialog_de3ce43f": {
-    "message": "篩選對話"
+  "filter_by_dialog_or_trigger_name_784ee5b0": {
+    "message": "依對話方塊或觸發程序名稱篩選"
+  },
+  "filter_by_file_name_fa3d33b5": {
+    "message": "依檔案名稱篩選"
+  },
+  "filter_e3398407": {
+    "message": "Filter"
+  },
+  "find_additional_template_specific_guidance_for_set_d7256573": {
+    "message": "Find additional template-specific guidance for setting up your bot."
+  },
+  "find_and_install_more_external_services_to_your_bo_37ef3f0c": {
+    "message": "Find and install more external services to your bot project in <a>package manager</a>. For further guidance, see documentation for <a2>adding external connections.</a2>"
+  },
+  "find_dialogs_339a3f87": {
+    "message": "Find dialogs"
+  },
+  "find_dialogs_or_topics_c986d1e6": {
+    "message": "Find dialogs or topics"
+  },
+  "find_pre_built_adaptive_expressions_b106308e": {
+    "message": "Find pre-built Adaptive expressions"
+  },
+  "finish_setting_up_your_environment_and_provisionin_e2fc3625": {
+    "message": "Finish setting up your environment and provisioning resources so that you can publish your bot."
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1220,38 +1679,71 @@
   "folder_foldername_already_exists_4a2260e9": {
     "message": "資料夾 { folderName } 已經存在"
   },
-  "for_each_def04c48": {
-    "message": "對於每個"
+  "font_family_baa0c6a3": {
+    "message": "字型家族"
   },
-  "for_each_page_3b4d4b69": {
-    "message": "對於每個頁面"
+  "font_settings_afc8127c": {
+    "message": "字型設定"
+  },
+  "font_settings_used_in_the_text_editors_a7ed1383": {
+    "message": "文字編輯器中所使用的字型設定。"
+  },
+  "font_size_bf4db203": {
+    "message": "字型大小"
+  },
+  "font_weight_188bb2b9": {
+    "message": "字型粗細"
+  },
+  "for_each_7ec2e376": {
+    "message": "For each"
+  },
+  "for_each_page_198e66f4": {
+    "message": "For each page"
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "對於類型清單 (或列舉) 的屬性，您的 Bot 只接受您定義的值。在您的對話方塊產生後，您可以為每個值提供同義字。"
   },
+  "for_security_purposes_your_bot_can_only_call_a_ski_4b0c81e0": {
+    "message": "For security purposes your bot can only call a skill if it’s Microsoft App Id is in apps allowed callers list. Once you create a publishing profile share your bot’s App ID with the skill’s author to add it to the skill’s allowed callers list. You may also need to include the skill’s app Id in the root bot’s allowed callers list."
+  },
+  "form_b674666c": {
+    "message": "form"
+  },
+  "form_dialog_7327a4ff": {
+    "message": "Form dialog"
+  },
   "form_dialog_error_ba7c37fe": {
-    "message": "Form dialog error"
+    "message": "表單對話方塊錯誤"
   },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "表單對話方塊結構描述動作"
   },
   "form_dialogs_4a1e22f9": {
-    "message": "Form dialogs"
+    "message": "表單對話方塊"
   },
   "form_editor_7c2b02f0": {
     "message": "表單編輯器"
   },
+  "form_field_8566629d": {
+    "message": "Form field"
+  },
   "form_title_baf85c7e": {
     "message": "表單標題"
+  },
+  "form_trigger_e8828303": {
+    "message": "Form trigger"
   },
   "form_wide_operations_1c1a73eb": {
     "message": "全表單作業"
   },
   "forms_preview_af001fab": {
-    "message": "Forms (preview)"
+    "message": "表單 (預覽)"
   },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "fromTemplateName 不存在"
+  },
+  "full_description_for_fd03dbf8": {
+    "message": "full description for"
   },
   "gb_7570760e": {
     "message": "GB"
@@ -1259,44 +1751,65 @@
   "general_24ac26a8": {
     "message": "一般"
   },
-  "generate_44e33e72": {
-    "message": "產生"
+  "generate_and_publish_4f218960": {
+    "message": "Generate and Publish"
   },
   "generate_dialog_b80a85b2": {
     "message": "產生對話"
   },
+  "generate_instructions_for_azure_administrator_1cb21884": {
+    "message": "Generate instructions for Azure administrator"
+  },
+  "generating_dialog_for_schemaid_51b2744f": {
+    "message": "正在產生 \"{ schemaId }\" 的對話方塊"
+  },
   "generating_form_dialog_using_schemaid_schema_faile_817f9f96": {
-    "message": "Generating form dialog using \"{ schemaId }\" schema failed. Please try again later."
+    "message": "使用 \"{ schemaId }\" 結構描述產生表單對話方塊失敗。請稍後再試。"
   },
   "generating_your_dialog_using_schemaid_schema_pleas_c2e1165": {
-    "message": "Generating your dialog using \"{ schemaId }\" schema, please wait..."
+    "message": "正在使用 \"{ schemaId }\" 結構描述產生對話方塊，請稍候..."
+  },
+  "get_a_key_bb364e3": {
+    "message": "Get a key"
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "取得執行階段程式碼的新複本"
   },
+  "get_a_skill_manifest_url_from_the_skill_s_author_7771e8b4": {
+    "message": "Get a skill manifest URL from the skill’s author"
+  },
   "get_activity_members_11339605": {
-    "message": "Get activity members"
+    "message": "取得活動成員"
   },
   "get_conversation_members_71602275": {
-    "message": "Get conversation members"
+    "message": "取得交談成員"
   },
-  "get_started_50c13c6c": {
-    "message": "開始使用!"
+  "get_remote_file_fail_37ef94c5": {
+    "message": "get remote file fail"
   },
-  "getting_help_ab6811b0": {
-    "message": "取得說明"
+  "get_started_76ed4cb9": {
+    "message": "Get started"
   },
-  "getting_started_f45a7e87": {
-    "message": "使用者入門"
+  "get_started_with_bot_framework_composer_57a6d38b": {
+    "message": "Get started with Bot Framework Composer"
   },
   "getting_template_910a4116": {
-    "message": "Getting template"
+    "message": "正在取得範本"
+  },
+  "github_c7cc3613": {
+    "message": "GitHub"
   },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "前往 QnA 完整檢視頁面。"
   },
+  "go_to_stack_overflow_e525148": {
+    "message": "Go to Stack Overflow"
+  },
   "got_it_2c06b54a": {
     "message": "了解!"
+  },
+  "greeting_conversationupdate_activity_3eb99c15": {
+    "message": "問候語 (ConversationUpdate 活動)"
   },
   "greeting_f906f962": {
     "message": "問候語"
@@ -1310,11 +1823,17 @@
   "handover_to_human_1a619574": {
     "message": "轉接給真人"
   },
+  "handover_to_human_handoff_activity_477a71fe": {
+    "message": "移交給人力資源 (移交活動)"
+  },
   "help_us_improve_468828c5": {
-    "message": "Help us improve?"
+    "message": "要協助我們改進嗎?"
   },
   "here_s_what_we_know_4e9c1731": {
     "message": "以下是我們所知的內容…"
+  },
+  "hero_card_cef4cd02": {
+    "message": "主圖卡片"
   },
   "hide_code_5dcffa94": {
     "message": "隱藏程式碼"
@@ -1322,11 +1841,14 @@
   "home_351838cd": {
     "message": "首頁"
   },
-  "http_request_79847109": {
-    "message": "HTTP 要求"
+  "http_request_b6394895": {
+    "message": "HTTP request"
   },
-  "i_want_to_delete_this_bot_f81a4735": {
-    "message": "我要刪除此 Bot"
+  "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
+    "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
+  },
+  "i_want_to_keep_the_template_content_in_the_file_ju_769331d9": {
+    "message": "I want to keep the template content in the file, just want to dereference from this response (hint: keep the content if you currently, or plan to re-use in another location)"
   },
   "icon_name_is_file_c80dacae": {
     "message": "{ icon } 名稱為 { file }"
@@ -1337,11 +1859,14 @@
   "id_already_exists_please_enter_a_unique_file_name_174913a3": {
     "message": "{ id } 已經存在。請輸入唯一的檔案名稱。"
   },
-  "if_condition_56c9be4a": {
-    "message": "If 條件"
+  "if_azure_resources_and_subscription_are_managed_by_e36717f6": {
+    "message": "If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot."
   },
-  "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
-    "message": "若此問題持續發生，請在下列位置提出問題:"
+  "if_condition_d4383ce9": {
+    "message": "If condition"
+  },
+  "if_this_problem_persists_please_file_an_issue_on_a_e8c3443e": {
+    "message": "If this problem persists, please file an issue on <a>GitHub</a>"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "若您已有 LUIS 帳戶，請提供下列資訊。若您還沒有帳戶，請先建立 (免費的) 帳戶。"
@@ -1349,20 +1874,41 @@
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "若您已有 QnA 帳戶，請提供下列資訊。若您還沒有帳戶，請先建立 (免費) 帳戶。"
   },
+  "if_you_have_created_custom_components_you_might_ne_dc7cf128": {
+    "message": "If you have created custom components, you might need to rebuild them. <a>Learn more about custom components.</a>"
+  },
+  "if_you_would_like_to_try_again_or_select_from_exis_f2f894b4": {
+    "message": "If you would like to try again, or select from existing resources, please click “Back”."
+  },
+  "ignoring_dc76ef87": {
+    "message": "忽略"
+  },
   "import_as_new_35630827": {
-    "message": "Import as new"
+    "message": "匯入為新的"
+  },
+  "import_new_url_and_overwrite_5e463747": {
+    "message": "Import new URL and overwrite"
   },
   "import_schema_75659c5f": {
     "message": "匯入結構描述"
   },
+  "import_url_62402b7c": {
+    "message": "Import URL"
+  },
   "import_your_bot_to_new_project_8751d82f": {
-    "message": "Import your bot to new project"
+    "message": "將您的 Bot 匯入新專案中"
+  },
+  "importing_a_publishing_profile_6fb3cd96": {
+    "message": "Importing a publishing profile"
   },
   "importing_b_botname_b_from_sourcename_f7410826": {
-    "message": "Importing <b>{ botName }</b> from { sourceName }..."
+    "message": "正在從 { sourceName } 匯入 <b>{ botName }</b>..."
   },
   "importing_bot_content_from_targetname_6da78f15": {
-    "message": "Importing bot content from { targetName }..."
+    "message": "正在從 { targetName } 匯入 Bot 內容..."
+  },
+  "in_order_to_use_the_response_editor_please_fix_you_570408e8": {
+    "message": "若要使用回應編輯器，請先修正範本錯誤。"
   },
   "in_production_5a70b8b4": {
     "message": "生產中"
@@ -1370,26 +1916,71 @@
   "in_test_63c32694": {
     "message": "測試中"
   },
-  "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
-    "message": "在 [建立觸發程序精靈]<b></b> 中，將觸發程序類型設定為下拉式清單中的 [活動]<i></i>。然後將 [活動類型]<b></b> 設定為 [問候語 (ConversationUpdate 活動)]<i></i>，並按一下 [提交]<b></b> 按鈕。"
-  },
   "inactive_34365329": {
-    "message": "Inactive"
+    "message": "非使用中"
   },
   "initializing_bot_project_48f55e12": {
-    "message": "Initializing bot project"
+    "message": "正在將 Bot 專案初始化"
   },
   "input_1d1d9b8e": {
     "message": "輸入"
   },
+  "input_hint_37e0c163": {
+    "message": "輸入提示: "
+  },
+  "input_hint_ab89f368": {
+    "message": "輸入提示"
+  },
+  "insert_a_property_reference_in_memory_95d27746": {
+    "message": "在記憶體中插入屬性參考"
+  },
+  "insert_a_template_reference_b1d4203e": {
+    "message": "插入範本參考"
+  },
+  "insert_an_adaptive_expression_pre_built_function_32b1583a": {
+    "message": "插入自適性運算式預建函數"
+  },
+  "insert_defined_entity_d1293781": {
+    "message": "Insert defined entity"
+  },
+  "insert_entity_3a9dbd5d": {
+    "message": "Insert entity"
+  },
+  "insert_prebuilt_functions_22b05f8": {
+    "message": "插入預建函數"
+  },
+  "insert_property_reference_38f0605": {
+    "message": "插入屬性參考"
+  },
+  "insert_ssml_tag_1fedbe80": {
+    "message": "插入 SSML 標籤"
+  },
+  "insert_template_reference_bb33720e": {
+    "message": "插入範本參考"
+  },
+  "install_azure_functions_d607f182": {
+    "message": "Install Azure Functions"
+  },
+  "install_error_a9319839": {
+    "message": "Install Error"
+  },
   "install_microsoft_net_core_sdk_2de509f0": {
     "message": "安裝 Microsoft .NET Core SDK"
+  },
+  "install_net_core_sdk_67e62ca9": {
+    "message": "Install .NET Core SDK"
+  },
+  "install_node_js_1857298c": {
+    "message": "Install Node.js"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
     "message": "每日安裝 Composer 的發行前版本，以存取及測試最新功能。<a>深入了解</a>。"
   },
   "install_the_update_and_restart_composer_fac30a61": {
     "message": "安裝更新並重新啟動 Composer。"
+  },
+  "instructions_2f88ee72": {
+    "message": "Instructions"
   },
   "integer_7f378275": {
     "message": "整數"
@@ -1406,14 +1997,23 @@
   "integer_or_expression_107f60fb": {
     "message": "整數或運算式"
   },
+  "integrating_with_power_virtual_agents_14c007cf": {
+    "message": "Integrating with Power Virtual Agents"
+  },
   "intent_2291200b": {
     "message": "意圖"
+  },
+  "intent_name_e9831403": {
+    "message": "Intent name: "
   },
   "intent_recognized_c3840853": {
     "message": "識別到意圖"
   },
   "intentname_is_missing_or_empty_e49db2f8": {
     "message": "intentName 缺少或空白"
+  },
+  "intents_9b8593e0": {
+    "message": "Intents"
   },
   "interpolated_string_c96053f2": {
     "message": "差補字串。"
@@ -1427,17 +2027,14 @@
   "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
     "message": "Composer 的主要概念簡介和使用者體驗要素。"
   },
+  "invalid_file_path_to_save_the_transcript_54c92a51": {
+    "message": "儲存文字記錄的檔案路徑無效。"
+  },
   "invoke_activity_87df4903": {
     "message": "叫用活動"
   },
   "is_missing_or_empty_a551462e": {
     "message": "缺少或空白"
-  },
-  "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
-    "message": "並非內建函數或自訂函數。"
-  },
-  "item_actions_22d0242": {
-    "message": "項目動作"
   },
   "item_actions_cd903bde": {
     "message": "項目動作"
@@ -1448,11 +2045,14 @@
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
     "message": "找到 { itemCount, plural,\n     =0 {0 個結構描述}\n     =1 {1 個結構描述}\n  other {# 個結構描述}\n}。\n            { itemCount, select,\n      0 {}\n  other {請按向下鍵瀏覽搜尋結果}\n}"
   },
-  "jan_28_2020_8beb36dc": {
-    "message": "2020 年 1 月 28 日"
+  "just_add_a_qna_key_and_you_ll_be_ready_to_talk_to__d18758bb": {
+    "message": "Just add a QnA key and you’ll be ready to talk to your bot."
   },
   "kb_d9c53902": {
     "message": "KB"
+  },
+  "keep_this_url_handy_to_share_it_with_other_develop_bfd51fb0": {
+    "message": "Keep this URL handy to share it with other developers to use in their bot projects. You can find this URL in the project settings tab."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "金鑰不能為空白"
@@ -1463,14 +2063,20 @@
   "keys_must_be_unique_2028cef3": {
     "message": "金鑰必須是唯一的"
   },
+  "knowledge_base_31e6868e": {
+    "message": "Knowledge base"
+  },
   "knowledge_base_name_7d83bbe4": {
     "message": "知識庫名稱"
   },
-  "knowledge_source_dd66f38f": {
-    "message": "知識來源"
+  "knowledge_qna_1a599dcf": {
+    "message": "Knowledge (QnA)"
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
+  },
+  "label_entity_45d7b842": {
+    "message": "Label entity"
   },
   "language_generation_1876f6d6": {
     "message": "語言產生"
@@ -1478,53 +2084,68 @@
   "language_understanding_9ae3f1f6": {
     "message": "語言理解"
   },
+  "language_understanding_authoring_key_74a41a4": {
+    "message": "Language Understanding authoring key"
+  },
+  "language_understanding_luis_is_an_azure_cognitive__21ee0f60": {
+    "message": "Language Understanding (LUIS) is an Azure Cognitive Service that uses machine learning to understand natural language input and direct the conversation flow. <a>Learn more.</a> Use an existing Language Understanding (LUIS) key from Azure or create a new key. <a2>Learn more</a2>"
+  },
+  "language_understanding_region_ec8fb05c": {
+    "message": "Language Understanding region"
+  },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
   },
   "last_modified_time_is_time_b1497d3": {
     "message": "上次修改時間為 { time }"
   },
-  "learn_more_14816ec": {
-    "message": "Learn More."
+  "layout_56d3a203": {
+    "message": "版面配置: "
+  },
+  "learn_about_adaptive_expressions_fb1b6c3c": {
+    "message": "Learn about Adaptive expressions"
   },
   "learn_more_a79a7918": {
     "message": "深入了解"
   },
   "learn_more_about_activities_134f453d": {
-    "message": "Learn more about activities"
+    "message": "深入了解活動"
+  },
+  "learn_more_about_custom_actions_e7aa69e9": {
+    "message": "Learn more about custom actions"
   },
   "learn_more_about_endpoints_df156708": {
-    "message": "Learn more about endpoints"
-  },
-  "learn_more_about_knowledge_base_sources_24369b09": {
-    "message": "深入了解知識庫來源。 "
+    "message": "深入了解端點"
   },
   "learn_more_about_manifests_6e7c364b": {
-    "message": "Learn more about manifests"
+    "message": "深入了解資訊清單"
+  },
+  "learn_more_about_orchestrator_c070e031": {
+    "message": "Learn more about Orchestrator"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
-    "message": "Learn more about skill manifests"
+    "message": "深入了解技能資訊清單"
   },
   "learn_more_about_title_d1d3edbe": {
     "message": "深入了解 { title }"
   },
   "learn_more_about_your_property_schema_3a0a0890": {
-    "message": "Learn more about your property schema"
-  },
-  "learn_more_c08939e8": {
-    "message": "深入了解。"
-  },
-  "learn_the_basics_2d9ae7df": {
-    "message": "了解基本概念"
+    "message": "深入了解您的屬性結構描述"
   },
   "leave_product_tour_49585718": {
     "message": "要離開產品導覽嗎?"
+  },
+  "lg_e6ee5b4a": {
+    "message": "LG"
   },
   "lg_editor_ee0184e6": {
     "message": "LG 編輯器"
   },
   "lg_file_already_exist_55195d20": {
     "message": "LG 檔案已經存在"
+  },
+  "lg_file_format_and_syntax_244103fb": {
+    "message": "LG file format and syntax"
   },
   "lg_file_id_not_found_6bd6869b": {
     "message": "找不到 LG 檔案 { id }"
@@ -1542,10 +2163,13 @@
     "message": "行 { startLine }:{ startCharacter } - 行 { endLine }:{ endCharacter }"
   },
   "link_to_this_skill_has_been_broken_343072bd": {
-    "message": "Link to this skill has been broken"
+    "message": "此技能的連結已毀損"
   },
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "連結至定義此 LUIS 意圖的位置"
+  },
+  "list_6cc05": {
+    "message": "清單"
   },
   "list_a034633b": {
     "message": "清單"
@@ -1553,8 +2177,17 @@
   "list_count_values_33ea7088": {
     "message": "清單 - { count } 個值"
   },
-  "list_of_languages_that_bot_will_be_able_to_underst_e4851dc5": {
-    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language."
+  "list_entity_a3502e75": {
+    "message": "List entity"
+  },
+  "list_of_actions_rendered_as_suggestions_to_user_c0154e0b": {
+    "message": "對使用者轉譯為建議的動作清單。"
+  },
+  "list_of_attachments_with_their_type_used_by_channe_7ecf0086": {
+    "message": "包含類型的附件清單。通道會用來轉譯為 UI 卡片或其他一般檔案附件類型。"
+  },
+  "list_of_languages_that_bot_will_be_able_to_underst_c6f62837": {
+    "message": "List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language."
   },
   "list_view_e33843f0": {
     "message": "清單檢視"
@@ -1565,17 +2198,26 @@
   "loading_bde52856": {
     "message": "正在載入"
   },
+  "loading_keys_22ceedc": {
+    "message": "Loading keys..."
+  },
+  "loading_subscription_f0a868a1": {
+    "message": "Loading subscription..."
+  },
   "local_bot_runtime_manager_812cbd0c": {
-    "message": "Local bot runtime manager"
+    "message": "本機 Bot 執行階段管理員"
   },
   "local_composer_386e07d7": {
-    "message": "Local Composer"
+    "message": "本機 Composer"
   },
   "local_skill_6ce0d311": {
-    "message": "Local Skill."
+    "message": "本機技能。"
+  },
+  "localization_2e29f01e": {
+    "message": "Localization"
   },
   "locate_the_bot_file_and_repair_the_link_202045b1": {
-    "message": "Locate the bot file and repair the link"
+    "message": "找到 Bot 檔案並修復連結"
   },
   "location_e17bd402": {
     "message": "位置"
@@ -1583,17 +2225,17 @@
   "location_is_location_8c17b5de": {
     "message": "位置為 { location }"
   },
+  "log_output_64a4dbec": {
+    "message": "記錄輸出"
+  },
   "log_to_console_4fc23e34": {
     "message": "記錄至主控台"
   },
   "login_6f3d6249": {
     "message": "登入"
   },
-  "login_to_composer_eb42b41": {
-    "message": "登入 Composer"
-  },
-  "loop_for_each_item_53eb7c5b": {
-    "message": "迴圈: 對於每個項目"
+  "login_to_azure_c0cb057e": {
+    "message": "登入 Azure"
   },
   "loop_for_each_item_e09537ae": {
     "message": "迴圈: 對於每個項目"
@@ -1604,11 +2246,17 @@
   "looping_ddae56ff": {
     "message": "迴圈"
   },
+  "lu_15572a02": {
+    "message": "LU"
+  },
   "lu_editor_d09fb2b0": {
     "message": "LU 編輯器"
   },
   "lu_file_already_exist_7f118089": {
     "message": "lu 檔案已經存在"
+  },
+  "lu_file_format_and_syntax_8211b0c9": {
+    "message": "LU file format and syntax"
   },
   "lu_file_id_not_found_8732d33e": {
     "message": "找不到 LU 檔案 { id }"
@@ -1622,29 +2270,23 @@
   "luis_add4bbe3": {
     "message": "LUIS"
   },
-  "luis_application_name_1530d3aa": {
-    "message": "LUIS application name"
+  "luis_authoring_key_2cfdf05": {
+    "message": "LUIS authoring key:"
   },
-  "luis_authoring_key_c8414499": {
-    "message": "LUIS authoring key"
+  "luis_authoring_key_is_required_with_the_current_re_464f655e": {
+    "message": "目前的識別器設定必須有 LUIS 製作金鑰，才能在本機啟動 Bot 及發行"
   },
-  "luis_authoring_key_cfaba7dd": {
-    "message": "LUIS 撰寫金鑰:"
+  "luis_authoring_region_a1d18730": {
+    "message": "Luis authoring region"
   },
-  "luis_authoring_region_b142f97b": {
-    "message": "LUIS 製作區域"
+  "luis_key_is_required_with_the_current_recognizer_s_66890a29": {
+    "message": "目前的識別器設定必須有 LUIS 金鑰，才能在本機啟動 Bot 及發行"
   },
-  "luis_endpoint_key_c685e219": {
-    "message": "LUIS endpoint key"
+  "luis_region_is_required_4b7a19af": {
+    "message": "需要 LUIS 區域"
   },
-  "luis_key_is_required_with_the_current_recognizer_s_6a0e8798": {
-    "message": "LUIS Key is required with the current recognizer setting to start your bot locally, and publish"
-  },
-  "luis_region_9879d8de": {
-    "message": "LUIS region"
-  },
-  "luis_region_is_required_163ca19f": {
-    "message": "LUIS Region is required"
+  "machine_learned_entity_baec1ae5": {
+    "message": "Machine learned entity"
   },
   "main_dialog_eed5c847": {
     "message": "主要對話"
@@ -1653,31 +2295,31 @@
     "message": "製作複本"
   },
   "manage_bot_languages_9ec36fd7": {
-    "message": "Manage bot languages"
+    "message": "管理 Bot 語言"
   },
   "manage_profiles_715c2092": {
-    "message": "Manage profiles"
+    "message": "管理設定檔"
   },
   "manage_properties_c9fa4456": {
     "message": "管理屬性"
   },
   "manifest_could_not_be_loaded_1c011a6a": {
-    "message": "Manifest could not be loaded"
+    "message": "無法載入資訊清單"
   },
   "manifest_editor_1426637": {
-    "message": "manifest editor"
+    "message": "資訊清單編輯器"
   },
-  "manifest_url_30824e88": {
-    "message": "資訊清單 URL"
+  "manifest_url_a6250c02": {
+    "message": "Manifest URL"
   },
-  "manifest_url_can_not_be_accessed_a7f147b2": {
-    "message": "無法存取資訊清單 URL"
+  "manifest_url_can_not_be_accessed_ba43fc31": {
+    "message": "Manifest URL can not be accessed"
   },
   "manifest_version_1edc004a": {
     "message": "資訊清單版本"
   },
-  "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
-    "message": "手動新增問題與答案配對以建立 KB"
+  "manually_add_question_and_answer_pairs_to_create_a_39089442": {
+    "message": "Manually add question and answer pairs to create a knowledge base"
   },
   "maximum_f0e8e5e4": {
     "message": "最大值"
@@ -1689,7 +2331,7 @@
     "message": "功能表項目"
   },
   "merging_packages_6115c7ea": {
-    "message": "Merging Packages"
+    "message": "正在合併套件"
   },
   "message_5c38209d": {
     "message": "訊息"
@@ -1700,11 +2342,17 @@
   "message_deleted_activity_85dd8915": {
     "message": "已刪除訊息活動"
   },
+  "message_deleted_message_deleted_activity_dd2d4b9f": {
+    "message": "已刪除訊息 (已刪除訊息活動)"
+  },
   "message_reaction_3704d790": {
     "message": "訊息表情符號"
   },
   "message_reaction_activity_379944e7": {
     "message": "訊息表情符號活動"
+  },
+  "message_reaction_message_reaction_activity_b9ac1076": {
+    "message": "訊息回應 (訊息回應活動)"
   },
   "message_received_5abfe9a0": {
     "message": "已收到訊息"
@@ -1712,17 +2360,38 @@
   "message_received_activity_1ff7c2a4": {
     "message": "已收到訊息活動"
   },
+  "message_received_message_received_activity_4ef515f5": {
+    "message": "已接收訊息 (已接收訊息活動)"
+  },
   "message_updated_4f2e37fe": {
     "message": "已更新訊息"
   },
   "message_updated_activity_4997737e": {
     "message": "已更新訊息活動"
   },
+  "message_updated_message_updated_activity_eacdb6bd": {
+    "message": "已更新訊息 (已更新訊息活動)"
+  },
+  "microsoft_app_id_9c9dc559": {
+    "message": "Microsoft App ID"
+  },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft 應用程式識別碼"
   },
   "microsoft_app_password_737ebc90": {
     "message": "Microsoft 應用程式密碼"
+  },
+  "microsoft_logo_4378a7cb": {
+    "message": "Microsoft Logo"
+  },
+  "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
+    "message": "Microsoft''s templates offer best practices for developing conversational bots."
+  },
+  "migrating_data_a35b3055": {
+    "message": "Migrating data"
+  },
+  "migrating_to_composer_bc304b5d": {
+    "message": "Migrating to Composer"
   },
   "minimap_beb3be27": {
     "message": "縮圖"
@@ -1754,14 +2423,17 @@
   "move_abf00365": {
     "message": "移動"
   },
-  "move_down_eaae3426": {
-    "message": "下移"
+  "move_down_4a9c9b18": {
+    "message": "Move down"
   },
-  "move_up_b1c4d3a5": {
-    "message": "上移"
+  "move_up_2440f707": {
+    "message": "Move up"
   },
-  "msft_ignite_ai_show_e131edef": {
-    "message": "MSFT Ignite AI 節目"
+  "ms_teams_15993b97": {
+    "message": "MS Teams"
+  },
+  "msg_bf173fef": {
+    "message": "{ msg }"
   },
   "multi_choice_839b54bb": {
     "message": "複選"
@@ -1775,9 +2447,6 @@
   "must_have_a_name_d5c5c464": {
     "message": "必須有名稱"
   },
-  "my_publish_profile_2ed56828": {
-    "message": "我的發行設定檔"
-  },
   "name_1aed4a1b": {
     "message": "名稱"
   },
@@ -1785,7 +2454,7 @@
     "message": "命名並儲存您的技能資訊清單。"
   },
   "name_cannot_be_found_at_the_location_27560dcb": {
-    "message": "{ name } cannot be found at the location."
+    "message": "在此位置找不到 { name }。"
   },
   "name_copy_55d27c1a": {
     "message": "{ name } 複本(_C)"
@@ -1811,11 +2480,11 @@
   "navigation_path_8b299e64": {
     "message": "瀏覽路徑"
   },
-  "navigation_to_see_actions_3be545c9": {
-    "message": "瀏覽以查看動作"
+  "need_another_template_send_us_a_request_5cf2a4d5": {
+    "message": "Need another template? Send us a request"
   },
-  "new_13daf639": {
-    "message": "新增"
+  "net_required_97928257": {
+    "message": ".NET required"
   },
   "new_template_49e6f0f2": {
     "message": "新增範本"
@@ -1835,14 +2504,29 @@
   "next_40e12421": {
     "message": "下一步"
   },
+  "no_azure_directories_were_found_6dfe6f6f": {
+    "message": "No Azure Directories were found."
+  },
   "no_editor_for_type_8b5593c5": {
     "message": "沒有任何 { type } 的編輯器"
+  },
+  "no_entities_found_a8e8bd19": {
+    "message": "no entities found"
+  },
+  "no_existing_service_resources_were_found_in_this_s_ca2f1745": {
+    "message": "No existing { service } resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin."
   },
   "no_extensions_installed_4b925277": {
     "message": "未安裝任何延伸模組"
   },
   "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
     "message": "沒有任何表單對話方塊結構描述符合您的篩選準則!"
+  },
+  "no_functions_found_e0db426b": {
+    "message": "找不到任何函數"
+  },
+  "no_items_found_4a6f55d5": {
+    "message": "no items found"
   },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "沒有名稱為 { id } 的 LU 檔案"
@@ -1853,35 +2537,59 @@
   "no_name_e082310e": {
     "message": "[無名稱]"
   },
+  "no_prebuilt_entities_found_a1015451": {
+    "message": "no prebuilt entities found"
+  },
+  "no_profiles_were_found_containing_a_microsoft_app__e63012d": {
+    "message": "No profiles were found containing a Microsoft App ID."
+  },
+  "no_properties_found_6f777f6e": {
+    "message": "找不到任何屬性"
+  },
   "no_qna_file_with_name_id_7cb89755": {
-    "message": "NO QNA FILE WITH NAME { id }"
+    "message": "沒有名稱為 { id } 的 QnA 檔案"
+  },
+  "no_recent_bots_f4cf7d0a": {
+    "message": "No recent bots"
   },
   "no_search_results_1ba50423": {
     "message": "沒有任何搜尋結果"
   },
+  "no_templates_found_d8dca69b": {
+    "message": "找不到任何範本"
+  },
   "no_updates_available_cecd904d": {
     "message": "沒有任何更新可用"
+  },
+  "no_uploads_were_attached_as_a_part_of_the_request_63e92f54": {
+    "message": "要求中未附加任何上傳項目。"
   },
   "no_wildcard_ff439e76": {
     "message": "沒有任何萬用字元"
   },
+  "node_js_required_89c1c708": {
+    "message": "Node.js required"
+  },
   "node_menu_e2aa8092": {
     "message": "節點功能表"
+  },
+  "node_preview_cbcd8fb": {
+    "message": "Node (Preview)"
   },
   "not_a_single_template_e37f894": {
     "message": "並非單一範本"
   },
   "not_now_97efd947": {
-    "message": "Not now"
+    "message": "稍後再說"
   },
   "not_yet_published_669e37b3": {
     "message": "尚未發行"
   },
+  "note_if_your_bot_is_using_custom_actions_they_will_a500ed2": {
+    "message": "Note: If your bot is using custom actions, they will not be supported in Composer 2.0. <a>Learn more about updating to Composer 2.0.</a>"
+  },
   "notifications_cbfa7704": {
     "message": "通知"
-  },
-  "nov_12_2019_96ec5473": {
-    "message": "2019 年 11 月 12 日"
   },
   "number_a6dc44e": {
     "message": "數字"
@@ -1898,8 +2606,14 @@
   "number_or_expression_55c7f9f": {
     "message": "數字或運算式"
   },
+  "oauth_activities_are_not_available_for_testing_in__2207dcef": {
+    "message": "目前還無法在 Composer 中測試 OAuth 活動。請繼續使用 Bot Framework Emulator 來測試 OAuth 動作。"
+  },
   "oauth_login_b6aa9534": {
     "message": "OAuth 登入"
+  },
+  "object_33fc75c0": {
+    "message": "object"
   },
   "object_345070f6": {
     "message": "物件"
@@ -1931,23 +2645,38 @@
   "onboarding_8407871c": {
     "message": "上線"
   },
+  "once_you_publish_your_bot_to_azure_you_will_be_rea_93048067": {
+    "message": "Once you publish your bot to Azure you will be ready to add connections."
+  },
   "ondialogevents_types_3dc569b5": {
     "message": "OnDialogEvents 類型"
   },
-  "open_an_existing_skill_fbd87273": {
-    "message": "Open an existing skill"
+  "one_or_more_options_that_are_passed_to_the_dialog__cbcf5d72": {
+    "message": "One or more options that are passed to the dialog that is called."
   },
   "open_e0beb7b9": {
     "message": "開啟"
   },
+  "open_github_811d5819": {
+    "message": "Open GitHub"
+  },
   "open_inline_editor_a5aabcfa": {
     "message": "開啟內嵌編輯器"
+  },
+  "open_manifest_6c334f9": {
+    "message": "Open manifest"
   },
   "open_notification_panel_5796edb3": {
     "message": "開啟通知面板"
   },
-  "open_start_bots_panel_f7f87200": {
-    "message": "Open start bots panel"
+  "open_teams_416aae5c": {
+    "message": "Open Teams"
+  },
+  "open_the_product_tour_to_learn_about_bot_framework_4e6e7227": {
+    "message": "Open the product tour to learn about Bot Framework Composer or <Link>create a new bot</Link>"
+  },
+  "open_web_chat_23601990": {
+    "message": "開啟網路聊天"
   },
   "optional_221bcc9d": {
     "message": "選擇性"
@@ -1964,14 +2693,17 @@
   "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
     "message": "選擇性。設定最小值可讓您的 Bot 拒絕過小的值，並重新提示使用者輸入新值。"
   },
+  "options_3ab0ea65": {
+    "message": "選項"
+  },
   "or_4f7d4edb": {
     "message": "或: "
   },
-  "orchestrator_36e58231": {
-    "message": "Orchestrator"
+  "orchestrator_downloading_language_model_e785be44": {
+    "message": "Orchestrator: Downloading language model"
   },
   "orchestrator_recognizer_cf38b65a": {
-    "message": "Orchestrator recognizer"
+    "message": "協調器辨識器"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "在存放區中找不到原始 LG 檔案"
@@ -1985,11 +2717,17 @@
   "other_1c6d9c79": {
     "message": "其他"
   },
+  "our_privacy_statement_is_located_at_a_https_go_mic_56534925": {
+    "message": "Our privacy statement is located at <a>https://go.microsoft.com/fwlink/?LinkID=824704</a>. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices."
+  },
   "output_5023cf84": {
     "message": "輸出"
   },
-  "package_manager_6c42db30": {
-    "message": "Package manager"
+  "overview_58268c72": {
+    "message": "Overview"
+  },
+  "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
+    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
   },
   "page_number_cdee4179": {
     "message": "頁碼"
@@ -2000,8 +2738,8 @@
   "paste_5963d1c1": {
     "message": "貼上"
   },
-  "please_add_at_least_minitems_endpoint_5439fd74": {
-    "message": "請至少新增 { minItems } 個端點"
+  "paste_token_here_eccec7e4": {
+    "message": "在此貼上權杖"
   },
   "please_enter_a_value_for_key_77cfc097": {
     "message": "請輸入 { key } 的值"
@@ -2009,8 +2747,8 @@
   "please_enter_an_event_name_a148275a": {
     "message": "請輸入事件名稱"
   },
-  "please_input_a_manifest_url_d726edbf": {
-    "message": "請輸入資訊清單 URL"
+  "please_input_a_manifest_url_79cce9d5": {
+    "message": "Please input a manifest URL"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "請輸入 RegEx 模式"
@@ -2021,32 +2759,41 @@
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
     "message": "請返回 [設計檢視] 以開始上線教學課程。"
   },
-  "please_select_a_event_type_200c4c9f": {
-    "message": "請選取事件類型"
-  },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
     "message": "請選取要匯入 QnA 的特定 QnA 檔案"
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "請選取觸發程序類型"
   },
-  "please_select_a_valid_endpoint_bf608af1": {
-    "message": "請選取有效的端點"
+  "please_setup_the_following_to_ensure_we_can_connec_2c5a2acb": {
+    "message": "Please setup the following to ensure we can connect to your remote skill successfully"
   },
-  "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
-    "message": "請選取資訊清單結構描述的版本"
+  "pop_out_editor_5528a187": {
+    "message": "Pop out editor"
   },
-  "please_select_an_activity_type_92f4a8a1": {
-    "message": "請選取活動類型"
+  "power_virtual_agents_bots_cannot_be_run_at_the_mom_a866be28": {
+    "message": "Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there."
+  },
+  "power_virtual_agents_bots_cannot_use_this_function_fcfeaf62": {
+    "message": "Power Virtual Agents bots cannot use this functionality at this time."
+  },
+  "power_virtual_agents_topics_count_9043ab47": {
+    "message": "Power Virtual Agents Topics ({ count })"
   },
   "powervirtualagents_logo_11858924": {
-    "message": "PowerVirtualAgents Logo"
+    "message": "PowerVirtualAgents 標誌"
+  },
+  "prebuilt_entity_21ebcdc6": {
+    "message": "Prebuilt entity"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "按 Enter 鍵以新增此項目，或按 Tab 鍵以移至下一個互動式元素"
   },
   "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
     "message": "按 Enter 鍵以新增此名稱並前進到下一個資料列，或按 Tab 鍵以前進到值欄位"
+  },
+  "press_shift_enter_to_insert_a_new_line_2a5a970f": {
+    "message": "Press Shift+Enter to insert a new line"
   },
   "preview_features_e279bac5": {
     "message": "預覽功能"
@@ -2055,31 +2802,28 @@
     "message": "上一步"
   },
   "previous_bot_content_has_been_backed_up_to_d6d23960": {
-    "message": " Previous bot content has been backed up to:"
+    "message": " 先前的 Bot 內容已備份到:"
   },
   "previous_folder_e7eeb306": {
     "message": "上一個資料夾"
   },
-  "privacy_290109ea": {
-    "message": "隱私權"
-  },
-  "privacy_button_b58e437": {
-    "message": "隱私權按鈕"
+  "pricing_tier_c2ff8573": {
+    "message": "Pricing tier"
   },
   "privacy_statement_da69ebc6": {
-    "message": "Privacy statement"
+    "message": "隱私權聲明"
+  },
+  "problems_31833f8c": {
+    "message": "問題"
   },
   "progress_of_total_87de8616": {
     "message": "{ total } 的 { progress }%"
   },
-  "project_settings_bb885d3e": {
-    "message": "Project Settings"
+  "project_readme_68f88d88": {
+    "message": "Project Readme"
   },
   "prompt_configurations_ab47cd3f": {
     "message": "提示設定"
-  },
-  "prompt_for_a_date_5d2c689e": {
-    "message": "提示輸入日期"
   },
   "prompt_for_a_date_or_a_time_d2df7f90": {
     "message": "提示輸入日期或時間"
@@ -2087,17 +2831,8 @@
   "prompt_for_a_file_or_an_attachment_1bf18e7e": {
     "message": "提示新增檔案或附件"
   },
-  "prompt_for_a_number_84999edb": {
-    "message": "提示輸入數字"
-  },
-  "prompt_for_attachment_727d4fac": {
-    "message": "提示新增附件"
-  },
   "prompt_for_confirmation_dc85565c": {
     "message": "提示確認"
-  },
-  "prompt_for_text_5c524f80": {
-    "message": "提示輸入文字"
   },
   "prompt_with_multi_choice_f428542f": {
     "message": "複選提示"
@@ -2129,53 +2864,89 @@
   "property_type_e38cf7e4": {
     "message": "屬性類型"
   },
+  "provide_a_key_in_order_to_connect_your_bot_to_the__9fa1f065": {
+    "message": "Provide a key in order to connect your bot to the Azure Speech service. "
+  },
+  "provide_access_tokens_8ead7563": {
+    "message": "提供存取權杖"
+  },
+  "provide_arm_token_by_running_az_account_get_access_e9d825a4": {
+    "message": "執行 `az account get-access-token` 以提供 ARM 權杖"
+  },
+  "provide_graph_token_by_running_az_account_get_acce_6d27a279": {
+    "message": "執行 `az account get-access-token  --resource-type ms-graph` 以提供圖表權杖"
+  },
+  "provision_failure_983d3844": {
+    "message": "佈建失敗"
+  },
+  "provision_partially_completed_b0120a72": {
+    "message": "Provision partially completed"
+  },
+  "provision_success_d6a6e437": {
+    "message": "佈建成功"
+  },
+  "provisioning_1330aede": {
+    "message": "正在佈建..."
+  },
   "pseudo_1a319287": {
     "message": "虛擬"
   },
   "publish_5211dca3": {
     "message": "發行"
   },
-  "publish_configuration_d759a4e3": {
-    "message": "發行設定"
-  },
-  "publish_destination_type_5f8c200a": {
-    "message": "發行目的地類型"
-  },
   "publish_models_9a36752a": {
     "message": "發行模型"
   },
+  "publish_profile_a4e8f07b": {
+    "message": "Publish profile"
+  },
   "publish_selected_bots_825bc03a": {
-    "message": "Publish selected bots"
+    "message": "發佈選取的 Bot"
   },
   "publish_target_388f6adf": {
-    "message": "Publish target"
+    "message": "發佈目標"
   },
-  "publish_targets_8afc4467": {
-    "message": "Publish targets"
+  "publish_your_bot_9099e323": {
+    "message": "Publish your bot"
+  },
+  "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
+    "message": "Publish your bot to Azure and manage published bots here."
   },
   "publish_your_bots_6e1ba7c2": {
-    "message": "Publish your bots"
+    "message": "發佈您的 Bot"
   },
   "published_4bb5209e": {
     "message": "已發行"
   },
-  "publishing_count_bots_b2a7f564": {
-    "message": "Publishing { count } bots"
+  "publisher_bf6195cf": {
+    "message": "Publisher"
+  },
+  "publishing_count_plural_1_one_bot_other_bots_11edc1e9": {
+    "message": "Publishing { count, plural,\n     =1 {one bot}\n  other {# bots}\n}"
   },
   "publishing_d63a8f2d": {
     "message": "正在發行"
   },
   "publishing_name_to_publishtarget_failed_8677b68d": {
-    "message": "Publishing { name } to { publishTarget } failed."
+    "message": "將 { name } 發佈至 { publishTarget } 失敗。"
+  },
+  "publishing_profile_6d7064ce": {
+    "message": "Publishing Profile"
+  },
+  "publishing_profile_a2cd5d52": {
+    "message": "Publishing profile"
+  },
+  "publishing_target_46605bc5": {
+    "message": "正在發行目標"
+  },
+  "publishing_your_skill_b5957f9c": {
+    "message": "Publishing your skill..."
   },
   "pull_d1c3e8fe": {
-    "message": "Pull"
+    "message": "提取"
   },
   "pull_from_selected_profile_b5c635ec": {
-    "message": "Pull from selected profile"
-  },
-  "qna_28ee5e26": {
-    "message": "QnA"
+    "message": "從選取的設定檔提取"
   },
   "qna_editor_9eb94b02": {
     "message": "QnA 編輯器"
@@ -2183,20 +2954,32 @@
   "qna_intent_recognized_49c3d797": {
     "message": "識別到 QnA 意圖"
   },
-  "qna_maker_subscription_key_e009c9d9": {
-    "message": "QnA Maker Subscription key"
+  "qna_intent_recognized_6760e56d": {
+    "message": "QnA intent recognized"
   },
-  "qna_maker_subscription_key_is_required_to_start_yo_9c0bc65a": {
-    "message": "QnA Maker subscription Key is required to start your bot locally, and publish"
+  "qna_maker_introduction_c2e426a": {
+    "message": "QnA Maker introduction"
+  },
+  "qna_maker_is_an_azure_cognitive_services_that_can__77546394": {
+    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more.</a2>"
+  },
+  "qna_maker_is_an_azure_cognitive_services_that_can__8166388a": {
+    "message": "QnA Maker is an Azure Cognitive services that can extract question-and-answer pairs from a website FAQ. <a>Learn more.</a> Use an existing key from Azure or create a new key. <a2>Learn more</a2>"
+  },
+  "qna_maker_subscription_key_a645be58": {
+    "message": "QnA Maker subscription key:"
+  },
+  "qna_maker_subscription_key_e009c9d9": {
+    "message": "QnA Maker 訂用帳戶金鑰"
+  },
+  "qna_maker_subscription_key_is_required_to_start_yo_1892741": {
+    "message": "需要 QnA Maker 訂閱金鑰，才能在本機啟動 Bot 及發行"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "QnA 瀏覽窗格"
   },
-  "qna_region_5a864ef8": {
-    "message": "QnA 區域"
-  },
-  "qna_subscription_key_ed72a47": {
-    "message": "QnA 訂用帳戶金鑰:"
+  "qna_region_5d2a4bce": {
+    "message": "QnA region"
   },
   "question_9121487": {
     "message": "問題"
@@ -2208,7 +2991,10 @@
     "message": "問題目前空白"
   },
   "queued_d0e45c4b": {
-    "message": "Queued"
+    "message": "已排入佇列"
+  },
+  "quick_references_2ffbd14a": {
+    "message": "Quick references"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -2219,17 +3005,23 @@
   "re_prompt_for_input_c3b5b3ab": {
     "message": "重新提示輸入"
   },
-  "recent_bots_53585911": {
-    "message": "最近使用的 Bot"
+  "re_prompt_for_input_reprompt_dialog_event_ba028f7": {
+    "message": "重新提示輸入 (重新提示對話方塊事件)"
   },
-  "recognize_an_intent_and_take_action_or_route_to_a__7db9088a": {
-    "message": "Recognize an intent, and take action or route to a skill, LUIS app, or QnAMaker KB"
+  "recent_f19e8c64": {
+    "message": "Recent"
   },
   "recognizer_type_dc591e16": {
     "message": "識別器類型"
   },
   "recognizers_cefce9d1": {
     "message": "識別器"
+  },
+  "recommended_7101829e": {
+    "message": "Recommended"
+  },
+  "recommended_actions_befdd1a": {
+    "message": "Recommended actions"
   },
   "redo_363c58b7": {
     "message": "重做"
@@ -2243,6 +3035,12 @@
   "regex_intent_is_already_defined_df095c1f": {
     "message": "已定義 RegEx { intent }"
   },
+  "region_939f2a6c": {
+    "message": "Region"
+  },
+  "regular_expression_entity_e1cb91ce": {
+    "message": "Regular expression entity"
+  },
   "regular_expression_recognizer_44664557": {
     "message": "一般運算式識別器"
   },
@@ -2253,25 +3051,49 @@
     "message": "正在重新載入"
   },
   "remote_skill_ed36a7e6": {
-    "message": "Remote skill"
+    "message": "遠端技能"
   },
   "remote_skill_f9074d76": {
-    "message": "Remote Skill."
+    "message": "遠端技能。"
+  },
+  "remove_all_attachments_9fbd3821": {
+    "message": "移除所有附件"
+  },
+  "remove_all_speech_responses_2ac35289": {
+    "message": "移除所有語音回應"
+  },
+  "remove_all_suggested_actions_7c69eca3": {
+    "message": "移除所有建議的動作"
+  },
+  "remove_all_text_responses_77592d1a": {
+    "message": "移除所有文字回應"
+  },
+  "remove_attachment_81f30aa3": {
+    "message": "Remove attachment"
   },
   "remove_f47dc62a": {
     "message": "移除"
+  },
+  "remove_item_5877e701": {
+    "message": "Remove item"
   },
   "remove_this_dialog_6146716c": {
     "message": "移除此對話方塊"
   },
   "remove_this_skill_from_project_4c1900a9": {
-    "message": "Remove this skill from project"
+    "message": "從專案移除此技能"
   },
   "remove_this_skill_from_your_project_3c9d4b0f": {
-    "message": "Remove this skill from your project"
+    "message": "從您的專案移除此技能"
   },
   "remove_this_trigger_622d866d": {
     "message": "移除此觸發程序"
+  },
+  "remove_variation_43b4f4d6": {
+    "message": "移除變化"
+  },
+  "removing_content_from_action_node_bb6a825e": {
+    "message": "Removing content from action node"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "重複此對話"
@@ -2279,13 +3101,13 @@
   "replace_this_dialog_e304015e": {
     "message": "取代此對話"
   },
+  "report_a_bug_or_request_a_feature_36eb52c7": {
+    "message": "Report a bug or request a feature"
+  },
   "reprompt_dialog_event_c42d2c33": {
     "message": "重新提示對話事件"
   },
   "required_5f7ef8c0": {
-    "message": "必要"
-  },
-  "required_a6089a96": {
     "message": "必要"
   },
   "required_properties_dfb0350d": {
@@ -2297,47 +3119,74 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | 優先順序: { priority }"
   },
+  "reset_view_d5f8245a": {
+    "message": "Reset view"
+  },
+  "resource_group_982beb22": {
+    "message": "Resource Group"
+  },
+  "resource_group_name_a8f7e7ce": {
+    "message": "Resource group name"
+  },
+  "resource_name_817b6e75": {
+    "message": "Resource name"
+  },
+  "resources_ccefab27": {
+    "message": "Resources"
+  },
+  "response_alternatives_will_be_selected_at_random_f_552dd090": {
+    "message": "Response alternatives will be selected at random for a more dynamic conversation."
+  },
   "response_is_response_3cd62f8f": {
     "message": "回應為 { response }"
   },
   "responses_12d6df1d": {
     "message": "回應"
   },
-  "restart_all_bots_running_total_running_cf47a2b5": {
-    "message": "Restart all bots ({ running }/{ total } running)"
+  "restart_conversation_new_user_id_9c024543": {
+    "message": "重新開始交談 - 新的使用者識別碼"
+  },
+  "restart_conversation_same_user_id_a0188cca": {
+    "message": "重新開始交談 - 相同的使用者識別碼"
+  },
+  "retrieve_app_id_59f07cf4": {
+    "message": "Retrieve App ID"
+  },
+  "retrieve_app_id_from_publishing_profile_b6643a25": {
+    "message": "Retrieve App ID from publishing profile"
   },
   "review_and_generate_63dec712": {
     "message": "檢閱並產生"
   },
+  "review_deactivated_custom_actions_8db7540c": {
+    "message": "Review deactivated custom actions"
+  },
+  "review_your_template_readme_2d6eae1e": {
+    "message": "Review your template readme"
+  },
   "rollback_26326307": {
     "message": "復原"
   },
+  "root_6b5104ad": {
+    "message": "(root)"
+  },
   "root_bot_7bb35314": {
-    "message": "Root bot."
-  },
-  "root_bot_da9de71c": {
-    "message": "Root Bot"
-  },
-  "root_bot_e2d0a1fc": {
-    "message": "Root bot"
+    "message": "根 Bot。"
   },
   "root_bot_luis_authoring_key_is_empty_aec2634e": {
-    "message": "Root Bot LUIS authoring key is empty"
-  },
-  "root_bot_luis_endpoint_key_is_empty_2b7f65f2": {
-    "message": "Root Bot LUIS endpoint key is empty"
+    "message": "根 Bot LUIS 製作金鑰為空白"
   },
   "root_bot_luis_region_is_empty_67932308": {
-    "message": "Root Bot LUIS region is empty"
+    "message": "根 Bot LUIS 區域為空白"
   },
   "root_bot_of_your_project_that_greets_users_and_can_94570f36": {
-    "message": "Root bot of your project that greets users, and can call skills."
+    "message": "問候使用者的專案根 Bot，可以呼叫技能。"
   },
   "root_bot_qna_maker_subscription_key_is_empty_7b7c8c4a": {
-    "message": "Root Bot QnA Maker Subscription key is empty"
+    "message": "根 Bot QnA Maker 訂用帳戶金鑰為空白"
   },
   "running_c5a4998d": {
-    "message": "Running"
+    "message": "正在執行"
   },
   "runtime_already_exists_f181f5ec": {
     "message": "執行階段已經存在"
@@ -2348,6 +3197,15 @@
   "runtime_config_a2904ff9": {
     "message": "執行階段設定"
   },
+  "runtime_language_da49617a": {
+    "message": "Runtime Language"
+  },
+  "runtime_log_9069fda7": {
+    "message": "Runtime log."
+  },
+  "runtime_type_f9e2419b": {
+    "message": "執行階段類型"
+  },
   "sample_phrases_5d78fa35": {
     "message": "範例片語"
   },
@@ -2357,8 +3215,8 @@
   "save_11a80ec3": {
     "message": "儲存"
   },
-  "save_as_9e0cf70b": {
-    "message": "另存新檔"
+  "save_app_id_f64b6102": {
+    "message": "Save App ID"
   },
   "save_your_skill_manifest_63bf5f26": {
     "message": "儲存您的技能資訊清單"
@@ -2381,20 +3239,62 @@
   "search_280d00bd": {
     "message": "搜尋"
   },
+  "search_4a044e7c": {
+    "message": "Search ..."
+  },
+  "search_entities_3ecdb6d": {
+    "message": "Search entities"
+  },
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "搜尋 npm 上的延伸模組"
   },
-  "see_details_da74090e": {
-    "message": "See Details"
+  "search_functions_4a1afbc3": {
+    "message": "搜尋函數"
+  },
+  "search_prebuilt_entities_e52c0f35": {
+    "message": "Search prebuilt entities"
+  },
+  "search_properties_5bf3d868": {
+    "message": "搜尋屬性"
+  },
+  "search_templates_669eab41": {
+    "message": "搜尋範本"
+  },
+  "see_details_15c93092": {
+    "message": "See details"
+  },
+  "see_instructions_87eb4251": {
+    "message": "See instructions"
   },
   "select_a_bot_e1c4dc2b": {
     "message": "選取 Bot"
   },
-  "select_a_publish_target_d4530c94": {
-    "message": "Select a publish target"
+  "select_a_dialog_134385f2": {
+    "message": "Select a dialog"
   },
-  "select_a_trigger_on_the_left_a4b41558": {
-    "message": "選取左側的觸發程序"
+  "select_a_dialog_or_topic_4df93d0f": {
+    "message": "Select a dialog or topic"
+  },
+  "select_a_publish_target_d4530c94": {
+    "message": "選取發佈目標"
+  },
+  "select_a_publishing_profile_a2eb4e86": {
+    "message": "Select a publishing profile"
+  },
+  "select_a_resource_group_b536a26d": {
+    "message": "Select a resource group"
+  },
+  "select_a_subscription_446b44e6": {
+    "message": "Select a subscription"
+  },
+  "select_a_template_874fe803": {
+    "message": "Select a template"
+  },
+  "select_a_trigger_in_the_left_br_navigation_to_see__f73148d6": {
+    "message": "Select a trigger in the left<br />navigation to see actions"
+  },
+  "select_a_trigger_type_219bb52f": {
+    "message": "選取觸發程序類型"
   },
   "select_all_f73344a8": {
     "message": "全選"
@@ -2405,14 +3305,23 @@
   "select_an_event_type_3d7108f1": {
     "message": "選取事件類型"
   },
+  "select_an_option_9f5dfb55": {
+    "message": "Select an option"
+  },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "選取結構描述以編輯或新建一個"
+  },
+  "select_dialogs_f625e607": {
+    "message": "Select dialogs"
+  },
+  "select_input_hint_267a6208": {
+    "message": "選取輸入提示"
   },
   "select_language_to_delete_d1662d3d": {
     "message": "選取要刪除的語言"
   },
-  "select_manifest_version_4f5b1230": {
-    "message": "選取資訊清單版本"
+  "select_one_b647b384": {
+    "message": "Select one"
   },
   "select_options_9ee7b227": {
     "message": "選取選項"
@@ -2420,17 +3329,41 @@
   "select_property_type_45c6e68e": {
     "message": "選取屬性類型"
   },
+  "select_publishing_profile_a3f478e2": {
+    "message": "Select publishing profile"
+  },
+  "select_region_42a80a8e": {
+    "message": "Select region"
+  },
+  "select_resource_edaf4ef5": {
+    "message": "Select resource"
+  },
   "select_runtime_version_to_add_d63d383b": {
     "message": "選取要新增的執行階段版本"
+  },
+  "select_service_resources_326b206a": {
+    "message": "Select { service } resources"
+  },
+  "select_subscription_c5678611": {
+    "message": "Select subscription"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
     "message": "選取 Bot 能夠理解 (使用者輸入) 並回應 (Bot 回應) 的語言。\n    若要以其他語言提供此 Bot，請按一下 [新增] 建立預設語言的複本，然後將內容翻譯成新語言。"
   },
-  "select_which_dialogs_are_included_in_the_skill_man_281ef8c9": {
-    "message": "選取要包含在技能資訊清單中的對話"
+  "select_the_resource_group_and_region_in_which_your_51f85ff": {
+    "message": "Select the resource group and region in which your { service } service will be created."
   },
-  "select_which_tasks_this_skill_can_perform_172b0eae": {
-    "message": "選取此技能可執行的工作"
+  "select_triggers_5ff033ae": {
+    "message": "Select triggers"
+  },
+  "select_your_azure_directory_then_choose_the_subscr_7034a3c0": {
+    "message": "Select your Azure directory, then choose the subscription where you’d like your new { service } resource."
+  },
+  "select_your_azure_directory_then_choose_the_subscr_d51f6201": {
+    "message": "Select your Azure directory, then choose the subscription where your existing { service } resource is located."
+  },
+  "select_your_microsoft_app_id_and_password_74918f5d": {
+    "message": "Select your Microsoft App ID and Password"
   },
   "selection_field_86d1dc94": {
     "message": "選取欄位"
@@ -2444,11 +3377,17 @@
   "send_an_http_request_aa32fd2": {
     "message": "傳送 HTTP 要求"
   },
+  "send_handoff_activity_651ee597": {
+    "message": "Send handoff activity"
+  },
   "send_messages_c48b239": {
     "message": "傳送訊息"
   },
   "sentence_wrap_930c8ced": {
     "message": "句子換行"
+  },
+  "service_resource_name_56566aab": {
+    "message": "{ service } resource name"
   },
   "session_expired_12aaf414": {
     "message": "工作階段已到期"
@@ -2460,16 +3399,31 @@
     "message": "設定目的地資料夾"
   },
   "set_it_as_default_language_212f0a00": {
-    "message": "Set it as default language"
+    "message": "將此設定為預設語言"
   },
   "set_properties_7415af3c": {
     "message": "設定屬性"
   },
-  "set_up_your_bot_75009578": {
-    "message": "設定您的 Bot"
+  "set_up_continuous_deployment_devops_4919f626": {
+    "message": "Set up continuous deployment (DevOps)"
+  },
+  "set_up_language_understanding_f51f4884": {
+    "message": "Set up Language Understanding"
+  },
+  "set_up_qna_maker_170a4422": {
+    "message": "Set up QnA Maker"
+  },
+  "set_up_service_b6d23e54": {
+    "message": "Set up { service }"
+  },
+  "set_your_microsoft_app_id_and_password_46b5628c": {
+    "message": "Set your Microsoft App ID and Password"
   },
   "setting_things_up_8022afe8": {
-    "message": "Setting things up..."
+    "message": "正在設定..."
+  },
+  "setting_up_bot_framework_emulator_40f455db": {
+    "message": "Setting up Bot Framework Emulator"
   },
   "settings_5aa0fd0c": {
     "message": "設定"
@@ -2483,26 +3437,41 @@
   "settings_menu_c99ecc6d": {
     "message": "設定功能表"
   },
+  "setup_tunneling_software_to_test_your_remote_skill_12c344c6": {
+    "message": "Setup tunneling software to test your remote skill"
+  },
+  "short_description_for_6abb9a1b": {
+    "message": "short description for"
+  },
   "show_all_diagnostics_c11f4e09": {
-    "message": "Show All Diagnostics"
+    "message": "顯示所有診斷"
   },
   "show_code_f3e9d1cc": {
     "message": "顯示程式碼"
   },
   "show_item_diagnostics_f6e902c7": {
-    "message": "Show { item } Diagnostics"
+    "message": "顯示 { item } 診斷"
   },
   "show_keys_3072a5b8": {
     "message": "顯示金鑰"
   },
+  "show_response_editor_90bd8b49": {
+    "message": "Show response editor"
+  },
   "show_skill_manifest_5d0abde1": {
     "message": "顯示技能資訊清單"
+  },
+  "sign_in_card_aac56fe0": {
+    "message": "登入卡片"
   },
   "sign_out_user_6845d640": {
     "message": "登出使用者"
   },
   "skill_9b084d2e": {
-    "message": "Skill"
+    "message": "技能"
+  },
+  "skill_configuration_5e4bfbcd": {
+    "message": "Skill configuration"
   },
   "skill_dialog_name_1bbf0eff": {
     "message": "技能對話名稱"
@@ -2510,26 +3479,32 @@
   "skill_endpoint_b563491e": {
     "message": "技能端點"
   },
-  "skill_endpoints_e4e3d8c1": {
-    "message": "技能端點"
-  },
-  "skill_host_endpoint_4118a173": {
-    "message": "Skill host endpoint"
+  "skill_host_endpoint_url_702c277c": {
+    "message": "Skill host endpoint URL"
   },
   "skill_host_endpoint_url_e68b65f6": {
-    "message": "Skill host endpoint url"
+    "message": "技能主機端點 URL"
   },
-  "skill_manifest_endpoint_is_configured_improperly_e083731d": {
-    "message": "技能資訊清單端點設定不正確"
+  "skill_manifest_url_1094fcba": {
+    "message": "Skill Manifest URL"
+  },
+  "skill_manifest_url_was_copied_to_the_clipboard_4cfad630": {
+    "message": "Skill manifest URL was copied to the clipboard"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } 資訊清單"
   },
+  "skills_can_be_called_by_external_bots_allow_other__d71decaf": {
+    "message": "Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>"
+  },
+  "skip_bcb86160": {
+    "message": "Skip"
+  },
   "something_happened_while_attempting_to_pull_e_952c7afe": {
-    "message": "Something happened while attempting to pull: { e }"
+    "message": "嘗試提取時發生問題: { e }"
   },
   "something_went_wrong_d238c551": {
-    "message": "Something went wrong"
+    "message": "發生問題"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "很抱歉，連線 Bot 執行階段時發生錯誤"
@@ -2549,6 +3524,9 @@
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "不允許空格和特殊字元。請使用字母、數字、- 或 _。"
   },
+  "spaces_and_special_characters_are_not_allowed_use__9f354fe3": {
+    "message": "不允許空格和特殊字元。請使用字母、數字或 _。"
+  },
   "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
     "message": "不允許使用空格和特殊字元。請使用字母、數字、- 或 _，並以字母開頭。"
   },
@@ -2558,35 +3536,47 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "指定新 Bot 專案的名稱、描述和位置。"
   },
-  "start_all_bots_eac99ea": {
-    "message": "Start all bots"
+  "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
+    "message": "當有多種附件版面配置時，請指定一個。"
+  },
+  "specify_an_existing_bot_to_connect_to_your_azure_b_3c632ffa": {
+    "message": "Specify an existing bot to connect to your Azure Bot resource."
+  },
+  "speech_16063aed": {
+    "message": "語音"
+  },
+  "spoken_text_used_by_the_channel_to_render_audibly_d07c7427": {
+    "message": "通道用於以聽覺化方式轉譯的口說文字。"
+  },
+  "ssml_tag_981a8aac": {
+    "message": "SSML 標籤"
+  },
+  "stack_overflow_de80008e": {
+    "message": "Stack Overflow"
+  },
+  "start_and_stop_local_bot_runtimes_98f94e21": {
+    "message": "Start and stop local bot runtimes"
   },
   "start_and_stop_local_bot_runtimes_individually_901c8d7d": {
-    "message": "Start and stop local bot runtimes individually."
+    "message": "個別啟動及停止本機 Bot 執行階段。"
   },
   "start_bot_1da1ebf4": {
-    "message": "Start bot"
-  },
-  "start_bot_25ecad14": {
     "message": "啟動 Bot"
-  },
-  "start_bot_failed_d75647d5": {
-    "message": "啟動 Bot 失敗"
   },
   "start_command_a085f2ec": {
     "message": "啟動命令"
   },
   "start_over_d7ce7a57": {
-    "message": "Start over?"
+    "message": "要重新啟動嗎?"
+  },
+  "start_this_bot_ef51fbc2": {
+    "message": "Start this bot"
   },
   "start_typing_kind_or_b0c305da": {
     "message": "開始鍵入 { kind } 或"
   },
   "starting_2b76fa0d": {
-    "message": "Starting"
-  },
-  "starting_bots_running_total_running_45302684": {
-    "message": "Starting bots.. ({ running }/{ total } running)"
+    "message": "正在啟動"
   },
   "state_is_state_a2b8943": {
     "message": "狀態為 { state }"
@@ -2594,17 +3584,20 @@
   "status_e7fdbe06": {
     "message": "狀態"
   },
+  "status_pending_4c90cbc5": {
+    "message": "狀態暫止"
+  },
   "step_of_setlength_43c73821": {
     "message": "{ setLength } 的 { step }"
   },
-  "stop_bot_866e8976": {
-    "message": "Stop Bot"
-  },
   "stop_bot_be23cf96": {
-    "message": "Stop bot"
+    "message": "停止 Bot"
+  },
+  "stop_this_bot_6cce6509": {
+    "message": "Stop this bot"
   },
   "stopping_e4de5f4a": {
-    "message": "Stopping"
+    "message": "正在停止"
   },
   "string_24369b3": {
     "message": "字串"
@@ -2618,11 +3611,50 @@
   "submit_a3cc6859": {
     "message": "提交"
   },
+  "submit_a_feature_request_151d280c": {
+    "message": "Submit a feature request"
+  },
+  "subscription_15330b8a": {
+    "message": "Subscription"
+  },
+  "subscription_id_250f5e1f": {
+    "message": "Subscription Id:"
+  },
+  "suggested_actions_94d06bfa": {
+    "message": "建議的動作"
+  },
+  "suggested_propertiy_u_in_cardtype_ca80f69": {
+    "message": "{ cardType } 中的建議屬性 { u }"
+  },
+  "suggestion_for_card_or_activity_type_b257066a": {
+    "message": "對卡片或活動的建議: { type }"
+  },
   "synonyms_optional_afe5cdb1": {
     "message": "同義字 (選擇性)"
   },
+  "system_topic_44cfbac8": {
+    "message": "System Topic"
+  },
+  "take_a_product_tour_a2892d17": {
+    "message": "Take a product tour"
+  },
+  "target_da92f4e6": {
+    "message": "目標"
+  },
   "tb_149f379c": {
     "message": "TB"
+  },
+  "teams_manifest_59d7fb0e": {
+    "message": "Teams Manifest"
+  },
+  "teams_manifest_for_your_bot_7d0ec7ea": {
+    "message": "Teams manifest for your bot:"
+  },
+  "teams_requires_a_few_more_steps_to_get_your_connec_320c55f2": {
+    "message": "Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how."
+  },
+  "template_name_c37cf8d9": {
+    "message": "範本名稱: "
   },
   "templatename_is_missing_or_empty_23e6b06e": {
     "message": "templateName 缺少或空白"
@@ -2630,8 +3662,17 @@
   "terms_of_use_6542769b": {
     "message": "使用規定"
   },
+  "test_and_debug_your_bots_in_bot_framework_emulator_89b76229": {
+    "message": "Test and debug your bots in Bot Framework Emulator"
+  },
   "test_in_emulator_b1b3c278": {
     "message": "在 Emulator 中測試"
+  },
+  "test_with_web_chat_and_emulator_d0f87a81": {
+    "message": "Test with Web Chat and Emulator"
+  },
+  "test_with_web_chat_or_emulator_4edda954": {
+    "message": "Test with Web Chat or Emulator"
   },
   "test_your_bot_3cd1f4bb": {
     "message": "測試您的 Bot"
@@ -2639,11 +3680,38 @@
   "text_7f4593da": {
     "message": "文字"
   },
+  "text_if_you_proceed_to_switch_to_response_editor_y_5f975ffb": {
+    "message": "<text>如果您繼續切換至回應編輯器，將會遺失目前的範本內容，並從空白回應開始。要繼續嗎?</text>"
+  },
+  "text_to_use_response_editor_the_lg_template_needs__7c0b3936": {
+    "message": "<text>若要使用回應編輯器，LG 範本必須是活動回應範本。<a>瀏覽此文件</a>以深入了解。</text>"
+  },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "技能的 /api/messages 端點。"
   },
+  "the_app_id_9c6d6a9a": {
+    "message": "The app id"
+  },
+  "the_app_id_of_your_application_registration_16fba1a9": {
+    "message": "The app id of your application registration"
+  },
+  "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
+    "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
+  },
+  "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
+    "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
+  },
+  "the_capabilities_of_your_bot_are_defined_in_its_di_37d5670f": {
+    "message": "The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more."
+  },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "您嘗試刪除的對話目前用於下列對話。移除此對話將會導致您的 Bot 發生問題而無須採取動作。"
+  },
+  "the_endpoint_url_7c04ee13": {
+    "message": "The endpoint url"
+  },
+  "the_endpoint_url_of_your_web_app_resource_10f73ba7": {
+    "message": "The endpoint url of your web app resource"
   },
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "檔案名稱不能空白"
@@ -2651,13 +3719,22 @@
   "the_following_lufile_s_are_invalid_c61ea748": {
     "message": "下列 LU 檔案無效: \n"
   },
-  "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
-    "message": "主要對話以您的 Bot 命名。此為 Bot 的根和進入點。"
+  "the_following_service_keys_have_been_successfully__29b5672a": {
+    "message": "The following { service } keys have been successfully added to your bot project:"
+  },
+  "the_following_service_resource_was_successfully_cr_1381acb2": {
+    "message": "The following { service } resource was successfully created and added to your bot project:"
+  },
+  "the_main_dialog_is_the_foundation_of_every_bot_cre_d4a938ff": {
+    "message": "The main dialog is the foundation of every bot created in Composer. There is only one main dialog and all other dialogs are children of it. It gets initialized every time your bot runs and is the entry point into the bot."
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
     "message": "您可以視需要或在必要情況下編輯和手動微調資訊清單。"
   },
-  "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
+  "the_name_of_your_publishing_file_cefbe3a1": {
+    "message": "您的發行檔案名稱"
+  },
+  "the_page_you_are_looking_for_can_t_be_found_acfd3adc": {
     "message": "找不到您要尋找的頁面。"
   },
   "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
@@ -2669,35 +3746,62 @@
   "the_root_bot_is_not_a_bot_project_d1495cf6": {
     "message": "根 Bot 不是 Bot 專案"
   },
-  "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
-    "message": "歡迎訊息由 <i>ConversationUpdate</i> 事件所觸發。若要新增 <i>ConversationUpdate</i> 觸發程序:"
+  "the_skill_you_tried_to_remove_from_the_project_is__2c0bd965": {
+    "message": "您嘗試從專案移除的技能目前已用於下列 Bot。移除此技能不會刪除這些檔案，但會在未執行其他動作的情況下就造成 Bot 無法正常運作。"
   },
-  "there_are_no_kind_properties_e299287e": {
-    "message": "沒有任何 { kind } 屬性。"
+  "the_target_where_you_publish_your_bot_3132ef47": {
+    "message": "您要在其中發行 Bot 的目標"
+  },
+  "the_user_input_page_is_where_the_language_understa_c9262f3f": {
+    "message": "The User Input page is where the Language Understanding editor locates. From here users can view all the Language Understanding templates and edit them."
   },
   "there_are_no_notifications_e81eab8d": {
     "message": "沒有任何通知。"
   },
+  "there_are_no_optional_properties_b664c20f": {
+    "message": "There are no optional properties."
+  },
   "there_are_no_preview_features_at_this_time_a5c40953": {
     "message": "目前沒有任何預覽功能。"
+  },
+  "there_are_no_required_properties_ba214ac5": {
+    "message": "There are no required properties."
+  },
+  "there_is_no_original_view_63a2eaed": {
+    "message": "沒有任何原始檢視"
+  },
+  "there_is_no_thumbnail_view_908fe5cc": {
+    "message": "沒有任何縮圖檢視"
+  },
+  "there_was_a_problem_getting_the_access_token_for_t_69f5a5e2": {
+    "message": "There was a problem getting the access token for the current Azure directory. { errMessage }"
+  },
+  "there_was_a_problem_loading_azure_directories_errm_56e6145d": {
+    "message": "There was a problem loading Azure directories. { errMessage }"
+  },
+  "there_was_a_problem_with_the_authentication_access_3ca717f6": {
+    "message": "There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage."
   },
   "there_was_an_error_74ed3c58": {
     "message": "發生錯誤"
   },
+  "there_was_an_error_accessing_your_azure_account_er_f39b4378": {
+    "message": "There was an error accessing your Azure account: { errorMsg }"
+  },
   "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
-    "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
+    "message": "將 Bot 內容匯入 <b>{ botName }</b> 時發生意外錯誤"
   },
   "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
-    "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
+    "message": "提取發行設定檔 <b>{ selectedTargetName }</b> 時發生意外錯誤"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "建立 KB 時發生錯誤"
   },
-  "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
-    "message": "這些範例會將我們透過建置交談體驗發現的所有最佳做法及支援元件整合在一起。"
+  "this_bot_cannot_be_called_as_a_skill_since_the_all_ffb502b2": {
+    "message": "This bot cannot be called as a skill since the allowed caller list is empty"
   },
-  "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
-    "message": "這些工作會用於產生資訊清單，並為可能想要使用此技能的人員描述其功能。"
+  "this_cognitive_service_account_is_already_set_as_t_841165f7": {
+    "message": "This cognitive service account is already set as the default for another bot. Do you want to enable this service without setting it as default?"
   },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "這會透過事件和動作的集合來設定資料驅動對話。"
@@ -2709,10 +3813,10 @@
     "message": "此為必填欄位。"
   },
   "this_is_a_severity_diagnostic_58312674": {
-    "message": "This is a { severity } diagnostic"
+    "message": "此為 { severity } 診斷"
   },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
-    "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
+    "message": "這是您目前製作的 Bot 語言。在下方的下拉式清單中變更使用中語言。"
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
     "message": "此為用於 Composer 使用者介面的語言。"
@@ -2721,16 +3825,22 @@
     "message": "此語言將會複製並作為翻譯的基礎 (及遞補語言)。"
   },
   "this_operation_cannot_be_completed_the_bot_is_alre_63822752": {
-    "message": "This operation cannot be completed. The bot is already part of the Bot Project"
+    "message": "無法完成此作業。此技能已經是 Bot 專案的一部分"
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "無法完成此作業。此技能已經是 Bot 專案的一部分"
   },
+  "this_operation_will_overwrite_changes_made_to_prev_e746d44f": {
+    "message": "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
+  },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "此選項可讓您的使用者為此屬性提供多個值。"
   },
-  "this_page_contains_detailed_information_about_your_b2b3413b": {
-    "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
+  "this_project_was_created_in_an_older_version_of_co_8b57954": {
+    "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
+  },
+  "this_publishing_profile_profilename_is_no_longer_s_eee0f447": {
+    "message": "This publishing profile ({ profileName }) is no longer supported. You are a member of multiple Azure tenants and the profile needs to have a tenant id associated with it. You can either edit the profile by adding the `tenantId` property to it''s configuration or create a new one."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "RegEx 識別器不支援此觸發程序類型。若要確保引發此觸發程序，請變更識別器類型。"
@@ -2741,11 +3851,11 @@
   "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
     "message": "這會刪除對話及其內容。要繼續嗎?"
   },
-  "this_will_open_your_emulator_application_if_you_do_ba277151": {
-    "message": "這會開啟您的 Emulator 應用程式。若尚未安裝 Bot Framework Emulator，可以在<a>這裡</a>下載。"
-  },
   "throw_exception_9d0d1db": {
-    "message": "Throw exception"
+    "message": "擲回例外狀況"
+  },
+  "thumbnail_card_7ebfa436": {
+    "message": "縮圖卡片"
   },
   "time_2b5aac58": {
     "message": "時間"
@@ -2756,14 +3866,26 @@
   "tips_80d0da2b": {
     "message": "提示"
   },
+  "title_connection_eaec11f8": {
+    "message": "{ title } connection"
+  },
   "title_ee03d132": {
     "message": "標題"
   },
-  "title_msg_ee91458d": {
-    "message": "{ title }。{ msg }"
+  "to_connect_to_a_skill_you_will_need_a_skill_s_mani_3d163597": {
+    "message": "To connect to a skill you will need a skill’s manifest URL. Contact the skill’s author to get the URL and paste it in the next step."
   },
-  "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
-    "message": "若要自訂歡迎訊息，請在視覺化編輯器中選取 [傳送回應]<i></i> 動作。然後，您可以在右側表單編輯器的<b>語言產生</b>欄位中，編輯 Bot 的歡迎訊息。"
+  "to_connect_to_a_skill_your_bot_needs_the_informati_f1b738ec": {
+    "message": "To connect to a skill, your bot needs the information captured in the skill''s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  },
+  "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
+    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+  },
+  "to_learn_more_a_visit_this_document_a_ce188d8": {
+    "message": "若要深入了解，請<a>瀏覽此文件</a>。"
+  },
+  "to_learn_more_about_ssml_tags_a_visit_this_documen_533b3e8": {
+    "message": "若要深入了解 SSML 標籤，請<a>瀏覽此文件</a>。"
   },
   "to_learn_more_about_the_lg_file_format_read_the_do_ef6e083d": {
     "message": "> 若要深入了解 LG 檔案格式，請閱讀文件，網址是\n> { lgHelp }"
@@ -2774,11 +3896,26 @@
   "to_learn_more_about_the_qna_file_format_read_the_d_1ce18259": {
     "message": "> 若要深入了解 QnA 檔案格式，請在下列位置閱讀文件\n> { QNA_HELP }"
   },
-  "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
-    "message": "為了讓其他人使用您的 Bot 作為技能，我們必須產生資訊清單。"
+  "to_learn_more_about_the_title_a_visit_its_document_c302e9b1": {
+    "message": "To learn more about the { title }, <a>visit its documentation page</a>."
+  },
+  "to_make_your_bot_available_as_a_remote_skill_you_w_be5a6e3f": {
+    "message": "To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select."
+  },
+  "to_perform_provisioning_and_publishing_actions_com_a2c54389": {
+    "message": "為了執行佈建及發行動作，Composer 必須存取您的 Azure 和 MS Graph 帳戶。走使用下方醒目提示的命令，從 az 命令列工具貼上存取權杖。"
+  },
+  "to_run_this_bot_composer_needs_azure_functions_cor_bbbd0e7": {
+    "message": "To run this bot, Composer needs Azure Functions Core Tools."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "若要執行此 Bot，Composer 需要 .NET Core SDK。"
+  },
+  "to_test_run_and_publish_your_bot_it_needs_azure_re_e33d8fd": {
+    "message": "To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels. Other resources, such as language understanding and storage are optional. A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources."
+  },
+  "to_understand_natural_language_input_and_direct_th_fc982d4a": {
+    "message": "To understand natural language input and direct the conversation flow, your bot needs a language understanding service. "
   },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
     "message": "若要了解使用者的說話內容，您的對話需要「識別器」; 其中包含使用者可以使用的範例單字和句子。"
@@ -2798,17 +3935,41 @@
   "toolbar_bafd4228": {
     "message": "工具列"
   },
+  "topic_e820dbbd": {
+    "message": "(Topic)"
+  },
   "total_mb_531a3721": {
     "message": "{ total }MB"
+  },
+  "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
+    "message": "{ total, plural,\n     =1 {重新啟動 Bot}\n  other {重新啟動所有 Bot ({ running }/{ total } 個正在執行)}\n}"
+  },
+  "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
+    "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
+  },
+  "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
+    "message": "{ total, plural,\n     =1 {正在啟動 Bot..}\n  other {正在啟動 Bot.. ({ running }/{ total } 個正在執行)}\n}"
+  },
+  "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
+    "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
+  },
+  "trigger_f0ee1fbf": {
+    "message": "Trigger"
+  },
+  "trigger_group_79a00ac6": {
+    "message": "Trigger group"
+  },
+  "trigger_phrases_are_inputs_from_users_that_will_be_f8c61866": {
+    "message": "Trigger phrases are inputs from users that will be used to train your LUIS model. This follows .lu file format."
   },
   "trigger_phrases_f6754fa": {
     "message": "觸發程序片語"
   },
-  "trigger_phrases_intent_intentname_a1b62148": {
-    "message": "觸發程序片語 (意圖: #{ intentName })"
+  "triggers_are_the_main_component_of_a_dialog_they_a_ff243c17": {
+    "message": "Triggers are the main component of a dialog, they are how you catch and respond to events. Each trigger has a condition and a collection of actions to execute when the condition is met."
   },
-  "triggers_connect_intents_with_bot_responses_think__fdfc97ea": {
-    "message": "觸發程序會將意圖與 Bot 回應連結。您可以將觸發程序視為 Bot 的一項功能。因此，您的 Bot 是觸發程序的集合。若要新增觸發程序，請按一下工具列中的 [新增]<b></b> 按鈕，然後從下拉式功能表中選取 [新增觸發程序]<b></b> 選項。"
+  "triggers_selected_below_will_enable_other_bots_to__fd8353a5": {
+    "message": "Triggers selected below will enable other bots to access the capabilities of your skill. Learn more."
   },
   "true_1900d7ae": {
     "message": "true"
@@ -2819,17 +3980,23 @@
   "trueselector_40702dda": {
     "message": "TrueSelector"
   },
-  "try_again_ad656c3c": {
-    "message": "再試一次"
-  },
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "在預覽中試用新功能，並協助我們改善 Composer。您可以隨時將其開啟或關閉。"
   },
-  "type_a_name_that_describes_this_content_d1a910b6": {
-    "message": "鍵入描述此內容的名稱"
+  "type_a_name_for_this_knowledge_base_ab07b439": {
+    "message": "Type a name for this knowledge base"
   },
   "type_and_press_enter_33a2905d": {
     "message": "鍵入並按 enter 鍵"
+  },
+  "type_app_id_a37decdf": {
+    "message": "Type App Id"
+  },
+  "type_app_password_8084ff36": {
+    "message": "Type App Password"
+  },
+  "type_application_name_24f02dbe": {
+    "message": "Type application name"
   },
   "type_c8106334": {
     "message": "類型"
@@ -2837,11 +4004,17 @@
   "type_could_not_be_loaded_65ebaf86": {
     "message": "無法載入 { type }"
   },
-  "type_dialog_name_14a50769": {
-    "message": "鍵入對話名稱"
-  },
   "type_form_dialog_schema_name_b767985c": {
     "message": "鍵入表單對話方塊結構描述名稱"
+  },
+  "type_language_understanding_authoring_key_515790d0": {
+    "message": "Type Language Understanding authoring key"
+  },
+  "type_or_paste_url_763adeb4": {
+    "message": "Type or paste URL"
+  },
+  "type_subscription_key_ab5ab9a6": {
+    "message": "Type subscription key"
   },
   "typing_activity_6b634ae": {
     "message": "正在鍵入活動"
@@ -2867,11 +4040,20 @@
   "unknown_state_23f73afb": {
     "message": "不明的狀態"
   },
+  "unnamed_4c8565a0": {
+    "message": "Unnamed"
+  },
+  "unread_notifications_indicator_e2ca00d5": {
+    "message": "Unread notifications Indicator"
+  },
+  "unsupported_publishing_profile_ad088e54": {
+    "message": "Unsupported publishing profile"
+  },
   "unused_8d193e3": {
     "message": "未使用"
   },
   "update_4d8ee62": {
-    "message": "Update"
+    "message": "更新"
   },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
     "message": "更新先前在交談期間傳送的活動"
@@ -2879,8 +4061,14 @@
   "update_activity_2b05e6c6": {
     "message": "更新活動"
   },
+  "update_and_restart_b236a67": {
+    "message": "Update and restart"
+  },
   "update_available_b637d767": {
     "message": "有可用的更新"
+  },
+  "update_cancelled_auto_update_has_been_turned_off_f_7f7e08d7": {
+    "message": "Update cancelled. Auto-update has been turned off for this release. You can update at any time by selecting <b>Help > Check for updates.</b>"
   },
   "update_complete_c5163fbf": {
     "message": "更新完成"
@@ -2897,35 +4085,53 @@
   "update_scripts_a3a483e": {
     "message": "更新指令碼"
   },
-  "update_scripts_c58771a2": {
-    "message": "更新指令碼"
-  },
   "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
-    "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
+    "message": "更新 { existingProjectName } 將會覆寫目前的 Bot 內容並建立備份。"
   },
   "updating_scripts_e17a5722": {
     "message": "正在更新指令碼... "
   },
-  "url_8c4ff7d2": {
+  "url_22a5f3b8": {
     "message": "URL"
   },
-  "url_should_start_with_http_s_9ca55d94": {
-    "message": "URL 應以 http[s]:// 開頭"
+  "url_should_start_with_http_or_https_c34632bb": {
+    "message": "URL should start with http:// or https://"
+  },
+  "use_azure_bot_to_create_a_new_conversation_1a116a65": {
+    "message": "Use Azure Bot to create a new conversation"
+  },
+  "use_azure_qna_maker_to_create_a_simple_question_an_a38d6770": {
+    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ."
+  },
+  "use_azure_qna_maker_to_create_a_simple_question_an_b24bef9f": {
+    "message": "Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ. "
+  },
+  "use_azure_qna_maker_to_extract_question_and_answer_942c2dcd": {
+    "message": "Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. "
   },
   "use_custom_luis_authoring_key_9c71470b": {
-    "message": "Use custom LUIS authoring key"
-  },
-  "use_custom_luis_endpoint_key_572e2c29": {
-    "message": "Use custom LUIS endpoint key"
+    "message": "使用自訂 LUIS 製作金鑰"
   },
   "use_custom_luis_region_49d31dbf": {
-    "message": "Use custom LUIS region"
+    "message": "使用自訂 LUIS 區域"
   },
   "use_custom_qna_maker_subscription_key_126e79df": {
-    "message": "Use custom QnA Maker Subscription key"
+    "message": "使用自訂 QnA Maker 訂用帳戶金鑰"
   },
   "use_custom_runtime_d7d323fd": {
     "message": "使用自訂執行階段"
+  },
+  "use_existing_resources_88d21106": {
+    "message": "Use existing resources"
+  },
+  "use_machine_learning_to_understand_natural_languag_53f12465": {
+    "message": "Use machine learning to understand natural language input and direct the conversation flow."
+  },
+  "use_orchestrator_for_multi_bot_projects_bots_that__1b481cdd": {
+    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
+  },
+  "use_speech_to_enable_voice_input_and_output_for_yo_742c511d": {
+    "message": "Use Speech to enable voice input and output for your bot."
   },
   "used_3d895705": {
     "message": "已使用"
@@ -2936,14 +4142,17 @@
   "user_input_673e4a89": {
     "message": "使用者輸入"
   },
-  "user_input_a6ff658d": {
-    "message": "使用者輸入"
+  "user_input_and_bot_responses_2a9b67b1": {
+    "message": "User input and bot responses"
   },
   "user_is_typing_790cb502": {
     "message": "使用者正在鍵入"
   },
-  "validating_35b79a96": {
-    "message": "正在驗證..."
+  "user_is_typing_typing_activity_cd938615": {
+    "message": "使用者正在鍵入 (鍵入活動)"
+  },
+  "user_topic_e3978941": {
+    "message": "User Topic"
   },
   "validation_b10c677c": {
     "message": "驗證"
@@ -2960,23 +4169,29 @@
   "version_version_a051e218": {
     "message": "版本 { version }"
   },
-  "video_tutorials_79eb26ca": {
-    "message": "影片教學課程:"
+  "video_card_cda18e03": {
+    "message": "視訊卡片"
   },
   "view_dialog_f5151228": {
     "message": "檢視對話方塊"
+  },
+  "view_documentation_samples_and_extensions_285b9404": {
+    "message": "View documentation, samples, and extensions"
   },
   "view_kb_c382e495": {
     "message": "檢視 KB"
   },
   "view_log_6d51af5e": {
-    "message": "View log"
+    "message": "檢視記錄"
   },
   "view_on_npm_2051324d": {
     "message": "在 npm 上檢視"
   },
-  "vishwac_sena_45910bf0": {
-    "message": "Vishwac Sena"
+  "view_readme_30ed498f": {
+    "message": "View Readme"
+  },
+  "visit_a_this_page_a_to_learn_more_about_entity_def_c7c862a9": {
+    "message": "Visit <a>this page</a> to learn more about entity definition."
   },
   "visual_editor_216472d": {
     "message": "視覺化編輯器"
@@ -2984,29 +4199,41 @@
   "warning_53c98b03": {
     "message": "警告!"
   },
-  "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
-    "message": "警告: 您要採取的動作無法復原。繼續進行將會刪除此 Bot 及 Bot 專案資料夾中的任何相關檔案。"
+  "warning_aacb8c24": {
+    "message": "警告"
   },
-  "we_have_created_a_sample_bot_to_help_you_get_start_95a58922": {
-    "message": "我們已建立範例 Bot 來協助您開始使用 Composer。請按一下這裡以開啟 Bot。"
+  "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
+    "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
+  },
+  "warningsmsg_e2c04bfe": {
+    "message": "{ warningsMsg }"
+  },
+  "we_detected_length_custom_obj_that_are_not_support_becd85f0": {
+    "message": "We detected { length } custom { obj } that are not support for Composer 2.0."
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
     "message": "我們必須定義技能的端點，以允許其他 Bot 與其互動。"
   },
-  "weather_bot_c38920cd": {
-    "message": "天氣 Bot"
+  "web_chat_c5ca7ab6": {
+    "message": "Web Chat"
   },
-  "welcome_73d18b4d": {
-    "message": "歡迎使用!"
+  "webchat_log_b7213a9e": {
+    "message": "網路聊天記錄檔。"
   },
   "welcome_dd4e7151": {
     "message": "歡迎使用"
   },
-  "westeurope_cabf9688": {
-    "message": "westeurope"
+  "welcome_to_bot_framework_composer_b4f92694": {
+    "message": "Welcome to Bot Framework Composer"
   },
-  "westus_dc50d800": {
-    "message": "westus"
+  "welcome_to_composer_7147714a": {
+    "message": "Welcome to Composer!"
+  },
+  "west_europe_75ac94f4": {
+    "message": "West Europe"
+  },
+  "west_us_51d3fdbb": {
+    "message": "West US"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
     "message": "使用者可透過此交談完成哪些作業? 例如，BookATable、OrderACoffee 等。"
@@ -3014,11 +4241,11 @@
   "what_is_the_name_of_the_custom_event_b28a7b3": {
     "message": "自訂事件的名稱為何?"
   },
+  "what_is_the_name_of_this_trigger_1d6db01": {
+    "message": "What is the name of this trigger?"
+  },
   "what_is_the_name_of_this_trigger_2642266e": {
     "message": "此觸發程序的名稱為何"
-  },
-  "what_is_the_name_of_this_trigger_luis_17b60a23": {
-    "message": "此觸發程序 (LUIS) 的名稱為何"
   },
   "what_is_the_name_of_this_trigger_regex_f77376d7": {
     "message": "此觸發程序 (RegEx) 的名稱為何"
@@ -3028,6 +4255,15 @@
   },
   "what_is_the_type_of_this_trigger_d2701744": {
     "message": "此觸發程序的類型為何?"
+  },
+  "what_s_new_a9752a8e": {
+    "message": "What''s new"
+  },
+  "what_s_new_list_6fe719cb": {
+    "message": "What''s new list"
+  },
+  "what_you_need_to_know_to_get_started_e2ab837a": {
+    "message": "What you need to know to get started"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "您 Bot 會對使用者說的話。此為用於建立傳出訊息的範例。可包含語言產生規則、記憶體的屬性及其他功能。\n\n例如，若要定義將會隨機選擇的變量，請寫入:\n- hello\n- hi"
@@ -3050,20 +4286,32 @@
   "which_bot_do_you_want_to_open_974bb1e5": {
     "message": "您要開啟哪個 Bot?"
   },
+  "which_bot_would_you_like_to_add_to_your_project_e31270db": {
+    "message": "Which bot would you like to add to your project"
+  },
+  "which_bots_can_connect_to_this_skill_5bf8421d": {
+    "message": "Which bots can connect to this skill?"
+  },
   "which_event_6e655d2b": {
     "message": "哪個事件?"
+  },
+  "working_with_packages_dbdddbe9": {
+    "message": "Working with packages"
   },
   "write_an_expression_8773ea5c": {
     "message": "撰寫運算式"
   },
   "write_your_message_5d0f151b": {
-    "message": "Write your message"
+    "message": "寫入您的訊息"
   },
   "yes_collect_data_b79b7844": {
-    "message": "Yes, collect data"
+    "message": "是，收集資料"
   },
   "yes_dde87d5": {
     "message": "是"
+  },
+  "yes_delete_d43476ee": {
+    "message": "Yes, delete"
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
     "message": "您已經有該名稱的 KB。請選擇其他名稱，然後再試一次。"
@@ -3072,42 +4320,84 @@
     "message": "您即將發行 Bot 至下列設定檔。要繼續嗎?"
   },
   "you_are_about_to_pull_project_files_from_the_selec_15786351": {
-    "message": "You are about to pull project files from the selected publish profiles. The current project will be overwritten by the pulled files, and will be saved as a backup automatically. You will be able to retrieve the backup anytime in the future."
+    "message": "您即將從選取的發行設定檔提取專案檔。目前的專案會由提取的檔案覆寫，並且會自動儲存為備份。您未來隨時都能取出備份。"
+  },
+  "you_are_about_to_remove_modalitytitle_content_from_c51efe05": {
+    "message": "You are about to remove { modalityTitle } content from this action node. Are you sure you want to proceed?"
+  },
+  "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
+    "message": "您將從此專案移除技能。移除此技能不會刪除檔案。"
   },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
     "message": "您可以使用 Composer 從頭開始建立新的 Bot，或從範本開始。"
   },
-  "you_can_define_and_manage_b_intents_b_here_each_in_721b8a0c": {
-    "message": "您可以在此定義及管理<b>意圖</b>。每個意圖都透過表達 (也就是使用者的說話內容) 來描述特定使用者意圖。<b>意圖通常為 Bot 的觸發程序。</b>"
-  },
-  "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
-    "message": "您可以在此管理所有 Bot 回應。請根據您自己的需求，善加利用範本來建立複雜的回應邏輯。"
-  },
   "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
-    "message": "You can only connect to a skill in the root bot."
+    "message": "您只能連線到根 Bot 中的技能。"
   },
   "you_can_turn_data_collection_on_or_off_at_any_time_50ed326f": {
-    "message": "You can turn data collection on or off at any time in the Application Settings."
+    "message": "您可以隨時在 [應用程式設定] 中開啟或關閉資料收集。"
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
     "message": "您無權在此儲存 Bot"
   },
   "you_have_successfully_published_name_to_publishtar_bc81d3c1": {
-    "message": "You have successfully published { name } to { publishTarget }"
+    "message": "已成功將 { name } 發佈至 { publishTarget }"
   },
-  "your_bot_creation_journey_on_composer_131c1a8b": {
-    "message": "您在 Composer 上建立 Bot 的旅程"
+  "you_re_ready_to_go_18ee8dac": {
+    "message": "You’re ready to go!"
+  },
+  "your_bot_is_configured_with_only_a_luis_authoring__179ab81c": {
+    "message": "Your bot is configured with only a LUIS authoring key, which has a limit of 1,000 calls per month. If your bot hits this limit, publish it to Azure using a <a>publishing profile</a> to continue testing.<a2>Learn more</a2>"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "您的 Bot 正在使用 LUIS 和 QnA 來理解自然語言。"
   },
-  "your_dialog_was_generated_successfully_61c13b73": {
-    "message": "Your dialog was generated successfully."
+  "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
+    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+  },
+  "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
+    "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"
+  },
+  "your_bot_s_microsoft_app_id_5f12844c": {
+    "message": "Your bot’s Microsoft App ID"
+  },
+  "your_dialog_for_schemaid_was_generated_successfull_7471b82e": {
+    "message": "已成功產生 \"{schemaId}\" 的對話方塊。"
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "您的知識庫已就緒!"
   },
-  "your_project_2a42631c": {
-    "message": "your project"
+  "your_new_azure_bot_is_available_in_composer_2756367a": {
+    "message": "Your new Azure Bot is available in Composer"
+  },
+  "your_new_bot_is_almost_ready_1bb596e": {
+    "message": "Your new bot is almost ready!"
+  },
+  "your_qna_maker_is_ready_it_took_time_minutes_to_co_88b29cf9": {
+    "message": "Your QnA Maker is ready! It took { time } minutes to complete."
+  },
+  "your_root_bot_must_have_an_associated_microsoft_ap_91671242": {
+    "message": "Your root bot must have an associated Microsoft App ID and Password."
+  },
+  "your_root_bot_must_have_an_azure_publishing_profil_89055cfd": {
+    "message": "Your root bot must have an Azure publishing profile."
+  },
+  "your_skill_could_not_be_published_5bee6e6a": {
+    "message": "Your skill could not be published."
+  },
+  "your_skill_is_ready_to_be_shared_6376eb3c": {
+    "message": "Your skill is ready to be shared!"
+  },
+  "your_subscription_list_is_empty_please_add_your_su_6b229c26": {
+    "message": "Your subscription list is empty, please add your subscription, or login with another account."
+  },
+  "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
+    "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
+  },
+  "zoom_in_3205e865": {
+    "message": "Zoom in"
+  },
+  "zoom_out_e4302632": {
+    "message": "Zoom out"
   }
 }

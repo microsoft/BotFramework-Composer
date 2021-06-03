@@ -6,8 +6,7 @@ import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/Ada
 
 test('should return NULL when input is invalid', () => {
   expect(transformForeach(null, '')).toBeNull();
-  expect(transformForeach({}, '')).toBeNull();
-  expect(transformForeach({ $kind: 'wrong' }, '')).toBeNull();
+  expect(transformForeach({}, '')).toBeTruthy();
 });
 
 test('should return correct schema when input a Foreach schema', () => {
@@ -26,7 +25,7 @@ test('should return correct schema when input a Foreach schema', () => {
 
   expect(foreachDetail).toBeDefined();
   expect(foreachDetail.id).toEqual('actions[0]');
-  expect(foreachDetail.json.$kind).toEqual(AdaptiveKinds.ForeachDetail);
+  expect(foreachDetail.json.$kind).toEqual(AdaptiveKinds.ConditionNode);
   expect(foreachDetail.json.listProperty).toEqual(json.listProperty);
 
   expect(stepGroup).toBeDefined();
@@ -60,7 +59,7 @@ test('should return correct schema when input a ForeachPage schema', () => {
 
   expect(foreachDetail).toBeDefined();
   expect(foreachDetail.id).toEqual('actions[0]');
-  expect(foreachDetail.json.$kind).toEqual(AdaptiveKinds.ForeachPageDetail);
+  expect(foreachDetail.json.$kind).toEqual(AdaptiveKinds.ConditionNode);
   expect(foreachDetail.json.listProperty).toEqual(json.listProperty);
 
   expect(stepGroup).toBeDefined();

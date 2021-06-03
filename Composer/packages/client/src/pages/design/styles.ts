@@ -20,6 +20,7 @@ export const contentWrapper = css`
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
+  position: relative;
   label: DesignPageContent;
 `;
 
@@ -63,14 +64,14 @@ export const assetTree = css`
 `;
 /*******/
 
-export const editorContainer = css`
+export const splitPaneContainer = css`
   display: flex;
   flex-direction: column;
   height: 0;
   flex-grow: 1;
 `;
 
-export const editorWrapper = css`
+export const splitPaneWrapper = css`
   display: flex;
   flex-direction: row;
   flex-grow: 1;
@@ -99,14 +100,24 @@ export const formEditor = css`
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 100%;
   min-width: 300px;
 `;
 
+export const visualPanelHeaderContainer = css`
+  display: flex;
+  align-items: center;
+  height: 65px;
+`;
+
+export const visualPanelHeaderShowCodeButton = css`
+  padding: 10px;
+  width: fit-content;
+`;
+
 export const breadcrumbClass = mergeStyleSets({
   root: {
-    width: '500px',
     margin: '0',
     padding: '10px',
   },
@@ -210,3 +221,19 @@ export const description = {
 export const manifestUrl = {
   subComponentStyles: textFieldlabel,
 };
+
+export const removeSkillDialogStyle = css`
+  white-space: pre-line;
+`;
+
+export const removeSkillDialogContentStyle = css`
+  background: #000;
+  max-height: 90px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 23px;
+  color: #fff;
+  padding: 10px 15px;
+  margin: 10px 0;
+  white-space: pre-line;
+`;

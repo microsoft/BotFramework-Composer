@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AuthParameters } from '@botframework-composer/types';
+import { AuthParameters, AzureTenant } from '@botframework-composer/types';
 
 import { AuthClient } from '../utils/authClient';
 
@@ -18,11 +18,13 @@ interface PublishConfig {
 
 interface AuthAPI {
   getAccessToken: (options: AuthParameters) => Promise<string>; // returns an access token
-  logOut: () => Promise<void>;
+  getARMTokenForTenant: (tenantId: string) => Promise<string>; // returns an ARM access token for specified tenant
+  getTenants: () => Promise<AzureTenant[]>; // signs a user in and returns available Azure tenants for the user
+  logOut: () => Promise<boolean>;
 }
 
 interface PublishAPI {
-  useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
+  getPublishConfig?: () => PublishConfig | void;
   startProvision?: (config: any) => void;
   currentProjectId?: () => string;
   closeDialog?: () => void;
@@ -30,9 +32,14 @@ interface PublishAPI {
   setTitle?: (value) => void;
   getSchema?: () => any;
   getType?: () => string;
+  getName?: () => string;
   savePublishConfig?: (config: PublishConfig) => void;
   getTokenFromCache?: () => { accessToken: string; graphToken: string };
+  /** @deprecated use `userShouldProvideTokens` instead */
   isGetTokenFromUser?: () => boolean;
+  userShouldProvideTokens?: () => boolean;
+  getTenantIdFromCache?: () => string;
+  setTenantId?: (value: string) => void;
 }
 
 class API implements IAPI {
@@ -41,15 +48,13 @@ class API implements IAPI {
 
   constructor() {
     this.auth = {
-      getAccessToken: (params: AuthParameters) => {
-        return AuthClient.getAccessToken(params);
-      },
-      logOut: () => {
-        return AuthClient.logOut();
-      },
+      getAccessToken: (params: AuthParameters) => AuthClient.getAccessToken(params),
+      getARMTokenForTenant: (tenantId: string) => AuthClient.getARMTokenForTenant(tenantId),
+      getTenants: () => AuthClient.getTenants(),
+      logOut: () => AuthClient.logOut(),
     };
     this.publish = {
-      useConfigBeingEdited: undefined,
+      getPublishConfig: undefined,
       startProvision: undefined,
       currentProjectId: undefined,
       closeDialog: undefined,
@@ -59,6 +64,9 @@ class API implements IAPI {
       savePublishConfig: undefined,
       getTokenFromCache: undefined,
       isGetTokenFromUser: undefined,
+      userShouldProvideTokens: undefined,
+      getTenantIdFromCache: undefined,
+      setTenantId: undefined,
     };
   }
 }

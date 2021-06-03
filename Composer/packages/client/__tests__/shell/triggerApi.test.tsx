@@ -8,8 +8,8 @@ import { RecoilRoot } from 'recoil';
 import { useTriggerApi } from '../../src/shell/triggerApi';
 import {
   localeState,
-  luFilesState,
-  lgFilesState,
+  luFilesSelectorFamily,
+  lgFilesSelectorFamily,
   dialogsSelectorFamily,
   schemasState,
   dispatcherState,
@@ -52,8 +52,8 @@ describe('use triggerApi hooks', () => {
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
       set(localeState(state.projectId), 'en-us');
-      set(luFilesState(state.projectId), state.luFiles);
-      set(lgFilesState(state.projectId), state.lgFiles);
+      set(luFilesSelectorFamily(state.projectId), state.luFiles);
+      set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
       set(dialogsSelectorFamily(state.projectId), state.dialogs);
       set(schemasState(state.projectId), state.schemas);
       set(dispatcherState, (current: Dispatcher) => ({

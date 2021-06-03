@@ -13,7 +13,7 @@ jobs:
   ci:
     name: Unit Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: Composer
@@ -24,7 +24,7 @@ jobs:
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
-          node-version: 12.13.0
+          node-version: 14.15.5
       #- name: Restore yarn cache
       #  uses: actions/cache@v2.1.2
       #  with:
@@ -39,7 +39,7 @@ jobs:
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
-        run: yarn lint
+        run: yarn lint:ci && yarn lint:extensions
       - name: yarn test:coverage
         run: yarn test:coverage
       - name: Coveralls
@@ -80,7 +80,7 @@ jobs:
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
-          node-version: 12.13.0
+          node-version: 14.15.5
       - name: npm install
         run: npm install
         working-directory: runtime/node

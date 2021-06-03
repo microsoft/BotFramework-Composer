@@ -8,9 +8,9 @@ import jwtDecode from 'jwt-decode';
 import { userDispatcher } from '../user';
 import { UserSettingsPayload } from '../../types';
 import { DEFAULT_USER_SETTINGS } from '../../utils';
-import { userSettingsState, currentUserState, CurrentUser } from '../../atoms/appState';
+import { getDefaultFontSettings } from '../../utils/fontUtil';
+import { userSettingsState, currentUserState, CurrentUser, dispatcherState } from '../../atoms/appState';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { dispatcherState } from '../../DispatcherWrapper';
 import { getUserTokenFromCache, loginPopup } from '../../../utils/auth';
 import { Dispatcher } from '..';
 
@@ -23,14 +23,16 @@ jest.mock('../../../utils/auth', () => {
   };
 });
 jest.mock('jwt-decode');
-jest.useFakeTimers();
 
 beforeAll(() => {
+  jest.useFakeTimers();
   global.Date.now = jest.fn(() => 10000000);
 });
 
 afterAll(() => {
   global.Date.now = realDate;
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
 });
 
 const mockGetUserToken = getUserTokenFromCache as jest.Mock;
@@ -158,6 +160,7 @@ describe('user dispatcher', () => {
         lineNumbers: false,
         wordWrap: false,
         minimap: false,
+        fontSettings: getDefaultFontSettings(),
       },
       propertyEditorWidth: 400,
       dialogNavWidth: 555,

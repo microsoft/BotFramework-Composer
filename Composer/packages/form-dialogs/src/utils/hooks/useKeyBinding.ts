@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { Lifetime } from 'src/utils/base';
+
+import { Lifetime } from '../base';
 
 export const useKeyBinding = (kind: 'keydown' | 'keyup', cb: (e: KeyboardEvent) => void) => {
   const callback = React.useCallback(cb, [cb]);

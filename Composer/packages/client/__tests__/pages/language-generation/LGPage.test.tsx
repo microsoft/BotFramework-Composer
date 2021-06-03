@@ -9,7 +9,7 @@ import TableView from '../../../src/pages/language-generation/table-view';
 import CodeEditor from '../../../src/pages/language-generation/code-editor';
 import {
   localeState,
-  lgFilesState,
+  lgFilesSelectorFamily,
   settingsState,
   schemasState,
   dialogsSelectorFamily,
@@ -51,7 +51,7 @@ const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
   set(dialogsSelectorFamily(state.projectId), state.dialogs);
-  set(lgFilesState(state.projectId), state.lgFiles);
+  set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
 };

@@ -13,26 +13,29 @@ import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import { dispatcherState, userSettingsState, qnaFilesState } from '../../recoilModel';
+import { dispatcherState, userSettingsState, qnaFilesSelectorFamily } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { getBaseName } from '../../utils/fileUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { backIcon } from './styles';
+import { qnaSuffix } from './table-view';
+interface CodeEditorProps extends RouteComponentProps<{}> {
+  dialogId: string;
+  projectId: string;
+  locale: string;
+  skillId?: string;
+  qnaFileId?: string;
+}
 
 const lspServerPath = '/lu-language-server';
-const CodeEditor: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
-  props
-) => {
-  const { projectId = '', dialogId = '', skillId } = props;
+const CodeEditor: React.FC<CodeEditorProps> = (props) => {
+  const { projectId = '', dialogId = '', skillId, locale } = props;
   const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
-  const qnaFiles = useRecoilValue(qnaFilesState(actualProjectId));
-  //To do: support other languages
-  const locale = 'en-us';
-  //const locale = useRecoilValue(localeState);
+  const qnaFiles = useRecoilValue(qnaFilesSelectorFamily(actualProjectId));
   const userSettings = useRecoilValue(userSettingsState);
 
   const search = props.location?.search ?? '';
@@ -40,7 +43,9 @@ const CodeEditor: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const searchContainerName =
     searchContainerId && typeof searchContainerId === 'string' && getBaseName(searchContainerId);
   const targetFileId =
-    searchContainerId && typeof searchContainerId === 'string' ? searchContainerId : `${dialogId}.${locale}`;
+    searchContainerId && typeof searchContainerId === 'string'
+      ? `${searchContainerId}${qnaSuffix(locale)}`
+      : `${dialogId}.${locale}`;
   const file = qnaFiles.find(({ id }) => id === targetFileId);
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
@@ -106,6 +111,8 @@ const CodeEditor: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           path: lspServerPath,
         }}
         placeholder={defaultQnAPlaceholder}
+        telemetryClient={TelemetryClient}
+        toolbarOptions={{ hidden: true }}
         value={content}
         onChange={onChangeContent}
         onChangeSettings={handleSettingsChange}

@@ -2,13 +2,15 @@
   "name": "plugin-runtimes",
   "version": "1.0.0",
   "description": "provide info about available runtimes",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "webpack"
-  },
+  "main": "dist/extension.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "build": "node ../scripts/build.js",
+    "watch": "yarn build --watch"
+  },
   "dependencies": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "fs-extra": "^9.0.1",
     "path": "^0.12.7",
     "rimraf": "^3.0.2"

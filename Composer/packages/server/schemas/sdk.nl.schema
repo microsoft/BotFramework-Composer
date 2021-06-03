@@ -7,7 +7,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -31,7 +31,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -71,9 +71,6 @@
           "title": "Schema",
           "description": "Schema dat moet worden ingevuld.",
           "anyOf": {
-            "0": {
-              "title": "Metaschema voor hoofdschema"
-            },
             "1": {
               "title": "Verwijzing naar het JSON-schema",
               "description": "Verwijzing naar het .dialog-bestand van het JSON-schema."
@@ -96,7 +93,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -116,7 +113,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -160,7 +157,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -258,7 +255,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -311,7 +308,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -375,7 +372,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -403,7 +400,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -443,7 +440,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -483,7 +480,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -503,7 +500,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -703,7 +700,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -727,7 +724,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -893,7 +890,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -907,13 +904,49 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "Continue conversation (Queue)",
+      "description": "Continue a specific conversation (via StorageQueue implementation).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "conversationReference": {
+          "title": "Conversation Reference",
+          "description": "A conversation reference. (NOTE: Minimum required values or channelId, conversation)."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "Conversatie later voortzetten (Queue)",
-      "description": "Conversatie op een later tijdstip voortzetten (via Azure Storage Queue).",
+      "description": "Continue conversation at later time (via StorageQueue implementation).",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -949,7 +982,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -977,7 +1010,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1005,7 +1038,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1025,7 +1058,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1049,7 +1082,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1129,7 +1162,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1157,7 +1190,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1189,7 +1222,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1225,7 +1258,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1257,7 +1290,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1277,7 +1310,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1319,7 +1352,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1369,7 +1402,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1389,7 +1422,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1439,7 +1472,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1471,7 +1504,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1499,7 +1532,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1519,7 +1552,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1563,7 +1596,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1611,7 +1644,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1647,7 +1680,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1673,13 +1706,45 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "Get ConversationReference",
+      "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "property": {
+          "title": "Property",
+          "description": "Property (named location to store information)."
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "Naar actie gaan",
       "description": "Naar een actie gaan op id.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1707,11 +1772,11 @@
     },
     "Microsoft.GuidEntityRecognizer": {
       "title": "Herkenningsfunctie voor GUID-entiteiten",
-      "description": "Herkenningsfunctie die GUID's herkent.",
+      "description": "Herkenningsfunctie die GUID\"s herkent.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1731,7 +1796,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1751,7 +1816,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft-activiteitssjablonen",
-      "description": "Onderdelen die een activiteitssjabloon zijn, zoals een tekenreekssjabloon, activiteit of implementatie van een activiteitssjabloon",
-      "oneOf": {
-        "1": {
-          "description": "Een activiteit is het basiscommunicatietype voor het Bot Framework 3.0-protocol.",
-          "title": "Activiteit",
-          "properties": {
-            "type": {
-              "description": "Bevat het type activiteit. Mogelijke waarden zijn: bericht, contactRelationUpdate,\nconversationUpdate, typen, endOfConversation, gebeurtenis, aanroep, deleteUserData,\nmessageUpdate, messageDelete, installationUpdate, messageReaction, suggestie,\ntracering en overdracht",
-              "title": "type"
-            },
-            "id": {
-              "description": "Bevat een id waarmee de activiteit op het kanaal uniek wordt aangeduid.",
-              "title": "id"
-            },
-            "timestamp": {
-              "description": "Bevat de datum en tijd waarop het bericht is verzonden, in UTC, uitgedrukt in de ISO-8601-notatie.",
-              "title": "timestamp"
-            },
-            "localTimestamp": {
-              "description": "Bevat de datum en tijd waarop het bericht is verzonden, in lokale tijd, uitgedrukt in ISO-8601-\nnotatie.\nBijvoorbeeld 2016-09-23T13:07:49.4714686-07:00.",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "Bevat de naam van de tijdzone waarin het bericht is verzonden, in de lokale tijd, uitgedrukt in de notatie van de\nIANA-tijdzonedatabase.\nBijvoorbeeld Amerika/Los_Angeles.",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "Bevat de URL waarmee het service-eindpunt van het kanaal wordt opgegeven. Ingesteld door het kanaal.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "Bevat een id waarmee het kanaal uniek wordt aangeduid. Ingesteld door het kanaal.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "Hiermee wordt de afzender van het bericht aangeduid.",
-              "title": "from"
-            },
-            "conversation": {
-              "description": "Hiermee wordt het gesprek aangeduid waartoe de activiteit behoort.",
-              "title": "conversation",
-              "properties": {
-                "isGroup": {
-                  "description": "Geeft aan of het gesprek meer dan twee deelnemers heeft op het moment dat de\nactiviteit is gegenereerd",
-                  "title": "isGroup"
-                },
-                "conversationType": {
-                  "description": "Hiermee wordt het type gesprek aangegeven op kanalen die onderscheid maken tussen de gesprekstypen",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "De kanaal-id voor de gebruiker of bot op dit kanaal (bijvoorbeeld: joe@smith.com, or @joesmith of\n123456)",
-                  "title": "id"
-                },
-                "name": {
-                  "description": "Beschrijvende naam weergave",
-                  "title": "name"
-                },
-                "aadObjectId": {
-                  "description": "De object-id van dit account in Azure Active Directory (AAD)",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "De rol van de entiteit achter het account (bijvoorbeeld: gebruiker, bot, enzovoort). Mogelijke waarden zijn:\ngebruiker, bot",
-                  "title": "role"
-                }
-              }
-            },
-            "recipient": {
-              "description": "Hiermee wordt de ontvanger van het bericht aangeduid.",
-              "title": "recipient"
-            },
-            "textFormat": {
-              "description": "Opmaak van tekstvelden. Standaardwaarde: markdown. Mogelijke waarden zijn: markdown, zonder opmaak, XML",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "De lay-outhint voor meerdere bijlagen. Standaardwaarde: lijst. Mogelijke waarden zijn: lijst,\ncarrousel",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "De verzameling leden die aan het gesprek is toegevoegd.",
-              "title": "membersAdded",
-              "items": {
-                "description": "Kanaalaccountgegevens die nodig zijn om een bericht te routeren",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "De kanaal-id voor de gebruiker of bot op dit kanaal (bijvoorbeeld: joe@smith.com, or @joesmith of\n123456)",
-                    "title": "id"
-                  },
-                  "name": {
-                    "description": "Beschrijvende naam weergave",
-                    "title": "name"
-                  },
-                  "aadObjectId": {
-                    "description": "De object-id van dit account in Azure Active Directory (AAD)",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "De rol van de entiteit achter het account (bijvoorbeeld: gebruiker, bot, enzovoort). Mogelijke waarden zijn:\ngebruiker, bot",
-                    "title": "role"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "De verzameling leden die uit het gesprek is verwijderd.",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "De verzameling reacties die aan het gesprek is toegevoegd.",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "Berichtreactieobject",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "Type berichtreactie. Mogelijke waarden zijn: like, plusOne",
-                    "title": "type"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "De verzameling reacties die uit het gesprek is verwijderd.",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "De naam van het bijgewerkte onderwerp van het gesprek.",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "Hiermee wordt aangegeven of de eerdere geschiedenis van het kanaal wordt vermeld.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "Een landinstellingsnaam voor de inhoud van het tekstveld.\nDe landinstellingsnaam is een combinatie van een ISO 639-cultuurcode van twee of drie letters die is gekoppeld\naan een taal\nen een ISO 3166-subcultuurcode van twee letters die is gekoppeld aan een land of regio.\nDe landinstellingsnaam kan ook overeenkomen met een geldige BCP-47-taalcode.",
-              "title": "locale"
-            },
-            "text": {
-              "description": "De tekstinhoud van het bericht.",
-              "title": "text"
-            },
-            "speak": {
-              "description": "De tekst die moet worden uitgesproken.",
-              "title": "speak"
-            },
-            "inputHint": {
-              "description": "Hiermee wordt aangegeven of uw bot gebruikersinvoer accepteert,\nverwacht of negeert nadat het bericht is bezorgd bij de client. Mogelijke\nwaarden zijn: acceptingInput, ignoringInput, expectingInput",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "De tekst die moet worden weergegeven als het kanaal geen kaarten kan weergeven.",
-              "title": "summary"
-            },
-            "suggestedActions": {
-              "description": "De voorgestelde acties voor de activiteit.",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "De id's van de ontvangers voor wie de acties moeten worden weergegeven. Deze id's zijn relatief ten opzichte van de\nchannelId en een subset van alle ontvangers van de activiteit",
-                  "title": "aan",
-                  "items": {
-                    "title": "Id",
-                    "description": "De id van de ontvanger."
-                  }
-                },
-                "actions": {
-                  "description": "Acties die kunnen worden weergegeven voor de gebruiker",
-                  "title": "actions",
-                  "items": {
-                    "description": "Een actie waarop kan worden geklikt",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "Het type actie dat door deze knop wordt geïmplementeerd. Mogelijke waarden zijn: openUrl, imBack,\npostBack, playAudio, playVideo, showImage, downloadFile, aanmelden, aanroepen,\nbetaling, messageBack",
-                        "title": "type"
-                      },
-                      "title": {
-                        "description": "De tekstbeschrijving die op de knop wordt weergegeven",
-                        "title": "title"
-                      },
-                      "image": {
-                        "description": "URL van de afbeelding die op de knop wordt weergegeven, naast het tekstlabel",
-                        "title": "image"
-                      },
-                      "text": {
-                        "description": "Tekst voor deze actie",
-                        "title": "text"
-                      },
-                      "displayText": {
-                        "description": "(Optioneel) tekst die moet worden weergegeven in de chatfeed als op de knop wordt geklikt",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "Aanvullende parameter voor actie. De inhoud van deze eigenschap is afhankelijk van ActionType",
-                        "title": "value"
-                      },
-                      "channelData": {
-                        "description": "Kanaalspecifieke gegevens die aan deze actie zijn gekoppeld",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "Bijlagen",
-              "title": "bijlagen",
-              "items": {
-                "description": "Een bijlage in een activiteit",
-                "title": "Bijlage",
-                "properties": {
-                  "contentType": {
-                    "description": "mimetype/inhoudstype voor het bestand",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "Inhouds-URL",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "Ingesloten inhoud",
-                    "title": "content"
-                  },
-                  "name": {
-                    "description": "(OPTIONEEL) De naam van de bijlage",
-                    "title": "name"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(OPTIONEEL) De miniatuur die aan de bijlage is gekoppeld",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "Duidt de entiteiten aan die in het bericht worden vermeld.",
-              "title": "entities",
-              "items": {
-                "description": "Het metagegevensobject dat betrekking heeft op een activiteit",
-                "title": "Entiteit",
-                "properties": {
-                  "type": {
-                    "description": "Type van deze entiteit (RFC 3987 IRI)",
-                    "title": "type"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "Bevat kanaalspecifieke inhoud.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "Geeft aan of de ontvanger van een update voor een contactrelatie is toegevoegd aan of verwijderd uit de\nlijst met contactpersonen van de afzender.",
-              "title": "actie"
-            },
-            "replyToId": {
-              "description": "Bevat de id van het bericht waarop dit bericht een antwoord is.",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "Een omschrijvend label voor de activiteit.",
-              "title": "label"
-            },
-            "valueType": {
-              "description": "Het type van het waardeobject van de activiteit.",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "Een waarde die aan de activiteit is gekoppeld.",
-              "title": "value"
-            },
-            "name": {
-              "description": "De naam van de bewerking die is gekoppeld aan een aanroep- of gebeurtenisactiviteit.",
-              "title": "name"
-            },
-            "relatesTo": {
-              "description": "Een verwijzing naar een ander gesprek of een andere activiteit.",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(Optioneel) Id van de activiteit waarnaar moet worden verwezen",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(Optioneel) Gebruiker die deelneemt aan dit gesprek",
-                  "title": "user"
-                },
-                "bot": {
-                  "description": "Bot die deelneemt aan dit gesprek",
-                  "title": "bot"
-                },
-                "conversation": {
-                  "description": "Gespreksverwijzing",
-                  "title": "conversation"
-                },
-                "channelId": {
-                  "description": "Kanaal-id",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "Service-eindpunt waar bewerkingen kunnen worden uitgevoerd met betrekking tot het gesprek waarnaar wordt verwezen",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "De code voor endOfConversation-activiteiten die aangeeft waarom de conversatie is beëindigd.\nMogelijke waarden zijn: onbekend, completedSuccessfully, userCancelled, botTimedOut,\nbotIssuedInvalidMessage, channelFailed",
-              "title": "code"
-            },
-            "expiration": {
-              "description": "Het tijdstip waarop de activiteit als vervallen moet worden beschouwd en niet meer moet worden\nweergegeven voor de ontvanger.",
-              "title": "expiration"
-            },
-            "importance": {
-              "description": "Het belang van de activiteit. Mogelijke waarden zijn: laag, normaal en hoog",
-              "title": "importance"
-            },
-            "deliveryMode": {
-              "description": "Een leveringshint om de ontvanger te attenderen op alternatieve leveringspaden voor de activiteit.\nDe standaardleveringsmodus is Standaard. Mogelijke waarden zijn: Normaal en Melding",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "Lijst met zinnen en verwijzingen waar spraak- en taalactiveringssystemen naar moeten luisteren",
-              "title": "listenFor",
-              "items": {
-                "title": "Zin",
-                "description": "Zin waarnaar moet worden geluisterd."
-              }
-            },
-            "textHighlights": {
-              "description": "De verzameling tekstfragmenten die moet worden gemarkeerd wanneer de activiteit een ReplyToId-waarde bevat.",
-              "title": "textHighlights",
-              "items": {
-                "description": "Verwijst naar een subtekenreeks van de inhoud in een ander veld",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "Definieert het tekstfragment dat moet worden gemarkeerd",
-                    "title": "text"
-                  },
-                  "occurrence": {
-                    "description": "Het aantal keren dat een tekstveld voorkomt in de tekst waarnaar wordt verwezen, als er meerdere voorkomen.",
-                    "title": "occurrence"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "Een optionele actie door middel van programmacode die deze aanvraag vergezelt",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "Id van deze actie",
-                  "title": "id"
-                },
-                "entities": {
-                  "description": "Entiteiten die zijn gekoppeld aan deze actie",
-                  "title": "entities"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "Onderdelen die een activiteitssjabloon zijn, zoals een tekenreekssjabloon, activiteit of implementatie van een activiteitssjabloon"
     },
     "Microsoft.IDialog": {
       "title": "Microsoft-dialogen",
@@ -2187,9 +1884,9 @@
       "title": "Herkenningsfuncties voor entiteiten",
       "description": "Onderdelen die zijn afgeleid van EntityRecognizer.",
       "oneOf": {
-        "0": {
-          "title": "Verwijzing naar Microsoft.IEntityRecognizer",
-          "description": "Verwijzing naar het bestand Microsoft.IEntityRecognizer.dialog."
+        "18": {
+          "title": "Reference to Microsoft.IEntityRecognizer",
+          "description": "Reference to Microsoft.IEntityRecognizer .dialog file."
         }
       }
     },
@@ -2209,9 +1906,9 @@
       "title": "Microsoft-triggers",
       "description": "Onderdelen die zijn afgeleid van de klasse OnCondition.",
       "oneOf": {
-        "0": {
-          "title": "Verwijzing naar Microsoft.ITrigger",
-          "description": "Verwijzing naar het bestand Microsoft.ITrigger.dialog."
+        "27": {
+          "title": "Reference to Microsoft.ITrigger",
+          "description": "Reference to Microsoft.ITrigger .dialog file."
         }
       }
     },
@@ -2219,9 +1916,9 @@
       "title": "Keuzeschakelaars",
       "description": "Onderdelen die zijn afgeleid van de klasse TriggerSelector.",
       "oneOf": {
-        "0": {
-          "title": "Verwijzing naar Microsoft.ITriggerSelector",
-          "description": "Verwijzing naar het bestand Microsoft.ITriggerSelector.dialog."
+        "5": {
+          "title": "Reference to Microsoft.ITriggerSelector",
+          "description": "Reference to Microsoft.ITriggerSelector .dialog file."
         }
       }
     },
@@ -2231,7 +1928,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2269,7 +1966,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2337,7 +2034,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2365,7 +2062,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2385,7 +2082,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2425,7 +2122,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2531,7 +2228,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2551,7 +2248,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2571,7 +2268,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2603,7 +2300,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2623,7 +2320,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2707,7 +2404,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2727,7 +2424,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2795,7 +2492,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2831,25 +2528,25 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "Bij entiteitstoewijzing",
-      "description": "Acties die moeten worden ondernomen wanneer een entiteit aan een eigenschap moet worden toegewezen.",
+      "description": "Actions to apply an operation on a property and value.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
-        "property": {
-          "title": "Eigenschap",
-          "description": "Eigenschap die wordt ingesteld nadat de entiteit is geselecteerd."
-        },
-        "entity": {
-          "title": "Entiteit",
-          "description": "Entiteit die in een eigenschap wordt geplaatst"
-        },
         "operation": {
           "title": "Bewerking",
-          "description": "De bewerking voor het toewijzen van een entiteit."
+          "description": "Operation filter on event."
+        },
+        "property": {
+          "title": "Eigenschap",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value filter on event."
         },
         "condition": {
           "title": "Voorwaarde",
@@ -2883,7 +2580,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2919,7 +2616,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -2951,21 +2648,25 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "Bij kiezen van entiteit",
-      "description": "Acties die moeten worden uitgevoerd wanneer een entiteitswaarde moet worden omgezet.",
+      "description": "Actions to be performed when value is ambiguous for operator and property.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
-        "property": {
-          "title": "Eigenschap die moet worden ingesteld",
-          "description": "Eigenschap die wordt ingesteld nadat de entiteit is geselecteerd."
+        "operation": {
+          "title": "Operation",
+          "description": "Operation filter on event."
         },
-        "entity": {
-          "title": "Dubbelzinnige entiteit",
-          "description": "Dubbelzinnige entiteit"
+        "property": {
+          "title": "Property",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Ambiguous value",
+          "description": "Ambiguous value filter on event."
         },
         "condition": {
           "title": "Voorwaarde",
@@ -2994,12 +2695,12 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "Bij onduidelijke intentie",
-      "description": "Acties die moeten worden uitgevoerd wanneer een intentie onduidelijk is.",
+      "title": "On ambiguous intent",
+      "description": "Actions to perform on when an intent is ambiguous.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3039,34 +2740,14 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "Bij kiezen van eigenschap",
-      "description": "Acties die moeten worden uitgevoerd wanneer er meerdere mogelijke toewijzingen van entiteiten aan eigenschappen zijn.",
+      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
-        "entity": {
-          "title": "Entiteit die wordt toegewezen",
-          "description": "Keuze van entiteit die aan eigenschap wordt toegewezen"
-        },
-        "properties": {
-          "title": "Mogelijke eigenschappen",
-          "description": "Eigenschappen waartussen moet worden gekozen.",
-          "items": {
-            "title": "Naam van eigenschap",
-            "description": "Mogelijke eigenschap die kan worden gekozen."
-          }
-        },
-        "entities": {
-          "title": "Entiteiten",
-          "description": "Onduidelijke entiteitsnamen.",
-          "items": {
-            "title": "Naam van entiteit",
-            "description": "De namen van entiteiten waartussen moet worden gekozen."
-          }
-        },
         "condition": {
           "title": "Voorwaarde",
           "description": "Voorwaarde (expressie)."
@@ -3099,7 +2780,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3135,7 +2816,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3171,7 +2852,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3207,7 +2888,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3247,7 +2928,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3283,7 +2964,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3319,7 +3000,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3355,7 +3036,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3391,7 +3072,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3427,7 +3108,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3463,7 +3144,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3511,7 +3192,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3547,7 +3228,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3583,7 +3264,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3619,7 +3300,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3655,7 +3336,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3691,7 +3372,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3727,7 +3408,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3763,7 +3444,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3799,7 +3480,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3835,7 +3516,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3855,7 +3536,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3875,7 +3556,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3895,7 +3576,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -3993,7 +3674,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4109,7 +3790,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4133,7 +3814,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4161,7 +3842,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4189,7 +3870,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4235,7 +3916,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4279,7 +3960,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4328,7 +4009,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4360,7 +4041,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4386,13 +4067,41 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "Send a handoff activity",
+      "description": "Sends a handoff activity to trigger a handoff request.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "Context",
+          "description": "Context to send with the handoff request"
+        },
+        "transcript": {
+          "title": "transcript",
+          "description": "Transcript to send with the handoff request"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "Eigenschap instellen",
       "description": "Stel een of meer eigenschapswaarden in.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4438,7 +4147,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4474,7 +4183,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4510,7 +4219,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4534,7 +4243,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4582,39 +4291,39 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetrie: gebeurtenis bijhouden",
-      "description": "Een aangepaste gebeurtenis bijhouden met behulp van de geregistreerde telemetrieclient.",
+    "Microsoft.TelemetryTrackEventAction": {
+      "title": "Telemetry - track event",
+      "description": "Track a custom event using the registered Telemetry Client.",
       "patternProperties": {
         "^\\$": {
-          "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
         }
       },
       "properties": {
         "id": {
           "title": "Id",
-          "description": "Optionele id voor de dialoog"
+          "description": "Optional id for the dialog"
         },
         "disabled": {
-          "title": "Uitgeschakeld",
-          "description": "Optionele voorwaarde, waarmee deze actie wordt uitgeschakeld als deze voorwaarde waar is."
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
         },
         "eventName": {
-          "title": "Gebeurtenisnaam",
-          "description": "De naam van de gebeurtenis die moet worden bijgehouden."
+          "title": "Event name",
+          "description": "The name of the event to track."
         },
         "properties": {
-          "title": "Eigenschappen",
-          "description": "Een of meer eigenschappen die moeten worden gekoppeld aan de gebeurtenis die wordt bijgehouden."
+          "title": "Properties",
+          "description": "One or more properties to attach to the event being tracked."
         },
         "$kind": {
-          "title": "Soort dialoogobject",
-          "description": "Hiermee worden de geldige eigenschappen gedefinieerd voor het onderdeel dat u configureert (op basis van een dialoogschemabestand)"
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
         },
         "$designer": {
-          "title": "Ontwerpgegevens",
-          "description": "Extra informatie voor de Bot Framework Composer."
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
         }
       }
     },
@@ -4624,7 +4333,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4644,7 +4353,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4668,7 +4377,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4748,7 +4457,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4772,7 +4481,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4804,7 +4513,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4848,7 +4557,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4868,7 +4577,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4900,11 +4609,11 @@
     },
     "Microsoft.UrlEntityRecognizer": {
       "title": "URL-herkenningsfunctie",
-      "description": "Herkenningsfunctie die URL's herkent.",
+      "description": "Herkenningsfunctie die URL\"s herkent.",
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -4942,7 +4651,7 @@
       "patternProperties": {
         "^\\$": {
           "title": "Hulpprogramma-eigenschap",
-          "description": "Onbepaalde eigenschap voor hulpprogramma's."
+          "description": "Onbepaalde eigenschap voor hulpprogramma\"s."
         }
       },
       "properties": {
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "Getal",
           "description": "Constante die bestaat uit een getal."
+        }
+      }
+    },
+    "schema": {
+      "title": "Core schema meta-schema"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "Channel account information needed to route a message",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "Channel account information for a conversation",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+              "title": "isGroup"
+            },
+            "conversationType": {
+              "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "Message reaction object",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+              "title": "type"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "A clickable action",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+              "title": "type"
+            },
+            "title": {
+              "description": "Text description which appears on the button",
+              "title": "title"
+            },
+            "image": {
+              "description": "Image URL which will appear on the button, next to text label",
+              "title": "image"
+            },
+            "text": {
+              "description": "Text for this action",
+              "title": "text"
+            },
+            "displayText": {
+              "description": "(Optional) text to display in the chat feed if the button is clicked",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+              "title": "value"
+            },
+            "channelData": {
+              "description": "Channel-specific data associated with this action",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "SuggestedActions that can be performed",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+              "title": "to",
+              "items": {
+                "title": "Id",
+                "description": "Id of recipient."
+              }
+            },
+            "actions": {
+              "description": "Actions that can be shown to the user",
+              "title": "actions"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "An attachment within an activity",
+          "title": "Attachment",
+          "properties": {
+            "contentType": {
+              "description": "mimetype/Contenttype for the file",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "Content Url",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "Embedded content",
+              "title": "content"
+            },
+            "name": {
+              "description": "(OPTIONAL) The name of the attachment",
+              "title": "name"
+            },
+            "thumbnailUrl": {
+              "description": "(OPTIONAL) Thumbnail associated with attachment",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "Metadata object pertaining to an activity",
+          "title": "Entity",
+          "properties": {
+            "type": {
+              "description": "Type of this entity (RFC 3987 IRI)",
+              "title": "type"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "An object relating to a particular point in a conversation",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(Optional) ID of the activity to refer to",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(Optional) User participating in this conversation",
+              "title": "user"
+            },
+            "bot": {
+              "description": "Bot participating in this conversation",
+              "title": "bot"
+            },
+            "conversation": {
+              "description": "Conversation reference",
+              "title": "conversation"
+            },
+            "channelId": {
+              "description": "Channel ID",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "Refers to a substring of content within another field",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "Defines the snippet of text to highlight",
+              "title": "text"
+            },
+            "occurrence": {
+              "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+              "title": "occurrence"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "Represents a reference to a programmatic action",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "ID of this action",
+              "title": "id"
+            },
+            "entities": {
+              "description": "Entities associated with this action",
+              "title": "entities"
+            }
+          }
+        },
+        "Activity": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation"
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments"
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities"
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }

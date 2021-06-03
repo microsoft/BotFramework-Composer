@@ -3,7 +3,9 @@
 
 import React, { useState, Fragment } from 'react';
 
-import { LgEditor } from '../../src';
+import { LgCodeEditor } from '../../src';
+
+import { mockTelemetryClient } from './mockTelemetryClient';
 
 const content = `# Greeting1
 -Good morning
@@ -18,7 +20,7 @@ const content = `# Greeting1
 function LGEditor() {
   const [value, setValue] = useState(content);
 
-  const onChange = value => {
+  const onChange = (value) => {
     setValue(value);
   };
 
@@ -30,14 +32,14 @@ function LGEditor() {
       path: '/lg-language-server',
     },
   };
-  return <LgEditor {...props} />;
+  return <LgCodeEditor {...props} telemetryClient={mockTelemetryClient} />;
 }
 
 export default function App() {
   const [count, setCount] = useState(1);
-  const editors = Array.from(Array(count).keys()).map(index => {
+  const editors = Array.from(Array(count).keys()).map((index) => {
     return (
-      <div style={{ width: '500px', height: '300px', float: 'left' }} key={index}>
+      <div key={index} style={{ width: '500px', height: '300px', float: 'left' }}>
         <LGEditor />
       </div>
     );
@@ -45,8 +47,8 @@ export default function App() {
   return (
     <Fragment>
       <button onClick={() => setCount(1)}>Reset</button>
-      <button onClick={() => setCount(prevCount => prevCount + 1)}>add</button>
-      <button onClick={() => setCount(prevCount => prevCount - 1)}>remove</button>
+      <button onClick={() => setCount((prevCount) => prevCount + 1)}>add</button>
+      <button onClick={() => setCount((prevCount) => prevCount - 1)}>remove</button>
       <div>{editors}</div>
     </Fragment>
   );

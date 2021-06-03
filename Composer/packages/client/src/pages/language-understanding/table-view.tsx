@@ -26,19 +26,20 @@ import { languageListTemplates } from '../../components/MultiLanguage';
 import { navigateTo } from '../../utils/navigation';
 import {
   dispatcherState,
-  luFilesState,
   localeState,
   settingsState,
-  validateDialogsSelectorFamily,
+  dialogsSelectorFamily,
+  luFilesSelectorFamily,
 } from '../../recoilModel';
 import { colors } from '../../colors';
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
   luFileId?: string;
+  file?: LuFile;
 }
 
 interface Intent {
@@ -51,25 +52,21 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId, luFileId } = props;
+  const { dialogId, projectId, skillId, luFileId, file } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const { updateLuIntent } = useRecoilValue(dispatcherState);
 
-  const luFiles = useRecoilValue(luFilesState(actualProjectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
 
   const { languages, defaultLanguage } = settings;
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
-
-  const file = luFileId
-    ? luFiles.find(({ id }) => id === luFileId)
-    : luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
 
   const defaultLangFile = luFileId
     ? luFiles.find(({ id }) => id === luFileId)
@@ -114,9 +111,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return result.concat(items);
       }, []);
 
-    if (!activeDialog) {
-      setIntents(allIntents);
-    } else if (luFileId && file) {
+    if (file) {
       const luIntents: Intent[] = [];
       get(file, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(file);
@@ -125,16 +120,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
           phrases,
           fileId: file.id,
           dialogId: activeDialog?.id || '',
-          used: activeDialog?.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+          used: !!activeDialog?.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
           state,
         });
       });
       setIntents(luIntents);
-    } else {
+    } else if (activeDialog) {
       const dialogIntents = allIntents.filter((t) => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
+    } else {
+      setIntents(allIntents);
     }
-  }, [luFiles, activeDialog, actualProjectId, luFileId]);
+  }, [luFiles, activeDialog, actualProjectId, luFileId, file]);
 
   const handleIntentUpdate = useCallback(
     (fileId: string, intentName: string, intent: LuIntentSection) => {
@@ -164,14 +161,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
     [defaultLangFile, actualProjectId]
   );
 
-  const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
+  const getTemplatesMoreButtons = (item, index, luFileId): IContextualMenuItem[] => {
     const buttons = [
       {
         key: 'edit',
         name: formatMessage('Edit'),
         onClick: () => {
           const { name, dialogId } = intents[index];
-          navigateTo(`${baseURL}language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
+          navigateTo(
+            `${baseURL}language-understanding/${dialogId}${
+              luFileId ? `/item/${luFileId}/` : '/'
+            }edit?t=${encodeURIComponent(name)}`
+          );
         },
       },
     ];
@@ -210,6 +211,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={displayName}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue === item.name) return;
                   if (newValue) {
                     handleIntentUpdate(item.fileId, item.name, { Name: newValue, Body: item.phrases });
                   }
@@ -240,6 +242,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
@@ -273,6 +276,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
@@ -305,6 +309,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === text) return;
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     const fixedBody = newValue.startsWith('-') ? newValue : `- ${newValue}`;
@@ -376,7 +381,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 menuIconProps={{ iconName: 'MoreVertical' }}
                 menuProps={{
                   shouldFocusOnMount: true,
-                  items: getTemplatesMoreButtons(item, index),
+                  items: getTemplatesMoreButtons(item, index, luFileId),
                 }}
                 styles={{ menuIcon: { color: colors.text, fontSize: FontSizes.size16 } }}
               />

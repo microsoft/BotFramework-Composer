@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export * from './appUpdates';
 export * from './auth';
+export * from './azure';
 export * from './diagnostic';
 export * from './dialogUtils';
 export * from './extension';
@@ -19,3 +21,5 @@ export * from './shell';
 export * from './telemetry';
 export * from './user';
 export * from './featureFlags';
+export * from './creation';
+export * from './orchestrator';

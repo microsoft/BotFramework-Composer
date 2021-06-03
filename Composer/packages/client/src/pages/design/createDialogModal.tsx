@@ -14,7 +14,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { DialogCreationCopy } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { actionsSeedState, botDisplayNameState, schemasState, validateDialogsSelectorFamily } from '../../recoilModel';
+import { actionsSeedState, botDisplayNameState, schemasState, dialogsSelectorFamily } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { name, description, styles as wizardStyles } from './styles';
@@ -37,7 +37,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   const { onSubmit, onDismiss, isOpen, projectId } = props;
 
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const { shellApi, ...shellData } = useShellApi();

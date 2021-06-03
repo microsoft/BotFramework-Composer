@@ -106,13 +106,13 @@ class StorageService {
 
   public updateCurrentPath = (path: string, storageId: string) => {
     //A path in windows should never start with \, but the fs.existsSync() return true
-    if (path && path.startsWith('\\') && settings.platform === 'win32') {
+    if (path?.startsWith('\\') && settings.platform === 'win32') {
       return this.storageConnections;
     }
-    if (path && path.endsWith(':')) {
+    if (path?.endsWith(':')) {
       path = path + '/';
     }
-    if (Path.isAbsolute(path) && fs.existsSync(path)) {
+    if (Path.isAbsolute(path) && fs.existsSync(path) && fs.statSync(path).isDirectory()) {
       const storage = this.storageConnections.find((s) => s.id === storageId);
       if (storage) {
         storage.path = path;
@@ -120,6 +120,16 @@ class StorageService {
       }
     }
     return this.storageConnections;
+  };
+
+  public validatePath = (path: string) => {
+    if (!fs.existsSync(path)) {
+      return 'The path does not exist';
+    } else if (!fs.statSync(path).isDirectory()) {
+      return 'This is not a directory';
+    } else {
+      return '';
+    }
   };
 
   public createFolder = (path: string) => {
@@ -145,7 +155,7 @@ class StorageService {
 
   private ensureDefaultBotFoldersExist = () => {
     this.storageConnections.forEach((s) => {
-      this.createFolderRecurively(s.defaultPath);
+      this.createFolderRecursively(s.defaultPath);
     });
   };
 
@@ -154,7 +164,7 @@ class StorageService {
     const children = await storage.readDir(path);
     const dialogFile = /.+(\.)dialog$/;
     const isNewBot = children.some((name) => dialogFile.test(name));
-    // locate old structire bot: Main.dialog
+    // locate old structure bot: Main.dialog
     const mainPath = Path.join(path, 'Main', 'Main.dialog');
     const isOldBot = await storage.exists(mainPath);
     return isNewBot || isOldBot;
@@ -193,9 +203,9 @@ class StorageService {
     return result.filter((item) => !!item);
   };
 
-  private createFolderRecurively = (path: string) => {
+  private createFolderRecursively = (path: string) => {
     if (!fs.existsSync(path)) {
-      this.createFolderRecurively(Path.dirname(path));
+      this.createFolderRecursively(Path.dirname(path));
       fs.mkdirSync(path);
     }
   };

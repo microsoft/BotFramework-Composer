@@ -1,18 +1,15 @@
-import { IBotProject, PublishResponse, PublishResult, } from '@botframework-composer/types';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { join } from 'path';
 import { createWriteStream } from 'fs';
-import { ensureDirSync } from 'fs-extra';
-import fetch, { RequestInit } from 'node-fetch';
 import stream from 'stream';
 
-import {
-  PVAPublishJob,
-  PublishConfig,
-  UserIdentity,
-  PublishState,
-  PublishHistory,
-  PullResponse,
-} from './types';
+import { IBotProject, PublishResponse, PublishResult } from '@botframework-composer/types';
+import { ensureDirSync } from 'fs-extra';
+import fetch, { RequestInit } from 'node-fetch';
+
+import { PVAPublishJob, PublishConfig, UserIdentity, PublishState, PublishHistory, PullResponse } from './types';
 import { getAuthCredentials, getBaseUrl } from './utils';
 import { logger } from './logger';
 import { API_VERSION } from './constants';
@@ -51,6 +48,7 @@ export const publish = async (
     logger.log('Writing bot content to in-memory buffer.');
     const botContentWriter = new stream.Writable();
     const botContentData: Uint8Array[] = [];
+    // eslint-disable-next-line no-underscore-dangle
     botContentWriter._write = (chunk: Buffer, encoding, callback) => {
       botContentData.push(chunk);
       callback(); // let the internal write() call know that the _write() was successful
@@ -87,7 +85,7 @@ export const publish = async (
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
         'Content-Length': botContent.buffer.byteLength.toString(),
-        'If-Match': project.eTag || '',
+        'If-Match': project.eTag,
       },
     });
     if (res.status === 202) {
@@ -111,7 +109,7 @@ export const publish = async (
     } else {
       // otherwise we should surface the error in the UI
       let errorText = res.statusText;
-      if (res && res.text) {
+      if (res?.text) {
         errorText = await res.text();
       }
       return {
@@ -262,11 +260,12 @@ export const pull = async (
     const accessToken = await getAccessToken(creds);
 
     // fetch zip containing bot content
-    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content`;
+    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content?includeTopics=true`;
     const options: RequestInit = {
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
     };
+    logger.log('Fetching from PVA: %s', url);
     const result = await fetch(url, options);
 
     const eTag = result.headers.get('etag') || '';
@@ -276,7 +275,7 @@ export const pull = async (
     }
 
     // write the zip to disk
-    if (result && result.body) {
+    if (result?.body) {
       // where we will store the bot .zip
       const zipDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-publish');
       ensureDirSync(zipDir);
@@ -369,7 +368,7 @@ const getUserFriendlyMessage = (job: PVAPublishJob): string => {
       return 'Bot content out of sync. Please check logs.';
 
     case 'UpdatingSnapshot':
-      return 'Updating bot content in PVA...';
+      return 'Updating bot content in Power Virtual Agents...';
 
     case 'Validating':
       return 'Validating bot assets...';

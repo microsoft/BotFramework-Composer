@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
 import { colors } from '../../../../colors';
-import { dispatcherState, validateDialogsSelectorFamily } from '../../../../recoilModel';
+import { dispatcherState, dialogsSelectorFamily } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
@@ -35,7 +35,7 @@ interface DescriptionColumnProps extends DialogInfo {
 
 const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
   const { id, displayName, projectId } = props;
-  const items = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const items = useRecoilValue(dialogsSelectorFamily(projectId));
   const { content } = items.find(({ id: dialogId }) => dialogId === id) || {};
 
   const [value, setValue] = useState(content?.$designer?.description);
@@ -93,8 +93,8 @@ const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
   );
 };
 
-export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, projectId }) => {
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+export const SelectDialogs: React.FC<ContentProps> = ({ selectedDialogs, setSelectedDialogs, projectId }) => {
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), [
     projectId,
   ]);
@@ -138,16 +138,20 @@ export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, proj
     [projectId]
   );
 
-  const selection = useMemo(
-    () =>
-      new Selection({
-        onSelectionChanged: () => {
-          const selectedItems = selection.getSelection();
-          setSelectedDialogs(selectedItems);
-        },
-      }),
-    []
+  const selectionRef = useRef(
+    new Selection({
+      getKey: (item) => item.id,
+      onSelectionChanged: () => {
+        const selectedItems = selectionRef.current.getSelection();
+        setSelectedDialogs(selectedItems);
+      },
+    })
   );
 
-  return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
+  useEffect(() => {
+    for (const item of selectedDialogs) {
+      selectionRef.current.setKeySelected(selectionRef.current.getKey(item), true, false);
+    }
+  }, []);
+  return <SelectItems items={items} selection={selectionRef.current} tableColumns={tableColumns} />;
 };

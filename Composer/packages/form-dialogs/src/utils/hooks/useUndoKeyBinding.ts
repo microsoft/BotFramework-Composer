@@ -3,8 +3,10 @@
 
 import { isMac } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
-import { useUndo } from 'src/undo/useUndo';
-import { useKeyBinding } from 'src/utils/hooks/useKeyBinding';
+
+import { useUndo } from '../../undo/useUndo';
+
+import { useKeyBinding } from './useKeyBinding';
 
 export const useUndoKeyBinding = () => {
   const { canRedo, canUndo, redo, undo } = useUndo();

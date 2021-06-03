@@ -13,6 +13,9 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as React from 'react';
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
+
+import { nameRegex } from '../../utils/constants';
+import { FieldLabel } from '../common/FieldLabel';
 import {
   ArrayPropertyPayload,
   FormDialogProperty,
@@ -21,13 +24,12 @@ import {
   IntegerPropertyPayload,
   NumberPropertyPayload,
   StringPropertyPayload,
-} from 'src/atoms/types';
-import { FieldLabel } from 'src/components/common/FieldLabel';
-import { NumberPropertyContent } from 'src/components/property/NumberPropertyContent';
-import { PropertyTypeSelector } from 'src/components/property/PropertyTypeSelector';
-import { RequiredPriorityIndicator } from 'src/components/property/RequiredPriorityIndicator';
-import { StringPropertyContent } from 'src/components/property/StringPropertyContent';
-import { nameRegex } from 'src/utils/constants';
+} from '../../atoms/types';
+
+import { NumberPropertyContent } from './NumberPropertyContent';
+import { PropertyTypeSelector } from './PropertyTypeSelector';
+import { RequiredPriorityIndicator } from './RequiredPriorityIndicator';
+import { StringPropertyContent } from './StringPropertyContent';
 
 const ContentRoot = styled.div(({ isValid }: { isValid: boolean }) => ({
   width: 720,

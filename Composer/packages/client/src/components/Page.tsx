@@ -3,18 +3,23 @@
 
 /** @jsx jsx */
 import { jsx, css, SerializedStyles } from '@emotion/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { useRecoilValue } from 'recoil';
+import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
+import formatMessage from 'format-message';
 
-import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 import { navigateTo, buildURL } from '../utils/navigation';
-import { PageMode } from '../recoilModel';
 import { colors } from '../colors';
+import { dispatcherState, PageMode } from '../recoilModel';
+import implementedDebugExtensions from '../pages/design/DebugPanel/TabExtensions';
+import { splitPaneContainer, splitPaneWrapper } from '../pages/design/styles';
 
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
-
+import { renderThinSplitter } from './Split/ThinSplitter';
 // -------------------- Styles -------------------- //
 
 export const root = css`
@@ -24,6 +29,15 @@ export const root = css`
 
   label: Page;
   color: ${colors.text};
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  position: relative;
+  label: PageContent;
 `;
 
 export const pageWrapper = css`
@@ -41,6 +55,7 @@ export const header = css`
   flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid ${NeutralColors.gray30};
 
   label: PageHeader;
   color: ${colors.text};
@@ -49,7 +64,6 @@ export const header = css`
 export const headerTitle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
-
   label: PageHeaderTitle;
 `;
 
@@ -60,12 +74,14 @@ export const headerContent = css`
   label: PageHeaderContent;
 `;
 
-export const main = css`
+// TODO: https://github.com/microsoft/BotFramework-Composer/issues/6873. Investigate static numbers
+export const main = (hasRenderHeaderContent) => css`
   margin-left: 2px;
-  height: calc(100vh - 165px);
+  max-height: ${hasRenderHeaderContent ? 'calc(100vh - 181px)' : 'calc(100vh - 165px)'};
   display: flex;
   border-top: 1px solid ${colors.gray(50)};
   position: relative;
+  overflow: auto;
   nav {
     ul {
       margin-top: 0px;
@@ -77,11 +93,20 @@ export const main = css`
 
 export const content = (shouldShowEditorError: boolean) => css`
   flex: 4;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : '100%'};
+  label: PageContent;
+  box-sizing: border-box;
+`;
+
+const defaultContentStyle = css`
   padding: 20px;
+  flex-grow: 1;
+  height: 0;
   position: relative;
   overflow: auto;
-  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : 'calc(100% - 10px)'};
-  label: PageContent;
   box-sizing: border-box;
 `;
 
@@ -92,13 +117,16 @@ type IPageProps = {
   toolbarItems: IToolbarItem[];
   title: string;
   headerStyle?: SerializedStyles;
+  contentStyle?: SerializedStyles;
   navRegionName: string;
   mainRegionName: string;
   shouldShowEditorError?: boolean;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
   useNewTree?: boolean;
+  useDebugPane?: boolean;
   navLinks?: INavTreeItem[];
+  navLinkClick?: (item: INavTreeItem) => void;
   pageMode: PageMode;
   showCommonLinks?: boolean;
   projectId?: string;
@@ -117,7 +145,8 @@ const Page: React.FC<IPageProps> = (props) => {
     navRegionName,
     mainRegionName,
     headerStyle = header,
-    shouldShowEditorError = true,
+    contentStyle = defaultContentStyle,
+    shouldShowEditorError = false,
     useNewTree,
     pageMode,
     showCommonLinks = false,
@@ -127,55 +156,83 @@ const Page: React.FC<IPageProps> = (props) => {
     fileId,
   } = props;
 
+  const { setPageElementState } = useRecoilValue(dispatcherState);
+
+  const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
+    setPageElementState(pageMode, { leftSplitWidth: sizes.primary });
+  };
+
+  const debugItems: IToolbarItem[] = useMemo(
+    () =>
+      implementedDebugExtensions
+        .map(({ key, ToolbarWidget }) => {
+          if (!ToolbarWidget) return;
+          return {
+            type: 'element',
+            element: <ToolbarWidget key={`ToolbarWidget-${key}`} />,
+            align: 'right',
+          };
+        })
+        .filter((item) => Boolean(item)) as IToolbarItem[],
+    []
+  );
+  const displayedToolbarItems = toolbarItems.concat(debugItems);
+
   return (
-    <div css={root} data-testid={props['data-testid']}>
-      <div css={pageWrapper}>
-        <Toolbar toolbarItems={toolbarItems} />
-        <div css={headerStyle}>
-          <h1 css={headerTitle}>{title}</h1>
-          {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
-        </div>
-        <div css={main} role="main">
-          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800} pageMode={pageMode}>
-            {useNewTree ? (
-              <ProjectTree
-                defaultSelected={{
-                  projectId,
-                  skillId,
-                  dialogId,
-                  lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
-                  luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
-                }}
-                options={{
-                  showDelete: false,
-                  showTriggers: false,
-                  showDialogs: true,
-                  showLgImports: pageMode === 'language-generation',
-                  showLuImports: pageMode === 'language-understanding',
-                  showRemote: false,
-                  showMenu: false,
-                  showQnAMenu: title === 'QnA',
-                  showErrors: false,
-                  showCommonLinks,
-                }}
-                onSelect={(link) => {
-                  navigateTo(buildURL(pageMode, link));
-                }}
-              />
-            ) : (
-              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
-            )}
-            <div
-              aria-label={mainRegionName}
-              css={content(shouldShowEditorError)}
-              data-testid="PageContent"
-              role="region"
-            >
-              {children}
-            </div>
-          </LeftRightSplit>
-        </div>
+    <div css={contentWrapper} data-testid={props['data-testid']} role="main">
+      <Toolbar toolbarItems={displayedToolbarItems} />
+      <div css={headerStyle}>
+        <h1 css={headerTitle}>{title}</h1>
+        {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
       </div>
+      <Split
+        resetOnDoubleClick
+        initialPrimarySize="20%"
+        minPrimarySize="200px"
+        minSecondarySize="800px"
+        renderSplitter={renderThinSplitter}
+        onMeasuredSizesChanged={onMeasuredSizesChanged}
+      >
+        <div css={contentWrapper}>
+          <div css={splitPaneContainer}>
+            <div css={splitPaneWrapper}>
+              {useNewTree ? (
+                <ProjectTree
+                  headerAriaLabel={formatMessage('Filter by file name')}
+                  headerPlaceholder={formatMessage('Filter by file name')}
+                  options={{
+                    showDelete: false,
+                    showTriggers: false,
+                    showDialogs: true,
+                    showLgImports: pageMode === 'language-generation',
+                    showLuImports: pageMode === 'language-understanding',
+                    showRemote: false,
+                    showMenu: false,
+                    showQnAMenu: pageMode === 'knowledge-base',
+                    showErrors: false,
+                    showCommonLinks,
+                  }}
+                  selectedLink={{
+                    projectId,
+                    skillId,
+                    dialogId,
+                    lgFileId: pageMode === 'language-generation' && fileId ? fileId : undefined,
+                    luFileId: pageMode === 'language-understanding' && fileId ? fileId : undefined,
+                  }}
+                  onSelect={(link) => {
+                    navigateTo(buildURL(pageMode, link));
+                  }}
+                />
+              ) : (
+                <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+              )}
+            </div>
+          </div>
+        </div>
+        <div aria-label={mainRegionName} css={content(shouldShowEditorError)} data-testid="PageContent" role="region">
+          <div css={contentStyle}>{children}</div>
+        </div>
+      </Split>
     </div>
   );
 };

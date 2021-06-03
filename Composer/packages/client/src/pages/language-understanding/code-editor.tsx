@@ -11,9 +11,12 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { LuFile } from '@bfc/shared';
 
-import { luFilesState, localeState, settingsState } from '../../recoilModel/atoms';
-import { userSettingsState, dispatcherState } from '../../recoilModel';
+import { dialogState, localeState, settingsState } from '../../recoilModel/atoms';
+import { userSettingsState, dispatcherState, luFilesSelectorFamily } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { DiffCodeEditor } from './diff-editor';
 
@@ -24,6 +27,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   projectId: string;
   skillId?: string;
   luFileId?: string;
+  file?: LuFile;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
@@ -34,18 +38,15 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-  const { dialogId, projectId, skillId, luFileId } = props;
+  const { dialogId, projectId, skillId, luFileId, file } = props;
   const actualProjectId = skillId ?? projectId;
 
-  const luFiles = useRecoilValue(luFilesState(actualProjectId));
+  const luFiles = useRecoilValue(luFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
+  const currentDialog = useRecoilValue(dialogState({ projectId: actualProjectId, dialogId }));
 
   const { languages, defaultLanguage } = settings;
-
-  const file = luFileId
-    ? luFiles.find(({ id }) => id === luFileId)
-    : luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
 
   const defaultLangFile = luFileId
     ? luFiles.find(({ id }) => id === luFileId)
@@ -146,6 +147,19 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings({ codeEditor: settings });
   };
 
+  const navigateToLuPage = useCallback(
+    (luFileId: string, sectionId?: string) => {
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      const pattern = new RegExp(`.${locale}`, 'g');
+      const fileId = currentDialog.isFormDialog ? luFileId : luFileId.replace(pattern, '');
+      const url = currentDialog.isFormDialog
+        ? `/bot/${projectId}/language-understanding/${currentDialog.id}/item/${fileId}`
+        : `/bot/${projectId}/language-understanding/${fileId}${sectionId ? `/edit?t=${sectionId}` : ''}`;
+      navigateTo(url);
+    },
+    [projectId, locale, currentDialog]
+  );
+
   const currentLanguageFileEditor = useMemo(() => {
     return (
       <LuEditor
@@ -155,18 +169,22 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         languageServer={{
           path: lspServerPath,
         }}
+        luFile={file}
         luOption={luOption}
+        telemetryClient={TelemetryClient}
         value={content}
         onChange={onChange}
         onChangeSettings={handleSettingsChange}
+        onNavigateToLuPage={navigateToLuPage}
       />
     );
-  }, [luOption]);
+  }, [luOption, file]);
 
   const defaultLanguageFileEditor = useMemo(() => {
     return (
       <LuEditor
         editorSettings={userSettings.codeEditor}
+        luFile={defaultLangFile}
         luOption={{
           fileId: dialogId,
           luFeatures,
@@ -174,11 +192,12 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         options={{
           readOnly: true,
         }}
+        telemetryClient={TelemetryClient}
         value={defaultLangContent}
         onChange={() => {}}
       />
     );
-  }, [dialogId]);
+  }, [defaultLangFile, dialogId]);
 
   return (
     <Fragment>

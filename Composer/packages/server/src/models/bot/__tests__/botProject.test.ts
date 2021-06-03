@@ -257,9 +257,10 @@ describe('lu operations', () => {
 describe('qna operations', () => {
   it('should get qna endpoint key', async () => {
     await proj.init();
-    const subscriptionKey = '21640b8e2110449abfdfccf2f6bbee02';
+    proj.builder.qnaBuilder.getEndpointKeys = jest.fn(() => ({ primaryEndpointKey: 'new key' }));
+    const subscriptionKey = 'test';
     const endpointKey = await proj.updateQnaEndpointKey(subscriptionKey);
-    expect(endpointKey).toBe('d423d198-b0cc-46b3-a48c-e32d7a7e5b8a');
+    expect(endpointKey).toBe('new key');
   });
 });
 describe('buildFiles', () => {
@@ -271,11 +272,12 @@ describe('buildFiles', () => {
       // ignore
     }
   });
+
   it('should build lu & qna file successfully', async () => {
     proj.init();
     const luisConfig = {
       authoringEndpoint: '',
-      authoringKey: '412f0bfc19824ceca7a6076d05478850',
+      authoringKey: 'test',
       authoringRegion: 'westus',
       defaultLanguage: 'en-us',
       endpoint: '',
@@ -286,7 +288,7 @@ describe('buildFiles', () => {
     const qnaConfig = {
       endpointKey: '',
       qnaRegion: 'westus',
-      subscriptionKey: '21640b8e2110449abfdfccf2f6bbee02',
+      subscriptionKey: 'test',
     };
     const luResource: Resource[] = [
       { id: 'a.en-us', isEmpty: false },
@@ -298,17 +300,14 @@ describe('buildFiles', () => {
       { id: 'b.en-us', isEmpty: false },
       { id: 'bot1.en-us', isEmpty: false },
     ];
+    proj.builder.luBuilder.build = jest.fn((items) => items.map((item) => item.id));
+    proj.builder.luBuilder.writeDialogAssets = jest.fn();
+    proj.builder.qnaBuilder.build = jest.fn((items) => items.map((item) => item.id));
+    proj.builder.qnaBuilder.writeDialogAssets = jest.fn();
     await proj.buildFiles({ luisConfig, qnaConfig, luResource, qnaResource });
-
-    try {
-      if (fs.existsSync(path)) {
-        const files = fs.readdirSync(path);
-        expect(files).toContain('a.lu.qna.dialog');
-      }
-    } catch (err) {
-      // ignore
-    }
-  }, 30000);
+    expect(proj.builder.luBuilder.build).toHaveReturnedWith(['a', 'b', 'bot1']);
+    expect(proj.builder.qnaBuilder.build).toHaveReturnedWith(['a', 'b', 'bot1']);
+  });
 });
 
 describe('dialog operations', () => {

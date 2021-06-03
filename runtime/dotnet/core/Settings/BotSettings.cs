@@ -26,6 +26,8 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
 
         public BotSkillConfiguration SkillConfiguration { get; set; }
 
+        public SpeechConfiguration Speech { get; set; }
+
         public class BlobStorageConfiguration
         {
             public string ConnectionString { get; set; }
@@ -38,6 +40,13 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
             public bool LogPersonalInformation { get; set; }
 
             public bool LogActivities { get; set; }
+        }
+
+        public class SpeechConfiguration
+        {
+            public string VoiceFontName { get; set; }
+
+            public bool FallbackToTextForSpeechIfEmpty { get; set; }
         }
     }
 }

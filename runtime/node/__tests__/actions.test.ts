@@ -200,10 +200,6 @@ describe('test runtime used ActionsSample', () => {
       .assertReply('Why did the chicken cross the road?')
       .send('Why?')
       .assertReply('To get to the other side!')
-      .send('future')
-      .assertReply('Seeing into your future...')
-      .assertReply('I see great things in your future!')
-      .assertReply('Potentially a successful demo')
       .startTest();
   });
   it('Actions_11EmitEvent', async () => {

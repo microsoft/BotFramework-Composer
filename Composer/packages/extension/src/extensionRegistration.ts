@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { RequestHandler } from 'express-serve-static-core';
+import { RequestHandler, Router } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 import {
   PublishPlugin,
@@ -13,6 +13,8 @@ import {
   UserIdentity,
   IBotProject,
   IExtensionRegistration,
+  ExtensionMetadata,
+  ExtensionSettings,
 } from '@botframework-composer/types';
 import { PassportStatic } from 'passport';
 
@@ -26,10 +28,15 @@ export class ExtensionRegistration implements IExtensionRegistration {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _store: Store<any> | null = null;
 
-  constructor(public context: IExtensionContext, name: string, description: string, private dataDir: string) {
-    this._name = name;
-    this._description = description;
-    this._log = log.extend(name);
+  constructor(
+    public context: IExtensionContext,
+    metadata: ExtensionMetadata,
+    private _getSettings: () => ExtensionSettings,
+    private _dataDir: string
+  ) {
+    this._name = metadata.id;
+    this._description = metadata.description;
+    this._log = log.extend(metadata.id);
   }
 
   public get passport(): PassportStatic {
@@ -54,11 +61,15 @@ export class ExtensionRegistration implements IExtensionRegistration {
 
   public get store() {
     if (this._store === null) {
-      const storePath = path.join(this.dataDir, `${this.name}.json`);
+      const storePath = path.join(this._dataDir, `${this.name}.json`);
       this._store = new Store(storePath, {}, this.log);
     }
 
     return this._store;
+  }
+
+  public get settings() {
+    return this._getSettings();
   }
 
   /**************************************************************************************
@@ -103,7 +114,7 @@ export class ExtensionRegistration implements IExtensionRegistration {
    * @param plugin
    * Expose a runtime template to the Composer UI. Registered templates will become available in the "Runtime settings" tab.
    * When selected, the full content of the `path` will be copied into the project's `runtime` folder. Then, when a user clicks
-   * `Start Bot`, the `startCommand` will be executed.  The expected result is that a bot application launches and is made available
+   * `Start bot`, the `startCommand` will be executed.  The expected result is that a bot application launches and is made available
    * to communicate with the Bot Framework Emulator.
    * ```ts
    * await composer.addRuntimeTemplate({
@@ -175,6 +186,14 @@ export class ExtensionRegistration implements IExtensionRegistration {
     }
   }
 
+  public addRouter(routerPath: string, router: Router) {
+    if (!this.context.webserver) {
+      throw new Error('Plugin loaded in context without webserver. Cannot add express Router.');
+    } else {
+      this.context.webserver.use(routerPath || '/', router);
+    }
+  }
+
   /**************************************************************************************
    * Auth/identity functions
    *************************************************************************************/
@@ -185,7 +204,7 @@ export class ExtensionRegistration implements IExtensionRegistration {
     // bind a basic auth middleware. this can be overridden. see setAuthMiddleware below
     this.context.extensions.authentication.middleware = (req, res, next) => {
       if (req.isAuthenticated()) {
-        next && next();
+        next?.();
       } else {
         log('Rejecting access to ', req.url);
         res.redirect(this.context.loginUri);

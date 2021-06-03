@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotIndexer } from '@bfc/indexers';
+import { BotIndexer, validateSchema } from '@bfc/indexers';
 import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
+import { getFriendlyName } from '@bfc/shared';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
-import { botDisplayNameState, qnaFilesState } from '../atoms/botState';
+import { botDisplayNameState, dialogIdsState } from '../atoms/botState';
 import {
   DialogDiagnostic,
   LgDiagnostic,
@@ -18,6 +19,7 @@ import {
   BotDiagnostic,
   SettingDiagnostic,
   SkillSettingDiagnostic,
+  SchemaDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
@@ -25,8 +27,6 @@ import {
   botProjectIdsState,
   dialogSchemasState,
   jsonSchemaFilesState,
-  lgFilesState,
-  luFilesState,
   projectMetaDataState,
   settingsState,
   skillManifestsState,
@@ -34,8 +34,11 @@ import {
 
 import { crossTrainConfigState } from './../atoms/botState';
 import { formDialogSchemasSelectorFamily, rootBotProjectIdSelector } from './project';
-import { validateDialogsSelectorFamily } from './validatedDialogs';
 import { recognizersSelectorFamily } from './recognizers';
+import { dialogDiagnosticsSelectorFamily, dialogsWithLuProviderSelectorFamily } from './validatedDialogs';
+import { lgFilesSelectorFamily } from './lg';
+import { luFilesSelectorFamily } from './lu';
+import { qnaFilesSelectorFamily } from './qna';
 
 export const botAssetsSelectFamily = selectorFamily({
   key: 'botAssetsSelectFamily',
@@ -43,13 +46,13 @@ export const botAssetsSelectFamily = selectorFamily({
     const projectsMetaData = get(projectMetaDataState(projectId));
     if (!projectsMetaData || projectsMetaData.isRemote) return null;
 
-    const dialogs = get(validateDialogsSelectorFamily(projectId));
-    const luFiles = get(luFilesState(projectId));
-    const lgFiles = get(lgFilesState(projectId));
+    const dialogs = get(dialogsWithLuProviderSelectorFamily(projectId));
+    const luFiles = get(luFilesSelectorFamily(projectId));
+    const lgFiles = get(lgFilesSelectorFamily(projectId));
     const setting = get(settingsState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
-    const qnaFiles = get(qnaFilesState(projectId));
+    const qnaFiles = get(qnaFilesSelectorFamily(projectId));
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
     const botProjectFile = get(botProjectFileState(projectId));
     const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
@@ -128,12 +131,13 @@ export const settingDiagnosticsSelectorFamily = selectorFamily({
     if (botAssets === null) return [];
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const rootSetting = get(settingsState(rootProjectId));
     const diagnosticList: DiagnosticInfo[] = [];
 
     //1. Missing LUIS key
     //2. Missing QnA Maker subscription key.
     //appsettings.json
-    const settingDiagnostic = BotIndexer.checkSetting(botAssets);
+    const settingDiagnostic = BotIndexer.checkSetting(botAssets, rootSetting);
     settingDiagnostic.forEach((item) => {
       diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
@@ -142,8 +146,13 @@ export const settingDiagnosticsSelectorFamily = selectorFamily({
     //files meet LUIS/QnA requirments.
     //appsettings.json
     const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
+    const qnaLocaleDiagnostics = BotIndexer.checkQnALocales(botAssets);
 
     luisLocaleDiagnostics.forEach((item) => {
+      diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
+    });
+
+    qnaLocaleDiagnostics.forEach((item) => {
       diagnosticList.push(new SettingDiagnostic(rootProjectId, projectId, item.source, item.source, item));
     });
 
@@ -151,24 +160,67 @@ export const settingDiagnosticsSelectorFamily = selectorFamily({
   },
 });
 
-export const dialogDiagnosticsSelectorFamily = selectorFamily({
-  key: 'dialogDiagnosticsSelectorFamily',
+export const dialogsDiagnosticsSelectorFamily = selectorFamily({
+  key: 'dialogsDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
     if (botAssets === null) return [];
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+    const dialogIds = get(dialogIdsState(projectId));
     const diagnosticList: DiagnosticInfo[] = [];
-    const { dialogs } = botAssets;
 
-    dialogs.forEach((dialog) => {
-      dialog.diagnostics.forEach((diagnostic) => {
-        const location = `${dialog.id}.dialog`;
-        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialog.id, location, diagnostic));
+    dialogIds.forEach((dialogId: string) => {
+      const diagnostics = get(dialogDiagnosticsSelectorFamily({ projectId, dialogId })) || [];
+      diagnostics.forEach((diagnostic) => {
+        const location = `${dialogId}.dialog`;
+        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic));
       });
     });
 
     return diagnosticList;
+  },
+});
+
+export const schemaDiagnosticsSelectorFamily = selectorFamily({
+  key: 'schemaDiagnosticsSelectorFamily',
+  get: (projectId: string) => ({ get }) => {
+    const botAssets = get(botAssetsSelectFamily(projectId));
+    if (botAssets === null) return [];
+
+    const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
+
+    /**
+     * `botAssets.dialogSchema` contains all *.schema files loaded by project indexer. However, it actually messes up sdk.schema and *.dialog.schema.
+     * To get the correct sdk.schema content, current workaround is to filter schema by id.
+     *
+     * TODO: To fix it entirely, we need to differentiate dialog.schema from sdk.schema in indexer.
+     */
+    const sdkSchemaContent = botAssets.dialogSchemas.find((d) => d.id === '')?.content;
+    if (!sdkSchemaContent) return [];
+
+    const fullDiagnostics: DiagnosticInfo[] = [];
+    botAssets.dialogs.forEach((dialog) => {
+      const diagnostics = validateSchema(dialog.id, dialog.content, sdkSchemaContent);
+      fullDiagnostics.push(
+        ...diagnostics.map((d) => {
+          let location = dialog.id;
+          if (d.path) {
+            const list = d.path.split('.');
+            let path = '';
+            location = [
+              location,
+              ...list.map((item) => {
+                path = `${path}${path ? '.' : ''}${item}`;
+                return getFriendlyName(lodashGet(dialog.content, path)) || '';
+              }),
+            ].join('>');
+          }
+          return new SchemaDiagnostic(rootProjectId, projectId, dialog.id, location, d);
+        })
+      );
+    });
+    return fullDiagnostics;
   },
 });
 
@@ -242,13 +294,14 @@ export const qnaDiagnosticsSelectorFamily = selectorFamily({
 export const diagnosticsSelectorFamily = selectorFamily({
   key: 'diagnosticsSelector',
   get: (projectId: string) => ({ get }) => [
-    ...get(dialogDiagnosticsSelectorFamily(projectId)),
+    ...get(dialogsDiagnosticsSelectorFamily(projectId)),
     ...get(botDiagnosticsSelectorFamily(projectId)),
     ...get(skillSettingDiagnosticsSelectorFamily(projectId)),
     ...get(settingDiagnosticsSelectorFamily(projectId)),
     ...get(luDiagnosticsSelectorFamily(projectId)),
     ...get(lgDiagnosticsSelectorFamily(projectId)),
     ...get(qnaDiagnosticsSelectorFamily(projectId)),
+    ...get(schemaDiagnosticsSelectorFamily(projectId)),
   ],
 });
 

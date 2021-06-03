@@ -66,7 +66,9 @@ export function resolveFieldWidget(params: {
       if (value.startsWith('=')) {
         return { field: isOneOf ? DefaultFields.IntellisenseExpressionField : IntellisenseExpressionFieldWithIcon };
       } else {
-        if (showIntellisense && isOneOf) {
+        if (schema.enum?.includes(value)) {
+          return { field: isOneOf ? DefaultFields.SelectField : SelectFieldWithIcon };
+        } else if (showIntellisense && isOneOf) {
           return { field: DefaultFields.IntellisenseTextField };
         } else if (showIntellisense && !isOneOf) {
           return { field: IntellisenseTextFieldWithIcon };
@@ -113,13 +115,7 @@ export function resolveFieldWidget(params: {
       case 'boolean':
         return { field: isOneOf ? DefaultFields.BooleanField : BooleanFieldWithIcon };
       case 'array': {
-        const { items } = schema;
-
-        if (Array.isArray(items) && typeof items[0] === 'object' && items[0].type === 'object') {
-          return { field: DefaultFields.ObjectArrayField };
-        } else if (!Array.isArray(items) && typeof items === 'object' && items.type === 'object') {
-          return { field: DefaultFields.ObjectArrayField };
-        } else if (!schema.items && !schema.oneOf) {
+        if (!schema.items && !schema.oneOf) {
           if (showIntellisense && isOneOf) {
             return { field: DefaultFields.IntellisenseJSONField, customProps: { style: { height: 100 } } };
           } else if (showIntellisense && !isOneOf) {

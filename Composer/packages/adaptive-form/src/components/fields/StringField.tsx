@@ -3,26 +3,10 @@
 
 import React, { useEffect } from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
-
-export const borderStyles = (transparentBorder: boolean, error: boolean) =>
-  transparentBorder
-    ? {
-        fieldGroup: {
-          borderColor: error ? undefined : 'transparent',
-          transition: 'border-color 0.1s linear',
-          selectors: {
-            ':hover': {
-              borderColor: error ? undefined : NeutralColors.gray30,
-            },
-          },
-        },
-      }
-    : {};
 
 export const StringField: React.FC<FieldProps<string>> = function StringField(props) {
   const {
@@ -34,7 +18,6 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     description,
     placeholder,
     readonly,
-    transparentBorder,
     onFocus,
     onBlur,
     error,
@@ -42,6 +25,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     required,
     focused,
     cursorPosition,
+    hasIcon,
   } = props;
 
   const textFieldRef = React.createRef<ITextField>();
@@ -61,7 +45,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (typeof onFocus === 'function') {
       e.stopPropagation();
-      onFocus(id, value);
+      onFocus(id, value, e);
     }
   };
 
@@ -83,14 +67,17 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         ariaLabel={label || formatMessage('string field')}
         autoComplete="off"
         componentRef={textFieldRef}
+        data-testid="string-field"
         disabled={disabled}
         errorMessage={error}
         id={id}
         placeholder={placeholder}
         readOnly={readonly}
         styles={{
-          ...borderStyles(Boolean(transparentBorder), Boolean(error)),
           root: { width: '100%' },
+          fieldGroup: {
+            borderRadius: hasIcon ? '0 2px 2px 0' : undefined,
+          },
           errorMessage: { display: 'none' },
         }}
         value={value}

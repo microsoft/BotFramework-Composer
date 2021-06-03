@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { v4 as uuid } from 'uuid';
+
 import { ProcessList, ProcessStatus } from './types';
 
 export class BackgroundProcessManager {
@@ -62,7 +63,7 @@ export class BackgroundProcessManager {
     this.processes[id].status = status;
     this.processes[id].message = message;
     this.processes[id].log.push(message);
-    if(config){
+    if (config) {
       this.processes[id].config = config;
     }
     return id;

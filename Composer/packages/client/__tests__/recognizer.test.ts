@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuFile, SDKKinds, QnAFile } from '@bfc/shared';
+import { LuFile, SDKKinds, QnAFile, QnALocales } from '@bfc/shared';
 
 import {
   getCrossTrainedRecognizerDialog,
   getLuisRecognizerDialogs,
   getMultiLanguagueRecognizerDialog,
   getQnAMakerRecognizerDialogs,
+  OrchestratorRecognizerTemplate,
   preserveRecognizer,
 } from '../src/recoilModel/Recognizers';
 
@@ -18,7 +19,8 @@ describe('Test the generated recognizer dialogs', () => {
         { id: 'test.en-us', empty: false },
         { id: 'test.fr-fr', empty: false },
       ],
-      'qna'
+      'qna',
+      QnALocales
     );
 
     expect(result.id).toBe('test.qna.dialog');
@@ -69,6 +71,34 @@ describe('Test the generated recognizer dialogs', () => {
       hostname: '=settings.qna.hostname',
       endpointKey: '=settings.qna.endpointKey',
     });
+  });
+
+  it('orchestrator settings should produce correct shape', () => {
+    const result = OrchestratorRecognizerTemplate('', 'Test.en-us');
+    expect(result.$kind).toBe(SDKKinds.OrchestratorRecognizer);
+    expect(result.modelFolder).toBe('=settings.orchestrator.models.en');
+    expect(result.snapshotFile).toBe('=settings.orchestrator.snapshots.Test_en_us');
+  });
+
+  it('orchestrator locale should be case-insensitive', () => {
+    const result = OrchestratorRecognizerTemplate('', 'Test.eN-GB');
+    expect(result.$kind).toBe(SDKKinds.OrchestratorRecognizer);
+    expect(result.modelFolder).toBe('=settings.orchestrator.models.en');
+    expect(result.snapshotFile).toBe('=settings.orchestrator.snapshots.Test_eN_GB');
+  });
+
+  it('orchestrator should use multilang for other languages than EN', () => {
+    const result = OrchestratorRecognizerTemplate('', 'Test.zh-cn');
+    expect(result.$kind).toBe(SDKKinds.OrchestratorRecognizer);
+    expect(result.modelFolder).toBe('=settings.orchestrator.models.multilang');
+    expect(result.snapshotFile).toBe('=settings.orchestrator.snapshots.Test_zh_cn');
+  });
+
+  it('orchestrator should generate proper settings for language fallbacks', () => {
+    const result = OrchestratorRecognizerTemplate('', 'Test.zh');
+    expect(result.$kind).toBe(SDKKinds.OrchestratorRecognizer);
+    expect(result.modelFolder).toBe('=settings.orchestrator.models.multilang');
+    expect(result.snapshotFile).toBe('=settings.orchestrator.snapshots.Test_zh');
   });
 
   it('should preserve Recogniozer', () => {

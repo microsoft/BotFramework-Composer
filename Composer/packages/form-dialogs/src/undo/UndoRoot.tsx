@@ -13,7 +13,8 @@ import {
   useRecoilTransactionObserver_UNSTABLE,
 } from 'recoil';
 import * as React from 'react';
-import { AtomMap, History } from 'src/undo/types';
+
+import { AtomMap, History } from './types';
 
 const getAtomMap = (snapshot: Snapshot, trackedAtoms: RecoilState<any>[]): AtomMap => {
   const atomMap = new Map<RecoilState<any>, Loadable<any>>();

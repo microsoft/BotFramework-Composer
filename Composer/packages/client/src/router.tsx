@@ -9,8 +9,8 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { resolveToBasePath } from './utils/fileUtil';
-import { data } from './styles';
 import { NotFound } from './components/NotFound';
+import { WebChatContainer } from './components/WebChat/WebChatContainer';
 import { BASEPATH } from './constants';
 import { colors } from './colors';
 import {
@@ -21,7 +21,7 @@ import {
   pluginPagesSelector,
   botOpeningMessage,
 } from './recoilModel';
-import { localBotsDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
+import { localBotsSettingDataSelector, rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -29,6 +29,8 @@ import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
 import { botDisplayNameState, botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
 import languageStorage from './utils/languageStorage';
+import { DebugPanel } from './pages/design/DebugPanel/DebugPanel';
+import { useDebugPane } from './components/useDebugPane';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -37,81 +39,131 @@ const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
 const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
 const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
+const ExtensionsPage = React.lazy(() => import('./pages/extensions/ExtensionsPage'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
-const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
+const BotCreationFlowRouterV2 = React.lazy(() => import('./components/CreationFlow/v2/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
+
+export const root = css`
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: row;
+
+  label: Page;
+`;
+
+export const pageWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  label: PageWrapper;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  position: relative;
+  label: PageContent;
+`;
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const spinnerText = useRecoilValue(botOpeningMessage);
+  const showDebugPanel = useDebugPane();
 
   return (
-    <div css={data}>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Router basepath={BASEPATH} {...props}>
-          <Redirect
-            noThrow
-            from="/bot/:projectId/language-generation"
-            to="/bot/:projectId/language-generation/common"
-          />
-          <Redirect
-            noThrow
-            from="/bot/:projectId/language-understanding"
-            to="/bot/:projectId/language-understanding/all"
-          />
-          <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
-          <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
-          <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
-          <ProjectRouter path="/bot/:projectId/skill/:skillId">
-            <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/all/*" />
-            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
-            <LUPage path="language-understanding/:dialogId/*" />
-            <LGPage path="language-generation/all/*" />
-            <LGPage path="language-generation/common/*" />
-            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
-            <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/:dialogId/*" />
-            <BotProjectSettings path="botProjectsSettings" />
-            <Diagnostics path="diagnostics" />
-            <DesignPage path="*" />
-          </ProjectRouter>
-          <ProjectRouter path="/bot/:projectId">
-            <DesignPage path="dialogs/:dialogId/*" />
-            <LUPage path="language-understanding/all/*" />
-            <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
-            <LUPage path="language-understanding/:dialogId/*" />
-            <LGPage path="language-generation/all/*" />
-            <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
-            <LGPage path="language-generation/:dialogId/*" />
-            <QnAPage path="knowledge-base/:dialogId/*" />
-            <Publish path="publish/:targetName" />
-            <BotProjectSettings path="botProjectsSettings" />
-            <FormDialogPage path="forms/:schemaId/*" />
-            <FormDialogPage path="forms/*" />
-            <DesignPage path="*" />
-            <Diagnostics path="diagnostics" />
-            {pluginPages.map((page) => (
-              <PluginPageContainer
-                key={`${page.id}/${page.bundleId}`}
-                bundleId={page.bundleId}
-                path={`plugin/${page.id}/${page.bundleId}`}
-                pluginId={page.id}
+    <div css={root}>
+      <div css={pageWrapper}>
+        <div css={contentWrapper}>
+          <WebChatContainer />
+          <Suspense fallback={<LoadingSpinner />}>
+            <Router basepath={BASEPATH} {...props}>
+              <Redirect
+                noThrow
+                from="/bot/:projectId/language-generation"
+                to="/bot/:projectId/language-generation/common"
               />
-            ))}
-          </ProjectRouter>
-          <SettingPage path="settings/*" />
-          <BotCreationFlowRouter path="projects/*" />
-          <BotCreationFlowRouter path="home" />
-          <NotFound default />
-        </Router>
-      </Suspense>
-      {botOpening && (
-        <div css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: colors.transparentBg }}>
-          <LoadingSpinner message={spinnerText} />
+              <Redirect
+                noThrow
+                from="/bot/:projectId/language-understanding"
+                to="/bot/:projectId/language-understanding/all"
+              />
+              <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
+              <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
+              <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
+              <ProjectRouter path="/bot/:projectId/skill/:skillId">
+                <DesignPage path="dialogs/:dialogId/*" />
+                <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
+                <LUPage path="language-understanding/:dialogId/*" />
+                <LGPage path="language-generation/all/*" />
+                <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
+                <LGPage path="language-generation/:dialogId/*" />
+                <QnAPage path="knowledge-base/:dialogId/item/:qnaFileId/*" />
+                <QnAPage path="knowledge-base/:dialogId/*" />
+                <BotProjectSettings path="botProjectsSettings" />
+                <Diagnostics path="diagnostics" />
+                {pluginPages.map((page) => (
+                  <PluginPageContainer
+                    key={`${page.id}/${page.bundleId}`}
+                    bundleId={page.bundleId}
+                    path={`plugin/${page.id}/${page.bundleId}`}
+                    pluginId={page.id}
+                  />
+                ))}
+                <DesignPage path="*" />
+              </ProjectRouter>
+              <ProjectRouter path="/bot/:projectId">
+                <DesignPage path="dialogs/:dialogId/*" />
+                <LUPage path="language-understanding/:dialogId/item/:luFileId/*" />
+                <LUPage path="language-understanding/:dialogId/*" />
+                <LGPage path="language-generation/all/*" />
+                <LGPage path="language-generation/:dialogId/item/:lgFileId/*" />
+                <LGPage path="language-generation/:dialogId/*" />
+                <QnAPage path="knowledge-base/:dialogId/*" />
+                <Publish path="publish/:targetName" />
+                <BotProjectSettings path="botProjectsSettings" />
+                <FormDialogPage path="forms/:schemaId/*" />
+                <FormDialogPage path="forms/*" />
+                <DesignPage path="*" />
+                <Diagnostics path="diagnostics" />
+                {pluginPages.map((page) => (
+                  <PluginPageContainer
+                    key={`${page.id}/${page.bundleId}`}
+                    bundleId={page.bundleId}
+                    path={`plugin/${page.id}/${page.bundleId}`}
+                    pluginId={page.id}
+                  />
+                ))}
+              </ProjectRouter>
+              <SettingPage path="settings/*" />
+              <ExtensionsPage path="extensions/*" />
+              <BotCreationFlowRouterV2 path="projects/*" />
+              <BotCreationFlowRouterV2 path="v2/projects/*" />
+              <BotCreationFlowRouterV2 path="home" />
+              <NotFound default />
+            </Router>
+          </Suspense>
+          {botOpening && (
+            <div
+              css={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                background: colors.transparentBg,
+              }}
+            >
+              <LoadingSpinner inModal message={spinnerText} />
+            </div>
+          )}
         </div>
-      )}
+        {showDebugPanel && <DebugPanel />}
+      </div>
     </div>
   );
 };
@@ -131,7 +183,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-  const localBots = useRecoilValue(localBotsDataSelector);
+  const localBots = useRecoilValue(localBotsSettingDataSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));
@@ -165,7 +217,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
       openAlertModal(title, subTitle, { style: dialogStyle.console });
     }
   }, [schemas, projectId]);
-
   if (props.projectId && botProjects.includes(props.projectId)) {
     if (props.skillId && !botProjects.includes(props.skillId)) {
       return <LoadingSpinner />;

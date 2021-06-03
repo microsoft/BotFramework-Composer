@@ -13,7 +13,8 @@ Param(
 	[string] $publishProfilePath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt"),
 	[string] $runtimeIdentifier = 'win-x64',
-	[string] $luisResource
+	[string] $luisResource,
+	[string] $resourceGroup
 )
 
 if ($PSVersionTable.PSVersion.Major -lt 6) {
@@ -52,6 +53,7 @@ if ($publishProfilePath) {
 	$qnaSubscriptionKey = $qnaConfig.subscriptionKey
 
 	$runtimeIdentifier = $publishProfile.runtimeIdentifier
+	$resourceGroup = $publishProfile.resourceGroup
 }
 
 # Get mandatory parameters
@@ -74,6 +76,10 @@ if (-not $luisAuthoringKey) {
 
 if (-not $luisEndpointKey) {
 	$luisEndpointKey = ""
+}
+
+if (-not $resourceGroup) {
+	$resourceGroup = "$name-$environment"
 }
 
 # Reset log file
@@ -163,7 +169,9 @@ if ($luisAuthoringKey -or $qnaSubscriptionKey) {
 		$null = New-Item -ItemType Directory -Force -Path generated\interruption
 	}
 
-	bf luis:cross-train --in . --out generated\interruption --config .\settings\cross-train.config.json --force
+	if (Test-Path .\settings\cross-train.config.json) {
+		bf luis:cross-train --in . --out generated\interruption --config .\settings\cross-train.config.json --force
+	}
 
 	if ($luisAuthoringKey) {
 		bf sampler:sampling --in generated\interruption --out generated\interruption --force
@@ -313,8 +321,6 @@ if ($qnaSubscriptionKey) {
 # write settings file to settings path
 $settings | ConvertTo-Json -depth 100 | Out-File $settingsPath
 
-$resourceGroup = "$name-$environment"
-
 # if all done, compress the folder and deploy to azure
 if ($?) {
 	# Compress source code
@@ -345,3 +351,5 @@ else {
 	Write-Host "! Could not deploy automatically to Azure. Review the log for more information." -ForegroundColor DarkRed
 	Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
 }
+
+Set-Location -Path $projFolder

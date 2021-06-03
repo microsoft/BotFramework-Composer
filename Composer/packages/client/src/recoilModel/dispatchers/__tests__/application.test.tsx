@@ -14,8 +14,8 @@ import {
   applicationErrorState,
   creationFlowStatusState,
   onboardingState,
+  dispatcherState,
 } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../../constants';
 import { StateError } from '../../types';
@@ -84,7 +84,7 @@ describe('<Editor />', () => {
 
   it('should set app updater error', () => {
     const error = {
-      message: 'An error occured with updating composer',
+      message: 'An error occurred with updating composer',
     };
     act(() => {
       dispatcher.setAppUpdateError(error);

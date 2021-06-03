@@ -3,14 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo } from 'react';
-import { DialogInfo, ITrigger, SDKKinds } from '@bfc/shared';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { DialogInfo, ITrigger, SDKKinds, getFriendlyName } from '@bfc/shared';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { getFriendlyName } from '../../../../utils/dialogUtil';
 import { isSupportedTrigger } from '../generateSkillManifest';
 import { dialogsSelectorFamily, schemasState } from '../../../../recoilModel';
 
@@ -21,7 +20,7 @@ const getLabel = (kind: SDKKinds, uiSchema) => {
   return label || kind.replace('Microsoft.', '');
 };
 
-export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers, projectId }) => {
+export const SelectTriggers: React.FC<ContentProps> = ({ selectedTriggers, setSelectedTriggers, projectId }) => {
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
@@ -81,16 +80,21 @@ export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers, pr
     },
   ];
 
-  const selection = useMemo(
-    () =>
-      new Selection({
-        onSelectionChanged: () => {
-          const selectedItems = selection.getSelection();
-          setSelectedTriggers(selectedItems);
-        },
-      }),
-    []
+  const selectionRef = useRef(
+    new Selection({
+      getKey: (item) => item.id,
+      onSelectionChanged: () => {
+        const selectedItems = selectionRef.current.getSelection();
+        setSelectedTriggers(selectedItems);
+      },
+    })
   );
 
-  return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
+  useEffect(() => {
+    for (const item of selectedTriggers) {
+      selectionRef.current.setKeySelected(selectionRef.current.getKey(item), true, false);
+    }
+  }, []);
+
+  return <SelectItems items={items} selection={selectionRef.current} tableColumns={tableColumns} />;
 };

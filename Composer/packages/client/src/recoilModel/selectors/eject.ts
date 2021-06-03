@@ -5,10 +5,10 @@ import { selector } from 'recoil';
 import formatMessage from 'format-message';
 import lodashGet from 'lodash/get';
 
-import { dispatcherState } from '../DispatcherWrapper';
 import httpClient from '../../utils/httpUtil';
 import { Dispatcher } from '../dispatchers';
 import { StateError } from '../../recoilModel/types';
+import { dispatcherState } from '../atoms';
 
 // Actions
 const ejectRuntimeAction = (dispatcher: Dispatcher) => {
@@ -34,7 +34,7 @@ const ejectRuntimeAction = (dispatcher: Dispatcher) => {
         } else {
           const errorToShow: StateError = {
             message: ex.response?.data?.message || ex.response?.data || ex.message,
-            summary: formatMessage('Error occured ejecting runtime!'),
+            summary: formatMessage('Error occurred ejecting runtime!'),
             status: ex.response?.data?.status || ex.status,
           };
           dispatcher.setApplicationLevelError(errorToShow);

@@ -4,11 +4,11 @@
 import React from 'react';
 
 import OnboardingContext from '../../src/Onboarding/OnboardingContext';
-import TeachingBubbles from '../../src/Onboarding/TeachingBubbles/TeachingBubbles';
+import TeachingBubbles from '../../src/Onboarding/TeachingBubbles';
 import WelcomeModal from '../../src/Onboarding/WelcomeModal/WelcomeModal';
 import { renderWithRecoil } from '../testUtils';
 import { onboardingState } from '../../src/recoilModel';
-import { stepSets as defaultStepSets } from '../../src/Onboarding/onboardingUtils';
+import { stepSets as defaultStepSets } from '../../src/Onboarding/content';
 
 describe('<Onboarding />', () => {
   let onboardingDefaultState;
@@ -57,7 +57,7 @@ describe('<Onboarding />', () => {
         </OnboardingContext.Provider>,
         onboardingDefaultState
       );
-      expect(rendered.baseElement).toHaveTextContent('Get started!');
+      expect(rendered.baseElement).toHaveTextContent('Main dialog');
     });
   });
 

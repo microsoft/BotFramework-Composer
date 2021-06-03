@@ -26,7 +26,7 @@ describe('<FileSelector/>', () => {
         name: 'EchoBot-0',
         type: 'bot',
         path: 'Desktop/EchoBot-11299',
-        lastModified: 'Wed Apr 22 2020 17:51:07 GMT-0700 (Pacific Daylight Time)',
+        lastModified: 'Wed, Apr 22 2020 17:51:07 -0700',
         size: 1,
       },
     ],
@@ -63,7 +63,7 @@ describe('<FileSelector/>', () => {
       name: 'EchoBot-0',
       type: 'bot',
       path: 'Desktop/EchoBot-11299',
-      lastModified: 'Wed Apr 22 2020 17:51:07 GMT-0700 (Pacific Daylight Time)',
+      lastModified: 'Wed, Apr 22 2020 17:51:07 -0700',
       size: 1,
     });
   });

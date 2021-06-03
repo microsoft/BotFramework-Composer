@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { lazy, useCallback, useState, Suspense } from 'react';
+import React, { lazy, useCallback, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
@@ -14,10 +14,12 @@ import { useRecoilValue } from 'recoil';
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
 import { colors } from '../../../colors';
+import { onboardingDisabled } from '../../../constants';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import { SettingDropdown } from './SettingDropdown';
+import { FontSettings } from './fontSettings';
 import * as images from './images';
 import { PreviewFeatureToggle } from './PreviewFeatureToggle';
 
@@ -40,12 +42,16 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     [onboardingSetComplete]
   );
 
-  const onCodeEditorChange = (key: string) => (checked: boolean) => {
-    updateUserSettings({ codeEditor: { [key]: checked } });
+  const onCodeEditorChange = (key: string) => (value: boolean | Record<string, string | number>) => {
+    updateUserSettings({ codeEditor: { [key]: value } });
   };
 
-  const onLocaleChange = (appLocale: string) => {
-    updateUserSettings({ appLocale });
+  const onLocaleChange = async (appLocale: string) => {
+    await updateUserSettings({ appLocale });
+
+    setTimeout(() => {
+      document.getElementById('appLanguage')?.focus();
+    }, 100);
   };
 
   const handleDataCollectionChange = (allowDataCollection: boolean) => {
@@ -94,66 +100,71 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     <div css={container}>
       <section css={section}>
         <section css={section}>
-          <h2>{formatMessage('Application Language settings')}</h2>
+          <h2>{formatMessage('Application language settings')}</h2>
           <SettingDropdown
-            description={formatMessage('This is the language used for Composer’s user interface.')}
+            id={'appLanguage'}
+            label={formatMessage('Composer language')}
             options={languageOptions}
             selected={userSettings.appLocale}
-            title={formatMessage('Application language')}
+            tooltip={formatMessage('This is the language used for Composer’s user interface.')}
             onChange={onLocaleChange}
           />
         </section>
-        <h2>{formatMessage('Onboarding')}</h2>
-        <SettingToggle
-          checked={!complete}
-          description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
-          id="onboardingToggle"
-          image={images.onboarding}
-          title={formatMessage('Onboarding')}
-          onToggle={onOnboardingChange}
-        />
-        <TeachingBubble
-          calloutProps={{
-            hidden: !calloutIsShown,
-            role: 'status',
-            directionalHint: DirectionalHint.rightCenter,
-            isBeakVisible: false,
-          }}
-          styles={{
-            bodyContent: {
-              padding: '0px',
-            },
-            body: {
-              margin: '0px',
-            },
-          }}
-          target="#onboardingToggle"
-        >
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-            `}
-          >
-            <div
-              css={css`
-                font-size: 24px;
-                background: ${colors.gray(20)};
-                color: black;
-                padding: 4px;
-              `}
+        {!onboardingDisabled && (
+          <React.Fragment>
+            <h2>{formatMessage('Onboarding')}</h2>
+            <SettingToggle
+              checked={!complete}
+              description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
+              id="onboardingToggle"
+              image={images.onboarding}
+              title={formatMessage('Onboarding')}
+              onToggle={onOnboardingChange}
+            />
+            <TeachingBubble
+              calloutProps={{
+                hidden: !calloutIsShown,
+                role: 'status',
+                directionalHint: DirectionalHint.rightCenter,
+                isBeakVisible: false,
+              }}
+              styles={{
+                bodyContent: {
+                  padding: '0px',
+                },
+                body: {
+                  margin: '0px',
+                },
+              }}
+              target="#onboardingToggle"
             >
-              <FontIcon iconName="SplitObject" />
-            </div>
-            <div
-              css={css`
-                padding-left: 8px;
-              `}
-            >
-              {formatMessage('Please return to Design View to start the Onboarding tutorial.')}
-            </div>
-          </div>
-        </TeachingBubble>
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
+                <div
+                  css={css`
+                    font-size: 24px;
+                    background: ${colors.gray(20)};
+                    color: black;
+                    padding: 4px;
+                  `}
+                >
+                  <FontIcon iconName="SplitObject" />
+                </div>
+                <div
+                  css={css`
+                    padding-left: 8px;
+                  `}
+                >
+                  {formatMessage('Please return to Design View to start the Onboarding tutorial.')}
+                </div>
+              </div>
+            </TeachingBubble>
+          </React.Fragment>
+        )}
       </section>
 
       <section css={section}>
@@ -181,13 +192,22 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           title={formatMessage('Sentence wrap')}
           onToggle={onCodeEditorChange('wordWrap')}
         />
+        <FontSettings
+          description={formatMessage('Font settings used in the text editors.')}
+          fontFamily={userSettings.codeEditor.fontSettings.fontFamily}
+          fontSize={userSettings.codeEditor.fontSettings.fontSize}
+          fontWeight={userSettings.codeEditor.fontSettings.fontWeight}
+          image={images.wordWrap}
+          title={formatMessage('Font settings')}
+          onChange={onCodeEditorChange('fontSettings')}
+        />
       </section>
       <section css={section}>
         <h2>{formatMessage('Application Updates')}</h2>
         <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
         <PreviewFeatureToggle />
       </section>
-      {renderElectronSettings && (
+      {(renderElectronSettings || process.env.NODE_ENV === 'development') && (
         <section css={section}>
           <h2>{formatMessage('Data Collection')}</h2>
           <SettingToggle

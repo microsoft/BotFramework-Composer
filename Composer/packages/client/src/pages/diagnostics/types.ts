@@ -3,6 +3,7 @@
 import { createSingleMessage, isDiagnosticWithInRange } from '@bfc/indexers';
 import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern } from '@bfc/shared';
 import get from 'lodash/get';
+import formatMessage from 'format-message';
 
 import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
@@ -17,6 +18,7 @@ export enum DiagnosticType {
   SKILL,
   SETTING,
   GENERAL,
+  SCHEMA,
 }
 
 export interface IDiagnosticInfo {
@@ -30,7 +32,9 @@ export interface IDiagnosticInfo {
   diagnostic: any;
   dialogPath?: string; //the data path in dialog
   resourceId: string; // id without locale
-  getUrl: () => string;
+  getUrl: (hash?: string) => string;
+  learnMore?: string;
+  title?: string;
 }
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
@@ -45,6 +49,8 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   dialogPath?: string;
   resourceId: string;
   getUrl = () => '';
+  learnMore?: string;
+  title?: string;
 
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     this.rootProjectId = rootProjectId;
@@ -94,6 +100,16 @@ export class DialogDiagnostic extends DiagnosticInfo {
   };
 }
 
+export class SchemaDiagnostic extends DialogDiagnostic {
+  type = DiagnosticType.SCHEMA;
+  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(rootProjectId, projectId, id, location, diagnostic);
+    this.message = diagnostic.message;
+    this.title = formatMessage('Deactivated action.');
+    this.learnMore = formatMessage('Learn more about custom actions');
+  }
+}
+
 export class SkillSettingDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.SKILL;
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
@@ -119,8 +135,8 @@ export class SettingDiagnostic extends DiagnosticInfo {
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
-  getUrl = () => {
-    return createBotSettingUrl(this.rootProjectId, this.projectId);
+  getUrl = (hash?: string) => {
+    return createBotSettingUrl(this.rootProjectId, this.projectId, hash);
   };
 }
 

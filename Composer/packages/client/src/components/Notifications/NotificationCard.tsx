@@ -6,10 +6,11 @@ import { jsx, css, keyframes } from '@emotion/core';
 import React, { useState } from 'react';
 import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { useRef } from 'react';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
+import { Notification } from '@botframework-composer/types';
 
 import { useInterval } from '../../utils/hooks';
 import { colors } from '../../colors';
@@ -36,7 +37,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
     border-left: 4px solid ${colors.main};
     background: white;
     box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
-    width: 340px;
+    min-width: 340px;
     border-radius: 2px;
     display: flex;
     flex-direction: column;
@@ -45,6 +46,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
     animation-timing-function: ${show ? 'cubic-bezier(0.1, 0.9, 0.2, 1)' : 'linear'};
     animation-fill-mode: both;
     animation-name: ${show ? fadeIn : fadeOut(height)};
+    pointer-events: auto;
   `;
 };
 
@@ -75,6 +77,11 @@ const errorType = css`
 const successType = css`
   margin-top: 4px;
   color: ${colors.green};
+`;
+
+const warningType = css`
+  margin-top: 4px;
+  color: ${SharedColors.yellow10};
 `;
 
 const cardTitle = css`
@@ -116,24 +123,8 @@ const getShimmerStyles = {
   ],
 };
 // -------------------- NotificationCard -------------------- //
-
-export type NotificationType = 'info' | 'warning' | 'error' | 'pending' | 'success';
-
-export type Link = {
-  label: string;
-  onClick: () => void;
-};
-
-export type CardProps = {
-  type: NotificationType;
-  title: string;
-  description?: string;
-  retentionTime?: number;
-  link?: Link;
-  read?: boolean;
-  hidden?: boolean;
-  onRenderCardContent?: ((props: CardProps) => JSX.Element) | React.FC<any>;
-};
+export type CardProps = Notification;
+export type NotificationType = Notification['type'];
 
 export type NotificationProps = {
   id: string;
@@ -148,6 +139,7 @@ const defaultCardContentRenderer = (props: CardProps) => {
     <div css={cardContent}>
       {type === 'error' && <Icon css={errorType} iconName="ErrorBadge" />}
       {type === 'success' && <Icon css={successType} iconName="Completed" />}
+      {type === 'warning' && <Icon css={warningType} iconName="Warning" />}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}

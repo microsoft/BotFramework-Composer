@@ -32,10 +32,33 @@ export class DefaultSettingManager extends FileSettingManager {
 
   protected createDefaultSettings = (): DialogSetting => {
     return {
+      runtimeSettings: {
+        features: {
+          removeRecipientMentions: false,
+          showTyping: false,
+          traceTranscript: false,
+          useInspection: false,
+          setSpeak: {
+            voiceFontName: 'en-US-AriaNeural',
+            fallbackToTextForSpeechIfEmpty: true,
+          },
+        },
+        components: [],
+        skills: {
+          allowedCallers: [],
+        },
+        storage: '',
+        telemetry: {
+          instrumentationKey: '',
+          logActivities: true,
+          logPersonalInformation: false,
+        },
+      },
       feature: {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
         RemoveRecipientMention: false,
+        UseSetSpeakMiddleware: true,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
@@ -52,6 +75,10 @@ export class DefaultSettingManager extends FileSettingManager {
         connectionString: '',
         container: 'transcripts',
       },
+      speech: {
+        voiceFontName: 'en-US-AriaNeural',
+        fallbackToTextForSpeechIfEmpty: true,
+      },
       luis: {
         name: '',
         authoringKey: '',
@@ -61,6 +88,7 @@ export class DefaultSettingManager extends FileSettingManager {
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
+        directVersionPublish: true,
       },
       luFeatures: {
         enablePattern: true,
@@ -92,12 +120,8 @@ export class DefaultSettingManager extends FileSettingManager {
       downsampling: {
         maxImbalanceRatio: -1,
       },
-      skillConfiguration: {
-        // TODO: Setting isSkill property to true for now. A runtime change is required to remove dependancy on isSkill prop #4501
-        isSkill: true,
-        allowedCallers: [],
-      },
       skill: {},
+      skillConfiguration: {},
       defaultLanguage: 'en-us',
       languages: ['en-us'],
       customFunctions: [],
@@ -139,6 +163,6 @@ export class DefaultSettingManager extends FileSettingManager {
     // remove sensitive values before saving to disk
     const settingsWithoutSensitive = omit(settings, SensitiveProperties);
 
-    await this.storage.writeFile(path, JSON.stringify(settingsWithoutSensitive, null, 2));
+    this.storage.writeFileSync(path, JSON.stringify(settingsWithoutSensitive, null, 2));
   };
 }

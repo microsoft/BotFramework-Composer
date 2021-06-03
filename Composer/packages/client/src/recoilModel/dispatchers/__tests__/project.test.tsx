@@ -13,6 +13,9 @@ import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
 import { botProjectFileDispatcher } from '../botProjectFile';
 import { publisherDispatcher } from '../publisher';
+import { triggerDispatcher } from '../trigger';
+import { settingsDispatcher } from '../setting';
+import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   recentProjectsState,
@@ -24,8 +27,6 @@ import {
   runtimeTemplatesState,
   currentProjectIdState,
   skillManifestsState,
-  luFilesState,
-  lgFilesState,
   settingsState,
   botEnvironmentState,
   botDiagnosticsState,
@@ -40,9 +41,9 @@ import {
   botNameIdentifierState,
   botErrorState,
   botProjectSpaceLoadedState,
+  dispatcherState,
 } from '../../atoms';
-import { dialogsSelectorFamily } from '../../selectors';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { dialogsSelectorFamily, lgFilesSelectorFamily, luFilesSelectorFamily } from '../../selectors';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
 
@@ -69,12 +70,37 @@ jest.mock('../../parsers/lgWorker', () => {
   return {
     flush: () => new Promise((resolve) => resolve(null)),
     addProject: () => new Promise((resolve) => resolve(null)),
+
+    parseAll: (id, files) =>
+      new Promise((resolve) =>
+        resolve(
+          files.map(({ id, content }) => {
+            const result = require('@bfc/indexers').lgUtil.parse(id, content, files);
+            delete result.parseResult;
+            return result;
+          })
+        )
+      ),
   };
 });
 
 jest.mock('../../parsers/luWorker', () => {
   return {
     flush: () => new Promise((resolve) => resolve(null)),
+    parseAll: (files, luFeatures) =>
+      new Promise((resolve) =>
+        resolve(files.map(({ id, content }) => require('@bfc/indexers').luUtil.parse(id, content, luFeatures)))
+      ),
+  };
+});
+
+jest.mock('../../parsers/qnaWorker', () => {
+  return {
+    flush: () => new Promise((resolve) => resolve(null)),
+    parseAll: (files) =>
+      new Promise((resolve) =>
+        resolve(files.map(({ id, content }) => require('@bfc/indexers').qnaUtil.parse(id, content)))
+      ),
   };
 });
 
@@ -114,8 +140,8 @@ describe('Project dispatcher', () => {
     const location = useRecoilValue(locationState(projectId));
     const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
-    const luFiles = useRecoilValue(luFilesState(projectId));
-    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
+    const lgFiles = useRecoilValue(lgFilesSelectorFamily(projectId));
     const settings = useRecoilValue(settingsState(projectId));
     const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
     const botEnvironment = useRecoilValue(botEnvironmentState(projectId));
@@ -184,6 +210,9 @@ describe('Project dispatcher', () => {
             projectDispatcher,
             botProjectFileDispatcher,
             publisherDispatcher,
+            triggerDispatcher,
+            dialogsDispatcher,
+            settingsDispatcher,
           },
         },
       }

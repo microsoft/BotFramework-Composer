@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ElectronAuthParameters } from '@botframework-composer/types';
+import { AzureTenant, ElectronAuthParameters } from '@botframework-composer/types';
 
 import logger from '../utility/logger';
 
@@ -21,4 +21,10 @@ export class OneAuthShim extends OneAuthBase {
   }
   public shutdown() {}
   public signOut() {}
+  public async getARMTokenForTenant(tenantId: string): Promise<string> {
+    return '';
+  }
+  public async getTenants(): Promise<AzureTenant[]> {
+    return [];
+  }
 }

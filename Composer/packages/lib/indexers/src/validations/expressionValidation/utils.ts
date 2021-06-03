@@ -27,7 +27,7 @@ export function findRequiredProperties(schema: any): { [key: string]: boolean } 
   if (!schema) return {};
   const types = schema.anyOf?.filter((x) => x.title === 'Type');
   const required = {};
-  if (types && types.length) {
+  if (types?.length) {
     types[0].required.forEach((element: string) => {
       required[element] = true;
     });

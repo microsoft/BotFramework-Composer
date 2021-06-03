@@ -67,7 +67,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
-    extensions: formatMessage('Extensions'),
     about: formatMessage('About'),
   };
 
@@ -107,12 +106,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     return settingLabels.appSettings;
   }, [location.pathname]);
 
-  const onRenderHeaderContent = () => {
-    return formatMessage(
-      'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'
-    );
-  };
-
   return (
     <Page
       headerStyle={header}
@@ -122,7 +115,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
       pageMode={'settings'}
       title={title}
       toolbarItems={[]}
-      onRenderHeaderContent={onRenderHeaderContent}
     >
       <AddLanguageModal
         defaultLanguage={defaultLanguage}

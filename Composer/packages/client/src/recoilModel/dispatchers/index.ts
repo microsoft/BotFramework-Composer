@@ -16,6 +16,7 @@ import { builderDispatcher } from './builder';
 import { navigationDispatcher } from './navigation';
 import { publisherDispatcher } from './publisher';
 import { provisionDispatcher } from './provision';
+import { provisionQNADispatcher } from './provisionQNA';
 import { settingsDispatcher } from './setting';
 import { skillDispatcher } from './skill';
 import { userDispatcher } from './user';
@@ -26,6 +27,8 @@ import { formDialogsDispatcher } from './formDialogs';
 import { botProjectFileDispatcher } from './botProjectFile';
 import { zoomDispatcher } from './zoom';
 import { recognizerDispatcher } from './recognizers';
+import { orchestratorDispatcher } from './orchestrator';
+import { webChatLogDispatcher } from './webchat';
 
 const createDispatchers = () => {
   return {
@@ -44,6 +47,7 @@ const createDispatchers = () => {
     ...navigationDispatcher(),
     ...publisherDispatcher(),
     ...provisionDispatcher(),
+    ...provisionQNADispatcher(),
     ...settingsDispatcher(),
     ...skillDispatcher(),
     ...userDispatcher(),
@@ -54,6 +58,8 @@ const createDispatchers = () => {
     ...botProjectFileDispatcher(),
     ...zoomDispatcher(),
     ...recognizerDispatcher(),
+    ...orchestratorDispatcher(),
+    ...webChatLogDispatcher(),
   };
 };
 

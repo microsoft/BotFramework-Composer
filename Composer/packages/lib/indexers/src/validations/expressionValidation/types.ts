@@ -13,6 +13,8 @@ export const StringMapExpressionType = {
   integer: ReturnType.Number,
 };
 
+export type ExpressionParseResult = { [content: string]: number };
+
 export type ValidateFunc = (
   path: string,
   value: MicrosoftIDialog,
@@ -20,8 +22,9 @@ export type ValidateFunc = (
   schema: SchemaDefinitions,
   setting: DialogSetting,
   lgFiles: LgFile[],
-  luFiles: LuFile[]
-) => Diagnostic[] | null; // error msg
+  luFiles: LuFile[],
+  cache?: ExpressionParseResult
+) => { diagnostics: Diagnostic[] | null; cache: ExpressionParseResult }; // error msg
 
 export type ExpressionProperty = {
   value: any;

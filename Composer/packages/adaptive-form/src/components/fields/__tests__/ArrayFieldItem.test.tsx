@@ -30,7 +30,7 @@ describe('<ArrayFieldItem />', () => {
   describe('context menu', () => {
     it('disables the action if prop is false', () => {
       const { getByLabelText } = renderSubject();
-      const menu = getByLabelText('Item Actions');
+      const menu = getByLabelText('Item actions');
       fireEvent.click(menu);
       const items = screen.getAllByRole('menuitem');
       expect(items).toHaveLength(3);
@@ -51,14 +51,14 @@ describe('<ArrayFieldItem />', () => {
         onReorder,
       });
 
-      const menu = getByLabelText('Item Actions');
+      const menu = getByLabelText('Item actions');
       fireEvent.click(menu);
-      const moveUp = screen.getByText('Move Up');
+      const moveUp = screen.getByText('Move up');
       fireEvent.click(moveUp);
       expect(onReorder).toHaveBeenCalledWith(1);
 
       fireEvent.click(menu);
-      const moveDown = screen.getByText('Move Down');
+      const moveDown = screen.getByText('Move down');
       fireEvent.click(moveDown);
       expect(onReorder).toHaveBeenCalledWith(3);
 
@@ -110,6 +110,6 @@ describe('<ArrayFieldItem />', () => {
       index: 1,
     });
 
-    expect(await findByText('error 2')).toBeInTheDocument();
+    expect(await findByText('Test Name error 2')).toBeInTheDocument();
   });
 });

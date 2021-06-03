@@ -2,29 +2,25 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
+import React, { Fragment } from 'react';
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { Link } from 'office-ui-fabric-react/lib/components/Link';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { colors } from '../../colors';
 
 // -------------------- Styles -------------------- //
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+import { subtext, title } from './styles';
+// -------------------- Styles -------------------- //
 
 const labelContainer = css`
   display: flex;
@@ -76,12 +72,25 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
 
   return (
-    <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={titleStyle}>
+    <Fragment>
+      <div css={title}>{formatMessage('Call skills')}</div>
+      <div css={subtext}>
+        {formatMessage.rich(
+          'Add a skill host endpoint so your skills can reliably connect to your root bot. <a>Learn more</a>.',
+          {
+            a: ({ children }) => (
+              <Link key="skills-settings-page" href={'https://aka.ms/composer-skills-learnmore'} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        )}
+      </div>
       <TextField
-        aria-label={formatMessage('Skill host endpoint')}
+        ariaLabel={formatMessage('Skill host endpoint url')}
         data-testid={'SkillHostEndPointTextField'}
-        label={formatMessage('Skill host endpoint url')}
-        placeholder={formatMessage('Enter Skill host endpoint url')}
+        label={formatMessage('Skill host endpoint URL')}
+        placeholder={formatMessage('Enter Skill host endpoint URL')}
         value={skillHostEndpoint}
         onChange={(e, value) => {
           setSettings(projectId, {
@@ -91,6 +100,6 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
         }}
         onRenderLabel={onRenderLabel}
       />
-    </CollapsableWrapper>
+    </Fragment>
   );
 };

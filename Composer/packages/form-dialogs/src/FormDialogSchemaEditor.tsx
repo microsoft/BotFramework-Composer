@@ -5,10 +5,11 @@ import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE } from 'recoil';
-import { formDialogSchemaJsonSelector, trackedAtomsSelector } from 'src/atoms/appState';
-import { useHandlers } from 'src/atoms/handlers';
-import { FormDialogPropertiesEditor } from 'src/components/FormDialogPropertiesEditor';
-import { UndoRoot } from 'src/undo/UndoRoot';
+
+import { formDialogSchemaJsonSelector, trackedAtomsSelector } from './atoms/appState';
+import { useHandlers } from './atoms/handlers';
+import { FormDialogPropertiesEditor } from './components/FormDialogPropertiesEditor';
+import { UndoRoot } from './undo/UndoRoot';
 
 export type FormDialogSchemaEditorProps = {
   /**

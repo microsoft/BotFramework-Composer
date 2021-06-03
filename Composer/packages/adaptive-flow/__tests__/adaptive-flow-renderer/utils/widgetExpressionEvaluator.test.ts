@@ -22,13 +22,13 @@ describe('evaluateWidgetProp()', () => {
     expect(evaluate('=action.x', { action: { x: 1 } })).toEqual(1);
 
     // Notes: Expression engine behavior. 'null' will be read as 'undefined'
-    expect(evaluate('=action.x', { action: { x: null } })).toEqual(undefined);
+    expect(evaluate('=action.x', { action: { x: null } })).toEqual(null);
     expect(evaluate('=action.x', { action: {} })).toEqual(undefined);
     expect(evaluate('=action.x', { action: { x: undefined } })).toEqual(undefined);
     expect(evaluate('=action.x', { action: { x: false } })).toEqual(false);
 
     // Convert to string
-    expect(evaluate('=string(action.x)', { action: { x: null } })).toEqual(undefined);
+    expect(evaluate('=string(action.x)', { action: { x: null } })).toEqual('null');
     expect(evaluate('=string(action.x)', { action: { x: undefined } })).toEqual(undefined);
     expect(evaluate('=string(action.x)', { action: { x: false } })).toEqual('false');
 

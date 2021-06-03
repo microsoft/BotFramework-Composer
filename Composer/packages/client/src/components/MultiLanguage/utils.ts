@@ -4,7 +4,19 @@ import without from 'lodash/without';
 
 import { Locales } from '../../locales';
 
-export const languageListTemplatesSorted = (languages: string[], locale: string, defaultLanguage: string) => {
+export type LanguageTemplate = {
+  locale: string;
+  language: string;
+  isEnabled: boolean;
+  isDefault: boolean;
+  isCurrent: boolean;
+};
+
+export const languageListTemplatesSorted = (
+  languages: string[],
+  locale: string,
+  defaultLanguage: string
+): LanguageTemplate[] => {
   const defaultLanguageTemplate =
     Locales.find((lang) => lang.locale === defaultLanguage) || Locales.find((lang) => lang.locale === 'en-us');
   if (!defaultLanguageTemplate) {
@@ -26,7 +38,11 @@ export const languageListTemplatesSorted = (languages: string[], locale: string,
   return languageList;
 };
 
-export const languageListTemplates = (languages: string[], locale: string, defaultLanguage: string) => {
+export const languageListTemplates = (
+  languages: string[],
+  locale: string,
+  defaultLanguage: string
+): LanguageTemplate[] => {
   const languageList = Locales.map((lang) => {
     const isEnabled = languages.includes(lang.locale);
     const isCurrent = locale === lang.locale;
@@ -39,4 +55,11 @@ export const languageListTemplates = (languages: string[], locale: string, defau
     };
   });
   return languageList;
+};
+
+export const languageFullName = (testLocale: string) => {
+  for (const { locale, language } of Locales) {
+    if (locale === testLocale) return language;
+  }
+  return testLocale;
 };

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IExtensionRegistration } from '@botframework-composer/types';
 
 import { getStatus, history, publish, pull } from './publish';
@@ -7,7 +10,7 @@ function initialize(registration: IExtensionRegistration) {
   setLogger(registration.log);
   const extension = {
     name: 'pva-publish-composer',
-    description: 'Publish bot to Power Virtual Agents (Preview)',
+    description: 'Publish to Microsoft Power Virtual Agents',
     bundleId: 'publish',
     getHistory: history,
     getStatus,

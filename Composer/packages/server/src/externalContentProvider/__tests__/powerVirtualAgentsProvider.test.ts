@@ -21,9 +21,10 @@ jest.mock('fs-extra', () => ({
   remove: async (...args) => await mockRemove(...args),
 }));
 
+const mockGetAccessToken = jest.fn().mockResolvedValue('accessToken');
 jest.mock('../../services/auth/auth', () => ({
   authService: {
-    getAccessToken: jest.fn().mockResolvedValue('accessToken'),
+    getAccessToken: async (...args) => await mockGetAccessToken(...args),
   },
 }));
 
@@ -31,6 +32,8 @@ const mockFetch = jest.fn();
 jest.mock('node-fetch', () => async (...args) => await mockFetch(...args));
 
 describe('Power Virtual Agents provider', () => {
+  const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
+  const PVA_PROD_APP_ID = '96ff4394-9197-43aa-b393-6a41652e21f8';
   const envBackup = { ...process.env };
   const metadata = {
     baseUrl: 'https://bots.int.customercareintelligence.net/',
@@ -45,6 +48,7 @@ describe('Power Virtual Agents provider', () => {
   beforeEach(() => {
     provider = new PowerVirtualAgentsProvider(metadata);
     mockFetch.mockClear();
+    mockGetAccessToken.mockClear();
   });
 
   beforeAll(() => {
@@ -74,6 +78,7 @@ describe('Power Virtual Agents provider', () => {
     mockFetch.mockResolvedValueOnce(mockResult);
     const result = await provider.downloadBotContent();
 
+    expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('?includeTopics'), expect.any(Object));
     expect(result.eTag).toBe('W/"Version"');
     expect((result.zipPath as string).includes('bot-assets-'));
     expect(Buffer.from(result.urlSuffix, 'base64').toString()).toBe('dialogs/myDialog');
@@ -143,9 +148,48 @@ describe('Power Virtual Agents provider', () => {
     expect(alias).toBe('myEnv.myBot');
   });
 
-  it('should authenticate', async () => {
+  it('should authenticate with credentials for the INT environment', async () => {
     const accessToken = await provider.authenticate();
 
+    const args = mockGetAccessToken.mock.calls[0];
+    const credentials = args[0];
+    expect(credentials.targetResource).toBe(PVA_TEST_APP_ID);
+    expect(accessToken).toBe('accessToken');
+  });
+
+  it('should authenticate with credentials for the PPE environment', async () => {
+    provider = new PowerVirtualAgentsProvider({
+      ...metadata,
+      baseUrl: 'https://bots.ppe.customercareintelligence.net/',
+    });
+    const accessToken = await provider.authenticate();
+
+    const args = mockGetAccessToken.mock.calls[0];
+    const credentials = args[0];
+    expect(credentials.targetResource).toBe(PVA_TEST_APP_ID);
+    expect(accessToken).toBe('accessToken');
+  });
+
+  it('should authenticate with credentials for the PROD environment', async () => {
+    provider = new PowerVirtualAgentsProvider({ ...metadata, baseUrl: 'https://powerva.microsoft.com/' });
+    const accessToken = await provider.authenticate();
+
+    const args = mockGetAccessToken.mock.calls[0];
+    const credentials = args[0];
+    expect(credentials.targetResource).toBe(PVA_PROD_APP_ID);
+    expect(accessToken).toBe('accessToken');
+  });
+
+  it('should authenticate with credentials for the SDF environment', async () => {
+    provider = new PowerVirtualAgentsProvider({
+      ...metadata,
+      baseUrl: 'https://bots.sdf.customercareintelligence.net/',
+    });
+    const accessToken = await provider.authenticate();
+
+    const args = mockGetAccessToken.mock.calls[0];
+    const credentials = args[0];
+    expect(credentials.targetResource).toBe(PVA_PROD_APP_ID);
     expect(accessToken).toBe('accessToken');
   });
 });

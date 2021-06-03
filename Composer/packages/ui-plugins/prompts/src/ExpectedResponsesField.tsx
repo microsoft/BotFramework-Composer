@@ -26,7 +26,7 @@ const ExpectedResponsesField: React.FC<FieldProps> = (props) => {
   const { const: $kind } = schema?.properties?.$kind as { const: string };
 
   const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();
-  const label = formatMessage('Expected responses (intent: #{intentName})', { intentName });
+  const label = formatMessage('Expected responses');
 
   const Editor = currentRecognizer?.intentEditor;
 
@@ -35,6 +35,7 @@ const ExpectedResponsesField: React.FC<FieldProps> = (props) => {
       <FieldLabel description={description} id={id} label={label} />
       <Editor
         {...props}
+        label={label}
         placeholder={expectedResponsesPlaceholder()}
         schema={schema}
         value={intentName}

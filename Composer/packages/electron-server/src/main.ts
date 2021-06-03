@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import os from 'os';
 import { join, resolve } from 'path';
 
 import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
@@ -11,7 +12,7 @@ import formatMessage from 'format-message';
 import { mkdirp } from 'fs-extra';
 
 import { initAppMenu } from './appMenu';
-import { AppUpdater } from './appUpdater';
+import { AppUpdater, BreakingUpdateMetaData } from './appUpdater';
 import { OneAuthService } from './auth/oneAuthService';
 import { composerProtocol } from './constants';
 import ElectronWindow from './electronWindow';
@@ -75,7 +76,9 @@ async function createAppDataDir() {
   const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
+  process.env.TEMPLATE_GENERATOR_PATH = join(composerAppDataPath, '.yo-repository');
   process.env.COMPOSER_EXTENSION_MANIFEST = join(composerAppDataPath, 'extensions.json');
+  process.env.COMPOSER_EXTENSION_SETTINGS = join(composerAppDataPath, 'extension-settings.json');
   process.env.COMPOSER_EXTENSION_DATA_DIR = join(composerAppDataPath, 'extension-data');
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
   process.env.COMPOSER_TEMP_DIR = join(composerAppDataPath, 'temp');
@@ -99,8 +102,14 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
       mainWindow.webContents.send('app-update', 'update-available', updateInfo);
     });
+    appUpdater.on('breaking-update-available', (updateInfo: UpdateInfo, breakingMetaData: BreakingUpdateMetaData) => {
+      mainWindow.webContents.send('app-update', 'breaking-update-available', updateInfo, breakingMetaData);
+    });
     appUpdater.on('progress', (progress) => {
       mainWindow.webContents.send('app-update', 'progress', progress);
+    });
+    appUpdater.on('update-in-progress', (updateInfo: UpdateInfo) => {
+      mainWindow.webContents.send('app-update', 'update-in-progress', updateInfo);
     });
     appUpdater.on('update-not-available', (explicitCheck: boolean) => {
       mainWindow.webContents.send('app-update', 'update-not-available', explicitCheck);
@@ -135,6 +144,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
 }
 
 async function loadServer() {
+  process.env.COMPOSER_VERSION = app.getVersion();
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
@@ -155,10 +165,17 @@ async function loadServer() {
   const { start } = await import('@bfc/server');
   serverPort = await start({
     getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
+    getARMTokenForTenant: OneAuthService.getARMTokenForTenant.bind(OneAuthService),
+    getTenants: OneAuthService.getTenants.bind(OneAuthService),
     logOut: OneAuthService.signOut.bind(OneAuthService),
-    machineId,
-    sessionId,
-    composerVersion: app.getVersion(),
+    telemetryData: {
+      composerVersion: app.getVersion(),
+      machineId,
+      sessionId,
+      architecture: os.arch(),
+      cpus: os.cpus().length,
+      memory: os.totalmem(),
+    },
   });
   log(`Server started at port: ${serverPort}`);
 }
@@ -168,10 +185,6 @@ async function main(show = false) {
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   initAppMenu(mainWindow);
   if (mainWindow) {
-    if (process.env.COMPOSER_DEV_TOOLS) {
-      mainWindow.webContents.openDevTools();
-    }
-
     await mainWindow.loadURL(getBaseUrl());
 
     if (show) {
@@ -283,6 +296,10 @@ async function run() {
 
     const mainWindow = getMainWindow();
     mainWindow?.webContents.send('session-update', 'session-started');
+
+    if (process.env.COMPOSER_DEV_TOOLS) {
+      mainWindow?.webContents.openDevTools();
+    }
   });
 
   // Quit when all windows are closed.
@@ -297,6 +314,7 @@ async function run() {
   app.on('before-quit', () => {
     const mainWindow = ElectronWindow.getInstance().browserWindow;
     mainWindow?.webContents.send('session-update', 'session-ended');
+    mainWindow?.webContents.send('cleanup');
   });
 
   app.on('activate', () => {
@@ -307,24 +325,20 @@ async function run() {
     }
   });
 
-  app.on('will-finish-launching', () => {
-    // Protocol handler for osx
-    app.on('open-url', (event, url) => {
-      event.preventDefault();
-      if (ElectronWindow.isBrowserWindowCreated) {
-        waitForMainWindowToShow
-          .then(() => {
-            log('[Mac] Main window is now showing. Processing deep link if any.');
-            const deeplinkUrl = parseDeepLinkUrl(url);
-            log('[Mac] Loading deeplink: %s', deeplinkUrl);
-            const mainWindow = ElectronWindow.getInstance().browserWindow;
-            mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
-          })
-          .catch((e) =>
-            console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
-          );
-      }
-    });
+  // Protocol handler for osx
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    waitForMainWindowToShow
+      .then(() => {
+        log('[Mac] Main window is now showing. Processing deep link if any.');
+        const deeplinkUrl = parseDeepLinkUrl(url);
+        log('[Mac] Loading deeplink: %s', deeplinkUrl);
+        const mainWindow = ElectronWindow.getInstance().browserWindow;
+        mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
+      })
+      .catch((e) =>
+        console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
+      );
   });
 }
 

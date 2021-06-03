@@ -20,7 +20,7 @@ const root = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   .ms-List-cell {
     min-height: 36px;

@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { JSONSchema7Type } from 'json-schema';
+
 import type { PublishTarget } from './publish';
 
 export interface LibraryRef {
@@ -9,10 +11,23 @@ export interface LibraryRef {
   location: string;
 }
 
+export type AdapterRecord = {
+  name: string;
+  route?: JSONSchema7Type;
+  type?: JSONSchema7Type;
+  enabled: boolean;
+};
+
 export type CodeEditorSettings = {
   lineNumbers: boolean;
   wordWrap: boolean;
   minimap: boolean;
+  fontSettings: {
+    fontFamily: string;
+    fontSize: string;
+    fontWeight: string;
+  };
+  fadedWhenReadOnly?: boolean;
 };
 
 export type TelemetrySettings = {
@@ -38,10 +53,43 @@ export type SkillSetting = {
   endpointUrl: string;
 };
 
+export type RuntimeSettings = {
+  adapters?: AdapterRecord[];
+  features?: {
+    removeRecipientMentions?: boolean;
+    showTyping?: boolean;
+    traceTranscript?: boolean;
+    useInspection?: boolean;
+    blobTranscript?: {
+      connectionString?: string;
+      containerName?: string;
+    };
+    setSpeak?: {
+      voiceFontName?: string;
+      fallbackToTextForSpeechIfEmpty?: true;
+    };
+  };
+  components?: [];
+  skills?: {
+    allowedCallers?: string[];
+  };
+  storage?: string;
+  telemetry?: {
+    options?: {
+      connectionString?: string;
+      instrumentationKey?: string;
+    };
+    instrumentationKey?: string;
+    logActivities?: boolean;
+    logPersonalInformation?: boolean;
+  };
+};
+
 export type DialogSetting = {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  orchestrator?: IOrchestratorConfig;
   luFeatures: ILUFeaturesConfig;
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
@@ -60,6 +108,8 @@ export type DialogSetting = {
   botId?: string;
   skillHostEndpoint?: string;
   customFunctions: string[];
+  defaultLocale?: string;
+  runtimeSettings?: RuntimeSettings;
   [key: string]: any;
 };
 
@@ -73,6 +123,7 @@ export type ILuisConfig = {
   region?: string;
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+  directVersionPublish?: boolean;
 };
 
 export type ILUFeaturesConfig = {
@@ -83,6 +134,7 @@ export type ILUFeaturesConfig = {
   enablePrebuiltEntities?: boolean;
   enableRegexEntities?: boolean;
   enablePhraseLists?: boolean;
+  isOrchestartor?: boolean;
 };
 
 export type IQnAConfig = {
@@ -93,7 +145,16 @@ export type IQnAConfig = {
   hostname?: string;
 };
 
-export type IConfig = ILuisConfig & {
-  subscriptionKey: string;
-  qnaRegion: string | 'westus';
+export type IOrchestratorConfig = {
+  model?: Record<'en_intent' | 'multilingual_intent', string>;
+};
+
+export type IConfig = ILuisConfig &
+  IOrchestratorConfig & {
+    subscriptionKey: string;
+    qnaRegion: string | 'westus';
+  };
+
+export type LgOptions = {
+  customFunctions: string[];
 };

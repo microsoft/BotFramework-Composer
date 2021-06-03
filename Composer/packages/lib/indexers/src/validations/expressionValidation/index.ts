@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIDialog, Diagnostic, LgFile, DialogSetting } from '@bfc/shared';
+import { MicrosoftIDialog, Diagnostic, LgFile, DialogSetting, DiagnosticSeverity, LuFile } from '@bfc/shared';
 import { SchemaDefinitions } from '@bfc/shared/lib/schemaUtils/types';
 
 import { extractOptionByKey } from '../../utils/lgUtil';
 
 import { searchExpressions } from './searchExpression';
-import { ValidateFunc } from './types';
-import { validate } from './validation';
+import { ExpressionParseResult, ValidateFunc } from './types';
+import { checkExpression, checkReturnType, filterCustomFunctionError } from './validation';
 
 const NamespaceKey = '@namespace';
 const ExportsKey = '@exports';
@@ -37,16 +37,29 @@ export const validateExpressions: ValidateFunc = (
   type: string,
   schema: SchemaDefinitions,
   settings: DialogSetting,
-  lgFiles: LgFile[]
+  lgFiles: LgFile[],
+  luFiles: LuFile[],
+  cache?: ExpressionParseResult
 ) => {
   const expressions = searchExpressions(path, value, type, schema);
   const customFunctions = searchLgCustomFunction(lgFiles).concat(settings.customFunctions);
-
+  const newCache = {};
   const diagnostics = expressions.reduce((diagnostics: Diagnostic[], expression) => {
-    const diagnostic = validate(expression, customFunctions);
-    if (diagnostic) diagnostics.push(diagnostic);
+    const { required, path, types, value } = expression;
+    let errorMessage = '';
+    let warningMessage = '';
+    try {
+      newCache[value] = cache?.[value] ? cache[value] : checkExpression(value, required);
+      errorMessage = checkReturnType(newCache[value], types);
+    } catch (error) {
+      //change the missing custom function error to warning
+      warningMessage = filterCustomFunctionError(error.message, customFunctions);
+    }
+
+    if (errorMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Error, path));
+    if (warningMessage) diagnostics.push(new Diagnostic(errorMessage, '', DiagnosticSeverity.Warning, path));
+
     return diagnostics;
   }, []);
-
-  return diagnostics;
+  return { diagnostics, cache: newCache };
 };

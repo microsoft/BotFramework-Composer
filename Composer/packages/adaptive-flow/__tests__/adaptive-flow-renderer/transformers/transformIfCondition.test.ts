@@ -4,10 +4,9 @@
 import { transformIfCondtion } from '../../../src/adaptive-flow-renderer/transformers/transformIfCondition';
 import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/AdaptiveKinds';
 
-test('should return {} when input is not IfCondition', () => {
-  const json = { $kind: '' };
-  const result = transformIfCondtion(json, '');
-  expect(result).toBeNull();
+test('should defense null input', () => {
+  expect(transformIfCondtion(null, '')).toBeFalsy();
+  expect(transformIfCondtion({}, '')).toBeTruthy();
 });
 
 test('should return correct schema when input choice and empty branches', () => {

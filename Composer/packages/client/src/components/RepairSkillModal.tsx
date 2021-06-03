@@ -10,7 +10,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
 import { repairSkillDialog } from '../constants';
 
-import { TreeLink } from './ProjectTree/ProjectTree';
+import { TreeLink } from './ProjectTree/types';
 
 export type RepairSkillModalFormData = 'repairSkill' | 'removeSkill';
 
@@ -25,11 +25,11 @@ export const RepairSkillModalOptionKeys = {
   removeSkill: 'removeSkill',
 };
 
-export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, onNext, onDismiss }) => {
-  const isRemote = skillItem.bot?.isRemote;
+export const RepairSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, onNext, onDismiss }) => {
+  const isRemote = skillItem.isRemote;
   const [option, setOption] = useState<RepairSkillModalFormData>(isRemote ? 'removeSkill' : 'repairSkill');
 
-  if (!skillItem.bot?.error) return null;
+  if (!skillItem.botError) return null;
 
   const handleChange = (event, option) => {
     setOption(option.key);
@@ -78,4 +78,4 @@ export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, o
   );
 };
 
-export default CreateSkillModal;
+export default RepairSkillModal;

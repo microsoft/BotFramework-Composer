@@ -1,38 +1,40 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable security/detect-non-literal-fs-filename */
 import { ChildProcess, spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
+
 import max from 'lodash/max';
 import portfinder from 'portfinder';
-
 import glob from 'globby';
 import rimraf from 'rimraf';
 import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import { DialogSetting, PublishPlugin, IExtensionRegistration } from '@botframework-composer/types';
-
 import killPort from 'kill-port';
 import map from 'lodash/map';
-import range from 'lodash/range';
 import * as tcpPortUsed from 'tcp-port-used';
 
-const stat = promisify(fs.stat);
-const readDir = promisify(fs.readdir);
-const removeFile = promisify(fs.unlink);
-const mkDir = promisify(fs.mkdir);
-const removeDirAndFiles = promisify(rimraf);
-const copyFile = promisify(fs.copyFile);
-const readFile = promisify(fs.readFile);
+import { RuntimeLogServer } from './runtimeLogServer';
 
+const removeDirAndFiles = promisify(rimraf);
+const mkdir = promisify(fs.mkdir);
+const readFile = promisify(fs.readFile);
+const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
+const copyFile = promisify(fs.copyFile);
+const unlink = promisify(fs.unlink);
 interface RunningBot {
   process?: ChildProcess;
   port?: number;
   status: number;
   result: {
     message: string;
+    runtimeLog?: string;
+    runtimeError?: string;
   };
 }
 interface PublishConfig {
@@ -43,6 +45,7 @@ interface PublishConfig {
 
 const isWin = process.platform === 'win32';
 
+// eslint-disable-next-line security/detect-unsafe-regex
 const localhostRegex = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
 
 const isLocalhostUrl = (matchUrl: string) => {
@@ -52,6 +55,15 @@ const isLocalhostUrl = (matchUrl: string) => {
 const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
+
+const stringifyError = (error: any): string => {
+  if (typeof error === 'object') {
+    return JSON.stringify(error, Object.getOwnPropertyNames(error));
+  } else {
+    return error.toString();
+  }
+};
+
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   public name = 'localpublish';
   public description = 'Publish bot to local runtime';
@@ -63,21 +75,74 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     this.composer = composer;
   }
 
-  private setBotStatus = (botId: string, status: RunningBot) => {
-    this.composer.log(`SETTING STATUS OF ${botId} to port ${status.port} and status ${status.status}`);
+  private setBotStatus = (botId: string, data: RunningBot) => {
+    const updatedBotData: RunningBot = {
+      ...LocalPublisher.runningBots[botId],
+      status: data.status,
+    };
+
+    this.composer.log(`SETTING STATUS OF ${botId} to port ${data.port} and status ${data.status}`);
     // preserve the pid and port if one is available
-    if (!status.process && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].process) {
-      status.process = LocalPublisher.runningBots[botId].process;
-    }
-    if (!status.port && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].port) {
-      status.port = LocalPublisher.runningBots[botId].port;
+    if (data.process && !LocalPublisher.runningBots[botId]?.process) {
+      updatedBotData.process = data.process;
     }
 
-    LocalPublisher.runningBots[botId] = status;
+    if (data.port && !LocalPublisher.runningBots[botId]?.port) {
+      updatedBotData.port = data.port;
+    }
+
+    if (data.result.message) {
+      updatedBotData.result = {
+        ...updatedBotData.result,
+        message: data.result.message,
+      };
+    }
+    LocalPublisher.runningBots[botId] = updatedBotData;
   };
 
-  private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
+  private appendRuntimeLogs = (botId: string, newContent: string, logType: 'stdout' | 'stderr' = 'stdout') => {
+    const botData = LocalPublisher.runningBots[botId];
+    if (logType === 'stdout') {
+      const runtimeLog = botData.result.runtimeLog ? botData.result.runtimeLog + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeLog,
+        },
+      };
+    } else {
+      const runtimeError = botData.result.runtimeError ? botData.result.runtimeError + newContent : newContent;
+      LocalPublisher.runningBots[botId] = {
+        ...botData,
+        result: {
+          ...botData.result,
+          runtimeError: runtimeError,
+        },
+      };
+    }
+    RuntimeLogServer.sendRuntimeLogToSubscribers(
+      botId,
+      LocalPublisher.runningBots[botId].result.runtimeLog ?? '',
+      LocalPublisher.runningBots[botId].result.runtimeError ?? ''
+    );
+  };
+
+  private publishAsync = async (botId: string, version: string, fullSettings: DialogSetting, project: any, user) => {
     try {
+      let port;
+      if (LocalPublisher.runningBots[botId]) {
+        this.composer.log('Bot already running. Stopping bot...');
+        // this may or may not be set based on the status of the bot
+        port = LocalPublisher.runningBots[botId].port;
+        await this.stopBot(botId);
+      }
+      if (!port) {
+        // Portfinder is the stablest amongst npm libraries for finding ports. https://github.com/http-party/node-portfinder/issues/61. It does not support supplying an array of ports to pick from as we can have a race conidtion when starting multiple bots at the same time. As a result, getting the max port number out of the range and starting the range from the max.
+        const maxPort = max(map(LocalPublisher.runningBots, 'port')) ?? 3979;
+        port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
+      }
+
       // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
       // and export the content into that folder as well.
       const runtime = this.composer.getRuntimeByProject(project);
@@ -86,35 +151,19 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
         await this.initBot(project);
         await this.saveContent(botId, version, project.dataDir, user);
-        await runtime.setSkillManifest(
-          this.getBotRuntimeDir(botId),
-          project.fileStorage,
-          this.getManifestSrcDir(project.dataDir),
-          project.fileStorage,
-          'azurewebapp'
-        );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
-        const runtimePath = path.isAbsolute(project.settings.runtime.path)
-          ? project.settings.runtime.path
-          : path.resolve(project.dataDir, project.settings.runtime.path);
-        await runtime.build(runtimePath, project);
-        await runtime.setSkillManifest(
-          project.settings.runtime.path,
-          project.fileStorage,
-          this.getManifestSrcDir(project.dataDir),
-          project.fileStorage,
-          'azurewebapp'
-        );
+        const runtimePath = project.getRuntimePath();
+        await runtime.build(runtimePath, project, fullSettings, port);
       } else {
         throw new Error('Custom runtime settings are incomplete. Please specify path and command.');
       }
-      await this.setBot(botId, version, fullSettings, project);
+      await this.setBot(botId, version, fullSettings, project, port);
     } catch (error) {
       await this.stopBot(botId);
       this.setBotStatus(botId, {
         status: 500,
         result: {
-          message: error.message,
+          message: stringifyError(error),
         },
       });
     }
@@ -149,7 +198,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       return {
         status: 500,
         result: {
-          message: error,
+          message: stringifyError(error),
         },
       };
     }
@@ -164,6 +213,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           status: 200,
           result: {
             message: 'Running',
+            port,
             endpointURL: url,
           },
         };
@@ -189,7 +239,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   removeRuntimeData = async (botId: string) => {
-    const targetDir = path.resolve(__dirname, `../hostedBots/${botId}`);
+    const targetDir = path.resolve(this.getBotsDir(), `./${botId}`);
     if (!(await this.dirExist(targetDir))) {
       return { msg: `runtime path ${targetDir} does not exist` };
     }
@@ -199,6 +249,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
     }
+  };
+
+  setupRuntimeLogServer = async (projectId: string) => {
+    await RuntimeLogServer.init();
+    return RuntimeLogServer.getRuntimeLogStreamingUrl(projectId);
   };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
@@ -246,12 +301,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         const botDir = this.getBotDir(botId);
         const runtimeDir = this.getBotRuntimeDir(botId);
         // create bot dir
-        await mkDir(botDir, { recursive: true });
-        await mkDir(runtimeDir, { recursive: true });
+        await mkdir(botDir, { recursive: true });
+        await mkdir(runtimeDir, { recursive: true });
 
         // create ComposerDialogs and history folder
-        mkDir(this.getBotAssetsDir(botId), { recursive: true });
-        mkDir(this.getHistoryDir(botId), { recursive: true });
+        await mkdir(this.getBotAssetsDir(botId), { recursive: true });
+        await mkdir(this.getHistoryDir(botId), { recursive: true });
 
         // copy runtime template in folder
         this.composer.log('COPY FROM ', runtime.path, ' to ', runtimeDir);
@@ -268,7 +323,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           })
         );
         // TODO: Understand why this is required as it would never hit this function if runtime is ejected
-        if (settings.runtime?.key && (settings.runtime?.key !== project.settings.runtime?.key)) {
+        if (settings.runtime?.key && settings.runtime?.key !== project.settings.runtime?.key) {
           // in order to change runtime type
           await removeDirAndFiles(this.getBotRuntimeDir(botId));
           // copy runtime template in folder
@@ -279,7 +334,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     } catch (error) {
       // delete the folder to make sure build again.
       await removeDirAndFiles(this.getBotDir(botId));
-      throw new Error(error.toString());
+      throw error;
     }
   };
 
@@ -290,22 +345,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   // start bot in current version
-  private setBot = async (botId: string, version: string, settings: any, project: any) => {
+  private setBot = async (botId: string, version: string, settings: any, project: any, port: number) => {
     // get port, and stop previous bot if exist
     try {
-      let port;
-      if (LocalPublisher.runningBots[botId]) {
-        this.composer.log('Bot already running. Stopping bot...');
-        // this may or may not be set based on the status of the bot
-        port = LocalPublisher.runningBots[botId].port;
-        await this.stopBot(botId);
-      }
-      if (!port) {
-        // Portfinder is the stablest amongst npm libraries for finding ports. https://github.com/http-party/node-portfinder/issues/61. It does not support supplying an array of ports to pick from as we can have a race conidtion when starting multiple bots at the same time. As a result, getting the max port number out of the range and starting the range from the max.
-        const maxPort = max(map(LocalPublisher.runningBots, 'port')) ?? 3979;
-        port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
-      }
-
       // if not using custom runtime, update assets in tmp older
       if (!settings.runtime || settings.runtime.customRuntime !== true) {
         this.composer.log('Updating bot assets');
@@ -324,23 +366,19 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // start the bot process
       await this.startBot(botId, port, settings, project);
     } catch (error) {
-      console.error('Error in startbot: ', error);
       await this.stopBot(botId);
       this.setBotStatus(botId, {
         status: 500,
         result: {
-          message: error,
+          message: stringifyError(error),
         },
       });
     }
   };
 
   private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
-    let customerRuntimePath = settings.runtime.path;
-    if (customerRuntimePath && !path.isAbsolute(customerRuntimePath)) {
-      customerRuntimePath = path.resolve(project.dir, customerRuntimePath);
-    }
-    const botDir = settings.runtime?.customRuntime === true ? customerRuntimePath : this.getBotRuntimeDir(botId);
+    const customRuntimePath = project.getRuntimePath();
+    const botDir = settings.runtime?.customRuntime === true ? customRuntimePath : this.getBotRuntimeDir(botId);
 
     const commandAndArgs =
       settings.runtime?.customRuntime === true
@@ -365,16 +403,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       }
       config = this.getConfig(settings, skillHostEndpoint);
       let spawnProcess;
+      const args = [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config];
+      this.composer.log('Executing command with arguments: %s %s', startCommand, args.join(' '));
       try {
-        spawnProcess = spawn(
-          startCommand,
-          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config],
-          {
-            cwd: botDir,
-            stdio: ['ignore', 'pipe', 'pipe'],
-            detached: !isWin, // detach in non-windows
-          }
-        );
+        spawnProcess = spawn(startCommand, args, {
+          cwd: botDir,
+          stdio: ['ignore', 'pipe', 'pipe'],
+          detached: !isWin, // detach in non-windows
+          shell: isWin, // run in a shell on windows so `npm start` doesn't need to be `npm.cmd start`
+        });
         this.composer.log('Started process %d', spawnProcess.pid);
         this.setBotStatus(botId, {
           process: spawnProcess,
@@ -398,7 +435,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
               status: 200,
               result: { message: 'Runtime started' },
             });
-            resolve();
+            resolve('Runtime started');
           },
           (err) => {
             reject(`Bot on localhost:${port} not working, error message: ${err.message}`);
@@ -415,9 +452,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const configList: string[] = [];
     if (config.MicrosoftAppPassword) {
       configList.push('--MicrosoftAppPassword');
-      configList.push(config.MicrosoftAppPassword);
+      configList.push(`"${config.MicrosoftAppPassword}"`);
     }
-    if (config.luis) {
+    if (config.luis && (config.luis.endpointKey || config.luis.authoringKey)) {
       configList.push('--luis:endpointKey');
       configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
@@ -449,23 +486,28 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logger: (...args: any[]) => void
   ) => {
-    let erroutput = '';
+    let errOutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
+        const runtimeData = data.toString();
+        this.appendRuntimeLogs(botId, runtimeData);
         logger('%s', data.toString());
       });
 
     child.stderr &&
       child.stderr.on('data', (err: any) => {
-        erroutput += err.toString();
+        errOutput += err.toString();
       });
 
     child.on('exit', (code) => {
       if (code !== 0) {
-        logger('error on exit: %s, exit code %d', erroutput, code);
+        logger('error on exit: %s, exit code %d', errOutput, code);
+        if (LocalPublisher.runningBots[botId].status === 200) {
+          this.appendRuntimeLogs(botId, errOutput, 'stderr');
+        }
         this.setBotStatus(botId, {
           status: 500,
-          result: { message: erroutput },
+          result: { message: errOutput },
         });
       }
     });
@@ -491,7 +533,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   private zipBot = async (dstPath: string, srcDir: string) => {
     // delete previous and create new
     if (fs.existsSync(dstPath)) {
-      await removeFile(dstPath);
+      await unlink(dstPath);
     }
     const files = await glob('**/*', {
       cwd: srcDir,
@@ -538,7 +580,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
             .then(() => {
               this.removeListener(proc);
               delete LocalPublisher.runningBots[botId];
-              resolve();
+              resolve('Stopped');
             })
             .catch((err) => {
               reject(err);
@@ -553,9 +595,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       throw new Error(`no such dir ${srcDir}`);
     }
     if (!(await this.dirExist(dstDir))) {
-      await mkDir(dstDir, { recursive: true });
+      await mkdir(dstDir, { recursive: true });
     }
-    const paths = await readDir(srcDir);
+    const paths = await readdir(srcDir);
     for (const subPath of paths) {
       const srcPath = path.resolve(srcDir, subPath);
       const dstPath = path.resolve(dstDir, subPath);

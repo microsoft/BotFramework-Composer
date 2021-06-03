@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, fireEvent } from '@botframework-composer/test-utils';
 
-import { StringField, borderStyles } from '../StringField';
+import { StringField } from '../StringField';
 
 import { fieldProps } from './testUtils';
 
@@ -34,7 +34,7 @@ describe('<StringField />', () => {
     const input = getByLabelText('a label');
 
     fireEvent.focus(input);
-    expect(onFocus).toHaveBeenCalledWith('string field', 'string value');
+    expect(onFocus).toHaveBeenCalledWith('string field', 'string value', expect.any(Object));
 
     fireEvent.blur(input);
     expect(onBlur).toHaveBeenCalledWith('string field', 'string value');
@@ -43,43 +43,5 @@ describe('<StringField />', () => {
   it('uses a fallback aria label', () => {
     const { container } = renderSubject({ label: '' });
     expect(container.querySelector('[aria-label="string field"]')).toBeInTheDocument();
-  });
-});
-
-describe('borderStyles', () => {
-  it('does not apply border styles when transparentBorder is false', () => {
-    expect(borderStyles(false, false)).toEqual({});
-  });
-
-  it('applies a transparent border when there is no error', () => {
-    expect(borderStyles(true, false)).toMatchInlineSnapshot(`
-      Object {
-        "fieldGroup": Object {
-          "borderColor": "transparent",
-          "selectors": Object {
-            ":hover": Object {
-              "borderColor": "#edebe9",
-            },
-          },
-          "transition": "border-color 0.1s linear",
-        },
-      }
-    `);
-  });
-
-  it('does not apply a transparent border when there is an error', () => {
-    expect(borderStyles(true, true)).toMatchInlineSnapshot(`
-      Object {
-        "fieldGroup": Object {
-          "borderColor": undefined,
-          "selectors": Object {
-            ":hover": Object {
-              "borderColor": undefined,
-            },
-          },
-          "transition": "border-color 0.1s linear",
-        },
-      }
-    `);
   });
 });

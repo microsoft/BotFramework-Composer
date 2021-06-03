@@ -4,7 +4,7 @@
 import { join } from 'path';
 
 import merge from 'lodash/merge';
-import { defaultPublishConfig, PublishResult } from '@bfc/shared';
+import { defaultPublishConfig, PublishResult, PublishTarget } from '@bfc/shared';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
@@ -22,6 +22,7 @@ function extensionImplementsMethod(extensionName: string, methodName: string): b
   return extensionName && ExtensionContext.extensions.publish[extensionName]?.methods[methodName];
 }
 
+let currentPublishTarget: PublishTarget;
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
@@ -53,24 +54,46 @@ export const PublishController = {
   publish: async (req, res) => {
     const target: string = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
-    const { metadata, sensitiveSettings } = req.body;
+    const { accessToken = '', metadata, sensitiveSettings, publishTarget } = req.body;
     const projectId: string = req.params.projectId;
+    currentPublishTarget = publishTarget;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
-
-    TelemetryService.trackEvent('PublishingProfileStarted', { target, projectId });
-    TelemetryService.startEvent('PublishingProfileCompleted', target + projectId, { target, projectId });
 
     // deal with publishTargets not exist in settings
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
-    const profile = profiles.length ? profiles[0] : undefined;
+    let profile: PublishTarget = profiles[0];
+    if (!profile) {
+      profile = publishTarget;
+      currentProject.settings?.publishTargets && currentProject.settings?.publishTargets.push(publishTarget);
+    }
     const extensionName = profile ? profile.type : ''; // get the publish plugin key
 
-    // get token from header
-    const accessToken = req.headers.authorization?.substring('Bearer '.length);
-    log('access token get from header: %s', accessToken);
+    try {
+      const configuration = JSON.parse(profile?.configuration || '{}');
+      TelemetryService.trackEvent('PublishingProfileStarted', {
+        target,
+        projectId,
+        msAppId: configuration.settings?.MicrosoftAppId,
+        subscriptionId: configuration.subscriptionId,
+      });
+
+      TelemetryService.startEvent('PublishingProfileCompleted', `${target}${projectId}`, {
+        target,
+        projectId,
+        msAppId: configuration.settings?.MicrosoftAppId,
+        subscriptionId: configuration.subscriptionId,
+      });
+    } catch (error) {
+      TelemetryService.trackEvent('PublishingProfileStarted', {
+        target,
+        projectId,
+      });
+    }
+
+    log('access token retrieved from body: %s', accessToken || 'no token provided');
     if (profile && extensionImplementsMethod(extensionName, 'publish')) {
       // append config from client(like sensitive settings)
       const configuration = {
@@ -126,7 +149,11 @@ export const PublishController = {
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter((t) => t.name === target);
-    const profile = profiles.length ? profiles[0] : undefined;
+    let profile: PublishTarget = profiles[0];
+    if (!profile) {
+      profile = currentPublishTarget;
+      currentProject.settings?.publishTargets && currentProject.settings?.publishTargets.push(currentPublishTarget);
+    }
     // get the publish plugin key
     const extensionName = profile ? profile.type : '';
     if (profile && extensionImplementsMethod(extensionName, 'getStatus')) {
@@ -150,7 +177,7 @@ export const PublishController = {
         );
         // update the eTag if the publish was completed and an eTag is provided
         if (results.status === 200) {
-          TelemetryService.endEvent('PublishingProfileCompleted', target + projectId);
+          TelemetryService.endEvent('PublishingProfileCompleted', `${target}${projectId}`);
           if (results.result?.eTag) {
             BotProjectService.setProjectLocationData(projectId, { eTag: results.result.eTag });
           }
@@ -318,6 +345,26 @@ export const PublishController = {
       statusCode: '400',
       message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
     });
+  },
+  setupRuntimeLogForBot: async (req, res) => {
+    log('Setting up runtime log server');
+    const profile = defaultPublishConfig;
+    const extensionName = profile.type;
+    const projectId = req.params.projectId;
+    if (profile && extensionImplementsMethod(extensionName, 'setupRuntimeLogServer') && projectId) {
+      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.setupRuntimeLogServer;
+      if (typeof pluginMethod === 'function') {
+        try {
+          const runtimeLogUrl = await pluginMethod.call(null, projectId);
+          return res.status(200).send(runtimeLogUrl);
+        } catch (ex) {
+          res.status(400).json({
+            statusCode: '400',
+            message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
+          });
+        }
+      }
+    }
   },
 
   pull: async (req, res) => {

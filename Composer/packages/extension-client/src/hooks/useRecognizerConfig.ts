@@ -58,13 +58,16 @@ export interface RecognizerSchemaConfig {
 
 export function useRecognizerConfig(): RecognizerSchemaConfig {
   const { plugins, shellData } = useContext(EditorExtensionContext);
+  const appSchema = shellData.schemas?.sdk?.content;
 
   const recognizers: RecognizerSchema[] = useMemo(() => {
     if (!plugins.uiSchema) return [];
 
     const recognizerWidgets = plugins.widgets?.recognizer ?? {};
     const schemas = Object.entries(plugins.uiSchema)
-      .filter(([_, uiOptions]) => uiOptions && uiOptions.recognizer)
+      .filter(([$kind, uiOptions]) => {
+        return Boolean(uiOptions?.recognizer && (appSchema?.definitions?.[$kind] || $kind === FallbackRecognizerKey));
+      })
       .map(([$kind, uiOptions]) => {
         const recognizerOptions = uiOptions?.recognizer as RecognizerOptions;
         const intentEditor = resolveRecognizerWidget(recognizerOptions.intentEditor, recognizerWidgets);

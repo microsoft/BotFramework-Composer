@@ -18,5 +18,8 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
 
         // Use RemoveRecipientMention Activity Extensions
         public bool RemoveRecipientMention { get; set; }
+
+        // Use SetSpeakMiddleware
+        public bool UseSetSpeakMiddleware { get; set; }
     }
 }

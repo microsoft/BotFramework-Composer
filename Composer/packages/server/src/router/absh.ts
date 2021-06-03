@@ -88,13 +88,13 @@ const absh: AuthProviderInit = {
 
     const authorize: RequestHandler = (req, res, next) => {
       if (COMPOSER_AUTH_PROVIDER !== 'abs-h' || req.method === 'OPTIONS') {
-        next && next();
+        next?.();
         return;
       }
 
       // validate bearer token exists
       const authHeader = req.header('Authorization');
-      const bearer = authHeader && authHeader.startsWith(BEARER_PREFIX) && authHeader.substr(BEARER_PREFIX.length);
+      const bearer = authHeader?.startsWith(BEARER_PREFIX) && authHeader.substr(BEARER_PREFIX.length);
 
       if (!bearer || bearer.length === 0) {
         res.status(401).json({ error: 'Unauthorized' });
@@ -124,10 +124,10 @@ const absh: AuthProviderInit = {
             decodedToken: token,
             accessToken: bearer,
           };
-          next && next();
+          next?.();
         });
       } catch (err) {
-        next && next(err);
+        next?.(err);
       }
     };
 

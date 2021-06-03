@@ -7,7 +7,8 @@ import styled from '@emotion/styled';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import * as React from 'react';
-import { ContentEditable } from 'src/components/tags/ContentEditable';
+
+import { ContentEditable } from './ContentEditable';
 
 const tagContentStyles = css`
   outline: 0;

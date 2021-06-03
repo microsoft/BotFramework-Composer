@@ -292,10 +292,12 @@ ${content1}
     expect(imports).toEqual([
       {
         id: 'help.qna',
+        description: 'import',
         path: '../common/help.qna',
       },
       {
         id: 'windows.source.qna',
+        description: 'import',
         path: 'windows.source.qna',
       },
     ]);
@@ -311,14 +313,17 @@ ${content1}
       {
         id: 'chitchat.qna',
         path: 'chitchat.qna',
+        description: 'import',
       },
       {
         id: 'help.qna',
         path: '../common/help.qna',
+        description: 'import',
       },
       {
         id: 'windows.source.qna',
         path: 'windows.source.qna',
+        description: 'import',
       },
     ]);
   });
@@ -334,6 +339,7 @@ ${content1}
       {
         id: 'chitchat.qna',
         path: 'chitchat.qna',
+        description: 'import',
       },
     ]);
   });
@@ -348,6 +354,7 @@ ${content1}
       {
         id: 'help.qna',
         path: '../common/help.qna',
+        description: 'import',
       },
     ]);
   });

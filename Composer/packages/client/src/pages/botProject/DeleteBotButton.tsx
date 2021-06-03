@@ -2,19 +2,16 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React from 'react';
-import { jsx, css } from '@emotion/core';
+import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import formatMessage from 'format-message';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Button } from 'office-ui-fabric-react/lib/Button';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { OpenConfirmModal } from '@bfc/ui-shared';
+import { css, jsx } from '@emotion/core';
+import formatMessage from 'format-message';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
-import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
-import { colors } from '../../colors';
+import { navigateTo } from '../../utils/navigation';
 
 // -------------------- Styles -------------------- //
 
@@ -32,12 +29,6 @@ const deleteBotButton = {
   root: {
     height: 32,
     width: 82,
-    background: colors.main,
-    color: colors.textOnColor,
-  },
-  rootHovered: {
-    background: colors.main,
-    color: colors.textOnColor,
   },
 };
 
@@ -45,84 +36,49 @@ const deleteBotButton = {
 
 type DeleteBotButtonProps = {
   projectId: string;
+  scrollToSectionId: string;
+};
+
+export const openDeleteBotModal = async (onConfirm: () => Promise<void>) => {
+  const warningText = formatMessage(
+    'Are you sure you want to delete your bot? This action cannot be undone and your bot and all related files in the bot project folder will be permanently deleted. Your Azure resources will remain unchanged.'
+  );
+  const title = formatMessage('Delete Bot');
+  const settings = {
+    onRenderContent: () => {
+      return <div>{warningText}</div>;
+    },
+    confirmText: formatMessage('Yes, delete'),
+  };
+  const res = await OpenConfirmModal(title, null, settings);
+  if (res) {
+    await onConfirm();
+  }
 };
 
 export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, scrollToSectionId = '' } = props;
   const { deleteBot } = useRecoilValue(dispatcherState);
-  const openDeleteBotModal = async () => {
-    const boldWarningText = formatMessage(
-      'Warning: the action you are about to take cannot be undone. Going further will delete this bot and any related files in the bot project folder.'
-    );
-    const warningText = formatMessage('External resources will not be changed.');
-    const title = formatMessage('Delete Bot');
-    const checkboxLabel = formatMessage('I want to delete this bot');
-    const settings = {
-      onRenderContent: () => {
-        return (
-          <div
-            style={{
-              background: colors.errorBg,
-              display: 'flex',
-              flexDirection: 'row',
-              marginBottom: '24px',
-            }}
-          >
-            <FontIcon
-              iconName="Warning12"
-              style={{
-                color: colors.error,
-                fontSize: 36,
-                padding: '32px',
-              }}
-            />
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Text
-                block
-                style={{
-                  fontWeight: 'bold',
-                  marginTop: '24px',
-                  marginRight: '24px',
-                  marginBottom: '24px',
-                }}
-              >
-                {boldWarningText}
-              </Text>
-              <Text
-                block
-                style={{
-                  marginRight: '24px',
-                  marginBottom: '24px',
-                }}
-              >
-                {warningText}
-              </Text>
-            </div>
-          </div>
-        );
-      },
-      disabled: true,
-      checkboxLabel,
-      confirmBtnText: formatMessage('Delete'),
-    };
-    const res = await OpenConfirmModal(title, null, settings);
-    if (res) {
-      await deleteBot(projectId);
-      navigateTo('home');
-    }
+
+  const deleteRef = React.useRef<HTMLDivElement>(null);
+
+  const onConfirm = async () => {
+    await deleteBot(projectId);
+    navigateTo('home');
   };
 
+  useEffect(() => {
+    if (deleteRef.current && scrollToSectionId === '#deleteBot') {
+      deleteRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [scrollToSectionId]);
+
   return (
-    <div css={marginBottom}>
+    <div ref={deleteRef} css={marginBottom} id="deleteBot">
       <div css={deleteBotText}> {formatMessage('Delete this bot')}</div>
-      <Button styles={deleteBotButton} onClick={openDeleteBotModal}>
+      <PrimaryButton styles={deleteBotButton} onClick={() => openDeleteBotModal(onConfirm)}>
         {formatMessage('Delete')}
-      </Button>
+      </PrimaryButton>
     </div>
   );
 };

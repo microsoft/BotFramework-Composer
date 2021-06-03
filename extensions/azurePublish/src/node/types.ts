@@ -25,7 +25,6 @@ export enum BotProjectRuntimeType {
 }
 
 export interface BotProjectDeployConfig {
-
   // access token to access azure
   accessToken: string;
 
@@ -74,7 +73,7 @@ export interface ProcessStatus {
   message: string; // contains latest message
   log: string[]; // contains all messages
   comment?: string; // contains user supplied comment about process
-  config? : any; // contains provision result
+  config?: any; // contains provision result
 }
 
 export interface ProcessList {

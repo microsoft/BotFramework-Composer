@@ -94,6 +94,7 @@ export interface BotConfig {
   appInsightsId?: string;
   appInsightsApiKey?: string;
   appInsightsInsKey?: string;
+  webAppHostname?: string;
 }
 
 export interface WebAppConfig {
@@ -105,7 +106,7 @@ export interface WebAppConfig {
   appPwd?: string;
 }
 
-export interface AzureFuntionsConfig {
+export interface AzureFunctionsConfig {
   resourceGroupName: string;
   name: string;
   location: string;
@@ -113,6 +114,11 @@ export interface AzureFuntionsConfig {
   appId?: string;
   appPwd?: string;
   instrumentationKey?: string;
+  /**
+   * The worker runtime language.
+   * Currently documented values: dotnet, node, java, python, or powershell
+   */
+  workerRuntime?: string;
 }
 
 export interface DeploymentsConfig {

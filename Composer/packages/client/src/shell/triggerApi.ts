@@ -7,8 +7,7 @@ import { useRecoilValue } from 'recoil';
 
 import { TriggerFormData } from '../utils/dialogUtil';
 import { Dispatcher } from '../recoilModel/dispatchers';
-
-import { dispatcherState } from './../recoilModel/DispatcherWrapper';
+import { dispatcherState } from '../recoilModel/atoms';
 
 function createTriggerApi(projectId: string, dispatchers: Dispatcher) {
   return {

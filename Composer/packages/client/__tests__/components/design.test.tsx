@@ -7,7 +7,7 @@ import { fireEvent } from '@botframework-composer/test-utils';
 import { renderWithRecoil } from '../testUtils';
 import { SAMPLE_DIALOG } from '../mocks/sampleDialog';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
-import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
+import { TriggerCreationModal } from '../../src/components/TriggerCreationModal';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
 import {
   dialogsSelectorFamily,

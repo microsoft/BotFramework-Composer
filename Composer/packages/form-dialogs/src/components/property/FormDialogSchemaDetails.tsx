@@ -6,12 +6,14 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import * as React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
-import { formDialogSchemaAtom } from 'src/atoms/appState';
-import { useHandlers } from 'src/atoms/handlers';
-import { PropertyRequiredKind } from 'src/atoms/types';
-import { PropertyList } from 'src/components/property/PropertyList';
-import { Lifetime } from 'src/utils/base';
-import { jsPropertyListClassName } from 'src/utils/constants';
+
+import { formDialogSchemaAtom } from '../../atoms/appState';
+import { useHandlers } from '../../atoms/handlers';
+import { PropertyRequiredKind } from '../../atoms/types';
+import { Lifetime } from '../../utils/base';
+import { jsPropertyListClassName } from '../../utils/constants';
+
+import { PropertyList } from './PropertyList';
 
 const Root = styled.div({
   display: 'flex',
@@ -40,7 +42,7 @@ export const FormDialogSchemaDetails = () => {
       const selection = window.getSelection();
 
       // If click outside is the continuation of text select within the card, don't dismiss the card.
-      if (selection && selection.toString()) return;
+      if (selection?.toString()) return;
 
       const { x, y } = e;
       const elms = Array.prototype.slice.call(

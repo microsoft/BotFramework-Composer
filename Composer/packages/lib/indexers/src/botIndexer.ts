@@ -6,6 +6,7 @@
 import get from 'lodash/get';
 import {
   LUISLocales,
+  QnALocales,
   Diagnostic,
   DiagnosticSeverity,
   LuFile,
@@ -17,6 +18,7 @@ import {
   QnAFile,
   BotProjectFile,
   SDKKinds,
+  RecognizerFile,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 
@@ -76,29 +78,31 @@ const shouldUseQnA = (dialogs: DialogInfo[], qnaFiles: QnAFile[]): boolean => {
  * 1. Missing LUIS key
  * 2. Missing QnA Maker subscription key.
  */
-const checkSetting = (assets: {
-  dialogs: DialogInfo[];
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  qnaFiles: QnAFile[];
-  setting: DialogSetting;
-}): Diagnostic[] => {
+const checkSetting = (
+  assets: {
+    dialogs: DialogInfo[];
+    lgFiles: LgFile[];
+    luFiles: LuFile[];
+    qnaFiles: QnAFile[];
+    setting: DialogSetting;
+  },
+  rootSetting?: DialogSetting
+): Diagnostic[] => {
   const { dialogs, setting, luFiles, qnaFiles } = assets;
   const diagnostics: Diagnostic[] = [];
-
   const useLUIS = shouldUseLuis(dialogs, luFiles);
   const useQnA = shouldUseQnA(dialogs, qnaFiles);
 
   // if use LUIS, check LUIS authoring key
   if (useLUIS) {
-    if (!get(setting, 'luis.authoringKey')) {
+    if (!get(setting, 'luis.authoringKey') && !get(rootSetting, 'luis.authoringKey')) {
       diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error, '#luisKey'));
     }
   }
 
   // if use LUIS, check LUIS authoring region
   if (useLUIS) {
-    if (!get(setting, 'luis.authoringRegion')) {
+    if (!get(setting, 'luis.authoringRegion') && !get(rootSetting, 'luis.authoringRegion')) {
       diagnostics.push(
         new Diagnostic('Missing LUIS region', 'appsettings.json', DiagnosticSeverity.Error, '#luisRegion')
       );
@@ -107,7 +111,7 @@ const checkSetting = (assets: {
 
   // if use QnA, check QnA subscription key
   if (useQnA) {
-    if (!get(setting, 'qna.subscriptionKey')) {
+    if (!get(setting, 'qna.subscriptionKey') && !get(rootSetting, 'qna.subscriptionKey')) {
       diagnostics.push(
         new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error, '#qnaKey')
       );
@@ -119,7 +123,7 @@ const checkSetting = (assets: {
 
 /**
  * Check bot settings & dialog
- * files meet LUIS/QnA requirments.
+ * files meet LUIS requirments.
  */
 const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
   const {
@@ -128,15 +132,42 @@ const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSettin
   } = assets;
 
   // if use LUIS, continue
-  const useLUIS = dialogs.some((item) => !!item.luFile);
+  const useLUIS = dialogs.some((item) => !!item.luFile && item?.luProvider === SDKKinds.LuisRecognizer);
   if (!useLUIS) return [];
 
   const unsupportedLocales = difference(languages, LUISLocales);
+
+  const severity =
+    unsupportedLocales.length === languages.length ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning;
+
   return unsupportedLocales.map((locale) => {
-    return new Diagnostic(`locale ${locale} is not supported by LUIS`, 'appsettings.json', DiagnosticSeverity.Warning);
+    return new Diagnostic(`locale ${locale} is not supported by LUIS`, 'appsettings.json', severity);
   });
 };
 
+/**
+ * Check bot settings & dialog
+ * files meet QnA requirments.
+ */
+const checkQnALocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
+  const {
+    dialogs,
+    setting: { languages },
+  } = assets;
+
+  // if use LUIS, continue
+  const useQnA = dialogs.some((item) => !!item.qnaFile);
+  if (!useQnA) return [];
+
+  const unsupportedLocales = difference(languages, QnALocales);
+
+  const severity =
+    unsupportedLocales.length === languages.length ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning;
+
+  return unsupportedLocales.map((locale) => {
+    return new Diagnostic(`locale ${locale} is not supported by QnA`, 'appsettings.json', severity);
+  });
+};
 /**
  * Check bot skill & setting
  * 1. used skill not existed in *.botproj
@@ -152,7 +183,7 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; botProjectFile: BotP
         const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
           new Diagnostic(
-            `The skill '${skillName}' does not exist in bot project file`,
+            `'${skillName}' does not exist in this project and is currently referenced in '${dialog.displayName}'.`,
             dialog.id,
             DiagnosticSeverity.Error
           )
@@ -164,27 +195,50 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; botProjectFile: BotP
   return diagnostics;
 };
 
-const validate = (assets: {
-  dialogs: DialogInfo[];
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  qnaFiles: QnAFile[];
-  setting: DialogSetting;
-  skillManifests: SkillManifestFile[];
-  botProjectFile: BotProjectFile;
-  isRemote?: boolean;
-  isRootBot?: boolean;
-}): Diagnostic[] => {
+const validate = (
+  assets: {
+    dialogs: DialogInfo[];
+    lgFiles: LgFile[];
+    luFiles: LuFile[];
+    qnaFiles: QnAFile[];
+    setting: DialogSetting;
+    skillManifests: SkillManifestFile[];
+    botProjectFile: BotProjectFile;
+    recognizers: RecognizerFile[];
+    isRemote?: boolean;
+    isRootBot?: boolean;
+  },
+  rootSetting?: DialogSetting
+): Diagnostic[] => {
   if (assets.isRemote) return [];
-  const settingDiagnostics = [...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
+  const settingDiagnostics = [
+    ...checkSetting(assets, rootSetting),
+    ...checkLUISLocales(assets),
+    ...checkQnALocales(assets),
+    ...checkSkillSetting(assets),
+  ];
   if (assets.isRootBot) return settingDiagnostics;
   return [...checkManifest(assets), ...settingDiagnostics];
 };
 
-const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
+const filterLUISFilesToPublish = (luFiles: LuFile[], dialogFiles: DialogInfo[]): LuFile[] => {
   return luFiles.filter((file) => {
+    if (
+      dialogFiles.some(
+        (dialog) => dialog.luFile === getBaseName(file.id) && dialog.luProvider === SDKKinds.OrchestratorRecognizer
+      )
+    ) {
+      return true;
+    }
     const locale = getLocale(file.id);
     return locale && LUISLocales.includes(locale);
+  });
+};
+
+const filterQnAFilesToPublish = (qnaFiles: QnAFile[]): QnAFile[] => {
+  return qnaFiles.filter((file) => {
+    const locale = getLocale(file.id);
+    return locale && QnALocales.includes(locale);
   });
 };
 
@@ -193,8 +247,10 @@ export const BotIndexer = {
   checkManifest,
   checkSetting,
   checkLUISLocales,
+  checkQnALocales,
   checkSkillSetting,
   filterLUISFilesToPublish,
+  filterQnAFilesToPublish,
   shouldUseLuis,
   shouldUseQnA,
 };

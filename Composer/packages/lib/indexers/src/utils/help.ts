@@ -40,6 +40,6 @@ export function buildNewlineText(lineArray: string[]): string {
       return line + '\r\n';
     }
   });
-  const lastLineWithRN = lastLine && lastLine.endsWith('\r') ? lastLine + '\n' : lastLine;
+  const lastLineWithRN = lastLine?.endsWith('\r') ? lastLine + '\n' : lastLine;
   return [...linesWithRN, lastLineWithRN].join('');
 }

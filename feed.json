@@ -1,0 +1,87 @@
+{
+	"version": 1,
+	"whatsNewLinks": [{
+		"title": "Conversational AI announcements at Microsoft Build 2021",
+		"description": "Find out more about our latest release, including Composer 2.0, new templates and enhanced authoring, testing and publishing capabilities.",
+		"url": "https://aka.ms/ConvAIBuild2021"
+	},
+	{
+		"title": "Announcing Enterprise Assistant Bot Template and Conversational UX Guide",
+		"description": "Find out more about the new Enterprise Assistant Bot template, to help you accelerate building high-quality enterprise assistants.",
+		"url": "http://aka.ms/EnterpriseAssistantBlogBuild2021"
+	},
+		{
+		"title": "Bot Framework Composer 1.3",
+		"description": "New preview features: Form Dialogs, Orchestrator and Package Manager",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/bot-framework-composer-1-3-is-now-available/ba-p/1996923"
+	}, {
+		"title": "Build 2020 updates",
+		"description": "Read all of the updates from the Build conference, including Composer GA and Bot Framework SDK v4.9.",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/build-2020-conversational-ai-updates/ba-p/1397685"
+	}, {
+		"title": "Microsoft Ignite 2020: Publish to Microsoft Power Virtual Agents ",
+		"description": "Open a Power Virtual Agents topic in Bot Framework Composer, create a custom bot and publish back to Microsoft Power Virtual Agents.",
+		"url": "https://powervirtualagents.microsoft.com/en-us/blog/power-virtual-agents-integration-with-bot-framework-composer-is-available-in-public-preview/"
+	}, {
+		"title": "Microsoft Ignite 2020: Conversational AI",
+		"description": "Updates to Conversational AI include Microsoft Teams APIs, and new releases for .NET, JavaScript, Python and Java (preview 7).",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/november-2020-conversational-ai-update/ba-p/1892528"
+	}, {
+		"title": "Microsoft Ignite 2020: Integration of QnA into Composer",
+		"description": "Updates including the addition of creation and management capabilities for QnA Maker knowledgebase and improvement of overall productivity.",
+		"url": "https://techcommunity.microsoft.com/t5/azure-ai/ignite-2020-conversational-ai-updates/ba-p/1691841"
+	}],
+	"tabs": [{
+		"title": "Latest Videos",
+		"viewAllLinkText": "View all",
+		"viewAllLinkUrl": "https://www.youtube.com/channel/UC8qPRh20PpuxBvxf0w2WrwQ",
+		"cards": [{
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/microsoft-build-2021.png",
+			"title": "Microsoft Build 2021 - Azure AI",
+			"description": "Azure AI focused session at Build 2021 featuring Conversational AI announcements",
+			"url": "https://mybuild.microsoft.com/sessions/2ba55238-d398-46f9-9ff2-eafcd9d69df3"
+		},
+			{
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/ai-show.png",
+			"title": "AI Show: Building a Telephony bot",
+			"description": "How to enable telephony with Composer",
+			"url": "https://channel9.msdn.com/Shows/AI-Show/Whats-new-in-the-world-of-conversational-AI"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/all-around-azure.png",
+			"title": "All Around Azure: Conversational AI",
+			"description": "Azure event about Conversational AI",
+			"url": "https://channel9.msdn.com/Events/All-Around-Azure/All-Around-Azure-A-Developers-Guide-to-AI/Improve-Customer-Engagement-and-Productivity-with-Conversational-AI"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/ignite.png",
+			"title": "Microsoft Ignite 2020 - Virtual Assistants",
+			"description": "Conversational AI session from the Microsoft Ignite 2020 conference.",
+			"url": "https://channel9.msdn.com/Events/Build/2020/INT139"
+		}
+	]
+	}, {
+		"title": "Tutorials",
+		"viewAllLinkText": "Visit the Bot Framework Composer YouTube Channel",
+		"viewAllLinkUrl": "https://www.youtube.com/channel/UC8qPRh20PpuxBvxf0w2WrwQ",
+		"cards": [{
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "Collect user input",
+			"description": "How to use 'Ask a question' actions to collect text, number or other input.",
+			"url": "https://www.youtube.com/watch?v=dUT8L4_bVrk"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "Advanced bot responses",
+			"description": "How to create dynamic, condition based bot responses.",
+			"url": "https://www.youtube.com/watch?v=hiIiZnRcCv0"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "Collect user input, advanced",
+			"description": "How to collect and change user input, including getting confirmation.",
+			"url": "https://www.youtube.com/watch?v=vN9dBQj1dOs"
+		}, {
+			"image": "https://github.com/microsoft/BotFramework-Composer/raw/main/docs/home-feed-content/composer-tutorials.png",
+			"title": "Build a weather bot",
+			"description": "How to create a bot to get the weather forecast.",
+			"url": "https://www.youtube.com/watch?v=P-kKw2HGP3o&t=1282s"
+		}]
+	}]
+}

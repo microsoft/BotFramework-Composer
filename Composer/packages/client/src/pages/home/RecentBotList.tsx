@@ -16,11 +16,11 @@ import {
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
+import { useMemo } from 'react';
 
 import { calculateTimeDiff } from '../../utils/fileUtil';
-import { colors } from '../../colors';
 
-import { detailListContainer, tableCell, content } from './styles';
+import * as home from './styles';
 
 interface RecentBotListProps {
   onItemChosen: (file: IObjectWithKey) => void;
@@ -38,14 +38,10 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       maxWidth: 200,
       isRowHeader: true,
       isResizable: true,
-      isSorted: true,
-      isSortedDescending: false,
-      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
-      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: (item) => {
         return (
-          <div data-is-focusable css={tableCell}>
+          <div data-is-focusable css={home.tableCell}>
             <Link
               aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
               onClick={() => onItemChosen(item)}
@@ -59,29 +55,6 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     },
     {
       key: 'column2',
-      name: formatMessage('Date modified'),
-      fieldName: 'dateModifiedValue',
-      minWidth: 60,
-      maxWidth: 70,
-      isResizable: true,
-      data: 'number',
-      onRender: (item) => {
-        return (
-          <div data-is-focusable css={tableCell}>
-            <div
-              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
-              css={content}
-              tabIndex={-1}
-            >
-              {calculateTimeDiff(item.dateModified)}
-            </div>
-          </div>
-        );
-      },
-      isPadded: true,
-    },
-    {
-      key: 'column3',
       name: formatMessage('Location'),
       fieldName: 'path',
       minWidth: 200,
@@ -90,13 +63,36 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'string',
       onRender: (item) => {
         return (
-          <div data-is-focusable css={tableCell}>
+          <div data-is-focusable css={home.tableCell}>
             <div
               aria-label={formatMessage(`location is {location}`, { location: item.path })}
-              css={content}
+              css={home.content}
               tabIndex={-1}
             >
               {item.path}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'column3',
+      name: formatMessage('Date modified'),
+      fieldName: 'dateModifiedValue',
+      minWidth: 60,
+      maxWidth: 70,
+      isResizable: true,
+      data: 'number',
+      onRender: (item) => {
+        return (
+          <div data-is-focusable css={home.tableCell}>
+            <div
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
+              css={home.content}
+              tabIndex={-1}
+            >
+              {calculateTimeDiff(item.dateModified)}
             </div>
           </div>
         );
@@ -116,27 +112,32 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     );
   }
 
+  const botList = useMemo(() => {
+    return (
+      <DetailsList
+        isHeaderVisible
+        checkboxVisibility={CheckboxVisibility.hidden}
+        columns={tableColums}
+        compact={false}
+        getKey={(item) => `${item.path}/${item.name}`}
+        items={recentProjects}
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionMode={SelectionMode.single}
+        onItemInvoked={onItemChosen}
+        onRenderDetailsHeader={onRenderDetailsHeader}
+      />
+    );
+  }, [recentProjects]);
+
   return (
-    <div css={detailListContainer} data-is-scrollable="true">
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <DetailsList
-          isHeaderVisible
-          checkboxVisibility={CheckboxVisibility.hidden}
-          columns={tableColumns}
-          compact={false}
-          getKey={(item) => `${item.path}/${item.name}`}
-          items={recentProjects}
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.single}
-          styles={{
-            contentWrapper: {
-              background: colors.bg,
-            },
-          }}
-          onItemInvoked={onItemChosen}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-        />
-      </ScrollablePane>
+    <div css={home.detailListContainer} data-is-scrollable="true">
+      {recentProjects.length > 5 ? (
+        <div css={home.detailListScrollWrapper}>
+          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>{botList}</ScrollablePane>{' '}
+        </div>
+      ) : (
+        botList
+      )}
     </div>
   );
 }

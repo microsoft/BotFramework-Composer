@@ -13,9 +13,9 @@ import {
   dialogState,
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
-  lgFilesState,
-  luFilesState,
-  qnaFilesState,
+  lgFilesSelectorFamily,
+  luFilesSelectorFamily,
+  qnaFilesSelectorFamily,
   schemasState,
   settingsState,
 } from '../../../src/recoilModel';
@@ -128,6 +128,7 @@ const state = {
         name: 'Email-Skill',
       },
     },
+    languages: ['en-us'],
   },
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
@@ -141,9 +142,9 @@ describe('<Diagnostics/>', () => {
     set(botProjectIdsState, [state.projectId]);
     set(dialogIdsState(state.projectId), ['test']);
     set(dialogState({ projectId: state.projectId, dialogId: 'test' }), state.dialogs[0]);
-    set(luFilesState(state.projectId), state.luFiles);
-    set(lgFilesState(state.projectId), state.lgFiles);
-    set(qnaFilesState(state.projectId), state.qnaFiles);
+    set(luFilesSelectorFamily(state.projectId), state.luFiles);
+    set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
+    set(qnaFilesSelectorFamily(state.projectId), state.qnaFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
     set(botDiagnosticsState(state.projectId), state.diagnostics);
     set(settingsState(state.projectId), state.settings);

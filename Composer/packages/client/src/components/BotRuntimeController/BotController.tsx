@@ -11,6 +11,7 @@ import formatMessage from 'format-message';
 import { css } from '@emotion/core';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import {
   buildConfigurationSelector,
@@ -22,6 +23,7 @@ import {
 import { BotStatus } from '../../constants';
 import { colors } from '../../colors';
 import { useClickOutsideOutsideTarget } from '../../utils/hooks';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -56,23 +58,28 @@ const startPanelsContainer = css`
 
 const transparentBackground = colors.transparentBg;
 
-const BotController: React.FC = () => {
+type BotControllerProps = {
+  onHideController: (isHidden: boolean) => void;
+  isControllerHidden: boolean;
+};
+
+const BotController: React.FC<BotControllerProps> = ({ onHideController, isControllerHidden }: BotControllerProps) => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
   const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
-  const [isControllerHidden, hideController] = useState(true);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
-  const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
-  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+
   const [botsStartOperationCompleted, setBotsStartOperationCompleted] = useState(false);
-  const [areBotsStarting, setBotsStarting] = useState(false);
+  const [areBotsProcessing, setBotsProcessing] = useState(false);
   const [startPanelButtonText, setStartPanelButtonText] = useState('');
   const { startAllBots, stopAllBots } = useBotOperations();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const isPVABot = usePVACheck(rootBotId ?? '');
 
   const startPanelTarget = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -93,7 +100,7 @@ const BotController: React.FC = () => {
   }, [projectCollection, errors]);
 
   useEffect(() => {
-    const botsStarting =
+    const botsProcessing =
       startAllBotsOperationQueued ||
       projectCollection.some(({ status }) => {
         return (
@@ -105,45 +112,62 @@ const BotController: React.FC = () => {
           status == BotStatus.stopping
         );
       });
-    setBotsStarting(botsStarting);
+    setBotsProcessing(botsProcessing);
 
     const botOperationsCompleted = projectCollection.some(
       ({ status }) => status === BotStatus.connected || status === BotStatus.failed
     );
     setBotsStartOperationCompleted(botOperationsCompleted);
 
-    if (botsStarting) {
+    if (botsProcessing) {
       setStatusIconClass(undefined);
-      setStartPanelButtonText(
-        formatMessage(
-          `{
-          total, plural,
-            =1 {Starting bot..}
-          other {Starting bots.. ({running}/{total} running)}
-        }`,
-          { running: runningBots.projectIds.length, total: runningBots.totalBots }
-        )
-      );
+      const botsStopping = projectCollection.some(({ status }) => status == BotStatus.stopping);
+      if (botsStopping) {
+        setStartPanelButtonText(
+          formatMessage(
+            `{
+            total, plural,
+              =1 {Stopping bot..}
+            other {Stopping bots.. ({running}/{total} running)}
+          }`,
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+      } else {
+        setStartPanelButtonText(
+          formatMessage(
+            `{
+            total, plural,
+              =1 {Starting bot..}
+            other {Starting bots.. ({running}/{total} running)}
+          }`,
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+      }
       return;
     }
 
     if (botOperationsCompleted) {
       if (statusIconClass !== 'Refresh') {
-        hideController(false);
+        onHideController(false);
       }
-      setStatusIconClass('Refresh');
 
-      setStartPanelButtonText(
-        formatMessage(
-          `{
+      if (runningBots.projectIds.length) {
+        setStatusIconClass('Refresh');
+
+        setStartPanelButtonText(
+          formatMessage(
+            `{
           total, plural,
             =1 {Restart bot}
           other {Restart all bots ({running}/{total} running)}
         }`,
-          { running: runningBots.projectIds.length, total: runningBots.totalBots }
-        )
-      );
-      return;
+            { running: runningBots.projectIds.length, total: runningBots.totalBots }
+          )
+        );
+        return;
+      }
     }
 
     setStatusIconClass('Play');
@@ -152,7 +176,7 @@ const BotController: React.FC = () => {
         `{
         total, plural,
           =1 {Start bot}
-          other {Start all bots}
+          other {Start all}
       }`,
         { total: runningBots.totalBots }
       )
@@ -160,9 +184,9 @@ const BotController: React.FC = () => {
   }, [runningBots, startAllBotsOperationQueued]);
 
   useClickOutsideOutsideTarget(
-    isControllerHidden || isErrorCalloutOpen ? null : [startPanelTarget, botControllerMenuTarget],
+    isControllerHidden ? null : [startPanelTarget, botControllerMenuTarget],
     (event: React.MouseEvent<HTMLElement>) => {
-      hideController(true);
+      onHideController(true);
       event.stopPropagation();
     }
   );
@@ -182,18 +206,19 @@ const BotController: React.FC = () => {
   };
 
   const onSplitButtonClick = () => {
-    hideController(!isControllerHidden);
+    onHideController(!isControllerHidden);
   };
 
   const items = useMemo<IContextualMenuItem[]>(() => {
-    return projectCollection.map(({ name: displayName, projectId }) => ({
-      key: projectId,
-      displayName,
-      projectId,
-      isRoot: projectId === rootBotId,
-      setGlobalErrorCalloutVisibility,
-      isRootBot: projectId === rootBotId,
-    }));
+    return projectCollection.map(({ name: displayName, projectId }) => {
+      const isRootBot = projectId === rootBotId;
+      return {
+        key: projectId,
+        displayName,
+        projectId,
+        isRootBot,
+      };
+    });
   }, [projectCollection, rootBotId]);
 
   return (
@@ -202,66 +227,74 @@ const BotController: React.FC = () => {
         return <BotRuntimeStatus key={projectId} projectId={projectId} />;
       })}
       <div ref={botControllerMenuTarget} css={[startPanelsContainer]}>
-        <DefaultButton
-          primary
-          aria-roledescription={formatMessage('Bot Controller')}
-          ariaDescription={startPanelButtonText}
-          disabled={disableStartBots || areBotsStarting}
-          iconProps={{
-            iconName: statusIconClass,
-            styles: {
-              root: {
-                color: colors.text,
-              },
-            },
-          }}
-          menuAs={() => null}
-          styles={{
-            root: {
-              backgroundColor: colors.botControllerBg,
-              color: colors.text,
-              display: 'flex',
-              alignItems: 'center',
-              minWidth: '229px',
-              height: '36px',
-              flexDirection: 'row',
-              padding: '0 7px',
-              border: `1px solid ${colors.botControllerBg}`,
-              width: '100%',
-            },
-            rootHovered: {
-              background: transparentBackground,
-              color: colors.text,
-            },
-            rootDisabled: {
-              opacity: 0.6,
-              backgroundColor: colors.botControllerBg,
-              color: colors.text,
-              border: 'none',
-              font: '62px',
-            },
-          }}
-          title={startPanelButtonText}
-          onClick={handleClick}
-        >
-          {areBotsStarting && (
-            <Spinner
-              size={SpinnerSize.small}
-              styles={{
-                root: {
-                  marginRight: '5px',
-                },
-              }}
-            />
+        <DisableFeatureToolTip
+          content={formatMessage(
+            'Power Virtual Agents bots cannot be run at the moment. Publish the bot to Power Virtual Agents and test it there.'
           )}
-          <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
-        </DefaultButton>
+          isPVABot={isPVABot}
+        >
+          <DefaultButton
+            primary
+            aria-roledescription={formatMessage('Bot Controller')}
+            ariaDescription={startPanelButtonText}
+            data-testid={'startBotButton'}
+            disabled={disableStartBots || areBotsProcessing}
+            iconProps={{
+              iconName: statusIconClass,
+              styles: {
+                root: {
+                  color: `${NeutralColors.white}`,
+                },
+              },
+            }}
+            id={'startBotPanelElement'}
+            menuAs={() => null}
+            styles={{
+              root: {
+                backgroundColor: CommunicationColors.tint10,
+                display: 'flex',
+                alignItems: 'center',
+                minWidth: '229px',
+                height: '36px',
+                flexDirection: 'row',
+                padding: '0 7px',
+                border: `1px solid ${CommunicationColors.tint10}`,
+                width: '100%',
+              },
+              rootHovered: {
+                background: transparentBackground,
+              },
+              rootDisabled: {
+                opacity: 0.6,
+                backgroundColor: CommunicationColors.tint10,
+                color: `${NeutralColors.white}`,
+                border: 'none',
+                font: '62px',
+              },
+            }}
+            title={startPanelButtonText}
+            onClick={handleClick}
+          >
+            {areBotsProcessing && (
+              <Spinner
+                size={SpinnerSize.small}
+                styles={{
+                  root: {
+                    marginRight: '5px',
+                  },
+                }}
+              />
+            )}
+            <span style={{ margin: '0 0 2px 5px' }}>{startPanelButtonText}</span>
+          </DefaultButton>
+        </DisableFeatureToolTip>
         <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
-            ariaDescription={formatMessage('Open start bots panel')}
+            ariaDescription={formatMessage('Start and stop local bot runtimes')}
+            data-testid="StartBotsPanel"
             disabled={disableStartBots}
             iconProps={{
-              iconName: 'ProductList',
+              iconName: 'List',
             }}
             styles={{
               root: {
@@ -278,7 +311,7 @@ const BotController: React.FC = () => {
               },
               rootHovered: { background: transparentBackground, color: colors.textOnColor },
             }}
-            title={formatMessage('Open start bots panel')}
+            title={formatMessage('Start and stop local bot runtimes')}
             onClick={onSplitButtonClick}
           />
         </div>

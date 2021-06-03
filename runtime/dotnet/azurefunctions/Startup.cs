@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -25,7 +22,6 @@ using Microsoft.BotFramework.Composer.Core.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -144,6 +140,7 @@ namespace Microsoft.BotFramework.Composer.Functions
                 ConfigureTranscriptLoggerMiddleware(adapter, settings);
                 ConfigureInspectionMiddleWare(adapter, settings, s);
                 ConfigureShowTypingMiddleWare(adapter, settings);
+                ConfigureSetSpeakMiddleWare(adapter, settings);
 
                 adapter.OnTurnError = async (turnContext, exception) =>
                 {
@@ -194,6 +191,14 @@ namespace Microsoft.BotFramework.Composer.Functions
             if (settings?.Feature?.UseInspectionMiddleware == true)
             {
                 adapter.Use(s.GetService<TelemetryInitializerMiddleware>());
+            }
+        }
+
+        public void ConfigureSetSpeakMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings?.Feature?.UseSetSpeakMiddleware == true && settings.Speech != null)
+            {
+                adapter.Use(new SetSpeakMiddleware(settings.Speech.VoiceFontName, settings.Speech.FallbackToTextForSpeechIfEmpty));
             }
         }
 

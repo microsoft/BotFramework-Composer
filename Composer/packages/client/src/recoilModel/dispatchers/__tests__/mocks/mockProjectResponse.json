@@ -23,9 +23,10 @@
       "path": "/Users/tester/Desktop/EmptyBot-1/dialogs/additem/language-understanding/en-us/additem.en-us.lu",
       "relativePath": "dialogs/additem/language-understanding/en-us/additem.en-us.lu",
       "lastModified": "Thu Jul 09 2020 10:19:09 GMT-0700 (Pacific Daylight Time)"
-    },{
+    },
+    {
       "name": "EmptyBot-1.botproj",
-      "content": "{\"$schema\":\"https:\/\/schemas.botframework.com\/schemas\/botprojects\/v0.1\/botproject-schema.json\",\"name\":\"echobot-0\",\"workspace\":\"\/Users\/tester\/Desktop\/samples\/EchoBot-0\",\"skills\":{}}",
+      "content": "{\"$schema\":\"https://schemas.botframework.com/schemas/botprojects/v0.1/botproject-schema.json\",\"name\":\"echobot-0\",\"workspace\":\"/Users/tester/Desktop/samples/EchoBot-0\",\"skills\":{}}",
       "path": "/Users/tester/Desktop/EmptyBot-1/EmptyBot-1.botproj",
       "relativePath": "dialogs/additem/language-understanding/en-us/additem.en-us.lu",
       "lastModified": "Thu Jul 09 2020 10:19:09 GMT-0700 (Pacific Daylight Time)"
@@ -45,10 +46,7 @@
             "$role": "implements(Microsoft.IActivityTemplate)",
             "title": "Microsoft ActivityTemplate",
             "type": "object",
-            "required": [
-              "template",
-              "$kind"
-            ],
+            "required": ["template", "$kind"],
             "additionalProperties": false,
             "patternProperties": {
               "^\\$": {
@@ -84,18 +82,17 @@
       "type": "object",
       "title": "Component kinds",
       "description": "These are all of the kinds that can be created by the loader.",
-      "oneOf": [ {
-        "$ref": "#/definitions/Microsoft.ActivityTemplate"
-      }],
+      "oneOf": [
+        {
+          "$ref": "#/definitions/Microsoft.ActivityTemplate"
+        }
+      ],
       "definitions": {
         "Microsoft.ActivityTemplate": {
           "$role": "implements(Microsoft.IActivityTemplate)",
           "title": "Microsoft ActivityTemplate",
           "type": "object",
-          "required": [
-            "template",
-            "$kind"
-          ],
+          "required": ["template", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -128,9 +125,7 @@
           "title": "Adaptive Dialog",
           "description": "Flexible, data driven dialog that can adapt to the conversation.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -210,15 +205,7 @@
                       "default": 0
                     },
                     "simpleTypes": {
-                      "enum": [
-                        "array",
-                        "boolean",
-                        "integer",
-                        "null",
-                        "number",
-                        "object",
-                        "string"
-                      ]
+                      "enum": ["array", "boolean", "integer", "null", "number", "object", "string"]
                     },
                     "stringArray": {
                       "type": "array",
@@ -229,10 +216,7 @@
                       }
                     }
                   },
-                  "type": [
-                    "object",
-                    "boolean"
-                  ],
+                  "type": ["object", "boolean"],
                   "properties": {
                     "$schema": {
                       "type": "string",
@@ -450,9 +434,7 @@
           "title": "Age Entity Recognizer",
           "description": "Recognizer which recognizes age.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -476,16 +458,11 @@
           }
         },
         "Microsoft.Ask": {
-          "$role": [
-            "implements(Microsoft.IDialog)",
-            "extends(Microsoft.SendActivity)"
-          ],
+          "$role": ["implements(Microsoft.IDialog)", "extends(Microsoft.SendActivity)"],
           "title": "Send Activity to Ask a question",
           "description": "This is an action which sends an activity to the user when a response is expected",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -499,12 +476,7 @@
               "title": "Expected Properties",
               "description": "Properties expected from the user.",
               "type": "array",
-              "examples": [
-                [
-                  "age",
-                  "name"
-                ]
-              ],
+              "examples": [["age", "name"]],
               "items": {
                 "type": "string",
                 "title": "Name",
@@ -515,9 +487,7 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Default Operation",
               "description": "Sets the default operation that will be used when no operation is recognized in the response to this Ask.",
-              "examples": [
-                "add"
-              ]
+              "examples": ["add"]
             },
             "id": {
               "type": "string",
@@ -528,9 +498,7 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "activity": {
               "$kind": "Microsoft.IActivityTemplate",
@@ -553,16 +521,11 @@
           }
         },
         "Microsoft.AttachmentInput": {
-          "$role": [
-            "implements(Microsoft.IDialog)",
-            "extends(Microsoft.InputDialog)"
-          ],
+          "$role": ["implements(Microsoft.IDialog)", "extends(Microsoft.InputDialog)"],
           "title": "Attachment input dialog",
           "description": "Collect information - Ask for a file or image.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -608,10 +571,7 @@
                   "type": "string",
                   "title": "Standard format",
                   "description": "Standard output formats.",
-                  "enum": [
-                    "all",
-                    "first"
-                  ],
+                  "enum": ["all", "first"],
                   "default": "first"
                 },
                 {
@@ -629,18 +589,13 @@
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
               "default": false,
-              "examples": [
-                false,
-                "=user.isVip"
-              ]
+              "examples": [false, "=user.isVip"]
             },
             "prompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Initial prompt",
               "description": "Message to send to collect information.",
-              "examples": [
-                "What is your birth date?"
-              ],
+              "examples": ["What is your birth date?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "unrecognizedPrompt": {
@@ -656,9 +611,7 @@
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send when the user input does not meet any validation expression.",
-              "examples": [
-                "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
-              ],
+              "examples": ["Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
@@ -675,10 +628,7 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3,
-                "=settings.xyz"
-              ]
+              "examples": [3, "=settings.xyz"]
             },
             "validations": {
               "type": "array",
@@ -688,41 +638,28 @@
                 "$ref": "#/definitions/condition",
                 "title": "Condition",
                 "description": "Expression which needs to met for the input to be considered valid",
-                "examples": [
-                  "int(this.value) > 1 && int(this.value) <= 150",
-                  "count(this.value) < 300"
-                ]
+                "examples": ["int(this.value) > 1 && int(this.value) <= 150", "count(this.value) < 300"]
               }
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true).",
-              "examples": [
-                "$birthday",
-                "dialog.${user.name}",
-                "=f(x)"
-              ]
+              "examples": ["$birthday", "dialog.${user.name}", "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
               "default": false,
-              "examples": [
-                false,
-                "=$val"
-              ]
+              "examples": [false, "=$val"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=user.xyz"
-              ]
+              "examples": [true, "=user.xyz"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -743,9 +680,7 @@
           "title": "Begin a dialog",
           "description": "Begin another dialog.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -763,9 +698,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "dialog": {
               "oneOf": [
@@ -777,9 +710,7 @@
                 },
                 {
                   "$ref": "#/definitions/equalsExpression",
-                  "examples": [
-                    "=settings.dialogId"
-                  ]
+                  "examples": ["=settings.dialogId"]
                 }
               ],
               "title": "Dialog name",
@@ -810,9 +741,7 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store any value returned by the dialog that is called.",
-              "examples": [
-                "dialog.userName"
-              ]
+              "examples": ["dialog.userName"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -833,9 +762,7 @@
           "title": "Begin a skill",
           "description": "Begin a remote skill.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -853,28 +780,20 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "activityProcessed": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Activity Processed",
               "description": "When set to false, the skill will be started using the activity in the current turn context instead of the activity in the Activity property.",
               "default": true,
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "resultProperty": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store any value returned by the dialog that is called.",
-              "examples": [
-                "dialog.userName"
-              ]
+              "examples": ["dialog.userName"]
             },
             "botId": {
               "$ref": "#/definitions/stringExpression",
@@ -887,9 +806,7 @@
               "title": "Skill host",
               "description": "The callback Url for the skill host.",
               "default": "=settings.skillHostEndpoint",
-              "examples": [
-                "https://mybot.contoso.com/api/skills/"
-              ]
+              "examples": ["https://mybot.contoso.com/api/skills/"]
             },
             "connectionName": {
               "$ref": "#/definitions/stringExpression",
@@ -906,9 +823,7 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Skill endpoint ",
               "description": "The /api/messages endpoint for the skill.",
-              "examples": [
-                "https://myskill.contoso.com/api/messages/"
-              ]
+              "examples": ["https://myskill.contoso.com/api/messages/"]
             },
             "activity": {
               "$kind": "Microsoft.IActivityTemplate",
@@ -935,9 +850,7 @@
           "title": "Break Loop",
           "description": "Stop executing this loop",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -955,9 +868,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -978,9 +889,7 @@
           "title": "Cancel all dialogs",
           "description": "Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -998,9 +907,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "activityProcessed": {
               "$ref": "#/definitions/booleanExpression",
@@ -1038,9 +945,7 @@
           "title": "Cancel all dialogs",
           "description": "Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1058,9 +963,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "activityProcessed": {
               "$ref": "#/definitions/booleanExpression",
@@ -1094,16 +997,11 @@
           }
         },
         "Microsoft.ChoiceInput": {
-          "$role": [
-            "implements(Microsoft.IDialog)",
-            "extends(Microsoft.InputDialog)"
-          ],
+          "$role": ["implements(Microsoft.IDialog)", "extends(Microsoft.InputDialog)"],
           "title": "Choice input dialog",
           "description": "Collect information - Pick from a list of choices",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1116,21 +1014,13 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Default value",
               "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
-              "examples": [
-                "hello world",
-                "Hello ${user.name}",
-                "=concat(user.firstname, user.lastName)"
-              ]
+              "examples": ["hello world", "Hello ${user.name}", "=concat(user.firstname, user.lastName)"]
             },
             "value": {
               "$ref": "#/definitions/stringExpression",
               "title": "Value",
               "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
-              "examples": [
-                "hello world",
-                "Hello ${user.name}",
-                "=concat(user.firstname, user.lastName)"
-              ]
+              "examples": ["hello world", "Hello ${user.name}", "=concat(user.firstname, user.lastName)"]
             },
             "outputFormat": {
               "$role": "expression",
@@ -1141,10 +1031,7 @@
                   "type": "string",
                   "title": "Standard",
                   "description": "Standard output format.",
-                  "enum": [
-                    "value",
-                    "index"
-                  ],
+                  "enum": ["value", "index"],
                   "default": "value"
                 },
                 {
@@ -1213,9 +1100,7 @@
               "title": "Default locale",
               "description": "The default locale to use to parse confirmation choices if there is not one passed by the caller.",
               "default": "en-us",
-              "examples": [
-                "en-us"
-              ]
+              "examples": ["en-us"]
             },
             "style": {
               "$role": "expression",
@@ -1226,14 +1111,7 @@
                   "type": "string",
                   "title": "List style",
                   "description": "Standard list style.",
-                  "enum": [
-                    "none",
-                    "auto",
-                    "inline",
-                    "list",
-                    "suggestedAction",
-                    "heroCard"
-                  ],
+                  "enum": ["none", "auto", "inline", "list", "suggestedAction", "heroCard"],
                   "default": "auto"
                 },
                 {
@@ -1331,18 +1209,13 @@
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
               "default": false,
-              "examples": [
-                false,
-                "=user.isVip"
-              ]
+              "examples": [false, "=user.isVip"]
             },
             "prompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Initial prompt",
               "description": "Message to send to collect information.",
-              "examples": [
-                "What is your birth date?"
-              ],
+              "examples": ["What is your birth date?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "unrecognizedPrompt": {
@@ -1358,9 +1231,7 @@
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send when the user input does not meet any validation expression.",
-              "examples": [
-                "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
-              ],
+              "examples": ["Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
@@ -1377,10 +1248,7 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3,
-                "=settings.xyz"
-              ]
+              "examples": [3, "=settings.xyz"]
             },
             "validations": {
               "type": "array",
@@ -1390,41 +1258,28 @@
                 "$ref": "#/definitions/condition",
                 "title": "Condition",
                 "description": "Expression which needs to met for the input to be considered valid",
-                "examples": [
-                  "int(this.value) > 1 && int(this.value) <= 150",
-                  "count(this.value) < 300"
-                ]
+                "examples": ["int(this.value) > 1 && int(this.value) <= 150", "count(this.value) < 300"]
               }
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true).",
-              "examples": [
-                "$birthday",
-                "dialog.${user.name}",
-                "=f(x)"
-              ]
+              "examples": ["$birthday", "dialog.${user.name}", "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
               "default": false,
-              "examples": [
-                false,
-                "=$val"
-              ]
+              "examples": [false, "=$val"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=user.xyz"
-              ]
+              "examples": [true, "=user.xyz"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -1445,12 +1300,7 @@
           "title": "Conditional Trigger Selector",
           "description": "Use a rule selector based on a condition",
           "type": "object",
-          "required": [
-            "condition",
-            "ifTrue",
-            "ifFalse",
-            "$kind"
-          ],
+          "required": ["condition", "ifTrue", "ifFalse", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1487,16 +1337,11 @@
           }
         },
         "Microsoft.ConfirmInput": {
-          "$role": [
-            "implements(Microsoft.IDialog)",
-            "extends(Microsoft.InputDialog)"
-          ],
+          "$role": ["implements(Microsoft.IDialog)", "extends(Microsoft.InputDialog)"],
           "title": "Confirm input dialog",
           "description": "Collect information - Ask for confirmation (yes or no).",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1509,18 +1354,14 @@
               "$ref": "#/definitions/valueExpression",
               "title": "Output format",
               "description": "Optional expression to use to format the output.",
-              "examples": [
-                "=concat('confirmation:', this.value)"
-              ]
+              "examples": ["=concat('confirmation:', this.value)"]
             },
             "defaultLocale": {
               "$ref": "#/definitions/stringExpression",
               "title": "Default locale",
               "description": "The Default locale or an expression which provides the default locale to use as default if not found in the activity.",
               "default": "en-us",
-              "examples": [
-                "en-us"
-              ]
+              "examples": ["en-us"]
             },
             "style": {
               "$role": "expression",
@@ -1531,14 +1372,7 @@
                   "type": "string",
                   "title": "Standard style",
                   "description": "Standard style for rendering choices.",
-                  "enum": [
-                    "none",
-                    "auto",
-                    "inline",
-                    "list",
-                    "suggestedAction",
-                    "heroCard"
-                  ],
+                  "enum": ["none", "auto", "inline", "list", "suggestedAction", "heroCard"],
                   "default": "auto"
                 },
                 {
@@ -1590,19 +1424,13 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Default value",
               "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "value": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Value",
               "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
-              "examples": [
-                true,
-                "=user.isVip"
-              ]
+              "examples": [true, "=user.isVip"]
             },
             "confirmChoices": {
               "$role": "expression",
@@ -1670,18 +1498,13 @@
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
               "default": false,
-              "examples": [
-                false,
-                "=user.isVip"
-              ]
+              "examples": [false, "=user.isVip"]
             },
             "prompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Initial prompt",
               "description": "Message to send to collect information.",
-              "examples": [
-                "What is your birth date?"
-              ],
+              "examples": ["What is your birth date?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "unrecognizedPrompt": {
@@ -1697,9 +1520,7 @@
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send when the user input does not meet any validation expression.",
-              "examples": [
-                "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
-              ],
+              "examples": ["Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
@@ -1716,10 +1537,7 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3,
-                "=settings.xyz"
-              ]
+              "examples": [3, "=settings.xyz"]
             },
             "validations": {
               "type": "array",
@@ -1729,41 +1547,28 @@
                 "$ref": "#/definitions/condition",
                 "title": "Condition",
                 "description": "Expression which needs to met for the input to be considered valid",
-                "examples": [
-                  "int(this.value) > 1 && int(this.value) <= 150",
-                  "count(this.value) < 300"
-                ]
+                "examples": ["int(this.value) > 1 && int(this.value) <= 150", "count(this.value) < 300"]
               }
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true).",
-              "examples": [
-                "$birthday",
-                "dialog.${user.name}",
-                "=f(x)"
-              ]
+              "examples": ["$birthday", "dialog.${user.name}", "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
               "default": false,
-              "examples": [
-                false,
-                "=$val"
-              ]
+              "examples": [false, "=$val"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=user.xyz"
-              ]
+              "examples": [true, "=user.xyz"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -1784,9 +1589,7 @@
           "title": "Confirmation Entity Recognizer",
           "description": "Recognizer which recognizes confirmation choices (yes/no).",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1814,9 +1617,7 @@
           "title": "Continue Loop",
           "description": "Stop executing this template and continue with the next iteration of the loop.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1834,9 +1635,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -1857,10 +1656,7 @@
           "title": "Cross-trained Recognizer Set",
           "description": "Recognizer for selecting between cross trained recognizers.",
           "type": "object",
-          "required": [
-            "recognizers",
-            "$kind"
-          ],
+          "required": ["recognizers", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1902,9 +1698,7 @@
           "title": "Currency Entity Recognizer",
           "description": "Recognizer which recognizes currency.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1932,9 +1726,7 @@
           "title": "DateTime Entity Recognizer",
           "description": "Recognizer which recognizes dates and time fragments.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1958,10 +1750,7 @@
           }
         },
         "Microsoft.DateTimeInput": {
-          "$role": [
-            "implements(Microsoft.IDialog)",
-            "extends(Microsoft.InputDialog)"
-          ],
+          "$role": ["implements(Microsoft.IDialog)", "extends(Microsoft.InputDialog)"],
           "title": "Date/time input dialog",
           "description": "Collect information - Ask for date and/ or time",
           "type": "object",
@@ -1971,9 +1760,7 @@
             "description": "Default locale.",
             "default": "en-us"
           },
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -1987,26 +1774,20 @@
               "format": "date-time",
               "title": "Default Date",
               "description": "'Property' will be set to the value or the result of the expression when max turn count is exceeded.",
-              "examples": [
-                "=user.birthday"
-              ]
+              "examples": ["=user.birthday"]
             },
             "value": {
               "$ref": "#/definitions/stringExpression",
               "format": "date-time",
               "title": "Value",
               "description": "'Property' will be set to the value or the result of the expression unless it evaluates to null.",
-              "examples": [
-                "=user.birthday"
-              ]
+              "examples": ["=user.birthday"]
             },
             "outputFormat": {
               "$ref": "#/definitions/stringExpression",
               "title": "Output format",
               "description": "Expression to use for formatting the output.",
-              "examples": [
-                "=this.value[0].Value"
-              ]
+              "examples": ["=this.value[0].Value"]
             },
             "id": {
               "type": "string",
@@ -2018,18 +1799,13 @@
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
               "default": false,
-              "examples": [
-                false,
-                "=user.isVip"
-              ]
+              "examples": [false, "=user.isVip"]
             },
             "prompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Initial prompt",
               "description": "Message to send to collect information.",
-              "examples": [
-                "What is your birth date?"
-              ],
+              "examples": ["What is your birth date?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "unrecognizedPrompt": {
@@ -2045,9 +1821,7 @@
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send when the user input does not meet any validation expression.",
-              "examples": [
-                "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
-              ],
+              "examples": ["Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
@@ -2064,10 +1838,7 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3,
-                "=settings.xyz"
-              ]
+              "examples": [3, "=settings.xyz"]
             },
             "validations": {
               "type": "array",
@@ -2077,41 +1848,28 @@
                 "$ref": "#/definitions/condition",
                 "title": "Condition",
                 "description": "Expression which needs to met for the input to be considered valid",
-                "examples": [
-                  "int(this.value) > 1 && int(this.value) <= 150",
-                  "count(this.value) < 300"
-                ]
+                "examples": ["int(this.value) > 1 && int(this.value) <= 150", "count(this.value) < 300"]
               }
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true).",
-              "examples": [
-                "$birthday",
-                "dialog.${user.name}",
-                "=f(x)"
-              ]
+              "examples": ["$birthday", "dialog.${user.name}", "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
               "default": false,
-              "examples": [
-                false,
-                "=$val"
-              ]
+              "examples": [false, "=$val"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=user.xyz"
-              ]
+              "examples": [true, "=user.xyz"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -2132,9 +1890,7 @@
           "title": "Debugger break",
           "description": "If debugger is attached, stop the execution at this point in the conversation.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2152,9 +1908,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -2175,10 +1929,7 @@
           "title": "Delete Activity",
           "description": "Delete an activity that was previously sent.",
           "type": "object",
-          "required": [
-            "activityId",
-            "$kind"
-          ],
+          "required": ["activityId", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2196,17 +1947,13 @@
               "$ref": "#/definitions/stringExpression",
               "title": "ActivityId",
               "description": "expression to an activityId to delete",
-              "examples": [
-                "=$lastActivity"
-              ]
+              "examples": ["=$lastActivity"]
             },
             "disabled": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -2227,10 +1974,7 @@
           "title": "Delete Properties",
           "description": "Delete multiple properties and any value it holds.",
           "type": "object",
-          "required": [
-            "properties",
-            "$kind"
-          ],
+          "required": ["properties", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2248,9 +1992,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "properties": {
               "type": "array",
@@ -2281,10 +2023,7 @@
           "title": "Delete Property",
           "description": "Delete a property and any value it holds.",
           "type": "object",
-          "required": [
-            "property",
-            "$kind"
-          ],
+          "required": ["property", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2302,9 +2041,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
@@ -2330,9 +2067,7 @@
           "title": "Dimension Entity Recognizer",
           "description": "Recognizer which recognizes dimension.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2360,11 +2095,7 @@
           "title": "Edit actions.",
           "description": "Edit the current list of actions.",
           "type": "object",
-          "required": [
-            "changeType",
-            "actions",
-            "$kind"
-          ],
+          "required": ["changeType", "actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2382,9 +2113,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "changeType": {
               "title": "Type of change",
@@ -2435,10 +2164,7 @@
           "title": "Edit array",
           "description": "Modify an array in memory",
           "type": "object",
-          "required": [
-            "itemsProperty",
-            "$kind"
-          ],
+          "required": ["itemsProperty", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2460,13 +2186,7 @@
                   "type": "string",
                   "title": "Enum",
                   "description": "Standard change type.",
-                  "enum": [
-                    "push",
-                    "pop",
-                    "take",
-                    "remove",
-                    "clear"
-                  ]
+                  "enum": ["push", "pop", "take", "remove", "clear"]
                 },
                 {
                   "$ref": "#/definitions/equalsExpression"
@@ -2477,9 +2197,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "itemsProperty": {
               "$ref": "#/definitions/stringExpression",
@@ -2495,11 +2213,7 @@
               "$ref": "#/definitions/valueExpression",
               "title": "Value",
               "description": "New value or expression.",
-              "examples": [
-                "milk",
-                "=dialog.favColor",
-                "=dialog.favColor == 'red'"
-              ]
+              "examples": ["milk", "=dialog.favColor", "=dialog.favColor == 'red'"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -2520,9 +2234,7 @@
           "title": "Email Entity Recognizer",
           "description": "Recognizer which recognizes email.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2550,10 +2262,7 @@
           "title": "Emit a custom event",
           "description": "Emit an event. Capture this event with a trigger.",
           "type": "object",
-          "required": [
-            "eventName",
-            "$kind"
-          ],
+          "required": ["eventName", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2571,9 +2280,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "eventName": {
               "$role": "expression",
@@ -2639,9 +2346,7 @@
           "title": "End dialog",
           "description": "End this dialog.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2659,18 +2364,13 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "value": {
               "$ref": "#/definitions/valueExpression",
               "title": "Value",
               "description": "Result value returned to the parent dialog.",
-              "examples": [
-                "=dialog.userName",
-                "='tomato'"
-              ]
+              "examples": ["=dialog.userName", "='tomato'"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -2691,9 +2391,7 @@
           "title": "End turn",
           "description": "End the current turn without ending the dialog.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2711,9 +2409,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -2734,9 +2430,7 @@
           "title": "First Trigger Selector",
           "description": "Selector for first true rule",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2764,11 +2458,7 @@
           "title": "For each item",
           "description": "Execute actions on each item in an a collection.",
           "type": "object",
-          "required": [
-            "itemsProperty",
-            "actions",
-            "$kind"
-          ],
+          "required": ["itemsProperty", "actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2786,17 +2476,13 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "itemsProperty": {
               "$ref": "#/definitions/stringExpression",
               "title": "Items property",
               "description": "Property that holds the array.",
-              "examples": [
-                "user.todoList"
-              ]
+              "examples": ["user.todoList"]
             },
             "index": {
               "$ref": "#/definitions/stringExpression",
@@ -2838,11 +2524,7 @@
           "title": "For each page",
           "description": "Execute actions on each page (collection of items) in an array.",
           "type": "object",
-          "required": [
-            "itemsProperty",
-            "actions",
-            "$kind"
-          ],
+          "required": ["itemsProperty", "actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2860,17 +2542,13 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "itemsProperty": {
               "$ref": "#/definitions/stringExpression",
               "title": "Items property",
               "description": "Property that holds the array.",
-              "examples": [
-                "user.todoList"
-              ]
+              "examples": ["user.todoList"]
             },
             "actions": {
               "type": "array",
@@ -2918,9 +2596,7 @@
           "title": "Get Activity Members",
           "description": "Get the members who are participating in an activity. (BotFrameworkAdapter only)",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2938,25 +2614,19 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property (named location to store information).",
-              "examples": [
-                "user.age"
-              ]
+              "examples": ["user.age"]
             },
             "activityId": {
               "$ref": "#/definitions/stringExpression",
               "title": "ActivityId",
               "description": "Activity ID or expression to an activityId to use to get the members. If none is defined then the current activity id will be used.",
-              "examples": [
-                "$lastActivity"
-              ]
+              "examples": ["$lastActivity"]
             },
             "disabled": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -2977,9 +2647,7 @@
           "title": "Get Converation Members",
           "description": "Get the members who are participating in an conversation. (BotFrameworkAdapter only)",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -2997,17 +2665,13 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property (named location to store information).",
-              "examples": [
-                "user.age"
-              ]
+              "examples": ["user.age"]
             },
             "disabled": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -3028,10 +2692,7 @@
           "title": "Go to Action",
           "description": "Go to an an action by id.",
           "type": "object",
-          "required": [
-            "actionId",
-            "$kind"
-          ],
+          "required": ["actionId", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -3049,9 +2710,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "actionId": {
               "$ref": "#/definitions/stringExpression",
@@ -3077,9 +2736,7 @@
           "title": "Guid Entity Recognizer",
           "description": "Recognizer which recognizes guids.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -3107,9 +2764,7 @@
           "title": "Hashtag Entity Recognizer",
           "description": "Recognizer which recognizes Hashtags.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -3137,11 +2792,7 @@
           "type": "object",
           "title": "HTTP request",
           "description": "Make a HTTP request.",
-          "required": [
-            "url",
-            "method",
-            "$kind"
-          ],
+          "required": ["url", "method", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -3159,33 +2810,20 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "method": {
               "type": "string",
               "title": "HTTP method",
               "description": "HTTP method to use.",
-              "enum": [
-                "GET",
-                "POST",
-                "PATCH",
-                "PUT",
-                "DELETE"
-              ],
-              "examples": [
-                "GET",
-                "POST"
-              ]
+              "enum": ["GET", "POST", "PATCH", "PUT", "DELETE"],
+              "examples": ["GET", "POST"]
             },
             "url": {
               "$ref": "#/definitions/stringExpression",
               "title": "Url",
               "description": "URL to call (supports data binding).",
-              "examples": [
-                "https://contoso.com"
-              ]
+              "examples": ["https://contoso.com"]
             },
             "body": {
               "$ref": "#/definitions/valueExpression",
@@ -3197,18 +2835,13 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Result property",
               "description": "A property to store the result of this action. The result can include any of the 4 properties from the HTTP response: statusCode, reasonPhrase, content, and headers. If the content is JSON it will be a deserialized object. The values can be accessed via .content for example.",
-              "examples": [
-                "dialog.contosodata"
-              ]
+              "examples": ["dialog.contosodata"]
             },
             "contentType": {
               "$ref": "#/definitions/stringExpression",
               "title": "Content type",
               "description": "Content media type for the body.",
-              "examples": [
-                "application/json",
-                "text/plain"
-              ]
+              "examples": ["application/json", "text/plain"]
             },
             "headers": {
               "type": "object",
@@ -3227,12 +2860,7 @@
                   "type": "string",
                   "title": "Standard response",
                   "description": "Standard response type.",
-                  "enum": [
-                    "none",
-                    "json",
-                    "activity",
-                    "activities"
-                  ],
+                  "enum": ["none", "json", "activity", "activities"],
                   "default": "json"
                 },
                 {
@@ -3263,9 +2891,7 @@
               "type": "string"
             },
             {
-              "required": [
-                "type"
-              ],
+              "required": ["type"],
               "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
               "title": "Activity",
               "type": "object",
@@ -3316,12 +2942,7 @@
                   "description": "Identifies the conversation to which the activity belongs.",
                   "title": "conversation",
                   "type": "object",
-                  "required": [
-                    "conversationType",
-                    "id",
-                    "isGroup",
-                    "name"
-                  ],
+                  "required": ["conversationType", "id", "isGroup", "name"],
                   "properties": {
                     "isGroup": {
                       "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
@@ -3350,10 +2971,7 @@
                     },
                     "role": {
                       "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
-                      "enum": [
-                        "bot",
-                        "user"
-                      ],
+                      "enum": ["bot", "user"],
                       "type": "string",
                       "title": "role"
                     }
@@ -3382,10 +3000,7 @@
                     "description": "Channel account information needed to route a message",
                     "title": "ChannelAccount",
                     "type": "object",
-                    "required": [
-                      "id",
-                      "name"
-                    ],
+                    "required": ["id", "name"],
                     "properties": {
                       "id": {
                         "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
@@ -3426,9 +3041,7 @@
                     "description": "Message reaction object",
                     "title": "MessageReaction",
                     "type": "object",
-                    "required": [
-                      "type"
-                    ],
+                    "required": ["type"],
                     "properties": {
                       "type": {
                         "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
@@ -3485,10 +3098,7 @@
                   "description": "The suggested actions for the activity.",
                   "title": "suggestedActions",
                   "type": "object",
-                  "required": [
-                    "actions",
-                    "to"
-                  ],
+                  "required": ["actions", "to"],
                   "properties": {
                     "to": {
                       "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
@@ -3508,11 +3118,7 @@
                         "description": "A clickable action",
                         "title": "CardAction",
                         "type": "object",
-                        "required": [
-                          "title",
-                          "type",
-                          "value"
-                        ],
+                        "required": ["title", "type", "value"],
                         "properties": {
                           "type": {
                             "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
@@ -3560,9 +3166,7 @@
                     "description": "An attachment within an activity",
                     "title": "Attachment",
                     "type": "object",
-                    "required": [
-                      "contentType"
-                    ],
+                    "required": ["contentType"],
                     "properties": {
                       "contentType": {
                         "description": "mimetype/Contenttype for the file",
@@ -3600,9 +3204,7 @@
                     "description": "Metadata object pertaining to an activity",
                     "title": "Entity",
                     "type": "object",
-                    "required": [
-                      "type"
-                    ],
+                    "required": ["type"],
                     "properties": {
                       "type": {
                         "description": "Type of this entity (RFC 3987 IRI)",
@@ -3649,12 +3251,7 @@
                   "description": "A reference to another conversation or activity.",
                   "title": "relatesTo",
                   "type": "object",
-                  "required": [
-                    "bot",
-                    "channelId",
-                    "conversation",
-                    "serviceUrl"
-                  ],
+                  "required": ["bot", "channelId", "conversation", "serviceUrl"],
                   "properties": {
                     "activityId": {
                       "description": "(Optional) ID of the activity to refer to",
@@ -3727,10 +3324,7 @@
                     "description": "Refers to a substring of content within another field",
                     "title": "TextHighlight",
                     "type": "object",
-                    "required": [
-                      "occurrence",
-                      "text"
-                    ],
+                    "required": ["occurrence", "text"],
                     "properties": {
                       "text": {
                         "description": "Defines the snippet of text to highlight",
@@ -3749,10 +3343,7 @@
                   "description": "An optional programmatic action accompanying this request",
                   "title": "semanticAction",
                   "type": "object",
-                  "required": [
-                    "entities",
-                    "id"
-                  ],
+                  "required": ["entities", "id"],
                   "properties": {
                     "id": {
                       "description": "ID of this action",
@@ -4158,11 +3749,7 @@
           "title": "If condition",
           "description": "Two-way branch the conversation flow based on a condition.",
           "type": "object",
-          "required": [
-            "condition",
-            "actions",
-            "$kind"
-          ],
+          "required": ["condition", "actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4180,18 +3767,13 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Expression to evaluate.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "disabled": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "actions": {
               "type": "array",
@@ -4227,9 +3809,7 @@
         },
         "Microsoft.InputDialog": {
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4248,18 +3828,13 @@
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
               "default": false,
-              "examples": [
-                false,
-                "=user.isVip"
-              ]
+              "examples": [false, "=user.isVip"]
             },
             "prompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Initial prompt",
               "description": "Message to send to collect information.",
-              "examples": [
-                "What is your birth date?"
-              ],
+              "examples": ["What is your birth date?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "unrecognizedPrompt": {
@@ -4275,9 +3850,7 @@
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send when the user input does not meet any validation expression.",
-              "examples": [
-                "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
-              ],
+              "examples": ["Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
@@ -4294,10 +3867,7 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3,
-                "=settings.xyz"
-              ]
+              "examples": [3, "=settings.xyz"]
             },
             "validations": {
               "type": "array",
@@ -4307,41 +3877,28 @@
                 "$ref": "#/definitions/condition",
                 "title": "Condition",
                 "description": "Expression which needs to met for the input to be considered valid",
-                "examples": [
-                  "int(this.value) > 1 && int(this.value) <= 150",
-                  "count(this.value) < 300"
-                ]
+                "examples": ["int(this.value) > 1 && int(this.value) <= 150", "count(this.value) < 300"]
               }
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true).",
-              "examples": [
-                "$birthday",
-                "dialog.${user.name}",
-                "=f(x)"
-              ]
+              "examples": ["$birthday", "dialog.${user.name}", "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
               "default": false,
-              "examples": [
-                false,
-                "=$val"
-              ]
+              "examples": [false, "=$val"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=user.xyz"
-              ]
+              "examples": [true, "=user.xyz"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -4362,9 +3919,7 @@
           "title": "Ip Entity Recognizer",
           "description": "Recognizer which recognizes internet IP patterns (like 192.1.1.1).",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4391,9 +3946,7 @@
           "title": "Language Policy",
           "description": "This represents a policy map for locales lookups to use for language",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": {
             "type": "array",
             "title": "Per-locale policy",
@@ -4430,10 +3983,7 @@
           "title": "Log to console",
           "description": "Log a message to the host application. Send a TraceActivity to Bot Framework Emulator (optional).",
           "type": "object",
-          "required": [
-            "text",
-            "$kind"
-          ],
+          "required": ["text", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4451,10 +4001,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "text": {
               "$ref": "#/definitions/stringExpression",
@@ -4490,12 +4037,7 @@
           "title": "LUIS Recognizer",
           "description": "LUIS recognizer.",
           "type": "object",
-          "required": [
-            "applicationId",
-            "endpoint",
-            "endpointKey",
-            "$kind"
-          ],
+          "required": ["applicationId", "endpoint", "endpointKey", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4630,9 +4172,7 @@
           "title": "Mentions Entity Recognizer",
           "description": "Recognizer which recognizes @Mentions",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4660,9 +4200,7 @@
           "title": "Most Specific Trigger Selector",
           "description": "Select most specific true events with optional additional selector",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4694,10 +4232,7 @@
           "title": "Multi-language recognizer",
           "description": "Configure one recognizer per language and the specify the language fallback policy.",
           "type": "object",
-          "required": [
-            "recognizers",
-            "$kind"
-          ],
+          "required": ["recognizers", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4746,9 +4281,7 @@
           "title": "Number Entity Recognizer",
           "description": "Recognizer which recognizes numbers.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4772,16 +4305,11 @@
           }
         },
         "Microsoft.NumberInput": {
-          "$role": [
-            "implements(Microsoft.IDialog)",
-            "extends(Microsoft.InputDialog)"
-          ],
+          "$role": ["implements(Microsoft.IDialog)", "extends(Microsoft.InputDialog)"],
           "title": "Number input dialog",
           "description": "Collect information - Ask for a number.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4794,28 +4322,19 @@
               "$ref": "#/definitions/numberExpression",
               "title": "Default value",
               "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
-              "examples": [
-                13,
-                "=user.age"
-              ]
+              "examples": [13, "=user.age"]
             },
             "value": {
               "$ref": "#/definitions/numberExpression",
               "title": "Value",
               "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
-              "examples": [
-                13,
-                "=user.age"
-              ]
+              "examples": [13, "=user.age"]
             },
             "outputFormat": {
               "$ref": "#/definitions/expression",
               "title": "Output format",
               "description": "Expression to format the number output.",
-              "examples": [
-                "=this.value",
-                "=int(this.text)"
-              ]
+              "examples": ["=this.value", "=int(this.text)"]
             },
             "defaultLocale": {
               "$ref": "#/definitions/stringExpression",
@@ -4833,18 +4352,13 @@
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
               "default": false,
-              "examples": [
-                false,
-                "=user.isVip"
-              ]
+              "examples": [false, "=user.isVip"]
             },
             "prompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Initial prompt",
               "description": "Message to send to collect information.",
-              "examples": [
-                "What is your birth date?"
-              ],
+              "examples": ["What is your birth date?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "unrecognizedPrompt": {
@@ -4860,9 +4374,7 @@
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send when the user input does not meet any validation expression.",
-              "examples": [
-                "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
-              ],
+              "examples": ["Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
@@ -4879,10 +4391,7 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3,
-                "=settings.xyz"
-              ]
+              "examples": [3, "=settings.xyz"]
             },
             "validations": {
               "type": "array",
@@ -4892,41 +4401,28 @@
                 "$ref": "#/definitions/condition",
                 "title": "Condition",
                 "description": "Expression which needs to met for the input to be considered valid",
-                "examples": [
-                  "int(this.value) > 1 && int(this.value) <= 150",
-                  "count(this.value) < 300"
-                ]
+                "examples": ["int(this.value) > 1 && int(this.value) <= 150", "count(this.value) < 300"]
               }
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true).",
-              "examples": [
-                "$birthday",
-                "dialog.${user.name}",
-                "=f(x)"
-              ]
+              "examples": ["$birthday", "dialog.${user.name}", "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
               "default": false,
-              "examples": [
-                false,
-                "=$val"
-              ]
+              "examples": [false, "=$val"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=user.xyz"
-              ]
+              "examples": [true, "=user.xyz"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -4947,9 +4443,7 @@
           "title": "NumberRange Entity Recognizer",
           "description": "Recognizer which recognizes ranges of numbers (Example:2 to 5).",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4977,10 +4471,7 @@
           "title": "OAuthInput Dialog",
           "description": "Collect login information.",
           "type": "object",
-          "required": [
-            "connectionName",
-            "$kind"
-          ],
+          "required": ["connectionName", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -4993,35 +4484,25 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Connection name",
               "description": "The connection name configured in Azure Web App Bot OAuth settings.",
-              "examples": [
-                "msgraphOAuthConnection"
-              ]
+              "examples": ["msgraphOAuthConnection"]
             },
             "disabled": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "text": {
               "$ref": "#/definitions/stringExpression",
               "title": "Text",
               "description": "Text shown in the OAuth signin card.",
-              "examples": [
-                "Please sign in. ",
-                "=concat(x,y,z)"
-              ]
+              "examples": ["Please sign in. ", "=concat(x,y,z)"]
             },
             "title": {
               "$ref": "#/definitions/stringExpression",
               "title": "Title",
               "description": "Title shown in the OAuth signin card.",
-              "examples": [
-                "Login"
-              ]
+              "examples": ["Login"]
             },
             "timeout": {
               "$ref": "#/definitions/integerExpression",
@@ -5033,26 +4514,20 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Token property",
               "description": "Property to store the OAuth token result.",
-              "examples": [
-                "dialog.token"
-              ]
+              "examples": ["dialog.token"]
             },
             "invalidPrompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send if user response is invalid.",
-              "examples": [
-                "Sorry, the login info you provided is not valid."
-              ],
+              "examples": ["Sorry, the login info you provided is not valid."],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Default value response",
               "description": "Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.",
-              "examples": [
-                "Login failed."
-              ],
+              "examples": ["Login failed."],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "maxTurnCount": {
@@ -5060,36 +4535,26 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3
-              ]
+              "examples": [3]
             },
             "defaultValue": {
               "$ref": "#/definitions/expression",
               "title": "Default value",
               "description": "Expression to examine on each turn of the conversation as possible value to the property.",
-              "examples": [
-                "@token"
-              ]
+              "examples": ["@token"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5106,18 +4571,11 @@
           }
         },
         "Microsoft.OnActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On activity",
           "description": "Actions to perform on receipt of a generic activity.",
           "type": "object",
-          "required": [
-            "type",
-            "actions",
-            "$kind"
-          ],
+          "required": ["type", "actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5135,9 +4593,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5157,10 +4613,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5177,17 +4630,11 @@
           }
         },
         "Microsoft.OnAssignEntity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On entity assignment",
           "description": "Actions to take when an entity should be assigned to a property.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5215,9 +4662,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5237,10 +4682,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5257,17 +4699,11 @@
           }
         },
         "Microsoft.OnBeginDialog": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On begin dialog",
           "description": "Actions to perform when this dialog begins.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5280,9 +4716,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5302,10 +4736,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5326,9 +4757,7 @@
           "title": "On cancel dialog",
           "description": "Actions to perform on cancel dialog event.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5352,17 +4781,11 @@
           }
         },
         "Microsoft.OnChooseEntity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On choose entity",
           "description": "Actions to be performed when an entity value needs to be resolved.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5385,9 +4808,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5407,10 +4828,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5427,17 +4845,11 @@
           }
         },
         "Microsoft.OnChooseIntent": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On ambigious intent",
           "description": "Actions to perform on when an intent is ambigious.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5460,9 +4872,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5482,10 +4892,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5502,17 +4909,11 @@
           }
         },
         "Microsoft.OnChooseProperty": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On choose property",
           "description": "Actions to take when there are multiple possible mappings of entities to properties.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5550,9 +4951,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5572,10 +4971,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5596,10 +4992,7 @@
           "title": "On condition",
           "description": "Actions to perform when specified condition is true.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5612,9 +5005,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5634,10 +5025,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5654,17 +5042,11 @@
           }
         },
         "Microsoft.OnConversationUpdateActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On ConversationUpdate activity",
           "description": "Actions to perform on receipt of an activity with type 'ConversationUpdate'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5677,9 +5059,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5699,10 +5079,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5719,18 +5096,11 @@
           }
         },
         "Microsoft.OnDialogEvent": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On dialog event",
           "description": "Actions to perform when a specific dialog event occurs.",
           "type": "object",
-          "required": [
-            "actions",
-            "event",
-            "$kind"
-          ],
+          "required": ["actions", "event", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5748,9 +5118,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5770,10 +5138,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5790,17 +5155,11 @@
           }
         },
         "Microsoft.OnEndOfActions": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On end of actions",
           "description": "Actions to take when there are no more actions in the current dialog.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5813,9 +5172,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5835,10 +5192,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5855,17 +5209,11 @@
           }
         },
         "Microsoft.OnEndOfConversationActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On EndOfConversation activity",
           "description": "Actions to perform on receipt of an activity with type 'EndOfConversation'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5878,9 +5226,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5900,10 +5246,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5920,17 +5263,11 @@
           }
         },
         "Microsoft.OnError": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On Error",
           "description": "Action to perform when an 'Error' dialog event occurs.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -5943,9 +5280,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -5965,10 +5300,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -5985,17 +5317,11 @@
           }
         },
         "Microsoft.OnEventActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On Event activity",
           "description": "Actions to perform on receipt of an activity with type 'Event'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6008,9 +5334,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6030,10 +5354,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6050,17 +5371,11 @@
           }
         },
         "Microsoft.OnHandoffActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On Handoff activity",
           "description": "Actions to perform on receipt of an activity with type 'HandOff'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6073,9 +5388,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6095,10 +5408,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6115,17 +5425,11 @@
           }
         },
         "Microsoft.OnIntent": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On intent recognition",
           "description": "Actions to perform when specified intent is recognized.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6153,9 +5457,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6175,10 +5477,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6195,17 +5494,11 @@
           }
         },
         "Microsoft.OnInvokeActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On Invoke activity",
           "description": "Actions to perform on receipt of an activity with type 'Invoke'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6218,9 +5511,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6240,10 +5531,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6260,17 +5548,11 @@
           }
         },
         "Microsoft.OnMessageActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On Message activity",
           "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6283,9 +5565,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6305,10 +5585,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6325,17 +5602,11 @@
           }
         },
         "Microsoft.OnMessageDeleteActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On MessageDelete activity",
           "description": "Actions to perform on receipt of an activity with type 'MessageDelete'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6348,9 +5619,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6370,10 +5639,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6390,17 +5656,11 @@
           }
         },
         "Microsoft.OnMessageReactionActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On MessageReaction activity",
           "description": "Actions to perform on receipt of an activity with type 'MessageReaction'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6413,9 +5673,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6435,10 +5693,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6455,17 +5710,11 @@
           }
         },
         "Microsoft.OnMessageUpdateActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On MessageUpdate activity",
           "description": "Actions to perform on receipt of an activity with type 'MessageUpdate'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6478,9 +5727,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6500,10 +5747,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6520,17 +5764,11 @@
           }
         },
         "Microsoft.OnQnAMatch": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On QnAMaker Match",
           "description": "Actions to perform on when an match from QnAMaker is found.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6543,9 +5781,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6565,10 +5801,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6585,17 +5818,11 @@
           }
         },
         "Microsoft.OnRepromptDialog": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On RepromptDialog",
           "description": "Actions to perform when 'RepromptDialog' event occurs.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6608,9 +5835,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6630,10 +5855,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6650,17 +5872,11 @@
           }
         },
         "Microsoft.OnTypingActivity": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On Typing activity",
           "description": "Actions to perform on receipt of an activity with type 'Typing'.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6673,9 +5889,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6695,10 +5909,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6715,17 +5926,11 @@
           }
         },
         "Microsoft.OnUnknownIntent": {
-          "$role": [
-            "implements(Microsoft.ITrigger)",
-            "extends(Microsoft.OnCondition)"
-          ],
+          "$role": ["implements(Microsoft.ITrigger)", "extends(Microsoft.OnCondition)"],
           "title": "On unknown intent",
           "description": "Action to perform when user input is unrecognized and if none of the 'on intent recognition' triggers match recognized intent.",
           "type": "object",
-          "required": [
-            "actions",
-            "$kind"
-          ],
+          "required": ["actions", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6738,9 +5943,7 @@
               "$ref": "#/definitions/condition",
               "title": "Condition",
               "description": "Condition (expression).",
-              "examples": [
-                "user.vip == true"
-              ]
+              "examples": ["user.vip == true"]
             },
             "actions": {
               "type": "array",
@@ -6760,10 +5963,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Run Once",
               "description": "True if rule should run once per unique conditions",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -6784,9 +5984,7 @@
           "title": "Ordinal Entity Recognizer",
           "description": "Recognizer which recognizes ordinals (example: first, second, 3rd).",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6814,9 +6012,7 @@
           "title": "Percentage Entity Recognizer",
           "description": "Recognizer which recognizes percentages.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6844,9 +6040,7 @@
           "title": "Phone Number Entity Recognizer",
           "description": "Recognizer which recognizes phone numbers.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6874,12 +6068,7 @@
           "title": "QnAMaker Dialog",
           "description": "Dialog which uses QnAMAker knowledge base to answer questions.",
           "type": "object",
-          "required": [
-            "knowledgeBaseId",
-            "endpointKey",
-            "hostname",
-            "$kind"
-          ],
+          "required": ["knowledgeBaseId", "endpointKey", "hostname", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -6905,9 +6094,7 @@
               "title": "Hostname",
               "description": "Hostname for your QnA Maker service.",
               "default": "=settings.qna.hostname",
-              "examples": [
-                "https://yourserver.azurewebsites.net/qnamaker"
-              ]
+              "examples": ["https://yourserver.azurewebsites.net/qnamaker"]
             },
             "noAnswer": {
               "$kind": "Microsoft.IActivityTemplate",
@@ -6985,11 +6172,7 @@
                 {
                   "title": "Standard ranker",
                   "description": "Standard ranker types.",
-                  "enum": [
-                    "default",
-                    "questionOnly",
-                    "autoSuggestQuestion"
-                  ],
+                  "enum": ["default", "questionOnly", "autoSuggestQuestion"],
                   "default": "default"
                 },
                 {
@@ -7016,12 +6199,7 @@
           "title": "QnAMaker Recognizer",
           "description": "Recognizer for generating QnAMatch intents from a KB.",
           "type": "object",
-          "required": [
-            "knowledgeBaseId",
-            "endpointKey",
-            "hostname",
-            "$kind"
-          ],
+          "required": ["knowledgeBaseId", "endpointKey", "hostname", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7052,9 +6230,7 @@
               "title": "Hostname",
               "description": "Hostname for your QnA Maker service.",
               "default": "settings.qna.hostname",
-              "examples": [
-                "https://yourserver.azurewebsites.net/qnamaker"
-              ]
+              "examples": ["https://yourserver.azurewebsites.net/qnamaker"]
             },
             "threshold": {
               "$ref": "#/definitions/numberExpression",
@@ -7096,10 +6272,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "IsTest",
               "description": "True, if pointing to Test environment, else false.",
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "rankerType": {
               "title": "Ranker Type",
@@ -7109,11 +6282,7 @@
                   "type": "string",
                   "title": "Ranker type",
                   "description": "Type of Ranker.",
-                  "enum": [
-                    "default",
-                    "questionOnly",
-                    "autoSuggestQuestion"
-                  ],
+                  "enum": ["default", "questionOnly", "autoSuggestQuestion"],
                   "default": "default"
                 },
                 {
@@ -7126,10 +6295,7 @@
               "title": "Include Dialog Name",
               "description": "When set to false, the dialog name will not be passed to QnAMaker. (default) is true",
               "default": true,
-              "examples": [
-                true,
-                "=f(x)"
-              ]
+              "examples": [true, "=f(x)"]
             },
             "metadata": {
               "$ref": "#/definitions/arrayExpression",
@@ -7182,9 +6348,7 @@
           "title": "Random rule selector",
           "description": "Select most specific true rule.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7217,10 +6381,7 @@
           "title": "Recognizer Set",
           "description": "Creates the union of the intents and entities of the recognizers in the set.",
           "type": "object",
-          "required": [
-            "recognizers",
-            "$kind"
-          ],
+          "required": ["recognizers", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7262,11 +6423,7 @@
           "title": "Regex Entity Recognizer",
           "description": "Recognizer which recognizes patterns of input based on regex.",
           "type": "object",
-          "required": [
-            "name",
-            "pattern",
-            "$kind"
-          ],
+          "required": ["name", "pattern", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7304,9 +6461,7 @@
           "title": "Regex recognizer",
           "description": "Use regular expressions to recognize intents and entities from user input.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7370,9 +6525,7 @@
           "type": "object",
           "title": "Repeat dialog",
           "description": "Repeat current dialog.",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7390,17 +6543,13 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "AllowLoop",
               "description": "Optional condition which if true will allow loop of the repeated dialog.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "disabled": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "options": {
               "$ref": "#/definitions/objectExpression",
@@ -7437,9 +6586,7 @@
           "type": "object",
           "title": "Replace dialog",
           "description": "Replace current dialog with another dialog.",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7457,9 +6604,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "dialog": {
               "oneOf": [
@@ -7471,9 +6616,7 @@
                 },
                 {
                   "$ref": "#/definitions/equalsExpression",
-                  "examples": [
-                    "=settings.dialogId"
-                  ]
+                  "examples": ["=settings.dialogId"]
                 }
               ],
               "title": "Dialog name",
@@ -7514,9 +6657,7 @@
           "title": "Resource Multi-Language Generator",
           "description": "MultiLanguage Generator which is bound to resource by resource Id.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7560,9 +6701,7 @@
           "title": "Send an activity",
           "description": "Respond with an activity.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7580,9 +6719,7 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                "user.age > 3"
-              ]
+              "examples": ["user.age > 3"]
             },
             "activity": {
               "$kind": "Microsoft.IActivityTemplate",
@@ -7609,10 +6746,7 @@
           "title": "Set property",
           "description": "Set one or more property values.",
           "type": "object",
-          "required": [
-            "assignments",
-            "$kind"
-          ],
+          "required": ["assignments", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7630,10 +6764,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "assignments": {
               "type": "array",
@@ -7648,19 +6779,13 @@
                     "$ref": "#/definitions/stringExpression",
                     "title": "Property",
                     "description": "Property (named location to store information).",
-                    "examples": [
-                      "user.age"
-                    ]
+                    "examples": ["user.age"]
                   },
                   "value": {
                     "$ref": "#/definitions/valueExpression",
                     "title": "Value",
                     "description": "New value or expression.",
-                    "examples": [
-                      "='milk'",
-                      "=dialog.favColor",
-                      "=dialog.favColor == 'red'"
-                    ]
+                    "examples": ["='milk'", "=dialog.favColor", "=dialog.favColor == 'red'"]
                   }
                 }
               }
@@ -7684,11 +6809,7 @@
           "title": "Set property",
           "description": "Set property to a value.",
           "type": "object",
-          "required": [
-            "property",
-            "value",
-            "$kind"
-          ],
+          "required": ["property", "value", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7706,28 +6827,19 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property (named location to store information).",
-              "examples": [
-                "user.age"
-              ]
+              "examples": ["user.age"]
             },
             "value": {
               "$ref": "#/definitions/valueExpression",
               "title": "Value",
               "description": "New value or expression.",
-              "examples": [
-                "='milk'",
-                "=dialog.favColor",
-                "=dialog.favColor == 'red'"
-              ]
+              "examples": ["='milk'", "=dialog.favColor", "=dialog.favColor == 'red'"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -7748,9 +6860,7 @@
           "title": "Sign Out User",
           "description": "Sign a user out that was logged in previously using OAuthInput.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7768,9 +6878,7 @@
               "$ref": "#/definitions/stringExpression",
               "title": "ActivityId",
               "description": "expression to an activityId to get the members. If none is defined then the current activity id will be used.",
-              "examples": [
-                "=$lastActivity"
-              ]
+              "examples": ["=$lastActivity"]
             },
             "connectionName": {
               "$ref": "#/definitions/stringExpression",
@@ -7781,10 +6889,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -7805,10 +6910,7 @@
           "title": "Microsoft Static Activity Template",
           "description": "This allows you to define a static Activity object",
           "type": "object",
-          "required": [
-            "activity",
-            "$kind"
-          ],
+          "required": ["activity", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7821,9 +6923,7 @@
               "$ref": "#/definitions/Microsoft.IActivityTemplate/oneOf/1",
               "title": "Activity",
               "description": "A static Activity to used.",
-              "required": [
-                "type"
-              ]
+              "required": ["type"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -7844,10 +6944,7 @@
           "title": "Switch condition",
           "description": "Execute different actions based on the value of a property.",
           "type": "object",
-          "required": [
-            "condition",
-            "$kind"
-          ],
+          "required": ["condition", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7865,18 +6962,13 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Condition",
               "description": "Property to evaluate.",
-              "examples": [
-                "user.favColor"
-              ]
+              "examples": ["user.favColor"]
             },
             "disabled": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "cases": {
               "type": "array",
@@ -7886,25 +6978,13 @@
                 "type": "object",
                 "title": "Case",
                 "description": "Case and actions.",
-                "required": [
-                  "value",
-                  "actions"
-                ],
+                "required": ["value", "actions"],
                 "properties": {
                   "value": {
-                    "type": [
-                      "number",
-                      "integer",
-                      "boolean",
-                      "string"
-                    ],
+                    "type": ["number", "integer", "boolean", "string"],
                     "title": "Value",
                     "description": "The value to compare the condition with.",
-                    "examples": [
-                      "red",
-                      "true",
-                      "13"
-                    ]
+                    "examples": ["red", "true", "13"]
                   },
                   "actions": {
                     "type": "array",
@@ -7946,9 +7026,7 @@
           "title": "Temperature Recognizer",
           "description": "Recognizer which recognizes temperatures.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -7976,9 +7054,7 @@
           "title": "Template Multi-Language Generator",
           "description": "Template Generator which allows only inline evaluation of templates.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8007,16 +7083,11 @@
           }
         },
         "Microsoft.TextInput": {
-          "$role": [
-            "implements(Microsoft.IDialog)",
-            "extends(Microsoft.InputDialog)"
-          ],
+          "$role": ["implements(Microsoft.IDialog)", "extends(Microsoft.InputDialog)"],
           "type": "object",
           "title": "Text input dialog",
           "description": "Collection information - Ask for a word or sentence.",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8029,30 +7100,19 @@
               "$ref": "#/definitions/stringExpression",
               "title": "Default value",
               "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
-              "examples": [
-                "hello world",
-                "Hello ${user.name}",
-                "=concat(user.firstname, user.lastName)"
-              ]
+              "examples": ["hello world", "Hello ${user.name}", "=concat(user.firstname, user.lastName)"]
             },
             "value": {
               "$ref": "#/definitions/stringExpression",
               "title": "Value",
               "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
-              "examples": [
-                "hello world",
-                "Hello ${user.name}",
-                "=concat(user.firstname, user.lastName)"
-              ]
+              "examples": ["hello world", "Hello ${user.name}", "=concat(user.firstname, user.lastName)"]
             },
             "outputFormat": {
               "$ref": "#/definitions/stringExpression",
               "title": "Output format",
               "description": "Expression to format the output.",
-              "examples": [
-                "=toUpper(this.value)",
-                "${toUpper(this.value)}"
-              ]
+              "examples": ["=toUpper(this.value)", "${toUpper(this.value)}"]
             },
             "id": {
               "type": "string",
@@ -8064,18 +7124,13 @@
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
               "default": false,
-              "examples": [
-                false,
-                "=user.isVip"
-              ]
+              "examples": [false, "=user.isVip"]
             },
             "prompt": {
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Initial prompt",
               "description": "Message to send to collect information.",
-              "examples": [
-                "What is your birth date?"
-              ],
+              "examples": ["What is your birth date?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "unrecognizedPrompt": {
@@ -8091,9 +7146,7 @@
               "$kind": "Microsoft.IActivityTemplate",
               "title": "Invalid prompt",
               "description": "Message to send when the user input does not meet any validation expression.",
-              "examples": [
-                "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
-              ],
+              "examples": ["Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"],
               "$ref": "#/definitions/Microsoft.IActivityTemplate"
             },
             "defaultValueResponse": {
@@ -8110,10 +7163,7 @@
               "title": "Max turn count",
               "description": "Maximum number of re-prompt attempts to collect information.",
               "default": 3,
-              "examples": [
-                3,
-                "=settings.xyz"
-              ]
+              "examples": [3, "=settings.xyz"]
             },
             "validations": {
               "type": "array",
@@ -8123,41 +7173,28 @@
                 "$ref": "#/definitions/condition",
                 "title": "Condition",
                 "description": "Expression which needs to met for the input to be considered valid",
-                "examples": [
-                  "int(this.value) > 1 && int(this.value) <= 150",
-                  "count(this.value) < 300"
-                ]
+                "examples": ["int(this.value) > 1 && int(this.value) <= 150", "count(this.value) < 300"]
               }
             },
             "property": {
               "$ref": "#/definitions/stringExpression",
               "title": "Property",
               "description": "Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true).",
-              "examples": [
-                "$birthday",
-                "dialog.${user.name}",
-                "=f(x)"
-              ]
+              "examples": ["$birthday", "dialog.${user.name}", "=f(x)"]
             },
             "alwaysPrompt": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Always prompt",
               "description": "Collect information even if the specified 'property' is not empty.",
               "default": false,
-              "examples": [
-                false,
-                "=$val"
-              ]
+              "examples": [false, "=$val"]
             },
             "allowInterruptions": {
               "$ref": "#/definitions/booleanExpression",
               "title": "Allow Interruptions",
               "description": "A boolean expression that determines whether the parent should be allowed to interrupt the input.",
               "default": true,
-              "examples": [
-                true,
-                "=user.xyz"
-              ]
+              "examples": [true, "=user.xyz"]
             },
             "$kind": {
               "title": "Kind of dialog object",
@@ -8178,10 +7215,7 @@
           "title": "Microsoft TextTemplate",
           "description": "Use LG Templates to create text",
           "type": "object",
-          "required": [
-            "template",
-            "$kind"
-          ],
+          "required": ["template", "$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8214,9 +7248,7 @@
           "title": "Send a TraceActivity",
           "description": "Send a trace activity to the transcript logger and/ or Bot Framework Emulator.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8234,10 +7266,7 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "name": {
               "$ref": "#/definitions/stringExpression",
@@ -8278,9 +7307,7 @@
           "title": "True Trigger Selector",
           "description": "Selector for all true events",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8308,9 +7335,7 @@
           "title": "Send an activity",
           "description": "Respond with an activity.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8328,18 +7353,13 @@
               "$ref": "#/definitions/booleanExpression",
               "title": "Disabled",
               "description": "Optional condition which if true will disable this action.",
-              "examples": [
-                true,
-                "=user.age > 3"
-              ]
+              "examples": [true, "=user.age > 3"]
             },
             "activityId": {
               "$ref": "#/definitions/stringExpression",
               "title": "Activity Id",
               "description": "An string expression with the activity id to update.",
-              "examples": [
-                "=dialog.lastActivityId"
-              ]
+              "examples": ["=dialog.lastActivityId"]
             },
             "activity": {
               "$kind": "Microsoft.IActivityTemplate",
@@ -8366,9 +7386,7 @@
           "title": "Confirmation Url Recognizer",
           "description": "Recognizer which recognizes urls.",
           "type": "object",
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8416,22 +7434,16 @@
               "title": "Boolean",
               "description": "Boolean constant.",
               "default": false,
-              "examples": [
-                false
-              ]
+              "examples": [false]
             },
             {
               "$ref": "#/definitions/equalsExpression",
-              "examples": [
-                "=user.isVip"
-              ]
+              "examples": ["=user.isVip"]
             }
           ]
         },
         "component": {
-          "required": [
-            "$kind"
-          ],
+          "required": ["$kind"],
           "additionalProperties": false,
           "patternProperties": {
             "^\\$": {
@@ -8466,9 +7478,7 @@
               "title": "Boolean",
               "description": "Boolean value.",
               "default": true,
-              "examples": [
-                false
-              ]
+              "examples": [false]
             }
           ]
         },
@@ -8477,18 +7487,14 @@
           "title": "Expression",
           "description": "Expression starting with =.",
           "pattern": "^=.*\\S.*",
-          "examples": [
-            "=user.name"
-          ]
+          "examples": ["=user.name"]
         },
         "expression": {
           "type": "string",
           "title": "Expression",
           "description": "Expression to evaluate.",
           "pattern": "^.*\\S.*",
-          "examples": [
-            "user.age > 13"
-          ]
+          "examples": ["user.age > 13"]
         },
         "integerExpression": {
           "$role": "expression",
@@ -8500,15 +7506,11 @@
               "title": "Integer",
               "description": "Integer constant.",
               "default": 0,
-              "examples": [
-                15
-              ]
+              "examples": [15]
             },
             {
               "$ref": "#/definitions/equalsExpression",
-              "examples": [
-                "=user.age"
-              ]
+              "examples": ["=user.age"]
             }
           ]
         },
@@ -8522,15 +7524,11 @@
               "title": "Number",
               "description": "Number constant.",
               "default": 0,
-              "examples": [
-                15.5
-              ]
+              "examples": [15.5]
             },
             {
               "$ref": "#/definitions/equalsExpression",
-              "examples": [
-                "=dialog.quantity"
-              ]
+              "examples": ["=dialog.quantity"]
             }
           ]
         },
@@ -8565,15 +7563,11 @@
               "title": "String",
               "description": "Interpolated string",
               "pattern": "^(?!(=)).*",
-              "examples": [
-                "Hello ${user.name}"
-              ]
+              "examples": ["Hello ${user.name}"]
             },
             {
               "$ref": "#/definitions/equalsExpression",
-              "examples": [
-                "=concat('x','y','z')"
-              ]
+              "examples": ["=concat('x','y','z')"]
             }
           ]
         },
@@ -8597,31 +7591,23 @@
               "title": "String",
               "description": "Interpolated string.",
               "pattern": "^(?!(=)).*",
-              "examples": [
-                "Hello ${user.name}"
-              ]
+              "examples": ["Hello ${user.name}"]
             },
             {
               "type": "boolean",
               "title": "Boolean",
               "description": "Boolean constant",
-              "examples": [
-                false
-              ]
+              "examples": [false]
             },
             {
               "type": "number",
               "title": "Number",
               "description": "Number constant.",
-              "examples": [
-                15.5
-              ]
+              "examples": [15.5]
             },
             {
               "$ref": "#/definitions/equalsExpression",
-              "examples": [
-                "=..."
-              ]
+              "examples": ["=..."]
             }
           ]
         }
@@ -8635,7 +7621,8 @@
     "feature": {
       "UseShowTypingMiddleware": false,
       "UseInspectionMiddleware": false,
-      "RemoveRecipientMention": false
+      "RemoveRecipientMention": false,
+      "UseSetSpeakMiddleware": true
     },
     "MicrosoftAppPassword": "",
     "MicrosoftAppId": "",
@@ -8651,6 +7638,10 @@
     "blobStorage": {
       "connectionString": "",
       "container": "transcripts"
+    },
+    "speech": {
+      "voiceFontName": "en-US-AriaNeural",
+      "fallbackToTextForSpeechIfEmpty": "true"
     },
     "defaultLanguage": "en-us",
     "languages": ["en-us"],
@@ -8675,7 +7666,8 @@
       "logActivities": true
     },
     "runtime": {
-      "customRuntime": false,
+      "key": "adaptive-runtime-dotnet-webapp",
+      "customRuntime": true,
       "path": "",
       "command": ""
     },

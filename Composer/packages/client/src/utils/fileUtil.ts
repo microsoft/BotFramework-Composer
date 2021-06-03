@@ -26,6 +26,20 @@ export function getBaseName(filename: string) {
   return filename;
 }
 
+export function getKBName(filename: string) {
+  if (typeof filename === 'string') {
+    return filename.substring(0, filename.indexOf('.')) || filename;
+  }
+  return filename;
+}
+
+export function getKBLocale(filename: string) {
+  if (typeof filename === 'string') {
+    return filename.substring(filename.lastIndexOf('.') + 1) || filename;
+  }
+  return filename;
+}
+
 export function upperCaseName(filename: string) {
   if (typeof filename === 'string') {
     return filename.charAt(0).toUpperCase() + filename.slice(1);

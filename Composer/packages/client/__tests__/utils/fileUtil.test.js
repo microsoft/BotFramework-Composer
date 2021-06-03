@@ -42,6 +42,10 @@ describe('upperCaseName', () => {
 });
 
 describe('loadLocale', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
   const LOCALE = 'en-test';
   it("does not set locale if it can't find one", async () => {
     jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: null }));

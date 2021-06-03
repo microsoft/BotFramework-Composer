@@ -15,7 +15,6 @@ export type ChangeHandler<T = any> = (newValue?: T) => void;
 export interface FieldProps<T = any> {
   className?: string;
   definitions: SchemaDefinitions | undefined;
-  depth: number;
   description?: string;
   disabled?: boolean;
   enumOptions?: string[];
@@ -31,15 +30,16 @@ export interface FieldProps<T = any> {
   readonly?: boolean;
   schema: JSONSchema7;
   required?: boolean;
-  transparentBorder?: boolean;
   uiOptions: UIOptions;
   value?: T;
   focused?: boolean;
   style?: React.CSSProperties;
   cursorPosition?: number;
+  isRoot?: boolean;
+  hasIcon?: boolean;
 
   onChange: ChangeHandler<T>;
-  onFocus?: (id: string, value?: T) => void;
+  onFocus?: (id: string, value?: T, event?: React.FocusEvent<any>) => void;
   onBlur?: (id: string, value?: T) => void;
 
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;

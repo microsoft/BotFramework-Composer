@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
-import path, { join } from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, BotTemplate, FileExtensions } from '@bfc/extension';
-import { mkdirs, readFile } from 'fs-extra';
-import rimraf from 'rimraf';
+import { UserIdentity, FileExtensions, FeedType, RuntimeType } from '@bfc/extension';
+import { mkdirSync, readFile } from 'fs-extra';
+import { BotTemplate, emptyBotNpmTemplateName, FeedName, QnABotTemplateId } from '@bfc/shared';
+import { ServerWorker } from '@bfc/server-workers';
+import isArray from 'lodash/isArray';
 
 import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
@@ -20,9 +20,8 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
-
-const execAsync = promisify(exec);
-const removeDirAndFiles = promisify(rimraf);
+import { templateGeneratorPath } from '../../settings/env';
+import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -92,21 +91,56 @@ export class AssetManager {
     return ref;
   }
 
-  private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
-    // install package
-    if (template.package) {
-      const { stderr: initErr } = await execAsync(`dotnet new -i ${template.package.packageName}`);
-      if (initErr) {
-        throw new Error(initErr);
+  public async copyRemoteProjectTemplateToV2(
+    templateId: string,
+    templateVersion: string,
+    projectName: string,
+    ref: LocationRef,
+    jobId: string,
+    runtimeType: RuntimeType,
+    runtimeLanguage: FeedName,
+    yeomanOptions?: any,
+    user?: UserIdentity
+  ): Promise<LocationRef> {
+    try {
+      // user storage maybe diff from template storage
+      const dstStorage = StorageService.getStorageClient(ref.storageId, user);
+      const dstDir = Path.resolve(ref.path);
+      if (await dstStorage.exists(dstDir)) {
+        log('Failed copying template to %s', dstDir);
+        throw new Error('already have this folder, please give another name');
       }
-      const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
-        cwd: destinationPath,
-      });
-      if (initErr2) {
-        throw new Error(initErr2);
+
+      log('About to create folder', dstDir);
+      mkdirSync(dstDir, { recursive: true });
+
+      const npmPackageName = templateId === QnABotTemplateId ? emptyBotNpmTemplateName : templateId;
+
+      await ServerWorker.execute(
+        'templateInstallation',
+        {
+          npmPackageName,
+          templateVersion,
+          dstDir,
+          projectName,
+          templateGeneratorPath,
+          runtimeType,
+          runtimeLanguage,
+          yeomanOptions,
+        },
+        (status, msg) => {
+          BackgroundProcessManager.updateProcess(jobId, status, msg);
+        }
+      );
+      return ref;
+    } catch (err) {
+      if (err?.message.match(/npm/)) {
+        throw new Error(
+          `Error calling npm to fetch template. Please ensure that node and npm are installed and available on your system. Full error message: ${err?.message}`
+        );
+      } else {
+        throw new Error(`Error hit when instantiating remote template: ${err?.message}`);
       }
-    } else {
-      throw new Error('selected template has no local or external address');
     }
   }
 
@@ -116,34 +150,11 @@ export class AssetManager {
       throw new Error(`no such template with id ${templateId}`);
     }
 
-    let templateSrcPath = template.path;
-    const isHostedTemplate = !templateSrcPath;
-    if (isHostedTemplate) {
-      // create empty temp directory on server for holding externally hosted template src
-      const baseDir = process.env.COMPOSER_TEMP_DIR as string;
-      templateSrcPath = join(baseDir, 'feedBasedTemplates');
-      if (fs.existsSync(templateSrcPath)) {
-        await removeDirAndFiles(templateSrcPath);
-      }
-      await mkdirs(templateSrcPath, (err) => {
-        if (err) {
-          throw new Error('Error creating temp directory for external template storage');
-        }
-      });
-      await this.getRemoteTemplate(template, templateSrcPath);
-    }
+    const templateSrcPath = template.path;
 
     if (templateSrcPath) {
       // copy Composer data files
       await copyDir(templateSrcPath, this.templateStorage, dstDir, dstStorage);
-
-      if (isHostedTemplate) {
-        try {
-          await removeDirAndFiles(templateSrcPath);
-        } catch (err) {
-          throw new Error('Issue deleting temp generated file for external template assets');
-        }
-      }
     }
 
     // if we have a locale override, copy those files over too
@@ -178,7 +189,7 @@ export class AssetManager {
       if (await project.fileStorage.exists(location)) {
         const raw = await project.fileStorage.readFile(location);
         const json = JSON.parse(raw);
-        if (json && json.version) {
+        if (json?.version) {
           return json.version;
         } else {
           return undefined;
@@ -203,7 +214,7 @@ export class AssetManager {
           const raw = await readFile(location, 'utf8');
 
           const json = JSON.parse(raw);
-          if (json && json.version) {
+          if (json?.version) {
             return json.version;
           } else {
             return undefined;
@@ -233,5 +244,92 @@ export class AssetManager {
         return '';
       }
     }
+  }
+
+  private getFeedType(): FeedType {
+    // TODO: parse through data to detect for npm or nuget package schema and return respecive result
+    return 'npm';
+  }
+
+  private getPackageDisplayName(packageName: string): string {
+    if (packageName) {
+      return packageName
+        .replace(/^@microsoft\/generator-microsoft-bot/, '') // clean up our complex package names
+        .replace(/^generator-/, '') // clean up other package names too
+        .split('-')
+        .reduce((a, b) => a.charAt(0).toUpperCase() + a.slice(1) + ' ' + b.charAt(0).toUpperCase() + b.slice(1));
+    } else {
+      return '';
+    }
+  }
+
+  private async getFeedContents(feedUrl: string): Promise<BotTemplate[] | undefined | null> {
+    try {
+      const res = await fetch(feedUrl);
+      const data = await res.json();
+      const feedType = this.getFeedType();
+
+      if (feedType === 'npm') {
+        return data.objects.map((result) => {
+          const { name, version, keywords, description = '' } = result.package;
+          const displayName = this.getPackageDisplayName(name);
+          const templateToReturn = {
+            id: name,
+            name: displayName,
+            description: description,
+            package: {
+              packageName: name,
+              packageSource: 'npm',
+              packageVersion: version,
+            },
+          } as BotTemplate;
+          if (isArray(keywords)) {
+            if (keywords.includes('bf-dotnet-functions') || keywords.includes('bf-dotnet-webapp')) {
+              templateToReturn.dotnetSupport = {
+                functionsSupported: keywords.includes('bf-dotnet-functions'),
+                webAppSupported: keywords.includes('bf-dotnet-webapp'),
+              };
+            }
+            if (keywords.includes('bf-js-functions') || keywords.includes('bf-js-webapp')) {
+              templateToReturn.nodeSupport = {
+                functionsSupported: keywords.includes('bf-js-functions'),
+                webAppSupported: keywords.includes('bf-js-webapp'),
+              };
+            }
+            templateToReturn.isMultiBotTemplate = keywords.includes('msbot-multibot-project');
+          }
+          return templateToReturn;
+        });
+      } else if (feedType === 'nuget') {
+        // TODO: handle nuget processing
+      } else {
+        return [];
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  public async getCustomFeedTemplates(feedUrls: string[]): Promise<BotTemplate[]> {
+    let templates: BotTemplate[] = [];
+    const invalidFeedUrls: string[] = [];
+
+    for (const feed of feedUrls) {
+      const feedTemplates = await this.getFeedContents(feed);
+      if (feedTemplates === null) {
+        invalidFeedUrls.push(feed);
+      } else if (feedTemplates && Array.isArray(feedTemplates) && feedTemplates.length > 0) {
+        templates = templates.concat(feedTemplates);
+      }
+    }
+
+    return templates;
+  }
+
+  public async getRawGithubFileContent(owner: string, repo: string, branch: string, path: string) {
+    const githubUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    const res = await fetch(githubUrl.toString());
+
+    return await res.text();
   }
 }

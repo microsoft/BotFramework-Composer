@@ -9,7 +9,11 @@ const getStatus = async (req, res) => {
     if (jobId) {
       const result = BackgroundProcessManager.getProcessStatus(jobId);
       if (result) {
-        res.status(result.httpStatusCode).json(result);
+        res.status(result.httpStatusCode).json({
+          ...result,
+          statusCode: result.httpStatusCode,
+          message: result.latestMessage,
+        });
       } else {
         res.status(404).json({
           statusCode: '404',

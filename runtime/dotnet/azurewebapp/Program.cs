@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.BotFramework.Composer.Core;
@@ -27,8 +24,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
                 var configuration = builder.Build();
 
-                // Hard code the settings path to 'ComposerDialogs' while deployment
-                var botRoot = configuration.GetValue<string>("bot") ?? "ComposerDialogs";
+                var botRoot = configuration.GetValue<string>("bot");
                 var configFile = Path.GetFullPath(Path.Combine(botRoot, @"settings/appsettings.json"));
 
                 builder.AddJsonFile(configFile, optional: true, reloadOnChange: true);

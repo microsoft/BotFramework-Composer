@@ -42,6 +42,7 @@ const link = (active: boolean, disabled: boolean) => css`
     : `&:hover {
       background-color: ${colors.gray(50)};
     }
+
     &:focus {
       outline: none;
       .ms-Fabric--isFocusVisible &::after {
@@ -98,7 +99,9 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   const active = (pathname.startsWith(to) || match?.test(pathname)) ?? false;
 
-  const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
+  const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), [
+    labelName,
+  ]);
 
   const getIcon = (iconName: string) => {
     let navIcon;

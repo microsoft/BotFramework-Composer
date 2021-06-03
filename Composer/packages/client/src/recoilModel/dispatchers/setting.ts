@@ -3,7 +3,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, RootBotManagedProperties, DialogSetting, PublishTarget, LibraryRef } from '@bfc/shared';
+import {
+  SensitiveProperties,
+  RootBotManagedProperties,
+  DialogSetting,
+  PublishTarget,
+  LibraryRef,
+  isUsingAdaptiveRuntime,
+} from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
@@ -12,10 +19,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
 import { rootBotProjectIdSelector, botProjectSpaceSelector } from '../selectors/project';
+import { skillsStateSelector } from '../selectors';
+import { botNameIdentifierState } from '../atoms';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
-
 export const setRootBotSettingState = async (
   callbackHelpers: CallbackInterface,
   projectId: string,
@@ -151,7 +159,7 @@ export const settingsDispatcher = () => {
   );
 
   const setRuntimeField = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (projectId: string, field: string, newValue: boolean) => {
+    ({ set }: CallbackInterface) => async (projectId: string, field: string, newValue: boolean | string) => {
       set(settingsState(projectId), (currentValue) => ({
         ...currentValue,
         runtime: {
@@ -162,9 +170,87 @@ export const settingsDispatcher = () => {
     }
   );
 
+  const setMicrosoftAppProperties = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (projectId: string, appId: string, password: string) => {
+      set(settingsState(projectId), (currentValue) => ({
+        ...currentValue,
+        MicrosoftAppId: appId,
+        MicrosoftAppPassword: password,
+      }));
+    }
+  );
   const setCustomRuntime = useRecoilCallback(() => async (projectId: string, isOn: boolean) => {
     setRuntimeField(projectId, 'customRuntime', isOn);
   });
+
+  const setSkillAndAllowCaller = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (projectId: string, skillId: string, endpointName: string) => {
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (!rootBotProjectId) {
+        return;
+      }
+      const manifestIdentifier = await snapshot.getPromise(botNameIdentifierState(skillId));
+      const settings = await snapshot.getPromise(settingsState(rootBotProjectId));
+      const skills = await snapshot.getPromise(skillsStateSelector);
+      const manifest = skills[manifestIdentifier]?.manifest;
+      let msAppId, endpointUrl;
+
+      if (manifest?.endpoints) {
+        const matchedEndpoint = manifest.endpoints.find((item) => item.name === endpointName);
+        endpointUrl = matchedEndpoint?.endpointUrl || '';
+        msAppId = matchedEndpoint?.msAppId || '';
+      }
+
+      const isAdaptiveRuntime = isUsingAdaptiveRuntime(settings.runtime);
+      set(settingsState(projectId), (currentValue) => {
+        if (isAdaptiveRuntime) {
+          const callers = settings.runtimeSettings?.skills?.allowedCallers
+            ? [...settings.runtimeSettings?.skills?.allowedCallers]
+            : [];
+          if (!callers?.find((item) => item === msAppId)) {
+            callers.push(msAppId);
+          }
+          return {
+            ...currentValue,
+            skill: {
+              ...settings.skill,
+              [manifestIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
+            },
+            runtimeSettings: {
+              ...settings.runtimeSettings,
+              skills: {
+                allowedCallers: callers,
+              },
+            },
+          };
+        } else {
+          const callers = settings.skillConfiguration?.allowedCallers
+            ? [...settings.skillConfiguration?.allowedCallers]
+            : [];
+          if (!callers?.find((item) => item === msAppId)) {
+            callers.push(msAppId);
+          }
+          return {
+            ...currentValue,
+            skill: {
+              ...settings.skill,
+              [manifestIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
+            },
+            skillConfiguration: {
+              ...settings.skillConfiguration,
+              allowedCallers: callers,
+            },
+          };
+        }
+      });
+    }
+  );
 
   const setQnASettings = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, subscriptionKey: string) => {
@@ -193,8 +279,10 @@ export const settingsDispatcher = () => {
     setRuntimeSettings,
     setPublishTargets,
     setRuntimeField,
+    setMicrosoftAppProperties,
     setImportedLibraries,
     setCustomRuntime,
     setQnASettings,
+    setSkillAndAllowCaller,
   };
 };

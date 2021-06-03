@@ -33,10 +33,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
     onRemove,
     index,
     label,
-    depth,
     onBlur,
-    stackArrayItems,
-    transparentBorder,
     uiOptions,
     value,
     className,
@@ -53,14 +50,14 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
   const contextItems: IContextualMenuItem[] = [
     {
       key: 'moveUp',
-      text: formatMessage('Move Up'),
+      text: formatMessage('Move up'),
       iconProps: { iconName: 'CaretSolidUp' },
       disabled: !canMoveUp,
       onClick: fabricMenuItemClickHandler(() => onReorder(index - 1)),
     },
     {
       key: 'moveDown',
-      text: formatMessage('Move Down'),
+      text: formatMessage('Move down'),
       iconProps: { iconName: 'CaretSolidDown' },
       disabled: !canMoveDown,
       onClick: fabricMenuItemClickHandler(() => onReorder(index + 1)),
@@ -89,19 +86,17 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
       <div css={arrayItem.field}>
         <SchemaField
           {...rest}
-          css={arrayItem.schemaFieldOverride(!!stackArrayItems)}
-          depth={depth + 1}
-          label={!stackArrayItems || label === false ? false : undefined}
+          css={arrayItem.schemaFieldOverride}
+          label={label}
           placeholder={undefined}
           rawErrors={typeof rawErrors === 'object' ? rawErrors[index] : rawErrors}
-          transparentBorder={!stackArrayItems ? transparentBorder : undefined}
           uiOptions={{ ...uiOptions, placeholder: undefined }}
           value={value}
           onBlur={handleBlur}
         />
       </div>
       <IconButton
-        ariaLabel={formatMessage('Item Actions')}
+        ariaLabel={formatMessage('Item actions')}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: contextItems }}
         styles={{

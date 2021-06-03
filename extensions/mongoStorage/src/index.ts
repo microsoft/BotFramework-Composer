@@ -54,7 +54,7 @@ class MongoStorage implements IFileStorage {
       MongoStorage.db.on('error', (err) => {
         throw new Error(err);
       });
-      MongoStorage.db.once('open', function () {
+      MongoStorage.db.once('open', () => {
         // we're connected!
         // eslint-disable-next-line no-console
         // console.log('CONNECTED TO MONGO');
@@ -235,7 +235,7 @@ class MongoStorage implements IFileStorage {
     path = cleanPath(path);
 
     return new Promise((resolve, reject) => {
-      // const root = pathLib.dirname(path);
+      // eslint-disable-next-line security/detect-non-literal-regexp
       const pattern = new RegExp(path + '.*');
 
       // remove all files inside this folder, any subfolder, including the folder itself
@@ -260,6 +260,7 @@ class MongoStorage implements IFileStorage {
       const regex = globToRegExp(pattern, { globstar: true });
 
       // make sure the folder contains the root path but can also have other stuff
+      // eslint-disable-next-line security/detect-non-literal-regexp
       const pathPattern = new RegExp(path + '.*');
       MongoStorage.files.find({ path: regex, folder: pathPattern }, (err, files) => {
         if (err) {
@@ -280,7 +281,9 @@ class MongoStorage implements IFileStorage {
     src = cleanPath(src);
     dest = cleanPath(dest);
 
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const content = await this.readFile(src);
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     return this.writeFile(dest, content);
   }
 

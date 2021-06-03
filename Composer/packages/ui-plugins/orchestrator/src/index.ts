@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { PluginConfig, ShellApi, ShellData } from '@bfc/extension-client';
-import { SDKKinds, DialogInfo } from '@bfc/shared';
+import { SDKKinds, DialogInfo, checkForOrchestratorSchema } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 const config: PluginConfig = {
@@ -14,7 +14,7 @@ const config: PluginConfig = {
           if (luProvider === SDKKinds.OrchestratorRecognizer) {
             return false;
           }
-          return !shellAPI.isFeatureEnabled('ORCHESTRATOR');
+          return !checkForOrchestratorSchema(shellData.schemas?.sdk);
         },
         displayName: () => formatMessage('Orchestrator recognizer'),
         isSelected: (_, dialog: DialogInfo) => {

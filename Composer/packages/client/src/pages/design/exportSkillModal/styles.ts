@@ -23,20 +23,23 @@ export const styles = {
       maxWidth: '80% !important',
       width: '960px !important',
     },
+    scrollableContent: {
+      overflow: 'hidden' as 'hidden',
+    },
   },
   container: css`
-    height: 520px;
+    height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
     label: ContentContainer;
   `,
-  content: css`
-    flex: 1;
+  content: {
+    flex: 1,
 
-    label: Content;
-  `,
+    label: 'Content',
+  },
   buttonContainer: css`
     display: flex;
     flex-direction: row-reverse;

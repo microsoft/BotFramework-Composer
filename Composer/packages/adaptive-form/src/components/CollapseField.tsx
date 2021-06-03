@@ -21,7 +21,7 @@ const styles = {
   header: css`
     background-color: #eff6fc;
     display: flex;
-    margin: 4px 0px;
+    margin: 4px -18px;
     align-items: center;
   `,
 };
@@ -48,6 +48,7 @@ export const CollapseField: React.FC<CollapseField> = ({ children, description, 
         }}
       >
         <IconButton
+          ariaLabel={isOpen ? formatMessage('Collapse') : formatMessage('Expand')}
           iconProps={{ iconName: isOpen ? 'ChevronDown' : 'ChevronRight' }}
           styles={{
             root: { color: NeutralColors.gray150 },

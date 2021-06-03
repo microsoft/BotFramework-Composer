@@ -6,298 +6,173 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import httpClient from '../../src/utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';
-import CreateSkillModal, { validateEndpoint, validateManifestUrl } from '../../src/components/CreateSkillModal';
+import CreateSkillModal, {
+  validateManifestUrl,
+  getSkillManifest,
+} from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
 import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
 
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
-let recoilInitState;
 const projectId = '123a.234';
 
-describe('Skill page', () => {
-  beforeEach(() => {
-    recoilInitState = ({ set }) => {
-      set(currentProjectIdState, projectId);
-
-      set(settingsState(projectId), {
-        luis: {
-          name: '',
-          authoringKey: '12345',
-          authoringEndpoint: 'testAuthoringEndpoint',
-          endpointKey: '12345',
-          endpoint: 'testEndpoint',
-          authoringRegion: 'westus',
-          defaultLanguage: 'en-us',
-          environment: 'composer',
-        },
-        qna: {
-          subscriptionKey: '12345',
-          qnaRegion: 'westus',
-          endpointKey: '',
-        },
-      });
-    };
-  });
-});
-
 describe('<SkillForm />', () => {
-  it('should render the skill form, and update skill manifest url', () => {
-    jest.useFakeTimers();
+  const recoilInitState = ({ set }) => {
+    set(currentProjectIdState, projectId);
 
-    (httpClient.get as jest.Mock).mockResolvedValue({ endpoints: [] });
+    set(settingsState(projectId), {
+      luis: {
+        name: '',
+        authoringKey: '12345',
+        authoringEndpoint: 'testAuthoringEndpoint',
+        endpointKey: '12345',
+        endpoint: 'testEndpoint',
+        authoringRegion: 'westus',
+        defaultLanguage: 'en-us',
+        environment: 'composer',
+      },
+      qna: {
+        subscriptionKey: '12345',
+        qnaRegion: 'westus',
+        endpointKey: '',
+      },
+      publishTargets: [
+        {
+          name: 'Test',
+          type: 'azurePublish',
+          configuration:
+            '{"name":"test","environment":"dev","tenantId":"xxx","runtimeIdentifier":"win-x64","resourceGroup":"<name of your resource group>","botName":"<name of your bot channel registration>","subscriptionId":"<id of your subscription>","region":"<region of your resource group>","settings":{"applicationInsights":{"InstrumentationKey":"<Instrumentation Key>"},"cosmosDb":{"cosmosDBEndpoint":"<endpoint url>","authKey":"<auth key>","databaseId":"botstate-db","containerId":"botstate-container"},"blobStorage":{"connectionString":"<connection string>","container":"<container>"}}}',
+          lastPublished: '2021-04-08T08:08:21.581Z',
+        },
+        {
+          name: 'Test1',
+          type: 'azurePublish',
+          configuration:
+            '{"name":"test1","environment":"dev","tenantId":"xxx","runtimeIdentifier":"win-x64","resourceGroup":"<name of your resource group>","botName":"<name of your bot channel registration>","subscriptionId":"<id of your subscription>","region":"<region of your resource group>","settings":{"applicationInsights":{"InstrumentationKey":"<Instrumentation Key>"},"cosmosDb":{"cosmosDBEndpoint":"<endpoint url>","authKey":"<auth key>","databaseId":"botstate-db","containerId":"botstate-container"},"blobStorage":{"connectionString":"<connection string>","container":"<container>"}}}',
+          lastPublished: '2021-04-08T07:23:29.077Z',
+        },
+        {
+          configuration:
+            '{"name":"test2","environment":"dev","tenantId":"xxx","runtimeIdentifier":"win-x64","resourceGroup":"<name of your resource group>","botName":"<name of your bot channel registration>","subscriptionId":"<id of your subscription>","region":"<region of your resource group>","settings":{"applicationInsights":{"InstrumentationKey":"<Instrumentation Key>"},"cosmosDb":{"cosmosDBEndpoint":"<endpoint url>","authKey":"<auth key>","databaseId":"botstate-db","containerId":"botstate-container"},"blobStorage":{"connectionString":"<connection string>","container":"<container>"}}}',
+          name: 'Test2',
+          type: 'azurePublish',
+          lastPublished: '2021-04-09T08:11:59.491Z',
+        },
+      ],
+    });
+  };
 
-    const onDismiss = jest.fn();
-    const onSubmit = jest.fn();
-    const { getByLabelText, getByText } = renderWithRecoil(
-      <CreateSkillModal projectId={projectId} onDismiss={onDismiss} onSubmit={onSubmit} />,
-      recoilInitState
-    );
+  it('should render the skill form, and update skill manifest URL', () => {
+    try {
+      jest.useFakeTimers();
 
-    const urlInput = getByLabelText('Manifest url');
-    act(() => {
-      fireEvent.change(urlInput, {
-        target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
+      (httpClient.get as jest.Mock).mockResolvedValue({ endpoints: [] });
+
+      const onDismiss = jest.fn();
+      const addRemoteSkill = jest.fn();
+      const addTriggerToRoot = jest.fn();
+      const { getByTestId, getByLabelText } = renderWithRecoil(
+        <CreateSkillModal
+          addRemoteSkill={addRemoteSkill}
+          addTriggerToRoot={addTriggerToRoot}
+          projectId={projectId}
+          onDismiss={onDismiss}
+        />,
+        recoilInitState
+      );
+
+      const nextButton = getByTestId('SetAppIdNext');
+      nextButton.click();
+
+      const urlInput = getByLabelText('Skill Manifest URL');
+      act(() => {
+        fireEvent.change(urlInput, {
+          target: {
+            value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
+          },
+        });
       });
-    });
 
-    expect(urlInput.getAttribute('value')).toBe(
-      'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
-    );
-
-    const submitButton = getByText('Confirm');
-    act(() => {
-      fireEvent.click(submitButton);
-    });
-    expect(onSubmit).not.toBeCalled();
+      expect(urlInput.getAttribute('value')).toBe(
+        'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
+      );
+    } finally {
+      jest.runOnlyPendingTimers();
+      jest.useRealTimers();
+    }
   });
 
   let formDataErrors;
-  let validationState;
   let setFormDataErrors;
   let setSkillManifest;
-  let setValidationState;
 
   beforeEach(() => {
     formDataErrors = {};
-    validationState = {};
     setFormDataErrors = jest.fn();
     setSkillManifest = jest.fn();
-    setValidationState = jest.fn();
   });
 
   describe('validateManifestUrl', () => {
-    it('should set the error for an invalid url', async () => {
-      const formData = { manifestUrl: 'invalid url' };
+    it('should set the error for an invalid URL', async () => {
+      const formData = { manifestUrl: 'invalid URL' };
 
       await validateManifestUrl({
         formData,
         formDataErrors,
-        projectId,
         setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
       });
 
       expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({ manifestUrl: 'Url should start with http[s]://' })
+        expect.objectContaining({ manifestUrl: 'URL should start with http:// or https://' })
       );
       expect(setSkillManifest).not.toBeCalled();
-      expect(setValidationState).not.toBeCalled();
     });
   });
 
   describe('validateManifestUrl', () => {
-    it('should set an error for a missing manifest url', () => {
+    it('should set an error for a missing manifest URL', () => {
       const formData = {};
 
       validateManifestUrl({
         formData,
         formDataErrors,
-        projectId,
         setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
       });
 
-      expect(setFormDataErrors).toBeCalledWith(expect.objectContaining({ manifestUrl: 'Please input a manifest Url' }));
+      expect(setFormDataErrors).toBeCalledWith(expect.objectContaining({ manifestUrl: 'Please input a manifest URL' }));
     });
 
-    it('should try and retrieve manifest if manifest url meets other criteria', async () => {
+    it('should try and retrieve manifest', async () => {
       (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: 'skill manifest' });
 
-      const formData = { manifestUrl: 'https://skill' };
-      const formDataErrors = { manifestUrl: 'error' };
+      const manifestUrl = 'https://skill';
 
-      await validateManifestUrl({
-        formData,
-        formDataErrors,
-        projectId,
-        setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
-      });
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validating',
-        })
-      );
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
-          url: formData.manifestUrl,
+          url: manifestUrl,
         },
       });
       expect(setSkillManifest).toBeCalledWith('skill manifest');
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validated',
-        })
-      );
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.not.objectContaining({
-          manifestUrl: 'error',
-        })
-      );
     });
 
     it('should show error when it could not retrieve skill manifest', async () => {
       (httpClient.get as jest.Mock) = jest.fn().mockRejectedValue({ message: 'skill manifest' });
 
-      const formData = { manifestUrl: 'https://skill' };
+      const manifestUrl = 'https://skill';
 
-      await validateManifestUrl({
-        formData,
-        formDataErrors,
-        projectId,
-        setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
-      });
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'Validating',
-        })
-      );
+      await getSkillManifest(projectId, manifestUrl, setSkillManifest, setFormDataErrors);
       expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
-          url: formData.manifestUrl,
+          url: manifestUrl,
         },
       });
       expect(setSkillManifest).not.toBeCalled();
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          manifestUrl: 'NotValidated',
-        })
-      );
       expect(setFormDataErrors).toBeCalledWith(
         expect.objectContaining({
-          manifestUrl: 'Manifest url can not be accessed',
-        })
-      );
-    });
-  });
-
-  describe('validateEndpoint', () => {
-    it('should set an error for missing msAppId', () => {
-      const formData = { endpointUrl: 'https://skill/api/messages' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Please select a valid endpoint',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should set an error for missing endpointUrl', () => {
-      const formData = { msAppId: '00000000-0000-0000-0000-000000000000' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Please select a valid endpoint',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should set an error for malformed msAppId', () => {
-      const formData = { endpointUrl: 'https://skill/api/messages', msAppId: 'malformed app id' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Skill manifest endpoint is configured improperly',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should set an error for malformed endpointUrl', () => {
-      const formData = { endpointUrl: 'malformed endpoint', msAppId: '00000000-0000-0000-0000-000000000000' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Skill manifest endpoint is configured improperly',
-        })
-      );
-      expect(setValidationState).not.toBeCalled();
-    });
-
-    it('should not set an error', () => {
-      const formData = { endpointUrl: 'https://skill/api/messages', msAppId: '00000000-0000-0000-0000-000000000000' };
-
-      validateEndpoint({
-        formData,
-        formDataErrors,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.not.objectContaining({
-          endpoint: expect.any(String),
-        })
-      );
-      expect(setValidationState).toBeCalledWith(
-        expect.objectContaining({
-          endpoint: 'Validated',
+          manifestUrl: 'Manifest URL can not be accessed',
         })
       );
     });

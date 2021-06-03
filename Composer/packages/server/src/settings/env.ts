@@ -11,7 +11,7 @@ export const absHostRoot = process.env.WEBSITE_HOSTNAME
   : 'http://localhost:3978';
 
 let folder = process.env.COMPOSER_BOTS_FOLDER;
-if (folder && folder.endsWith(':')) {
+if (folder?.endsWith(':')) {
   folder = folder + '/';
 }
 
@@ -44,11 +44,16 @@ export const environment = process.env.NODE_ENV || 'development';
 export const botsFolder = folder;
 export const botEndpoint = process.env.BOT_ENDPOINT || 'http://localhost:3979';
 export const appDataPath = process.env.COMPOSER_APP_DATA || Path.resolve(__dirname, '../../data.json');
+export const templateGeneratorPath = process.env.TEMPLATE_GENERATOR_PATH || resolveFromRoot('.composer/.yo-repository');
 export const runtimeFolder = process.env.COMPOSER_RUNTIME_FOLDER || resolveFromRoot('../runtime');
 export const runtimeFrameworkVersion = process.env.COMPOSER_RUNTIME_VERSION || 'netcoreapp3.1';
 export const extensionManifestPath =
   process.env.COMPOSER_EXTENSION_MANIFEST || resolveFromRoot('.composer/extensions.json');
+export const extensionSettingsPath =
+  process.env.COMPOSER_EXTENSION_SETTINGS || resolveFromRoot('.composer/settings.json');
 export const extensionDataDir = process.env.COMPOSER_EXTENSION_DATA_DIR || resolveFromRoot('.composer/extension-data');
-export const extensionsbuiltinDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || resolveFromRoot('../extensions');
+export const extensionsBuiltinDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || resolveFromRoot('../extensions');
 export const extensionsRemoteDir =
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR || resolveFromRoot('.composer/extensions');
+export const localPublishPath =
+  process.env.LOCAL_PUBLISH_PATH || resolveFromRoot('../extensions/localPublish/hostedBots');

@@ -12,7 +12,7 @@ import { LuIntentName } from '../models/stringTypes';
  */
 export default function buildLuType(luType: LuType): LuIntentName {
   const { hostKind, type } = luType;
-  const kindPrefix = hostKind.replace('Microsoft.', '');
+  const kindPrefix = hostKind.replace('Microsoft.', '').replace('.', '');
   const typeSuffix = type.charAt(0).toUpperCase() + type.slice(1);
   return `${kindPrefix}_${typeSuffix}`;
 }

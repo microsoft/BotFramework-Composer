@@ -19,7 +19,7 @@ const { luParser, sectionOperator } = sectionHandler;
 
 const NEWLINE = '\n';
 
-enum SectionTypes {
+export enum SectionTypes {
   QnASection = 'qnaSection',
   ImportSection = 'importSection',
   LUModelInfo = 'modelInfoSection',
@@ -115,12 +115,15 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
     };
   });
 
-  const imports = Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(({ Path }) => {
-    return {
-      id: getFileName(Path),
-      path: Path,
-    };
-  });
+  const imports = Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(
+    ({ Path, Description }) => {
+      return {
+        id: getFileName(Path),
+        description: Description,
+        path: Path,
+      };
+    }
+  );
 
   const optionRegExp = new RegExp(/@source\.(\w+)\s*=\s*(.*)/);
   const options: { id: string; name: string; value: string }[] = [];
@@ -145,6 +148,7 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
     resource: { Sections, Errors, Content },
     imports,
     options,
+    isContentUnparsed: false,
   };
 }
 

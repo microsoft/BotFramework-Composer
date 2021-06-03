@@ -5,7 +5,7 @@
 
 import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import { jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme/lib/fluent';
+import { FluentTheme } from '@uifabric/fluent-theme/lib/fluent';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -37,18 +37,24 @@ const styles = {
     margin-right: 3px;
   `,
   dropdown: {
-    title: { ...sharedFieldIconStyles, height: '100%' },
+    title: { ...sharedFieldIconStyles, height: '100%', borderRadius: '2px 0 0 2px', borderRight: 'none' },
     dropdown: { height: '100%' },
   },
   nestedDropdown: {
-    caretDown: { color: SharedColors.cyanBlue10 },
-    caretDownWrapper: { height: '20px', lineHeight: '20px' },
-    root: { flexBasis: 'auto', paddingBottom: '-4px' },
+    root: {
+      ':hover .ms-Dropdown-title, :active .ms-Dropdown-title, :hover .ms-Dropdown-caretDown, :active .ms-Dropdown-caretDown': {
+        color: FluentTheme.palette.themeDarker,
+      },
+      ':focus-within .ms-Dropdown-title, :focus-within .ms-Dropdown-caretDown': {
+        color: FluentTheme.palette.accent,
+      },
+    },
+    caretDown: { fontSize: FluentTheme.fonts.xSmall.fontSize, color: FluentTheme.palette.accent },
+    dropdownOptionText: { fontSize: FluentTheme.fonts.small.fontSize },
     title: {
       border: 'none',
-      color: SharedColors.cyanBlue10,
-      height: '20px',
-      lineHeight: '20px',
+      fontSize: FluentTheme.fonts.small.fontSize,
+      color: FluentTheme.palette.accent,
     },
   },
 };
@@ -100,9 +106,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   };
 
   const renderField = () => {
-    if (!selectedSchema || Array.isArray(selectedSchema.type) || !selectedSchema.type) {
-      return null;
-    }
     // attempt to get a placeholder with the selected schema
     const placeholder = getUiPlaceholder({ ...props, schema: selectedSchema }) || props.placeholder;
     const enumOptions = selectedSchema?.enum as string[];
@@ -121,6 +124,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
       <Field
         key={selectedSchema.type}
         expression={expression}
+        hasIcon={options.length > 1 || !isNested}
         {...props}
         {...customProps}
         css={{ label: 'ExpressionFieldValue' }}
@@ -129,7 +133,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
         label={selectedSchema.type !== 'object' ? false : undefined}
         placeholder={placeholder}
         schema={selectedSchema}
-        transparentBorder={false}
         uiOptions={props.uiOptions}
       />
     );

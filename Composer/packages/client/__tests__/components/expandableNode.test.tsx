@@ -2,32 +2,29 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent } from '@botframework-composer/test-utils';
+import { render, fireEvent, RenderResult } from '@botframework-composer/test-utils';
 
 import { ExpandableNode } from '../../src/components/ProjectTree/ExpandableNode';
 
-function isShown(details: HTMLElement) {
-  if (details == null) return false;
-  return details.attributes.getNamedItem('open') != null;
-}
-
 describe('<ExpandableNode />', () => {
-  let component;
+  let component: RenderResult | null = null;
   beforeEach(() => {
-    component = render(<ExpandableNode summary={'Summary'}>{'details'}</ExpandableNode>);
+    component = render(<ExpandableNode summary={'Summary'}>{'details'}</ExpandableNode>) as RenderResult;
   });
 
   it('closes and opens on click', async () => {
+    if (component == null) fail();
+
     const triangle = await component.findByTestId('summaryTag');
-    let details = await component.findAllByText('details');
-    expect(isShown(details[0])).toEqual(true);
+    let details = await component.findByTestId('dialog');
+    expect(details.childNodes.length).toBe(2); // 1 for the summary itself, 1 for the details
 
     fireEvent.click(triangle);
-    details = await component.findAllByText('details');
-    expect(isShown(details[0])).toEqual(false);
+    details = await component.findByTestId('dialog');
+    expect(details.childNodes.length).toBe(1); // when the node is closed, the details don't render at all
 
     fireEvent.click(triangle);
-    details = await component.findAllByText('details');
-    expect(isShown(details[0])).toEqual(true);
+    details = await component.findByTestId('dialog');
+    expect(details.childNodes.length).toBe(2);
   });
 });

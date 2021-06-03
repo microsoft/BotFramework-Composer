@@ -15,6 +15,11 @@ const memoryResolver = () => {
   return ['this.value', 'this.turnCount'];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const luisMemoryResolver = (projectId: string) => {
+  return ['@ ml name', '@ regex zipcode'];
+};
+
 function createSocketHandler(webSocket: any): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
     send: (content) =>
@@ -47,7 +52,7 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  return new LGServer(connection, (projectId?: string) => [], memoryResolver);
+  return new LGServer(connection, (projectId?: string) => [], memoryResolver, luisMemoryResolver);
 }
 
 export function startServer() {

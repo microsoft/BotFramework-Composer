@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -17,10 +17,14 @@ import { isElectron } from './utils';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
+  scrollbar: {
+    alwaysConsumeMouseWheel: false,
+  },
   wordWrap: 'off',
   wordWrapColumn: 120,
-  fontFamily: 'Segoe UI',
-  fontSize: 14,
+  fontFamily: 'Courier',
+  fontSize: '18px',
+  fontWeight: 600,
   lineNumbers: 'off',
   quickSuggestions: false,
   minimap: {
@@ -72,7 +76,7 @@ const styles = {
       box-sizing: border-box;
       height: calc(${typeof height === 'string' ? height : `${height}px`} - ${heightAdj}px);
       > * {
-        opacity: ${editorOptions?.readOnly ? 0.4 : 1};
+        opacity: ${editorOptions?.readOnly && editorOptions?.fadedWhenReadOnly ? 0.4 : 1};
       }
       label: BaseEditor;
     `;
@@ -96,6 +100,10 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
       enabled: overrides.minimap,
       maxColumn: overrides.minimap ? 120 : 0,
     },
+    fontFamily: overrides?.fontSettings?.fontFamily,
+    fontSize: overrides?.fontSettings?.fontSize,
+    fontWeight: Number(overrides?.fontSettings?.fontWeight),
+    fadedWhenReadOnly: overrides?.fadedWhenReadOnly !== undefined ? overrides.fadedWhenReadOnly : true,
   };
 };
 
@@ -106,16 +114,18 @@ export interface BaseEditorProps extends EditorProps {
   helpURL?: string;
   hidePlaceholder?: boolean;
   id?: string;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string, isFlush?: boolean) => void;
   onInit?: OnInit;
   placeholder?: string;
   value?: string;
   warningMessage?: string; // warning text show below editor
   errorMessage?: string; // error text show below editor
   editorSettings?: Partial<CodeEditorSettings>;
-  onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
+  onChangeSettings?: (settings: CodeEditorSettings) => void;
   onBlur?: (id: string) => void;
   onFocus?: (id: string) => void;
+  styleOverrides?: SerializedStyles[];
+  popExpandOptions?: { onEditorPopToggle?: (expanded: boolean) => void; popExpandTitle: string };
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = (props) => {
@@ -135,6 +145,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
     editorSettings,
     onFocus,
     onBlur,
+    styleOverrides = [],
     ...rest
   } = props;
   const baseOptions = useMemo(() => assignDefined(defaultOptions, props.options), [props.options]);
@@ -146,6 +157,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.
+  // if editor is readOnly, we can take external value updates.
   const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
@@ -183,14 +195,14 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onBlurListener.dispose();
       };
     }
-  }, [editorRef.current]);
+  }, [editorRef.current, onBlur, onFocus]);
 
   useEffect(() => {
     if (editorRef.current) {
-      const disposable = editorRef.current.onDidChangeModelContent(() => {
+      const disposable = editorRef.current.onDidChangeModelContent((e) => {
         if (editorRef.current) {
           const newValue = editorRef.current.getValue();
-          setTimeout(() => onChange(newValue), 0);
+          setTimeout(() => onChange(newValue, e.isFlush), 0);
         }
       });
 
@@ -230,19 +242,28 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   return (
     <React.Fragment>
       <div
-        css={styles.container({
-          hovered,
-          focused,
-          error: hasError,
-          warning: hasWarning,
-          height,
-          editorOptions,
-        })}
+        css={[
+          styles.container({
+            hovered,
+            focused,
+            error: hasError,
+            warning: hasWarning,
+            height,
+            editorOptions,
+          }),
+          ...styleOverrides,
+        ]}
         data-testid="BaseEditor"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} key={id} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
+        <Editor
+          {...rest}
+          key={id}
+          editorDidMount={onEditorMount}
+          options={editorOptions}
+          value={(editorOptions?.readOnly ? value : initialValue) || ''}
+        />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar

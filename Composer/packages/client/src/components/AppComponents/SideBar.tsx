@@ -9,6 +9,8 @@ import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
@@ -16,6 +18,9 @@ import { colors } from '../../colors';
 import { NavItem } from '../NavItem';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { PageLink } from '../../utils/pageLinks';
+import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
+import { currentProjectIdState } from '../../recoilModel';
+import { usePVACheck } from '../../hooks/usePVACheck';
 
 import { useLinks } from './../../utils/hooks';
 
@@ -65,7 +70,9 @@ const divider = (isExpand: boolean) => css`
 
 // -------------------- SideBar -------------------- //
 
-export const SideBar = () => {
+export const SideBar: React.FC<RouteComponentProps> = () => {
+  const projectId = useRecoilValue(currentProjectIdState);
+  const isPVABot = usePVACheck(projectId);
   const [sideBarExpand, setSideBarExpand] = useState(false);
   const { topLinks, bottomLinks } = useLinks();
 
@@ -92,10 +99,10 @@ export const SideBar = () => {
         <div css={dividerTop} />{' '}
         <FocusZone allowFocusRoot>
           {topLinks.map((link, index) => {
-            return (
+            const navItem = (
               <NavItem
                 key={'NavLeftBar' + index}
-                disabled={link.disabled}
+                disabled={link.disabled || link.isDisabledForPVA}
                 iconName={link.iconName}
                 labelName={link.labelName}
                 match={link.match}
@@ -103,6 +110,11 @@ export const SideBar = () => {
                 to={mapNavItemTo(link.to)}
               />
             );
+
+            if (link.isDisabledForPVA) {
+              return <DisableFeatureToolTip isPVABot={isPVABot}>{navItem}</DisableFeatureToolTip>;
+            }
+            return navItem;
           })}
         </FocusZone>
       </div>

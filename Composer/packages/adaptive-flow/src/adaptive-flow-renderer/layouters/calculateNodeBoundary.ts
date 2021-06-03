@@ -6,6 +6,7 @@ import {
   ElementInterval,
   BranchIntervalX,
   BranchIntervalY,
+  BranchingNodeMarginRight,
   LoopEdgeMarginLeft,
   DiamondSize,
   IconBrickSize,
@@ -113,7 +114,8 @@ function measureBranchingContainerBoundary(
       conditionBoundary.width - conditionBoundary.axisX,
       choiceBoundary.width - choiceBoundary.axisX,
       branchGroupBoundary.width - branchGroupBoundary.axisX
-    );
+    ) +
+    BranchingNodeMarginRight;
 
   const containerBoundary = new Boundary();
   containerBoundary.width = containerWidth;

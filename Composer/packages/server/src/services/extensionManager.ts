@@ -5,8 +5,16 @@ import path from 'path';
 
 import glob from 'globby';
 import { readJson, ensureDir, remove, pathExists } from 'fs-extra';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@botframework-composer/types';
+import {
+  ExtensionBundle,
+  PackageJSON,
+  ExtensionMetadata,
+  ExtensionConfigurationSchema,
+  JSONSchema7,
+  ExtensionSettings,
+} from '@botframework-composer/types';
 import { ExtensionRegistration } from '@bfc/extension';
+import mapKeys from 'lodash/mapKeys';
 
 import settings from '../settings';
 import logger from '../logger';
@@ -15,7 +23,7 @@ import { search, downloadPackage } from '../utility/npm';
 import { isSubdirectory } from '../utility/isSubdirectory';
 import { ExtensionContext } from '../models/extension/extensionContext';
 
-const log = logger.extend('manager');
+const log = logger.extend('extension-manager');
 
 function processBundles(extensionPath: string, bundles: ExtensionBundle[]) {
   return bundles.map((b) => ({
@@ -24,7 +32,7 @@ function processBundles(extensionPath: string, bundles: ExtensionBundle[]) {
   }));
 }
 
-function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): ExtensionMetadata {
+function extractMetadata(extensionPath: string, packageJson: PackageJSON): ExtensionMetadata {
   return {
     id: packageJson.name,
     name: packageJson.composer?.name ?? packageJson.name,
@@ -34,13 +42,17 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
     path: extensionPath,
     bundles: processBundles(extensionPath, packageJson.composer?.bundles ?? []),
     contributes: packageJson.composer?.contributes ?? {},
+    configurationSchema: packageJson.composer?.configuration,
   };
 }
 
 export type ExtensionManifest = Record<string, ExtensionMetadata>;
 
 export class ExtensionManagerImp {
-  public constructor(private _manifest?: JsonStore<ExtensionManifest>) {}
+  public constructor(
+    private _manifest?: JsonStore<ExtensionManifest>,
+    private _settings?: JsonStore<ExtensionSettings>
+  ) {}
 
   /**
    * Returns all extensions currently in the extension manifest
@@ -51,7 +63,7 @@ export class ExtensionManagerImp {
   }
 
   /**
-   * Returns the extension manifest entry for the specified extension ID
+   * Returns the extension manifest entry & settings for the specified extension ID
    * @param id Id of the extension to search for
    */
   public find(id: string) {
@@ -84,7 +96,7 @@ export class ExtensionManagerImp {
       const extensionInstallPath = path.dirname(fullPath);
       const packageJson = (await readJson(fullPath)) as PackageJSON;
       const isEnabled = packageJson.composer?.enabled !== false;
-      const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
+      const metadata = extractMetadata(extensionInstallPath, packageJson);
       if (isEnabled) {
         this.updateManifest(metadata.id, {
           ...metadata,
@@ -120,7 +132,7 @@ export class ExtensionManagerImp {
 
       const packageJson = await this.getPackageJson(name, this.remoteDir);
       if (packageJson) {
-        this.updateManifest(packageJson.name, getExtensionMetadata(destination, packageJson));
+        this.updateManifest(packageJson.name, extractMetadata(destination, packageJson));
       }
 
       return name;
@@ -140,7 +152,11 @@ export class ExtensionManagerImp {
         throw new Error(`Extension not found: ${id}`);
       }
 
-      const registration = new ExtensionRegistration(ExtensionContext, metadata.id, metadata.description, this.dataDir);
+      const getSettings = () => {
+        return this.getSettingsForExtension(metadata.id);
+      };
+
+      const registration = new ExtensionRegistration(ExtensionContext, metadata, getSettings, this.dataDir);
       if (typeof extension.default === 'function') {
         // the module exported just an init function
         await extension.default.call(null, registration);
@@ -194,9 +210,11 @@ export class ExtensionManagerImp {
       log('Removing %s', id);
 
       if (metadata.builtIn) {
+        this.updateManifest(id, { enabled: false });
         return;
       }
 
+      log('Removing %s', id);
       await remove(metadata.path);
       this.updateManifest(id, undefined);
     } else {
@@ -244,8 +262,49 @@ export class ExtensionManagerImp {
       this.manifest.set(id, undefined);
     } else {
       const existingData = this.manifest.get(id);
-      this.manifest.set(id, Object.assign({}, existingData, data));
+      this.manifest.set(id, { ...existingData, ...data } as ExtensionMetadata);
     }
+  }
+
+  public get settingsSchema() {
+    return {
+      type: 'object',
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      properties: this.combinedSettingsSchema,
+      additionalProperties: false,
+    } as JSONSchema7;
+  }
+
+  public getSettings(withDefaults = false) {
+    const userSettings = this.settings.read();
+
+    if (withDefaults) {
+      log('Including defaults in settings.');
+      Object.entries(this.combinedSettingsSchema).forEach(([key, schema]) => {
+        if (!(key in userSettings) && schema.default) {
+          userSettings[key] = schema.default;
+        }
+      });
+    }
+
+    return userSettings;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public updateSettings(newSettings: any) {
+    log('Writing new settings. %O', newSettings);
+    this.settings.write(newSettings);
+  }
+
+  private getSettingsForExtension(id: string) {
+    const allSettings = this.getSettings(true);
+
+    return Object.entries(allSettings).reduce((all, [key, value]) => {
+      if (key.startsWith(id)) {
+        all[key.replace(`${id}.`, '')] = value;
+      }
+      return all;
+    }, {}) as ExtensionSettings;
   }
 
   private async cleanManifest() {
@@ -269,6 +328,14 @@ export class ExtensionManagerImp {
     }
   }
 
+  private get combinedSettingsSchema() {
+    return this.getAll().reduce((all, e) => {
+      const extSchema = mapKeys(e.configurationSchema ?? {}, (_, k) => `${e.id}.${k}`);
+
+      return { ...all, ...extSchema };
+    }, {} as ExtensionConfigurationSchema);
+  }
+
   private get manifest() {
     /* istanbul ignore next */
     if (!this._manifest) {
@@ -278,30 +345,24 @@ export class ExtensionManagerImp {
     return this._manifest;
   }
 
-  private get builtinDir() {
+  private get settings() {
     /* istanbul ignore next */
-    if (!settings.extensions.builtinDir) {
-      throw new Error('COMPOSER_BUILTIN_EXTENSIONS_DIR must be set.');
+    if (!this._settings) {
+      this._settings = new JsonStore(settings.extensions.settingsPath, {});
     }
 
+    return this._settings;
+  }
+
+  private get builtinDir() {
     return settings.extensions.builtinDir;
   }
 
   private get remoteDir() {
-    /* istanbul ignore next */
-    if (!settings.extensions.remoteDir) {
-      throw new Error('COMPOSER_REMOTE_EXTENSIONS_DIR must be set.');
-    }
-
     return settings.extensions.remoteDir;
   }
 
   private get dataDir() {
-    /* istanbul ignore next */
-    if (!settings.extensions.dataDir) {
-      throw new Error('COMPOSER_EXTENSION_DATA_DIR must be set.');
-    }
-
     return settings.extensions.dataDir;
   }
 }

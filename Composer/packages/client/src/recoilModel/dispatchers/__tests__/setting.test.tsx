@@ -5,8 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { settingsState, currentProjectIdState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { settingsState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '..';
 import { settingsDispatcher } from '../setting';
 
@@ -19,6 +18,7 @@ const settings = {
     UseShowTypingMiddleware: false,
     UseInspectionMiddleware: false,
     RemoveRecipientMention: false,
+    UseSetSpeakMiddleware: false,
   },
   MicrosoftAppPassword: '',
   MicrosoftAppId: '',
@@ -34,6 +34,10 @@ const settings = {
   blobStorage: {
     connectionString: '',
     container: 'transcripts',
+  },
+  speech: {
+    voiceFontName: 'en-US-AriaNeural',
+    fallbackToTextForSpeechIfEmpty: true,
   },
   defaultLanguage: 'en-us',
   languages: ['en-us'],

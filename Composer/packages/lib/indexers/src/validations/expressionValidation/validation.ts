@@ -4,16 +4,13 @@
 /* eslint-disable no-bitwise */
 import { Expression, ReturnType } from 'adaptive-expressions';
 import formatMessage from 'format-message';
-import { Diagnostic } from '@bfc/shared';
-
-import { ExpressionProperty } from './types';
 
 const EMPTY = formatMessage(`is missing or empty`);
 const RETURNTYPE_NOT_MATCH = formatMessage('the return type does not match');
-const BUILT_IN_FUNCTION_ERROR = formatMessage("it's not a built-in function or a custom function.");
+export const BUILT_IN_FUNCTION_ERROR = 'not a built-in function or a custom function.';
 
 const expressionErrorMessage = (error: string) => formatMessage('must be an expression: {error}', { error });
-const builtInFunctionErrorMessage = (error: string) =>
+export const builtInFunctionErrorMessage = (error: string) =>
   formatMessage(`{error} Please add unknown functions to setting's customFunctions field.`, {
     error,
   });
@@ -69,7 +66,7 @@ export const checkExpression = (exp: any, required: boolean): number => {
 //The return type should match the schema type
 // the return type use binary number to store
 // if returnType = 24, the expression result is 16+8. so the type is string or array
-const checkReturnType = (returnType: number, types: number[]): string => {
+export const checkReturnType = (returnType: number, types: number[]): string => {
   // if return type contain object do nothing.
   if (returnType & ReturnType.Object) return '';
 
@@ -77,7 +74,7 @@ const checkReturnType = (returnType: number, types: number[]): string => {
 };
 
 //string match or * match
-const checkCustomFunctions = (currentFunction: string, customFunction: string) => {
+export const checkCustomFunctions = (currentFunction: string, customFunction: string) => {
   //.* or * => #
   let customReg = customFunction.replace(/\.\*|\*/g, '#');
   //. => [.]
@@ -90,7 +87,7 @@ const checkCustomFunctions = (currentFunction: string, customFunction: string) =
   return reg.test(currentFunction);
 };
 
-const filterCustomFunctionError = (error: string, CustomFunctions: string[]): string => {
+export const filterCustomFunctionError = (error: string, CustomFunctions: string[]): string => {
   //Now all customFunctions is from lg file content.
   //If the custom functions are defined in runtime, use the field from settings to filter
   if (error.endsWith(BUILT_IN_FUNCTION_ERROR)) {
@@ -103,22 +100,4 @@ const filterCustomFunctionError = (error: string, CustomFunctions: string[]): st
   }
 
   return expressionErrorMessage(error);
-};
-
-export const validate = (expression: ExpressionProperty, customFunctions: string[]): Diagnostic | null => {
-  const { required, path, types, value } = expression;
-  let errorMessage = '';
-
-  try {
-    const returnType = checkExpression(value, required);
-    errorMessage = checkReturnType(returnType, types);
-  } catch (error) {
-    errorMessage = filterCustomFunctionError(error.message, customFunctions);
-  }
-
-  if (!errorMessage) return null;
-
-  const diagnostic = new Diagnostic(errorMessage, '');
-  diagnostic.path = path;
-  return diagnostic;
 };

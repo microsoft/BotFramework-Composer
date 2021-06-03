@@ -10,11 +10,13 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { IBotStatus } from './BotStatusList';
+import TelemetryClient from '../../telemetry/TelemetryClient';
+
+import { BotStatus } from './type';
 
 export const PublishDialog = (props) => {
   const { items } = props;
-  const [showItems, setShowItems] = useState<IBotStatus[]>(items);
+  const [showItems, setShowItems] = useState<BotStatus[]>(items);
   const columns = [
     {
       key: 'name',
@@ -25,7 +27,7 @@ export const PublishDialog = (props) => {
       maxWidth: 90,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return <span>{item.name}</span>;
       },
       isPadded: true,
@@ -39,7 +41,7 @@ export const PublishDialog = (props) => {
       maxWidth: 200,
       isMultiline: true,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         return <span>{item.publishTarget}</span>;
       },
       isPadded: true,
@@ -49,10 +51,10 @@ export const PublishDialog = (props) => {
       name: formatMessage('Comments'),
       className: 'comment',
       fieldName: 'comment',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 200,
+      maxWidth: 290,
       data: 'string',
-      onRender: (item: IBotStatus) => {
+      onRender: (item: BotStatus) => {
         // message for each publish bot
         return (
           <TextField
@@ -86,6 +88,7 @@ export const PublishDialog = (props) => {
     setShowItems(cleanedItems);
   };
   const submit = async () => {
+    TelemetryClient.track('PublishStartBtnClick');
     props.onDismiss();
     await props.onSubmit(showItems);
     cleanComments();
@@ -94,7 +97,11 @@ export const PublishDialog = (props) => {
     <Dialog
       dialogContentProps={publishDialogProps}
       hidden={false}
-      modalProps={{ isBlocking: true, styles: { main: { maxWidth: '1063px !important' } } }}
+      modalProps={{
+        isBlocking: true,
+        isClickableOutsideFocusTrap: true,
+        styles: { main: { maxWidth: '1063px !important' } },
+      }}
       onDismiss={() => {
         cleanComments();
         props.onDismiss();

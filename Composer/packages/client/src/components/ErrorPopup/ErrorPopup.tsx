@@ -18,21 +18,28 @@ type ErrorPopupProps = {
   onDismiss: () => void;
 };
 
-const formatErrorTitle = (error: StateError): string => {
-  const { summary } = error;
-  if (!summary) return '';
+const formatErrorTitle = (summary: string): string => {
+  if (!summary) return formatMessage('Error');
   return summary.length > 20 ? summary.substring(0, 20) + '...' : summary;
 };
 
 const formatErrorDetail = (error: StateError): React.ReactElement => {
-  const helpText = formatMessage('If this problem persists, please file an issue on');
+  const helpText = formatMessage.rich('If this problem persists, please file an issue on <a>GitHub</a>', {
+    a: ({ children }) => (
+      <a
+        key="composer-github-issues-page"
+        href={'https://github.com/microsoft/BotFramework-Composer/issues'}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {children}
+      </a>
+    ),
+  });
   const message = error.message;
   return (
     <section>
       {helpText}
-      <a href={'https://github.com/microsoft/BotFramework-Composer/issues'} rel="noopener noreferrer" target="_blank">
-        GitHub
-      </a>
       {message && <details>{message}</details>}
     </section>
   );
@@ -54,7 +61,7 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     }
   }, [props.error]);
 
-  const title = props.error ? formatErrorTitle(props.error) : '';
+  const title = formatErrorTitle(props?.error?.summary);
   const detail = props.error ? formatErrorDetail(props.error) : '';
 
   return (
@@ -73,7 +80,7 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     >
       <div css={consoleStyle}>{detail}</div>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('Ok')} onClick={closeDialog} />
+        <PrimaryButton text={formatMessage('OK')} onClick={closeDialog} />
       </DialogFooter>
     </Dialog>
   );

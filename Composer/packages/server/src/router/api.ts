@@ -20,15 +20,18 @@ import { ImportController } from '../controllers/import';
 import { StatusController } from '../controllers/status';
 import { SettingsController } from '../controllers/settings';
 import { TelemetryController } from '../controllers/telemetry';
+import OrchestratorController from '../controllers/orchestrator';
 
 import { UtilitiesController } from './../controllers/utilities';
 
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
+router.post('/v2/projects/migrate', ProjectController.migrateProject);
 router.post('/v2/projects', ProjectController.createProjectV2);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
+router.get('/projects/feed', ProjectController.getFeed);
 router.get('/projects/generateProjectId', ProjectController.generateProjectId);
 
 router.get('/projects/:projectId', ProjectController.getProjectById);
@@ -37,14 +40,19 @@ router.delete('/projects/:projectId', ProjectController.removeProject);
 router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
 router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
+router.put('/projects/:projectId/manifest/files/:name', ProjectController.updateManifestFile);
+router.delete('/projects/:projectId/manifest/files/:name', ProjectController.removeManifestFile);
+router.post('/projects/:projectId/manifest/files', ProjectController.createManifestFile);
 router.get('/projects/:projectId/skill/retrieveSkillManifest', ProjectController.getSkill);
 router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 router.get('/projects/alias/:alias', ProjectController.getProjectByAlias);
+router.post('/projects/:projectId/alias/set', ProjectController.setProjectAlias);
 router.post('/projects/:projectId/backup', ProjectController.backupProject);
 router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
+router.get('/projects/:projectId/variables', ProjectController.getVariablesByProjectId);
 
 // form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
@@ -58,6 +66,7 @@ router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBo
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
+router.get('/storages/validate/:path', StorageController.validatePath);
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
@@ -70,6 +79,7 @@ router.get('/provision/:projectId/:type/resources', ProvisionController.getResou
 router.post('/provision/:projectId/:type', ProvisionController.provision);
 
 // publishing
+router.get('/publish/runtimeLogUrl/:projectId', PublishController.setupRuntimeLogForBot);
 router.get('/publish/types', PublishController.getTypes);
 router.get('/publish/:projectId/status/:target/:jobId', PublishController.status);
 router.get('/publish/:projectId/status/:target', PublishController.status);
@@ -87,17 +97,25 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
+router.post('/v2/assets/projectTemplates', AssetController.getProjTemplatesV2);
+router.get('/assets/templateReadme', AssetController.getTemplateReadMe);
 
 router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.get('/utilities/retrieveRemoteFile', UtilitiesController.getRemoteFile);
+router.get('/utilities/checkNode', UtilitiesController.checkNodeVersion);
+
 // extensions
 router.get('/extensions', ExtensionsController.listExtensions);
 router.post('/extensions', ExtensionsController.addExtension);
 router.delete('/extensions', ExtensionsController.removeExtension);
 router.patch('/extensions/toggle', ExtensionsController.toggleExtension);
 router.get('/extensions/search', ExtensionsController.searchExtensions);
+router.get('/extensions/settings/schema.json', ExtensionsController.getSettingsSchema);
+router.get('/extensions/settings', ExtensionsController.getSettings);
+router.patch('/extensions/settings', ExtensionsController.updateSettings);
 router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 // proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
 router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
@@ -105,6 +123,8 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 // authentication from client
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 router.get('/auth/logOut', AuthController.logOut);
+router.get('/auth/getTenants', csrfProtection, AuthController.getTenants);
+router.get('/auth/getARMTokenForTenant', csrfProtection, AuthController.getARMTokenForTenant);
 
 // FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
@@ -113,6 +133,8 @@ router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 // importing
 router.post('/import/:source', ImportController.startImport);
 router.post('/import/:source/authenticate', ImportController.authenticate);
+router.post('/import/:source/generateProfile', ImportController.generateProfile);
+router.post('/import/:source/getAlias', ImportController.getAlias);
 
 // Process status
 router.get('/status/:jobId', StatusController.getStatus);
@@ -123,6 +145,10 @@ router.post('/settings', SettingsController.updateUserSettings);
 
 // Telemetry
 router.post('/telemetry/events', TelemetryController.track);
+
+// Orchestrator Specific API
+router.post('/orchestrator/download', OrchestratorController.downloadLanguageModel);
+router.get('/orchestrator/status', OrchestratorController.status);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

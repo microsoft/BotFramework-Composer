@@ -269,6 +269,16 @@ export function getTokenFromCache(key: string) {
   return token;
 }
 
+export function getTenantIdFromCache() {
+  return storage.get('tenantId');
+}
+export function setTenantId(value: string) {
+  storage.set('tenantId', value);
+}
+export function removeTenantFromCache() {
+  storage.remove('tenantId');
+}
+
 // clean token by clientId with fuzzy matching or key
 export function cleanTokenFromCache(key: string) {
   storage.remove(key);
@@ -317,27 +327,19 @@ export function getAccessTokenUrl(options: { clientId: string; redirectUrl: stri
   return url;
 }
 
-export function isShowAuthDialog(needGraph: boolean): boolean {
+export function userShouldProvideTokens(): boolean {
   if (isElectron()) {
     return false;
-  } else if (!(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId)) {
-    return isTokenExpired(getTokenFromCache('accessToken'))
-      ? true
-      : needGraph && isTokenExpired(getTokenFromCache('graphToken'))
-      ? true
-      : false;
-  } else {
-    return false;
-  }
+  } else return !(authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId);
 }
 
-export function isGetTokenFromUser(): boolean {
-  if (isElectron()) {
+export function isShowAuthDialog(needGraph: boolean): boolean {
+  if (userShouldProvideTokens())
+    return (
+      (needGraph && isTokenExpired(getTokenFromCache('graphToken'))) || isTokenExpired(getTokenFromCache('accessToken'))
+    );
+  else {
     return false;
-  } else if (authConfig.clientId && authConfig.redirectUrl && authConfig.tenantId) {
-    return false;
-  } else {
-    return true;
   }
 }
 

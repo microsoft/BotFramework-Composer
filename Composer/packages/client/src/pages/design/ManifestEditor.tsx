@@ -115,7 +115,7 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
               description={formatMessage('Learn more about manifests')}
               helpLink={helpLink}
               id={'url'}
-              label={formatMessage('Manifest url')}
+              label={formatMessage('Manifest URL')}
             />
             <p>
               <Link aria-label={formData.location} href={formData.location} rel="noopener noreferrer" target="_blank">

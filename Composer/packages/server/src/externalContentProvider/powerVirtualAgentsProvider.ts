@@ -30,7 +30,7 @@ export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
 
 const getAuthCredentials = (baseUrl: string) => {
   const url = new URL(baseUrl);
-  if (url.hostname.includes('int') || url.hostname.includes('ppe')) {
+  if (url.hostname.includes('.int.') || url.hostname.includes('.ppe.')) {
     log('Using INT / PPE auth credentials.');
     return {
       clientId: COMPOSER_1P_APP_ID,
@@ -79,7 +79,7 @@ function prettyPrintError(err: string | Error): string {
   if (typeof err === 'string') {
     return err;
   }
-  if (err && err.message) {
+  if (err?.message) {
     return err.message;
   }
   return '';
@@ -100,6 +100,8 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
         method: 'GET',
         headers: await this.getRequestHeaders(),
       };
+      log('Fetching from PVA: %s', url);
+
       const result = await fetch(url, options);
 
       const eTag = result.headers.get('etag') || '';
@@ -110,7 +112,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       }
 
       // write the zip to disk
-      if (result && result.body) {
+      if (result?.body) {
         ensureDirSync(this.tempBotAssetsDir);
         const zipPath = join(this.tempBotAssetsDir, `bot-assets-${Date.now()}.zip`);
         const writeStream = createWriteStream(zipPath);
@@ -158,7 +160,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
 
   private getContentUrl(): string {
     const { envId, baseUrl, botId } = this.metadata;
-    return `${baseUrl || getBaseUrl()}/environments/${envId}/bots/${botId}/composer/content`;
+    return `${baseUrl || getBaseUrl()}/environments/${envId}/bots/${botId}/composer/content?includeTopics=true`;
   }
 
   private async getRequestHeaders() {

@@ -36,7 +36,7 @@ export const HeaderText = css`
 `;
 
 export const ContentStyle = css`
-  margin-left: 2px;
+  margin-left: 12px;
   display: flex;
   height: 100%;
   border-top: 1px solid ${colors.gray(50)};
@@ -137,7 +137,7 @@ export const targetSelected = css`
 
 export const separator = css`
   ::before {
-    background: gray;
+    background: EDEBE9;
   }
 `;
 
@@ -151,5 +151,5 @@ export const pvaPublishSurface = css`
 export const azurePublishSurface = css`
   overflow-x: hidden;
   overflow-y: auto;
-  height: 400px;
+  height: 500px;
 `;

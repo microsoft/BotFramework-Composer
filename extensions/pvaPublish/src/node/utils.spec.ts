@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { AUTH_CREDENTIALS, BASE_URLS } from './constants';
 import { getAuthCredentials, getBaseUrl } from './utils';
 

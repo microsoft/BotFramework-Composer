@@ -7,8 +7,7 @@ import { act, RenderHookResult, HookResult } from '@botframework-composer/test-u
 import httpClient from '../../../utils/httpUtil';
 import { storageDispatcher } from '../storage';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { runtimeTemplatesState, currentProjectIdState } from '../../atoms';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { runtimeTemplatesState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '../../dispatchers';
 
 // let httpMocks;

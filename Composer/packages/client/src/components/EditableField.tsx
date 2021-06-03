@@ -55,7 +55,7 @@ type IconProps = {
 
 interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
   expanded?: boolean;
-  componentFocusOnmount?: boolean;
+  componentFocusOnMount?: boolean;
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
@@ -84,7 +84,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
   const {
-    componentFocusOnmount = false,
+    componentFocusOnMount = false,
     containerStyles,
     depth,
     required,
@@ -121,7 +121,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
 
   const fieldRef = useRef<ITextField>(null);
   useEffect(() => {
-    if (componentFocusOnmount) {
+    if (componentFocusOnMount) {
       fieldRef.current?.focus();
     }
   }, []);

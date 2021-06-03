@@ -4,8 +4,9 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
 import { atom, atomFamily, RecoilState, selector, selectorFamily } from 'recoil';
-import { FormDialogProperty, FormDialogSchema } from 'src/atoms/types';
-import { spreadSchemaPropertyStore, validateSchemaPropertyStore } from 'src/atoms/utils';
+
+import { FormDialogProperty, FormDialogSchema } from './types';
+import { spreadSchemaPropertyStore, validateSchemaPropertyStore } from './utils';
 
 const schemaDraftUrl = 'http://json-schema.org/draft-07/schema';
 

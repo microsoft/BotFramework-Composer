@@ -71,9 +71,6 @@
           "title": "Şema",
           "description": "Doldurulacak şema.",
           "anyOf": {
-            "0": {
-              "title": "Çekirdek şema meta şema"
-            },
             "1": {
               "title": "JSON şemasına yönelik başvuru",
               "description": "JSON şeması .dialog dosyası başvurusu."
@@ -337,7 +334,7 @@
         },
         "skillHostEndpoint": {
           "title": "Yetenek konağı",
-          "description": "Yetenek konağının geri arama URL'si."
+          "description": "Yetenek konağının geri arama URL\"si."
         },
         "connectionName": {
           "title": "OAuth bağlantı adı (SSO)",
@@ -575,7 +572,7 @@
         },
         "style": {
           "title": "Liste stili",
-          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle'ı ayarlar.",
+          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle\"ı ayarlar.",
           "oneOf": {
             "0": {
               "title": "Liste stili",
@@ -593,7 +590,7 @@
               "properties": {
                 "inlineSeparator": {
                   "title": "Satır içi ayırıcı",
-                  "description": "2'den fazla seçenek olduğunda seçimleri tek tek ayırmak için kullanılan karakter"
+                  "description": "2\"den fazla seçenek olduğunda seçimleri tek tek ayırmak için kullanılan karakter"
                 },
                 "inlineOr": {
                   "title": "Satır içi veya",
@@ -601,7 +598,7 @@
                 },
                 "inlineOrMore": {
                   "title": "Satır içi veya daha fazla",
-                  "description": "2'den fazla seçenek olduğunda son 2 seçenek arasına eklenen ayırıcı."
+                  "description": "2\"den fazla seçenek olduğunda son 2 seçenek arasına eklenen ayırıcı."
                 },
                 "includeNumbers": {
                   "title": "Sayıları ekle",
@@ -741,7 +738,7 @@
         },
         "style": {
           "title": "Liste stili",
-          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle'ı ayarlar.",
+          "description": "Seçimlerin nasıl işleneceğini denetlemek için ListStyle\"ı ayarlar.",
           "oneOf": {
             "0": {
               "title": "Standart stil",
@@ -759,7 +756,7 @@
               "properties": {
                 "inlineSeparator": {
                   "title": "Satır içi ayırıcı",
-                  "description": "2'den fazla seçenek olduğunda seçimleri tek tek ayıracak metin"
+                  "description": "2\"den fazla seçenek olduğunda seçimleri tek tek ayıracak metin"
                 },
                 "inlineOr": {
                   "title": "Satır içi veya",
@@ -767,7 +764,7 @@
                 },
                 "inlineOrMore": {
                   "title": "Satır içi veya daha fazla",
-                  "description": "2'den fazla seçenek olduğunda son 2 seçim arasına eklenecek metin."
+                  "description": "2\"den fazla seçenek olduğunda son 2 seçim arasına eklenecek metin."
                 },
                 "includeNumbers": {
                   "title": "Sayıları ekle",
@@ -907,9 +904,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversation": {
+      "title": "Continue conversation (Queue)",
+      "description": "Continue a specific conversation (via StorageQueue implementation).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "conversationReference": {
+          "title": "Conversation Reference",
+          "description": "A conversation reference. (NOTE: Minimum required values or channelId, conversation)."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.ContinueConversationLater": {
       "title": "Konuşmaya daha sonra devam edin (Kuyruk)",
-      "description": "Konuşmaya daha sonra devam edin (Azure Depolama Kuyruğu aracılığıyla).",
+      "description": "Continue conversation at later time (via StorageQueue implementation).",
       "patternProperties": {
         "^\\$": {
           "title": "Araç özelliği",
@@ -1673,6 +1706,38 @@
         }
       }
     },
+    "Microsoft.GetConversationReference": {
+      "title": "Get ConversationReference",
+      "description": "Gets the ConversationReference from current context and stores it in property so it can be used to with ContinueConversation action.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "property": {
+          "title": "Property",
+          "description": "Property (named location to store information)."
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.GotoAction": {
       "title": "Eyleme git",
       "description": "Kimliğe göre bir eyleme gidin.",
@@ -1707,7 +1772,7 @@
     },
     "Microsoft.GuidEntityRecognizer": {
       "title": "GUID varlığı tanıyıcısı",
-      "description": "GUID'leri tanıyan tanıyıcı.",
+      "description": "GUID\"leri tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -1809,375 +1874,7 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "Dizi şablonu, etkinlik veya ActivityTemplate uygulaması olan ActivityTemplate bileşenleri",
-      "oneOf": {
-        "1": {
-          "description": "Etkinlik, Bot Framework 3.0 protokolü için temel iletişim türüdür.",
-          "title": "Etkinlik",
-          "properties": {
-            "type": {
-              "description": "Etkinlik türünü içerir. Olası değerler şunlardır: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "tür"
-            },
-            "id": {
-              "description": "Kanaldaki etkinliği benzersiz olarak tanımlayan bir kimlik içerir.",
-              "title": "kimlik"
-            },
-            "timestamp": {
-              "description": "İletinin gönderildiği, UTC olarak ISO-8601 biçiminde ifade edilen tarih ve saati içerir.",
-              "title": "zaman damgası"
-            },
-            "localTimestamp": {
-              "description": "İletinin yerel saatle gönderildiği, ISO-8601 biçiminde ifade edilen tarih ve saati\niçerir.\nÖrneğin, 2016-09-23T13:07:49.4714686-07:00.",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "İletinin yerel saatle IANA Saat Dilimi veritabanı biçiminde ifade edildiği saat diliminin\nadını içerir.\nÖrneğin, Amerika/Los_Angeles.",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "Kanalın hizmet uç noktasını belirten URL'yi içerir. Kanal tarafından ayarlanır.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "Kanalı benzersiz olarak tanımlayan bir kimlik içerir. Kanal tarafından ayarlanır.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "İletinin gönderenini tanımlar.",
-              "title": "şuradan"
-            },
-            "conversation": {
-              "description": "Etkinliğin ait olduğu konuşmayı tanımlar.",
-              "title": "konuşma",
-              "properties": {
-                "isGroup": {
-                  "description": "Etkinliğin oluşturulduğu saatte konuşmanın ikiden çok katılımcı içerip içermediğini\ngösterir",
-                  "title": "isGroup"
-                },
-                "conversationType": {
-                  "description": "Kanallarda konuşma türlerini birbirinden ayıran konuşma türünü gösterir",
-                  "title": "conversationType"
-                },
-                "id": {
-                  "description": "Bu kanaldaki kullanıcının veya botun kanal kimliği (Örnek: joe@smith.com veya @joesmith ya da\n123456)",
-                  "title": "kimlik"
-                },
-                "name": {
-                  "description": "Kolay adı görüntüle",
-                  "title": "ad"
-                },
-                "aadObjectId": {
-                  "description": "Bu hesabın Azure Active Directory (AAD) içindeki nesne kimliği",
-                  "title": "aadObjectId"
-                },
-                "role": {
-                  "description": "Hesabın arkasındaki varlığın rolü (Örnek: Kullanıcı, Bot vb.). Olası değerler şunlardır:\n'user', 'bot'",
-                  "title": "rol"
-                }
-              }
-            },
-            "recipient": {
-              "description": "İletinin alıcısını tanımlar.",
-              "title": "alıcı"
-            },
-            "textFormat": {
-              "description": "Metin alanlarının biçimi Default:markdown. Olası değerler şunlardır: 'markdown', 'plain', 'xml'",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "Birden çok ek için düzen ipucu. Varsayılan: list. Olası değerler şunlardır: 'list',\n'carousel'",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "Konuşmaya eklenen üye koleksiyonu.",
-              "title": "membersAdded",
-              "items": {
-                "description": "Bir iletiyi yönlendirmek için gereken kanal hesabı bilgileri",
-                "title": "ChannelAccount",
-                "properties": {
-                  "id": {
-                    "description": "Bu kanaldaki kullanıcının veya botun kanal kimliği (Örnek: joe@smith.com veya @joesmith ya da\n123456)",
-                    "title": "kimlik"
-                  },
-                  "name": {
-                    "description": "Kolay adı görüntüle",
-                    "title": "ad"
-                  },
-                  "aadObjectId": {
-                    "description": "Bu hesabın Azure Active Directory (AAD) içindeki nesne kimliği",
-                    "title": "aadObjectId"
-                  },
-                  "role": {
-                    "description": "Hesabın arkasındaki varlığın rolü (Örnek: Kullanıcı, Bot vb.). Olası değerler şunlardır:\n'user', 'bot'",
-                    "title": "rol"
-                  }
-                }
-              }
-            },
-            "membersRemoved": {
-              "description": "Konuşmadan kaldırılan üye koleksiyonu.",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "Konuşmaya eklenen tepki koleksiyonu.",
-              "title": "reactionsAdded",
-              "items": {
-                "description": "İleti tepki nesnesi",
-                "title": "MessageReaction",
-                "properties": {
-                  "type": {
-                    "description": "İleti tepki türü. Olası değerler şunlardır: 'like', 'plusOne'",
-                    "title": "tür"
-                  }
-                }
-              }
-            },
-            "reactionsRemoved": {
-              "description": "Konuşmadan kaldırılan tepki koleksiyonu.",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "Konuşmanın güncelleştirilmiş konu adı.",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "Kanalın önceki geçmişinin açıklanıp açıklanmadığını gösterir.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "Metin alanının içeriğine ilişkin yerel ayar adı.\nYerel ayar adı, bir dil ile ilişkili iki ya da üç harfli ISO 639 kültür kodunun\nve bir ülke ya da bölge\nile ilişkili iki harfli ISO 3166 alt kültür kodunun bileşiminden oluşur.\nYerel ayar adı ayrıca geçerli bir BCP-47 dil etiketine de karşılık gelebilir.",
-              "title": "yerel ayar"
-            },
-            "text": {
-              "description": "İletinin metin içeriği.",
-              "title": "metin"
-            },
-            "speak": {
-              "description": "Konuşulacak metin.",
-              "title": "konuş"
-            },
-            "inputHint": {
-              "description": "İleti istemciye teslim edildikten sonra botunuzun\nkullanıcı girişini kabul edip etmeyeceğini, kullanıcı girişi bekleyip beklemediğini veya kullanıcı girişini \nyoksayıp saymadığını gösterir. Olası değerler şunlardır: 'acceptingInput', 'ignoringInput', 'expectingInput'",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "Kanal kartları işleyemezse görüntülenecek metin.",
-              "title": "özet"
-            },
-            "suggestedActions": {
-              "description": "Etkinlik için önerilen eylemler.",
-              "title": "suggestedActions",
-              "properties": {
-                "to": {
-                  "description": "Eylemlerin gösterilmesi gereken alıcıların kimlikleri. Bu kimlikler channelId'ye görelidir\nve etkinliğin tüm alıcılarının bir alt kümesidir",
-                  "title": "-",
-                  "items": {
-                    "title": "Kimlik",
-                    "description": "Alıcının kimliği."
-                  }
-                },
-                "actions": {
-                  "description": "Kullanıcıya gösterilebilen eylemler",
-                  "title": "eylemler",
-                  "items": {
-                    "description": "Tıklanabilir bir eylem",
-                    "title": "CardAction",
-                    "properties": {
-                      "type": {
-                        "description": "Bu düğme tarafından uygulanan eylemin türü. Olası değerler şunlardır: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-                        "title": "tür"
-                      },
-                      "title": {
-                        "description": "Düğmede görünen metin açıklaması",
-                        "title": "başlık"
-                      },
-                      "image": {
-                        "description": "Düğmede metin etiketinin yanında görünecek resim URL'si",
-                        "title": "görüntü"
-                      },
-                      "text": {
-                        "description": "Bu eylemin metni",
-                        "title": "metin"
-                      },
-                      "displayText": {
-                        "description": "(İsteğe bağlı) düğmeye tıklanırsa sohbet akışında görüntülenecek metin",
-                        "title": "displayText"
-                      },
-                      "value": {
-                        "description": "Eylemin tamamlayıcı parametresi. Bu özelliğin içeriği ActionType'a bağımlıdır",
-                        "title": "değer"
-                      },
-                      "channelData": {
-                        "description": "Bu eylemle ilişkili kanala özgü veriler",
-                        "title": "channelData"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "attachments": {
-              "description": "Ekler",
-              "title": "ekler",
-              "items": {
-                "description": "Etkinlik içindeki bir ek",
-                "title": "Ek",
-                "properties": {
-                  "contentType": {
-                    "description": "dosyaya ilişkin mimetype/Contenttype",
-                    "title": "contentType"
-                  },
-                  "contentUrl": {
-                    "description": "İçerik URL'si",
-                    "title": "contentUrl"
-                  },
-                  "content": {
-                    "description": "Ekli içerik",
-                    "title": "içerik"
-                  },
-                  "name": {
-                    "description": "(İSTEĞE BAĞLI) Ekin adı",
-                    "title": "ad"
-                  },
-                  "thumbnailUrl": {
-                    "description": "(İSTEĞE BAĞLI) Ek ile ilişkili küçük resim",
-                    "title": "thumbnailUrl"
-                  }
-                }
-              }
-            },
-            "entities": {
-              "description": "İletide bahsedilen varlıkları gösterir.",
-              "title": "varlıklar",
-              "items": {
-                "description": "Bir etkinlikle ilgili meta veri nesnesi",
-                "title": "Varlık",
-                "properties": {
-                  "type": {
-                    "description": "Bu varlığın türü (RFC 3987 IRI)",
-                    "title": "tür"
-                  }
-                }
-              }
-            },
-            "channelData": {
-              "description": "Kanala özgü içerik barındırır.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "Bir contactRelationUpdate alıcısının, gönderenin ilgili kişi listesine eklenip eklenmeyeceğini veya\nbu listeden kaldırılıp kaldırılmayacağını gösterir.",
-              "title": "eylem"
-            },
-            "replyToId": {
-              "description": "Bu iletinin yanıt olarak gönderildiği iletinin kimliğini içerir.",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "Etkinlik için tanımlayıcı bir etiket.",
-              "title": "etiket"
-            },
-            "valueType": {
-              "description": "Etkinliğin değer nesnesinin türü.",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "Etkinlikle ilişkili değer.",
-              "title": "değer"
-            },
-            "name": {
-              "description": "Bir çağrı veya olay etkinliği ile ilişkili işlemin adı.",
-              "title": "ad"
-            },
-            "relatesTo": {
-              "description": "Başka bir konuşma veya etkinlik başvurusu.",
-              "title": "relatesTo",
-              "properties": {
-                "activityId": {
-                  "description": "(İsteğe bağlı) Başvurulacak etkinliğin kimliği",
-                  "title": "activityId"
-                },
-                "user": {
-                  "description": "(İsteğe bağlı) Bu konuşmaya katılan kullanıcı",
-                  "title": "kullanıcı"
-                },
-                "bot": {
-                  "description": "Bu konuşmaya katılan bot",
-                  "title": "bot"
-                },
-                "conversation": {
-                  "description": "Konuşma başvurusu",
-                  "title": "konuşma"
-                },
-                "channelId": {
-                  "description": "Kanal Kimliği",
-                  "title": "channelId"
-                },
-                "serviceUrl": {
-                  "description": "Başvurulan konuşmayla ilgili işlemlerin gerçekleştirilebileceği hizmet uç noktası",
-                  "title": "serviceUrl"
-                }
-              }
-            },
-            "code": {
-              "description": "Konuşmanın neden sonlandırıldığını gösteren endOfConversation etkinliklerine yönelik bir kod.\nOlası değerler şunlardır: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "kod"
-            },
-            "expiration": {
-              "description": "Etkinliğin \"süresi doldu\" olarak kabul edilmesi ve alıcıya sunulmaması\ngereken saat.",
-              "title": "süre sonu"
-            },
-            "importance": {
-              "description": "Etkinliğin önemi. Olası değerler şunlardır: 'low', 'normal', 'high'",
-              "title": "önem derecesi"
-            },
-            "deliveryMode": {
-              "description": "Etkinliğin alıcı alternatif teslim yollarına sinyal verecek bir teslim ipucu.\nVarsayılan teslim modu: \"varsayılan\". Olası değerler şunlardır: 'normal', 'notification'",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "Konuşma ve dil hazırlama sistemlerinin dinlemesi gereken tümcecik ve başvuru listesi",
-              "title": "listenFor",
-              "items": {
-                "title": "Tümcecik",
-                "description": "Dinlenecek tümcecik."
-              }
-            },
-            "textHighlights": {
-              "description": "Etkinlik bir ReplyToId değeri içerdiğinde vurgulanacak metin parçaları koleksiyonu.",
-              "title": "textHighlights",
-              "items": {
-                "description": "Başka bir alan içindeki içeriğin alt dizesine başvurur",
-                "title": "TextHighlight",
-                "properties": {
-                  "text": {
-                    "description": "Vurgulanacak metin parçacığını tanımlar",
-                    "title": "metin"
-                  },
-                  "occurrence": {
-                    "description": "Birden çok varsa, başvurulan metin içindeki metin alanının oluşumu.",
-                    "title": "oluşum"
-                  }
-                }
-              }
-            },
-            "semanticAction": {
-              "description": "Bu isteğe eşlik eden isteğe bağlı bir programlı eylem",
-              "title": "semanticAction",
-              "properties": {
-                "id": {
-                  "description": "Bu eylemin kimliği",
-                  "title": "kimlik"
-                },
-                "entities": {
-                  "description": "Bu eylemle ilişkili varlıklar",
-                  "title": "varlıklar"
-                }
-              }
-            }
-          }
-        }
-      }
+      "description": "Dizi şablonu, etkinlik veya ActivityTemplate uygulaması olan ActivityTemplate bileşenleri"
     },
     "Microsoft.IDialog": {
       "title": "Microsoft iletişim kutuları",
@@ -2185,11 +1882,11 @@
     },
     "Microsoft.IEntityRecognizer": {
       "title": "Varlık tanıyıcıları",
-      "description": "EntityRecognizer'dan türetilen bileşenler.",
+      "description": "EntityRecognizer\"dan türetilen bileşenler.",
       "oneOf": {
-        "0": {
-          "title": "Microsoft.IEntityRecognizer başvurusu",
-          "description": "Microsoft.IEntityRecognizer .dialog dosyası başvurusu."
+        "18": {
+          "title": "Reference to Microsoft.IEntityRecognizer",
+          "description": "Reference to Microsoft.IEntityRecognizer .dialog file."
         }
       }
     },
@@ -2209,9 +1906,9 @@
       "title": "Microsoft Tetikleyicileri",
       "description": "OnCondition sınıfından türetilen bileşenler.",
       "oneOf": {
-        "0": {
-          "title": "Microsoft.ITrigger başvurusu",
-          "description": "Microsoft.ITrigger .dialog dosyası başvurusu."
+        "27": {
+          "title": "Reference to Microsoft.ITrigger",
+          "description": "Reference to Microsoft.ITrigger .dialog file."
         }
       }
     },
@@ -2219,9 +1916,9 @@
       "title": "Seçiciler",
       "description": "TriggerSelector sınıfından türetilen bileşenler.",
       "oneOf": {
-        "0": {
-          "title": "Microsoft.ITriggerSelector başvurusu",
-          "description": "Microsoft.ITriggerSelector .dialog dosyası başvurusu."
+        "5": {
+          "title": "Reference to Microsoft.ITriggerSelector",
+          "description": "Reference to Microsoft.ITriggerSelector .dialog file."
         }
       }
     },
@@ -2407,7 +2104,7 @@
         },
         "traceActivity": {
           "title": "İzleme etkinliği gönder",
-          "description": "True ise, otomatik olarak bir TraceActivity gönderir (Bot Framework Emulator'da görüntüleyin)."
+          "description": "True ise, otomatik olarak bir TraceActivity gönderir (Bot Framework Emulator\"da görüntüleyin)."
         },
         "$kind": {
           "title": "İletişim kutusu nesnesinin türü",
@@ -2451,7 +2148,7 @@
         },
         "externalEntityRecognizer": {
           "title": "Dış varlık tanıyıcısı",
-          "description": "Bu tanıyıcı tarafından tanınan varlıklar, LUIS'ye dış varlık olarak geçirilir."
+          "description": "Bu tanıyıcı tarafından tanınan varlıklar, LUIS\"ye dış varlık olarak geçirilir."
         },
         "dynamicLists": {
           "title": "Dinamik listeler",
@@ -2813,7 +2510,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2831,7 +2528,7 @@
     },
     "Microsoft.OnAssignEntity": {
       "title": "Varlık atamasında",
-      "description": "Bir özelliğe varlık atanması gerektiğinde gerçekleştirilecek eylemler.",
+      "description": "Actions to apply an operation on a property and value.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -2839,17 +2536,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Özellik",
-          "description": "Varlık seçildikten sonra ayarlanacak özellik."
-        },
-        "entity": {
-          "title": "Varlık",
-          "description": "Özelliğe yerleştirilen varlık"
-        },
         "operation": {
           "title": "İşlem",
-          "description": "Varlık atama işlemi."
+          "description": "Operation filter on event."
+        },
+        "property": {
+          "title": "Özellik",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value filter on event."
         },
         "condition": {
           "title": "Koşul",
@@ -2861,7 +2558,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2897,7 +2594,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2933,7 +2630,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2951,7 +2648,7 @@
     },
     "Microsoft.OnChooseEntity": {
       "title": "Varlık seçildiğinde",
-      "description": "Bir varlık değerinin çözümlenmesi gerektiğinde gerçekleştirilecek eylemler.",
+      "description": "Actions to be performed when value is ambiguous for operator and property.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -2959,13 +2656,17 @@
         }
       },
       "properties": {
-        "property": {
-          "title": "Ayarlanacak özellik",
-          "description": "Varlık seçildikten sonra ayarlanacak özellik."
+        "operation": {
+          "title": "Operation",
+          "description": "Operation filter on event."
         },
-        "entity": {
-          "title": "Belirsiz varlık",
-          "description": "Belirsiz varlık"
+        "property": {
+          "title": "Property",
+          "description": "Property filter on event."
+        },
+        "value": {
+          "title": "Ambiguous value",
+          "description": "Ambiguous value filter on event."
         },
         "condition": {
           "title": "Koşul",
@@ -2977,7 +2678,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -2994,8 +2695,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "Belirsiz amaçta",
-      "description": "Bir amaç belirsiz olduğunda gerçekleştirilecek eylemler.",
+      "title": "On ambiguous intent",
+      "description": "Actions to perform on when an intent is ambiguous.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -3021,7 +2722,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3039,7 +2740,7 @@
     },
     "Microsoft.OnChooseProperty": {
       "title": "Özellik seçildiğinde",
-      "description": "Özelliklerde varlıkların birden çok olası eşlemesi olduğunda gerçekleştirilecek eylemler.",
+      "description": "Actions to take when there are multiple possible mappings of entities to properties and operations.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -3047,26 +2748,6 @@
         }
       },
       "properties": {
-        "entity": {
-          "title": "Atanan varlık",
-          "description": "Özellik seçimine atanan varlık"
-        },
-        "properties": {
-          "title": "Olası özellikler",
-          "description": "Aralarında seçim yapılacak özellikler.",
-          "items": {
-            "title": "Özellik adı",
-            "description": "Seçilecek olası özellik."
-          }
-        },
-        "entities": {
-          "title": "Varlıklar",
-          "description": "Belirsiz varlık adları.",
-          "items": {
-            "title": "Varlık adı",
-            "description": "Arasında seçim yapılan varlık adı."
-          }
-        },
         "condition": {
           "title": "Koşul",
           "description": "Koşul (ifade)."
@@ -3077,7 +2758,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3113,7 +2794,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3149,7 +2830,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3185,7 +2866,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3225,7 +2906,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3261,7 +2942,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3297,7 +2978,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3333,7 +3014,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3369,7 +3050,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3405,7 +3086,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3441,7 +3122,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kez Çalıştır",
@@ -3489,7 +3170,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3525,7 +3206,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3561,7 +3242,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3597,7 +3278,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3633,7 +3314,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3669,7 +3350,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3687,7 +3368,7 @@
     },
     "Microsoft.OnQnAMatch": {
       "title": "Soru-Cevap Oluşturma eşleşmesinde",
-      "description": "Soru-Cevap Oluşturma'dan bir eşleştirme bulunduğunda gerçekleştirilecek eylemler.",
+      "description": "Soru-Cevap Oluşturma\"dan bir eşleştirme bulunduğunda gerçekleştirilecek eylemler.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -3705,7 +3386,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3741,7 +3422,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3777,7 +3458,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3813,7 +3494,7 @@
         },
         "priority": {
           "title": "Öncelik",
-          "description": "0'ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
+          "description": "0\"ın en yüksek ve <0 olan değerlerin yoksayıldığı tetikleyici önceliği."
         },
         "runOnce": {
           "title": "Bir Kere Çalıştır",
@@ -3905,7 +3586,7 @@
         },
         "endpointKey": {
           "title": "Uç nokta anahtarı",
-          "description": "Soru-Cevap Oluşturma BB'nin uç nokta anahtarı."
+          "description": "Soru-Cevap Oluşturma BB\"nin uç nokta anahtarı."
         },
         "hostname": {
           "title": "Konak adı",
@@ -3989,7 +3670,7 @@
     },
     "Microsoft.QnAMakerRecognizer": {
       "title": "Soru-Cevap Oluşturma tanıyıcısı",
-      "description": "Bir BB'den QnAMatch amaçları oluşturmaya yönelik tanıyıcı.",
+      "description": "Bir BB\"den QnAMatch amaçları oluşturmaya yönelik tanıyıcı.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -4007,7 +3688,7 @@
         },
         "endpointKey": {
           "title": "Uç nokta anahtarı",
-          "description": "Soru-Cevap Oluşturma BB'nin uç nokta anahtarı."
+          "description": "Soru-Cevap Oluşturma BB\"nin uç nokta anahtarı."
         },
         "hostname": {
           "title": "Konak adı",
@@ -4022,7 +3703,7 @@
           "description": "Soru-Cevap Oluşturma BB çağrılırken kullanılacak meta veri filtreleri.",
           "items": {
             "title": "Meta veri filtreleri",
-            "description": "Soru-Cevap Oluşturma BB'si sorgulanırken kullanılacak meta veri filtreleri.",
+            "description": "Soru-Cevap Oluşturma BB\"si sorgulanırken kullanılacak meta veri filtreleri.",
             "properties": {
               "name": {
                 "title": "Ad",
@@ -4065,14 +3746,14 @@
         },
         "includeDialogNameInMetadata": {
           "title": "Diyalog adını ekle",
-          "description": "False olarak ayarlandığında, iletişim kutusu adı Soru-Cevap Oluşturma'ya geçirilmez. (varsayılan) true"
+          "description": "False olarak ayarlandığında, iletişim kutusu adı Soru-Cevap Oluşturma\"ya geçirilmez. (varsayılan) true"
         },
         "metadata": {
           "title": "Meta veri filtreleri",
           "description": "Soru-Cevap Oluşturma BB çağrılırken kullanılacak meta veri filtreleri.",
           "items": {
             "title": "Meta veri filtresi",
-            "description": "Soru-Cevap Oluşturma BB'si çağrılırken kullanılacak meta veri filtresi.",
+            "description": "Soru-Cevap Oluşturma BB\"si çağrılırken kullanılacak meta veri filtresi.",
             "properties": {
               "name": {
                 "title": "Ad",
@@ -4091,7 +3772,7 @@
         },
         "qnaId": {
           "title": "Soru-Cevap kimliği",
-          "description": "Soru-Cevap Oluşturma API'sine geçirilecek QnAId olan bir sayı veya ifade."
+          "description": "Soru-Cevap Oluşturma API\"sine geçirilecek QnAId olan bir sayı veya ifade."
         },
         "$kind": {
           "title": "İletişim kutusu nesnesinin türü",
@@ -4386,6 +4067,34 @@
         }
       }
     },
+    "Microsoft.SendHandoffActivity": {
+      "title": "Send a handoff activity",
+      "description": "Sends a handoff activity to trigger a handoff request.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "context": {
+          "title": "Context",
+          "description": "Context to send with the handoff request"
+        },
+        "transcript": {
+          "title": "transcript",
+          "description": "Transcript to send with the handoff request"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.SetProperties": {
       "title": "Özellik ayarla",
       "description": "Bir veya daha fazla özellik değeri ayarlayın.",
@@ -4582,39 +4291,39 @@
         }
       }
     },
-    "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetri - olayı izle",
-      "description": "Kayıtlı Telemetri İstemcisini kullanarak özel bir olayı izleyin.",
+    "Microsoft.TelemetryTrackEventAction": {
+      "title": "Telemetry - track event",
+      "description": "Track a custom event using the registered Telemetry Client.",
       "patternProperties": {
         "^\\$": {
-          "title": "Araçlar özelliği",
-          "description": "Araçlar için açık uçlu özellik."
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
         }
       },
       "properties": {
         "id": {
-          "title": "Kimlik",
-          "description": "İletişim kutusunun isteğe bağlı kimliği"
+          "title": "Id",
+          "description": "Optional id for the dialog"
         },
         "disabled": {
-          "title": "Devre Dışı",
-          "description": "True ise bu eylemi devre dışı bırakacak isteğe bağlı koşul."
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
         },
         "eventName": {
-          "title": "Olay adı",
-          "description": "İzlenecek olayın adı."
+          "title": "Event name",
+          "description": "The name of the event to track."
         },
         "properties": {
-          "title": "Özellikler",
-          "description": "İzlenen olaya eklenecek bir veya daha fazla özellik."
+          "title": "Properties",
+          "description": "One or more properties to attach to the event being tracked."
         },
         "$kind": {
-          "title": "İletişim kutusu nesnesinin türü",
-          "description": "Yapılandırmakta olduğunuz bileşen için geçerli özellikleri tanımlar (bir iletişim kutusu .schema dosyasından)"
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
         },
         "$designer": {
-          "title": "Tasarımcı bilgileri",
-          "description": "Bot Framework Composer için ek bilgiler."
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
         }
       }
     },
@@ -4800,7 +4509,7 @@
     },
     "Microsoft.TraceActivity": {
       "title": "TraceActivity gönderin",
-      "description": "Transkript günlükçüsüne ve/veya Bot Framework Emulator'a bir izleme etkinliği gönderin.",
+      "description": "Transkript günlükçüsüne ve/veya Bot Framework Emulator\"a bir izleme etkinliği gönderin.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -4900,7 +4609,7 @@
     },
     "Microsoft.UrlEntityRecognizer": {
       "title": "URL tanıyıcısı",
-      "description": "URL'leri tanıyan tanıyıcı.",
+      "description": "URL\"leri tanıyan tanıyıcı.",
       "patternProperties": {
         "^\\$": {
           "title": "Araçlar özelliği",
@@ -5041,6 +4750,395 @@
         "4": {
           "title": "Sayı",
           "description": "Sayı sabiti."
+        }
+      }
+    },
+    "schema": {
+      "title": "Core schema meta-schema"
+    },
+    "botframework.json": {
+      "definitions": {
+        "ChannelAccount": {
+          "description": "Channel account information needed to route a message",
+          "title": "ChannelAccount",
+          "properties": {
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "ConversationAccount": {
+          "description": "Channel account information for a conversation",
+          "title": "ConversationAccount",
+          "properties": {
+            "isGroup": {
+              "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+              "title": "isGroup"
+            },
+            "conversationType": {
+              "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+              "title": "conversationType"
+            },
+            "id": {
+              "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+              "title": "id"
+            },
+            "name": {
+              "description": "Display friendly name",
+              "title": "name"
+            },
+            "aadObjectId": {
+              "description": "This account's object ID within Azure Active Directory (AAD)",
+              "title": "aadObjectId"
+            },
+            "role": {
+              "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+              "title": "role"
+            }
+          }
+        },
+        "MessageReaction": {
+          "description": "Message reaction object",
+          "title": "MessageReaction",
+          "properties": {
+            "type": {
+              "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+              "title": "type"
+            }
+          }
+        },
+        "CardAction": {
+          "description": "A clickable action",
+          "title": "CardAction",
+          "properties": {
+            "type": {
+              "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+              "title": "type"
+            },
+            "title": {
+              "description": "Text description which appears on the button",
+              "title": "title"
+            },
+            "image": {
+              "description": "Image URL which will appear on the button, next to text label",
+              "title": "image"
+            },
+            "text": {
+              "description": "Text for this action",
+              "title": "text"
+            },
+            "displayText": {
+              "description": "(Optional) text to display in the chat feed if the button is clicked",
+              "title": "displayText"
+            },
+            "value": {
+              "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+              "title": "value"
+            },
+            "channelData": {
+              "description": "Channel-specific data associated with this action",
+              "title": "channelData"
+            }
+          }
+        },
+        "SuggestedActions": {
+          "description": "SuggestedActions that can be performed",
+          "title": "SuggestedActions",
+          "properties": {
+            "to": {
+              "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+              "title": "to",
+              "items": {
+                "title": "Id",
+                "description": "Id of recipient."
+              }
+            },
+            "actions": {
+              "description": "Actions that can be shown to the user",
+              "title": "actions"
+            }
+          }
+        },
+        "Attachment": {
+          "description": "An attachment within an activity",
+          "title": "Attachment",
+          "properties": {
+            "contentType": {
+              "description": "mimetype/Contenttype for the file",
+              "title": "contentType"
+            },
+            "contentUrl": {
+              "description": "Content Url",
+              "title": "contentUrl"
+            },
+            "content": {
+              "description": "Embedded content",
+              "title": "content"
+            },
+            "name": {
+              "description": "(OPTIONAL) The name of the attachment",
+              "title": "name"
+            },
+            "thumbnailUrl": {
+              "description": "(OPTIONAL) Thumbnail associated with attachment",
+              "title": "thumbnailUrl"
+            }
+          }
+        },
+        "Entity": {
+          "description": "Metadata object pertaining to an activity",
+          "title": "Entity",
+          "properties": {
+            "type": {
+              "description": "Type of this entity (RFC 3987 IRI)",
+              "title": "type"
+            }
+          }
+        },
+        "ConversationReference": {
+          "description": "An object relating to a particular point in a conversation",
+          "title": "ConversationReference",
+          "properties": {
+            "activityId": {
+              "description": "(Optional) ID of the activity to refer to",
+              "title": "activityId"
+            },
+            "user": {
+              "description": "(Optional) User participating in this conversation",
+              "title": "user"
+            },
+            "bot": {
+              "description": "Bot participating in this conversation",
+              "title": "bot"
+            },
+            "conversation": {
+              "description": "Conversation reference",
+              "title": "conversation"
+            },
+            "channelId": {
+              "description": "Channel ID",
+              "title": "channelId"
+            },
+            "serviceUrl": {
+              "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+              "title": "serviceUrl"
+            }
+          }
+        },
+        "TextHighlight": {
+          "description": "Refers to a substring of content within another field",
+          "title": "TextHighlight",
+          "properties": {
+            "text": {
+              "description": "Defines the snippet of text to highlight",
+              "title": "text"
+            },
+            "occurrence": {
+              "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+              "title": "occurrence"
+            }
+          }
+        },
+        "SemanticAction": {
+          "description": "Represents a reference to a programmatic action",
+          "title": "SemanticAction",
+          "properties": {
+            "id": {
+              "description": "ID of this action",
+              "title": "id"
+            },
+            "entities": {
+              "description": "Entities associated with this action",
+              "title": "entities"
+            }
+          }
+        },
+        "Activity": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation"
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded"
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded"
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions"
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments"
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities"
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo"
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights"
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction"
+            }
+          }
         }
       }
     }

@@ -176,14 +176,13 @@
       "apiVersion": "2015-08-01",
       "location": "[variables('resourcesLocation')]",
       "kind": "app",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', variables('servicePlanName'))]"
-      ],
+      "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('servicePlanName'))]"],
       "name": "[variables('webAppName')]",
       "properties": {
         "name": "[variables('webAppName')]",
         "serverFarmId": "[variables('servicePlanName')]",
         "siteConfig": {
+          "webSocketsEnabled": true,
           "appSettings": [
             {
               "name": "WEBSITE_NODE_DEFAULT_VERSION",
@@ -229,9 +228,7 @@
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
       "apiVersion": "2020-03-01",
       "name": "[concat(variables('cosmosDbAccountName'), '/botstate-db')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"
-      ],
+      "dependsOn": ["[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"],
       "properties": {
         "resource": {
           "id": "botstate-db"
@@ -266,9 +263,7 @@
             ]
           },
           "partitionKey": {
-            "paths": [
-              "/id"
-            ],
+            "paths": ["/id"],
             "kind": "Hash"
           },
           "conflictResolutionPolicy": {
@@ -281,11 +276,11 @@
       "condition": "[parameters('useCosmosDb')]"
     },
     {
-      "apiVersion": "2017-12-01",
+      "apiVersion": "2018-07-12",
       "type": "Microsoft.BotService/botServices",
       "name": "[parameters('botId')]",
       "location": "global",
-      "kind": "bot",
+      "kind": "azurebot",
       "sku": {
         "name": "[parameters('botSku')]"
       },
@@ -294,14 +289,13 @@
         "displayName": "[parameters('botId')]",
         "endpoint": "[variables('botEndpoint')]",
         "msaAppId": "[parameters('appId')]",
+        "openWithHint": "bfcomposer://",
         "developerAppInsightsApplicationId": null,
         "developerAppInsightKey": null,
         "publishingCredentials": null,
         "storageResourceId": null
       },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/', variables('webAppName'))]"
-      ]
+      "dependsOn": ["[resourceId('Microsoft.Web/sites/', variables('webAppName'))]"]
     },
     {
       "comments": "app insights",

@@ -7,45 +7,45 @@ import { useState, MouseEvent, KeyboardEvent } from 'react';
 
 import { colors } from '../../colors';
 
-import { INDENT_PER_LEVEL } from './constants';
-
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   summary: React.ReactNode;
   depth?: number;
   detailsRef?: (el: HTMLElement | null) => void;
   onToggle?: (newState: boolean) => void;
   defaultState?: boolean;
+  isActive?: boolean;
 };
 
-const summaryStyle = css`
-  label: summary;
-  display: flex;
-  padding-left: 12px;
-  padding-top: 6px;
-  color: ${colors.text};
-`;
-
-const nodeStyle = (depth: number) => css`
-  margin-top: 2px;
-  margin-left: ${depth * INDENT_PER_LEVEL}px;
-`;
-
-const TRIANGLE_SCALE = 0.6;
-
-const detailsStyle = css`
-  &:not([open]) > summary::-webkit-details-marker {
-    transform: scaleX(${TRIANGLE_SCALE});
-    min-width: 10px;
+const listItemStyle = (isActive: boolean, isOpen: boolean, hasChildren: boolean) => css`
+  label: listItem;
+  :hover {
+    background: ${isActive ? colors.gray(40) : colors.gray(20)};
   }
-
-  &[open] > summary::-webkit-details-marker {
-    transform: scaleY(${TRIANGLE_SCALE});
-    min-width: 10px;
-  }
+  background: ${isActive ? colors.gray(30) : colors.bg};
+  ${!hasChildren
+    ? 'list-style: none'
+    : isOpen
+    ? `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 8 8 h 16 l -8 8 l -8 -8'/%3E%3C/svg%3E");`
+    : `list-style-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 24 16'%3E%3Cpath style='fill:black%3B' d='M 16 0 v 16 l 8 -8 l -8 -8'/%3E%3C/svg%3E");`}
 `;
 
-export const ExpandableNode = ({ children, summary, detailsRef, depth = 0, onToggle, defaultState = true }: Props) => {
+const listStyle = css`
+  label: list;
+  margin-top: 0;
+  margin-left: 16px;
+  padding-inline-start: 6px;
+  margin-block-end: 0px;
+`;
+
+export const ExpandableNode = ({
+  children,
+  summary,
+  detailsRef,
+  onToggle,
+  defaultState = true,
+  isActive = false,
+}: Props) => {
   const [isExpanded, setExpanded] = useState(defaultState);
 
   function setExpandedWithCallback(newState: boolean) {
@@ -54,8 +54,10 @@ export const ExpandableNode = ({ children, summary, detailsRef, depth = 0, onTog
   }
 
   function handleClick(ev: MouseEvent) {
-    if ((ev.target as Element)?.tagName.toLowerCase() === 'summary') {
+    const target = ev.target as Element;
+    if (target.tagName.toLowerCase() === 'li') {
       setExpandedWithCallback(!isExpanded);
+      ev.stopPropagation();
     }
     ev.preventDefault();
   }
@@ -65,21 +67,20 @@ export const ExpandableNode = ({ children, summary, detailsRef, depth = 0, onTog
   }
 
   return (
-    <div css={nodeStyle(depth)} data-testid="dialog">
-      <details ref={detailsRef} css={detailsStyle} open={isExpanded}>
-        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-        <summary
-          css={summaryStyle}
-          data-testid={'summaryTag'}
-          role="button"
-          tabIndex={0}
-          onClick={handleClick}
-          onKeyUp={handleKey}
-        >
-          {summary}
-        </summary>
-        {children}
-      </details>
-    </div>
+    <ul
+      ref={detailsRef}
+      aria-expanded={isExpanded}
+      css={listStyle}
+      data-testid="dialog"
+      role="tree"
+      onClick={handleClick}
+      onKeyDown={handleKey}
+    >
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+      <li css={listItemStyle(isActive, isExpanded, children != null)} data-testid={'summaryTag'}>
+        {summary}
+      </li>
+      {children != null && isExpanded && <div role="group">{children}</div>}
+    </ul>
   );
 };

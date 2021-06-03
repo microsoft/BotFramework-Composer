@@ -12,10 +12,19 @@ import {
   IQnAConfig,
   SkillSetting,
   QnAFile,
+  SDKKinds,
 } from '@bfc/shared';
 
 import { BotIndexer } from '../src/botIndexer';
-const { checkManifest, checkSetting, checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotIndexer;
+const {
+  checkManifest,
+  checkSetting,
+  checkSkillSetting,
+  checkLUISLocales,
+  checkQnALocales,
+  filterLUISFilesToPublish,
+  filterQnAFilesToPublish,
+} = BotIndexer;
 
 const botAssets: BotAssets = {
   projectId: 'test',
@@ -58,10 +67,11 @@ const botAssets: BotAssets = {
     {
       luFile: 'a.lu',
       skills: ['Email-Skill', 'Calendar-Skill'],
+      luProvider: SDKKinds.LuisRecognizer,
     } as DialogInfo,
   ],
   setting: {
-    languages: ['en-us', 'zh-cn', 'ar'],
+    languages: ['en-us', 'zh-cn', 'af'],
     defaultLanguage: 'en-us',
     botId: '',
     skillHostEndpoint: '',
@@ -147,6 +157,16 @@ describe('checkLUISLocales', () => {
   });
 });
 
+describe('checkQnALocales', () => {
+  it('should check qna not supported locales', () => {
+    const diagnostics = checkQnALocales(botAssets);
+    const errors = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Error);
+    const warnings = diagnostics.filter((item) => item.severity === DiagnosticSeverity.Warning);
+    expect(errors.length).toEqual(0);
+    expect(warnings.length).toEqual(1);
+  });
+});
+
 describe('checkSkillSetting', () => {
   it('should check skill are missing', () => {
     const diagnostics = checkSkillSetting(botAssets);
@@ -159,10 +179,56 @@ describe('checkSkillSetting', () => {
 
 describe('filterLUISFilesToPublish', () => {
   it('should filter luFiles left LUIS supported locale file', () => {
-    const luFilesToPublish = filterLUISFilesToPublish(botAssets.luFiles);
+    const luFilesToPublish = filterLUISFilesToPublish(botAssets.luFiles, botAssets.dialogs);
     expect(luFilesToPublish.length).toEqual(2);
     expect(luFilesToPublish).not.toContain({
-      id: 'a.ar',
+      id: 'a.af',
+    });
+  });
+
+  it('should not filter locales for Orchestrator', () => {
+    const botAssetsOrch = {
+      ...botAssets,
+      luFiles: [
+        {
+          id: 'a.es',
+          empty: false,
+        } as LuFile,
+        {
+          id: 'b.es',
+          empty: false,
+        } as LuFile,
+      ],
+      dialogs: [
+        {
+          luFile: 'a',
+          luProvider: SDKKinds.OrchestratorRecognizer,
+        } as DialogInfo,
+        {
+          luFile: 'b',
+          luProvider: SDKKinds.LuisRecognizer,
+        } as DialogInfo,
+      ],
+    };
+
+    const luFilesToPublish = filterLUISFilesToPublish(botAssetsOrch.luFiles, botAssetsOrch.dialogs);
+    expect(luFilesToPublish.length).toEqual(1);
+    expect(luFilesToPublish).not.toContainEqual({
+      id: 'b.es',
+      empty: false,
+    });
+    expect(luFilesToPublish).toContainEqual({
+      id: 'a.es',
+      empty: false,
+    });
+  });
+  describe('filterQnAFilesToPublish', () => {
+    it('should filter qnaFiles left QnA supported locale file', () => {
+      const qnaFilesToPublish = filterQnAFilesToPublish(botAssets.qnaFiles, botAssets.dialogs);
+      expect(qnaFilesToPublish.length).toEqual(2);
+      expect(qnaFilesToPublish).not.toContain({
+        id: 'a.af',
+      });
     });
   });
 });

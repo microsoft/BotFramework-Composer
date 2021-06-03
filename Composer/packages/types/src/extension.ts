@@ -38,6 +38,10 @@ export type ExtensionBundle = {
   path: string;
 };
 
+export type ExtensionConfigurationSchema = Record<string, JSONSchema7>;
+
+export type ExtensionSettings = Record<string, unknown>;
+
 export type ExtensionMetadata = {
   /** name field from package.json */
   id: string;
@@ -55,6 +59,7 @@ export type ExtensionMetadata = {
   builtIn?: boolean;
   bundles: ExtensionBundle[];
   contributes: ExtensionContribution;
+  configurationSchema?: ExtensionConfigurationSchema;
 };
 
 export type ExtensionMap = {
@@ -80,13 +85,12 @@ export type PackageJSON = {
     enabled?: boolean;
     contributes?: ExtensionContribution;
     bundles?: ExtensionBundle[];
+    configuration?: Record<string, JSONSchema7>;
   };
 };
 
 export type ExtensionCollection = {
-  storage: {
-    [key: string]: any;
-  };
+  storage: Record<string, any>;
   publish: {
     [key: string]: {
       plugin: {

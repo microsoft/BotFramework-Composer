@@ -71,7 +71,6 @@ describe('test skill conversation id factory', () => {
         await skillConversationIdFactory.deleteConversationReference(conversationId);
 
         const skillConversationRefAfterDeleted = await skillConversationIdFactory.getSkillConversationReference(conversationId);
-        console.log(skillConversationRefAfterDeleted);
         expect(skillConversationRefAfterDeleted).toBeUndefined();
     });
 });

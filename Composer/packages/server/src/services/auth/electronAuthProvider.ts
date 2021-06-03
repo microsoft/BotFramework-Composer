@@ -60,6 +60,23 @@ export class ElectronAuthProvider extends AuthProvider {
     }
   }
 
+  async getArmAccessToken(tenantId: string): Promise<string> {
+    const { getARMTokenForTenant } = this.electronContext;
+    if (isLinux()) {
+      log('Auth login flow is currently unsupported in Linux.');
+      return '';
+    }
+    log('Getting ARM access token.');
+    try {
+      // otherwise get a fresh token
+      const token = await getARMTokenForTenant(tenantId);
+      return token;
+    } catch (e) {
+      log('Error while trying to get access token: %O', e);
+      return '';
+    }
+  }
+
   logOut(): void {
     const { logOut } = this.electronContext;
     logOut();

@@ -18,9 +18,11 @@ const getTelemetryContext = () => {
   const electronContext = useElectronContext();
 
   if (electronContext) {
-    const { sessionId, machineId, composerVersion } = electronContext;
+    const {
+      telemetryData: { composerVersion, sessionId, machineId, architecture, cpus, memory },
+    } = electronContext;
     const { telemetry = {} } = SettingsService.getSettings();
-    return { sessionId, userId: machineId, telemetry, composerVersion };
+    return { sessionId, userId: machineId, telemetry, composerVersion, architecture, cpus, memory };
   }
 
   return {};
@@ -38,8 +40,8 @@ if (instrumentationKey) {
     .setAutoCollectRequests(true);
   // do not collect the user's machine name
   AppInsights.defaultClient.context.tags[AppInsights.defaultClient.context.keys.cloudRoleInstance] = '';
-  AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope, context): boolean => {
-    const { sessionId, telemetry, composerVersion } = getTelemetryContext();
+  AppInsights.defaultClient.addTelemetryProcessor((envelope: AppInsights.Contracts.Envelope): boolean => {
+    const { sessionId, telemetry, composerVersion, userId, architecture, cpus, memory } = getTelemetryContext();
 
     if (!telemetry?.allowDataCollection) {
       return false;
@@ -48,6 +50,9 @@ if (instrumentationKey) {
 
     // Add session id
     envelope.tags[AppInsights.defaultClient.context.keys.sessionId] = sessionId;
+
+    // Add truncated user id
+    envelope.tags[AppInsights.defaultClient.context.keys.userId] = userId?.slice(0, Math.floor(userId.length * 0.8));
 
     // Remove PII from url
     if (envelope.data.baseType === 'RequestData' && data.baseData.url.match(/\/\d+.\d+/i)) {
@@ -65,6 +70,20 @@ if (instrumentationKey) {
 
       if (composerVersion) {
         data.baseData.properties.composerVersion = composerVersion;
+      }
+
+      if (data.baseData.name === 'SessionStarted') {
+        if (architecture) {
+          data.baseData.properties.architecture = architecture;
+        }
+
+        if (cpus !== undefined) {
+          data.baseData.properties.cpus = cpus;
+        }
+
+        if (memory !== undefined) {
+          data.baseData.properties.memory = memory;
+        }
       }
 
       // remove PII

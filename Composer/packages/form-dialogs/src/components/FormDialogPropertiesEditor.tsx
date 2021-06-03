@@ -11,18 +11,20 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
+import { OpenConfirmModal } from '@bfc/ui-shared';
+
 import {
   allFormDialogPropertyIdsSelector,
   formDialogSchemaAtom,
   formDialogSchemaJsonSelector,
   formDialogSchemaValidSelector,
-} from 'src/atoms/appState';
-import { useHandlers } from 'src/atoms/handlers';
-import { CommandBarUploadButton } from 'src/components/common/CommandBarUpload';
-import { FormDialogSchemaDetails } from 'src/components/property/FormDialogSchemaDetails';
-import { useUndo } from 'src/undo/useUndo';
-import { useUndoKeyBinding } from 'src/utils/hooks/useUndoKeyBinding';
-import { OpenConfirmModal } from '@bfc/ui-shared';
+} from '../atoms/appState';
+import { useHandlers } from '../atoms/handlers';
+import { useUndo } from '../undo/useUndo';
+import { useUndoKeyBinding } from '../utils/hooks/useUndoKeyBinding';
+
+import { CommandBarUploadButton } from './common/CommandBarUpload';
+import { FormDialogSchemaDetails } from './property/FormDialogSchemaDetails';
 
 const Root = styled(Stack)({
   backgroundColor: NeutralColors.gray20,

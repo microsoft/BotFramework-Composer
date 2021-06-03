@@ -5,6 +5,10 @@
 
 import * as React from 'react';
 import { useRecoilCallback } from 'recoil';
+
+import { generateId } from '../utils/base';
+import { readFileContent } from '../utils/file';
+
 import {
   activePropertyIdAtom,
   allFormDialogPropertyIdsSelector,
@@ -12,11 +16,9 @@ import {
   formDialogSchemaAtom,
   formDialogSchemaPropertyNamesSelector,
   formDialogTemplatesAtom,
-} from 'src/atoms/appState';
-import { FormDialogPropertyKind, FormDialogPropertyPayload, PropertyRequiredKind } from 'src/atoms/types';
-import { createSchemaStoreFromJson, getDefaultPayload, getDuplicateName } from 'src/atoms/utils';
-import { generateId } from 'src/utils/base';
-import { readFileContent } from 'src/utils/file';
+} from './appState';
+import { FormDialogPropertyKind, FormDialogPropertyPayload, PropertyRequiredKind } from './types';
+import { createSchemaStoreFromJson, getDefaultPayload, getDuplicateName } from './utils';
 
 const getHandlers = () => {
   const importSchemaString = useRecoilCallback(({ set }) => ({ id, content }: { id: string; content: string }) => {

@@ -8,16 +8,14 @@ import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 
 import { useResolvers } from '../hooks/useResolver';
-import { focusPathState } from '../recoilModel';
+import { designPageLocationState, dispatcherState } from '../recoilModel';
 import { Dispatcher } from '../recoilModel/dispatchers';
-
-import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
 const fileNotFound = (id: string) => formatMessage(`LU file {id} not found`, { id });
 const INTENT_ERROR = formatMessage('intentName is missing or empty');
 
 function createLuApi(
-  state: { focusPath: string; projectId: string },
+  state: { dialogId: string; projectId: string },
   dispatchers: Dispatcher,
   luFileResolver: (id: string) => LuFile | undefined
 ): LuContextApi {
@@ -67,7 +65,7 @@ function createLuApi(
 
   const getLuIntents = (id: string): LuIntentSection[] => {
     if (id === undefined) throw new Error('must have a file id');
-    const focusedDialogId = state.focusPath.split('#').shift() || id;
+    const focusedDialogId = state.dialogId || id;
     const file = luFileResolver(focusedDialogId);
     if (!file) throw new Error(fileNotFound(id));
     return file.intents;
@@ -85,20 +83,20 @@ function createLuApi(
     getLuIntents,
     getLuIntent,
     updateLuIntent,
-    debouncedUpdateLuIntent: debounce(updateLuIntent, 250, { leading: true, trailing: true }),
+    debouncedUpdateLuIntent: debounce(updateLuIntent, 250),
     renameLuIntent,
     removeLuIntent,
   };
 }
 
 export function useLuApi(projectId: string) {
-  const focusPath = useRecoilValue(focusPathState(projectId));
+  const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const dispatchers = useRecoilValue(dispatcherState);
   const { luFileResolver } = useResolvers(projectId);
-  const [api, setApi] = useState(createLuApi({ focusPath, projectId }, dispatchers, luFileResolver));
+  const [api, setApi] = useState(createLuApi({ dialogId, projectId }, dispatchers, luFileResolver));
 
   useEffect(() => {
-    const newApi = createLuApi({ focusPath, projectId }, dispatchers, luFileResolver);
+    const newApi = createLuApi({ dialogId, projectId }, dispatchers, luFileResolver);
     setApi(newApi);
 
     return () => {
@@ -108,7 +106,7 @@ export function useLuApi(projectId: string) {
         }
       });
     };
-  }, [projectId, focusPath]);
+  }, [projectId, dialogId]);
 
   return api;
 }

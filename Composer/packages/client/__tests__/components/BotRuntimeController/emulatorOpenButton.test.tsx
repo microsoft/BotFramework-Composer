@@ -47,7 +47,7 @@ describe('<OpenEmulatorButton />', () => {
     mockCallEmulator.mockImplementationOnce((url) => {
       expect(url).toBeDefined();
     });
-    const { findByTestId } = renderWithRecoil(<OpenEmulatorButton isRoot projectId={projectId} />, initialState());
+    const { findByTestId } = renderWithRecoil(<OpenEmulatorButton isRootBot projectId={projectId} />, initialState());
     const button = await findByTestId('button');
     act(() => {
       fireEvent.click(button);
@@ -56,7 +56,7 @@ describe('<OpenEmulatorButton />', () => {
 
   it('should not show the button if the status is not `BotStatus.connected`', () => {
     const { container } = renderWithRecoil(
-      <OpenEmulatorButton isRoot projectId={projectId} />,
+      <OpenEmulatorButton isRootBot projectId={projectId} />,
       initialState({ currentStatus: BotStatus.pending })
     );
     expect(container).not.toHaveTextContent('Test in Emulator');

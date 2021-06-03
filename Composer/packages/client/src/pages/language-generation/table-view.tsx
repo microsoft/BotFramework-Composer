@@ -18,46 +18,39 @@ import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { lgUtil } from '@bfc/indexers';
+import { LgFile } from '@botframework-composer/types/src';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, editableFieldContainer } from '../language-understanding/styles';
-import {
-  dispatcherState,
-  lgFilesState,
-  localeState,
-  settingsState,
-  validateDialogsSelectorFamily,
-} from '../../recoilModel';
+import { dispatcherState, localeState, settingsState, dialogsSelectorFamily } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { colors } from '../../colors';
+import { lgFilesSelectorFamily } from '../../recoilModel/selectors/lg';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
-  projectId?: string;
+  projectId: string;
   skillId?: string;
   dialogId?: string;
   lgFileId?: string;
+  file?: LgFile;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogId, projectId, skillId, lgFileId } = props;
+  const { dialogId, projectId, skillId, lgFileId, file } = props;
 
-  const actualProjectId = skillId ?? projectId ?? '';
+  const actualProjectId = skillId ?? projectId;
 
-  const lgFiles = useRecoilValue(lgFilesState(actualProjectId));
+  const lgFiles = useRecoilValue(lgFilesSelectorFamily(actualProjectId));
   const locale = useRecoilValue(localeState(actualProjectId));
   const settings = useRecoilValue(settingsState(actualProjectId));
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(actualProjectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(actualProjectId));
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
   );
 
   const { languages, defaultLanguage } = settings;
-
-  const file = lgFileId
-    ? lgFiles.find(({ id }) => id === lgFileId)
-    : lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
 
   const defaultLangFile = lgFileId
     ? lgFiles.find(({ id }) => id === lgFileId)
@@ -225,6 +218,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={displayName}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue === item.name) return;
                   if (newValue) {
                     handleTemplateUpdate(item.name, { ...item, name: newValue });
                   }
@@ -255,6 +249,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body
@@ -290,6 +285,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body
@@ -324,6 +320,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={text}
                 value={text}
                 onBlur={(_id, value) => {
+                  if (value === item.body) return;
                   const newValue = value?.trim();
                   if (newValue) {
                     // prefix with - to body

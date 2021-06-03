@@ -3,7 +3,9 @@
 
 import React, { useState } from 'react';
 
-import { LgEditor } from '../../src';
+import { LgCodeEditor } from '../../src';
+
+import { mockTelemetryClient } from './mockTelemetryClient';
 
 // body will fill in editor
 const template = {
@@ -21,7 +23,7 @@ const lgOption = {
 export default function App() {
   const [value, setValue] = useState(template.body);
 
-  const onChange = value => {
+  const onChange = (value) => {
     setValue(value);
   };
 
@@ -34,5 +36,5 @@ export default function App() {
       path: '/lg-language-server',
     },
   };
-  return <LgEditor {...props} />;
+  return <LgCodeEditor {...props} telemetryClient={mockTelemetryClient} />;
 }

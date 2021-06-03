@@ -5,7 +5,7 @@ import type { JSONSchema7 } from 'json-schema';
 
 import type { IBotProject } from './server';
 import type { UserIdentity } from './user';
-import type { ILuisConfig, IQnAConfig } from './settings';
+import type { ILuisConfig, IOrchestratorConfig, IQnAConfig } from './settings';
 import { AuthParameters } from './auth';
 
 export type PublishResult = {
@@ -19,6 +19,7 @@ export type PublishResult = {
   status?: number;
   /** for local publish */
   endpointURL?: string;
+  port?: number;
   /** for PVA publish */
   action?: {
     href: string;
@@ -131,6 +132,7 @@ export type PublishPlugin<Config = any> = {
 export type IPublishConfig = {
   luis: ILuisConfig;
   qna: IQnAConfig;
+  orchestrator?: IOrchestratorConfig;
 };
 
 export type PublishTarget = {
@@ -138,6 +140,52 @@ export type PublishTarget = {
   type: string;
   configuration: string;
   lastPublished?: Date;
+};
+
+// structure from json parse PublishTarget.configuration
+export type PublishProfile = {
+  name?: string;
+  environment?: string;
+  tenantId?: string;
+  hostname?: string;
+  luisResource?: string;
+  language?: string;
+  runtimeIdentifier: string;
+  botName?: string;
+  resourceGroup?: string;
+  subscriptionId?: string;
+  region?: string;
+  settings: {
+    applicationInsights?: {
+      InstrumentationKey: string;
+      connectionString?: string;
+    };
+    cosmosDb?: {
+      cosmosDBEndpoint: string;
+      authKey: string;
+      databaseId: string;
+      containerId: string;
+    };
+    blobStorage?: {
+      connectionString: string;
+      container: string;
+    };
+    luis?: {
+      authoringKey: string;
+      authoringEndpoint: string;
+      endpointKey: string;
+      endpoint: string;
+      region: string;
+    };
+    qna?: {
+      subscriptionKey: string;
+      qnaRegion: string;
+      endpoint: string;
+    };
+    MicrosoftAppId: string;
+    MicrosoftAppPassword: string;
+  };
+  [key: string]: any;
 };
 
 export type Subscription = {

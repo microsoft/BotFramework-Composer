@@ -13,11 +13,25 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
     switch (action) {
       case 'open': {
         const encodedUrl: string = convertedUrl.searchParams.get('url') || '';
-        return decodeURIComponent(encodedUrl);
+        const source = convertedUrl.searchParams.get('source');
+        const payload = convertedUrl.searchParams.get('payload');
+        if (encodedUrl) {
+          return decodeURIComponent(encodedUrl);
+        } else if (source && payload) {
+          return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+        } else {
+          return '';
+        }
       }
 
       case 'create': {
-        return `projects/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
+        const source = convertedUrl.searchParams.get('source');
+        const payload = convertedUrl.searchParams.get('payload');
+        if (!source || !payload) {
+          return `projects/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
+        } else {
+          return `projects/create?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+        }
       }
 
       // process the import and load the URL at the server
@@ -27,6 +41,7 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
         if (!source || !payload) {
           throw new Error('bfcomposer://import must include a "source" and "payload" parameter.');
         }
+
         return `projects/import?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
       }
 

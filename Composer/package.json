@@ -13,38 +13,53 @@
     "selfsigned": "1.10.8",
     "serialize-javascript": "^3.1.0",
     "set-value": "^3.0.2",
-    "terser-webpack-plugin": "^2.3.7"
+    "terser-webpack-plugin": "^2.3.7",
+    "axios": "^0.21.1",
+    "y18n": "^5.0.5",
+    "immer": "^8.0.1",
+    "url-parse": "^1.5.1",
+    "underscore": "^1.12.1",
+    "dns-packet": "^1.3.4",
+    "json-ptr": "^2.1"
   },
   "engines": {
     "node": ">=12"
   },
-  "workspaces": [
-    "packages/adaptive-flow",
-    "packages/adaptive-form",
-    "packages/client",
-    "packages/electron-server",
-    "packages/extension",
-    "packages/extension-client",
-    "packages/form-dialogs",
-    "packages/intellisense",
-    "packages/lib/*",
-    "packages/server",
-    "packages/test-utils",
-    "packages/tools/built-in-functions",
-    "packages/tools/language-servers/*",
-    "packages/types",
-    "packages/ui-plugins/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/adaptive-flow",
+      "packages/adaptive-form",
+      "packages/client",
+      "packages/electron-server",
+      "packages/extension",
+      "packages/extension-client",
+      "packages/form-dialogs",
+      "packages/intellisense",
+      "packages/lib/*",
+      "packages/server",
+      "packages/server-workers",
+      "packages/test-utils",
+      "packages/tools/built-in-functions",
+      "packages/tools/language-servers/*",
+      "packages/types",
+      "packages/ui-plugins/*"
+    ],
+    "nohoist": [
+      "**/server-workers/**"
+    ]
+  },
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
     "build:prod": "yarn build:dev && yarn build:client && yarn build:server && yarn build:electron",
+    "build:ci": "yarn l10n:check && yarn build:dev",
     "build:dev": "yarn build:libs && yarn build:extensions",
     "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
     "build:libs": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @botframework-composer/* -p @bfc/* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
-    "build:extensions": "node scripts/compileExtensions.js",
+    "build:extensions": "cd ../extensions && yarn && yarn build:all",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
+    "start:debug": "cross-env NODE_ENV=production PORT=3000 DEBUG=* yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:dev:electron": "concurrently  \"npm:start:client\" \"npm:start:electron\"",
@@ -53,24 +68,28 @@
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
-    "test": "yarn typecheck && jest",
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
-    "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default",
+    "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default --silent",
     "test:integration": "cypress run --browser edge",
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",
     "test:integration:clean": "node scripts/clean-e2e.js",
+    "test:integration:clean-all": "node scripts/clean-e2e.js --all",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
+    "lint:ci": "wsrun --exclude-missing --collect-logs --report --no-prefix lint --format github-actions",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
+    "lint:extensions": "cd ../extensions && yarn lint",
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
     "typecheck:server": "yarn workspace @bfc/server typecheck",
     "typecheck:client": "yarn workspace @bfc/client typecheck",
     "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build",
-    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
+    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json \"l10ntemp/**/*.js\"",
     "l10n:extractJson": "node scripts/l10n-extractJson.js",
     "l10n:transform": "node scripts/l10n-transform.js",
     "l10n:babel": "babel --config-file ./babel.l10n.config.js --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp ./packages",
-    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas && rimraf l10ntemp"
+    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas && rimraf l10ntemp",
+    "l10n:check": "node scripts/l10nCheck.js"
   },
   "husky": {
     "hooks": {
@@ -78,7 +97,11 @@
     }
   },
   "lint-staged": {
-    "packages/**/*.{ts,tsx,js,jsx}": [
+    "**/*.{ts,tsx,js,jsx,json}": [
+      "prettier --write",
+      "git add"
+    ],
+    "../extensions/**/*.{ts,tsx,js,jsx,json}": [
       "prettier --write",
       "git add"
     ]
@@ -94,6 +117,7 @@
     "@bfc/eslint-plugin-bfcomposer": "*",
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@testing-library/cypress": "7.0.0-beta.1",
+    "@testing-library/user-event": "12.6.3",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",
     "chalk": "^4.0.0",
@@ -104,6 +128,7 @@
     "cypress-plugin-tab": "^1.0.5",
     "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
+    "eslint-formatter-github-actions": "^1.0.0",
     "eslint-plugin-cypress": "2.11.1",
     "eslint-plugin-emotion": "10.0.27",
     "eslint-plugin-format-message": "6.2.3",
@@ -123,7 +148,7 @@
     "ts-loader": "7.0.4",
     "tslib": "^2.0.0",
     "typescript": "3.9.2",
-    "wait-on": "^5.2.0",
+    "wait-on": "^5.3.0",
     "wsrun": "^5.2.0"
   }
 }

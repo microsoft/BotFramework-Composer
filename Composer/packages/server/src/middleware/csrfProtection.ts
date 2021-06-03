@@ -23,5 +23,5 @@ export const csrfProtection = (req: Request, res: Response, next?: NextFunction)
   }
 
   // check passed, continue to next handler
-  next && next();
+  next?.();
 };

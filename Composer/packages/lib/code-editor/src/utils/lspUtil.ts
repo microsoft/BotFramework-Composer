@@ -60,7 +60,7 @@ export function createLanguageClient(
   });
 }
 
-export async function SendRequestWithRetry(
+export async function sendRequestWithRetry(
   languageClient: MonacoLanguageClient,
   method: string,
   data: any,

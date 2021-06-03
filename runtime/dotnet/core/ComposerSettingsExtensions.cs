@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -53,13 +50,6 @@ namespace Microsoft.BotFramework.Composer.Core
             if (qnaSettingsFile.Exists)
             {
                 builder.AddJsonFile(qnaSettingsFile.FullName, optional: false, reloadOnChange: true);
-            }
-
-            var orchestratorSettingsPath = Path.GetFullPath(Path.Combine(botRoot, "generated", "orchestrator.settings.json"));
-            var orchestratorSettingsFile = new FileInfo(orchestratorSettingsPath);
-            if (orchestratorSettingsFile.Exists)
-            {
-                builder.AddJsonFile(orchestratorSettingsFile.FullName, optional: false, reloadOnChange: true);
             }
 
             return builder;

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Dialog, DialogType, IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
@@ -12,6 +12,7 @@ export enum DialogTypes {
   CreateFlow,
   DesignFlow,
   Customer,
+  ProvisionFlow,
 }
 
 // -------------------- Styles -------------------- //
@@ -19,6 +20,7 @@ export enum DialogTypes {
 const styles: {
   [DialogTypes.DesignFlow]: { dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> };
   [DialogTypes.CreateFlow]: { dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> };
+  [DialogTypes.ProvisionFlow]: { dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> };
 } = {
   [DialogTypes.CreateFlow]: {
     dialog: {
@@ -37,6 +39,25 @@ const styles: {
         // maxWidth: '416px !important',
         maxWidth: '80% !important',
         width: '960px !important',
+      },
+    },
+  },
+  [DialogTypes.ProvisionFlow]: {
+    dialog: {
+      title: {
+        fontWeight: FontWeights.bold,
+        fontSize: FontSizes.size20,
+        paddingTop: '14px',
+        paddingBottom: '11px',
+      },
+      subText: {
+        fontSize: FontSizes.size14,
+      },
+    },
+    modal: {
+      main: {
+        maxWidth: '70% !important',
+        width: '900px !important',
       },
     },
   },
@@ -60,8 +81,9 @@ const styles: {
   },
 };
 
-interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss' | 'isBlocking'> {
+interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss'> {
   isOpen: boolean;
+  isBlocking?: boolean;
   title?: string;
   subText?: string;
   dialogType: DialogTypes;
@@ -87,13 +109,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
   /* add customer styles to the array */
   styles[DialogTypes.Customer] = customerStyle;
 
-  const [currentStyle, setStyle] = useState(styles[dialogType]);
-
-  useEffect(() => {
-    if (dialogType) {
-      setStyle(styles[dialogType]);
-    }
-  }, [dialogType]);
+  const currentStyle = styles[dialogType];
 
   if (!isOpen) {
     return null;
@@ -110,7 +126,7 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
       hidden={false}
       minWidth={minWidth}
       modalProps={{
-        isBlocking: Boolean(isBlocking),
+        isBlocking: isBlocking,
         styles: currentStyle.modal,
       }}
       onDismiss={onDismiss}

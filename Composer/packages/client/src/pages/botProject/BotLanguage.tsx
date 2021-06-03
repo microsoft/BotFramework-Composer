@@ -11,7 +11,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
-import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { localeState, showAddLanguageModalState } from '../../recoilModel/atoms';
 import { AddLanguageModal } from '../../components/MultiLanguage';
@@ -20,21 +19,12 @@ import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { colors } from '../../colors';
 // -------------------- Styles -------------------- //
 
-const titleStyle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-  margin-left: 22px;
-  margin-top: 6px;
-`;
+import { headerText } from './styles';
+// -------------------- Styles -------------------- //
 
 const botLanguageContainerStyle = css`
   display: flex;
   flex-direction: column;
-`;
-
-const botLanguageDescriptionStyle = css`
-  font-size: ${FontSizes.small};
-  color: ${colors.gray(130)};
 `;
 
 const botLanguageFieldStyle = css`
@@ -89,7 +79,7 @@ const languageButton = {
 };
 
 const defaultLanguageTextStyle = css`
-  color: colors.gray(110);
+  color: ${colors.gray(110)};
   font-size: 8px;
 `;
 
@@ -162,51 +152,49 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
 
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Bot language')} titleStyle={titleStyle}>
-        <div css={botLanguageContainerStyle}>
-          <div css={botLanguageDescriptionStyle}>
-            {formatMessage(
-              'List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language.'
-            )}
-          </div>
-          <div css={botLanguageFieldStyle}>
-            {languageListOptions.map((l) => (
-              <div key={l.key} css={languageRowContainer}>
-                {l.key === defaultLanguage && (
-                  <div css={languageTextStyle} data-testid={'defaultLanguage'}>
-                    {l.text}
-                    <span css={defaultLanguageTextStyle}> {formatMessage('DEFAULT LANGUAGE')}</span>
-                  </div>
-                )}
-                {l.key !== defaultLanguage && (
-                  <div css={languageItemContainer}>
-                    <div css={languageItem}>{l.text}</div>
-                    <div css={languageButtonContainer}>
-                      <ActionButton
-                        data-testid={'setDefaultLanguage'}
-                        styles={languageButton}
-                        onClick={(e) => setDefaultLanguage(l.key)}
-                      >
-                        {formatMessage('Set it as default language')}
-                      </ActionButton>
-                      <ActionButton
-                        data-testid={'remove'}
-                        styles={languageButton}
-                        onClick={() => deleteLanguages({ languages: [l.key], projectId: projectId })}
-                      >
-                        {formatMessage('Remove')}
-                      </ActionButton>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          <ActionButton styles={manageBotLanguage} onClick={() => addLanguageDialogBegin(projectId, () => {})}>
-            {formatMessage('Manage bot languages')}
-          </ActionButton>
+      <div css={botLanguageContainerStyle}>
+        <div css={headerText}>
+          {formatMessage(
+            'List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage languages’ to create a copy of the default language, and translate the content into the new language.'
+          )}
         </div>
-      </CollapsableWrapper>
+        <div css={botLanguageFieldStyle}>
+          {languageListOptions.map((l) => (
+            <div key={l.key} css={languageRowContainer}>
+              {l.key === defaultLanguage && (
+                <div css={languageTextStyle} data-testid={'defaultLanguage'}>
+                  {l.text}
+                  <span css={defaultLanguageTextStyle}> {formatMessage('DEFAULT LANGUAGE')}</span>
+                </div>
+              )}
+              {l.key !== defaultLanguage && (
+                <div css={languageItemContainer}>
+                  <div css={languageItem}>{l.text}</div>
+                  <div css={languageButtonContainer}>
+                    <ActionButton
+                      data-testid={'setDefaultLanguage'}
+                      styles={languageButton}
+                      onClick={(e) => setDefaultLanguage(l.key)}
+                    >
+                      {formatMessage('Set it as default language')}
+                    </ActionButton>
+                    <ActionButton
+                      data-testid={'remove'}
+                      styles={languageButton}
+                      onClick={() => deleteLanguages({ languages: [l.key], projectId: projectId })}
+                    >
+                      {formatMessage('Remove')}
+                    </ActionButton>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <ActionButton styles={manageBotLanguage} onClick={() => addLanguageDialogBegin(projectId, () => {})}>
+          {formatMessage('Manage bot languages')}
+        </ActionButton>
+      </div>
       <AddLanguageModal
         defaultLanguage={defaultLanguage}
         isOpen={showAddLanguageModal}

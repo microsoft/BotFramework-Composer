@@ -11,7 +11,6 @@
     "**/node_modules": true,
     "**/build": true
   },
-  "eslint.enable": true,
   "eslint.packageManager": "yarn",
   "eslint.validate": [
     "javascript",
@@ -24,5 +23,12 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  }
+  },
+  "json.schemas": [
+    {
+      "fileMatch": [".composer/settings.json"],
+      "url": "http://localhost:5000/api/extensions/settings/schema.json"
+    }
+  ],
+  "json.schemaDownload.enable": true
 }

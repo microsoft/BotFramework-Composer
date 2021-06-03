@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
 using System;
 using System.IO;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -8,9 +5,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.AI.Orchestrator;
 using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
@@ -33,6 +30,7 @@ using Microsoft.BotFramework.Composer.Core.Settings;
 using Microsoft.BotFramework.Composer.WebAppTemplates.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace Microsoft.BotFramework.Composer.WebAppTemplates
 {
@@ -72,6 +70,14 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             }
         }
 
+        public void ConfigureSetSpeakMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings?.Feature?.UseSetSpeakMiddleware == true && settings.Speech != null)
+            {
+                adapter.Use(new SetSpeakMiddleware(settings.Speech.VoiceFontName, settings.Speech.FallbackToTextForSpeechIfEmpty));
+            }
+        }
+
         public IStorage ConfigureStorage(BotSettings settings)
         {
             if (string.IsNullOrEmpty(settings?.CosmosDb?.ContainerId))
@@ -105,7 +111,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var adapter = IsSkill(settings)
                 ? new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>())
                 : new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
-            
+
             adapter
               .UseStorage(storage)
               .UseBotState(userState, conversationState)
@@ -116,6 +122,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
             ConfigureInspectionMiddleWare(adapter, settings, storage);
             ConfigureShowTypingMiddleWare(adapter, settings);
+            ConfigureSetSpeakMiddleWare(adapter, settings);
 
             adapter.OnTurnError = async (turnContext, exception) =>
             {
@@ -151,7 +158,6 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
-            ComponentRegistration.Add(new OrchestratorComponentRegistration());
 
             // This is for custom action component registration.
             //ComponentRegistration.Add(new CustomActionComponentRegistration());
@@ -220,7 +226,18 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+
+            // Set up custom content types - associating file extension to MIME type.
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".lu"] = "application/lu";
+            provider.Mappings[".qna"] = "application/qna";
+
+            // Expose static files in manifests folder for skill scenarios.
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+
             app.UseNamedPipes(System.Environment.GetEnvironmentVariable("APPSETTING_WEBSITE_SITE_NAME") + ".directline");
             app.UseWebSockets();
             app.UseRouting()
