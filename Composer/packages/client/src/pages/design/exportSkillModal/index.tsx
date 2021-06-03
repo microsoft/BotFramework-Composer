@@ -277,7 +277,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       onDismiss={handleDismiss}
     >
       <div css={styles.container}>
-        <p>
+        <p style={{ height: '38px' }}>
           {typeof subText === 'function' && subText()}
           {helpLink && (
             <React.Fragment>
@@ -322,7 +322,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
                 const Button = primary ? PrimaryButton : DefaultButton;
 
-                const isDisabled = typeof disabled === 'function' ? disabled({ publishTargets }) : !!disabled;
+                const isDisabled =
+                  typeof disabled === 'function' ? disabled({ publishTarget: currentPublishTarget }) : !!disabled;
 
                 return (
                   <Button
