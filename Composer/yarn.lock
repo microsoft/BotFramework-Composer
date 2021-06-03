@@ -4086,10 +4086,10 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-lu@4.14.0-dev.20210427.c0be653":
-  version "4.14.0-dev.20210427.c0be653"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.14.0-dev.20210427.c0be653.tgz#b710879b1843af69b0d43ecb5cbf583c946ec1d0"
-  integrity sha1-txCHmxhDr2mw1D7LXL9YPJRuwdA=
+"@microsoft/bf-lu@4.14.0-dev.20210602.be805a8":
+  version "4.14.0-dev.20210602.be805a8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.14.0-dev.20210602.be805a8.tgz#dc35016c5ea1688fa5adf430a969d5c9ce817cc5"
+  integrity sha1-3DUBbF6haI+lrfQwqWnVyc6BfMU=
   dependencies:
     "@types/node-fetch" "~2.5.5"
     antlr4 "~4.8.0"
@@ -4104,7 +4104,6 @@
     https-proxy-agent "^5.0.0"
     intercept-stdout "^0.1.2"
     lodash "^4.17.19"
-    node-fetch "~2.6.0"
     semver "^5.5.1"
     tslib "^2.0.3"
 
