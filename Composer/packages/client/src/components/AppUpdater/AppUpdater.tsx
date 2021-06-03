@@ -19,9 +19,9 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IpcRendererEvent } from 'electron';
 
-import { AppUpdaterStatus } from '../constants';
-import { colors } from '../colors';
-import { appUpdateState, dispatcherState } from '../recoilModel';
+import { AppUpdaterStatus } from '../../constants';
+import { colors } from '../../colors';
+import { appUpdateState, dispatcherState } from '../../recoilModel';
 
 import { breakingUpdatesMap } from './breakingUpdates/breakingUpdatesMap';
 
