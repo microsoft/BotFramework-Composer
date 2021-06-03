@@ -35,6 +35,7 @@ const ExpectedResponsesField: React.FC<FieldProps> = (props) => {
       <FieldLabel description={description} id={id} label={label} />
       <Editor
         {...props}
+        label={label}
         placeholder={expectedResponsesPlaceholder()}
         schema={schema}
         value={intentName}
