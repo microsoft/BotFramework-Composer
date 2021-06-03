@@ -43,7 +43,8 @@
     }
   },
   "resolutions": {
-    "@botframework-composer/types": "file:../../Composer/packages/types"
+    "@botframework-composer/types": "file:../../Composer/packages/types",
+    "json-ptr": "^2.1"
   },
   "dependencies": {
     "@bfc/extension": "file:../../Composer/packages/extension",

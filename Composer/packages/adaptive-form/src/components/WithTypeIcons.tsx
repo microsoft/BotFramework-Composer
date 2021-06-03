@@ -39,7 +39,7 @@ export function WithTypeIcons(WrappedComponent: FieldWidget): FieldWidget {
         <div css={styles.mainWrapper}>
           {iconText && <div css={styles.iconWrapper}>{iconText}</div>}
           <div css={styles.componentWrapper}>
-            <WrappedComponent hasIcon {...props} label={undefined} />
+            <WrappedComponent hasIcon {...props} label={false} />
           </div>
         </div>
       </React.Fragment>
