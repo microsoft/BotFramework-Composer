@@ -63,7 +63,7 @@
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
-    "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 yarn typecheck && jest",
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 yarn typecheck && ./node_modules/.bin/jest",
     "test:watch": "yarn typecheck && jest --watch",
     "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default --silent",
     "test:integration": "cypress run --browser edge",
