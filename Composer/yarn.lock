@@ -4852,7 +4852,7 @@ __metadata:
     "@microsoft/bf-dialog": 4.13.1
     "@microsoft/bf-dispatcher": ^4.11.0-beta.20201016.393c6b2
     "@microsoft/bf-generate-library": 4.10.0-daily.20210317.224602
-    "@microsoft/bf-lu": 4.14.0-dev.20210408.1a5070e
+    "@microsoft/bf-lu": 4.14.0-dev.20210602.be805a8
     "@microsoft/bf-orchestrator": 4.13.0-rc0
     "@types/archiver": ^3.1.0
     "@types/body-parser": ^1.17.0
@@ -6391,6 +6391,29 @@ __metadata:
     semver: ^5.5.1
     tslib: ^2.0.3
   checksum: e0aeb1eb34b10472afbd64ee9b3abcc02abd237bba36d2c3da67e673317b35f21676743d2eee8ef653223e3abc51b809d098a0166d71158681de88151e9fd4bf
+  languageName: node
+  linkType: hard
+
+"@microsoft/bf-lu@npm:4.14.0-dev.20210602.be805a8":
+  version: 4.14.0-dev.20210602.be805a8
+  resolution: "@microsoft/bf-lu@npm:4.14.0-dev.20210602.be805a8"
+  dependencies:
+    "@types/node-fetch": ~2.5.5
+    antlr4: ~4.8.0
+    axios: ~0.21.1
+    chalk: 2.4.1
+    console-stream: ^0.1.1
+    deep-equal: ^1.0.1
+    delay: ^4.3.0
+    fs-extra: ^8.1.0
+    get-stdin: ^6.0.0
+    globby: ^10.0.1
+    https-proxy-agent: ^5.0.0
+    intercept-stdout: ^0.1.2
+    lodash: ^4.17.19
+    semver: ^5.5.1
+    tslib: ^2.0.3
+  checksum: 5d3e7ba26c9d89eb197767e80d08ad541aa7bde4cf59469c2071ec249621b169cda73109e1610042da4c506c9116e1cd779f5775fb2b62cc6eb05501e6f3a00c
   languageName: node
   linkType: hard
 
