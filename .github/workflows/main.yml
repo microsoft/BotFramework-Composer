@@ -32,8 +32,8 @@ jobs:
       #    key: ${{ runner.os }}-yarn-new-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
       #    restore-keys: |
       #      ${{ runner.os }}-yarn-new-
-      - name: Clear global yarn cache
-        run: yarn cache clean
+      # - name: Clear global yarn cache
+      #   run: yarn cache clean
       - name: yarn
         # don't update lockfiles
         run: yarn --immutable
