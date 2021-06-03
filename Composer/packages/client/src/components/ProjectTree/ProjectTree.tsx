@@ -23,7 +23,6 @@ import {
   projectTreeSelectorFamily,
 } from '../../recoilModel';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { colors } from '../../colors';
 import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';

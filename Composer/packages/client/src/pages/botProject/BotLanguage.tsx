@@ -17,9 +17,9 @@ import { AddLanguageModal } from '../../components/MultiLanguage';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { colors } from '../../colors';
-// -------------------- Styles -------------------- //
 
 import { headerText } from './styles';
+
 // -------------------- Styles -------------------- //
 
 const botLanguageContainerStyle = css`

@@ -37,13 +37,8 @@ class Colors {
   amber = SharedColors.orangeYellow10;
 
   gray = (value: number) => {
-    if (this.isDark) {
-      const red = value;
-      return `rgb(${red}, ${red - 2}, ${red - 4})`;
-    } else {
-      const red = 255 - value;
-      return `rgb(${red}, ${red - 2}, ${red - 4})`;
-    }
+    const red = this.isDark ? value : 255 - value;
+    return `rgb(${red}, ${red - 2}, ${red - 4})`;
   };
 
   // copied from https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/messaging
