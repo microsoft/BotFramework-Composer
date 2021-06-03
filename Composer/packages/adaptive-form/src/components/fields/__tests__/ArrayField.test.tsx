@@ -27,14 +27,11 @@ describe('<ArrayField />', () => {
     expect(getAllByTestId('ArrayFieldItem')).toHaveLength(3);
   });
 
-  it('can add new items', () => {
-    const onChange = jest.fn();
-    const { getByLabelText } = renderSubject({ onChange });
+  it('can add new items', async () => {
+    const { getByText, findByTestId } = renderSubject();
 
-    const input = getByLabelText('New value');
-    fireEvent.change(input, { target: { value: 'new value' } });
-    fireEvent.keyDown(input, { key: 'Enter' });
-
-    expect(onChange).toHaveBeenCalledWith(['new value']);
+    const button = getByText('Add new');
+    fireEvent.click(button);
+    await findByTestId('string-field');
   });
 });

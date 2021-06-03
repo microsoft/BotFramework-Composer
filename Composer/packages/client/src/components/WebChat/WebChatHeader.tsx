@@ -43,6 +43,7 @@ export type WebChatHeaderProps = {
   onSaveTranscript: (conversationId: string) => void;
   onOpenBotInEmulator: () => void;
   onCloseWebChat: () => void;
+  isRestartButtonDisabled: boolean;
 };
 
 export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
@@ -54,6 +55,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   onOpenBotInEmulator: openBotInEmulator,
   onSetRestartOption,
   onCloseWebChat,
+  isRestartButtonDisabled,
 }) => {
   const menuProps: IContextualMenuProps = {
     items: [
@@ -114,6 +116,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
         split
         aria-roledescription="split button"
         ariaLabel="restart-conversation"
+        disabled={isRestartButtonDisabled}
         iconProps={{ iconName: 'Refresh' }}
         menuProps={menuProps}
         splitButtonAriaLabel="See 2 other restart conversation options"

@@ -323,12 +323,20 @@ export const MultiLanguagesDialog = {
 };
 
 export const addSkillDialog = {
+  get SET_APP_ID() {
+    return {
+      title: formatMessage('Connect to a skill'),
+      subText: formatMessage(
+        "To connect to a skill, your bot needs the information captured in the skill’s manifest, and, for secure access, the skill needs to know your bot's App ID. Follow the steps below to proceed."
+      ),
+    };
+  },
   get SKILL_MANIFEST_FORM() {
     return {
       title: formatMessage('Add a skill'),
       subText: (url: string) =>
         formatMessage.rich(
-          `To connect to a skill, your bot needs the information captured in the skill's manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
+          `To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot's AppID. <link>Learn more.</link>`,
           {
             link: ({ children }) => (
               <Link key="learn-more-about-skills" href={url} rel="noopener noreferrer" target="_blank">
@@ -418,6 +426,7 @@ export const SupportedFileTypes = [
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
 
 export enum AppUpdaterStatus {
+  BREAKING_UPDATE_AVAILABLE,
   IDLE,
   UPDATE_AVAILABLE,
   UPDATE_UNAVAILABLE,

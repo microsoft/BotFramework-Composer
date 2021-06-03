@@ -35,7 +35,7 @@ export const applicationDispatcher = () => {
         const newAppUpdateState = {
           ...currentAppUpdate,
         };
-        if (status === AppUpdaterStatus.UPDATE_AVAILABLE) {
+        if (status === AppUpdaterStatus.UPDATE_AVAILABLE || status === AppUpdaterStatus.BREAKING_UPDATE_AVAILABLE) {
           newAppUpdateState.version = version;
         }
         if (status === AppUpdaterStatus.IDLE) {

@@ -6,23 +6,35 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { isUsingAdaptiveRuntime, SDKKinds } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { settingsState, designPageLocationState, dispatcherState, luFilesSelectorFamily } from '../../recoilModel';
+import {
+  settingsState,
+  designPageLocationState,
+  dispatcherState,
+  luFilesSelectorFamily,
+  publishTypesState,
+} from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TriggerFormData } from '../../utils/dialogUtil';
 import { selectIntentDialog } from '../../constants';
+import { isShowAuthDialog } from '../../utils/auth';
+import { AuthDialog } from '../Auth/AuthDialog';
+import { PublishProfileDialog } from '../../pages/botProject/create-publish-profile/PublishProfileDialog';
 
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
+import { SetAppId } from './SetAppId';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -64,7 +76,7 @@ export const getSkillManifest = async (projectId: string, manifestUrl: string, s
   } catch (error) {
     const httpMessage = error?.response?.data?.message;
     const message = httpMessage?.match('Unexpected string in JSON')
-      ? formatMessage("Error attempting to parse Skill manifest. There could be an error in it's format.")
+      ? formatMessage('Error attempting to parse Skill manifest. There could be an error in its format.')
       : formatMessage('Manifest URL can not be accessed');
 
     setFormDataErrors({ ...error, manifestUrl: message });
@@ -81,13 +93,31 @@ const getTriggerFormData = (intent: string, content: string): TriggerFormData =>
 
 const buttonStyle = { root: { marginLeft: '8px' } };
 
+const setAppIdDialogStyles = {
+  dialog: {
+    title: {
+      fontWeight: FontWeights.bold,
+      fontSize: FontSizes.size20,
+      paddingTop: '14px',
+      paddingBottom: '11px',
+    },
+    subText: {
+      fontSize: FontSizes.size14,
+      marginBottom: '0px',
+    },
+  },
+  modal: {
+    main: {
+      maxWidth: '80% !important',
+      width: '960px !important',
+    },
+  },
+};
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { projectId, addRemoteSkill, addTriggerToRoot, onDismiss } = props;
 
-  const [title, setTitle] = useState({
-    subText: '',
-    title: addSkillDialog.SKILL_MANIFEST_FORM.title,
-  });
+  const [title, setTitle] = useState(addSkillDialog.SET_APP_ID);
+  const [showSetAppIdDialog, setShowSetAppIdDialog] = useState(true);
   const [showIntentSelectDialog, setShowIntentSelectDialog] = useState(false);
   const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
     manifestUrl: '',
@@ -96,11 +126,16 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [skillManifest, setSkillManifest] = useState<any | null>(null);
   const [showDetail, setShowDetail] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [createSkillDialogHidden, setCreateSkillDialogHidden] = useState(false);
 
-  const { languages, luFeatures, runtime } = useRecoilValue(settingsState(projectId));
+  const publishTypes = useRecoilValue(publishTypesState(projectId));
+  const { languages, luFeatures, runtime, publishTargets = [], MicrosoftAppId } = useRecoilValue(
+    settingsState(projectId)
+  );
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
-  const { updateRecognizer } = useRecoilValue(dispatcherState);
+  const { updateRecognizer, setMicrosoftAppProperties, setPublishTargets } = useRecoilValue(dispatcherState);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -162,6 +197,31 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     }
   };
 
+  const handleDismiss = () => {
+    setShowSetAppIdDialog(true);
+    onDismiss();
+  };
+
+  const handleGotoAddSkill = (publishTargetName: string) => {
+    const profileTarget = publishTargets.find((target) => target.name === publishTargetName);
+    const configuration = JSON.parse(profileTarget?.configuration || '');
+    setMicrosoftAppProperties(
+      projectId,
+      configuration.settings.MicrosoftAppId,
+      configuration.settings.MicrosoftAppPassword
+    );
+
+    setShowSetAppIdDialog(false);
+    setTitle({
+      subText: '',
+      title: addSkillDialog.SKILL_MANIFEST_FORM.title,
+    });
+  };
+
+  const handleGotoCreateProfile = () => {
+    isShowAuthDialog(true) ? setShowAuthDialog(true) : setCreateSkillDialogHidden(true);
+  };
+
   useEffect(() => {
     if (skillManifest?.endpoints) {
       setFormData({
@@ -171,109 +231,161 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     }
   }, [skillManifest]);
 
+  useEffect(() => {
+    if (MicrosoftAppId) {
+      setShowSetAppIdDialog(false);
+      setTitle({
+        subText: '',
+        title: addSkillDialog.SKILL_MANIFEST_FORM.title,
+      });
+    }
+  }, [MicrosoftAppId]);
+
   return (
-    <DialogWrapper isOpen dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss} {...title}>
-      {showIntentSelectDialog ? (
-        <SelectIntent
-          dialogId={dialogId}
-          languages={languages}
-          luFeatures={luFeatures}
-          manifest={skillManifest}
-          projectId={projectId}
-          rootLuFiles={luFiles}
-          runtime={runtime}
-          onBack={() => {
-            setTitle({
-              subText: '',
-              title: addSkillDialog.SKILL_MANIFEST_FORM.title,
-            });
-            setShowIntentSelectDialog(false);
-          }}
-          onDismiss={onDismiss}
-          onSubmit={handleSubmit}
-          onUpdateTitle={setTitle}
-        />
-      ) : (
-        <Fragment>
-          <div style={{ marginBottom: '16px' }}>
-            {addSkillDialog.SKILL_MANIFEST_FORM.subText('https://aka.ms/bf-composer-docs-publish-bot')}
-          </div>
-          <Separator />
-          <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
-            <div style={{ width: '50%' }}>
-              <TextField
-                required
-                errorMessage={formDataErrors.manifestUrl}
-                label={formatMessage('Skill Manifest URL')}
-                placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
-                value={formData.manifestUrl || ''}
-                onChange={handleManifestUrlChange}
-              />
-              {skillManifest?.endpoints?.length > 1 && (
-                <Dropdown
-                  defaultSelectedKey={skillManifest.endpoints[0].name}
-                  label={formatMessage('Endpoints')}
-                  options={options}
-                  responsiveMode={ResponsiveMode.large}
-                  onChange={(e, option?: IDropdownOption) => {
-                    if (option) {
-                      setFormData({
-                        ...formData,
-                        endpointName: option.key as string,
-                      });
-                    }
-                  }}
-                />
-              )}
+    <Fragment>
+      <DialogWrapper
+        dialogType={showSetAppIdDialog ? DialogTypes.Customer : DialogTypes.CreateFlow}
+        isOpen={!createSkillDialogHidden}
+        onDismiss={handleDismiss}
+        {...title}
+        customerStyle={setAppIdDialogStyles}
+      >
+        {showSetAppIdDialog && (
+          <Fragment>
+            <Separator styles={{ root: { marginBottom: '20px' } }} />
+            <SetAppId
+              projectId={projectId}
+              onDismiss={handleDismiss}
+              onGotoCreateProfile={handleGotoCreateProfile}
+              onNext={handleGotoAddSkill}
+            />
+          </Fragment>
+        )}
+        {showIntentSelectDialog && (
+          <SelectIntent
+            dialogId={dialogId}
+            languages={languages}
+            luFeatures={luFeatures}
+            manifest={skillManifest}
+            projectId={projectId}
+            rootLuFiles={luFiles}
+            onBack={() => {
+              setTitle({
+                subText: '',
+                title: addSkillDialog.SKILL_MANIFEST_FORM.title,
+              });
+              setShowIntentSelectDialog(false);
+            }}
+            onDismiss={handleDismiss}
+            onSubmit={handleSubmit}
+            onUpdateTitle={setTitle}
+          />
+        )}
+        {!showIntentSelectDialog && !showSetAppIdDialog && (
+          <Fragment>
+            <div style={{ marginBottom: '16px' }}>
+              {addSkillDialog.SKILL_MANIFEST_FORM.subText('https://aka.ms/bf-composer-docs-publish-bot')}
             </div>
-            {showDetail && (
-              <Fragment>
-                <Separator vertical styles={{ root: { padding: '0px 20px' } }} />
-                <div style={{ minWidth: '50%' }}>
-                  {skillManifest ? <SkillDetail manifest={skillManifest} /> : <LoadingSpinner />}
-                </div>
-              </Fragment>
-            )}
-          </Stack>
-          <Stack>
             <Separator />
-            <StackItem align={'end'}>
-              <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
-              {skillManifest ? (
-                isUsingAdaptiveRuntime(runtime) &&
-                luFiles.length > 0 &&
-                skillManifest.dispatchModels?.intents?.length > 0 ? (
-                  <PrimaryButton
-                    disabled={formDataErrors.manifestUrl ? true : false}
-                    styles={buttonStyle}
-                    text={formatMessage('Next')}
-                    onClick={(event) => {
-                      setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
-                      setShowIntentSelectDialog(true);
+            <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
+              <div style={{ width: '50%' }}>
+                <TextField
+                  required
+                  errorMessage={formDataErrors.manifestUrl}
+                  label={formatMessage('Skill Manifest URL')}
+                  placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
+                  value={formData.manifestUrl || ''}
+                  onChange={handleManifestUrlChange}
+                />
+                {skillManifest?.endpoints?.length > 1 && (
+                  <Dropdown
+                    defaultSelectedKey={skillManifest.endpoints[0].name}
+                    label={formatMessage('Endpoints')}
+                    options={options}
+                    responsiveMode={ResponsiveMode.large}
+                    onChange={(e, option?: IDropdownOption) => {
+                      if (option) {
+                        setFormData({
+                          ...formData,
+                          endpointName: option.key as string,
+                        });
+                      }
                     }}
                   />
+                )}
+              </div>
+              {showDetail && (
+                <Fragment>
+                  <Separator vertical styles={{ root: { padding: '0px 20px' } }} />
+                  <div style={{ minWidth: '50%' }}>
+                    {skillManifest ? <SkillDetail manifest={skillManifest} /> : <LoadingSpinner />}
+                  </div>
+                </Fragment>
+              )}
+            </Stack>
+            <Stack>
+              <Separator />
+              <StackItem align={'end'}>
+                <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
+                {skillManifest ? (
+                  isUsingAdaptiveRuntime(runtime) &&
+                  luFiles.length > 0 &&
+                  skillManifest.dispatchModels?.intents?.length > 0 ? (
+                    <PrimaryButton
+                      disabled={formDataErrors.manifestUrl ? true : false}
+                      styles={buttonStyle}
+                      text={formatMessage('Next')}
+                      onClick={(event) => {
+                        setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
+                        setShowIntentSelectDialog(true);
+                      }}
+                    />
+                  ) : (
+                    <PrimaryButton
+                      styles={buttonStyle}
+                      text={formatMessage('Done')}
+                      onClick={(event) => {
+                        addRemoteSkill(formData.manifestUrl, formData.endpointName);
+                      }}
+                    />
+                  )
                 ) : (
                   <PrimaryButton
+                    disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
                     styles={buttonStyle}
-                    text={formatMessage('Done')}
-                    onClick={(event) => {
-                      addRemoteSkill(formData.manifestUrl, formData.endpointName);
-                    }}
+                    text={formatMessage('Next')}
+                    onClick={validateUrl}
                   />
-                )
-              ) : (
-                <PrimaryButton
-                  disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
-                  styles={buttonStyle}
-                  text={formatMessage('Next')}
-                  onClick={validateUrl}
-                />
-              )}
-            </StackItem>
-          </Stack>
-        </Fragment>
+                )}
+              </StackItem>
+            </Stack>
+          </Fragment>
+        )}
+      </DialogWrapper>
+      {showAuthDialog && (
+        <AuthDialog
+          needGraph
+          next={() => {
+            setCreateSkillDialogHidden(true);
+          }}
+          onDismiss={() => {
+            setShowAuthDialog(false);
+          }}
+        />
       )}
-    </DialogWrapper>
+      {createSkillDialogHidden ? (
+        <PublishProfileDialog
+          closeDialog={() => {
+            setCreateSkillDialogHidden(false);
+          }}
+          current={null}
+          projectId={projectId}
+          setPublishTargets={setPublishTargets}
+          targets={publishTargets || []}
+          types={publishTypes}
+        />
+      ) : null}
+    </Fragment>
   );
 };
 

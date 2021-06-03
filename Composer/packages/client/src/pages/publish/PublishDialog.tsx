@@ -97,7 +97,11 @@ export const PublishDialog = (props) => {
     <Dialog
       dialogContentProps={publishDialogProps}
       hidden={false}
-      modalProps={{ isBlocking: true, styles: { main: { maxWidth: '1063px !important' } } }}
+      modalProps={{
+        isBlocking: true,
+        isClickableOutsideFocusTrap: true,
+        styles: { main: { maxWidth: '1063px !important' } },
+      }}
       onDismiss={() => {
         cleanComments();
         props.onDismiss();

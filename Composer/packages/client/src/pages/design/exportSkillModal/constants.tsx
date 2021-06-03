@@ -192,19 +192,15 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       backButton,
       {
-        disabled: ({ publishTargets }) => {
+        disabled: ({ publishTarget }) => {
           try {
-            return (
-              publishTargets.findIndex((item) => {
-                const config = JSON.parse(item.configuration);
-                return (
-                  config.settings &&
-                  config.settings.MicrosoftAppId &&
-                  config.hostname &&
-                  config.settings.MicrosoftAppId.length > 0 &&
-                  config.hostname.length > 0
-                );
-              }) < 0
+            const config = JSON.parse(publishTarget.configuration);
+            return !(
+              config.settings &&
+              config.settings.MicrosoftAppId &&
+              config.hostname &&
+              config.settings.MicrosoftAppId.length > 0 &&
+              config.hostname.length > 0
             );
           } catch (err) {
             console.log(err.message);
@@ -287,8 +283,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Next'),
-        onClick: ({ onNext, generateManifest }) => () => {
-          // generateManifest();
+        onClick: ({ onNext }) => () => {
           onNext();
         },
       },
