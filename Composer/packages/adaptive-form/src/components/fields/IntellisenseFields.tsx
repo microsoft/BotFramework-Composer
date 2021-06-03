@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps } from '@bfc/extension-client';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { Intellisense } from '@bfc/intellisense';
 import React, { useRef, useState } from 'react';
 
@@ -18,6 +18,8 @@ const noop = () => {};
 export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
+  const { projectId } = useShellApi();
+
   const completionListOverrideResolver = (value: string) => {
     return value === '' ? <ExpressionSwitchWindow kind={'String'} onSwitchToExpression={() => onChange('=')} /> : null;
   };
@@ -30,6 +32,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
       completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
+      projectId={projectId}
       scopes={scopes}
       url={intellisenseServerUrlRef.current}
       value={value}
@@ -65,6 +68,8 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
 export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, focused: defaultFocused } = props;
 
+  const { projectId } = useShellApi();
+
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
@@ -89,6 +94,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
     <Intellisense
       focused={defaultFocused}
       id={`intellisense-${id}`}
+      projectId={projectId}
       scopes={scopes}
       url={intellisenseServerUrlRef.current}
       value={value}
@@ -134,6 +140,8 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
 export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
+  const { projectId } = useShellApi();
+
   const completionListOverrideResolver = (value: string) => {
     return value === '' ? <ExpressionSwitchWindow kind={'Number'} onSwitchToExpression={() => onChange('=')} /> : null;
   };
@@ -146,6 +154,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
       completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
+      projectId={projectId}
       scopes={scopes}
       url={intellisenseServerUrlRef.current}
       value={value}
@@ -171,6 +180,8 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
 
 export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, focused: defaultFocused, schema } = props;
+
+  const { projectId } = useShellApi();
 
   const completionListOverrideResolver = (value: any) => {
     if (typeof value === 'object' && Object.keys(value).length === 0) {
@@ -204,6 +215,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
       completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
+      projectId={projectId}
       scopes={scopes}
       url={intellisenseServerUrlRef.current}
       value={value || defaultValue}
