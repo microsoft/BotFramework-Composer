@@ -537,7 +537,10 @@ export class BotProjectService {
                 ? { voiceFontName: 'en-US-AriaNeural', fallbackToTextForSpeechIfEmpty: true }
                 : undefined,
               blobTranscript: originalProject.settings?.blobStorage?.connectionString
-                ? originalProject.settings?.blobStorage
+                ? {
+                    connectionString: originalProject.settings.blobStorage.connectionString,
+                    containerName: originalProject.settings.blobStorage.container,
+                  }
                 : {},
             },
             telemetry: {
@@ -563,7 +566,7 @@ export class BotProjectService {
           speech: { ...originalProject.settings.speech },
           defaultLanguage: originalProject.settings.defaultLanguage,
           languages: originalProject.settings.languages,
-          customFunctions: originalProject.settings.customfunctions,
+          customFunctions: originalProject.settings.customFunctions ?? [],
           importedLibraries: [],
           MicrosoftAppId: originalProject.settings.MicrosoftAppId,
 

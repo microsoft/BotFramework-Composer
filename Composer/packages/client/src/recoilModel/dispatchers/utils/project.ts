@@ -768,6 +768,8 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
 
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
   set(botProjectIdsState, [rootBotProjectId]);
+  // Get the publish types on opening
+  dispatcher.getPublishTargetTypes(rootBotProjectId);
   // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
   if (botFiles?.botProjectSpaceFiles?.length) {
