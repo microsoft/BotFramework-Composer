@@ -111,10 +111,19 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
     [mergedSettings, projectId, runtimeSettings?.skills]
   );
 
-  const { arrayItems: allowedCallers = [], addItem, handleChange } = useArrayItems(
+  const { arrayItems: allowedCallers = [], addItem, handleChange, handleResetCache } = useArrayItems(
     runtimeSettings?.skills?.allowedCallers || [],
     updateAllowedCallers
   );
+
+  // Reset array cache when user switches between project settings
+  const didMount = React.useRef(false);
+  React.useEffect(() => {
+    if (didMount.current) {
+      handleResetCache(runtimeSettings?.skills?.allowedCallers || []);
+    }
+    didMount.current = true;
+  }, [projectId]);
 
   const onAddNewAllowedCaller = React.useCallback(() => {
     addItem('');

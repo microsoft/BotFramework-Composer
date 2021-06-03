@@ -168,7 +168,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
         },
       };
 
-    case 'projectSettings':
+    case 'publish':
       return {
         content: formatMessage('Publish your bot to Azure and manage published bots here.'),
         headline: formatMessage('Configure and publish'),

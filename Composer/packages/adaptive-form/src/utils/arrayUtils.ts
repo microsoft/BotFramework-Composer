@@ -3,7 +3,7 @@
 
 import { generateUniqueId } from '@bfc/shared';
 import { ChangeHandler } from '@bfc/extension-client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type ArrayChangeHandler<ItemType> = (items: ArrayItem<ItemType>[]) => void;
 
@@ -16,9 +16,10 @@ interface ArrayItemState<ItemType> {
   arrayItems: ArrayItem<ItemType>[];
   handleChange: ArrayChangeHandler<ItemType>;
   addItem: (newItem: ItemType) => void;
+  handleResetCache: (newItem: ItemType[]) => void;
 }
 
-const generateArrayItems = <ItemType = unknown>(value: ItemType[]): ArrayItem<ItemType>[] => {
+const generateArrayItems = <ItemType = unknown>(value: ItemType[] = []): ArrayItem<ItemType>[] => {
   return value.map((i) => ({
     id: generateUniqueId(),
     value: i,
@@ -73,19 +74,33 @@ export const getArrayItemProps = <ItemType = unknown>(
 };
 
 export function useArrayItems<ItemType = unknown>(
-  items: ItemType[],
+  items: ItemType[] | undefined,
   onChange: ChangeHandler<ItemType[]>
 ): ArrayItemState<ItemType> {
   const [cache, setCache] = useState(generateArrayItems(items));
 
+  const didMount = useRef(false);
+  useEffect(() => {
+    // If the user switches between types and the value
+    // gets reset to undefined, then reset the cache
+    if (didMount.current && items === undefined) {
+      setCache([]);
+    }
+    didMount.current = true;
+  }, [items]);
+
   const handleChange = (newItems: ArrayItem<ItemType>[]) => {
     setCache(newItems);
-    onChange(newItems.map(({ value }) => value));
+    onChange(newItems.map(({ value }) => value).filter(Boolean));
   };
 
   const addItem = (newItem: ItemType) => {
     handleChange(cache.concat(createArrayItem(newItem)));
   };
 
-  return { arrayItems: cache, handleChange, addItem };
+  const handleResetCache = (items: ItemType[]) => {
+    setCache(generateArrayItems(items));
+  };
+
+  return { arrayItems: cache, handleChange, addItem, handleResetCache };
 }
