@@ -17,12 +17,9 @@ formatMessage.setup({ missingTranslation: 'ignore' });
 for (const localePath of localePaths) {
   let errorCount = 0;
   console.log(`Checking within ${localePath}:`);
-  const dir = fs.opendirSync(localePath);
-  for (;;) {
-    const dirent = dir.readSync();
-    if (dirent == null) break;
 
-    const fileName = path.join(localePath, dirent.name);
+  for (const name of fs.readdirSync(localePath)) {
+    const fileName = path.join(localePath, name);
 
     const data = fs.readFileSync(fileName);
     const json = JSON.parse(data);
@@ -32,7 +29,7 @@ for (const localePath of localePaths) {
       const msg = val.message;
       let fixedMessage = msg;
 
-      const src = `${dirent.name} at ${key}:`;
+      const src = `${name} at ${key}:`;
 
       try {
         formatMessage(msg);
@@ -57,7 +54,7 @@ for (const localePath of localePaths) {
         fixedMessage = fixedMessage.replace(/(\p{L})'(\p{L})/gu, '$1’$2');
       }
 
-      if (/\p{L}"\p{L}/u.exec(msg) && !dirent.name.includes('ko')) {
+      if (/\p{L}"\p{L}/u.exec(msg) && !name.includes('ko')) {
         console.log(src, `replacing double quote between letters with single`);
         fixedMessage = fixedMessage.replace(/(\p{L})"(\p{L})/gu, '$1’$2');
       }

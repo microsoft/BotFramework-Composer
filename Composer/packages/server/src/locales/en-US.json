@@ -698,6 +698,9 @@
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
   },
+  "choose_a_valid_publish_profile_to_continue_d4bd0b96": {
+    "message": "Choose a valid publish profile to continue"
+  },
   "choose_how_to_create_your_bot_a97f7b3e": {
     "message": "Choose how to create your bot"
   },
@@ -967,6 +970,9 @@
   },
   "create_a_trigger_40e74743": {
     "message": "Create a trigger"
+  },
+  "create_a_valid_publish_profile_to_continue_2425bea1": {
+    "message": "Create a valid publish profile to continue"
   },
   "create_and_configure_new_azure_resources_302c574a": {
     "message": "Create and configure new Azure resources"
@@ -2888,6 +2894,9 @@
   "publish_profile_a4e8f07b": {
     "message": "Publish profile"
   },
+  "publish_profile_is_missing_app_id_and_host_name_49d72218": {
+    "message": "Publish profile is missing App ID and host name. "
+  },
   "publish_selected_bots_825bc03a": {
     "message": "Publish selected bots"
   },
@@ -3674,8 +3683,8 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
   },
-  "the_app_id_9c6d6a9a": {
-    "message": "The app id"
+  "the_app_id_352b6bc6": {
+    "message": "The App ID"
   },
   "the_app_id_of_your_application_registration_16fba1a9": {
     "message": "The app id of your application registration"
