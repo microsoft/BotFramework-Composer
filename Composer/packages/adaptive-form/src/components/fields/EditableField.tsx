@@ -10,25 +10,11 @@ import { FieldProps } from '@bfc/extension-client';
 interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
-  transparentBorder?: boolean;
   ariaLabel?: string;
 }
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
-  const {
-    depth,
-    styles = {},
-    placeholder,
-    fontSize,
-    onChange,
-    onBlur,
-    value,
-    id,
-    error,
-    className,
-    transparentBorder,
-    ariaLabel,
-  } = props;
+  const { styles = {}, placeholder, fontSize, onChange, onBlur, value, id, error, className, ariaLabel } = props;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [localValue, setLocalValue] = useState<string | undefined>(value);
@@ -55,7 +41,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   let borderColor: string | undefined = undefined;
 
   if (!editing && !error) {
-    borderColor = localValue || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
+    borderColor = localValue ? 'transparent' : NeutralColors.gray30;
   }
 
   return (
