@@ -243,10 +243,10 @@
     "message": "+ Lägg till QnA-par"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> lägga till några exempelfraser som utlöser den här avsikten:\n> – berätta om vädret\n> – hur är vädret i {city=Seattle}\n\n> entitetsdefinitioner:\n> @ ml city"
+    "message": "> lägga till några exempelfraser som utlöser den här avsikten:\n> – berätta om vädret\n> – hur är vädret i '{'city=Seattle'}'\n\n> entitetsdefinitioner:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> lägg till vissa förväntade användarsvar:\n> – Påminn mig att {itemTitle=köpa mjölk}\n> – Påminn mig att {itemTitle}\n> –lägga till {itemTitle} i min att göra-lista\n>\n> entitetsdefinitioner:\n> @ ml-itemTitle\n"
+    "message": "> lägg till vissa förväntade användarsvar:\n> – Påminn mig att '{'itemTitle=köpa mjölk'}'\n> – Påminn mig att '{'itemTitle'}'\n> –lägga till '{'itemTitle'}' i min att göra-lista\n>\n> entitetsdefinitioner:\n> @ ml-itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Lägg till föreslagen åtgärd"
