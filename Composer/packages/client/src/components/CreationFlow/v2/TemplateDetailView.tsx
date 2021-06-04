@@ -64,6 +64,14 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     return props.readMe.replace(/^(#|##) (.*)/, '').trim();
   };
 
+  const validatePath = (path: string) => {
+    // TODO check if path is valid on users machine and return error message if not
+    if (path.length > 0) {
+      return '';
+    }
+    return '';
+  };
+
   const renderLocalTemplateForm = () => (
     <Fragment>
       <Text>
@@ -83,6 +91,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         styles={{ root: { marginTop: '10px' } }}
         value={localTemplatePath}
         onChange={(_e, val) => setLocalTemplatePathState(val || '')}
+        onGetErrorMessage={validatePath}
       />
     </Fragment>
   );
