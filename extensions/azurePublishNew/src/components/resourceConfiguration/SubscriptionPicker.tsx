@@ -5,7 +5,7 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import React, { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 
-import { getSubscriptions } from '../api';
+import { getSubscriptions } from '../../api';
 import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoComplete';
 
 type ComboBoxPropsWithOutOptions = Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
