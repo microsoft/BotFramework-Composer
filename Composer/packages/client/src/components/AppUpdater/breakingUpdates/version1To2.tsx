@@ -11,6 +11,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../../../colors';
 import { dispatcherState, userSettingsState } from '../../../recoilModel';
 
 import { BreakingUpdateProps } from './types';
@@ -107,11 +108,21 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
       </p>
       <div css={buttonRow}>
         {explicitCheck ? (
-          <DefaultButton styles={dismissButton} text={formatMessage('Cancel')} onClick={onCancel} />
+          <DefaultButton
+            styles={dismissButton}
+            text={formatMessage('Cancel')}
+            theme={colors.fluentTheme}
+            onClick={onCancel}
+          />
         ) : (
-          <DefaultButton styles={dismissButton} text={formatMessage('Not now')} onClick={onNotNow} />
+          <DefaultButton
+            styles={dismissButton}
+            text={formatMessage('Not now')}
+            theme={colors.fluentTheme}
+            onClick={onNotNow}
+          />
         )}
-        <PrimaryButton text={formatMessage('Update and restart')} onClick={onContinue} />
+        <PrimaryButton text={formatMessage('Update and restart')} theme={colors.fluentTheme} onClick={onContinue} />
       </div>
     </Dialog>
   ) : (
@@ -135,7 +146,12 @@ export const Version1To2Content: React.FC<BreakingUpdateProps> = (props) => {
         )}
       </p>
       <div css={buttonRow}>
-        <PrimaryButton css={gotItButton} text={formatMessage('Got it!')} onClick={onCancel} />
+        <PrimaryButton
+          css={gotItButton}
+          text={formatMessage('Got it!')}
+          theme={colors.fluentTheme}
+          onClick={onCancel}
+        />
       </div>
     </Dialog>
   );

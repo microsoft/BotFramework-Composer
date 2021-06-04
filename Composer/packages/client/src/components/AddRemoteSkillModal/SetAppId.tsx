@@ -132,6 +132,7 @@ const renderMicrosoftAppId = (MicrosoftAppId: string, label: string, description
         <IconButton
           iconProps={{ iconName: 'copy' }}
           styles={{ icon: { fontSize: FontSizes.size12, color: colors.main } }}
+          theme={colors.fluentTheme}
           onClick={() => navigator.clipboard.writeText(MicrosoftAppId || '')}
         />
       </div>
@@ -234,12 +235,18 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
       <Stack>
         <Separator />
         <StackItem align={'end'}>
-          <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton
+            data-testid="SkillFormCancel"
+            text={formatMessage('Cancel')}
+            theme={colors.fluentTheme}
+            onClick={onDismiss}
+          />
           <PrimaryButton
             data-testid="SetAppIdNext"
             disabled={publishTargets.length === 0}
             styles={buttonStyle}
             text={formatMessage('Next')}
+            theme={colors.fluentTheme}
             onClick={() => onNext(currentTargetName)}
           />
         </StackItem>

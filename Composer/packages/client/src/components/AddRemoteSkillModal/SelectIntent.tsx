@@ -16,6 +16,7 @@ import { LuFile, LuIntentSection, SDKKinds, ILUFeaturesConfig } from '@bfc/share
 import { useRecoilValue } from 'recoil';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { colors } from '../../colors';
 import { selectIntentDialog, enableOrchestratorDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luWorker from '../../recoilModel/parsers/luWorker';
@@ -310,6 +311,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
               <PrimaryButton
                 styles={{ root: { marginLeft: '8px' } }}
                 text={pageIndex === 1 && hasOrchestrator ? formatMessage('Done') : formatMessage('Next')}
+                theme={colors.fluentTheme}
                 onClick={(ev) => {
                   if (pageIndex === 1) {
                     if (hasOrchestrator) {

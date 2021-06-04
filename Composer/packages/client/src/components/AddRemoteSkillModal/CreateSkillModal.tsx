@@ -23,6 +23,7 @@ import {
   luFilesSelectorFamily,
   publishTypesState,
 } from '../../recoilModel';
+import { colors } from '../../colors';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -335,6 +336,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                       disabled={formDataErrors.manifestUrl ? true : false}
                       styles={buttonStyle}
                       text={formatMessage('Next')}
+                      theme={colors.fluentTheme}
                       onClick={(event) => {
                         setTitle(selectIntentDialog.SELECT_INTENT(dialogId, skillManifest.name));
                         setShowIntentSelectDialog(true);
@@ -344,6 +346,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                     <PrimaryButton
                       styles={buttonStyle}
                       text={formatMessage('Done')}
+                      theme={colors.fluentTheme}
                       onClick={(event) => {
                         addRemoteSkill(formData.manifestUrl, formData.endpointName);
                       }}
@@ -354,6 +357,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                     disabled={!formData.manifestUrl || formDataErrors.manifestUrl !== undefined}
                     styles={buttonStyle}
                     text={formatMessage('Next')}
+                    theme={colors.fluentTheme}
                     onClick={validateUrl}
                   />
                 )}

@@ -16,6 +16,7 @@ import { RouteComponentProps, navigate } from '@reach/router';
 import querystring from 'query-string';
 import axios from 'axios';
 
+import { colors } from '../../colors';
 import { DialogCreationCopy } from '../../constants';
 import { getAliasFromPayload } from '../../utils/electronUtil';
 
@@ -112,8 +113,13 @@ export function CreateOptions(props: CreateOptionsProps) {
       >
         <ChoiceGroup required defaultSelectedKey="B" options={options} onChange={handleChange} />
         <DialogFooter>
-          <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <PrimaryButton
+            data-testid="NextStepButton"
+            text={formatMessage('Next')}
+            theme={colors.fluentTheme}
+            onClick={handleJumpToNext}
+          />
+          <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
         </DialogFooter>
       </DialogWrapper>
       <CreateBot

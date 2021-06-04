@@ -9,6 +9,7 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { PrimaryButton, DefaultButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../../colors';
 import { dispatcherState } from '../../recoilModel';
 import { enableOrchestratorDialog } from '../../constants';
 
@@ -51,10 +52,16 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
       <Stack horizontal horizontalAlign="space-between">
         <Stack.Item>{!hideBackButton && <DefaultButton text={formatMessage('Back')} onClick={onBack} />}</Stack.Item>
         <Stack.Item align="end">
-          <DefaultButton styles={{ root: { marginRight: '8px' } }} text={formatMessage('Skip')} onClick={onSubmit} />
+          <DefaultButton
+            styles={{ root: { marginRight: '8px' } }}
+            text={formatMessage('Skip')}
+            theme={colors.fluentTheme}
+            onClick={onSubmit}
+          />
           <PrimaryButton
             data-testid="import-orchestrator"
             text={formatMessage('Continue')}
+            theme={colors.fluentTheme}
             onClick={(event) => {
               onSubmit(event, enableOrchestrator);
               if (enableOrchestrator) {

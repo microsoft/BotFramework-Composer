@@ -10,6 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 
+import { colors } from '../../colors';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotStatus } from './type';
@@ -118,12 +119,13 @@ export const PublishDialog = (props) => {
         <DialogFooter>
           <DefaultButton
             text={formatMessage('Cancel')}
+            theme={colors.fluentTheme}
             onClick={() => {
               cleanComments();
               props.onDismiss();
             }}
           />
-          <PrimaryButton text={formatMessage('Okay')} onClick={submit} />
+          <PrimaryButton text={formatMessage('Okay')} theme={colors.fluentTheme} onClick={submit} />
         </DialogFooter>
       </Fragment>
     </Dialog>

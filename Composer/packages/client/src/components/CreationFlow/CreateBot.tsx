@@ -27,6 +27,7 @@ import { WindowLocation } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
+import { colors } from '../../colors';
 import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -293,11 +294,12 @@ export function CreateBot(props: CreateBotProps) {
           </ScrollablePane>
         </div>
         <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
             disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
             text={formatMessage('Next')}
+            theme={colors.fluentTheme}
             onClick={handleJumpToNext}
           />
         </DialogFooter>

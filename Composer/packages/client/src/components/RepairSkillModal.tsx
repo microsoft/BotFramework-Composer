@@ -8,6 +8,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
+import { colors } from '../colors';
 import { repairSkillDialog } from '../constants';
 
 import { TreeLink } from './ProjectTree/types';
@@ -70,8 +71,13 @@ export const RepairSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, o
         <input style={{ display: 'none' }} type="submit" />
         <ChoiceGroup options={choiceOptions} selectedKey={option} onChange={handleChange} />
         <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-          <PrimaryButton data-testid="NextStepButton" text={formatMessage('Next')} onClick={handleJumpToNext} />
+          <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
+          <PrimaryButton
+            data-testid="NextStepButton"
+            text={formatMessage('Next')}
+            theme={colors.fluentTheme}
+            onClick={handleJumpToNext}
+          />
         </DialogFooter>
       </form>
     </DialogWrapper>

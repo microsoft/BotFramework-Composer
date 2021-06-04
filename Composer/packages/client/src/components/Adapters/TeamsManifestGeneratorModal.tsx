@@ -100,11 +100,13 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
           href={'data:text/plain;charset=utf-8,' + encodeURIComponent(generateTeamsManifest())}
           menuIconProps={{ iconName: 'Download' }}
           styles={iconButtonStyle}
+          theme={colors.fluentTheme}
         />
         <IconButton
           ariaLabel={formatMessage('Copy Icon')}
           menuIconProps={{ iconName: 'Copy' }}
           styles={iconButtonStyle}
+          theme={colors.fluentTheme}
           onClick={() => {
             copyCodeToClipboard();
           }}
@@ -124,7 +126,12 @@ export const TeamsManifestGeneratorModal = (props: TeamsManifestGeneratorModalPr
             props.onDismiss();
           }}
         />
-        <PrimaryButton href={teamsAppStudioDeepLink} target="_blank" text={formatMessage('Open Teams')} />
+        <PrimaryButton
+          href={teamsAppStudioDeepLink}
+          target="_blank"
+          text={formatMessage('Open Teams')}
+          theme={colors.fluentTheme}
+        />
       </DialogFooter>
     </DialogWrapper>
   );

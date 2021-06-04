@@ -18,6 +18,7 @@ import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, IQnAConfig } from '@bfc/shared';
 import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
+import { colors } from '../../colors';
 import { Text, Tips, Links, nameRegex, LUIS_REGIONS } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
@@ -285,8 +286,18 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
         </Stack>
       </form>
       <DialogFooter>
-        <PrimaryButton disabled={hasErrors} text={formatMessage('OK')} onClick={handlePublish} />
-        <DefaultButton data-testid={'publish-LUIS-models-cancel'} text={formatMessage('Cancel')} onClick={onDismiss} />
+        <PrimaryButton
+          disabled={hasErrors}
+          text={formatMessage('OK')}
+          theme={colors.fluentTheme}
+          onClick={handlePublish}
+        />
+        <DefaultButton
+          data-testid={'publish-LUIS-models-cancel'}
+          text={formatMessage('Cancel')}
+          theme={colors.fluentTheme}
+          onClick={onDismiss}
+        />
       </DialogFooter>
     </Dialog>
   );

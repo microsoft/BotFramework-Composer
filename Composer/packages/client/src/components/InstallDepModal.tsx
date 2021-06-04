@@ -12,6 +12,8 @@ import React from 'react';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
+import { colors } from '../colors';
+
 type InstallDepModalProps = {
   onDismiss: () => void;
   title: string;
@@ -44,6 +46,7 @@ export const InstallDepModal: React.FC<InstallDepModalProps> = (props) => {
           href={props.downloadLink}
           target="_blank"
           text={props.downloadLinkText}
+          theme={colors.fluentTheme}
         />
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
       </DialogFooter>

@@ -291,18 +291,20 @@ export const AppUpdater: React.FC<{}> = () => {
         return (
           <div>
             <DefaultButton styles={updateAvailableDismissBtn} text={formatMessage('Cancel')} onClick={handleDismiss} />
-            <PrimaryButton text={formatMessage('Okay')} onClick={handlePreDownloadOkay} />
+            <PrimaryButton text={formatMessage('Okay')} theme={colors.fluentTheme} onClick={handlePreDownloadOkay} />
           </div>
         );
 
       case AppUpdaterStatus.UPDATE_SUCCEEDED:
-        return <PrimaryButton text={formatMessage('Okay')} onClick={handlePostDownloadOkay} />;
+        return (
+          <PrimaryButton text={formatMessage('Okay')} theme={colors.fluentTheme} onClick={handlePostDownloadOkay} />
+        );
 
       case AppUpdaterStatus.UPDATE_FAILED:
-        return <PrimaryButton text={formatMessage('Okay')} onClick={handleDismiss} />;
+        return <PrimaryButton text={formatMessage('Okay')} theme={colors.fluentTheme} onClick={handleDismiss} />;
 
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
-        return <PrimaryButton text={formatMessage('Okay')} onClick={handleDismiss} />;
+        return <PrimaryButton text={formatMessage('Okay')} theme={colors.fluentTheme} onClick={handleDismiss} />;
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
         return undefined;

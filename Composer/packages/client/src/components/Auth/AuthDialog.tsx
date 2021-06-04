@@ -10,6 +10,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useCallback, useState } from 'react';
 
+import { colors } from '../../colors';
 import storage from '../../utils/storage';
 import { isTokenExpired } from '../../utils/auth';
 
@@ -82,10 +83,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
         />
       ) : null}
       <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+        <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={props.onDismiss} />
         <PrimaryButton
           disabled={!isAble()}
           text={formatMessage('Continue')}
+          theme={colors.fluentTheme}
           onClick={() => {
             props.onDismiss();
             // cache tokens

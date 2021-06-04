@@ -290,11 +290,12 @@ export function CreateBotV2(props: CreateBotProps) {
             <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
             {formatMessage('Need another template? Send us a request')}
           </Link>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
             disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null)}
             text={formatMessage('Next')}
+            theme={colors.fluentTheme}
             onClick={handleJumpToNext}
           />
         </DialogFooter>
