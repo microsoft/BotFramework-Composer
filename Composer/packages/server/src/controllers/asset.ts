@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, localTemplateId, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
 import { sortTemplates } from '../utility/creation';
+import { FeatureFlagService } from '../services/featureFlags';
 
 async function getProjTemplates(req: Request, res: Response) {
   try {
@@ -55,6 +56,26 @@ export async function getProjTemplatesV2(req: any, res: any) {
           packageVersion: qnaTemplateVersion,
         },
       });
+      if (FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS')) {
+        templates.push({
+          id: localTemplateId,
+          name: 'Local Template',
+          description: formatMessage('Create a bot using a local yeoman generator'),
+          dotnetSupport: {
+            functionsSupported: true,
+            webAppSupported: true,
+          },
+          nodeSupport: {
+            functionsSupported: true,
+            webAppSupported: true,
+          },
+          package: {
+            packageName: '',
+            packageSource: '',
+            packageVersion: '',
+          },
+        });
+      }
     }
 
     if (getFirstPartyNpm) {
