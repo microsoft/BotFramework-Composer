@@ -166,8 +166,8 @@ export class Builder {
     this.config = config;
     this.downSamplingConfig = downSamplingConfig;
     if (!crossTrainingSetting) return;
-    if (crossTrainingSetting.inter) this.crossTrainingSetting.inter = crossTrainingSetting.inter;
-    if (crossTrainingSetting.intra) this.crossTrainingSetting.intra = crossTrainingSetting.intra;
+    if (crossTrainingSetting.inter !== undefined) this.crossTrainingSetting.inter = crossTrainingSetting.inter;
+    if (crossTrainingSetting.intra !== undefined) this.crossTrainingSetting.intra = crossTrainingSetting.intra;
   }
 
   public get locale(): string {
