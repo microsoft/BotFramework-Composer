@@ -3942,7 +3942,7 @@
     "message": "{ total }MB"
   },
   "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
-    "message": "{ total, plural,\n     =1 {重启机器人}\n  其他 {重启所有机器人({ running } 个正在运行(共 { total } 个))}\n}"
+    "message": "{ total, plural,\n     =1 {重启机器人}\n  other {重启所有机器人({ running } 个正在运行(共 { total } 个))}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
     "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
