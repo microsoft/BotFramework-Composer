@@ -364,3 +364,8 @@ export const warnAboutFunctionsState = atom<boolean>({
   key: getFullyQualifiedKey('warnAboutFunctionsState'),
   default: false,
 });
+
+export const localTemplatePathState = atom<string>({
+  key: getFullyQualifiedKey('localTemplatePathState'),
+  default: '',
+});

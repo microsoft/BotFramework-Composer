@@ -41,6 +41,7 @@ import {
   settingsState,
   creationFlowStatusState,
   orchestratorForSkillsDialogState,
+  localTemplatePathState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -744,6 +745,10 @@ export const projectDispatcher = () => {
     callbackHelpers.set(warnAboutFunctionsState, warn);
   });
 
+  const setLocalTemplatePathState = useRecoilCallback((callbackHelpers: CallbackInterface) => (path: string) => {
+    callbackHelpers.set(localTemplatePathState, path);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -771,5 +776,6 @@ export const projectDispatcher = () => {
     setWarnAboutDotNet,
     setWarnAboutFunctions,
     fetchReadMe,
+    setLocalTemplatePathState,
   };
 };
