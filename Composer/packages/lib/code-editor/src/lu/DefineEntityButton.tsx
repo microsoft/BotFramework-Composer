@@ -13,6 +13,7 @@ import {
   IContextualMenuItemRenderFunctions,
 } from 'office-ui-fabric-react/lib/ContextualMenu';
 import * as React from 'react';
+import { LuFile } from '@bfc/shared';
 
 import { ItemWithTooltip } from '../components/ItemWithTooltip';
 import { useNoSearchResultMenuItem } from '../hooks/useNoSearchResultMenuItem';
@@ -21,10 +22,13 @@ import { withTooltip } from '../utils/withTooltip';
 import { getEntityTypeDisplayName } from '../utils/luUtils';
 
 import { jsLuToolbarMenuClassName, prebuiltEntities } from './constants';
-import { getLuToolbarItemTextAndIcon } from './iconUtils';
-import { ToolbarLuEntityType, toolbarSupportedLuEntityTypes } from './types';
+import { getLuToolbarItemTextAndIcon } from './utils/iconUtils';
+import { ToolbarLuEntityType, toolbarSupportedLuEntityTypes, ListEntity } from './types';
+import { ListEntityCreationDialog } from './dialogs/ListEntityCreationDialog';
+import { getEntityLuDefinition } from './utils/entityDefinition';
+import { useLuEntities } from './hooks/useLuEntities';
 
-const allowedLuEntityTypes = ['prebuilt', 'ml'];
+const allowedLuEntityTypes: ToolbarLuEntityType[] = ['prebuilt', 'ml', 'list'];
 const entityDefinitionLinkId = 'define-entity-menu-header-link';
 const entityDefinitionHelpUrl =
   'https://docs.microsoft.com/en-us/azure/bot-service/file-format/bot-builder-lu-file-format?view=azure-bot-service-4.0#entity';
@@ -48,19 +52,46 @@ const getCommandBarButton = (tooltipContent: string) =>
   withTooltip({ content: tooltipContent }, DefaultCommandBarButton);
 
 type Props = {
-  onDefineEntity: (entityType: ToolbarLuEntityType, entityName?: string) => void;
+  onDefineEntity: (
+    entityType: ToolbarLuEntityType,
+    data: Partial<{ entityName: string; entityDefinition: string }>
+  ) => void;
   disabled?: boolean;
   tooltip?: string;
+  luFile?: LuFile;
 };
 
 export const DefineEntityButton = React.memo((props: Props) => {
-  const { onDefineEntity, disabled = false, tooltip } = props;
+  const { luFile, onDefineEntity, disabled = false, tooltip } = props;
 
+  const entities = useLuEntities(luFile);
+
+  const [showListEntityCreationDialog, setShowListEntityCreationDialog] = React.useState(false);
   const { iconName, text } = React.useMemo(() => getLuToolbarItemTextAndIcon('defineEntity'), []);
   const { onRenderMenuList, query, setQuery } = useSearchableMenuListCallback(
     formatMessage('Search prebuilt entities')
   );
+
   const noSearchResultsMenuItem = useNoSearchResultMenuItem(formatMessage('no prebuilt entities found'));
+
+  const onClickEntityType = React.useCallback(
+    (entityType: ToolbarLuEntityType, ignoreEntityTypeList: ToolbarLuEntityType[] = [], entityName?: string) => {
+      if (ignoreEntityTypeList.includes(entityType)) return;
+
+      switch (entityType) {
+        case 'list':
+          setShowListEntityCreationDialog(true);
+          break;
+        case 'ml':
+        case 'prebuilt':
+          onDefineEntity(entityType, { entityName });
+          break;
+        default:
+          throw `${entityType} is not supported!`;
+      }
+    },
+    []
+  );
 
   const filteredPrebuiltEntities = React.useMemo(() => {
     const filteredItems = query
@@ -75,7 +106,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
       key: prebuiltEntity,
       text: prebuiltEntity,
       style: fontSizeStyle,
-      onClick: () => onDefineEntity('prebuilt', prebuiltEntity),
+      onClick: () => onClickEntityType('prebuilt', [], prebuiltEntity),
     }));
   }, [onDefineEntity, noSearchResultsMenuItem, query]);
 
@@ -125,7 +156,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
           text: getEntityTypeDisplayName(t),
           style: fontSizeStyle,
           subMenuProps: t === 'prebuilt' ? prebuiltSubMenuProps : undefined,
-          onClick: t !== 'prebuilt' ? () => onDefineEntity(t) : undefined,
+          onClick: () => onClickEntityType(t, ['prebuilt']),
         })),
     ];
   }, [onDefineEntity, renderMenuItemHeader, prebuiltSubMenuProps]);
@@ -159,16 +190,39 @@ export const DefineEntityButton = React.memo((props: Props) => {
     tooltip,
   ]);
 
+  const dismissListEntityCreationDialog = React.useCallback(() => {
+    setShowListEntityCreationDialog(false);
+  }, []);
+
+  const createListEntity = React.useCallback(
+    (listEntity: ListEntity) => {
+      dismissListEntityCreationDialog();
+      onDefineEntity('list', {
+        entityName: listEntity.name,
+        entityDefinition: getEntityLuDefinition(
+          listEntity,
+          entities.map((e) => e.Name)
+        ),
+      });
+    },
+    [onDefineEntity, dismissListEntityCreationDialog, entities]
+  );
+
   return (
-    <CommandBarButton
-      className={jsLuToolbarMenuClassName}
-      data-testid="menuButton"
-      disabled={disabled}
-      iconProps={{ iconName }}
-      menuProps={menuProps}
-      styles={buttonStyles}
-    >
-      {text}
-    </CommandBarButton>
+    <>
+      <CommandBarButton
+        className={jsLuToolbarMenuClassName}
+        data-testid="menuButton"
+        disabled={disabled}
+        iconProps={{ iconName }}
+        menuProps={menuProps}
+        styles={buttonStyles}
+      >
+        {text}
+      </CommandBarButton>
+      {showListEntityCreationDialog && (
+        <ListEntityCreationDialog onCreateListEntity={createListEntity} onDismiss={dismissListEntityCreationDialog} />
+      )}
+    </>
   );
 });
