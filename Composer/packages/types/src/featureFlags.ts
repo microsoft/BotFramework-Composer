@@ -14,6 +14,6 @@ export type FeatureFlag = {
   enabled: boolean;
 };
 
-export type FeatureFlagKey = 'FORM_DIALOG';
+export type FeatureFlagKey = 'FORM_DIALOG' | 'ADVANCED_TEMPLATE_OPTIONS';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
