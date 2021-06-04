@@ -17,7 +17,7 @@ export const ActivityInspectionListener: FC<{}> = () => {
   useEffect(() => {
     if (
       webChatInspectionData?.item.trafficType === 'activity' &&
-      webChatInspectionData.item.activity.type === 'message' // TODO: loosen this restriction?
+      webChatInspectionData.item.activity.type === 'message'
     ) {
       scrollToActivity({ activityID: webChatInspectionData.item.activity.id }, { behavior: 'smooth' });
     }

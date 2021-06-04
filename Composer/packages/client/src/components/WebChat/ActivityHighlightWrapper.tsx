@@ -31,10 +31,17 @@ export const ActivityHighlightWrapper: React.FC<ActivityHighlightWrapperProps> =
   const isSelected = useMemo(() => {
     return (
       webChatInspectionData?.item.trafficType === 'activity' &&
-      webChatInspectionData.item.activity.type === 'message' && // TODO: loosen this restriction?
+      webChatInspectionData.item.activity.type === 'message' &&
       webChatInspectionData.item.activity.id === activityId
     );
   }, [activityId, webChatInspectionData]);
 
-  return <div css={isSelected ? webchatSelectedActivity : {}}>{children}</div>;
+  return (
+    <div
+      css={isSelected ? webchatSelectedActivity : {}}
+      data-testid={isSelected ? 'composer-wc-activity-selected' : 'composer-wc-activity'}
+    >
+      {children}
+    </div>
+  );
 };
