@@ -6,40 +6,72 @@
 const fs = require('fs');
 const path = require('path');
 
-const localePath = 'packages/server/src/locales';
+const formatMessage = require('format-message');
 
-let errorCount = 0;
+const localePaths = ['packages/server/src/locales', 'packages/electron-server/locales'];
 
-const dir = fs.opendirSync(localePath);
-for (;;) {
-  const dirent = dir.readSync();
-  if (dirent == null) break;
-  const data = fs.readFileSync(path.join(localePath, dirent.name));
-  const json = JSON.parse(data);
-  for (const [key, val] of Object.entries(json)) {
-    const msg = val.message;
+let totalCount = 0;
 
-    const src = `${dirent.name} at ${key}:`;
-    if (/\{.*plural.*}/.exec(msg)) {
-      // if we're in a "plural" rules section...
-      if (/=\s+\d+/.exec(msg)) {
-        console.log(src, `whitespace between number and =`);
+formatMessage.setup({ missingTranslation: 'ignore' });
+
+for (const localePath of localePaths) {
+  let errorCount = 0;
+  console.log(`Checking within ${localePath}:`);
+
+  for (const name of fs.readdirSync(localePath)) {
+    const fileName = path.join(localePath, name);
+
+    const data = fs.readFileSync(fileName);
+    const json = JSON.parse(data);
+    const objectOut = {};
+
+    for (const [key, val] of Object.entries(json)) {
+      const msg = val.message;
+      let fixedMessage = msg;
+
+      const src = `${name} at ${key}:`;
+
+      try {
+        formatMessage(msg);
+      } catch (e) {
+        console.log(src, e);
         errorCount += 1;
       }
-      if (/=\d+/.exec(msg) && !/other/.exec(msg)) {
-        console.log(src, `missing 'other' clause`);
-        errorCount += 1;
+
+      if (/\{.*plural.*}/.exec(msg)) {
+        // if we're in a "plural" rules section...
+        if (/=\s+\d+/.exec(fixedMessage)) {
+          console.log(src, `removing whitespace between number and =`);
+          fixedMessage = fixedMessage.replace(/=\s+(\d+)/g, '=$1');
+        }
+        if (/=\d+/.exec(msg) && !/other/.exec(msg)) {
+          console.log(src, `missing 'other' clause`);
+          errorCount += 1;
+        }
       }
+      if (/\p{L}'\p{L}/u.exec(msg)) {
+        console.log(src, `fixing single quote between letters`);
+        fixedMessage = fixedMessage.replace(/(\p{L})'(\p{L})/gu, '$1’$2');
+      }
+
+      if (/\p{L}"\p{L}/u.exec(msg) && !name.includes('ko')) {
+        console.log(src, `replacing double quote between letters with single`);
+        fixedMessage = fixedMessage.replace(/(\p{L})"(\p{L})/gu, '$1’$2');
+      }
+      if (/([^']\{')|('\}[^'])/.exec(msg)) {
+        console.log(src, `fixing incorrect brace quoting`);
+        fixedMessage = fixedMessage.replace(/([^']\{')/g, "'{'").replace(/('\}[^'])/g, "'}'");
+      }
+
+      objectOut[key] = { message: fixedMessage };
     }
-    if (/(\p{L}|\s|\w)'(\p{L}|\w)/.exec(msg)) {
-      console.log(src, `single quote between letters`);
-      errorCount += 1;
-    }
-    if (/([^']\{')|('\}[^'])/.exec(msg)) {
-      console.log(src, `incorrect brace quoting`);
-      errorCount += 1;
-    }
+
+    fs.writeFileSync(fileName, JSON.stringify(objectOut, null, 2));
   }
+
+  if (errorCount > 0) console.log(`${errorCount} error(s) found that can't be autofixed`);
+
+  totalCount += errorCount;
 }
 
-process.exit(errorCount);
+process.exit(totalCount);
