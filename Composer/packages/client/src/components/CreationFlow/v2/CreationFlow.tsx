@@ -144,6 +144,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       alias: formData?.alias,
       profile: formData?.profile,
       source: formData?.source,
+      isLocalGenerator: formData?.isLocalGenerator,
     };
     TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
 

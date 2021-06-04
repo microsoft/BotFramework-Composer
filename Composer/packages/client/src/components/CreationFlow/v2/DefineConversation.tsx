@@ -15,7 +15,14 @@ import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
-import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
+import {
+  csharpFeedKey,
+  FeedType,
+  functionsRuntimeKey,
+  localTemplateId,
+  nodeFeedKey,
+  QnABotTemplateId,
+} from '@bfc/shared';
 import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
@@ -26,7 +33,12 @@ import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../../ImportModal/ImportSuccessNotification';
-import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../../recoilModel';
+import {
+  creationFlowStatusState,
+  dispatcherState,
+  localTemplatePathState,
+  templateProjectsState,
+} from '../../../recoilModel';
 import { LocationSelectContent } from '../LocationSelectContent';
 import { getAliasFromPayload, Profile } from '../../../utils/electronUtil';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
@@ -81,7 +93,7 @@ type DefineConversationFormData = {
   profile?: Profile; // abs payload to create bot
   source?: string; // where the payload come from
   alias?: string; // identifier that is used to track bots between imports
-
+  isLocalGenerator?: boolean;
   pvaData?: {
     templateDir?: string; // location of the imported template
     eTag?: string; // e tag used for content sync between composer and imported bot content
@@ -120,6 +132,7 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
   const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
+  const localTemplatePath = useRecoilValue(localTemplatePathState);
 
   const currentTemplate = templateProjects.find((t) => {
     if (t?.id) {
@@ -308,7 +321,10 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
         isPva: isImported,
         isAbs: !!dataToSubmit?.source,
       });
-      onSubmit({ ...dataToSubmit }, templateId || '');
+      const isLocalGenerator = templateId === localTemplateId;
+      const generatorName = isLocalGenerator ? localTemplatePath : templateId;
+      dataToSubmit.isLocalGenerator = isLocalGenerator;
+      onSubmit({ ...dataToSubmit }, generatorName || '');
     },
     [hasErrors, formData]
   );
