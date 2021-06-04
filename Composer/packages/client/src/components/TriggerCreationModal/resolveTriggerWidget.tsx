@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
+import React from 'react';
 import formatMessage from 'format-message';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -25,13 +25,12 @@ export function resolveTriggerWidget(
   userSettings: UserSettings,
   projectId: string,
   dialogId: string,
-  luFile?: LuFile
+  luFile?: LuFile,
+  setLuFile?: (data: LuFile) => void
 ) {
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile) || isPVARecognizerType(dialogFile);
   const showTriggerPhrase = selectedType === SDKKinds.OnIntent && !isRegEx;
-
-  const [localeLuFile, setLocaleLuFile] = useState(luFile);
 
   const onNameChange = (e: React.FormEvent, name: string | undefined) => {
     const errors: TriggerFormDataErrors = {};
@@ -60,9 +59,9 @@ export function resolveTriggerWidget(
     }
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
 
-    if (localeLuFile) {
+    if (luFile && setLuFile) {
       const shadowLuFile = luUtil.updateIntent(
-        localeLuFile,
+        luFile,
         PlaceHolderSectionName,
         {
           Name: PlaceHolderSectionName,
@@ -70,8 +69,7 @@ export function resolveTriggerWidget(
         },
         {}
       );
-
-      setLocaleLuFile(shadowLuFile);
+      setLuFile(shadowLuFile);
     }
   };
 
@@ -118,7 +116,7 @@ export function resolveTriggerWidget(
         editorSettings={userSettings.codeEditor}
         errorMessage={formData.errors.triggerPhrases}
         height={225}
-        luFile={localeLuFile}
+        luFile={luFile}
         luOption={{
           projectId,
           fileId: dialogId,
