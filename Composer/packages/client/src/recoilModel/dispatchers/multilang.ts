@@ -28,12 +28,20 @@ const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: 
 
   for (const file of copyOriginFiles) {
     for (const toLanguage of toLanguages) {
+      const copiedFile = cloneDeep(file);
       // eslint-disable-next-line security/detect-non-literal-regexp
-      const id = file.id.replace(new RegExp(`${fromLanguage}$`), toLanguage);
-      copiedFiles.push({
-        ...file,
-        id,
+      const idReplacerReg = new RegExp(`${fromLanguage}$`);
+
+      copiedFile.id = file.id.replace(idReplacerReg, toLanguage);
+
+      copiedFile.intents?.forEach((item) => {
+        item.fileId = item.fileId.replace(idReplacerReg, toLanguage);
       });
+      copiedFile.allIntents?.forEach((item) => {
+        item.fileId = item.fileId.replace(idReplacerReg, toLanguage);
+      });
+
+      copiedFiles.push(copiedFile);
     }
   }
 
