@@ -48,6 +48,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
     fetchProjectById,
     createNewBotV2,
     fetchReadMe,
+    setLocalTemplatePathState,
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(templateProjectsState);
@@ -100,6 +101,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   };
 
   const handleDismiss = () => {
+    setLocalTemplatePathState('');
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
     navigate(`/home`);
   };
