@@ -5,8 +5,8 @@ import { AzureTenant } from '@botframework-composer/types';
 import React, { useEffect, useState, memo } from 'react';
 import formatMessage from 'format-message';
 import { usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
+import jwtDecode from 'jwt-decode';
 
-import { decodeToken } from '../util';
 import { UserInfo } from '../../recoilModel/types';
 import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoComplete';
 
@@ -25,7 +25,14 @@ export const TenantPicker = memo((props: Props) => {
   const [tenants, setTenants] = useState<AzureTenant[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const decodeToken = (token: string) => {
+    try {
+      return jwtDecode<any>(token);
+    } catch (err) {
+      console.error('decode token error in ', err);
+      return null;
+    }
+  };
   useEffect(() => {
     if (!userShouldProvideTokens()) {
       // TODO: handle when existing profile is being edited

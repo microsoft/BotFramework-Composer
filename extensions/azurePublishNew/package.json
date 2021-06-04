@@ -48,7 +48,6 @@
     "@azure/ms-rest-js": "^2.0.7",
     "@azure/ms-rest-nodeauth": "3.0.3",
     "@bfc/built-in-functions": "../../Composer/packages/tools/built-in-functions",
-    "@bfc/code-editor": "../../Composer/packages/lib/code-editor",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/indexers": "../../Composer/packages/lib/indexers",
     "@bfc/shared": "../../Composer/packages/lib/shared",
@@ -70,14 +69,12 @@
     "react-dom": "^16.13.0",
     "recoil": "^0.3.1",
     "request": "2.88.2",
-    "request-promise": "^4.2.6",
     "url-loader": "^4.1.1",
     "uuid": "7.0.3"
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
-    "bl": "^4.0.3",
-    "underscore": "^1.12.1"
+    "bl": "^4.0.3"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.9.6",
