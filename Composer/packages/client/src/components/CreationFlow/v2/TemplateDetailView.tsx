@@ -16,6 +16,7 @@ import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import composerIcon from '../../../images/composerIcon.svg';
 import addIcon from '../../../images/addIcon.svg';
 import { dispatcherState, localTemplatePathState } from '../../../recoilModel';
+import httpClient from '../../../utils/httpUtil';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
   width: 100%;
@@ -64,12 +65,9 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     return props.readMe.replace(/^(#|##) (.*)/, '').trim();
   };
 
-  const validatePath = (path: string) => {
-    // TODO check if path is valid on users machine and return error message if not
-    if (path.length > 0) {
-      return '';
-    }
-    return '';
+  const validatePath = async (path): Promise<string> => {
+    const response = await httpClient.get(`/storages/validate/${encodeURI(path)}`);
+    return response.data.errorMsg;
   };
 
   const renderLocalTemplateForm = () => (
