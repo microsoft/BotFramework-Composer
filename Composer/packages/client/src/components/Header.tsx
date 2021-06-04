@@ -30,7 +30,6 @@ import {
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import { colors } from '../colors';
-import { useLocation } from '../utils/hooks';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
@@ -53,16 +52,9 @@ const headerContainer = css`
   align-items: center;
 `;
 
-const title = css`
-  margin-left: 20px;
-  font-weight: ${FontWeights.semibold};
-  font-size: ${FontSizes.size16};
-  color: ${colors.textOnColor};
-`;
-
 const botName = css`
   font-size: 16px;
-  color: #fff;
+  color: ${colors.textOnColor};
   padding-left: 20px;
 `;
 
@@ -72,7 +64,6 @@ const botLocale = css`
   border-radius: 19px;
   background: ${colors.main};
   font-size: 12px;
-  color: #fff;
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
@@ -116,7 +107,7 @@ const buttonStyles: IButtonStyles = {
     backgroundColor: colors.transparentBg,
   },
   rootDisabled: {
-    backgroundColor: `${CommunicationColors.primary}`,
+    backgroundColor: colors.main,
   },
 };
 
@@ -131,13 +122,13 @@ const calloutStyle = {
 };
 
 const calloutHeader = css`
-  color: ${NeutralColors.black};
+  color: ${colors.black};
   font-size: ${FontSizes.size20};
 `;
 
 const calloutDescription = css`
   padding-top: 12px;
-  color: ${NeutralColors.black};
+  color: ${colors.black};
   font-size: ${FontSizes.size12};
 `;
 

@@ -1,41 +1,43 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { NeutralColors, CommunicationColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../../colors';
 
 export default {
-  backgroundColor: `${NeutralColors.white}`,
-  accent: `${CommunicationColors.primary}`,
-  subtle: `${NeutralColors.gray10}`,
+  backgroundColor: NeutralColors.white,
+  accent: colors.main,
+  subtle: colors.gray(10),
 
   primaryFont: 'Segoe UI, HelveticaNeue-Light, Ubuntu, Droid Sans, sans-serif',
 
-  bubbleBackground: `${NeutralColors.gray10}`,
-  bubbleFromUserBackground: `${CommunicationColors.primary}`,
-  bubbleFromUserTextColor: `${NeutralColors.white}`,
-  bubbleTextColor: `${NeutralColors.black}`,
+  bubbleBackground: colors.gray(10),
+  bubbleFromUserBackground: colors.main,
+  bubbleFromUserTextColor: NeutralColors.white,
+  bubbleTextColor: NeutralColors.black,
   bubbleMinHeight: 20,
 
-  microphoneButtonColorOnDictate: `${SharedColors.red10}`,
-  sendBoxButtonColor: `${NeutralColors.gray130}`,
-  sendBoxButtonColorOnFocus: `${NeutralColors.gray140}`,
-  sendBoxButtonColorOnHover: `${NeutralColors.gray150}`,
-  sendBoxTextColor: `${NeutralColors.black}`,
-  sendBoxPlaceholderColor: `${NeutralColors.gray150}`,
-  timestampColor: `${NeutralColors.gray130}`,
-  suggestedActionBackground: `${NeutralColors.gray10}`,
+  microphoneButtonColorOnDictate: SharedColors.red10,
+  sendBoxButtonColor: colors.gray(130),
+  sendBoxButtonColorOnFocus: colors.gray(140),
+  sendBoxButtonColorOnHover: colors.gray(150),
+  sendBoxTextColor: NeutralColors.black,
+  sendBoxPlaceholderColor: colors.gray(150),
+  timestampColor: colors.gray(130),
+  suggestedActionBackground: colors.gray(10),
   suggestedActionBorderColor: 'transparent',
   suggestedActionBorderStyle: 'solid',
   suggestedActionBorderWidth: 0,
-  suggestedActionTextColor: `${CommunicationColors.primary}`,
+  suggestedActionTextColor: colors.main,
 
   transcriptOverlayButtonBackground: 'rgba(48, 98, 214, 0.8)',
   transcriptOverlayButtonBackgroundOnFocus: 'rgba(34, 76, 174, .8)',
   transcriptOverlayButtonBackgroundOnHover: 'rgba(34, 76, 174, .8)',
-  transcriptOverlayButtonColor: `${NeutralColors.gray10}`,
-  transcriptOverlayButtonColorOnFocus: `${NeutralColors.gray10}`,
-  transcriptOverlayButtonColorOnHover: `${NeutralColors.gray10}`,
+  transcriptOverlayButtonColor: colors.gray(10),
+  transcriptOverlayButtonColorOnFocus: colors.gray(10),
+  transcriptOverlayButtonColorOnHover: colors.gray(10),
   transcriptActivityVisualKeyboardIndicatorWidth: 1,
-  transcriptVisualKeyboardIndicatorColor: `${CommunicationColors.primary}`,
+  transcriptVisualKeyboardIndicatorColor: colors.main,
   transcriptVisualKeyboardIndicatorStyle: 'solid',
   transcriptVisualKeyboardIndicatorWidth: 2,
 };

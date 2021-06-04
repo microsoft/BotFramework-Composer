@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
 import { colors } from '../../colors';
@@ -140,7 +140,7 @@ export const getSkillPublishedNotificationCardProps = (
                   {url}
                   <IconButton
                     iconProps={{ iconName: 'copy' }}
-                    styles={{ icon: { fontSize: '12px', color: CommunicationColors.primary } }}
+                    styles={{ icon: { fontSize: '12px', color: colors.main } }}
                     onClick={() => navigator.clipboard.writeText(url)}
                   />
                 </div>

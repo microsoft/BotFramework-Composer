@@ -9,7 +9,7 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/components/Button';
-import { FontSizes, NeutralColors } from '@uifabric/fluent-theme/lib/fluent';
+import { FontSizes } from '@uifabric/fluent-theme/lib/fluent';
 import { useRef } from 'react';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
@@ -17,6 +17,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
 import { defaultTeamsManifest } from '../../constants';
+import { colors } from '../../colors';
 import { dispatcherState } from '../../recoilModel';
 
 const iconButtonStyle: IButtonStyles = {
@@ -26,12 +27,12 @@ const iconButtonStyle: IButtonStyles = {
     marginRight: '10px',
   },
   menuIcon: {
-    backgroundColor: NeutralColors.white,
-    color: NeutralColors.gray130,
+    backgroundColor: colors.bg,
+    color: colors.gray(130),
     fontSize: FontSizes.size16,
   },
   rootDisabled: {
-    backgroundColor: NeutralColors.white,
+    backgroundColor: colors.bg,
   },
   rootHovered: {
     backgroundColor: 'unset',

@@ -7,7 +7,9 @@ import React from 'react';
 import { ActionButton, DefaultButton, IButtonStyles, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import formatMessage from 'format-message';
-import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../colors';
 
 import { RestartOption } from './types';
 
@@ -20,7 +22,7 @@ const customButtonStyles: IButtonStyles = {
     color: `${NeutralColors.black}`,
   },
   icon: {
-    color: `${CommunicationColors.primary}`,
+    color: colors.main,
   },
   splitButtonMenuButton: { backgroundColor: `${NeutralColors.white}`, width: 28, border: 'none' },
   splitButtonMenuIcon: { fontSize: '7px' },

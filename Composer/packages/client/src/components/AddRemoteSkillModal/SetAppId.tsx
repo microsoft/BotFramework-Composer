@@ -8,7 +8,6 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { CommunicationColors, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Label } from 'office-ui-fabric-react/lib/Label';
@@ -18,6 +17,7 @@ import { DefaultButton, IconButton, PrimaryButton } from 'office-ui-fabric-react
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { navigate } from '@reach/router';
 
+import { colors } from '../../colors';
 import { settingsState, botDisplayNameState } from '../../recoilModel';
 
 const buttonStyle = { root: { marginLeft: '8px' } };
@@ -75,7 +75,7 @@ const renderItem = ({
   title,
   description,
   link,
-  iconProps = { iconName: 'Completed', color: SharedColors.cyanBlue10 },
+  iconProps = { iconName: 'Completed', color: colors.main },
 }: RenderItemProps) => {
   return (
     <div css={{ display: 'flex', marginBottom: '20px' }}>
@@ -84,8 +84,8 @@ const renderItem = ({
         style={{ color: iconProps.color, fontSize: '18px', margin: '4px 12px 0 0' }}
       />
       <div css={{ fontSize: '14px', lineHeight: '20px' }}>
-        <div style={{ color: NeutralColors.gray160, fontWeight: 600, marginBottom: '5px' }}>{title}</div>
-        <div style={{ color: NeutralColors.gray130 }}>{description}</div>
+        <div style={{ color: colors.gray(160), fontWeight: 600, marginBottom: '5px' }}>{title}</div>
+        <div style={{ color: colors.gray(130) }}>{description}</div>
         {link && <Link onClick={link.onClick}>{link.text}</Link>}
       </div>
     </div>
@@ -131,7 +131,7 @@ const renderMicrosoftAppId = (MicrosoftAppId: string, label: string, description
         {MicrosoftAppId}
         <IconButton
           iconProps={{ iconName: 'copy' }}
-          styles={{ icon: { fontSize: FontSizes.size12, color: CommunicationColors.primary } }}
+          styles={{ icon: { fontSize: FontSizes.size12, color: colors.main } }}
           onClick={() => navigator.clipboard.writeText(MicrosoftAppId || '')}
         />
       </div>

@@ -243,7 +243,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
               iconName: statusIconClass,
               styles: {
                 root: {
-                  color: `${NeutralColors.white}`,
+                  color: colors.textOnColor,
                 },
               },
             }}
@@ -251,14 +251,14 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             menuAs={() => null}
             styles={{
               root: {
-                backgroundColor: CommunicationColors.tint10,
+                backgroundColor: colors.main,
                 display: 'flex',
                 alignItems: 'center',
                 minWidth: '229px',
                 height: '36px',
                 flexDirection: 'row',
                 padding: '0 7px',
-                border: `1px solid ${CommunicationColors.tint10}`,
+                border: `1px solid ${colors.main}`,
                 width: '100%',
               },
               rootHovered: {
@@ -266,8 +266,8 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
               },
               rootDisabled: {
                 opacity: 0.6,
-                backgroundColor: CommunicationColors.tint10,
-                color: `${NeutralColors.white}`,
+                backgroundColor: colors.main,
+                color: colors.textOnColor,
                 border: 'none',
                 font: '62px',
               },

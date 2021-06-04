@@ -5,7 +5,6 @@
 import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
@@ -55,7 +54,7 @@ export const header = css`
   flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${NeutralColors.gray30};
+  border-bottom: 1px solid ${colors.gray(30)};
 
   label: PageHeader;
   color: ${colors.text};

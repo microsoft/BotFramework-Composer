@@ -2,11 +2,14 @@
 // Licensed under the MIT License.
 import React from 'react';
 import { createStyleSet, Components } from 'botframework-webchat';
-import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../colors';
 
 import { ConversationService } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 import { ChatData, ActivityType } from './types';
+
 const { BasicWebChat, Composer } = Components;
 
 export type WebChatComposerProps = {
@@ -93,7 +96,7 @@ export const WebChatComposer = React.memo((props: WebChatComposerProps) => {
     ...styleSet.fileContent,
     background: `${NeutralColors.white}`,
     '& .webchat__fileContent__fileName': {
-      color: `${CommunicationColors.primary}`,
+      color: colors.main,
     },
     '& .webchat__fileContent__size': {
       color: `${NeutralColors.white}`,

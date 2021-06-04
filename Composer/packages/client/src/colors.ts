@@ -6,10 +6,10 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 class Colors {
   // main background color
-  bg = '#004';
+  bg = '#fff';
   // main theming color (BFC default is SharedColors.cyanBlue10)
-  main = '#DDD';
-  textOnColor = '#000';
+  main = SharedColors.cyanBlue10;
+  textOnColor = '#fff'; // color of text on main-colored elements like buttons and headers
 
   private bgColor = Color(this.bg);
 
