@@ -3,6 +3,7 @@
 
 import Color from 'color';
 import { SharedColors } from '@uifabric/fluent-theme';
+import { createTheme } from '@uifabric/styling';
 
 class Colors {
   // main background color
@@ -54,6 +55,33 @@ class Colors {
     this.mainLight = Color(this.main).lighten(0.5).hex();
     this.mainDark = Color(this.main).darken(0.5).hex();
   };
+
+  fluentTheme = createTheme({
+    palette: {
+      themePrimary: this.main,
+      themeLighterAlt: Color(this.main).lighten(0.9).hex(),
+      themeLighter: Color(this.main).lighten(0.8).hex(),
+      themeLight: Color(this.main).lighten(0.7).hex(),
+      themeTertiary: Color(this.main).lighten(0.5).hex(),
+      themeSecondary: Color(this.main).lighten(0.2).hex(),
+      themeDarkAlt: Color(this.main).darken(0.9).hex(),
+      themeDark: Color(this.main).darken(0.75).hex(),
+      themeDarker: Color(this.main).darken(0.5).hex(),
+      neutralLighterAlt: this.gray(0xfa),
+      neutralLighter: this.gray(0xf3),
+      neutralLight: this.gray(0xed),
+      neutralQuaternaryAlt: this.gray(0xe1),
+      neutralQuaternary: this.gray(0xd0),
+      neutralTertiaryAlt: this.gray(0xc8),
+      neutralTertiary: this.gray(0xa1),
+      neutralSecondary: this.gray(0x60),
+      neutralPrimaryAlt: this.gray(0x3b),
+      neutralPrimary: this.gray(0x32),
+      neutralDark: this.gray(0x20),
+      black: this.text,
+      white: this.bg,
+    },
+  });
 }
 
 export const colors = new Colors();

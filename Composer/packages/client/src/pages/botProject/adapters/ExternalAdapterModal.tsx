@@ -19,6 +19,7 @@ import { AdapterRecord } from '@botframework-composer/types';
 
 import { settingsState, dispatcherState } from '../../../recoilModel';
 import { useShell } from '../../../shell';
+import { colors } from '../../../colors';
 import plugins, { mergePluginConfigs } from '../../../plugins';
 
 type Props = {
@@ -93,6 +94,7 @@ const AdapterModal = (props: Props) => {
             <DefaultButton onClick={onClose}>{formatMessage('Back')}</DefaultButton>
             <PrimaryButton
               disabled={value == null || !hasRequired(value, required)}
+              theme={colors.fluentTheme}
               onClick={async () => {
                 if (value != null) {
                   const currentAdapters: AdapterRecord[] = currentSettings.runtimeSettings?.adapters ?? [];

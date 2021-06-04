@@ -10,6 +10,7 @@ import formatMessage from 'format-message';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
+import { colors } from '../../colors';
 import { dispatcherState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 
@@ -76,7 +77,7 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
   return (
     <div ref={deleteRef} css={marginBottom} id="deleteBot">
       <div css={deleteBotText}> {formatMessage('Delete this bot')}</div>
-      <PrimaryButton styles={deleteBotButton} onClick={() => openDeleteBotModal(onConfirm)}>
+      <PrimaryButton styles={deleteBotButton} theme={colors.fluentTheme} onClick={() => openDeleteBotModal(onConfirm)}>
         {formatMessage('Delete')}
       </PrimaryButton>
     </div>

@@ -8,6 +8,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../colors';
 import { dispatcherState } from '../recoilModel';
 
 const DataCollectionDialog: React.FC = () => {
@@ -47,8 +48,16 @@ const DataCollectionDialog: React.FC = () => {
         </Link>
       </p>
       <DialogFooter>
-        <DefaultButton text={formatMessage('Not now')} onClick={handleDataCollectionChange(false)} />
-        <PrimaryButton text={formatMessage('Yes, collect data')} onClick={handleDataCollectionChange(true)} />
+        <DefaultButton
+          text={formatMessage('Not now')}
+          theme={colors.fluentTheme}
+          onClick={handleDataCollectionChange(false)}
+        />
+        <PrimaryButton
+          text={formatMessage('Yes, collect data')}
+          theme={colors.fluentTheme}
+          onClick={handleDataCollectionChange(true)}
+        />
       </DialogFooter>
     </Dialog>
   );

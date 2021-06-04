@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { runtimeTemplatesState, dispatcherState } from '../../../recoilModel';
+import { colors } from '../../../colors';
 
 import { modalControlGroup } from './style';
 
@@ -64,7 +65,7 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
       </div>
       <DialogFooter>
         <DefaultButton onClick={props.onDismiss}>{formatMessage('Cancel')}</DefaultButton>
-        <PrimaryButton disabled={!selectedTemplate} onClick={doEject}>
+        <PrimaryButton disabled={!selectedTemplate} theme={colors.fluentTheme} onClick={doEject}>
           {formatMessage('Okay')}
         </PrimaryButton>
       </DialogFooter>

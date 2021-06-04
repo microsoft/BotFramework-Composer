@@ -10,6 +10,8 @@ import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import React from 'react';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
+import { colors } from '../../colors';
+
 type PulledFailedDialogProps = {
   error: Error | string;
   onDismiss: () => void;
@@ -50,7 +52,7 @@ export const PullFailedDialog: React.FC<PulledFailedDialogProps> = (props) => {
       </p>
       <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('Ok')} onClick={onDismiss} />
+        <PrimaryButton text={formatMessage('Ok')} theme={colors.fluentTheme} onClick={onDismiss} />
       </DialogFooter>
     </Dialog>
   );

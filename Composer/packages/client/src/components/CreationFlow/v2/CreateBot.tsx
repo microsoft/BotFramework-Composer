@@ -27,6 +27,7 @@ import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import msftIcon from '../../../images/msftIcon.svg';
+import { colors } from '../../../colors';
 import { DialogCreationCopy } from '../../../constants';
 import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';

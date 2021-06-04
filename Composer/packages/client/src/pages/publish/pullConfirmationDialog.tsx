@@ -8,6 +8,8 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/compone
 import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import React from 'react';
 
+import { colors } from '../../colors';
+
 type PullConfirmationDialogProps = {
   onConfirm: () => void;
   onDismiss: () => void;
@@ -36,8 +38,18 @@ export const PullConfirmationDialog: React.FC<PullConfirmationDialogProps> = (pr
       </p>
       <p>{formatMessage('Do you want to proceed?')}</p>
       <DialogFooter>
-        <DefaultButton data-testid="pull-cancel-button" text={formatMessage('Cancel')} onClick={onDismiss} />
-        <PrimaryButton data-testid="pull-confirm-button" text={formatMessage('Pull')} onClick={onConfirm} />
+        <DefaultButton
+          data-testid="pull-cancel-button"
+          text={formatMessage('Cancel')}
+          theme={colors.fluentTheme}
+          onClick={onDismiss}
+        />
+        <PrimaryButton
+          data-testid="pull-confirm-button"
+          text={formatMessage('Pull')}
+          theme={colors.fluentTheme}
+          onClick={onConfirm}
+        />
       </DialogFooter>
     </Dialog>
   );

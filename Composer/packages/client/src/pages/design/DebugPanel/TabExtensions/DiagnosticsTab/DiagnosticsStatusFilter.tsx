@@ -4,8 +4,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+
+import { colors } from '../../../../../colors';
 
 import { Severity, useDiagnosticsStatistics } from './useDiagnostics';
 

@@ -12,6 +12,7 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 
+import { colors } from '../../../colors';
 import { separator } from '../../publish/styles';
 import { PublishType } from '../../../recoilModel/types';
 
@@ -134,6 +135,7 @@ export const ProfileFormDialog: React.FC<ProfileFormDialogProps> = (props) => {
             disabled={saveDisabled}
             style={{ margin: '0 4px' }}
             text={formatMessage('Next')}
+            theme={colors.fluentTheme}
             onClick={() => {
               onNext();
             }}
