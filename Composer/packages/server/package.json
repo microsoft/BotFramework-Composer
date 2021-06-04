@@ -129,7 +129,7 @@
     "uuid": "^8.3.0",
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "ws": "^5.0.0",
+    "ws": "^6.2.2",
     "yeoman-environment": "^2.10.3"
   },
   "resolutions": {
