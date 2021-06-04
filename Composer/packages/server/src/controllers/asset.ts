@@ -59,7 +59,7 @@ export async function getProjTemplatesV2(req: any, res: any) {
       if (FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS')) {
         templates.push({
           id: localTemplateId,
-          name: 'Local Template',
+          name: 'Create from local template',
           description: formatMessage('Create a bot using a local yeoman generator'),
           dotnetSupport: {
             functionsSupported: true,

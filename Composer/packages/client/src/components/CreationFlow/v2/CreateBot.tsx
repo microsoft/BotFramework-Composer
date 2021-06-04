@@ -16,7 +16,7 @@ import {
   CheckboxVisibility,
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, localTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { WindowLocation } from '@reach/router';
@@ -27,6 +27,7 @@ import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import msftIcon from '../../../images/msftIcon.svg';
+import addIcon from '../../../images/addIcon.svg';
 import { DialogCreationCopy } from '../../../constants';
 import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../../recoilModel';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
@@ -157,6 +158,23 @@ export function CreateBotV2(props: CreateBotProps) {
     }
   };
 
+  const renderTemplateIcon = (item: BotTemplate) => {
+    let labelText = formatMessage('Microsoft Logo');
+    let iconSrc = msftIcon;
+    if (item.id === localTemplateId) {
+      labelText = formatMessage('Add Local Template');
+      iconSrc = addIcon;
+    }
+    return (
+      <img
+        alt={labelText}
+        aria-label={labelText}
+        src={iconSrc}
+        style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px', color: 'blue' }}
+      />
+    );
+  };
+
   const tableColumns = [
     {
       key: 'name',
@@ -170,12 +188,7 @@ export function CreateBotV2(props: CreateBotProps) {
       onRender: (item) => (
         <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
-            <img
-              alt={formatMessage('Microsoft Logo')}
-              aria-label={formatMessage('Microsoft Logo')}
-              src={msftIcon}
-              style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px' }}
-            />
+            {renderTemplateIcon(item)}
             {item.name}
           </div>
         </div>
