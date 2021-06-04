@@ -12,7 +12,7 @@ import { withTooltip } from '../utils/withTooltip';
 
 import { jsLuToolbarMenuClassName } from './constants';
 import { useLabelingMenuProps } from './hooks/useLabelingMenuItems';
-import { getLuToolbarItemTextAndIcon } from './iconUtils';
+import { getLuToolbarItemTextAndIcon } from './utils/iconUtils';
 
 const fontSizeStyle = {
   fontSize: FluentTheme.fonts.small.fontSize,

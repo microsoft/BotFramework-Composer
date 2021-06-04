@@ -253,10 +253,11 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   };
 
   const defineEntity = useCallback(
-    (entityType: ToolbarLuEntityType, entityName?: string) => {
-      entityName = entityName || getDefaultMlEntityName(entityType);
+    (entityType: ToolbarLuEntityType, entityData: Partial<{ entityName: string; entityDefinition: string }>) => {
+      const { entityDefinition } = entityData || {};
+      const entityName = entityData?.entityName || getDefaultMlEntityName(entityType);
       if (editor) {
-        const luEdits = computeDefineLuEntityEdits(entityType, entityName, editor, entities);
+        const luEdits = computeDefineLuEntityEdits({ entityType, entityName, entityDefinition }, editor, entities);
         if (luEdits?.edits?.length) {
           editor.executeEdits('toolbarMenu', luEdits.edits);
           if (luEdits.selection) {

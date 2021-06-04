@@ -28,7 +28,10 @@ type Props = {
   className?: string;
   luFile?: LuFile;
   labelingMenuVisible: boolean;
-  onDefineEntity: (entityType: ToolbarLuEntityType, entityName?: string) => void;
+  onDefineEntity: (
+    entityType: ToolbarLuEntityType,
+    data: Partial<{ entityName: string; entityDefinition: string }>
+  ) => void;
   onInsertEntity: (entityName: string, entityType: string) => void;
   options?: Partial<{
     disabled: boolean;
@@ -60,7 +63,12 @@ export const LuEditorToolbar = React.memo((props: Props) => {
     return {
       key: 'defineLuEntityItem',
       commandBarButtonAs: () => (
-        <DefineEntityButton disabled={options?.disabled} tooltip={options?.tooltip} onDefineEntity={onDefineEntity} />
+        <DefineEntityButton
+          disabled={options?.disabled}
+          luFile={luFile}
+          tooltip={options?.tooltip}
+          onDefineEntity={onDefineEntity}
+        />
       ),
     };
   }, [onDefineEntity]);
