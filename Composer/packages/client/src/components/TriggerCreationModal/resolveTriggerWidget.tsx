@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { UserSettings, DialogInfo, SDKKinds, LuFile } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
+import { luUtil } from '@bfc/indexers';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { isRegExRecognizerType, isLUISnQnARecognizerType, isPVARecognizerType } from '../../utils/dialogValidator';
@@ -29,6 +30,8 @@ export function resolveTriggerWidget(
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile) || isPVARecognizerType(dialogFile);
   const showTriggerPhrase = selectedType === SDKKinds.OnIntent && !isRegEx;
+
+  const [localeLuFile, setLocaleLuFile] = useState(luFile);
 
   const onNameChange = (e: React.FormEvent, name: string | undefined) => {
     const errors: TriggerFormDataErrors = {};
@@ -56,6 +59,20 @@ export function resolveTriggerWidget(
       errors.triggerPhrases = '';
     }
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
+
+    if (localeLuFile) {
+      const shadowLuFile = luUtil.updateIntent(
+        localeLuFile,
+        PlaceHolderSectionName,
+        {
+          Name: PlaceHolderSectionName,
+          Body: body,
+        },
+        {}
+      );
+
+      setLocaleLuFile(shadowLuFile);
+    }
   };
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
@@ -101,7 +118,7 @@ export function resolveTriggerWidget(
         editorSettings={userSettings.codeEditor}
         errorMessage={formData.errors.triggerPhrases}
         height={225}
-        luFile={luFile}
+        luFile={localeLuFile}
         luOption={{
           projectId,
           fileId: dialogId,
