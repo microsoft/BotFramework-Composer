@@ -8,7 +8,7 @@ class Colors {
   // main background color
   bg = '#fff';
   // main theming color (BFC default is SharedColors.cyanBlue10)
-  main = SharedColors.cyanBlue10;
+  main = '#93f';
   textOnColor = '#fff'; // color of text on main-colored elements like buttons and headers
 
   private bgColor = Color(this.bg);

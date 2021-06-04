@@ -36,7 +36,7 @@ export const statusStyle = css`
   padding: 5px 0;
 
   i {
-    color: ${NeutralColors.gray150};
+    color: ${colors.gray(150)};
     padding-right: 10px;
   }
 
@@ -45,7 +45,7 @@ export const statusStyle = css`
   }
 
   span {
-    color: ${NeutralColors.gray130};
+    color: ${colors.gray(130)};
   }
 `;
 

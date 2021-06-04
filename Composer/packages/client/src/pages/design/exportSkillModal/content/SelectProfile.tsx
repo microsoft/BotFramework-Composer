@@ -208,7 +208,7 @@ export const SelectProfile: React.FC<ContentProps> = ({
     return publishingTargets.map((t) => ({
       key: t.name,
       text: t.name,
-      data: !isValidProfile(t) ? { icon: 'TriangleSolid', color: NeutralColors.gray60 } : undefined,
+      data: !isValidProfile(t) ? { icon: 'TriangleSolid', color: colors.gray(60) } : undefined,
     }));
   }, [publishingTargets]);
 

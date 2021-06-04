@@ -251,7 +251,7 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
             menuAs={() => null}
             styles={{
               root: {
-                backgroundColor: colors.main,
+                backgroundColor: colors.botControllerBg,
                 display: 'flex',
                 alignItems: 'center',
                 minWidth: '229px',

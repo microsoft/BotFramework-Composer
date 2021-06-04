@@ -27,6 +27,7 @@ import { useFeatureFlag } from '../../utils/hooks';
 import { LoadingSpinner } from '../LoadingSpinner';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { getBaseName } from '../../utils/fileUtil';
+import { colors } from '../../colors';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -64,9 +65,9 @@ export const headerCSS = (label: string, isActive?: boolean) => css`
   width: 100%;
   label: ${label};
   :hover {
-    background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+    background: ${isActive ? colors.gray(40) : colors.gray(20)};
   }
-  background: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
+  background: ${isActive ? colors.gray(30) : NeutralColors.white};
 `;
 
 // -------------------- Helper functions -------------------- //

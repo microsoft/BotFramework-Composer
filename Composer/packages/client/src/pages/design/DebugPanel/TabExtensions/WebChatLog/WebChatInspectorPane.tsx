@@ -113,7 +113,7 @@ export const WebChatInspectorPane: React.FC<WebChatInspectorPaneProps> = (props)
         css={{
           height: '100%',
           width: '50%',
-          borderLeft: `1px solid ${NeutralColors.gray30}`,
+          borderLeft: `1px solid ${colors.gray(30)}`,
           display: 'flex',
           overflow: 'auto',
           flexDirection: 'column',

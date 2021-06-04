@@ -260,7 +260,7 @@ export const mediaCardItem = {
       height: calc(20vw * ${ImageCoverHeight / ImageCoverWidth});
     }
     @media (min-width: 2800px) {
-      background: ${NeutralColors.gray160};
+      background: ${colors.gray(160)};
     }
     .image-cover-img {
       display: flex;
@@ -282,7 +282,7 @@ export const mediaCardNoCoverItem = {
     position: relative;
     align-items: center;
     justify-content: center;
-    background: ${NeutralColors.gray160};
+    background: ${colors.gray(160)};
     .image-cover-img {
       width: 53px;
       height: 48px;
@@ -302,7 +302,7 @@ export const childrenContainer = css`
 `;
 
 export const detailListContainer = css`
-  border-top: 1px solid ${NeutralColors.gray30};
+  border-top: 1px solid ${colors.gray(30)};
   padding-top: 10px;
   .ms-DetailsHeader {
     padding-top: 0;

@@ -156,7 +156,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
           onRenderLabel={onRenderLabel}
         />
         <PrimaryButton
-          styles={{ root: { width: '230px', marginTop: '15px' } }}
+          styles={{ root: { width: '230px', marginTop: '15px', background: colors.main, border: colors.mainDark } }}
           text={formatMessage('Retrieve App ID')}
           onClick={() => {
             setShowImportDialog(true);

@@ -85,7 +85,7 @@ export const textFieldAnswer = {
 
 export const divider = css`
   height: 1px;
-  background: ${NeutralColors.gray30};
+  background: ${colors.gray(30)};
 `;
 
 export const rowDetails = {
@@ -97,10 +97,10 @@ export const rowDetails = {
         fontSize: 8,
       },
       '&:hover': {
-        background: NeutralColors.gray30,
+        background: colors.gray(30),
         selectors: {
           '.ms-TextField-fieldGroup': {
-            background: NeutralColors.gray30,
+            background: colors.gray(30),
           },
           '.ms-Button--icon': {
             visibility: 'visible',
@@ -119,12 +119,12 @@ export const rowDetails = {
             visibility: 'visible',
           },
           '.ms-TextField-fieldGroup': {
-            background: NeutralColors.gray30,
+            background: colors.gray(30),
           },
         },
       },
       '&.is-selected:hover': {
-        background: NeutralColors.gray30,
+        background: colors.gray(30),
       },
     },
   },

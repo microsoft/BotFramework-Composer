@@ -22,7 +22,8 @@ import uniqueId from 'lodash/uniqueId';
 
 import { colors } from '../../colors';
 
-import { TreeLink, TreeMenuItem } from './ProjectTree';
+import { THREE_DOTS_ICON_WIDTH } from './constants';
+import { TreeLink, TreeMenuItem } from './types';
 import { TreeItemContent } from './TreeItemContent';
 
 // -------------------- Styles -------------------- //
@@ -102,7 +103,7 @@ const navContainer = (
     ? ''
     : `
     &:hover {
-      background: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+      background: ${isActive ? colors.gray(40) : colors.gray(20)};
         .dialog-more-btn {
           visibility: visible;
         }

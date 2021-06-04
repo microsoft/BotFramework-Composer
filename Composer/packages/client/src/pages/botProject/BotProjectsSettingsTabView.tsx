@@ -9,12 +9,12 @@ import { RouteComponentProps } from '@reach/router';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/components/Pivot';
 import formatMessage from 'format-message';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
 import { DisableFeatureToolTip } from '../../components/DisableFeatureToolTip';
 import { usePVACheck } from '../../hooks/usePVACheck';
 import { navigateTo } from '../../utils/navigation';
+import { colors } from '../../colors';
 
 import { BotProjectInfo } from './BotProjectInfo';
 import { AppIdAndPassword } from './AppIdAndPassword';
@@ -40,7 +40,7 @@ const disabledPivotStyle: IButtonProps = {
   style: {
     pointerEvents: 'unset',
     cursor: 'not-allowed',
-    color: `${NeutralColors.gray100}`,
+    color: `${colors.gray(100)}`,
   },
 };
 

@@ -8,7 +8,8 @@ import { FluentTheme, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
-import { NeutralColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../colors';
 
 import { NextStep } from './types';
 
@@ -25,7 +26,7 @@ const getStartedStepStyle = (disabled?: boolean) => css`
 const stepDescriptionStyle = css`
   margin-left: 36px;
   font-size: 14px;
-  color: ${NeutralColors.gray120};
+  color: ${colors.gray(120)};
   margin-top: -4px;
 `;
 

@@ -6,10 +6,11 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors, FontSizes, FluentTheme } from '@uifabric/fluent-theme';
+import { FontSizes, FluentTheme } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
 
+import { colors } from '../../colors';
 import { platform, OS } from '../../utils/os';
 
 import { CardProps } from './NotificationCard';
@@ -24,7 +25,7 @@ const commandContainer = css`
   flex-flow: row nowrap;
   position: relative;
   padding: 4px 28px 4px 8px;
-  background-color: ${NeutralColors.gray20};
+  background-color: ${colors.gray(20)};
   line-height: 22px;
   margin: 1rem 0;
 `;

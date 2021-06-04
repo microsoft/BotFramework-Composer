@@ -70,7 +70,7 @@ export const textFieldLocales = {
     paddingBottom: 20,
     selectors: {
       '.ms-Label': {
-        color: NeutralColors.gray160,
+        color: colors.gray(160),
       },
     },
   },
@@ -98,7 +98,7 @@ export const subText = css`
 
 export const knowledgeBaseStyle = {
   root: {
-    color: NeutralColors.gray160,
+    color: colors.gray(160),
     fontWeight: '600' as '600',
   },
 };

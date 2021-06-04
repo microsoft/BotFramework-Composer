@@ -5,6 +5,8 @@ import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
+import { colors } from '../../colors';
+
 export const title = css`
   font-size: ${FontSizes.large};
   font-weight: ${FontWeights.semibold};
@@ -19,19 +21,19 @@ export const tabContentContainer = css`
 `;
 
 export const subtext = css`
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray(130)};
   font-size: ${FontSizes.medium};
   padding-bottom: 5px;
 `;
 
 export const subtitle = css`
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray(130)};
   font-size: ${FontSizes.medium};
   padding: 12px 0;
 `;
 
 export const headerText = css`
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray(130)};
   font-size: ${FontSizes.medium};
   margin-top: 25px;
 `;
@@ -48,7 +50,7 @@ export const tableHeaderRow = css`
   align-items: center;
   height: 42px;
   width: 750px;
-  border-bottom: 1px solid ${NeutralColors.gray30};
+  border-bottom: 1px solid ${colors.gray(30)};
 `;
 
 export const tableRow = css`

@@ -600,7 +600,7 @@ export const ManageService = (props: ManageServiceProps) => {
           </div>
           <div>
             {noKeys && subscriptionId && (
-              <span style={{ color: NeutralColors.gray100 }}>
+              <span style={{ color: colors.gray(100) }}>
                 {formatMessage(
                   'No existing {service} resources were found in this subscription. Select a different subscription, or click “Back” to create a new resource or generate a resource request to handoff to your Azure admin.',
                   {

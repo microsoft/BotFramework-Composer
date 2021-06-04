@@ -117,7 +117,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       <DetailsList
         isHeaderVisible
         checkboxVisibility={CheckboxVisibility.hidden}
-        columns={tableColums}
+        columns={tableColumns}
         compact={false}
         getKey={(item) => `${item.path}/${item.name}`}
         items={recentProjects}

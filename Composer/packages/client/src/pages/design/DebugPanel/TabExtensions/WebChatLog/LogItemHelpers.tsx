@@ -3,7 +3,9 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { SharedColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../../../../colors';
 
 const timestampStyle = css`
   color: ${SharedColors.green20};
@@ -11,7 +13,7 @@ const timestampStyle = css`
 `;
 
 const timestampBracket = css`
-  color: ${NeutralColors.gray130};
+  color: ${colors.gray(130)};
 `;
 
 export const renderActivityArrow = (activity) => {

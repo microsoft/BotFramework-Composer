@@ -27,7 +27,7 @@ const customButtonStyles: IButtonStyles = {
   splitButtonMenuButton: { backgroundColor: `${NeutralColors.white}`, width: 28, border: 'none' },
   splitButtonMenuIcon: { fontSize: '7px' },
   splitButtonDivider: {
-    backgroundColor: `${NeutralColors.gray50}`,
+    backgroundColor: `${colors.gray(50)}`,
     width: 1,
     right: 26,
     position: 'absolute',
@@ -83,7 +83,7 @@ export const WebChatHeader: React.FC<WebChatHeaderProps> = ({
   };
 
   return (
-    <div data-testid="Webchat-Header" style={{ borderBottom: `1px solid ${NeutralColors.gray60}` }}>
+    <div data-testid="Webchat-Header" style={{ borderBottom: `1px solid ${colors.gray(60)}` }}>
       <h4
         css={{
           margin: 0,

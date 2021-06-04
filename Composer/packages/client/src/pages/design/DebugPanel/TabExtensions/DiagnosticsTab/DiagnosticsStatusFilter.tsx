@@ -24,7 +24,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: NeutralColors.gray10,
+        backgroundColor: colors.gray(10),
       }}
       data-testid="diagnostics-sidebar"
     >
@@ -37,7 +37,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             paddingRight: '3px',
             width: '100%',
             border: 'none',
-            backgroundColor: filterType === Severity.Error ? NeutralColors.gray40 : NeutralColors.gray10,
+            backgroundColor: filterType === Severity.Error ? colors.gray(40) : colors.gray(10),
           },
           flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
           label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },
@@ -58,7 +58,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
             paddingRight: '3px',
             border: 'none',
             width: '100%',
-            backgroundColor: filterType === Severity.Warning ? NeutralColors.gray40 : NeutralColors.gray10,
+            backgroundColor: filterType === Severity.Warning ? colors.gray(40) : colors.gray(10),
           },
           flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
           label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },

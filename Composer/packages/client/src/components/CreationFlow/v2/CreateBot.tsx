@@ -62,15 +62,15 @@ const pickerContainer = css`
 const rowDetails = (disabled) => {
   return {
     root: {
-      color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+      color: disabled ? colors.gray(80) : NeutralColors.black,
       selectors: {
         '&:hover': {
-          background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+          background: disabled ? NeutralColors.white : colors.gray(30),
+          color: disabled ? colors.gray(80) : NeutralColors.black,
         },
         '&.ms-DetailsRow.is-selected': {
-          background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+          background: disabled ? NeutralColors.white : colors.gray(30),
+          color: disabled ? colors.gray(80) : NeutralColors.black,
         },
       },
     },
@@ -80,11 +80,11 @@ const rowDetails = (disabled) => {
 const rowTitle = (disabled) => {
   return {
     cellTitle: {
-      color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+      color: disabled ? colors.gray(80) : NeutralColors.black,
       selectors: {
         ':hover': {
-          background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+          background: disabled ? NeutralColors.white : colors.gray(30),
+          color: disabled ? colors.gray(80) : NeutralColors.black,
         },
       },
     },

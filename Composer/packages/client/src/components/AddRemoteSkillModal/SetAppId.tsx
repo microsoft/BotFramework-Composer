@@ -32,7 +32,7 @@ type SetAppIdProps = {
 const getCreateProfileDescription = (botName, handleCreateProfile) => ({
   iconProps: {
     iconName: 'Error',
-    color: SharedColors.orange20,
+    color: colors.error,
   },
   title: formatMessage(`Add publishing profile for {botName}`, { botName }),
   description: formatMessage(
@@ -118,8 +118,8 @@ const renderMicrosoftAppId = (MicrosoftAppId: string, label: string, description
       <CustomLabel description={description} label={label} />
       <div
         style={{
-          color: NeutralColors.gray90,
-          backgroundColor: NeutralColors.gray20,
+          color: colors.gray(90),
+          backgroundColor: colors.gray(20),
           fontSize: FontSizes.size14,
           display: 'flex',
           justifyContent: 'space-between',
@@ -155,7 +155,7 @@ export const SetAppId: React.FC<SetAppIdProps> = (props) => {
   const setMSAppIdAndPassword = () => ({
     iconProps: {
       iconName: 'Error',
-      color: SharedColors.orange20,
+      color: colors.error,
     },
     title: formatMessage('Select App ID and password'),
     description: formatMessage(

@@ -4,9 +4,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../../../../../colors';
 import { outputsDebugPanelSelector } from '../../../../../recoilModel';
 import { BotStatusIndicator } from '../../../../../components/BotRuntimeController/BotStatusIndicator';
 
@@ -20,7 +20,7 @@ export const BotProjectsFilter = ({ currentProjectId, onChangeProject }) => {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: NeutralColors.gray10,
+        backgroundColor: colors.gray(10),
       }}
       data-testid="runtime-logs-sidebar"
     >
@@ -36,8 +36,7 @@ export const BotProjectsFilter = ({ currentProjectId, onChangeProject }) => {
                 textAlign: 'left',
                 justifyContent: 'flex-start',
                 display: 'flex',
-                backgroundColor:
-                  currentProjectId === projectData.projectId ? NeutralColors.gray30 : NeutralColors.gray10,
+                backgroundColor: currentProjectId === projectData.projectId ? colors.gray(30) : colors.gray(10),
               },
               description: projectData.botName,
             }}

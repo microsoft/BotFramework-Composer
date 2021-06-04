@@ -20,9 +20,9 @@ export const emphasizedText = css`
 
 export const hoverItem = (isActive: boolean) => css`
   padding: 0 16px;
-  background-color: ${isActive ? NeutralColors.gray30 : NeutralColors.white};
+  background-color: ${isActive ? colors.gray(30) : NeutralColors.white};
   &:hover {
-    background-color: ${isActive ? NeutralColors.gray40 : NeutralColors.gray20};
+    background-color: ${isActive ? colors.gray(40) : colors.gray(20)};
   }
 `;
 
