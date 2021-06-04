@@ -4086,6 +4086,27 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
+"@microsoft/bf-lu@4.14.0-dev.20210602.be805a8":
+  version "4.14.0-dev.20210602.be805a8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.14.0-dev.20210602.be805a8.tgz#dc35016c5ea1688fa5adf430a969d5c9ce817cc5"
+  integrity sha1-3DUBbF6haI+lrfQwqWnVyc6BfMU=
+  dependencies:
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "~4.8.0"
+    axios "~0.21.1"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    https-proxy-agent "^5.0.0"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
 "@microsoft/bf-lu@next":
   version "4.13.0-dev.20210218.d9e7d3a"
   resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.13.0-dev.20210218.d9e7d3a.tgz#351004819bf9a130d324e687e774df621914e2a0"
