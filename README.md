@@ -20,7 +20,7 @@ Bot Framework Composer is an open-source, visual authoring canvas for developers
 The Bot Framework Composer is an open source tool based on the Bot Framework SDK. It is available as a [desktop application](#get-started) as well as a [web-based component](#build-composer-locally)
 
 <p align="center">
-    <img alt="Bot Framework Composer Home Page" src="./docs/Assets/Screenshot-Composer-overview.png" style="max-width:700px;" />
+    <img alt="Bot Framework Composer Home Page" src="./docs/Assets/Screenshot-ComposerV2-overview.png" style="max-width:700px;" />
 </p>
 
 ## Get Started

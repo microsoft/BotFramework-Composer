@@ -256,7 +256,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     [onTemplateChange]
   );
 
-  const popExpandOptions = React.useMemo(() => ({ popExpandTitle: label || formatMessage('Bot response') }), []);
+  const popExpandOptions = React.useMemo(() => ({ popExpandTitle: label || formatMessage('Bot response') }), [label]);
 
   return (
     <React.Fragment>
