@@ -4072,10 +4072,10 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.14.0-preview.20210521.24cb5c8":
-  version "4.14.0-preview.20210521.24cb5c8"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-generate-library/-/bf-generate-library-4.14.0-preview.20210521.24cb5c8.tgz#3547da152a2c9a7079eb014c220acfdda495bb1f"
-  integrity sha512-KLdbLvJHEvSbrL6R1ahXqLwJLx9HnpeVM1Vtp+4W92oQxo2SnHF/uT94I8cMxGLJGi8T68NcLM/fjeAWkZM7ng==
+"@microsoft/bf-generate-library@^4.14.0-preview.20210605.ff079e5":
+  version "4.14.0-preview.20210605.ff079e5"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-generate-library/-/bf-generate-library-4.14.0-preview.20210605.ff079e5.tgz#8ffc164fdf245d21c2d2de1973263876ce4b8a8a"
+  integrity sha512-q91m8DawwE18g0sqKtgPnC6gwC+N4MLyWiIx+gRhoX5hDaxPjcPow3yUrwiBDvx/aIPAI7EOS8xAMA9fQpFlIA==
   dependencies:
     "@microsoft/bf-lu" latest
     adaptive-expressions next
