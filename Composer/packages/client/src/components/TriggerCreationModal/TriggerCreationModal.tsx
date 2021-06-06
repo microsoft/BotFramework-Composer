@@ -57,6 +57,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const [formData, setFormData] = useState(initialFormData);
   const [selectedType, setSelectedType] = useState<string>(SDKKinds.OnIntent);
+  const [localeLuFile, setLocaleLuFile] = useState(luFile);
 
   const onClickSubmitButton = (e) => {
     e.preventDefault();
@@ -82,7 +83,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     userSettings,
     projectId,
     dialogId,
-    luFile
+    localeLuFile,
+    setLocaleLuFile
   );
 
   return (
