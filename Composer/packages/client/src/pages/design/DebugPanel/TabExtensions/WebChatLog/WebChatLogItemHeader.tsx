@@ -42,7 +42,7 @@ export const WebChatLogItemHeader: React.FC<DebugPanelTabHeaderProps> = ({ isAct
         flex-direction: row;
         align-items: center;
       `}
-      data-testid="Tab-Diagnostics"
+      data-testid="Tab-WebChat"
     >
       <div
         css={css`
