@@ -413,6 +413,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '250px', marginTop: '15px', background: colors.main, border: colors.mainDark } }}
           text={formatMessage('Set up Language Understanding')}
+          theme={colors.fluentTheme}
           onClick={() => {
             setDisplayManageLuis(true);
           }}
@@ -482,6 +483,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           disabled={displayManageLuis || displayManageQNA}
           styles={{ root: { width: '250px', marginTop: '15px', background: colors.main, border: colors.mainDark } }}
           text={formatMessage('Set up QnA Maker')}
+          theme={colors.fluentTheme}
           onClick={() => {
             setDisplayManageQNA(true);
           }}

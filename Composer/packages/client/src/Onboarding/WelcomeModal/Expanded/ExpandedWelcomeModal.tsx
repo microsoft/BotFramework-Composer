@@ -7,6 +7,7 @@ import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
+import { colors } from '../../colors';
 import { useOnboardingContext } from '../../OnboardingContext';
 
 import {
@@ -75,10 +76,20 @@ const WelcomeModal = () => {
         {currentStep === -1 && (
           <div>
             {currentSet + 1 < stepSets.length && (
-              <PrimaryButton data-testid="onboardingNextSet" text={stepSets[currentSet + 1].title} onClick={nextSet} />
+              <PrimaryButton
+                data-testid="onboardingNextSet"
+                text={stepSets[currentSet + 1].title}
+                theme={colors.fluentTheme}
+                onClick={nextSet}
+              />
             )}
             {currentSet + 1 === stepSets.length && (
-              <PrimaryButton data-testid="onboardingDone" text={formatMessage('Done!')} onClick={onComplete} />
+              <PrimaryButton
+                data-testid="onboardingDone"
+                text={formatMessage('Done!')}
+                theme={colors.fluentTheme}
+                onClick={onComplete}
+              />
             )}
           </div>
         )}

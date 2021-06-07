@@ -10,6 +10,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { SDKKinds, RegexRecognizer } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../../colors';
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { userSettingsState } from '../../recoilModel/atoms';
 import { currentDialogState, dialogsSelectorFamily, localeState, luFilesSelectorFamily } from '../../recoilModel';
@@ -110,11 +111,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
         {triggerWidget}
       </div>
       <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'triggerFormSubmit'}
           disabled={disable}
           text={formatMessage('Submit')}
+          theme={colors.fluentTheme}
           onClick={onClickSubmitButton}
         />
       </DialogFooter>

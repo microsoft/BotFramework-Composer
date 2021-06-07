@@ -11,6 +11,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
+import { colors } from '../../colors';
 import { settingsState } from '../../recoilModel/atoms/botState';
 
 type AppInfo = {
@@ -110,9 +111,10 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
         <PrimaryButton
           disabled={!!publishTargetsErrorMessage || !selectedKey}
           text={formatMessage('Save App ID')}
+          theme={colors.fluentTheme}
           onClick={handleAdd}
         />
-        <DefaultButton text={formatMessage('Cancel')} onClick={onCancel} />
+        <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onCancel} />
       </DialogFooter>
     </Dialog>
   );

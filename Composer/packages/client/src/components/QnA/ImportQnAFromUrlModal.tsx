@@ -12,6 +12,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { QnAFile } from '@bfc/shared';
 
+import { colors } from '../../colors';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getQnAFileUrlOption, getQnAFileMultiTurnOption } from '../../utils/qnaUtil';
 
@@ -96,10 +97,11 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
         <PrimaryButton
           disabled={disabled}
           text={formatMessage('Done')}
+          theme={colors.fluentTheme}
           onClick={() => {
             if (hasErrors) {
               return;
