@@ -9,24 +9,23 @@ import { ProvisionAction } from '../types';
 
 import { ChooseProvisionAction } from './ChooseProvisionActionStep';
 import { CreateResourcesWizard, HandOffToAdminWizard, ImportResourcesWizard } from './provisioningWizards';
-
-const Root = styled.div`
-  height: calc(100vh - 65px);
-`;
+type RootStyleProps = {
+  stepIndex: number;
+};
+const Root = styled.div<RootStyleProps>(({ stepIndex }) => ({
+  height: stepIndex === 1 ? 'unset' : 'calc(100vh - 65px)',
+}));
 
 export const AzureProvisionWizard = () => {
   const [provisionAction, setProvisionAction] = useState<ProvisionAction>('create');
-  const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
-
-  const handleStepChange = (index: number) => {
-    console.log(index);
-    setActiveStepIndex(index);
-  };
+  const [activeStepIndex, setActiveStepIndex] = useState<number>(1);
 
   const renderContent = React.useCallback(() => {
     switch (provisionAction) {
       case 'create':
-        return <CreateResourcesWizard stepId={activeStepIndex} onStepChange={handleStepChange} />;
+        return (
+          <CreateResourcesWizard stepIndex={activeStepIndex} onStepChange={(s) => setActiveStepIndex(parseInt(s))} />
+        );
       case 'import':
         return <ImportResourcesWizard />;
       case 'generate':
@@ -34,19 +33,18 @@ export const AzureProvisionWizard = () => {
     }
   }, [provisionAction, activeStepIndex]);
 
+  // const content = React.useMemo(() => renderContent(), [renderContent]);
+
   return (
     <RecoilRoot>
-      <Root>
-        {activeStepIndex === 0 && (
-          <ChooseProvisionAction
-            selectedProvisionAction={provisionAction}
-            showChoices={activeStepIndex === 0}
-            onChangeSelectedProvisionAction={setProvisionAction}
-          >
-            {renderContent()}
-          </ChooseProvisionAction>
-        )}
-        {activeStepIndex > 0 && renderContent()}
+      <Root stepIndex={activeStepIndex}>
+        <ChooseProvisionAction
+          selectedProvisionAction={provisionAction}
+          showChoices={activeStepIndex === 1}
+          onChangeSelectedProvisionAction={setProvisionAction}
+        >
+          {renderContent()}
+        </ChooseProvisionAction>
       </Root>
     </RecoilRoot>
   );

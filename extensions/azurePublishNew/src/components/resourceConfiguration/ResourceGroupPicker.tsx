@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ResourceGroups as ResourceGroup } from '@botframework-composer/types';
 import React, { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
+import { ResourceGroup } from '@azure/arm-resources/esm/models';
 
 import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoComplete';
+import { getResourceGroups } from '../api';
+
 type ComboBoxPropsWithOutOptions = Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
 type Props = {
   allowCreation?: boolean;
@@ -14,21 +16,50 @@ type Props = {
   onResourceGroupChange: React.Dispatch<React.SetStateAction<string>>;
   accessToken: string;
 } & ComboBoxPropsWithOutOptions;
+
+const messages = {
+  placeholder: formatMessage('Select Resource Group'),
+};
 export const ResourceGroupPicker = React.memo((props: Props) => {
+  const { accessToken, subscriptionId, onResourceGroupChange } = props;
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
-    //TODO: Create an API to call the server
-    setResourceGroups([]);
-  }, [props.subscriptionId]);
+    if (accessToken && subscriptionId) {
+      setIsLoading(true);
+      getResourceGroups(accessToken, subscriptionId)
+        .then((data) => {
+          setResourceGroups(data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setErrorMessage(formatMessage(err.message));
+          setIsLoading(false);
+        })
+        .finally(() => {
+          isLoading && setIsLoading(false);
+        });
+    }
+  }, [accessToken, props.subscriptionId]);
+
   const localTextFieldProps = {
-    placeholder: formatMessage('Select Resource Group'),
+    placeholder: messages.placeholder,
   };
+
+  const getValue = () => {
+    return resourceGroups.find((rg) => rg.id === props.value)?.name;
+  };
+
   return (
     <>
       <AutoComplete
+        errorMessage={errorMessage}
+        isLoading={isLoading}
         items={resourceGroups.map((t) => ({ key: t.id, text: t.name }))}
-        onSubmit={(option) => props.onResourceGroupChange(option.id)}
-        {...{ ...props, textFieldProps: { ...localTextFieldProps, ...props.textFieldProps } }}
+        onSubmit={(option) => onResourceGroupChange(option.id)}
+        {...{ ...props, textFieldProps: { ...localTextFieldProps, ...props.textFieldProps }, value: getValue() }}
       />
     </>
   );

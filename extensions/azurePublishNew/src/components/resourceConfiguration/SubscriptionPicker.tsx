@@ -5,17 +5,23 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import React, { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 
-import { getSubscriptions } from '../../api';
 import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoComplete';
+import { getSubscriptions } from '../api';
 
 type ComboBoxPropsWithOutOptions = Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
 type Props = {
   allowCreation?: boolean;
-  canRefresh?: boolean; // not needed for subscriptions
+  canRefresh?: boolean;
   accessToken: string;
   onSubscriptionChange: React.Dispatch<React.SetStateAction<string>>;
 } & ComboBoxPropsWithOutOptions;
 
+const messages = {
+  placeholder: formatMessage('Select subscription'),
+  subscriptionListEmpty: formatMessage(
+    'Your subscription list is empty, please add your subscription, or login with another account.'
+  ),
+};
 export const SubscriptionPicker = React.memo((props: Props) => {
   const { accessToken } = props;
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -30,11 +36,7 @@ export const SubscriptionPicker = React.memo((props: Props) => {
           setIsLoading(false);
           setSubscriptions(data);
           if (data.length === 0) {
-            setErrorMessage(
-              formatMessage(
-                'Your subscription list is empty, please add your subscription, or login with another account.'
-              )
-            );
+            setErrorMessage(messages.subscriptionListEmpty);
           }
         })
         .catch((err) => {
@@ -42,13 +44,12 @@ export const SubscriptionPicker = React.memo((props: Props) => {
           setErrorMessage(err.message);
         })
         .finally(() => {
-          if (isLoading) {
-            setIsLoading(false);
-          }
+          isLoading && setIsLoading(false);
         });
     }
   }, [accessToken]);
-  const localTextFieldProps = { placeholder: formatMessage('Select subscription') };
+
+  const localTextFieldProps = { placeholder: messages.placeholder };
   const getValue = () => {
     return subscriptions.find((sub) => sub.subscriptionId === props.value)?.displayName;
   };
@@ -62,20 +63,3 @@ export const SubscriptionPicker = React.memo((props: Props) => {
     />
   );
 });
-
-{
-  /* <LuisSearchDropdown
-items={storageAccountItems}
-value={selectedStorageAccount?.name}
-data-automation-id={'storageAccountId'}
-isLoading={storageAccountTracker.isRunning}
-onSubmit={item => updateFormState({ storageAccountId: item.key })}
-onClear={() => updateFormState({ storageAccountId: '', containerName: '' })}
-textFieldProps={{
-    required: true,
-    disabled: storageAccountTracker.isFailed,
-    label: localize(messages.storageAccountLabel),
-    placeholder: localize(messages.storageAccountPlaceholder)
-}}
-/> */
-}

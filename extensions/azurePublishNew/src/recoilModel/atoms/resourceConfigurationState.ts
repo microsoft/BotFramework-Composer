@@ -19,9 +19,9 @@ export const tenantSelectionState = atom<string>({
   default: tenantIdSelector,
 });
 
-export const userInfoState = atom<UserInfo>({
+export const userInfoState = atom<UserInfo | undefined>({
   key: 'resourceConfiguration_accessToken',
-  default: defaultUserInfo,
+  default: undefined,
 });
 
 export const subscriptionSelectionState = atom<string>({
