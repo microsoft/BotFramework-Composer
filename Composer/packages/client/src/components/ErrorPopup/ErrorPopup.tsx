@@ -9,6 +9,7 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import isEmpty from 'lodash/isEmpty';
 
+import { colors } from '../../colors';
 import { StateError } from '../../recoilModel/types';
 
 import { consoleStyle, dialog } from './styles';
@@ -80,7 +81,7 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     >
       <div css={consoleStyle}>{detail}</div>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('OK')} onClick={closeDialog} />
+        <PrimaryButton text={formatMessage('OK')} theme={colors.fluentTheme} onClick={closeDialog} />
       </DialogFooter>
     </Dialog>
   );

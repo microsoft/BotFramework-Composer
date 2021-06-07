@@ -10,6 +10,8 @@ import React from 'react';
 import formatMessage from 'format-message';
 import { generateUniqueId } from '@bfc/shared';
 
+import { colors } from '../../colors';
+
 import { boldBlueText, dialogContent } from './style';
 
 type ImportPromptToSaveModalProps = {
@@ -52,8 +54,18 @@ export const ImportPromptToSaveModal: React.FC<ImportPromptToSaveModalProps> = (
         {isCopyingContent && (
           <Spinner label={formatMessage('Setting things up...')} labelPosition={'left'} size={SpinnerSize.small} />
         )}
-        <PrimaryButton disabled={isCopyingContent} text={formatMessage('Update')} onClick={onUpdate} />
-        <DefaultButton disabled={isCopyingContent} text={formatMessage('Import as new')} onClick={onImportAsNew} />
+        <PrimaryButton
+          disabled={isCopyingContent}
+          text={formatMessage('Update')}
+          theme={colors.fluentTheme}
+          onClick={onUpdate}
+        />
+        <DefaultButton
+          disabled={isCopyingContent}
+          text={formatMessage('Import as new')}
+          theme={colors.fluentTheme}
+          onClick={onImportAsNew}
+        />
       </DialogFooter>
     </Dialog>
   );

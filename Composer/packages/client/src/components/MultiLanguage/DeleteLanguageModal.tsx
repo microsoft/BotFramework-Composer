@@ -14,6 +14,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
+import { colors } from '../../colors';
 import { MultiLanguagesDialog } from '../../constants';
 
 import { ILanguageFormData } from './types';
@@ -101,12 +102,18 @@ const DeleteLanguageModal: React.FC<IDeleteLanguageModalProps> = (props) => {
             <ScrollablePane styles={scrollablePaneStyles}>{languageCheckBoxList}</ScrollablePane>
           </StackItem>
           <StackItem>
-            <PrimaryButton className={classNames.confirmBtn} text={formatMessage('Done')} onClick={onSubmit} />
+            <PrimaryButton
+              className={classNames.confirmBtn}
+              text={formatMessage('Done')}
+              theme={colors.fluentTheme}
+              onClick={onSubmit}
+            />
 
             <DefaultButton
               className={classNames.confirmBtn}
               data-testid="DeleteLanguageFormCancel"
               text={formatMessage('Cancel')}
+              theme={colors.fluentTheme}
               onClick={onDismiss}
             />
           </StackItem>

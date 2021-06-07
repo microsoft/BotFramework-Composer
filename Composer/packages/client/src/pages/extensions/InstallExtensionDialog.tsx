@@ -11,6 +11,7 @@ import axios, { CancelToken } from 'axios';
 import formatMessage from 'format-message';
 import { ExtensionSearchResult } from '@bfc/extension-client';
 
+import { colors } from '../../colors';
 import httpClient from '../../utils/httpUtil';
 
 import { ExtensionSearchResults } from './ExtensionSearchResults';
@@ -96,8 +97,10 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
         />
       </div>
       <DialogFooter>
-        <DefaultButton onClick={onDismiss}>Cancel</DefaultButton>
-        <PrimaryButton disabled={!selectedExtension} onClick={onSubmit}>
+        <DefaultButton theme={colors.fluentTheme} onClick={onDismiss}>
+          {formatMessage('Cancel')}
+        </DefaultButton>
+        <PrimaryButton disabled={!selectedExtension} theme={colors.fluentTheme} onClick={onSubmit}>
           {formatMessage('Add')}
         </PrimaryButton>
       </DialogFooter>

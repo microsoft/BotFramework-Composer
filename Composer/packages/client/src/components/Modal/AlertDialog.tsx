@@ -78,8 +78,8 @@ const AlertDialog = (props: Props) => {
       {subtitle && <div css={builtInStyles[style]}>{subtitle}</div>}
 
       <DialogFooter>
-        {cancelText && <DefaultButton text={cancelText} onClick={onCancel}></DefaultButton>}
-        <PrimaryButton text={confirmText} onClick={onConfirm} />
+        {cancelText && <DefaultButton text={cancelText} theme={colors.fluentTheme} onClick={onCancel} />}
+        <PrimaryButton text={confirmText} theme={colors.fluentTheme} onClick={onConfirm} />
       </DialogFooter>
     </Dialog>
   );

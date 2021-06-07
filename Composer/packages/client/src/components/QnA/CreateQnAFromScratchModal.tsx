@@ -11,6 +11,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
+import { colors } from '../../colors';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dispatcherState, showCreateQnAFromUrlDialogState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -88,6 +89,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
           <DefaultButton
             styles={{ root: { float: 'left' } }}
             text={formatMessage('Back')}
+            theme={colors.fluentTheme}
             onClick={() => {
               actions.createQnAFromScratchDialogBack({ projectId });
             }}
@@ -95,6 +97,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
         )}
         <DefaultButton
           text={formatMessage('Cancel')}
+          theme={colors.fluentTheme}
           onClick={() => {
             handleDismiss();
           }}
@@ -103,6 +106,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
           text={formatMessage('Create')}
+          theme={colors.fluentTheme}
           onClick={() => {
             if (hasErrors) {
               return;

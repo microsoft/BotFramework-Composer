@@ -16,6 +16,7 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
+import { colors } from '../../colors';
 import { MultiLanguagesDialog } from '../../constants';
 
 import { ILanguageFormData } from './types';
@@ -175,12 +176,18 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
             />
           </StackItem>
           <StackItem>
-            <PrimaryButton className={classNames.confirmBtn} text={formatMessage('Done')} onClick={onSubmit} />
+            <PrimaryButton
+              className={classNames.confirmBtn}
+              text={formatMessage('Done')}
+              theme={colors.fluentTheme}
+              onClick={onSubmit}
+            />
 
             <DefaultButton
               className={classNames.confirmBtn}
               data-testid="AddLanguageFormCancel"
               text={formatMessage('Cancel')}
+              theme={colors.fluentTheme}
               onClick={onDismiss}
             />
           </StackItem>

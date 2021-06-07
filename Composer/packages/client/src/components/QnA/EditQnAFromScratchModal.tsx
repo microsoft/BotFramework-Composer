@@ -11,6 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { QnAFile } from '@bfc/shared';
 
+import { colors } from '../../colors';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getKBName } from '../../utils/fileUtil';
 
@@ -84,11 +85,12 @@ export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'editKnowledgeBase'}
           disabled={disabled}
           text={formatMessage('Done')}
+          theme={colors.fluentTheme}
           onClick={() => {
             if (hasErrors) {
               return;

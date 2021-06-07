@@ -16,6 +16,7 @@ import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../../colors';
 import { skillsStateSelector, userSettingsState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
@@ -105,7 +106,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
         />
       </div>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('Close')} onClick={onDismiss} />
+        <PrimaryButton text={formatMessage('Close')} theme={colors.fluentTheme} onClick={onDismiss} />
       </DialogFooter>
     </Dialog>
   );

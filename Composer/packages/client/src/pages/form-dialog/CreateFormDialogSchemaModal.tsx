@@ -10,6 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React, { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../../colors';
 import { nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dialogsSelectorFamily } from '../../recoilModel';
@@ -81,10 +82,11 @@ const CreateFormDialogSchemaModal: React.FC<Props> = (props) => {
         </Stack>
 
         <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
           <PrimaryButton
             disabled={hasErrors || formData.name === ''}
             text={formatMessage('Create')}
+            theme={colors.fluentTheme}
             onClick={handleSubmit}
           />
         </DialogFooter>

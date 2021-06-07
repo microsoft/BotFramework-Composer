@@ -14,6 +14,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
+import { colors } from '../../colors';
 import { Locales } from '../../locales';
 import { dispatcherState, onCreateQnAFromUrlDialogCompleteState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -237,6 +238,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
           data-testid={'createKnowledgeBaseFromScratch'}
           styles={{ root: { float: 'left' } }}
           text={formatMessage('Create custom knowledge base')}
+          theme={colors.fluentTheme}
           onClick={() => {
             // switch to create from scratch flow, pass onComplete callback.
             actions.createQnAFromScratchDialogBegin({ projectId, dialogId, onComplete: onComplete?.func });
@@ -244,6 +246,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
         />
         <DefaultButton
           text={formatMessage('Cancel')}
+          theme={colors.fluentTheme}
           onClick={() => {
             handleDismiss();
           }}
@@ -252,6 +255,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
           text={formatMessage('Create')}
+          theme={colors.fluentTheme}
           onClick={() => {
             if (hasErrors(formDataErrors)) {
               return;

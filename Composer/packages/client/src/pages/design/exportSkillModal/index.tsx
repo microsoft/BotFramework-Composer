@@ -15,6 +15,7 @@ import { navigate } from '@reach/router';
 import { isUsingAdaptiveRuntime } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
+import { colors } from '../../../colors';
 import { Notification } from '../../../recoilModel/types';
 import {
   dispatcherState,
@@ -331,6 +332,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                     disabled={isDisabled}
                     styles={{ root: { marginLeft: '8px' } }}
                     text={text()}
+                    theme={colors.fluentTheme}
                     onClick={onClick({
                       generateManifest: handleGenerateManifest,
                       setCurrentStep,

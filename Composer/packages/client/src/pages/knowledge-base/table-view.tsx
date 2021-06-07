@@ -888,6 +888,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           <PrimaryButton
             data-testid={'createKnowledgeBase'}
             text={formatMessage('Create new KB')}
+            theme={colors.fluentTheme}
             onClick={() => {
               actions.createQnAFromUrlDialogBegin({ projectId: actualProjectId, dialogId });
               TelemetryClient.track('AddNewKnowledgeBaseStarted');

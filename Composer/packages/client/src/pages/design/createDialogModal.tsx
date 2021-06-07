@@ -11,6 +11,7 @@ import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extensi
 import { DialogFactory, SDKKinds, DialogUtils } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
+import { colors } from '../../colors';
 import { DialogCreationCopy } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -141,11 +142,12 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
         </Stack>
 
         <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
           <PrimaryButton
             data-testid="SubmitNewDialogBtn"
             disabled={hasErrors || formData.name === ''}
             text={formatMessage('OK')}
+            theme={colors.fluentTheme}
             onClick={handleSubmit}
           />
         </DialogFooter>

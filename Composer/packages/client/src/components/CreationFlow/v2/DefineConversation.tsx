@@ -21,6 +21,7 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 
+import { colors } from '../../../colors';
 import { CreationFlowStatus, DialogCreationCopy, nameRegex, nameRegexV2 } from '../../../constants';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 import { StorageFolder } from '../../../recoilModel/types';
@@ -416,11 +417,12 @@ const DefineConversationV2: React.FC<DefineConversationProps> = (props) => {
           </Stack>
           {locationSelectContent}
           <DialogFooter>
-            <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+            <DefaultButton text={formatMessage('Cancel')} theme={colors.fluentTheme} onClick={onDismiss} />
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={hasErrors || !writable}
               text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('Create')}
+              theme={colors.fluentTheme}
               onClick={handleSubmit}
             />
           </DialogFooter>

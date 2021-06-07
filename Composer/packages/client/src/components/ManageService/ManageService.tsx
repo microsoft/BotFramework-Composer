@@ -21,7 +21,6 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { AzureTenant } from '@botframework-composer/types';
 import jwtDecode from 'jwt-decode';
 
@@ -30,6 +29,7 @@ import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { dispatcherState } from '../../recoilModel/atoms';
+import { colors } from '../../colors';
 
 type ManageServiceProps = {
   createService: (
@@ -541,10 +541,16 @@ export const ManageService = (props: ManageServiceProps) => {
           </div>
         </div>
         <DialogFooter>
-          <PrimaryButton disabled={!!loading} text={formatMessage('Next')} onClick={performNextAction} />
+          <PrimaryButton
+            disabled={!!loading}
+            text={formatMessage('Next')}
+            theme={colors.fluentTheme}
+            onClick={performNextAction}
+          />
           <DefaultButton
             disabled={!!loading || showAuthDialog}
             text={formatMessage('Cancel')}
+            theme={colors.fluentTheme}
             onClick={props.onDismiss}
           />
         </DialogFooter>
@@ -629,13 +635,24 @@ export const ManageService = (props: ManageServiceProps) => {
         </div>
         <DialogFooter>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
-          <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
+          <DefaultButton
+            disabled={!!loading}
+            text={formatMessage('Back')}
+            theme={colors.fluentTheme}
+            onClick={() => setCurrentStep('intro')}
+          />
           <PrimaryButton
             disabled={!!loading || !(region && key)}
             text={formatMessage('Next')}
+            theme={colors.fluentTheme}
             onClick={chooseExistingKey}
           />
-          <DefaultButton disabled={!!loading} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton
+            disabled={!!loading}
+            text={formatMessage('Cancel')}
+            theme={colors.fluentTheme}
+            onClick={props.onDismiss}
+          />
         </DialogFooter>
       </div>
     );
@@ -729,6 +746,7 @@ export const ManageService = (props: ManageServiceProps) => {
           <DefaultButton
             disabled={!!loading}
             text={formatMessage('Back')}
+            theme={colors.fluentTheme}
             onClick={() => setCurrentStep('subscription')}
           />
           <PrimaryButton
@@ -741,9 +759,15 @@ export const ManageService = (props: ManageServiceProps) => {
               (resourceGroupKey == CREATE_NEW_KEY && !newResourceGroupName)
             }
             text={formatMessage('Next')}
+            theme={colors.fluentTheme}
             onClick={createService}
           />
-          <DefaultButton disabled={!!loading} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton
+            disabled={!!loading}
+            text={formatMessage('Cancel')}
+            theme={colors.fluentTheme}
+            onClick={props.onDismiss}
+          />
         </DialogFooter>
       </div>
     );
@@ -762,8 +786,14 @@ export const ManageService = (props: ManageServiceProps) => {
           )}
         </div>
         <DialogFooter>
-          {outcomeError && <DefaultButton text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />}
-          <PrimaryButton text={formatMessage('Done')} onClick={props.onNext} />
+          {outcomeError && (
+            <DefaultButton
+              text={formatMessage('Back')}
+              theme={colors.fluentTheme}
+              onClick={() => setCurrentStep('intro')}
+            />
+          )}
+          <PrimaryButton text={formatMessage('Done')} theme={colors.fluentTheme} onClick={props.onNext} />
         </DialogFooter>
       </div>
     );
@@ -818,13 +848,24 @@ export const ManageService = (props: ManageServiceProps) => {
         </div>
         <DialogFooter>
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
-          <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
+          <DefaultButton
+            disabled={!!loading}
+            text={formatMessage('Back')}
+            theme={colors.fluentTheme}
+            onClick={() => setCurrentStep('intro')}
+          />
           <PrimaryButton
             disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId}
             text={formatMessage('Next')}
+            theme={colors.fluentTheme}
             onClick={() => setCurrentStep('resourceCreation')}
           />
-          <DefaultButton disabled={!!loading} text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton
+            disabled={!!loading}
+            text={formatMessage('Cancel')}
+            theme={colors.fluentTheme}
+            onClick={props.onDismiss}
+          />
         </DialogFooter>
       </div>
     );

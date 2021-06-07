@@ -9,6 +9,8 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
+import { colors } from '../../../colors';
+
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -65,6 +67,7 @@ const ABSChannelSpeechModal = (props: Props) => {
         <DialogFooter>
           <PrimaryButton
             disabled={!value || !region}
+            theme={colors.fluentTheme}
             onClick={() => {
               if (value && region) {
                 onUpdateKey(value, region, true);
@@ -74,7 +77,9 @@ const ABSChannelSpeechModal = (props: Props) => {
           >
             {formatMessage('Enable Speech')}
           </PrimaryButton>
-          <DefaultButton onClick={onClose}>{formatMessage('Cancel')}</DefaultButton>
+          <DefaultButton theme={colors.fluentTheme} onClick={onClose}>
+            {formatMessage('Cancel')}
+          </DefaultButton>
         </DialogFooter>
       </div>
     </DialogWrapper>
