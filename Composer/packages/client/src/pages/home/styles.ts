@@ -328,7 +328,7 @@ export const whatsNewsContainer = css`
   padding: 20px 24px 24px 24px;
   border-radius: 5px;
   margin: 20px 0 24px 0;
-  background: ${colors.gray(250)};
+  background: ${colors.gray(10)};
   @media (max-width: 1416px) {
     background: none;
     min-width: 200px;
