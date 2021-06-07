@@ -140,8 +140,8 @@ describe('ExternalAdapterSettings', () => {
     });
   });
 
-  it('does not proceed if required settings are missing', async () => {
-    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
+  it('does not proceed if required settings are missing', () => {
+    const { getByTestId, debug } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
@@ -152,10 +152,10 @@ describe('ExternalAdapterSettings', () => {
     });
 
     const modal = getByTestId('adapterModal');
-    expect(within(modal).getByText('Configure')).toBeDisabled();
+    expect(within(modal).getByRole('button', { name: 'Configure' })).toBeDisabled();
   });
 
-  it('disables an adapter', async () => {
+  it('disables an adapter', () => {
     const initStateWithAdapter = {
       runtimeSettings: {
         adapters: [{ name: 'Adapter.Mock', enabled: true, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
@@ -176,7 +176,7 @@ describe('ExternalAdapterSettings', () => {
     const toggle = queryByTestId('toggle_Adapter.Mock');
     expect(toggle).not.toBeNull();
 
-    await act(async () => {
+    act(() => {
       fireEvent.click(toggle!);
     });
 
@@ -190,7 +190,7 @@ describe('ExternalAdapterSettings', () => {
     );
   });
 
-  it('enables an adapter', async () => {
+  it('enables an adapter', () => {
     const initStateWithAdapter = {
       runtimeSettings: {
         adapters: [{ name: 'Adapter.Mock', enabled: false, route: 'mock', type: 'Adapter.Full.Type.Mock' }],
@@ -210,7 +210,7 @@ describe('ExternalAdapterSettings', () => {
     const toggle = queryByTestId('toggle_Adapter.Mock');
     expect(toggle).not.toBeNull();
 
-    await act(async () => {
+    act(() => {
       fireEvent.click(toggle!);
     });
 

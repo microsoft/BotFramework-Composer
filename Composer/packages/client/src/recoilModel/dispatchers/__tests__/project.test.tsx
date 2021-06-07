@@ -3,7 +3,7 @@
 
 import { selector, useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
-import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderHookResult, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 import { useRecoilState } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import endsWith from 'lodash/endsWith';
@@ -189,7 +189,7 @@ describe('Project dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(async () => {
     (navigateTo as jest.Mock).mockReset();
@@ -506,7 +506,7 @@ describe('Project dispatcher', () => {
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/skill/${skillId}/dialogs/emptybot-1`);
   });
 
-  it('should be able to open a project and its skills in Bot project file', async (done) => {
+  it('should be able to open a project and its skills in Bot project file', async () => {
     let callIndex = 0;
     (httpClient.put as jest.Mock).mockImplementation(() => {
       let mockSkillData: any;
@@ -539,12 +539,9 @@ describe('Project dispatcher', () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
 
-    setImmediate(() => {
-      expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
-      expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');
-      expect(renderedComponent.current.botProjectSpaceLoaded).toBeTruthy();
-      done();
-    });
+    expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
+    expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');
+    expect(renderedComponent.current.botProjectSpaceLoaded).toBeTruthy();
   });
 
   it('should migrate skills from existing bots and add them to botproject file', async () => {
