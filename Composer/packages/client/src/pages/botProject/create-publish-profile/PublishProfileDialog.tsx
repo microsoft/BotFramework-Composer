@@ -225,6 +225,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         minWidth={960}
         modalProps={{
           isBlocking: true,
+          isClickableOutsideFocusTrap: true,
         }}
         onDismiss={closeDialog}
       >
