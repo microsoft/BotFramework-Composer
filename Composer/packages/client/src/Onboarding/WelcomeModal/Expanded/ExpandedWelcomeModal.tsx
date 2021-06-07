@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
-import { colors } from '../../colors';
+import { colors } from '../../../colors';
 import { useOnboardingContext } from '../../OnboardingContext';
 
 import {
