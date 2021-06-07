@@ -17,11 +17,14 @@ export type AutoCompleteTextFieldProps = ITextFieldProps & {
    */
   'data-automation-id'?: string;
 };
-
+const messages = {
+  typeText: formatMessage('Type text here ...'),
+  textField: formatMessage('Textfield'),
+};
 export const AutoCompleteTextField = React.forwardRef(
   (props: AutoCompleteTextFieldProps, tagInputFieldRef: React.MutableRefObject<ITextField>) => {
     const { onEnterKeyUp, onKeyDown, componentRef } = props;
-    const { placeholder = formatMessage('Type text here ...'), errorMessage } = props;
+    const { placeholder = messages.typeText, errorMessage } = props;
     /**
      * Intercepts the key up event to handle the Enter key press.
      *
@@ -47,7 +50,7 @@ export const AutoCompleteTextField = React.forwardRef(
     return (
       <TextField
         {...props}
-        ariaLabel={props.ariaLabel || props.label || formatMessage('Textfield')}
+        ariaLabel={props.ariaLabel || props.label || messages.textField}
         autoComplete="off"
         componentRef={tagInputFieldRef || componentRef}
         deferredValidationTime={300}

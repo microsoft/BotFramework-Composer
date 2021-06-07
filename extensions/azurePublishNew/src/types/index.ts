@@ -33,6 +33,7 @@ export enum AzureAPIStatus {
   ERROR = 'ERROR',
 }
 
+export type ProvisionAction = 'create' | 'import' | 'generate';
 export const AzureResourceTypes = {
   APP_REGISTRATION: 'appRegistration',
   BOT_REGISTRATION: 'botRegistration',
@@ -80,4 +81,3 @@ export const authConfig = {
     targetResource: 'https://graph.microsoft.com/',
   },
 };
-export type ProvisionAction = 'create' | 'import' | 'generate';

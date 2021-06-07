@@ -170,7 +170,7 @@ const BlockCommandButton = styled(CommandButton)`
 `;
 
 const IconContainer = styled(Stack)`
-  height: '100%';
+  height: 100%;
   padding: 0;
 `;
 

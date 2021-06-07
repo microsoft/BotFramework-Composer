@@ -16,8 +16,6 @@ type Props = {
 export const RegionPicker = React.memo((props: Props) => {
   const [subscriptions, setSubscriptions] = useState<DeployLocation[]>();
   useEffect(() => {
-    //TODO: Create an API to call the server
-    //
     setSubscriptions([]);
   }, [props.tenantId]);
   return (
@@ -30,5 +28,3 @@ export const RegionPicker = React.memo((props: Props) => {
     />
   );
 });
-
-//TODO:Define API's for all the Azure calls

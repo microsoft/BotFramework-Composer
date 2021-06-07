@@ -14,14 +14,17 @@ const { userShouldProvideTokens, getTenantIdFromCache, setTenantId } = usePublis
 
 type ComboBoxPropsWithOutOptions = Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
 type Props = {
-  allowCreation?: boolean;
-  canRefresh?: boolean;
   onTenantChange: React.Dispatch<React.SetStateAction<string>>;
   onUserInfoFetch: React.Dispatch<React.SetStateAction<UserInfo>>;
 } & ComboBoxPropsWithOutOptions;
 
+const messages = {
+  placeholder: formatMessage('Select Azure directory'),
+  tenantListEmpty: formatMessage('No Azure Directories were found.'),
+};
+
 export const TenantPicker = memo((props: Props) => {
-  const { allowCreation, canRefresh, onTenantChange, onUserInfoFetch } = props;
+  const { onTenantChange, onUserInfoFetch } = props;
   const [tenants, setTenants] = useState<AzureTenant[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,7 +38,6 @@ export const TenantPicker = memo((props: Props) => {
   };
   useEffect(() => {
     if (!userShouldProvideTokens()) {
-      // TODO: handle when existing profile is being edited
       // We should get an ARM token for the tenant in the profile and then fetch tenant details after to show in the UI.
       // Note: For electron, getTenants may cause the sign-in dialog to appear.
       setErrorMessage(undefined);
@@ -45,14 +47,12 @@ export const TenantPicker = memo((props: Props) => {
           setTenants(tenants);
           setIsLoading(false);
           if (tenants.length === 0) {
-            setErrorMessage(formatMessage('No Azure Directories were found.'));
+            setErrorMessage(messages.tenantListEmpty);
           } else {
             setErrorMessage(undefined);
           }
 
           const cachedTenantId = getTenantIdFromCache();
-
-          // default to the last used tenant only if it is in the account's tenants
           if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
             setTenantId(cachedTenantId);
           } else {
@@ -73,9 +73,7 @@ export const TenantPicker = memo((props: Props) => {
           );
         })
         .finally(() => {
-          if (isLoading) {
-            setIsLoading(false);
-          }
+          isLoading && setIsLoading(false);
         });
     }
   }, []);
@@ -106,21 +104,29 @@ export const TenantPicker = memo((props: Props) => {
       });
   };
 
+  const getValue = React.useCallback(() => {
+    if (props.value) {
+      return tenants.find((tenant) => tenant.tenantId === props.value)?.displayName;
+    } else if (tenants.length === 1) {
+      props.onTenantChange(tenants[0].tenantId);
+    }
+    return '';
+  }, [tenants, props.value]);
+
   useEffect(() => {
-    if (!userShouldProvideTokens()) {
+    if (props.value && !userShouldProvideTokens()) {
       getTokenForTenant(props.value as string);
     }
   }, [props.value]);
 
   const localTextFieldProps = {
     disabled: tenants.length === 1,
-    placeholder: formatMessage('Select Azure directory'),
+    placeholder: messages.placeholder,
   };
-  const getValue = () => {
-    return tenants.find((tenant) => tenant.tenantId === props.value)?.displayName;
-  };
+
   return (
     <AutoComplete
+      errorMessage={errorMessage}
       isLoading={isLoading}
       items={tenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
       onSubmit={(option) => props.onTenantChange(option.key as string)}
