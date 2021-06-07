@@ -110,6 +110,6 @@ describe('<ArrayFieldItem />', () => {
       index: 1,
     });
 
-    expect(await findByText('error 2')).toBeInTheDocument();
+    expect(await findByText('Test Name error 2')).toBeInTheDocument();
   });
 });

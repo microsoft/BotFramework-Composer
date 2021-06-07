@@ -125,6 +125,7 @@ export interface BaseEditorProps extends EditorProps {
   onBlur?: (id: string) => void;
   onFocus?: (id: string) => void;
   styleOverrides?: SerializedStyles[];
+  popExpandOptions?: { onEditorPopToggle?: (expanded: boolean) => void; popExpandTitle: string };
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = (props) => {

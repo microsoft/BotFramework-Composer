@@ -585,7 +585,7 @@ const Library: React.FC = () => {
         }}
         hidden={addDialogHidden}
         minWidth={450}
-        modalProps={{ isBlocking: true }}
+        modalProps={{ isBlocking: true, isClickableOutsideFocusTrap: true }}
         onDismiss={closeDialog}
       >
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
