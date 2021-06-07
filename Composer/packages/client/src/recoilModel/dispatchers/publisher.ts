@@ -32,8 +32,8 @@ import { RuntimeOutputData } from '../types';
 import { checkIfFunctionsMissing, missingFunctionsError } from '../../utils/runtimeErrors';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { TunnelingSetupNotification } from '../../components/Notifications/TunnelingSetupNotification';
+import { BotStatus, Text, defaultBotEndpoint, defaultBotPort } from '../../constants';
 
-import { BotStatus, Text, defaultBotEndpoint, defaultBotPort } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
 import { setRootBotSettingState } from './setting';
