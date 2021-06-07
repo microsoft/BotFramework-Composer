@@ -146,6 +146,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
               key={`webchat-activity-item-${index}`}
               isSelected={itemIsSelected(item, inspectionData)}
               item={item}
+              logsContainerRef={webChatContainerRef}
               onClickTraffic={onClickTraffic}
             />
           );

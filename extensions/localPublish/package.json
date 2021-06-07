@@ -22,7 +22,7 @@
     "rimraf": "^3.0.2",
     "tcp-port-used": "^1.0.1",
     "uuid": "^7.0.1",
-    "ws": "^7.4.4"
+    "ws": "^7.4.6"
   },
   "resolutions": {
     "@botframework-composer/types": "file:../../Composer/packages/types",
