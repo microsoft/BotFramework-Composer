@@ -4,17 +4,44 @@
 import * as React from 'react';
 import formatMessage from 'format-message';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import styled from '@emotion/styled';
+import { FluentTheme } from '@uifabric/fluent-theme';
+import { Link, Stack } from 'office-ui-fabric-react';
 
-import {
-  Content,
-  Details,
-  Instruction,
-  InstructionDetails,
-  InstructionTitle,
-  LearnMoreLink,
-  Summary,
-  Title,
-} from '../../ChooseProvisionActionStep';
+export const Content = styled(Stack)`
+  padding: 0px 20px;
+`;
+
+export const Title = styled(Text)`
+  font-size: ${FluentTheme.fonts.xLarge.fontSize};
+  margin: 8px 0;
+`;
+
+export const Summary = styled.div`
+  margin: 8px 0;
+`;
+
+export const Details = styled(Stack)`
+  margin: 10px 0;
+`;
+
+export const Instruction = styled(Stack)`
+  margin: 10px 0;
+`;
+
+export const InstructionTitle = styled(Text)`
+  font-size: ${FluentTheme.fonts.smallPlus.fontSize};
+  text-transform: uppercase;
+`;
+
+export const InstructionDetails = styled.div`
+  margin: 10px 0;
+`;
+
+export const LearnMoreLink = styled(Link)`
+  user-select: none;
+  font-size: 14px;
+`;
 
 export const GenerateActionContentStep = () => {
   return (
