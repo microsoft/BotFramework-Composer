@@ -24,8 +24,8 @@ import { atomFamily } from 'recoil';
 
 import { BotStartError, DesignPageLocation, WebChatInspectionData, RuntimeOutputData } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
+import { BotStatus } from '../../constants';
 
-import { BotStatus } from './../../constants';
 import { PublishType } from './../../recoilModel/types';
 
 const getFullyQualifiedKey = (value: string) => {
