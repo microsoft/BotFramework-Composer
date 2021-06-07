@@ -64,8 +64,10 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
   }, [publishTargetOptions]);
 
   const dialogTitle = {
-    title: formatMessage('Add from publishing profile'),
-    subText: formatMessage('Select the publishing profile you’d like to add a Microsoft App ID and Password from.'),
+    title: formatMessage('Retrieve App ID from publishing profile'),
+    subText: formatMessage(
+      'A publishing profile contains the information necessary to provision and publish your bot, including its App ID.'
+    ),
   };
 
   const handleAdd = () => {
@@ -85,6 +87,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
       minWidth={500}
       modalProps={{
         isBlocking: true,
+        isClickableOutsideFocusTrap: true,
       }}
       onDismiss={onCancel}
     >
@@ -106,7 +109,7 @@ export const GetAppInfoFromPublishProfileDialog: React.FC<Props> = (props) => {
       <DialogFooter>
         <PrimaryButton
           disabled={!!publishTargetsErrorMessage || !selectedKey}
-          text={formatMessage('Add App ID and Password')}
+          text={formatMessage('Save App ID')}
           onClick={handleAdd}
         />
         <DefaultButton text={formatMessage('Cancel')} onClick={onCancel} />

@@ -16,8 +16,8 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { OpenConfirmModal } from '@bfc/ui-shared';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -25,10 +25,15 @@ import { navigateTo } from '../../../utils/navigation';
 import { botDisplayNameState, settingsState } from '../../../recoilModel';
 import { AuthClient } from '../../../utils/authClient';
 import { AuthDialog } from '../../../components/Auth/AuthDialog';
-import { armScopes } from '../../../constants';
-import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../../utils/auth';
+import {
+  getTokenFromCache,
+  getTenantIdFromCache,
+  isShowAuthDialog,
+  userShouldProvideTokens,
+} from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
 import { dispatcherState } from '../../../recoilModel';
+import { armScopes } from '../../../constants';
 import {
   tableHeaderRow,
   tableRow,
@@ -63,6 +68,7 @@ type AzureResourcePointer = {
   resourceName: string;
   resourceGroupName: string;
   microsoftAppId: string;
+  tenantId: string;
 };
 
 type AzureChannelStatus = {
@@ -117,32 +123,65 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
+  const getTokenInteractively = async (tenantId: string) => {
+    let newtoken = '';
+    try {
+      // if tenantId is present, use this to retrieve the arm token.
+      // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
+      if (!tenantId) {
+        const tenants = await AuthClient.getTenants();
+        const cachedTenantId = getTenantIdFromCache();
+
+        if (tenants.length === 0) {
+          throw new Error('No Azure Directories were found.');
+        } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+          tenantId = cachedTenantId;
+        } else {
+          tenantId = tenants[0].tenantId;
+        }
+      }
+      if (tenantId) {
+        newtoken = await AuthClient.getARMTokenForTenant(tenantId);
+      } else {
+        newtoken = await AuthClient.getAccessToken(armScopes);
+      }
+    } catch (error) {
+      setErrorMessage(error.message || error.toString());
+      setCurrentResource(undefined);
+    }
+    return newtoken;
+  };
+
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
       TelemetryClient.track('ConnectionsAddNewProfile');
       navigateTo(`/bot/${projectId}/publish/all/#addNewPublishProfile`);
     } else {
-      let newtoken = '';
-      if (userShouldProvideTokens()) {
-        if (isShowAuthDialog(false)) {
-          setShowAuthDialog(true);
-        }
-        newtoken = getTokenFromCache('accessToken');
-      } else {
-        newtoken = await AuthClient.getAccessToken(armScopes);
-      }
-      setToken(newtoken);
-
       // identify the publishing profile in the list
       const profile = publishTargets?.find((p) => p.name === opt.key);
       if (profile) {
         const config = JSON.parse(profile.configuration);
-        setCurrentResource({
-          microsoftAppId: config?.settings?.MicrosoftAppId,
-          resourceName: config.botName || config.name,
-          resourceGroupName: config.resourceGroup || config.botName || config.name,
-          subscriptionId: config.subscriptionId,
-        });
+
+        let newtoken = '';
+        if (userShouldProvideTokens()) {
+          if (isShowAuthDialog(false)) {
+            setShowAuthDialog(true);
+          }
+          newtoken = getTokenFromCache('accessToken');
+        } else {
+          newtoken = await getTokenInteractively(config.tenantId);
+        }
+        setToken(newtoken);
+
+        if (newtoken) {
+          setCurrentResource({
+            microsoftAppId: config?.settings?.MicrosoftAppId,
+            resourceName: config.botName || config.name,
+            resourceGroupName: config.resourceGroup || config.botName || config.name,
+            tenantId: config.tenantId,
+            subscriptionId: config.subscriptionId,
+          });
+        }
       }
     }
   };
@@ -321,16 +360,18 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   };
 
   const hasAuth = async () => {
-    let newtoken = '';
-    if (userShouldProvideTokens()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
+    if (currentResource) {
+      let newtoken = '';
+      if (userShouldProvideTokens()) {
+        if (isShowAuthDialog(false)) {
+          setShowAuthDialog(true);
+        }
+        newtoken = getTokenFromCache('accessToken');
+      } else {
+        newtoken = await getTokenInteractively(currentResource.tenantId);
       }
-      newtoken = getTokenFromCache('accessToken');
-    } else {
-      newtoken = await AuthClient.getAccessToken(armScopes);
+      setToken(newtoken);
     }
-    setToken(newtoken);
   };
 
   const toggleService = (channel) => {
@@ -516,7 +557,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
                   setShowTeamsManifestModal(true);
                 }}
               >
-                {formatMessage('Open Manifest')}
+                {formatMessage('Open manifest')}
               </Link>
             </Stack.Item>
           )}
@@ -550,19 +591,14 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
         onToggleVisibility={setShowSpeechModal}
       />
       {showTeamsCallOut && (
-        <Callout
-          setInitialFocus
-          className={teamsCallOutStyles.callout}
-          gapSpace={0}
-          role="alertdialog"
+        <TeachingBubble
+          hasCondensedHeadline
+          headline={formatMessage('Almost there!')}
           target={`#${CHANNELS.TEAMS}`}
           onDismiss={() => {
             setShowTeamsCallOut(false);
           }}
         >
-          <Text className={teamsCallOutStyles.title} variant="xLarge">
-            {formatMessage('Almost there!')}
-          </Text>
           <Text block variant="small">
             {formatMessage(
               'Teams requires a few more steps to get your connection up and running. Follow the instructions on our documentation page to learn how.'
@@ -571,7 +607,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
           <Link className={teamsCallOutStyles.link} href={teamsHelpLink} target="_blank">
             {formatMessage('See instructions')}
           </Link>
-        </Callout>
+        </TeachingBubble>
       )}
       <div>
         <Dropdown

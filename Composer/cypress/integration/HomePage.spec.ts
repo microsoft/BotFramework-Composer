@@ -25,7 +25,7 @@ context('Home Page ', () => {
     cy.createTestBot('EmptySample', ({ id }) => {
       cy.visit(`/bot/${id}`);
       cy.findByTestId('LeftNavButton').click();
-      cy.findByTestId('LeftNav-CommandBarButtonDesign').should('exist');
+      cy.findByTestId('LeftNav-CommandBarButtonCreate').should('exist');
       cy.findByTestId('LeftNav-CommandBarButtonBot responses').click();
       cy.url().should('include', 'language-generation');
       cy.findByTestId('LeftNav-CommandBarButtonUser input').click();
@@ -55,7 +55,7 @@ context('Home Page ', () => {
     cy.visit('/home');
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-Toolbar-New').within(() => {
-      cy.findByText('New').click();
+      cy.findByText('Create new').click();
     });
     cy.wait(3000);
     cy.findByTestId('@microsoft/generator-bot-empty').click();
@@ -67,7 +67,10 @@ context('Home Page ', () => {
     });
   });
 
-  it('can save as a new bot from an existing bot', () => {
+  // We are disabling this test since we are temporarily removing
+  // this feature in R13 since we don't have a clear definition or solution
+  // for copying parent bots and skills.
+  xit('can save as a new bot from an existing bot', () => {
     cy.createTestBot('EmptySample', ({ id }) => {
       cy.visit(`/bot/${id}`);
       cy.findByTestId('LeftNav-CommandBarButtonHome').click();

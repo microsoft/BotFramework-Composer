@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
-import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
+import { luImportResolverGenerator, ResolverResource, DialogSetting } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
 import { ensureDir, existsSync, remove } from 'fs-extra';
@@ -18,11 +21,14 @@ import { Store } from '../store/store';
 import log from '../logger';
 import { ExtensionContext } from '../models/extension/extensionContext';
 import { getLocationRef, getNewProjRef, ejectAndMerge } from '../utility/project';
+import { isSchema } from '../models/bot/botStructure';
+import { getLatestGeneratorVersion } from '../controllers/asset';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
 import { BackgroundProcessManager } from './backgroundProcessManager';
 import { TelemetryService } from './telemetry';
+const execAsync = promisify(exec);
 
 const MAX_RECENT_BOTS = 7;
 
@@ -53,6 +59,15 @@ function fixOldBotProjectMapEntries(
   }
   return map;
 }
+
+const isFunctionsRuntimeInstalled = async (): Promise<boolean> => {
+  try {
+    const { stderr: funcErr } = await execAsync(`func -v`);
+    return !funcErr;
+  } catch (err) {
+    return false;
+  }
+};
 
 export class BotProjectService {
   private static currentBotProjects: BotProject[] = [];
@@ -217,7 +232,8 @@ export class BotProjectService {
   public static openProject = async (
     locationRef: LocationRef,
     user?: UserIdentity,
-    isRootBot?: boolean
+    isRootBot?: boolean,
+    options?: { allowPartialBots: boolean }
   ): Promise<string> => {
     BotProjectService.initialize();
 
@@ -227,7 +243,10 @@ export class BotProjectService {
       throw new Error(`file ${locationRef.path} does not exist`);
     }
 
-    if (!(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))) {
+    if (
+      !options?.allowPartialBots &&
+      !(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))
+    ) {
       throw new Error(`${locationRef.path} is not a bot project folder`);
     }
 
@@ -446,6 +465,162 @@ export class BotProjectService {
     }
   };
 
+  public static async migrateProjectAsync(req: Request, jobId: string) {
+    const { oldProjectId, name, description, location, storageId, runtimeType, runtimeLanguage } = req.body;
+
+    const user = await ExtensionContext.getUserFromRequest(req);
+
+    try {
+      const locationRef = getLocationRef(location, storageId, name);
+
+      await BotProjectService.cleanProject(locationRef);
+
+      log('Downloading adaptive generator');
+
+      // Update status for polling
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
+      const baseGenerator = '@microsoft/generator-bot-adaptive';
+      const latestVersion = await getLatestGeneratorVersion(baseGenerator);
+
+      log(`Using version ${latestVersion} of ${baseGenerator} for migration`);
+      const newProjRef = await AssetService.manager.copyRemoteProjectTemplateToV2(
+        baseGenerator,
+        latestVersion, // use the @latest version
+        name,
+        locationRef,
+        jobId,
+        runtimeType,
+        runtimeLanguage,
+        {
+          applicationSettingsDirectory: 'settings',
+        },
+        user
+      );
+
+      // update project ref to point at newly created folder
+      newProjRef.path = `${newProjRef.path}/${name}`;
+
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Migrating data'));
+
+      log('Migrating files...');
+
+      const originalProject = await BotProjectService.getProjectById(oldProjectId, user);
+
+      if (originalProject.settings) {
+        const originalFiles = originalProject.getProject().files;
+
+        // pass in allowPartialBots = true so that this project can be opened even though
+        // it doesn't yet have a root dialog...
+        const id = await BotProjectService.openProject(newProjRef, user, true, { allowPartialBots: true });
+        const currentProject = await BotProjectService.getProjectById(id, user);
+
+        // add all original files to new project
+        for (let f = 0; f < originalFiles.length; f++) {
+          // exclude the schema files, so we start from scratch
+          if (!isSchema(originalFiles[f].name)) {
+            await currentProject.migrateFile(
+              originalFiles[f].name,
+              originalFiles[f].content,
+              originalProject.rootDialogId
+            );
+          }
+        }
+        const newSettings: DialogSetting = {
+          ...currentProject.settings,
+          runtimeSettings: {
+            components: [],
+            features: {
+              showTyping: originalProject.settings?.feature?.UseShowTypingMiddleware || false,
+              useInspection: originalProject.settings?.feature?.UseInspectionMiddleware || false,
+              removeRecipientMentions: originalProject.settings?.feature?.RemoveRecipientMention || false,
+              setSpeak: originalProject.settings?.feature?.useSetSpeakMiddleware
+                ? { voiceFontName: 'en-US-AriaNeural', fallbackToTextForSpeechIfEmpty: true }
+                : undefined,
+              blobTranscript: originalProject.settings?.blobStorage?.connectionString
+                ? {
+                    connectionString: originalProject.settings.blobStorage.connectionString,
+                    containerName: originalProject.settings.blobStorage.container,
+                  }
+                : {},
+            },
+            telemetry: {
+              options: { instrumentationKey: originalProject.settings?.applicationInsights?.InstrumentationKey },
+            },
+            skills: {
+              allowedCallers: originalProject.settings?.skillConfiguration?.allowedCallers,
+            },
+            storage: originalProject.settings?.cosmosDb?.authKey ? 'CosmosDbPartitionedStorage' : undefined,
+          },
+          CosmosDbPartitionedStorage: originalProject.settings?.cosmosDb?.authKey
+            ? originalProject.settings.cosmosDb
+            : undefined,
+          luis: { ...originalProject.settings.luis },
+          luFeatures: { ...originalProject.settings.luFeatures },
+          publishTargets: originalProject.settings.publishTargets?.map((target) => {
+            if (target.type === 'azureFunctionsPublish') target.type = 'azurePublish';
+            return target;
+          }),
+          qna: { ...originalProject.settings.qna },
+          downsampling: { ...originalProject.settings.downsampling },
+          skill: { ...originalProject.settings.skill },
+          speech: { ...originalProject.settings.speech },
+          defaultLanguage: originalProject.settings.defaultLanguage,
+          languages: originalProject.settings.languages,
+          customFunctions: originalProject.settings.customFunctions ?? [],
+          importedLibraries: [],
+          MicrosoftAppId: originalProject.settings.MicrosoftAppId,
+
+          runtime: currentProject.settings?.runtime
+            ? { ...currentProject.settings.runtime }
+            : {
+                customRuntime: true,
+                path: '../',
+                key: 'adaptive-runtime-dotnet-webapp',
+                command: `dotnet run --project ${name}.csproj`,
+              },
+        };
+
+        log('Update settings...');
+
+        // adjust settings from old format to new format
+        await currentProject.updateEnvSettings(newSettings);
+
+        log('Copy boilerplate...');
+        await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
+        log('Update bot info...');
+        await currentProject.updateBotInfo(name, description, true);
+
+        const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+        const runtimePath = currentProject.getRuntimePath();
+        if (runtimePath) {
+          // install all dependencies and build the app
+          BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
+          log('Build new runtime...');
+          await runtime.build(runtimePath, currentProject);
+        }
+
+        await ejectAndMerge(currentProject, jobId);
+
+        const project = currentProject.getProject();
+
+        log('Project created successfully.');
+        BackgroundProcessManager.updateProcess(jobId, 200, 'Migrated successfully', {
+          id,
+          ...project,
+        });
+      } else {
+        BackgroundProcessManager.updateProcess(jobId, 500, 'Could not find source project to migrate.');
+      }
+    } catch (err) {
+      BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
+      TelemetryService.trackEvent('CreateNewBotProjectCompleted', {
+        template: '@microsoft/generator-microsoft-bot-adaptive',
+        status: 500,
+      });
+    }
+  }
+
   public static async createProjectAsync(req: Request, jobId: string) {
     const {
       templateId,
@@ -475,6 +650,20 @@ export class BotProjectService {
       // TODO: Replace with default template once one is determined
       throw Error('empty templateID passed');
     }
+
+    // test for required dependencies
+    if (runtimeType === 'functions') {
+      if (!(await isFunctionsRuntimeInstalled())) {
+        BackgroundProcessManager.updateProcess(jobId, 500, formatMessage('Azure Functions runtime not installed.'));
+        TelemetryService.trackEvent('CreateNewBotProjectFailed', {
+          reason: 'Azure Functions runtime not installed.',
+          template: templateId,
+          status: 500,
+        });
+        return;
+      }
+    }
+
     // location to store the bot project
     const locationRef = getLocationRef(location, storageId, name);
     try {
@@ -493,6 +682,7 @@ export class BotProjectService {
             jobId,
             runtimeType,
             runtimeLanguage,
+            null,
             user
           );
 
@@ -583,7 +773,11 @@ export class BotProjectService {
       const storage = StorageService.getStorageClient(locationRef.storageId, user);
       await storage.rmrfDir(locationRef.path);
       BackgroundProcessManager.updateProcess(jobId, 500, err instanceof Error ? err.message : err, err);
-      TelemetryService.trackEvent('CreateNewBotProjectCompleted', { template: templateId, status: 500 });
+      TelemetryService.trackEvent('CreateNewBotProjectFailed', {
+        reason: err instanceof Error ? err.message : err,
+        template: templateId,
+        status: 500,
+      });
     }
   }
 }

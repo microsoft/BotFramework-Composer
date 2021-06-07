@@ -52,7 +52,7 @@ const BorderlessTextField: React.FC<BorderlessTextFieldProps> = (props) => {
     if (componentFocusOnMount) {
       fieldRef.current?.focus();
     }
-  }, []);
+  }, [componentFocusOnMount]);
   return (
     <TextField
       borderless={borderless}
@@ -71,9 +71,15 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdat
   };
   const handleAddNewAllowedCallerClick = () => {
     const currentCallers = callers.slice();
-    currentCallers?.push('');
-    onUpdateCallers(currentCallers);
-    setFocusCallerIndex(currentCallers.length - 1);
+    const index = currentCallers.findIndex((content) => content === '');
+    if (index < 0) {
+      currentCallers?.push('');
+      onUpdateCallers(currentCallers);
+      setFocusCallerIndex(currentCallers.length - 1);
+    } else {
+      // just focus on the first empty caller.
+      setFocusCallerIndex(index);
+    }
   };
 
   const [focusCallerIndex, setFocusCallerIndex] = useState<number | undefined>(0);
@@ -81,7 +87,7 @@ export const AddCallers: React.FC<ContentProps> = ({ projectId, callers, onUpdat
   return (
     <div>
       <div css={header}>
-        <div css={tableColumnHeader()}>{formatMessage('Allowed Callers')}</div>
+        <div css={tableColumnHeader()}>{formatMessage('Available as skill to the following bots:')}</div>
       </div>
       {callers?.map((caller, index) => {
         const isFocus = focusCallerIndex === index;

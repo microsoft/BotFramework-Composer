@@ -68,7 +68,6 @@
     "ts-node": "^8.4.1"
   },
   "dependencies": {
-    "@azure/msal-node": "^1.0.0-beta.1",
     "@bfc/client": "*",
     "@bfc/extension": "*",
     "@bfc/indexers": "*",
@@ -81,7 +80,7 @@
     "@microsoft/bf-dialog": "4.13.1",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
     "@microsoft/bf-generate-library": "^4.10.0-daily.20210317.224602",
-    "@microsoft/bf-lu": "4.14.0-dev.20210408.1a5070e",
+    "@microsoft/bf-lu": "4.14.0-dev.20210602.be805a8",
     "@microsoft/bf-orchestrator": "4.13.0-rc0",
     "applicationinsights": "^1.8.7",
     "archiver": "^5.0.2",
@@ -130,7 +129,7 @@
     "uuid": "^8.3.0",
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "ws": "^5.0.0",
+    "ws": "^7.4.6",
     "yeoman-environment": "^2.10.3"
   },
   "resolutions": {

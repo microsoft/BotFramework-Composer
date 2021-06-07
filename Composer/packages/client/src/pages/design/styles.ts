@@ -103,9 +103,19 @@ export const formEditor = css`
   min-width: 300px;
 `;
 
+export const visualPanelHeaderContainer = css`
+  display: flex;
+  align-items: center;
+  height: 65px;
+`;
+
+export const visualPanelHeaderShowCodeButton = css`
+  padding: 10px;
+  width: fit-content;
+`;
+
 export const breadcrumbClass = mergeStyleSets({
   root: {
-    width: '500px',
     margin: '0',
     padding: '10px',
   },

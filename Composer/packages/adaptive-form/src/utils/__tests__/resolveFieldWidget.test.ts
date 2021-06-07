@@ -162,7 +162,7 @@ describe('resolveFieldWidget', () => {
       expect(ReturnedField).toEqual(DefaultFields.JsonField);
     });
 
-    it('returns ObjectArrayField when item type is object', () => {
+    it('returns ArrayField when item type is object', () => {
       const schema = {
         type: 'array' as const,
         items: {
@@ -171,7 +171,7 @@ describe('resolveFieldWidget', () => {
       };
 
       const { field: ReturnedField } = resolveFieldWidget({ schema });
-      expect(ReturnedField).toEqual(DefaultFields.ObjectArrayField);
+      expect(ReturnedField).toEqual(DefaultFields.ArrayField);
     });
 
     it('can handle different items schemas', () => {
@@ -197,7 +197,7 @@ describe('resolveFieldWidget', () => {
       };
 
       const { field: ReturnedField2 } = resolveFieldWidget({ schema: objectArray });
-      expect(ReturnedField2).toEqual(DefaultFields.ObjectArrayField);
+      expect(ReturnedField2).toEqual(DefaultFields.ArrayField);
     });
   });
 

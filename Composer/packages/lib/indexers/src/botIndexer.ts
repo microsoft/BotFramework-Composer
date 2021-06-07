@@ -183,7 +183,7 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; botProjectFile: BotP
         const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
           new Diagnostic(
-            `The skill '${skillName}' does not exist in bot project file`,
+            `'${skillName}' does not exist in this project and is currently referenced in '${dialog.displayName}'.`,
             dialog.id,
             DiagnosticSeverity.Error
           )

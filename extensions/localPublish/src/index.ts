@@ -128,8 +128,21 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     );
   };
 
-  private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
+  private publishAsync = async (botId: string, version: string, fullSettings: DialogSetting, project: any, user) => {
     try {
+      let port;
+      if (LocalPublisher.runningBots[botId]) {
+        this.composer.log('Bot already running. Stopping bot...');
+        // this may or may not be set based on the status of the bot
+        port = LocalPublisher.runningBots[botId].port;
+        await this.stopBot(botId);
+      }
+      if (!port) {
+        // Portfinder is the stablest amongst npm libraries for finding ports. https://github.com/http-party/node-portfinder/issues/61. It does not support supplying an array of ports to pick from as we can have a race conidtion when starting multiple bots at the same time. As a result, getting the max port number out of the range and starting the range from the max.
+        const maxPort = max(map(LocalPublisher.runningBots, 'port')) ?? 3979;
+        port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
+      }
+
       // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
       // and export the content into that folder as well.
       const runtime = this.composer.getRuntimeByProject(project);
@@ -140,11 +153,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         await this.saveContent(botId, version, project.dataDir, user);
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
         const runtimePath = project.getRuntimePath();
-        await runtime.build(runtimePath, project);
+        await runtime.build(runtimePath, project, fullSettings, port);
       } else {
         throw new Error('Custom runtime settings are incomplete. Please specify path and command.');
       }
-      await this.setBot(botId, version, fullSettings, project);
+      await this.setBot(botId, version, fullSettings, project, port);
     } catch (error) {
       await this.stopBot(botId);
       this.setBotStatus(botId, {
@@ -200,6 +213,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           status: 200,
           result: {
             message: 'Running',
+            port,
             endpointURL: url,
           },
         };
@@ -331,22 +345,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   // start bot in current version
-  private setBot = async (botId: string, version: string, settings: any, project: any) => {
+  private setBot = async (botId: string, version: string, settings: any, project: any, port: number) => {
     // get port, and stop previous bot if exist
     try {
-      let port;
-      if (LocalPublisher.runningBots[botId]) {
-        this.composer.log('Bot already running. Stopping bot...');
-        // this may or may not be set based on the status of the bot
-        port = LocalPublisher.runningBots[botId].port;
-        await this.stopBot(botId);
-      }
-      if (!port) {
-        // Portfinder is the stablest amongst npm libraries for finding ports. https://github.com/http-party/node-portfinder/issues/61. It does not support supplying an array of ports to pick from as we can have a race conidtion when starting multiple bots at the same time. As a result, getting the max port number out of the range and starting the range from the max.
-        const maxPort = max(map(LocalPublisher.runningBots, 'port')) ?? 3979;
-        port = await portfinder.getPortPromise({ port: maxPort + 1, stopPort: 6000 });
-      }
-
       // if not using custom runtime, update assets in tmp older
       if (!settings.runtime || settings.runtime.customRuntime !== true) {
         this.composer.log('Updating bot assets');
@@ -451,7 +452,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const configList: string[] = [];
     if (config.MicrosoftAppPassword) {
       configList.push('--MicrosoftAppPassword');
-      configList.push(config.MicrosoftAppPassword);
+      configList.push(`"${config.MicrosoftAppPassword}"`);
     }
     if (config.luis && (config.luis.endpointKey || config.luis.authoringKey)) {
       configList.push('--luis:endpointKey');

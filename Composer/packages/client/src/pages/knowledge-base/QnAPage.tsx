@@ -164,6 +164,8 @@ const QnAPage: React.FC<RouteComponentProps<{
             actions.createQnAFromUrlDialogCancel({ projectId: createQnAOnInfo.projectId });
           }}
           onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
+            await actions.createQnATrigger(projectId, createQnAOnInfo.dialogId, false);
+
             if (urls.length !== 0) {
               actions.createQnAKBsFromUrls({ id: createQnAOnInfo.dialogId, name, projectId, locales, urls, multiTurn });
             } else {

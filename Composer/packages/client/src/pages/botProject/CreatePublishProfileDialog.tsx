@@ -2,36 +2,35 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { jsx } from '@emotion/core';
-import { useRecoilValue } from 'recoil';
-import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ActionButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useBoolean } from '@uifabric/react-hooks';
 import Dialog, { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-
-import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { isShowAuthDialog } from '../../utils/auth';
-
-import { PublishProfileDialog } from './create-publish-profile/PublishProfileDialog';
-import { actionButton } from './styles';
+import { SharedColors } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 // -------------------- CreatePublishProfileDialog -------------------- //
 
 type CreatePublishProfileDialogProps = {
-  projectId: string;
+  onShowPublishProfileWrapperDialog: () => void;
+};
+
+// -------------------- Style -------------------- //
+const actionButton = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    marginLeft: 5,
+  },
 };
 
 export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProps> = (props) => {
-  const { projectId } = props;
-  const { publishTargets } = useRecoilValue(settingsState(projectId));
-  const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
-  const publishTypes = useRecoilValue(publishTypesState(projectId));
+  const { onShowPublishProfileWrapperDialog } = props;
 
-  const [dialogHidden, setDialogHidden] = useState(true);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(false);
 
   const dialogTitle = {
@@ -40,15 +39,6 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
       'To make your bot available as a remote skill you will need to provision Azure resources . This process may take a few minutes depending on the resources you select.'
     ),
   };
-  const [currentPublishProfile, setCurrentPublishProfile] = useState<{ index: number; item: PublishTarget } | null>(
-    null
-  );
-
-  useEffect(() => {
-    if (projectId) {
-      getPublishTargetTypes(projectId);
-    }
-  }, [projectId]);
 
   return (
     <Fragment>
@@ -61,6 +51,7 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
         minWidth={960}
         modalProps={{
           isBlocking: true,
+          isClickableOutsideFocusTrap: true,
         }}
         onDismiss={toggleHideDialog}
       >
@@ -69,8 +60,8 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
             data-testid={'addNewPublishProfile'}
             styles={actionButton}
             onClick={() => {
-              isShowAuthDialog(true) ? setShowAuthDialog(true) : setDialogHidden(false);
               toggleHideDialog();
+              onShowPublishProfileWrapperDialog();
             }}
           >
             {formatMessage('Create new publish profile')}
@@ -80,30 +71,6 @@ export const CreatePublishProfileDialog: React.FC<CreatePublishProfileDialogProp
           <DefaultButton text={formatMessage('Cancel')} onClick={toggleHideDialog} />
         </DialogFooter>
       </Dialog>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph
-          next={() => {
-            setDialogHidden(false);
-          }}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
-      {!dialogHidden ? (
-        <PublishProfileDialog
-          closeDialog={() => {
-            setDialogHidden(true);
-            setCurrentPublishProfile(null);
-          }}
-          current={currentPublishProfile}
-          projectId={projectId}
-          setPublishTargets={setPublishTargets}
-          targets={publishTargets || []}
-          types={publishTypes}
-        />
-      ) : null}
     </Fragment>
   );
 };

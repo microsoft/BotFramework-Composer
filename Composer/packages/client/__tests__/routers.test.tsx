@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import { within } from '@testing-library/dom';
 import { render } from '@botframework-composer/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
@@ -12,6 +13,7 @@ import { wrapWithRecoil } from './testUtils';
 jest.mock('axios', () => ({
   create: jest.fn().mockReturnThis(),
   get: jest.fn(),
+  post: jest.fn(() => new Promise((resolve) => resolve({}))),
   request: jest.fn(),
   interceptors: {
     request: { use: jest.fn() },
@@ -35,7 +37,7 @@ describe('<Router/> router test', () => {
     } = renderWithRouter(wrapWithRecoil(<AppTest />));
 
     const appContainer = container;
-    expect(appContainer.innerHTML).toMatch('Bot Framework Composer');
+    expect(within(appContainer).findByAltText('Composer Logo')).not.toBeNull();
 
     navigate('/language-understanding');
     expect(appContainer.innerHTML).toMatch('Setting');
