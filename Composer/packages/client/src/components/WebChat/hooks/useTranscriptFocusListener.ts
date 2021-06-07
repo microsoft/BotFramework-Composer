@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FC, useCallback } from 'react';
+import { useCallback } from 'react';
 import { hooks } from 'botframework-webchat';
 import { Activity } from 'botframework-schema';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -12,17 +12,19 @@ import {
   dispatcherState,
   rootBotProjectIdSelector,
   webChatTrafficState,
-} from '../../recoilModel';
-import { WebChatInspectorTabKey } from '../../pages/design/DebugPanel/TabExtensions/types';
+} from '../../../recoilModel';
+import { WebChatInspectorTabKey } from '../../../pages/design/DebugPanel/TabExtensions/types';
 
 const { useObserveTranscriptFocus } = hooks;
 
-export const TranscriptFocusListener: FC<{}> = () => {
+export const useTranscriptFocusListener = () => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
   const setDebugPanelActiveTab = useSetRecoilState(debugPanelActiveTabState);
   const setDebugPanelExpansion = useSetRecoilState(debugPanelExpansionState);
   const { setWebChatInspectionData } = useRecoilValue(dispatcherState);
+
+  // listen for when an activity is focused and inspect the corresponding log item
   const onActivityFocused = useCallback(
     ({ activity }: { activity: Activity }) => {
       const trafficItem = rawWebChatTraffic.find((t) => {
@@ -40,7 +42,4 @@ export const TranscriptFocusListener: FC<{}> = () => {
   );
 
   useObserveTranscriptFocus(onActivityFocused, [onActivityFocused]);
-
-  // strictly listen for and act on a new activity being selected; do not render anything
-  return null;
 };

@@ -1,19 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FC, useEffect } from 'react';
+import { useEffect } from 'react';
 import { hooks } from 'botframework-webchat';
 import { useRecoilValue } from 'recoil';
 
-import { rootBotProjectIdSelector, webChatInspectionDataState } from '../../recoilModel';
+import { rootBotProjectIdSelector, webChatInspectionDataState } from '../../../recoilModel';
 
 const { useScrollTo } = hooks;
 
-export const ActivityInspectionListener: FC<{}> = () => {
+export const useActivityInspectionListener = () => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const webChatInspectionData = useRecoilValue(webChatInspectionDataState(currentProjectId ?? ''));
   const scrollToActivity = useScrollTo();
 
+  // listen for when an activity item is inspected in the log, and scroll to the activity
   useEffect(() => {
     if (
       webChatInspectionData?.item.trafficType === 'activity' &&
@@ -22,7 +23,4 @@ export const ActivityInspectionListener: FC<{}> = () => {
       scrollToActivity({ activityID: webChatInspectionData.item.activity.id }, { behavior: 'smooth' });
     }
   }, [webChatInspectionData]);
-
-  // only listen for when a traffic item is inspected from the log; do not render anything
-  return null;
 };

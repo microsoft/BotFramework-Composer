@@ -7,9 +7,8 @@ import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 import { ConversationService } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 import { ChatData, ActivityType } from './types';
-import { TranscriptFocusListener } from './TranscriptFocusListener';
 import { ActivityHighlightWrapper } from './ActivityHighlightWrapper';
-import { ActivityInspectionListener } from './ActivityInspectionListener';
+import { WebChatHooksContainer } from './hooks/WebChatHooksContainer';
 
 const { BasicWebChat, Composer } = Components;
 
@@ -127,8 +126,7 @@ export const WebChatComposer = React.memo((props: WebChatComposerProps) => {
       userID={chatData?.user.id}
     >
       <BasicWebChat />
-      <TranscriptFocusListener />
-      <ActivityInspectionListener />
+      <WebChatHooksContainer />
     </Composer>
   );
 }, areEqual);
