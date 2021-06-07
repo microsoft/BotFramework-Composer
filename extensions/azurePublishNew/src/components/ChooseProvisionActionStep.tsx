@@ -5,9 +5,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
-import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { ProvisionAction } from '../types';
 
@@ -30,45 +28,6 @@ export const ContentPane = styled(Stack)`
   border-left: 1px solid ${NeutralColors.gray30};
   height: 100%;
   overflow-y: auto;
-`;
-
-export const Content = styled(Stack)`
-  padding: 0px 20px;
-`;
-
-export const Title = styled(Text)`
-  font-size: ${FluentTheme.fonts.xLarge.fontSize};
-  margin: 8px 0;
-`;
-
-export const Summary = styled.div`
-  margin: 8px 0;
-`;
-
-export const Details = styled(Stack)`
-  margin: 10px 0;
-`;
-
-export const Instruction = styled(Stack)`
-  margin: 10px 0;
-`;
-
-export const InstructionTitle = styled(Text)`
-  font-size: ${FluentTheme.fonts.smallPlus.fontSize};
-  text-transform: uppercase;
-`;
-
-export const InstructionDetails = styled.div`
-  margin: 10px 0;
-`;
-
-export const ResourceTitle = styled(Stack)`
-  margin: 4px 0;
-`;
-
-export const LearnMoreLink = styled(Link)`
-  user-select: none;
-  font-size: 14px;
 `;
 
 const choiceOptions: IChoiceGroupOption[] = [
