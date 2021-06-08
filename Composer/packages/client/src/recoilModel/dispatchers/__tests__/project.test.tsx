@@ -3,7 +3,7 @@
 
 import { selector, useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
-import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderHookResult, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 import { useRecoilState } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import endsWith from 'lodash/endsWith';
@@ -46,21 +46,17 @@ import {
 import { dialogsSelectorFamily, lgFilesSelectorFamily, luFilesSelectorFamily } from '../../selectors';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
+import { navigateTo } from '../../../utils/navigation';
 
 import mockProjectData from './mocks/mockProjectResponse.json';
 import mockManifestData from './mocks/mockManifest.json';
 import mockBotProjectFileData from './mocks/mockBotProjectFile.json';
 
-// let httpMocks;
-let navigateTo;
-
 const projectId = '30876.502871204648';
 
 jest.mock('../../../utils/navigation', () => {
-  const navigateMock = jest.fn();
-  navigateTo = navigateMock;
   return {
-    navigateTo: navigateMock,
+    navigateTo: jest.fn(),
   };
 });
 
@@ -193,10 +189,10 @@ describe('Project dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(async () => {
-    navigateTo.mockReset();
+    (navigateTo as jest.Mock).mockReset();
     mockProjectResponse = cloneDeep(mockProjectData);
     mockManifestResponse = cloneDeep(mockManifestData);
     mockBotProjectResponse = cloneDeep(mockBotProjectFileData);
@@ -480,7 +476,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.botStates.oneNoteSync).toBeUndefined();
   });
 
-  it('should be able to open a project and its skills in Bot project file', async (done) => {
+  it('should be able to open a project and its skills in Bot project file', async () => {
     let callIndex = 0;
     (httpClient.put as jest.Mock).mockImplementation(() => {
       let mockSkillData: any;
@@ -513,12 +509,9 @@ describe('Project dispatcher', () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
 
-    setImmediate(() => {
-      expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
-      expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');
-      expect(renderedComponent.current.botProjectSpaceLoaded).toBeTruthy();
-      done();
-    });
+    expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
+    expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');
+    expect(renderedComponent.current.botProjectSpaceLoaded).toBeTruthy();
   });
 
   it('should migrate skills from existing bots and add them to botproject file', async () => {
