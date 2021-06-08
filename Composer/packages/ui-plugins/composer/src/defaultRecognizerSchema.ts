@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { RegexIntentField, CustomRecognizerField } from '@bfc/adaptive-form';
 
 const FallbackRecognizerJsonEditor: RecognizerOptions = {
-  displayName: () => formatMessage('Custom recognizer'),
+  displayName: () => formatMessage('Custom'),
   seedNewRecognizer: () => ({}),
   recognizerEditor: CustomRecognizerField,
   description: () => formatMessage('Enables you to customize your own recognizer by editing JSON in the form'),
@@ -15,10 +15,10 @@ const FallbackRecognizerJsonEditor: RecognizerOptions = {
 
 export const DefaultRecognizerSchema: RecognizerUISchema = {
   [SDKKinds.RegexRecognizer]: {
-    displayName: () => formatMessage('Regular expression recognizer'),
+    displayName: () => formatMessage('Regular expression'),
     description: () =>
       formatMessage(
-        'Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns'
+        'Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns.'
       ),
     intentEditor: RegexIntentField,
     renameIntent: (intentName, newIntentName, shellData, shellApi) => {
