@@ -41,7 +41,7 @@ const IntentField: React.FC<FieldProps> = (props) => {
     <React.Fragment>
       <FieldLabel description={description} helpLink={helpLink} id={id} label={label} required={required} />
       {Editor ? (
-        <Editor {...props} onChange={handleChange} />
+        <Editor {...props} label={label} onChange={handleChange} />
       ) : (
         formatMessage('No Editor for {type}', { type: currentRecognizer?.id })
       )}
