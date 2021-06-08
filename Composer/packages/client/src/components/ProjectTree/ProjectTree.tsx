@@ -461,7 +461,10 @@ export const ProjectTree: React.FC<Props> = ({
   const renderDialogTriggersByProperty = (dialog: DialogInfo, projectId: string, startDepth: number) => {
     const jsonSchemaFiles = jsonSchemaFilesByProjectId[projectId];
     const dialogSchemaProperties = extractSchemaProperties(dialog, jsonSchemaFiles);
-    const groupedTriggers = groupTriggersByPropertyReference(dialog, { validProperties: dialogSchemaProperties });
+    const groupedTriggers = groupTriggersByPropertyReference(dialog, {
+      validProperties: dialogSchemaProperties,
+      allowMultiParent: true,
+    });
 
     const triggerGroups = Object.keys(groupedTriggers);
 
