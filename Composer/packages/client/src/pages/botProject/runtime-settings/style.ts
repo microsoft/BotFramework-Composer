@@ -2,8 +2,11 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+
+import { colors } from '../../../constants';
+
 export const runtimeSettingsStyle = css`
   display: flex;
   flex-direction: column;
@@ -51,7 +54,7 @@ export const iconStyle = (disabled) => {
       selectors: {
         '&::before': {
           content: " '*'",
-          color: SharedColors.red10,
+          color: colors.errorIcon,
           paddingRight: 3,
         },
       },

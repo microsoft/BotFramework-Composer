@@ -5,6 +5,8 @@ import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
+import { colors } from '../../constants';
+
 export const dialogContentStyles = {
   title: {
     fontWeight: FontWeights.bold,
@@ -56,6 +58,6 @@ export const optionStyles = {
 
 export const warningIconStyles = {
   marginLeft: '5px',
-  color: '#BE880A',
+  color: colors.warningIcon,
   fontSize: '12px',
 };

@@ -13,6 +13,8 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+import { colors } from '../constants';
+
 const disabledTextFieldStyle = {
   root: {
     selectors: {
@@ -51,7 +53,7 @@ const errorContainer = css`
 
 const errorIcon = {
   root: {
-    color: '#A80000',
+    color: colors.errorIcon,
     marginRight: 8,
     paddingLeft: 12,
     fontSize: '12px',
@@ -78,7 +80,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: SharedColors.red10,
+          color: colors.errorIcon,
           paddingRight: 3,
         },
       },

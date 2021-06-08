@@ -3,9 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+
+import { colors } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -133,7 +134,7 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   return (
     <div
       css={{
-        color: `${SharedColors.red10}`,
+        color: `${colors.errorIcon}`,
       }}
       data-testid="runtime-error-callout"
     >

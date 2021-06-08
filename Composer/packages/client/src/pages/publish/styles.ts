@@ -4,6 +4,8 @@ import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+import { colors } from '../../constants';
+
 export const settingsContainer = css`
   display: flex;
   border-top: 1px solid ${NeutralColors.gray20};
@@ -55,7 +57,7 @@ export const contentEditor = css`
 `;
 
 export const publishDialogText = css`
-  background-color: #ddf3db;
+  background-color: ${colors.successBg};
   margin-bottom: 10px;
   font-size: medium;
   padding: 7px;

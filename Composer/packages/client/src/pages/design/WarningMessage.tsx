@@ -8,18 +8,18 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import React from 'react';
 
-import { triggerNotSupportedWarning } from '../../constants';
+import { triggerNotSupportedWarning, colors } from '../../constants';
 
 const warningIcon = {
   marginLeft: 5,
-  color: '#8A8780',
+  color: colors.warningFg,
   fontSize: 20,
   cursor: 'pointer',
 };
 
 const warningRoot = {
   display: 'flex',
-  background: '#FFF4CE',
+  background: colors.warningBg,
   height: 50,
   alignItems: 'center',
 };

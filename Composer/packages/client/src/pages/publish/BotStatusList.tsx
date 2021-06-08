@@ -21,6 +21,7 @@ import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
+import { colors } from '../../constants';
 
 import { PublishStatusList } from './PublishStatusList';
 import { detailList, listRoot, tableView } from './styles';
@@ -179,7 +180,7 @@ export const BotStatusList: React.FC<BotStatusListProps> = ({
         </div>
       );
     } else {
-      return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
+      return <Icon iconName="Cancel" style={{ color: colors.errorIcon, fontWeight: 600 }} />;
     }
   };
 

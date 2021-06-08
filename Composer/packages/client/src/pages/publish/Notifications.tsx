@@ -9,6 +9,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { CommunicationColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { CardProps } from '../../components/Notifications/NotificationCard';
+import { colors } from '../../constants';
 
 import { BotStatus } from './type';
 
@@ -85,11 +86,11 @@ export const getSkillPublishedNotificationCardProps = (
     width: '12px',
     height: '12px',
     fontSize: '12px',
-    color: SharedColors.red10,
+    color: colors.errorIcon,
   });
   const errorType = css`
     margin-top: 4px;
-    color: ${SharedColors.red10};
+    color: ${colors.errorIcon};
   `;
   const successType = css`
     margin-top: 4px;

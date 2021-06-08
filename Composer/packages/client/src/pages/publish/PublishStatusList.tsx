@@ -16,6 +16,7 @@ import { PublishResult } from '@botframework-composer/types';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 
+import { colors } from '../../constants';
 import { ApiStatus } from '../../utils/publishStatusPollingUpdater';
 
 import { listRoot, tableView, detailList } from './styles';
@@ -94,7 +95,7 @@ export const PublishStatusList: React.FC<StatusListProps> = (props) => {
             </div>
           );
         } else {
-          return <Icon iconName="Cancel" style={{ color: SharedColors.red10, fontWeight: 600 }} />;
+          return <Icon iconName="Cancel" style={{ color: colors.errorIcon, fontWeight: 600 }} />;
         }
       },
       isPadded: true,

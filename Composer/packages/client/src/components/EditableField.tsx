@@ -10,6 +10,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 import { FieldConfig, useForm } from '../hooks/useForm';
+import { colors } from '../constants';
 
 const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'PageDown', 'PageUp', 'Home', 'End'];
 
@@ -18,7 +19,7 @@ const defaultContainerStyle = (hasFocus, hasErrors) => css`
   display: flex;
   width: 100%;
   outline: ${hasErrors
-    ? `2px solid ${SharedColors.red10}`
+    ? `2px solid ${colors.errorIcon}`
     : hasFocus
     ? `2px solid ${SharedColors.cyanBlue10}`
     : undefined};
@@ -295,9 +296,9 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
         )}
       </div>
       {hasErrors && hasBeenEdited && (
-        <span style={{ color: SharedColors.red20 }}>{requiredMessage || formErrors.value}</span>
+        <span style={{ color: colors.errorIcon }}>{requiredMessage || formErrors.value}</span>
       )}
-      {error && <span style={{ color: SharedColors.red20 }}>{error}</span>}
+      {error && <span style={{ color: colors.errorIcon }}>{error}</span>}
     </Fragment>
   );
 };

@@ -10,10 +10,10 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
+import { colors } from '../../constants';
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -38,7 +38,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: SharedColors.red10,
+          color: colors.errorIcon,
           paddingRight: 3,
         },
       },

@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { botStatusState } from '../../recoilModel';
-import { BotStatus, BotStatusesCopy } from '../../constants';
+import { BotStatus, BotStatusesCopy, colors } from '../../constants';
 
 type BotStatusIndicatorProps = {
   projectId: string;
@@ -27,7 +27,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
       });
     } else if (botStatus === BotStatus.failed) {
       setBotStatusStyle({
-        color: SharedColors.red10,
+        color: colors.errorIcon,
       });
     } else {
       setBotStatusStyle({

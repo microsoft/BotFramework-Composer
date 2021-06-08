@@ -14,7 +14,7 @@ import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -30,7 +30,7 @@ import {
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
-import { LUIS_REGIONS } from '../../constants';
+import { LUIS_REGIONS, colors } from '../../constants';
 import { ManageLuis } from '../../components/ManageLuis/ManageLuis';
 import { ManageQNA } from '../../components/ManageQNA/ManageQNA';
 
@@ -54,7 +54,7 @@ const unknownIconStyle = (required) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: SharedColors.red10,
+          color: colors.errorIcon,
           paddingRight: 3,
         },
       },

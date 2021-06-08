@@ -10,6 +10,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 
 import { CardProps } from '../Notifications/NotificationCard';
+import { colors } from '../constants';
 
 const cardContent = css`
   display: flex;
@@ -37,7 +38,7 @@ const infoType = css`
 `;
 
 const errorIcon = css`
-  color: ${SharedColors.red10},
+  color: ${colors.errorIcon},
   marginRight: 8,
   paddingLeft: 12,
   fontSize: ${FontSizes.mediumPlus},

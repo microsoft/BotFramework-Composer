@@ -18,12 +18,14 @@ import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 
+import { colors } from '../../constants';
+
 import { IDiagnosticInfo } from './types';
 
 // -------------------- Styles -------------------- //
 
 const icons = {
-  Error: { iconName: 'StatusErrorFull', color: SharedColors.red10 },
+  Error: { iconName: 'StatusErrorFull', color: colors.errorIcon },
   Warning: { iconName: 'WarningSolid', color: SharedColors.yellow10 },
 };
 

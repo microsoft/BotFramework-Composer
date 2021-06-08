@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { NeutralColors, CommunicationColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../../constants';
 
 export default {
   backgroundColor: `${NeutralColors.white}`,
@@ -15,7 +17,7 @@ export default {
   bubbleTextColor: `${NeutralColors.black}`,
   bubbleMinHeight: 20,
 
-  microphoneButtonColorOnDictate: `${SharedColors.red10}`,
+  microphoneButtonColorOnDictate: `${colors.errorIcon}`,
   sendBoxButtonColor: `${NeutralColors.gray130}`,
   sendBoxButtonColorOnFocus: `${NeutralColors.gray140}`,
   sendBoxButtonColorOnHover: `${NeutralColors.gray150}`,

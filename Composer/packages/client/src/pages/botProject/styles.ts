@@ -5,6 +5,8 @@ import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontSizes, FontWeights, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
+import { colors } from '../../constants';
+
 export const title = css`
   font-size: ${FontSizes.large};
   font-weight: ${FontWeights.semibold};
@@ -134,7 +136,7 @@ export const unknownIconStyle = (required: boolean) => {
       selectors: {
         '&::before': {
           content: required ? " '*'" : '',
-          color: SharedColors.red10,
+          color: colors.errorIcon,
           paddingRight: 10,
         },
       },

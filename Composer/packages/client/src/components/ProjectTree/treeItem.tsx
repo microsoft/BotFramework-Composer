@@ -21,6 +21,8 @@ import { DiagnosticSeverity, Diagnostic, Icons } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import uniqueId from 'lodash/uniqueId';
 
+import { colors } from '../../constants';
+
 import { THREE_DOTS_ICON_WIDTH } from './constants';
 import { TreeLink, TreeMenuItem } from './types';
 import { TreeItemContent } from './TreeItemContent';
@@ -166,7 +168,7 @@ export const overflowSet = (isBroken: boolean) => css`
   justify-content: space-between;
   display: inline-flex;
   i {
-    color: ${isBroken ? SharedColors.red20 : 'inherit'};
+    color: ${isBroken ? colors.errorIcon : 'inherit'};
   }
 `;
 
@@ -184,12 +186,12 @@ const statusIcon = {
 
 const warningIcon = {
   ...statusIcon,
-  color: '#BE880A',
+  color: colors.warningIcon,
 };
 
 const errorIcon = {
   ...statusIcon,
-  color: '#CC3F3F',
+  color: colors.errorIcon,
 };
 
 const diagnosticIcon = {
@@ -202,14 +204,14 @@ const diagnosticIcon = {
 
 const diagnosticErrorIcon = {
   ...diagnosticIcon,
-  color: '#A80000',
-  background: '#FED9CC',
+  color: colors.errorFg,
+  background: colors.errorBg,
 };
 
 const diagnosticWarningIcon = {
   ...diagnosticIcon,
-  color: '#8A8780',
-  background: '#FFF4CE',
+  color: colors.warningFg,
+  background: colors.warningBg,
 };
 export const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;

@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { ConversationNetworkErrorItem, ConversationNetworkTrafficItem } from '@botframework-composer/types';
 import { css, jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
 import React, { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 
+import { colors } from '../../../../../constants';
 import { userSettingsState } from '../../../../../recoilModel';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
 
@@ -20,7 +20,7 @@ const networkItem = css`
 `;
 
 const redErrorText = css`
-  color: ${SharedColors.red20};
+  color: ${colors.errorIcon};
 `;
 
 type WebChatNetworkLogItemProps = {

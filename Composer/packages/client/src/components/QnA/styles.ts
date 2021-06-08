@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
-import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../constants';
 
 export const styles = {
   dialog: {
@@ -84,7 +86,7 @@ export const textFieldUrl = {
 };
 
 export const warning = {
-  color: SharedColors.red10,
+  color: colors.errorIcon,
   fontSize: FontSizes.size10,
 };
 

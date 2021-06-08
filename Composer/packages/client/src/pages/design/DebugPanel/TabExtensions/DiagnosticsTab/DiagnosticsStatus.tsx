@@ -9,6 +9,7 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
+import { colors } from '../../../../../constants';
 import { debugPanelExpansionState, debugPanelActiveTabState } from '../../../../../recoilModel';
 import { DiagnosticsTabKey } from '../types';
 
@@ -69,7 +70,7 @@ export const DiagnosticsStatus = () => {
         {errorsCount > 0 && (
           <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
             <FontIcon
-              css={{ color: SharedColors.red10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+              css={{ color: colors.errorIcon, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
               iconName="StatusErrorFull"
             />
             {errorsCount}

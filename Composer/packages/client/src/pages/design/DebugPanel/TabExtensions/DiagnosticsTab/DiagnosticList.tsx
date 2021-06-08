@@ -21,6 +21,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useEffect, useState } from 'react';
 
+import { colors } from '../../../../../constants';
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
 import { botDisplayNameState, botProjectSpaceSelector, exportSkillModalInfoState } from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
@@ -28,7 +29,7 @@ import { navigateTo } from '../../../../../utils/navigation';
 // -------------------- Styles -------------------- //
 
 const icons = {
-  Error: { iconName: 'StatusErrorFull', color: SharedColors.red10 },
+  Error: { iconName: 'StatusErrorFull', color: colors.errorIcon },
   Warning: { iconName: 'WarningSolid', color: SharedColors.yellow10 },
 };
 
