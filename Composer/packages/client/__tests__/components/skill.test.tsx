@@ -93,6 +93,8 @@ describe('<SkillForm />', () => {
             value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
           },
         });
+        // allow validatation debounce to execute
+        jest.runAllTimers();
       });
 
       expect(urlInput.getAttribute('value')).toBe(
