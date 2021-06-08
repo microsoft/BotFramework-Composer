@@ -46,7 +46,7 @@ export const LearnMoreLink = styled(Link)`
   font-size: 14px;
 `;
 
-export const ImportActionContentStep = () => {
+export const ImportInstructionsStep = () => {
   return (
     <Content>
       <Title>{formatMessage('Use existing resources')}</Title>

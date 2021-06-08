@@ -43,7 +43,7 @@ export const LearnMoreLink = styled(Link)`
   font-size: 14px;
 `;
 
-export const GenerateActionContentStep = () => {
+export const HandOffInstructionsStep = () => {
   return (
     <Content>
       <Title>{formatMessage('Hand off to admin')}</Title>

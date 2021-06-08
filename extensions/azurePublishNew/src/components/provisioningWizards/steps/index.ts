@@ -3,7 +3,7 @@
 
 export * from './ChooseResourcesStep';
 export * from './CreateActionContentStep';
-export * from './GenerateActionContentStep';
-export * from './ImportActionContentStep';
+export * from './HandOffInstructionsStep';
+export * from './ImportInstructionsStep';
 export * from './ResourceConfigurationStep';
 export * from './ReviewResourcesStep';
