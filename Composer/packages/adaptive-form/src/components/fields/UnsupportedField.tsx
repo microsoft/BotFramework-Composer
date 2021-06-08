@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FieldProps } from '@bfc/extension-client';
 import omit from 'lodash/omit';
+import formatMessage from 'format-message';
 
 import { unsupportedField } from './styles';
 
@@ -17,7 +18,7 @@ export const UnsupportedField: React.FC<FieldProps> = function UnsupportedField(
       <div css={unsupportedField.container} data-testid="UnsupportedField">
         {props.label} (Unsupported Field)
         <Link styles={unsupportedField.link} onClick={() => setShowDetails((prev) => !prev)}>
-          Toggle Details
+          {formatMessage('Toggle Details')}
         </Link>
       </div>
       <pre css={unsupportedField.details(!showDetails)} data-testid="UnsupportedFieldDetails">

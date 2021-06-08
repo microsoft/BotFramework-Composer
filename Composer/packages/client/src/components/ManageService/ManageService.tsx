@@ -903,6 +903,7 @@ export const ManageService = (props: ManageServiceProps) => {
         minWidth={480}
         modalProps={{
           isBlocking: true,
+          isClickableOutsideFocusTrap: true,
         }}
         onDismiss={loading ? () => {} : props.onDismiss}
       >
