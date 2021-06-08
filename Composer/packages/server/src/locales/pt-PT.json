@@ -243,10 +243,10 @@
     "message": "+ Adicionar Par de FAQ"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> adicionar algumas expressões de exemplo para acionar esta intenção:\n> - qual é o estado do tempo\n> - como está o tempo em \"{\"city=Seattle\"}\"\n\n> definições de entidade:\n> @ ml city"
+    "message": "> adicionar algumas expressões de exemplo para acionar esta intenção:\n> - qual é o estado do tempo\n> - como está o tempo em '{'city=Seattle'}'\n\n> definições de entidade:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> adicionar algumas respostas de utilizador esperadas:\n> - Lembrar-me para \"{\"itemTitle=comprar leite\"}\"\n> - lembrar-me para \"{\"itemTitle\"}\"\n> - adicionar \"{\"itemTitle\"}\" à minha lista A fazer\n>\n> definições de entidade:\n> @ item mlTitle\n"
+    "message": "> adicionar algumas respostas de utilizador esperadas:\n> - Lembrar-me para '{'itemTitle=comprar leite'}'\n> - lembrar-me para '{'itemTitle'}'\n> - adicionar '{'itemTitle'}' à minha lista A fazer\n>\n> definições de entidade:\n> @ item mlTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Adicionar ação sugerida"
@@ -3942,13 +3942,13 @@
     "message": "{ total } MB"
   },
   "total_plural_1_restart_bot_other_restart_all_bots__deeb9a99": {
-    "message": "{ total, plural,\n     =1 {Reiniciar bot}\n  other {Reiniciar todos os bots ({ em execução }/{ total } em execução)}\n}"
+    "message": "{ total, plural,\n     =1 {Reiniciar bot}\n  other {Reiniciar todos os bots ({ running }/{ total } em execução)}\n}"
   },
   "total_plural_1_start_bot_other_start_all_cf7d3a9d": {
     "message": "{ total, plural,\n     =1 {Start bot}\n  other {Start all}\n}"
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
-    "message": "{ total, plural,\n     =1 {A iniciar bot..}\n  other {A iniciar bots.. ({ em execucação }/{ total } em execução)}\n}"
+    "message": "{ total, plural,\n     =1 {A iniciar bot..}\n  other {A iniciar bots.. ({ running }/{ total } em execução)}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
     "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
