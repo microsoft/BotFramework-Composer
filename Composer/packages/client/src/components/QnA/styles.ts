@@ -4,7 +4,7 @@ import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 
-import { colors } from '../constants';
+import { colors } from '../../constants';
 
 export const styles = {
   dialog: {

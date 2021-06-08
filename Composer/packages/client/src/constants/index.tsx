@@ -527,3 +527,4 @@ export const defaultBotPort = 3979;
 export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;
 
 export * from './colors';
+export * from './dimensions';

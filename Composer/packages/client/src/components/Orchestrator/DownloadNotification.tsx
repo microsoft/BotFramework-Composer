@@ -10,7 +10,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 
 import { CardProps } from '../Notifications/NotificationCard';
-import { colors } from '../constants';
+import { colors } from '../../constants';
 
 const cardContent = css`
   display: flex;
