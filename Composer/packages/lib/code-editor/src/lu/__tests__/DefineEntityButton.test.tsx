@@ -52,7 +52,7 @@ describe('<DefineEntityButton />', () => {
     expect(callback).toBeCalledWith('prebuilt', 'datetimeV2');
   });
 
-  it.only('Should open a new window when link in tooltip is clicked', () => {
+  it('Should open a new window when link in tooltip is clicked', () => {
     const origOpen = window.open;
     window.open = jest.fn();
 

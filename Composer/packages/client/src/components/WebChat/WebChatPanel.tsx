@@ -94,7 +94,6 @@ export const WebChatPanel: React.FC<WebChatPanelProps> = ({
               }
               case 'networkError': {
                 appendWebChatTraffic(projectId, data);
-                console.log('NETWORK ERROR');
                 setTimeout(() => {
                   setActiveTabInDebugPanel('WebChatInspector');
                   setDebugPanelExpansion(true);

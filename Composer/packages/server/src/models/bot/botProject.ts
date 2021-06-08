@@ -185,7 +185,6 @@ export class BotProject implements IBotProject {
 
   public get builder() {
     if (!this._builder) {
-      console.log('initializing builder');
       this._builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
     }
 

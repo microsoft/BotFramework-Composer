@@ -141,7 +141,7 @@ describe('ExternalAdapterSettings', () => {
   });
 
   it('does not proceed if required settings are missing', () => {
-    const { getByTestId, debug } = renderWithRecoilAndCustomDispatchers(
+    const { getByTestId } = renderWithRecoilAndCustomDispatchers(
       <ExternalAdapterSettings projectId={PROJECT_ID} />,
       initRecoilState
     );
