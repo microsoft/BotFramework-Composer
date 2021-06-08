@@ -56,34 +56,6 @@ describe('<DefineConversation/>', () => {
     expect(component.container).toBeDefined();
   });
 
-  it('should update formdata with data passed through location props', async () => {
-    locationMock = {
-      search:
-        'schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26name%3DEchoBot-11299%26description%3DTest%20Echo',
-    };
-    const component = renderComponent();
-    const node = await component.findByText('OK');
-    fireEvent.click(node);
-    expect(
-      onSubmitMock.mock.calls[0][0] ===
-        {
-          description: 'Test Echo',
-          name: 'EchoBot-11299',
-          location: '\\test-folder\\Desktop',
-          schemaUrl:
-            'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
-        } ||
-        onSubmitMock.mock.calls[0][0] ===
-          {
-            description: 'Test Echo',
-            name: 'EchoBot-11299',
-            location: '/test-folder/Desktop',
-            schemaUrl:
-              'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
-          }
-    ).toBeTruthy;
-  });
-
   it('does not allow submission when the name is invalid', async () => {
     const component = renderComponent();
     const nameField = await component.getByTestId('NewDialogName');
