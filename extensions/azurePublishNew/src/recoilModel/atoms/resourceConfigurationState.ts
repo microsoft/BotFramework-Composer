@@ -39,8 +39,8 @@ export const hostNameState = atom<string>({
   default: '',
 });
 
-export const regionSelectionState = atom<string>({
-  key: 'resourceConfiguration_region',
+export const deployLocationSelectionState = atom<string>({
+  key: 'resourceConfiguration_dl',
   default: '',
 });
 

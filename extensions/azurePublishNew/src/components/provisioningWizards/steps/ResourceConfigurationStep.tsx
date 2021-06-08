@@ -26,10 +26,12 @@ import {
   resourceGroupSelectionState,
   subscriptionSelectionState,
   tenantSelectionState,
+  deployLocationSelectionState,
 } from '../../../recoilModel/atoms/resourceConfigurationState';
 import { ResourceGroupPicker } from '../../resourceConfiguration/ResourceGroupPicker';
 import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPicker';
 import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
+import { DeployLocationPicker } from '../../resourceConfiguration/DeployLocationPicker';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;
@@ -107,6 +109,7 @@ export const ResourceConfigurationStep = (props: Props) => {
   const [tenantId, setTenantId] = useRecoilState(tenantSelectionState);
   const [subscriptionId, setSubscriptionId] = useRecoilState(subscriptionSelectionState);
   const [resourceGroupId, setResourceGroupId] = useRecoilState(resourceGroupSelectionState);
+  const [deployLocationId, setDeployLocationId] = useRecoilState(deployLocationSelectionState);
 
   const { onResourceConfigurationChange } = props;
 
@@ -122,18 +125,27 @@ export const ResourceConfigurationStep = (props: Props) => {
 
   const handleTenantChange = (tenantId: string) => {
     setTenantId(tenantId);
-    //setSubscriptionId('');
-    //setResourceGroupId('');
+    if (!tenantId) {
+      setSubscriptionId('');
+    }
   };
 
   const handleSubscriptionChange = (subscriptionId: string) => {
     setSubscriptionId(subscriptionId);
+    if (!subscriptionId) {
+      setResourceGroupId('');
+      setDeployLocationId('');
+    }
   };
 
   const handleResourceGroupChange = (resourceGroupId: string) => {
     setResourceGroupId(resourceGroupId);
-    onResourceConfigurationChange(isValidConfiguration());
   };
+
+  const handleDeployLocationChange = (deployLocationId: string) => {
+    setDeployLocationId(deployLocationId);
+  };
+
   const renderPropertyInfoIcon = (tooltip: string) => {
     return (
       <TooltipHost content={tooltip}>
@@ -217,14 +229,13 @@ export const ResourceConfigurationStep = (props: Props) => {
               <ConfigureResourcesPropertyLabel required>{messages.region}</ConfigureResourcesPropertyLabel>
               {renderPropertyInfoIcon(messages.regionIconInfo)}
             </Stack>
-            {/* <Dropdown
-              disabled={currentConfig?.region}
-              options={deployLocationOptions}
-              placeholder={formatMessage('Select one')}
-              selectedKey={formData.region}
-              styles={configureResourceDropdownStyles}
-              onChange={updateCurrentLocation}
-            /> */}
+            <DeployLocationPicker
+              accessToken={userInfo?.token}
+              subscriptionId={deployLocationId}
+              textFieldProps={{ styles: autoCompleteTextFieldStyles }}
+              value={resourceGroupId}
+              onDeployLocationChange={handleDeployLocationChange}
+            />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack>

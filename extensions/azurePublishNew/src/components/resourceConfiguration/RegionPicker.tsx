@@ -5,13 +5,12 @@ import { DeployLocation } from '@botframework-composer/types';
 import React, { useEffect, useState } from 'react';
 import { IComboBoxProps, ComboBox } from 'office-ui-fabric-react';
 
-type ComboBoxPropsWithOutOptions = Omit<IComboBoxProps, 'options'>;
 type Props = {
   allowCreation?: boolean;
   canRefresh?: boolean;
   tenantId: string;
   onRegionChange: React.Dispatch<React.SetStateAction<string>>;
-} & ComboBoxPropsWithOutOptions;
+} & Omit<IComboBoxProps, 'options'>;
 
 export const RegionPicker = React.memo((props: Props) => {
   const [subscriptions, setSubscriptions] = useState<DeployLocation[]>();

@@ -12,11 +12,10 @@ import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoCom
 
 const { userShouldProvideTokens, getTenantIdFromCache, setTenantId } = usePublishApi();
 
-type ComboBoxPropsWithOutOptions = Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
 type Props = {
   onTenantChange: React.Dispatch<React.SetStateAction<string>>;
   onUserInfoFetch: React.Dispatch<React.SetStateAction<UserInfo>>;
-} & ComboBoxPropsWithOutOptions;
+} & Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
 
 const messages = {
   placeholder: formatMessage('Select Azure directory'),
@@ -71,9 +70,6 @@ export const TenantPicker = memo((props: Props) => {
               errMessage: err.message || err.toString(),
             })
           );
-        })
-        .finally(() => {
-          isLoading && setIsLoading(false);
         });
     }
   }, []);

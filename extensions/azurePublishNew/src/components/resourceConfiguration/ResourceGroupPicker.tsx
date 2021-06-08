@@ -6,16 +6,15 @@ import formatMessage from 'format-message';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 
 import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoComplete';
-import { getResourceGroups } from '../api';
+import { getResourceGroups } from '../../api';
 
-type ComboBoxPropsWithOutOptions = Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
 type Props = {
   allowCreation?: boolean;
   subscriptionId: string;
   canRefresh?: boolean;
   onResourceGroupChange: React.Dispatch<React.SetStateAction<string>>;
   accessToken: string;
-} & ComboBoxPropsWithOutOptions;
+} & Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
 
 const messages = {
   placeholder: formatMessage('Select Resource Group'),
@@ -41,6 +40,8 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
         .finally(() => {
           isLoading && setIsLoading(false);
         });
+    } else {
+      resourceGroups?.length > 0 && setResourceGroups([]);
     }
   }, [accessToken, props.subscriptionId]);
 
@@ -49,7 +50,11 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
   };
 
   const getValue = () => {
-    return resourceGroups.find((rg) => rg.id === props.value)?.name;
+    if (props.value) {
+      return resourceGroups.find((rg) => rg.id === props.value)?.name;
+    } else {
+      return '';
+    }
   };
 
   return (
@@ -64,7 +69,3 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
     </>
   );
 });
-
-// Client & server side validations when new resource groups are created
-// When tenantid is changed, load the new subscriptions
-// if previously selected subscription is part of the new tenent leave it selected else show the placeholder

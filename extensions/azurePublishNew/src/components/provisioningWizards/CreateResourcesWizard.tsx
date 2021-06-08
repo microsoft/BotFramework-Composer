@@ -11,10 +11,12 @@ import { Wizard, WizardStep } from '../shared/wizard/Wizard';
 
 import { WizardFooterWithUserPersona } from './footers/WizardFooterWithUserPersona';
 import { CreateActionContentStep, ChooseResourcesStep, ResourceConfigurationStep, ReviewResourcesStep } from './steps';
+
 type Props = {
   onStepChange: (stepId: string) => void;
   stepIndex?: number;
 };
+
 export const CreateResourcesWizard = React.memo((props: Props) => {
   const { stepIndex, onStepChange } = props;
   const userInfo = useRecoilValue(userInfoState);
@@ -26,6 +28,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
     step && setTitle({ title: step.title, subText: step.subTitle });
     return <></>;
   };
+
   React.useEffect(() => {
     setSteps([
       {
