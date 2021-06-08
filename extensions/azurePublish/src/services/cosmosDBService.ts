@@ -22,7 +22,7 @@ export const createCosmosDBService = (token: string, subscriptionId: string) => 
     throwNotImplementedError();
   };
 
-  const listContainters = async () => {
+  const listContainers = async () => {
     throwNotImplementedError();
   };
 
@@ -100,7 +100,7 @@ export const createCosmosDBService = (token: string, subscriptionId: string) => 
     listAccounts,
     listAccountKeys,
     listDatabases,
-    listContainters,
+    listContainers,
     updateAccount,
     updateDatabase,
     updateContainer,
