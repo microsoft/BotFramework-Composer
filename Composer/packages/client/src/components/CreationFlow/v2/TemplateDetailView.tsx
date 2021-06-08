@@ -4,10 +4,12 @@
 
 /** @jsx jsx */
 import { BotTemplate } from '@bfc/shared';
+import { PropertyAssignment } from '@bfc/ui-shared';
 import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/components/Button';
-import React, { useState } from 'react';
+import { CommandButton, PrimaryButton } from 'office-ui-fabric-react/lib/components/Button';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import composerIcon from '../../../images/composerIcon.svg';
@@ -20,14 +22,14 @@ const templateTitleContainer = css`
   flex-grow: 1;
   float: left;
   word-break: break-all;
+  margin-bottom: 10px;
 `;
 
 const templateTitle = css`
   position: relative;
-  bottom: 18px;
   font-size: 19px;
   font-weight: 550;
-  margin-left: 10px;
+  margin-left: 7px;
 `;
 
 const templateVersion = css`
@@ -35,9 +37,10 @@ const templateVersion = css`
   font-size: 12px;
   font-weight: 100;
   display: block;
-  left: 55px;
   width: fit-content;
-  bottom: 18px;
+  height: 10px;
+  padding: 0px;
+  margin-left: 6px;
 `;
 
 type TemplateDetailViewProps = {
@@ -46,9 +49,13 @@ type TemplateDetailViewProps = {
 };
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  const [selectedVersion, setSelectedVersion] = useState<string>('');
+  const [selectedVersion, setSelectedVersion] = useState<string>(props.template?.package?.packageVersion || '');
+
+  useEffect(() => {}, [props.template]);
 
   const renderVersionButton = () => {
+    const availableVersions = props.template?.package?.availableVersions || ([] as string[]);
+    availableVersions;
     const versionOptions = {
       items: [
         { key: '1', text: '1' },
@@ -58,31 +65,11 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
       onItemClick: (ev, item) => setSelectedVersion(item.key),
     };
     return (
-      <PrimaryButton
-        disabled={false}
+      <CommandButton
         menuProps={versionOptions}
-        split={versionOptions != undefined}
-        styles={{ root: { maxWidth: 180, textOverflow: 'ellipsis' } }}
-        onClick={() => {
-          console.log('changeVersions');
-        }}
-      >
-        <span>
-          <span css={{ display: 'inline-block', overflow: 'hidden' }}>{'install '}</span>&nbsp;
-          <span
-            css={{
-              maxWidth: 80,
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              display: 'inline-block',
-            }}
-            title={'Selected version'}
-          >
-            {selectedVersion}
-          </span>
-        </span>
-      </PrimaryButton>
+        styles={{ root: templateVersion, menuIcon: { fontSize: '8px' } }}
+        text={selectedVersion}
+      />
     );
   };
 
@@ -94,16 +81,22 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
   return (
     <div>
       <div css={templateTitleContainer}>
-        <img
-          alt={formatMessage('Composer Logo')}
-          aria-label={formatMessage('Composer Logo')}
-          src={composerIcon}
-          style={{ marginLeft: '9px' }}
-        />
-        <span css={templateTitle}>{props.template?.name}</span>
-        <span css={templateVersion}>{props.template?.package?.packageVersion}</span>
-        {renderVersionButton()}
+        <Stack horizontal>
+          <Stack.Item>
+            <img
+              alt={formatMessage('Composer Logo')}
+              aria-label={formatMessage('Composer Logo')}
+              src={composerIcon}
+              style={{ marginLeft: '9px' }}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <span css={templateTitle}>{props.template?.name}</span>
+            {renderVersionButton()}
+          </Stack.Item>
+        </Stack>
       </div>
+
       <ReactMarkdown linkTarget="_blank">{getStrippedReadMe()}</ReactMarkdown>
     </div>
   );
