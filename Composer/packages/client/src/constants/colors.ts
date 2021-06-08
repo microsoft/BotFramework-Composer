@@ -1,0 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+export const colors = {
+  errorBg: '',
+  errorFg: '',
+  warningBg: '',
+  warningFg: '',
+};
