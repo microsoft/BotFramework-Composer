@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderHookResult, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import httpClient from '../../../utils/httpUtil';
 import { storageDispatcher } from '../storage';
@@ -51,7 +51,7 @@ describe('Storage dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     (navigateTo as jest.Mock).mockReset();

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderHookResult, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 // eslint-disable-next-line lodash/import-scope
 import debounce from 'lodash/debounce';
 
@@ -42,7 +42,7 @@ describe('<Editor />', () => {
       onboarding,
     };
   };
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeAll(() => {});
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selectorFamily, useRecoilState, useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { skillDispatcher } from '../skill';
 import { botProjectFileDispatcher } from '../botProjectFile';
@@ -93,7 +93,7 @@ describe('skill dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     mockDialogComplete.mockClear();

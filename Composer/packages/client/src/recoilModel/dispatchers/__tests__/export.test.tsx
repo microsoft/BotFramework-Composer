@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import httpClient from '../../../utils/httpUtil';
 import { exportDispatcher } from '../export';
@@ -23,7 +23,7 @@ describe('Export dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>,
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>,
     dispatcher: Dispatcher,
     prevDocumentCreateElement,
     prevCreateObjectURL,
