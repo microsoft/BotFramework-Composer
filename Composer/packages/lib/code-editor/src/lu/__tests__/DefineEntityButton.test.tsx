@@ -52,8 +52,9 @@ describe('<DefineEntityButton />', () => {
     expect(callback).toBeCalledWith('prebuilt', 'datetimeV2');
   });
 
-  it('Should open a new window when link in tooltip is clicked', () => {
-    const windowOpenSpy = spyOn(window, 'open');
+  it.only('Should open a new window when link in tooltip is clicked', () => {
+    const origOpen = window.open;
+    window.open = jest.fn();
 
     render(<DefineEntityButton onDefineEntity={jest.fn()} />);
 
@@ -64,6 +65,7 @@ describe('<DefineEntityButton />', () => {
     });
     fireEvent.click(screen.getByText('this page'));
 
-    expect(windowOpenSpy).toBeCalled();
+    expect(window.open).toBeCalled();
+    window.open = origOpen;
   });
 });
