@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
 import { TokenCredentials } from '@azure/ms-rest-js';
-
-import { CosmosDBConfig } from '../azureResourceManager/azureResourceManagerConfig';
 
 import { throwNotImplementedError } from './throwNotImplementedError';
 

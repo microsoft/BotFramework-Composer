@@ -1,28 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
-
-import { WebAppConfig } from '../azureResourceManager/azureResourceManagerConfig';
 
 import { throwNotImplementedError } from './throwNotImplementedError';
 
 const createWebAppServicePlanService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
-  const createOrUpdate = async (config: WebAppConfig) => {
-    return await webSiteManagementClient.appServicePlans.createOrUpdate(config.resourceGroupName, config.name, {
-      location: config.location,
-      sku: {
-        name: 'S1',
-        tier: 'Standard',
-        size: 'S1',
-        family: 'S',
-        capacity: 1,
-      },
-    });
+  const createOrUpdate = async () => {
+    throwNotImplementedError();
   };
 
   const deleteMethod = async () => {

@@ -8,31 +8,11 @@ import { throwNotImplementedError } from './throwNotImplementedError';
 
 export const createWebAppService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
-  const createOrUpdate = async (createAppOptions) => {
-    const { resourceGroupName, webAppName, AppPlanName, location } = createAppOptions;
-
-    const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(resourceGroupName, webAppName, {
-      name: webAppName,
-      serverFarmId: AppPlanName,
-      location: location,
-      kind: 'app',
-      siteConfig: {
-        webSocketsEnabled: true,
-        appSettings: [
-          {
-            name: 'WEBSITE_NODE_DEFAULT_VERSION',
-            value: '10.14.1',
-          },
-        ],
-        cors: {
-          allowedOrigins: ['https://botservice.hosting.portal.azure.net', 'https://hosting.onecloud.azure-test.net/'],
-        },
-      },
-    });
-
-    return webAppResult;
+  const createOrUpdate = async () => {
+    throwNotImplementedError();
   };
 
   const deleteMethod = async () => {

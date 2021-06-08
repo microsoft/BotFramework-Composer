@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -7,8 +6,8 @@ import { throwNotImplementedError } from './throwNotImplementedError';
 /* Use Graph Client
 https://www.npmjs.com/package/@microsoft/microsoft-graph-client
 */
-export const createAppRegistrationService = (graphToken: string) => {
-  const checkExistence = async (displayName: string) => {
+export const createAppRegistrationService = () => {
+  const checkExistence = async () => {
     throwNotImplementedError();
   };
 
@@ -16,31 +15,31 @@ export const createAppRegistrationService = (graphToken: string) => {
     throwNotImplementedError();
   };
 
-  const getApp = async (displayName: string) => {
+  const getApp = async () => {
     throwNotImplementedError();
   };
 
-  const createApp = async (displayName: string) => {
+  const createApp = async () => {
     throwNotImplementedError();
   };
 
-  const updateApp = async (displayName: string) => {
+  const updateApp = async () => {
     throwNotImplementedError();
   };
 
-  const deleteApp = async (displayName: string) => {
+  const deleteApp = async () => {
     throwNotImplementedError();
   };
 
-  const addPassword = async (displayName: string, appCreatedId: string) => {
+  const addPassword = async () => {
     throwNotImplementedError();
   };
 
-  const updatePassword = async (displayName: string) => {
+  const updatePassword = async () => {
     throwNotImplementedError();
   };
 
-  const deletePassword = async (displayName: string) => {
+  const deletePassword = async () => {
     throwNotImplementedError();
   };
 
@@ -52,7 +51,7 @@ export const createAppRegistrationService = (graphToken: string) => {
    * - Creates or updates the App Password
    * returns App Registration
    */
-  const provision = async (displayName: string) => {
+  const provision = async () => {
     throwNotImplementedError();
   };
 

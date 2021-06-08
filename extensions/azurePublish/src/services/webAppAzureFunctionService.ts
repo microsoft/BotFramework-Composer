@@ -1,53 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
-
-import { AzureFunctionsConfig } from '../azureResourceManager/azureResourceManagerConfig';
 
 import { throwNotImplementedError } from './throwNotImplementedError';
 
 const createWebAppAzureFunctionService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
-  const createOrUpdate = async (azureFunctionsName: string, config: AzureFunctionsConfig) => {
-    return await webSiteManagementClient.webApps.createOrUpdate(config.resourceGroupName, config.name, {
-      name: azureFunctionsName,
-      location: config.location,
-      kind: 'functionapp',
-      httpsOnly: true,
-      siteConfig: {
-        webSocketsEnabled: true,
-        appSettings: [
-          {
-            name: 'MicrosoftAppId',
-            value: config.appId,
-          },
-          {
-            name: 'MicrosoftAppPassword',
-            value: config.appPwd,
-          },
-          {
-            name: 'FUNCTIONS_EXTENSION_VERSION',
-            value: '~3',
-          },
-          {
-            name: 'FUNCTIONS_WORKER_RUNTIME',
-            value: config.workerRuntime || 'dotnet',
-          },
-          {
-            name: 'WEBSITE_NODE_DEFAULT_VERSION',
-            value: '~14',
-          },
-          {
-            name: 'APPINSIGHTS_INSTRUMENTATIONKEY',
-            value: config.instrumentationKey ?? '',
-          },
-        ],
-      },
-    });
+  const createOrUpdate = async () => {
+    throwNotImplementedError();
   };
 
   const deleteMethod = async () => {

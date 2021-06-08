@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { ResourceManagementClient } from '@azure/arm-resources';
@@ -8,29 +7,30 @@ import { throwNotImplementedError } from './throwNotImplementedError';
 
 const createResourceGroupService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const client = new ResourceManagementClient(tokenCredentials, subscriptionId);
 
   const list = async () => {
     throwNotImplementedError();
   };
 
-  const get = async (resourceGroupName: string) => {
+  const get = async () => {
     throwNotImplementedError();
   };
 
-  const checkExistence = async (resourceGroupName: string) => {
+  const checkExistence = async () => {
     throwNotImplementedError();
   };
 
-  const update = async (resourceGroupName: string) => {
+  const update = async () => {
     throwNotImplementedError();
   };
 
-  const deleteMethod = async (resourceGroupName: string) => {
+  const deleteMethod = async () => {
     throwNotImplementedError();
   };
 
-  const createOrUpdate = async (resourceGroupName: string) => {
+  const createOrUpdate = async () => {
     throwNotImplementedError();
   };
 
