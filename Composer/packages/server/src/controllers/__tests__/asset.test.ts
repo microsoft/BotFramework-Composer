@@ -58,9 +58,9 @@ describe('getTemplateReadMe', () => {
     readme: '# Mock readme markdown',
   };
 
-  enableFetchMocks();
-  fetchMock.mockResponseOnce(JSON.stringify(mockFetchResponse));
   it('should return a readMe', async () => {
+    enableFetchMocks();
+    fetchMock.mockResponseOnce(JSON.stringify(mockFetchResponse));
     await AssetController.getTemplateReadMe(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith('# Mock readme markdown');
