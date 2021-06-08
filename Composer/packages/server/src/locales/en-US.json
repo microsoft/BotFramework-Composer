@@ -4131,7 +4131,7 @@
     "message": "Use machine learning to understand natural language input and direct the conversation flow."
   },
   "use_orchestrator_for_multi_bot_projects_bots_that__1b481cdd": {
-    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
+    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
   },
   "use_speech_to_enable_voice_input_and_output_for_yo_742c511d": {
     "message": "Use Speech to enable voice input and output for your bot."

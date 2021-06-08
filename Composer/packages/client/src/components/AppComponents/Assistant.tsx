@@ -25,8 +25,7 @@ export const Assistant = () => {
     location: { pathname },
   } = useLocation();
 
-  const isShowingPVAorCreationFlow =
-    pathname === '/projects/import' || pathname === '/projects/create' || pathname === '/v2/projects/create';
+  const isShowingPVAorCreationFlow = pathname === '/projects/import' || pathname === '/projects/create';
   const renderDataCollectionDialog =
     isElectron() &&
     !isShowingPVAorCreationFlow &&
