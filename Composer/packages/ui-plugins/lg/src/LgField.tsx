@@ -256,7 +256,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     [onTemplateChange]
   );
 
-  const popExpandOptions = React.useMemo(() => ({ popExpandTitle: label || formatMessage('Bot response') }), []);
+  const popExpandOptions = React.useMemo(() => ({ popExpandTitle: label || formatMessage('Bot response') }), [label]);
 
   return (
     <React.Fragment>
@@ -281,9 +281,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
             styles={linkStyles}
             onClick={modeChange}
           >
-            {editorMode === 'codeEditor'
-              ? formatMessage('Switch to response editor')
-              : formatMessage('Switch to code editor')}
+            {editorMode === 'codeEditor' ? formatMessage('Show response editor') : formatMessage('Show code')}
           </Link>
         </TooltipHost>
       </Stack>

@@ -38,6 +38,17 @@ const Page = {
   ConfigProvision: Symbol('config'),
 };
 
+const formatDialogTitle = (current) => {
+  return {
+    title: current ? formatMessage('Edit publishing profile') : formatMessage('Create a publishing profile'),
+    subText: formatMessage(
+      'To test, run and publish your bot, it needs Azure resources such as app registration, hosting and channels.' +
+        ' Other resources, such as language understanding and storage are optional.' +
+        ' A publishing profile contains all of the information necessary to provision and publish your bot, including its Azure resources.'
+    ),
+  };
+};
+
 export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props) => {
   const {
     current,
@@ -54,13 +65,9 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
   const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
-
-  const [dialogTitle, setTitle] = useState({
-    title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
-    subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
-  });
-
   const [selectedType, setSelectType] = useState<PublishType | undefined>();
+
+  const [dialogTitle, setTitle] = useState(formatDialogTitle(current));
 
   useEffect(() => {
     const ty = types.find((t) => t.name === current?.item.type);
@@ -89,10 +96,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.closeDialog = closeDialog;
     PluginAPI.publish.onBack = () => {
       setPage(Page.ProfileForm);
-      setTitle({
-        title: current ? formatMessage('Edit publishing profile') : formatMessage('Add new publishing profile'),
-        subText: formatMessage('A publishing profile provides the secure connectivity required to publish your bot. '),
-      });
+      setTitle(formatDialogTitle(current));
     };
     PluginAPI.publish.getTokenFromCache = () => {
       return {
@@ -220,6 +224,7 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
         minWidth={960}
         modalProps={{
           isBlocking: true,
+          isClickableOutsideFocusTrap: true,
         }}
         onDismiss={closeDialog}
       >

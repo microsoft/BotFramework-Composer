@@ -81,9 +81,9 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
     id: 'publish',
     steps: [
       {
-        id: 'projectSettings',
+        id: 'publish',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navProjectsettings',
+        targetId: 'navPublish',
       },
     ],
     title: formatMessage('Configure and publish'),
@@ -120,7 +120,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
     case 'actions':
       return {
         content: formatMessage(
-          'Actions are the main component of a trigger, they are what enable your bot to take action whether in response to user input or any other event that may occur.'
+          'Actions are the main component of a trigger; they are what enable your bot to take action whether in response to user input or any other event that may occur.'
         ),
         headline: formatMessage('Actions'),
         helpLink: 'https://docs.microsoft.com/en-us/composer/concept-dialog#action',
@@ -168,7 +168,7 @@ export const getTeachingBubble = (id: string | undefined): TeachingBubble => {
         },
       };
 
-    case 'projectSettings':
+    case 'publish':
       return {
         content: formatMessage('Publish your bot to Azure and manage published bots here.'),
         headline: formatMessage('Configure and publish'),

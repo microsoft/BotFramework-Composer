@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef, parseTemplateBody } from '@bfc/shared';
+import { LgTemplateRef, parseTemplateBody, extractTemplateNameFromExpression } from '@bfc/shared';
 import { LgTemplate, useShellApi } from '@bfc/extension-client';
 
 import { locateLgTemplatePosition } from '../locateLgTemplatePosition';
-
-const exprRegex = /^\${(.*)\(\)}$/;
 
 const getAttachmentDisplayText = (template: LgTemplate) => {
   const cardType = template.properties?.$type as string;
@@ -31,10 +29,9 @@ const getLgTemplateTextData = (
         if (responseType === 'Text' || responseType === 'Speak') {
           const subTemplateItem = template.properties[responseType];
           if (subTemplateItem && typeof subTemplateItem === 'string') {
-            const matched = subTemplateItem.trim().match(exprRegex);
+            const subTemplateId = extractTemplateNameFromExpression(subTemplateItem.trim());
             //If it's a template
-            if (matched && matched.length > 1) {
-              const subTemplateId = matched[1];
+            if (subTemplateId) {
               const subTemplate = templates.find((x) => x.name === subTemplateId);
               // If found template and it matches auto-generated names
               if (subTemplate) {
@@ -57,10 +54,9 @@ const getLgTemplateTextData = (
             : [template.properties[responseType]]) as string[];
           const subTemplateItem = subTemplateItems[0];
           if (subTemplateItem && typeof subTemplateItem === 'string') {
-            const matched = subTemplateItem.trim().match(exprRegex);
-            //If it's a template
-            if (matched && matched.length > 1) {
-              const subTemplateId = matched[1];
+            const subTemplateId = extractTemplateNameFromExpression(subTemplateItem.trim());
+            // If it's a template
+            if (subTemplateId) {
               const subTemplate = templates.find((x) => x.name === subTemplateId);
               if (subTemplate) {
                 acc[responseType] = {

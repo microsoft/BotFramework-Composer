@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -12,7 +12,7 @@ import { DisplayMarkdownDialog } from '@bfc/ui-shared';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import { localBotsDataSelector } from '../../recoilModel/selectors/project';
-import { currentProjectIdState } from '../../recoilModel';
+import { currentProjectIdState, schemaDiagnosticsSelectorFamily } from '../../recoilModel';
 import { ManageLuis } from '../ManageLuis/ManageLuis';
 import { ManageQNA } from '../ManageQNA/ManageQNA';
 import { dispatcherState, settingsState } from '../../recoilModel';
@@ -20,7 +20,7 @@ import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/u
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
 import { usePVACheck } from '../../hooks/usePVACheck';
-import { projectReadmeState } from '../../recoilModel/atoms';
+import { debugPanelActiveTabState, debugPanelExpansionState, projectReadmeState } from '../../recoilModel/atoms';
 
 import { GetStartedTask } from './GetStartedTask';
 import { NextStep } from './types';
@@ -42,7 +42,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const [displayManageQNA, setDisplayManageQNA] = useState<boolean>(false);
   const readme = useRecoilValue(projectReadmeState(projectId));
   const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
-
+  const schemaDiagnostics = useRecoilValue(schemaDiagnosticsSelectorFamily(projectId));
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
@@ -50,6 +50,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const [requiredNextSteps, setRequiredNextSteps] = useState<NextStep[]>([]);
   const [recommendedNextSteps, setRecommendedNextSteps] = useState<NextStep[]>([]);
   const [optionalSteps, setOptionalSteps] = useState<NextStep[]>([]);
+  const setExpansion = useSetRecoilState(debugPanelExpansionState);
+  const setActiveTab = useSetRecoilState(debugPanelActiveTabState);
 
   const [highlightLUIS, setHighlightLUIS] = useState<boolean>(false);
   const [highlightQNA, setHighlightQNA] = useState<boolean>(false);
@@ -129,11 +131,35 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
         ? true
         : false;
 
+    if (schemaDiagnostics.length) {
+      newNextSteps.push({
+        key: 'customActions',
+        label: formatMessage('Review deactivated custom actions'),
+        description: formatMessage('We detected {length} custom {obj} that are not support for Composer 2.0.', {
+          length: schemaDiagnostics.length,
+          obj: `component${schemaDiagnostics.length > 1 ? 's' : ''}`,
+        }),
+        required: true,
+        checked: false,
+        onClick: (step) => {
+          TelemetryClient.track('GettingStartedActionClicked', {
+            taskName: 'customActionsCheck',
+            priority: 'required',
+          });
+          setExpansion(true);
+          setActiveTab('Diagnostics');
+        },
+        hideFeatureStep: false,
+      });
+    }
+
     if (props.requiresLUIS) {
       newNextSteps.push({
         key: 'luis',
-        label: formatMessage('Add a LUIS key'),
-        description: formatMessage('Setup Language Understanding so that you can start and test your bot.'),
+        label: formatMessage('Set up Language Understanding'),
+        description: formatMessage(
+          'Use machine learning to understand natural language input and direct the conversation flow.'
+        ),
         learnMore: 'https://aka.ms/composer-luis-learnmore',
         required: true,
         checked: hasLUIS,
@@ -153,8 +179,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     if (props.requiresQNA) {
       newNextSteps.push({
         key: 'qna',
-        label: formatMessage('Add a QnA Maker key'),
-        description: formatMessage('Your template requires QnA Maker to access content for your bot.'),
+        label: formatMessage('Set up QnA Maker'),
+        description: formatMessage(
+          'Use Azure QnA Maker to create a simple question-and-answer bot from a website FAQ.'
+        ),
         learnMore: 'https://aka.ms/composer-addqnamaker-learnmore',
         required: true,
         checked: hasQNA,
@@ -196,7 +224,9 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       newRecomendedSteps.push({
         key: 'publishing',
         label: formatMessage('Create a publishing profile'),
-        description: formatMessage('Set up hosting and other Azure resources to enable publishing'),
+        description: formatMessage(
+          'A publishing profile provides the secure connectivity required to publish your bot.'
+        ),
         checked: hasPublishingProfile,
         learnMore: 'https://aka.ms/composer-getstarted-publishingprofile',
         onClick: () => {
@@ -225,8 +255,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
     newRecomendedSteps.push({
       key: 'editlg',
-      label: formatMessage('Edit what your bot says'),
-      description: formatMessage('Customize your bot by editing and adding bot responses.'),
+      label: formatMessage('Edit bot responses'),
+      description: formatMessage(
+        "Define your bot's responses, add phrase variations, execute simple expressions based on context, or refer to conversational memory."
+      ),
       learnMore: 'https://aka.ms/composer-getstarted-editbotsays',
       checked: false,
       onClick: () => {
@@ -237,8 +269,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
     });
     newRecomendedSteps.push({
       key: 'editlu',
-      label: formatMessage('Train your language model'),
-      description: formatMessage('Ensure your bot can understand your users by frequently training your LUIS model.'),
+      label: formatMessage('Edit user input and triggers'),
+      description: formatMessage('Define user input and trigger phrases to direct the conversation flow.'),
       learnMore: 'https://aka.ms/composer-luis-learnmore',
       checked: false,
       onClick: () => {
@@ -254,7 +286,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       {
         key: 'packages',
         label: formatMessage('Add packages'),
-        description: formatMessage('Visit the Package manager to browse packages to add to your bot.'),
+        description: formatMessage('Extend your bot with reusable dialogs, bot response templates and custom actions.'),
         learnMore: 'https://aka.ms/composer-getstarted-addpackages',
         checked: false,
         onClick: () => {
@@ -265,10 +297,8 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       },
       {
         key: 'insights',
-        label: formatMessage('Enable Insights'),
-        description: formatMessage(
-          'Collect service-level and conversation-level data to help gauge the performance and efficacy of your bot.'
-        ),
+        label: formatMessage('Enable App Insights'),
+        description: formatMessage('Collect information about the use and performance of your bot.'),
         learnMore: 'https://aka.ms/composer-getstarted-enableinsights',
         checked: false,
         onClick: () => {
@@ -279,8 +309,10 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
       },
       {
         key: 'devops',
-        label: formatMessage('Publish to Dev Ops'),
-        description: formatMessage('Learn how to publish to a Dev Ops pipeline using CI / CD.'),
+        label: formatMessage('Set up continuous deployment (DevOps)'),
+        description: formatMessage(
+          'Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates.'
+        ),
         learnMore: 'https://aka.ms/bfcomposercicd',
         checked: false,
         onClick: () => {

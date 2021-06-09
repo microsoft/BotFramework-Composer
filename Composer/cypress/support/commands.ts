@@ -5,23 +5,7 @@ import '@testing-library/cypress/add-commands';
 
 let TemplateBotProjectId = '';
 
-Cypress.Commands.add('createBot', (botId: string, botName?: string) => {
-  const name = `__Test${botName || botId}`;
-
-  const params = {
-    storageId: 'default',
-    name,
-    description: '',
-    templateId: botId,
-  };
-
-  cy.request('post', '/api/projects', params).then((res) => {
-    const { id: projectId } = res.body;
-    cy.visit(`/bot/${projectId}/dialogs/${name.toLowerCase()}`);
-  });
-});
-
-Cypress.Commands.add('createBotV2', (botName: string, callback: (bot: any) => void) => {
+Cypress.Commands.add('createBot', (botName: string, callback: (bot: any) => void) => {
   const params = {
     description: '',
     location: '',
@@ -50,7 +34,7 @@ Cypress.Commands.add('createBotV2', (botName: string, callback: (bot: any) => vo
     }
   };
 
-  cy.request('post', '/api/v2/projects', params).then((res) => {
+  cy.request('post', '/api/projects', params).then((res) => {
     const { jobId } = res.body;
     // install package can take a long time.
     cy.wait(20000);
@@ -59,7 +43,7 @@ Cypress.Commands.add('createBotV2', (botName: string, callback: (bot: any) => vo
 });
 
 Cypress.Commands.add('createTemplateBot', (botName: string, callback: (bot: any) => void) => {
-  cy.createBotV2(`TemplateBot_${botName}`, (bot) => {
+  cy.createBot(`TemplateBot_${botName}`, (bot) => {
     TemplateBotProjectId = bot.id;
   });
 });
@@ -83,9 +67,9 @@ Cypress.Commands.add('withinEditor', (editorName, cb) => {
   cy.findByTestId(editorName).within(cb);
 });
 
-Cypress.Commands.add('visitPage', (page) => {
+Cypress.Commands.add('visitPage', (page: string, checked = true) => {
   cy.findByTestId(`LeftNav-CommandBarButton${page}`).click();
-  cy.findByTestId('ActiveLeftNavItem').should('contain', page);
+  if (checked) cy.findByTestId('ActiveLeftNavItem').should('contain', page);
 
   // click the logo to clear any stray tooltips from page navigation
   cy.findByAltText('Composer Logo').click({ force: true });

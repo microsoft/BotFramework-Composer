@@ -463,6 +463,19 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
 
+export const isAdaptiveRuntime = (settings): boolean => {
+  return settings?.runtime?.key?.match(/^adaptive-runtime/) ? true : false;
+};
+
+export const isOldCustomRuntime = (settings): boolean => {
+  const keys = ['node-azurewebapp', 'csharp-azurewebapp'];
+  return keys.includes(settings?.runtime?.key);
+};
+
+export const isPVA = (settings): boolean => {
+  return settings?.publishTargets?.some((target) => target.type === 'pva-publish-composer');
+};
+
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { set } = callbackHelpers;
   const { botName, botEnvironment, location, readme, schemas, settings, id: projectId, diagnostics } = data;
@@ -479,7 +492,6 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     recognizers,
     crossTrainConfig,
   } = botFiles;
-
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   languageStorage.setLocale(botName, locale);
@@ -603,6 +615,7 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   if (error) {
     throw error;
   }
+
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   set(projectMetaDataState(projectData.id), {
     isRootBot: false,
@@ -621,6 +634,7 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
 export const createNewBotFromTemplate = async (
   callbackHelpers,
   templateId: string,
+  templateVersion: string,
   name: string,
   description: string,
   location: string,
@@ -631,10 +645,10 @@ export const createNewBotFromTemplate = async (
   alias?: string,
   preserveRoot?: boolean
 ) => {
-  const { set } = callbackHelpers;
-  const response = await httpClient.post(`/projects`, {
+  const jobId = await httpClient.post(`/projects`, {
     storageId: 'default',
     templateId,
+    templateVersion,
     name,
     description,
     location,
@@ -645,22 +659,28 @@ export const createNewBotFromTemplate = async (
     alias,
     preserveRoot,
   });
-  const { botFiles, projectData } = await loadProjectData(response.data);
-  const projectId = response.data.id;
-  if (settingStorage.get(projectId)) {
-    settingStorage.remove(projectId);
-  }
-  const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-  set(botProjectFileState(projectId), currentBotProjectFileIndexed);
+  return jobId;
+};
 
-  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
-  // if create from QnATemplate, continue creation flow.
-  if (templateId === QnABotTemplateId) {
-    set(createQnAOnState, { projectId, dialogId: mainDialog });
-    set(showCreateQnAFromUrlDialogState(projectId), true);
-  }
-
-  return { projectId, mainDialog };
+export const migrateToV2 = async (
+  callbackHelpers,
+  oldProjectId: string,
+  name: string,
+  description: string,
+  location: string,
+  runtimeLanguage: string,
+  runtimeType: string
+) => {
+  const jobId = await httpClient.post(`projects/migrate`, {
+    storageId: 'default',
+    oldProjectId,
+    name,
+    description,
+    location,
+    runtimeLanguage,
+    runtimeType,
+  });
+  return jobId;
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
@@ -703,6 +723,8 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
 
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
   set(botProjectIdsState, [rootBotProjectId]);
+  // Get the publish types on opening
+  dispatcher.getPublishTargetTypes(rootBotProjectId);
   // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
   if (botFiles?.botProjectSpaceFiles?.length) {
@@ -776,6 +798,8 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, d
   return {
     mainDialog,
     projectId: rootBotProjectId,
+    requiresMigrate: !isAdaptiveRuntime(botFiles.mergedSettings) && !isPVA(botFiles.mergedSettings),
+    hasOldCustomRuntime: isOldCustomRuntime(botFiles.mergedSettings),
   };
 };
 
@@ -831,6 +855,7 @@ export const openRootBotAndSkillsByProjectId = async (callbackHelpers: CallbackI
   if (data.error) {
     throw data.error;
   }
+
   return await openRootBotAndSkills(callbackHelpers, data);
 };
 

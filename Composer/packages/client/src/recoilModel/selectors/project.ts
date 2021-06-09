@@ -376,7 +376,7 @@ export const webChatEssentialsSelector = selectorFamily<WebChatEssentials, strin
       msPassword: settings.MicrosoftAppPassword || '',
     };
     const botEndpoints = get(botEndpointsState);
-    const botUrl = botEndpoints[projectId];
+    const botUrl = botEndpoints[projectId]?.url;
     const botName = get(botDisplayNameState(projectId));
     const activeLocale = get(localeState(projectId));
     const botStatus = get(botStatusState(projectId));

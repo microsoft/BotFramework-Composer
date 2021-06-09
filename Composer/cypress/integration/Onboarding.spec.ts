@@ -6,12 +6,12 @@ context('Onboarding', () => {
     cy.createTestBot('TestSample', ({ id }) => {
       cy.visit(`/bot/${id}`);
       //enable onboarding setting
-      cy.visitPage('Composer settings');
+      cy.visitPage('Composer settings', false);
       cy.findByTestId('ProjectTree').within(() => {
         cy.findByText('Application Settings').click();
       });
       cy.findByTestId('onboardingToggle').click();
-      cy.visitPage('Design');
+      cy.visitPage('Create');
     });
   });
 

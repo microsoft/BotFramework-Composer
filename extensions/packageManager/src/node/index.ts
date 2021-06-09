@@ -28,7 +28,7 @@ const hasSchema = (c) => {
 };
 
 const isAdaptiveComponent = (c) => {
-  return hasSchema(c) || c.includesExports;
+  return c.name && c.version && (hasSchema(c) || c.includesExports);
 };
 
 const readFileAsync = async (path, encoding) => {
@@ -367,11 +367,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
             const installedComponents = await loadPackageAssets(mergeResults.components.filter(isAdaptiveComponent));
             if (mergeResults) {
-              res.json({
-                success: true,
-                components: installedComponents,
-              });
-
               let runtimeLanguage = 'c#';
               if (
                 currentProject.settings.runtime.key === 'node-azurewebapp' ||
@@ -386,11 +381,15 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
                 newlyInstalledPlugin &&
                 !currentProject.settings.runtimeSettings?.components?.find((p) => p.name === newlyInstalledPlugin.name)
               ) {
-                const newSettings = currentProject.settings;
+                const newSettings = await currentProject.getEnvSettings();
+                // guard against missing settings keys
                 if (!newSettings.runtimeSettings) {
                   newSettings.runtimeSettings = {
                     components: [],
                   };
+                }
+                if (!newSettings.runtimeSettings.components) {
+                  newSettings.runtimeSettings.components = [];
                 }
                 newSettings.runtimeSettings.components.push({
                   name: newlyInstalledPlugin.name,
@@ -399,6 +398,11 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
                 currentProject.updateEnvSettings(newSettings);
               }
               updateRecentlyUsed(installedComponents, runtimeLanguage);
+
+              res.json({
+                success: true,
+                components: installedComponents,
+              });
             } else {
               res.json({
                 success: false,
@@ -475,7 +479,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
 
           // update the settings.components array
           if (currentProject.settings.runtimeSettings?.components?.find((p) => p.name === packageName)) {
-            const newSettings = currentProject.settings;
+            const newSettings = await currentProject.getEnvSettings();
             newSettings.runtimeSettings.components = newSettings.runtimeSettings.components.filter(
               (p) => p.name !== packageName
             );

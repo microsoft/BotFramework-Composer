@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Request, Response } from 'express';
 import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -10,18 +9,7 @@ import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
 import { sortTemplates } from '../utility/creation';
 
-async function getProjTemplates(req: Request, res: Response) {
-  try {
-    const templates = await AssetService.manager.getProjectTemplates();
-    res.status(200).json(templates);
-  } catch (error) {
-    res.status(400).json({
-      message: error instanceof Error ? error.message : error,
-    });
-  }
-}
-
-export async function getProjTemplatesV2(req: any, res: any) {
+export async function getProjTemplates(req: any, res: any) {
   try {
     let templates: BotTemplate[] = [];
 
@@ -73,6 +61,18 @@ export async function getProjTemplatesV2(req: any, res: any) {
   }
 }
 
+export async function getLatestGeneratorVersion(moduleName: string): Promise<string> {
+  try {
+    const moduleURL = `https://registry.npmjs.org/${moduleName}`;
+    const response = await fetch(moduleURL);
+    const data = await response.json();
+    return data['dist-tags'].latest || '*';
+  } catch (err) {
+    log('Could not retrieve latest generator version', err);
+    return '*';
+  }
+}
+
 export async function getTemplateReadMe(req: any, res: any) {
   try {
     const moduleName = req.query?.moduleName;
@@ -104,6 +104,5 @@ export async function getTemplateReadMe(req: any, res: any) {
 
 export const AssetController = {
   getProjTemplates: getProjTemplates,
-  getProjTemplatesV2: getProjTemplatesV2,
   getTemplateReadMe: getTemplateReadMe,
 };
