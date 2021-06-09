@@ -47,12 +47,40 @@ const AttachmentModalityEditor = React.memo(
         onUpdateResponseTemplate({
           Attachments: {
             kind: 'Attachments',
-            value: newItems.map((item) => `\${json(${item}())}`),
+            value: newItems.map((item) => {
+              const template = lgTemplates?.find((t) => t.name === item);
+              const isAdaptiveCard = template?.body?.includes(`"AdaptiveCard"`);
+              return isAdaptiveCard ? `\${json(${item}())}` : `\${${item}()}`;
+            }),
             valueType: 'direct',
           },
         });
       },
-      [setItems, onUpdateResponseTemplate]
+      [onUpdateResponseTemplate, lgTemplates]
+    );
+
+    const handleTemplateChange = React.useCallback(
+      (templateId: string, body?: string | undefined) => {
+        const isAdaptiveCard = body?.includes(`"AdaptiveCard"`);
+
+        if (isAdaptiveCard && items.includes(templateId)) {
+          onUpdateResponseTemplate({
+            Attachments: {
+              kind: 'Attachments',
+              value: items.map((item) => {
+                if (item === templateId) {
+                  return isAdaptiveCard ? `\${json(${item}())}` : `\${${item}()}`;
+                }
+                return `\${${item}()}`;
+              }),
+              valueType: 'direct',
+            },
+          });
+        }
+
+        onTemplateChange(templateId, body);
+      },
+      [onUpdateResponseTemplate, onTemplateChange, items]
     );
 
     const attachmentLayoutOptions = React.useMemo<IDropdownOption[]>(
@@ -113,7 +141,7 @@ const AttachmentModalityEditor = React.memo(
           telemetryClient={telemetryClient}
           onChange={handleChange}
           onRemoveTemplate={onRemoveTemplate}
-          onTemplateChange={onTemplateChange}
+          onTemplateChange={handleTemplateChange}
         />
       </ModalityEditorContainer>
     );
