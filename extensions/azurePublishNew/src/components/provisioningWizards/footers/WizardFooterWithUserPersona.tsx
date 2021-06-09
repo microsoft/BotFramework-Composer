@@ -8,11 +8,12 @@ import { DefaultButton, PersonaSize } from 'office-ui-fabric-react';
 
 import { UserInfo } from '../../../recoilModel/types';
 import { UserPersona } from '../../shared/userPersona/UserPersona';
-import { WizardNavigationState } from '../../shared/wizard/WizardNew';
+import { WizardStep } from '../../shared/wizard';
 
 type ProvisonActionsStylingProps = {
   showSignout: boolean;
 };
+
 const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
   display: 'flex',
   flexFlow: 'row nowrap',
@@ -20,42 +21,35 @@ const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
 }));
 
 const FooterButton = styled(DefaultButton)`
-  margin: '0 4px';
+  margin: 0 4px;
 `;
 
-type Props = { userInfo: UserInfo } & WizardNavigationState;
-
-const messages = {
-  back: formatMessage('Back'),
-  cancel: formatMessage('Cancel'),
-  next: formatMessage('Next'),
-};
+type Props = { userInfo: UserInfo } & WizardStep;
 
 export const WizardFooterWithUserPersona = (props: Props) => {
-  const isSignin = !!props.userInfo;
+  const { userInfo, navigationState: navigation } = props;
+  const isSignedIn = !!props.userInfo;
+
   return (
-    <ProvisonActions showSignout={isSignin}>
-      {isSignin ? (
-        <UserPersona secondaryText={formatMessage('Sign out')} size={PersonaSize.size40} text={props.userInfo?.name} />
+    <ProvisonActions showSignout={isSignedIn}>
+      {isSignedIn ? (
+        <UserPersona secondaryText={formatMessage('Sign out')} size={PersonaSize.size40} text={userInfo?.name} />
       ) : null}
       <div>
         <FooterButton
-          disabled={!props.canGoBack}
-          style={{ margin: '0 4px' }}
-          text={props.backText || messages.back}
+          disabled={!navigation.canGoBack}
+          text={formatMessage(navigation.backText || 'Back')}
           onClick={() => props.onBack()}
         />
         <FooterButton
           primary
-          disabled={!props.canGoNext}
-          style={{ margin: '0 4px' }}
-          text={props.nextText || messages.next}
+          disabled={!navigation.canGoNext}
+          text={formatMessage(navigation.nextText || 'Next')}
           onClick={() => props.onNext()}
         />
         <FooterButton
-          disabled={!props.canCancel}
-          style={{ margin: '0 4px' }}
-          text={props.cancelText || messages.cancel}
+          disabled={!navigation.canCancel}
+          text={formatMessage(navigation.cancelText || 'Cancel')}
           onClick={() => props.onCancel()}
         />
       </div>

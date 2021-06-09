@@ -8,42 +8,42 @@ import styled from '@emotion/styled';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { Link, Stack } from 'office-ui-fabric-react';
 
-export const Content = styled(Stack)`
+const Content = styled(Stack)`
   padding: 0px 20px;
 `;
 
-export const Title = styled(Text)`
+const Title = styled(Text)`
   font-size: ${FluentTheme.fonts.xLarge.fontSize};
   margin: 8px 0;
 `;
 
-export const Summary = styled.div`
+const Summary = styled.div`
   margin: 8px 0;
 `;
 
-export const Details = styled(Stack)`
+const Details = styled(Stack)`
   margin: 10px 0;
 `;
 
-export const Instruction = styled(Stack)`
+const Instruction = styled(Stack)`
   margin: 10px 0;
 `;
 
-export const InstructionTitle = styled(Text)`
+const InstructionTitle = styled(Text)`
   font-size: ${FluentTheme.fonts.smallPlus.fontSize};
   text-transform: uppercase;
 `;
 
-export const InstructionDetails = styled.div`
+const InstructionDetails = styled.div`
   margin: 10px 0;
 `;
 
-export const LearnMoreLink = styled(Link)`
+const LearnMoreLink = styled(Link)`
   user-select: none;
   font-size: 14px;
 `;
 
-export const CreateActionContentStep = () => {
+export const CreateResourceInstructionsStep = () => {
   return (
     <Content>
       <Title>{formatMessage('Create new resources')}</Title>

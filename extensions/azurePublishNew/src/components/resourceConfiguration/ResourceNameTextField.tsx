@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import React from 'react';
 import { ITextFieldProps, TextField } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
 
 type Props = {
-  onResourceNameChange: React.Dispatch<React.SetStateAction<string>>;
+  onHostNameChange: (hostName: string) => void;
   accessToken: string;
 } & ITextFieldProps;
 
@@ -12,12 +14,9 @@ export const ResourceNameTextField = React.memo((props: Props) => {
   return (
     <TextField
       required
-      label="Subscriptions"
-      placeholder="Select subscription"
-      onChange={(event, newValue) => props.onResourceNameChange(newValue)}
+      placeholder={formatMessage('Enter host name')}
+      onChange={(_, newValue) => props.onHostNameChange(newValue)}
       {...props}
     />
   );
 });
-
-//TODO: Handle Client/server side validation

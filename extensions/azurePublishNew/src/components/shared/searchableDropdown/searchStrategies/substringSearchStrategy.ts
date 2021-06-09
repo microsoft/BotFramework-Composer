@@ -2,10 +2,6 @@
 // Licensed under the MIT License.
 
 /**
- * Copyright (c) Microsoft. All rights reserved.
- */
-
-/**
  * Searches an array of strings using the index of with logic; finds the
  * strings that have the needle as a sub string.
  *

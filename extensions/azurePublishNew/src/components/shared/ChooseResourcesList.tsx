@@ -109,18 +109,14 @@ export const ChooseResourcesList = (props: Props) => {
   const onCheckboxChanged = (ev: React.FormEvent<HTMLElement>, checked: boolean, item: ResourceListItem): void => {
     let newSelectedKeys = undefined;
     if (item.required || checked) {
-      if (!selectedKeys.includes(item.ke)) {
+      if (!selectedKeys.includes(item.key)) {
         newSelectedKeys = [...selectedKeys, item.key];
       }
     } else {
       newSelectedKeys = selectedKeys.filter((i: string) => i !== item.key);
     }
-
     setSelectedKeys(newSelectedKeys);
-
-    if (onSelectionChanged) {
-      onSelectionChanged(newSelectedKeys);
-    }
+    onSelectionChanged?.(newSelectedKeys);
   };
 
   // ----- Render

@@ -5,20 +5,17 @@ import React, { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 
-import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoComplete';
+import { SearchableDropdown, SearchableDropdownProps } from '../shared/searchableDropdown/SearchableDropdown';
 import { getResourceGroups } from '../../api';
 
 type Props = {
   allowCreation?: boolean;
   subscriptionId: string;
   canRefresh?: boolean;
-  onResourceGroupChange: React.Dispatch<React.SetStateAction<string>>;
+  onResourceGroupChange: (rg: string) => void;
   accessToken: string;
-} & Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
+} & Omit<SearchableDropdownProps, 'items' | 'onSubmit'>;
 
-const messages = {
-  placeholder: formatMessage('Select Resource Group'),
-};
 export const ResourceGroupPicker = React.memo((props: Props) => {
   const { accessToken, subscriptionId, onResourceGroupChange } = props;
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
@@ -28,43 +25,35 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
   useEffect(() => {
     if (accessToken && subscriptionId) {
       setIsLoading(true);
-      getResourceGroups(accessToken, subscriptionId)
-        .then((data) => {
-          setResourceGroups(data);
+      (async () => {
+        try {
+          const resourceGroups = await getResourceGroups(accessToken, subscriptionId);
+          setResourceGroups(resourceGroups);
           setIsLoading(false);
-        })
-        .catch((err) => {
-          setErrorMessage(formatMessage(err.message));
+        } catch (ex) {
+          setResourceGroups([]);
           setIsLoading(false);
-        })
-        .finally(() => {
-          isLoading && setIsLoading(false);
-        });
-    } else {
-      resourceGroups?.length > 0 && setResourceGroups([]);
+          setErrorMessage(ex.message);
+        }
+      })();
     }
   }, [accessToken, props.subscriptionId]);
 
   const localTextFieldProps = {
-    placeholder: messages.placeholder,
-  };
-
-  const getValue = () => {
-    if (props.value) {
-      return resourceGroups.find((rg) => rg.id === props.value)?.name;
-    } else {
-      return '';
-    }
+    placeholder: formatMessage('Select Resource Group'),
   };
 
   return (
     <>
-      <AutoComplete
+      <SearchableDropdown
         errorMessage={errorMessage}
         isLoading={isLoading}
-        items={resourceGroups.map((t) => ({ key: t.id, text: t.name }))}
-        onSubmit={(option) => onResourceGroupChange(option.id)}
-        {...{ ...props, textFieldProps: { ...localTextFieldProps, ...props.textFieldProps }, value: getValue() }}
+        items={resourceGroups.map((t) => ({ key: t.name, text: t.name }))}
+        onSubmit={(option) => onResourceGroupChange(option.key)}
+        {...{
+          ...props,
+          textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },
+        }}
       />
     </>
   );

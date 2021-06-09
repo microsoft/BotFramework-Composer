@@ -4,47 +4,53 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { RecoilRoot } from 'recoil';
+import { usePublishApi } from '@bfc/extension-client';
 
 import { ProvisionAction } from '../types';
 
-import { ChooseProvisionAction } from './ChooseProvisionActionStep';
+import { ChooseProvisionAction } from './ChooseProvisionAction';
 import { CreateResourcesWizard, HandOffToAdminWizard, ImportResourcesWizard } from './provisioningWizards';
-type RootStyleProps = {
-  stepIndex: number;
-};
-const Root = styled.div<RootStyleProps>(({ stepIndex }) => ({
-  height: stepIndex === 1 ? 'unset' : 'calc(100vh - 65px)',
-}));
+
+const Root = styled.div`
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30% 1fr;
+  grid-template-rows: 1fr;
+`;
 
 export const AzureProvisionWizard = () => {
   const [provisionAction, setProvisionAction] = useState<ProvisionAction>('create');
-  const [activeStepIndex, setActiveStepIndex] = useState<number>(1);
+  const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
+  const { setTitle } = usePublishApi();
+
+  const handleStepChange = (index, step) => {
+    setActiveStepIndex(index);
+    step && setTitle({ title: step.title, subText: step.subTitle });
+  };
 
   const renderContent = React.useCallback(() => {
     switch (provisionAction) {
       case 'create':
-        return (
-          <CreateResourcesWizard stepIndex={activeStepIndex} onStepChange={(s) => setActiveStepIndex(parseInt(s))} />
-        );
+        return <CreateResourcesWizard stepIndex={activeStepIndex} onStepChange={handleStepChange} />;
       case 'import':
-        return <ImportResourcesWizard />;
+        return <ImportResourcesWizard stepIndex={activeStepIndex} onStepChange={handleStepChange} />;
       case 'generate':
-        return <HandOffToAdminWizard />;
+        return <HandOffToAdminWizard stepIndex={activeStepIndex} onStepChange={handleStepChange} />;
     }
   }, [provisionAction, activeStepIndex]);
 
-  // const content = React.useMemo(() => renderContent(), [renderContent]);
-
   return (
     <RecoilRoot>
-      <Root stepIndex={activeStepIndex}>
-        <ChooseProvisionAction
-          selectedProvisionAction={provisionAction}
-          showChoices={activeStepIndex === 1}
-          onChangeSelectedProvisionAction={setProvisionAction}
-        >
-          {renderContent()}
-        </ChooseProvisionAction>
+      <Root>
+        {!activeStepIndex && (
+          <ChooseProvisionAction
+            selectedProvisionAction={provisionAction}
+            showChoices={activeStepIndex === 0}
+            onChangeSelectedProvisionAction={setProvisionAction}
+          ></ChooseProvisionAction>
+        )}
+        {renderContent()}
       </Root>
     </RecoilRoot>
   );

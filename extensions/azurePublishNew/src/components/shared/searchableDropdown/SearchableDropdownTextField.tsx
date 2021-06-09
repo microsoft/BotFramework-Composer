@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import React from 'react';
 import formatMessage from 'format-message';
 import { ITextField, ITextFieldProps, TextField } from 'office-ui-fabric-react';
 
-export type AutoCompleteTextFieldProps = ITextFieldProps & {
+export type SearchableDropdownTextFieldProps = ITextFieldProps & {
   /**
    * A handy callback for when the enter key
    * is pressed.
@@ -17,14 +18,17 @@ export type AutoCompleteTextFieldProps = ITextFieldProps & {
    */
   'data-automation-id'?: string;
 };
+
 const messages = {
   typeText: formatMessage('Type text here ...'),
   textField: formatMessage('Textfield'),
 };
-export const AutoCompleteTextField = React.forwardRef(
-  (props: AutoCompleteTextFieldProps, tagInputFieldRef: React.MutableRefObject<ITextField>) => {
+
+export const SearchableDropdownTextField = React.forwardRef(
+  (props: SearchableDropdownTextFieldProps, tagInputFieldRef: React.MutableRefObject<ITextField>) => {
     const { onEnterKeyUp, onKeyDown, componentRef } = props;
     const { placeholder = messages.typeText, errorMessage } = props;
+
     /**
      * Intercepts the key up event to handle the Enter key press.
      *

@@ -47,10 +47,10 @@
     "@azure/ms-rest-browserauth": "0.1.4",
     "@azure/ms-rest-js": "^2.0.7",
     "@azure/ms-rest-nodeauth": "3.0.3",
-    "@bfc/built-in-functions": "../../Composer/packages/tools/built-in-functions",
+    "@monaco-editor/react": "^3.1.0",
+    "monaco-editor": "^0.19.0",
+    "monaco-languageclient": "^0.10.0",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
-    "@bfc/indexers": "../../Composer/packages/lib/indexers",
-    "@bfc/shared": "../../Composer/packages/lib/shared",
     "@bfc/ui-shared": "../../Composer/packages/lib/ui-shared",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
@@ -78,7 +78,6 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.9.6",
-    "@bfc/code-editor": "../../Composer/packages/lib/code-editor",
     "@botframework-composer/test-utils": "^0.0.1",
     "@botframework-composer/types": "file:../../Composer/packages/types",
     "@types/archiver": "3.1.0",
@@ -87,11 +86,11 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/request": "2.48.4",
-    "@types/request-promise": "4.1.45",
     "html-webpack-plugin": "^4.3.0",
     "ts-loader": "^8.0.0",
     "typescript": "^3.9.6",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "@uifabric/fluent-theme": "^7.1.4"
   }
 }
