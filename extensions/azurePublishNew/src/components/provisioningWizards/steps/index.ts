@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 export * from './ChooseResourcesStep';
-export * from './CreateActionContentStep';
-export * from './HandOffInstructionsStep';
-export * from './ImportInstructionsStep';
+export * from './CreateResourceInstructionsStep';
 export * from './ResourceConfigurationStep';
 export * from './ReviewResourcesStep';
+export * from './ImportInstructionsStep';
+export * from './HandOffInstructionsStep';

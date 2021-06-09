@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/**
- * Copyright (c) Microsoft. All rights reserved.
- */
-
 import { ISelection, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import React from 'react';
 

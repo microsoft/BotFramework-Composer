@@ -4,6 +4,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { DefaultButton } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
+
 export type WizardNavigationState = {
   nextText?: string;
   canGoNext?: boolean;
@@ -14,11 +16,13 @@ export type WizardNavigationState = {
   cancelText?: string;
   canCancel?: boolean;
 };
+
 export type ChangeDirection = 'next' | 'back';
+
 export type WizardStep = {
   id: string;
-  title: any;
-  subTitle?: any;
+  title: React.ReactNode;
+  subTitle?: React.ReactNode;
   navigationState?: WizardNavigationState;
   onNext?: (step?: WizardStep) => void;
   onRenderContent: (step: WizardStep) => React.ReactNode;
@@ -28,7 +32,7 @@ export type WizardStep = {
   getBackStepId?: () => string | undefined;
 };
 
-export type Props = {
+type Props = {
   steps: WizardStep[];
   firstStepId?: string;
   navigationState?: WizardNavigationState;
@@ -36,8 +40,9 @@ export type Props = {
   onRenderFooter?: (step: WizardStep) => React.ReactNode;
   getNextStepId?: (currentStep: WizardStep) => string | undefined;
   getBackStepId?: (currentStep: WizardStep) => string | undefined;
-  onStepChange?: (step: WizardStep, changeDirection: ChangeDirection) => void;
+  onStepChange?: (stepIndex: number, step: WizardStep, changeDirection: ChangeDirection) => void;
 };
+
 const Footer = styled.div`
   flex: auto;
   flex-grow: 0;
@@ -47,17 +52,20 @@ const Footer = styled.div`
   text-align: right;
   height: fit-content;
   padding: 24px 0px 0px;
+  grid-column: span 2;
 `;
+
 const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 430px;
-  height: calc(100vh - 65px);
 `;
+
 const FooterButton = styled(DefaultButton)`
   margin: 0 4px;
 `;
+
 export const Wizard = (props: Props) => {
   const {
     steps,
@@ -68,26 +76,24 @@ export const Wizard = (props: Props) => {
     onRenderFooter,
     onRenderHeader,
   } = props;
-  const [currentStepId, setCurrentStepId] = React.useState<string>(
-    firstStepId || (steps.length > 0 ? steps[0].id : '')
-  );
+  const [currentStepId, setCurrentStepId] = React.useState<string>('');
+
+  React.useEffect(() => {
+    !currentStepId && setCurrentStepId(firstStepId ?? steps[0]?.id);
+  }, [firstStepId, steps]);
 
   const stepIndex = React.useMemo(() => {
     return steps.findIndex((step) => step.id === currentStepId);
   }, [steps, currentStepId]);
 
-  const currentStep = React.useMemo(() => {
-    return stepIndex >= 0 && stepIndex < steps.length ? steps[stepIndex] : undefined;
-  }, [stepIndex, steps]);
+  const currentStep = React.useMemo(() => steps[stepIndex], [steps, stepIndex]);
 
   const onNextClick = React.useCallback(() => {
     let nextStepId: string | undefined = undefined;
     let nextStep: WizardStep | undefined = undefined;
 
     // step chooses first
-    if (currentStep?.getNextStepId) {
-      nextStepId = currentStep.getNextStepId();
-    }
+    nextStepId = currentStep?.getNextStepId?.();
 
     // caller chooses next
     if (currentStep && !nextStepId && getNextStepId) {
@@ -108,16 +114,15 @@ export const Wizard = (props: Props) => {
       setCurrentStepId(nextStep.id);
     }
     currentStep?.onNext?.(nextStep);
-    nextStep && onStepChange?.(nextStep, 'next');
-  }, [currentStep]);
+    nextStep && onStepChange?.(stepIndex + 1, nextStep, 'next');
+  }, [currentStep, onStepChange]);
 
   const onBackClick = React.useCallback(() => {
     let backStepId: string | undefined = undefined;
     let backStep: WizardStep | undefined = undefined;
 
-    if (currentStep?.getBackStepId) {
-      backStepId = currentStep.getBackStepId();
-    }
+    backStepId = currentStep?.getBackStepId?.();
+
     if (currentStep && !backStepId && currentStep?.getBackStepId) {
       backStepId = getNextStepId(currentStep);
     }
@@ -132,20 +137,20 @@ export const Wizard = (props: Props) => {
       setCurrentStepId(backStep.id);
     }
     currentStep?.onBack?.(backStep);
-    backStep && onStepChange?.(backStep, 'back');
-  }, [currentStep]);
+    backStep && onStepChange?.(stepIndex - 1, backStep, 'back');
+  }, [currentStep, onStepChange]);
 
   const onCancelClick = () => {};
 
   const defaultNavigationState = React.useMemo<WizardNavigationState>(() => {
     return {
       showBack: stepIndex > 0,
-      backText: 'Back',
+      backText: formatMessage('Back'),
       canGoBack: stepIndex > 0,
-      nextText: 'Next',
+      nextText: formatMessage('Next'),
       canGoNext: stepIndex < steps.length,
       showCancel: true,
-      cancelText: 'Cancel',
+      cancelText: formatMessage('Cancel'),
       canCancel: true,
     };
   }, [steps, stepIndex]);
@@ -155,6 +160,8 @@ export const Wizard = (props: Props) => {
       ...defaultNavigationState,
       ...wizardNavigationState,
       ...currentStep?.navigationState,
+      canGoBack: !!currentStep?.onBack || defaultNavigationState.canGoBack,
+      showBack: !!currentStep?.onBack || defaultNavigationState.canGoBack,
     };
   }, [currentStep, wizardNavigationState, defaultNavigationState]);
 
@@ -166,7 +173,7 @@ export const Wizard = (props: Props) => {
       onBack: onBackClick,
       onCancel: onCancelClick,
     };
-  }, [currentStep, navigationState]);
+  }, [currentStep, navigationState, onNextClick, onBackClick, onCancelClick]);
 
   return (
     <>

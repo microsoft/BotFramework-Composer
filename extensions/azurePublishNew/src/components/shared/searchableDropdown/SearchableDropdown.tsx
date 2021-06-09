@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/**
- * Copyright (c) Microsoft. All rights reserved.
- */
-
 import {
   CommandButton,
   IBaseButtonProps,
@@ -28,9 +24,8 @@ import { ITextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-
 import { classNamesFunction, getId, IStyleFunctionOrObject, SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
 import { ICalloutPositionedInfo } from 'office-ui-fabric-react/lib/utilities/positioning';
 import * as React from 'react';
-import { FluentTheme } from '@uifabric/fluent-theme';
 
-import { AutoCompleteTextField, AutoCompleteTextFieldProps } from './AutoCompleteTextField';
+import { SearchableDropdownTextField, SearchableDropdownTextFieldProps } from './SearchableDropdownTextField';
 import { useSelection } from './hooks/useSelection';
 import { SearchStrategy } from './searchStrategies';
 
@@ -49,7 +44,8 @@ export const KeyCodes = {
   CloseBraces: '}',
   Tab: 'Tab',
 };
-export type IAutoCompleteProps = {
+
+export type SearchableDropdownProps = {
   /**
    * The value set to the dropdown. This is
    * different than the value that is displayed
@@ -88,7 +84,7 @@ export type IAutoCompleteProps = {
    * text field.
    */
   textFieldProps?: Pick<
-    AutoCompleteTextFieldProps,
+    SearchableDropdownTextFieldProps,
     | 'styles'
     | 'className'
     | 'required'
@@ -138,15 +134,8 @@ export type IAutoCompleteProps = {
   errorMessage?: string;
 };
 
-const messages = {
-  noItems: 'No items to show',
-  loadingLabel: 'Loading ...',
-  clearButtonAriaLabel: 'Clear',
-  chevronDownButtonAriaLabel: 'Chevron down',
-  defaultTextFieldAriaLabel: 'Type a value here ...',
-  defaultHiddenLabel: 'Choose item from list',
-};
 const { fonts, palette, semanticColors } = getTheme();
+
 const dropdownTheme = {
   selectedItemBackgroundColor: palette.neutralLighter,
   suffixBackgroundColor: palette.white,
@@ -161,7 +150,7 @@ const Root = styled.div`
 
 const ErrorText = styled.div`
   padding-top: 5px;
-  font-size: ${FluentTheme.fonts.small.fontSize};
+  font-size: ${fonts.small.fontSize};
   color: ${semanticColors.errorText};
 `;
 
@@ -391,7 +380,7 @@ const isItemPartiallyHidden = (panel: Partial<ClientRect>, item: Partial<ClientR
  * Renders a dropdown with a text field that filters
  * the items in the dropdown.
  */
-export const AutoComplete = (props: IAutoCompleteProps) => {
+export const SearchableDropdown = (props: SearchableDropdownProps) => {
   const {
     value,
     onClear,
@@ -406,6 +395,7 @@ export const AutoComplete = (props: IAutoCompleteProps) => {
     allowNonExistingItems = false,
     errorMessage,
   } = props;
+
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const panelIdRef = React.useRef(getId());
@@ -654,7 +644,7 @@ export const AutoComplete = (props: IAutoCompleteProps) => {
       <IconButton
         aria-controls={panelIdRef.current}
         aria-expanded={isMenuOpen}
-        ariaLabel={formatMessage(messages.chevronDownButtonAriaLabel)}
+        ariaLabel={formatMessage('Chevron down')}
         disabled={fieldProps.disabled}
         iconProps={{ iconName: 'ChevronDown' }}
         styles={textFieldButtonStyles}
@@ -664,7 +654,7 @@ export const AutoComplete = (props: IAutoCompleteProps) => {
 
     const clearButton = (
       <IconButton
-        ariaLabel={formatMessage(messages.clearButtonAriaLabel)}
+        ariaLabel={formatMessage('Clear')}
         disabled={fieldProps.disabled}
         iconProps={{ iconName: 'Clear' }}
         styles={textFieldButtonStyles}
@@ -730,7 +720,7 @@ export const AutoComplete = (props: IAutoCompleteProps) => {
         <BlockCommandButton disabled>
           <Stack horizontal tokens={{ childrenGap: 10 }} verticalAlign="center">
             <Spinner size={SpinnerSize.small}></Spinner>
-            <Text>{formatMessage(messages.loadingLabel)}</Text>
+            <Text>{formatMessage('Loading ...')}</Text>
           </Stack>
         </BlockCommandButton>
       );
@@ -739,7 +729,7 @@ export const AutoComplete = (props: IAutoCompleteProps) => {
     if (!filteredItems.length) {
       return (
         !textFieldProps?.errorMessage && (
-          <BlockCommandButton disabled role="alert" text={emptyStatePlaceholder || formatMessage(messages.noItems)} />
+          <BlockCommandButton disabled role="alert" text={emptyStatePlaceholder || formatMessage('No items to show')} />
         )
       );
     }
@@ -765,24 +755,26 @@ export const AutoComplete = (props: IAutoCompleteProps) => {
       </div>
     ));
   };
+
   const hasErrorMessage: boolean = !!errorMessage && errorMessage.length > 0;
+
   return (
     <Root ref={rootRef} className={rootClassName}>
       {!textFieldProps?.label && (
         <span data-automation-id="hiddenLabel" id={labelIdRef.current} style={{ display: 'none' }}>
-          {formatMessage(messages.defaultHiddenLabel)}
+          {formatMessage('Choose item from list')}
         </span>
       )}
 
       <FocusZone direction={FocusZoneDirection.horizontal}>
-        <AutoCompleteTextField
+        <SearchableDropdownTextField
           ref={fieldRef}
           aria-labelledby={labelIdRef.current}
           value={query}
           onRenderLabel={onRenderTextFieldLabel}
           {...textFieldProps}
-          ariaLabel={textFieldProps?.placeholder || formatMessage(messages.defaultTextFieldAriaLabel)}
-          placeholder={isLoading ? formatMessage(messages.loadingLabel) : textFieldProps?.placeholder}
+          ariaLabel={textFieldProps?.placeholder || formatMessage('Type a value here ...')}
+          placeholder={isLoading ? formatMessage('Loading ...') : textFieldProps?.placeholder}
           styles={mergeStyleSets(textFieldStyles, textFieldProps?.styles)}
           onChange={onInputChange}
           onFocus={() => setIsMenuOpen(true)}

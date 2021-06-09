@@ -20,7 +20,7 @@ export const tenantSelectionState = atom<string>({
 });
 
 export const userInfoState = atom<UserInfo | undefined>({
-  key: 'resourceConfiguration_accessToken',
+  key: 'resourceConfiguration_userInfo',
   default: undefined,
 });
 

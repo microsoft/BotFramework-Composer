@@ -80,30 +80,6 @@ const FullWidthForm = styled.form`
   width: '100%';
 `;
 
-//TODO: a wrapper function would be nice eg: formatMessages({})
-const messages = {
-  azureDetails: formatMessage('Azure details'),
-  azureDirectory: formatMessage('Azure Directory'),
-  selectAzureDirectory: formatMessage('Select your Azure directory and subscription, enter resource group name.'),
-  learnMore: formatMessage('Learn more'),
-  enterResourceName: formatMessage('Enter resource name and select region. This will be applied to the new resources.'),
-  activeDirectoryInfo: formatMessage(
-    'Azure Active Directory is Microsoft’s cloud-based identity and access management service.'
-  ),
-  subscription: formatMessage('Subscription'),
-  subscriptionInfo: formatMessage('The subscription that will be billed for the resources.'),
-  resourceGroup: formatMessage('Resource group'),
-  resourceGroupInfo: formatMessage(
-    'A custom resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.'
-  ),
-  resourceDetails: formatMessage('Resource details'),
-  name: formatMessage('Name'),
-  uniqueResourceName: formatMessage('A unique name for your resources.'),
-  region: formatMessage('Region'),
-  luisRegion: formatMessage('LUIS region'),
-  regionIconInfo: formatMessage('The region where your resources and bot will be used.'),
-  luisRegionIconInfo: formatMessage('The region associated with your Language understanding model.'),
-};
 export const ResourceConfigurationStep = (props: Props) => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [tenantId, setTenantId] = useRecoilState(tenantSelectionState);
@@ -113,15 +89,15 @@ export const ResourceConfigurationStep = (props: Props) => {
 
   const { onResourceConfigurationChange } = props;
 
-  const isValidConfiguration = React.useCallback((): boolean => {
-    let isInValid = !tenantId || tenantId.length === 0;
-    isInValid = isInValid || !subscriptionId || subscriptionId.length === 0;
-    return !isInValid;
-  }, [tenantId, subscriptionId]);
+  const isValidConfiguration = React.useMemo((): boolean => !(!tenantId || !subscriptionId || !resourceGroupId), [
+    tenantId,
+    subscriptionId,
+    resourceGroupId,
+  ]);
 
   React.useEffect(() => {
-    onResourceConfigurationChange(isValidConfiguration());
-  }, [tenantId, subscriptionId]);
+    onResourceConfigurationChange(isValidConfiguration);
+  }, [isValidConfiguration]);
 
   const handleTenantChange = (tenantId: string) => {
     setTenantId(tenantId);
@@ -153,16 +129,25 @@ export const ResourceConfigurationStep = (props: Props) => {
       </TooltipHost>
     );
   };
+
   return (
     <ScrollablePane data-is-scrollable="true" scrollbarVisibility={ScrollbarVisibility.auto}>
       <FullWidthForm>
         <Stack>
-          <ConfigureResourcesSectionName>{messages.azureDetails}</ConfigureResourcesSectionName>
-          <ConfigureResourcesSectionDescription>{messages.selectAzureDirectory}</ConfigureResourcesSectionDescription>
+          <ConfigureResourcesSectionName>{formatMessage('Azure details')}</ConfigureResourcesSectionName>
+          <ConfigureResourcesSectionDescription>
+            {formatMessage('Select your Azure directory and subscription, enter resource group name.')}
+          </ConfigureResourcesSectionDescription>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-              <ConfigureResourcesPropertyLabel required>{messages.azureDirectory}</ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon(messages.activeDirectoryInfo)}
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Azure Directory')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage(
+                  'Azure Active Directory is Microsoft’s cloud-based identity and access management service.'
+                )
+              )}
             </Stack>
             <TenantPicker
               textFieldProps={{
@@ -179,14 +164,16 @@ export const ResourceConfigurationStep = (props: Props) => {
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-              <ConfigureResourcesPropertyLabel required>{messages.subscription}</ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon(messages.subscriptionInfo)}
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Subscription')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon('The subscription that will be billed for the resources.')}
             </Stack>
             <SubscriptionPicker
               accessToken={userInfo?.token}
               textFieldProps={{
                 styles: autoCompleteTextFieldStyles,
-                onChange: (e, newValue) => {
+                onChange: (_, newValue) => {
                   if (newValue.length === 0) handleSubscriptionChange('');
                 },
               }}
@@ -197,69 +184,73 @@ export const ResourceConfigurationStep = (props: Props) => {
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-              <ConfigureResourcesPropertyLabel required>{messages.resourceGroup}</ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon(messages.resourceGroupInfo)}
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Resource group')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage(
+                  'A custom resource group name that you choose or create. Resource groups allow you to group Azure resources for access and management.'
+                )
+              )}
             </Stack>
             <ResourceGroupPicker
               accessToken={userInfo?.token}
               subscriptionId={subscriptionId}
-              textFieldProps={{ styles: autoCompleteTextFieldStyles }}
+              textFieldProps={{
+                styles: autoCompleteTextFieldStyles,
+                onChange: (_, newValue) => {
+                  if (newValue.length === 0) handleResourceGroupChange('');
+                },
+              }}
               value={resourceGroupId}
+              onClear={() => handleResourceGroupChange('')}
               onResourceGroupChange={handleResourceGroupChange}
             />
           </Stack>
-          <ConfigureResourcesSectionName>{messages.resourceDetails}</ConfigureResourcesSectionName>
-          <ConfigureResourcesSectionDescription>{messages.enterResourceName}</ConfigureResourcesSectionDescription>
+          <ConfigureResourcesSectionName>{formatMessage('Resource details')}</ConfigureResourcesSectionName>
+          <ConfigureResourcesSectionDescription>
+            {formatMessage('Enter resource name and select region. This will be applied to the new resources.')}
+          </ConfigureResourcesSectionDescription>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-              <ConfigureResourcesPropertyLabel required>{messages.name}</ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon(messages.uniqueResourceName)}
+              <ConfigureResourcesPropertyLabel required>{formatMessage('Name')}</ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(formatMessage('A unique name for your resources.'))}
             </Stack>
-            {/* <TextField
-              disabled={currentConfig?.hostname || currentConfig?.name}
-              errorMessage={errorHostName}
-              placeholder={formatMessage('New resource name')}
-              styles={configureResourceTextFieldStyles}
-              value={formData.hostname}
-              onChange={newHostName}
-            /> */}
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-              <ConfigureResourcesPropertyLabel required>{messages.region}</ConfigureResourcesPropertyLabel>
-              {renderPropertyInfoIcon(messages.regionIconInfo)}
+              <ConfigureResourcesPropertyLabel required>{formatMessage('Region')}</ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon('The region where your resources and bot will be used.')}
             </Stack>
             <DeployLocationPicker
               accessToken={userInfo?.token}
-              subscriptionId={deployLocationId}
-              textFieldProps={{ styles: autoCompleteTextFieldStyles }}
-              value={resourceGroupId}
+              subscriptionId={subscriptionId}
+              textFieldProps={{
+                styles: autoCompleteTextFieldStyles,
+                onChange: (_, newValue) => {
+                  if (newValue.length === 0) handleDeployLocationChange('');
+                },
+              }}
+              value={deployLocationId}
+              onClear={() => handleDeployLocationChange('')}
               onDeployLocationChange={handleDeployLocationChange}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack>
               <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
-                <ConfigureResourcesPropertyLabel required>{messages.luisRegion}</ConfigureResourcesPropertyLabel>
-                {renderPropertyInfoIcon(messages.luisRegionIconInfo)}
+                <ConfigureResourcesPropertyLabel required>
+                  {formatMessage('LUIS region')}
+                </ConfigureResourcesPropertyLabel>
+                {renderPropertyInfoIcon(formatMessage('The region associated with your Language understanding model.'))}
               </Stack>
               <LearnMoreLink
                 href="https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions"
                 target="_blank"
               >
-                {messages.learnMore}
+                {formatMessage('Learn more')}
               </LearnMoreLink>
             </Stack>
-            {/* <Dropdown
-              disabled={currentConfig?.settings?.luis?.region}
-              options={luisLocationOptions}
-              placeholder={formatMessage('Select one')}
-              selectedKey={formData.luisLocation}
-              styles={configureResourceDropdownStyles}
-              onChange={(e, o) => {
-                updateFormData('luisLocation', o.key as string);
-              }}
-            /> */}
           </Stack>
         </Stack>
       </FullWidthForm>

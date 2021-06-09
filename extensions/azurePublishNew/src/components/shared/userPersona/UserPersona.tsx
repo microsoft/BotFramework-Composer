@@ -20,21 +20,10 @@ const getLogoutNotificationSettings = (description: string, type: Notification['
   };
 };
 
-const messages = {
-  signedOutSuccessfully: formatMessage('You have successfully signed out of Azure'),
-  signOutOutError: formatMessage(
-    'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.'
-  ),
-  signOutConfirmationTitle: formatMessage('Sign out of Azure'),
-  signOutConfirmationContent: formatMessage(
-    'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
-  ),
-  signOut: formatMessage('Sign out'),
-  cancel: formatMessage('Cancel'),
-};
 type Props = {
   onSignOut?: () => void;
 } & IPersonaProps;
+
 export const UserPersona = (props: Props) => {
   const { closeDialog } = usePublishApi();
   const { addNotification } = useApplicationApi();
@@ -42,27 +31,38 @@ export const UserPersona = (props: Props) => {
   const signoutAndNotify = React.useCallback(async () => {
     const isSignedOut = await logOut();
     if (isSignedOut) {
-      addNotification(getLogoutNotificationSettings(messages.signedOutSuccessfully, 'info'));
+      addNotification(
+        getLogoutNotificationSettings(formatMessage('You have successfully signed out of Azure'), 'info')
+      );
       closeDialog();
     } else {
-      addNotification(getLogoutNotificationSettings(messages.signOutOutError, 'error'));
+      addNotification(
+        getLogoutNotificationSettings(
+          formatMessage(
+            'There was an error attempting to sign out of Azure. To complete sign out, you may need to restart Composer.'
+          ),
+          'error'
+        )
+      );
     }
   }, [addNotification]);
 
-  const onRenderSecondaryText = React.useMemo(
-    () => (personaProps: IPersonaProps) => {
+  const onRenderSecondaryText = React.useCallback(
+    (personaProps: IPersonaProps) => {
       return (
         <div
           role="button"
           style={{ color: 'blue', cursor: 'pointer' }}
           onClick={async () => {
             const confirmed = await OpenConfirmModal(
-              messages.signOutConfirmationTitle,
-              messages.signOutConfirmationContent,
+              formatMessage('Sign out of Azure'),
+              formatMessage(
+                'By signing out of Azure, your new publishing profile will be canceled and this dialog will close. Do you want to continue?'
+              ),
               {
                 onRenderContent: (subtitle: string) => <div>{subtitle}</div>,
-                confirmText: messages.signOut,
-                cancelText: messages.cancel,
+                confirmText: formatMessage('Sign out'),
+                cancelText: formatMessage('Cancel'),
               }
             );
             if (confirmed) {
@@ -75,7 +75,7 @@ export const UserPersona = (props: Props) => {
         </div>
       );
     },
-    [signoutAndNotify]
+    [signoutAndNotify, props.onSignOut]
   );
   return <Persona {...props} onRenderSecondaryText={props.onRenderSecondaryText || onRenderSecondaryText} />;
 };

@@ -10,10 +10,15 @@ import { userInfoState } from '../../recoilModel/atoms/resourceConfigurationStat
 import { Wizard, WizardStep } from '../shared/wizard/Wizard';
 
 import { WizardFooterWithUserPersona } from './footers/WizardFooterWithUserPersona';
-import { CreateActionContentStep, ChooseResourcesStep, ResourceConfigurationStep, ReviewResourcesStep } from './steps';
+import {
+  CreateResourceInstructionsStep,
+  ChooseResourcesStep,
+  ResourceConfigurationStep,
+  ReviewResourcesStep,
+} from './steps';
 
 type Props = {
-  onStepChange: (stepId: string) => void;
+  onStepChange?: (stepIndex: number, step: WizardStep) => void;
   stepIndex?: number;
 };
 
@@ -22,24 +27,19 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
   const userInfo = useRecoilValue(userInfoState);
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
   const [isValidResourceConfiguration, setIsValidResourceConfiguration] = useState<boolean>(false);
-  const { setTitle, onBack } = usePublishApi();
-
-  const setDialogTitle = (step: WizardStep) => {
-    step && setTitle({ title: step.title, subText: step.subTitle });
-    return <></>;
-  };
+  const { onBack } = usePublishApi();
 
   React.useEffect(() => {
     setSteps([
       {
-        id: '1',
+        id: 'create-resource-instructions',
         title: formatMessage('Configure resources to your publishing profile'),
         subTitle: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
-        onRenderContent: () => <CreateActionContentStep />,
+        onRenderContent: () => <CreateResourceInstructionsStep />,
         onBack,
       },
       {
-        id: '2',
+        id: 'configure-resources',
         title: formatMessage('Configure resources'),
         onRenderContent: () => (
           <ResourceConfigurationStep onResourceConfigurationChange={setIsValidResourceConfiguration} />
@@ -47,7 +47,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         navigationState: { canGoNext: isValidResourceConfiguration },
       },
       {
-        id: '3',
+        id: 'add-resources',
         title: formatMessage('Add resources'),
         subTitle: formatMessage.rich(
           'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile. <a>Learn more</a>',
@@ -67,23 +67,24 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         onRenderContent: () => <ChooseResourcesStep />,
       },
       {
-        id: '4',
+        id: 'review-resources',
         title: formatMessage('Review resources to be created'),
         subTitle: formatMessage(
           'The following resources will be created and provisioned for your bot. Once provisioned, they will be available in the Azure portal.'
         ),
         onRenderContent: () => <ReviewResourcesStep />,
-        navigationState: { nextText: 'Done' },
+        navigationState: { nextText: formatMessage('Done') },
       },
     ]);
   }, [isValidResourceConfiguration, userInfo]);
+
   return (
     <Wizard
-      firstStepId={stepIndex?.toString() ?? '1'}
+      firstStepId={steps[stepIndex]?.id ?? 'create-resource-instructions'}
       steps={steps}
       onRenderFooter={(navState) => <WizardFooterWithUserPersona userInfo={userInfo} {...navState} />}
-      onRenderHeader={(step) => setDialogTitle(step)}
-      onStepChange={(step) => onStepChange(step.id)}
+      onRenderHeader={() => <></>}
+      onStepChange={(index, step) => onStepChange(index, step)}
     />
   );
 });

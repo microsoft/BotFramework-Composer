@@ -2,10 +2,6 @@
 // Licensed under the MIT License.
 
 /**
- * Copyright (c) Microsoft. All rights reserved.
- */
-
-/**
  * Searches an array of strings using the starts with logic; finds the
  * strings that start with the needle.
  *

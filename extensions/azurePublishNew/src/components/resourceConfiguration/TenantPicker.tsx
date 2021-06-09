@@ -8,25 +8,21 @@ import { usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-
 import jwtDecode from 'jwt-decode';
 
 import { UserInfo } from '../../recoilModel/types';
-import { AutoComplete, IAutoCompleteProps } from '../shared/autoComplete/AutoComplete';
+import { SearchableDropdown, SearchableDropdownProps } from '../shared/searchableDropdown/SearchableDropdown';
 
 const { userShouldProvideTokens, getTenantIdFromCache, setTenantId } = usePublishApi();
 
 type Props = {
-  onTenantChange: React.Dispatch<React.SetStateAction<string>>;
-  onUserInfoFetch: React.Dispatch<React.SetStateAction<UserInfo>>;
-} & Omit<IAutoCompleteProps, 'items' | 'onSubmit'>;
-
-const messages = {
-  placeholder: formatMessage('Select Azure directory'),
-  tenantListEmpty: formatMessage('No Azure Directories were found.'),
-};
+  onTenantChange: (tenantId: string) => void;
+  onUserInfoFetch: (userInfo: UserInfo) => void;
+} & Omit<SearchableDropdownProps, 'items' | 'onSubmit'>;
 
 export const TenantPicker = memo((props: Props) => {
   const { onTenantChange, onUserInfoFetch } = props;
   const [tenants, setTenants] = useState<AzureTenant[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const decodeToken = (token: string) => {
     try {
       return jwtDecode<any>(token);
@@ -35,18 +31,21 @@ export const TenantPicker = memo((props: Props) => {
       return null;
     }
   };
+
   useEffect(() => {
     if (!userShouldProvideTokens()) {
       // We should get an ARM token for the tenant in the profile and then fetch tenant details after to show in the UI.
       // Note: For electron, getTenants may cause the sign-in dialog to appear.
+
       setErrorMessage(undefined);
       setIsLoading(true);
-      getTenants()
-        .then((tenants) => {
+      (async () => {
+        try {
+          const tenants = await getTenants();
           setTenants(tenants);
           setIsLoading(false);
           if (tenants.length === 0) {
-            setErrorMessage(messages.tenantListEmpty);
+            setErrorMessage('No Azure Directories were found.');
           } else {
             setErrorMessage(undefined);
           }
@@ -62,42 +61,41 @@ export const TenantPicker = memo((props: Props) => {
             }
           }
           onTenantChange(cachedTenantId);
-        })
-        .catch((err) => {
+        } catch (err) {
+          setTenants([]);
           setIsLoading(false);
           setErrorMessage(
             formatMessage('There was a problem loading Azure directories. {errMessage}', {
               errMessage: err.message || err.toString(),
             })
           );
-        });
+        }
+      })();
     }
   }, []);
 
-  const getTokenForTenant = (tenantId: string) => {
-    getARMTokenForTenant(tenantId)
-      .then((token) => {
-        setTenantId(tenantId);
-        const decoded = decodeToken(token);
-        onUserInfoFetch({
-          token: token,
-          email: decoded.upn,
-          name: decoded.name,
-          expiration: (decoded.exp || 0) * 1000, // convert to ms,
-          sessionExpired: false,
-        });
-        setErrorMessage(undefined);
-      })
-      .catch((err) => {
-        setTenantId(undefined);
-        onUserInfoFetch(undefined);
-        setErrorMessage(
-          formatMessage('There was a problem getting the access token for the current Azure directory. {errMessage}', {
-            errMessage: err.message || err.toString(),
-          })
-        );
-        setErrorMessage(err.message || err.toString());
+  const getTokenForTenant = async (tenantId: string) => {
+    try {
+      const token = await getARMTokenForTenant(tenantId);
+      setErrorMessage(undefined);
+      setTenantId(tenantId);
+      const decoded = decodeToken(token);
+      onUserInfoFetch({
+        token: token,
+        email: decoded.upn,
+        name: decoded.name,
+        expiration: (decoded.exp || 0) * 1000, // convert to ms,
+        sessionExpired: false,
       });
+    } catch (ex) {
+      setTenantId(undefined);
+      onUserInfoFetch(undefined);
+      setErrorMessage(
+        formatMessage('There was a problem getting the access token for the current Azure directory. {errMessage}', {
+          errMessage: ex.message || ex.toString(),
+        })
+      );
+    }
   };
 
   const getValue = React.useCallback(() => {
@@ -111,17 +109,19 @@ export const TenantPicker = memo((props: Props) => {
 
   useEffect(() => {
     if (props.value && !userShouldProvideTokens()) {
-      getTokenForTenant(props.value as string);
+      (async () => {
+        await getTokenForTenant(props.value);
+      })();
     }
   }, [props.value]);
 
   const localTextFieldProps = {
     disabled: tenants.length === 1,
-    placeholder: messages.placeholder,
+    placeholder: formatMessage('Select Azure directory'),
   };
 
   return (
-    <AutoComplete
+    <SearchableDropdown
       errorMessage={errorMessage}
       isLoading={isLoading}
       items={tenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
