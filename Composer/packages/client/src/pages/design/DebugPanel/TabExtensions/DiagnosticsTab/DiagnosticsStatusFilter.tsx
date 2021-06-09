@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { colors } from '../../../../../constants';
@@ -64,7 +64,7 @@ export const DiagnosticsStatusFilter = ({ filterType, onChangeFilterType }) => {
           },
           flexContainer: { paddingLeft: '24px', justifyContent: 'inherit' },
           label: { fontSize: FontSizes.size12, fontFamily: 'Segoe UI', lineHeight: '12px', textAlign: 'left' },
-          icon: { color: SharedColors.yellow10, fontSize: FontSizes.size14, lineHeight: '18px' },
+          icon: { color: colors.warningIcon, fontSize: FontSizes.size14, lineHeight: '18px' },
         }}
         onClick={() => {
           onChangeFilterType(Severity.Warning);

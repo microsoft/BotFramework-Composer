@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useSetRecoilState } from 'recoil';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
@@ -79,7 +79,7 @@ export const DiagnosticsStatus = () => {
         {warningsCount > 0 && (
           <span css={{ display: 'flex', alignItems: 'center' }}>
             <FontIcon
-              css={{ color: SharedColors.yellow10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+              css={{ color: colors.warningIcon, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
               iconName="WarningSolid"
             />
             {warningsCount}

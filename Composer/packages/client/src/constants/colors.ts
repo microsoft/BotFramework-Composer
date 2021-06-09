@@ -1,15 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from 'office-ui-fabric-react/lib/Styling';
+
+const theme = getTheme();
+
+const semColors = theme.semanticColors;
+
 export const colors = {
   // copied from https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/messaging
-  errorBg: '#FED9CC',
-  errorFg: '#D83B01',
-  warningBg: '#FFF4CE',
-  warningFg: '#797673',
-  successBg: '#DDF3DB',
-  successFg: '#107C10',
-  errorIcon: '#a80000',
+  errorBg: semColors.errorBackground,
+  errorFg: semColors.errorText,
+  errorIcon: semColors.errorIcon,
 
-  warningIcon: '#BE880A',
+  warningBg: semColors.warningBackground,
+  warningFg: semColors.messageText, // warningIcon is deprecated
+  warningIcon: theme.palette.yellow, // the official warningIcon color is gray, so we override it here
+
+  successBg: semColors.successBackground,
+  successFg: semColors.messageText, // successIcon is also deprecated
+  successIcon: semColors.successIcon,
 };

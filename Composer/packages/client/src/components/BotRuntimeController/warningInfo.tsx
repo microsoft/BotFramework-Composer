@@ -4,7 +4,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { SharedColors } from '@uifabric/fluent-theme';
+
+import { colors } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -14,9 +15,9 @@ const warningInfo = css`
 `;
 
 const warningButton = css`
-  color: ${SharedColors.yellow10};
+  color: ${colors.warningIcon};
   &:hover {
-    color: ${SharedColors.yellow10};
+    color: ${colors.warningIcon};
   }
 `;
 

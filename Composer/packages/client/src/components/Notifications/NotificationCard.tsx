@@ -6,12 +6,13 @@ import { jsx, css, keyframes } from '@emotion/core';
 import React, { useState } from 'react';
 import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { useRef } from 'react';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { Notification } from '@botframework-composer/types';
 
+import { colors } from '../../constants';
 import { useInterval } from '../../utils/hooks';
 
 // -------------------- Styles -------------------- //
@@ -70,17 +71,17 @@ const cardDetail = css`
 
 const errorType = css`
   margin-top: 4px;
-  color: #a80000;
+  color: ${colors.errorIcon};
 `;
 
 const successType = css`
   margin-top: 4px;
-  color: #27ae60;
+  color: ${colors.successIcon};
 `;
 
 const warningType = css`
   margin-top: 4px;
-  color: ${SharedColors.yellow10};
+  color: ${colors.warningIcon};
 `;
 
 const cardTitle = css`

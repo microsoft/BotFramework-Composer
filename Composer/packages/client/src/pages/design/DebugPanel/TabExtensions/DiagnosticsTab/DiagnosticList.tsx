@@ -15,7 +15,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -30,7 +30,7 @@ import { navigateTo } from '../../../../../utils/navigation';
 
 const icons = {
   Error: { iconName: 'StatusErrorFull', color: colors.errorIcon },
-  Warning: { iconName: 'WarningSolid', color: SharedColors.yellow10 },
+  Warning: { iconName: 'WarningSolid', color: colors.warningIcon },
 };
 
 const diagnostic = mergeStyleSets({

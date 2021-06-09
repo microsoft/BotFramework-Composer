@@ -3,7 +3,6 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { SharedColors } from '@uifabric/fluent-theme';
 
 import { colors } from '../../../../constants';
 
@@ -13,7 +12,7 @@ export const DebugPanelErrorIndicator = (props: { hasError: boolean; hasWarning?
   const indicator = props.hasError ? (
     <Indicator color={`${colors.errorIcon}`} />
   ) : props.hasWarning ? (
-    <Indicator color={`${SharedColors.yellow10}`} />
+    <Indicator color={`${colors.warningIcon}`} />
   ) : null;
   return indicator;
 };
