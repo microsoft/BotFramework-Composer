@@ -1,16 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 
-import { throwNotImplementedError } from './throwNotImplementedError';
+import { throwNotImplementedError } from '../throwNotImplementedError';
 
-const createWebAppAzureFunctionService = (token: string, subscriptionId: string) => {
+export const createWebAppService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
-  const createOrUpdate = async () => {
+  const checkNameAvailability = async () => {
+    throwNotImplementedError();
+  };
+
+  const create = async () => {
     throwNotImplementedError();
   };
 
@@ -35,21 +40,22 @@ const createWebAppAzureFunctionService = (token: string, subscriptionId: string)
   };
 
   /**
-   * Creates or updates a Azure Function WebApp for given resource group
+   * Creates or updates a Azure WebApp for given resource group
    */
   const provision = async () => {
     throwNotImplementedError();
   };
 
   return {
-    createOrUpdate,
+    checkNameAvailability,
+    create,
     deleteMethod,
     get,
     list,
     listByResourceGroup,
-    update,
     provision,
+    update,
   };
 };
 
-export type WebAppAzureFunctionService = ReturnType<typeof createWebAppAzureFunctionService>;
+export type WebAppService = ReturnType<typeof createWebAppService>;

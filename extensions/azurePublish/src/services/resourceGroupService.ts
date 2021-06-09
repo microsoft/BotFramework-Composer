@@ -18,10 +18,6 @@ const createResourceGroupService = (token: string, subscriptionId: string) => {
     throwNotImplementedError();
   };
 
-  const checkExistence = async () => {
-    throwNotImplementedError();
-  };
-
   const update = async () => {
     throwNotImplementedError();
   };
@@ -30,13 +26,17 @@ const createResourceGroupService = (token: string, subscriptionId: string) => {
     throwNotImplementedError();
   };
 
-  const createOrUpdate = async () => {
+  const create = async () => {
+    throwNotImplementedError();
+  };
+
+  const checkNameAvailability = async () => {
     throwNotImplementedError();
   };
 
   return {
-    checkExistence,
-    createOrUpdate,
+    checkNameAvailability,
+    create,
     deleteMethod,
     get,
     list,

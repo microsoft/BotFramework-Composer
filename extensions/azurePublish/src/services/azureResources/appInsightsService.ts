@@ -3,17 +3,25 @@
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { TokenCredentials } from '@azure/ms-rest-js';
 
-import { throwNotImplementedError } from './throwNotImplementedError';
+import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createAppInsightsService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(tokenCredentials, subscriptionId);
 
+  const checkNameAvailability = async () => {
+    throwNotImplementedError();
+  };
+
   /**
    * Creates (or updates) an Application Insights component.
    * */
-  const createOrUpdate = async () => {
+  const create = async () => {
+    throwNotImplementedError();
+  };
+
+  const update = async () => {
     throwNotImplementedError();
   };
 
@@ -25,10 +33,16 @@ const createAppInsightsService = (token: string, subscriptionId: string) => {
     throwNotImplementedError();
   };
 
+  /**
+   * List by subscription
+   * */
   const list = async () => {
     throwNotImplementedError();
   };
 
+  /**
+   * List by resource group
+   * */
   const listByResourceGroup = async () => {
     throwNotImplementedError();
   };
@@ -36,6 +50,7 @@ const createAppInsightsService = (token: string, subscriptionId: string) => {
   /**
    * Provisions an App Insights component in the given resource group. If the service already
    * exists, all properties will be updated with the given values.
+   * Connects to the Bot Registration
    * @returns Promise<ComponentsCreateOrUpdateResponse>
    */
   const provision = async () => {
@@ -43,12 +58,14 @@ const createAppInsightsService = (token: string, subscriptionId: string) => {
   };
 
   return {
-    createOrUpdate,
+    checkNameAvailability,
+    create,
     deleteMethod,
     get,
     list,
     listByResourceGroup,
     provision,
+    update,
   };
 };
 

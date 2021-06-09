@@ -4,7 +4,7 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { SearchManagementClient } from '@azure/arm-search';
 import { TokenCredentials } from '@azure/ms-rest-js';
 
-import { throwNotImplementedError } from './throwNotImplementedError';
+import { throwNotImplementedError } from '../throwNotImplementedError';
 
 const createQNAService = (token: string, subscriptionId: string) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +18,7 @@ const createQNAService = (token: string, subscriptionId: string) => {
     throwNotImplementedError();
   };
 
-  const createOrUpdate = async () => {
+  const create = async () => {
     throwNotImplementedError();
   };
 
@@ -58,13 +58,13 @@ const createQNAService = (token: string, subscriptionId: string) => {
 
   return {
     checkNameAvailability,
-    createOrUpdate,
+    create,
     deleteMethod,
     get,
     list,
     listByResourceGroup,
-    update,
     provision,
+    update,
   };
 };
 

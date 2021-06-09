@@ -3,12 +3,16 @@
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { TokenCredentials } from '@azure/ms-rest-js';
 
-import { throwNotImplementedError } from './throwNotImplementedError';
+import { throwNotImplementedError } from '../throwNotImplementedError';
 
-const createLuisProvisioningService = (token: string, subscriptionId: string) => {
+const createLuisService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
+
+  const checkNameAvailability = async () => {
+    throwNotImplementedError();
+  };
 
   /**
    * Creates Cognitive Services Account
@@ -31,7 +35,7 @@ const createLuisProvisioningService = (token: string, subscriptionId: string) =>
   /**
    * Returns a Cognitive Services Account
    * */
-  const getProperties = async () => {
+  const get = async () => {
     throwNotImplementedError();
   };
 
@@ -59,9 +63,10 @@ const createLuisProvisioningService = (token: string, subscriptionId: string) =>
   };
 
   return {
+    checkNameAvailability,
     create,
     deleteMethod,
-    getProperties,
+    get,
     list,
     listKeys,
     listByResourceGroup,
@@ -70,4 +75,4 @@ const createLuisProvisioningService = (token: string, subscriptionId: string) =>
   };
 };
 
-export type LuisProvisionService = ReturnType<typeof createLuisProvisioningService>;
+export type LuisService = ReturnType<typeof createLuisService>;

@@ -3,22 +3,14 @@
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 
-import { throwNotImplementedError } from './throwNotImplementedError';
+import { throwNotImplementedError } from '../throwNotImplementedError';
 
-export const createBotRegistrationService = (token: string, subscriptionId: string) => {
+export const createABSService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const azureBotSerivce = new AzureBotService(tokenCredentials, subscriptionId);
+  const azureBotService = new AzureBotService(tokenCredentials, subscriptionId);
 
-  const list = async () => {
-    throwNotImplementedError();
-  };
-
-  const listByResourceGroup = async () => {
-    throwNotImplementedError();
-  };
-
-  const getCheckNameAvailability = async () => {
+  const checkNameAvailability = async () => {
     throwNotImplementedError();
   };
 
@@ -38,6 +30,14 @@ export const createBotRegistrationService = (token: string, subscriptionId: stri
     throwNotImplementedError();
   };
 
+  const list = async () => {
+    throwNotImplementedError();
+  };
+
+  const listByResourceGroup = async () => {
+    throwNotImplementedError();
+  };
+
   /**
    * Creates or updates a Bot Service for given resource group
    */
@@ -46,10 +46,10 @@ export const createBotRegistrationService = (token: string, subscriptionId: stri
   };
 
   return {
+    checkNameAvailability,
     create,
-    get,
-    getCheckNameAvailability,
     deleteMethod,
+    get,
     update,
     list,
     listByResourceGroup,
@@ -57,4 +57,4 @@ export const createBotRegistrationService = (token: string, subscriptionId: stri
   };
 };
 
-export type BotRegistrationService = ReturnType<typeof createBotRegistrationService>;
+export type ABSService = ReturnType<typeof createABSService>;

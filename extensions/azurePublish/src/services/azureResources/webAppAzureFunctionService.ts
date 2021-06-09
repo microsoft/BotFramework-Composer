@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { StorageManagementClient } from '@azure/arm-storage';
+import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 
-import { throwNotImplementedError } from './throwNotImplementedError';
+import { throwNotImplementedError } from '../throwNotImplementedError';
 
-const createBlobStorageService = (token: string, subscriptionId: string) => {
+const createWebAppAzureFunctionService = (token: string, subscriptionId: string) => {
   const tokenCredentials = new TokenCredentials(token);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const storageManagementClient = new StorageManagementClient(tokenCredentials, subscriptionId);
+  const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, subscriptionId);
 
   const checkNameAvailability = async () => {
     throwNotImplementedError();
@@ -22,10 +22,7 @@ const createBlobStorageService = (token: string, subscriptionId: string) => {
     throwNotImplementedError();
   };
 
-  /**
-   * Returns the properties for the specified storage account
-   */
-  const getProperties = async () => {
+  const get = async () => {
     throwNotImplementedError();
   };
 
@@ -37,16 +34,12 @@ const createBlobStorageService = (token: string, subscriptionId: string) => {
     throwNotImplementedError();
   };
 
-  const listKeys = async () => {
-    throwNotImplementedError();
-  };
-
   const update = async () => {
     throwNotImplementedError();
   };
 
   /**
-   * Creates or updates a Blob Storage Account for given resource group
+   * Creates or updates a Azure Function WebApp for given resource group
    */
   const provision = async () => {
     throwNotImplementedError();
@@ -56,13 +49,12 @@ const createBlobStorageService = (token: string, subscriptionId: string) => {
     checkNameAvailability,
     create,
     deleteMethod,
-    getProperties,
+    get,
     list,
     listByResourceGroup,
-    listKeys,
-    update,
     provision,
+    update,
   };
 };
 
-export type BlobStorageService = ReturnType<typeof createBlobStorageService>;
+export type WebAppAzureFunctionService = ReturnType<typeof createWebAppAzureFunctionService>;
