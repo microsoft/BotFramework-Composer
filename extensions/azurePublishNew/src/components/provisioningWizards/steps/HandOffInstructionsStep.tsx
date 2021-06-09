@@ -47,33 +47,24 @@ export const HandOffInstructionsStep = () => {
     <Content>
       <Title>{formatMessage('Hand off to admin')}</Title>
       <Summary>
-        {formatMessage.rich(
-          '<text>Select this option to request your Azure admin to provision resources on your behalf, for example, when you don’t have proper permissions to use Azure or you want to generate resources from a sovereign cloud.</text>',
-          {
-            text: ({ children }) => <Text key="step_0">{children}</Text>,
-          }
+        {formatMessage(
+          'Select this option to request your Azure admin to provision resources on your behalf, for example, when you don’t have proper permissions to use Azure or you want to generate resources from a sovereign cloud.'
         )}
       </Summary>
       <Details>
         <Instruction>
           <InstructionTitle>{formatMessage('Step 1')}</InstructionTitle>
           <InstructionDetails>
-            {formatMessage.rich(
-              '<text>Add resources you need for the bot and generate a resource request to share with your Azure admin.</text>',
-              {
-                text: ({ children }) => <Text key="step_1">{children}</Text>,
-              }
+            {formatMessage(
+              'Add resources you need for the bot and generate a resource request to share with your Azure admin.'
             )}
           </InstructionDetails>
         </Instruction>
         <Instruction>
           <InstructionTitle>{formatMessage('Step 2')}</InstructionTitle>
           <InstructionDetails>
-            {formatMessage.rich(
-              '<text>Once you get the resource details from your Azure admin, use them to import existing resources.</text>',
-              {
-                text: ({ children }) => <Text key="step_2">{children}</Text>,
-              }
+            {formatMessage(
+              '<text>Once you get the resource details from your Azure admin, use them to import existing resources.</text>'
             )}
           </InstructionDetails>
         </Instruction>
