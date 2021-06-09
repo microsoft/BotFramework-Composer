@@ -10,19 +10,14 @@ import { WizardStep, Wizard } from '../shared/wizard';
 import { HandOffInstructionsStep } from './steps';
 
 type Props = {
-  onStepChange?: (stepIndex: number, stepId: string) => void;
+  onStepChange?: (stepIndex: number, step: WizardStep) => void;
   stepIndex?: number;
 };
 
 export const HandOffToAdminWizard = React.memo((props: Props) => {
   const { stepIndex, onStepChange } = props;
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
-  const { setTitle, onBack } = usePublishApi();
-
-  const setDialogTitle = (step: WizardStep) => {
-    step && setTitle({ title: step.title, subText: step.subTitle });
-    return <></>;
-  };
+  const { onBack } = usePublishApi();
 
   React.useEffect(() => {
     setSteps([
@@ -40,8 +35,8 @@ export const HandOffToAdminWizard = React.memo((props: Props) => {
     <Wizard
       firstStepId={steps[stepIndex]?.id ?? 'handoff-instructions'}
       steps={steps}
-      onRenderHeader={(step) => setDialogTitle(step)}
-      onStepChange={(index, step) => onStepChange(index, step.id)}
+      onRenderHeader={() => <></>}
+      onStepChange={(index, step) => onStepChange(index, step)}
     />
   );
 });
