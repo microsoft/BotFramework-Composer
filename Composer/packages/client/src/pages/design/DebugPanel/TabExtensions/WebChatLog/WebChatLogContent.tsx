@@ -5,7 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
-import { ConversationTrafficItem } from '@botframework-composer/types/src';
+import { ConversationTrafficItem } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
