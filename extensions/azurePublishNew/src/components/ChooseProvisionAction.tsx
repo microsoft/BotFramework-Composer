@@ -3,7 +3,8 @@
 
 import React from 'react';
 import styled from '@emotion/styled';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import formatMessage from 'format-message';
 
 import { ProvisionAction } from '../types';
 
@@ -14,12 +15,6 @@ const ChoicesPane = styled.div`
   width: 100%;
 `;
 
-const choiceOptions: IChoiceGroupOption[] = [
-  { key: 'create', text: 'Create new resources' },
-  { key: 'import', text: 'Import existing resources' },
-  { key: 'generate', text: 'Hand off to admin' },
-];
-
 type Props = {
   selectedProvisionAction?: ProvisionAction;
   onChangeSelectedProvisionAction: (choice: ProvisionAction) => void;
@@ -28,6 +23,15 @@ type Props = {
 
 export const ChooseProvisionAction = (props: Props) => {
   const { selectedProvisionAction, onChangeSelectedProvisionAction } = props;
+
+  const choiceOptions = React.useMemo(() => {
+    return [
+      { key: 'create', text: formatMessage('Create new resources') },
+      { key: 'import', text: formatMessage('Import existing resources') },
+      { key: 'generate', text: formatMessage('Hand off to admin') },
+    ];
+  }, []);
+
   return (
     <ChoicesPane>
       <ChoiceGroup
