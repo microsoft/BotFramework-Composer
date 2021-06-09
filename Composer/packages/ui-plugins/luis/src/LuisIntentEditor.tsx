@@ -11,7 +11,7 @@ import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType, checkForPVASch
 import formatMessage from 'format-message';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
-  const { onChange, value, schema, placeholder } = props;
+  const { label, onChange, value, schema, placeholder } = props;
   const { schemas } = useShellApi();
   const isPVABot = useMemo(() => checkForPVASchema(schemas.sdk), [schemas.sdk]);
 
@@ -25,6 +25,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     userSettings,
     luFeatures = {},
   } = useShellApi();
+
   const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
@@ -32,6 +33,11 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     const { $kind }: any = schema?.properties || {};
     $kind.const && (intentName = new LuMetaData(new LuType($kind.const).toString(), designerId).toString());
   }
+
+  const popExpandOptions = useMemo(
+    () => ({ popExpandTitle: typeof label === 'string' ? label : formatMessage('Trigger phrases') }),
+    [label]
+  );
 
   const luIntent = useMemo(() => {
     /**
@@ -98,6 +104,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
       luFile={luFile}
       luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId, luFeatures }}
       placeholder={placeholder || inlineModePlaceholder}
+      popExpandOptions={popExpandOptions}
       telemetryClient={shellApi.telemetryClient}
       toolbarOptions={{
         disabled: isPVABot,

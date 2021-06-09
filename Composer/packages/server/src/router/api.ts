@@ -26,8 +26,7 @@ import { UtilitiesController } from './../controllers/utilities';
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
-router.post('/v2/projects/migrate', ProjectController.migrateProject);
-router.post('/v2/projects', ProjectController.createProjectV2);
+router.post('/projects/migrate', ProjectController.migrateProject);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
 router.get('/projects/feed', ProjectController.getFeed);
@@ -91,8 +90,7 @@ router.post('/publish/:projectId/pull/:target', PublishController.pull);
 router.get('/publish/:method', PublishController.publish);
 
 //assets
-router.get('/assets/projectTemplates', AssetController.getProjTemplates);
-router.post('/v2/assets/projectTemplates', AssetController.getProjTemplatesV2);
+router.post('/assets/projectTemplates', AssetController.getProjTemplates);
 router.get('/assets/templateReadme', AssetController.getTemplateReadMe);
 
 router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));

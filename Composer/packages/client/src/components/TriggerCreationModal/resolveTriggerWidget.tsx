@@ -8,6 +8,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { UserSettings, DialogInfo, SDKKinds, LuFile } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
+import { luUtil } from '@bfc/indexers';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { isRegExRecognizerType, isLUISnQnARecognizerType, isPVARecognizerType } from '../../utils/dialogValidator';
@@ -24,7 +25,8 @@ export function resolveTriggerWidget(
   userSettings: UserSettings,
   projectId: string,
   dialogId: string,
-  luFile?: LuFile
+  luFile?: LuFile,
+  setLuFile?: (data: LuFile) => void
 ) {
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile) || isPVARecognizerType(dialogFile);
@@ -56,6 +58,19 @@ export function resolveTriggerWidget(
       errors.triggerPhrases = '';
     }
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
+
+    if (luFile && setLuFile) {
+      const shadowLuFile = luUtil.updateIntent(
+        luFile,
+        PlaceHolderSectionName,
+        {
+          Name: PlaceHolderSectionName,
+          Body: body,
+        },
+        {}
+      );
+      setLuFile(shadowLuFile);
+    }
   };
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
