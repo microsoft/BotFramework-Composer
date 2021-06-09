@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import { FileInfo } from '@bfc/shared';
-import { LabelResolver, Orchestrator } from '@microsoft/bf-orchestrator';
+import { LabelResolver, Orchestrator, Utility } from '@microsoft/bf-orchestrator';
+import debug from 'debug';
 import { writeFile, readdir, readFile, pathExists, readJson } from 'fs-extra';
 import partition from 'lodash/partition';
 
@@ -10,6 +11,8 @@ import { Path } from '../../../utility/path';
 import { IOrchestratorBuildOutput, IOrchestratorSettings } from '../interface';
 
 import { RequestMsg } from './types';
+
+Utility.resetFlagToPrintDebuggingLogToConsole(debug.enabled('Orchestrator'));
 
 export class LabelResolversCache {
   // use projectId to support multiple bots.

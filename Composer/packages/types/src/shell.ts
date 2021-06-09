@@ -76,6 +76,7 @@ export type Notification = {
   read?: boolean;
   hidden?: boolean;
   onRenderCardContent?: ((props: Notification) => JSX.Element) | React.FC<any>;
+  data?: Record<string, any>;
 };
 
 export type ApplicationContextApi = {
@@ -146,6 +147,7 @@ export type ProjectContextApi = {
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   createQnATrigger: (id: string) => void;
+  stopBot: (projectId: string) => void;
   updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
   updateRecognizer: (projectId: string, dialogId: string, kind: LuProviderType) => void;
 };

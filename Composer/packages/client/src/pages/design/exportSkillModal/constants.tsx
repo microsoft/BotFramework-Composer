@@ -180,8 +180,11 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     buttons: [cancelButton, nextButton],
     content: Description,
     editJson: false,
-    title: () => formatMessage('Describe your skill'),
-    subText: () => formatMessage('To make your bot available for others as a skill, we need to generate a manifest.'),
+    title: () => formatMessage('Export your bot'),
+    subText: () =>
+      formatMessage(
+        'A skill is a bot that can perform a set of tasks one or more bots.  To make your bot available as a skill, it needs a manifest - a JSON file that describes the actions the skill can perform.'
+      ),
     validate,
   },
   [ManifestEditorSteps.SELECT_PROFILE]: {
@@ -189,19 +192,15 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       backButton,
       {
-        disabled: ({ publishTargets }) => {
+        disabled: ({ publishTarget }) => {
           try {
-            return (
-              publishTargets.findIndex((item) => {
-                const config = JSON.parse(item.configuration);
-                return (
-                  config.settings &&
-                  config.settings.MicrosoftAppId &&
-                  config.hostname &&
-                  config.settings.MicrosoftAppId.length > 0 &&
-                  config.hostname.length > 0
-                );
-              }) < 0
+            const config = JSON.parse(publishTarget.configuration);
+            return !(
+              config.settings &&
+              config.settings.MicrosoftAppId &&
+              config.hostname &&
+              config.settings.MicrosoftAppId.length > 0 &&
+              config.hostname.length > 0
             );
           } catch (err) {
             console.log(err.message);
@@ -241,9 +240,9 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: AddCallers,
     subText: () =>
       formatMessage(
-        'Add Microsoft App Ids of bots that can access this skill. You can skip this step and add this information later from the project settings tab.'
+        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more.'
       ),
-    title: () => formatMessage('Which bots are allowed to use this skill?'),
+    title: () => formatMessage('Which bots can connect to this skill?'),
   },
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
@@ -273,9 +272,9 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     subText: () =>
       formatMessage(
-        'These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.'
+        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more.'
       ),
-    title: () => formatMessage('Select which dialogs are included in the skill manifest'),
+    title: () => formatMessage('Select dialogs'),
   },
   [ManifestEditorSteps.SELECT_TRIGGERS]: {
     buttons: [
@@ -284,8 +283,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Next'),
-        onClick: ({ onNext, generateManifest }) => () => {
-          // generateManifest();
+        onClick: ({ onNext }) => () => {
           onNext();
         },
       },
@@ -294,9 +292,9 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     subText: () =>
       formatMessage(
-        'These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.'
+        'Triggers selected below will enable other bots to access the capabilities of your skill. Learn more.'
       ),
-    title: () => formatMessage('Select which tasks this skill can perform'),
+    title: () => formatMessage('Select triggers'),
   },
   [ManifestEditorSteps.SAVE_MANIFEST]: {
     buttons: [

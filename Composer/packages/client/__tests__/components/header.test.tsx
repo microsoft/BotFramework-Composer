@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
+import { within } from '@testing-library/dom';
 
 import { renderWithRecoil } from '../testUtils';
 import { Header } from '../../src/components/Header';
@@ -15,7 +16,7 @@ describe('<Header />', () => {
       return { location: { pathname: 'http://server/home' } };
     });
     const { container } = renderWithRecoil(<Header />);
-    expect(container).toHaveTextContent('Bot Framework Composer');
+    expect(within(container).findByAltText('Composer Logo')).not.toBeNull();
   });
 
   it('should not show the start bots widget in Home page', async () => {
@@ -23,7 +24,7 @@ describe('<Header />', () => {
       return { location: { pathname: 'http://server/home' } };
     });
     const { queryByText } = renderWithRecoil(<Header />);
-    expect(queryByText('Start all bots')).toBeNull();
+    expect(queryByText('Start all')).toBeNull();
   });
 
   it('should show the start bots widget on design page', async () => {
@@ -31,7 +32,7 @@ describe('<Header />', () => {
       return { location: { pathname: 'http://server/bot/1234/dialogs' } };
     });
     const result = renderWithRecoil(<Header />);
-    expect(result.findAllByDisplayValue('Start all bots')).not.toBeNull();
+    expect(result.findAllByDisplayValue('Start all')).not.toBeNull();
   });
 
   it('should show the start bots widget on settings page', async () => {
@@ -39,6 +40,6 @@ describe('<Header />', () => {
       return { location: { pathname: 'http://server/bot/1234/settings' } };
     });
     const result = renderWithRecoil(<Header />);
-    expect(result.findAllByDisplayValue('Start all bots')).not.toBeNull();
+    expect(result.findAllByDisplayValue('Start all')).not.toBeNull();
   });
 });

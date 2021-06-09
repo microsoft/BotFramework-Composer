@@ -111,10 +111,19 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
     [mergedSettings, projectId, runtimeSettings?.skills]
   );
 
-  const { arrayItems: allowedCallers = [], addItem, handleChange } = useArrayItems(
+  const { arrayItems: allowedCallers = [], addItem, handleChange, handleResetCache } = useArrayItems(
     runtimeSettings?.skills?.allowedCallers || [],
     updateAllowedCallers
   );
+
+  // Reset array cache when user switches between project settings
+  const didMount = React.useRef(false);
+  React.useEffect(() => {
+    if (didMount.current) {
+      handleResetCache(runtimeSettings?.skills?.allowedCallers || []);
+    }
+    didMount.current = true;
+  }, [projectId]);
 
   const onAddNewAllowedCaller = React.useCallback(() => {
     addItem('');
@@ -147,7 +156,7 @@ export const AllowedCallers: React.FC<Props> = ({ projectId }) => {
       <div css={title}>{formatMessage('Allowed Callers')}</div>
       <div css={subtext}>
         {formatMessage.rich(
-          'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more.</a>',
+          'Skills can be “called” by external bots. Allow other bots to call your skill by adding their App IDs to the list below. <a>Learn more</a>',
           {
             a: ({ children }) => (
               <Link
