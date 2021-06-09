@@ -323,9 +323,6 @@
   "any_or_expression_acad7d37": {
     "message": "Any or expression"
   },
-  "any_string_f22dc2e1": {
-    "message": "any string"
-  },
   "application_language_settings_85b1f06": {
     "message": "Application language settings"
   },
@@ -701,9 +698,6 @@
   "choose_a_valid_publish_profile_to_continue_d4bd0b96": {
     "message": "Choose a valid publish profile to continue"
   },
-  "choose_how_to_create_your_bot_a97f7b3e": {
-    "message": "Choose how to create your bot"
-  },
   "clear_all_da755751": {
     "message": "Clear all"
   },
@@ -977,9 +971,6 @@
   "create_and_configure_new_azure_resources_302c574a": {
     "message": "Create and configure new Azure resources"
   },
-  "create_bot_from_template_or_scratch_92f0fefa": {
-    "message": "Create bot from template or scratch?"
-  },
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Create copy to translate bot content"
   },
@@ -991,15 +982,6 @@
   },
   "create_form_dialog_bb98a4f2": {
     "message": "Create form dialog"
-  },
-  "create_from_knowledge_base_qna_maker_7422486": {
-    "message": "Create from knowledge base (QnA Maker)"
-  },
-  "create_from_qna_7aa9dcbb": {
-    "message": "Create from QnA"
-  },
-  "create_from_scratch_485c3045": {
-    "message": "Create from scratch"
   },
   "create_from_template_87e12c94": {
     "message": "Create from template"
@@ -1141,6 +1123,9 @@
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
+  },
+  "delete_locale_examples_6f0c5926": {
+    "message": "Delete \"{ locale }\" examples?"
   },
   "delete_properties_c49a7892": {
     "message": "Delete properties"
@@ -1439,12 +1424,6 @@
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
   },
-  "enter_a_max_value_14e8ba52": {
-    "message": "Enter a max value"
-  },
-  "enter_a_min_value_c3030813": {
-    "message": "Enter a min value"
-  },
   "enter_a_url_to_import_qna_resource_223ded92": {
     "message": "Enter a URL to Import QnA resource"
   },
@@ -1469,8 +1448,8 @@
   "enter_skill_manifest_url_583d54f4": {
     "message": "Enter skill manifest URL"
   },
-  "entities_ef09392c": {
-    "message": "Entities"
+  "entity_92d59f72": {
+    "message": "Entity"
   },
   "entity_defined_in_lu_files_entity_1812c172": {
     "message": "Entity defined in lu files: { entity }"
@@ -1558,9 +1537,6 @@
   },
   "everything_you_need_to_build_sophisticated_convers_9c00cc01": {
     "message": "Everything you need to build sophisticated conversational experiences"
-  },
-  "examples_c435f08c": {
-    "message": "Examples"
   },
   "examples_for_entity_9b50e2e5": {
     "message": "Examples for entity"
@@ -1711,9 +1687,6 @@
   },
   "for_each_page_198e66f4": {
     "message": "For each page"
-  },
-  "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
-    "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
   "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
     "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profile, share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
@@ -2711,8 +2684,8 @@
   "overview_58268c72": {
     "message": "Overview"
   },
-  "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
-    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
+  "p_copyright_c_microsoft_corporation_p_p_mit_licens_6d0992f9": {
+    "message": "<p>Copyright (c) Microsoft Corporation.</p>\n            <p>MIT License</p>\n            <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>\n            <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>\n            <p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
   },
   "page_number_cdee4179": {
     "message": "Page number"
@@ -2725,6 +2698,9 @@
   },
   "paste_token_here_eccec7e4": {
     "message": "Paste token here"
+  },
+  "please_add_a_name_to_this_property_to_enable_addin_916ab99c": {
+    "message": "Please add a name to this property to enable adding examples"
   },
   "please_enter_a_value_for_key_77cfc097": {
     "message": "Please enter a value for { key }"
@@ -2887,6 +2863,9 @@
   },
   "publish_your_bot_9099e323": {
     "message": "Publish your bot"
+  },
+  "publish_your_bot_to_azure_and_manage_published_bot_67751ca9": {
+    "message": "Publish your bot to Azure and manage published bots here."
   },
   "publish_your_bots_6e1ba7c2": {
     "message": "Publish your bots"
@@ -3085,6 +3064,9 @@
   },
   "required_5f7ef8c0": {
     "message": "Required"
+  },
+  "required_properties_are_properties_that_your_bot_w_d41caf66": {
+    "message": "Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties."
   },
   "required_properties_dfb0350d": {
     "message": "Required properties"
@@ -3602,6 +3584,9 @@
   "suggestion_for_card_or_activity_type_b257066a": {
     "message": "Suggestion for Card or Activity: { type }"
   },
+  "synonyms_31f2e91e": {
+    "message": "Synonyms"
+  },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
   },
@@ -4110,7 +4095,7 @@
     "message": "Use machine learning to understand natural language input and direct the conversation flow."
   },
   "use_orchestrator_for_multi_bot_projects_bots_that__1b481cdd": {
-    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
+    "message": "Use Orchestrator for multi-bot projects (bots that consist of multiple bots or connect to skills)."
   },
   "use_speech_to_enable_voice_input_and_output_for_yo_742c511d": {
     "message": "Use Speech to enable voice input and output for your bot."
@@ -4309,9 +4294,6 @@
   },
   "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
     "message": "You are about to remove the skill from this project. Removing this skill won’t delete the files."
-  },
-  "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
-    "message": "You can create a new bot from scratch with Composer, or start with a template."
   },
   "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
     "message": "You can only connect to a skill in the root bot."
