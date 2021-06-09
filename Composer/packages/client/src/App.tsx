@@ -9,6 +9,7 @@ import { Announcement } from './components/AppComponents/Announcement';
 import { MainContainer } from './components/AppComponents/MainContainer';
 import { dispatcherState, userSettingsState } from './recoilModel';
 import { loadLocale } from './utils/fileUtil';
+import { ClientStorage } from './utils/storage';
 import { useInitializeLogger } from './telemetry/useInitializeLogger';
 import { setupIcons } from './setupIcons';
 
@@ -19,13 +20,19 @@ const Logger = () => {
   return null;
 };
 
+const surveyStorage = new ClientStorage(window.localStorage, 'survey');
+
 const { ipcRenderer } = window;
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
 
-  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion, performAppCleanupOnQuit } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    fetchExtensions,
+    fetchFeatureFlags,
+    checkNodeVersion,
+    performAppCleanupOnQuit,
+    setSurveyEligibility,
+  } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     loadLocale(appLocale);
@@ -38,6 +45,19 @@ export const App: React.FC = () => {
     ipcRenderer?.on('cleanup', (_event) => {
       performAppCleanupOnQuit();
     });
+
+    let days = surveyStorage.get('days', 0);
+    const lastUsed = surveyStorage.get('lastUsed', null);
+    const today = new Date().toDateString();
+    if (lastUsed !== today) {
+      days += 1;
+      surveyStorage.set('days', days);
+    }
+    if (days >= 5) {
+      // eligible for HaTS notification
+      setSurveyEligibility(true);
+    }
+    surveyStorage.set('lastUsed', today);
   }, []);
 
   return (
