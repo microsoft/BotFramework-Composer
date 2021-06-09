@@ -233,8 +233,8 @@ export const ListEntityCreationDialog = (props: Props) => {
         />
       ) : null}
       <DialogFooter>
-        <PrimaryButton disabled={creationDisabled} text={formatMessage('Create')} onClick={createListEntity} />
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <PrimaryButton disabled={creationDisabled} text={formatMessage('Create')} onClick={createListEntity} />
       </DialogFooter>
     </Dialog>
   );
