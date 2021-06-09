@@ -18,6 +18,7 @@ import {
   debugPanelActiveTabState,
   userHasNodeInstalledState,
   applicationErrorState,
+  surveyEligibilityState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -153,6 +154,10 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
+  const setSurveyEligibility = useRecoilCallback(({ set }: CallbackInterface) => (eligible: boolean) => {
+    set(surveyEligibilityState, eligible);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -169,5 +174,6 @@ export const applicationDispatcher = () => {
     setPageElementState,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setSurveyEligibility,
   };
 };
