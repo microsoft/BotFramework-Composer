@@ -14,10 +14,10 @@ export const colors = {
   errorIcon: semColors.errorIcon,
 
   warningBg: semColors.warningBackground,
-  warningFg: semColors.messageText, // warningIcon is deprecated
+  warningFg: semColors.messageText, // warningText is deprecated
   warningIcon: theme.palette.yellow, // the official warningIcon color is gray, so we override it here
 
   successBg: semColors.successBackground,
-  successFg: semColors.messageText, // successIcon is also deprecated
+  successFg: semColors.messageText, // successText is also deprecated
   successIcon: semColors.successIcon,
 };
