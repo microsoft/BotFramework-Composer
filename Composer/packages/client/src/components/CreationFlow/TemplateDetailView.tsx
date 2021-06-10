@@ -74,7 +74,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     <Fragment>
       <Text>
         {formatMessage.rich(
-          `To create a bot from your own <templateDocLink>Bot Framework Template</templateDocLink> you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>`,
+          `To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>`,
           {
             templateDocLink: ({ children }) => (
               <Link key="local-template-link" href={templateDocUrl} rel="noopener noreferrer" target="_blank">

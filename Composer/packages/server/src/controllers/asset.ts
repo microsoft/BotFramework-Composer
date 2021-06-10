@@ -14,6 +14,7 @@ import { FeatureFlagService } from '../services/featureFlags';
 export async function getProjTemplates(req: any, res: any) {
   try {
     let templates: BotTemplate[] = [];
+    const advancedTemplateOptionsEnabled = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
 
     // Get FeedUrl
     const { feedUrls, getFirstPartyNpm } = req.body;
@@ -45,7 +46,7 @@ export async function getProjTemplates(req: any, res: any) {
           packageVersion: qnaTemplateVersion,
         },
       });
-      if (FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS')) {
+      if (advancedTemplateOptionsEnabled) {
         templates.push({
           id: localTemplateId,
           name: 'Create from local template',
