@@ -21,7 +21,9 @@
     "url-parse": "^1.5.1",
     "underscore": "^1.12.1",
     "dns-packet": "^1.3.4",
-    "json-ptr": "^2.1"
+    "json-ptr": "^2.1",
+    "css-what": "^5.0.1",
+    "css-select": "^4.1.3"
   },
   "engines": {
     "node": ">=12"
