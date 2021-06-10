@@ -53,6 +53,7 @@ export async function getProjTemplatesV2(req: any, res: any) {
           packageName: emptyBotNpmTemplateName,
           packageSource: 'npm',
           packageVersion: qnaTemplateVersion,
+          availableVersions: [],
         },
       });
     }
