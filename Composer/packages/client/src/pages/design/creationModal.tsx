@@ -153,6 +153,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       <DefineConversation
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
+        localTemplatePath={localTemplatePath}
         templateId={templateId}
         updateFolder={updateFolder}
         onCurrentPathUpdate={updateCurrentPath}
