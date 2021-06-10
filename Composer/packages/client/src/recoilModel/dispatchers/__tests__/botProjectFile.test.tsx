@@ -23,7 +23,6 @@ import {
 } from '../../atoms';
 import { Dispatcher } from '..';
 
-jest.mock('../../../utils/httpUtil');
 const rootBotProjectId = '2345.32324';
 const testSkillId = '123.1sd23';
 

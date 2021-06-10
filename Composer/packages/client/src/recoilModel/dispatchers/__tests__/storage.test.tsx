@@ -19,8 +19,6 @@ jest.mock('../../../utils/navigation', () => {
   };
 });
 
-jest.mock('../../../utils/httpUtil');
-
 jest.mock('../../parsers/lgWorker', () => {
   return {
     flush: () => new Promise((resolve) => resolve()),

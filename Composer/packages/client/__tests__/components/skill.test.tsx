@@ -12,8 +12,6 @@ import CreateSkillModal, {
 } from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
 import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
-jest.mock('../../src//utils/httpUtil');
-
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
 const projectId = '123a.234';

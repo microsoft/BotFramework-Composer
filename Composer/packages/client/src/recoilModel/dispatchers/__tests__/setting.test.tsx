@@ -9,8 +9,6 @@ import { settingsState, currentProjectIdState, dispatcherState } from '../../ato
 import { Dispatcher } from '..';
 import { settingsDispatcher } from '../setting';
 
-jest.mock('../../../utils/httpUtil');
-
 const projectId = '1235a.2341';
 
 const settings = {

@@ -10,7 +10,6 @@ import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { botDisplayNameState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '../../../recoilModel/dispatchers';
 
-jest.mock('../../../utils/httpUtil');
 const projectId = '2345.32324';
 
 describe('Export dispatcher', () => {

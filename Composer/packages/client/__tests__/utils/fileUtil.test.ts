@@ -4,8 +4,6 @@
 import { getExtension, getBaseName, upperCaseName, loadLocale, getUniqueName } from '../../src/utils/fileUtil';
 import httpClient from '../../src/utils/httpUtil';
 
-jest.mock('../../src/utils/httpUtil');
-
 const files = ['a.text', 'a.b.text', 1];
 
 describe('getExtension', () => {
