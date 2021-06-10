@@ -38,6 +38,9 @@
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
   },
+  "a_list_entity_represents_a_fixed_closed_set_of_rel_6e87d740": {
+    "message": "A list entity represents a fixed, closed set of related words along with their synonyms. The normalized value is the value returned when any of the corresponding synonyms are recognized. <link>Learn more about list entities</link>"
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -158,6 +161,9 @@
   "add_a_dialog_e378aa3a": {
     "message": "Add a dialog"
   },
+  "add_a_list_entity_91adc4b3": {
+    "message": "Add a list entity"
+  },
   "add_a_new_key_5c208c29": {
     "message": "Add a new key"
   },
@@ -245,6 +251,9 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
+  "add_row_7ebc94fb": {
+    "message": "Add row"
+  },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
@@ -260,6 +269,9 @@
   "advanced_settings_view_json_b83638b4": {
     "message": "Advanced Settings View (json)"
   },
+  "agree_73937908": {
+    "message": "Agree"
+  },
   "all_4321c3a1": {
     "message": "All"
   },
@@ -268,6 +280,9 @@
   },
   "almost_there_f90939cb": {
     "message": "Almost there!"
+  },
+  "already_used_16061b3a": {
+    "message": "Already used"
   },
   "an_app_id_is_used_for_communication_between_your_b_255025e1": {
     "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
@@ -926,6 +941,9 @@
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
+  "count_plural_0_no_items_selected_1_one_item_is_sel_13d3b2de": {
+    "message": "{ count, plural,\n     =0 {No items selected}\n     =1 {One item is selected}\n  other {# items are selected}\n}"
+  },
   "create_132b3be1": {
     "message": "Create"
   },
@@ -1424,8 +1442,14 @@
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
   },
+  "enter_a_synonym_and_press_enter_bd39b5d1": {
+    "message": "Enter a synonym and press enter"
+  },
   "enter_a_url_to_import_qna_resource_223ded92": {
     "message": "Enter a URL to Import QnA resource"
+  },
+  "enter_a_value_d91fdd00": {
+    "message": "Enter a value"
   },
   "enter_cognitive_service_region_a0f684a4": {
     "message": "Enter cognitive service region"
@@ -1825,6 +1849,9 @@
   },
   "http_request_b6394895": {
     "message": "HTTP request"
+  },
+  "i_agree_to_the_a_microsoft_channel_publication_ter_f9187f7d": {
+    "message": "I agree to the <a>Microsoft Channel Publication Terms</a> and the <a2>Microsoft Privacy Statement</a2> for my deployment to the Microsoft Teams channel."
   },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
     "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
@@ -2357,6 +2384,9 @@
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
   },
+  "microsoft_teams_terms_and_conditions_8375ce96": {
+    "message": "Microsoft Teams terms and conditions"
+  },
   "migrating_data_a35b3055": {
     "message": "Migrating data"
   },
@@ -2437,6 +2467,9 @@
   },
   "name_of_the_property_f3cae657": {
     "message": "Name of the property"
+  },
+  "name_your_list_entity_9701a8f0": {
+    "message": "Name your list entity"
   },
   "navigation_control_94f2649e": {
     "message": "navigation control"
@@ -2539,6 +2572,9 @@
   },
   "node_preview_cbcd8fb": {
     "message": "Node (Preview)"
+  },
+  "normalized_value_8eb24de2": {
+    "message": "Normalized value"
   },
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
