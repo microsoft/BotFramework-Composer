@@ -72,6 +72,8 @@ export const ListEntityCreationDialog = (props: Props) => {
   const [listEntity, setListEntity] = React.useState<ListEntity>({ entityType: 'list', name: '', items: [] });
   let listEntityId = 0;
 
+  const listRootRef = React.useRef<HTMLDivElement>(null);
+
   const { hasErrors, nameError, itemErrors, itemsTouched } = useListEntityValidation(listEntity);
 
   const [selectedItems, setSelectedItems] = React.useState<ListEntityItem[]>([]);
@@ -81,6 +83,15 @@ export const ListEntityCreationDialog = (props: Props) => {
       selectionMode: SelectionMode.multiple,
     })
   ).current;
+
+  const scrollTimeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
+  React.useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const changeEntityName = React.useCallback(
     (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
@@ -134,11 +145,22 @@ export const ListEntityCreationDialog = (props: Props) => {
     });
   }, [selectedItems]);
 
+  const scrollToItemByIndex = React.useCallback((idx: number) => {
+    scrollTimeoutRef.current = setTimeout(() => {
+      listRootRef.current
+        ?.querySelector(`div.ms-List-cell[data-list-index="${idx}"]`)
+        ?.scrollIntoView({ behavior: 'smooth' });
+      scrollTimeoutRef.current = undefined;
+    }, 300);
+  }, []);
+
   const addListEntityItem = React.useCallback(() => {
     setListEntity((currentEntity) => {
       const clonedEntity = { ...currentEntity };
       clonedEntity.items = [...clonedEntity.items, { id: listEntityId, normalizedValue: '', synonyms: [] }];
       listEntityId++;
+
+      scrollToItemByIndex(currentEntity.items.length);
       return clonedEntity;
     });
   }, []);
@@ -173,6 +195,7 @@ export const ListEntityCreationDialog = (props: Props) => {
             <TextField
               borderless
               data-selection-disabled
+              autoComplete="off"
               errorMessage={itemsTouched[item.id] ? itemErrors[item.id] : ''}
               placeholder={formatMessage('Enter a value')}
               styles={normalizedValueTextField}
@@ -242,6 +265,7 @@ export const ListEntityCreationDialog = (props: Props) => {
       <Stack tokens={containerStackTokens}>
         <TextField
           required
+          autoComplete="off"
           errorMessage={nameError}
           label={formatMessage('Name')}
           placeholder={formatMessage('Name your list entity')}
@@ -249,7 +273,7 @@ export const ListEntityCreationDialog = (props: Props) => {
           value={listEntity.name}
           onChange={changeEntityName}
         />
-        <Stack>
+        <div ref={listRootRef}>
           <CommandBar items={commandBarItems} styles={commandBarStyles} />
           <DetailsList
             selectionPreservedOnEmptyClick
@@ -260,7 +284,7 @@ export const ListEntityCreationDialog = (props: Props) => {
             onRenderRow={renderRow}
             onShouldVirtualize={() => false}
           />
-        </Stack>
+        </div>
       </Stack>
       {selection ? (
         <Announced
