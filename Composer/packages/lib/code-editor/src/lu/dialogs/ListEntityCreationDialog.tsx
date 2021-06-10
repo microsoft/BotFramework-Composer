@@ -266,7 +266,7 @@ export const ListEntityCreationDialog = (props: Props) => {
         <TextField
           required
           autoComplete="off"
-          errorMessage={nameError}
+          errorMessage={itemsTouched.nameField ? nameError : ''}
           label={formatMessage('Name')}
           placeholder={formatMessage('Name your list entity')}
           styles={textFieldStyles}
