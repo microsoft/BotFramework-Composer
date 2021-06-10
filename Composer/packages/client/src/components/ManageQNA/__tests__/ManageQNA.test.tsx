@@ -396,11 +396,7 @@ describe('<ManageQNA />', () => {
     // since QNA is async, onGetKey is not called here.
     // instead, these values are updated directly in the recoil state.
 
-    // ensure that the final callback was called
-    // expect(onGetKey).toBeCalledWith({
-    //   region: 'westus',
-    //   key: 'mockedKey',
-    // });
+    // TODO: how to test that the recoil state was updated as expected?
   });
 
   it('it should show handoff instructions', async () => {
