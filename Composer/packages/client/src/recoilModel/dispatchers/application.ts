@@ -18,12 +18,14 @@ import {
   debugPanelActiveTabState,
   userHasNodeInstalledState,
   applicationErrorState,
+  surveyEligibilityState,
 } from '../atoms/appState';
-import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
+import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType, SURVEY_PARAMETERS } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
 import httpClient from '../../utils/httpUtil';
+import { ClientStorage } from '../../utils/storage';
 
 import { setError } from './shared';
 import { flushExistingTasks } from './utils/project';
@@ -153,6 +155,32 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
+  const setSurveyEligibility = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    const surveyStorage = new ClientStorage(window.localStorage, 'survey');
+
+    const optedOut = surveyStorage.get('optedOut', false);
+    if (optedOut) return;
+
+    let days = surveyStorage.get('days', 0);
+    const lastUsed = surveyStorage.get('dateLastUsed', null);
+    const lastTaken = surveyStorage.get('epochLastTaken', null);
+    const today = new Date().toDateString();
+    if (lastUsed !== today) {
+      days += 1;
+      surveyStorage.set('days', days);
+    }
+    if (
+      // we need to have used Composer enough different calendar days to become eligible...
+      days >= SURVEY_PARAMETERS.daysUntilEligible &&
+      // ... and have either never taken the survey or it's been long enough since we did
+      (lastTaken == null || Date.now() - lastTaken > SURVEY_PARAMETERS.timeUntilNextSurvey)
+    ) {
+      // do we hit the probability of the survey appearing?
+      set(surveyEligibilityState, Math.random() < SURVEY_PARAMETERS.chanceToAppear);
+    }
+    surveyStorage.set('dateLastUsed', today);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -169,5 +197,6 @@ export const applicationDispatcher = () => {
     setPageElementState,
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
+    setSurveyEligibility,
   };
 };

@@ -23,9 +23,13 @@ const { ipcRenderer } = window;
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
 
-  const { fetchExtensions, fetchFeatureFlags, checkNodeVersion, performAppCleanupOnQuit } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    fetchExtensions,
+    fetchFeatureFlags,
+    checkNodeVersion,
+    performAppCleanupOnQuit,
+    setSurveyEligibility,
+  } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     loadLocale(appLocale);
@@ -38,6 +42,7 @@ export const App: React.FC = () => {
     ipcRenderer?.on('cleanup', (_event) => {
       performAppCleanupOnQuit();
     });
+    setSurveyEligibility();
   }, []);
 
   return (
