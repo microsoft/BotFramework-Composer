@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useCallback, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ConversationActivityTrafficItem, Activity } from '@botframework-composer/types';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
@@ -11,9 +11,15 @@ import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
+import debounce from 'lodash/debounce';
 
 import { DebugPanelTabHeaderProps } from '../types';
-import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
+import {
+  rootBotProjectIdSelector,
+  webChatTrafficState,
+  watchedVariablesState,
+  dispatcherState,
+} from '../../../../../recoilModel';
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
@@ -66,13 +72,13 @@ const watchTableColumns: IColumn[] = [
 
 const watchTableLayout: DetailsListLayoutMode = DetailsListLayoutMode.fixedColumns;
 
+// this can be exported and used in other places
 const getValueFromBotTraceScope = (delimitedProperty: string, botTrace: Activity) => {
   const propertySegments = delimitedProperty.split('.');
   const value = propertySegments.reduce(
     (accumulator: object | string | number | boolean | undefined, segment, index) => {
       // first try to grab the specified property off the root of the bot trace's memory
       if (index === 0) {
-        console.log('grabbing root value: ', segment);
         return botTrace?.value[segment];
       }
       // if we are not on the root, try accessing the next value of the desired property
@@ -90,8 +96,19 @@ const getValueFromBotTraceScope = (delimitedProperty: string, botTrace: Activity
 export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
-  // TODO: move to recoil
-  const [watchedProperties, setWatchedProperties] = useState<string[]>(['user.boolean', 'user.complexObj']);
+  const watchedProperties = useRecoilValue(watchedVariablesState(currentProjectId ?? ''));
+  const { setWatchedVariables } = useRecoilValue(dispatcherState);
+
+  const setPropertyValue = useRef(
+    debounce((event: React.ChangeEvent<HTMLInputElement>, propertyIndex: number) => {
+      if (currentProjectId) {
+        const updatedProperties = [...watchedProperties];
+        updatedProperties[propertyIndex] = event?.target?.value;
+        console.log('setting watched properties: ', updatedProperties);
+        setWatchedVariables(currentProjectId, updatedProperties);
+      }
+    }, 500)
+  ).current;
 
   const mostRecentBotState = useMemo(() => {
     const botStateTraffic = rawWebChatTraffic.filter(
@@ -102,12 +119,26 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     }
   }, [rawWebChatTraffic]);
 
+  // we need to refresh the details list every time a new bot state comes in
+  const refreshedWatchedProperties = useMemo(() => {
+    return [...watchedProperties];
+  }, [mostRecentBotState, watchedProperties]);
+
   const renderColumn = useCallback(
     (item: string, index: number | undefined, column: IColumn | undefined) => {
-      if (column) {
+      if (column && index !== undefined) {
         if (column.key === NameColumnKey) {
           // render picker
-          return <span>{item}</span>;
+          return (
+            <input
+              key={`watch-var-picker-input-${index}`}
+              onChange={(ev) => {
+                ev.persist();
+                setPropertyValue(ev, index);
+              }}
+            ></input>
+          );
+          //return <span>{item}</span>;
         } else if (column.key === ValueColumnKey) {
           // render the value display
           if (mostRecentBotState) {
@@ -157,18 +188,27 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     [mostRecentBotState]
   );
 
+  const onClickAdd = useCallback(() => {
+    setWatchedVariables(currentProjectId ?? '', [...watchedProperties, 'placeholder']);
+  }, [watchedProperties]);
+
+  const onClickRemove = useCallback(() => {
+    watchedProperties.pop();
+    setWatchedVariables(currentProjectId ?? '', [...watchedProperties]);
+  }, [watchedProperties]);
+
   if (isActive) {
     return (
       <div css={contentContainer}>
         {/** TODO: factor toolbar and content out into own components? */}
         <div css={toolbar}>
-          <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} />
-          <CommandBarButton iconProps={removeIcon} text={formatMessage('Remove from list')} />
+          <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
+          <CommandBarButton iconProps={removeIcon} text={formatMessage('Remove from list')} onClick={onClickRemove} />
         </div>
         <div css={content}>
           <DetailsList
             columns={watchTableColumns}
-            items={watchedProperties}
+            items={refreshedWatchedProperties}
             layoutMode={watchTableLayout}
             onRenderItemColumn={renderColumn}
           />

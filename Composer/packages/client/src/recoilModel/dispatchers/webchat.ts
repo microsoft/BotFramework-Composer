@@ -5,7 +5,12 @@
 import { ConversationTrafficItem } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import { webChatTrafficState, webChatInspectionDataState, isWebChatPanelVisibleState } from '../atoms';
+import {
+  webChatTrafficState,
+  webChatInspectionDataState,
+  isWebChatPanelVisibleState,
+  watchedVariablesState,
+} from '../atoms';
 import { WebChatInspectionData } from '../types';
 
 export const webChatLogDispatcher = () => {
@@ -13,6 +18,7 @@ export const webChatLogDispatcher = () => {
     const { set } = callbackHelpers;
     set(webChatTrafficState(projectId), []);
     set(webChatInspectionDataState(projectId), undefined); // clear the inspection panel
+    set(watchedVariablesState(projectId), []); // TODO: might not want to do this depending on how annoying it is for the user -- do you want to wipe variables when you restart convo?
   });
 
   const setWebChatPanelVisibility = useRecoilCallback((callbackHelpers: CallbackInterface) => (value: boolean) => {
@@ -43,9 +49,17 @@ export const webChatLogDispatcher = () => {
     }
   );
 
+  const setWatchedVariables = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (projectId: string, variables: string[]) => {
+      const { set } = callbackHelpers;
+      set(watchedVariablesState(projectId), [...variables]);
+    }
+  );
+
   return {
     clearWebChatLogs,
     appendWebChatTraffic,
+    setWatchedVariables,
     setWebChatPanelVisibility,
     setWebChatInspectionData,
   };
