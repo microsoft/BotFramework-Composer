@@ -18,10 +18,11 @@ type ContentEditableProps = {
   remove: () => void;
   validator?: (value: string) => boolean;
   removeOnBackspace?: boolean;
+  style?: React.CSSProperties;
 };
 
 export const ContentEditable = (props: ContentEditableProps) => {
-  const { value, className = '', innerEditableRef, removeOnBackspace, change, validator } = props;
+  const { value, className = '', style, innerEditableRef, removeOnBackspace, change, validator } = props;
 
   let removed = false;
   let preFocusedValue = '';
@@ -95,6 +96,7 @@ export const ContentEditable = (props: ContentEditableProps) => {
 
   return (
     <div
+      style={style}
       dangerouslySetInnerHTML={{ __html: safeHtmlString(value) }}
       ref={innerEditableRef}
       className={className}

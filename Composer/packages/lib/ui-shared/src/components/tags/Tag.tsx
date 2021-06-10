@@ -1,21 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import * as React from 'react';
 import styled from '@emotion/styled';
 import { FluentTheme } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import * as React from 'react';
 
 import { ContentEditable } from './ContentEditable';
 
-const tagContentStyles = css`
-  outline: 0;
-  border: none;
-  white-space: nowrap;
-  padding: 0 4px;
-`;
+const tagContentStyles: React.CSSProperties = {
+  outline: 0,
+  border: 'none',
+  whiteSpace: 'nowrap',
+  padding: '0 8px 0 4px',
+};
 
 const Root = styled.div({
   position: 'relative',
@@ -23,9 +21,14 @@ const Root = styled.div({
   alignItems: 'center',
   fontSize: '14px',
   lineHeight: 1,
-  background: FluentTheme.palette.neutralLight,
-  color: FluentTheme.palette.neutralDark,
+  background: FluentTheme.palette.neutralLighter,
+  color: FluentTheme.palette.neutralPrimary,
 });
+
+const closeIconStyles = {
+  root: { width: 24, height: 24 },
+  icon: { fontSize: 10, color: FluentTheme.palette.neutralSecondary },
+};
 
 type TagProps = {
   value: string;
@@ -47,16 +50,16 @@ export const Tag = (props: TagProps) => {
 
   return (
     <Root data-selection-disabled>
-      {!editable && <div css={tagContentStyles}>{value}</div>}
+      {!editable && <div style={tagContentStyles}>{value}</div>}
       {editable && (
         <ContentEditable
           data-selection-disabled
           change={(newValue) => update(index, newValue)}
-          css={tagContentStyles}
           innerEditableRef={innerEditableRef}
           inputRef={inputRef}
           remove={onRemove}
           removeOnBackspace={removeOnBackspace}
+          style={tagContentStyles}
           validator={validator}
           value={value}
         />
@@ -65,7 +68,7 @@ export const Tag = (props: TagProps) => {
         <IconButton
           data-selection-disabled
           iconProps={{ iconName: 'ChromeClose' }}
-          styles={{ root: { width: 24, height: 24 }, icon: { fontSize: 10 } }}
+          styles={closeIconStyles}
           onClick={onRemove}
         />
       )}
