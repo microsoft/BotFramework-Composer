@@ -6,7 +6,6 @@ import React from 'react';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils';
 import { ManageService } from '../ManageService';
-// cog servs client
 
 const regions = [{ key: 'mockedRegion', text: 'mockedRegion' }];
 const tiers = [{ key: 'mockedTier', text: 'mockedTier' }];
@@ -80,7 +79,7 @@ jest.mock('@azure/arm-subscriptions', () => ({
           };
         },
         listLocations: async () => {
-          return [{ key: 'mockedRegion', text: 'mockedRegion' }];
+          return [{ name: 'mockedRegion', displayName: 'mockedRegion' }];
         },
       },
     };
@@ -385,6 +384,152 @@ describe('<ManageService />', () => {
         introText={introtext}
         learnMore={learnMore}
         regions={regions}
+        serviceKeyType={serviceKeyType}
+        serviceName={serviceName}
+        tiers={tiers}
+        onDismiss={onDismiss}
+        onGetKey={onGetKey}
+        onNext={onNext}
+        onToggleVisibility={onToggleVisibility}
+      />
+    );
+
+    // test the default option (choose existing)
+    // change selection
+    const createOption = await findByText('Create and configure new Azure resources');
+    fireEvent.click(createOption);
+
+    // click the next button, ensure the title changes
+    const nextButton = await findByText('Next');
+    expect(nextButton).toBeDefined();
+    await act(async () => {
+      await fireEvent.click(nextButton);
+    });
+    expect(baseElement).toHaveTextContent(`Create ${serviceName} resources`);
+
+    // ensure that since a subscription hasn't been selected
+    // this button is disabled
+    const nextButton2 = await findByText('Next');
+    expect(nextButton2).toBeDefined();
+    expect(nextButton2).toBeDisabled();
+
+    const tenantOption = await findByTestId('service-create-tenant-selection');
+    expect(tenantOption).toBeDefined();
+    expect(tenantOption).toBeEnabled();
+
+    const subscriptionOption = await findByTestId('service-create-subscription-selection');
+    expect(subscriptionOption).toBeDefined();
+    expect(subscriptionOption).toBeEnabled();
+
+    // choose subscription
+    await act(async () => {
+      await fireEvent.keyDown(subscriptionOption, DOWN_ARROW);
+    });
+
+    const mySub = await findByText('mockSubscription');
+    expect(mySub).toBeDefined();
+
+    await act(async () => {
+      await fireEvent.click(mySub);
+    });
+
+    // next button should now be enabled
+    expect(nextButton2).toBeEnabled();
+
+    await act(async () => {
+      await fireEvent.click(nextButton2);
+    });
+
+    const nextButton3 = await findByText('Next');
+    expect(nextButton3).toBeDefined();
+    expect(nextButton3).toBeDisabled();
+
+    const resourceOption = await findByTestId('service-create-resource-selection');
+    expect(resourceOption).toBeDefined();
+    expect(resourceOption).toBeEnabled();
+
+    const resourceName = await findByTestId('resourceName');
+    expect(resourceName).toBeDefined();
+    expect(resourceName).toBeEnabled();
+
+    // choose subscription
+    await act(async () => {
+      await fireEvent.click(resourceOption);
+    });
+
+    const myGroup = await findByText('mockedGroup');
+    expect(myGroup).toBeDefined();
+
+    await act(async () => {
+      await fireEvent.click(myGroup);
+      await fireEvent.change(resourceName, { target: { value: 'mockedResource' } });
+    });
+
+    // select region
+    const regionOption = await findByTestId('rootRegion');
+    expect(regionOption).toBeDefined();
+    expect(regionOption).toBeEnabled();
+    // choose subscription
+    await act(async () => {
+      await fireEvent.keyDown(regionOption, DOWN_ARROW);
+    });
+
+    const myRegion = await findByText('mockedRegion');
+    expect(myRegion).toBeDefined();
+
+    await act(async () => {
+      await fireEvent.click(myRegion);
+    });
+
+    // NEXT BUTTON SHOULD STILL BE DISABLED! need to do tier selection!
+    expect(nextButton3).toBeDisabled();
+
+    const tierOption = await findByTestId('tier');
+    expect(tierOption).toBeDefined();
+    expect(tierOption).toBeEnabled();
+    // choose subscription
+    await act(async () => {
+      await fireEvent.keyDown(tierOption, DOWN_ARROW);
+    });
+
+    const myTier = await findByText('mockedTier');
+    expect(myTier).toBeDefined();
+
+    await act(async () => {
+      await fireEvent.click(myTier);
+    });
+
+    // finally the button should now be enabled
+    expect(nextButton3).toBeEnabled();
+
+    await act(async () => {
+      await fireEvent.click(nextButton3);
+    });
+
+    expect(createService).toBeCalledWith(
+      expect.anything(),
+      'mockSubscription',
+      'mockedGroup',
+      'mockedResource',
+      'mockedRegion',
+      'mockedTier'
+    );
+
+    // ensure that the final callback was called
+    expect(onGetKey).toBeCalledWith({
+      region: 'mockedRegion',
+      key: 'mockedKey',
+    });
+  });
+
+  it('it should handle tier + dynamic regions option during creation', async () => {
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
+      <ManageService
+        createService={createService}
+        handoffInstructions={handoffInstructions}
+        hidden={false}
+        introText={introtext}
+        learnMore={learnMore}
         serviceKeyType={serviceKeyType}
         serviceName={serviceName}
         tiers={tiers}
