@@ -116,6 +116,8 @@ type CreateBotProps = {
   isOpen: boolean;
   templates: BotTemplate[];
   location?: WindowLocation | undefined;
+  localTemplatePath: string;
+  setLocalTemplatePath: (path: string) => void;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   fetchReadMe: (moduleName: string) => {};
@@ -124,7 +126,7 @@ type CreateBotProps = {
 export function CreateBot(props: CreateBotProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
-  const { isOpen, templates, onDismiss, onNext } = props;
+  const { isOpen, templates, onDismiss, onNext, localTemplatePath, setLocalTemplatePath } = props;
   const [currentTemplateId, setCurrentTemplateId] = useState('');
   const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
     props: { itemKey: csharpFeedKey },
@@ -291,7 +293,16 @@ export function CreateBot(props: CreateBotProps) {
             </ScrollablePane>
           </div>
           <div css={templateDetailContainer} data-is-scrollable="true">
-            {fetchReadMePending ? <LoadingSpinner /> : <TemplateDetailView readMe={readMe} template={getTemplate()} />}
+            {fetchReadMePending ? (
+              <LoadingSpinner />
+            ) : (
+              <TemplateDetailView
+                localTemplatePath={localTemplatePath}
+                readMe={readMe}
+                setLocalTemplatePath={setLocalTemplatePath}
+                template={getTemplate()}
+              />
+            )}
           </div>
         </div>
         <DialogFooter>

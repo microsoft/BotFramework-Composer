@@ -26,12 +26,7 @@ import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNotification';
-import {
-  creationFlowStatusState,
-  dispatcherState,
-  localTemplatePathState,
-  templateProjectsState,
-} from '../../recoilModel';
+import { creationFlowStatusState, dispatcherState, templateProjectsState } from '../../recoilModel';
 import { getAliasFromPayload, Profile } from '../../utils/electronUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -104,6 +99,7 @@ type DefineConversationProps = {
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
+  localTemplatePath?: string;
   focusedStorageFolder: StorageFolder;
 } & RouteComponentProps<{
   templateId: string;
@@ -121,13 +117,13 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     focusedStorageFolder,
     createFolder,
     updateFolder,
+    localTemplatePath,
   } = props;
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
   const runtimeLanguage = props.runtimeLanguage ? props.runtimeLanguage : csharpFeedKey;
   const templateProjects = useRecoilValue(templateProjectsState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
-  const localTemplatePath = useRecoilValue(localTemplatePathState);
 
   const currentTemplate = templateProjects.find((t) => {
     if (t?.id) {

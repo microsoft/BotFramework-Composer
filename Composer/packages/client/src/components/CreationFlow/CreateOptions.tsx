@@ -28,6 +28,8 @@ import { CreateBot } from './CreateBot';
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
   templates: BotTemplate[];
+  localTemplatePath: string;
+  setLocalTemplatePath: (path: string) => void;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
@@ -38,7 +40,15 @@ export function CreateOptions(props: CreateOptionsProps) {
   const [isOpenOptionsModal, setIsOpenOptionsModal] = useState(false);
   const [option, setOption] = useState('Create');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-  const { templates, onDismiss, onNext, onJumpToOpenModal, fetchReadMe } = props;
+  const {
+    templates,
+    onDismiss,
+    onNext,
+    onJumpToOpenModal,
+    fetchReadMe,
+    setLocalTemplatePath,
+    localTemplatePath,
+  } = props;
   const [showNodeModal, setShowNodeModal] = useState(false);
   const userHasNode = useRecoilValue(userHasNodeInstalledState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
@@ -140,7 +150,9 @@ export function CreateOptions(props: CreateOptionsProps) {
       <CreateBot
         fetchReadMe={fetchReadMe}
         isOpen={isOpenCreateModal}
+        localTemplatePath={localTemplatePath}
         location={props.location}
+        setLocalTemplatePath={setLocalTemplatePath}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}

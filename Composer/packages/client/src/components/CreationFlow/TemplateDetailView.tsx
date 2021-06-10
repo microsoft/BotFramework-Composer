@@ -15,8 +15,7 @@ import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
 
 import composerIcon from '../../../images/composerIcon.svg';
 import addIcon from '../../../images/addIcon.svg';
-import { dispatcherState, localTemplatePathState } from '../../../recoilModel';
-import httpClient from '../../../utils/httpUtil';
+import httpClient from '../../utils/httpUtil';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
   width: 100%;
@@ -51,15 +50,14 @@ const templateVersion = css`
 type TemplateDetailViewProps = {
   template?: BotTemplate;
   readMe: string;
+  localTemplatePath: string;
+  setLocalTemplatePath: (path: string) => void;
 };
 
 const templateDocUrl = 'https://aka.ms/localComposerTemplateDoc';
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  const { setLocalTemplatePathState } = useRecoilValue(dispatcherState);
-
-  const localTemplatePath = useRecoilValue(localTemplatePathState);
-  const isLocalTemplate = props.template?.id === localTemplateId;
+  const { localTemplatePath, setLocalTemplatePath } = props;
   // Composer formats and displays its own template title and strips out title from read me to avoid redundant titles
   const getStrippedReadMe = () => {
     return props.readMe.replace(/^(#|##) (.*)/, '').trim();
@@ -88,7 +86,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         label={formatMessage('Local Template Path')}
         styles={{ root: { marginTop: '10px' } }}
         value={localTemplatePath}
-        onChange={(_e, val) => setLocalTemplatePathState(val || '')}
+        onChange={(_e, val) => setLocalTemplatePath(val || '')}
         onGetErrorMessage={validatePath}
       />
     </Fragment>
