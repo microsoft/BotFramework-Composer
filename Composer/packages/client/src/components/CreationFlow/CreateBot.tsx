@@ -4,11 +4,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useState, Fragment, useEffect, useMemo } from 'react';
-import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
@@ -19,50 +16,51 @@ import {
   CheckboxVisibility,
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { BotTemplate, localTemplateId } from '@bfc/shared';
+import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { WindowLocation } from '@reach/router';
-import { useRecoilValue } from 'recoil';
-import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
-import { creationFlowTypeState } from '../../recoilModel';
+import msftIcon from '../../images/msftIcon.svg';
+import addIcon from '../../images/addIcon.svg';
+import { DialogCreationCopy } from '../../constants';
+import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
+
+import { TemplateDetailView } from './TemplateDetailView';
 
 // -------------------- Styles -------------------- //
 
-const optionIcon = (checked: boolean) => css`
-  vertical-align: text-bottom;
-  font-size: 18px;
-  margin-right: 10px;
-  color: ${checked ? '#0078d4' : '#000'};
-`;
-
-const optionRoot = css`
-  width: 100%;
-  height: 100%;
-`;
-
 const detailListContainer = css`
-  width: 100%;
+  width: 48%;
+  padding-right: 2%;
   height: 400px;
-  position: relative;
   overflow: hidden;
+  float: left;
   flex-grow: 1;
 `;
 
-const listHeader = css`
-  margin-top: 10px;
-  margin-bottom: 0;
+const templateDetailContainer = css`
+  width: 48%;
+  padding-right: 2%;
+  height: 400px;
+  overflow: auto;
+  flex-grow: 1;
+  float: left;
 `;
 
-export const bannerClass = mergeStyles({
-  marginTop: '5px',
-});
+const pickerContainer = css`
+  position: relative;
+  height: 400px;
+  border: 1px solid #f3f2f1;
+`;
 
-const rowDetails = (disabled: boolean) => {
+const rowDetails = (disabled) => {
   return {
     root: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
@@ -80,7 +78,7 @@ const rowDetails = (disabled: boolean) => {
   };
 };
 
-const rowTitle = (disabled: boolean) => {
+const rowTitle = (disabled) => {
   return {
     cellTitle: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
@@ -111,74 +109,73 @@ const optionKeys = {
   createFromTemplate: 'createFromTemplate',
 };
 
+const templateRequestUrl =
+  'https://github.com/microsoft/botframework-components/issues/new?assignees=&labels=needs-triage%2C+feature-request&template=-net-sdk-feature-request.md&title=[NewTemplateRequest]';
+
 // -------------------- CreateOptions -------------------- //
 type CreateBotProps = {
   isOpen: boolean;
   templates: BotTemplate[];
   location?: WindowLocation | undefined;
   onDismiss: () => void;
-  onNext: (data: string) => void;
+  onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
+  fetchReadMe: (moduleName: string) => {};
 };
 
 export function CreateBot(props: CreateBotProps) {
-  const [option, setOption] = useState(optionKeys.createFromScratch);
-  const [disabled, setDisabled] = useState(true);
-  const { templates, location, onDismiss, onNext, isOpen } = props;
-  const [currentTemplate, setCurrentTemplate] = useState('');
-  const [emptyBotKey, setEmptyBotKey] = useState('');
+  const [option] = useState(optionKeys.createFromTemplate);
+  const [disabled] = useState(false);
+  const { isOpen, templates, onDismiss, onNext } = props;
+  const [currentTemplateId, setCurrentTemplateId] = useState('');
+  const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
+    props: { itemKey: csharpFeedKey },
+  });
+  const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
+  const [readMe] = useRecoilState(selectedTemplateReadMeState);
+  const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
 
-  const selection = useMemo(() => {
+  const selectedTemplate = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
-        const t = selection.getSelection()[0] as BotTemplate;
+        const t = selectedTemplate.getSelection()[0] as BotTemplate;
+
         if (t) {
-          setCurrentTemplate(t.id);
+          setCurrentTemplateId(t.id);
         }
       },
     });
   }, []);
 
-  function SelectOption(props?: { checked?: boolean; text: string; key: string }) {
-    if (props == null) return null;
-    const { checked, text, key } = props;
-    return (
-      <div key={key} css={optionRoot}>
-        <Icon css={optionIcon(checked ?? false)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
-        <span>{text}</span>
-      </div>
-    );
-  }
-
-  const handleChange = (event, option?: IChoiceGroupOption) => {
-    if (option == null) return;
-    setOption(option.key);
-    if (option.key === optionKeys.createFromTemplate) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  };
-
   const handleJumpToNext = () => {
-    let routeToTemplate = emptyBotKey;
-    if (option === optionKeys.createFromTemplate) {
-      routeToTemplate = currentTemplate;
-      TelemetryClient.track('CreateNewBotProjectFromExample', { template: routeToTemplate });
-    }
+    TelemetryClient.track('CreateNewBotProjectNextButton', { template: currentTemplateId });
+    const runtimeLanguage = selectedProgLang?.props?.itemKey ?? csharpFeedKey;
 
-    if (option === optionKeys.createFromQnA) {
-      routeToTemplate = QnABotTemplateId;
-    }
     if (location?.search) {
-      routeToTemplate += location.search;
+      onNext(currentTemplateId, runtimeLanguage, location.search);
+    } else {
+      onNext(currentTemplateId, runtimeLanguage);
     }
-
-    TelemetryClient.track('CreateNewBotProjectNextButton', { template: routeToTemplate });
-    onNext(routeToTemplate);
   };
 
-  const tableColums = [
+  const renderTemplateIcon = (item: BotTemplate) => {
+    let labelText = formatMessage('Microsoft Logo');
+    let iconSrc = msftIcon;
+    if (item.id === localTemplateId) {
+      labelText = formatMessage('Add Local Template');
+      iconSrc = addIcon;
+    }
+    return (
+      <img
+        alt={labelText}
+        aria-label={labelText}
+        src={iconSrc}
+        style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px', color: 'blue' }}
+      />
+    );
+  };
+
+  const tableColumns = [
     {
       key: 'name',
       name: formatMessage('Name'),
@@ -191,112 +188,124 @@ export function CreateBot(props: CreateBotProps) {
       onRender: (item) => (
         <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
+            {renderTemplateIcon(item)}
             {item.name}
           </div>
         </div>
       ),
     },
-    {
-      key: 'description',
-      name: formatMessage('Description'),
-      fieldName: 'dateModifiedValue',
-      minWidth: 200,
-      maxWidth: 450,
-      isResizable: !disabled,
-      data: 'string',
-      styles: rowTitle(disabled),
-      onRender: (item) => (
-        <div data-is-focusable css={tableCell}>
-          <div css={content} tabIndex={-1}>
-            {item.description}
-          </div>
-        </div>
-      ),
-    },
   ];
 
-  const onRenderDetailsHeader = (props, defaultRender) => {
+  const onRenderRow = (props) => {
+    if (!props) return null;
     return (
-      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
-        {defaultRender({
-          ...props,
-        })}
-      </Sticky>
+      <DetailsRow {...props} data-testid={props.item.id} styles={rowDetails(disabled)} tabIndex={props.itemIndex} />
     );
   };
-  const onRenderRow = (props) => {
-    if (props) {
-      return (
-        <DetailsRow {...props} data-testid={props.item.id} styles={rowDetails(disabled)} tabIndex={props.itemIndex} />
-      );
-    }
-    return null;
+
+  const getTemplate = (): BotTemplate | undefined => {
+    const currentTemplate = displayedTemplates.find((t) => {
+      return t?.id === currentTemplateId;
+    });
+    return currentTemplate;
   };
 
   useEffect(() => {
-    if (templates.length > 1) {
-      const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
-      if (emptyBotTemplate) {
-        setCurrentTemplate(emptyBotTemplate.id);
-        setEmptyBotKey(emptyBotTemplate.id);
-      }
+    const itemKey = selectedProgLang.props.itemKey;
+    let newTemplates: BotTemplate[] = [];
+    if (itemKey === csharpFeedKey) {
+      newTemplates = templates.filter((template) => {
+        return template.dotnetSupport;
+      });
+    } else if (itemKey === nodeFeedKey) {
+      newTemplates = templates.filter((template) => {
+        return template.nodeSupport;
+      });
     }
-  }, [templates]);
+    if (creationFlowType === 'Skill') {
+      newTemplates = newTemplates.filter((template) => {
+        return !template.isMultiBotTemplate;
+      });
+    }
+    setDisplayedTemplates(newTemplates);
+  }, [templates, selectedProgLang]);
 
-  const choiceOptions = [
-    {
-      ariaLabel: formatMessage('Create from scratch') + (option === optionKeys.createFromScratch ? ' selected' : ''),
-      key: optionKeys.createFromScratch,
-      'data-testid': 'Create from scratch',
-      text: formatMessage('Create from scratch'),
-      onRenderField: SelectOption,
-    },
-    {
-      ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
-      key: optionKeys.createFromQnA,
-      'data-testid': 'Create from QnA',
-      text: formatMessage('Create from knowledge base (QnA Maker)'),
-      onRenderField: SelectOption,
-    },
-    {
-      ariaLabel: formatMessage('Create from template') + (option === optionKeys.createFromTemplate ? ' selected' : ''),
-      key: optionKeys.createFromTemplate,
-      'data-testid': 'Create from template',
-      text: formatMessage('Create from template'),
-      onRenderField: SelectOption,
-    },
-  ];
+  useEffect(() => {
+    if (displayedTemplates?.[0]?.id) {
+      setCurrentTemplateId(displayedTemplates[0].id);
+      setTimeout(() => {
+        selectedTemplate.setIndexSelected(0, true, false);
+      }, 0);
+    }
+  }, [displayedTemplates]);
 
-  const choiceGroupTitle = creationFlowType === 'Skill' ? '' : formatMessage('Choose how to create your bot');
+  useEffect(() => {
+    if (currentTemplateId) {
+      props.fetchReadMe(currentTemplateId);
+    }
+  }, [currentTemplateId, props.fetchReadMe]);
+
   const dialogWrapperProps =
     creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
+
   return (
     <Fragment>
       <DialogWrapper isOpen={isOpen} {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
-        <ChoiceGroup label={choiceGroupTitle} options={choiceOptions} selectedKey={option} onChange={handleChange} />
-        <h3 css={listHeader}>{formatMessage('Examples')}</h3>
-        <div css={detailListContainer} data-is-scrollable="true">
-          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-            <DetailsList
-              isHeaderVisible
-              checkboxVisibility={CheckboxVisibility.hidden}
-              columns={tableColums}
-              compact={false}
-              getKey={(item) => item.name}
-              items={templates}
-              layoutMode={DetailsListLayoutMode.justified}
-              selection={selection}
-              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
-              onRenderDetailsHeader={onRenderDetailsHeader}
-              onRenderRow={onRenderRow}
-            />
-          </ScrollablePane>
+        <Pivot
+          defaultSelectedKey={csharpFeedKey}
+          onLinkClick={(item) => {
+            if (item) {
+              setSelectedProgLang(item);
+            }
+          }}
+        >
+          <PivotItem data-testid="dotnetFeed" headerText="C#" itemKey={csharpFeedKey}></PivotItem>
+          <PivotItem
+            data-testid="nodeFeed"
+            headerText={formatMessage('Node (Preview)')}
+            itemKey={nodeFeedKey}
+          ></PivotItem>
+        </Pivot>
+        <div css={pickerContainer}>
+          <div css={detailListContainer} data-is-scrollable="true" id="templatePickerContainer">
+            <ScrollablePane
+              scrollbarVisibility={ScrollbarVisibility.auto}
+              styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
+            >
+              <DetailsList
+                checkboxVisibility={CheckboxVisibility.hidden}
+                columns={tableColumns}
+                compact={false}
+                getKey={(item) => item.name}
+                isHeaderVisible={false}
+                items={displayedTemplates}
+                layoutMode={DetailsListLayoutMode.justified}
+                selection={selectedTemplate}
+                selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+                onRenderRow={onRenderRow}
+              />
+            </ScrollablePane>
+          </div>
+          <div css={templateDetailContainer} data-is-scrollable="true">
+            {fetchReadMePending ? <LoadingSpinner /> : <TemplateDetailView readMe={readMe} template={getTemplate()} />}
+          </div>
         </div>
         <DialogFooter>
+          <Link
+            href={templateRequestUrl}
+            styles={{ root: { fontSize: '12px', float: 'left' } }}
+            target="_blank"
+            onClick={() => {
+              TelemetryClient.track('NeedAnotherTemplateClicked');
+            }}
+          >
+            <FontIcon iconName="ChatInviteFriend" style={{ marginRight: '5px' }} />
+            {formatMessage('Need another template? Send us a request')}
+          </Link>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
+            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null)}
             text={formatMessage('Next')}
             onClick={handleJumpToNext}
           />
