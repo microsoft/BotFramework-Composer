@@ -18,7 +18,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { BotTemplate, localTemplateId } from '@bfc/shared';
 import { DialogWrapper, DialogTypes, LoadingSpinner } from '@bfc/ui-shared';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { WindowLocation } from '@reach/router';
 import { IPivotItemProps, Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -164,8 +164,15 @@ export function CreateBot(props: CreateBotProps) {
       return (
         <FontIcon
           aria-label={formatMessage('Add Local Template')}
-          iconName="AddIcon"
-          style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px', color: 'blue' }}
+          iconName="Add"
+          style={{
+            color: `${SharedColors.cyanBlue10}`,
+            marginRight: '3px',
+            height: '12px',
+            width: '12px',
+            position: 'relative',
+            top: '2px',
+          }}
         />
       );
     } else {

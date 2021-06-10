@@ -12,8 +12,9 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 
-import composerIcon from '../../../images/composerIcon.svg';
+import composerIcon from '../../images/composerIcon.svg';
 import httpClient from '../../utils/httpUtil';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
@@ -95,7 +96,11 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
 
   const renderTemplateIcon = () => {
     return isLocalTemplate ? (
-      <FontIcon aria-label={formatMessage('Add icon')} iconName="AddIcon" style={{ marginLeft: '9px' }} />
+      <FontIcon
+        aria-label={formatMessage('Add icon')}
+        iconName="Add"
+        style={{ marginLeft: '9px', color: `${SharedColors.cyanBlue10}`, fontSize: '20px' }}
+      />
     ) : (
       <img
         alt={formatMessage('Composer Logo')}
