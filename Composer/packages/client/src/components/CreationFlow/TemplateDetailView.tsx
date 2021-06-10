@@ -8,10 +8,10 @@ import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import React, { Fragment } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useRecoilValue } from 'recoil';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import composerIcon from '../../../images/composerIcon.svg';
 import addIcon from '../../../images/addIcon.svg';
@@ -57,7 +57,9 @@ type TemplateDetailViewProps = {
 const templateDocUrl = 'https://aka.ms/localComposerTemplateDoc';
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  const { localTemplatePath, setLocalTemplatePath } = props;
+  const { localTemplatePath, setLocalTemplatePath, template } = props;
+  const isLocalTemplate = template?.id === localTemplateId;
+
   // Composer formats and displays its own template title and strips out title from read me to avoid redundant titles
   const getStrippedReadMe = () => {
     return props.readMe.replace(/^(#|##) (.*)/, '').trim();
@@ -92,9 +94,23 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     </Fragment>
   );
 
+  const renderTemplateIcon = () => {
+    return isLocalTemplate ? (
+      <FontIcon aria-label={formatMessage('Add icon')} iconName="AddIcon" style={{ marginLeft: '9px' }} />
+    ) : (
+      <img
+        alt={formatMessage('Composer Logo')}
+        aria-label={formatMessage('Composer Logo')}
+        src={composerIcon}
+        style={{ marginLeft: '9px' }}
+      />
+    );
+  };
+
   return (
     <div>
       <div css={templateTitleContainer(isLocalTemplate)}>
+        {renderTemplateIcon()}
         {isLocalTemplate ? (
           <img
             alt={formatMessage('Add Icon')}
