@@ -106,14 +106,14 @@ jest.mock('../../../utils/authClient', () => ({
 
 jest.mock('../../../utils/auth');
 
-const createService = jest.fn();
-const onDismiss = jest.fn();
-const onGetKey = jest.fn();
-const onNext = jest.fn();
-const onToggleVisibility = jest.fn();
-
 describe('<ManageService />', () => {
   it('displays correct ui copy', async () => {
+    const createService = jest.fn(() => 'mockedKey');
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
@@ -140,6 +140,12 @@ describe('<ManageService />', () => {
   });
 
   it('calls close method when closed', async () => {
+    const createService = jest.fn(() => 'mockedKey');
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { findByText } = renderWithRecoil(
       <ManageService
         createService={createService}
@@ -163,6 +169,12 @@ describe('<ManageService />', () => {
   });
 
   it('it should navigate to the selection page', async () => {
+    const createService = jest.fn(() => 'mockedKey');
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
@@ -250,6 +262,12 @@ describe('<ManageService />', () => {
   });
 
   it('it should navigate to the create page', async () => {
+    const createService = jest.fn(() => 'mockedKey');
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
@@ -376,6 +394,12 @@ describe('<ManageService />', () => {
   });
 
   it('it should handle tier option during creation', async () => {
+    const createService = jest.fn(() => 'mockedKey');
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
@@ -523,6 +547,12 @@ describe('<ManageService />', () => {
   });
 
   it('it should handle tier + dynamic regions option during creation', async () => {
+    const createService = jest.fn(() => 'mockedKey');
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageService
         createService={createService}
@@ -669,6 +699,12 @@ describe('<ManageService />', () => {
   });
 
   it('it should show handoff instructions', async () => {
+    const createService = jest.fn();
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText } = renderWithRecoil(
       <ManageService
         createService={createService}

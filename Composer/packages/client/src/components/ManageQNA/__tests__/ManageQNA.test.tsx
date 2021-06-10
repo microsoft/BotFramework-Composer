@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { fireEvent, act, findAllByText } from '@botframework-composer/test-utils';
+import { fireEvent, act } from '@botframework-composer/test-utils';
 import React from 'react';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils';
-import { ManageSpeech } from '../ManageSpeech';
+import { ManageQNA } from '../ManageQNA';
 
-const serviceName = 'Speech';
+const serviceName = 'QnA Maker';
 const DOWN_ARROW = { keyCode: 40 };
 
 // token creds
@@ -39,7 +39,7 @@ jest.mock('@azure/arm-cognitiveservices', () => ({
         list: async () => {
           return [
             {
-              kind: 'SpeechServices',
+              kind: 'QnAMaker',
               id: '/stuff/resourceGroups/mockedGroup/stuff',
               name: 'mockedAccount',
               location: 'westus',
@@ -101,7 +101,7 @@ jest.mock('../../../utils/authClient', () => ({
 
 jest.mock('../../../utils/auth');
 
-describe('<ManageSpeech />', () => {
+describe('<ManageQNA />', () => {
   it('displays correct ui copy', async () => {
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
@@ -109,7 +109,7 @@ describe('<ManageSpeech />', () => {
     const onToggleVisibility = jest.fn();
 
     const { baseElement } = renderWithRecoil(
-      <ManageSpeech
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -129,7 +129,7 @@ describe('<ManageSpeech />', () => {
     const onToggleVisibility = jest.fn();
 
     const { findByText } = renderWithRecoil(
-      <ManageSpeech
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -150,7 +150,7 @@ describe('<ManageSpeech />', () => {
     const onToggleVisibility = jest.fn();
 
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
-      <ManageSpeech
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -228,14 +228,14 @@ describe('<ManageSpeech />', () => {
     });
   });
 
-  it('it should navigate to the create page', async () => {
+  it('it should handle tier option during creation', async () => {
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findAllByText } = renderWithRecoil(
-      <ManageSpeech
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -321,7 +321,6 @@ describe('<ManageSpeech />', () => {
     expect(regionOption).toBeEnabled();
     // choose subscription
     await act(async () => {
-      // await fireEvent.keyDown(regionOption, DOWN_ARROW);
       await fireEvent.click(regionOption);
     });
 
@@ -332,7 +331,27 @@ describe('<ManageSpeech />', () => {
       await fireEvent.click(myRegion);
     });
 
+    // NEXT BUTTON SHOULD STILL BE DISABLED! need to do tier selection!
+    expect(nextButton3).toBeDisabled();
+
+    const tierOption = await findByTestId('tier');
+    expect(tierOption).toBeDefined();
+    expect(tierOption).toBeEnabled();
+    // choose subscription
+    await act(async () => {
+      await fireEvent.keyDown(tierOption, DOWN_ARROW);
+    });
+
+    const myTier = await findByText('Free');
+    expect(myTier).toBeDefined();
+
+    await act(async () => {
+      await fireEvent.click(myTier);
+    });
+
+    // finally the button should now be enabled
     expect(nextButton3).toBeEnabled();
+
     await act(async () => {
       await fireEvent.click(nextButton3);
     });
@@ -351,7 +370,7 @@ describe('<ManageSpeech />', () => {
     const onToggleVisibility = jest.fn();
 
     const { baseElement, findByText } = renderWithRecoil(
-      <ManageSpeech
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}

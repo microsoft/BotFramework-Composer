@@ -101,12 +101,12 @@ jest.mock('../../../utils/authClient', () => ({
 
 jest.mock('../../../utils/auth');
 
-const onDismiss = jest.fn();
-const onGetKey = jest.fn();
-const onNext = jest.fn();
-const onToggleVisibility = jest.fn();
-
 describe('<ManageLuis />', () => {
+  const onDismiss = jest.fn();
+  const onGetKey = jest.fn();
+  const onNext = jest.fn();
+  const onToggleVisibility = jest.fn();
+
   it('displays correct ui copy', async () => {
     const { baseElement } = renderWithRecoil(
       <ManageLuis
@@ -123,6 +123,11 @@ describe('<ManageLuis />', () => {
   });
 
   it('calls close method when closed', async () => {
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { findByText } = renderWithRecoil(
       <ManageLuis
         hidden={false}
@@ -139,6 +144,11 @@ describe('<ManageLuis />', () => {
   });
 
   it('it should navigate to the selection page', async () => {
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageLuis
         hidden={false}
@@ -219,6 +229,11 @@ describe('<ManageLuis />', () => {
   });
 
   it('it should navigate to the create page', async () => {
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageLuis
         hidden={false}
@@ -329,6 +344,11 @@ describe('<ManageLuis />', () => {
   });
 
   it('it should show handoff instructions', async () => {
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement, findByText } = renderWithRecoil(
       <ManageLuis
         hidden={false}
