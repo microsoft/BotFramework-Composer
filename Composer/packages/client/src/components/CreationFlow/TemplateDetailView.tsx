@@ -14,7 +14,6 @@ import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import composerIcon from '../../../images/composerIcon.svg';
-import addIcon from '../../../images/addIcon.svg';
 import httpClient from '../../utils/httpUtil';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
@@ -111,21 +110,6 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     <div>
       <div css={templateTitleContainer(isLocalTemplate)}>
         {renderTemplateIcon()}
-        {isLocalTemplate ? (
-          <img
-            alt={formatMessage('Add Icon')}
-            aria-label={formatMessage('Add Icon')}
-            src={addIcon}
-            style={{ marginLeft: '9px', height: '20px', width: '20px' }}
-          />
-        ) : (
-          <img
-            alt={formatMessage('Composer Logo')}
-            aria-label={formatMessage('Composer Logo')}
-            src={composerIcon}
-            style={{ marginLeft: '9px' }}
-          />
-        )}
         <span css={templateTitle(isLocalTemplate)}>{props.template?.name}</span>
         {!isLocalTemplate && <span css={templateVersion}>{props.template?.package?.packageVersion}</span>}
       </div>
