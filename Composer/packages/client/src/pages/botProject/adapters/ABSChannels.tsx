@@ -239,6 +239,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
               channelName: channelId,
               location: 'global',
               properties: {
+                acceptedTerms: opts?.acceptedTerms,
                 isEnabled: true,
               },
             },
@@ -286,7 +287,47 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       }
       await httpClient.put(url, data, { headers: { Authorization: `Bearer ${token}` } });
       if (channelId === CHANNELS.TEAMS) {
-        setShowTeamsCallOut(true);
+        const createResults = await httpClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
+        if (!createResults.data?.properties?.properties?.acceptedTerms === true) {
+          if (
+            await OpenConfirmModal(formatMessage('Microsoft Teams terms and conditions'), null, {
+              disabled: true,
+              confirmText: formatMessage('Agree'),
+              checkboxProps: {
+                kind: 'doubleConfirm',
+                checkboxLabel: (
+                  <div>
+                    {formatMessage.rich(
+                      'I agree to the <a>Microsoft Channel Publication Terms</a> and the <a2>Microsoft Privacy Statement</a2> for my deployment to the Microsoft Teams channel.',
+                      {
+                        a: ({ children }) => (
+                          <a href="https://aka.ms/bots/terms/channels" rel="noreferrer" target="_blank">
+                            {children}
+                          </a>
+                        ),
+                        a2: ({ children }) => (
+                          <a
+                            href="https://privacy.microsoft.com/en-us/privacystatement"
+                            rel="noreferrer"
+                            target="_blank"
+                          >
+                            {children}
+                          </a>
+                        ),
+                      }
+                    )}
+                  </div>
+                ),
+              },
+            })
+          ) {
+            return await createChannelService(channelId, { ...opts, acceptedTerms: true });
+          } else {
+            return await deleteChannelService(channelId);
+          }
+        } else {
+          setShowTeamsCallOut(true);
+        }
       }
       // success!!
       setChannelStatus({
