@@ -21,7 +21,7 @@ const getPropertyReferences = (content: any) => {
       // extract from action expectedProperties
       for (const action of content.actions) {
         if (action.expectedProperties && Array.isArray(action.expectedProperties)) {
-          foundProperties.push(...action.expectedProperties)
+          foundProperties.push(...action.expectedProperties);
         }
       }
     }
