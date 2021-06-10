@@ -21,7 +21,13 @@ const ProvisonActions = styled.div<ProvisonActionsStylingProps>((props) => ({
 }));
 
 const FooterButton = styled(DefaultButton)`
-  margin: 0 4px;
+  margin-right: 8px;
+`;
+
+const ButtonContainer = styled.div`
+  & button:nth-last-child(1) {
+    margin-right: 0px;
+  }
 `;
 
 type Props = { userInfo: UserInfo } & WizardStep;
@@ -35,7 +41,7 @@ export const WizardFooterWithUserPersona = (props: Props) => {
       {isSignedIn ? (
         <UserPersona secondaryText={formatMessage('Sign out')} size={PersonaSize.size40} text={userInfo?.name} />
       ) : null}
-      <div>
+      <ButtonContainer>
         <FooterButton
           disabled={!navigation.canGoBack}
           text={formatMessage(navigation.backText || 'Back')}
@@ -52,7 +58,7 @@ export const WizardFooterWithUserPersona = (props: Props) => {
           text={formatMessage(navigation.cancelText || 'Cancel')}
           onClick={() => props.onCancel()}
         />
-      </div>
+      </ButtonContainer>
     </ProvisonActions>
   );
 };

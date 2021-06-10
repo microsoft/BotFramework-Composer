@@ -4,7 +4,9 @@ export type ResourceConfigurationState = {
   tenantId: string;
   accessToken: string;
   subscriptionId: string;
-  resourceGroupId: string;
+  resourceGroupName: string;
+  luisRegion: string;
+  deployLocation: string;
 };
 
 export type UserInfo = {

@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const ImportResourcesWizard = React.memo((props: Props) => {
-  const { stepIndex, onStepChange } = props;
+  const { onStepChange } = props;
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
   const { onBack } = usePublishApi();
 
@@ -33,7 +33,7 @@ export const ImportResourcesWizard = React.memo((props: Props) => {
 
   return (
     <Wizard
-      firstStepId={steps[stepIndex]?.id ?? 'import-instructions'}
+      firstStepId={'import-instructions'}
       steps={steps}
       onRenderHeader={() => <></>} // Returning fragment to override the default header rendering behaviour
       onStepChange={(index, step) => onStepChange(index, step)}

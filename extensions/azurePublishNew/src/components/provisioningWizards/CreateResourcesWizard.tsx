@@ -23,7 +23,7 @@ type Props = {
 };
 
 export const CreateResourcesWizard = React.memo((props: Props) => {
-  const { stepIndex, onStepChange } = props;
+  const { onStepChange } = props;
   const userInfo = useRecoilValue(userInfoState);
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
   const [isValidResourceConfiguration, setIsValidResourceConfiguration] = useState<boolean>(false);
@@ -80,7 +80,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
 
   return (
     <Wizard
-      firstStepId={steps[stepIndex]?.id ?? 'create-resource-instructions'}
+      firstStepId={'create-resource-instructions'}
       steps={steps}
       onRenderFooter={(navState) => <WizardFooterWithUserPersona userInfo={userInfo} {...navState} />}
       onRenderHeader={() => <></>}

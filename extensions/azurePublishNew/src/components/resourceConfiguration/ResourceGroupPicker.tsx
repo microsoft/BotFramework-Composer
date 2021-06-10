@@ -44,17 +44,15 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
   };
 
   return (
-    <>
-      <SearchableDropdown
-        errorMessage={errorMessage}
-        isLoading={isLoading}
-        items={resourceGroups.map((t) => ({ key: t.name, text: t.name }))}
-        onSubmit={(option) => onResourceGroupChange(option.key)}
-        {...{
-          ...props,
-          textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },
-        }}
-      />
-    </>
+    <SearchableDropdown
+      errorMessage={errorMessage}
+      isLoading={isLoading}
+      items={resourceGroups.map((t) => ({ key: t.name, text: t.name }))}
+      onSubmit={(option) => onResourceGroupChange(option.key)}
+      {...{
+        ...props,
+        textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },
+      }}
+    />
   );
 });

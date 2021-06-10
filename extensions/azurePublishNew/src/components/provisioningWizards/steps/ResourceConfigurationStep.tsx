@@ -14,24 +14,18 @@ import {
   Stack,
   Text,
   FontWeights,
-  FontSizes,
   Label,
   IStackTokens,
   IStackItemStyles,
   Link,
 } from 'office-ui-fabric-react';
 
-import {
-  userInfoState,
-  resourceGroupSelectionState,
-  subscriptionSelectionState,
-  tenantSelectionState,
-  deployLocationSelectionState,
-} from '../../../recoilModel/atoms/resourceConfigurationState';
+import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
 import { ResourceGroupPicker } from '../../resourceConfiguration/ResourceGroupPicker';
 import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPicker';
 import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
 import { DeployLocationPicker } from '../../resourceConfiguration/DeployLocationPicker';
+import { useResourceConfiguration } from '../../../hooks/useResourceConfiguration';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;
@@ -45,7 +39,6 @@ const ConfigureResourcesSectionName = styled(Text)`
 
 const ConfigureResourcesSectionDescription = styled(Text)`
   font-size: ${FluentTheme.fonts.medium.fontSize};
-  line-height: ${FontSizes.size14};
   margin-bottom: 20px;
 `;
 
@@ -82,45 +75,20 @@ const FullWidthForm = styled.form`
 
 export const ResourceConfigurationStep = (props: Props) => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-  const [tenantId, setTenantId] = useRecoilState(tenantSelectionState);
-  const [subscriptionId, setSubscriptionId] = useRecoilState(subscriptionSelectionState);
-  const [resourceGroupId, setResourceGroupId] = useRecoilState(resourceGroupSelectionState);
-  const [deployLocationId, setDeployLocationId] = useRecoilState(deployLocationSelectionState);
+  const {
+    configuration: { tenantId, deployLocation, resourceGroupName, subscriptionId },
+    handleResourceGroupChange,
+    handleDeployLocationChange,
+    handleSubscriptionChange,
+    handleTenantChange,
+    isValidConfiguration,
+  } = useResourceConfiguration();
 
   const { onResourceConfigurationChange } = props;
-
-  const isValidConfiguration = React.useMemo((): boolean => !(!tenantId || !subscriptionId || !resourceGroupId), [
-    tenantId,
-    subscriptionId,
-    resourceGroupId,
-  ]);
 
   React.useEffect(() => {
     onResourceConfigurationChange(isValidConfiguration);
   }, [isValidConfiguration]);
-
-  const handleTenantChange = (tenantId: string) => {
-    setTenantId(tenantId);
-    if (!tenantId) {
-      setSubscriptionId('');
-    }
-  };
-
-  const handleSubscriptionChange = (subscriptionId: string) => {
-    setSubscriptionId(subscriptionId);
-    if (!subscriptionId) {
-      setResourceGroupId('');
-      setDeployLocationId('');
-    }
-  };
-
-  const handleResourceGroupChange = (resourceGroupId: string) => {
-    setResourceGroupId(resourceGroupId);
-  };
-
-  const handleDeployLocationChange = (deployLocationId: string) => {
-    setDeployLocationId(deployLocationId);
-  };
 
   const renderPropertyInfoIcon = (tooltip: string) => {
     return (
@@ -202,7 +170,7 @@ export const ResourceConfigurationStep = (props: Props) => {
                   if (newValue.length === 0) handleResourceGroupChange('');
                 },
               }}
-              value={resourceGroupId}
+              value={resourceGroupName}
               onClear={() => handleResourceGroupChange('')}
               onResourceGroupChange={handleResourceGroupChange}
             />
@@ -231,7 +199,7 @@ export const ResourceConfigurationStep = (props: Props) => {
                   if (newValue.length === 0) handleDeployLocationChange('');
                 },
               }}
-              value={deployLocationId}
+              value={deployLocation}
               onClear={() => handleDeployLocationChange('')}
               onDeployLocationChange={handleDeployLocationChange}
             />

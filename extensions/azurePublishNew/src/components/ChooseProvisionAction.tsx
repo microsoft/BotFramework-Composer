@@ -18,7 +18,6 @@ const ChoicesPane = styled.div`
 type Props = {
   selectedProvisionAction?: ProvisionAction;
   onChangeSelectedProvisionAction: (choice: ProvisionAction) => void;
-  showChoices: boolean;
 };
 
 export const ChooseProvisionAction = (props: Props) => {
