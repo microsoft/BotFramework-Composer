@@ -4,15 +4,16 @@
 
 /** @jsx jsx */
 import { BotTemplate } from '@bfc/shared';
-import { PropertyAssignment } from '@bfc/ui-shared';
 import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { CommandButton, PrimaryButton } from 'office-ui-fabric-react/lib/components/Button';
+import { CommandButton } from 'office-ui-fabric-react/lib/components/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../../images/composerIcon.svg';
+import { dispatcherState, selectedTemplateVersionState } from '../../../recoilModel';
 
 const templateTitleContainer = css`
   width: 100%;
@@ -49,7 +50,8 @@ type TemplateDetailViewProps = {
 };
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  const [selectedVersion, setSelectedVersion] = useState<string>(props.template?.package?.packageVersion || '');
+  const { setSelectedTemplateVersion } = useRecoilValue(dispatcherState);
+  const selectedTemplateVersion = useRecoilValue(selectedTemplateVersionState);
 
   useEffect(() => {}, [props.template]);
 
@@ -57,18 +59,16 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     const availableVersions = props.template?.package?.availableVersions || ([] as string[]);
     availableVersions;
     const versionOptions = {
-      items: [
-        { key: '1', text: '1' },
-        { key: '2', text: '2' },
-        { key: '3', text: '3' },
-      ],
-      onItemClick: (ev, item) => setSelectedVersion(item.key),
+      items: availableVersions.map((version: string) => {
+        return { key: version, text: version };
+      }),
+      onItemClick: (ev, item) => setSelectedTemplateVersion(item.key),
     };
     return (
       <CommandButton
         menuProps={versionOptions}
         styles={{ root: templateVersion, menuIcon: { fontSize: '8px' } }}
-        text={selectedVersion}
+        text={selectedTemplateVersion}
       />
     );
   };
