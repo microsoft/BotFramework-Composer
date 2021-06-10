@@ -7,6 +7,9 @@ import { CommunicationColors, NeutralColors } from '@uifabric/fluent-theme';
 import { ConversationService } from './utils/conversationService';
 import webChatStyleOptions from './utils/webChatTheme';
 import { ChatData, ActivityType } from './types';
+import { ActivityHighlightWrapper } from './ActivityHighlightWrapper';
+import { WebChatHooksContainer } from './hooks/WebChatHooksContainer';
+
 const { BasicWebChat, Composer } = Components;
 
 export type WebChatComposerProps = {
@@ -67,7 +70,11 @@ const createActivityMiddleware = () => (next: unknown) => (...setupArgs) => (...
       if (typeof next === 'function') {
         const middlewareResult = next(...setupArgs);
         if (middlewareResult) {
-          return middlewareResult(...renderArgs);
+          return (
+            <ActivityHighlightWrapper activityId={card.activity.id}>
+              {middlewareResult(...renderArgs)}
+            </ActivityHighlightWrapper>
+          );
         }
         return false;
       }
@@ -119,6 +126,7 @@ export const WebChatComposer = React.memo((props: WebChatComposerProps) => {
       userID={chatData?.user.id}
     >
       <BasicWebChat />
+      <WebChatHooksContainer />
     </Composer>
   );
 }, areEqual);
