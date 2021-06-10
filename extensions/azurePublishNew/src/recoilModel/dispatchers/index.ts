@@ -2,11 +2,13 @@
 // Licensed under the MIT License.
 
 import { resourceConfigurationDispatcher } from './resourceConfigurationDispatcher';
+import { userInfoDispatcher } from './userInfoDispatcher';
 
-const useDispatchers = () => {
+const createDispatchers = () => {
   return {
     ...resourceConfigurationDispatcher(),
+    ...userInfoDispatcher(),
   };
 };
 
-export default useDispatchers;
+export default createDispatchers;

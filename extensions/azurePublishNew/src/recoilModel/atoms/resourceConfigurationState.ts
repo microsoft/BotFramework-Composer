@@ -3,16 +3,7 @@
 
 import { atom } from 'recoil';
 
-import useDispatchers, { Dispatcher } from '../dispatchers';
 import { ResourceConfigurationState, UserInfo } from '../types';
-
-export const defaultUserInfo: UserInfo = {
-  email: undefined,
-  expiration: undefined,
-  name: undefined,
-  sessionExpired: undefined,
-  token: undefined,
-};
 
 export const resourceConfigurationState = atom<ResourceConfigurationState>({
   key: 'resourceConfiguration',

@@ -5,13 +5,19 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { resourceConfigurationState } from '../recoilModel/atoms/resourceConfigurationState';
-import useDispatchers from '../recoilModel/dispatchers';
-import { tenantIdSelectorFamily } from '../recoilModel/selectors/tenants';
+import createDispatchers from '../recoilModel/dispatchers';
 
 export const useResourceConfiguration = () => {
-  const { setTenantId, setSubscriptionId, setResourceGroupName, setDeployLocation, setLuisRegion } = useDispatchers();
-  const { subscriptionId, resourceGroupName, deployLocation, luisRegion } = useRecoilValue(resourceConfigurationState);
-  const tenantId = useRecoilValue(tenantIdSelectorFamily('Test'));
+  const {
+    setTenantId,
+    setSubscriptionId,
+    setResourceGroupName,
+    setDeployLocation,
+    setLuisRegion,
+  } = createDispatchers();
+  const { tenantId, subscriptionId, resourceGroupName, deployLocation, luisRegion } = useRecoilValue(
+    resourceConfigurationState
+  );
 
   const isValidConfiguration = React.useMemo((): boolean => !(!tenantId || !subscriptionId || !resourceGroupName), [
     tenantId,

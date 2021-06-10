@@ -3,7 +3,7 @@
 
 import React from 'react';
 import styled from '@emotion/styled';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import {
@@ -26,6 +26,7 @@ import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPick
 import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
 import { DeployLocationPicker } from '../../resourceConfiguration/DeployLocationPicker';
 import { useResourceConfiguration } from '../../../hooks/useResourceConfiguration';
+import createDispatchers from '../../../recoilModel/dispatchers';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;
@@ -74,7 +75,9 @@ const FullWidthForm = styled.form`
 `;
 
 export const ResourceConfigurationStep = (props: Props) => {
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const { setUserInfo } = createDispatchers();
+  const userInfo = useRecoilValue(userInfoState);
+
   const {
     configuration: { tenantId, deployLocation, resourceGroupName, subscriptionId },
     handleResourceGroupChange,
