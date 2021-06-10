@@ -110,6 +110,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         profile: formData?.profile,
         source: formData?.source,
         isRoot: false,
+        isLocalGenerator: formData?.isLocalGenerator,
       };
       createNewBot(newCreationBotData);
     } else {
