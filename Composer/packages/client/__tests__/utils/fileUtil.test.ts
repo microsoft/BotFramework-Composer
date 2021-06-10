@@ -4,7 +4,7 @@
 import { getExtension, getBaseName, upperCaseName, loadLocale, getUniqueName } from '../../src/utils/fileUtil';
 import httpClient from '../../src/utils/httpUtil';
 
-const files = ['a.text', 'a.b.text', 1];
+const files = ['a.text', 'a.b.text', 1] as string[];
 
 describe('getExtension', () => {
   it('returns extension', () => {
@@ -46,19 +46,19 @@ describe('loadLocale', () => {
 
   const LOCALE = 'en-test';
   it("does not set locale if it can't find one", async () => {
-    jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: null }));
+    (httpClient.get as jest.Mock).mockImplementation(() => ({ data: null }));
 
     expect(await loadLocale(LOCALE)).toBeNull();
   });
   it('does not set locale if the server returns an error page', async () => {
-    jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: 'error page' }));
+    (httpClient.get as jest.Mock).mockImplementation(() => ({ data: 'error page' }));
 
     expect(await loadLocale(LOCALE)).toBeNull();
   });
   it('sets locale if it does find one', async () => {
     const RESPONSE = { data: { abc: 'def' } };
 
-    jest.spyOn(httpClient, 'get').mockImplementation(() => RESPONSE);
+    (httpClient.get as jest.Mock).mockImplementation(() => RESPONSE);
 
     expect(await loadLocale(LOCALE)).toMatchObject({
       locale: LOCALE,
