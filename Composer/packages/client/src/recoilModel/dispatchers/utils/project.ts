@@ -78,6 +78,7 @@ import {
   dispatcherState,
   warnAboutDotNetState,
   warnAboutFunctionsState,
+  showGetStartedTeachingBubbleState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -837,9 +838,9 @@ export const postRootBotCreation = async (
     newProfile && dispatcher.setPublishTargets([newProfile], projectId);
   }
   projectIdCache.set(projectId);
-
+  callbackHelpers.set(showGetStartedTeachingBubbleState, true);
   // navigate to the new get started section
-  navigateToBot(callbackHelpers, projectId, undefined, btoa('dialogs#getstarted'));
+  navigateToBot(callbackHelpers, projectId, undefined, btoa('dialogs'));
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
