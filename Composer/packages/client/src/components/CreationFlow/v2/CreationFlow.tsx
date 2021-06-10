@@ -17,6 +17,7 @@ import {
   currentProjectIdState,
   userSettingsState,
   templateProjectsState,
+  selectedTemplateVersionState,
 } from '../../../recoilModel';
 import { localBotsDataSelector } from '../../../recoilModel/selectors/project';
 import Home from '../../../pages/home/Home';
@@ -62,6 +63,7 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
+  const selectedTemplateVersion = useRecoilValue(selectedTemplateVersionState);
 
   useEffect(() => {
     if (storages?.length) {
@@ -123,9 +125,11 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
-    const templateVersion = templateProjects.find((template: BotTemplate) => {
-      return template.id == templateId;
-    })?.package?.packageVersion;
+    const templateVersion = selectedTemplateVersion
+      ? selectedTemplateVersion
+      : templateProjects.find((template: BotTemplate) => {
+          return template.id == templateId;
+        })?.package?.packageVersion;
     const newBotData = {
       templateId: templateId || '',
       templateVersion: templateVersion || '',
@@ -146,7 +150,6 @@ const CreationFlowV2: React.FC<CreationFlowProps> = () => {
       source: formData?.source,
     };
     TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
-
     createNewBotV2(newBotData);
   };
 

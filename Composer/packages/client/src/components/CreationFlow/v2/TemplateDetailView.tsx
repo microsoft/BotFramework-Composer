@@ -53,7 +53,9 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
   const { setSelectedTemplateVersion } = useRecoilValue(dispatcherState);
   const selectedTemplateVersion = useRecoilValue(selectedTemplateVersionState);
 
-  useEffect(() => {}, [props.template]);
+  useEffect(() => {
+    props.template?.package?.packageVersion && setSelectedTemplateVersion(props.template.package.packageVersion);
+  }, [props.template]);
 
   const renderVersionButton = () => {
     const availableVersions = props.template?.package?.availableVersions || ([] as string[]);
