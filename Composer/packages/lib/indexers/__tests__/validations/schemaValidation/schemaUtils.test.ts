@@ -38,11 +38,9 @@ describe('#schemaUtils', () => {
       $designer: {
         id: 'sJzdQm',
       },
-      assignments: [
-        { property: 'username', value: 'test' }
-      ]
+      assignments: [{ property: 'username', value: 'test' }],
     };
 
     expect(discoverNestedPaths(setPropertiesStub, SetPropertiesSchema)).toEqual([]);
-  })
+  });
 });
