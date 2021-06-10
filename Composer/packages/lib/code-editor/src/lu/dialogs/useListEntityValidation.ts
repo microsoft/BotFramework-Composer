@@ -70,9 +70,10 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
 
   // Validates entity name
   React.useEffect(() => {
-    if (listEntity.name) {
-      validateEntityName(listEntity.name);
+    if (listEntity.name && !touchedRef.current.nameField) {
+      touchedRef.current.nameField = !!listEntity.name;
     }
+    validateEntityName(listEntity.name);
   }, [listEntity.name]);
 
   const validateEntityItems = React.useCallback(
