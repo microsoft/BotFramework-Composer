@@ -3,161 +3,46 @@
 
 import { useId } from '@uifabric/react-hooks';
 import formatMessage from 'format-message';
-import { Dropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import {
-  ArrayPropertyPayload,
-  BuiltInStringFormat,
-  builtInStringFormats,
-  FormDialogPropertyPayload,
-  IntegerPropertyPayload,
-  NumberPropertyPayload,
-  RefPropertyPayload,
-  FormDialogPropertyKind,
-  StringPropertyPayload,
-} from '../../atoms/types';
-import { FieldLabel } from '../common/FieldLabel';
 import { formDialogTemplatesAtom } from '../../atoms/appState';
-
-const processSelection = (
-  isArray: boolean,
-  oldKind: FormDialogPropertyKind,
-  newKind: FormDialogPropertyKind,
-  selectedKey: string,
-  payload: FormDialogPropertyPayload
-): FormDialogPropertyPayload => {
-  if (isArray) {
-    return processSelection(
-      false,
-      (payload as ArrayPropertyPayload).items.kind,
-      newKind,
-      selectedKey,
-      (payload as ArrayPropertyPayload).items
-    );
-  }
-
-  // If the property type hasn't changed, reset the payload and update the type required payload (string => format, ref => $ref)
-  if (oldKind === newKind) {
-    switch (newKind) {
-      case 'string':
-        return {
-          ...payload,
-          format:
-            selectedKey !== 'string' && selectedKey !== 'enums' ? (selectedKey as BuiltInStringFormat) : undefined,
-          enums: selectedKey === 'enums' ? [] : undefined,
-        } as StringPropertyPayload;
-      case 'number':
-        return { kind: 'number' } as NumberPropertyPayload;
-      case 'integer':
-        return { kind: 'integer' } as IntegerPropertyPayload;
-      case 'ref':
-        return { ...payload, ref: selectedKey } as RefPropertyPayload;
-    }
-  } else {
-    switch (newKind) {
-      case 'string':
-        return {
-          kind: newKind,
-          format:
-            selectedKey !== 'string' && selectedKey !== 'enums' ? (selectedKey as BuiltInStringFormat) : undefined,
-          enums: selectedKey === 'enums' ? [] : undefined,
-        } as StringPropertyPayload;
-      case 'number':
-        return { kind: newKind } as NumberPropertyPayload;
-      case 'integer':
-        return { kind: newKind } as IntegerPropertyPayload;
-      case 'ref':
-        return { kind: newKind, ref: selectedKey } as RefPropertyPayload;
-    }
-  }
-};
+import { FieldLabel } from '../common/FieldLabel';
 
 type Props = {
-  isArray: boolean;
-  kind: FormDialogPropertyKind;
-  payload: FormDialogPropertyPayload;
-  onChange: (kind: FormDialogPropertyKind, payload?: FormDialogPropertyPayload) => void;
+  selectedPropertyType: string;
+  onChange: (propertyType: string) => void;
 };
 
 export const PropertyTypeSelector = React.memo((props: Props) => {
-  const { isArray, kind, payload, onChange } = props;
+  const { selectedPropertyType, onChange } = props;
 
   const propertyTypeTooltipId = useId('propertyType');
-  const isEnumList = kind === 'string' && !!(payload as StringPropertyPayload).enums;
 
   const templates = useRecoilValue(formDialogTemplatesAtom);
-  const templateOptions = React.useMemo(
+  const options = React.useMemo(
     () =>
-      templates.map<IDropdownOption>((t) => ({
-        key: t,
-        text: t,
-        selected: kind === 'ref' && (payload as RefPropertyPayload).ref === t,
-        data: 'ref',
-      })),
-    [templates, payload, kind]
-  );
-
-  const stringOptions = React.useMemo(
-    () =>
-      builtInStringFormats.map<IDropdownOption>((builtInFormat) => ({
-        key: builtInFormat.value,
-        text: builtInFormat.displayName,
-        selected: kind === 'string' && (payload as StringPropertyPayload).format === builtInFormat.value,
-        data: 'string',
-      })),
-    [payload, kind]
-  );
-
-  const dynamicOptions = React.useMemo(
-    () =>
-      [
-        { key: 'number', text: formatMessage('number'), selected: kind === 'number', data: 'number' },
-        { key: 'integer', text: formatMessage('integer'), selected: kind === 'integer', data: 'integer' },
-        {
-          key: 'string',
-          text: formatMessage('any string'),
-          selected: kind === 'string' && !(payload as StringPropertyPayload).format,
-          data: 'string',
+      templates.map<IDropdownOption>((template) => ({
+        key: template.id,
+        text: template.$generator.title,
+        title: template.$generator.description,
+        selected: selectedPropertyType === template.id,
+        data: {
+          template,
         },
-        ...stringOptions,
-        ...templateOptions,
-      ].sort((a, b) => a.text.localeCompare(b.text)) as IDropdownOption[],
-    [kind, stringOptions, templateOptions]
+      })),
+    [templates, selectedPropertyType]
   );
-
-  const options = React.useMemo(() => {
-    return [
-      {
-        key: 'enums',
-        text: formatMessage('list'),
-        selected: isEnumList,
-        data: 'string',
-      } as IDropdownOption,
-      {
-        key: 'divider1',
-        itemType: DropdownMenuItemType.Divider,
-      } as IDropdownOption,
-      {
-        key: 'header1',
-        itemType: DropdownMenuItemType.Header,
-        text: formatMessage('Define by value type'),
-      } as IDropdownOption,
-      ...dynamicOptions,
-    ];
-  }, [isEnumList, dynamicOptions]);
 
   const selectedKey = React.useMemo(() => options.find((o) => o.selected).key, [options]);
 
   const change = React.useCallback(
     (_: React.FormEvent<HTMLDivElement>, option: IDropdownOption) => {
-      const newKind = option.data as FormDialogPropertyKind;
-      const selectedKey = option.key as string;
-      const newPayload = processSelection(isArray, kind, newKind, selectedKey, payload);
-      onChange(newKind, newPayload);
+      const newPropertyType = option.key as string;
+      onChange(newPropertyType);
     },
-    [payload, isArray, kind, onChange]
+    [onChange]
   );
 
   const onRenderLabel = React.useCallback(
