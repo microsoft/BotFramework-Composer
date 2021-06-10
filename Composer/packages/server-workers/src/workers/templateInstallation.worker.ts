@@ -62,7 +62,7 @@ const yeomanWork = async (
   // create yeoman environment
   log('Getting Yeoman environment');
   parentPort?.postMessage({ status: 'Downloading template' });
-  const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+  let generatorName = npmPackageName;
 
   const yeomanEnv = yeoman.createEnv(
     '',
@@ -76,6 +76,8 @@ const yeomanWork = async (
     log('Installing Yeoman template');
 
     await installRemoteTemplate(yeomanEnv, templateGeneratorPath, npmPackageName, templateVersion);
+    generatorName = npmPackageName.toLowerCase().replace('generator-', '');
+
     log('Instantiating Yeoman template');
   }
   parentPort?.postMessage({ status: 'Creating project' });
