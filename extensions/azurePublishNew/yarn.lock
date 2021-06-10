@@ -266,16 +266,6 @@
   dependencies:
     tslib "^2.0.0"
 
-"@azure/ms-rest-azure-env@^1.1.0":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-env/-/ms-rest-azure-env-1.1.2.tgz#8505873afd4a1227ec040894a64fdd736b4a101f"
-  integrity sha512-l7z0DPCi2Hp88w12JhDTtx5d0Y3+vhfE7JKJb9O7sEz71Cwp053N8piTtTnnk/tUor9oZHgEKi/p3tQQmLPjvA==
-
-"@azure/ms-rest-azure-env@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-env/-/ms-rest-azure-env-2.0.0.tgz#45809f89763a480924e21d3c620cd40866771625"
-  integrity sha512-dG76W7ElfLi+fbTjnZVGj+M9e0BIEJmRxU6fHaUQ12bZBe8EJKYb2GV50YWNaP2uJiVQ5+7nXEVj1VN1UQtaEw==
-
 "@azure/ms-rest-azure-js@^1.1.0", "@azure/ms-rest-azure-js@^1.3.2":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-js/-/ms-rest-azure-js-1.4.0.tgz#a68a7f2e47786a26f2dc47fb4038a3ae2ce4a3fa"
@@ -294,16 +284,6 @@
     "@azure/ms-rest-js" "^2.2.0"
     tslib "^1.10.0"
 
-"@azure/ms-rest-browserauth@0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@azure/ms-rest-browserauth/-/ms-rest-browserauth-0.1.4.tgz#a2b9434c7de08fd3e742b4bfd75427deef1dbab1"
-  integrity sha512-yV7B+dQzvuHwWpS2KJuu+wU56CdPIUBCJQVG8iidCPXp1zCqGSH5HcbmxHzESMSieDrMeybtPeLx/PNA6Y7YYA==
-  dependencies:
-    "@azure/ms-rest-azure-env" "^1.1.0"
-    "@azure/ms-rest-js" "^1.8.1"
-    adal-angular "^1.0.17"
-    tslib "^1.9.3"
-
 "@azure/ms-rest-js@^1.1.0", "@azure/ms-rest-js@^1.10.0", "@azure/ms-rest-js@^1.8.1":
   version "1.11.2"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-1.11.2.tgz#e83d512b102c302425da5ff03a6d76adf2aa4ae6"
@@ -318,7 +298,7 @@
     uuid "^3.2.1"
     xml2js "^0.4.19"
 
-"@azure/ms-rest-js@^2.0.3", "@azure/ms-rest-js@^2.0.4", "@azure/ms-rest-js@^2.0.7", "@azure/ms-rest-js@^2.2.0":
+"@azure/ms-rest-js@^2.0.3", "@azure/ms-rest-js@^2.0.4", "@azure/ms-rest-js@^2.2.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-2.5.0.tgz#a998ce3822e16528841e8ba9a7bd649a07ade461"
   integrity sha512-mXezdECH1Vjr+7FkH5+LlL85/YEHOrXHYqd9qh8b6dgvvE7sVvUk3qrtRGk3WZr4TLrZvRLE7NbFU7RgHHg45Q==
@@ -332,15 +312,6 @@
     tunnel "0.0.6"
     uuid "^3.3.2"
     xml2js "^0.4.19"
-
-"@azure/ms-rest-nodeauth@3.0.3":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@azure/ms-rest-nodeauth/-/ms-rest-nodeauth-3.0.3.tgz#e485b9c960da718d0476115e9f0ec550ccbba561"
-  integrity sha512-/KAgVV68vkOdrx6O3T6qO7thCep4nPbWzkpNIPFN3P6uzEzDIk6BCGgkzabnmkb2kXaf4+IGHs0UMoXSfN/IgQ==
-  dependencies:
-    "@azure/ms-rest-azure-env" "^2.0.0"
-    "@azure/ms-rest-js" "^2.0.4"
-    adal-node "^0.1.28"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13":
   version "7.12.13"
@@ -2621,11 +2592,6 @@ acorn@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
-adal-angular@^1.0.17:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/adal-angular/-/adal-angular-1.0.18.tgz#51cee7e408b5fe6a105740da73cab9be16e26fb4"
-  integrity sha512-X24lNbv3H8mjevnWxy2n6SLKN/kAQbg6b9xM9sqBwXBTobhArMaUHy3hd5xwSFMu8wiTu8A5Z52T56i7NqBoxA==
-
 adal-node@0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/adal-node/-/adal-node-0.2.1.tgz#19e401bd579977448c1a77ce0e5b4c9accdc334e"
@@ -2636,21 +2602,6 @@ adal-node@0.2.1:
     date-utils "*"
     jws "3.x.x"
     request "^2.88.0"
-    underscore ">= 1.3.1"
-    uuid "^3.1.0"
-    xmldom ">= 0.1.x"
-    xpath.js "~1.1.0"
-
-adal-node@^0.1.28:
-  version "0.1.28"
-  resolved "https://registry.yarnpkg.com/adal-node/-/adal-node-0.1.28.tgz#468c4bb3ebbd96b1270669f4b9cba4e0065ea485"
-  integrity sha1-RoxLs+u9lrEnBmn0ucuk4AZepIU=
-  dependencies:
-    "@types/node" "^8.0.47"
-    async ">=0.6.0"
-    date-utils "*"
-    jws "3.x.x"
-    request ">= 2.52.0"
     underscore ">= 1.3.1"
     uuid "^3.1.0"
     xmldom ">= 0.1.x"
@@ -2844,17 +2795,17 @@ async-each@^1.0.1:
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.3.tgz#b727dbf87d7651602f06f4d4ac387f47d91b0cbf"
   integrity sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
 
-async@>=0.6.0, async@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/async/-/async-3.2.0.tgz#b3a2685c5ebb641d3de02d161002c60fc9f85720"
-  integrity sha512-TR2mEZFVOj2pLStYxLht7TyfuRzaydfpxr3k9RpHIzMgw7A64dzsdqCxH1WJyQdoe8T10nDXd9wnEigmiuHIZw==
-
 async@^2.6.3:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
   integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
   dependencies:
     lodash "^4.17.14"
+
+async@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/async/-/async-3.2.0.tgz#b3a2685c5ebb641d3de02d161002c60fc9f85720"
+  integrity sha512-TR2mEZFVOj2pLStYxLht7TyfuRzaydfpxr3k9RpHIzMgw7A64dzsdqCxH1WJyQdoe8T10nDXd9wnEigmiuHIZw==
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -7283,7 +7234,7 @@ request-promise-native@^1.0.8:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@2.88.2, "request@>= 2.52.0", request@^2.88.0, request@^2.88.2:
+request@2.88.2, request@^2.88.0, request@^2.88.2:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
