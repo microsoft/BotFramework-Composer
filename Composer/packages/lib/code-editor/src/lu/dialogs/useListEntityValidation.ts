@@ -23,8 +23,9 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
   const errorMessages = React.useMemo(
     () => ({
       missingNormalizedValue: formatMessage('Required'),
-      duplicateNormalizedValue: formatMessage('Already used!'),
-      name: formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.'),
+      duplicateNormalizedValue: formatMessage('Already used'),
+      missingName: formatMessage('Required'),
+      nameFormat: formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.'),
     }),
     []
   );
@@ -49,9 +50,14 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
 
   const validateEntityName = React.useCallback(
     debounce(
-      (name?: string) => {
-        if (name && !nameRegex.test(name)) {
-          setNameError(errorMessages.name);
+      (name: string) => {
+        if (!name) {
+          setNameError(errorMessages.missingName);
+          return;
+        }
+
+        if (!nameRegex.test(name)) {
+          setNameError(errorMessages.nameFormat);
         } else {
           setNameError('');
         }
