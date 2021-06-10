@@ -154,7 +154,7 @@ export const Header = () => {
 
   const [hideBotController, hideBotStartController] = useState(true);
   const [showGetStarted, setShowGetStarted] = useState<boolean>(false);
-  const [showTeachingBubble, setShowTeachingBubble] = useState<boolean>(false);
+  const [showStartBotTeachingBubble, setShowStartBotTeachingBubble] = useState<boolean>(false);
   const [requiresLUIS, setRequiresLUIS] = useState<boolean>(false);
   const [requiresQNA, setRequiresQNA] = useState<boolean>(false);
 
@@ -184,7 +184,7 @@ export const Header = () => {
   }, []);
 
   const hideTeachingBubble = () => {
-    setShowTeachingBubble(false);
+    setShowStartBotTeachingBubble(false);
   };
   const toggleGetStarted = (newvalue) => {
     hideTeachingBubble();
@@ -320,7 +320,7 @@ export const Header = () => {
             onClick={() => toggleGetStarted(true)}
           />
         )}
-        {isShow && showTeachingBubble && (
+        {isShow && showStartBotTeachingBubble && (
           <TeachingBubble
             hasCloseButton
             hasCondensedHeadline
@@ -375,7 +375,7 @@ export const Header = () => {
         requiresQNA={requiresQNA}
         showTeachingBubble={botProjectSolutionLoaded && showGetStartedTeachingBubble}
         onBotReady={() => {
-          setShowTeachingBubble(true);
+          setShowStartBotTeachingBubble(true);
         }}
         onDismiss={() => {
           toggleGetStarted(false);
