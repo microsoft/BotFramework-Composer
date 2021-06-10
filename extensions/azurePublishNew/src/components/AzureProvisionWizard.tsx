@@ -32,13 +32,13 @@ export const AzureProvisionWizard = () => {
   const renderContent = React.useCallback(() => {
     switch (provisionAction) {
       case 'create':
-        return <CreateResourcesWizard stepIndex={activeStepIndex} onStepChange={handleStepChange} />;
+        return <CreateResourcesWizard onStepChange={handleStepChange} />;
       case 'import':
-        return <ImportResourcesWizard stepIndex={activeStepIndex} onStepChange={handleStepChange} />;
+        return <ImportResourcesWizard onStepChange={handleStepChange} />;
       case 'generate':
-        return <HandOffToAdminWizard stepIndex={activeStepIndex} onStepChange={handleStepChange} />;
+        return <HandOffToAdminWizard onStepChange={handleStepChange} />;
     }
-  }, [provisionAction, activeStepIndex]);
+  }, [provisionAction]);
 
   return (
     <RecoilRoot>
@@ -46,7 +46,6 @@ export const AzureProvisionWizard = () => {
         {!activeStepIndex && (
           <ChooseProvisionAction
             selectedProvisionAction={provisionAction}
-            showChoices={activeStepIndex === 0}
             onChangeSelectedProvisionAction={setProvisionAction}
           ></ChooseProvisionAction>
         )}

@@ -63,7 +63,13 @@ const Content = styled.div`
 `;
 
 const FooterButton = styled(DefaultButton)`
-  margin: 0 4px;
+  margin-right: 8px;
+`;
+
+const ButtonContainer = styled.div`
+  & button:nth-last-child(1) {
+    margin-right: 0px;
+  }
 `;
 
 export const Wizard = (props: Props) => {
@@ -190,7 +196,7 @@ export const Wizard = (props: Props) => {
         {onRenderFooter != null ? (
           onRenderFooter(step)
         ) : (
-          <div>
+          <ButtonContainer>
             {navigationState.showBack && (
               <FooterButton disabled={!navigationState.canGoBack} onClick={onBackClick}>
                 {navigationState.backText}
@@ -202,7 +208,7 @@ export const Wizard = (props: Props) => {
             <FooterButton disabled={!navigationState.canCancel} onClick={onCancelClick}>
               {navigationState.cancelText}
             </FooterButton>
-          </div>
+          </ButtonContainer>
         )}
       </Footer>
     </>

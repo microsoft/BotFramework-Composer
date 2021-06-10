@@ -3,8 +3,8 @@
 
 import { atom } from 'recoil';
 
-import { tenantIdSelector } from '../selectors/tenants';
-import { UserInfo } from '../types';
+import useDispatchers, { Dispatcher } from '../dispatchers';
+import { ResourceConfigurationState, UserInfo } from '../types';
 
 export const defaultUserInfo: UserInfo = {
   email: undefined,
@@ -14,37 +14,18 @@ export const defaultUserInfo: UserInfo = {
   token: undefined,
 };
 
-export const tenantSelectionState = atom<string>({
-  key: 'resourceConfiguration_tenant',
-  default: tenantIdSelector,
+export const resourceConfigurationState = atom<ResourceConfigurationState>({
+  key: 'resourceConfiguration',
+  default: {
+    resourceGroupName: '',
+    subscriptionId: '',
+    tenantId: '',
+    deployLocation: '',
+    luisRegion: '',
+  } as ResourceConfigurationState,
 });
 
-export const userInfoState = atom<UserInfo | undefined>({
-  key: 'resourceConfiguration_userInfo',
+export const userInfoState = atom<UserInfo>({
+  key: 'userInfo',
   default: undefined,
-});
-
-export const subscriptionSelectionState = atom<string>({
-  key: 'resourceConfiguration_subscription',
-  default: '',
-});
-
-export const resourceGroupSelectionState = atom<string>({
-  key: 'resourceConfiguration_rg',
-  default: '',
-});
-
-export const hostNameState = atom<string>({
-  key: 'resourceConfiguration_hostname',
-  default: '',
-});
-
-export const deployLocationSelectionState = atom<string>({
-  key: 'resourceConfiguration_dl',
-  default: '',
-});
-
-export const luisLocationSelectionState = atom<string>({
-  key: 'resourceConfiguration_luis_location',
-  default: '',
 });

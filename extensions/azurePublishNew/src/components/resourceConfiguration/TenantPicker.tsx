@@ -18,7 +18,7 @@ type Props = {
 } & Omit<SearchableDropdownProps, 'items' | 'onSubmit'>;
 
 export const TenantPicker = memo((props: Props) => {
-  const { onTenantChange, onUserInfoFetch } = props;
+  const { onTenantChange, onUserInfoFetch, value } = props;
   const [tenants, setTenants] = useState<AzureTenant[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -98,22 +98,13 @@ export const TenantPicker = memo((props: Props) => {
     }
   };
 
-  const getValue = React.useCallback(() => {
-    if (props.value) {
-      return tenants.find((tenant) => tenant.tenantId === props.value)?.displayName;
-    } else if (tenants.length === 1) {
-      props.onTenantChange(tenants[0].tenantId);
-    }
-    return '';
-  }, [tenants, props.value]);
-
   useEffect(() => {
-    if (props.value && !userShouldProvideTokens()) {
+    if (value && !userShouldProvideTokens()) {
       (async () => {
         await getTokenForTenant(props.value);
       })();
     }
-  }, [props.value]);
+  }, [value]);
 
   const localTextFieldProps = {
     disabled: tenants.length === 1,
@@ -126,7 +117,11 @@ export const TenantPicker = memo((props: Props) => {
       isLoading={isLoading}
       items={tenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
       onSubmit={(option) => props.onTenantChange(option.key as string)}
-      {...{ ...props, textFieldProps: { ...localTextFieldProps, ...props.textFieldProps }, value: getValue() }}
+      {...{
+        ...props,
+        textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },
+        value: tenants.find(({ tenantId }) => tenantId === props.value)?.displayName,
+      }}
     />
   );
 });
