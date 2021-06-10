@@ -30,6 +30,8 @@ const base: Partial<JestOverrides> = {
   transformIgnorePatterns: ['/node_modules/'],
 
   setupFiles: [path.resolve(__dirname, 'setupEnv.js')],
+
+  clearMocks: true,
 };
 
 export default base;
