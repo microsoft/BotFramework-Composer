@@ -53,6 +53,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
   const [templateId, setTemplateId] = useState(emptyBotNpmTemplateName);
+  const [localTemplatePath, setLocalTemplatePath] = useState('');
 
   useEffect(() => {
     if (storages?.length) {
@@ -166,6 +167,8 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       <CreateBot
         isOpen
         fetchReadMe={fetchReadMe}
+        localTemplatePath={localTemplatePath}
+        setLocalTemplatePath={setLocalTemplatePath}
         templates={templateProjects}
         onDismiss={handleDismiss}
         onNext={handleCreateNext}
