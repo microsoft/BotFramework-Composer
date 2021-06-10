@@ -6,6 +6,7 @@ import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 
 import { ListEntity, ListEntityItem } from '../types';
+import { prebuiltEntities } from '../constants';
 
 const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
@@ -24,6 +25,7 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
     () => ({
       missingNormalizedValue: formatMessage('Required'),
       duplicateNormalizedValue: formatMessage('Already used'),
+      reservedName: formatMessage('This entity name is reserved'),
       missingName: formatMessage('Required'),
       nameFormat: formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.'),
     }),
@@ -58,9 +60,15 @@ export const useListEntityValidation = (listEntity: ListEntity) => {
 
         if (!nameRegex.test(name)) {
           setNameError(errorMessages.nameFormat);
-        } else {
-          setNameError('');
+          return;
         }
+
+        if (prebuiltEntities.includes(name)) {
+          setNameError(errorMessages.reservedName);
+          return;
+        }
+
+        setNameError('');
       },
       300,
       { leading: true }

@@ -12,7 +12,7 @@ const tagContentStyles: React.CSSProperties = {
   outline: 0,
   border: 'none',
   whiteSpace: 'nowrap',
-  padding: '0 8px 0 4px',
+  padding: '0 8px 0 8px',
 };
 
 const Root = styled.div({
@@ -23,6 +23,8 @@ const Root = styled.div({
   lineHeight: 1,
   background: FluentTheme.palette.neutralLighter,
   color: FluentTheme.palette.neutralPrimary,
+  border: `1px solid ${FluentTheme.palette.neutralQuaternaryAlt}`,
+  borderRadius: 2,
 });
 
 const closeIconStyles = {
