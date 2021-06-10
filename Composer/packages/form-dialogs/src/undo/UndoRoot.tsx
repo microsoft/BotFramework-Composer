@@ -25,22 +25,26 @@ const getAtomMap = (snapshot: Snapshot, trackedAtoms: RecoilState<any>[]): AtomM
 };
 
 const didAtomMapsChange = (prevMap: AtomMap, currMap: AtomMap) => {
+  if (prevMap.size !== currMap.size) {
+    return true;
+  }
+
   for (const key of prevMap.keys()) {
     if (!currMap.has(key)) {
       return true;
     }
 
-    const prevVal = prevMap.get(key);
-    const currVal = currMap.get(key);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const prevVal = prevMap.get(key)!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const currVal = currMap.get(key)!;
 
-    if (prevVal && currVal) {
-      if (prevVal.state !== currVal.state) {
-        return true;
-      }
+    if (prevVal.state !== currVal.state) {
+      return true;
+    }
 
-      if (prevVal.state === 'hasValue' && currVal.state === 'hasValue' && prevVal.contents !== currVal.contents) {
-        return true;
-      }
+    if (prevVal.state === 'hasValue' && currVal.state === 'hasValue' && prevVal.contents !== currVal.contents) {
+      return true;
     }
   }
 
@@ -90,7 +94,7 @@ export const UndoRoot = React.memo(({ trackedAtoms, children }: Props) => {
 
   const { 0: history, 1: setHistory } = React.useState<History>({
     past: [],
-    present: { snapshot: currentSnapshot, trackedAtoms },
+    present: currentSnapshot,
     future: [],
   });
 
@@ -107,55 +111,55 @@ export const UndoRoot = React.memo(({ trackedAtoms, children }: Props) => {
       const currMap = getAtomMap(snapshot, trackedAtoms);
 
       if (!didAtomMapsChange(prevMap, currMap)) {
-        setHistory({ ...history, present: { snapshot, trackedAtoms } });
+        setHistory({ ...history, present: snapshot });
         return;
       }
     }
 
     setHistory({
-      past: [...history.past, { snapshot: previousSnapshot, trackedAtoms }],
-      present: { snapshot, trackedAtoms },
+      past: [...history.past, previousSnapshot],
+      present: snapshot,
       future: [],
     });
   });
 
   const undo = React.useCallback(() => {
-    setHistory((history: History) => {
-      if (!history.past.length) {
-        return history;
+    setHistory((currentHistory: History) => {
+      if (!currentHistory.past.length) {
+        return currentHistory;
       }
 
       isUndoingRef.current = true;
-      const target = history.past[history.past.length - 1];
-      const { present } = history;
-      const newPresent = mapTrackedAtomsOntoSnapshot(present.snapshot, target.snapshot, target.trackedAtoms);
+      const target = currentHistory.past[currentHistory.past.length - 1];
+      const { present } = currentHistory;
+      const newPresent = mapTrackedAtomsOntoSnapshot(present, target, trackedAtoms);
 
       gotoSnapshot(newPresent);
 
       return {
-        past: history.past.slice(0, history.past.length - 1),
-        present: { snapshot: newPresent, trackedAtoms },
-        future: [history.present, ...history.future],
+        past: currentHistory.past.slice(0, currentHistory.past.length - 1),
+        present: newPresent,
+        future: [currentHistory.present, ...currentHistory.future],
       };
     });
   }, [setHistory, gotoSnapshot, trackedAtoms]);
 
   const redo = React.useCallback(() => {
-    setHistory((history: History) => {
-      if (!history.future.length) {
-        return history;
+    setHistory((currentHistory: History) => {
+      if (!currentHistory.future.length) {
+        return currentHistory;
       }
 
       isUndoingRef.current = true;
-      const target = history.future[0];
-      const { present } = history;
-      const newPresent = mapTrackedAtomsOntoSnapshot(present.snapshot, target.snapshot, target.trackedAtoms);
+      const target = currentHistory.future[0];
+      const { present } = currentHistory;
+      const newPresent = mapTrackedAtomsOntoSnapshot(present, target, trackedAtoms);
       gotoSnapshot(newPresent);
 
       return {
-        past: [...history.past, history.present],
-        present: { snapshot: newPresent, trackedAtoms },
-        future: history.future.slice(1),
+        past: [...currentHistory.past, currentHistory.present],
+        present: newPresent,
+        future: currentHistory.future.slice(1),
       };
     });
   }, [setHistory, gotoSnapshot, trackedAtoms]);
