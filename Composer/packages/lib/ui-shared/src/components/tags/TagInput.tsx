@@ -20,29 +20,14 @@ const Root = styled.div({
   flexWrap: 'wrap',
   flexDirection: 'row',
   alignItems: 'stretch',
-  background: FluentTheme.palette.white,
   padding: '0px 4px 4px 0',
+  background: 'transparent',
   border: `1px solid ${FluentTheme.palette.neutralTertiary}`,
-  '&:focus-within ': {
-    borderColor: FluentTheme.palette.neutralTertiary,
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      left: -1,
-      top: -1,
-      right: -1,
-      bottom: -1,
-      pointerEvents: 'none',
-      borderRadius: 2,
-      border: `2px solid ${FluentTheme.palette.themePrimary}`,
-      zIndex: 1,
-    },
-  },
   '& *': {
     boxSizing: 'border-box',
   },
   '& > *:not(input)': {
-    margin: '4px 0 0 4px',
+    margin: '4px 0 0 8px',
   },
 });
 
@@ -68,11 +53,12 @@ const Input = styled.input({
     outlineOffset: '-2px',
   },
   '&:not(:first-of-type)': {
-    marginLeft: '4px',
+    marginLeft: '8px',
   },
 });
 
 type TagInputProps = {
+  className?: string;
   tags: string[];
   onChange: (tags: string[]) => void;
   placeholder?: string;
@@ -84,7 +70,7 @@ type TagInputProps = {
 };
 
 export const TagInput = (props: TagInputProps) => {
-  const { tags, validator, removeOnBackspace, onChange, editable, maxTags, placeholder, readOnly } = props;
+  const { className, tags, validator, removeOnBackspace, onChange, editable, maxTags, placeholder, readOnly } = props;
 
   const inputRef = React.createRef<HTMLInputElement>();
   const { 0: input, 1: setInput } = React.useState('');
@@ -174,7 +160,7 @@ export const TagInput = (props: TagInputProps) => {
   const showInput = !readOnly && !maxTagsReached;
 
   return (
-    <Root>
+    <Root className={className}>
       {tags.map((tag, i) => (
         <Tag
           key={i}

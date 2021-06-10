@@ -1,31 +1,66 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { TagInput } from '@bfc/ui-shared';
+import styled from '@emotion/styled';
 import formatMessage from 'format-message';
 import { Announced } from 'office-ui-fabric-react/lib/Announced';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { DetailsList, ISelection, IColumn, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  DetailsRow,
+  IColumn,
+  IDetailsRowProps,
+  ISelection,
+  Selection,
+  SelectionMode,
+} from 'office-ui-fabric-react/lib/DetailsList';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
-import debounce from 'lodash/debounce';
 
 import { ListEntity, ListEntityItem } from '../types';
 
-import { TagInput } from './tags/TagInput';
+import { useListEntityValidation } from './useListEntityValidation';
 
-const detailsListStyles = { root: { overflowY: 'hidden' }, contentWrapper: { height: 400, overflowY: 'auto' } };
+const listEntityDocUrl = '';
+
+const defaultRowsToShow = 6;
+const minRowHeight = 60;
+
+const SubText = styled(Stack.Item)({
+  marginBottom: 24,
+});
+
+const SynonymInput = styled(TagInput)({
+  border: 'none',
+});
+
+const commandBarStyles = {
+  root: {
+    padding: 0,
+  },
+};
+
+const detailsRowStyles = {
+  cell: { display: 'inline-flex', alignItems: 'center' },
+  checkCell: { display: 'inline-flex', alignItems: 'center' },
+};
+const textFieldStyles = { fieldGroup: { width: '50%' } };
+const detailsListStyles = {
+  root: { overflowY: 'hidden' },
+  contentWrapper: { height: minRowHeight * defaultRowsToShow, overflowY: 'auto' },
+};
 const normalizedValueTextField = { field: { padding: 0 }, fieldGroup: { backgroundColor: 'transparent' } };
 const dialogModalProps = {
   isBlocking: true,
-  styles: { main: { maxWidth: '840px !important', width: '840px !important' } },
 };
 
-const containerStackTokens = { childrenGap: 16 };
-
-const nameRegex = /^[a-zA-Z0-9-_]+$/;
+const containerStackTokens = { childrenGap: 24 };
 
 type Props = {
   onCreateListEntity: (listEntity: ListEntity) => void;
@@ -37,20 +72,7 @@ export const ListEntityCreationDialog = (props: Props) => {
   const [listEntity, setListEntity] = React.useState<ListEntity>({ entityType: 'list', name: '', items: [] });
   let listEntityId = 0;
 
-  const [nameValidationError, setNameValidationError] = React.useState('');
-
-  const validateEntityName = React.useCallback(
-    debounce((name?: string) => {
-      if (name && !nameRegex.test(name)) {
-        setNameValidationError(
-          formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.')
-        );
-      } else {
-        setNameValidationError('');
-      }
-    }, 300),
-    []
-  );
+  const { hasErrors, nameError, itemErrors, itemsTouched } = useListEntityValidation(listEntity);
 
   const [selectedItems, setSelectedItems] = React.useState<ListEntityItem[]>([]);
   const selection: ISelection = React.useRef(
@@ -63,7 +85,6 @@ export const ListEntityCreationDialog = (props: Props) => {
   const changeEntityName = React.useCallback(
     (_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
       setListEntity((currentEntity) => ({ ...currentEntity, name: newValue ?? currentEntity.name }));
-      validateEntityName(newValue);
     },
     []
   );
@@ -127,7 +148,7 @@ export const ListEntityCreationDialog = (props: Props) => {
       {
         key: 'addItem',
         iconProps: { iconName: 'Add' },
-        name: formatMessage('Add'),
+        name: formatMessage('Add row'),
         onClick: addListEntityItem,
       },
       {
@@ -152,6 +173,7 @@ export const ListEntityCreationDialog = (props: Props) => {
             <TextField
               borderless
               data-selection-disabled
+              errorMessage={itemsTouched[item.id] ? itemErrors[item.id] : ''}
               placeholder={formatMessage('Enter a value')}
               styles={normalizedValueTextField}
               value={item.normalizedValue}
@@ -159,8 +181,8 @@ export const ListEntityCreationDialog = (props: Props) => {
             />
           );
         },
-        minWidth: 100,
-        maxWidth: 150,
+        minWidth: 200,
+        maxWidth: 250,
       },
       {
         key: 'synonyms',
@@ -169,10 +191,10 @@ export const ListEntityCreationDialog = (props: Props) => {
         onRender: (item: ListEntityItem) => {
           const values = item.synonyms;
           return (
-            <TagInput
+            <SynonymInput
               removeOnBackspace
               editable={false}
-              placeholder={formatMessage('Type a synonym and press enter')}
+              placeholder={formatMessage('Enter a synonym and press enter')}
               tags={values}
               onChange={changeSynonyms(item)}
             />
@@ -181,43 +203,64 @@ export const ListEntityCreationDialog = (props: Props) => {
         minWidth: 500,
       },
     ];
-  }, [changeNormalizedValue, changeSynonyms]);
+  }, [changeNormalizedValue, changeSynonyms, itemErrors]);
 
   const createListEntity = React.useCallback(() => {
     onCreateListEntity(listEntity);
   }, [onCreateListEntity, listEntity]);
 
-  const creationDisabled = !listEntity.name || !listEntity.items.length;
+  const renderRow: IRenderFunction<IDetailsRowProps> = React.useCallback(
+    (rowProps) => (rowProps ? <DetailsRow {...rowProps} styles={detailsRowStyles} /> : null),
+    []
+  );
+
+  const createDisabled = !listEntity.name || !listEntity.items.length || hasErrors;
 
   return (
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('title'),
-        subText: formatMessage('subText'),
+        title: formatMessage('Add a list entity'),
       }}
       hidden={false}
       modalProps={dialogModalProps}
+      styles={{ main: { width: '960px !important', minWidth: '960px !important' } }}
       onDismiss={onDismiss}
     >
+      <SubText>
+        {formatMessage.rich(
+          'A list entity represents a fixed, closed set of related words along with their synonyms. The normalized value is the value returned when any of the corresponding synonyms are recognized. <link>Learn more about list entities</link>',
+          {
+            link: ({ children }) => (
+              <Link key="list-entity-doc-link" href={listEntityDocUrl} target="_blank">
+                {children}
+              </Link>
+            ),
+          }
+        )}
+      </SubText>
       <Stack tokens={containerStackTokens}>
         <TextField
           required
-          errorMessage={nameValidationError}
-          label={formatMessage('Entity name')}
-          placeholder={formatMessage('Enter a name for your list entity')}
+          errorMessage={nameError}
+          label={formatMessage('Name')}
+          placeholder={formatMessage('Name your list entity')}
+          styles={textFieldStyles}
           value={listEntity.name}
           onChange={changeEntityName}
         />
-        <CommandBar items={commandBarItems} />
-        <DetailsList
-          selectionPreservedOnEmptyClick
-          columns={columns}
-          items={listEntity.items}
-          selection={selection}
-          styles={detailsListStyles}
-          onShouldVirtualize={() => false}
-        />
+        <Stack>
+          <CommandBar items={commandBarItems} styles={commandBarStyles} />
+          <DetailsList
+            selectionPreservedOnEmptyClick
+            columns={columns}
+            items={listEntity.items}
+            selection={selection}
+            styles={detailsListStyles}
+            onRenderRow={renderRow}
+            onShouldVirtualize={() => false}
+          />
+        </Stack>
       </Stack>
       {selection ? (
         <Announced
@@ -233,8 +276,8 @@ export const ListEntityCreationDialog = (props: Props) => {
         />
       ) : null}
       <DialogFooter>
+        <PrimaryButton disabled={createDisabled} text={formatMessage('Create')} onClick={createListEntity} />
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-        <PrimaryButton disabled={creationDisabled} text={formatMessage('Create')} onClick={createListEntity} />
       </DialogFooter>
     </Dialog>
   );
