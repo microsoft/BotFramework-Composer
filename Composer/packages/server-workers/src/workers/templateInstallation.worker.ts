@@ -62,6 +62,7 @@ const yeomanWork = async (
   // create yeoman environment
   log('Getting Yeoman environment');
   parentPort?.postMessage({ status: 'Downloading template' });
+  const generatorName = npmPackageName.toLowerCase().replace('generator-', '');
 
   const yeomanEnv = yeoman.createEnv(
     '',
@@ -69,7 +70,6 @@ const yeomanWork = async (
     new TerminalAdapter({ console: console })
   );
   if (!isLocalGenerator) {
-    npmPackageName = npmPackageName.toLowerCase().replace('generator-', '');
     log('Looking up local packages');
     yeomanEnv.lookupLocalPackages();
 
@@ -82,7 +82,7 @@ const yeomanWork = async (
 
   await instantiateRemoteTemplate(
     yeomanEnv,
-    npmPackageName,
+    generatorName,
     dstDir,
     projectName,
     runtimeType,
