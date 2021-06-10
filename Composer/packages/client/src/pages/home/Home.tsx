@@ -99,7 +99,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const onClickNewBot = () => {
     setCreationFlowType('Bot');
     setCreationFlowStatus(CreationFlowStatus.NEW);
-    navigate(`v2/projects/create`);
+    navigate(`projects/create`);
   };
 
   const toolbarItems: IToolbarItem[] = [
