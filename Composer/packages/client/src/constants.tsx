@@ -525,3 +525,11 @@ export const defaultTeamsManifest: TeamsManifest = {
 
 export const defaultBotPort = 3979;
 export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;
+
+const DAYS = 1000 * 60 * 60 * 24; // ms per day
+
+export const SURVEY_PARAMETERS = {
+  daysUntilEligible: 5,
+  timeUntilNextSurvey: 90 * DAYS,
+  chanceToAppear: 0.15,
+};
