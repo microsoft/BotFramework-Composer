@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { DialogInfo, ITrigger } from '@bfc/shared';
-import { ExpressionParser } from 'adaptive-expressions';
 import uniq from 'lodash/uniq';
 
 export const NoGroupingTriggerGroupName = '(none)';
@@ -12,31 +11,18 @@ const getPropertyReferences = (content: any) => {
   const foundProperties: string[] = [];
 
   if (content) {
-    // has $designer: { "propertyGroups": ["<name1>", "<name2", ... ]
     if (content.$designer?.propertyGroups && Array.isArray(content.$designer?.propertyGroups)) {
+      // has $designer: { "propertyGroups": ["<name1>", "<name2", ... ]
       foundProperties.push(...content.$designer.propertyGroups);
-    }
-
-    // has "property": "<name>"
-    if (content.property && typeof content.property === 'string') {
+    } else if (content.property && typeof content.property === 'string') {
+      // has "property": "<name>"
       foundProperties.push(content.property);
-    }
-
-    // had "expectedProperties" : ["<name1>", "<name2", ... ]
-    if (content.expectedProperties && Array.isArray(content.expectedProperties)) {
-      foundProperties.push(...content.expectedProperties);
-    }
-
-    // has condition : "<expresssion referencing properties>"
-    if (content.condition) {
-      try {
-        const expressionParser = new ExpressionParser();
-        const expression = expressionParser.parse(content.condition);
-        const references = expression.references().map((r) => (r.startsWith('$') ? r.substring(1) : r));
-        foundProperties.push(...references);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(`Could not parse condition expression ${content.condition}. ${err}`);
+    } else if (content.actions && Array.isArray(content.actions)) {
+      // extract from action expectedProperties
+      for (const action of content.actions) {
+        if (action.expectedProperties && Array.isArray(action.expectedProperties)) {
+          foundProperties.push(...action.expectedProperties);
+        }
       }
     }
   }
@@ -45,18 +31,8 @@ const getPropertyReferences = (content: any) => {
 };
 
 const getTriggerPropertyReferences = (trigger: ITrigger, isValidProperty: (name: string) => boolean) => {
-  const content = trigger.content;
-
-  // inspect trigger
+  // inspect trigger and actions
   const foundProperties: string[] = getPropertyReferences(trigger.content);
-
-  // inspect actions
-  if (content.actions && Array.isArray(content.actions)) {
-    for (let i = 0; i < content.actions.length; i++) {
-      foundProperties.push(...getPropertyReferences(content.actions[i]));
-    }
-  }
-
   const result = uniq(foundProperties).filter(isValidProperty);
 
   if (result.length === 0) {
@@ -70,10 +46,8 @@ const getTriggerPropertyReferences = (trigger: ITrigger, isValidProperty: (name:
  * Groups triggers by the property name they reference in:
  * - $designer: { "propertyGroups": ["<name1>", "<name2", ... ]
  * - "property": "<name>"
- * - "expectedProperties" : ["<name1>", "<name2", ... ]
- * - condition : "<expresssion referencing properties>"
- * - Any of the trigger's action that reference a property.
- * If a trigger does not reference a property, it will be grouped under "(none)"
+ * - Action.expectedProperties : ["<name1>", "<name2", ... ]
+ * If a trigger does not reference a schema property, it will be grouped under "(none)"
  */
 export const groupTriggersByPropertyReference = (
   dialog: DialogInfo,
@@ -95,7 +69,7 @@ export const groupTriggersByPropertyReference = (
         properties.forEach((p) => {
           addResult(p, t);
         });
-      } else if (properties.length === 1) {
+      } else if (properties.length >= 1) {
         addResult(properties[0], t);
       }
     });
