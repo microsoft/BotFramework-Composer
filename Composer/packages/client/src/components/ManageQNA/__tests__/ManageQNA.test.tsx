@@ -13,6 +13,40 @@ const DOWN_ARROW = { keyCode: 40 };
 // token creds
 jest.mock('@azure/ms-rest-js');
 
+jest.mock('@azure/arm-appservice', () => ({
+  WebSiteManagementClient: () => {
+    return {
+      appServicePlans: {
+        createOrUpdate: jest.fn(),
+      },
+      webApps: {
+        createOrUpdate: jest.fn(() => {
+          'https://mockedHostName';
+        }),
+      },
+      adminKeys: {
+        get: jest.fn(() => {
+          'mockedPrimaryKey';
+        }),
+      },
+    };
+  },
+}));
+jest.mock('@azure/arm-search', () => ({
+  SearchManagementClient: () => {
+    return {
+      services: {
+        createOrUpdate: jest.fn(),
+      },
+      adminKeys: {
+        get: jest.fn(() => {
+          'mockedPrimaryKey';
+        }),
+      },
+    };
+  },
+}));
+
 jest.mock('@azure/arm-resources', () => ({
   ResourceManagementClient: () => {
     return {
@@ -356,11 +390,17 @@ describe('<ManageQNA />', () => {
       await fireEvent.click(nextButton3);
     });
 
+    // since QNA is async, the modal closes at the end ...
+    expect(onToggleVisibility).toBeCalled();
+
+    // since QNA is async, onGetKey is not called here.
+    // instead, these values are updated directly in the recoil state.
+
     // ensure that the final callback was called
-    expect(onGetKey).toBeCalledWith({
-      region: 'westus',
-      key: 'mockedKey',
-    });
+    // expect(onGetKey).toBeCalledWith({
+    //   region: 'westus',
+    //   key: 'mockedKey',
+    // });
   });
 
   it('it should show handoff instructions', async () => {
