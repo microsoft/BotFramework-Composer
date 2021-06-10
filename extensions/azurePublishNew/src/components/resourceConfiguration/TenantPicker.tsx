@@ -42,6 +42,16 @@ export const TenantPicker = memo((props: Props) => {
       (async () => {
         try {
           const tenants = await getTenants();
+          tenants.push({
+            id: '/tenants/72f988bf-86f1-41af-91ab-2d7cd011db471',
+            tenantId: '72f988bf-86f1-41af-91ab-2d7cd011db471',
+            countryCode: 'US',
+            displayName: 'Microsoft 12',
+            tenantCategory: 'Home',
+            defaultDomain: 'microsoft.onmicrosoft.com',
+            tenantType: 'AAD',
+            domains: [],
+          });
           setTenants(tenants);
           setIsLoading(false);
           if (tenants.length === 0) {
@@ -50,17 +60,9 @@ export const TenantPicker = memo((props: Props) => {
             setErrorMessage(undefined);
           }
 
-          const cachedTenantId = getTenantIdFromCache();
-          if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
-            setTenantId(cachedTenantId);
-          } else {
-            setTenantId(undefined);
-            if (tenants?.length > 0) {
-              // seed tenant selection with 1st tenant
-              setTenantId(tenants[0].tenantId);
-            }
+          if (!value && tenants?.length > 0) {
+            onTenantChange(tenants[0].tenantId);
           }
-          onTenantChange(cachedTenantId);
         } catch (err) {
           setTenants([]);
           setIsLoading(false);
@@ -110,7 +112,7 @@ export const TenantPicker = memo((props: Props) => {
     disabled: tenants.length === 1,
     placeholder: formatMessage('Select Azure directory'),
   };
-
+  console.log(value);
   return (
     <SearchableDropdown
       errorMessage={errorMessage}
