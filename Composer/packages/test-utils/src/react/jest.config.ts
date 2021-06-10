@@ -23,4 +23,5 @@ export default mergeConfig(baseConfig, {
   },
 
   setupFilesAfterEnv: [path.resolve(__dirname, 'setup.js')],
+  setupFiles: [path.resolve(__dirname, 'setupEnvReact.js')],
 });
