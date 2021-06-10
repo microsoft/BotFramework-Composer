@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 
 import { DebugPanelTabHeaderProps } from '../types';
 
-export const BotStateLogHeader: React.FC<DebugPanelTabHeaderProps> = () => {
+export const WatchTabHeader: React.FC<DebugPanelTabHeaderProps> = () => {
   return (
     <div
       css={css`
@@ -15,14 +15,14 @@ export const BotStateLogHeader: React.FC<DebugPanelTabHeaderProps> = () => {
         flex-direction: row;
         align-items: center;
       `}
-      data-testid="Tab-BotState"
+      data-testid="Tab-Watch"
     >
       <div
         css={css`
           margin-right: 4px;
         `}
       >
-        {formatMessage('Bot state')}
+        {formatMessage('Watch')}
       </div>
     </div>
   );

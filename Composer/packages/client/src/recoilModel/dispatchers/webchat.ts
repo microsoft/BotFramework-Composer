@@ -2,16 +2,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConversationTrafficItem, Activity } from '@botframework-composer/types';
+import { ConversationTrafficItem } from '@botframework-composer/types';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
-import {
-  webChatTrafficState,
-  webChatInspectionDataState,
-  isWebChatPanelVisibleState,
-  botStateInspectionDataState,
-  inspectedBotStateIndexState,
-} from '../atoms';
+import { webChatTrafficState, webChatInspectionDataState, isWebChatPanelVisibleState } from '../atoms';
 import { WebChatInspectionData } from '../types';
 
 export const webChatLogDispatcher = () => {
@@ -19,8 +13,6 @@ export const webChatLogDispatcher = () => {
     const { set } = callbackHelpers;
     set(webChatTrafficState(projectId), []);
     set(webChatInspectionDataState(projectId), undefined); // clear the inspection panel
-    set(botStateInspectionDataState(projectId), undefined);
-    set(inspectedBotStateIndexState(projectId), undefined);
   });
 
   const setWebChatPanelVisibility = useRecoilCallback((callbackHelpers: CallbackInterface) => (value: boolean) => {
@@ -51,25 +43,9 @@ export const webChatLogDispatcher = () => {
     }
   );
 
-  const setBotStateInspectionData = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (projectId: string, inspectionData: Activity) => {
-      const { set } = callbackHelpers;
-      set(botStateInspectionDataState(projectId), inspectionData);
-    }
-  );
-
-  const setInspectedBotStateIndex = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => (projectId: string, botStateIndex: number) => {
-      const { set } = callbackHelpers;
-      set(inspectedBotStateIndexState(projectId), botStateIndex);
-    }
-  );
-
   return {
     clearWebChatLogs,
     appendWebChatTraffic,
-    setBotStateInspectionData,
-    setInspectedBotStateIndex,
     setWebChatPanelVisibility,
     setWebChatInspectionData,
   };

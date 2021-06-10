@@ -19,7 +19,7 @@ import {
   RecognizerFile,
   PublishTarget,
 } from '@bfc/shared';
-import { ConversationTrafficItem, Activity } from '@botframework-composer/types';
+import { ConversationTrafficItem } from '@botframework-composer/types';
 import { atomFamily } from 'recoil';
 
 import { BotStartError, DesignPageLocation, WebChatInspectionData, RuntimeOutputData } from '../../recoilModel/types';
@@ -444,16 +444,6 @@ export const webChatTrafficState = atomFamily<ConversationTrafficItem[], string>
 
 export const webChatInspectionDataState = atomFamily<WebChatInspectionData | undefined, string>({
   key: getFullyQualifiedKey('webChatInspectionData'),
-  default: undefined,
-});
-
-export const botStateInspectionDataState = atomFamily<Activity | undefined, string>({
-  key: getFullyQualifiedKey('botStateInspectionData'),
-  default: undefined,
-});
-
-export const inspectedBotStateIndexState = atomFamily<number | undefined, string>({
-  key: getFullyQualifiedKey('inspectedBotStateIndex'),
   default: undefined,
 });
 
