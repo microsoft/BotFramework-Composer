@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FormDialogSchemaTemplate } from '@bfc/shared';
 import * as React from 'react';
-import { useRecoilValue } from 'recoil';
 // eslint-disable-next-line @typescript-eslint/camelcase
-import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE } from 'recoil';
+import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE, useRecoilValue } from 'recoil';
 
 import { formDialogSchemaJsonSelector, trackedAtomsSelector } from './atoms/appState';
 import { useHandlers } from './atoms/handlers';
@@ -12,6 +12,7 @@ import { FormDialogPropertiesEditor } from './components/FormDialogPropertiesEdi
 import { UndoRoot } from './undo/UndoRoot';
 
 export type FormDialogSchemaEditorProps = {
+  locale: string;
   /**
    * Unique id for the visual editor.
    */
@@ -31,7 +32,7 @@ export type FormDialogSchemaEditorProps = {
   /**
    * Record of available schema templates.
    */
-  templates?: string[];
+  templates?: FormDialogSchemaTemplate[];
   /**
    * Indicates of caller is running generation logic.
    */
@@ -48,10 +49,11 @@ export type FormDialogSchemaEditorProps = {
 
 const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditorProps) => {
   const {
+    locale,
     editorId,
     schema,
     templates = [],
-    schemaExtension = '.schema',
+    schemaExtension = '.template',
     isGenerating = false,
     onSchemaUpdated,
     onGenerateDialog,
@@ -59,15 +61,23 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
   } = props;
 
   const trackedAtoms = useRecoilValue(trackedAtomsSelector);
-  const { setTemplates, reset, importSchemaString } = useHandlers();
+  const { setTemplates, reset, updateLocale, importSchemaString } = useHandlers();
+
+  React.useEffect(() => {
+    if (locale) {
+      updateLocale({ locale });
+    }
+  }, [locale]);
 
   React.useEffect(() => {
     setTemplates({ templates });
   }, [templates]);
 
   React.useEffect(() => {
-    importSchemaString(schema);
-  }, [editorId]);
+    if (templates.length) {
+      importSchemaString({ ...schema, templates });
+    }
+  }, [editorId, templates]);
 
   const startOver = React.useCallback(() => {
     reset({ name: schema.id });
