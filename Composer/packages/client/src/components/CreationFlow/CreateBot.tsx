@@ -27,7 +27,6 @@ import { csharpFeedKey, nodeFeedKey } from '@botframework-composer/types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import msftIcon from '../../images/msftIcon.svg';
-import addIcon from '../../images/addIcon.svg';
 import { DialogCreationCopy } from '../../constants';
 import { creationFlowTypeState, fetchReadMePendingState, selectedTemplateReadMeState } from '../../recoilModel';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -159,20 +158,25 @@ export function CreateBot(props: CreateBotProps) {
   };
 
   const renderTemplateIcon = (item: BotTemplate) => {
-    let labelText = formatMessage('Microsoft Logo');
-    let iconSrc = msftIcon;
     if (item.id === localTemplateId) {
-      labelText = formatMessage('Add Local Template');
-      iconSrc = addIcon;
+      return (
+        <FontIcon
+          aria-label={formatMessage('Add Local Template')}
+          iconName="AddIcon"
+          style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px', color: 'blue' }}
+        />
+      );
+    } else {
+      const labelText = formatMessage('Microsoft Logo');
+      return (
+        <img
+          alt={labelText}
+          aria-label={labelText}
+          src={msftIcon}
+          style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px', color: 'blue' }}
+        />
+      );
     }
-    return (
-      <img
-        alt={labelText}
-        aria-label={labelText}
-        src={iconSrc}
-        style={{ marginRight: '3px', height: '12px', width: '12px', position: 'relative', top: '2px', color: 'blue' }}
-      />
-    );
   };
 
   const tableColumns = [
