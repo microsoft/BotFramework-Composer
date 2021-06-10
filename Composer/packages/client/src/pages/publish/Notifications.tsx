@@ -44,7 +44,6 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
     height: '12px',
     fontSize: '12px',
     color: item.status === 200 ? '#27AE60' : 'rgb(161, 159, 157)',
-    transform: item.status !== 200 ? 'rotate(45deg)' : '',
   });
   return {
     title: '',
@@ -62,7 +61,7 @@ export const getPublishedNotificationCardProps = (item: BotStatus): CardProps =>
     onRenderCardContent: (props) => (
       <div css={cardContent}>
         <Icon css={infoType} iconName="CloudUpload" />
-        <Icon css={statusIconStyle} iconName={item.status === 200 ? 'Completed' : 'CircleAdditionSolid'} />
+        <Icon css={statusIconStyle} iconName={item.status === 200 ? 'Completed' : 'StatusErrorFull'} />
         <div css={cardDetail}>
           <div css={cardDescription}>{props.description}</div>
         </div>
