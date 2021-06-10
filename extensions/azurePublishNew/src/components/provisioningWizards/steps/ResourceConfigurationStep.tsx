@@ -20,13 +20,14 @@ import {
   Link,
 } from 'office-ui-fabric-react';
 
-import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
-import { ResourceGroupPicker } from '../../resourceConfiguration/ResourceGroupPicker';
-import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPicker';
-import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
-import { DeployLocationPicker } from '../../resourceConfiguration/DeployLocationPicker';
-import { useResourceConfiguration } from '../../../hooks/useResourceConfiguration';
-import createDispatchers from '../../../recoilModel/dispatchers';
+import { userInfoState } from '../../../recoilModel/atoms';
+import {
+  ResourceGroupPicker,
+  SubscriptionPicker,
+  TenantPicker,
+  DeployLocationPicker,
+} from '../../resourceConfiguration';
+import { useDispatcher, useResourceConfiguration } from '../../../hooks';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;
@@ -75,7 +76,7 @@ const FullWidthForm = styled.form`
 `;
 
 export const ResourceConfigurationStep = (props: Props) => {
-  const { setUserInfo } = createDispatchers();
+  const { setUserInfo } = useDispatcher();
   const userInfo = useRecoilValue(userInfoState);
 
   const {

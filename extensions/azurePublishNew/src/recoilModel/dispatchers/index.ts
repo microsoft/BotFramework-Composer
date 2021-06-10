@@ -12,3 +12,4 @@ const createDispatchers = () => {
 };
 
 export default createDispatchers;
+export type Dispatcher = ReturnType<typeof createDispatchers>;

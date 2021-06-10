@@ -3,6 +3,7 @@
 
 import { atom } from 'recoil';
 
+import { Dispatcher } from '../dispatchers';
 import { ResourceConfigurationState, UserInfo } from '../types';
 
 export const resourceConfigurationState = atom<ResourceConfigurationState>({
@@ -14,6 +15,11 @@ export const resourceConfigurationState = atom<ResourceConfigurationState>({
     deployLocation: '',
     luisRegion: '',
   } as ResourceConfigurationState,
+});
+
+export const dispatcherState = atom<Dispatcher>({
+  key: 'azurePublishDispatcherState',
+  default: {} as Dispatcher,
 });
 
 export const userInfoState = atom<UserInfo>({
