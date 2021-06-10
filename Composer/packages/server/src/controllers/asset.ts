@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Request, Response } from 'express';
 import { BotTemplate, emptyBotNpmTemplateName, localTemplateId, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
