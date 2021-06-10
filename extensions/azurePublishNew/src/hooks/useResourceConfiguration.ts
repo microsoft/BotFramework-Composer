@@ -4,17 +4,12 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { resourceConfigurationState } from '../recoilModel/atoms/resourceConfigurationState';
-import createDispatchers from '../recoilModel/dispatchers';
+import { resourceConfigurationState } from '../recoilModel/atoms';
+
+import { useDispatcher } from './useDispatcher';
 
 export const useResourceConfiguration = () => {
-  const {
-    setTenantId,
-    setSubscriptionId,
-    setResourceGroupName,
-    setDeployLocation,
-    setLuisRegion,
-  } = createDispatchers();
+  const { setTenantId, setSubscriptionId, setResourceGroupName, setDeployLocation, setLuisRegion } = useDispatcher();
   const { tenantId, subscriptionId, resourceGroupName, deployLocation, luisRegion } = useRecoilValue(
     resourceConfigurationState
   );
