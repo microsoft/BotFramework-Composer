@@ -45,5 +45,5 @@ if ($luisAuthroingKey)
 
 if ($appPassword)
 {
-    dotnet user-secrets set "MicrosoftAppPassword" $appPassword --project $destinationFolder
+    dotnet user-secrets set "MicrosoftAppPassword" "$appPassword" --project $destinationFolder
 }

@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import loader from '@monaco-editor/loader';
 import { monaco } from '@monaco-editor/react';
+
+// reset CDN path
+loader.config({
+  paths: {
+    vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs',
+  },
+});
 
 // initialize moanco api as early as possible
 monaco.init();
