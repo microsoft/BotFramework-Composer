@@ -41,6 +41,7 @@ import {
   settingsState,
   creationFlowStatusState,
   orchestratorForSkillsDialogState,
+  selectedTemplateVersionState,
 } from '../atoms';
 import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../selectors';
 import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../recoilModel/dispatchers/utils/project';
@@ -744,6 +745,12 @@ export const projectDispatcher = () => {
     callbackHelpers.set(warnAboutFunctionsState, warn);
   });
 
+  const setSelectedTemplateVersion = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (selectedVersion: string) => {
+      callbackHelpers.set(selectedTemplateVersionState, selectedVersion);
+    }
+  );
+
   return {
     openProject,
     createNewBot,
@@ -771,5 +778,6 @@ export const projectDispatcher = () => {
     setWarnAboutDotNet,
     setWarnAboutFunctions,
     fetchReadMe,
+    setSelectedTemplateVersion,
   };
 };

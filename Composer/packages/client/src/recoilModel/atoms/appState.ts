@@ -364,3 +364,8 @@ export const warnAboutFunctionsState = atom<boolean>({
   key: getFullyQualifiedKey('warnAboutFunctionsState'),
   default: false,
 });
+
+export const selectedTemplateVersionState = atom<string>({
+  key: getFullyQualifiedKey('selectedTemplateVersion'),
+  default: '',
+});
