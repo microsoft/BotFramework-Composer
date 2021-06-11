@@ -45,7 +45,7 @@ jobs:
       - script: yarn build
         displayName: yarn build
         workingDirectory: Composer
-      - script: ./scripts/e2e-ci.sh
+      - script: ./scripts/e2e-ci.sh --record
         displayName: Run E2E Tests
         workingDirectory: Composer/packages/integration-tests
         env:
