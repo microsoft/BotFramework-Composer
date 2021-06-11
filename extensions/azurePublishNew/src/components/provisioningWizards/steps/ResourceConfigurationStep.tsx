@@ -20,14 +20,13 @@ import {
   Link,
 } from 'office-ui-fabric-react';
 
-import { userInfoState } from '../../../recoilModel/atoms';
-import {
-  ResourceGroupPicker,
-  SubscriptionPicker,
-  TenantPicker,
-  DeployLocationPicker,
-} from '../../resourceConfiguration';
-import { useDispatcher, useResourceConfiguration } from '../../../hooks';
+import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
+import { useDispatcher } from '../../../hooks/useDispatcher';
+import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
+import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPicker';
+import { ResourceGroupPicker } from '../../resourceConfiguration/ResourceGroupPicker';
+import { DeployLocationPicker } from '../../resourceConfiguration/DeployLocationPicker';
+import { useResourceConfiguration } from '../../../hooks/useResourceConfiguration';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;

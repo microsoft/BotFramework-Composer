@@ -9,7 +9,9 @@ import { usePublishApi } from '@bfc/extension-client';
 import { ProvisionAction } from '../types';
 
 import { ChooseProvisionAction } from './ChooseProvisionAction';
-import { CreateResourcesWizard, HandOffToAdminWizard, ImportResourcesWizard } from './provisioningWizards';
+import { CreateResourcesWizard } from './provisioningWizards/CreateResourcesWizard';
+import { ImportResourcesWizard } from './provisioningWizards/ImportResourcesWizard';
+import { HandOffToAdminWizard } from './provisioningWizards/HandOffToAdminWizard';
 
 const Root = styled.div`
   height: 100%;

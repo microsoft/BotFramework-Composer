@@ -4,7 +4,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { resourceConfigurationState } from '../recoilModel/atoms';
+import { resourceConfigurationState } from '../recoilModel/atoms/resourceConfigurationState';
 
 import { useDispatcher } from './useDispatcher';
 

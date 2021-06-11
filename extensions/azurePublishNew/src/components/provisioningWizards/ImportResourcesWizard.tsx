@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 
 import { WizardStep, Wizard } from '../shared/wizard';
 
-import { ImportInstructionsStep } from './steps';
+import { ImportInstructionsStep } from './steps/ImportInstructionsStep';
 
 type Props = {
   onStepChange?: (stepIndex: number, step: WizardStep) => void;
