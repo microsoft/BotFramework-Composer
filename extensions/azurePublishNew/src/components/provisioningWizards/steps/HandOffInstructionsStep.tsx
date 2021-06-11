@@ -42,6 +42,10 @@ const LearnMoreLink = styled(Link)`
   font-size: 14px;
 `;
 
+const urls = {
+  handOffAdmin: 'https://aka.ms/composer-publishingprofile-handoffadmin',
+};
+
 export const HandOffInstructionsStep = () => {
   return (
     <Content>
@@ -69,7 +73,7 @@ export const HandOffInstructionsStep = () => {
           </InstructionDetails>
         </Instruction>
       </Details>
-      <LearnMoreLink href="https://aka.ms/composer-publishingprofile-handoffadmin" target="_blank">
+      <LearnMoreLink href={urls.handOffAdmin} target="_blank">
         {formatMessage('Learn More')}
       </LearnMoreLink>
     </Content>

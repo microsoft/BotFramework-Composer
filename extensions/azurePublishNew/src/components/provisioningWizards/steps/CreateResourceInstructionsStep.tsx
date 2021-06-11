@@ -43,6 +43,11 @@ const LearnMoreLink = styled(Link)`
   font-size: 14px;
 `;
 
+const urls = {
+  createNewResources: 'https://aka.ms/composer-publish-bot#create-new-azure-resources',
+  microsoftAzure: 'https://aka.ms/azureSignUpPage',
+};
+
 export const CreateResourceInstructionsStep = () => {
   return (
     <Content>
@@ -54,13 +59,13 @@ export const CreateResourceInstructionsStep = () => {
           )}
         </Text>
         &nbsp;
-        <LearnMoreLink href="https://aka.ms/azureSignUpPage" target="_blank">
+        <LearnMoreLink href={urls.microsoftAzure} target="_blank">
           {formatMessage('Microsoft Azure')}
         </LearnMoreLink>
         &nbsp;
         <Text>{formatMessage('is required.')}</Text>
         &nbsp;
-        <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
+        <LearnMoreLink href={urls.createNewResources} target="_blank">
           {formatMessage('Learn more')}
         </LearnMoreLink>
       </Summary>
@@ -93,7 +98,7 @@ export const CreateResourceInstructionsStep = () => {
       <Summary>
         <Text>{formatMessage('Once provisioned, your new resources will be available in the Azure portal.')}</Text>
         &nbsp;
-        <LearnMoreLink href="https://aka.ms/composer-publish-bot#create-new-azure-resources" target="_blank">
+        <LearnMoreLink href={urls.createNewResources} target="_blank">
           {formatMessage('Learn More')}
         </LearnMoreLink>
       </Summary>
