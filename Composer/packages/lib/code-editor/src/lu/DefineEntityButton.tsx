@@ -84,7 +84,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
           break;
         case 'ml':
         case 'prebuilt':
-          onDefineEntity(entityType, { entityName });
+          onDefineEntity(entityType, entityName ? { entityName } : {});
           break;
         default:
           throw `${entityType} is not supported!`;
