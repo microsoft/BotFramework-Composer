@@ -140,24 +140,9 @@ export const storageDispatcher = () => {
     }
   );
 
-  const fetchTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
+  const fetchTemplates = useRecoilCallback(({ set }: CallbackInterface) => async (feedUrls?: string[]) => {
     try {
-      const response = await httpClient.get(`/assets/projectTemplates`);
-
-      const data = response?.data;
-
-      if (data && Array.isArray(data) && data.length > 0) {
-        callbackHelpers.set(templateProjectsState, data);
-      }
-    } catch (err) {
-      // TODO: Handle exceptions
-      logMessage(callbackHelpers, `Error fetching runtime templates: ${err}`);
-    }
-  });
-
-  const fetchTemplatesV2 = useRecoilCallback(({ set }: CallbackInterface) => async (feedUrls?: string[]) => {
-    try {
-      const response = await httpClient.post(`v2/assets/projectTemplates`, {
+      const response = await httpClient.post(`assets/projectTemplates`, {
         feedUrls: feedUrls,
         getFirstPartyNpm: false,
       });
@@ -231,7 +216,6 @@ export const storageDispatcher = () => {
     createFolder,
     updateFolder,
     fetchTemplates,
-    fetchTemplatesV2,
     fetchRuntimeTemplates,
     fetchFeatureFlags,
     toggleFeatureFlag,

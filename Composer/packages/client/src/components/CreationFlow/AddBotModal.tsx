@@ -9,8 +9,8 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
 
-import { dispatcherState } from '../../../recoilModel';
-import { CreationFlowStatus } from '../../../constants';
+import { dispatcherState } from '../../recoilModel';
+import { CreationFlowStatus } from '../../constants';
 
 interface AddBotModalProps {
   onDismiss: () => void;

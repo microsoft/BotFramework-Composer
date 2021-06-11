@@ -19,9 +19,9 @@ import {
 } from '../../recoilModel';
 import { CreationFlowStatus } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import DefineConversationV2 from '../../components/CreationFlow/v2/DefineConversation';
-import { CreateBotV2 } from '../../components/CreationFlow/v2/CreateBot';
-import { AddBotModal } from '../../components/CreationFlow/v2/AddBotModal';
+import DefineConversation from '../../components/CreationFlow/DefineConversation';
+import { CreateBot } from '../../components/CreationFlow/CreateBot';
+import { AddBotModal } from '../../components/CreationFlow/AddBotModal';
 
 interface CreationModalProps {
   onSubmit: () => void;
@@ -38,7 +38,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     updateFolder,
     saveTemplateId,
     createNewBot,
-    createNewBotV2,
     openProject,
     addExistingSkillToBotProject,
     fetchReadMe,
@@ -111,7 +110,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         source: formData?.source,
         isRoot: false,
       };
-      createNewBotV2(newCreationBotData);
+      createNewBot(newCreationBotData);
     } else {
       createNewBot(newBotData);
     }
@@ -150,7 +149,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const renderDefineConversation = () => {
     return (
-      <DefineConversationV2
+      <DefineConversation
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         templateId={templateId}
@@ -164,7 +163,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const renderCreateOptions = () => {
     return (
-      <CreateBotV2
+      <CreateBot
         isOpen
         fetchReadMe={fetchReadMe}
         templates={templateProjects}
