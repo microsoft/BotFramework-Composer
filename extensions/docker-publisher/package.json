@@ -1,0 +1,84 @@
+{
+  "name": "docker-publisher",
+  "version": "1.0.0",
+  "main": "dist/extension.js",
+  "description": "Publish bot to Docker Images",
+  "scripts": {
+    "build": "node ../scripts/build.js",
+    "watch": "yarn build --watch",
+    "lint": "eslint --quiet --ext .ts,.tsx .",
+    "test": "yarn test:ui && yarn test:node",
+    "test:ui": "jest --config jest.config.ui.js",
+    "test:node": "jest --config jest.config.node.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "composer": {
+    "enabled": true,
+    "bundles": [
+      {
+        "id": "dockerPublish",
+        "path": "./dist/publish.js"
+      },
+      {
+        "id": "publish.js.map",
+        "path": "./dist/publish.js.map"
+      }
+    ],
+    "contributes": {
+      "views": {
+        "publish": [
+          {
+            "bundleId": "dockerPublish"
+          }
+        ]
+      }
+    }
+  },
+  "esbuild": {},
+  "author": {
+    "name": "Christiano Donke",
+    "email": "cdonke@outlook.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@azure/arm-subscriptions": "2.0.0",
+    "@azure/ms-rest-js": "^2.0.7",
+    "@azure/arm-resources": "2.1.0",
+    "@botframework-composer/types": "file:../../Composer/packages/types",
+    "@bfc/extension-client": "file:../../Composer/packages/extension-client",
+    "@bfc/ui-shared": "../../Composer/packages/lib/ui-shared",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "office-ui-fabric-react": "7.71.0",
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
+    "@uifabric/fluent-theme": "^7.4.36",
+    "portfinder": "^1.0.28",
+    "ws": "^7.4.4",
+    "express": "^4.17.1",
+    "eslint": "7.0.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-cypress": "2.11.1",
+    "eslint-plugin-emotion": "10.0.27",
+    "eslint-plugin-format-message": "6.2.3",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-lodash": "7.1.0",
+    "eslint-plugin-notice": "0.9.10",
+    "eslint-plugin-prettier": "3.1.3",
+    "eslint-plugin-react": "7.20.0",
+    "eslint-plugin-security": "1.4.0",
+    "buffer": "^6.0.3"
+  },
+  "devDependencies": {
+    "@botframework-composer/test-utils": "file:../../Composer/packages/test-utils",
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "typescript": "^3.9.6",
+    "@types/react": "^16.9.53",
+    "@types/jest": "^26.0.15",
+    "jest": "^26.0.15",
+    "ts-jest": "^26.0.15"
+  }
+}

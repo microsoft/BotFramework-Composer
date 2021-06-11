@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^6.0.3"
+  },
   "dependencies": {
     "@types/fs-extra": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "2.34.0",

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "jsx": "react",
+    "alwaysStrict": true,
+    "module": "commonjs",
+    "declaration": false,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "types": ["node", "@types/jest"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,54 @@
+FROM mcr.microsoft.com/dotnet/sdk:3.1 as SDK
+ARG EXECUTABLE
+ARG COMPOSER
+ARG PFXPASSWORD
+
+RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p ${PFXPASSWORD}
+
+WORKDIR /src
+COPY . .
+
+RUN dotnet restore
+RUN dotnet build -c Release --no-restore
+RUN dotnet publish --no-build --no-restore --configuration Release --verbosity detailed --output /app
+
+FROM mcr.microsoft.com/dotnet/aspnet:3.1
+ARG EXECUTABLE
+ARG COMPOSER
+ARG PFXPASSWORD
+
+COPY --from=SDK /https/aspnetapp.pfx /https/aspnetapp.pfx
+
+ENV ASPNETCORE_URLS https://+;http://+
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password ${PFXPASSWORD}
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path /https/aspnetapp.pfx
+
+WORKDIR /app
+COPY --from=SDK /app /app
+
+EXPOSE 80
+EXPOSE 443
+
+ENV MicrosoftAppId ""
+ENV MicrosoftAppPassword ""
+ENV LuisEnpointKey ""
+ENV QnAEndpointKey ""
+ENV SkillHostEndpoint ""
+ENV DLL ${EXECUTABLE}
+
+SHELL ["/bin/bash", "-c"]
+RUN echo $'#!/bin/bash\n\
+\n\
+args=() \n\
+args+=($DLL) \n\
+\n\
+[[ ! -z "$MicrosoftAppId" ]] && args+=("--MicrosoftAppId $MicrosoftAppId")\n\
+[[ ! -z "$MicrosoftAppPassword" ]] && args+=("--MicrosoftAppPassword $MicrosoftAppPassword")\n\
+[[ ! -z "$LuisEnpointKey" ]] && args+=("--luis:endpointKey $LuisEnpointKey")\n\
+[[ ! -z "$QnAEndpointKey" ]] && args+=("--MicrosoftAppPassword $QnAEndpointKey")\n\
+[[ ! -z "$SkillHostEndpoint" ]] && args+=("--SkillHostEndpoint $SkillHostEndpoint")\n\
+\n\
+[[ "$COMPOSER" == "DEBUG" ]] && echo "dotnet ${args[@]}"\n\
+dotnet "${args[@]}"' > ./run.sh && chmod +x ./run.sh
+
+ENTRYPOINT [ "./run.sh" ]

@@ -30,5 +30,7 @@ module.exports = {
     'packages/tools/**/lib',
     'packages/types/**/lib',
     'packages/ui-plugins/**/lib',
+    '../extensions/**/node_modules',
+    '../extensions/**/__tests__',
   ],
 };
