@@ -5,17 +5,18 @@ const removeLineBreaks = (value: string) => {
   return value.replace(/(\r\n|\n|\r)/gm, '');
 };
 
-// TAKEN FROM - https://github.com/janl/mustache.js/blob/master/mustache.js#L55
+// Taken from - https://github.com/janl/mustache.js/blob/master/mustache.js#L55
 const htmlEntityMap: Record<string, string> = {
-  '&': '&',
-  '<': '<',
-  '>': '>',
-  '"': '"',
-  "'": "'",
-  '/': '/',
-  '`': '`',
-  '=': '=',
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;',
+  '`': '&#x60;',
+  '=': '&#x3D;',
 };
+
 const escapeHtml = (value: string) => {
   // eslint-disable-next-line no-useless-escape
   return String(value).replace(/[&<>"'`=\/]/g, (s) => htmlEntityMap[s]);
