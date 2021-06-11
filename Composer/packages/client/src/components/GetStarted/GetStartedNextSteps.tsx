@@ -43,7 +43,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const readme = useRecoilValue(projectReadmeState(projectId));
   const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
   const schemaDiagnostics = useRecoilValue(schemaDiagnosticsSelectorFamily(projectId));
-  const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
+  const { setSettings, setQnASettings, setShowGetStartedTeachingBubble } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
@@ -402,6 +402,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             target="#luis"
             onDismiss={() => {
               setHighlightLUIS(false);
+              setShowGetStartedTeachingBubble(false);
             }}
           >
             {formatMessage('Continue setting up your development environment by adding LUIS keys.')}
@@ -415,6 +416,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             target="#qna"
             onDismiss={() => {
               setHighlightQNA(false);
+              setShowGetStartedTeachingBubble(false);
             }}
           >
             {formatMessage('Just add a QnA key and you’ll be ready to talk to your bot.')}
