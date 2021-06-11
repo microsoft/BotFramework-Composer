@@ -260,6 +260,9 @@
   "advanced_settings_view_json_b83638b4": {
     "message": "Advanced Settings View (json)"
   },
+  "agree_73937908": {
+    "message": "Agree"
+  },
   "all_4321c3a1": {
     "message": "All"
   },
@@ -1826,6 +1829,9 @@
   "http_request_b6394895": {
     "message": "HTTP request"
   },
+  "i_agree_to_the_a_microsoft_channel_publication_ter_f9187f7d": {
+    "message": "I agree to the <a>Microsoft Channel Publication Terms</a> and the <a2>Microsoft Privacy Statement</a2> for my deployment to the Microsoft Teams channel."
+  },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
     "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
   },
@@ -2356,6 +2362,9 @@
   },
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
+  },
+  "microsoft_teams_terms_and_conditions_8375ce96": {
+    "message": "Microsoft Teams terms and conditions"
   },
   "migrating_data_a35b3055": {
     "message": "Migrating data"
