@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /// <reference types="Cypress" />
 
 context('Assertions', () => {

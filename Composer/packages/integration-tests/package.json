@@ -7,7 +7,8 @@
     "start:server": "node scripts/e2e.js",
     "open": "cypress open",
     "clean": "node scripts/clean-e2e.js",
-    "clean-all": "node scripts/clean-e2e.js --all"
+    "clean-all": "node scripts/clean-e2e.js --all",
+    "lint": "eslint --quiet cypress"
   },
   "keywords": [],
   "author": "",
