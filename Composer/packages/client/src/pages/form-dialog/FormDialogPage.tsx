@@ -63,10 +63,9 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     loadFormDialogSchemaTemplates();
   }, []);
 
-  const availableTemplates = React.useMemo(
-    () => formDialogLibraryTemplates.filter((t) => !t.isGlobal).map((t) => t.name),
-    [formDialogLibraryTemplates]
-  );
+  const availableTemplates = React.useMemo(() => formDialogLibraryTemplates.filter((t) => !t.$global), [
+    formDialogLibraryTemplates,
+  ]);
 
   const validSchemaId = React.useMemo(() => formDialogSchemaIds.includes(schemaId), [formDialogSchemaIds, schemaId]);
 
