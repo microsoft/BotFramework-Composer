@@ -143,7 +143,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateRecognizer, setMicrosoftAppProperties, setPublishTargets } = useRecoilValue(dispatcherState);
   const { content: botProjectFile } = useRecoilValue(botProjectFileState(projectId));
-  const skillUrls = Object.keys(botProjectFile.skills).map((key) => botProjectFile.skills[key].manifest);
+  const skillUrls = Object.keys(botProjectFile.skills).map((key) => botProjectFile.skills[key].manifest as string);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
