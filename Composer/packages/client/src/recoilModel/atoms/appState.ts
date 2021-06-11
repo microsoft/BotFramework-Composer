@@ -369,3 +369,8 @@ export const surveyEligibilityState = atom<boolean>({
   key: getFullyQualifiedKey('surveyEligibilityState'),
   default: false,
 });
+
+export const showGetStartedTeachingBubbleState = atom<boolean>({
+  key: getFullyQualifiedKey('showGetStartedTeachingBubbleState'),
+  default: false,
+});

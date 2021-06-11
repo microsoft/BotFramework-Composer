@@ -19,6 +19,7 @@ import {
   userHasNodeInstalledState,
   applicationErrorState,
   surveyEligibilityState,
+  showGetStartedTeachingBubbleState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType, SURVEY_PARAMETERS } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -181,6 +182,10 @@ export const applicationDispatcher = () => {
     surveyStorage.set('dateLastUsed', today);
   });
 
+  const setShowGetStartedTeachingBubble = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
+    callbackHelpers.set(showGetStartedTeachingBubbleState, show);
+  });
+
   return {
     checkNodeVersion,
     setAppUpdateStatus,
@@ -198,5 +203,6 @@ export const applicationDispatcher = () => {
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
     setSurveyEligibility,
+    setShowGetStartedTeachingBubble,
   };
 };
