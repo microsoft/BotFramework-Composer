@@ -16,7 +16,6 @@
     "@testing-library/cypress": "7.0.6",
     "@testing-library/user-event": "13.1.9",
     "cypress": "^7.5.0",
-    "cypress-plugin-tab": "^1.0.5",
     "chalk": "^4.0.0",
     "eslint-plugin-cypress": "2.11.1"
   }

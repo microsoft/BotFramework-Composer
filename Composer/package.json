@@ -125,7 +125,6 @@
     "concurrently": "^4.1.0",
     "coveralls": "^3.1.0",
     "cross-env": "^6.0.3",
-    "cypress-plugin-tab": "^1.0.5",
     "eslint": "7.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-formatter-github-actions": "^1.0.0",
