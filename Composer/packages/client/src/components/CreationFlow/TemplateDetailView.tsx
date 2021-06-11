@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import composerIcon from '../../../images/composerIcon.svg';
+import composerIcon from '../../images/composerIcon.svg';
 
 const templateTitleContainer = css`
   width: 100%;
