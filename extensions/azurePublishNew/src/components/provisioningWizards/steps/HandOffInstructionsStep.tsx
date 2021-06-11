@@ -51,25 +51,31 @@ export const HandOffInstructionsStep = () => {
     <Content>
       <Title>{formatMessage('Hand off to admin')}</Title>
       <Summary>
-        {formatMessage(
-          'Select this option to request your Azure admin to provision resources on your behalf, for example, when you don’t have proper permissions to use Azure or you want to generate resources from a sovereign cloud.'
-        )}
+        <Text>
+          {formatMessage(
+            'Select this option to request your Azure admin to provision resources on your behalf, for example, when you don’t have proper permissions to use Azure or you want to generate resources from a sovereign cloud.'
+          )}
+        </Text>
       </Summary>
       <Details>
         <Instruction>
           <InstructionTitle>{formatMessage('Step 1')}</InstructionTitle>
           <InstructionDetails>
-            {formatMessage(
-              'Add resources you need for the bot and generate a resource request to share with your Azure admin.'
-            )}
+            <Text>
+              {formatMessage(
+                'Add resources you need for the bot and generate a resource request to share with your Azure admin.'
+              )}
+            </Text>
           </InstructionDetails>
         </Instruction>
         <Instruction>
           <InstructionTitle>{formatMessage('Step 2')}</InstructionTitle>
           <InstructionDetails>
-            {formatMessage(
-              '<text>Once you get the resource details from your Azure admin, use them to import existing resources.</text>'
-            )}
+            <Text>
+              {formatMessage(
+                'Once you get the resource details from your Azure admin, use them to import existing resources.'
+              )}
+            </Text>
           </InstructionDetails>
         </Instruction>
       </Details>

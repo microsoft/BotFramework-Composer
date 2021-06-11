@@ -39,14 +39,18 @@ export const ImportInstructionsStep = () => {
     <Content>
       <Title>{formatMessage('Use existing resources')}</Title>
       <Summary>
-        {formatMessage(
-          'Select this option if you have access to existing Azure resources and their associated values.'
-        )}
+        <Text>
+          {formatMessage(
+            'Select this option if you have access to existing Azure resources and their associated values.'
+          )}
+        </Text>
       </Summary>
       <Summary>
-        {formatMessage(
-          'Copy and paste the JSON file containing the values of your existing Azure resources, from the Azure portal. This file includes values for some or all of the following:'
-        )}
+        <Text>
+          {formatMessage(
+            'Copy and paste the JSON file containing the values of your existing Azure resources, from the Azure portal. This file includes values for some or all of the following:'
+          )}
+        </Text>
       </Summary>
 
       <Details>
