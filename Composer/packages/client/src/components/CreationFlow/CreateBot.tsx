@@ -131,6 +131,7 @@ export function CreateBot(props: CreateBotProps) {
   const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
     props: { itemKey: csharpFeedKey },
   });
+  const [localTemplatePathValid, setLocalTemplatePathValid] = useState<boolean>(false);
   const [displayedTemplates, setDisplayedTemplates] = useState<BotTemplate[]>([]);
   const [readMe] = useRecoilState(selectedTemplateReadMeState);
   const fetchReadMePending = useRecoilValue(fetchReadMePendingState);
@@ -307,6 +308,7 @@ export function CreateBot(props: CreateBotProps) {
                 localTemplatePath={localTemplatePath}
                 readMe={readMe}
                 setLocalTemplatePath={setLocalTemplatePath}
+                setLocalTemplatePathValid={setLocalTemplatePathValid}
                 template={getTemplate()}
               />
             )}
@@ -327,7 +329,10 @@ export function CreateBot(props: CreateBotProps) {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null)}
+            disabled={
+              (currentTemplateId === localTemplateId && !localTemplatePathValid) ||
+              (option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplateId === null))
+            }
             text={formatMessage('Next')}
             onClick={handleJumpToNext}
           />
