@@ -78,6 +78,7 @@ import {
   dispatcherState,
   warnAboutDotNetState,
   warnAboutFunctionsState,
+  showGetStartedTeachingBubbleState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -634,50 +635,6 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
 export const createNewBotFromTemplate = async (
   callbackHelpers,
   templateId: string,
-  name: string,
-  description: string,
-  location: string,
-  schemaUrl?: string,
-  locale?: string,
-  templateDir?: string,
-  eTag?: string,
-  alias?: string,
-  preserveRoot?: boolean
-) => {
-  const { set } = callbackHelpers;
-  const response = await httpClient.post(`/projects`, {
-    storageId: 'default',
-    templateId,
-    name,
-    description,
-    location,
-    schemaUrl,
-    locale,
-    templateDir,
-    eTag,
-    alias,
-    preserveRoot,
-  });
-  const { botFiles, projectData } = await loadProjectData(response.data);
-  const projectId = response.data.id;
-  if (settingStorage.get(projectId)) {
-    settingStorage.remove(projectId);
-  }
-  const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-  set(botProjectFileState(projectId), currentBotProjectFileIndexed);
-  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
-  // if create from QnATemplate, continue creation flow.
-  if (templateId === QnABotTemplateId) {
-    set(createQnAOnState, { projectId, dialogId: mainDialog });
-    set(showCreateQnAFromUrlDialogState(projectId), true);
-  }
-
-  return { projectId, mainDialog };
-};
-
-export const createNewBotFromTemplateV2 = async (
-  callbackHelpers,
-  templateId: string,
   templateVersion: string,
   name: string,
   description: string,
@@ -689,7 +646,7 @@ export const createNewBotFromTemplateV2 = async (
   alias?: string,
   preserveRoot?: boolean
 ) => {
-  const jobId = await httpClient.post(`/v2/projects`, {
+  const jobId = await httpClient.post(`/projects`, {
     storageId: 'default',
     templateId,
     templateVersion,
@@ -715,7 +672,7 @@ export const migrateToV2 = async (
   runtimeLanguage: string,
   runtimeType: string
 ) => {
-  const jobId = await httpClient.post(`/v2/projects/migrate`, {
+  const jobId = await httpClient.post(`projects/migrate`, {
     storageId: 'default',
     oldProjectId,
     name,
@@ -881,9 +838,9 @@ export const postRootBotCreation = async (
     newProfile && dispatcher.setPublishTargets([newProfile], projectId);
   }
   projectIdCache.set(projectId);
-
+  callbackHelpers.set(showGetStartedTeachingBubbleState, true);
   // navigate to the new get started section
-  navigateToBot(callbackHelpers, projectId, undefined, btoa('dialogs#getstarted'));
+  navigateToBot(callbackHelpers, projectId, undefined, btoa('dialogs'));
 };
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
