@@ -64,10 +64,10 @@ export type DisabledMenuActions = {
   reason: string;
 };
 
-type NotificationLink = { label: string; onClick: () => void };
+export type NotificationLink = { label: string; onClick: () => void };
 
 export type Notification = {
-  type: 'info' | 'warning' | 'error' | 'pending' | 'success' | 'question';
+  type: 'info' | 'warning' | 'error' | 'pending' | 'success' | 'question' | 'congratulation';
   title: string;
   description?: string;
   retentionTime?: number;

@@ -68,26 +68,34 @@ const cardDetail = css`
   flex-grow: 1;
 `;
 
+const iconMargin = '4px';
+
 const errorType = css`
-  margin-top: 4px;
+  margin-top: ${iconMargin};
   color: #a80000;
 `;
 
 const successType = css`
-  margin-top: 4px;
+  margin-top: ${iconMargin};
   color: #27ae60;
 `;
 
 // #fce100
 const warningType = css`
-  margin-top: 4px;
+  margin-top: ${iconMargin};
   color: ${SharedColors.yellow10};
 `;
 
 // #0078d4
 const questionType = css`
-  margin-top: 4px;
+  margin-top: ${iconMargin};
   color: ${SharedColors.cyanBlue10};
+`;
+
+// #c19c00
+const congratulationType = css`
+  margin-top: ${iconMargin};
+  color: ${SharedColors.orangeYellow10};
 `;
 
 const cardTitle = css`
@@ -153,6 +161,7 @@ const defaultCardContentRenderer = (props: CardProps) => {
       {type === 'success' && <Icon css={successType} iconName="Completed" />}
       {type === 'warning' && <Icon css={warningType} iconName="Warning" />}
       {type === 'question' && <Icon css={questionType} iconName="UnknownSolid" />}
+      {type === 'congratulation' && <Icon css={congratulationType} iconName="Trophy2Solid" />}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}

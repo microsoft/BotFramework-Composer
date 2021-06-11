@@ -184,6 +184,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       ],
     });
 
+    addNotification({
+      id: 'test2',
+      type: 'congratulation',
+      title: "You've published 10 bots!",
+      description: 'Congratulations!',
+      link: {
+        label: 'Got it',
+        onClick: () => {
+          console.log('clicked this');
+        },
+      },
+    });
+
     // Clear intervals when unmount
     return () => {
       if (pollingUpdaterList) {
