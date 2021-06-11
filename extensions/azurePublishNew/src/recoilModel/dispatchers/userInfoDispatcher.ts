@@ -3,7 +3,7 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { userInfoState } from '../atoms';
+import { userInfoState } from '../atoms/resourceConfigurationState';
 import { UserInfo } from '../types';
 
 export const userInfoDispatcher = () => {

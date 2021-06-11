@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 
 import { WizardStep, Wizard } from '../shared/wizard';
 
-import { HandOffInstructionsStep } from './steps';
+import { HandOffInstructionsStep } from './steps/HandOffInstructionsStep';
 
 type Props = {
   onStepChange?: (stepIndex: number, stepId: string) => void;

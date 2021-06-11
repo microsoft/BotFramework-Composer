@@ -6,16 +6,14 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { usePublishApi } from '@bfc/extension-client';
 
-import { userInfoState } from '../../recoilModel/atoms/resourceConfigurationState';
 import { Wizard, WizardStep } from '../shared/wizard/Wizard';
+import { userInfoState } from '../../recoilModel/atoms/resourceConfigurationState';
 
 import { WizardFooterWithUserPersona } from './footers/WizardFooterWithUserPersona';
-import {
-  CreateResourceInstructionsStep,
-  ChooseResourcesStep,
-  ResourceConfigurationStep,
-  ReviewResourcesStep,
-} from './steps';
+import { CreateResourceInstructionsStep } from './steps/CreateResourceInstructionsStep';
+import { ResourceConfigurationStep } from './steps/ResourceConfigurationStep';
+import { ChooseResourcesStep } from './steps/ChooseResourcesStep';
+import { ReviewResourcesStep } from './steps/ReviewResourcesStep';
 
 type Props = {
   onStepChange?: (stepIndex: number, step: WizardStep) => void;

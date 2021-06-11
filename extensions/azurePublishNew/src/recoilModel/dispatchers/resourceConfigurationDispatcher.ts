@@ -3,7 +3,7 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { resourceConfigurationState } from '../atoms';
+import { resourceConfigurationState } from '../atoms/resourceConfigurationState';
 
 export const resourceConfigurationDispatcher = () => {
   const setTenantId = useRecoilCallback(({ set }: CallbackInterface) => (tenantId: string) => {
