@@ -74,6 +74,10 @@ const FullWidthForm = styled.form`
   width: '100%';
 `;
 
+const urls = {
+  luisReferenceRegions: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions',
+};
+
 export const ResourceConfigurationStep = (props: Props) => {
   const { setUserInfo } = useDispatcher();
   const userInfo = useRecoilValue(userInfoState);
@@ -215,10 +219,7 @@ export const ResourceConfigurationStep = (props: Props) => {
                 </ConfigureResourcesPropertyLabel>
                 {renderPropertyInfoIcon(formatMessage('The region associated with your Language understanding model.'))}
               </Stack>
-              <LearnMoreLink
-                href="https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions"
-                target="_blank"
-              >
+              <LearnMoreLink href={urls.luisReferenceRegions} target="_blank">
                 {formatMessage('Learn more')}
               </LearnMoreLink>
             </Stack>

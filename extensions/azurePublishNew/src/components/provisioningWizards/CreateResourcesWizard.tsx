@@ -20,6 +20,10 @@ type Props = {
   stepIndex?: number;
 };
 
+const urls = {
+  createNewResources: 'https://aka.ms/composer-publish-bot#create-new-azure-resources',
+};
+
 export const CreateResourcesWizard = React.memo((props: Props) => {
   const { onStepChange } = props;
   const userInfo = useRecoilValue(userInfoState);
@@ -51,12 +55,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
           'Your bot needs the following resources based on its capabilities. Select resources that you want to provision in your publishing profile. <a>Learn more</a>',
           {
             a: ({ children }) => (
-              <a
-                key="add-resource-learn-more"
-                href={'https://aka.ms/composer-publish-bot#create-new-azure-resources'}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
+              <a key="add-resource-learn-more" href={urls.createNewResources} rel="noopener noreferrer" target="_blank">
                 {children}
               </a>
             ),
