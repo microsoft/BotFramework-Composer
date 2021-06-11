@@ -6,9 +6,9 @@
 import { RecoilState, Snapshot, Loadable } from 'recoil';
 
 export type History = {
-  past: { snapshot: Snapshot; trackedAtoms: RecoilState<any>[] }[];
-  present: { snapshot: Snapshot; trackedAtoms: RecoilState<any>[] };
-  future: { snapshot: Snapshot; trackedAtoms: RecoilState<any>[] }[];
+  past: Snapshot[];
+  present: Snapshot;
+  future: Snapshot[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

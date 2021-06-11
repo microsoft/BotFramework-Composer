@@ -365,6 +365,11 @@ export const warnAboutFunctionsState = atom<boolean>({
   default: false,
 });
 
+export const showGetStartedTeachingBubbleState = atom<boolean>({
+  key: getFullyQualifiedKey('showGetStartedTeachingBubbleState'),
+  default: false,
+});
+
 export const selectedTemplateVersionState = atom<string>({
   key: getFullyQualifiedKey('selectedTemplateVersion'),
   default: '',
