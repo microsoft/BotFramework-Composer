@@ -11,7 +11,7 @@ Resource Services each provide a facade for an authenticated client to manage an
 Create a new instance of a particular service by calling its `create` method. The create method will return an object with available methods for managing that Azure Resource.
 
 ## Implementing a new Azure Resource Service
-- Define a create method that will return a new instance of the service for that Azure Resourc
+- Define a create method that will return a new instance of the service for that Azure Resource
 - Save authentication details for the service in the closure of the create method
 - Returns methods that will be needed for managing an Azure Resource (create, read, update, delete, etc)
 - Includes a provision method to coordinate all the steps of provisioning the resource
