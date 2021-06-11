@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>2.0.3</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CommandCardFactory.cs" />
+    <Compile Remove="ConnectionRequestHandler.cs" />
+    <Compile Remove="MessageRouterResultHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bot.Builder" Version="4.7.2" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MessageRouting\Utils\" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <RootNamespace>Underscore.Bot.MessageRouting</RootNamespace>
+  </PropertyGroup>
+
+</Project>

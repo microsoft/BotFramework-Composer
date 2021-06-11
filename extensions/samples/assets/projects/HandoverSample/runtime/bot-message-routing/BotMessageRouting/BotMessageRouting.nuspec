@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Underscore.Bot.MessageRouting</id>
+    <version>$version$</version>
+    <title>Bot Message Routing component</title>
+    <authors>Tomi Paananen et al. (see README on project website)</authors>
+    <owners>Tomi Paananen</owners>
+    <licenseUrl>https://github.com/tompaana/bot-message-routing/blob/master/LICENSE</licenseUrl>
+    <license type="MIT" />
+    <projectUrl>https://github.com/tompaana/bot-message-routing</projectUrl>
+    <!-- <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl> -->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Message routing component for chatbots built with Microsoft Bot Framework C# SDK</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017-2019 Microsoft</copyright>
+    <tags>chatbot chatbots bot bots messaging message routing</tags>
+  </metadata>
+</package>

@@ -1,0 +1,385 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "$designer": {
+      "name": "HandOffHuman",
+      "description": "",
+      "id": "o3Mml6"
+    }
+  },
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "a9CICk"
+          },
+          "condition": "=empty(settings.MicrosoftAppId)",
+          "actions": [
+            {
+              "$kind": "Microsoft.TraceActivity",
+              "$designer": {
+                "id": "I30Oop"
+              },
+              "name": "Configurations",
+              "value": "Microsoft AppId is empty",
+              "valueType": "https://www.botframework.com/schemas/handOver",
+              "label": "Hand Over State"
+            }
+          ],
+          "elseActions": []
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "p1D40j"
+          },
+          "condition": "=empty(settings.MicrosoftAppPassword)",
+          "actions": [
+            {
+              "$kind": "Microsoft.TraceActivity",
+              "$designer": {
+                "id": "VeyKWB"
+              },
+              "name": "Configurations",
+              "value": "Microsoft Password is empty",
+              "valueType": "https://www.botframework.com/schemas/handOver",
+              "label": "Hand Over State"
+            }
+          ],
+          "elseActions": []
+        },
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "${SendActivity_Welcome()}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "zEJJv7"
+      },
+      "actions": [
+        {
+          "$kind": "PostDialog",
+          "$designer": {
+            "id": "bEFZAF"
+          }
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "tbmHn9",
+        "name": "Watch"
+      },
+      "intent": "Watch",
+      "actions": [
+        {
+          "$kind": "WatchDialog",
+          "$designer": {
+            "id": "SkAHOd"
+          },
+          "resultProperty": "$response"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "uR0mUz",
+        "name": "TalkToHuman"
+      },
+      "intent": "TalkToHuman",
+      "actions": [
+        {
+          "$kind": "HumanDialog",
+          "$designer": {
+            "id": "QPtxgK"
+          },
+          "resultProperty": "=$response"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "cC8Qt4",
+        "name": "AcceptRequest"
+      },
+      "intent": "AcceptRequest",
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperties",
+          "$designer": {
+            "id": "fUAuGe"
+          },
+          "assignments": [
+            {
+              "property": "dialog.conversation",
+              "value": "=coalesce(@conversation, $conversation)"
+            },
+            {
+              "property": "dialog.userId",
+              "value": "=coalesce(@user, $user)"
+            }
+          ]
+        },
+        {
+          "$kind": "AcceptOrRejectDialog",
+          "$designer": {
+            "id": "rNAa7C"
+          },
+          "conversationProperty": "=dialog.conversation",
+          "userIdProperty": "=dialog.userID",
+          "acceptProperty": true
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "J3l01k",
+        "name": "Unwatch"
+      },
+      "intent": "Unwatch",
+      "actions": [
+        {
+          "$kind": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "2zU039"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "prompt": "${ConfirmInput_Prompt_2zU039()}",
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or ",
+            "inlineOr": " or "
+          },
+          "property": "$response",
+          "style": "heroCard"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "mheI0g"
+          },
+          "condition": "=$response",
+          "actions": [
+            {
+              "$kind": "UnwatchDialog",
+              "$designer": {
+                "id": "gYQolj"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "ObzAs0",
+        "name": "GetRequests"
+      },
+      "intent": "GetRequests",
+      "actions": [
+        {
+          "$kind": "GetRequestsDialog",
+          "$designer": {
+            "id": "3w8vOz"
+          },
+          "resultProperty": "$result"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "KaygQj",
+        "name": "RejectRequest"
+      },
+      "intent": "RejectRequest",
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperties",
+          "$designer": {
+            "id": "oQ3Trt"
+          },
+          "assignments": [
+            {
+              "property": "dialog.conversation",
+              "value": "=coalesce(@conversation, $conversation)"
+            },
+            {
+              "property": "dialog.userId",
+              "value": "=coalesce(@user, $user)"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "RDEsp6"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "prompt": "${ConfirmInput_Prompt_RDEsp6()}",
+          "choiceOptions": {
+            "includeNumbers": true
+          },
+          "property": "$response"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "FoFadH"
+          },
+          "condition": "=$response",
+          "actions": [
+            {
+              "$kind": "AcceptOrRejectDialog",
+              "$designer": {
+                "id": "rZR37P"
+              },
+              "conversationProperty": "=dialog.conversation",
+              "userIdProperty": "=dialog.userID",
+              "acceptProperty": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "lXnwTV",
+        "name": "Disconnect"
+      },
+      "intent": "Disconnect",
+      "actions": [
+        {
+          "$kind": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "lgg1XZ"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or ",
+            "inlineOr": " or ",
+            "inlineSeparator": ", "
+          },
+          "prompt": "${ConfirmInput_Prompt_lgg1XZ()}",
+          "style": "heroCard",
+          "property": "$response"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "75mCL5"
+          },
+          "condition": "=$response",
+          "actions": [
+            {
+              "$kind": "DisconnectDialog",
+              "$designer": {
+                "id": "dMpKzq"
+              },
+              "resultProperty": "$result"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "HandOffHuman.lg",
+  "id": "HandOffHuman",
+  "recognizer": {
+    "$kind": "Microsoft.RegexRecognizer",
+    "intents": [
+      {
+        "intent": "Watch",
+        "pattern": "(?i)^watch$"
+      },
+      {
+        "intent": "TalkToHuman",
+        "pattern": "(?i).*human.*"
+      },
+      {
+        "intent": "AcceptRequest",
+        "pattern": "(?i)^accept (?<conversation>.*) (?<user>.*)$"
+      },
+      {
+        "intent": "Unwatch",
+        "pattern": "(?i)^unwatch$"
+      },
+      {
+        "intent": "GetRequests",
+        "pattern": "(?i)^get\\s?request[s]?$"
+      },
+      {
+        "intent": "RejectRequest",
+        "pattern": "(?i)^reject (?<conversation>.*) (?<user>.*)$"
+      },
+      {
+        "intent": "Disconnect",
+        "pattern": "(?i)^disconnect$"
+      }
+    ]
+  },
+  "autoEndDialog": false
+}

@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
+    "$role": "implements(Microsoft.IDialog)",
+    "title": "Talk to Human",
+    "description": "This will request to talk to a human",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {        
+        "resultProperty": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "Result",
+            "description": ""
+        }
+    }
+}
