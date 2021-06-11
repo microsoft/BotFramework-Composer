@@ -64,15 +64,15 @@ export type DisabledMenuActions = {
   reason: string;
 };
 
+type NotificationLink = { label: string; onClick: () => void };
+
 export type Notification = {
-  type: 'info' | 'warning' | 'error' | 'pending' | 'success';
+  type: 'info' | 'warning' | 'error' | 'pending' | 'success' | 'question';
   title: string;
   description?: string;
   retentionTime?: number;
-  link?: {
-    label: string;
-    onClick: () => void;
-  };
+  link?: NotificationLink;
+  links?: NotificationLink[];
   read?: boolean;
   hidden?: boolean;
   onRenderCardContent?: ((props: Notification) => JSX.Element) | React.FC<any>;

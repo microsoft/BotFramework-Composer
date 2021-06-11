@@ -10,7 +10,7 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { Notification } from '@botframework-composer/types';
+import { Notification, NotificationLink } from '@botframework-composer/types';
 
 import { useInterval } from '../../utils/hooks';
 
@@ -78,9 +78,16 @@ const successType = css`
   color: #27ae60;
 `;
 
+// #fce100
 const warningType = css`
   margin-top: 4px;
   color: ${SharedColors.yellow10};
+`;
+
+// #0078d4
+const questionType = css`
+  margin-top: 4px;
+  color: ${SharedColors.cyanBlue10};
 `;
 
 const cardTitle = css`
@@ -102,7 +109,7 @@ const linkButton = css`
   float: right;
   font-size: 12px;
   height: auto;
-  margin-right: 8px;
+  margin: 4px 0 4px 8px;
 `;
 
 const getShimmerStyles = {
@@ -132,21 +139,27 @@ export type NotificationProps = {
   onHide?: (id: string) => void;
 };
 
+const makeLinkLabel = (link: NotificationLink) => (
+  <ActionButton css={linkButton} onClick={link.onClick}>
+    {link.label}
+  </ActionButton>
+);
+
 const defaultCardContentRenderer = (props: CardProps) => {
-  const { title, description, type, link } = props;
+  const { title, description, type, link, links } = props;
   return (
     <div css={cardContent}>
       {type === 'error' && <Icon css={errorType} iconName="ErrorBadge" />}
       {type === 'success' && <Icon css={successType} iconName="Completed" />}
       {type === 'warning' && <Icon css={warningType} iconName="Warning" />}
+      {type === 'question' && <Icon css={questionType} iconName="UnknownSolid" />}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}
-        {link && (
-          <ActionButton css={linkButton} onClick={link.onClick}>
-            {link.label}
-          </ActionButton>
-        )}
+        {link && makeLinkLabel(link)}
+        {links?.map((link) => (
+          <div key={link.label}>{makeLinkLabel(link)}</div>
+        ))}
         {type === 'pending' && (
           <Shimmer shimmerElements={[{ type: ShimmerElementType.line, height: 2 }]} styles={getShimmerStyles} />
         )}
