@@ -90,7 +90,7 @@ export const DefineEntityButton = React.memo((props: Props) => {
           throw `${entityType} is not supported!`;
       }
     },
-    []
+    [onDefineEntity]
   );
 
   const filteredPrebuiltEntities = React.useMemo(() => {

@@ -68,7 +68,7 @@ export const ContentEditable = (props: ContentEditableProps) => {
     if (!removed && innerEditableRef.current) {
       // On blur, if no content in tag, remove it
       if (innerEditableRef.current.innerText === '') {
-        props.onRemove();
+        onRemove();
         return;
       }
 
