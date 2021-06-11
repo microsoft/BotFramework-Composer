@@ -59,18 +59,18 @@ const Input = styled.input({
 
 type TagInputProps = {
   className?: string;
-  tags: string[];
-  onChange: (tags: string[]) => void;
-  placeholder?: string;
-  maxTags?: number;
-  validator?: (val: string) => boolean;
   editable?: boolean;
+  maxTags?: number;
+  placeholder?: string;
   readOnly?: boolean;
   removeOnBackspace?: boolean;
+  tags: string[];
+  onChange: (tags: string[]) => void;
+  onValidate?: (val: string) => boolean;
 };
 
 export const TagInput = (props: TagInputProps) => {
-  const { className, tags, validator, removeOnBackspace, onChange, editable, maxTags, placeholder, readOnly } = props;
+  const { className, tags, onValidate, removeOnBackspace, onChange, editable, maxTags, placeholder, readOnly } = props;
 
   const inputRef = React.createRef<HTMLInputElement>();
   const { 0: input, 1: setInput } = React.useState('');
@@ -123,7 +123,7 @@ export const TagInput = (props: TagInputProps) => {
       }
 
       // Check if input is valid
-      const valid = validator !== undefined ? validator(input) : true;
+      const valid = onValidate !== undefined ? onValidate(input) : true;
       if (!valid) {
         return;
       }
@@ -141,7 +141,7 @@ export const TagInput = (props: TagInputProps) => {
     }
   };
 
-  const updateTag = (i: number, value: string) => {
+  const changeTag = (i: number, value: string) => {
     const clonedTags = [...tags];
     const numOccurrencesOfValue = tags.reduce(
       (prev, currentValue, index) => prev + (currentValue === value && index !== i ? 1 : 0),
@@ -168,11 +168,11 @@ export const TagInput = (props: TagInputProps) => {
           index={i}
           inputRef={inputRef}
           readOnly={readOnly || false}
-          remove={removeTag}
           removeOnBackspace={removeOnBackspace}
-          update={updateTag}
-          validator={validator}
           value={tag}
+          onChange={changeTag}
+          onRemove={removeTag}
+          onValidate={onValidate}
         />
       ))}
       {showInput && (

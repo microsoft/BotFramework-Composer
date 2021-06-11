@@ -14,33 +14,42 @@ type ContentEditableProps = {
   className?: string;
   innerEditableRef: React.RefObject<HTMLDivElement>;
   inputRef: React.RefObject<HTMLInputElement>;
-  change: (value: string) => void;
-  remove: () => void;
-  validator?: (value: string) => boolean;
   removeOnBackspace?: boolean;
   style?: React.CSSProperties;
+  onChange: (value: string) => void;
+  onRemove: () => void;
+  onValidate?: (value: string) => boolean;
 };
 
 export const ContentEditable = (props: ContentEditableProps) => {
-  const { value, className = '', style, innerEditableRef, removeOnBackspace, change, validator } = props;
+  const {
+    value,
+    className = '',
+    style,
+    innerEditableRef,
+    inputRef,
+    removeOnBackspace,
+    onChange,
+    onRemove,
+    onValidate,
+  } = props;
 
-  let removed = false;
-  let preFocusedValue = '';
+  const removed = React.useRef(false);
+  const preFocusedValue = React.useRef('');
 
-  const getValue = () => props.innerEditableRef.current?.innerText || '';
+  const getValue = () => innerEditableRef.current?.innerText || '';
 
-  const focusInputRef = () => {
-    const { inputRef } = props;
+  const focusInputRef = React.useCallback(() => {
     if (inputRef?.current) {
       inputRef.current.focus();
     }
-  };
+  }, [inputRef]);
 
   React.useEffect(() => {
-    preFocusedValue = getValue();
+    preFocusedValue.current = getValue();
   }, []);
 
-  const onPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+  const onPaste = React.useCallback((e: React.ClipboardEvent<HTMLDivElement>) => {
     // Cancel paste event
     e.preventDefault();
 
@@ -49,50 +58,52 @@ export const ContentEditable = (props: ContentEditableProps) => {
 
     // Insert text manually from paste command
     document.execCommand('insertHTML', false, safeHtmlString(text));
-  };
+  }, []);
 
-  const onFocus = () => {
-    preFocusedValue = getValue();
-  };
+  const onFocus = React.useCallback(() => {
+    preFocusedValue.current = getValue();
+  }, []);
 
-  const onBlur = () => {
-    const ref = props.innerEditableRef.current;
-    if (!removed && ref) {
+  const onBlur = React.useCallback(() => {
+    if (!removed && innerEditableRef.current) {
       // On blur, if no content in tag, remove it
-      if (ref.innerText === '') {
-        props.remove();
+      if (innerEditableRef.current.innerText === '') {
+        props.onRemove();
         return;
       }
 
       // Validate input if needed
-      if (validator) {
-        const valid = validator(getValue());
+      if (onValidate) {
+        const valid = onValidate(getValue());
         // If invalidate, switch ref back to pre focused value
         if (!valid) {
-          ref.innerText = preFocusedValue;
+          innerEditableRef.current.innerText = preFocusedValue.current;
           return;
         }
       }
-      change(ref.innerText);
+      onChange(innerEditableRef.current.innerText);
     }
-  };
+  }, [onChange, onRemove, onValidate, innerEditableRef]);
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    // On enter, focus main tag input
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      focusInputRef();
-      return;
-    }
+  const onKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      // On enter, focus main tag input
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        focusInputRef();
+        return;
+      }
 
-    const currentVal = getValue();
-    if (removeOnBackspace && e.keyCode === 8 && currentVal === '') {
-      removed = true;
-      props.remove();
-      focusInputRef();
-      return;
-    }
-  };
+      const currentVal = getValue();
+      if (removeOnBackspace && e.key === 'Backspace' && currentVal === '') {
+        removed.current = true;
+        onRemove();
+        focusInputRef();
+        return;
+      }
+    },
+    [removeOnBackspace, onRemove, focusInputRef]
+  );
 
   return (
     <div

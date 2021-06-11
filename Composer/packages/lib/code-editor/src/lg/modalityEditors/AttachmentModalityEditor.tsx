@@ -60,7 +60,7 @@ const AttachmentModalityEditor = React.memo(
     );
 
     const handleTemplateChange = React.useCallback(
-      (templateId: string, body?: string | undefined) => {
+      (templateId: string, body?: string) => {
         const isAdaptiveCard = body?.includes(`"AdaptiveCard"`);
 
         if (isAdaptiveCard && items.includes(templateId)) {

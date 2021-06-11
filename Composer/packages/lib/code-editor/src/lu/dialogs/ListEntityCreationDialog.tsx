@@ -55,7 +55,7 @@ const detailsListStyles = {
   root: { overflowY: 'hidden' },
   contentWrapper: { height: minRowHeight * defaultRowsToShow, overflowY: 'auto' },
 };
-const normalizedValueTextField = { field: { padding: 0 }, fieldGroup: { backgroundColor: 'transparent' } };
+const normalizedValueTextFieldStyles = { field: { padding: 0 }, fieldGroup: { backgroundColor: 'transparent' } };
 const dialogModalProps = {
   isBlocking: true,
 };
@@ -70,7 +70,7 @@ type Props = {
 export const ListEntityCreationDialog = (props: Props) => {
   const { onDismiss, onCreateListEntity } = props;
   const [listEntity, setListEntity] = React.useState<ListEntity>({ entityType: 'list', name: '', items: [] });
-  let listEntityId = 0;
+  let listEntityId = React.useRef(0).current;
 
   const listRootRef = React.useRef<HTMLDivElement>(null);
 
@@ -198,7 +198,7 @@ export const ListEntityCreationDialog = (props: Props) => {
               autoComplete="off"
               errorMessage={itemsTouched[item.id] ? itemErrors[item.id] : ''}
               placeholder={formatMessage('Enter a value')}
-              styles={normalizedValueTextField}
+              styles={normalizedValueTextFieldStyles}
               value={item.normalizedValue}
               onChange={changeNormalizedValue(item)}
             />
@@ -212,13 +212,12 @@ export const ListEntityCreationDialog = (props: Props) => {
         name: formatMessage('Synonyms'),
         isResizable: true,
         onRender: (item: ListEntityItem) => {
-          const values = item.synonyms;
           return (
             <SynonymInput
               removeOnBackspace
               editable={false}
               placeholder={formatMessage('Enter a synonym and press enter')}
-              tags={values}
+              tags={item.synonyms}
               onChange={changeSynonyms(item)}
             />
           );

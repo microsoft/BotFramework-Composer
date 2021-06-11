@@ -38,17 +38,17 @@ type TagProps = {
   editable: boolean;
   readOnly: boolean;
   inputRef: React.RefObject<HTMLInputElement>;
-  update: (i: number, value: string) => void;
-  remove: (i: number) => void;
-  validator?: (val: string) => boolean;
   removeOnBackspace?: boolean;
+  onRemove: (i: number) => void;
+  onChange: (i: number, value: string) => void;
+  onValidate?: (val: string) => boolean;
 };
 
 export const Tag = (props: TagProps) => {
-  const { value, index, editable, inputRef, validator, update, remove, readOnly, removeOnBackspace } = props;
-  const innerEditableRef = React.createRef<HTMLDivElement>();
+  const { value, index, editable, inputRef, onValidate, onChange, onRemove, readOnly, removeOnBackspace } = props;
 
-  const onRemove = () => remove(index);
+  const innerEditableRef = React.useRef<HTMLDivElement>(null);
+  const remove = React.useCallback(() => onRemove(index), [onRemove, index]);
 
   return (
     <Root data-selection-disabled>
@@ -56,14 +56,14 @@ export const Tag = (props: TagProps) => {
       {editable && (
         <ContentEditable
           data-selection-disabled
-          change={(newValue) => update(index, newValue)}
           innerEditableRef={innerEditableRef}
           inputRef={inputRef}
-          remove={onRemove}
           removeOnBackspace={removeOnBackspace}
           style={tagContentStyles}
-          validator={validator}
           value={value}
+          onChange={(newValue) => onChange(index, newValue)}
+          onRemove={remove}
+          onValidate={onValidate}
         />
       )}
       {!readOnly && (
@@ -71,7 +71,7 @@ export const Tag = (props: TagProps) => {
           data-selection-disabled
           iconProps={{ iconName: 'ChromeClose' }}
           styles={closeIconStyles}
-          onClick={onRemove}
+          onClick={remove}
         />
       )}
     </Root>
