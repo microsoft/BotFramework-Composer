@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "react-beautiful-dnd": "^13.0.0",
+    "@bfc/shared": "*",
     "@bfc/ui-shared": "*"
   },
   "peerDependencies": {
