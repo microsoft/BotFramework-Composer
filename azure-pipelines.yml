@@ -45,7 +45,7 @@ jobs:
       - script: yarn build
         displayName: yarn build
         workingDirectory: Composer
-      - script: ./scripts/e2e-ci.sh --record
+      - script: ./scripts/e2e-ci.sh --record --parallel --ci-build-id $(Build.BuildNumber) --group "Azure CI"
         displayName: Run E2E Tests
         workingDirectory: Composer/packages/integration-tests
         env:
