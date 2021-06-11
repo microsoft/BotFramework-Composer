@@ -23,7 +23,7 @@ import { StateError } from '../../types';
 jest.mock('lodash/debounce');
 (debounce as any).mockImplementation((fn) => fn);
 
-describe('<Editor />', () => {
+describe('application dispatchers', () => {
   const useRecoilTestHook = () => {
     const [appUpdater, setAppUpdater] = useRecoilState(appUpdateState);
     const dispatcher = useRecoilValue(dispatcherState);
@@ -43,8 +43,6 @@ describe('<Editor />', () => {
     };
   };
   let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
-
-  beforeAll(() => {});
 
   beforeEach(() => {
     const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(
