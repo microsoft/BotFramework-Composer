@@ -7,6 +7,8 @@ import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-cli
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { CheckboxVisibility, DetailsList, SelectionMode, Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
@@ -22,6 +24,13 @@ const recognizerStyle = css`
   margin: 5px 0px 10px 0px;
 `;
 const AzureBlue = '#0078D4';
+const recognizerContainer = css`
+  position: relative;
+  height: 500px;
+  border-top: 1px solid #f3f2f1;
+  border-bottom: 1px solid #f3f2f1;
+`;
+const learnRecognizerUrl = 'https://github.com/microsoft/botframework-components';
 
 export type RecognizerListItem = {
   key: string;
@@ -96,29 +105,39 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         }}
         onDismiss={() => setShowDialog(false)}
       >
-        <DetailsList
-          checkboxVisibility={CheckboxVisibility.always}
-          columns={[
-            {
-              key: 'recognizer',
-              name: 'Recognizer type',
-              minWidth: 70,
-              onRender: (item) => {
-                return (
-                  <div>
-                    <div style={{ fontWeight: 600 }}>{item.text}</div>
-                    <div style={{ whiteSpace: 'normal' }}>{item.description}</div>
-                  </div>
-                );
-              },
-            },
-          ]}
-          isHeaderVisible={false}
-          items={detailsListItems}
-          selection={selection}
-          selectionMode={SelectionMode.single}
-        />
+        <div css={recognizerContainer}>
+          <ScrollablePane
+            scrollbarVisibility={ScrollbarVisibility.auto}
+            styles={{ root: { width: '100%', height: 'inherit', position: 'relative' } }}
+          >
+            <DetailsList
+              checkboxVisibility={CheckboxVisibility.always}
+              columns={[
+                {
+                  key: 'recognizer',
+                  name: 'Recognizer type',
+                  minWidth: 70,
+                  onRender: (item) => {
+                    return (
+                      <div>
+                        <div style={{ fontWeight: 'bold' }}>{item.text}</div>
+                        <div style={{ whiteSpace: 'normal' }}>{item.description}</div>
+                      </div>
+                    );
+                  },
+                },
+              ]}
+              isHeaderVisible={false}
+              items={detailsListItems}
+              selection={selection}
+              selectionMode={SelectionMode.single}
+            />
+          </ScrollablePane>
+        </div>
         <DialogFooter>
+          <Link href={learnRecognizerUrl} styles={{ root: { fontSize: '12px', float: 'left' } }} target="_blank">
+            {formatMessage('Learn more about recognizers')}
+          </Link>
           <DefaultButton text={formatMessage('Cancel')} onClick={() => setShowDialog(false)} />
           <PrimaryButton
             text={formatMessage('Done')}

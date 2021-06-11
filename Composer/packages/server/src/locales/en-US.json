@@ -260,6 +260,9 @@
   "advanced_settings_view_json_b83638b4": {
     "message": "Advanced Settings View (json)"
   },
+  "agree_73937908": {
+    "message": "Agree"
+  },
   "all_4321c3a1": {
     "message": "All"
   },
@@ -698,8 +701,6 @@
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
   },
-  
-  
   "choose_a_recognizer_type_fa398753": {
     "message": "Choose a recognizer type"
   },
@@ -1027,14 +1028,14 @@
   "current_40c0812f": {
     "message": " - Current"
   },
+  "custom_6979cd81": {
+    "message": "Custom"
+  },
   "custom_actions_5d396747": {
     "message": "Custom Actions"
   },
   "custom_events_d6f0e45b": {
     "message": "Custom events"
-  },
-  "custom_recognizer_951bab90": {
-    "message": "Custom recognizer"
   },
   "custom_runtime_426aa34f": {
     "message": "Custom runtime"
@@ -1081,14 +1082,14 @@
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
   },
+  "default_9db103d": {
+    "message": "Default"
+  },
   "default_language_486a558d": {
     "message": "Default language"
   },
   "default_language_a976938d": {
     "message": "DEFAULT LANGUAGE"
-  },
-  "default_recognizer_9c06c1a3": {
-    "message": "Default recognizer"
   },
   "define_conversation_objective_146d1cc6": {
     "message": "Define conversation objective"
@@ -1792,14 +1793,14 @@
   "github_c7cc3613": {
     "message": "GitHub"
   },
-  "gives_your_bot_the_ability_to_detect_and_route_use_48c2bdc2": {
-    "message": "Gives your bot the ability to detect and route user input to an appropriate skill or to a subsequent language understanding models"
-  },
-  "gives_your_bot_the_ability_to_extract_intent_and_e_7072a9c5": {
-    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns"
+  "gives_your_bot_the_ability_to_detect_and_route_use_663cf67d": {
+    "message": "Gives your bot the ability to detect and route user input to an appropriate skill or to a subsequent language understanding models."
   },
   "gives_your_bot_the_ability_to_extract_intent_and_e_8170cf3d": {
     "message": "Gives your bot the ability to extract intent and entity data from an utterance based on luis modal"
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_b33162e7": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns."
   },
   "gives_your_bot_the_ability_to_extract_intent_and_e_c315fe1d": {
     "message": "Gives your bot the ability to extract intent and entity data from an utterance based on a cross trained recognizer set."
@@ -1848,6 +1849,9 @@
   },
   "http_request_b6394895": {
     "message": "HTTP request"
+  },
+  "i_agree_to_the_a_microsoft_channel_publication_ter_f9187f7d": {
+    "message": "I agree to the <a>Microsoft Channel Publication Terms</a> and the <a2>Microsoft Privacy Statement</a2> for my deployment to the Microsoft Teams channel."
   },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
     "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
@@ -2380,6 +2384,9 @@
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
   },
+  "microsoft_teams_terms_and_conditions_8375ce96": {
+    "message": "Microsoft Teams terms and conditions"
+  },
   "migrating_data_a35b3055": {
     "message": "Migrating data"
   },
@@ -2683,8 +2690,8 @@
   "orchestrator_downloading_language_model_e785be44": {
     "message": "Orchestrator: Downloading language model"
   },
-  "orchestrator_recognizer_intents_only_86883251": {
-    "message": "Orchestrator recognizer (Intents only)"
+  "orchestrator_intents_only_57c08345": {
+    "message": "Orchestrator (Intents only)"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "origin lg file not found in store"
@@ -3016,11 +3023,11 @@
   "region_939f2a6c": {
     "message": "Region"
   },
+  "regular_expression_ca08546f": {
+    "message": "Regular expression"
+  },
   "regular_expression_entity_e1cb91ce": {
     "message": "Regular expression entity"
-  },
-  "regular_expression_recognizer_44664557": {
-    "message": "Regular expression recognizer"
   },
   "release_1af20f26": {
     "message": "Release: "
