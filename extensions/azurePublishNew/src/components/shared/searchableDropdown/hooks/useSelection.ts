@@ -10,9 +10,9 @@ import React from 'react';
  * containing the selection instance and an array containing the currently
  * selected items.
  *
- * @param selectionMode An optional selection mode to use with the hook.
+ * @param initialSelectionMode An optional selection mode to use with the hook.
  */
-export function useSelection<T>(selectionMode?: SelectionMode) {
+export function useSelection<T>(initialSelectionMode?: SelectionMode) {
   const [items, setItems] = React.useState<T[]>([]);
 
   const selection = React.useRef<ISelection>();
@@ -21,7 +21,7 @@ export function useSelection<T>(selectionMode?: SelectionMode) {
     selection.current = new Selection({
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       onSelectionChanged: () => setItems(<T[]>selection.current.getSelection()),
-      selectionMode: selectionMode || SelectionMode.multiple,
+      selectionMode: initialSelectionMode || SelectionMode.multiple,
     });
   }
 
