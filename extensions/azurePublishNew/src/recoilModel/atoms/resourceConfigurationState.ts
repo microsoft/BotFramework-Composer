@@ -14,6 +14,8 @@ export const resourceConfigurationState = atom<ResourceConfigurationState>({
     tenantId: '',
     deployLocation: '',
     luisRegion: '',
+    isNewResourceGroup: false,
+    hostName: '',
   } as ResourceConfigurationState,
 });
 
