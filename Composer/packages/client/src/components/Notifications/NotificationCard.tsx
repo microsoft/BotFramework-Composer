@@ -162,6 +162,15 @@ const defaultCardContentRenderer = (props: CardProps) => {
       {type === 'warning' && <Icon css={warningType} iconName="Warning" />}
       {type === 'question' && <Icon css={questionType} iconName="UnknownSolid" />}
       {type === 'congratulation' && <Icon css={congratulationType} iconName="Trophy2Solid" />}
+      {type === 'custom' && (
+        <Icon
+          css={css`
+            margin-top: ${iconMargin};
+            color: ${props.color ?? SharedColors.gray10};
+          `}
+          iconName={props.icon ?? 'UnknownSolid'}
+        />
+      )}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}

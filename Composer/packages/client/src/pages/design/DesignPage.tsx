@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
+import { useEffect } from 'react';
 
 import { dispatcherState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
@@ -25,7 +26,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { projectId = '', skillId, location } = props;
 
   useEmptyPropsHandler(projectId, location, skillId, props.dialogId);
-  const { setPageElementState } = useRecoilValue(dispatcherState);
+  const { setPageElementState, addNotification } = useRecoilValue(dispatcherState);
 
   const onMeasuredSizesChanged = (sizes: SplitMeasuredSizes) => {
     setPageElementState('dialogs', { leftSplitWidth: sizes.primary });

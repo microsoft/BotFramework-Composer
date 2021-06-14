@@ -73,6 +73,8 @@ export type Notification = {
   retentionTime?: number;
   link?: NotificationLink;
   links?: NotificationLink[];
+  icon?: string;
+  color?: string;
   read?: boolean;
   hidden?: boolean;
   onRenderCardContent?: ((props: Notification) => JSX.Element) | React.FC<any>;
