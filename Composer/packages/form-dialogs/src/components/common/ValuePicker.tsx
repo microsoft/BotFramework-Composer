@@ -5,8 +5,7 @@ import { useId } from '@uifabric/react-hooks';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import * as React from 'react';
-
-import { TagInput } from './tags/TagInput';
+import { TagInput } from '@bfc/ui-shared';
 
 type Props = {
   /**
