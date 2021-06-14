@@ -9,8 +9,9 @@ import jwtDecode from 'jwt-decode';
 
 import { UserInfo } from '../../recoilModel/types';
 import { SearchableDropdown, SearchableDropdownProps } from '../shared/searchableDropdown/SearchableDropdown';
+import { SearchableDropdownTextFieldProps } from '../shared/searchableDropdown/SearchableDropdownTextField';
 
-const { userShouldProvideTokens, getTenantIdFromCache, setTenantId } = usePublishApi();
+const { userShouldProvideTokens, getTokenFromCache, setTenantId } = usePublishApi();
 
 type Props = {
   onTenantChange: (tenantId: string) => void;
@@ -31,6 +32,21 @@ export const TenantPicker = memo((props: Props) => {
       return null;
     }
   };
+  useEffect(() => {
+    if (userShouldProvideTokens()) {
+      const { accessToken } = getTokenFromCache();
+
+      const decoded = decodeToken(accessToken);
+      onTenantChange(decoded.tid as string);
+      onUserInfoFetch({
+        token: accessToken,
+        email: decoded.upn,
+        name: decoded.name,
+        expiration: (decoded.exp || 0) * 1000, // convert to ms,
+        sessionExpired: false,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (!userShouldProvideTokens()) {
@@ -98,17 +114,20 @@ export const TenantPicker = memo((props: Props) => {
     }
   }, [value]);
 
-  const localTextFieldProps = {
-    disabled: tenants.length === 1,
-    placeholder: formatMessage('Select Azure directory'),
-  };
+  const localTextFieldProps = React.useMemo<Partial<SearchableDropdownTextFieldProps>>(
+    () => ({
+      disabled: true,
+      placeholder: formatMessage('Select Azure directory'),
+      errorMessage,
+    }),
+    [errorMessage, tenants]
+  );
 
   return (
     <SearchableDropdown
-      errorMessage={errorMessage}
       isLoading={isLoading}
       items={tenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-      onSubmit={(option) => props.onTenantChange(option.key as string)}
+      onSubmit={(option) => props.onTenantChange(option.key)}
       {...{
         ...props,
         textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },

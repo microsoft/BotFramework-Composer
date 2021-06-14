@@ -38,7 +38,7 @@ export const HandOffToAdminWizard = React.memo((props: Props) => {
 
   return (
     <Wizard
-      firstStepId={'handoff-instructions'}
+      firstStepId="handoff-instructions"
       steps={steps}
       onRenderHeader={(step) => setDialogTitle(step)}
       onStepChange={(index, step) => onStepChange(index, step.id)}
