@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { act, screen } from '@botframework-composer/test-utils';
+import { act, screen, userEvent } from '@botframework-composer/test-utils';
 import { SDKKinds } from '@botframework-composer/types';
 import * as React from 'react';
-import userEvent from '@testing-library/user-event';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import {

@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { act, fireEvent, within } from '@botframework-composer/test-utils';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, within, userEvent } from '@botframework-composer/test-utils';
 
 import ExternalAdapterSettings from '../../../src/pages/botProject/adapters/ExternalAdapterSettings';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
