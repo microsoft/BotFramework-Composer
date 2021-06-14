@@ -75,6 +75,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         multiline={uiOptions?.multiline}
         placeholder={placeholder}
         readOnly={readonly}
+        resizable={false}
         styles={{
           root: { width: '100%' },
           fieldGroup: {
