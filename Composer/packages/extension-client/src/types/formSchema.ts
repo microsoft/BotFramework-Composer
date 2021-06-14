@@ -49,6 +49,8 @@ export interface UIOptions {
   fieldsets?: Fieldset[];
   /** Label override. */
   label?: UIOptionValue<string | false | undefined>;
+  /** Force string input to render as a textarea for long form text. */
+  multiline?: boolean;
   /** Set order of fields. Use * for all other fields. */
   order?: UIOptionValue<(string | [string, string])[]>;
   /** Renders fieldsets in a tabbed view when true */
