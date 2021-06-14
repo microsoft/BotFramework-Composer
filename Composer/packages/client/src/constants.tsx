@@ -529,7 +529,7 @@ export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messag
 const DAYS_IN_MS = 1000 * 60 * 60 * 24;
 
 export const SURVEY_PARAMETERS = {
-  daysUntilEligible: 5,
-  timeUntilNextSurvey: 90 * DAYS_IN_MS,
-  chanceToAppear: 0.15,
+  daysUntilEligible: /*5*/ 0,
+  timeUntilNextSurvey: /*90*/ 0 * DAYS_IN_MS,
+  chanceToAppear: /* 0.15 */ 1,
 };

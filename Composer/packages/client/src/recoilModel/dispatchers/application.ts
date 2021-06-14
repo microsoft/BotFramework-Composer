@@ -160,7 +160,10 @@ export const applicationDispatcher = () => {
     const surveyStorage = new ClientStorage(window.localStorage, 'survey');
 
     const optedOut = surveyStorage.get('optedOut', false);
-    if (optedOut) return;
+    if (optedOut) {
+      set(surveyEligibilityState, false);
+      return;
+    }
 
     let days = surveyStorage.get('days', 0);
     const lastUsed = surveyStorage.get('dateLastUsed', null);

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Image, ImageFit } from 'office-ui-fabric-react/lib/Image';
@@ -16,11 +16,13 @@ import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
+import { ClientStorage } from '../../utils/storage';
 import {
   recentProjectsState,
   feedState,
   warnAboutDotNetState,
   warnAboutFunctionsState,
+  surveyEligibilityState,
 } from '../../recoilModel/atoms/appState';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 import composerDocumentIcon from '../../images/composerDocumentIcon.svg';
@@ -84,9 +86,12 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowType,
     setWarnAboutDotNet,
     setWarnAboutFunctions,
+    addNotification,
+    deleteNotification,
   } = useRecoilValue(dispatcherState);
   const warnAboutDotNet = useRecoilValue(warnAboutDotNetState);
   const warnAboutFunctions = useRecoilValue(warnAboutFunctionsState);
+  const surveyEligible = useRecoilValue(surveyEligibilityState);
 
   const onItemChosen = async (item) => {
     if (item?.path) {
@@ -163,6 +168,37 @@ const Home: React.FC<RouteComponentProps> = () => {
     //   disabled: botName ? false : true,
     // },
   ];
+
+  useEffect(() => {
+    if (surveyEligible) {
+      const surveyStorage = new ClientStorage(window.localStorage, 'survey');
+
+      addNotification({
+        id: 'survey',
+        type: 'question',
+        title: 'Title of Survey Card',
+        description:
+          "This is the text that will go onto the survey card. I'm making it longer so it has to stretch across multiple lines.",
+        links: [
+          {
+            label: 'Take the survey',
+            onClick: () => {
+              window.open('https://aka.ms/bfcomposer');
+              deleteNotification('survey');
+            }, // get the right URL later
+          },
+          {
+            label: 'Opt out',
+            onClick: () => {
+              deleteNotification('survey');
+              surveyStorage.set('optedOut', true);
+            },
+          },
+        ],
+      });
+    }
+  }, []);
+
   return (
     <div css={home.outline}>
       <div css={home.page}>
