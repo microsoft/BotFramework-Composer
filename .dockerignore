@@ -1,3 +1,5 @@
+node_modules
+Composer/node_modules
 **/node_modules
 **/package-lock.json
 **/dist
@@ -15,7 +17,7 @@ extensions/localPublish/hostedBots/*
 
 # ignore test
 Composer/coverage
-Composer/packages/server/.composer
+Composer/.composer
 
 extensions/.build-cache.json
 extensions/**/lib
