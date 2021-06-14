@@ -19,7 +19,6 @@ export const HeaderCSS = css`
 export const BodyCSS = css`
   ${fullWidthSection};
   min-height: ${StandardSectionHeight}px;
-  padding: 7px 8px;
 `;
 
 export const FooterCSS = css`
