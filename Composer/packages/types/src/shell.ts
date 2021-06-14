@@ -67,7 +67,7 @@ export type DisabledMenuActions = {
 export type NotificationLink = { label: string; onClick: () => void };
 
 export type Notification = {
-  type: 'info' | 'warning' | 'error' | 'pending' | 'success' | 'question' | 'congratulation';
+  type: 'info' | 'warning' | 'error' | 'pending' | 'success' | 'question' | 'congratulation' | 'custom';
   title: string;
   description?: string;
   retentionTime?: number;
