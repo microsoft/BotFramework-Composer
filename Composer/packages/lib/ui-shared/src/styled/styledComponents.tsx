@@ -49,7 +49,7 @@ export const TextDiv = styled.div`
   ${MultilineCSS};
   white-space: pre-wrap;
   line-height: 16px;
-  display: inline-block;
+  min-height: 16px;
 `;
 
 export const Text = styled.span(

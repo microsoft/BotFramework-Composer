@@ -53,7 +53,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
 
   const renderBody = (body: ReactNode) => (
     <div className="CardNode__Body" css={bodyCSS} onClick={onClickBody}>
-      {typeof body === 'string' ? <TextDiv css={{ width: '100%', padding: '7px 8px' }}>{body}</TextDiv> : body}
+      <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );
 
