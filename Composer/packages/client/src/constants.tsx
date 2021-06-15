@@ -528,10 +528,16 @@ export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messag
 
 const DAYS_IN_MS = 1000 * 60 * 60 * 24;
 
+// export const SURVEY_PARAMETERS = {
+//   daysUntilEligible: 5,
+//   timeUntilNextSurvey: 90 * DAYS_IN_MS,
+//   chanceToAppear: 0.15,
+// };
+
 export const SURVEY_PARAMETERS = {
-  daysUntilEligible: 5,
-  timeUntilNextSurvey: 90 * DAYS_IN_MS,
-  chanceToAppear: 0.15,
+  daysUntilEligible: 0,
+  timeUntilNextSurvey: 0,
+  chanceToAppear: 1,
 };
 
 export const SURVEY_URL_BASE = 'http://aka.ms/bfcomposer';

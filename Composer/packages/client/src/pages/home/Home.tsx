@@ -285,7 +285,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           onDismiss={() => setWarnAboutFunctions(false)}
         />
       )}
-      <SurveyNotification machineId="123456" surveyUrl="http://aka.ms/bfcomposer" />
+      <SurveyNotification />
     </div>
   );
 };

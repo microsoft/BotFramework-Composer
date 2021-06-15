@@ -9,23 +9,22 @@ import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState } from '../../recoilModel/atoms/appState';
 import { SURVEY_URL_BASE } from '../../constants';
 
-type Props = {
-  machineId: string;
-};
-
-function buildUrl({ machineId }: Props) {
+function buildUrl() {
   const userAgent = new UAParser().getResult();
   const version = process.env.COMPOSER_VERSION;
+  const machineId = '123456';
 
   return (
     `${SURVEY_URL_BASE}?` +
-    `o=${encodeURIComponent(`${userAgent.browser}-${userAgent.os.name}-${userAgent.os.version}`)}&` +
+    `o=${encodeURIComponent(
+      `${userAgent.browser.name}-${userAgent.browser.major}-${userAgent.os.name}-${userAgent.os.version}`
+    )}&` +
     `v=${encodeURIComponent(version ?? '')}&` +
     `m=${encodeURIComponent(machineId)}`
   );
 }
 
-export default function SurveyNotification(props: Props) {
+export default function SurveyNotification() {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
 
   const surveyEligible = useRecoilValue(surveyEligibilityState);
@@ -46,7 +45,7 @@ export default function SurveyNotification(props: Props) {
             onClick: () => {
               // This is safe; we control what the URL that gets built is
               // eslint-disable-next-line security/detect-non-literal-fs-filename
-              window.open(buildUrl(props), '_blank');
+              window.open(buildUrl(), '_blank');
               deleteNotification('survey');
             }, // get the right URL later
           },
