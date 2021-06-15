@@ -3,22 +3,24 @@
 
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { UAParser } from 'ua-parser-js';
 
 import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState } from '../../recoilModel/atoms/appState';
 
 type Props = {
   surveyUrl: string;
-  platform: string;
-  version: string;
   machineId: string;
 };
 
-function buildUrl({ surveyUrl, platform, version, machineId }: Props) {
+function buildUrl({ surveyUrl, machineId }: Props) {
+  const userAgent = new UAParser().getResult();
+  const version = process.env.COMPOSER_VERSION;
+
   return (
     `${surveyUrl}?` +
-    `o=${encodeURIComponent(platform)}&` +
-    `v=${encodeURIComponent(version)}&` +
+    `o=${encodeURIComponent(`${userAgent.browser}-${userAgent.os.name}-${userAgent.os.version}`)}&` +
+    `v=${encodeURIComponent(version ?? '')}&` +
     `m=${encodeURIComponent(machineId)}`
   );
 }

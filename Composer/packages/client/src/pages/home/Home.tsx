@@ -29,6 +29,7 @@ import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 import { InstallDepModal } from '../../components/InstallDepModal';
 import { missingDotnetVersionError, missingFunctionsError } from '../../utils/runtimeErrors';
+import SurveyNotification from '../../components/Notifications/SurveyNotification';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -284,6 +285,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           onDismiss={() => setWarnAboutFunctions(false)}
         />
       )}
+      <SurveyNotification machineId="123456" surveyUrl="http://aka.ms/bfcomposer" />
     </div>
   );
 };
