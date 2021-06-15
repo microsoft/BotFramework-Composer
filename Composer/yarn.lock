@@ -4971,6 +4971,18 @@
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
   integrity sha512-aWw2YTtAdT7CskFyxEX2K21/zSDStuf/ikI3yBqmwpwJF0pS+/IX5DWv+1UFffZIbruP6cnT9/LAJV1gFwAT1A==
 
+"@types/lodash.isequal@^4.5.5":
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/@types/lodash.isequal/-/lodash.isequal-4.5.5.tgz#4fed1b1b00bef79e305de0352d797e9bb816c8ff"
+  integrity sha512-4IKbinG7MGP131wRfceK6W4E/Qt3qssEFLF30LnJbjYiSfHGGRU/Io8YxXrZX109ir+iDETC8hw8QsDijukUVg==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.170"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.170.tgz#0d67711d4bf7f4ca5147e9091b847479b87925d6"
+  integrity sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q==
+
 "@types/lodash@^4.14.146":
   version "4.14.146"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.146.tgz#de0d2c8610012f12a6a796455054cbc654f8fecf"
@@ -6065,6 +6077,32 @@ adaptive-expressions@4.12.0-rc1:
     x2js "^3.4.0"
     xml2js "^0.4.23"
     xmldom "^0.4.0"
+    xpath "^0.0.32"
+
+adaptive-expressions@4.14.0-dev.391a2ab:
+  version "4.14.0-dev.391a2ab"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.14.0-dev.391a2ab.tgz#25f146165a4ac48ae86c81de05f7c163ee1ca97c"
+  integrity sha512-ZzUKnrCqnCz+qbzE24x0PVHxY9vxdx0s93fN3jHtEgwPMmIdbS/rFxwKjiEU+CAHDWKLNPZ9yPOA5/Mu3xMjAg==
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.3.0"
+    "@types/atob-lite" "^2.0.0"
+    "@types/btoa-lite" "^1.0.0"
+    "@types/lodash.isequal" "^4.5.5"
+    "@types/lru-cache" "^5.1.0"
+    "@types/xmldom" "^0.1.30"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    btoa-lite "^1.0.0"
+    d3-format "^1.4.4"
+    dayjs "^1.10.3"
+    jspath "^0.4.0"
+    lodash.isequal "^4.5.0"
+    lru-cache "^5.1.1"
+    uuid "^8.3.2"
+    x2js "^3.4.0"
+    xml2js "^0.4.23"
+    xmldom "^0.5.0"
     xpath "^0.0.32"
 
 adaptive-expressions@4.14.0-dev.c7a22fb, adaptive-expressions@next:
@@ -7305,12 +7343,12 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@4.12.0-rc1:
-  version "4.12.0-rc1"
-  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.12.0-rc1.tgz#32e5f6dd8bdbf176d059a2d4f6faad8c1effc140"
-  integrity sha512-Sg4Kahj1EW5dkfoKosfzsQu2x0QTKaEeci/nOQI/RaXvvG2pzAr1d/qOLdcPCq04KMRBSuyDC5SqRpXYGpPIpA==
+botbuilder-lg@4.14.0-dev.391a2ab:
+  version "4.14.0-dev.391a2ab"
+  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.14.0-dev.391a2ab.tgz#6dd0c80910b940398f63de1206986f6e7f0528dd"
+  integrity sha512-mCpvcIi1FQCXM/TGjEnrGoJw1gh42HUJgJ/HgEc3/vIzNvLpGWcBAMpC0UDxPY016E3DS/8xo/lVe3dljtPuZw==
   dependencies:
-    adaptive-expressions "4.12.0-rc1"
+    adaptive-expressions "4.14.0-dev.391a2ab"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
