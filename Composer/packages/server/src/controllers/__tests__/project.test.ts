@@ -197,24 +197,11 @@ describe('create a component model conversational core bot project', () => {
   it('should start to create a new project', async () => {
     BotProjectService.createProjectAsync = jest.fn();
 
-    ProjectController.createProjectV2(mockReq, mockRes);
+    ProjectController.createProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(202);
   });
 });
 
-describe('create a Empty Bot project', () => {
-  it('should create a new project', async () => {
-    const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
-    const name = 'newBot';
-    const mockReq = {
-      params: {},
-      query: {},
-      body: { storageId: 'default', location: newBotDir, description: '', name: name, templateId: 'SampleBot' },
-    } as Request;
-    await ProjectController.createProject(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
-});
 //current opened bot is the newBot
 describe('dialog operation', () => {
   let projectId = '';

@@ -20,16 +20,18 @@ export const addReturnType = (currentType: number, newType: number) => {
   return currentType | newType;
 };
 
-export const checkStringExpression = (exp: string): number => {
-  //StringExpression always assumes string interpolation unless prefixed with =, producing a string
-  if (exp.trim().startsWith('=')) {
-    return Expression.parse(exp.trim().substring(1)).returnType;
+export const checkStringExpression = (exp: string, isStringType: boolean): number => {
+  const origin = exp.trim();
+
+  //no need to do parse if the string expression doesn't start with '='
+  if (!origin.startsWith('=') && isStringType) {
+    return ReturnType.String;
   }
 
-  return ReturnType.String;
+  return Expression.parse(origin.substring(1)).returnType;
 };
 
-export const checkExpression = (exp: any, required: boolean): number => {
+export const checkExpression = (exp: any, required: boolean, types: number[]): number => {
   if ((exp === undefined || '') && required) {
     throw new Error(EMPTY);
   }
@@ -53,7 +55,7 @@ export const checkExpression = (exp: any, required: boolean): number => {
       break;
     }
     case 'string': {
-      returnType = checkStringExpression(exp);
+      returnType = checkStringExpression(exp, types.length === 1 && types[0] === ReturnType.String);
       break;
     }
     default:
