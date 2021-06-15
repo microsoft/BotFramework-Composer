@@ -4,7 +4,7 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { userInfoState } from '../atoms/resourceConfigurationState';
-import { UserInfo } from '../types';
+import { UserInfo } from '../../types';
 
 export const userInfoDispatcher = () => {
   const setUserInfo = useRecoilCallback(({ set }: CallbackInterface) => (userInfo: UserInfo) => {

@@ -17,7 +17,7 @@ type Props = {
 export const HandOffToAdminWizard = React.memo((props: Props) => {
   const { onStepChange } = props;
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
-  const { setTitle, onBack } = usePublishApi();
+  const { setTitle, onBack, closeDialog: onCancel } = usePublishApi();
 
   const setDialogTitle = (step: WizardStep) => {
     step && setTitle({ title: step.title, subText: step.subTitle });
@@ -32,6 +32,7 @@ export const HandOffToAdminWizard = React.memo((props: Props) => {
         subTitle: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
         onRenderContent: () => <HandOffInstructionsStep />,
         onBack,
+        onCancel,
       },
     ]);
   }, []);

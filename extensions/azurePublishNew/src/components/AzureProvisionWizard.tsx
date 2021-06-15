@@ -4,10 +4,10 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { RecoilRoot } from 'recoil';
-import { usePublishApi, useLocalStorage } from '@bfc/extension-client';
+import { usePublishApi } from '@bfc/extension-client';
 
 import { ProvisionAction } from '../types';
-import { resourceConfigurationState } from '../recoilModel/atoms/resourceConfigurationState';
+import { usePublishProfileInitializer } from '../hooks/usePublishProfileInitializer';
 
 import { ChooseProvisionAction } from './ChooseProvisionAction';
 import { CreateResourcesWizard } from './provisioningWizards/CreateResourcesWizard';
@@ -25,9 +25,8 @@ const Root = styled.div`
 export const AzureProvisionWizard = () => {
   const [provisionAction, setProvisionAction] = useState<ProvisionAction>('create');
   const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
-  const { setTitle, getName } = usePublishApi();
-  const { getItem } = useLocalStorage();
-
+  const { setTitle } = usePublishApi();
+  const initialize = usePublishProfileInitializer();
   const handleStepChange = (index, step) => {
     setActiveStepIndex(index);
     step && setTitle({ title: step.title, subText: step.subTitle });
@@ -45,14 +44,7 @@ export const AzureProvisionWizard = () => {
   }, [provisionAction]);
 
   return (
-    <RecoilRoot
-      initializeState={({ set }) => {
-        set(resourceConfigurationState, (currentState) => ({
-          ...currentState,
-          ...getItem(getName()),
-        }));
-      }}
-    >
+    <RecoilRoot initializeState={initialize}>
       <Root>
         {!activeStepIndex && (
           <ChooseProvisionAction

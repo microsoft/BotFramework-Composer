@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
 import jwtDecode from 'jwt-decode';
 
-import { UserInfo } from '../../recoilModel/types';
+import { UserInfo } from '../../types';
 import { SearchableDropdown, SearchableDropdownProps } from '../shared/searchableDropdown/SearchableDropdown';
 import { SearchableDropdownTextFieldProps } from '../shared/searchableDropdown/SearchableDropdownTextField';
 
