@@ -7,18 +7,18 @@ import { UAParser } from 'ua-parser-js';
 
 import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState } from '../../recoilModel/atoms/appState';
+import { SURVEY_URL_BASE } from '../../constants';
 
 type Props = {
-  surveyUrl: string;
   machineId: string;
 };
 
-function buildUrl({ surveyUrl, machineId }: Props) {
+function buildUrl({ machineId }: Props) {
   const userAgent = new UAParser().getResult();
   const version = process.env.COMPOSER_VERSION;
 
   return (
-    `${surveyUrl}?` +
+    `${SURVEY_URL_BASE}?` +
     `o=${encodeURIComponent(`${userAgent.browser}-${userAgent.os.name}-${userAgent.os.version}`)}&` +
     `v=${encodeURIComponent(version ?? '')}&` +
     `m=${encodeURIComponent(machineId)}`
@@ -44,6 +44,8 @@ export default function SurveyNotification(props: Props) {
           {
             label: 'Take the survey',
             onClick: () => {
+              // This is safe; we control what the URL that gets built is
+              // eslint-disable-next-line security/detect-non-literal-fs-filename
               window.open(buildUrl(props), '_blank');
               deleteNotification('survey');
             }, // get the right URL later

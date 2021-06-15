@@ -533,3 +533,5 @@ export const SURVEY_PARAMETERS = {
   timeUntilNextSurvey: 90 * DAYS_IN_MS,
   chanceToAppear: 0.15,
 };
+
+export const SURVEY_URL_BASE = 'http://aka.ms/bfcomposer';
