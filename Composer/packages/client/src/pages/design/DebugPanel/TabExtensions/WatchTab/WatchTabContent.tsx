@@ -3,24 +3,29 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { v4 as uuidv4 } from 'uuid';
 import { ConversationActivityTrafficItem, Activity } from '@botframework-composer/types';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode,
+  Selection,
+  IObjectWithKey,
+} from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
-import debounce from 'lodash/debounce';
+import produce from 'immer';
 
 import { DebugPanelTabHeaderProps } from '../types';
-import {
-  rootBotProjectIdSelector,
-  webChatTrafficState,
-  watchedVariablesState,
-  dispatcherState,
-} from '../../../../../recoilModel';
+import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
+import { WatchVariablePicker } from '../../WatchVariableSelector/WatchVariablePicker';
+import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils/project';
 
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
@@ -96,19 +101,40 @@ const getValueFromBotTraceScope = (delimitedProperty: string, botTrace: Activity
 export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
-  const watchedProperties = useRecoilValue(watchedVariablesState(currentProjectId ?? ''));
-  const { setWatchedVariables } = useRecoilValue(dispatcherState);
+  const [watchVariables, setWatchVariable] = useState<Record<string, string>>({});
 
-  const setPropertyValue = useRef(
-    debounce((event: React.ChangeEvent<HTMLInputElement>, propertyIndex: number) => {
-      if (currentProjectId) {
-        const updatedProperties = [...watchedProperties];
-        updatedProperties[propertyIndex] = event?.target?.value;
-        console.log('setting watched properties: ', updatedProperties);
-        setWatchedVariables(currentProjectId, updatedProperties);
-      }
-    }, 500)
-  ).current;
+  const [selectedItems, setSelectedItems] = useState<IObjectWithKey[]>();
+
+  const selection = useMemo(
+    () =>
+      new Selection({
+        onSelectionChanged: () => {
+          //console.log('handle selection change',selection.getSelection())
+          setSelectedItems(selection.getSelection());
+        },
+        selectionMode: SelectionMode.multiple,
+      }),
+    []
+  );
+
+  const [memoryVariablesPayload, setMemoryVariablesPayload] = useState<WatchDataPayload>({
+    kind: 'property',
+    data: { properties: [] },
+  });
+
+  useEffect(() => {
+    if (currentProjectId) {
+      const abortController = new AbortController();
+      (async () => {
+        try {
+          const variables = await getMemoryVariables(currentProjectId, { signal: abortController.signal });
+          setMemoryVariablesPayload({ kind: 'property', data: { properties: variables } });
+        } catch (e) {
+          // error can be due to abort
+        }
+      })();
+    }
+  }, [currentProjectId]);
 
   const mostRecentBotState = useMemo(() => {
     const botStateTraffic = rawWebChatTraffic.filter(
@@ -119,30 +145,45 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     }
   }, [rawWebChatTraffic]);
 
+  const onSelectPath = useCallback(
+    (variableId: string, path: string) => {
+      setWatchVariable({
+        ...watchVariables,
+        [variableId]: path,
+      });
+    },
+    [watchVariables]
+  );
+
   // we need to refresh the details list every time a new bot state comes in
   const refreshedWatchedProperties = useMemo(() => {
-    return [...watchedProperties];
-  }, [mostRecentBotState, watchedProperties]);
+    return Object.entries(watchVariables).map(([key, value]) => {
+      return {
+        key,
+        value,
+      };
+    });
+  }, [mostRecentBotState, watchVariables]);
 
   const renderColumn = useCallback(
-    (item: string, index: number | undefined, column: IColumn | undefined) => {
+    (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
       if (column && index !== undefined) {
         if (column.key === NameColumnKey) {
           // render picker
           return (
-            <input
-              key={`watch-var-picker-input-${index}`}
-              onChange={(ev) => {
-                ev.persist();
-                setPropertyValue(ev, index);
-              }}
-            ></input>
+            <WatchVariablePicker
+              key={item.key}
+              path={item.value}
+              payload={memoryVariablesPayload}
+              variableId={item.key}
+              onSelectPath={onSelectPath}
+            />
           );
           //return <span>{item}</span>;
         } else if (column.key === ValueColumnKey) {
           // render the value display
           if (mostRecentBotState) {
-            const value = getValueFromBotTraceScope(item, mostRecentBotState?.activity);
+            const value = getValueFromBotTraceScope(item.value, mostRecentBotState?.activity);
             if (typeof value === 'object') {
               // render monaco view
               // TODO: is there some way we can expand the height of the cell based on the number of object keys?
@@ -185,17 +226,26 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
       }
       return null;
     },
-    [mostRecentBotState]
+    [mostRecentBotState, memoryVariablesPayload, watchVariables]
   );
 
   const onClickAdd = useCallback(() => {
-    setWatchedVariables(currentProjectId ?? '', [...watchedProperties, 'placeholder']);
-  }, [watchedProperties]);
+    setWatchVariable({
+      ...watchVariables,
+      [uuidv4()]: '',
+    });
+  }, [watchVariables]);
 
-  const onClickRemove = useCallback(() => {
-    watchedProperties.pop();
-    setWatchedVariables(currentProjectId ?? '', [...watchedProperties]);
-  }, [watchedProperties]);
+  const onClickRemove = () => {
+    const updated = produce(watchVariables, (draftState) => {
+      if (selectedItems?.length) {
+        selectedItems.map((item: IObjectWithKey) => {
+          delete draftState[item.key as string];
+        });
+      }
+    });
+    setWatchVariable(updated);
+  };
 
   if (isActive) {
     return (
@@ -210,6 +260,8 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
             columns={watchTableColumns}
             items={refreshedWatchedProperties}
             layoutMode={watchTableLayout}
+            selection={selection}
+            selectionMode={SelectionMode.multiple}
             onRenderItemColumn={renderColumn}
           />
         </div>
