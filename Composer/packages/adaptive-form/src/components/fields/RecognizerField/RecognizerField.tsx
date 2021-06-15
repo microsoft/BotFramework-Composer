@@ -30,7 +30,7 @@ const recognizerContainer = css`
   border-top: 1px solid #f3f2f1;
   border-bottom: 1px solid #f3f2f1;
 `;
-const learnRecognizerUrl = 'https://github.com/microsoft/botframework-components';
+const learnRecognizerUrl = 'https://docs.microsoft.com/en-us/composer/concept-dialog?tabs=v2x#recognizer';
 
 export type RecognizerListItem = {
   key: string;
