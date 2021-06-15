@@ -15,9 +15,11 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TextField } from 'office-ui-fabric-react/lib/components/TextField';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
+import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../images/composerIcon.svg';
 import httpClient from '../../utils/httpUtil';
+import { dispatcherState, selectedTemplateVersionState } from '../../recoilModel';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
   width: 100%;
