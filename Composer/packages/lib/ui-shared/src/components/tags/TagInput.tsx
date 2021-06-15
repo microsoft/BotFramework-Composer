@@ -20,29 +20,14 @@ const Root = styled.div({
   flexWrap: 'wrap',
   flexDirection: 'row',
   alignItems: 'stretch',
-  background: FluentTheme.palette.white,
   padding: '0px 4px 4px 0',
+  background: 'transparent',
   border: `1px solid ${FluentTheme.palette.neutralTertiary}`,
-  '&:focus-within ': {
-    borderColor: FluentTheme.palette.neutralTertiary,
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      left: -1,
-      top: -1,
-      right: -1,
-      bottom: -1,
-      pointerEvents: 'none',
-      borderRadius: 2,
-      border: `2px solid ${FluentTheme.palette.themePrimary}`,
-      zIndex: 1,
-    },
-  },
   '& *': {
     boxSizing: 'border-box',
   },
   '& > *:not(input)': {
-    margin: '4px 0 0 4px',
+    margin: '4px 0 0 8px',
   },
 });
 
@@ -68,25 +53,26 @@ const Input = styled.input({
     outlineOffset: '-2px',
   },
   '&:not(:first-of-type)': {
-    marginLeft: '4px',
+    marginLeft: '8px',
   },
 });
 
 type TagInputProps = {
-  tags: string[];
-  onChange: (tags: string[]) => void;
-  placeholder?: string;
-  maxTags?: number;
-  validator?: (val: string) => boolean;
+  className?: string;
   editable?: boolean;
+  maxTags?: number;
+  placeholder?: string;
   readOnly?: boolean;
   removeOnBackspace?: boolean;
+  tags: string[];
+  onChange: (tags: string[]) => void;
+  onValidate?: (val: string) => boolean;
 };
 
 export const TagInput = (props: TagInputProps) => {
-  const { tags, validator, removeOnBackspace, onChange, editable, maxTags, placeholder, readOnly } = props;
+  const { className, tags, onValidate, removeOnBackspace, onChange, editable, maxTags, placeholder, readOnly } = props;
 
-  const inputRef = React.useRef<HTMLInputElement>();
+  const inputRef = React.createRef<HTMLInputElement>();
   const { 0: input, 1: setInput } = React.useState('');
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +123,7 @@ export const TagInput = (props: TagInputProps) => {
       }
 
       // Check if input is valid
-      const valid = validator !== undefined ? validator(input) : true;
+      const valid = onValidate !== undefined ? onValidate(input) : true;
       if (!valid) {
         return;
       }
@@ -155,7 +141,7 @@ export const TagInput = (props: TagInputProps) => {
     }
   };
 
-  const updateTag = (i: number, value: string) => {
+  const changeTag = (i: number, value: string) => {
     const clonedTags = [...tags];
     const numOccurrencesOfValue = tags.reduce(
       (prev, currentValue, index) => prev + (currentValue === value && index !== i ? 1 : 0),
@@ -174,7 +160,7 @@ export const TagInput = (props: TagInputProps) => {
   const showInput = !readOnly && !maxTagsReached;
 
   return (
-    <Root>
+    <Root className={className}>
       {tags.map((tag, i) => (
         <Tag
           key={i}
@@ -182,16 +168,17 @@ export const TagInput = (props: TagInputProps) => {
           index={i}
           inputRef={inputRef}
           readOnly={readOnly || false}
-          remove={removeTag}
           removeOnBackspace={removeOnBackspace}
-          update={updateTag}
-          validator={validator}
           value={tag}
+          onChange={changeTag}
+          onRemove={removeTag}
+          onValidate={onValidate}
         />
       ))}
       {showInput && (
         <Input
           ref={inputRef}
+          data-selection-disabled
           placeholder={placeholder || formatMessage('Type and press enter')}
           value={input}
           onChange={onInputChange}
