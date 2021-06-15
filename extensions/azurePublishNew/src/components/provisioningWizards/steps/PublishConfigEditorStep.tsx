@@ -7,6 +7,7 @@ import { MessageBar, MessageBarType, Link } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { useRecoilValue } from 'recoil';
+import { useShellApi } from '@bfc/extension-client';
 
 import { useDispatcher } from '../../../hooks/useDispatcher';
 import { importConfigurationState } from '../../../recoilModel/atoms/importConfigurationState';
@@ -23,12 +24,12 @@ const editorOptions = {
   scrollbar: {
     alwaysConsumeMouseWheel: false,
   },
-  wordWrap: 'off',
+  wordWrap: 'off' as any,
   wordWrapColumn: 120,
   fontFamily: 'Courier',
-  fontSize: '14px',
-  fontWeight: 600,
-  lineNumbers: 'off',
+  fontSize: 14,
+  fontWeight: '600',
+  lineNumbers: 'off' as any,
   quickSuggestions: false,
   minimap: {
     enabled: false,
@@ -38,7 +39,7 @@ const editorOptions = {
   lineNumbersMinChars: 3,
   glyphMargin: false,
   folding: false,
-  renderLineHighlight: 'none',
+  renderLineHighlight: 'none' as any,
   formatOnType: true,
   fixedOverflowWidgets: true,
 };
@@ -53,6 +54,7 @@ export const PublishConfigEditorStep = (props: Props) => {
   const [editorMounted, setEditorMounted] = React.useState<boolean>(false);
   const { setImportConfiguration } = useDispatcher();
   const { config, isValidConfiguration } = useRecoilValue(importConfigurationState);
+  const { userSettings: { codeEditor: { fontSettings } = {} } = {} } = useShellApi();
 
   const handleOnMount: EditorDidMount = (_: () => string, editor) => {
     setEditorMounted(true);
@@ -63,17 +65,18 @@ export const PublishConfigEditorStep = (props: Props) => {
   };
 
   React.useEffect(() => {
+    let disposable: any;
     if (editorRef.current) {
-      const disposable = editorRef.current.onDidChangeModelContent((e) => {
+      disposable = editorRef.current.onDidChangeModelContent((e) => {
         if (editorRef.current) {
           const newValue = editorRef.current.getValue();
           setImportConfiguration(newValue);
         }
       });
-      return () => {
-        disposable.dispose();
-      };
     }
+    return () => {
+      disposable?.dispose();
+    };
   }, [editorMounted]);
 
   React.useEffect(() => {
@@ -90,7 +93,13 @@ export const PublishConfigEditorStep = (props: Props) => {
         editorDidMount={handleOnMount}
         height={400}
         language="json"
-        options={editorOptions}
+        options={{
+          ...editorOptions,
+          ...{
+            fontFamily: fontSettings?.fontFamily ?? editorOptions.fontFamily,
+            fontWeight: fontSettings?.fontWeight ?? editorOptions.fontWeight,
+          },
+        }}
         theme="light"
         value={config}
         width="100vw"
