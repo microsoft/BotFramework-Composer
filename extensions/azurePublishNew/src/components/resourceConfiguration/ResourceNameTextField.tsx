@@ -13,7 +13,6 @@ type Props = {
 export const ResourceNameTextField = React.memo((props: Props) => {
   return (
     <TextField
-      required
       placeholder={formatMessage('Enter host name')}
       onChange={(_, newValue) => props.onHostNameChange(newValue)}
       {...props}

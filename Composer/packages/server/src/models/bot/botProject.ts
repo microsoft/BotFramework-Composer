@@ -584,7 +584,8 @@ export class BotProject implements IBotProject {
           qnaRegion: qnaConfig.qnaRegion ?? '',
           ...orchestratorConfig,
         },
-        this.settings.downsampling
+        this.settings.downsampling,
+        this.settings.crossTrain
       );
       await this.builder.build(
         luFiles,

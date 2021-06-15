@@ -7,6 +7,8 @@ export type ResourceConfigurationState = {
   resourceGroupName: string;
   luisRegion: string;
   deployLocation: string;
+  hostName: string;
+  isNewResourceGroup: boolean;
 };
 
 export type UserInfo = {
