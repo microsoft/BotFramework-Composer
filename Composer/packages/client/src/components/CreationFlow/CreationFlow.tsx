@@ -226,7 +226,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           fetchReadMe={fetchReadMe}
           localTemplatePath={localTemplatePath}
           path="create"
-          setLocalTemplatePath={setLocalTemplatePath}
           templates={templateProjects}
           onDismiss={() => {
             TelemetryClient.track('CreationCancelled');
@@ -234,6 +233,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           }}
           onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
+          onUpdateLocalTemplatePath={setLocalTemplatePath}
         />
         <DefineConversation
           createFolder={createFolder}

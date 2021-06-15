@@ -51,14 +51,14 @@ type TemplateDetailViewProps = {
   template?: BotTemplate;
   readMe: string;
   localTemplatePath: string;
-  setLocalTemplatePathValid: (isValid: boolean) => void;
+  onValidateLocalTemplatePath: (isValid: boolean) => void;
   setLocalTemplatePath: (path: string) => void;
 };
 
 const templateDocUrl = 'https://aka.ms/localComposerTemplateDoc';
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  const { localTemplatePath, setLocalTemplatePath, setLocalTemplatePathValid, template } = props;
+  const { localTemplatePath, setLocalTemplatePath, onValidateLocalTemplatePath, template } = props;
   const isLocalTemplate = template?.id === localTemplateId;
 
   // Composer formats and displays its own template title and strips out title from read me to avoid redundant titles
@@ -70,10 +70,10 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     const response = await httpClient.get(`/storages/validate/${encodeURI(path)}`);
     const validateMessage = response.data.errorMsg;
     if (typeof validateMessage === 'string' && validateMessage.includes('path')) {
-      setLocalTemplatePathValid(false);
+      onValidateLocalTemplatePath(false);
       return formatMessage('This path does not exist');
     } else if (validateMessage) {
-      setLocalTemplatePathValid(true);
+      onValidateLocalTemplatePath(true);
     }
     return '';
   };

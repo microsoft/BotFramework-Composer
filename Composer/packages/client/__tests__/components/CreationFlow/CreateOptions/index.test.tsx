@@ -12,7 +12,7 @@ describe('<CreateOptions/>', () => {
   const handleCreateNextMock = jest.fn();
   const handleJumpToOpenModal = jest.fn();
   const handleFetchReadMeMock = jest.fn();
-  const setLocalTemplatePathMock = jest.fn();
+  const onUpdateLocalTemplatePathMock = jest.fn();
 
   const templates = [
     {
@@ -36,11 +36,11 @@ describe('<CreateOptions/>', () => {
         fetchReadMe={handleFetchReadMeMock}
         localTemplatePath={''}
         path="create"
-        setLocalTemplatePath={setLocalTemplatePathMock}
         templates={templates}
         onDismiss={handleDismissMock}
         onJumpToOpenModal={handleJumpToOpenModal}
         onNext={handleCreateNextMock}
+        onUpdateLocalTemplatePath={onUpdateLocalTemplatePathMock}
       />
     );
   };

@@ -117,7 +117,7 @@ type CreateBotProps = {
   templates: BotTemplate[];
   location?: WindowLocation | undefined;
   localTemplatePath: string;
-  setLocalTemplatePath: (path: string) => void;
+  onUpdateLocalTemplatePath: (path: string) => void;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   fetchReadMe: (moduleName: string) => {};
@@ -126,7 +126,7 @@ type CreateBotProps = {
 export function CreateBot(props: CreateBotProps) {
   const [option] = useState(optionKeys.createFromTemplate);
   const [disabled] = useState(false);
-  const { isOpen, templates, onDismiss, onNext, localTemplatePath, setLocalTemplatePath } = props;
+  const { isOpen, templates, onDismiss, onNext, localTemplatePath, onUpdateLocalTemplatePath } = props;
   const [currentTemplateId, setCurrentTemplateId] = useState('');
   const [selectedProgLang, setSelectedProgLang] = useState<{ props: IPivotItemProps }>({
     props: { itemKey: csharpFeedKey },
@@ -307,9 +307,9 @@ export function CreateBot(props: CreateBotProps) {
               <TemplateDetailView
                 localTemplatePath={localTemplatePath}
                 readMe={readMe}
-                setLocalTemplatePath={setLocalTemplatePath}
-                setLocalTemplatePathValid={setLocalTemplatePathValid}
                 template={getTemplate()}
+                onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
+                onValidateLocalTemplatePath={setLocalTemplatePathValid}
               />
             )}
           </div>

@@ -29,7 +29,7 @@ import { CreateBot } from './CreateBot';
 type CreateOptionsProps = {
   templates: BotTemplate[];
   localTemplatePath: string;
-  setLocalTemplatePath: (path: string) => void;
+  onUpdateLocalTemplatePath: (path: string) => void;
   onDismiss: () => void;
   onNext: (templateName: string, templateLanguage: string, urlData?: string) => void;
   onJumpToOpenModal: (search?: string) => void;
@@ -46,7 +46,7 @@ export function CreateOptions(props: CreateOptionsProps) {
     onNext,
     onJumpToOpenModal,
     fetchReadMe,
-    setLocalTemplatePath,
+    onUpdateLocalTemplatePath,
     localTemplatePath,
   } = props;
   const [showNodeModal, setShowNodeModal] = useState(false);
@@ -152,10 +152,10 @@ export function CreateOptions(props: CreateOptionsProps) {
         isOpen={isOpenCreateModal}
         localTemplatePath={localTemplatePath}
         location={props.location}
-        setLocalTemplatePath={setLocalTemplatePath}
         templates={templates}
         onDismiss={onDismiss}
         onNext={onNext}
+        onUpdateLocalTemplatePath={onUpdateLocalTemplatePath}
       />
       {isElectron() && showNodeModal && (
         <InstallDepModal
