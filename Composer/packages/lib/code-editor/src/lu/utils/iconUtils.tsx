@@ -3,7 +3,7 @@
 
 import formatMessage from 'format-message';
 
-import { LuToolbarButtonKind } from './types';
+import { LuToolbarButtonKind } from '../types';
 
 export const getLuToolbarItemTextAndIcon = (kind: LuToolbarButtonKind): { iconName: string; text: string } => {
   switch (kind) {
