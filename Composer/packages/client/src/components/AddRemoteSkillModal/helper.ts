@@ -32,7 +32,7 @@ export const importOrchestrator = async (
   if (runtimeInfo.runtimeLanguage === 'dotnet') {
     reqBody = {
       package: 'Microsoft.Bot.Builder.AI.Orchestrator',
-      version: '4.13.1',
+      version: '', //implicitly use latest nuget package
       source: 'https://api.nuget.org/v3/index.json',
       isUpdating: false,
       isPreview: false,
@@ -40,7 +40,7 @@ export const importOrchestrator = async (
   } else if (runtimeInfo.runtimeLanguage === 'js') {
     reqBody = {
       package: 'botbuilder-ai-orchestrator',
-      version: '4.13.1',
+      version: 'latest',
       source: 'https://registry.npmjs.org/-/v1/search',
       isUpdating: false,
       isPreview: false,
