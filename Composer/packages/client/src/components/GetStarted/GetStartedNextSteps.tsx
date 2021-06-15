@@ -325,7 +325,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
     if (hasPublishingProfile) {
       if (!hasPartialPublishingProfile) {
-        optSteps.push({
+        newRecomendedSteps.push({
           key: 'publish',
           label: formatMessage('Publish your bot'),
           description: formatMessage('Once you publish your bot to Azure you will be ready to add connections.'),
@@ -337,20 +337,20 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           },
           hideFeatureStep: isPVABot,
         });
-      }
 
-      optSteps.push({
-        key: 'connections',
-        label: formatMessage('Add connections'),
-        description: formatMessage('Connect your bot to Teams, external channels, or enable speech.'),
-        learnMore: 'https://aka.ms/composer-connections-learnmore',
-        checked: false,
-        onClick: () => {
-          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
-          openLink(linkToConnections);
-        },
-        hideFeatureStep: isPVABot,
-      });
+        newRecomendedSteps.push({
+          key: 'connections',
+          label: formatMessage('Add connections'),
+          description: formatMessage('Connect your bot to Teams, external channels, or enable speech.'),
+          learnMore: 'https://aka.ms/composer-connections-learnmore',
+          checked: false,
+          onClick: () => {
+            TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
+            openLink(linkToConnections);
+          },
+          hideFeatureStep: isPVABot,
+        });
+      }
     }
 
     setOptionalSteps(optSteps);

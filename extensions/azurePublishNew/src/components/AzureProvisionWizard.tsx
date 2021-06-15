@@ -4,9 +4,10 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { RecoilRoot } from 'recoil';
-import { usePublishApi } from '@bfc/extension-client';
+import { usePublishApi, useLocalStorage } from '@bfc/extension-client';
 
 import { ProvisionAction } from '../types';
+import { resourceConfigurationState } from '../recoilModel/atoms/resourceConfigurationState';
 
 import { ChooseProvisionAction } from './ChooseProvisionAction';
 import { CreateResourcesWizard } from './provisioningWizards/CreateResourcesWizard';
@@ -24,7 +25,8 @@ const Root = styled.div`
 export const AzureProvisionWizard = () => {
   const [provisionAction, setProvisionAction] = useState<ProvisionAction>('create');
   const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
-  const { setTitle } = usePublishApi();
+  const { setTitle, getName } = usePublishApi();
+  const { getItem } = useLocalStorage();
 
   const handleStepChange = (index, step) => {
     setActiveStepIndex(index);
@@ -43,7 +45,14 @@ export const AzureProvisionWizard = () => {
   }, [provisionAction]);
 
   return (
-    <RecoilRoot>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(resourceConfigurationState, (currentState) => ({
+          ...currentState,
+          ...getItem(getName()),
+        }));
+      }}
+    >
       <Root>
         {!activeStepIndex && (
           <ChooseProvisionAction
