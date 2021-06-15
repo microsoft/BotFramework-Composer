@@ -3,31 +3,28 @@
 
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { UAParser } from 'ua-parser-js';
 
 import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState } from '../../recoilModel/atoms/appState';
 import { SURVEY_URL_BASE } from '../../constants';
 
 function buildUrl() {
-  const userAgent = new UAParser().getResult();
   const version = process.env.COMPOSER_VERSION;
   const machineId = '123456';
 
   return (
     `${SURVEY_URL_BASE}?` +
-    `o=${encodeURIComponent(
-      `${userAgent.browser.name}-${userAgent.browser.major}-${userAgent.os.name}-${userAgent.os.version}`
-    )}&` +
+    `o=${encodeURIComponent(window.navigator.userAgent)}&` +
     `v=${encodeURIComponent(version ?? '')}&` +
     `m=${encodeURIComponent(machineId)}`
   );
 }
 
-export default function SurveyNotification() {
+export function useSurveyNotification() {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
 
   const surveyEligible = useRecoilValue(surveyEligibilityState);
+  console.log(buildUrl());
 
   useEffect(() => {
     if (surveyEligible) {
@@ -60,6 +57,4 @@ export default function SurveyNotification() {
       });
     }
   }, []);
-
-  return null; // this renders nothing and only exists to create a notification
 }

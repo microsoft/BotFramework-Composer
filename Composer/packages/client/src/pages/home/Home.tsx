@@ -29,7 +29,7 @@ import githubIcon from '../../images/githubIcon.svg';
 import noRecentBotsCover from '../../images/noRecentBotsCover.svg';
 import { InstallDepModal } from '../../components/InstallDepModal';
 import { missingDotnetVersionError, missingFunctionsError } from '../../utils/runtimeErrors';
-import SurveyNotification from '../../components/Notifications/SurveyNotification';
+import { useSurveyNotification } from '../../components/Notifications/SurveyNotification';
 
 import { RecentBotList } from './RecentBotList';
 import { WhatsNewsList } from './WhatsNewsList';
@@ -76,6 +76,8 @@ const Home: React.FC<RouteComponentProps> = () => {
   // const projectId = useRecoilValue<string>(currentProjectIdState);
   // const botName = useRecoilValue<string>(botDisplayNameState(projectId));
   // const templateId = useRecoilValue<string>(templateIdState);
+
+  useSurveyNotification();
 
   const recentProjects = useRecoilValue(recentProjectsState);
   const feed = useRecoilValue(feedState);
@@ -285,7 +287,6 @@ const Home: React.FC<RouteComponentProps> = () => {
           onDismiss={() => setWarnAboutFunctions(false)}
         />
       )}
-      <SurveyNotification />
     </div>
   );
 };
