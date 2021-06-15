@@ -20,6 +20,7 @@ describe('Test the generated recognizer dialogs', () => {
         { id: 'test.fr-fr', empty: false },
       ],
       'qna',
+      false,
       QnALocales
     );
 
