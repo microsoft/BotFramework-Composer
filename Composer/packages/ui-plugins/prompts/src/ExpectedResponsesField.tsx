@@ -3,19 +3,32 @@
 
 import React from 'react';
 import { FieldLabel, useAdaptiveFormContext } from '@bfc/adaptive-form';
-import { FieldProps, useRecognizerConfig, useShellApi } from '@bfc/extension-client';
+import { FieldProps, SDKKinds, useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import { LuMetaData, LuType } from '@bfc/shared';
 
-const expectedResponsesPlaceholder = () =>
-  formatMessage(`> add some expected user responses:
-> - Please remind me to '{itemTitle=buy milk}'
-> - remind me to '{itemTitle}'
-> - add '{itemTitle}' to my todo list
->
-> entity definitions:
-> @ ml itemTitle
-`);
+const expectedResponsesPlaceholder = (id?: SDKKinds) => {
+  let placeholderText = '';
+  switch (id) {
+    case SDKKinds.CrossTrainedRecognizerSet:
+    case SDKKinds.LuisRecognizer:
+      placeholderText = formatMessage(`> add some expected user responses:
+      > - Please remind me to '{itemTitle=buy milk}'
+      > - remind me to '{itemTitle}'
+      > - add '{itemTitle}' to my todo list
+      >
+      > entity definitions:
+      > @ ml itemTitle
+      `);
+      break;
+    case SDKKinds.RegexRecognizer:
+      placeholderText = formatMessage('Add regex pattern');
+      break;
+    default:
+      break;
+  }
+  return placeholderText;
+};
 
 const ExpectedResponsesField: React.FC<FieldProps> = (props) => {
   const { id, description } = props;
@@ -36,7 +49,7 @@ const ExpectedResponsesField: React.FC<FieldProps> = (props) => {
       <Editor
         {...props}
         label={label}
-        placeholder={expectedResponsesPlaceholder()}
+        placeholder={expectedResponsesPlaceholder(currentRecognizer?.id as SDKKinds)}
         schema={schema}
         value={intentName}
         onChange={() => {}}
