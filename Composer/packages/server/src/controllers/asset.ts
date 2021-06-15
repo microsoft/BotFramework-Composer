@@ -63,6 +63,7 @@ export async function getProjTemplates(req: any, res: any) {
             packageName: '',
             packageSource: '',
             packageVersion: '',
+            availableVersions: [],
           },
         });
       }

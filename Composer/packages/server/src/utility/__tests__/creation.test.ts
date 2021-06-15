@@ -120,6 +120,7 @@ describe('templateSort', () => {
         packageName: '',
         packageSource: '',
         packageVersion: '',
+        availableVersions: [''],
       },
     },
   ];
