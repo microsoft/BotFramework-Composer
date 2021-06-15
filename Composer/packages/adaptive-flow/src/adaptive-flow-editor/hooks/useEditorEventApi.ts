@@ -216,15 +216,35 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.PasteSelection:
         handler = () => {
-          const currentSelectedId = selectedIds[0];
-          if (currentSelectedId.endsWith('+')) {
-            const { arrayPath, arrayIndex } = DialogUtils.parseNodePath(currentSelectedId.slice(0, -1)) || {};
-            handleEditorEvent(NodeEventTypes.Insert, {
-              id: arrayPath,
-              position: arrayIndex,
-              $kind: MenuEventTypes.Paste,
-            });
+          if (!clipboardActions?.length) return;
+
+          const length = selectedIds.length;
+          let arrayPath = '';
+          let arrayIndex = -1;
+
+          //if there is no selected action, paste it to the end of the current dialog
+          if (!length && state.nodeContext?.focusedEvent) {
+            const focused = state.nodeContext.focusedEvent;
+            const actions = get(data, `${focused}.actions`);
+            arrayPath = `${focused}.actions`;
+            arrayIndex = actions ? actions.length : 0;
           }
+
+          //If some actions are selected, paste it to the end of the last selected action
+          if (length) {
+            const result = DialogUtils.parseNodePath(selectedIds[length - 1]);
+            if (!result) return;
+            arrayPath = result.arrayPath;
+            arrayIndex = result.arrayIndex + 1;
+          }
+
+          if (!arrayPath) return;
+
+          handleEditorEvent(NodeEventTypes.Insert, {
+            id: arrayPath,
+            position: arrayIndex,
+            $kind: MenuEventTypes.Paste,
+          });
         };
         break;
       case NodeEventTypes.MoveSelection:
