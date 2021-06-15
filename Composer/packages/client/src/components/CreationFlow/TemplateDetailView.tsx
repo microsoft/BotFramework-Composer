@@ -151,9 +151,13 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
   return (
     <div>
       <div css={templateTitleContainer(isLocalTemplate)}>
-        {renderTemplateIcon()}
-        <span css={templateTitle(isLocalTemplate)}>{props.template?.name}</span>
-        {!isLocalTemplate && <span css={templateVersion}>{props.template?.package?.packageVersion}</span>}
+        <Stack horizontal>
+          <Stack.Item>{renderTemplateIcon()}</Stack.Item>
+          <Stack.Item>
+            <span css={templateTitle(isLocalTemplate)}>{props.template?.name}</span>
+            {!isLocalTemplate && renderVersionButton()}
+          </Stack.Item>
+        </Stack>
       </div>
       {isLocalTemplate ? (
         renderLocalTemplateForm()
