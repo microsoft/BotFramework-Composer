@@ -170,10 +170,10 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         isOpen
         fetchReadMe={fetchReadMe}
         localTemplatePath={localTemplatePath}
-        setLocalTemplatePath={setLocalTemplatePath}
         templates={templateProjects}
         onDismiss={handleDismiss}
         onNext={handleCreateNext}
+        onUpdateLocalTemplatePath={setLocalTemplatePath}
       />
     );
   };

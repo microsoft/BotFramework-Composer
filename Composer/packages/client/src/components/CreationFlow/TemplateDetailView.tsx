@@ -52,13 +52,13 @@ type TemplateDetailViewProps = {
   readMe: string;
   localTemplatePath: string;
   onValidateLocalTemplatePath: (isValid: boolean) => void;
-  setLocalTemplatePath: (path: string) => void;
+  onUpdateLocalTemplatePath: (path: string) => void;
 };
 
 const templateDocUrl = 'https://aka.ms/localComposerTemplateDoc';
 
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
-  const { localTemplatePath, setLocalTemplatePath, onValidateLocalTemplatePath, template } = props;
+  const { localTemplatePath, onUpdateLocalTemplatePath, onValidateLocalTemplatePath, template } = props;
   const isLocalTemplate = template?.id === localTemplateId;
 
   // Composer formats and displays its own template title and strips out title from read me to avoid redundant titles
@@ -96,7 +96,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         label={formatMessage('Local Template Path')}
         styles={{ root: { marginTop: '10px' } }}
         value={localTemplatePath}
-        onChange={(_e, val) => setLocalTemplatePath(val || '')}
+        onChange={(_e, val) => onUpdateLocalTemplatePath(val || '')}
         onGetErrorMessage={validatePath}
       />
     </Fragment>
