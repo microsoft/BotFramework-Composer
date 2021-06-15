@@ -16,7 +16,7 @@
     "express": "^4.17.1",
     "globby": "^11.0.0",
     "kill-port": "^1.6.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "path": "^0.12.7",
     "portfinder": "^1.0.28",
     "rimraf": "^3.0.2",
