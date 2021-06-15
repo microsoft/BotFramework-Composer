@@ -38,6 +38,9 @@
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
   },
+  "a_list_entity_represents_a_fixed_closed_set_of_rel_6e87d740": {
+    "message": "A list entity represents a fixed, closed set of related words along with their synonyms. The normalized value is the value returned when any of the corresponding synonyms are recognized. <link>Learn more about list entities</link>"
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -158,6 +161,9 @@
   "add_a_dialog_e378aa3a": {
     "message": "Add a dialog"
   },
+  "add_a_list_entity_91adc4b3": {
+    "message": "Add a list entity"
+  },
   "add_a_new_key_5c208c29": {
     "message": "Add a new key"
   },
@@ -199,6 +205,12 @@
   },
   "add_entity_5f769994": {
     "message": "Add entity"
+  },
+  "add_icon_af0bdefc": {
+    "message": "Add icon"
+  },
+  "add_local_template_d300195f": {
+    "message": "Add Local Template"
   },
   "add_more_to_this_response_d45bdfda": {
     "message": "Add more to this response"
@@ -245,6 +257,9 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
+  "add_row_7ebc94fb": {
+    "message": "Add row"
+  },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
@@ -260,6 +275,9 @@
   "advanced_settings_view_json_b83638b4": {
     "message": "Advanced Settings View (json)"
   },
+  "advanced_template_options_8a40f0cc": {
+    "message": "Advanced template options"
+  },
   "agree_73937908": {
     "message": "Agree"
   },
@@ -271,6 +289,9 @@
   },
   "almost_there_f90939cb": {
     "message": "Almost there!"
+  },
+  "already_used_16061b3a": {
+    "message": "Already used"
   },
   "an_app_id_is_used_for_communication_between_your_b_255025e1": {
     "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
@@ -929,11 +950,17 @@
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
+  "count_plural_0_no_items_selected_1_one_item_is_sel_13d3b2de": {
+    "message": "{ count, plural,\n     =0 {No items selected}\n     =1 {One item is selected}\n  other {# items are selected}\n}"
+  },
   "create_132b3be1": {
     "message": "Create"
   },
   "create_a_bot_project_73e6ce33": {
     "message": "Create a bot project"
+  },
+  "create_a_bot_using_a_local_yeoman_generator_fdfe822d": {
+    "message": "Create a bot using a local yeoman generator"
   },
   "create_a_condition_8686fd5": {
     "message": "Create a condition"
@@ -1403,6 +1430,9 @@
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
+  "enables_creating_bots_from_local_templates_as_well_5608165d": {
+    "message": "Enables creating bots from local templates as well as creating bots from older versions of published templates"
+  },
   "end_dialog_88fa2f7a": {
     "message": "End dialog"
   },
@@ -1427,8 +1457,14 @@
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
   },
+  "enter_a_synonym_and_press_enter_bd39b5d1": {
+    "message": "Enter a synonym and press enter"
+  },
   "enter_a_url_to_import_qna_resource_223ded92": {
     "message": "Enter a URL to Import QnA resource"
+  },
+  "enter_a_value_d91fdd00": {
+    "message": "Enter a value"
   },
   "enter_cognitive_service_region_a0f684a4": {
     "message": "Enter cognitive service region"
@@ -2192,6 +2228,9 @@
   "local_skill_6ce0d311": {
     "message": "Local Skill."
   },
+  "local_template_path_2dee8b6f": {
+    "message": "Local Template Path"
+  },
   "localization_2e29f01e": {
     "message": "Localization"
   },
@@ -2447,6 +2486,9 @@
   "name_of_the_property_f3cae657": {
     "message": "Name of the property"
   },
+  "name_your_list_entity_9701a8f0": {
+    "message": "Name your list entity"
+  },
   "navigation_control_94f2649e": {
     "message": "navigation control"
   },
@@ -2548,6 +2590,9 @@
   },
   "node_preview_cbcd8fb": {
     "message": "Node (Preview)"
+  },
+  "normalized_value_8eb24de2": {
+    "message": "Normalized value"
   },
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
@@ -3776,6 +3821,9 @@
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "This dialog has no trigger yet."
   },
+  "this_entity_name_is_reserved_f97d9573": {
+    "message": "This entity name is reserved"
+  },
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
@@ -3847,6 +3895,9 @@
   },
   "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
     "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
+  },
+  "to_create_a_bot_from_your_own_bot_framework_templa_2c5b1f2d": {
+    "message": "To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>"
   },
   "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
     "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."

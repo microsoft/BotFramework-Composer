@@ -12,6 +12,7 @@ describe('<CreateOptions/>', () => {
   const handleCreateNextMock = jest.fn();
   const handleJumpToOpenModal = jest.fn();
   const handleFetchReadMeMock = jest.fn();
+  const onUpdateLocalTemplatePathMock = jest.fn();
 
   const templates = [
     {
@@ -34,11 +35,13 @@ describe('<CreateOptions/>', () => {
     return renderWithRecoil(
       <CreateOptions
         fetchReadMe={handleFetchReadMeMock}
+        localTemplatePath={''}
         path="create"
         templates={templates}
         onDismiss={handleDismissMock}
         onJumpToOpenModal={handleJumpToOpenModal}
         onNext={handleCreateNextMock}
+        onUpdateLocalTemplatePath={onUpdateLocalTemplatePathMock}
       />
     );
   };

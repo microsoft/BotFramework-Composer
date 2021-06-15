@@ -20,7 +20,7 @@ import { SelectionZone } from 'office-ui-fabric-react/lib/Selection';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { ITextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
+import { ITextField, ITextFieldProps, ITextFieldStyles, TextField } from 'office-ui-fabric-react/lib/TextField';
 import { classNamesFunction, getId, IStyleFunctionOrObject, SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
 import { ICalloutPositionedInfo } from 'office-ui-fabric-react/lib/utilities/positioning';
 import * as React from 'react';
@@ -45,6 +45,11 @@ export const KeyCodes = {
   Tab: 'Tab',
 };
 
+export type CreationProps = {
+  creationTextFieldProps?: ITextFieldProps;
+  creationItem?: IContextualMenuItem;
+};
+
 export type SearchableDropdownProps = {
   /**
    * The value set to the dropdown. This is
@@ -55,14 +60,17 @@ export type SearchableDropdownProps = {
   value: string;
 
   /**
+   * 'Create New' item will be shown in the options
+   *  when selected, a TextField will be shown to enter
+   *  the name of the new option.
+   */
+  allowCreation?: boolean;
+
+  /**
    * The items to display in the dropdown.
    */
   items?: IContextualMenuItem[];
 
-  /**
-   * The items to display when the filtered items
-   * have a length of zero.
-   */
   onNoItemsContent?: (query: string) => IContextualMenuItem[];
 
   /**
@@ -101,7 +109,7 @@ export type SearchableDropdownProps = {
     | 'underlined'
     | 'onChange'
   >;
-
+  creationProps?: CreationProps;
   /**
    * Styles to apply to the root element of
    * the search dropdown
@@ -130,11 +138,9 @@ export type SearchableDropdownProps = {
    * presses the Enter key.
    */
   onSubmit: (item: IContextualMenuItem) => void;
-
-  errorMessage?: string;
 };
 
-const { fonts, palette, semanticColors } = getTheme();
+const { fonts, palette } = getTheme();
 
 const dropdownTheme = {
   selectedItemBackgroundColor: palette.neutralLighter,
@@ -148,10 +154,8 @@ const Root = styled.div`
   position: relative;
 `;
 
-const ErrorText = styled.div`
-  padding-top: 5px;
-  font-size: ${fonts.small.fontSize};
-  color: ${semanticColors.errorText};
+const CreateNewOptionDivider = styled.div`
+  border-top: 1px solid #edebe9;
 `;
 
 const BlockCommandButton = styled(CommandButton)`
@@ -186,7 +190,7 @@ const underlineTextFieldLabelStyles = classNamesFunction<ILabelStyleProps, ILabe
  *
  * @param isSelected Whether the item is selected or not.
  */
-const getListItemClassName = (isSelected: boolean) => {
+const getListItemClassName = (isSelected: boolean, isCreateNew = false) => {
   const styles: IStyleFunctionOrObject<IButtonProps, IButtonStyles> = {};
 
   styles.root = { width: '100%', textAlign: 'left' };
@@ -195,6 +199,9 @@ const getListItemClassName = (isSelected: boolean) => {
 
   if (isSelected) {
     styles.root.backgroundColor = dropdownTheme.selectedItemBackgroundColor;
+  }
+  if (isCreateNew) {
+    styles.root.color = palette.themePrimary;
   }
 
   return classNamesFunction<IButtonProps, IButtonStyles>()(styles);
@@ -393,7 +400,8 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
     maxDropdownHeight = 300,
     className: rootClassName,
     allowNonExistingItems = false,
-    errorMessage,
+    allowCreation,
+    creationProps: { creationTextFieldProps, creationItem } = {},
   } = props;
 
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -420,6 +428,14 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
    * is displayed under the text field.
    */
   const calloutTarget = rootRef.current?.querySelector('.ms-TextField-wrapper');
+
+  const createNewItem = React.useMemo(() => creationItem ?? { key: 'CREATE_NEW', text: formatMessage('Create New') }, [
+    creationItem,
+  ]);
+
+  if (allowCreation) {
+    filteredItems.unshift(createNewItem);
+  }
 
   React.useEffect(() => {
     setQuery(value);
@@ -743,7 +759,7 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
           disabled={item.disabled}
           iconProps={{ iconName: item.iconProps?.iconName }}
           role="option"
-          styles={getListItemClassName(selection.isKeySelected(item.key))}
+          styles={getListItemClassName(selection.isKeySelected(item.key), item.key === createNewItem.key)}
           tabIndex={-1}
           title={item.text}
           onClick={(event) => onItemClick(item, event)}
@@ -752,11 +768,10 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
         >
           {onRenderItem(item)}
         </CommandButton>
+        {allowCreation && item.key === creationItem.key && <CreateNewOptionDivider />}
       </div>
     ));
   };
-
-  const hasErrorMessage: boolean = !!errorMessage && errorMessage.length > 0;
 
   return (
     <Root ref={rootRef} className={rootClassName}>
@@ -781,7 +796,6 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
           onKeyDown={onFieldKeyDown}
           onRenderSuffix={onRenderTextFieldSuffix}
         />
-        {hasErrorMessage && <ErrorText role="alert">{errorMessage}</ErrorText>}
       </FocusZone>
 
       {isMenuOpen && (
@@ -804,6 +818,16 @@ export const SearchableDropdown = (props: SearchableDropdownProps) => {
             </div>
           </SelectionZone>
         </Callout>
+      )}
+      {allowCreation && value === createNewItem.text && (
+        <div>
+          <TextField
+            {...creationTextFieldProps}
+            autoComplete="off"
+            deferredValidationTime={300}
+            styles={mergeStyleSets(textFieldStyles, textFieldProps?.styles)}
+          />
+        </div>
       )}
     </Root>
   );

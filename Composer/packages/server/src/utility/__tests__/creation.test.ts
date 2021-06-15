@@ -112,6 +112,16 @@ describe('templateSort', () => {
         availableVersions: [],
       },
     },
+    {
+      id: 'LocalTemplate',
+      name: '',
+      description: '',
+      package: {
+        packageName: '',
+        packageSource: '',
+        packageVersion: '',
+      },
+    },
   ];
 
   it('should return sorted templates per sortOrder obj', async () => {

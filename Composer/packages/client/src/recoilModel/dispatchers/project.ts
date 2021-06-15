@@ -358,6 +358,7 @@ export const projectDispatcher = () => {
         runtimeType,
         runtimeLanguage,
         isRoot,
+        isLocalGenerator,
       } = newProjectData;
 
       // starts the creation process and stores the jobID in state for tracking
@@ -377,6 +378,7 @@ export const projectDispatcher = () => {
         runtimeType,
         runtimeLanguage,
         isRoot,
+        isLocalGenerator,
       });
 
       if (response.data.jobId) {

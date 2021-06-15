@@ -8,7 +8,7 @@
     "bl": "^4.0.3",
     "elliptic": "^6.5.3",
     "kind-of": "^6.0.3",
-    "lodash": "^4.17.12",
+    "lodash": "^4.17.21",
     "mkdirp": "^0.5.2",
     "selfsigned": "1.10.8",
     "serialize-javascript": "^3.1.0",

@@ -3,7 +3,7 @@
 
 import Path from 'path';
 
-import React, { useEffect, useRef, Fragment } from 'react';
+import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { BotTemplate } from '@bfc/shared';
@@ -63,6 +63,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
+  const [localTemplatePath, setLocalTemplatePath] = useState('');
   const selectedTemplateVersion = useRecoilValue(selectedTemplateVersionState);
 
   useEffect(() => {
@@ -102,6 +103,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleDismiss = () => {
+    setLocalTemplatePath('');
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
     navigate(`/home`);
   };
@@ -148,6 +150,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       alias: formData?.alias,
       profile: formData?.profile,
       source: formData?.source,
+      isLocalGenerator: formData?.isLocalGenerator,
     };
     TelemetryClient.track('CreateNewBotProjectStarted', { template: templateId });
 
@@ -201,6 +204,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
         <DefineConversation
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
+          localTemplatePath={localTemplatePath}
           path="create/:runtimeLanguage/:templateId"
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
@@ -224,6 +228,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
         />
         <CreateOptions
           fetchReadMe={fetchReadMe}
+          localTemplatePath={localTemplatePath}
           path="create"
           templates={templateProjects}
           onDismiss={() => {
@@ -232,6 +237,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           }}
           onJumpToOpenModal={handleJumpToOpenModal}
           onNext={handleCreateNext}
+          onUpdateLocalTemplatePath={setLocalTemplatePath}
         />
         <DefineConversation
           createFolder={createFolder}
