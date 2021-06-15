@@ -13,7 +13,7 @@ import ReactMarkdown from 'react-markdown';
 import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../images/composerIcon.svg';
-import { dispatcherState, selectedTemplateVersionState } from '../../../recoilModel';
+import { dispatcherState, selectedTemplateVersionState } from '../../recoilModel';
 
 const templateTitleContainer = css`
   width: 100%;
