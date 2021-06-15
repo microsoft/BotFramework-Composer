@@ -183,7 +183,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           {
             label: 'Take the survey',
             onClick: () => {
-              window.open('https://aka.ms/bfcomposer');
+              window.open('https://aka.ms/bfcomposer', '_blank');
               deleteNotification('survey');
             }, // get the right URL later
           },
