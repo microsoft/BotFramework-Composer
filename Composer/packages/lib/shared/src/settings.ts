@@ -21,6 +21,7 @@ export const applyPublishingProfileToSettings = (settings: DialogSetting, profil
     profile.settings.applicationInsights?.connectionString
   ) {
     settings.runtimeSettings.telemetry = {
+      ...settings.runtimeSettings.telemetry,
       options: {
         connectionString: profile.settings.applicationInsights.connectionString,
         instrumentationKey: profile.settings.applicationInsights.InstrumentationKey,

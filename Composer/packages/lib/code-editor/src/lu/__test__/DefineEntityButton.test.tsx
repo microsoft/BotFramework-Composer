@@ -20,7 +20,7 @@ describe('<DefineEntityButton />', () => {
     render(<DefineEntityButton onDefineEntity={callback} />);
     fireEvent.click(screen.getByTestId('menuButton'));
     fireEvent.click(screen.getByText('Machine learned entity'));
-    expect(callback).toBeCalledWith('ml');
+    expect(callback).toBeCalledWith('ml', {});
   });
 
   it('prebuilt: Should filter prebuilt entities when passed query', async () => {
@@ -49,7 +49,7 @@ describe('<DefineEntityButton />', () => {
       jest.runAllTimers();
     });
 
-    expect(callback).toBeCalledWith('prebuilt', 'datetimeV2');
+    expect(callback).toBeCalledWith('prebuilt', { entityName: 'datetimeV2' });
   });
 
   it('Should open a new window when link in tooltip is clicked', () => {
