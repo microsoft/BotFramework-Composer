@@ -6,7 +6,7 @@ on:
       - "abrown/docker-for-tests"
 
 env:
-  IMAGE_NAME: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}
+  IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}:latest
   BASE_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}:base
   DEP_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}:dependencies
   BUILD_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}:build
@@ -31,8 +31,8 @@ jobs:
         continue-on-error: true
       - name: Docker Build
         run: |
-          docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --target base .
-          docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.DEP_IMAGE_TAG }} --target dependencies .
+          docker build -f Dockerfile.Test -t ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --target base .
+          docker build -f Dockerfile.Test -t ${{ env.DEP_IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.DEP_IMAGE_TAG }} --target dependencies .
           docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.DEP_IMAGE_TAG }} .
       - name: Docker push
         run: docker push ${{ env.IMAGE_TAG }}
