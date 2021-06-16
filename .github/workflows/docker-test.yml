@@ -18,6 +18,6 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
       - name: Docker Build
-        run: docker build -f Dockerfile.Test -t composerci.azurecr.io/composer/ci:${{ github.sha }}
+        run: docker build -f Dockerfile.Test -t ${{ secrets.ACR_USERNAME }}.azurecr.io/composer/ci:${{ github.sha }} .
       - name: Docker push
-        run: docker push  composerci.azurecr.io/composer/ci:${{ github.sha }}
+        run: docker push  ${{ secrets.ACR_USERNAME }}.azurecr.io/composer/ci:${{ github.sha }}
