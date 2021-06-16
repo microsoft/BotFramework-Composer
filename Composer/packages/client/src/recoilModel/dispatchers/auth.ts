@@ -44,28 +44,32 @@ export const authDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (tenant: string, notify = true) => {
       callbackHelpers.set(currentTenantState, tenant);
       setTenantId(tenant);
+      if (tenant) {
+        // get arm token for tenant
+        try {
+          const token = await AuthClient.getARMTokenForTenant(tenant);
+          if (token) {
+            setPrimaryToken(token);
 
-      // get arm token for tenant
-      try {
-        console.log('GET ARM TOKEN FOR TENANT');
-        const token = await AuthClient.getARMTokenForTenant(tenant);
-        if (token) {
-          setPrimaryToken(token);
-          // fire notification
-
-          if (notify !== false) {
-            // set notification
-            const notification = createNotification({
-              title: formatMessage('Azure sign-in'),
-              description: formatMessage("You've successfully signed in."),
-              type: 'pending',
-            });
-            addNotificationInternal(callbackHelpers, notification);
+            // fire notification
+            if (notify !== false) {
+              // set notification
+              const notification = createNotification({
+                title: formatMessage('Azure sign-in'),
+                description: formatMessage("You've successfully signed in."),
+                type: 'info',
+              });
+              addNotificationInternal(callbackHelpers, notification);
+            }
           }
+        } catch (err) {
+          const notification = createNotification({
+            title: formatMessage('Azure sign-in'),
+            description: formatMessage(`Sign in failed: {message}`, { message: err.message || err.toString() }),
+            type: 'error',
+          });
+          addNotificationInternal(callbackHelpers, notification);
         }
-      } catch (err) {
-        // TODO: properly display error
-        alert(err);
       }
     }
   );
@@ -83,6 +87,16 @@ export const authDispatcher = () => {
     setGraphToken(getTokenFromCache('graphToken'));
   });
 
+  const logoutUser = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    // clear out app state
+    setPrimaryToken('');
+    setGraphToken('');
+    setCurrentTenant('');
+
+    // call additional logout logic in auth client
+    AuthClient.logOut();
+  });
+
   const requireUserLogin = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     if (userShouldProvideTokens()) {
       if (isShowAuthDialog(false)) {
@@ -93,19 +107,30 @@ export const authDispatcher = () => {
         setGraphToken(getTokenFromCache('graphToken'));
       }
     } else {
-      const tenantId = getTenantIdFromCache();
+      const cachedTenantId = getTenantIdFromCache();
+      let tenantId;
       try {
-        console.log('GET TENANTS');
         const tenants = await AuthClient.getTenants();
         setAvailableTenants(tenants);
+        if (tenants.length === 0) {
+          throw new Error('No Azure Directories were found.');
+        } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+          tenantId = cachedTenantId;
+        } else if (tenants.length === 1) {
+          tenantId = tenants[0].tenantId;
+        }
+        if (tenantId) {
+          setCurrentTenant(tenantId, false);
+        } else {
+          setShowTenantDialog(true);
+        }
       } catch (err) {
-        // TODO: display tenant error
-        alert(err);
-      }
-      if (tenantId) {
-        setCurrentTenant(tenantId, false);
-      } else {
-        setShowTenantDialog(true);
+        const notification = createNotification({
+          title: formatMessage('Azure sign-in'),
+          description: formatMessage(`Sign in failed: {message}`, { message: err.message || err.toString() }),
+          type: 'error',
+        });
+        addNotificationInternal(callbackHelpers, notification);
       }
     }
   });
@@ -118,5 +143,6 @@ export const authDispatcher = () => {
     setShowTenantDialog,
     setCurrentTenant,
     refreshLoginStatus,
+    logoutUser,
   };
 };

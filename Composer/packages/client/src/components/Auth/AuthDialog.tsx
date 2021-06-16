@@ -18,7 +18,7 @@ import { isTokenExpired } from '../../utils/auth';
 export interface AuthDialogProps {
   needGraph: boolean;
   onDismiss: () => void;
-  next: () => void;
+  next?: () => void;
 }
 export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
   const { setPrimaryToken, setGraphToken } = useRecoilValue(dispatcherState);
@@ -97,7 +97,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
             storage.set('graphToken', graphToken);
             setPrimaryToken(accessToken);
             setGraphToken(graphToken);
-            props.next();
+            if (props.next) props.next();
           }}
         />
       </DialogFooter>
