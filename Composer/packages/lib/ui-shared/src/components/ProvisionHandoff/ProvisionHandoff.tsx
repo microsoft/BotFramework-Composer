@@ -7,7 +7,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { IconButton } from 'office-ui-fabric-react/lib/components/Button';
+import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/components/Button';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme/lib/fluent';
 import { useRef } from 'react';
 import { ITextField, TextField } from 'office-ui-fabric-react/lib/components/TextField';
@@ -93,13 +93,13 @@ export const ProvisionHandoff = (props: ProvisionHandoffProps) => {
         value={props.handoffInstructions}
       />
       <DialogFooter>
-        <PrimaryButton
+        <DefaultButton
           text={formatMessage('Back')}
           onClick={() => {
             props.onBack();
           }}
         />
-        <PrimaryButton text={formatMessage('Okay')} onClick={props.onDismiss} />
+        <PrimaryButton text={formatMessage('OK')} onClick={props.onDismiss} />
       </DialogFooter>
     </DialogWrapper>
   );
