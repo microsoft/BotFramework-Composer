@@ -26,6 +26,7 @@ import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../re
 import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 import { WatchVariablePicker } from '../../WatchVariableSelector/WatchVariablePicker';
 import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils/project';
+import { WatchDataPayload } from '../../WatchVariableSelector/utils/helpers';
 
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
@@ -101,27 +102,25 @@ const getValueFromBotTraceScope = (delimitedProperty: string, botTrace: Activity
 export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
-  const [watchVariables, setWatchVariable] = useState<Record<string, string>>({});
+  const [watchedVars, setWatchedVars] = useState<Record<string, string>>({});
+  const [selectedVars, setSelectedVars] = useState<IObjectWithKey[]>();
+  const [memoryVariablesPayload, setMemoryVariablesPayload] = useState<WatchDataPayload>({
+    kind: 'property',
+    data: { properties: [] },
+  });
 
-  const [selectedItems, setSelectedItems] = useState<IObjectWithKey[]>();
-
-  const selection = useMemo(
+  const watchedVarsSelection = useMemo(
     () =>
       new Selection({
         onSelectionChanged: () => {
-          //console.log('handle selection change',selection.getSelection())
-          setSelectedItems(selection.getSelection());
+          setSelectedVars(watchedVarsSelection.getSelection());
         },
         selectionMode: SelectionMode.multiple,
       }),
     []
   );
 
-  const [memoryVariablesPayload, setMemoryVariablesPayload] = useState<WatchDataPayload>({
-    kind: 'property',
-    data: { properties: [] },
-  });
-
+  // get memory scope variables for the bot
   useEffect(() => {
     if (currentProjectId) {
       const abortController = new AbortController();
@@ -147,23 +146,24 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const onSelectPath = useCallback(
     (variableId: string, path: string) => {
-      setWatchVariable({
-        ...watchVariables,
+      console.log(`selecting path: ${variableId}, ${path}`);
+      setWatchedVars({
+        ...watchedVars,
         [variableId]: path,
       });
     },
-    [watchVariables]
+    [watchedVars]
   );
 
   // we need to refresh the details list every time a new bot state comes in
-  const refreshedWatchedProperties = useMemo(() => {
-    return Object.entries(watchVariables).map(([key, value]) => {
+  const refreshedWatchedVars = useMemo(() => {
+    return Object.entries(watchedVars).map(([key, value]) => {
       return {
         key,
         value,
       };
     });
-  }, [mostRecentBotState, watchVariables]);
+  }, [mostRecentBotState, watchedVars]);
 
   const renderColumn = useCallback(
     (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
@@ -179,7 +179,6 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
               onSelectPath={onSelectPath}
             />
           );
-          //return <span>{item}</span>;
         } else if (column.key === ValueColumnKey) {
           // render the value display
           if (mostRecentBotState) {
@@ -226,25 +225,25 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
       }
       return null;
     },
-    [mostRecentBotState, memoryVariablesPayload, watchVariables]
+    [mostRecentBotState, memoryVariablesPayload, watchedVars]
   );
 
   const onClickAdd = useCallback(() => {
-    setWatchVariable({
-      ...watchVariables,
+    setWatchedVars({
+      ...watchedVars,
       [uuidv4()]: '',
     });
-  }, [watchVariables]);
+  }, [watchedVars]);
 
   const onClickRemove = () => {
-    const updated = produce(watchVariables, (draftState) => {
-      if (selectedItems?.length) {
-        selectedItems.map((item: IObjectWithKey) => {
+    const updated = produce(watchedVars, (draftState) => {
+      if (selectedVars?.length) {
+        selectedVars.map((item: IObjectWithKey) => {
           delete draftState[item.key as string];
         });
       }
     });
-    setWatchVariable(updated);
+    setWatchedVars(updated);
   };
 
   if (isActive) {
@@ -258,9 +257,9 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         <div css={content}>
           <DetailsList
             columns={watchTableColumns}
-            items={refreshedWatchedProperties}
+            items={refreshedWatchedVars}
             layoutMode={watchTableLayout}
-            selection={selection}
+            selection={watchedVarsSelection}
             selectionMode={SelectionMode.multiple}
             onRenderItemColumn={renderColumn}
           />
