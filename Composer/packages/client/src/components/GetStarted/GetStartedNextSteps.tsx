@@ -43,7 +43,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
   const readme = useRecoilValue(projectReadmeState(projectId));
   const [readmeHidden, setReadmeHidden] = useState<boolean>(true);
   const schemaDiagnostics = useRecoilValue(schemaDiagnosticsSelectorFamily(projectId));
-  const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
+  const { setSettings, setQnASettings, setShowGetStartedTeachingBubble } = useRecoilValue(dispatcherState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
   const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
@@ -325,7 +325,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
 
     if (hasPublishingProfile) {
       if (!hasPartialPublishingProfile) {
-        optSteps.push({
+        newRecomendedSteps.push({
           key: 'publish',
           label: formatMessage('Publish your bot'),
           description: formatMessage('Once you publish your bot to Azure you will be ready to add connections.'),
@@ -337,20 +337,20 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
           },
           hideFeatureStep: isPVABot,
         });
-      }
 
-      optSteps.push({
-        key: 'connections',
-        label: formatMessage('Add connections'),
-        description: formatMessage('Connect your bot to Teams, external channels, or enable speech.'),
-        learnMore: 'https://aka.ms/composer-connections-learnmore',
-        checked: false,
-        onClick: () => {
-          TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
-          openLink(linkToConnections);
-        },
-        hideFeatureStep: isPVABot,
-      });
+        newRecomendedSteps.push({
+          key: 'connections',
+          label: formatMessage('Add connections'),
+          description: formatMessage('Connect your bot to Teams, external channels, or enable speech.'),
+          learnMore: 'https://aka.ms/composer-connections-learnmore',
+          checked: false,
+          onClick: () => {
+            TelemetryClient.track('GettingStartedActionClicked', { taskName: 'connections', priority: 'optional' });
+            openLink(linkToConnections);
+          },
+          hideFeatureStep: isPVABot,
+        });
+      }
     }
 
     setOptionalSteps(optSteps);
@@ -402,6 +402,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             target="#luis"
             onDismiss={() => {
               setHighlightLUIS(false);
+              setShowGetStartedTeachingBubble(false);
             }}
           >
             {formatMessage('Continue setting up your development environment by adding LUIS keys.')}
@@ -415,6 +416,7 @@ export const GetStartedNextSteps: React.FC<GetStartedProps> = (props) => {
             target="#qna"
             onDismiss={() => {
               setHighlightQNA(false);
+              setShowGetStartedTeachingBubble(false);
             }}
           >
             {formatMessage('Just add a QnA key and you’ll be ready to talk to your bot.')}

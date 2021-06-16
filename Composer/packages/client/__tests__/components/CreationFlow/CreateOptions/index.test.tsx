@@ -11,54 +11,46 @@ describe('<CreateOptions/>', () => {
   const handleDismissMock = jest.fn();
   const handleCreateNextMock = jest.fn();
   const handleJumpToOpenModal = jest.fn();
+  const handleFetchReadMeMock = jest.fn();
+  const onUpdateLocalTemplatePathMock = jest.fn();
+
   const templates = [
     {
-      description: 'empty bot',
-      id: 'EmptyBot',
+      description: 'conversational core template generator',
+      id: 'generator-conversational-core',
       index: 0,
-      name: 'Empty Bot',
-      path: 'templatePath',
-      support: ['C#', 'JS'],
-      tags: ['Basic'],
-    },
-    {
-      description: 'echo bot',
-      id: 'EchoBot',
-      index: 1,
-      name: 'Echo Bot',
-      path: 'templatePath',
-      support: ['C#', 'JS'],
-      tags: ['Basic'],
+      name: 'conversational-core',
+      dotnetSupport: { webAppSupported: true, functionsSupported: true },
+      nodeSupport: { webAppSupported: true, functionsSupported: true },
+      package: {
+        packageName: 'generator-conversational-core',
+        packageSource: 'npm',
+        packageVersion: '1.0.9',
+      },
     },
   ];
 
   const renderComponent = () => {
     return renderWithRecoil(
       <CreateOptions
+        fetchReadMe={handleFetchReadMeMock}
+        localTemplatePath={''}
         path="create"
         templates={templates}
         onDismiss={handleDismissMock}
         onJumpToOpenModal={handleJumpToOpenModal}
         onNext={handleCreateNextMock}
+        onUpdateLocalTemplatePath={onUpdateLocalTemplatePathMock}
       />
     );
   };
 
-  it('should save empty bot template id', async () => {
+  it('should save conversational core template id', async () => {
     const component = renderComponent();
+    const conversationalCoreBot = await component.findByTestId('generator-conversational-core');
+    fireEvent.click(conversationalCoreBot);
     const nextButton = await component.findByText('Next');
     fireEvent.click(nextButton);
-    expect(handleCreateNextMock).toBeCalledWith('EmptyBot');
-  });
-
-  it('should save echo bot template id', async () => {
-    const component = renderComponent();
-    const option = await component.findByTestId('Create from template');
-    fireEvent.click(option);
-    const echoBot = await component.findByText('Echo Bot');
-    fireEvent.click(echoBot);
-    const nextButton = await component.findByText('Next');
-    fireEvent.click(nextButton);
-    expect(handleCreateNextMock).toBeCalledWith('EchoBot');
+    expect(handleCreateNextMock).toBeCalledWith('generator-conversational-core', 'dotnet');
   });
 });

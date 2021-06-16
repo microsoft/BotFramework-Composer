@@ -38,6 +38,9 @@
   "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
     "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
   },
+  "a_list_entity_represents_a_fixed_closed_set_of_rel_6e87d740": {
+    "message": "A list entity represents a fixed, closed set of related words along with their synonyms. The normalized value is the value returned when any of the corresponding synonyms are recognized. <link>Learn more about list entities</link>"
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -158,6 +161,9 @@
   "add_a_dialog_e378aa3a": {
     "message": "Add a dialog"
   },
+  "add_a_list_entity_91adc4b3": {
+    "message": "Add a list entity"
+  },
   "add_a_new_key_5c208c29": {
     "message": "Add a new key"
   },
@@ -199,6 +205,12 @@
   },
   "add_entity_5f769994": {
     "message": "Add entity"
+  },
+  "add_icon_af0bdefc": {
+    "message": "Add icon"
+  },
+  "add_local_template_d300195f": {
+    "message": "Add Local Template"
   },
   "add_more_to_this_response_d45bdfda": {
     "message": "Add more to this response"
@@ -245,6 +257,9 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
+  "add_row_7ebc94fb": {
+    "message": "Add row"
+  },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
@@ -257,11 +272,14 @@
   "advanced_events_2cbfa47d": {
     "message": "Advanced Events"
   },
-  "advanced_options_4dcc8385": {
-    "message": "Advanced options"
-  },
   "advanced_settings_view_json_b83638b4": {
     "message": "Advanced Settings View (json)"
+  },
+  "advanced_template_options_8a40f0cc": {
+    "message": "Advanced template options"
+  },
+  "agree_73937908": {
+    "message": "Agree"
   },
   "all_4321c3a1": {
     "message": "All"
@@ -271,6 +289,9 @@
   },
   "almost_there_f90939cb": {
     "message": "Almost there!"
+  },
+  "already_used_16061b3a": {
+    "message": "Already used"
   },
   "an_app_id_is_used_for_communication_between_your_b_255025e1": {
     "message": "An App ID is used for communication between your bot and skills, services, websites or applications. Use an existing App ID or automatically generate an App ID when creating a publishing profile for this bot. <a>Learn more</a>"
@@ -326,9 +347,6 @@
   "any_or_expression_acad7d37": {
     "message": "Any or expression"
   },
-  "any_string_f22dc2e1": {
-    "message": "any string"
-  },
   "application_language_settings_85b1f06": {
     "message": "Application language settings"
   },
@@ -349,6 +367,9 @@
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings."
+  },
+  "are_you_sure_you_want_to_remove_examples_for_local_3a4742d4": {
+    "message": "Are you sure you want to remove examples for \"{ locale }\" locale?"
   },
   "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
     "message": "Are you sure you want to remove form dialog schema \"{ id }\"?"
@@ -701,9 +722,6 @@
   "choose_a_valid_publish_profile_to_continue_d4bd0b96": {
     "message": "Choose a valid publish profile to continue"
   },
-  "choose_how_to_create_your_bot_a97f7b3e": {
-    "message": "Choose how to create your bot"
-  },
   "clear_all_da755751": {
     "message": "Clear all"
   },
@@ -932,11 +950,17 @@
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
+  "count_plural_0_no_items_selected_1_one_item_is_sel_13d3b2de": {
+    "message": "{ count, plural,\n     =0 {No items selected}\n     =1 {One item is selected}\n  other {# items are selected}\n}"
+  },
   "create_132b3be1": {
     "message": "Create"
   },
   "create_a_bot_project_73e6ce33": {
     "message": "Create a bot project"
+  },
+  "create_a_bot_using_a_local_yeoman_generator_fdfe822d": {
+    "message": "Create a bot using a local yeoman generator"
   },
   "create_a_condition_8686fd5": {
     "message": "Create a condition"
@@ -977,9 +1001,6 @@
   "create_and_configure_new_azure_resources_302c574a": {
     "message": "Create and configure new Azure resources"
   },
-  "create_bot_from_template_or_scratch_92f0fefa": {
-    "message": "Create bot from template or scratch?"
-  },
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Create copy to translate bot content"
   },
@@ -991,15 +1012,6 @@
   },
   "create_form_dialog_bb98a4f2": {
     "message": "Create form dialog"
-  },
-  "create_from_knowledge_base_qna_maker_7422486": {
-    "message": "Create from knowledge base (QnA Maker)"
-  },
-  "create_from_qna_7aa9dcbb": {
-    "message": "Create from QnA"
-  },
-  "create_from_scratch_485c3045": {
-    "message": "Create from scratch"
   },
   "create_from_template_87e12c94": {
     "message": "Create from template"
@@ -1100,9 +1112,6 @@
   "default_recognizer_9c06c1a3": {
     "message": "Default recognizer"
   },
-  "define_by_value_type_3cd3d1a8": {
-    "message": "Define by value type"
-  },
   "define_conversation_objective_146d1cc6": {
     "message": "Define conversation objective"
   },
@@ -1144,6 +1153,9 @@
   },
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
+  },
+  "delete_locale_examples_6f0c5926": {
+    "message": "Delete \"{ locale }\" examples?"
   },
   "delete_properties_c49a7892": {
     "message": "Delete properties"
@@ -1418,6 +1430,9 @@
   "enabled_ba7cab66": {
     "message": "Enabled"
   },
+  "enables_creating_bots_from_local_templates_as_well_5608165d": {
+    "message": "Enables creating bots from local templates as well as creating bots from older versions of published templates"
+  },
   "end_dialog_88fa2f7a": {
     "message": "End dialog"
   },
@@ -1442,14 +1457,14 @@
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
     "message": "Enter a manifest URL to add a new skill to your bot."
   },
-  "enter_a_max_value_14e8ba52": {
-    "message": "Enter a max value"
-  },
-  "enter_a_min_value_c3030813": {
-    "message": "Enter a min value"
+  "enter_a_synonym_and_press_enter_bd39b5d1": {
+    "message": "Enter a synonym and press enter"
   },
   "enter_a_url_to_import_qna_resource_223ded92": {
     "message": "Enter a URL to Import QnA resource"
+  },
+  "enter_a_value_d91fdd00": {
+    "message": "Enter a value"
   },
   "enter_cognitive_service_region_a0f684a4": {
     "message": "Enter cognitive service region"
@@ -1472,11 +1487,14 @@
   "enter_skill_manifest_url_583d54f4": {
     "message": "Enter skill manifest URL"
   },
-  "entities_ef09392c": {
-    "message": "Entities"
+  "entity_92d59f72": {
+    "message": "Entity"
   },
   "entity_defined_in_lu_files_entity_1812c172": {
     "message": "Entity defined in lu files: { entity }"
+  },
+  "enum_examples_for_each_possible_value_153b6663": {
+    "message": "Enum examples for each possible value."
   },
   "environment_68aed6d3": {
     "message": "Environment"
@@ -1559,8 +1577,8 @@
   "everything_you_need_to_build_sophisticated_convers_9c00cc01": {
     "message": "Everything you need to build sophisticated conversational experiences"
   },
-  "examples_c435f08c": {
-    "message": "Examples"
+  "examples_for_entity_9b50e2e5": {
+    "message": "Examples for entity"
   },
   "existing_files_in_scripts_folder_will_be_overwritt_afa8d787": {
     "message": "Existing files in scripts/folder will be overwritten. Are you sure you want to continue?"
@@ -1709,9 +1727,6 @@
   "for_each_page_198e66f4": {
     "message": "For each page"
   },
-  "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
-    "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
-  },
   "for_security_purposes_your_bot_can_only_call_a_ski_57c22e66": {
     "message": "For security purposes, your bot can only call a skill if its Microsoft App ID is in the skill’s allowed callers list. Once you create a publishing profile, share your bot’s App ID with the skill’s author to add it. You may also need to include the skill’s App Id in the root bot’s allowed callers list."
   },
@@ -1850,6 +1865,9 @@
   "http_request_b6394895": {
     "message": "HTTP request"
   },
+  "i_agree_to_the_a_microsoft_channel_publication_ter_f9187f7d": {
+    "message": "I agree to the <a>Microsoft Channel Publication Terms</a> and the <a2>Microsoft Privacy Statement</a2> for my deployment to the Microsoft Teams channel."
+  },
   "i_am_creating_a_conversational_experience_using_mi_d4519e24": {
     "message": "I am creating a conversational experience using Microsoft Bot Framework project. For my project to work, it needs Azure resources including { service }. Below are the steps to create these resources.\n\n{ instructions }"
   },
@@ -1987,9 +2005,6 @@
   },
   "instructions_2f88ee72": {
     "message": "Instructions"
-  },
-  "integer_7f378275": {
-    "message": "integer"
   },
   "integer_b08abbe9": {
     "message": "Integer"
@@ -2177,12 +2192,6 @@
   "list_6cc05": {
     "message": "List"
   },
-  "list_a034633b": {
-    "message": "list"
-  },
-  "list_count_values_33ea7088": {
-    "message": "list - { count } values"
-  },
   "list_entity_a3502e75": {
     "message": "List entity"
   },
@@ -2218,6 +2227,9 @@
   },
   "local_skill_6ce0d311": {
     "message": "Local Skill."
+  },
+  "local_template_path_2dee8b6f": {
+    "message": "Local Template Path"
   },
   "localization_2e29f01e": {
     "message": "Localization"
@@ -2327,9 +2339,6 @@
   "manually_add_question_and_answer_pairs_to_create_a_39089442": {
     "message": "Manually add question and answer pairs to create a knowledge base"
   },
-  "maximum_f0e8e5e4": {
-    "message": "Maximum"
-  },
   "mb_8f9f9e84": {
     "message": "MB"
   },
@@ -2393,6 +2402,9 @@
   "microsoft_s_templates_offer_best_practices_for_dev_7793c3be": {
     "message": "Microsoft''s templates offer best practices for developing conversational bots."
   },
+  "microsoft_teams_terms_and_conditions_8375ce96": {
+    "message": "Microsoft Teams terms and conditions"
+  },
   "migrating_data_a35b3055": {
     "message": "Migrating data"
   },
@@ -2401,9 +2413,6 @@
   },
   "minimap_beb3be27": {
     "message": "Minimap"
-  },
-  "minimum_f31b05ab": {
-    "message": "Minimum"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
@@ -2476,6 +2485,9 @@
   },
   "name_of_the_property_f3cae657": {
     "message": "Name of the property"
+  },
+  "name_your_list_entity_9701a8f0": {
+    "message": "Name your list entity"
   },
   "navigation_control_94f2649e": {
     "message": "navigation control"
@@ -2579,6 +2591,9 @@
   "node_preview_cbcd8fb": {
     "message": "Node (Preview)"
   },
+  "normalized_value_8eb24de2": {
+    "message": "Normalized value"
+  },
   "not_a_single_template_e37f894": {
     "message": "Not a single template"
   },
@@ -2602,9 +2617,6 @@
   },
   "number_constant_or_expression_to_evaluate_1098771": {
     "message": "Number constant or expression to evaluate."
-  },
-  "number_dc1c178": {
-    "message": "number"
   },
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
@@ -2690,11 +2702,8 @@
   "optional_properties_2c23c7c6": {
     "message": "Optional properties"
   },
-  "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
-    "message": "Optional. Setting a maximum value enables your bot to reject a value that is too large and re-prompt the user for a new value."
-  },
-  "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
-    "message": "Optional. Setting a minimum value enables your bot to reject a value that is too small and re-prompt the user for a new value."
+  "optional_properties_are_properties_the_bot_accepts_2bf34da9": {
+    "message": "Optional properties are properties the bot accepts if given but does not ask for."
   },
   "options_3ab0ea65": {
     "message": "Options"
@@ -2729,8 +2738,8 @@
   "overview_58268c72": {
     "message": "Overview"
   },
-  "p_copyright_c_microsoft_corporation_p_p_mit_licens_cd145fd6": {
-    "message": "<p>Copyright (c) Microsoft Corporation.</p><p>MIT License</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
+  "p_copyright_c_microsoft_corporation_p_p_mit_licens_6d0992f9": {
+    "message": "<p>Copyright (c) Microsoft Corporation.</p>\n            <p>MIT License</p>\n            <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>\n            <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>\n            <p>THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
   },
   "page_number_cdee4179": {
     "message": "Page number"
@@ -2743,6 +2752,9 @@
   },
   "paste_token_here_eccec7e4": {
     "message": "Paste token here"
+  },
+  "please_add_a_name_to_this_property_to_enable_addin_916ab99c": {
+    "message": "Please add a name to this property to enable adding examples"
   },
   "please_enter_a_value_for_key_77cfc097": {
     "message": "Please enter a value for { key }"
@@ -3107,14 +3119,17 @@
   "required_5f7ef8c0": {
     "message": "Required"
   },
+  "required_properties_are_properties_that_your_bot_w_d41caf66": {
+    "message": "Required properties are properties that your bot will ask the user to provide. The user must provide values for all required properties."
+  },
   "required_properties_dfb0350d": {
     "message": "Required properties"
   },
   "requiredtext_ff8f722f": {
     "message": "{ requiredText }"
   },
-  "requiredtext_priority_priority_4293288f": {
-    "message": "{ requiredText } | Priority: { priority }"
+  "requiredtext_priority_help_priority_refers_to_the__54ceda82": {
+    "message": "{ requiredText } | Priority <help>Priority refers to the order in which the bot will ask for the required properties.</help> : { priority }"
   },
   "reset_view_d5f8245a": {
     "message": "Reset view"
@@ -3623,6 +3638,9 @@
   "suggestion_for_card_or_activity_type_b257066a": {
     "message": "Suggestion for Card or Activity: { type }"
   },
+  "synonyms_31f2e91e": {
+    "message": "Synonyms"
+  },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
   },
@@ -3803,6 +3821,9 @@
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "This dialog has no trigger yet."
   },
+  "this_entity_name_is_reserved_f97d9573": {
+    "message": "This entity name is reserved"
+  },
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
@@ -3875,8 +3896,11 @@
   "to_connect_to_a_skill_your_bot_needs_the_informati_8b391c2a": {
     "message": "To connect to a skill, your bot needs the information captured in the skill’s manifest of the bot, and, for secure access, the skill needs to know your bot''s AppID. <link>Learn more.</link>"
   },
-  "to_ensure_a_secure_connection_provide_the_app_id_o_61ccd30d": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration."
+  "to_create_a_bot_from_your_own_bot_framework_templa_2c5b1f2d": {
+    "message": "To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>"
+  },
+  "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
+    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
   },
   "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
     "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
@@ -4330,9 +4354,6 @@
   },
   "you_are_about_to_remove_the_skill_from_this_projec_2ba31a6d": {
     "message": "You are about to remove the skill from this project. Removing this skill won’t delete the files."
-  },
-  "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
-    "message": "You can create a new bot from scratch with Composer, or start with a template."
   },
   "you_can_only_connect_to_a_skill_in_the_root_bot_d8cb3f53": {
     "message": "You can only connect to a skill in the root bot."

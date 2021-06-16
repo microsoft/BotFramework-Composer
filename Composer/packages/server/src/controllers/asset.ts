@@ -1,29 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Request, Response } from 'express';
-import { BotTemplate, emptyBotNpmTemplateName, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, emptyBotNpmTemplateName, localTemplateId, QnABotTemplateId } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import AssetService from '../services/asset';
 import { getNpmTemplates } from '../utility/npm';
 import log from '../logger';
 import { sortTemplates } from '../utility/creation';
+import { FeatureFlagService } from '../services/featureFlags';
 
-async function getProjTemplates(req: Request, res: Response) {
-  try {
-    const templates = await AssetService.manager.getProjectTemplates();
-    res.status(200).json(templates);
-  } catch (error) {
-    res.status(400).json({
-      message: error instanceof Error ? error.message : error,
-    });
-  }
-}
-
-export async function getProjTemplatesV2(req: any, res: any) {
+export async function getProjTemplates(req: any, res: any) {
   try {
     let templates: BotTemplate[] = [];
+    const advancedTemplateOptionsEnabled = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
 
     // Get FeedUrl
     const { feedUrls, getFirstPartyNpm } = req.body;
@@ -55,6 +45,26 @@ export async function getProjTemplatesV2(req: any, res: any) {
           packageVersion: qnaTemplateVersion,
         },
       });
+      if (advancedTemplateOptionsEnabled) {
+        templates.push({
+          id: localTemplateId,
+          name: 'Create from local template',
+          description: formatMessage('Create a bot using a local yeoman generator'),
+          dotnetSupport: {
+            functionsSupported: true,
+            webAppSupported: true,
+          },
+          nodeSupport: {
+            functionsSupported: true,
+            webAppSupported: true,
+          },
+          package: {
+            packageName: '',
+            packageSource: '',
+            packageVersion: '',
+          },
+        });
+      }
     }
 
     if (getFirstPartyNpm) {
@@ -116,6 +126,5 @@ export async function getTemplateReadMe(req: any, res: any) {
 
 export const AssetController = {
   getProjTemplates: getProjTemplates,
-  getProjTemplatesV2: getProjTemplatesV2,
   getTemplateReadMe: getTemplateReadMe,
 };
