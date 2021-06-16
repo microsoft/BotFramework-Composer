@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -123,7 +124,6 @@ async function getARMTokenForTenant(tenantId: string): Promise<string> {
     const { __csrf__ = '' } = window;
     options.headers['X-CSRF-Token'] = __csrf__;
   }
-
   const result = await fetch(`/api/auth/getARMTokenForTenant?tenantId=${tenantId}`, options);
   if (result.status >= 400) {
     const data = await result.json();

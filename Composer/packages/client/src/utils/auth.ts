@@ -17,6 +17,15 @@ import storage from './storage';
 import httpClient from './httpUtil';
 import { isElectron } from './electronUtil';
 
+export function decodeToken(token: string) {
+  try {
+    return jwtDecode<any>(token);
+  } catch (err) {
+    console.error('decode token error in ', err);
+    return null;
+  }
+}
+
 export function isTokenExpired(token: string): boolean {
   try {
     const decoded = jwtDecode<{ exp: number }>(token);

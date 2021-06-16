@@ -26,12 +26,17 @@ import {
   isWebChatPanelVisibleState,
   allRequiredRecognizersSelector,
   showGetStartedTeachingBubbleState,
+  showAuthDialogState,
+  showTenantDialogState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 import TelemetryClient from '../telemetry/TelemetryClient';
 import { useBotControllerBar } from '../hooks/useControllerBar';
 
+import { AuthCard } from './Auth/AuthCard';
+import { AuthDialog } from './Auth/AuthDialog';
+import { TenantDialog } from './Auth/TenantDialog';
 import { languageListTemplates, languageFullName } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
 import { BotController } from './BotRuntimeController/BotController';
@@ -134,7 +139,7 @@ const calloutDescription = css`
 // -------------------- Header -------------------- //
 
 export const Header = () => {
-  const { setAppUpdateShowing, setLocale } = useRecoilValue(dispatcherState);
+  const { setAppUpdateShowing, setLocale, setShowAuthDialog, setShowTenantDialog } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || projectId;
   const projectName = useRecoilValue(botDisplayNameState(projectId));
@@ -142,6 +147,8 @@ export const Header = () => {
   const appUpdate = useRecoilValue(appUpdateState);
   const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
   const showGetStartedTeachingBubble = useRecoilValue(showGetStartedTeachingBubbleState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
+  const showTenantDialog = useRecoilValue(showTenantDialogState);
   const settings = useRecoilValue(settingsState(projectId));
   const isWebChatPanelVisible = useRecoilValue(isWebChatPanelVisibleState);
   const botProjectSolutionLoaded = useRecoilValue(botProjectSpaceLoadedState);
@@ -342,6 +349,7 @@ export const Header = () => {
             onClick={onUpdateAvailableClick}
           />
         )}
+        <AuthCard />
       </div>
       {teachingBubbleVisibility && (
         <Callout
@@ -381,6 +389,26 @@ export const Header = () => {
           toggleGetStarted(false);
         }}
       />
+
+      {showAuthDialog && (
+        <AuthDialog
+          needGraph={false}
+          next={() => {
+            console.log('GOT AUTH!');
+          }}
+          onDismiss={() => {
+            setShowAuthDialog(false);
+          }}
+        />
+      )}
+
+      {showTenantDialog && (
+        <TenantDialog
+          onDismiss={() => {
+            setShowTenantDialog(false);
+          }}
+        />
+      )}
     </div>
   );
 };

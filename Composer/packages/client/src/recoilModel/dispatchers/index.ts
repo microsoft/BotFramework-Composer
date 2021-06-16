@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { authDispatcher } from './auth';
 import { dialogsDispatcher } from './dialogs';
 import { dialogSchemaDispatcher } from './dialogSchema';
 import { projectDispatcher } from './project';
@@ -32,6 +33,7 @@ import { webChatLogDispatcher } from './webchat';
 
 const createDispatchers = () => {
   return {
+    ...authDispatcher(),
     ...editorDispatcher(),
     ...dialogsDispatcher(),
     ...dialogSchemaDispatcher(),

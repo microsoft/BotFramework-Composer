@@ -9,7 +9,9 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useCallback, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
+import { dispatcherState } from '../../recoilModel/atoms';
 import storage from '../../utils/storage';
 import { isTokenExpired } from '../../utils/auth';
 
@@ -19,7 +21,9 @@ export interface AuthDialogProps {
   next: () => void;
 }
 export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
-  const [graphToken, setGraphToken] = useState('');
+  const { setPrimaryToken, setGraphToken } = useRecoilValue(dispatcherState);
+
+  const [graphToken, setLocalGraphToken] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [tokenError, setTokenError] = useState<string>('');
   const [graphError, setGraphError] = useState<string>('');
@@ -72,7 +76,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
           placeholder={formatMessage('Paste token here')}
           rows={4}
           onChange={(event, newValue) => {
-            newValue && setGraphToken(newValue);
+            newValue && setLocalGraphToken(newValue);
             if (isTokenExpired(newValue || '')) {
               setGraphError('Token Expire or token invalid');
             } else {
@@ -91,6 +95,8 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
             // cache tokens
             storage.set('accessToken', accessToken);
             storage.set('graphToken', graphToken);
+            setPrimaryToken(accessToken);
+            setGraphToken(graphToken);
             props.next();
           }}
         />

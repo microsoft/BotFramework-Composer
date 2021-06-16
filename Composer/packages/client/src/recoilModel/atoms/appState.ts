@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+import { AzureTenant } from '@botframework-composer/types';
 import { atom, atomFamily } from 'recoil';
 import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings, ExtensionSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
@@ -367,5 +367,35 @@ export const warnAboutFunctionsState = atom<boolean>({
 
 export const showGetStartedTeachingBubbleState = atom<boolean>({
   key: getFullyQualifiedKey('showGetStartedTeachingBubbleState'),
+  default: false,
+});
+
+export const showAuthDialogState = atom<boolean>({
+  key: getFullyQualifiedKey('showAuthDialog'),
+  default: false,
+});
+
+export const primaryTokenState = atom<string>({
+  key: getFullyQualifiedKey('primaryToken'),
+  default: '',
+});
+
+export const graphTokenState = atom<string>({
+  key: getFullyQualifiedKey('graphToken'),
+  default: '',
+});
+
+export const availableTenantsState = atom<AzureTenant[]>({
+  key: getFullyQualifiedKey('availableTenants'),
+  default: [],
+});
+
+export const currentTenantState = atom<string>({
+  key: getFullyQualifiedKey('currentTenant'),
+  default: '',
+});
+
+export const showTenantDialogState = atom<boolean>({
+  key: getFullyQualifiedKey('showTenantDialog'),
   default: false,
 });

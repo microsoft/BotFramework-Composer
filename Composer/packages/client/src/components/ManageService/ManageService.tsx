@@ -26,10 +26,8 @@ import { AzureTenant } from '@botframework-composer/types';
 import jwtDecode from 'jwt-decode';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { AuthClient } from '../../utils/authClient';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
-import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
-import { dispatcherState } from '../../recoilModel/atoms';
+import { userShouldProvideTokens } from '../../utils/auth';
+import { dispatcherState, primaryTokenState, showAuthDialogState } from '../../recoilModel/atoms';
 
 type ManageServiceProps = {
   createService: (
@@ -73,10 +71,12 @@ const dialogBodyStyles = { height: 400 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
 export const ManageService = (props: ManageServiceProps) => {
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [token, setToken] = useState<string | undefined>();
+  // const [showAuthDialog, setShowAuthDialog] = useState(false);
+  // const [token, setToken] = useState<string | undefined>();
+  const token = useRecoilValue(primaryTokenState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
 
-  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
+  const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
   const [tenantId, setTenantId] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
@@ -151,50 +151,6 @@ export const ManageService = (props: ManageServiceProps) => {
   };
 
   useEffect(() => {
-    if (currentStep === 'subscription' && !userShouldProvideTokens()) {
-      AuthClient.getTenants()
-        .then((tenants) => {
-          setAllTenants(tenants);
-          if (tenants.length === 0) {
-            setTenantsErrorMessage(formatMessage('No Azure Directories were found.'));
-          } else if (tenants.length >= 1) {
-            setTenantId(tenants[0].tenantId);
-          } else {
-            setTenantsErrorMessage(undefined);
-          }
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage('There was a problem loading Azure directories. {errMessage}', {
-              errMessage: err.message || err.toString(),
-            })
-          );
-        });
-    }
-  }, [currentStep]);
-
-  useEffect(() => {
-    if (tenantId) {
-      AuthClient.getARMTokenForTenant(tenantId)
-        .then((token) => {
-          setToken(token);
-          setTenantsErrorMessage(undefined);
-        })
-        .catch((err) => {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem getting the access token for the current Azure directory. {errMessage}',
-              {
-                errMessage: err.message || err.toString(),
-              }
-            )
-          );
-          setTenantsErrorMessage(err.message || err.toString());
-        });
-    }
-  }, [tenantId]);
-
-  useEffect(() => {
     if (token) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
@@ -214,32 +170,6 @@ export const ManageService = (props: ManageServiceProps) => {
         });
     }
   }, [token]);
-
-  const hasAuth = async () => {
-    let newtoken = '';
-    if (userShouldProvideTokens()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
-      }
-      newtoken = getTokenFromCache('accessToken');
-      if (newtoken) {
-        const decoded = decodeToken(newtoken);
-        if (decoded) {
-          setToken(newtoken);
-          setUserProvidedTokens(true);
-        } else {
-          setTenantsErrorMessage(
-            formatMessage(
-              'There was a problem with the authentication access token. Close this dialog and try again. To be prompted to provide the access token again, clear it from application local storage.'
-            )
-          );
-        }
-      }
-    } else {
-      setUserProvidedTokens(false);
-    }
-    setCurrentStep('subscription');
-  };
 
   useEffect(() => {
     // reset the ui
@@ -508,7 +438,8 @@ export const ManageService = (props: ManageServiceProps) => {
       setShowHandoff(true);
       props.onDismiss();
     } else {
-      hasAuth();
+      requireUserLogin();
+      setCurrentStep('subscription');
     }
   };
 
@@ -869,15 +800,6 @@ export const ManageService = (props: ManageServiceProps) => {
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={hasAuth}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
       <ProvisionHandoff
         developerInstructions={formatMessage(
           'If Azure resources and subscription are managed by others, use the following information to request creation of the resources that you need to build and run your bot.'
