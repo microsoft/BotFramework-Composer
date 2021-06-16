@@ -22,12 +22,11 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { AzureTenant } from '@botframework-composer/types';
 import jwtDecode from 'jwt-decode';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
+import { dispatcherState, primaryTokenState, showAuthDialogState, currentTenantState } from '../../recoilModel/atoms';
 import { userShouldProvideTokens } from '../../utils/auth';
-import { dispatcherState, primaryTokenState, showAuthDialogState } from '../../recoilModel/atoms';
 
 type ManageServiceProps = {
   createService: (
@@ -71,22 +70,18 @@ const dialogBodyStyles = { height: 400 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
 export const ManageService = (props: ManageServiceProps) => {
-  // const [showAuthDialog, setShowAuthDialog] = useState(false);
-  // const [token, setToken] = useState<string | undefined>();
   const token = useRecoilValue(primaryTokenState);
+  const tenantId = useRecoilValue(currentTenantState);
   const showAuthDialog = useRecoilValue(showAuthDialogState);
 
   const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
   const [subscriptionId, setSubscription] = useState<string>('');
-  const [tenantId, setTenantId] = useState<string>('');
   const [resourceGroups, setResourceGroups] = useState<any[]>([]);
   const [createResourceGroup, setCreateResourceGroup] = useState<boolean>(false);
   const [newResourceGroupName, setNewResourceGroupName] = useState<string>('');
   const [resourceGroupKey, setResourceGroupKey] = useState<string>('');
   const [resourceGroup, setResourceGroup] = useState<string>('');
   const [tier, setTier] = useState<string>('');
-  const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
-  const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string | undefined>(undefined);
   const [showHandoff, setShowHandoff] = useState<boolean>(false);
   const [resourceName, setResourceName] = useState<string>('');
   const [loading, setLoading] = useState<string | undefined>(undefined);
@@ -99,7 +94,6 @@ export const ManageService = (props: ManageServiceProps) => {
   const [keys, setKeys] = useState<KeyRec[]>([]);
   const [dialogTitle, setDialogTitle] = useState<string>('');
 
-  const [userProvidedTokens, setUserProvidedTokens] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<Step>('intro');
   const [outcomeDescription, setOutcomeDescription] = useState<string>('');
   const [outcomeSummary, setOutcomeSummary] = useState<any>();
@@ -488,10 +482,9 @@ export const ManageService = (props: ManageServiceProps) => {
       <div>
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
-            {formatMessage(
-              'Select your Azure directory, then choose the subscription where your existing {service} resource is located.',
-              { service: props.serviceName }
-            )}
+            {formatMessage('Choose the subscription where your existing {service} resource is located.', {
+              service: props.serviceName,
+            })}
             {props.learnMore ? (
               <Link href={props.learnMore} target={'_blank'}>
                 {formatMessage('Learn more')}
@@ -499,18 +492,6 @@ export const ManageService = (props: ManageServiceProps) => {
             ) : null}
           </p>
           <div css={mainElementStyle}>
-            <Dropdown
-              required
-              disabled={allTenants.length === 1 || !tenantId || tenantId.trim().length === 0}
-              errorMessage={tenantsErrorMessage}
-              label={formatMessage('Azure directory')}
-              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-              selectedKey={tenantId}
-              styles={dropdownStyles}
-              onChange={(_e, o) => {
-                setTenantId(o?.key as string);
-              }}
-            />
             <Dropdown
               required
               disabled={!(availableSubscriptions?.length > 0)}
@@ -705,10 +686,9 @@ export const ManageService = (props: ManageServiceProps) => {
       <div>
         <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>
-            {formatMessage(
-              'Select your Azure directory, then choose the subscription where you’d like your new {service} resource.',
-              { service: props.serviceName }
-            )}
+            {formatMessage('Choose the subscription where you’d like your new {service} resource.', {
+              service: props.serviceName,
+            })}
             {props.learnMore ? (
               <Link href={props.learnMore} target={'_blank'}>
                 {formatMessage('Learn more')}
@@ -716,18 +696,6 @@ export const ManageService = (props: ManageServiceProps) => {
             ) : null}
           </p>
           <div css={mainElementStyle}>
-            <Dropdown
-              required
-              disabled={allTenants.length === 1 || !tenantId}
-              errorMessage={tenantsErrorMessage}
-              label={formatMessage('Azure directory')}
-              options={allTenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-              selectedKey={tenantId}
-              styles={dropdownStyles}
-              onChange={(_e, o) => {
-                setTenantId(o?.key as string);
-              }}
-            />
             <Dropdown
               required
               disabled={availableSubscriptions?.length === 0}
@@ -751,7 +719,7 @@ export const ManageService = (props: ManageServiceProps) => {
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
-            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId}
+            disabled={!!loading || (!userShouldProvideTokens && !tenantId) || !subscriptionId}
             text={formatMessage('Next')}
             onClick={() => setCurrentStep('resourceCreation')}
           />

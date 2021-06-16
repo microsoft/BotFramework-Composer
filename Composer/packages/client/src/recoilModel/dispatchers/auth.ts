@@ -69,6 +69,8 @@ export const authDispatcher = () => {
             type: 'error',
           });
           addNotificationInternal(callbackHelpers, notification);
+          // clear out app state
+          resetCreds();
         }
       }
     }
@@ -87,11 +89,15 @@ export const authDispatcher = () => {
     setGraphToken(getTokenFromCache('graphToken'));
   });
 
-  const logoutUser = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    // clear out app state
+  const resetCreds = () => {
     setPrimaryToken('');
     setGraphToken('');
     setCurrentTenant('');
+  };
+
+  const logoutUser = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    // clear out app state
+    resetCreds();
 
     // call additional logout logic in auth client
     AuthClient.logOut();
@@ -131,6 +137,8 @@ export const authDispatcher = () => {
           type: 'error',
         });
         addNotificationInternal(callbackHelpers, notification);
+        // clean out the app state
+        resetCreds();
       }
     }
   });
