@@ -16,6 +16,7 @@ import {
   SelectionMode,
   Selection,
   IObjectWithKey,
+  IDetailsListStyles,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
@@ -40,6 +41,7 @@ const contentContainer = css`
 const toolbar = css`
   display: flex;
   flex-flow: row nowrap;
+  flex-shrink: 0;
   height: 24px;
   padding: 8px 16px;
 `;
@@ -47,9 +49,8 @@ const toolbar = css`
 const content = css`
   display: flex;
   flex-flow: column nowrap;
-  height: 100%;
+  height: calc(100% - 40px);
   width: 100%;
-  overflow-y: scroll;
 `;
 
 const editorStyles = css`
@@ -60,6 +61,21 @@ const objectCell = css`
   height: 160px;
   width: 360px;
 `;
+
+const watchTableStyles = {
+  root: {
+    height: '100%',
+    selectors: {
+      '& > div[role="grid"]': {
+        height: '100%',
+      },
+    },
+  },
+  contentWrapper: {
+    overflowY: 'auto' as 'auto',
+    height: 'calc(100% - 60px)',
+  },
+};
 
 const addIcon: IIconProps = {
   iconName: 'Add',
@@ -261,6 +277,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
             layoutMode={watchTableLayout}
             selection={watchedVarsSelection}
             selectionMode={SelectionMode.multiple}
+            styles={watchTableStyles}
             onRenderItemColumn={renderColumn}
           />
         </div>
