@@ -22,6 +22,7 @@ import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 import { templateGeneratorPath } from '../../settings/env';
 import { BackgroundProcessManager } from '../../services/backgroundProcessManager';
+import { FeatureFlagService } from '../../services/featureFlags';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -276,7 +277,8 @@ export class AssetManager {
           data.objects.map(
             async (result): Promise<BotTemplate> => {
               const { name, version, keywords, description = '' } = result.package;
-              const availableVersions = await this.getNpmPackageVersions(name);
+              const shouldFetchVersions = FeatureFlagService.getFeatureFlagValue('ADVANCED_TEMPLATE_OPTIONS');
+              const versions = shouldFetchVersions ? await this.getNpmPackageVersions(name) : [];
               const displayName = this.getPackageDisplayName(name);
               const templateToReturn = {
                 id: name,
@@ -286,7 +288,7 @@ export class AssetManager {
                   packageName: name,
                   packageSource: 'npm',
                   packageVersion: version,
-                  availableVersions: availableVersions,
+                  availableVersions: versions,
                 },
               } as BotTemplate;
               if (isArray(keywords)) {
@@ -346,7 +348,7 @@ export class AssetManager {
     const registryUrl = `https://registry.npmjs.org/${packageName}`;
     const response = await fetch(registryUrl);
     const data = await response.json();
-    const versionsMap = data?.versions || [];
+    const versionsMap = data?.versions ?? [];
     const availableVersions: string[] = [];
     for (const [key] of Object.entries(versionsMap)) {
       if (key) {

@@ -20,6 +20,7 @@ import { useRecoilValue } from 'recoil';
 import composerIcon from '../../images/composerIcon.svg';
 import httpClient from '../../utils/httpUtil';
 import { dispatcherState, selectedTemplateVersionState } from '../../recoilModel';
+import { useFeatureFlag } from '../../utils/hooks';
 
 const templateTitleContainer = (isLocalTemplate: boolean) => css`
   width: 100%;
@@ -66,14 +67,17 @@ const templateDocUrl = 'https://aka.ms/localComposerTemplateDoc';
 export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => {
   const { setSelectedTemplateVersion } = useRecoilValue(dispatcherState);
   const selectedTemplateVersion = useRecoilValue(selectedTemplateVersionState);
+  const advancedTemplateOptionsEnabled = useFeatureFlag('ADVANCED_TEMPLATE_OPTIONS');
 
   useEffect(() => {
     props.template?.package?.packageVersion && setSelectedTemplateVersion(props.template.package.packageVersion);
   }, [props.template]);
 
   const renderVersionButton = () => {
+    if (!advancedTemplateOptionsEnabled) {
+      return <span css={templateVersion}>{props.template?.package?.packageVersion}</span>;
+    }
     const availableVersions = props.template?.package?.availableVersions || ([] as string[]);
-    availableVersions;
     const versionOptions = {
       items: availableVersions.map((version: string) => {
         return { key: version, text: version };
