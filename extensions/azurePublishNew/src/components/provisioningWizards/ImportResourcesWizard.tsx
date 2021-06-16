@@ -11,6 +11,7 @@ import { importConfigurationState } from '../../recoilModel/atoms/importConfigur
 
 import { ImportInstructionsStep } from './steps/ImportInstructionsStep';
 import { PublishConfigEditorStep } from './steps/PublishConfigEditorStep';
+import { WizardFooter } from './footers/WizardFooter';
 
 const removePlaceholder = (config: any) => {
   try {
@@ -64,6 +65,7 @@ export const ImportResourcesWizard = React.memo((props: Props) => {
     <Wizard
       firstStepId="import-instructions"
       steps={steps}
+      onRenderFooter={(navState) => <WizardFooter {...navState} />}
       onRenderHeader={() => <></>} // Returning fragment to override the default header rendering behaviour
       onStepChange={(index, step) => onStepChange(index, step)}
     />

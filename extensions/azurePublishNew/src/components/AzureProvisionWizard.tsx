@@ -27,6 +27,7 @@ export const AzureProvisionWizard = () => {
   const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
   const { setTitle } = usePublishApi();
   const initialize = usePublishProfileInitializer();
+
   const handleStepChange = (index, step) => {
     setActiveStepIndex(index);
     step && setTitle({ title: step.title, subText: step.subTitle });

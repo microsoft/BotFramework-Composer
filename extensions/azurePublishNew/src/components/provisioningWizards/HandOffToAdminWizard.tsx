@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { WizardStep, Wizard } from '../shared/wizard';
 
 import { HandOffInstructionsStep } from './steps/HandOffInstructionsStep';
+import { WizardFooter } from './footers/WizardFooter';
 
 type Props = {
   onStepChange?: (stepIndex: number, stepId: string) => void;
@@ -41,6 +42,7 @@ export const HandOffToAdminWizard = React.memo((props: Props) => {
     <Wizard
       firstStepId="handoff-instructions"
       steps={steps}
+      onRenderFooter={(navState) => <WizardFooter {...navState} />}
       onRenderHeader={(step) => setDialogTitle(step)}
       onStepChange={(index, step) => onStepChange(index, step.id)}
     />

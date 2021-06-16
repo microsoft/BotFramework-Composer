@@ -6,9 +6,9 @@ import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { DefaultButton, PersonaSize } from 'office-ui-fabric-react';
 
-import { UserInfo } from '../../../recoilModel/types';
 import { UserPersona } from '../../shared/userPersona/UserPersona';
 import { WizardStep } from '../../shared/wizard';
+import { UserInfo } from '../../../types';
 
 type ProvisonActionsStylingProps = {
   showSignout: boolean;

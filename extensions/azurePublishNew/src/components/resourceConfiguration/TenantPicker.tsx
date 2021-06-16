@@ -7,9 +7,9 @@ import formatMessage from 'format-message';
 import { usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
 import jwtDecode from 'jwt-decode';
 
-import { UserInfo } from '../../types';
 import { SearchableDropdown, SearchableDropdownProps } from '../shared/searchableDropdown/SearchableDropdown';
 import { SearchableDropdownTextFieldProps } from '../shared/searchableDropdown/SearchableDropdownTextField';
+import { UserInfo } from '../../types';
 
 const { userShouldProvideTokens, getTokenFromCache, setTenantId } = usePublishApi();
 
