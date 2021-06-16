@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import formatMessage from 'format-message';
@@ -77,6 +77,13 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
     onChange(recognizerInstance);
     telemetryClient?.track('RecognizerChanged', { recognizer: selectedRecognizer.key as string });
   }, [selectedRecognizer, recognizerConfigs, shellData, shellApi, telemetryClient]);
+
+  useEffect(() => {
+    if (selection && currentRecognizer) {
+      selection.setItems(detailsListItems, false);
+      selection.setKeySelected(currentRecognizer.id, true, false);
+    }
+  }, [detailsListItems]);
 
   return (
     <React.Fragment>
