@@ -36,7 +36,7 @@ const templateTitleContainer = (isLocalTemplate: boolean) => css`
 
 const templateTitle = (isLocalTemplate: boolean) => css`
   position: relative;
-  bottom: ${isLocalTemplate ? '4px' : '18px'};
+  bottom: ${isLocalTemplate ? '4px' : '0px'};
   font-size: 19px;
   font-weight: 550;
   margin-left: 7px;
@@ -156,7 +156,9 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         <Stack horizontal>
           <Stack.Item>{renderTemplateIcon()}</Stack.Item>
           <Stack.Item>
-            <span css={templateTitle(isLocalTemplate)}>{props.template?.name}</span>
+            <span css={templateTitle(isLocalTemplate)}>
+              {props.template?.name ? props.template.name : formatMessage('Template undefined')}
+            </span>
             {!isLocalTemplate && renderVersionButton()}
           </Stack.Item>
         </Stack>

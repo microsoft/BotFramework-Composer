@@ -257,6 +257,9 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
+  "add_regex_pattern_140335cb": {
+    "message": "Add regex pattern"
+  },
   "add_row_7ebc94fb": {
     "message": "Add row"
   },
@@ -264,7 +267,7 @@
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
+    "message": "> add some expected user responses:\n      > - Please remind me to '{'itemTitle=buy milk'}'\n      > - remind me to '{'itemTitle'}'\n      > - add '{'itemTitle'}' to my todo list\n      >\n      > entity definitions:\n      > @ ml itemTitle\n      "
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
@@ -3850,6 +3853,9 @@
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
+  },
+  "this_path_does_not_exist_42c11e1": {
+    "message": "This path does not exist"
   },
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
     "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."

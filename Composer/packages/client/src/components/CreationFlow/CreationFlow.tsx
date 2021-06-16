@@ -127,11 +127,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
-    const templateVersion = selectedTemplateVersion
-      ? selectedTemplateVersion
-      : templateProjects.find((template: BotTemplate) => {
-          return template.id == templateId;
-        })?.package?.packageVersion;
+    const templateVersion =
+      selectedTemplateVersion ??
+      templateProjects.find((template: BotTemplate) => {
+        return template.id == templateId;
+      })?.package?.packageVersion;
     const newBotData = {
       templateId: templateId || '',
       templateVersion: templateVersion || '',
