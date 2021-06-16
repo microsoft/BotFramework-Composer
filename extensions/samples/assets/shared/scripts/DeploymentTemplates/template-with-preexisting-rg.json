@@ -3,8 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "name": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().name]"
+      "type": "string"
     },
     "appId": {
       "type": "string",
@@ -36,7 +35,7 @@
     },
     "cosmosDbName": {
       "type": "string",
-      "defaultValue": "[resourceGroup().name]"
+      "defaultValue": "[parameters('name')]"
     },
     "botId": {
       "type": "string",
@@ -57,7 +56,7 @@
     },
     "newAppServicePlanName": {
       "type": "string",
-      "defaultValue": "[resourceGroup().name]",
+      "defaultValue": "[parameters('name')]",
       "metadata": {
         "description": "The name of the new App Service Plan."
       }
@@ -90,14 +89,14 @@
     },
     "newWebAppName": {
       "type": "string",
-      "defaultValue": "[resourceGroup().name]",
+      "defaultValue": "[parameters('name')]",
       "metadata": {
         "description": "The globally unique name of the Web App. Defaults to the value passed in for \"botId\"."
       }
     },
     "appInsightsName": {
       "type": "string",
-      "defaultValue": "[resourceGroup().name]"
+      "defaultValue": "[parameters('name')]"
     },
     "location": {
       "type": "string",
@@ -113,11 +112,11 @@
     },
     "storageAccountName": {
       "type": "string",
-      "defaultValue": "[resourceGroup().name]"
+      "defaultValue": "[parameters('name')]"
     },
     "luisServiceName": {
       "type": "string",
-      "defaultValue": "[concat(resourceGroup().name, '-luis')]"
+      "defaultValue": "[concat(parameters('name'), '-luis')]"
     },
     "luisServiceAuthoringSku": {
       "type": "string",
@@ -142,7 +141,7 @@
     "siteHost": "[concat(variables('webAppName'), '.azurewebsites.net')]",
     "botEndpoint": "[concat('https://', variables('siteHost'), '/api/messages')]",
     "storageAccountName": "[toLower(take(replace(replace(parameters('storageAccountName'), '-', ''), '_', ''), 24))]",
-    "LuisAuthoringAccountName": "[concat(parameters('luisServiceName'), '-Authoring')]"
+    "LuisAuthoringAccountName": "[concat(parameters('luisServiceName'), '-authoring')]"
   },
   "resources": [
     {
@@ -176,9 +175,7 @@
       "apiVersion": "2015-08-01",
       "location": "[variables('resourcesLocation')]",
       "kind": "app",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', variables('servicePlanName'))]"
-      ],
+      "dependsOn": ["[resourceId('Microsoft.Web/serverfarms/', variables('servicePlanName'))]"],
       "name": "[variables('webAppName')]",
       "properties": {
         "name": "[variables('webAppName')]",
@@ -230,9 +227,7 @@
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
       "apiVersion": "2020-03-01",
       "name": "[concat(variables('cosmosDbAccountName'), '/botstate-db')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"
-      ],
+      "dependsOn": ["[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"],
       "properties": {
         "resource": {
           "id": "botstate-db"
@@ -267,9 +262,7 @@
             ]
           },
           "partitionKey": {
-            "paths": [
-              "/id"
-            ],
+            "paths": ["/id"],
             "kind": "Hash"
           },
           "conflictResolutionPolicy": {
@@ -301,9 +294,7 @@
         "publishingCredentials": null,
         "storageResourceId": null
       },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/', variables('webAppName'))]"
-      ]
+      "dependsOn": ["[resourceId('Microsoft.Web/sites/', variables('webAppName'))]"]
     },
     {
       "comments": "app insights",

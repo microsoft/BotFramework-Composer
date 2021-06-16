@@ -29,7 +29,7 @@
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "adaptive-expressions": "4.12.0-rc1",
-    "botbuilder-lg": "4.12.0-rc1",
+    "botbuilder-lg": "4.14.0-dev.391a2ab",
     "create-react-class": "^15.6.3",
     "d3": "^5.9.1",
     "dagre": "^0.8.4",

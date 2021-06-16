@@ -25,17 +25,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.15.5
-      #- name: Restore yarn cache
-      #  uses: actions/cache@v2.1.2
-      #  with:
-      #    path: ~/.cache/yarn
-      #    key: ${{ runner.os }}-yarn-new-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
-      #    restore-keys: |
-      #      ${{ runner.os }}-yarn-new-
-      - name: Clear global yarn cache
-        run: yarn cache clean
-      - name: yarn --update-checksums
-        run: yarn --update-checksums
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: yarn
+        run: yarn
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint

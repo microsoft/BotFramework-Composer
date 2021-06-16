@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotTemplate, QnABotTemplateId } from '@bfc/shared';
+import { BotTemplate, localTemplateId, QnABotTemplateId } from '@bfc/shared';
 import union from 'lodash/union';
 
 import logger from '../logger';
@@ -16,6 +16,7 @@ export const defaultSortOrder = [
   { generatorName: '@microsoft/generator-bot-enterprise-assistant', displayName: 'Enterprise Assistant Bot' },
   { generatorName: '@microsoft/generator-bot-enterprise-calendar', displayName: 'Enterprise Calendar Bot' },
   { generatorName: '@microsoft/generator-bot-enterprise-people', displayName: 'Enterprise People Bot' },
+  { generatorName: localTemplateId, displayName: 'Create from local template' },
 ];
 
 export const sortTemplates = async (templates: BotTemplate[]): Promise<BotTemplate[]> => {
