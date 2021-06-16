@@ -6,10 +6,10 @@ on:
       - "abrown/docker-for-tests"
 
 env:
-  IMAGE_NAME: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}
-  BASE_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}:base
-  DEP_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}:dependencies
-  BUILD_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}:build
+  IMAGE_NAME: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}
+  BASE_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}:base
+  DEP_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}:dependencies
+  BUILD_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ github.ref }}:build
 
 jobs:
   build-and-push:
@@ -18,20 +18,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - run: echo ${{ env.BASE_IMAGE_TAG }}
-      # - name: Docker Login
-      #   uses: azure/docker-login@v1
-      #   with:
-      #     login-server: composerci.azurecr.io
-      #     username: ${{ secrets.ACR_USERNAME }}
-      #     password: ${{ secrets.ACR_PASSWORD }}
-      # - name: Docker Pull
-      #   run: |
-      #     docker pull ${{ env.BASE_IMAGE_TAG }}
-      #     docker pull ${{ env.DEP_IMAGE_TAG }}
-      # - name: Docker Build
-      #   run: |
-      #     docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --target base .
-      #     docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.DEP_IMAGE_TAG }} --target dependencies .
-      #     docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.DEP_IMAGE_TAG }} .
-      # - name: Docker push
-      #   run: docker push ${{ env.IMAGE_TAG }}
+      - name: Docker Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: composerci.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - name: Docker Pull
+        run: |
+          docker pull ${{ env.BASE_IMAGE_TAG }}
+          docker pull ${{ env.DEP_IMAGE_TAG }}
+        continue-on-error: true
+      - name: Docker Build
+        run: |
+          docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --target base .
+          docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.DEP_IMAGE_TAG }} --target dependencies .
+          docker build -f Dockerfile.Test -t ${{ env.IMAGE_TAG }} --cache-from ${{ env.BASE_IMAGE_TAG }} --cache-from ${{ env.DEP_IMAGE_TAG }} .
+      - name: Docker push
+        run: docker push ${{ env.IMAGE_TAG }}
