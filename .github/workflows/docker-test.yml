@@ -7,10 +7,10 @@ on:
 
 env:
   IMAGE_NAME: ${{ secrets.ACR_USERNAME }}.azurecr.io/composer/ci
-  IMAGE_TAG: ${{ env.IMAGE_NAME }}:${{ github.ref }}
-  BASE_IMAGE_TAG: ${{ env.IMAGE_NAME }}:base-${{ github.ref }}
-  DEP_IMAGE_TAG: ${{ env.IMAGE_NAME }}:dependencies-${{ github.ref }}
-  BUILD_IMAGE_TAG: ${{ env.IMAGE_NAME }}:build-${{ github.ref }}
+  IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/composer/ci:${{ github.ref }}
+  BASE_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/composer/ci:base-${{ github.ref }}
+  DEP_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/composer/ci:dependencies-${{ github.ref }}
+  BUILD_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/composer/ci:build-${{ github.ref }}
 
 jobs:
   build-and-push:
