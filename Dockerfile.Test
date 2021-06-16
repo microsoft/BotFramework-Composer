@@ -21,7 +21,3 @@ COPY extensions /src/extensions
 ENV NODE_ENV "production"
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
 RUN yarn build:dev
-
-FROM build
-
-ENTRYPOINT "/bin/sh"
