@@ -6,10 +6,10 @@ on:
       - "abrown/docker-for-tests"
 
 env:
-  IMAGE_NAME: ${{ secrets.ACR_USERNAME }}.azurecr.io/${GITHUB_REF#refs/heads/}
-  BASE_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${GITHUB_REF#refs/heads/}:base
-  DEP_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${GITHUB_REF#refs/heads/}:dependencies
-  BUILD_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${GITHUB_REF#refs/heads/}:build
+  IMAGE_NAME: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}
+  BASE_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}:base
+  DEP_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}:dependencies
+  BUILD_IMAGE_TAG: ${{ secrets.ACR_USERNAME }}.azurecr.io/${{ env.GITHUB_REF#refs/heads/ }}:build
 
 jobs:
   build-and-push:
