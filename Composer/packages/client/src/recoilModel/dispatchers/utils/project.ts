@@ -72,7 +72,7 @@ import {
   settingsState,
   skillManifestsState,
   dialogIdsState,
-  showCreateQnAFromUrlDialogState,
+  showCreateQnADialogState,
   createQnAOnState,
   botEndpointsState,
   dispatcherState,
@@ -825,7 +825,7 @@ export const postRootBotCreation = async (
   // if create from QnATemplate, continue creation flow.
   if (templateId === QnABotTemplateId) {
     callbackHelpers.set(createQnAOnState, { projectId, dialogId: mainDialog });
-    callbackHelpers.set(showCreateQnAFromUrlDialogState(projectId), true);
+    callbackHelpers.set(showCreateQnADialogState(projectId), true);
   }
 
   callbackHelpers.set(botProjectIdsState, [projectId]);

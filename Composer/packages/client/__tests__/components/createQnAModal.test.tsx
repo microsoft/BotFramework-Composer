@@ -7,7 +7,7 @@ import { fireEvent } from '@botframework-composer/test-utils';
 import { renderWithRecoil } from '../testUtils/renderWithRecoil';
 import CreateQnAFromUrlModal from '../../src/components/QnA/CreateQnAFromUrlModal';
 import CreateQnAFromScratchModal from '../../src/components/QnA/CreateQnAFromScratchModal';
-import { showCreateQnAFromUrlDialogState } from '../../src/recoilModel';
+import { showCreateQnADialogState } from '../../src/recoilModel';
 
 describe('<CreateQnAFromUrlModal />', () => {
   const onDismiss = jest.fn(() => {});
@@ -28,7 +28,7 @@ describe('<CreateQnAFromUrlModal />', () => {
         onSubmit={onSubmit}
       />,
       ({ set }) => {
-        set(showCreateQnAFromUrlDialogState(projectId), true);
+        set(showCreateQnADialogState(projectId), true);
       }
     );
 

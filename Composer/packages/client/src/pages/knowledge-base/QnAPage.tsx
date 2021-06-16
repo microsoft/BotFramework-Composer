@@ -161,7 +161,7 @@ const QnAPage: React.FC<RouteComponentProps<{
           projectId={createQnAOnInfo.projectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ projectId: createQnAOnInfo.projectId });
+            actions.createQnADialogCancel({ projectId: createQnAOnInfo.projectId });
           }}
           onSubmit={async ({ name, urls = [], locales = [], multiTurn = false }) => {
             await actions.createQnATrigger(projectId, createQnAOnInfo.dialogId, false);

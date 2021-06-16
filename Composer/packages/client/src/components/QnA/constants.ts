@@ -18,6 +18,11 @@ export type CreateQnAFromUrlFormData = {
   multiTurn: boolean;
 };
 
+export type CreateQnAFromQnAMakerFormData = {
+  name: string;
+  locale: string;
+};
+
 export type CreateQnAFromUrlFormDataErrors = {
   urls: string[];
   name: string;
@@ -30,7 +35,7 @@ export type CreateQnAFormData = {
   multiTurn?: boolean;
 };
 
-export type CreateQnAFromModalProps = {
+export type CreateQnAModalProps = {
   projectId: string;
   dialogId: string;
   qnaFiles: QnAFile[];
@@ -41,7 +46,7 @@ export type CreateQnAFromModalProps = {
   onSubmit: (formData: CreateQnAFormData) => void;
 };
 
-export type CreateQnAFromUrlModalProps = {
+export type CreateQnAFromFormProps = {
   projectId: string;
   locales: string[];
   defaultLocale: string;
@@ -51,7 +56,7 @@ export type CreateQnAFromUrlModalProps = {
   subscriptionKey?: string;
   onUpdateInitialName?: (initialName: string) => void;
   onDismiss?: () => void;
-  onSubmit: (formData: CreateQnAFormData) => void;
+  onChange: (formData: CreateQnAFormData, disabled: boolean) => void;
 };
 
 export const validateUrl: FieldValidator = (url: string): string => {
