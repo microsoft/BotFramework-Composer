@@ -18,19 +18,19 @@ import {
   IObjectWithKey,
   IDetailsRowProps,
   DetailsRow,
+  IDetailsListStyles,
+  IDetailsRowStyles,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
-import { JsonEditor } from '@bfc/code-editor';
 import produce from 'immer';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import { rootBotProjectIdSelector, webChatTrafficState } from '../../../../../recoilModel';
-import { getDefaultFontSettings } from '../../../../../recoilModel/utils/fontUtil';
 import { WatchVariablePicker } from '../../WatchVariableSelector/WatchVariablePicker';
 import { getMemoryVariables } from '../../../../../recoilModel/dispatchers/utils/project';
 import { WatchDataPayload } from '../../WatchVariableSelector/utils/helpers';
 
-const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
+import { WatchTabObjectValue } from './WatchTabObjectValue';
 
 const contentContainer = css`
   display: flex;
@@ -54,15 +54,6 @@ const content = css`
   width: 100%;
 `;
 
-const editorStyles = css`
-  border: none;
-`;
-
-const objectCell = css`
-  height: 160px;
-  width: 360px;
-`;
-
 const undefinedValue = css`
   font-family: Segoe UI;
   font-size: 12px;
@@ -71,7 +62,7 @@ const undefinedValue = css`
   line-height: 16px;
 `;
 
-const watchTableStyles = {
+const watchTableStyles: Partial<IDetailsListStyles> = {
   root: {
     height: '100%',
     selectors: {
@@ -85,6 +76,20 @@ const watchTableStyles = {
     // fill remaining space after table header row
     height: 'calc(100% - 60px)',
   },
+};
+
+const rowStyles: Partial<IDetailsRowStyles> = {
+  cell: { minHeight: 32, padding: '8px 6px' },
+  checkCell: {
+    height: 32,
+    minHeight: 32,
+    selectors: {
+      '& > div[role="checkbox"]': {
+        height: 32,
+      },
+    },
+  },
+  root: { minHeight: 32 },
 };
 
 const addIcon: IIconProps = {
@@ -193,24 +198,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const renderRow = useCallback((props?: IDetailsRowProps) => {
     if (props) {
-      return (
-        <DetailsRow
-          {...props}
-          styles={{
-            cell: { minHeight: 32, padding: '8px 6px' },
-            checkCell: {
-              height: 32,
-              minHeight: 32,
-              selectors: {
-                '& > div[role="checkbox"]': {
-                  height: 32,
-                },
-              },
-            },
-            root: { minHeight: 32 },
-          }}
-        />
-      );
+      return <DetailsRow {...props} styles={rowStyles} />;
     }
     return null;
   }, []);
@@ -235,33 +223,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
             const value = getValueFromBotTraceScope(item.value, mostRecentBotState?.activity);
             if (value !== null && typeof value === 'object') {
               // render monaco view
-              // TODO: is there some way we can expand the height of the cell based on the number of object keys?
-              return (
-                // TODO: <WatchTabObjectValue /> || <WatchTabObjectProperty /> ?
-                <div css={objectCell}>
-                  <JsonEditor
-                    editorSettings={{
-                      fadedWhenReadOnly: false,
-                      fontSettings: {
-                        fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
-                        fontSize: '12px',
-                        fontWeight: 'normal',
-                      },
-                    }}
-                    // TODO: https://stackoverflow.com/questions/54373288/monaco-editor-hide-overview-ruler
-                    options={{
-                      folding: true,
-                      minimap: { enabled: false, showSlider: 'mouseover' },
-                      showFoldingControls: 'always',
-                      readOnly: true,
-                      lineHeight: 16,
-                    }}
-                    styleOverrides={[editorStyles]}
-                    value={value}
-                    onChange={(_d) => null}
-                  />
-                </div>
-              );
+              return <WatchTabObjectValue value={value} />;
             } else if (value === undefined) {
               // render undefined indicator
               return <span css={undefinedValue}>undefined</span>;
@@ -302,7 +264,6 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
   if (isActive) {
     return (
       <div css={contentContainer}>
-        {/** TODO: factor toolbar and content out into own components? */}
         <div css={toolbar}>
           <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
           <CommandBarButton iconProps={removeIcon} text={formatMessage('Remove from list')} onClick={onClickRemove} />
