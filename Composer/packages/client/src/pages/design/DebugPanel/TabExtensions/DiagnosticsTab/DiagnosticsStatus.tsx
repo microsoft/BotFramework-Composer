@@ -63,7 +63,8 @@ export const DiagnosticsStatus = () => {
             label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
           }}
           onClick={() => {
-            setErrorDiagnosticsFilter();
+            setErrorDiagnosticsFilter(true);
+            setWarningDiagnosticsFilter(false);
             setExpansion(true);
             setActiveTab(DiagnosticsTabKey);
           }}
@@ -90,7 +91,8 @@ export const DiagnosticsStatus = () => {
             label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
           }}
           onClick={() => {
-            setWarningDiagnosticsFilter();
+            setWarningDiagnosticsFilter(true);
+            setErrorDiagnosticsFilter(false);
             setExpansion(true);
             setActiveTab(DiagnosticsTabKey);
           }}

@@ -16,12 +16,11 @@ interface DropdownWithAllOptionProps {
   selectedKeys: string[];
   setSelectedKeys: (keys: string[]) => void;
   dropdownOptions: IDropdownOption[];
+  optionAllKey: string;
 }
 
-const optionAllKey = 'All';
-
 export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (props) => {
-  const { optionAllText, selectedKeys, setSelectedKeys, placeholder, dropdownOptions } = props;
+  const { optionAllText, selectedKeys, setSelectedKeys, placeholder, dropdownOptions, optionAllKey } = props;
   const [currentOptions, setCurrentOptions] = useState<IDropdownOption[]>([]);
 
   useEffect(() => {

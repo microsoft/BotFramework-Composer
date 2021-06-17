@@ -20,6 +20,7 @@ import {
   applicationErrorState,
   showErrorDiagnosticsState,
   showWarningDiagnosticsState,
+  projectsForDiagnosticsFilterState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
@@ -155,14 +156,16 @@ export const applicationDispatcher = () => {
     await flushExistingTasks(callbackHelpers);
   });
 
-  const setErrorDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => () => {
-    set(showWarningDiagnosticsState, false);
-    set(showErrorDiagnosticsState, true);
+  const setErrorDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (value: boolean) => {
+    set(showErrorDiagnosticsState, value);
   });
 
-  const setWarningDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => () => {
-    set(showWarningDiagnosticsState, true);
-    set(showErrorDiagnosticsState, false);
+  const setWarningDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (value: boolean) => {
+    set(showWarningDiagnosticsState, value);
+  });
+
+  const setProjectsForDiagnosticsFilter = useRecoilCallback(({ set }: CallbackInterface) => (projectIds: string[]) => {
+    set(projectsForDiagnosticsFilterState, projectIds);
   });
 
   return {
@@ -183,5 +186,6 @@ export const applicationDispatcher = () => {
     setActiveTabInDebugPanel,
     setErrorDiagnosticsFilter,
     setWarningDiagnosticsFilter,
+    setProjectsForDiagnosticsFilter,
   };
 };

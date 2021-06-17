@@ -3,46 +3,57 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useMemo, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { Stack } from 'office-ui-fabric-react';
 
 import { DebugPanelTabHeaderProps } from '../types';
-import { DiagnosticInfo } from '../../../../diagnostics/types';
+import { IDiagnosticInfo } from '../../../../diagnostics/types';
 import { dispatcherState, showErrorDiagnosticsState, showWarningDiagnosticsState } from '../../../../../recoilModel';
 
 import { DiagnosticList } from './DiagnosticList';
 import { Severity, useDiagnosticsData } from './useDiagnostics';
 import { DiagnosticsFilters } from './DiagnosticFilters';
 
-const runWarningFilter = (item: DiagnosticInfo, showWarnings: boolean) => {
-  return showWarnings && item.severity === Severity.Warning;
-};
-
-const runErrorFilter = (item: DiagnosticInfo, showErrors: boolean) => {
-  return showErrors && item.severity === Severity.Error;
-};
-
-const runProjectFilter = (projectsToFilter: string[], item: DiagnosticInfo) => {
-  return projectsToFilter.includes(item.projectId);
-};
-
 export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const diagnostics = useDiagnosticsData();
-  const { setWarningDiagnosticsFilter: setShowWarnings, setErrorDiagnosticsFilter: setShowErrors } = useRecoilValue(
-    dispatcherState
-  );
+  const { setWarningDiagnosticsFilter, setErrorDiagnosticsFilter } = useRecoilValue(dispatcherState);
   const showWarnings = useRecoilValue(showWarningDiagnosticsState);
   const showErrors = useRecoilValue(showErrorDiagnosticsState);
   const [projectsToFilter, setProjectsToFilter] = useState<string[]>([]);
+  const [errorCount, setErrorCount] = useState<number>(0);
+  const [warningCount, setWarningCount] = useState<number>(0);
+  const [filteredDiagnostics, setFilteredDiagnostics] = useState<IDiagnosticInfo[]>([]);
 
-  const filteredDiagnosticItems = useMemo(() => {
-    const filtered = diagnostics.filter((diagnostic) => {
-      return (
-        runProjectFilter(projectsToFilter, diagnostic) &&
-        (runErrorFilter(diagnostic, showErrors) || runWarningFilter(diagnostic, showWarnings))
-      );
+  useEffect(() => {
+    let errorCt = 0;
+    let warningCt = 0;
+    const filteredItems = diagnostics.filter((diagnostic) => {
+      const projectFilter = projectsToFilter.includes(diagnostic.projectId);
+      if (!projectFilter) {
+        return false;
+      }
+
+      let errorFilter = false;
+      if (diagnostic.severity === Severity.Error) {
+        errorCt++;
+        if (showErrors) {
+          errorFilter = true;
+        }
+      }
+
+      let warningFilter = false;
+      if (diagnostic.severity === Severity.Warning) {
+        warningCt++;
+        if (showWarnings) {
+          warningFilter = true;
+        }
+      }
+      return warningFilter || errorFilter;
     });
-    return filtered;
+    setErrorCount(errorCt);
+    setWarningCount(warningCt);
+    setFilteredDiagnostics(filteredItems);
   }, [projectsToFilter, showWarnings, showErrors, diagnostics]);
 
   if (!isActive) {
@@ -50,25 +61,40 @@ export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActiv
   }
 
   return (
-    <Fragment>
+    <div
+      css={{
+        height: '100%',
+      }}
+    >
       <div
         css={{
           display: 'flex',
-          flexDirection: 'row',
+          flex: '1 1 auto',
+          height: '55px',
         }}
       >
         <DiagnosticsFilters
+          errorCount={errorCount}
           projectsToFilter={projectsToFilter}
+          setErrorFilter={setErrorDiagnosticsFilter}
           setProjectsToFilter={setProjectsToFilter}
-          setShowErrors={setShowErrors}
-          setShowWarnings={setShowWarnings}
+          setWarningFilter={setWarningDiagnosticsFilter}
           showErrors={showErrors}
           showWarnings={showWarnings}
+          warningCount={warningCount}
         />
       </div>
-      <div data-testid="DiagnosticList-Container" style={{ height: '100%', overflow: 'auto' }}>
-        <DiagnosticList diagnosticItems={filteredDiagnosticItems} />
+
+      <div
+        css={{
+          height: 'calc(100% - 55px)',
+          overflowY: 'scroll',
+        }}
+        data-is-scrollable="true"
+        data-testid="DiagnosticList-Container"
+      >
+        <DiagnosticList diagnosticItems={filteredDiagnostics} />
       </div>
-    </Fragment>
+    </div>
   );
 };

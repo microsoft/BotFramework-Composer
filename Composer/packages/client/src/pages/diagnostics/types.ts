@@ -35,6 +35,7 @@ export interface IDiagnosticInfo {
   getUrl: (hash?: string) => string;
   learnMore?: string;
   title?: string;
+  getFriendlyLocation: () => string;
 }
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
@@ -51,6 +52,7 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   getUrl = () => '';
   learnMore?: string;
   title?: string;
+  getFriendlyLocation = () => '';
 
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     this.rootProjectId = rootProjectId;
@@ -79,7 +81,6 @@ export class BotDiagnostic extends DiagnosticInfo {
         break;
       }
     }
-
     return url;
   };
 }

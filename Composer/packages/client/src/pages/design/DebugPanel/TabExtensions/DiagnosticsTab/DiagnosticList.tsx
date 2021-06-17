@@ -19,10 +19,16 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
-import { botDisplayNameState, botProjectSpaceSelector, exportSkillModalInfoState } from '../../../../../recoilModel';
+import {
+  botDisplayNameState,
+  botProjectSpaceSelector,
+  exportSkillModalInfoState,
+  localeState,
+  rootBotProjectIdSelector,
+} from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
 
 // -------------------- Styles -------------------- //
@@ -106,11 +112,13 @@ const BotNameRender: React.FC<{ item: IDiagnosticInfo }> = ({ item }) => {
 export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems }) => {
   const setExportSkillModalInfo = useSetRecoilState(exportSkillModalInfoState);
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
+  const locale = useRecoilValue(localeState(rootBotId ?? ''));
 
-  const getSkillName = (projectId: string) =>
+  const getProjectName = (projectId: string) =>
     botProjectSpace.find((bot) => bot.projectId === projectId)?.name ?? projectId;
 
-  const staticColumns = [
+  const staticColumns: IColumn[] = [
     {
       key: 'Icon',
       name: '',
@@ -216,18 +224,17 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
     setColumns(staticColumns);
   }, [diagnosticItems]);
 
-  const sortFactor = columns[1].isSortedDescending ? 1 : -1;
-  const displayedDiagnosticItems = diagnosticItems.sort((a, b) => {
-    const aName = getSkillName(a.projectId);
-    const bName = getSkillName(b.projectId);
-    if (aName < bName) {
-      return sortFactor;
-    } else if (aName > bName) {
-      return -sortFactor;
-    } else {
-      return a.location < b.location ? sortFactor : -sortFactor;
-    }
-  });
+  const displayedDiagnosticItems = useMemo(() => {
+    const sortFactor = columns[1].isSortedDescending ? 1 : -1;
+    return diagnosticItems.sort((a, b) => {
+      // Error before Warning
+      const severityComparator = a.severity.localeCompare(b.severity);
+      if (severityComparator === 0) {
+        return sortFactor * getProjectName(a.projectId).localeCompare(getProjectName(b.projectId), locale);
+      }
+      return severityComparator;
+    });
+  }, [diagnosticItems, columns]);
 
   return (
     <DetailsList

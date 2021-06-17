@@ -10,15 +10,16 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import { DiagnosticSeverity } from '@bfc/shared';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-import { outputsDebugPanelSelector } from '../../../../../recoilModel';
+import { outputsDebugPanelSelector, rootBotProjectIdSelector } from '../../../../../recoilModel';
 import { DropdownWithAllOption } from '../../../../../components/DropdownWithAllOption/DropdownWithAllOption';
-
-import { useDiagnosticsStatistics } from './useDiagnostics';
 
 const severityTextStyle = {
   marginRight: '6px',
 };
+
+const optionAllKey = 'All';
 
 const getSeverityButtonStyle = (severityType: DiagnosticSeverity, isChecked: boolean): any => {
   const baseStyle = {
@@ -57,16 +58,33 @@ type DiagnosticsFiltersProps = {
   showErrors: boolean;
   projectsToFilter: string[];
   showWarnings: boolean;
-  setShowWarnings: () => void;
-  setShowErrors: () => void;
+  setWarningFilter: (value: boolean) => void;
+  setErrorFilter: (value: boolean) => void;
   setProjectsToFilter: (projects: string[]) => void;
+  errorCount: number;
+  warningCount: number;
 };
 
 export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => {
-  const { errorsCount, warningsCount } = useDiagnosticsStatistics();
-  const { showErrors, showWarnings, setShowWarnings, setShowErrors, setProjectsToFilter, projectsToFilter } = props;
+  const {
+    showErrors,
+    showWarnings,
+    setWarningFilter,
+    setErrorFilter,
+    setProjectsToFilter,
+    projectsToFilter,
+    errorCount,
+    warningCount,
+  } = props;
   const projects = useRecoilValue(outputsDebugPanelSelector);
   const [projectSelectorOptions, setProjectSelectorOptions] = useState<IDropdownOption[]>([]);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+
+  useEffect(() => {
+    if (rootBotProjectId) {
+      setProjectsToFilter([rootBotProjectId]);
+    }
+  }, [rootBotProjectId]);
 
   useEffect(() => {
     const projectOptions = projects.map(({ projectId, botName }) => {
@@ -78,27 +96,24 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
     setProjectSelectorOptions(projectOptions);
   }, [projects]);
 
+  if (!rootBotProjectId) {
+    return null;
+  }
+
   return (
     <Fragment>
-      <div
-        css={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          width: '100%',
-          margin: '10px 15px',
-        }}
-      >
+      <Stack grow horizontal>
         <DefaultButton
           allowDisabledFocus
-          toggle
           checked={showErrors}
           iconProps={{ iconName: 'StatusErrorFull' }}
           styles={getSeverityButtonStyle(DiagnosticSeverity.Error, showErrors)}
-          onClick={setShowErrors}
+          onClick={() => {
+            setErrorFilter(!showErrors);
+          }}
         >
           <span style={severityTextStyle}>{formatMessage('Errors')}</span>
-          <span>{errorsCount}</span>
+          <span>{errorCount}</span>
         </DefaultButton>
         <DefaultButton
           allowDisabledFocus
@@ -106,26 +121,23 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
           checked={showWarnings}
           iconProps={{ iconName: 'WarningSolid' }}
           styles={getSeverityButtonStyle(DiagnosticSeverity.Warning, showWarnings)}
-          onClick={setShowWarnings}
-        >
-          <span style={severityTextStyle}>{formatMessage('Warnings')}</span>
-          <span>{warningsCount}</span>
-        </DefaultButton>
-
-        <div
-          style={{
-            marginLeft: 'auto',
+          onClick={() => {
+            setWarningFilter(!showWarnings);
           }}
         >
-          <DropdownWithAllOption
-            dropdownOptions={projectSelectorOptions}
-            optionAllText={formatMessage('All bots')}
-            placeholder={formatMessage('Select a project')}
-            selectedKeys={projectsToFilter}
-            setSelectedKeys={setProjectsToFilter}
-          />
-        </div>
-      </div>
+          <span style={severityTextStyle}>{formatMessage('Warnings')}</span>
+          <span>{warningCount}</span>
+        </DefaultButton>
+
+        <DropdownWithAllOption
+          dropdownOptions={projectSelectorOptions}
+          optionAllKey={optionAllKey}
+          optionAllText={formatMessage('All bots')}
+          placeholder={formatMessage('Select a project')}
+          selectedKeys={projectsToFilter}
+          setSelectedKeys={setProjectsToFilter}
+        />
+      </Stack>
     </Fragment>
   );
 };
