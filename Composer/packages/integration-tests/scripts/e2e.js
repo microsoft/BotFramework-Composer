@@ -7,13 +7,11 @@
 /* eslint-disable security/detect-child-process */
 
 const path = require('path');
-const fs = require('fs');
 const { promisify } = require('util');
 const { spawn, execSync } = require('child_process');
 
+const fs = require('fs-extra');
 const chalk = require('chalk');
-
-const mkdir = promisify(fs.mkdir);
 
 const rootDir = path.resolve(__dirname, '..');
 const composerRootDir = path.resolve(rootDir, '..', '..');
@@ -62,7 +60,7 @@ Wait for the server to come up and then start cypress.
 
 async function setup() {
   try {
-    await mkdir(process.env.COMPOSER_BOTS_FOLDER);
+    await fs.ensureDir(process.env.COMPOSER_BOTS_FOLDER);
   } catch (err) {
     process.stderr.write('There was a problem setting up.\n');
     process.stderr.write(`Error:\n${err.message}\n`);
