@@ -14,7 +14,6 @@ RUN yarn install --frozen-lockfile
 
 FROM dependencies as build
 WORKDIR /src/Composer
-COPY --from=dependencies /src/Composer /src/Composer
 COPY Composer /src/Composer
 COPY extensions /src/extensions
 
