@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import React from 'react';
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension-client';
 import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { nameRegex } from '../../../constants';
 
@@ -175,6 +177,14 @@ const validate = ({ content, schema }) => {
     }, {});
 };
 
+function makeLink(url: string) {
+  return ({ children }) => (
+    <Link key={url} href={url} rel="noopener noreferrer" target="_blank">
+      {children}
+    </Link>
+  );
+}
+
 export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.MANIFEST_DESCRIPTION]: {
     buttons: [cancelButton, nextButton],
@@ -239,8 +249,11 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     content: AddCallers,
     subText: () =>
-      formatMessage(
-        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more.'
+      formatMessage.rich(
+        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. <link>Learn more.</link>',
+        {
+          link: makeLink('https://docs.microsoft.com/en-us/composer/how-to-connect-to-a-skill'),
+        }
       ),
     title: () => formatMessage('Which bots can connect to this skill?'),
   },
@@ -272,7 +285,10 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     subText: () =>
       formatMessage(
-        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more.'
+        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. <link>Learn more.</link>',
+        {
+          link: makeLink('https://aka.ms/bfcomposer-2-exportskill'),
+        }
       ),
     title: () => formatMessage('Select dialogs'),
   },
@@ -292,7 +308,10 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     subText: () =>
       formatMessage(
-        'Triggers selected below will enable other bots to access the capabilities of your skill. Learn more.'
+        'Triggers selected below will enable other bots to access the capabilities of your skill. <link>Learn more.</link>',
+        {
+          link: makeLink('https://aka.ms/bfcomposer-2-exportskill'),
+        }
       ),
     title: () => formatMessage('Select triggers'),
   },

@@ -40,13 +40,13 @@ describe('<AppUpdater />', () => {
     const { getByText } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
-        version: '1.0.0',
+        version: '5.6.7',
         status: AppUpdaterStatus.UPDATE_AVAILABLE,
       });
     });
 
     getByText('New update available');
-    getByText('Bot Framework Composer v1.0.0');
+    getByText('Bot Framework Composer v5.6.7');
     getByText('Install the update and restart Composer.');
     getByText('Download now and install when you close Composer.');
   });
@@ -79,9 +79,10 @@ describe('<AppUpdater />', () => {
       set(appUpdateState, {
         ...baseState,
         status: AppUpdaterStatus.UPDATE_IN_PROGRESS,
+        version: '12.3.4',
       });
     });
-    getByText('Update in progress');
+    getByText('Updating to Composer v12.3.4');
     getByText('Downloading...');
     getByText('0% of Calculating...');
   });
@@ -93,9 +94,10 @@ describe('<AppUpdater />', () => {
         progressPercent: 23,
         downloadSizeInBytes: 14760000,
         status: AppUpdaterStatus.UPDATE_IN_PROGRESS,
+        version: '12.3.4',
       });
     });
-    getByText('Update in progress');
+    getByText('Updating to Composer v12.3.4');
     getByText('Downloading...');
     getByText('23% of 14.76MB');
   });

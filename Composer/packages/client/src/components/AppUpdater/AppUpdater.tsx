@@ -202,7 +202,7 @@ export const AppUpdater: React.FC<{}> = () => {
         return formatMessage('Update failed');
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
-        return formatMessage('Update in progress');
+        return formatMessage('Updating to Composer v{version}', { version });
 
       case AppUpdaterStatus.UPDATE_SUCCEEDED:
         return formatMessage('Update complete');
