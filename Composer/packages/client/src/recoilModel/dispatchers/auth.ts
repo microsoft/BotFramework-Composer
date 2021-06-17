@@ -47,6 +47,7 @@ export const authDispatcher = () => {
       if (tenant) {
         // get arm token for tenant
         try {
+          console.log('Get arm token for tenant', tenant);
           const token = await AuthClient.getARMTokenForTenant(tenant);
           if (token) {
             setPrimaryToken(token);
@@ -103,45 +104,51 @@ export const authDispatcher = () => {
     AuthClient.logOut();
   });
 
-  const requireUserLogin = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    if (userShouldProvideTokens()) {
-      if (isShowAuthDialog(false)) {
-        setShowAuthDialog(true);
-      } else {
-        // update app state with token from cache
-        setPrimaryToken(getTokenFromCache('accessToken'));
-        setGraphToken(getTokenFromCache('graphToken'));
-      }
-    } else {
-      const cachedTenantId = getTenantIdFromCache();
-      let tenantId;
-      try {
-        const tenants = await AuthClient.getTenants();
-        setAvailableTenants(tenants);
-        if (tenants.length === 0) {
-          throw new Error('No Azure Directories were found.');
-        } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
-          tenantId = cachedTenantId;
-        } else if (tenants.length === 1) {
-          tenantId = tenants[0].tenantId;
-        }
-        if (tenantId) {
-          setCurrentTenant(tenantId, false);
+  const requireUserLogin = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (desiredTenantId?: string) => {
+      if (userShouldProvideTokens()) {
+        if (isShowAuthDialog(false)) {
+          setShowAuthDialog(true);
         } else {
-          setShowTenantDialog(true);
+          // update app state with token from cache
+          setPrimaryToken(getTokenFromCache('accessToken'));
+          setGraphToken(getTokenFromCache('graphToken'));
         }
-      } catch (err) {
-        const notification = createNotification({
-          title: formatMessage('Azure sign-in'),
-          description: formatMessage(`Sign in failed: {message}`, { message: err.message || err.toString() }),
-          type: 'error',
-        });
-        addNotificationInternal(callbackHelpers, notification);
-        // clean out the app state
-        resetCreds();
+      } else if (desiredTenantId) {
+        console.log('Logging into specific tenant:', desiredTenantId);
+        setCurrentTenant(desiredTenantId);
+      } else {
+        const cachedTenantId = getTenantIdFromCache();
+        let tenantId;
+        console.log('Getting list of tenants...');
+        try {
+          const tenants = await AuthClient.getTenants();
+          setAvailableTenants(tenants);
+          if (tenants.length === 0) {
+            throw new Error('No Azure Directories were found.');
+          } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+            tenantId = cachedTenantId;
+          } else if (tenants.length === 1) {
+            tenantId = tenants[0].tenantId;
+          }
+          if (tenantId) {
+            setCurrentTenant(tenantId, false);
+          } else {
+            setShowTenantDialog(true);
+          }
+        } catch (err) {
+          const notification = createNotification({
+            title: formatMessage('Azure sign-in'),
+            description: formatMessage(`Sign in failed: {message}`, { message: err.message || err.toString() }),
+            type: 'error',
+          });
+          addNotificationInternal(callbackHelpers, notification);
+          // clean out the app state
+          resetCreds();
+        }
       }
     }
-  });
+  );
 
   return {
     setShowAuthDialog,

@@ -23,16 +23,16 @@ import TelemetryClient from '../../../telemetry/TelemetryClient';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { navigateTo } from '../../../utils/navigation';
 import { botDisplayNameState, settingsState } from '../../../recoilModel';
-import { AuthClient } from '../../../utils/authClient';
-import { AuthDialog } from '../../../components/Auth/AuthDialog';
-import {
-  getTokenFromCache,
-  getTenantIdFromCache,
-  isShowAuthDialog,
-  userShouldProvideTokens,
-} from '../../../utils/auth';
+// import { AuthClient } from '../../../utils/authClient';
+// import { AuthDialog } from '../../../components/Auth/AuthDialog';
+// import {
+//   getTokenFromCache,
+//   getTenantIdFromCache,
+//   isShowAuthDialog,
+//   userShouldProvideTokens,
+// } from '../../../utils/auth';
 import httpClient from '../../../utils/httpUtil';
-import { dispatcherState } from '../../../recoilModel';
+import { dispatcherState, primaryTokenState } from '../../../recoilModel';
 import { armScopes } from '../../../constants';
 import {
   tableHeaderRow,
@@ -89,12 +89,12 @@ export enum AzureAPIStatus {
 
 export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const { projectId } = props;
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  // const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [currentResource, setCurrentResource] = useState<AzureResourcePointer | undefined>();
   const [channelStatus, setChannelStatus] = useState<AzureChannelsStatus | undefined>();
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const botDisplayName = useRecoilValue(botDisplayNameState(projectId));
-  const [token, setToken] = useState<string | undefined>();
+  // const [token, setToken] = useState<string | undefined>();
   const [availableSubscriptions, setAvailableSubscriptions] = useState<Subscription[]>([]);
   const [publishTargetOptions, setPublishTargetOptions] = useState<IDropdownOption[]>([]);
   const [isLoading, setLoadingStatus] = useState<boolean>(false);
@@ -102,7 +102,9 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
   const [showSpeechModal, setShowSpeechModal] = useState<boolean>(false);
   const [showTeamsManifestModal, setShowTeamsManifestModal] = useState<boolean>(false);
   const [showTeamsCallOut, setShowTeamsCallOut] = useState<boolean>(false);
-  const { setApplicationLevelError } = useRecoilValue(dispatcherState);
+  const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
+  const token = useRecoilValue(primaryTokenState);
+
   /* Copied from Azure Publishing extension */
   const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
     const tokenCredentials = new TokenCredentials(token);
@@ -123,34 +125,34 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const getTokenInteractively = async (tenantId: string) => {
-    let newtoken = '';
-    try {
-      // if tenantId is present, use this to retrieve the arm token.
-      // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
-      if (!tenantId) {
-        const tenants = await AuthClient.getTenants();
-        const cachedTenantId = getTenantIdFromCache();
+  // const getTokenInteractively = async (tenantId: string) => {
+  //   let newtoken = '';
+  //   try {
+  //     // if tenantId is present, use this to retrieve the arm token.
+  //     // absence of a tenantId indicates this was a legacy (pre-tenant support) provisioning profile
+  //     if (!tenantId) {
+  //       const tenants = await AuthClient.getTenants();
+  //       const cachedTenantId = getTenantIdFromCache();
 
-        if (tenants.length === 0) {
-          throw new Error('No Azure Directories were found.');
-        } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
-          tenantId = cachedTenantId;
-        } else {
-          tenantId = tenants[0].tenantId;
-        }
-      }
-      if (tenantId) {
-        newtoken = await AuthClient.getARMTokenForTenant(tenantId);
-      } else {
-        newtoken = await AuthClient.getAccessToken(armScopes);
-      }
-    } catch (error) {
-      setErrorMessage(error.message || error.toString());
-      setCurrentResource(undefined);
-    }
-    return newtoken;
-  };
+  //       if (tenants.length === 0) {
+  //         throw new Error('No Azure Directories were found.');
+  //       } else if (cachedTenantId && tenants.map((t) => t.tenantId).includes(cachedTenantId)) {
+  //         tenantId = cachedTenantId;
+  //       } else {
+  //         tenantId = tenants[0].tenantId;
+  //       }
+  //     }
+  //     if (tenantId) {
+  //       newtoken = await AuthClient.getARMTokenForTenant(tenantId);
+  //     } else {
+  //       newtoken = await AuthClient.getAccessToken(armScopes);
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage(error.message || error.toString());
+  //     setCurrentResource(undefined);
+  //   }
+  //   return newtoken;
+  // };
 
   const onSelectProfile = async (_, opt) => {
     if (opt.key === 'manageProfiles') {
@@ -162,26 +164,29 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
       if (profile) {
         const config = JSON.parse(profile.configuration);
 
-        let newtoken = '';
-        if (userShouldProvideTokens()) {
-          if (isShowAuthDialog(false)) {
-            setShowAuthDialog(true);
-          }
-          newtoken = getTokenFromCache('accessToken');
-        } else {
-          newtoken = await getTokenInteractively(config.tenantId);
-        }
-        setToken(newtoken);
+        // TODO: handle case where config does not have a tenant id and we need to fall back to getAccessToken
+        requireUserLogin(config.tenantId);
 
-        if (newtoken) {
-          setCurrentResource({
-            microsoftAppId: config?.settings?.MicrosoftAppId,
-            resourceName: config.botName || config.name,
-            resourceGroupName: config.resourceGroup || config.botName || config.name,
-            tenantId: config.tenantId,
-            subscriptionId: config.subscriptionId,
-          });
-        }
+        // let newtoken = '';
+        // if (userShouldProvideTokens()) {
+        //   if (isShowAuthDialog(false)) {
+        //     setShowAuthDialog(true);
+        //   }
+        //   newtoken = getTokenFromCache('accessToken');
+        // } else {
+        //   newtoken = await getTokenInteractively(config.tenantId);
+        // }
+        // setToken(newtoken);
+
+        // if (newtoken) {
+        setCurrentResource({
+          microsoftAppId: config?.settings?.MicrosoftAppId,
+          resourceName: config.botName || config.name,
+          resourceGroupName: config.resourceGroup || config.botName || config.name,
+          tenantId: config.tenantId,
+          subscriptionId: config.subscriptionId,
+        });
+        // }
       }
     }
   };
@@ -400,20 +405,20 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
     }
   };
 
-  const hasAuth = async () => {
-    if (currentResource) {
-      let newtoken = '';
-      if (userShouldProvideTokens()) {
-        if (isShowAuthDialog(false)) {
-          setShowAuthDialog(true);
-        }
-        newtoken = getTokenFromCache('accessToken');
-      } else {
-        newtoken = await getTokenInteractively(currentResource.tenantId);
-      }
-      setToken(newtoken);
-    }
-  };
+  // const hasAuth = async () => {
+  //   if (currentResource) {
+  //     let newtoken = '';
+  //     if (userShouldProvideTokens()) {
+  //       if (isShowAuthDialog(false)) {
+  //         setShowAuthDialog(true);
+  //       }
+  //       newtoken = getTokenFromCache('accessToken');
+  //     } else {
+  //       newtoken = await getTokenInteractively(currentResource.tenantId);
+  //     }
+  //     setToken(newtoken);
+  //   }
+  // };
 
   const toggleService = (channel) => {
     return async (_, enabled) => {
@@ -609,7 +614,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
 
   return (
     <React.Fragment>
-      {showAuthDialog && (
+      {/* {showAuthDialog && (
         <AuthDialog
           needGraph={false}
           next={hasAuth}
@@ -617,7 +622,7 @@ export const ABSChannels: React.FC<RuntimeSettingsProps> = (props) => {
             setShowAuthDialog(false);
           }}
         />
-      )}
+      )} */}
       <ManageSpeech
         hidden={!showSpeechModal}
         onDismiss={() => {
