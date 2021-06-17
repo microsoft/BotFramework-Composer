@@ -192,7 +192,7 @@ export const ResourceConfigurationStep = (props: Props) => {
               isNewResourceGroup={isNewResourceGroup}
               subscriptionId={subscriptionId}
               textFieldProps={{
-                disabled: publishConfig?.resourceGroup?.name,
+                disabled: publishConfig?.resourceGroup,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleResourceGroupChange('', false, false);

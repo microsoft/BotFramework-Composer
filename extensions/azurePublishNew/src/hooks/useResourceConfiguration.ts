@@ -21,7 +21,8 @@ import { useDispatcher } from './useDispatcher';
 export const useResourceConfiguration = () => {
   const { userShouldProvideTokens, getName } = usePublishApi();
   const [deployLocations, setDeployLocations] = React.useState<DeployLocation[]>([]);
-  const [hasErrors, setHasErrors] = React.useState<boolean>(false);
+  const [isInvalidResourceGroupName, setIsInvalidResourceGroupName] = React.useState<boolean>(false);
+  const [isInvalidHostName, setIsInvalidHostName] = React.useState<boolean>(false);
   const {
     setTenantId,
     setSubscriptionId,
@@ -40,6 +41,11 @@ export const useResourceConfiguration = () => {
   const hostName = useRecoilValue(hostNameState);
 
   const { setItem } = useLocalStorage();
+
+  const hasErrors = React.useMemo(() => isInvalidResourceGroupName || isInvalidHostName, [
+    isInvalidHostName,
+    isInvalidResourceGroupName,
+  ]);
 
   const isValidConfiguration = React.useMemo(
     (): boolean =>
@@ -78,9 +84,9 @@ export const useResourceConfiguration = () => {
   );
 
   const handleResourceGroupChange = React.useCallback(
-    (resourceGroupId: string, isNew: boolean, hasErrors: boolean) => {
+    (resourceGroupId: string, isNew: boolean, isInvalidName: boolean) => {
       setResourceGroup(resourceGroupId, isNew);
-      setHasErrors(hasErrors);
+      setIsInvalidResourceGroupName(isInvalidName);
     },
     [setResourceGroup]
   );
@@ -110,8 +116,9 @@ export const useResourceConfiguration = () => {
   );
 
   const handleHostNameChange = React.useCallback(
-    (hostName: string) => {
+    (hostName: string, isInvalidName: boolean) => {
       setHostName(hostName);
+      setIsInvalidHostName(isInvalidName);
     },
     [setHostName]
   );
