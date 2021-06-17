@@ -539,4 +539,4 @@ export const SURVEY_PARAMETERS = {
   chanceToAppear: 1,
 };
 
-export const SURVEY_URL_BASE = 'https://microsoft.qualtrics.com/jfe/form/SV_bwlHGwEO2UDwo2F?Source=Composer';
+export const SURVEY_URL_BASE = 'https://microsoft.qualtrics.com/jfe/form/SV_bwlHGwEO2UDwo2F';

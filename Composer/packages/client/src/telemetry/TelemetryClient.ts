@@ -25,6 +25,7 @@ export default class TelemetryClient {
     eventName: TN,
     properties?: TelemetryEvents[TN] extends undefined ? never : TelemetryEvents[TN]
   ) {
+    console.log(this.sharedProperties);
     this.client?.trackEvent(eventName, { ...this.sharedProperties, ...properties });
   }
 

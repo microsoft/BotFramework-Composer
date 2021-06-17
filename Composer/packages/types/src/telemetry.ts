@@ -234,6 +234,12 @@ type PageView = {
   [PageNames.PackageManger]: undefined;
 };
 
+type SurveyEvents = {
+  SurveyOffered: undefined;
+  SurveyTaken: undefined;
+  SurveyOptOut: undefined;
+};
+
 export type TelemetryEvents = ApplicationEvents &
   GettingStartedEvents &
   BotProjectEvents &
@@ -252,7 +258,8 @@ export type TelemetryEvents = ApplicationEvents &
   LuEditorEvents &
   OrchestratorEvents &
   PropertyEditorEvents &
-  CreationEvents;
+  CreationEvents &
+  SurveyEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 
