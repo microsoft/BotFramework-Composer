@@ -5,9 +5,7 @@ import './commands';
 
 before(() => {
   cy.exec('yarn clean-all');
-  cy.createTemplateBot('EmptySample', ({ id }) => {
-    cy.visit(`/bot/${id}`);
-  });
+  cy.createTemplateBot('EmptySample');
 });
 
 beforeEach(() => {
@@ -20,5 +18,5 @@ beforeEach(() => {
 after(() => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(500);
-  cy.exec('yarn clean-all');
+  // cy.exec('yarn clean-all');
 });

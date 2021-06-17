@@ -9,19 +9,19 @@ declare namespace Cypress {
      * Creates a bot based on empty bot.
      * @example cy.createBot('EmptySample', ()=> {})
      */
-    createBot(botName: string, createdCallback: (bot: any) => void): void;
+    createBot(botName: string, createdCallback?: (bot: any) => void): void;
 
     /**
      * Creates a bot based on empty bot.
      * @example cy.createTemplateBot('EmptySample', ()=> {})
      */
-    createTemplateBot(botName: string, createdCallback: (bot: any) => void): void;
+    createTemplateBot(botName: string, createdCallback?: (bot: any) => void): void;
 
     /**
      * Creates a bot from above created template bot.
      * @example cy.createTestBot('EmptySample', ()=> {})
      */
-    createTestBot(botName: string, createdCallback: (bot: any) => void): void;
+    createTestBot(botName: string, createdCallback?: (bot: any) => void): void;
 
     /**
      * Visits a page from the left nav bar using the page's testid

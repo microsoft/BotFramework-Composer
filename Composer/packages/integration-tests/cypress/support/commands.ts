@@ -5,7 +5,7 @@ import '@testing-library/cypress/add-commands';
 
 let TemplateBotProjectId = '';
 
-Cypress.Commands.add('createBot', (botName: string, callback: (bot: any) => void) => {
+Cypress.Commands.add('createBot', (botName: string, callback?: (bot: any) => void) => {
   const params = {
     description: '',
     location: '',
@@ -15,10 +15,10 @@ Cypress.Commands.add('createBot', (botName: string, callback: (bot: any) => void
     schemaUrl: '',
     storageId: 'default',
     templateId: '@microsoft/generator-bot-empty',
-    templateVersion: '1.0.0-rc3',
+    templateVersion: '1.0.0',
   };
 
-  const pollingRequestBotStatus = (jobId: string, callback: (result: any) => void) => {
+  const pollingRequestBotStatus = (jobId: string, callback?: (result: any) => void) => {
     cy.wait(2000);
     try {
       cy.request('get', `/api/status/${jobId}`).then((res) => {
@@ -26,10 +26,11 @@ Cypress.Commands.add('createBot', (botName: string, callback: (bot: any) => void
         if (httpStatusCode !== 200) {
           pollingRequestBotStatus(id, callback);
         } else {
-          callback(result);
+          callback?.(result);
         }
       });
     } catch (error) {
+      console.error(error);
       pollingRequestBotStatus(jobId, callback);
     }
   };
@@ -37,18 +38,19 @@ Cypress.Commands.add('createBot', (botName: string, callback: (bot: any) => void
   cy.request('post', '/api/projects', params).then((res) => {
     const { jobId } = res.body;
     // install package can take a long time.
-    cy.wait(20000);
-    pollingRequestBotStatus(jobId, (result) => callback(result));
+    cy.wait(5000);
+    pollingRequestBotStatus(jobId, (result) => callback?.(result));
   });
 });
 
-Cypress.Commands.add('createTemplateBot', (botName: string, callback: (bot: any) => void) => {
+Cypress.Commands.add('createTemplateBot', (botName: string, callback?: (bot: any) => void) => {
   cy.createBot(`TemplateBot_${botName}`, (bot) => {
     TemplateBotProjectId = bot.id;
+    callback?.(bot);
   });
 });
 
-Cypress.Commands.add('createTestBot', (botName: string, callback: (bot: any) => void) => {
+Cypress.Commands.add('createTestBot', (botName: string, callback?: (bot: any) => void) => {
   const name = `TestBot_${botName}`;
 
   const params = {
@@ -59,7 +61,7 @@ Cypress.Commands.add('createTestBot', (botName: string, callback: (bot: any) => 
   };
 
   cy.request('post', `/api/projects/${TemplateBotProjectId}/project/saveAs`, params).then((res) => {
-    callback(res.body);
+    callback?.(res.body);
   });
 });
 
