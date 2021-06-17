@@ -2,26 +2,19 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import React, { useMemo, useCallback, useEffect, useRef, FocusEvent, KeyboardEvent, useState, FormEvent } from 'react';
-import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import { TextField, ITextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import debounce from 'lodash/debounce';
-import { IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
-import {
-  IContextualMenuItem,
-  IContextualMenuItemProps,
-  ContextualMenu,
-  DirectionalHint,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { IContextualMenuItem, ContextualMenu, DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
 
 import { getDefaultFontSettings } from '../../../../recoilModel/utils/fontUtil';
 
-import { PropertyTreeItem, PropertyItem } from './utils/components/PropertyTreeItem';
+import { PropertyItem } from './utils/components/PropertyTreeItem';
 import { useNoSearchResultMenuItem } from './utils/hooks/useNoSearchResultMenuItem';
 import { computePropertyItemTree, getAllNodes, WatchDataPayload } from './utils/helpers';
+import { GetPickerContextualMenuItem } from './utils/components/PickerContextualMenuItem';
 
 const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
@@ -40,11 +33,28 @@ const getStrings = () => {
   };
 };
 
-const defaultTreeItemHeight = 36;
-
-const labelContainerStyle: IStackStyles = {
-  root: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', height: defaultTreeItemHeight },
+const textFieldStyles: Partial<ITextFieldStyles> = {
+  field: {
+    fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
+    fontSize: 12,
+  },
+  fieldGroup: {
+    backgroundColor: 'transparent',
+    height: 16,
+  },
+  root: {
+    selectors: {
+      '.ms-TextField-fieldGroup': {
+        border: 'none',
+      },
+    },
+  },
 };
+
+const pickerContainer = css`
+  margin: '0';
+  width: '240px';
+`;
 
 export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) => {
   const { payload, variableId, path, onSelectPath } = props;
@@ -190,37 +200,19 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
     onHideContextualMenu();
   }, []);
 
+  const contextualMenuItemRenderer = useMemo(() => {
+    return GetPickerContextualMenuItem(query, propertyTreeExpanded);
+  }, [query, propertyTreeExpanded]);
+
   return (
-    <div
-      ref={pickerContainerElement}
-      css={{
-        margin: '0',
-        width: '240px',
-      }}
-    >
+    <div ref={pickerContainerElement} css={pickerContainer}>
       <TextField
         componentRef={inputBoxElement}
         id={variableId}
         placeholder={uiStrings.searchPlaceholder}
-        styles={{
-          field: {
-            fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
-            fontSize: 12,
-          },
-          fieldGroup: {
-            backgroundColor: 'transparent',
-            height: 16,
-          },
-          root: {
-            selectors: {
-              '.ms-TextField-fieldGroup': {
-                border: 'none',
-              },
-            },
-          },
-        }}
+        styles={textFieldStyles}
         value={query}
-        onChange={(evt: FormEvent<HTMLInputElement | HTMLTextAreaElement>, val: string | undefined) => {
+        onChange={(_e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, val: string | undefined) => {
           setQuery(val ?? '');
         }}
         onFocus={onTextBoxFocus}
@@ -229,54 +221,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
       <ContextualMenu
         useTargetAsMinWidth
         useTargetWidth
-        contextualMenuItemAs={(itemProps: IContextualMenuItemProps) => {
-          const {
-            item: { secondaryText: path },
-          } = itemProps;
-
-          const { onToggleExpand, level, node } = itemProps.item.data as {
-            node: PropertyItem;
-            onToggleExpand: (itemId: string, expanded: boolean) => void;
-            level: number;
-          };
-
-          const renderLabel = () => {
-            const pathNodes = (path ?? '').split('.');
-            return (
-              <Stack horizontal styles={labelContainerStyle} verticalAlign="center">
-                {pathNodes.map((pathNode, idx) => (
-                  <Text
-                    key={`segment-${idx}`}
-                    styles={{
-                      root: {
-                        color: idx === pathNodes.length - 1 ? NeutralColors.black : NeutralColors.gray70,
-                      },
-                    }}
-                    variant="small"
-                  >
-                    {`${pathNode}${idx === pathNodes.length - 1 && node.children.length === 0 ? '' : '.'}`}
-                  </Text>
-                ))}
-              </Stack>
-            );
-          };
-
-          const renderSearchResultLabel = () => (
-            <Stack styles={labelContainerStyle} verticalAlign="center">
-              <Text variant="small">{path}</Text>
-            </Stack>
-          );
-
-          return (
-            <PropertyTreeItem
-              expanded={propertyTreeExpanded[node.id]}
-              item={node}
-              level={level}
-              onRenderLabel={query ? renderSearchResultLabel : renderLabel}
-              onToggleExpand={onToggleExpand}
-            />
-          );
-        }}
+        contextualMenuItemAs={contextualMenuItemRenderer}
         delayUpdateFocusOnHover={false}
         directionalHint={DirectionalHint.bottomLeftEdge}
         hidden={!showContextualMenu}
