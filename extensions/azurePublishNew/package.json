@@ -6,7 +6,11 @@
   "license": "MIT",
   "scripts": {
     "build": "node ../scripts/build.js",
-    "watch": "yarn build --watch"
+    "watch": "yarn build --watch",
+    "test": "jest --config jest.config.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "composer": {
     "enabled": true,
