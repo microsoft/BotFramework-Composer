@@ -6,9 +6,9 @@ import formatMessage from 'format-message';
 import styled from '@emotion/styled';
 import { DefaultButton, PersonaSize } from 'office-ui-fabric-react';
 
-import { UserInfo } from '../../../recoilModel/types';
 import { UserPersona } from '../../shared/userPersona/UserPersona';
 import { WizardStep } from '../../shared/wizard';
+import { UserInfo } from '../../../types';
 
 type ProvisonActionsStylingProps = {
   showSignout: boolean;
@@ -25,20 +25,19 @@ const FooterButton = styled(DefaultButton)`
 `;
 
 const ButtonContainer = styled.div`
-  & button:nth-last-child(1) {
+  & button:last-of-type {
     margin-right: 0px;
   }
 `;
 
-type Props = { userInfo: UserInfo } & WizardStep;
+type Props = { userInfo?: UserInfo } & WizardStep;
 
-export const WizardFooterWithUserPersona = (props: Props) => {
+export const WizardFooter = (props: Props) => {
   const { userInfo, navigationState: navigation } = props;
-  const isSignedIn = !!props.userInfo;
 
   return (
-    <ProvisonActions showSignout={isSignedIn}>
-      {isSignedIn ? (
+    <ProvisonActions showSignout={!!userInfo}>
+      {userInfo ? (
         <UserPersona secondaryText={formatMessage('Sign out')} size={PersonaSize.size40} text={userInfo?.name} />
       ) : null}
       <ButtonContainer>
