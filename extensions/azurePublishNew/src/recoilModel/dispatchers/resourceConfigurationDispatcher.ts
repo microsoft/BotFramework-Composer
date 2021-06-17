@@ -22,7 +22,7 @@ export const resourceConfigurationDispatcher = () => {
     set(subscriptionState, subscriptionId);
   });
 
-  const setResourceGroupName = useRecoilCallback(
+  const setResourceGroup = useRecoilCallback(
     ({ set }: CallbackInterface) => (resourceGroupName: string, isNew: boolean) => {
       set(resourceGroupState, { name: resourceGroupName, isNew });
     }
@@ -43,7 +43,7 @@ export const resourceConfigurationDispatcher = () => {
   return {
     setTenantId,
     setSubscriptionId,
-    setResourceGroupName,
+    setResourceGroup,
     setDeployLocation,
     setLuisRegion,
     setHostName,

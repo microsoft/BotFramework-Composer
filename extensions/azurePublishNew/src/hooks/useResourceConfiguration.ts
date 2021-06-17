@@ -25,7 +25,7 @@ export const useResourceConfiguration = () => {
   const {
     setTenantId,
     setSubscriptionId,
-    setResourceGroupName,
+    setResourceGroup,
     setDeployLocation,
     setLuisRegion,
     setHostName,
@@ -69,20 +69,20 @@ export const useResourceConfiguration = () => {
     (subscriptionId: string) => {
       setSubscriptionId(subscriptionId);
       if (!subscriptionId) {
-        setResourceGroupName('', false);
+        setResourceGroup('', false);
         setDeployLocation('');
         setLuisRegion(undefined);
       }
     },
-    [setResourceGroupName, setDeployLocation, setSubscriptionId]
+    [setResourceGroup, setDeployLocation, setSubscriptionId]
   );
 
   const handleResourceGroupChange = React.useCallback(
     (resourceGroupId: string, isNew: boolean, hasErrors: boolean) => {
-      setResourceGroupName(resourceGroupId, isNew);
+      setResourceGroup(resourceGroupId, isNew);
       setHasErrors(hasErrors);
     },
-    [setResourceGroupName]
+    [setResourceGroup]
   );
 
   const handleDeployLocationChange = React.useCallback(
@@ -116,17 +116,16 @@ export const useResourceConfiguration = () => {
     [setHostName]
   );
 
-  const stashWizardState = React.useCallback(
-    () =>
-      setItem(getName(), {
-        tenantId,
-        subscriptionId,
-        resourceGroup: { name: resourceGroupName, isNew },
-        deployLocation,
-        luisRegion,
-      }),
-    [tenantId, subscriptionId, resourceGroupName, deployLocation, luisRegion]
-  );
+  const stashWizardState = React.useCallback(() => {
+    setItem(getName(), {
+      tenantId,
+      subscriptionId,
+      resourceGroup: { name: resourceGroupName, isNew },
+      deployLocation,
+      luisRegion,
+      hostName,
+    });
+  }, [tenantId, subscriptionId, resourceGroupName, deployLocation, luisRegion, isNew, hostName]);
 
   return {
     configuration: {

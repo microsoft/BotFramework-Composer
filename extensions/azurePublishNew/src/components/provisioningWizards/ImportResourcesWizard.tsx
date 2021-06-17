@@ -13,12 +13,11 @@ import { ImportInstructionsStep } from './steps/ImportInstructionsStep';
 import { PublishConfigEditorStep } from './steps/PublishConfigEditorStep';
 import { WizardFooter } from './footers/WizardFooter';
 
-const removePlaceholder = (config: any) => {
+const removePlaceholder = (config: string) => {
   try {
     if (config) {
-      let str = JSON.stringify(config);
-      str = str.replace(/<[^>]*>/g, '');
-      const newConfig = JSON.parse(str);
+      config = config.replace(/<[^>]*>/g, '');
+      const newConfig = JSON.parse(config);
       return newConfig;
     } else {
       return undefined;

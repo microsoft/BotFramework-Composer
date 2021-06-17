@@ -80,7 +80,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         onCancel,
       },
     ]);
-  }, [isValidResourceConfiguration, userInfo]);
+  }, [isValidResourceConfiguration, userInfo, stashWizardState]);
 
   return (
     <Wizard

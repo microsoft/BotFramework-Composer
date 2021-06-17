@@ -5,6 +5,7 @@
 
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation, Subscription } from '@botframework-composer/types';
+import { ResourceNameAvailability } from '@azure/arm-appservice/esm/models';
 
 export const getSubscriptions = (accessToken: string): Promise<Subscription[]> => {
   return new Promise((resolve) => {
@@ -22,4 +23,15 @@ export const getDeployLocations = (accessToken: string, subscription: string): P
   return new Promise((resolve) => {
     resolve([]);
   });
+};
+
+export const CheckWebAppNameAvailability = async (
+  token: string,
+  webAppName: string,
+  subscriptionId: string
+): Promise<ResourceNameAvailability> => {
+  return {
+    nameAvailable: true,
+    message: '',
+  } as ResourceNameAvailability;
 };

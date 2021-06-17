@@ -19,6 +19,7 @@ import {
   IStackItemStyles,
   Link,
 } from 'office-ui-fabric-react';
+import { usePublishApi } from '@bfc/extension-client';
 
 import { useDispatcher } from '../../../hooks/useDispatcher';
 import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
@@ -83,11 +84,19 @@ const urls = {
 
 export const ResourceConfigurationStep = (props: Props) => {
   const { setUserInfo } = useDispatcher();
-
+  const { publishConfig } = usePublishApi();
   const userInfo = useRecoilValue(userInfoState);
 
   const {
-    configuration: { tenantId, deployLocation, resourceGroupName, subscriptionId, luisRegion, isNewResourceGroup },
+    configuration: {
+      tenantId,
+      deployLocation,
+      resourceGroupName,
+      subscriptionId,
+      luisRegion,
+      isNewResourceGroup,
+      hostName,
+    },
     handleResourceGroupChange,
     handleDeployLocationChange,
     handleSubscriptionChange,
@@ -134,6 +143,7 @@ export const ResourceConfigurationStep = (props: Props) => {
             </Stack>
             <TenantPicker
               textFieldProps={{
+                disabled: publishConfig?.tenantId, //disable if the config is coming from publishConfig(import)
                 styles: autoCompleteTextFieldStyles,
                 onChange: (e, newValue) => {
                   if (newValue.length === 0) handleTenantChange('');
@@ -155,6 +165,7 @@ export const ResourceConfigurationStep = (props: Props) => {
             <SubscriptionPicker
               accessToken={userInfo?.token}
               textFieldProps={{
+                disabled: publishConfig?.subscriptionId,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleSubscriptionChange('');
@@ -181,6 +192,7 @@ export const ResourceConfigurationStep = (props: Props) => {
               isNewResourceGroup={isNewResourceGroup}
               subscriptionId={subscriptionId}
               textFieldProps={{
+                disabled: publishConfig?.resourceGroup?.name,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleResourceGroupChange('', false, false);
@@ -202,7 +214,10 @@ export const ResourceConfigurationStep = (props: Props) => {
             </Stack>
             <ResourceNameTextField
               accessToken={userInfo?.token}
+              disabled={publishConfig?.hostname}
               styles={autoCompleteTextFieldStyles}
+              subscriptionId={subscriptionId}
+              value={hostName}
               onHostNameChange={handleHostNameChange}
             />
           </Stack>
@@ -215,6 +230,7 @@ export const ResourceConfigurationStep = (props: Props) => {
               accessToken={userInfo?.token}
               subscriptionId={subscriptionId}
               textFieldProps={{
+                disabled: publishConfig?.deployLocation,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleDeployLocationChange('');
@@ -243,6 +259,7 @@ export const ResourceConfigurationStep = (props: Props) => {
                 .filter((dl) => LuisAuthoringSupportLocation.includes(dl.name))
                 .map((i) => ({ key: i.name, text: i.displayName }))}
               textFieldProps={{
+                disabled: publishConfig?.settings?.luis?.region,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleLuisRegionChange(undefined);

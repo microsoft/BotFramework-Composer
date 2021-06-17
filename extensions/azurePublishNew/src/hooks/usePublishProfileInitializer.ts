@@ -3,6 +3,7 @@
 
 import { MutableSnapshot } from 'recoil';
 import { useLocalStorage, usePublishApi } from '@bfc/extension-client';
+import mergeWith from 'lodash/mergeWith';
 
 import {
   tenantState,
@@ -15,21 +16,46 @@ import {
 import { PublishProfileConfiguration } from '../types';
 import { importConfigurationState } from '../recoilModel/atoms/importConfigurationState';
 
-const defaultConfig: PublishProfileConfiguration = {
+const defaultConfig = {
   tenantId: '',
   subscriptionId: '',
   deployLocation: '',
   hostName: '',
   luisRegion: '',
   resourceGroup: { isNew: false, name: '' },
-};
+} as PublishProfileConfiguration;
 
 export const usePublishProfileInitializer = () => {
   const { getName, publishConfig, getSchema } = usePublishApi();
   const { getItem } = useLocalStorage();
 
+  const currentPublishConfig: PublishProfileConfiguration = {
+    deployLocation: publishConfig?.region,
+    hostName: publishConfig?.hostname,
+    luisRegion: publishConfig?.settings?.luis?.region,
+    resourceGroup: { name: publishConfig?.resourceGroup, isNew: false },
+    subscriptionId: publishConfig?.subscriptionId,
+    tenantId: publishConfig?.tenantId,
+  };
+
   const initialize = ({ set }: MutableSnapshot) => {
-    const profile = { ...defaultConfig, ...(getItem(getName()) as PublishProfileConfiguration) };
+    //pick all the non-null values, publish config will only be populated when the exisiting profile is edited.
+    const profile = mergeWith(
+      defaultConfig,
+      getItem(getName()) as PublishProfileConfiguration,
+      currentPublishConfig,
+      (value, srcValue, key) => {
+        if (key === 'resourceGroup') {
+          return {
+            name: value?.name || srcValue?.name,
+            isNew: value?.isNew || srcValue?.isNew,
+          };
+        } else {
+          return value || srcValue;
+        }
+      }
+    );
+
     set(tenantState, profile.tenantId);
     set(subscriptionState, profile.subscriptionId);
     set(luisRegionState, profile.luisRegion);
@@ -37,7 +63,7 @@ export const usePublishProfileInitializer = () => {
     set(resourceGroupState, profile.resourceGroup);
     set(hostNameState, profile.hostName);
     set(importConfigurationState, {
-      config: publishConfig || JSON.stringify(getSchema().default, null, 2),
+      config: JSON.stringify(publishConfig || getSchema().default, null, 2),
       isValidConfiguration: true,
     });
   };
