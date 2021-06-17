@@ -1,35 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { fireEvent, act, findAllByText } from '@botframework-composer/test-utils';
+import { fireEvent, act } from '@botframework-composer/test-utils';
 import React from 'react';
 
-import { renderWithRecoil } from '../../../../__tests__/testUtils';
-import { ManageSpeech } from '../ManageSpeech';
+import { renderWithRecoil } from '../../testUtils';
+import { ManageSpeech } from '../../../src/components/ManageSpeech/ManageSpeech';
 
 const serviceName = 'Speech';
 const DOWN_ARROW = { keyCode: 40 };
-
-// token creds
-jest.mock('@azure/ms-rest-js');
-
-jest.mock('@azure/arm-resources', () => ({
-  ResourceManagementClient: () => {
-    return {
-      resourceGroups: {
-        list: async () => {
-          return [
-            {
-              id: 'mockedGroup',
-              name: 'mockedGroup',
-              region: 'westus',
-            },
-          ];
-        },
-      },
-    };
-  },
-}));
 
 jest.mock('@azure/arm-cognitiveservices', () => ({
   CognitiveServicesManagementClient: () => {
@@ -56,36 +35,11 @@ jest.mock('@azure/arm-cognitiveservices', () => ({
   },
 }));
 
-// subscription client
-jest.mock('@azure/arm-subscriptions', () => ({
-  SubscriptionClient: () => {
-    return {
-      subscriptions: {
-        list: async () => {
-          return {
-            _response: {
-              parsedBody: [
-                {
-                  subscriptionId: 'mockSubscription',
-                  displayName: 'mockSubscription',
-                },
-              ],
-            },
-          };
-        },
-        listLocations: async () => {
-          return [{ name: 'westus', displayName: 'West US' }];
-        },
-      },
-    };
-  },
-}));
-
-jest.mock('../../../components/Auth/AuthDialog', () => ({
+jest.mock('../../../src/components/Auth/AuthDialog', () => ({
   AuthDialog: ({ children, onClick }) => <div />,
 }));
 
-jest.mock('../../../utils/authClient', () => ({
+jest.mock('../../../src/utils/authClient', () => ({
   AuthClient: {
     getTenants: async () => {
       return [
@@ -99,7 +53,7 @@ jest.mock('../../../utils/authClient', () => ({
   },
 }));
 
-jest.mock('../../../utils/auth');
+jest.mock('../../../src/utils/auth');
 
 describe('<ManageSpeech />', () => {
   it('displays correct ui copy', async () => {
@@ -234,7 +188,7 @@ describe('<ManageSpeech />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId, findAllByText } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId } = renderWithRecoil(
       <ManageSpeech
         hidden={false}
         onDismiss={onDismiss}

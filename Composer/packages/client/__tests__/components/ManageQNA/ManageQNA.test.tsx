@@ -4,33 +4,45 @@
 import { fireEvent, act } from '@botframework-composer/test-utils';
 import React from 'react';
 
-import { renderWithRecoil } from '../../../../__tests__/testUtils';
-import { ManageLuis } from '../ManageLuis';
+import { renderWithRecoil } from '../../testUtils';
+import { ManageQNA } from '../../../src/components/ManageQNA/ManageQNA';
 
-const serviceName = 'Language Understanding';
+const serviceName = 'QnA Maker';
 const DOWN_ARROW = { keyCode: 40 };
 
-// token creds
-jest.mock('@azure/ms-rest-js');
-
-jest.mock('@azure/arm-resources', () => ({
-  ResourceManagementClient: () => {
+jest.mock('@azure/arm-appservice', () => ({
+  WebSiteManagementClient: () => {
     return {
-      resourceGroups: {
-        list: async () => {
-          return [
-            {
-              id: 'mockedGroup',
-              name: 'mockedGroup',
-              region: 'westus',
-            },
-          ];
-        },
+      appServicePlans: {
+        createOrUpdate: jest.fn(),
+      },
+      webApps: {
+        createOrUpdate: jest.fn(() => {
+          'https://mockedHostName';
+        }),
+      },
+      adminKeys: {
+        get: jest.fn(() => {
+          'mockedPrimaryKey';
+        }),
       },
     };
   },
 }));
-
+jest.mock('@azure/arm-search', () => ({
+  SearchManagementClient: () => {
+    return {
+      services: {
+        createOrUpdate: jest.fn(),
+      },
+      adminKeys: {
+        get: jest.fn(() => {
+          'mockedPrimaryKey';
+        }),
+      },
+    };
+  },
+}));
 jest.mock('@azure/arm-cognitiveservices', () => ({
   CognitiveServicesManagementClient: () => {
     return {
@@ -39,7 +51,7 @@ jest.mock('@azure/arm-cognitiveservices', () => ({
         list: async () => {
           return [
             {
-              kind: 'LUIS.Authoring',
+              kind: 'QnAMaker',
               id: '/stuff/resourceGroups/mockedGroup/stuff',
               name: 'mockedAccount',
               location: 'westus',
@@ -56,36 +68,11 @@ jest.mock('@azure/arm-cognitiveservices', () => ({
   },
 }));
 
-// subscription client
-jest.mock('@azure/arm-subscriptions', () => ({
-  SubscriptionClient: () => {
-    return {
-      subscriptions: {
-        list: async () => {
-          return {
-            _response: {
-              parsedBody: [
-                {
-                  subscriptionId: 'mockSubscription',
-                  displayName: 'mockSubscription',
-                },
-              ],
-            },
-          };
-        },
-        listLocations: async () => {
-          return [{ name: 'westus', displayName: 'West US' }];
-        },
-      },
-    };
-  },
-}));
-
-jest.mock('../../../components/Auth/AuthDialog', () => ({
+jest.mock('../../../src/components/Auth/AuthDialog', () => ({
   AuthDialog: ({ children, onClick }) => <div />,
 }));
 
-jest.mock('../../../utils/authClient', () => ({
+jest.mock('../../../src/utils/authClient', () => ({
   AuthClient: {
     getTenants: async () => {
       return [
@@ -99,17 +86,17 @@ jest.mock('../../../utils/authClient', () => ({
   },
 }));
 
-jest.mock('../../../utils/auth');
+jest.mock('../../../src/utils/auth');
 
-describe('<ManageLuis />', () => {
-  const onDismiss = jest.fn();
-  const onGetKey = jest.fn();
-  const onNext = jest.fn();
-  const onToggleVisibility = jest.fn();
-
+describe('<ManageQNA />', () => {
   it('displays correct ui copy', async () => {
+    const onDismiss = jest.fn();
+    const onGetKey = jest.fn();
+    const onNext = jest.fn();
+    const onToggleVisibility = jest.fn();
+
     const { baseElement } = renderWithRecoil(
-      <ManageLuis
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -129,7 +116,7 @@ describe('<ManageLuis />', () => {
     const onToggleVisibility = jest.fn();
 
     const { findByText } = renderWithRecoil(
-      <ManageLuis
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -150,7 +137,7 @@ describe('<ManageLuis />', () => {
     const onToggleVisibility = jest.fn();
 
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
-      <ManageLuis
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -228,14 +215,14 @@ describe('<ManageLuis />', () => {
     });
   });
 
-  it('it should navigate to the create page', async () => {
+  it('it should handle tier option during creation', async () => {
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
     const { baseElement, findByText, findByTestId } = renderWithRecoil(
-      <ManageLuis
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}
@@ -321,7 +308,7 @@ describe('<ManageLuis />', () => {
     expect(regionOption).toBeEnabled();
     // choose subscription
     await act(async () => {
-      await fireEvent.keyDown(regionOption, DOWN_ARROW);
+      await fireEvent.click(regionOption);
     });
 
     const myRegion = await findByText('West US');
@@ -331,16 +318,38 @@ describe('<ManageLuis />', () => {
       await fireEvent.click(myRegion);
     });
 
+    // NEXT BUTTON SHOULD STILL BE DISABLED! need to do tier selection!
+    expect(nextButton3).toBeDisabled();
+
+    const tierOption = await findByTestId('tier');
+    expect(tierOption).toBeDefined();
+    expect(tierOption).toBeEnabled();
+    // choose subscription
+    await act(async () => {
+      await fireEvent.keyDown(tierOption, DOWN_ARROW);
+    });
+
+    const myTier = await findByText('Free');
+    expect(myTier).toBeDefined();
+
+    await act(async () => {
+      await fireEvent.click(myTier);
+    });
+
+    // finally the button should now be enabled
     expect(nextButton3).toBeEnabled();
+
     await act(async () => {
       await fireEvent.click(nextButton3);
     });
 
-    // ensure that the final callback was called
-    expect(onGetKey).toBeCalledWith({
-      region: 'westus',
-      key: 'mockedKey',
-    });
+    // since QNA is async, the modal closes at the end ...
+    expect(onToggleVisibility).toBeCalled();
+
+    // since QNA is async, onGetKey is not called here.
+    // instead, these values are updated directly in the recoil state.
+
+    // TODO: how to test that the recoil state was updated as expected?
   });
 
   it('it should show handoff instructions', async () => {
@@ -350,7 +359,7 @@ describe('<ManageLuis />', () => {
     const onToggleVisibility = jest.fn();
 
     const { baseElement, findByText } = renderWithRecoil(
-      <ManageLuis
+      <ManageQNA
         hidden={false}
         onDismiss={onDismiss}
         onGetKey={onGetKey}

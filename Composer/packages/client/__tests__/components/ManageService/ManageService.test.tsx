@@ -4,10 +4,10 @@
 import { fireEvent, act } from '@botframework-composer/test-utils';
 import React from 'react';
 
-import { renderWithRecoil } from '../../../../__tests__/testUtils';
-import { ManageService } from '../ManageService';
+import { renderWithRecoil } from '../../testUtils';
+import { ManageService } from '../../../src/components/ManageService/ManageService';
 
-const regions = [{ key: 'mockedRegion', text: 'mockedRegion' }];
+const regions = [{ key: 'westus', text: 'West US' }];
 const tiers = [{ key: 'mockedTier', text: 'mockedTier' }];
 const serviceName = 'serviceName';
 const introtext = 'introtext';
@@ -15,27 +15,6 @@ const learnMore = 'learnmore';
 const serviceKeyType = 'keytype';
 const handoffInstructions = 'handoffInstructions';
 const DOWN_ARROW = { keyCode: 40 };
-
-// token creds
-jest.mock('@azure/ms-rest-js');
-
-jest.mock('@azure/arm-resources', () => ({
-  ResourceManagementClient: () => {
-    return {
-      resourceGroups: {
-        list: async () => {
-          return [
-            {
-              id: 'mockedGroup',
-              name: 'mockedGroup',
-              region: 'mockedRegion',
-            },
-          ];
-        },
-      },
-    };
-  },
-}));
 
 jest.mock('@azure/arm-cognitiveservices', () => ({
   CognitiveServicesManagementClient: () => {
@@ -47,7 +26,7 @@ jest.mock('@azure/arm-cognitiveservices', () => ({
               kind: 'keytype',
               id: '/stuff/resourceGroups/mockedGroup/stuff',
               name: 'mockedAccount',
-              location: 'mockedRegion',
+              location: 'westus',
             },
           ];
         },
@@ -61,36 +40,11 @@ jest.mock('@azure/arm-cognitiveservices', () => ({
   },
 }));
 
-// subscription client
-jest.mock('@azure/arm-subscriptions', () => ({
-  SubscriptionClient: () => {
-    return {
-      subscriptions: {
-        list: async () => {
-          return {
-            _response: {
-              parsedBody: [
-                {
-                  subscriptionId: 'mockSubscription',
-                  displayName: 'mockSubscription',
-                },
-              ],
-            },
-          };
-        },
-        listLocations: async () => {
-          return [{ name: 'mockedRegion', displayName: 'mockedRegion' }];
-        },
-      },
-    };
-  },
-}));
-
-jest.mock('../../../components/Auth/AuthDialog', () => ({
+jest.mock('../../../src/components/Auth/AuthDialog', () => ({
   AuthDialog: ({ children, onClick }) => <div />,
 }));
 
-jest.mock('../../../utils/authClient', () => ({
+jest.mock('../../../src/utils/authClient', () => ({
   AuthClient: {
     getTenants: async () => {
       return [
@@ -104,11 +58,11 @@ jest.mock('../../../utils/authClient', () => ({
   },
 }));
 
-jest.mock('../../../utils/auth');
+jest.mock('../../../src/utils/auth');
 
 describe('<ManageService />', () => {
   it('displays correct ui copy', async () => {
-    const createService = jest.fn(() => 'mockedKey');
+    const createService = jest.fn(async () => 'mockedKey');
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
@@ -140,7 +94,7 @@ describe('<ManageService />', () => {
   });
 
   it('calls close method when closed', async () => {
-    const createService = jest.fn(() => 'mockedKey');
+    const createService = jest.fn(async () => 'mockedKey');
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
@@ -169,7 +123,7 @@ describe('<ManageService />', () => {
   });
 
   it('it should navigate to the selection page', async () => {
-    const createService = jest.fn(() => 'mockedKey');
+    const createService = jest.fn(async () => 'mockedKey');
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
@@ -256,13 +210,13 @@ describe('<ManageService />', () => {
 
     // ensure that the final callback was called
     expect(onGetKey).toBeCalledWith({
-      region: 'mockedRegion',
+      region: 'westus',
       key: 'mockedKey',
     });
   });
 
   it('it should navigate to the create page', async () => {
-    const createService = jest.fn(() => 'mockedKey');
+    const createService = jest.fn(async () => 'mockedKey');
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
@@ -365,7 +319,7 @@ describe('<ManageService />', () => {
       await fireEvent.keyDown(regionOption, DOWN_ARROW);
     });
 
-    const myRegion = await findByText('mockedRegion');
+    const myRegion = await findByText('West US');
     expect(myRegion).toBeDefined();
 
     await act(async () => {
@@ -382,19 +336,19 @@ describe('<ManageService />', () => {
       'mockSubscription',
       'mockedGroup',
       'mockedResource',
-      'mockedRegion',
+      'westus',
       expect.anything()
     );
 
     // ensure that the final callback was called
     expect(onGetKey).toBeCalledWith({
-      region: 'mockedRegion',
+      region: 'westus',
       key: 'mockedKey',
     });
   });
 
   it('it should handle tier option during creation', async () => {
-    const createService = jest.fn(() => 'mockedKey');
+    const createService = jest.fn(async () => 'mockedKey');
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
@@ -498,7 +452,7 @@ describe('<ManageService />', () => {
       await fireEvent.keyDown(regionOption, DOWN_ARROW);
     });
 
-    const myRegion = await findByText('mockedRegion');
+    const myRegion = await findByText('West US');
     expect(myRegion).toBeDefined();
 
     await act(async () => {
@@ -535,19 +489,19 @@ describe('<ManageService />', () => {
       'mockSubscription',
       'mockedGroup',
       'mockedResource',
-      'mockedRegion',
+      'westus',
       'mockedTier'
     );
 
     // ensure that the final callback was called
     expect(onGetKey).toBeCalledWith({
-      region: 'mockedRegion',
+      region: 'westus',
       key: 'mockedKey',
     });
   });
 
   it('it should handle tier + dynamic regions option during creation', async () => {
-    const createService = jest.fn(() => 'mockedKey');
+    const createService = jest.fn(async () => 'mockedKey');
     const onDismiss = jest.fn();
     const onGetKey = jest.fn();
     const onNext = jest.fn();
@@ -650,7 +604,7 @@ describe('<ManageService />', () => {
       await fireEvent.keyDown(regionOption, DOWN_ARROW);
     });
 
-    const myRegion = await findByText('mockedRegion');
+    const myRegion = await findByText('West US');
     expect(myRegion).toBeDefined();
 
     await act(async () => {
@@ -687,13 +641,13 @@ describe('<ManageService />', () => {
       'mockSubscription',
       'mockedGroup',
       'mockedResource',
-      'mockedRegion',
+      'westus',
       'mockedTier'
     );
 
     // ensure that the final callback was called
     expect(onGetKey).toBeCalledWith({
-      region: 'mockedRegion',
+      region: 'westus',
       key: 'mockedKey',
     });
   });
