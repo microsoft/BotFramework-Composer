@@ -16,7 +16,7 @@ import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilValue } from 'recoil';
 import { csharpFeedKey, FeedType, functionsRuntimeKey, nodeFeedKey, QnABotTemplateId } from '@bfc/shared';
-import { RuntimeType, webAppRuntimeKey } from '@bfc/shared';
+import { RuntimeType, webAppRuntimeKey, localTemplateId } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
@@ -82,6 +82,7 @@ type DefineConversationFormData = {
   profile?: Profile; // abs payload to create bot
   source?: string; // where the payload come from
   alias?: string; // identifier that is used to track bots between imports
+  isLocalGenerator?: boolean;
 
   pvaData?: {
     templateDir?: string; // location of the imported template
@@ -98,6 +99,7 @@ type DefineConversationProps = {
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
+  localTemplatePath?: string;
   focusedStorageFolder: StorageFolder;
 } & RouteComponentProps<{
   templateId: string;
@@ -115,6 +117,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     focusedStorageFolder,
     createFolder,
     updateFolder,
+    localTemplatePath,
   } = props;
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
@@ -309,7 +312,10 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         isPva: isImported,
         isAbs: !!dataToSubmit?.source,
       });
-      onSubmit({ ...dataToSubmit }, templateId || '');
+      const isLocalGenerator = templateId === localTemplateId;
+      const generatorName = isLocalGenerator ? localTemplatePath : templateId;
+      dataToSubmit.isLocalGenerator = isLocalGenerator;
+      onSubmit({ ...dataToSubmit }, generatorName || '');
     },
     [hasErrors, formData]
   );
