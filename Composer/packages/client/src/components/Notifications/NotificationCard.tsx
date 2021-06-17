@@ -9,6 +9,7 @@ import { useRef } from 'react';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 import { Notification, NotificationLink } from '@botframework-composer/types';
 
@@ -175,9 +176,13 @@ const defaultCardContentRenderer = (props: CardProps) => {
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}
         {link && makeLinkLabel(link)}
-        {links?.map((link) => (
-          <div key={link.label}>{makeLinkLabel(link)}</div>
-        ))}
+        {links && (
+          <Stack>
+            {links.map((link) => (
+              <div key={link.label}>{makeLinkLabel(link)}</div>
+            ))}
+          </Stack>
+        )}
         {type === 'pending' && (
           <Shimmer shimmerElements={[{ type: ShimmerElementType.line, height: 2 }]} styles={getShimmerStyles} />
         )}

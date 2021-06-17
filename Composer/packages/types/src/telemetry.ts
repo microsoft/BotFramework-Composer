@@ -235,9 +235,10 @@ type PageView = {
 };
 
 type SurveyEvents = {
-  SurveyOffered: undefined;
-  SurveyTaken: undefined;
-  SurveyOptOut: undefined;
+  HATSSurveyOffered: undefined;
+  HATSSurveyDismissed: undefined;
+  HATSSurveyAccepted: undefined;
+  HATSSurveyRejected: undefined;
 };
 
 export type TelemetryEvents = ApplicationEvents &

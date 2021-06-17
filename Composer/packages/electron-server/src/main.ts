@@ -143,7 +143,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
   log('App updater initialized.');
 }
 
-async function loadServer(mainWindow?: Electron.BrowserWindow) {
+async function loadServer() {
   process.env.COMPOSER_VERSION = app.getVersion();
   if (!isDevelopment) {
     // only change paths if packaged electron app
@@ -156,7 +156,7 @@ async function loadServer(mainWindow?: Electron.BrowserWindow) {
   const machineId = await getMachineId();
   const sessionId = getSessionId();
 
-  mainWindow?.webContents.send('machine-id', machineId);
+  log(`Machine ID is ${machineId}`);
 
   // only create a new data directory if packaged electron app
   log('Creating app data directory...');
@@ -289,7 +289,7 @@ async function run() {
     });
 
     updateStatus(formatMessage('Starting server...'));
-    await loadServer(getMainWindow());
+    await loadServer();
 
     initSettingsListeners();
     await main();

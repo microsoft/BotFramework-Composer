@@ -10,9 +10,7 @@ import { surveyEligibilityState, dispatcherState } from '../../recoilModel/atoms
 import { SURVEY_URL_BASE } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-const { ipcRenderer } = window;
-
-function buildUrl(machineId: string) {
+function buildUrl() {
   // User OS
   // hashed machineId
   // composer version
@@ -23,7 +21,7 @@ function buildUrl(machineId: string) {
   const parameters = {
     Source: 'Composer',
     userOS: platform(),
-    machineId,
+    //machineId,
     version,
   };
 
@@ -39,48 +37,43 @@ export function useSurveyNotification() {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
   const surveyEligible = useRecoilValue(surveyEligibilityState);
 
-  let machineId;
-
   useEffect(() => {
-    ipcRenderer?.on('machine-id', (event, name) => {
-      console.log('IPC event', event, name);
-      machineId = name;
-    });
-  }, []);
+    const url = buildUrl();
+    deleteNotification('survey');
 
-  console.log(buildUrl(machineId));
-
-  useEffect(() => {
     if (surveyEligible) {
       const surveyStorage = new ClientStorage(window.localStorage, 'survey');
-      TelemetryClient.track('SurveyOffered');
+      TelemetryClient.track('HATSSurveyOffered');
 
       addNotification({
         id: 'survey',
         type: 'question',
-        title: "Let us know how we're doing",
-        description: `We read each and every comment and will your use your feedback to improve. (debug: machineId=${machineId})`,
+        title: 'Do you mind taking a quick feedback survey?',
+        description: `We read every response and will use your feedback to improve Composer.`,
         links: [
           {
-            label: 'Take Survey',
+            label: 'Take survey',
             onClick: () => {
               // This is safe; we control what the URL that gets built is
               // eslint-disable-next-line security/detect-non-literal-fs-filename
-              window.open(buildUrl(machineId), '_blank');
+              window.open(url, '_blank');
+              TelemetryClient.track('HATSSurveyAccepted');
               deleteNotification('survey');
             },
           },
 
           {
             // this is functionally identical to clicking the close box
-            label: 'Remind Me Later',
+            label: 'Remind me later',
             onClick: () => {
+              TelemetryClient.track('HATSSurveyDismissed');
               deleteNotification('survey');
             },
           },
           {
-            label: "Don't Show Again",
+            label: 'No thanks',
             onClick: () => {
+              TelemetryClient.track('HATSSurveyRejected');
               deleteNotification('survey');
               surveyStorage.set('optedOut', true);
             },
@@ -88,5 +81,5 @@ export function useSurveyNotification() {
         ],
       });
     }
-  }, []);
+  }, [machineId]);
 }
