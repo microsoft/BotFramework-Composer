@@ -318,7 +318,7 @@ export const Header = () => {
             id="rocketButton"
             styles={buttonStyles}
             title={formatMessage('Recommended actions')}
-            onClick={() => toggleGetStarted(true)}
+            onClick={() => toggleGetStarted(!showGetStarted)}
           />
         )}
         {isShow && showStartBotTeachingBubble && (

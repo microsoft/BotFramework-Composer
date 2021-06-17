@@ -175,6 +175,8 @@ const validate = ({ content, schema }) => {
     }, {});
 };
 
+const helpLink = 'https://aka.ms/AAct49m';
+
 export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
   [ManifestEditorSteps.MANIFEST_DESCRIPTION]: {
     buttons: [cancelButton, nextButton],
@@ -240,9 +242,10 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: AddCallers,
     subText: () =>
       formatMessage(
-        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more.'
+        'To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration.'
       ),
     title: () => formatMessage('Which bots can connect to this skill?'),
+    helpLink,
   },
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
@@ -272,9 +275,10 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     editJson: false,
     subText: () =>
       formatMessage(
-        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots. Learn more.'
+        'The capabilities of your bot are defined in its dialogs and triggers. Selected dialogs will be included in the manifest. Internal dialogs or actions may not be relevant to other bots.'
       ),
     title: () => formatMessage('Select dialogs'),
+    helpLink,
   },
   [ManifestEditorSteps.SELECT_TRIGGERS]: {
     buttons: [
@@ -291,10 +295,9 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
     content: SelectTriggers,
     editJson: false,
     subText: () =>
-      formatMessage(
-        'Triggers selected below will enable other bots to access the capabilities of your skill. Learn more.'
-      ),
+      formatMessage('Triggers selected below will enable other bots to access the capabilities of your skill.'),
     title: () => formatMessage('Select triggers'),
+    helpLink,
   },
   [ManifestEditorSteps.SAVE_MANIFEST]: {
     buttons: [

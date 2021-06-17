@@ -33,7 +33,7 @@ export const ImportResourcesWizard = React.memo((props: Props) => {
 
   return (
     <Wizard
-      firstStepId={'import-instructions'}
+      firstStepId="import-instructions"
       steps={steps}
       onRenderHeader={() => <></>} // Returning fragment to override the default header rendering behaviour
       onStepChange={(index, step) => onStepChange(index, step)}

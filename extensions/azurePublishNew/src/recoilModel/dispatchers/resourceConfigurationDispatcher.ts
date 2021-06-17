@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { useLocalStorage, usePublishApi } from '@bfc/extension-client';
 
 import { resourceConfigurationState } from '../atoms/resourceConfigurationState';
 
@@ -24,14 +25,17 @@ export const resourceConfigurationDispatcher = () => {
     });
   });
 
-  const setResourceGroupName = useRecoilCallback(({ set }: CallbackInterface) => (resourceGroupName: string) => {
-    set(resourceConfigurationState, (currentResourceConfig) => {
-      return {
-        ...currentResourceConfig,
-        resourceGroupName,
-      };
-    });
-  });
+  const setResourceGroupName = useRecoilCallback(
+    ({ set }: CallbackInterface) => (resourceGroupName: string, isNew: boolean) => {
+      set(resourceConfigurationState, (currentResourceConfig) => {
+        return {
+          ...currentResourceConfig,
+          resourceGroupName,
+          isNewResourceGroup: isNew,
+        };
+      });
+    }
+  );
 
   const setDeployLocation = useRecoilCallback(({ set }: CallbackInterface) => (deployLocation: string) => {
     set(resourceConfigurationState, (currentResourceConfig) => {
@@ -51,11 +55,21 @@ export const resourceConfigurationDispatcher = () => {
     });
   });
 
+  const setHostName = useRecoilCallback(({ set }: CallbackInterface) => (hostName: string) => {
+    set(resourceConfigurationState, (currentResourceConfig) => {
+      return {
+        ...currentResourceConfig,
+        hostName,
+      };
+    });
+  });
+
   return {
     setTenantId,
     setSubscriptionId,
     setResourceGroupName,
     setDeployLocation,
     setLuisRegion,
+    setHostName,
   };
 };

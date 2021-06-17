@@ -46,11 +46,16 @@ export const SubscriptionPicker = React.memo((props: Props) => {
     }
   }, [accessToken]);
 
-  const localTextFieldProps = { placeholder: formatMessage('Select subscription') };
+  const localTextFieldProps = React.useMemo(
+    () => ({
+      placeholder: formatMessage('Select subscription'),
+      errorMessage,
+    }),
+    [errorMessage]
+  );
 
   return (
     <SearchableDropdown
-      errorMessage={errorMessage}
       isLoading={isLoading}
       items={subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }))}
       onSubmit={(option) => props.onSubscriptionChange(option.key)}

@@ -15,13 +15,18 @@ type Props = {
   accessToken: string;
   subscriptionId: string;
   onDeployLocationChange: (location: string) => void;
+  onDeployLocationsFetch?: (deployLocations: DeployLocation[]) => void;
 } & Omit<SearchableDropdownProps, 'items' | 'onSubmit'>;
 
 export const DeployLocationPicker = React.memo((props: Props) => {
-  const { accessToken, subscriptionId } = props;
+  const { accessToken, subscriptionId, onDeployLocationsFetch } = props;
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    onDeployLocationsFetch?.(deployLocations);
+  }, [deployLocations]);
 
   useEffect(() => {
     if (accessToken && subscriptionId) {
@@ -41,11 +46,16 @@ export const DeployLocationPicker = React.memo((props: Props) => {
     }
   }, [accessToken, subscriptionId]);
 
-  const localTextFieldProps = { placeholder: formatMessage('Select Region') };
+  const localTextFieldProps = React.useMemo(
+    () => ({
+      placeHolder: formatMessage('Select Region'),
+      errorMessage,
+    }),
+    [errorMessage]
+  );
 
   return (
     <SearchableDropdown
-      errorMessage={errorMessage}
       isLoading={isLoading}
       items={sortBy(
         deployLocations.map((t) => ({ key: t.name, text: t.displayName })),
