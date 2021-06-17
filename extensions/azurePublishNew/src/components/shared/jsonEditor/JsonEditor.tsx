@@ -109,22 +109,23 @@ export const JsonEditor = (props: Props) => {
   }, [editorMounted]);
 
   React.useEffect(() => {
+    let onFocusListener: any;
+    let onBlurListener: any;
     if (editorRef.current) {
-      const onFocusListener = editorRef.current.onDidFocusEditorWidget(() => {
+      onFocusListener = editorRef.current.onDidFocusEditorWidget(() => {
         onFocus?.();
         setFocused(true);
       });
 
-      const onBlurListener = editorRef.current.onDidBlurEditorWidget(() => {
+      onBlurListener = editorRef.current.onDidBlurEditorWidget(() => {
         onBlur?.();
         setFocused(false);
       });
-
-      return () => {
-        onFocusListener.dispose();
-        onBlurListener.dispose();
-      };
     }
+    return () => {
+      onFocusListener?.dispose();
+      onBlurListener?.dispose();
+    };
   }, [editorMounted, onBlur, onFocus]);
 
   return (
