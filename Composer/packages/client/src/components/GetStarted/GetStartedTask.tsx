@@ -31,6 +31,7 @@ const stepDescriptionStyle = css`
 
 export const GetStartedTask: React.FC<TaskProps> = (props) => {
   const icon = props.step.checked ? 'CompletedSolid' : props.step.required ? 'Error' : 'Completed';
+  const iconTestId = props.step.checked ? `${props.step.key}-checked` : `${props.step.key}-unChecked`;
   const color = props.step.checked
     ? FluentTheme.palette.green
     : props.step.required
@@ -39,6 +40,7 @@ export const GetStartedTask: React.FC<TaskProps> = (props) => {
   return (
     <div css={getStartedStepStyle(props.step.hideFeatureStep)}>
       <ActionButton
+        data-testid={iconTestId}
         iconProps={{ iconName: icon, id: props.step.key }}
         styles={{
           root: { padding: '0px', display: 'block', fontSize: 16 },
