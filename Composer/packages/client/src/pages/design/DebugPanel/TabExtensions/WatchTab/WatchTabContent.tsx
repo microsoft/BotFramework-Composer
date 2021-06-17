@@ -16,7 +16,8 @@ import {
   SelectionMode,
   Selection,
   IObjectWithKey,
-  IDetailsListStyles,
+  IDetailsRowProps,
+  DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
@@ -62,6 +63,14 @@ const objectCell = css`
   width: 360px;
 `;
 
+const undefinedValue = css`
+  font-family: Segoe UI;
+  font-size: 12px;
+  font-style: italic;
+  height: 16px;
+  line-height: 16px;
+`;
+
 const watchTableStyles = {
   root: {
     height: '100%',
@@ -73,6 +82,7 @@ const watchTableStyles = {
   },
   contentWrapper: {
     overflowY: 'auto' as 'auto',
+    // fill remaining space after table header row
     height: 'calc(100% - 60px)',
   },
 };
@@ -162,7 +172,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const onSelectPath = useCallback(
     (variableId: string, path: string) => {
-      console.log(`selecting path: ${variableId}, ${path}`);
+      // TODO: if the variable path is already being watched, no-op
       setWatchedVars({
         ...watchedVars,
         [variableId]: path,
@@ -180,6 +190,30 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
       };
     });
   }, [mostRecentBotState, watchedVars]);
+
+  const renderRow = useCallback((props?: IDetailsRowProps) => {
+    if (props) {
+      return (
+        <DetailsRow
+          {...props}
+          styles={{
+            cell: { minHeight: 32, padding: '8px 6px' },
+            checkCell: {
+              height: 32,
+              minHeight: 32,
+              selectors: {
+                '& > div[role="checkbox"]': {
+                  height: 32,
+                },
+              },
+            },
+            root: { minHeight: 32 },
+          }}
+        />
+      );
+    }
+    return null;
+  }, []);
 
   const renderColumn = useCallback(
     (item: { key: string; value: string }, index: number | undefined, column: IColumn | undefined) => {
@@ -199,10 +233,11 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
           // render the value display
           if (mostRecentBotState) {
             const value = getValueFromBotTraceScope(item.value, mostRecentBotState?.activity);
-            if (typeof value === 'object') {
+            if (value !== null && typeof value === 'object') {
               // render monaco view
               // TODO: is there some way we can expand the height of the cell based on the number of object keys?
               return (
+                // TODO: <WatchTabObjectValue /> || <WatchTabObjectProperty /> ?
                 <div css={objectCell}>
                   <JsonEditor
                     editorSettings={{
@@ -213,6 +248,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
                         fontWeight: 'normal',
                       },
                     }}
+                    // TODO: https://stackoverflow.com/questions/54373288/monaco-editor-hide-overview-ruler
                     options={{
                       folding: true,
                       minimap: { enabled: false, showSlider: 'mouseover' },
@@ -227,15 +263,16 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
                 </div>
               );
             } else if (value === undefined) {
-              // don't render anything
-              return null;
+              // render undefined indicator
+              return <span css={undefinedValue}>undefined</span>;
             } else {
               // render primitive view
               return <span>{String(value)}</span>;
             }
           } else {
-            // no bot trace available
-            return null;
+            // no bot trace available;
+            // render undefined indicator
+            return <span css={undefinedValue}>undefined</span>;
           }
         }
       }
@@ -279,6 +316,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
             selectionMode={SelectionMode.multiple}
             styles={watchTableStyles}
             onRenderItemColumn={renderColumn}
+            onRenderRow={renderRow}
           />
         </div>
       </div>

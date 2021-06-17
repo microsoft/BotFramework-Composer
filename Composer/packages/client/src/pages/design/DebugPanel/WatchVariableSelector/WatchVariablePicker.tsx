@@ -17,9 +17,13 @@ import {
 } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+import { getDefaultFontSettings } from '../../../../recoilModel/utils/fontUtil';
+
 import { PropertyTreeItem, PropertyItem } from './utils/components/PropertyTreeItem';
 import { useNoSearchResultMenuItem } from './utils/hooks/useNoSearchResultMenuItem';
 import { computePropertyItemTree, getAllNodes, WatchDataPayload } from './utils/helpers';
+
+const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 
 type WatchVariablePickerProps = {
   payload: WatchDataPayload;
@@ -168,13 +172,18 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
     onShowContextualMenu(event);
   };
 
-  const onTextBoxKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode == 13) {
-      event.preventDefault();
-      onHideContextualMenu();
-      inputBoxElement.current?.blur();
-    }
-  };
+  const onTextBoxKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      // enter
+      if (event.keyCode == 13) {
+        event.preventDefault();
+        onSelectPath(variableId, query);
+        onHideContextualMenu();
+        inputBoxElement.current?.blur();
+      }
+    },
+    [variableId, query]
+  );
 
   const onDismiss = useCallback(() => {
     setPropertyTreeExpanded({});
@@ -185,7 +194,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
     <div
       ref={pickerContainerElement}
       css={{
-        margin: '5px 0',
+        margin: '0',
         width: '240px',
       }}
     >
@@ -194,6 +203,14 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         id={variableId}
         placeholder={uiStrings.searchPlaceholder}
         styles={{
+          field: {
+            fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
+            fontSize: 12,
+          },
+          fieldGroup: {
+            backgroundColor: 'transparent',
+            height: 16,
+          },
           root: {
             selectors: {
               '.ms-TextField-fieldGroup': {
