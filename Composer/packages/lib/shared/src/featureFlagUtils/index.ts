@@ -14,4 +14,13 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     isHidden: false,
     enabled: false,
   },
+  ADVANCED_TEMPLATE_OPTIONS: {
+    displayName: formatMessage('Advanced template options'),
+    description: formatMessage(
+      'Enables creating bots from local templates as well as creating bots from older versions of published templates'
+    ),
+    documentationLink: '',
+    isHidden: true,
+    enabled: false,
+  },
 });

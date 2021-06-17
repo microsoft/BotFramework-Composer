@@ -10,7 +10,7 @@ import CreateSkillModal, {
   validateManifestUrl,
   getSkillManifest,
 } from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
-import { currentProjectIdState, settingsState } from '../../src/recoilModel';
+import { botProjectFileState, currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
 
@@ -61,6 +61,18 @@ describe('<SkillForm />', () => {
           lastPublished: '2021-04-09T08:11:59.491Z',
         },
       ],
+    });
+
+    set(botProjectFileState(projectId), {
+      content: {
+        skills: {
+          oneNoteSync: {
+            manifest: 'https://xxx.json',
+            remote: true,
+            endpointName: 'default',
+          },
+        },
+      },
     });
   };
 

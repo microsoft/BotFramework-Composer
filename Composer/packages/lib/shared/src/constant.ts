@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 export const QnABotTemplateId = 'QnASample';
+export const localTemplateId = 'LocalTemplate';
 
 export const emptyBotNpmTemplateName = '@microsoft/generator-bot-empty';
 
