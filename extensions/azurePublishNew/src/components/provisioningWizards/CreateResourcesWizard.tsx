@@ -10,7 +10,7 @@ import { Wizard, WizardStep } from '../shared/wizard/Wizard';
 import { useResourceConfiguration } from '../../hooks/useResourceConfiguration';
 import { userInfoState } from '../../recoilModel/atoms/resourceConfigurationState';
 
-import { WizardFooterWithUserPersona } from './footers/WizardFooterWithUserPersona';
+import { WizardFooter } from './footers/WizardFooter';
 import { CreateResourceInstructionsStep } from './steps/CreateResourceInstructionsStep';
 import { ResourceConfigurationStep } from './steps/ResourceConfigurationStep';
 import { ChooseResourcesStep } from './steps/ChooseResourcesStep';
@@ -86,7 +86,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
     <Wizard
       firstStepId="create-resource-instructions"
       steps={steps}
-      onRenderFooter={(navState) => <WizardFooterWithUserPersona userInfo={userInfo} {...navState} />}
+      onRenderFooter={(navState) => <WizardFooter userInfo={userInfo} {...navState} />}
       onRenderHeader={() => <></>}
       onStepChange={(index, step) => onStepChange(index, step)}
     />
