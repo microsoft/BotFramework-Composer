@@ -24,7 +24,7 @@ context('Luis Deploy', () => {
       method: 'POST',
       url: 'api/projects/*/build',
       status: 400,
-      response: 'fixture:luPublish/failure',
+      response: 'fixture:luPublish/error',
     });
     cy.findByTestId('startBotButton').click();
     cy.findByTestId('runtime-logs-sidebar');
