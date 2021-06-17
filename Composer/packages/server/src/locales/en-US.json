@@ -257,6 +257,9 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
+  "add_regex_pattern_140335cb": {
+    "message": "Add regex pattern"
+  },
   "add_row_7ebc94fb": {
     "message": "Add row"
   },
@@ -264,7 +267,7 @@
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
+    "message": "> add some expected user responses:\n      > - Please remind me to '{'itemTitle=buy milk'}'\n      > - remind me to '{'itemTitle'}'\n      > - add '{'itemTitle'}' to my todo list\n      >\n      > entity definitions:\n      > @ ml itemTitle\n      "
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
@@ -3542,8 +3545,8 @@
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
   },
-  "specify_a_name_description_and_location_for_your_n_667f1438": {
-    "message": "Specify a name, description, and location for your new bot project."
+  "specify_a_name_runtime_type_and_location_for_your__594518ca": {
+    "message": "Specify a name, runtime type, and location for your new bot project."
   },
   "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
     "message": "Specify an attachment layout when there are more than one."
@@ -3851,6 +3854,9 @@
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
   },
+  "this_path_does_not_exist_42c11e1": {
+    "message": "This path does not exist"
+  },
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
     "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
   },
@@ -4121,8 +4127,8 @@
   "url_22a5f3b8": {
     "message": "URL"
   },
-  "url_should_start_with_http_or_https_c34632bb": {
-    "message": "URL should start with http:// or https://"
+  "url_should_start_with_http_or_https_or_file_path_o_2b060341": {
+    "message": "URL should start with http:// or https:// or file path of your system"
   },
   "use_azure_bot_to_create_a_new_conversation_1a116a65": {
     "message": "Use Azure Bot to create a new conversation"

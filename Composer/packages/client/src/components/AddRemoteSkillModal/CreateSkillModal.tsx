@@ -35,6 +35,7 @@ import { PublishProfileDialog } from '../../pages/botProject/create-publish-prof
 import { SelectIntent } from './SelectIntent';
 import { SkillDetail } from './SkillDetail';
 import { SetAppId } from './SetAppId';
+import { BrowserModal } from './BrowserModal';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -170,6 +171,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
       manifestUrl: currentManifestUrl,
     });
     setSkillManifest(null);
+    setShowDetail(false);
   };
 
   const validateUrl = useCallback(
@@ -292,7 +294,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             </div>
             <Separator />
             <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
-              <div style={{ width: '50%' }}>
+              <div style={{ width: '50%', display: 'flex' }}>
                 <TextField
                   required
                   errorMessage={formDataErrors.manifestUrl}
@@ -300,6 +302,18 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
                   placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
                   value={formData.manifestUrl || ''}
                   onChange={handleManifestUrlChange}
+                  styles={{ root: { width: '300px' } }}
+                />
+                <BrowserModal
+                  onUpdate={(path: string, content: object) => {
+                    setFormData({
+                      ...formData,
+                      manifestUrl: path,
+                    });
+                    setSkillManifest(content);
+                    setShowDetail(true);
+                    setFormDataErrors({});
+                  }}
                 />
                 {skillManifest?.endpoints?.length > 1 && (
                   <Dropdown

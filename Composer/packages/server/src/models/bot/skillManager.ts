@@ -15,11 +15,19 @@ const token = process.env.ACCESS_TOKEN || 'token';
 const creds = new msRest.TokenCredentials(token);
 const client = new msRest.ServiceClient(creds, clientOptions);
 
-export const getSkillManifest = async (url: string): Promise<any> => {
-  const { bodyAsText: content } = await client.sendRequest({
-    url,
-    method: 'GET',
-  });
+const urlRegex = /^http[s]?:\/\/\w+/;
+const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
 
-  return typeof content === 'string' ? JSON.parse(content) : {};
+export const getSkillManifest = async (url: string): Promise<any> => {
+  if (filePathRegex.test(url)) {
+    // get local manifest
+    return require(url);
+  } else if (urlRegex.test(url)) {
+    // get remote manifest
+    const { bodyAsText: content } = await client.sendRequest({
+      url,
+      method: 'GET',
+    });
+    return typeof content === 'string' ? JSON.parse(content) : {};
+  }
 };
