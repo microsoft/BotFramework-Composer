@@ -25,7 +25,7 @@ const FooterButton = styled(DefaultButton)`
 `;
 
 const ButtonContainer = styled.div`
-  & button:nth-last-child(1) {
+  & button:last-of-type {
     margin-right: 0px;
   }
 `;
@@ -44,18 +44,18 @@ export const WizardFooterWithUserPersona = (props: Props) => {
       <ButtonContainer>
         <FooterButton
           disabled={!navigation.canGoBack}
-          text={formatMessage(navigation.backText || 'Back')}
+          text={navigation.backText || formatMessage('Back')}
           onClick={() => props.onBack()}
         />
         <FooterButton
           primary
           disabled={!navigation.canGoNext}
-          text={formatMessage(navigation.nextText || 'Next')}
+          text={navigation.nextText || formatMessage('Next')}
           onClick={() => props.onNext()}
         />
         <FooterButton
           disabled={!navigation.canCancel}
-          text={formatMessage(navigation.cancelText || 'Cancel')}
+          text={navigation.cancelText || formatMessage('Cancel')}
           onClick={() => props.onCancel()}
         />
       </ButtonContainer>

@@ -50,17 +50,17 @@ type Props = {
   errorMessage: string;
 } & Omit<EditorProps, 'options' | 'language' | 'editorDidMount'>;
 
-const editorOptions = {
+const editorOptions: EditorProps['options'] = {
   scrollBeyondLastLine: false,
   scrollbar: {
     alwaysConsumeMouseWheel: false,
   },
-  wordWrap: 'off' as any,
+  wordWrap: 'off',
   wordWrapColumn: 120,
   fontFamily: 'Courier',
-  fontSize: '14',
+  fontSize: 14,
   fontWeight: '600',
-  lineNumbers: 'off' as any,
+  lineNumbers: 'off',
   quickSuggestions: false,
   minimap: {
     enabled: false,
@@ -70,14 +70,13 @@ const editorOptions = {
   lineNumbersMinChars: 3,
   glyphMargin: false,
   folding: false,
-  renderLineHighlight: 'none' as any,
+  renderLineHighlight: 'none',
   formatOnType: true,
   fixedOverflowWidgets: true,
 };
 
-const urls = {
-  jsonOrg: 'https://www.json.org',
-};
+const jsonOrgUrl = 'https://www.json.org';
+
 export const JsonEditor = (props: Props) => {
   const { onChange, errorMessage, onFocus, onBlur, styleOverrides = [], width = '100%' } = props;
   const editorRef = useRef(null);
@@ -109,22 +108,22 @@ export const JsonEditor = (props: Props) => {
   }, [editorMounted]);
 
   React.useEffect(() => {
-    let onFocusListener: any;
-    let onBlurListener: any;
+    let onFocusListenerDisposable: any;
+    let onBlurListenerDisposable: any;
     if (editorRef.current) {
-      onFocusListener = editorRef.current.onDidFocusEditorWidget(() => {
-        onFocus?.();
+      onFocusListenerDisposable = editorRef.current.onDidFocusEditorWidget(() => {
         setFocused(true);
+        onFocus?.();
       });
 
-      onBlurListener = editorRef.current.onDidBlurEditorWidget(() => {
-        onBlur?.();
+      onBlurListenerDisposable = editorRef.current.onDidBlurEditorWidget(() => {
         setFocused(false);
+        onBlur?.();
       });
     }
     return () => {
-      onFocusListener?.dispose();
-      onBlurListener?.dispose();
+      onFocusListenerDisposable?.dispose();
+      onBlurListenerDisposable?.dispose();
     };
   }, [editorMounted, onBlur, onFocus]);
 
@@ -150,7 +149,7 @@ export const JsonEditor = (props: Props) => {
           ...{
             fontFamily: fontSettings?.fontFamily ?? editorOptions.fontFamily,
             fontWeight: fontSettings?.fontWeight ?? editorOptions.fontWeight,
-            fontSize: parseInt(fontSettings?.fontSize ?? editorOptions.fontSize),
+            fontSize: parseInt(fontSettings?.fontSize, 10) || editorOptions.fontSize,
           },
         }}
         theme="light"
@@ -163,7 +162,7 @@ export const JsonEditor = (props: Props) => {
           messageBarType={MessageBarType.error}
         >
           {errorMessage}
-          <Link key="a" href={urls.jsonOrg} rel="noopener noreferrer" target="_blank">
+          <Link href={jsonOrgUrl} rel="noopener noreferrer" target="_blank">
             {formatMessage('Refer to the syntax documentation here.')}
           </Link>
         </FullWidthMessageBar>

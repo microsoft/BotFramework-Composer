@@ -3,7 +3,7 @@
 
 import { atom } from 'recoil';
 
-import { UserInfo, ResourceGroup } from '../../types';
+import { UserInfo, ResourceGroup, LuisRegion } from '../../types';
 
 export const subscriptionState = atom<string>({
   key: 'resourceConfiguration_subscription',
@@ -15,9 +15,9 @@ export const tenantState = atom<string>({
   default: '',
 });
 
-export const luisRegionState = atom<string>({
+export const luisRegionState = atom<LuisRegion>({
   key: 'resourceConfiguration_luisRegion',
-  default: '',
+  default: undefined,
 });
 
 export const deployLocationState = atom<string>({

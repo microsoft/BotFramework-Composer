@@ -14,6 +14,7 @@ import {
   hostNameState,
 } from '../recoilModel/atoms/resourceConfigurationState';
 import { LuisAuthoringSupportLocation } from '../constants';
+import { LuisRegion } from '../types';
 
 import { useDispatcher } from './useDispatcher';
 
@@ -70,7 +71,7 @@ export const useResourceConfiguration = () => {
       if (!subscriptionId) {
         setResourceGroupName('', false);
         setDeployLocation('');
-        setLuisRegion('');
+        setLuisRegion(undefined);
       }
     },
     [setResourceGroupName, setDeployLocation, setSubscriptionId]
@@ -88,11 +89,13 @@ export const useResourceConfiguration = () => {
     (deployLocationId: string) => {
       setDeployLocation(deployLocationId);
       if (!deployLocationId) {
-        setLuisRegion('');
+        setLuisRegion(undefined);
       } else {
         //Seed luis region with the deploy location or pick the first one
         setLuisRegion(
-          LuisAuthoringSupportLocation.includes(deployLocation) ? deployLocation : LuisAuthoringSupportLocation[0]
+          (LuisAuthoringSupportLocation.includes(deployLocation)
+            ? deployLocation
+            : LuisAuthoringSupportLocation[0]) as LuisRegion
         );
       }
     },
@@ -100,7 +103,7 @@ export const useResourceConfiguration = () => {
   );
 
   const handleLuisRegionChange = React.useCallback(
-    (luisRegion: string) => {
+    (luisRegion: LuisRegion) => {
       setLuisRegion(luisRegion);
     },
     [setLuisRegion]

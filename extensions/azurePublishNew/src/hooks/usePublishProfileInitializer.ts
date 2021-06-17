@@ -15,14 +15,14 @@ import {
 import { PublishProfileConfiguration } from '../types';
 import { importConfigurationState } from '../recoilModel/atoms/importConfigurationState';
 
-const defaultConfig = {
+const defaultConfig: PublishProfileConfiguration = {
   tenantId: '',
   subscriptionId: '',
   deployLocation: '',
   hostName: '',
   luisRegion: '',
   resourceGroup: { isNew: false, name: '' },
-} as PublishProfileConfiguration;
+};
 
 export const usePublishProfileInitializer = () => {
   const { getName, publishConfig, getSchema } = usePublishApi();

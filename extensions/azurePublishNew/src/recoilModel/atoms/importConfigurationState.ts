@@ -7,5 +7,5 @@ import { ImportConfiguration } from '../../types';
 
 export const importConfigurationState = atom<ImportConfiguration>({
   key: 'import_configuration',
-  default: { isValidConfiguration: false, config: '' },
+  default: { isValidConfiguration: true, config: '{}' },
 });

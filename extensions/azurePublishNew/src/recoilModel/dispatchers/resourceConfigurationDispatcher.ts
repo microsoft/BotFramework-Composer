@@ -11,6 +11,7 @@ import {
   luisRegionState,
   hostNameState,
 } from '../atoms/resourceConfigurationState';
+import { LuisRegion } from '../../types';
 
 export const resourceConfigurationDispatcher = () => {
   const setTenantId = useRecoilCallback(({ set }: CallbackInterface) => (tenantId: string) => {
@@ -31,7 +32,7 @@ export const resourceConfigurationDispatcher = () => {
     set(deployLocationState, deployLocation);
   });
 
-  const setLuisRegion = useRecoilCallback(({ set }: CallbackInterface) => (luisRegion: string) => {
+  const setLuisRegion = useRecoilCallback(({ set }: CallbackInterface) => (luisRegion: LuisRegion) => {
     set(luisRegionState, luisRegion);
   });
 
