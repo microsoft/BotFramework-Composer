@@ -235,6 +235,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       // Error before Warning
       const severityComparator = a.severity.localeCompare(b.severity);
       if (severityComparator === 0) {
+        // Sort by name
         return sortFactor * getProjectName(a.projectId).localeCompare(getProjectName(b.projectId), locale);
       }
       return severityComparator;

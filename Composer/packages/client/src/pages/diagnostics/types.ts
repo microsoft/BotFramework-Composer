@@ -48,11 +48,11 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   message = '';
   diagnostic: Diagnostic;
   dialogPath?: string;
+  friendlyDialogPath?: string[];
   resourceId: string;
   getUrl = () => '';
   learnMore?: string;
   title?: string;
-  getFriendlyLocation = () => '';
 
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     this.rootProjectId = rootProjectId;
@@ -63,6 +63,7 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
     this.diagnostic = diagnostic;
     this.location = location;
   }
+  getFriendlyLocation: () => string;
 }
 
 export class BotDiagnostic extends DiagnosticInfo {
@@ -155,7 +156,23 @@ export class LgDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
+    this.getFriendlyPath(this.dialogPath, dialogs);
   }
+  private getFriendlyPath(dialogPath: string | undefined, dialogs: DialogInfo[]) {
+    try {
+      if (!dialogPath) {
+        return null;
+      }
+      const breadcrumb: string[] = [];
+      const splitPath = dialogPath.split('');
+      const dialogName: string = get(dialogs, splitPath[0], '');
+      breadcrumb.push(dialogName);
+      console.log(breadcrumb);
+    } catch (ex) {
+      return null;
+    }
+  }
+
   private findDialogPath(lgFile: LgFile, dialogs: DialogInfo[], diagnostic: Diagnostic) {
     const mappedTemplate = lgFile.templates.find(
       (t) =>
@@ -168,6 +185,7 @@ export class LgDiagnostic extends DiagnosticInfo {
       const dialog = dialogs.find((d) => d.lgFile === this.resourceId);
       const lgTemplate = dialog ? dialog.lgTemplates.find((lg) => lg.name === lgTemplateName) : null;
       const path = lgTemplate ? lgTemplate.path : '';
+
       return path;
     }
   }
@@ -197,6 +215,9 @@ export class LuDiagnostic extends DiagnosticInfo {
   ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
+    const splitPath = this.dialogPath?.split('.');
+    console.log('LU', splitPath);
+
     this.message = createSingleMessage(diagnostic);
   }
 
