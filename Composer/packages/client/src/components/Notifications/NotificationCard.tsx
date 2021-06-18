@@ -182,7 +182,7 @@ const defaultCardContentRenderer = (props: CardProps) => {
               link != null ? (
                 <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
               ) : (
-                <Stack.Item key="blank" grow={1} />
+                <span key="blank" style={{ width: '25px' }} />
               )
             )}
           </Stack>
