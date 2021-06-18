@@ -261,12 +261,21 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
     setWatchedVars(updated);
   };
 
+  const removeIsDisabled = useMemo(() => {
+    return selectedVars === undefined || selectedVars.length === 0;
+  }, [selectedVars]);
+
   if (isActive) {
     return (
       <div css={contentContainer}>
         <div css={toolbar}>
           <CommandBarButton iconProps={addIcon} text={formatMessage('Add property')} onClick={onClickAdd} />
-          <CommandBarButton iconProps={removeIcon} text={formatMessage('Remove from list')} onClick={onClickRemove} />
+          <CommandBarButton
+            disabled={removeIsDisabled}
+            iconProps={removeIcon}
+            text={formatMessage('Remove from list')}
+            onClick={onClickRemove}
+          />
         </div>
         <div css={content}>
           <DetailsList
