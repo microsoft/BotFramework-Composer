@@ -71,7 +71,12 @@ async function run() {
   console.log('COMPOSER ROOT', composerRootDir);
   return new Promise((resolve) => {
     const startCommand = isDev ? 'start:dev' : 'start';
-    const server = spawn('yarn', [startCommand], { cwd: composerRootDir, stdio: 'inherit' });
+
+    const spawnOptions = { cwd: composerRootDir, stdio: 'inherit' };
+    if (process.platform === 'win32') {
+      spawnOptions.shell = true;
+    }
+    const server = spawn('yarn', [startCommand], spawnOptions);
 
     server.on('close', () => {
       resolve();
