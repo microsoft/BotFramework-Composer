@@ -19,12 +19,12 @@ import {
   userHasNodeInstalledState,
   applicationErrorState,
   surveyEligibilityState,
-  machineIdState,
+  machineInfoState,
   showGetStartedTeachingBubbleState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType, SURVEY_PARAMETERS } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
-import { StateError, AppUpdateState } from '../../recoilModel/types';
+import { StateError, AppUpdateState, MachineInfo } from '../../recoilModel/types';
 import { DebugDrawerKeys } from '../../pages/design/DebugPanel/TabExtensions/types';
 import httpClient from '../../utils/httpUtil';
 import { ClientStorage } from '../../utils/storage';
@@ -186,8 +186,8 @@ export const applicationDispatcher = () => {
     surveyStorage.set('dateLastUsed', today);
   });
 
-  const setMachineId = useRecoilCallback((callbackHelpers: CallbackInterface) => (id: string) => {
-    callbackHelpers.set(machineIdState, id);
+  const setMachineInfo = useRecoilCallback((callbackHelpers: CallbackInterface) => (info: MachineInfo) => {
+    callbackHelpers.set(machineInfoState, info);
   });
 
   const setShowGetStartedTeachingBubble = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
@@ -211,7 +211,7 @@ export const applicationDispatcher = () => {
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
     setSurveyEligibility,
-    setMachineId,
+    setMachineInfo,
     setShowGetStartedTeachingBubble,
   };
 };

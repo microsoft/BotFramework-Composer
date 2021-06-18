@@ -304,7 +304,7 @@ async function run() {
     }
 
     log(`Machine ID is ${machineId}`);
-    mainWindow?.webContents.send('machine-id', machineId);
+    mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
   });
 
   // Quit when all windows are closed.

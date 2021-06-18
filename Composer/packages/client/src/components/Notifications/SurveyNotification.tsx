@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { ClientStorage } from '../../utils/storage';
-import { platform } from '../../utils/os';
-import { surveyEligibilityState, dispatcherState, machineIdState } from '../../recoilModel/atoms/appState';
+import { surveyEligibilityState, dispatcherState, machineInfoState } from '../../recoilModel/atoms/appState';
+import { MachineInfo } from '../../recoilModel/types';
 import { SURVEY_URL_BASE } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-function buildUrl(machineId: string) {
+function buildUrl(info: MachineInfo) {
   // User OS
   // hashed machineId
   // composer version
@@ -20,8 +20,8 @@ function buildUrl(machineId: string) {
 
   const parameters = {
     Source: 'Composer',
-    userOS: platform(),
-    machineId,
+    os: info.os || 'Unknown',
+    machineId: info.id,
     version,
   };
 
@@ -36,10 +36,10 @@ function buildUrl(machineId: string) {
 export function useSurveyNotification() {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
   const surveyEligible = useRecoilValue(surveyEligibilityState);
-  const machineId = useRecoilValue(machineIdState);
+  const machineInfo = useRecoilValue(machineInfoState);
 
   useEffect(() => {
-    const url = buildUrl(machineId);
+    const url = buildUrl(machineInfo);
     deleteNotification('survey');
 
     if (surveyEligible) {
