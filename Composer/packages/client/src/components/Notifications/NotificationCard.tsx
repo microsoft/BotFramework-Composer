@@ -164,7 +164,7 @@ const makeLinkLabel = (link: NotificationLink) => (
 const defaultCardContentRenderer = (props: CardProps) => {
   const { title, description, type, link, links, stretchLinks } = props;
 
-  const linkList = links ?? [link];
+  const linkList = links ?? [link ?? null];
 
   const stackProps: IStackProps = {
     horizontalAlign: stretchLinks ? 'space-between' : 'end',
