@@ -23,7 +23,6 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useEffect, useState, useMemo } from 'react';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 
-import { IDiagnosticInfo } from '../../../../diagnostics/types';
 import {
   botDisplayNameState,
   botProjectSpaceSelector,
@@ -32,6 +31,8 @@ import {
   rootBotProjectIdSelector,
 } from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
+
+import { IDiagnosticInfo } from './types';
 
 // -------------------- Styles -------------------- //
 

@@ -5,9 +5,9 @@ import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern, ITrigger } from 
 import get from 'lodash/get';
 import formatMessage from 'format-message';
 
-import { getBaseName } from '../../utils/fileUtil';
-import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
-import { convertPathToUrl, createBotSettingUrl } from '../../utils/navigation';
+import { getBaseName } from '../../../../../utils/fileUtil';
+import { replaceDialogDiagnosticLabel } from '../../../../../utils/dialogUtil';
+import { convertPathToUrl, createBotSettingUrl } from '../../../../../utils/navigation';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
 export enum DiagnosticType {
