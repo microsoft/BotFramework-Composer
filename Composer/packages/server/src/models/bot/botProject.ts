@@ -65,7 +65,6 @@ export class BotProject implements IBotProject {
   public dataDir: string;
   public eTag?: string;
   public fileStorage: IFileStorage;
-  public builder: Builder;
   public defaultSDKSchema: {
     [key: string]: string;
   };
@@ -77,6 +76,7 @@ export class BotProject implements IBotProject {
   public settings: DialogSetting | null = null;
 
   private files = new Map<string, FileInfo>();
+  public _builder: Builder | undefined;
 
   constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
     this.ref = ref;
@@ -90,7 +90,7 @@ export class BotProject implements IBotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+
     this.readme = '';
   }
 
@@ -180,6 +180,14 @@ export class BotProject implements IBotProject {
 
   public get schemaOverrides() {
     return this.files.get('app.override.schema') ?? this.files.get('sdk.override.schema');
+  }
+
+  public get builder() {
+    if (!this._builder) {
+      this._builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+    }
+
+    return this._builder;
   }
 
   public getFile(id: string) {

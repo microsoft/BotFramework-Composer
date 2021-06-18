@@ -9,8 +9,6 @@ import { botBuildTimeErrorState, botStatusState } from '../../../recoilModel';
 import { BotStatus } from '../../../constants';
 import { BotRuntimeStatus } from '../../BotRuntimeController/BotRuntimeStatus';
 
-jest.mock('../../../utils/httpUtil');
-
 const mockStart = jest.fn();
 const mockStop = jest.fn();
 const pollingInterval = 1500;

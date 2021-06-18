@@ -41,8 +41,8 @@ jobs:
         run: yarn build:dev
       - name: yarn lint
         run: yarn lint:ci && yarn lint:extensions
-      - name: yarn test:coverage
-        run: yarn test:coverage
+      - name: yarn test:ci
+        run: yarn test:ci
       - name: Coveralls
         uses: coverallsapp/github-action@v1.1.1
         continue-on-error: true

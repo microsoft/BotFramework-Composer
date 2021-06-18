@@ -24,8 +24,8 @@ const recognizers = [
   {
     id: 'TestRecognizer',
     displayName: 'TestRecognizer',
-    intentEditor: ({ id, onChange }) => (
-      <div id={id}>
+    intentEditor: ({ id, onChange, label }) => (
+      <div aria-label={label} id={id}>
         Test Recognizer <button onClick={onChange}>Update</button>
       </div>
     ),

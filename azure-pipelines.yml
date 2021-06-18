@@ -1,9 +1,3 @@
-pr:
-  autoCancel: true
-  branches:
-    include:
-      - "*"
-
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
 
@@ -11,17 +5,16 @@ jobs:
   - job: e2e
     displayName: End-to-End Tests
     # re-enable once we upgrade our subscription to cypress
-    # strategy:
-    #   parallel: 4
+    strategy:
+      parallel: "4"
     pool:
       vmImage: ubuntu-latest
 
     steps:
-
       - task: UseDotNet@2
         inputs:
-          packageType: 'runtime'
-          version: '3.1.x'
+          packageType: "runtime"
+          version: "3.1.x"
       - task: NodeTool@0
         displayName: "Use Node 14.15.5"
         inputs:
@@ -29,7 +22,7 @@ jobs:
       - task: Bash@3
         displayName: "Adding myGet source"
         inputs:
-          targetType: 'inline'
+          targetType: "inline"
           script:
             # Write your commands here
             dotnet nuget add source https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json
@@ -46,13 +39,13 @@ jobs:
       - script: yarn build
         displayName: yarn build
         workingDirectory: Composer
-      - script: ./scripts/e2e-ci.sh
+      - script: ./scripts/e2e-ci.sh --record --parallel --ci-build-id $(Build.BuildNumber) --group "Azure CI"
         displayName: Run E2E Tests
-        workingDirectory: Composer
+        workingDirectory: Composer/packages/integration-tests
         env:
-          # CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
           CYPRESS_VIDEO: true
-          # CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
+          CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
           CYPRESS_SCREENSHOTS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/screenshots
           CYPRESS_VIDEOS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/videos
           TERM: xterm
