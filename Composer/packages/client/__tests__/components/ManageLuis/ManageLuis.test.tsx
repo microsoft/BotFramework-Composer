@@ -11,7 +11,7 @@ const serviceName = 'Language Understanding';
 const DOWN_ARROW = { keyCode: 40 };
 
 jest.mock('@azure/arm-cognitiveservices', () => ({
-  CognitiveServicesManagementClient: () => {
+  CognitiveServicesManagementClient: function CognitiveServicesManagementClient() {
     return {
       accounts: {
         create: async () => {},
@@ -103,7 +103,7 @@ describe('<ManageLuis />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
       <ManageLuis
         hidden={false}
         onDismiss={onDismiss}
@@ -115,7 +115,7 @@ describe('<ManageLuis />', () => {
 
     // test the default option (choose existing)
     // click the next button, ensure the title changes
-    const nextButton = await findByText('Next');
+    const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -136,7 +136,7 @@ describe('<ManageLuis />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByText('Next');
+    const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -188,7 +188,7 @@ describe('<ManageLuis />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText, findByTestId } = renderWithRecoil(
+    const { baseElement, findByText, findByTestId, findByRole } = renderWithRecoil(
       <ManageLuis
         hidden={false}
         onDismiss={onDismiss}
@@ -204,7 +204,7 @@ describe('<ManageLuis />', () => {
     fireEvent.click(createOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByText('Next');
+    const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);
@@ -213,7 +213,7 @@ describe('<ManageLuis />', () => {
 
     // ensure that since a subscription hasn't been selected
     // this button is disabled
-    const nextButton2 = await findByText('Next');
+    const nextButton2 = await findByRole('button', { name: 'Next' });
     expect(nextButton2).toBeDefined();
     expect(nextButton2).toBeDisabled();
 
@@ -244,7 +244,7 @@ describe('<ManageLuis />', () => {
       await fireEvent.click(nextButton2);
     });
 
-    const nextButton3 = await findByText('Next');
+    const nextButton3 = await findByRole('button', { name: 'Next' });
     expect(nextButton3).toBeDefined();
     expect(nextButton3).toBeDisabled();
 
@@ -303,7 +303,7 @@ describe('<ManageLuis />', () => {
     const onNext = jest.fn();
     const onToggleVisibility = jest.fn();
 
-    const { baseElement, findByText } = renderWithRecoil(
+    const { baseElement, findByText, findByRole } = renderWithRecoil(
       <ManageLuis
         hidden={false}
         onDismiss={onDismiss}
@@ -319,7 +319,7 @@ describe('<ManageLuis />', () => {
     fireEvent.click(generateOption);
 
     // click the next button, ensure the title changes
-    const nextButton = await findByText('Next');
+    const nextButton = await findByRole('button', { name: 'Next' });
     expect(nextButton).toBeDefined();
     await act(async () => {
       await fireEvent.click(nextButton);

@@ -1,6 +1,6 @@
 let mock = jest.createMockFromModule('@azure/arm-resources');
 
-mock.ResourceManagementClient = () => {
+function ResourceManagementClient() {
   return {
     resourceGroups: {
       list: async () => {
@@ -14,6 +14,8 @@ mock.ResourceManagementClient = () => {
       },
     },
   };
-};
+}
+
+mock.ResourceManagementClient = ResourceManagementClient;
 
 module.exports = mock;

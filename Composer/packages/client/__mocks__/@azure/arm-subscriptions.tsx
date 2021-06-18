@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 let mock = jest.createMockFromModule('@azure/arm-subscriptions');
 
-mock.SubscriptionClient = () => {
+function SubscriptionClient() {
   return {
     subscriptions: {
       list: async () => {
@@ -22,6 +22,7 @@ mock.SubscriptionClient = () => {
       },
     },
   };
-};
+}
+mock.SubscriptionClient = SubscriptionClient;
 
 module.exports = mock;
