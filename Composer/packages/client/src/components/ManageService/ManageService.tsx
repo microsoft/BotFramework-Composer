@@ -72,7 +72,7 @@ const mainElementStyle = { marginBottom: 20 };
 const dialogBodyStyles = { height: 400 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
-export const ManageService = (props: ManageServiceProps) => {
+const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) => {
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [token, setToken] = useState<string | undefined>();
 
@@ -311,7 +311,6 @@ export const ManageService = (props: ManageServiceProps) => {
       const tokenCredentials = new TokenCredentials(token);
       const resourceClient = new ResourceManagementClient(tokenCredentials, subscriptionId);
       const groups = sortBy(await resourceClient.resourceGroups.list(), ['name']);
-
       setResourceGroups([
         {
           id: CREATE_NEW_KEY,
@@ -437,8 +436,9 @@ export const ManageService = (props: ManageServiceProps) => {
   const onChangeSubscription = async (_, opt) => {
     // get list of keys for this subscription
     setSubscription(opt.key);
-    fetchAccounts(opt.key);
     setLoading(formatMessage('Loading subscription...'));
+    fetchAccounts(opt.key);
+
     // if we don't have a list of regions already passed in
     if (!props.regions) {
       fetchLocations(opt.key);
@@ -531,7 +531,7 @@ export const ManageService = (props: ManageServiceProps) => {
           <p css={{ marginTop: 0 }}>
             {props.introText}
             {props.learnMore ? (
-              <Link href={props.learnMore} target={'_blank'}>
+              <Link data-testid="manageservice-learnmore" href={props.learnMore} target={'_blank'}>
                 {formatMessage('Learn more')}
               </Link>
             ) : null}
@@ -570,6 +570,7 @@ export const ManageService = (props: ManageServiceProps) => {
           <div css={mainElementStyle}>
             <Dropdown
               required
+              data-testid="service-useexisting-tenant-selection"
               disabled={allTenants.length === 1 || !tenantId || tenantId.trim().length === 0}
               errorMessage={tenantsErrorMessage}
               label={formatMessage('Azure directory')}
@@ -582,6 +583,7 @@ export const ManageService = (props: ManageServiceProps) => {
             />
             <Dropdown
               required
+              data-testid="service-useexisting-subscription-selection"
               disabled={!(availableSubscriptions?.length > 0)}
               errorMessage={subscriptionsErrorMessage}
               label={formatMessage('Azure subscription')}
@@ -612,6 +614,7 @@ export const ManageService = (props: ManageServiceProps) => {
             {!noKeys && subscriptionId && (
               <div>
                 <Dropdown
+                  data-testid="service-useexisting-key-selection"
                   disabled={!(keys?.length > 0) || nextAction !== 'choose'}
                   label={formatMessage('{service} resource name', { service: props.serviceName })}
                   options={
@@ -653,6 +656,7 @@ export const ManageService = (props: ManageServiceProps) => {
 
           <div css={mainElementStyle}>
             <Dropdown
+              data-testid="service-create-resource-selection"
               disabled={!subscriptionId || resourceGroups.length === 0 || !!loading}
               label={formatMessage('Azure resource group')}
               options={
@@ -705,7 +709,9 @@ export const ManageService = (props: ManageServiceProps) => {
               placeholder={formatMessage('Enter name for new resources')}
               styles={inputStyles}
               value={resourceName}
-              onChange={(e, val) => setResourceName(val || '')}
+              onChange={(e, val) => {
+                setResourceName(val || '');
+              }}
             />
             {props.tiers && (
               <Dropdown
@@ -787,6 +793,7 @@ export const ManageService = (props: ManageServiceProps) => {
           <div css={mainElementStyle}>
             <Dropdown
               required
+              data-testid="service-create-tenant-selection"
               disabled={allTenants.length === 1 || !tenantId}
               errorMessage={tenantsErrorMessage}
               label={formatMessage('Azure directory')}
@@ -799,6 +806,7 @@ export const ManageService = (props: ManageServiceProps) => {
             />
             <Dropdown
               required
+              data-testid="service-create-subscription-selection"
               disabled={availableSubscriptions?.length === 0}
               errorMessage={subscriptionsErrorMessage}
               label={formatMessage('Azure subscription')}
@@ -912,3 +920,5 @@ export const ManageService = (props: ManageServiceProps) => {
     </Fragment>
   );
 };
+
+export { ManageService };

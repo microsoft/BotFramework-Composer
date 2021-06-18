@@ -114,6 +114,7 @@ describe('<CreationFlow/>', () => {
       qnaKbUrls: undefined,
       runtimeLanguage: 'dotnet',
       source: undefined,
+      isLocalGenerator: false,
     });
   });
 });
