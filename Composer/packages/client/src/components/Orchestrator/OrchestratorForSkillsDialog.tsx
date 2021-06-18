@@ -36,7 +36,7 @@ export const OrchestratorForSkillsDialog = () => {
     if (showOrchestratorDialog && hasOrchestrator) {
       setShowOrchestratorDialog(false);
     }
-  }, [showOrchestratorDialog]);
+  }, [hasOrchestrator, showOrchestratorDialog]);
 
   const handleOrchestratorSubmit = async (event: React.MouseEvent<HTMLElement | Button>, enable?: boolean) => {
     event.preventDefault();
