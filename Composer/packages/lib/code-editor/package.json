@@ -61,6 +61,12 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-alignment": "^28.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^28.0.0",
+    "@ckeditor/ckeditor5-image": "^28.0.0",
+    "@ckeditor/ckeditor5-markdown-gfm": "^28.0.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@ckeditor/ckeditor5-theme-lark": "^28.0.0",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@monaco-editor/react": "^3.8.3",
@@ -72,6 +78,7 @@
     "reconnecting-websocket": "^3.2.2",
     "vscode-ws-jsonrpc": "^0.1.1",
     "@uifabric/fluent-theme": "^7.1.4",
-    "@fluentui/react-icons": "^0.3.9"
+    "@fluentui/react-icons": "^0.3.9",
+    "@wwalc/ckeditor5-emoji": "^11.0.2"
   }
 }

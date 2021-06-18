@@ -18,6 +18,7 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { ESBuildPlugin, ESBuildMinifyPlugin } = require('esbuild-loader');
+const { styles: ckStyles } = require('@ckeditor/ckeditor5-dev-utils');
 
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
@@ -240,6 +241,33 @@ module.exports = function (webpackEnv) {
           include: paths.appSrc,
         },
         {
+          test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+          use: ['raw-loader'],
+        },
+        {
+          test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+          use: [
+            {
+              loader: 'style-loader',
+              options: {
+                injectType: 'singletonStyleTag',
+                attributes: {
+                  'data-cke': true,
+                },
+              },
+            },
+            {
+              loader: 'postcss-loader',
+              options: ckStyles.getPostCssConfig({
+                themeImporter: {
+                  themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
+                },
+                minify: true,
+              }),
+            },
+          ],
+        },
+        {
           test: /\.worker\.ts$/,
           use: {
             loader: 'worker-loader',
@@ -309,7 +337,7 @@ module.exports = function (webpackEnv) {
             // By default we support CSS Modules with the extension .module.css
             {
               test: cssRegex,
-              exclude: cssModuleRegex,
+              exclude: [cssModuleRegex, /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/],
               use: getStyleLoaders({
                 importLoaders: 1,
                 sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
@@ -324,6 +352,7 @@ module.exports = function (webpackEnv) {
             // using the extension .module.css
             {
               test: cssModuleRegex,
+              exclude: [/ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/],
               use: getStyleLoaders({
                 importLoaders: 1,
                 sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
@@ -343,7 +372,13 @@ module.exports = function (webpackEnv) {
               // its runtime that would otherwise be processed through "file" loader.
               // Also exclude `html` and `json` extensions so they get processed
               // by webpacks internal loaders.
-              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+              exclude: [
+                /\.(js|mjs|jsx|ts|tsx)$/,
+                /\.html$/,
+                /\.json$/,
+                /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+              ],
               options: {
                 name: 'static/media/[name].[hash:8].[ext]',
               },

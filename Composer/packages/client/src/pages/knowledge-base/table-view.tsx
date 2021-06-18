@@ -32,6 +32,7 @@ import flatMap from 'lodash/flatMap';
 import { QnASection, QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { QnARichEditor } from '@bfc/code-editor';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
@@ -352,7 +353,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return (
           <IconButton
             hidden
-            data-testId={'knowledgeBaseMore'}
+            data-testid={'knowledgeBaseMore'}
             menuIconProps={{ iconName: 'More' }}
             menuProps={{ items: overflowItems || [] }}
             role="menuitem"
@@ -679,31 +680,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const isSourceSectionInDialog =
             item.fileId.endsWith(qnaSuffix(locale)) && !dialogId.endsWith(qnaSuffix(locale));
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
-          const isExpanded = expandedIndex === index;
           const isCreatingQnA =
             item.fileId === createQnAPairSettings.groupKey && index === createQnAPairSettings.sectionIndex;
 
           return (
             <div data-is-focusable css={formCell}>
-              <EditableField
-                required
-                ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
-                depth={0}
+              <QnARichEditor
                 disabled={isAllowEdit}
-                enableIcon={isExpanded}
-                expanded={isExpanded}
-                iconProps={{
-                  iconName: 'Cancel',
-                }}
                 id={item.sectionId}
-                name={item.Answer}
-                placeholder={formatMessage('Add new answer')}
-                requiredMessage={formatMessage('Answer is required')}
-                resizable={false}
-                styles={editableField}
                 value={item.Answer}
-                onBlur={(_id, value) => {
-                  const newValue = value?.trim();
+                onBlur={(_, editor) => {
+                  const newValue = editor.getData();
                   const isChanged = item.Answer !== newValue;
                   if (!newValue || !isChanged) return;
 

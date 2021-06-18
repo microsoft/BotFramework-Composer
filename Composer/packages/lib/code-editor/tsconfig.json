@@ -3,11 +3,6 @@
   "compilerOptions": {
     "outDir": "lib"
   },
-  "include": [
-    "./src/**/*",
-    "./__tests__/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["./src/typings.d.ts", "./src/**/*", "./__tests__/**/*"],
+  "exclude": ["node_modules"]
 }
