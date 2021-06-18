@@ -1,7 +1,7 @@
 {
   "name": "@bfc/integration-tests",
   "version": "1.0.0",
-  "description": "",
+  "description": "Composer end-to-end tests using the cypress testing framework.",
   "scripts": {
     "start": "cypress run --browser edge",
     "start:server": "node scripts/e2e.js",
