@@ -370,6 +370,11 @@ export const surveyEligibilityState = atom<boolean>({
   default: false,
 });
 
+export const machineIdState = atom<string>({
+  key: getFullyQualifiedKey('machineIdState'),
+  default: '',
+});
+
 export const showGetStartedTeachingBubbleState = atom<boolean>({
   key: getFullyQualifiedKey('showGetStartedTeachingBubbleState'),
   default: false,

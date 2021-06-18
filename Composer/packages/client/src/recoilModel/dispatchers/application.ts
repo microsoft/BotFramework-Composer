@@ -19,6 +19,7 @@ import {
   userHasNodeInstalledState,
   applicationErrorState,
   surveyEligibilityState,
+  machineIdState,
   showGetStartedTeachingBubbleState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType, SURVEY_PARAMETERS } from '../../constants';
@@ -185,6 +186,10 @@ export const applicationDispatcher = () => {
     surveyStorage.set('dateLastUsed', today);
   });
 
+  const setMachineId = useRecoilCallback((callbackHelpers: CallbackInterface) => (id: string) => {
+    callbackHelpers.set(machineIdState, id);
+  });
+
   const setShowGetStartedTeachingBubble = useRecoilCallback((callbackHelpers: CallbackInterface) => (show: boolean) => {
     callbackHelpers.set(showGetStartedTeachingBubbleState, show);
   });
@@ -206,6 +211,7 @@ export const applicationDispatcher = () => {
     setDebugPanelExpansion,
     setActiveTabInDebugPanel,
     setSurveyEligibility,
+    setMachineId,
     setShowGetStartedTeachingBubble,
   };
 };

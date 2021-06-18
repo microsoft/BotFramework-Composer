@@ -156,8 +156,6 @@ async function loadServer() {
   const machineId = await getMachineId();
   const sessionId = getSessionId();
 
-  log(`Machine ID is ${machineId}`);
-
   // only create a new data directory if packaged electron app
   log('Creating app data directory...');
   await createAppDataDir();
@@ -297,11 +295,16 @@ async function run() {
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
 
     const mainWindow = getMainWindow();
+    const machineId = await getMachineId();
+
     mainWindow?.webContents.send('session-update', 'session-started');
 
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow?.webContents.openDevTools();
     }
+
+    log(`Machine ID is ${machineId}`);
+    mainWindow?.webContents.send('machine-id', machineId);
   });
 
   // Quit when all windows are closed.

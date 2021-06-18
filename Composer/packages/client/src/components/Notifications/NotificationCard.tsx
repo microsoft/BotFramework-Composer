@@ -118,7 +118,7 @@ const linkButton = css`
   float: right;
   font-size: 12px;
   height: auto;
-  margin: 4px 0 4px 8px;
+  margin: 4px 0;
 `;
 
 const getShimmerStyles = {
@@ -177,10 +177,14 @@ const defaultCardContentRenderer = (props: CardProps) => {
         {description && <div css={cardDescription}>{description}</div>}
         {link && makeLinkLabel(link)}
         {links && (
-          <Stack>
-            {links.map((link) => (
-              <div key={link.label}>{makeLinkLabel(link)}</div>
-            ))}
+          <Stack horizontal horizontalAlign="space-between">
+            {links.map((link) =>
+              link != null ? (
+                <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
+              ) : (
+                <Stack.Item key="blank" grow={1} />
+              )
+            )}
           </Stack>
         )}
         {type === 'pending' && (

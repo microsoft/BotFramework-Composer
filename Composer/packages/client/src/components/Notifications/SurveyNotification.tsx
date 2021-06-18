@@ -6,11 +6,11 @@ import { useRecoilValue } from 'recoil';
 
 import { ClientStorage } from '../../utils/storage';
 import { platform } from '../../utils/os';
-import { surveyEligibilityState, dispatcherState } from '../../recoilModel/atoms/appState';
+import { surveyEligibilityState, dispatcherState, machineIdState } from '../../recoilModel/atoms/appState';
 import { SURVEY_URL_BASE } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-function buildUrl() {
+function buildUrl(machineId: string) {
   // User OS
   // hashed machineId
   // composer version
@@ -21,7 +21,7 @@ function buildUrl() {
   const parameters = {
     Source: 'Composer',
     userOS: platform(),
-    //machineId,
+    machineId,
     version,
   };
 
@@ -36,9 +36,10 @@ function buildUrl() {
 export function useSurveyNotification() {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
   const surveyEligible = useRecoilValue(surveyEligibilityState);
+  const machineId = useRecoilValue(machineIdState);
 
   useEffect(() => {
-    const url = buildUrl();
+    const url = buildUrl(machineId);
     deleteNotification('survey');
 
     if (surveyEligible) {
@@ -48,7 +49,7 @@ export function useSurveyNotification() {
       addNotification({
         id: 'survey',
         type: 'question',
-        title: 'Do you mind taking a quick feedback survey?',
+        title: 'Would you mind taking a quick survey?',
         description: `We read every response and will use your feedback to improve Composer.`,
         links: [
           {
@@ -70,6 +71,7 @@ export function useSurveyNotification() {
               deleteNotification('survey');
             },
           },
+          null,
           {
             label: 'No thanks',
             onClick: () => {
@@ -81,5 +83,5 @@ export function useSurveyNotification() {
         ],
       });
     }
-  }, [machineId]);
+  }, []);
 }

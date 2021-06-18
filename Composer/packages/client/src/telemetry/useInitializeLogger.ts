@@ -15,7 +15,7 @@ import TelemetryClient from './TelemetryClient';
 const { ipcRenderer } = window;
 
 export const useInitializeLogger = () => {
-  const { updateUserSettings } = useRecoilValue(dispatcherState);
+  const { updateUserSettings, setMachineId } = useRecoilValue(dispatcherState);
   const rootProjectId = useRecoilValue(currentProjectIdState);
   const { telemetry } = useRecoilValue(userSettingsState);
   const featureFlags = useRecoilValue(featureFlagsState);
@@ -59,6 +59,11 @@ export const useInitializeLogger = () => {
         default:
           break;
       }
+    });
+
+    ipcRenderer?.on('machine-id', (_event, id) => {
+      console.log(JSON.stringify(id));
+      setMachineId(id);
     });
   }, []);
 
