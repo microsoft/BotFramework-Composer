@@ -316,7 +316,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             onUpdateIsCreateProfileFromSkill={setIsCreateProfileFromSkill}
           />
         </div>
-        <DialogFooter>
+        <DialogFooter styles={{ actions: { lineHeight: '0px' } }}>
           <div css={styles.buttonContainer}>
             <div>
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
