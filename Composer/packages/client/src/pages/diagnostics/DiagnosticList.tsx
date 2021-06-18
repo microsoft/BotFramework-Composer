@@ -122,6 +122,10 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: IDiagnosticInfo) => {
+      let locationPath = item.location;
+      if (item.friendlyLocationPath) {
+        locationPath = item.friendlyLocationPath.join(' >');
+      }
       return (
         <div data-is-focusable css={tableCell}>
           <div
@@ -129,7 +133,7 @@ const columns: IColumn[] = [
             css={content}
             tabIndex={-1}
           >
-            {item.location}
+            {locationPath}
           </div>
         </div>
       );

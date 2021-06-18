@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { createSingleMessage, isDiagnosticWithInRange } from '@bfc/indexers';
-import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern } from '@bfc/shared';
+import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern, ITrigger } from '@bfc/shared';
 import get from 'lodash/get';
 import formatMessage from 'format-message';
 
@@ -35,7 +35,7 @@ export interface IDiagnosticInfo {
   getUrl: (hash?: string) => string;
   learnMore?: string;
   title?: string;
-  getFriendlyLocation: () => string;
+  friendlyLocationPath?: string[];
 }
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
@@ -48,7 +48,6 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   message = '';
   diagnostic: Diagnostic;
   dialogPath?: string;
-  friendlyDialogPath?: string[];
   resourceId: string;
   getUrl = () => '';
   learnMore?: string;
@@ -63,7 +62,6 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
     this.diagnostic = diagnostic;
     this.location = location;
   }
-  getFriendlyLocation: () => string;
 }
 
 export class BotDiagnostic extends DiagnosticInfo {
@@ -156,20 +154,39 @@ export class LgDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
-    this.getFriendlyPath(this.dialogPath, dialogs);
+    const friendlyPath = this.getFriendlyPath(this.dialogPath, dialogs);
+    if (friendlyPath.length) {
+      this.friendlyLocationPath = friendlyPath;
+    }
   }
   private getFriendlyPath(dialogPath: string | undefined, dialogs: DialogInfo[]) {
     try {
       if (!dialogPath) {
-        return null;
+        return [];
       }
       const breadcrumb: string[] = [];
-      const splitPath = dialogPath.split('');
-      const dialogName: string = get(dialogs, splitPath[0], '');
-      breadcrumb.push(dialogName);
-      console.log(breadcrumb);
+      const [dialogName, triggerPath, actionPath] = dialogPath.split('.');
+      if (dialogName) {
+        const matchedDialog = dialogs.find(({ displayName }) => displayName === dialogName);
+        if (matchedDialog && triggerPath) {
+          breadcrumb.push(matchedDialog.displayName);
+
+          const trigger: ITrigger = get(matchedDialog, triggerPath, '');
+          if (trigger.displayName) {
+            breadcrumb.push(trigger.displayName);
+          }
+
+          if (trigger && actionPath) {
+            const action = get(trigger.content, actionPath, '');
+            if (action.$kind) {
+              breadcrumb.push(action.$kind);
+            }
+          }
+        }
+      }
+      return breadcrumb;
     } catch (ex) {
-      return null;
+      return [];
     }
   }
 

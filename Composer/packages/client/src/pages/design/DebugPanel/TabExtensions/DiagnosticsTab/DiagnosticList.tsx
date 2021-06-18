@@ -167,6 +167,10 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isResizable: true,
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
+        let locationPath = item.location;
+        if (item.friendlyLocationPath) {
+          locationPath = item.friendlyLocationPath.join(' > ');
+        }
         return (
           <div css={tableCell}>
             <Link
@@ -179,7 +183,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
                 }
               }}
             >
-              {item.location}
+              {locationPath}
             </Link>
           </div>
         );
