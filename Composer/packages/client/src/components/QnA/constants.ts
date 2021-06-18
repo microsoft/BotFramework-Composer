@@ -95,3 +95,5 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
 export const knowledgeBaseSourceUrl = 'https://aka.ms/qna-data-source-content';
 
 export const QnAMakerLearningUrl = 'https://aka.ms/qna-maker-pricing';
+
+export const QnAMakerLearnMoreUrl = 'https://aka.ms/composer-addqnamaker-learnmore';
