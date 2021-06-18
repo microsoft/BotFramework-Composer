@@ -68,7 +68,6 @@ async function setup() {
 }
 
 async function run() {
-  console.log('COMPOSER ROOT', composerRootDir);
   return new Promise((resolve) => {
     const startCommand = isDev ? 'start:dev' : 'start';
 
