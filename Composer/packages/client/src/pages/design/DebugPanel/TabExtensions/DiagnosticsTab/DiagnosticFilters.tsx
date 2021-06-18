@@ -6,11 +6,11 @@ import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import { DiagnosticSeverity } from '@bfc/shared';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { FontWeights } from '@uifabric/styling';
 
 import { outputsDebugPanelSelector, rootBotProjectIdSelector } from '../../../../../recoilModel';
 import { DropdownWithAllOption } from '../../../../../components/DropdownWithAllOption/DropdownWithAllOption';
@@ -19,12 +19,16 @@ const severityTextStyle = {
   marginRight: '6px',
 };
 
+const countFontWeight = {
+  fontWeight: FontWeights.bold,
+};
+
 const optionAllKey = 'All';
 
 const getSeverityButtonStyle = (severityType: DiagnosticSeverity, isChecked: boolean): any => {
   const baseStyle = {
     root: {
-      padding: '3px 8px',
+      padding: '8px 4px',
       marginRight: '8px',
       fontSize: FontSizes.size12,
       fontFamily: 'Segoe UI',
@@ -101,34 +105,43 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
   }
 
   return (
-    <Fragment>
-      <Stack grow horizontal>
-        <DefaultButton
-          allowDisabledFocus
-          checked={showErrors}
-          iconProps={{ iconName: 'StatusErrorFull' }}
-          styles={getSeverityButtonStyle(DiagnosticSeverity.Error, showErrors)}
-          onClick={() => {
-            setErrorFilter(!showErrors);
-          }}
-        >
-          <span style={severityTextStyle}>{formatMessage('Errors')}</span>
-          <span>{errorCount}</span>
-        </DefaultButton>
-        <DefaultButton
-          allowDisabledFocus
-          toggle
-          checked={showWarnings}
-          iconProps={{ iconName: 'WarningSolid' }}
-          styles={getSeverityButtonStyle(DiagnosticSeverity.Warning, showWarnings)}
-          onClick={() => {
-            setWarningFilter(!showWarnings);
-          }}
-        >
-          <span style={severityTextStyle}>{formatMessage('Warnings')}</span>
-          <span>{warningCount}</span>
-        </DefaultButton>
-
+    <div
+      css={{
+        display: 'flex',
+        flex: '1 1 auto',
+        width: '100%',
+      }}
+    >
+      <DefaultButton
+        allowDisabledFocus
+        checked={showErrors}
+        iconProps={{ iconName: 'StatusErrorFull' }}
+        styles={getSeverityButtonStyle(DiagnosticSeverity.Error, showErrors)}
+        onClick={() => {
+          setErrorFilter(!showErrors);
+        }}
+      >
+        <span style={severityTextStyle}>{formatMessage('Errors')}</span>
+        <span style={countFontWeight}>{errorCount}</span>
+      </DefaultButton>
+      <DefaultButton
+        allowDisabledFocus
+        toggle
+        checked={showWarnings}
+        iconProps={{ iconName: 'WarningSolid' }}
+        styles={getSeverityButtonStyle(DiagnosticSeverity.Warning, showWarnings)}
+        onClick={() => {
+          setWarningFilter(!showWarnings);
+        }}
+      >
+        <span style={severityTextStyle}>{formatMessage('Warnings')}</span>
+        <span style={countFontWeight}>{warningCount}</span>
+      </DefaultButton>
+      <div
+        css={{
+          marginLeft: 'auto !important',
+        }}
+      >
         <DropdownWithAllOption
           dropdownOptions={projectSelectorOptions}
           optionAllKey={optionAllKey}
@@ -137,7 +150,7 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
           selectedKeys={projectsToFilter}
           setSelectedKeys={setProjectsToFilter}
         />
-      </Stack>
-    </Fragment>
+      </div>
+    </div>
   );
 };

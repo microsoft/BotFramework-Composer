@@ -9,6 +9,7 @@ import {
   SelectionMode,
   IColumn,
   CheckboxVisibility,
+  ConstrainMode,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -20,6 +21,7 @@ import { css } from '@emotion/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useEffect, useState, useMemo } from 'react';
+import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
 import {
@@ -32,6 +34,8 @@ import {
 import { navigateTo } from '../../../../../utils/navigation';
 
 // -------------------- Styles -------------------- //
+
+const maxHeightDetailsList = 45;
 
 const icons = {
   Error: { iconName: 'StatusErrorFull', color: SharedColors.red10 },
@@ -63,7 +67,7 @@ const typeIcon = (icon) => css`
 `;
 
 const detailList = css`
-  overflow-x: hidden;
+  height: calc(100% - 55px);
 `;
 
 const tableCell = css`
@@ -145,11 +149,12 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isPadded: true,
       isSorted: true,
       isSortedDescending: false,
-      onColumnClick: () => {
+      onColumnClick: (event) => {
         const newColumns = columns.slice();
         newColumns[1].isSorted = true;
         newColumns[1].isSortedDescending = !columns[1].isSortedDescending;
         setColumns(newColumns);
+        event.stopPropagation();
       },
     },
     {
@@ -237,16 +242,25 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
   }, [diagnosticItems, columns]);
 
   return (
-    <DetailsList
-      isHeaderVisible
-      checkboxVisibility={CheckboxVisibility.hidden}
-      columns={columns}
-      css={detailList}
-      items={displayedDiagnosticItems}
-      layoutMode={DetailsListLayoutMode.justified}
-      selectionMode={SelectionMode.single}
-      setKey="none"
-      onRenderDetailsHeader={onRenderDetailsHeader}
-    />
+    <ScrollablePane>
+      <DetailsList
+        isHeaderVisible
+        checkboxVisibility={CheckboxVisibility.hidden}
+        columns={columns}
+        constrainMode={ConstrainMode.unconstrained}
+        css={detailList}
+        items={displayedDiagnosticItems}
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionMode={SelectionMode.single}
+        setKey="none"
+        styles={{
+          root: {
+            maxHeight: `calc(100% - ${maxHeightDetailsList}px)`,
+            selectors: {},
+          },
+        }}
+        onRenderDetailsHeader={onRenderDetailsHeader}
+      />
+    </ScrollablePane>
   );
 };

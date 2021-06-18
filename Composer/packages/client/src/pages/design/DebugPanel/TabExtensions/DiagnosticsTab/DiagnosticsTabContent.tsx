@@ -3,9 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { Stack } from 'office-ui-fabric-react';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import { IDiagnosticInfo } from '../../../../diagnostics/types';
@@ -14,6 +13,8 @@ import { dispatcherState, showErrorDiagnosticsState, showWarningDiagnosticsState
 import { DiagnosticList } from './DiagnosticList';
 import { Severity, useDiagnosticsData } from './useDiagnostics';
 import { DiagnosticsFilters } from './DiagnosticFilters';
+
+const severityFilterHeight = 45;
 
 export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const diagnostics = useDiagnosticsData();
@@ -64,13 +65,16 @@ export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActiv
     <div
       css={{
         height: '100%',
+        width: '100%',
       }}
     >
       <div
         css={{
+          height: `${severityFilterHeight}px`,
           display: 'flex',
           flex: '1 1 auto',
-          height: '55px',
+          alignItems: 'center',
+          padding: '0 16px',
         }}
       >
         <DiagnosticsFilters
@@ -84,14 +88,11 @@ export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActiv
           warningCount={warningCount}
         />
       </div>
-
       <div
         css={{
-          height: 'calc(100% - 55px)',
-          overflowY: 'scroll',
+          height: `calc(100% - ${severityFilterHeight}px)`,
+          position: 'relative',
         }}
-        data-is-scrollable="true"
-        data-testid="DiagnosticList-Container"
       >
         <DiagnosticList diagnosticItems={filteredDiagnostics} />
       </div>
