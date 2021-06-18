@@ -51,6 +51,7 @@ export function useSurveyNotification() {
         type: 'question',
         title: 'Would you mind taking a quick survey?',
         description: `We read every response and will use your feedback to improve Composer.`,
+        stretchLinks: true,
         links: [
           {
             label: 'Take survey',

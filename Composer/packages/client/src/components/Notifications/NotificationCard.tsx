@@ -9,7 +9,7 @@ import { useRef } from 'react';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Stack, IStackProps } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 import { Notification, NotificationLink } from '@botframework-composer/types';
 
@@ -113,13 +113,20 @@ const cardDescription = css`
   word-break: break-word;
 `;
 
-const linkButton = css`
-  color: #0078d4;
-  float: right;
-  font-size: 12px;
-  height: auto;
-  margin: 4px 0;
-`;
+const linkButton = {
+  root: {
+    padding: '0',
+    border: '0',
+  },
+  label: {
+    fontSize: '12px',
+    color: '#0078d4',
+    margin: '0',
+  },
+  textContainer: {
+    height: '16px',
+  },
+};
 
 const getShimmerStyles = {
   root: {
@@ -149,13 +156,25 @@ export type NotificationProps = {
 };
 
 const makeLinkLabel = (link: NotificationLink) => (
-  <ActionButton css={linkButton} onClick={link.onClick}>
+  <ActionButton styles={linkButton} onClick={link.onClick}>
     {link.label}
   </ActionButton>
 );
 
 const defaultCardContentRenderer = (props: CardProps) => {
-  const { title, description, type, link, links } = props;
+  const { title, description, type, link, links, stretchLinks } = props;
+
+  const linkList = links ?? [link];
+
+  const stackProps: IStackProps = {
+    horizontalAlign: stretchLinks ? 'space-between' : 'end',
+    tokens: {
+      childrenGap: stretchLinks ? undefined : '20px',
+      padding: '0 16px 0 0',
+      maxHeight: '24px',
+    },
+  };
+
   return (
     <div css={cardContent}>
       {type === 'error' && <Icon css={errorType} iconName="ErrorBadge" />}
@@ -175,18 +194,15 @@ const defaultCardContentRenderer = (props: CardProps) => {
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}
-        {link && makeLinkLabel(link)}
-        {links && (
-          <Stack horizontal horizontalAlign="space-between">
-            {links.map((link) =>
-              link != null ? (
-                <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
-              ) : (
-                <span key="blank" style={{ width: '25px' }} />
-              )
-            )}
-          </Stack>
-        )}
+        <Stack horizontal {...stackProps}>
+          {linkList.map((link) =>
+            link != null ? (
+              <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
+            ) : (
+              <span key="blank" style={{ width: '25px' }} />
+            )
+          )}
+        </Stack>
         {type === 'pending' && (
           <Shimmer shimmerElements={[{ type: ShimmerElementType.line, height: 2 }]} styles={getShimmerStyles} />
         )}
