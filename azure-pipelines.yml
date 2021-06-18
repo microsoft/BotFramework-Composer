@@ -66,14 +66,6 @@ jobs:
   - job: security
     displayName: Security Analysis
     steps:
-      - task: UseDotNet@2
-        inputs:
-          version: "3.1.x"
-          packageType: sdk
-      - task: DotNetCoreCLI@2
-        displayName: "dotnet build"
-        inputs:
-          projects: runtime/dotnet
       - task: ComponentGovernanceComponentDetection@0
         displayName: Component Detection
         inputs:

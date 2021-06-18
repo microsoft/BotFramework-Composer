@@ -50,47 +50,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./Composer/coverage/lcov.info
           base-path: ./Composer
-
-  botproject:
-    name: BotProject-dotnet
-    runs-on: windows-latest
-    timeout-minutes: 20
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set Dotnet Version
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "3.1.102" # SDK Version to use.
-      - name: dotnet build
-        run: dotnet build
-        working-directory: runtime/dotnet
-      - name: dotnet test
-        run: dotnet test
-        working-directory: runtime/dotnet/tests
-
-  nodejs:
-    name: BotProject-nodejs
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set Node Version
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.15.5
-      - name: npm install
-        run: npm install
-        working-directory: runtime/node
-      - name: npm build
-        run: npm run build
-        working-directory: runtime/node
-      - name: npm test
-        run: npm run test
-        working-directory: runtime/node
   # docker-build:
   #   name: Docker Build
   #   timeout-minutes: 20
