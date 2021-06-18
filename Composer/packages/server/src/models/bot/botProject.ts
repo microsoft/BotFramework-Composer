@@ -22,7 +22,6 @@ import merge from 'lodash/merge';
 import { UserIdentity } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
-import { ExtensionContext } from '../extension/extensionContext';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -617,10 +616,6 @@ export class BotProject implements IBotProject {
   public async deleteAllFiles(): Promise<boolean> {
     try {
       await this.fileStorage.rmrfDir(this.dir);
-      const projectId = await BotProjectService.getProjectIdByPath(this.dir);
-      if (projectId) {
-        await this.removeLocalRuntimeData(projectId);
-      }
       await BotProjectService.cleanProject({ storageId: 'default', path: this.dir });
       await BotProjectService.deleteRecentProject(this.dir);
     } catch (e) {
@@ -711,23 +706,6 @@ export class BotProject implements IBotProject {
   public updateETag(eTag: string): void {
     this.eTag = eTag;
     // also update the bot project map
-  }
-
-  private async removeLocalRuntimeData(projectId) {
-    const method = 'localpublish';
-    if (ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
-      const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
-      if (typeof pluginMethod === 'function') {
-        await pluginMethod.call(null, projectId);
-      }
-    }
-
-    if (ExtensionContext.extensions.publish[method]?.methods?.removeRuntimeData) {
-      const pluginMethod = ExtensionContext.extensions.publish[method].methods.removeRuntimeData;
-      if (typeof pluginMethod === 'function') {
-        await pluginMethod.call(null, projectId);
-      }
-    }
   }
 
   private _cleanUp = (relativePath: string) => {
