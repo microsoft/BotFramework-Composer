@@ -25,7 +25,7 @@ export const getDeployLocations = (accessToken: string, subscription: string): P
   });
 };
 
-export const CheckWebAppNameAvailability = async (
+export const checkWebAppNameAvailability = async (
   token: string,
   webAppName: string,
   subscriptionId: string

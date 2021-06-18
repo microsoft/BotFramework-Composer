@@ -123,7 +123,7 @@ export const useResourceConfiguration = () => {
     [setHostName]
   );
 
-  const stashWizardState = React.useCallback(() => {
+  const stashWizardState = () => {
     setItem(getName(), {
       tenantId,
       subscriptionId,
@@ -132,7 +132,7 @@ export const useResourceConfiguration = () => {
       luisRegion,
       hostName,
     });
-  }, [tenantId, subscriptionId, resourceGroupName, deployLocation, luisRegion, isNew, hostName]);
+  };
 
   return {
     configuration: {

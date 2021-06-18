@@ -5,7 +5,7 @@ import React from 'react';
 import { ITextFieldProps, TextField } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
-import { CheckWebAppNameAvailability } from '../../api';
+import { checkWebAppNameAvailability } from '../../api';
 import { useDebounce } from '../useDebounce';
 
 type Props = {
@@ -22,14 +22,14 @@ export const ResourceNameTextField = React.memo((props: Props) => {
 
   React.useEffect(() => {
     if (subscriptionId && accessToken && debouncedHostName) {
-      // check app name whether exist or not
-      CheckWebAppNameAvailability(accessToken, debouncedHostName, subscriptionId).then((value) => {
-        if (!value.nameAvailable) {
-          setError(value.message);
+      (async () => {
+        const result = await checkWebAppNameAvailability(accessToken, debouncedHostName, subscriptionId);
+        if (!result.nameAvailable) {
+          setError(result.message);
         } else {
           setError('');
         }
-      });
+      })();
     }
   }, [accessToken, subscriptionId, debouncedHostName]);
 

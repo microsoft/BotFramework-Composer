@@ -143,7 +143,7 @@ export const ResourceConfigurationStep = (props: Props) => {
             </Stack>
             <TenantPicker
               textFieldProps={{
-                disabled: publishConfig?.tenantId, //disable if the config is coming from publishConfig(import)
+                disabled: !!publishConfig?.tenantId,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (e, newValue) => {
                   if (newValue.length === 0) handleTenantChange('');
@@ -165,7 +165,7 @@ export const ResourceConfigurationStep = (props: Props) => {
             <SubscriptionPicker
               accessToken={userInfo?.token}
               textFieldProps={{
-                disabled: publishConfig?.subscriptionId,
+                disabled: !!publishConfig?.subscriptionId,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleSubscriptionChange('');
@@ -192,7 +192,7 @@ export const ResourceConfigurationStep = (props: Props) => {
               isNewResourceGroup={isNewResourceGroup}
               subscriptionId={subscriptionId}
               textFieldProps={{
-                disabled: publishConfig?.resourceGroup,
+                disabled: !!publishConfig?.resourceGroup?.name,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleResourceGroupChange('', false, false);
@@ -214,7 +214,7 @@ export const ResourceConfigurationStep = (props: Props) => {
             </Stack>
             <ResourceNameTextField
               accessToken={userInfo?.token}
-              disabled={publishConfig?.hostname}
+              disabled={!!publishConfig?.hostName}
               styles={autoCompleteTextFieldStyles}
               subscriptionId={subscriptionId}
               value={hostName}
@@ -230,7 +230,7 @@ export const ResourceConfigurationStep = (props: Props) => {
               accessToken={userInfo?.token}
               subscriptionId={subscriptionId}
               textFieldProps={{
-                disabled: publishConfig?.deployLocation,
+                disabled: !!publishConfig?.deployLocation,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleDeployLocationChange('');
@@ -259,7 +259,7 @@ export const ResourceConfigurationStep = (props: Props) => {
                 .filter((dl) => LuisAuthoringSupportLocation.includes(dl.name))
                 .map((i) => ({ key: i.name, text: i.displayName }))}
               textFieldProps={{
-                disabled: publishConfig?.settings?.luis?.region,
+                disabled: !!publishConfig?.settings?.luis?.region,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
                   if (newValue.length === 0) handleLuisRegionChange(undefined);
