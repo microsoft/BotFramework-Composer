@@ -411,6 +411,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           : currentProfile?.luisResource,
         runtimeIdentifier: currentProfile?.runtimeIdentifier ?? 'win-x64',
         region: provisionConfig.location,
+        appServiceOperatingSystem: currentProfile?.appServiceOperatingSystem ?? 'windows',
         settings: {
           applicationInsights: {
             InstrumentationKey:

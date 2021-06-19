@@ -41,6 +41,8 @@ import {
   IStackTokens,
   IStackItemStyles,
   Link,
+  ChoiceGroup,
+  IChoiceGroupOption,
 } from 'office-ui-fabric-react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JsonEditor } from '@bfc/code-editor';
@@ -71,6 +73,7 @@ type ProvisionFormData = {
   hostname: string;
   region: string;
   luisLocation: string;
+  appServiceOperatingSystem: string;
   enabledResources: ResourcesItem[];
   requiredResources: ResourcesItem[];
 };
@@ -129,6 +132,14 @@ const LearnMoreLink = styled(Link)`
   user-select: none;
   font-size: 14px;
 `;
+
+const appOSChoiceGroupStyles = {
+  flexContainer: { display: 'flex', flexDirection: 'row' },
+};
+
+const appOSChoiceGroupOptionStyles = {
+  root: { marginLeft: '8px' },
+};
 
 const PageTypes = {
   ChooseAction: 'chooseAction',
@@ -289,6 +300,8 @@ const getDefaultFormData = (currentProfile, defaults) => {
     hostname: getHostname(currentProfile) ?? defaults.hostname,
     region: currentProfile?.region ?? defaults.region,
     luisLocation: currentProfile?.settings?.luis?.region ?? defaults.luisLocation,
+    appServiceOperatingSystem:
+      currentProfile?.settings?.appServiceOperatingSystem ?? defaults.appServiceOperatingSystem,
     enabledResources: defaults.enabledResources ?? [],
     requiredResources: defaults.requireResources ?? [],
   };
@@ -846,6 +859,11 @@ export const AzureProvisionDialog: React.FC = () => {
     );
   };
 
+  const appServiceOSOptions: IChoiceGroupOption[] = [
+    { key: 'windows', text: 'Windows' },
+    { key: 'linux', text: 'Linux', styles: appOSChoiceGroupOptionStyles },
+  ];
+
   const PageFormConfig = (
     <ScrollablePane
       data-is-scrollable="true"
@@ -919,6 +937,27 @@ export const AzureProvisionDialog: React.FC = () => {
                 setIsNewResourceGroup(choice.isNew);
                 updateFormData('resourceGroup', choice.name);
                 setErrorResourceGroupName(choice.errorMessage);
+              }}
+            />
+          </Stack>
+          <ConfigureResourcesSectionName>
+            {formatMessage('App Service (Web App or Function)')}
+          </ConfigureResourcesSectionName>
+          <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
+            <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
+              <ConfigureResourcesPropertyLabel required>
+                {formatMessage('Operating System')}
+              </ConfigureResourcesPropertyLabel>
+              {renderPropertyInfoIcon(
+                formatMessage('Select the operating system that will host your application service.')
+              )}
+            </Stack>
+            <ChoiceGroup
+              required
+              options={appServiceOSOptions}
+              styles={appOSChoiceGroupStyles}
+              onChange={(_e, o) => {
+                updateFormData('appServiceOperatingSystem', o.key as string);
               }}
             />
           </Stack>
@@ -1249,6 +1288,7 @@ export const AzureProvisionDialog: React.FC = () => {
                   hostname: formData.hostname,
                   location: formData.region,
                   luisLocation: formData.luisLocation || formData.region,
+                  appServiceOperatingSystem: formData.appServiceOperatingSystem,
                   type: publishType,
                   externalResources: selectedResources,
                 });

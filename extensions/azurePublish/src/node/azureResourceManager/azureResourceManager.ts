@@ -778,12 +778,16 @@ export class AzureResourceMananger {
       });
       const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
 
+      const operatingSystem = config.operatingSystem ? config.operatingSystem : 'windows';
+
       // Create new Service Plan
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
         config.resourceGroupName,
         config.name,
         {
           location: config.location,
+          kind: operatingSystem,
+          reserved: operatingSystem === 'linux',
           sku: {
             name: 'S1',
             tier: 'Standard',
@@ -807,7 +811,7 @@ export class AzureResourceMananger {
         name: webAppName,
         serverFarmId: servicePlanResult.name,
         location: config.location,
-        kind: 'app',
+        kind: operatingSystem === 'linux' ? 'app,linux' : 'app',
         siteConfig: {
           webSocketsEnabled: true,
           appSettings: [
@@ -819,6 +823,8 @@ export class AzureResourceMananger {
           cors: {
             allowedOrigins: ['https://botservice.hosting.portal.azure.net', 'https://hosting.onecloud.azure-test.net/'],
           },
+          // linuxFxVersion: operatingSystem === 'linux' ? '' : null,
+          // windowsFxVersion: operatingSystem === 'windows' ? '' : null,
         },
       });
 
@@ -853,13 +859,16 @@ export class AzureResourceMananger {
       });
       const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
       const azureFunctionsName = config.name;
+
+      const operatingSystem = config.operatingSystem ? config.operatingSystem : 'windows';
+
       const azureFunctionsResult = await webSiteManagementClient.webApps.createOrUpdate(
         config.resourceGroupName,
         config.name,
         {
           name: azureFunctionsName,
           location: config.location,
-          kind: 'functionapp',
+          kind: operatingSystem === 'linux' ? 'functionapp,linux' : 'functionapp',
           httpsOnly: true,
           siteConfig: {
             webSocketsEnabled: true,
