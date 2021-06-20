@@ -5,11 +5,11 @@ import { BotIndexer, validateSchema } from '@bfc/indexers';
 import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
-import { getFriendlyName } from '@bfc/shared';
+import { getFriendlyName, DialogInfo } from '@bfc/shared';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
-import { botDisplayNameState, dialogIdsState } from '../atoms/botState';
+import { botDisplayNameState, dialogIdsState, dialogState } from '../atoms/botState';
 import {
   DialogDiagnostic,
   LgDiagnostic,
@@ -20,7 +20,7 @@ import {
   SettingDiagnostic,
   SkillSettingDiagnostic,
   SchemaDiagnostic,
-} from '../../pages/diagnostics/types';
+} from '../../pages/design/DebugPanel/TabExtensions/DiagnosticsTab/types';
 import {
   botDiagnosticsState,
   botProjectFileState,
@@ -168,11 +168,16 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
     const dialogIds = get(dialogIdsState(projectId));
+
     const diagnosticList: DiagnosticInfo[] = [];
 
     dialogIds.forEach((dialogId: string) => {
       const diagnostics = get(dialogDiagnosticsSelectorFamily({ projectId, dialogId })) || [];
       diagnostics.forEach((diagnostic) => {
+        const dialog: DialogInfo = get(dialogState({ projectId, dialogId }));
+        const splitPaths = diagnostic.path?.split('.');
+        console.log(splitPaths);
+
         const location = `${dialogId}.dialog`;
         diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic));
       });
