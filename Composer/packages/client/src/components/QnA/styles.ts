@@ -137,3 +137,18 @@ export const urlStackStyle = {
     marginBottom: 10,
   },
 };
+
+export const header = {
+  height: 50,
+  marginBottom: 20,
+};
+
+export const descriptionStyle = {
+  fontSize: 12,
+};
+
+export const titleStyle = {
+  fontSize: 16,
+  fontWeight: 600,
+  marginBottom: 10,
+};

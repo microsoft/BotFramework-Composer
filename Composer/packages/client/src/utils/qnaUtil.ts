@@ -12,8 +12,9 @@ import { qnaUtil, BotIndexer } from '@bfc/indexers';
 import { getBaseName, getExtension } from './fileUtil';
 
 export const getFileLocale = (fileName: string) => {
-  //file name = 'a.en-us.qna'
-  return getExtension(getBaseName(fileName));
+  //file name = 'a.source.en-us.qna'
+  const tokens = fileName.split('.');
+  return tokens[2];
 };
 export const getReferredQnaFiles = (qnaFiles: QnAFile[], dialogs: DialogInfo[], checkContent = true) => {
   return qnaFiles.filter((file) => {

@@ -40,7 +40,7 @@ import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
-import { ImportQnAFromUrlModal } from '../../components/QnA/ImportQnAFromUrlModal';
+import { ReplaceQnAOptionsModal } from '../../components/QnA/ReplaceQnAOptionsModal';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -456,7 +456,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       {
                         key: 'update',
                         iconProps: { iconName: 'Download' },
-                        name: formatMessage('Import new URL and overwrite'),
+                        name: formatMessage('Replace content'),
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!containerQnAFile) return;
@@ -932,13 +932,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
         ></EditQnAModal>
       )}
       {importingResourceQnAFile && (
-        <ImportQnAFromUrlModal
+        <ReplaceQnAOptionsModal
+          dialogId={dialogId}
+          projectId={projectId}
           qnaFile={importingResourceQnAFile}
           onDismiss={() => {
             setImportingResourceQnAFile(undefined);
           }}
-          onSubmit={handleImportUrl}
-        ></ImportQnAFromUrlModal>
+          onSubmit={() => {}}
+        ></ReplaceQnAOptionsModal>
       )}
     </div>
   );
