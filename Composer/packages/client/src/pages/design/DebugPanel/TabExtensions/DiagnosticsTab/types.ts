@@ -35,8 +35,38 @@ export interface IDiagnosticInfo {
   getUrl: (hash?: string) => string;
   learnMore?: string;
   title?: string;
-  friendlyLocationPath?: string[];
+  friendlyLocationBreadcrumb?: string[];
 }
+
+const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) => {
+  const breadcrumb: string[] = [];
+  try {
+    if (!dialogPath) {
+      return [];
+    }
+    const [dialogName, triggerPath, actionPath] = dialogPath.split('#')[0].split('.');
+    if (dialogName) {
+      const matchedDialog = dialogs.find(({ displayName }) => displayName === dialogName);
+      if (matchedDialog && triggerPath) {
+        breadcrumb.push(matchedDialog.displayName);
+        const trigger: ITrigger = get(matchedDialog, triggerPath, '');
+        if (trigger.displayName) {
+          breadcrumb.push(trigger.displayName);
+        }
+
+        if (trigger && actionPath) {
+          const action = get(trigger.content, actionPath, '');
+          if (action.$kind) {
+            breadcrumb.push(action.$kind);
+          }
+        }
+      }
+    }
+    return breadcrumb;
+  } catch (ex) {
+    return [];
+  }
+};
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
   rootProjectId: string;
@@ -52,6 +82,7 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   getUrl = () => '';
   learnMore?: string;
   title?: string;
+  friendlyLocationBreadcrumb?: string[];
 
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     this.rootProjectId = rootProjectId;
@@ -69,6 +100,9 @@ export class BotDiagnostic extends DiagnosticInfo {
   constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = diagnostic.message;
+    if (this.location === 'manifest.json') {
+      this.friendlyLocationBreadcrumb = [formatMessage('Skill Manifest')];
+    }
   }
 
   getUrl = () => {
@@ -134,6 +168,7 @@ export class SettingDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
+    this.friendlyLocationBreadcrumb = ['Settings'];
   }
   getUrl = (hash?: string) => {
     return createBotSettingUrl(this.rootProjectId, this.projectId, hash);
@@ -154,39 +189,9 @@ export class LgDiagnostic extends DiagnosticInfo {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
-    const friendlyPath = this.getFriendlyPath(this.dialogPath, dialogs);
+    const friendlyPath = getFriendlyPath(this.dialogPath, dialogs);
     if (friendlyPath.length) {
-      this.friendlyLocationPath = friendlyPath;
-    }
-  }
-  private getFriendlyPath(dialogPath: string | undefined, dialogs: DialogInfo[]) {
-    try {
-      if (!dialogPath) {
-        return [];
-      }
-      const breadcrumb: string[] = [];
-      const [dialogName, triggerPath, actionPath] = dialogPath.split('.');
-      if (dialogName) {
-        const matchedDialog = dialogs.find(({ displayName }) => displayName === dialogName);
-        if (matchedDialog && triggerPath) {
-          breadcrumb.push(matchedDialog.displayName);
-
-          const trigger: ITrigger = get(matchedDialog, triggerPath, '');
-          if (trigger.displayName) {
-            breadcrumb.push(trigger.displayName);
-          }
-
-          if (trigger && actionPath) {
-            const action = get(trigger.content, actionPath, '');
-            if (action.$kind) {
-              breadcrumb.push(action.$kind);
-            }
-          }
-        }
-      }
-      return breadcrumb;
-    } catch (ex) {
-      return [];
+      this.friendlyLocationBreadcrumb = friendlyPath;
     }
   }
 
@@ -232,9 +237,10 @@ export class LuDiagnostic extends DiagnosticInfo {
   ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
-    const splitPath = this.dialogPath?.split('.');
-    console.log('LU', splitPath);
-
+    const friendlyPath = getFriendlyPath(this.dialogPath, dialogs);
+    if (friendlyPath.length) {
+      this.friendlyLocationBreadcrumb = friendlyPath;
+    }
     this.message = createSingleMessage(diagnostic);
   }
 

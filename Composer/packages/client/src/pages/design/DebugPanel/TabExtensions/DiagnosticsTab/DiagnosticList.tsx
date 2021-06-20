@@ -169,8 +169,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
         let locationPath = item.location;
-        if (item.friendlyLocationPath) {
-          locationPath = item.friendlyLocationPath.join(' > ');
+        if (item.friendlyLocationBreadcrumb) {
+          locationPath = item.friendlyLocationBreadcrumb.join(' > ');
         }
         return (
           <div css={tableCell}>
