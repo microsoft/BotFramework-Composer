@@ -97,15 +97,15 @@ export const ResourceConfigurationStep = (props: Props) => {
       isNewResourceGroup,
       hostName,
     },
-    handleResourceGroupChange,
-    handleDeployLocationChange,
-    handleSubscriptionChange,
-    handleHostNameValidate,
-    handleResourceGroupNameValidate,
-    handleTenantChange,
-    handleDeployLocationFetch,
-    handleLuisRegionChange,
-    handleHostNameChange,
+    handleChangeResourceGroup: handleResourceGroupChange,
+    handleChangeDeployLocation: handleDeployLocationChange,
+    handleChangeSubscription: handleSubscriptionChange,
+    handleValidateHostName: handleHostNameValidate,
+    handleValidateResourceGroupName: handleResourceGroupNameValidate,
+    handleChangeTenant: handleTenantChange,
+    handleFetchDeployLocation: handleDeployLocationFetch,
+    handleChangeLuisRegion: handleLuisRegionChange,
+    handleChangeHostName: handleHostNameChange,
     isValidConfiguration,
     deployLocations,
   } = useResourceConfiguration();
@@ -152,8 +152,8 @@ export const ResourceConfigurationStep = (props: Props) => {
                 },
               }}
               value={tenantId}
+              onChangeTenant={handleTenantChange}
               onClear={() => handleTenantChange('')}
-              onTenantChange={handleTenantChange}
               onUserInfoFetch={setUserInfo}
             />
           </Stack>
@@ -174,8 +174,8 @@ export const ResourceConfigurationStep = (props: Props) => {
                 },
               }}
               value={subscriptionId}
+              onChangeSubscription={handleSubscriptionChange}
               onClear={() => handleSubscriptionChange('')}
-              onSubscriptionChange={handleSubscriptionChange}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -201,9 +201,9 @@ export const ResourceConfigurationStep = (props: Props) => {
                 },
               }}
               value={resourceGroupName}
+              onChangeResourceGroup={handleResourceGroupChange}
               onClear={() => handleResourceGroupChange('', false)}
-              onResourceGroupChange={handleResourceGroupChange}
-              onResourceGroupNameValidate={handleResourceGroupNameValidate}
+              onValidateResourceGroupName={handleResourceGroupNameValidate}
             />
           </Stack>
           <ConfigureResourcesSectionName>{formatMessage('Resource details')}</ConfigureResourcesSectionName>
@@ -221,8 +221,8 @@ export const ResourceConfigurationStep = (props: Props) => {
               styles={autoCompleteTextFieldStyles}
               subscriptionId={subscriptionId}
               value={hostName}
-              onHostNameChange={handleHostNameChange}
-              onHostNameValidate={handleHostNameValidate}
+              onChangeHostName={handleHostNameChange}
+              onValidateHostName={handleHostNameValidate}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -241,9 +241,9 @@ export const ResourceConfigurationStep = (props: Props) => {
                 },
               }}
               value={deployLocation}
+              onChangeDeployLocation={handleDeployLocationChange}
               onClear={() => handleDeployLocationChange('')}
-              onDeployLocationChange={handleDeployLocationChange}
-              onDeployLocationsFetch={handleDeployLocationFetch}
+              onFetchDeployLocations={handleDeployLocationFetch}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -270,8 +270,8 @@ export const ResourceConfigurationStep = (props: Props) => {
                 },
               }}
               value={luisRegion}
+              onChangeLuisRegion={handleLuisRegionChange}
               onClear={() => handleLuisRegionChange(undefined)}
-              onLuisRegionChange={handleLuisRegionChange}
             />
           </Stack>
         </Stack>

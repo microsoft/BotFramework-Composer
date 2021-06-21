@@ -9,14 +9,14 @@ import { checkWebAppNameAvailability } from '../../api';
 import { useDebounce } from '../useDebounce';
 
 type Props = {
-  onHostNameChange: (hostName: string) => void;
-  onHostNameValidate: (hasErrors: boolean) => void;
+  onChangeHostName: (hostName: string) => void;
+  onValidateHostName: (hasErrors: boolean) => void;
   accessToken: string;
   subscriptionId: string;
 } & ITextFieldProps;
 
 export const ResourceNameTextField = React.memo((props: Props) => {
-  const { accessToken, subscriptionId, value, onHostNameChange, onHostNameValidate } = props;
+  const { accessToken, subscriptionId, value, onChangeHostName, onValidateHostName } = props;
   const [error, setError] = React.useState<string>('');
   const [name, setName] = React.useState<string>(value);
   const debouncedHostName = useDebounce<string>(name, 500);
@@ -35,8 +35,8 @@ export const ResourceNameTextField = React.memo((props: Props) => {
   }, [accessToken, subscriptionId, debouncedHostName]);
 
   React.useEffect(() => {
-    onHostNameChange?.(debouncedHostName);
-    onHostNameValidate?.(!!error);
+    onChangeHostName?.(debouncedHostName);
+    onValidateHostName?.(!!error);
   }, [error, debouncedHostName]);
 
   return (

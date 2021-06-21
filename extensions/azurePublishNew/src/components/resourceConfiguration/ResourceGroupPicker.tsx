@@ -12,20 +12,20 @@ import { useDebounce } from '../useDebounce';
 type Props = {
   subscriptionId: string;
   canRefresh?: boolean;
-  onResourceGroupChange: (rg: string, isNew: boolean) => void;
-  onResourceGroupNameValidate?: (hasErrors: boolean) => void;
+  onChangeResourceGroup: (rg: string, isNew: boolean) => void;
+  onValidateResourceGroupName?: (hasErrors: boolean) => void;
   isNewResourceGroup?: boolean;
   accessToken: string;
 } & Omit<SearchableDropdownProps, 'items' | 'onSubmit' | 'creationProps'>;
 
 export const ResourceGroupPicker = React.memo((props: Props) => {
   const {
-    onResourceGroupChange,
+    onChangeResourceGroup,
     accessToken,
     subscriptionId,
     value,
     isNewResourceGroup,
-    onResourceGroupNameValidate,
+    onValidateResourceGroupName,
   } = props;
 
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
@@ -54,12 +54,12 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
   }, [debouncedNewName, resourceGroups, isNewResourceGroup]);
 
   useEffect(() => {
-    isNewResourceGroup && onResourceGroupChange(debouncedNewName, isNewResourceGroup);
-  }, [debouncedNewName, newNameErrorMessage, isNewResourceGroup, onResourceGroupChange]);
+    isNewResourceGroup && onChangeResourceGroup(debouncedNewName, isNewResourceGroup);
+  }, [debouncedNewName, newNameErrorMessage, isNewResourceGroup, onChangeResourceGroup]);
 
   useEffect(() => {
-    onResourceGroupNameValidate?.(!!newNameErrorMessage);
-  }, [newNameErrorMessage, onResourceGroupNameValidate]);
+    onValidateResourceGroupName?.(!!newNameErrorMessage);
+  }, [newNameErrorMessage, onValidateResourceGroupName]);
 
   useEffect(() => {
     if (accessToken && subscriptionId) {
@@ -107,8 +107,8 @@ export const ResourceGroupPicker = React.memo((props: Props) => {
       items={resourceGroups.map((t) => ({ key: t.name, text: t.name }))}
       onSubmit={(option) => {
         const isNew = option.key === creationItem.key;
-        onResourceGroupChange(isNew ? '' : option.key, isNew);
-        onResourceGroupNameValidate?.(false);
+        onChangeResourceGroup(isNew ? '' : option.key, isNew);
+        onValidateResourceGroupName?.(false);
       }}
       {...{
         ...props,
