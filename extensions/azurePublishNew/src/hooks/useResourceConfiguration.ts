@@ -21,12 +21,11 @@ import { useDispatcher } from './useDispatcher';
 export const useResourceConfiguration = () => {
   const { userShouldProvideTokens, getName } = usePublishApi();
   const [deployLocations, setDeployLocations] = React.useState<DeployLocation[]>([]);
-  const [isInvalidResourceGroupName, setIsInvalidResourceGroupName] = React.useState<boolean>(false);
-  const [isInvalidHostName, setIsInvalidHostName] = React.useState<boolean>(false);
+  const [hasErrors, setHasErrors] = React.useState<boolean>(false);
   const {
     setTenantId,
     setSubscriptionId,
-    setResourceGroup,
+    setResourceGroupName,
     setDeployLocation,
     setLuisRegion,
     setHostName,
@@ -41,11 +40,6 @@ export const useResourceConfiguration = () => {
   const hostName = useRecoilValue(hostNameState);
 
   const { setItem } = useLocalStorage();
-
-  const hasErrors = React.useMemo(() => isInvalidResourceGroupName || isInvalidHostName, [
-    isInvalidHostName,
-    isInvalidResourceGroupName,
-  ]);
 
   const isValidConfiguration = React.useMemo(
     (): boolean =>
@@ -75,20 +69,20 @@ export const useResourceConfiguration = () => {
     (subscriptionId: string) => {
       setSubscriptionId(subscriptionId);
       if (!subscriptionId) {
-        setResourceGroup('', false);
+        setResourceGroupName('', false);
         setDeployLocation('');
         setLuisRegion(undefined);
       }
     },
-    [setResourceGroup, setDeployLocation, setSubscriptionId]
+    [setResourceGroupName, setDeployLocation, setSubscriptionId]
   );
 
   const handleResourceGroupChange = React.useCallback(
-    (resourceGroupId: string, isNew: boolean, isInvalidName: boolean) => {
-      setResourceGroup(resourceGroupId, isNew);
-      setIsInvalidResourceGroupName(isInvalidName);
+    (resourceGroupId: string, isNew: boolean, hasErrors: boolean) => {
+      setResourceGroupName(resourceGroupId, isNew);
+      setHasErrors(hasErrors);
     },
-    [setResourceGroup]
+    [setResourceGroupName]
   );
 
   const handleDeployLocationChange = React.useCallback(
@@ -116,23 +110,23 @@ export const useResourceConfiguration = () => {
   );
 
   const handleHostNameChange = React.useCallback(
-    (hostName: string, isInvalidName: boolean) => {
+    (hostName: string) => {
       setHostName(hostName);
-      setIsInvalidHostName(isInvalidName);
     },
     [setHostName]
   );
 
-  const stashWizardState = () => {
-    setItem(getName(), {
-      tenantId,
-      subscriptionId,
-      resourceGroup: { name: resourceGroupName, isNew },
-      deployLocation,
-      luisRegion,
-      hostName,
-    });
-  };
+  const stashWizardState = React.useCallback(
+    () =>
+      setItem(getName(), {
+        tenantId,
+        subscriptionId,
+        resourceGroup: { name: resourceGroupName, isNew },
+        deployLocation,
+        luisRegion,
+      }),
+    [tenantId, subscriptionId, resourceGroupName, deployLocation, luisRegion]
+  );
 
   return {
     configuration: {
