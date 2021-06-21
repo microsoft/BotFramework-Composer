@@ -3,18 +3,16 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Dropdown, IDropdownOption, IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
-import React, { useEffect, useState, Fragment } from 'react';
+import { Dropdown, IDropdownOption, IDropdownStyles, IDropdownProps } from 'office-ui-fabric-react/lib/Dropdown';
+import React, { useMemo } from 'react';
 
 const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width: 300 },
 };
 
-interface DropdownWithAllOptionProps {
-  placeholder: string;
+export interface DropdownWithAllOptionProps extends Omit<IDropdownProps, 'onChange'> {
   selectedKeys: string[];
-  setSelectedKeys: (keys: string[]) => void;
-  dropdownOptions: IDropdownOption[];
+  onChange: (event: React.FormEvent<HTMLDivElement>, selectedItems: string[]) => void;
   optionAll: {
     key: string;
     text: string;
@@ -22,10 +20,9 @@ interface DropdownWithAllOptionProps {
 }
 
 export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (props) => {
-  const { selectedKeys, setSelectedKeys, placeholder, dropdownOptions, optionAll } = props;
-  const [currentOptions, setCurrentOptions] = useState<IDropdownOption[]>([]);
+  const { selectedKeys, onChange, placeholder, options: dropdownOptions, optionAll } = props;
 
-  useEffect(() => {
+  const currentOptions = useMemo(() => {
     const allOptions = [...dropdownOptions];
     if (allOptions.length > 1) {
       allOptions.unshift({
@@ -34,17 +31,17 @@ export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (prop
       });
     }
 
-    setCurrentOptions(allOptions);
+    return allOptions;
   }, [dropdownOptions]);
 
   const onOptionSelectionChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
     if (item) {
       if (item.key === optionAll.key) {
         if (!item.selected) {
-          setSelectedKeys([]);
+          onChange(event, []);
         } else {
           const allOptions = currentOptions.map((option) => option.key as string);
-          setSelectedKeys(allOptions);
+          onChange(event, allOptions);
         }
         return;
       }
@@ -54,18 +51,18 @@ export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (prop
       if (allIndex !== -1) {
         tempState.splice(allIndex, 1);
       }
-      setSelectedKeys(item.selected ? [...tempState, item.key as string] : tempState.filter((key) => key !== item.key));
+      onChange(event, item.selected ? [...tempState, item.key as string] : tempState.filter((key) => key !== item.key));
     }
   };
 
   const onRenderTitle = (selectedItems: IDropdownOption[] | undefined): JSX.Element | null => {
     const allIndex = selectedKeys.findIndex((option) => option === optionAll.key);
     if (allIndex !== -1) {
-      return <Fragment>{currentOptions[0].text}</Fragment>;
+      return currentOptions[0].text as any;
     }
     if (selectedItems?.length) {
       const items = selectedItems.map((item) => item.text);
-      return <Fragment>{items.join(', ')}</Fragment>;
+      return items.join(', ') as any;
     }
     return null;
   };

@@ -16,7 +16,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors, FluentTheme } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -36,12 +36,12 @@ import { IDiagnosticInfo } from './DiagnosticType';
 
 // -------------------- Styles -------------------- //
 
-const maxHeightDetailsList = 45;
+const maxHeightDetailsList = 32;
 
-const icons = {
-  Error: { iconName: 'StatusErrorFull', color: SharedColors.red10 },
-  Warning: { iconName: 'WarningSolid', color: SharedColors.yellow10 },
-};
+const icons = [
+  { iconName: 'StatusErrorFull', color: SharedColors.red10 },
+  { iconName: 'WarningSolid', color: FluentTheme.palette.yellow },
+];
 
 const diagnostic = mergeStyleSets({
   typeIconHeaderIcon: {
@@ -65,10 +65,6 @@ const typeIcon = (icon) => css`
   line-height: 24px;
   color: ${icon.color};
   cursor: pointer;
-`;
-
-const detailList = css`
-  height: calc(100% - 55px);
 `;
 
 const tableCell = css`
@@ -174,10 +170,9 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isResizable: true,
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
-        console.log('Location', item.location);
         let locationPath = item.location;
-        if (item.friendlyLocationBreadcrumb) {
-          locationPath = item.friendlyLocationBreadcrumb.join(' > ');
+        if (item.friendlyLocationBreadcrumbItems) {
+          locationPath = item.friendlyLocationBreadcrumbItems.join(' > ');
         }
         return (
           <div css={[tableCell, textWrapStyle]}>
@@ -245,14 +240,13 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
     const sortFactor = columns[1].isSortedDescending ? 1 : -1;
     const result = diagnosticItems.sort((a, b) => {
       // Error before Warning
-      const severityComparator = a.severity.localeCompare(b.severity);
+      const severityComparator = a.severity - b.severity;
       if (severityComparator === 0) {
         // Sort by name
         return sortFactor * getProjectName(a.projectId).localeCompare(getProjectName(b.projectId), locale);
       }
       return severityComparator;
     });
-    console.log('Result', diagnosticItems);
     return result;
   }, [diagnosticItems, columns]);
 
@@ -263,7 +257,6 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
         checkboxVisibility={CheckboxVisibility.hidden}
         columns={columns}
         constrainMode={ConstrainMode.unconstrained}
-        css={detailList}
         items={displayedDiagnosticItems}
         layoutMode={DetailsListLayoutMode.justified}
         selectionMode={SelectionMode.single}
@@ -271,7 +264,6 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
         styles={{
           root: {
             maxHeight: `calc(100% - ${maxHeightDetailsList}px)`,
-            selectors: {},
           },
         }}
         onRenderDetailsHeader={onRenderDetailsHeader}

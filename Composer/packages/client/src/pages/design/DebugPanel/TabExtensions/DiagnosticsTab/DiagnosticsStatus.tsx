@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors, FluentTheme } from '@uifabric/fluent-theme';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
@@ -59,7 +59,7 @@ export const DiagnosticsStatus = () => {
               border: 'none',
               minWidth: '40px',
               margin: 0,
-              padding: 0,
+              padding: '0px 3px',
             },
             label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI' },
           }}
@@ -103,7 +103,7 @@ export const DiagnosticsStatus = () => {
           <span css={{ display: 'flex', alignItems: 'center' }}>
             <FontIcon
               css={{
-                color: `#F4BD00`,
+                color: FluentTheme.palette.yellow,
                 fontSize: FontSizes.size18,
                 marginRight: '5px',
               }}

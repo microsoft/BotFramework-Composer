@@ -3,6 +3,7 @@
 
 import * as React from 'react';
 import { fireEvent } from '@botframework-composer/test-utils';
+import { DiagnosticSeverity } from '@botframework-composer/types';
 import { Range, Position } from '@bfc/shared';
 
 import { renderWithRecoil } from '../../../testUtils';
@@ -18,8 +19,10 @@ import {
   luFilesSelectorFamily,
   schemasState,
   settingsState,
+  projectMetaDataState,
 } from '../../../../src/recoilModel';
 import mockProjectResponse from '../../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
+import { DiagnosticsContent } from '../../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticsTabContent';
 
 const mockNavigationTo = jest.fn();
 jest.mock('../../../../src/utils/navigation', () => ({
@@ -52,7 +55,7 @@ const state = {
       diagnostics: [
         {
           message: 'lu syntax error',
-          severity: 'Error',
+          severity: DiagnosticSeverity.Error,
           location: 'test.en-us',
           range: {
             end: { character: 2, line: 7 },
@@ -76,7 +79,7 @@ const state = {
       diagnostics: [
         {
           message: 'lg syntax error',
-          severity: 'Error',
+          severity: DiagnosticSeverity.Error,
           location: 'test.en-us',
           range: {
             end: { character: 2, line: 13 },
@@ -95,7 +98,7 @@ const state = {
   diagnostics: [
     {
       message: 'server error',
-      severity: 'Error',
+      severity: DiagnosticSeverity.Error,
       location: 'server',
     },
   ],
@@ -115,6 +118,9 @@ describe('<DiagnosticList/>', () => {
   const initRecoilState = ({ set }) => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
+    set(projectMetaDataState(state.projectId), {
+      isRootBot: true,
+    });
     set(dialogIdsState(state.projectId), []);
     set(luFilesSelectorFamily(state.projectId), state.luFiles);
     set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
@@ -136,17 +142,14 @@ describe('<DiagnosticList/>', () => {
     expect(container).toHaveTextContent('server');
   });
 
-  fit('should render the Diagnostics', () => {
-    const { container, getByText } = renderWithRecoil(
-      <DiagnosticList diagnosticItems={state.diagnostics as any} />,
-      initRecoilState
-    );
+  it('should render the Diagnostics', () => {
+    const { getByText } = renderWithRecoil(<DiagnosticsContent isActive />, initRecoilState);
 
-    fireEvent.doubleClick(getByText(/test.en-us.lg/));
-    expect(mockNavigationTo).toBeCalledWith('/bot/testproj/language-generation/test/edit#L=13');
-    fireEvent.doubleClick(getByText(/test.en-us.lu/));
-    expect(mockNavigationTo).nthCalledWith(2, '/bot/testproj/language-understanding/test/edit#L=7');
-    fireEvent.doubleClick(getByText(/test.en-us.qna/));
-    expect(mockNavigationTo).nthCalledWith(3, '/bot/testproj/knowledge-base/test/edit#L=7');
+    fireEvent.click(getByText(/test.en-us.lg/));
+    expect(mockNavigationTo).toBeCalledWith('/bot/test/language-generation/test/edit#L=13');
+    fireEvent.click(getByText(/test.en-us.lu/));
+    expect(mockNavigationTo).nthCalledWith(2, '/bot/test/language-understanding/test/edit#L=7');
+    fireEvent.click(getByText(/test.en-us.qna/));
+    expect(mockNavigationTo).nthCalledWith(3, '/bot/test/knowledge-base/test/edit#L=7');
   });
 });

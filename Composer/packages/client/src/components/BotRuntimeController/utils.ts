@@ -8,7 +8,7 @@ export const isBotStarting = (currentStatus: BotStatus) => {
     currentStatus === BotStatus.publishing ||
     currentStatus === BotStatus.published ||
     currentStatus == BotStatus.pending ||
-    currentStatus == BotStatus.queued ||
-    currentStatus == BotStatus.starting
+    currentStatus === BotStatus.queued ||
+    currentStatus === BotStatus.starting
   );
 };

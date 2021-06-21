@@ -5,7 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React, { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
-import { ConversationTrafficItem } from '@botframework-composer/types/src';
+import { ConversationTrafficItem, DiagnosticSeverity } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -20,6 +20,7 @@ import {
   botStatusState,
   isWebChatPanelVisibleState,
   runningBotsSelector,
+  allDiagnosticsSelectorFamily,
 } from '../../../../../recoilModel';
 import { DebugPanelTabHeaderProps } from '../types';
 import { WebChatInspectionData } from '../../../../../recoilModel/types';
@@ -82,6 +83,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
   const { startAllBots } = useBotOperations();
   const isPVABot = usePVACheck(currentProjectId ?? '');
   const [isWebChatPanelOpenedOnce, setIsWebChatPanelOpenedOnce] = useState(false);
+  const projectErrors = useRecoilValue(allDiagnosticsSelectorFamily([DiagnosticSeverity.Error]));
 
   const navigateToNewestLogEntry = () => {
     if (currentLogItemCount && webChatContainerRef?.current) {
@@ -210,7 +212,13 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
             {
               total: runningBots.totalBots,
               actionButton: ({ children }) => (
-                <ActionButton key="webchat-tab-startbot" styles={actionButton} type="button" onClick={startAllBots}>
+                <ActionButton
+                  key="webchat-tab-startbot"
+                  disabled={projectErrors.length > 0}
+                  styles={actionButton}
+                  type="button"
+                  onClick={startAllBots}
+                >
                   {children}
                 </ActionButton>
               ),
@@ -244,7 +252,7 @@ export const WebChatLogContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive
       );
     }
     return null;
-  }, [currentStatus, currentProjectId]);
+  }, [currentStatus, currentProjectId, projectErrors]);
 
   return (
     <div css={logContainer(isActive)}>

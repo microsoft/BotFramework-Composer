@@ -6,6 +6,7 @@ import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
 import { getFriendlyName } from '@bfc/shared';
+import { DiagnosticSeverity } from '@botframework-composer/types/src';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
@@ -84,6 +85,7 @@ export const botDiagnosticsSelectorFamily = selectorFamily({
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
     const diagnostics = get(botDiagnosticsState(projectId));
+
     const diagnosticList: DiagnosticInfo[] = [];
 
     diagnostics.forEach((d) => {
@@ -232,6 +234,7 @@ export const luDiagnosticsSelectorFamily = selectorFamily({
   key: 'luDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
+
     if (botAssets === null) return [];
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
@@ -311,12 +314,12 @@ export const diagnosticsSelectorFamily = selectorFamily({
 
 export const allDiagnosticsSelectorFamily = selectorFamily({
   key: 'allDiagnosticsSelector',
-  get: (type: 'Error' | 'Warning' | 'All') => ({ get }) => {
+  get: (severitiesToFilter: DiagnosticSeverity[]) => ({ get }) => {
     const ids = get(botProjectIdsState);
     const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
       return [
         ...result,
-        ...get(diagnosticsSelectorFamily(id)).filter((diagnostic) => type === 'All' || diagnostic.severity === type),
+        ...get(diagnosticsSelectorFamily(id)).filter((diagnostic) => severitiesToFilter.includes(diagnostic.severity)),
       ];
     }, []);
     return result;

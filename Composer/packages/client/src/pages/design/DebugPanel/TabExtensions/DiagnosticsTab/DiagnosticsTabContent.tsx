@@ -3,18 +3,19 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
+import { DiagnosticSeverity } from '@bfc/shared';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { DebugPanelTabHeaderProps } from '../types';
 import { dispatcherState, showErrorDiagnosticsState, showWarningDiagnosticsState } from '../../../../../recoilModel';
 
-import { IDiagnosticInfo } from './DiagnosticType';
 import { DiagnosticList } from './DiagnosticList';
-import { Severity, useDiagnosticsData } from './useDiagnostics';
+import { useDiagnosticsData } from './useDiagnostics';
 import { DiagnosticsFilters } from './DiagnosticFilters';
 
-const severityFilterHeight = 45;
+const severityFilterHeight = 32;
 
 export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
   const diagnostics = useDiagnosticsData();
@@ -22,80 +23,75 @@ export const DiagnosticsContent: React.FC<DebugPanelTabHeaderProps> = ({ isActiv
   const showWarnings = useRecoilValue(showWarningDiagnosticsState);
   const showErrors = useRecoilValue(showErrorDiagnosticsState);
   const [projectsToFilter, setProjectsToFilter] = useState<string[]>([]);
-  const [errorCount, setErrorCount] = useState<number>(0);
-  const [warningCount, setWarningCount] = useState<number>(0);
-  const [filteredDiagnostics, setFilteredDiagnostics] = useState<IDiagnosticInfo[]>([]);
 
-  useEffect(() => {
-    let errorCt = 0;
-    let warningCt = 0;
+  const { filteredDiagnostics, errorCount, warningCount } = useMemo(() => {
+    let countOfErrors = 0;
+    let countOfWarnings = 0;
     const filteredItems = diagnostics.filter((diagnostic) => {
       const projectFilter = projectsToFilter.includes(diagnostic.projectId);
+
       if (!projectFilter) {
         return false;
       }
 
       let errorFilter = false;
-      if (diagnostic.severity === Severity.Error) {
-        errorCt++;
+
+      if (diagnostic.severity === DiagnosticSeverity.Error) {
+        countOfErrors++;
         if (showErrors) {
           errorFilter = true;
         }
       }
 
       let warningFilter = false;
-      if (diagnostic.severity === Severity.Warning) {
-        warningCt++;
+      if (diagnostic.severity === DiagnosticSeverity.Warning) {
+        countOfWarnings++;
         if (showWarnings) {
           warningFilter = true;
         }
       }
       return warningFilter || errorFilter;
     });
-    setErrorCount(errorCt);
-    setWarningCount(warningCt);
-    setFilteredDiagnostics(filteredItems);
+
+    return {
+      filteredDiagnostics: filteredItems,
+      errorCount: countOfErrors,
+      warningCount: countOfWarnings,
+    };
   }, [projectsToFilter, showWarnings, showErrors, diagnostics]);
 
   if (!isActive) {
     return null;
   }
-
   return (
-    <div
-      css={{
-        height: '100%',
-        width: '100%',
-      }}
-    >
-      <div
+    <Stack verticalFill>
+      <Stack.Item
         css={{
           height: `${severityFilterHeight}px`,
-          display: 'flex',
-          flex: '1 1 auto',
-          alignItems: 'center',
+          marginTop: '14px',
           padding: '0 16px',
+          alignItems: 'center',
         }}
       >
         <DiagnosticsFilters
           errorCount={errorCount}
           projectsToFilter={projectsToFilter}
-          setErrorFilter={setErrorDiagnosticsFilter}
-          setProjectsToFilter={setProjectsToFilter}
-          setWarningFilter={setWarningDiagnosticsFilter}
           showErrors={showErrors}
           showWarnings={showWarnings}
           warningCount={warningCount}
+          onErrorFilterChange={setErrorDiagnosticsFilter}
+          onProjectFilterChange={setProjectsToFilter}
+          onWarningFilterChange={setWarningDiagnosticsFilter}
         />
-      </div>
-      <div
+      </Stack.Item>
+      <Stack.Item
         css={{
           height: `calc(100% - ${severityFilterHeight}px)`,
           position: 'relative',
         }}
       >
         <DiagnosticList diagnosticItems={filteredDiagnostics} />
-      </div>
-    </div>
+      </Stack.Item>
+    </Stack>
   );
 };

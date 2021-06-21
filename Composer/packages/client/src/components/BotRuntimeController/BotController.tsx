@@ -11,6 +11,7 @@ import formatMessage from 'format-message';
 import { css } from '@emotion/core';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { DiagnosticSeverity } from '@botframework-composer/types';
 
 import { DisableFeatureToolTip } from '../DisableFeatureToolTip';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -66,7 +67,7 @@ type BotControllerProps = {
 const BotController: React.FC<BotControllerProps> = ({ onHideController, isControllerHidden }: BotControllerProps) => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
-  const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
+  const errors = useRecoilValue(allDiagnosticsSelectorFamily([DiagnosticSeverity.Error]));
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
@@ -100,18 +101,15 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   }, [projectCollection, errors]);
 
   useEffect(() => {
-    console.log('Prokjject', projectCollection);
     const botsProcessing =
       startAllBotsOperationQueued ||
-      projectCollection.some(({ status }) => isBotStarting(status) || status == BotStatus.stopping);
+      projectCollection.some(({ status }) => isBotStarting(status) || status === BotStatus.stopping);
     setBotsProcessing(botsProcessing);
-    console.log('Botproce', botsProcessing);
 
     const botOperationsCompleted = projectCollection.some(
       ({ status }) => status === BotStatus.connected || status === BotStatus.failed
     );
     setBotsStartOperationCompleted(botOperationsCompleted);
-    console.log('Botprasdasd oce', projectCollection);
 
     if (botsProcessing) {
       setStatusIconClass(undefined);
