@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { enableFetchMocks } from 'jest-fetch-mock';
 import { BotTemplate } from '@bfc/shared';
 
 import { ExtensionContext } from '../../../models/extension/extensionContext';
@@ -36,6 +35,23 @@ jest.mock('@bfc/server-workers', () => {
       execute: jest.fn(),
     },
   };
+});
+
+const mockFeedResponse = {
+  objects: [
+    {
+      package: {
+        name: 'generator-conversational-core',
+        version: '1.0.3',
+        description: 'Preview conversational core package for TESTING ONLY',
+        keywords: ['conversationalcore', 'yeoman-generator'],
+      },
+    },
+  ],
+};
+
+jest.mock('../../../utility/fetch', () => () => {
+  return Promise.resolve({ json: () => mockFeedResponse });
 });
 
 const mockSampleBotPath = Path.join(__dirname, '../../../__mocks__/asset/projects/SampleBot');
@@ -110,21 +126,6 @@ describe('assetManager', () => {
   });
 
   describe('getFeedContents', () => {
-    const mockFeedResponse = {
-      objects: [
-        {
-          package: {
-            name: 'generator-conversational-core',
-            version: '1.0.3',
-            description: 'Preview conversational core package for TESTING ONLY',
-            keywords: ['conversationalcore', 'yeoman-generator'],
-          },
-        },
-      ],
-    };
-
-    enableFetchMocks();
-    fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
     it('Get contents of a feed and return template array', async () => {
       const assetManager = new AssetManager();
       const mockFeedUrl =

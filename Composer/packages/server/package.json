@@ -58,7 +58,6 @@
     "cross-env": "^7.0.2",
     "eslint": "7.0.0",
     "fs-extra": "7.0.1",
-    "jest-fetch-mock": "^3.0.3",
     "mock-fs": "^4.10.1",
     "nodemon": "^2.0.3",
     "prettier": "2.0.5",
