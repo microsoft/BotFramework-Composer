@@ -43,6 +43,8 @@ router.put('/projects/:projectId/manifest/files/:name', ProjectController.update
 router.delete('/projects/:projectId/manifest/files/:name', ProjectController.removeManifestFile);
 router.post('/projects/:projectId/manifest/files', ProjectController.createManifestFile);
 router.get('/projects/:projectId/skill/retrieveSkillManifest', ProjectController.getSkill);
+router.delete('/projects/:projectId/skillFiles/:name', ProjectController.removeSkillFiles);
+router.post('/projects/:projectId/skillFiles', ProjectController.createSkillFiles);
 router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);

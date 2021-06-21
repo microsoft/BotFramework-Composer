@@ -18,14 +18,17 @@ const client = new msRest.ServiceClient(creds, clientOptions);
 const urlRegex = /^http[s]?:\/\/\w+/;
 const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
 
-export const getSkillManifest = async (url: string): Promise<any> => {
+export const getSkillManifest = async (url: string, isJson = true): Promise<any> => {
   if (urlRegex.test(url)) {
     // get remote manifest
     const { bodyAsText: content } = await client.sendRequest({
       url,
       method: 'GET',
     });
-    return typeof content === 'string' ? JSON.parse(content) : {};
+    if (isJson) {
+      return typeof content === 'string' ? JSON.parse(content) : {};
+    }
+    return content;
   } else if (filePathRegex.test(url)) {
     // get local manifest
     return require(url);

@@ -351,6 +351,36 @@ async function getSkill(req: Request, res: Response) {
   }
 }
 
+async function createSkillFiles(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const { url, skillName } = req.body;
+    const file = await currentProject.createSkillFiles(url, skillName);
+    res.status(200).json(file);
+  } else {
+    res.status(404).json({
+      message: 'No such bot project found',
+    });
+  }
+}
+
+async function removeSkillFiles(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    console.log(req.params.name);
+    const isDelete = await currentProject.deleteSkillFiles(req.params.name);
+    res.status(200).json(isDelete);
+  } else {
+    res.status(404).json({ error: 'No bot project found' });
+  }
+}
+
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
   currentProject.exportToZip(null, (archive: Archiver) => {
@@ -599,6 +629,8 @@ export const ProjectController = {
   createManifestFile,
   updateManifestFile,
   removeManifestFile,
+  createSkillFiles,
+  removeSkillFiles,
   getSkill,
   build,
   setQnASettings,
