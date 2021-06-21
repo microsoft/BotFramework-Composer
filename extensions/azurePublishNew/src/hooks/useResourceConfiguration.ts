@@ -5,8 +5,16 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { usePublishApi, DeployLocation, useLocalStorage } from '@bfc/extension-client';
 
-import { resourceConfigurationState } from '../recoilModel/atoms/resourceConfigurationState';
+import {
+  tenantState,
+  subscriptionState,
+  resourceGroupState,
+  deployLocationState,
+  luisRegionState,
+  hostNameState,
+} from '../recoilModel/atoms/resourceConfigurationState';
 import { LuisAuthoringSupportLocation } from '../constants';
+import { LuisRegion } from '../types';
 
 import { useDispatcher } from './useDispatcher';
 
@@ -22,14 +30,15 @@ export const useResourceConfiguration = () => {
     setLuisRegion,
     setHostName,
   } = useDispatcher();
-  const {
-    tenantId,
-    subscriptionId,
-    resourceGroupName,
-    deployLocation,
-    luisRegion,
-    isNewResourceGroup,
-  } = useRecoilValue(resourceConfigurationState);
+
+  const tenantId = useRecoilValue(tenantState);
+
+  const subscriptionId = useRecoilValue(subscriptionState);
+  const { name: resourceGroupName, isNew } = useRecoilValue(resourceGroupState);
+  const deployLocation = useRecoilValue(deployLocationState);
+  const luisRegion = useRecoilValue(luisRegionState);
+  const hostName = useRecoilValue(hostNameState);
+
   const { setItem } = useLocalStorage();
 
   const isValidConfiguration = React.useMemo(
@@ -40,9 +49,10 @@ export const useResourceConfiguration = () => {
         !resourceGroupName ||
         hasErrors ||
         !deployLocation ||
-        !luisRegion
+        !luisRegion ||
+        !hostName
       ),
-    [tenantId, subscriptionId, resourceGroupName, hasErrors, deployLocation, luisRegion]
+    [tenantId, subscriptionId, resourceGroupName, hasErrors, deployLocation, luisRegion, hostName]
   );
 
   const handleTenantChange = React.useCallback(
@@ -61,7 +71,7 @@ export const useResourceConfiguration = () => {
       if (!subscriptionId) {
         setResourceGroupName('', false);
         setDeployLocation('');
-        setLuisRegion('');
+        setLuisRegion(undefined);
       }
     },
     [setResourceGroupName, setDeployLocation, setSubscriptionId]
@@ -79,11 +89,13 @@ export const useResourceConfiguration = () => {
     (deployLocationId: string) => {
       setDeployLocation(deployLocationId);
       if (!deployLocationId) {
-        setLuisRegion('');
+        setLuisRegion(undefined);
       } else {
         //Seed luis region with the deploy location or pick the first one
         setLuisRegion(
-          LuisAuthoringSupportLocation.includes(deployLocation) ? deployLocation : LuisAuthoringSupportLocation[0]
+          (LuisAuthoringSupportLocation.includes(deployLocation)
+            ? deployLocation
+            : LuisAuthoringSupportLocation[0]) as LuisRegion
         );
       }
     },
@@ -91,7 +103,7 @@ export const useResourceConfiguration = () => {
   );
 
   const handleLuisRegionChange = React.useCallback(
-    (luisRegion: string) => {
+    (luisRegion: LuisRegion) => {
       setLuisRegion(luisRegion);
     },
     [setLuisRegion]
@@ -104,12 +116,12 @@ export const useResourceConfiguration = () => {
     [setHostName]
   );
 
-  const persistResourceConfiguration = React.useCallback(
+  const stashWizardState = React.useCallback(
     () =>
       setItem(getName(), {
         tenantId,
         subscriptionId,
-        resourceGroupName,
+        resourceGroup: { name: resourceGroupName, isNew },
         deployLocation,
         luisRegion,
       }),
@@ -123,7 +135,8 @@ export const useResourceConfiguration = () => {
       resourceGroupName,
       deployLocation,
       luisRegion,
-      isNewResourceGroup,
+      isNewResourceGroup: isNew,
+      hostName,
     },
     handleTenantChange,
     handleSubscriptionChange,
@@ -131,7 +144,7 @@ export const useResourceConfiguration = () => {
     handleDeployLocationFetch: setDeployLocations,
     handleDeployLocationChange,
     handleLuisRegionChange,
-    persistResourceConfiguration,
+    stashWizardState,
     handleHostNameChange,
     isValidConfiguration,
     deployLocations,

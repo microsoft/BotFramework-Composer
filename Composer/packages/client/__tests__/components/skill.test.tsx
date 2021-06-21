@@ -10,9 +10,7 @@ import CreateSkillModal, {
   validateManifestUrl,
   getSkillManifest,
 } from '../../src/components/AddRemoteSkillModal/CreateSkillModal';
-import { currentProjectIdState, settingsState } from '../../src/recoilModel';
-
-jest.mock('../../src//utils/httpUtil');
+import { botProjectFileState, currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
@@ -62,6 +60,18 @@ describe('<SkillForm />', () => {
         },
       ],
     });
+
+    set(botProjectFileState(projectId), {
+      content: {
+        skills: {
+          oneNoteSync: {
+            manifest: 'https://xxx.json',
+            remote: true,
+            endpointName: 'default',
+          },
+        },
+      },
+    });
   };
 
   it('should render the skill form, and update skill manifest URL', () => {
@@ -93,6 +103,8 @@ describe('<SkillForm />', () => {
             value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
           },
         });
+        // allow validatation debounce to execute
+        jest.runAllTimers();
       });
 
       expect(urlInput.getAttribute('value')).toBe(
