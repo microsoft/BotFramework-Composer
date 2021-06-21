@@ -286,43 +286,6 @@ export const PublishController = {
       message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
     });
   },
-  removeLocalRuntimeData: async (req, res) => {
-    const projectId = req.params.projectId;
-    const profile = defaultPublishConfig;
-    const extensionName = profile.type;
-    if (profile && extensionImplementsMethod(extensionName, 'stopBot')) {
-      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.stopBot;
-      if (typeof pluginMethod === 'function') {
-        try {
-          await pluginMethod.call(null, projectId);
-        } catch (err) {
-          return res.status(400).json({
-            statusCode: '400',
-            message: err.message,
-          });
-        }
-      }
-    }
-    if (profile && extensionImplementsMethod(extensionName, 'removeRuntimeData')) {
-      const pluginMethod = ExtensionContext.extensions.publish[extensionName].methods.removeRuntimeData;
-      if (typeof pluginMethod === 'function') {
-        try {
-          const result = await pluginMethod.call(null, projectId);
-          return res.status(200).json({ message: result.msg });
-        } catch (err) {
-          return res.status(400).json({
-            statusCode: '400',
-            message: err.message,
-          });
-        }
-      }
-    }
-    res.status(400).json({
-      statusCode: '400',
-      message: `${extensionName} is not a valid publishing target type. There may be a missing plugin.`,
-    });
-  },
-
   stopBot: async (req, res) => {
     const projectId = req.params.projectId;
     const profile = defaultPublishConfig;
@@ -366,7 +329,6 @@ export const PublishController = {
       }
     }
   },
-
   pull: async (req, res) => {
     log('Starting pull');
     const target = req.params.target;

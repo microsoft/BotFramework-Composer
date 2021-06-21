@@ -8,12 +8,11 @@ import { OpenEmulatorButton } from '../../../src/components/BotRuntimeController
 import { botEndpointsState, botStatusState, settingsState } from '../../../src/recoilModel';
 import { BotStatus } from '../../../src/constants';
 import { renderWithRecoil } from '../../testUtils';
-
-const mockCallEmulator = jest.fn();
+import { openInEmulator } from '../../../src/utils/navigation';
 
 jest.mock('../../../src/utils/navigation', () => {
   return {
-    openInEmulator: mockCallEmulator,
+    openInEmulator: jest.fn(),
   };
 });
 
@@ -44,7 +43,7 @@ const initialState = ({ currentStatus = BotStatus.connected } = {}) => ({ set })
 
 describe('<OpenEmulatorButton />', () => {
   it('should show the button to open emulator', async () => {
-    mockCallEmulator.mockImplementationOnce((url) => {
+    (openInEmulator as jest.Mock).mockImplementationOnce((url) => {
       expect(url).toBeDefined();
     });
     const { findByTestId } = renderWithRecoil(<OpenEmulatorButton isRootBot projectId={projectId} />, initialState());

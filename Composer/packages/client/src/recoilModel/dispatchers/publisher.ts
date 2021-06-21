@@ -11,7 +11,6 @@ import {
   botStatusState,
   publishHistoryState,
   botBuildTimeErrorState,
-  isEjectRuntimeExistState,
   filePersistenceState,
   settingsState,
   runtimeStandardOutputDataState,
@@ -297,12 +296,6 @@ export const publisherDispatcher = () => {
     }
   );
 
-  const setEjectRuntimeExist = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (isExist: boolean, projectId: string) => {
-      set(isEjectRuntimeExistState(projectId), isExist);
-    }
-  );
-
   // only support local publish
   const stopPublishBot = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
@@ -369,7 +362,6 @@ export const publisherDispatcher = () => {
     getPublishStatus,
     getPublishStatusV2,
     getPublishHistory,
-    setEjectRuntimeExist,
     openBotInEmulator,
     resetBotRuntimeLog,
     setRuntimeStandardOutputData,
