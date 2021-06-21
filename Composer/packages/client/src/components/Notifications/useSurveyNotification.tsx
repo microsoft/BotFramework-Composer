@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { formatMessage } from 'format-message';
+import formatMessage from 'format-message';
 
 import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState, machineInfoState } from '../../recoilModel/atoms/appState';

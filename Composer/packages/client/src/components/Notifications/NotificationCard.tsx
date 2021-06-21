@@ -196,7 +196,7 @@ const defaultCardContentRenderer = (props: CardProps) => {
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}
-        <Stack horizontal>
+        <Stack horizontal horizontalAlign="space-between">
           <Stack {...stackProps}>
             {leftLinkList.map(
               (link) => link != null && <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
