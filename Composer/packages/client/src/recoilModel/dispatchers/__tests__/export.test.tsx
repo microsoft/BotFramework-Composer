@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import httpClient from '../../../utils/httpUtil';
 import { exportDispatcher } from '../export';
@@ -10,7 +10,6 @@ import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { botDisplayNameState, currentProjectIdState, dispatcherState } from '../../atoms';
 import { Dispatcher } from '../../../recoilModel/dispatchers';
 
-jest.mock('../../../utils/httpUtil');
 const projectId = '2345.32324';
 
 describe('Export dispatcher', () => {
@@ -23,7 +22,7 @@ describe('Export dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>,
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>,
     dispatcher: Dispatcher,
     prevDocumentCreateElement,
     prevCreateObjectURL,

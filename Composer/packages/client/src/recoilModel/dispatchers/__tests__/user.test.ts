@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 import jwtDecode from 'jwt-decode';
 
 import { userDispatcher } from '../user';
@@ -53,7 +53,7 @@ describe('user dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     process.env.COMPOSER_REQUIRE_AUTH = 'true'; // needs to be a string
@@ -118,6 +118,7 @@ describe('user dispatcher', () => {
       });
 
       it('sets values given a decodable token', async () => {
+        const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
         mockJwtDecode.mockImplementationOnce(() => {
           return {
             exp: 12345,
@@ -138,7 +139,7 @@ describe('user dispatcher', () => {
         // 12345 is the expiration time in seconds, *1000 = 12345000
         // 10000000 is the mock time we set
         // 2045000 = 12345000 - 10000000 - (1000 * 60 * 5)
-        expect(setTimeout).toHaveBeenCalledWith(expect.anything(), 2045000);
+        expect(setTimeoutSpy).toHaveBeenCalledWith(expect.anything(), 2045000);
       });
     });
   });

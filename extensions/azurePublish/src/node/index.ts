@@ -15,7 +15,7 @@ import {
   PublishResponse,
   PublishResult,
 } from '@botframework-composer/types';
-import { isUsingAdaptiveRuntime, parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
+import { parseRuntimeKey, applyPublishingProfileToSettings } from '@bfc/shared';
 
 import { authConfig, ResourcesItem } from '../types';
 
@@ -146,100 +146,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       await writeJson(logPath, curr, { spaces: 2 });
     };
 
-    /*******************************************************************************************************************************/
-    /* These methods implement the publish actions */
-    /*******************************************************************************************************************************/
-    /**
-     * Prepare a bot to be built and deployed by copying the runtime and declarative assets into a temporary folder
-     * @param project
-     * @param settings
-     * @param srcTemplate
-     * @param resourcekey
-     */
-    private init = async (project: any, srcTemplate: string, resourcekey: string, runtime: any) => {
-      try {
-        // point to the declarative assets (possibly in remote storage)
-        const botFiles = project.getProject().files;
-
-        const mode = this.getRuntimeTemplateMode(runtime?.key);
-
-        // include both pre-release and release identifiers here
-        // TODO: eventually we can clean this up when the "old" runtime is deprecated
-        // (old runtime support is the else block below)
-        if (isUsingAdaptiveRuntime(runtime)) {
-          const buildFolder = this.getProjectFolder(resourcekey, mode);
-
-          // clean up from any previous deploys
-          await this.cleanup(resourcekey);
-
-          // copy bot and runtime into projFolder
-          await copy(srcTemplate, buildFolder);
-
-          let manifestPath;
-          for (const file of botFiles) {
-            const pattern = /manifests\/[0-9A-z-]*.json/;
-            if (file.relativePath.match(pattern)) {
-              manifestPath = path.dirname(file.path);
-            }
-          }
-
-          // save manifest
-          runtime.setSkillManifest(buildFolder, project.fileStorage, manifestPath, project.fileStorage, mode);
-        } else {
-          const botFolder = this.getBotFolder(resourcekey, mode);
-          const runtimeFolder = this.getRuntimeFolder(resourcekey);
-
-          // clean up from any previous deploys
-          await this.cleanup(resourcekey);
-
-          // create the temporary folder to contain this project
-          mkdirSync(runtimeFolder, { recursive: true });
-
-          // create the ComposerDialogs/ folder
-          mkdirSync(botFolder, { recursive: true });
-
-          let manifestPath;
-          for (const file of botFiles) {
-            const pattern = /manifests\/[0-9A-z-]*.json/;
-            if (file.relativePath.match(pattern)) {
-              manifestPath = path.dirname(file.path);
-            }
-            // save bot files
-            const filePath = path.resolve(botFolder, file.relativePath);
-            if (!(await pathExists(path.dirname(filePath)))) {
-              mkdirSync(path.dirname(filePath), { recursive: true });
-            }
-            writeFileSync(filePath, file.content);
-          }
-
-          // save manifest
-          runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, mode);
-
-          // copy bot and runtime into projFolder
-          await copy(srcTemplate, runtimeFolder);
-        }
-      } catch (error) {
-        throw createCustomizeError(
-          AzurePublishErrors.INITIALIZE_ERROR,
-          `Error during init publish folder, ${error.message}`
-        );
-      }
-    };
-
-    /**
-     * Remove any previous version of a project's working files
-     * @param resourcekey
-     */
-    private async cleanup(resourcekey: string) {
-      try {
-        const projFolder = this.getRuntimeFolder(resourcekey);
-        await emptyDir(projFolder);
-        await rmdir(projFolder);
-      } catch (error) {
-        this.logger('$O', error);
-      }
-    }
-
     /**
      * Take the project from a given folder, build it, and push it to Azure.
      * @param project
@@ -260,7 +166,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       resourcekey: string,
       customizeConfiguration: DeployResources
     ) => {
-      const { subscriptionID, accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
+      const { accessToken, name, environment, hostname, luisResource, abs } = customizeConfiguration;
 
       // Create the BotProjectDeploy object, which is used to carry out the deploy action.
       const azDeployer = new BotProjectDeploy({
@@ -306,7 +212,6 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
         environment,
         hostname,
         luisResource,
-        settings, // these are the settings from inside the publishing profile
         accessToken,
         luResources,
         qnaResources,
