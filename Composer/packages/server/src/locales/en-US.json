@@ -251,9 +251,6 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
-  "add_regex_pattern_140335cb": {
-    "message": "Add regex pattern"
-  },
   "add_row_7ebc94fb": {
     "message": "Add row"
   },
@@ -261,7 +258,7 @@
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> add some expected user responses:\n      > - Please remind me to '{'itemTitle=buy milk'}'\n      > - remind me to '{'itemTitle'}'\n      > - add '{'itemTitle'}' to my todo list\n      >\n      > entity definitions:\n      > @ ml itemTitle\n      "
+    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"

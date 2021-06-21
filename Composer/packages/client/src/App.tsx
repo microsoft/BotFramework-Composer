@@ -29,7 +29,6 @@ export const App: React.FC = () => {
     checkNodeVersion,
     performAppCleanupOnQuit,
     setSurveyEligibility,
-    setMachineInfo,
   } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
@@ -42,10 +41,6 @@ export const App: React.FC = () => {
     fetchFeatureFlags();
     ipcRenderer?.on('cleanup', (_event) => {
       performAppCleanupOnQuit();
-    });
-
-    ipcRenderer?.on('machine-info', (_event, info) => {
-      setMachineInfo(info);
     });
     setSurveyEligibility();
   }, []);

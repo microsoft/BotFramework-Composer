@@ -163,6 +163,40 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   }, [botList]);
 
   useEffect(() => {
+    addNotification({
+      id: 'test',
+      type: 'question',
+      title: 'Would you like to take a survey?',
+      description: "This is where we would ask the user if they'd like to take a survey.",
+      links: [
+        {
+          label: 'Take the survey?',
+          onClick: () => {
+            console.log('clicked');
+          },
+        },
+        {
+          label: 'Opt out of this and future surveys',
+          onClick: () => {
+            console.log('opted out');
+          },
+        },
+      ],
+    });
+
+    addNotification({
+      id: 'test2',
+      type: 'congratulation',
+      title: "You've published 10 bots!",
+      description: 'Congratulations!',
+      link: {
+        label: 'Got it',
+        onClick: () => {
+          console.log('clicked this');
+        },
+      },
+    });
+
     // Clear intervals when unmount
     return () => {
       if (pollingUpdaterList) {
