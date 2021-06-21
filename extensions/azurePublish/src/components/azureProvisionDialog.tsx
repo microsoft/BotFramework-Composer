@@ -307,6 +307,8 @@ const getDefaultFormData = (currentProfile, defaults) => {
   };
 };
 
+const defaultAppServiceOperatingSystem = 'windows';
+
 export const AzureProvisionDialog: React.FC = () => {
   const {
     currentProjectId,
@@ -954,6 +956,7 @@ export const AzureProvisionDialog: React.FC = () => {
             </Stack>
             <ChoiceGroup
               required
+              defaultSelectedKey={defaultAppServiceOperatingSystem}
               options={appServiceOSOptions}
               styles={appOSChoiceGroupStyles}
               onChange={(_e, o) => {

@@ -870,6 +870,7 @@ export class AzureResourceMananger {
           location: config.location,
           kind: operatingSystem === 'linux' ? 'functionapp,linux' : 'functionapp',
           httpsOnly: true,
+          reserved: operatingSystem === 'linux',
           siteConfig: {
             webSocketsEnabled: true,
             appSettings: [
