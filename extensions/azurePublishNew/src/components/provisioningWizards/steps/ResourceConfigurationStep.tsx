@@ -245,11 +245,11 @@ export const ResourceConfigurationStep = (props: Props) => {
               textFieldProps={{
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleLuisRegionChange('');
+                  if (newValue.length === 0) handleLuisRegionChange(undefined);
                 },
               }}
               value={luisRegion}
-              onClear={() => handleLuisRegionChange('')}
+              onClear={() => handleLuisRegionChange(undefined)}
               onLuisRegionChange={handleLuisRegionChange}
             />
           </Stack>

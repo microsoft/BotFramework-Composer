@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import WebSocket from 'ws';
-
-import { startServer } from './helpers/server';
 import {
   InitializeParams,
   DidOpenTextDocumentParams,
@@ -11,6 +9,8 @@ import {
   DidChangeTextDocumentParams,
   DidChangeConfigurationParams,
 } from 'vscode-languageserver';
+
+import { startServer } from './helpers/server';
 
 const ws = new WebSocket('ws://localhost:50002/intellisense-language-server');
 
@@ -56,15 +56,10 @@ function send(data, resolvers?: messageResolver[]): Promise<any> {
 
 describe('Intellisense LSP server test', () => {
   const oldEnv = process.env;
-  beforeAll(() => {
-    process.env.NODE_ENV = 'test';
-  });
-
-  afterAll(() => {
-    process.env = oldEnv;
-  });
   const server = startServer();
+
   beforeAll(async () => {
+    process.env.NODE_ENV = 'test';
     await new Promise((resolve) => {
       ws.on('open', () => {
         resolve();
@@ -72,7 +67,8 @@ describe('Intellisense LSP server test', () => {
     });
   });
 
-  afterAll(async (done) => {
+  afterAll((done) => {
+    process.env = oldEnv;
     ws.close();
     server.close();
     done();

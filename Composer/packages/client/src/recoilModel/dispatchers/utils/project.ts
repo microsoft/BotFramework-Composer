@@ -632,37 +632,6 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   };
 };
 
-export const createNewBotFromTemplate = async (
-  callbackHelpers,
-  templateId: string,
-  templateVersion: string,
-  name: string,
-  description: string,
-  location: string,
-  schemaUrl?: string,
-  locale?: string,
-  templateDir?: string,
-  eTag?: string,
-  alias?: string,
-  preserveRoot?: boolean
-) => {
-  const jobId = await httpClient.post(`/projects`, {
-    storageId: 'default',
-    templateId,
-    templateVersion,
-    name,
-    description,
-    location,
-    schemaUrl,
-    locale,
-    templateDir,
-    eTag,
-    alias,
-    preserveRoot,
-  });
-  return jobId;
-};
-
 export const migrateToV2 = async (
   callbackHelpers,
   oldProjectId: string,

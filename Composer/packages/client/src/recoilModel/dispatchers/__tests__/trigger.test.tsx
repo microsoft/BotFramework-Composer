@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { dialogsDispatcher } from '../dialogs';
 import { triggerDispatcher } from '../trigger';
@@ -118,7 +118,7 @@ describe('trigger dispatcher', () => {
       qnaFiles,
     };
   };
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {

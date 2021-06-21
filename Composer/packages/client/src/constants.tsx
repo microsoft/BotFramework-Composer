@@ -229,7 +229,7 @@ export const DialogCreationCopy = {
   get DEFINE_BOT_PROJECT() {
     return {
       title: formatMessage('Create a bot project'),
-      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+      subText: formatMessage(`Specify a name, runtime type, and location for your new bot project.`),
     };
   },
   get DEFINE_DIALOG() {
@@ -267,7 +267,7 @@ export const DialogCreationCopy = {
   get IMPORT_BOT_PROJECT() {
     return {
       title: formatMessage('Import your bot to new project'),
-      subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+      subText: formatMessage(`Specify a name, runtime type, and location for your new bot project.`),
     };
   },
 };

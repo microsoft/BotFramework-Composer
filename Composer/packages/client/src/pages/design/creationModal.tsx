@@ -53,6 +53,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
   const [templateId, setTemplateId] = useState(emptyBotNpmTemplateName);
+  const [localTemplatePath, setLocalTemplatePath] = useState('');
 
   useEffect(() => {
     if (storages?.length) {
@@ -109,6 +110,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
         profile: formData?.profile,
         source: formData?.source,
         isRoot: false,
+        isLocalGenerator: formData?.isLocalGenerator,
       };
       createNewBot(newCreationBotData);
     } else {
@@ -152,6 +154,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       <DefineConversation
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
+        localTemplatePath={localTemplatePath}
         templateId={templateId}
         updateFolder={updateFolder}
         onCurrentPathUpdate={updateCurrentPath}
@@ -166,9 +169,11 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       <CreateBot
         isOpen
         fetchReadMe={fetchReadMe}
+        localTemplatePath={localTemplatePath}
         templates={templateProjects}
         onDismiss={handleDismiss}
         onNext={handleCreateNext}
+        onUpdateLocalTemplatePath={setLocalTemplatePath}
       />
     );
   };
