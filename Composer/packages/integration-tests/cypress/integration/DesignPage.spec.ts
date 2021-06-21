@@ -75,7 +75,7 @@ context('breadcrumb', () => {
     cy.findByTestId('DialogHeader-TestBot_TestSample').click();
     // cy.findByText('Change').click();
     cy.findByTestId('openRecognizerDialog').click();
-    cy.findByText('Regular expression recognizer').click();
+    cy.findByText('Regular expression').click();
     cy.findByText('Done').click();
 
     //onintent trigger
