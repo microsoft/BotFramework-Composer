@@ -52,7 +52,6 @@ export function useSurveyNotification() {
         type: 'question',
         title: formatMessage('Would you mind taking a quick survey?'),
         description: formatMessage('We read every response and will use your feedback to improve Composer.'),
-        stretchLinks: true,
         leftLinks: [
           {
             label: formatMessage('Take survey'),

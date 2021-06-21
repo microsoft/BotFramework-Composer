@@ -75,7 +75,6 @@ export type Notification = {
   links?: (NotificationLink | null | undefined)[];
   leftLinks?: (NotificationLink | null | undefined)[];
   rightLinks?: (NotificationLink | null | undefined)[];
-  stretchLinks?: boolean;
   icon?: string;
   color?: string;
   read?: boolean;
