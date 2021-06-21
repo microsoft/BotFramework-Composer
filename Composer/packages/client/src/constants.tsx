@@ -527,10 +527,9 @@ export const defaultBotPort = 3979;
 export const defaultBotEndpoint = `http://localhost:${defaultBotPort}/api/messages`;
 
 const DAYS_IN_MS = 1000 * 60 * 60 * 24;
-export const SURVEY_PARAMETERS = {
-  daysUntilEligible: 2,
-  timeUntilNextSurvey: 90 * DAYS_IN_MS,
-  chanceToAppear: 0.3,
-};
 
-export const SURVEY_URL_BASE = 'https://microsoft.qualtrics.com/jfe/form/SV_bwlHGwEO2UDwo2F';
+export const SURVEY_PARAMETERS = {
+  daysUntilEligible: 5,
+  timeUntilNextSurvey: 90 * DAYS_IN_MS,
+  chanceToAppear: 0.15,
+};

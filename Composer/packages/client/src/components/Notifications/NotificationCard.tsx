@@ -9,7 +9,6 @@ import { useRef } from 'react';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Stack, IStackProps } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 import { Notification, NotificationLink } from '@botframework-composer/types';
 
@@ -37,7 +36,7 @@ const cardContainer = (show: boolean, ref?: HTMLDivElement | null) => () => {
     border-left: 4px solid #0078d4;
     background: white;
     box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
-    width: 340px;
+    min-width: 340px;
     border-radius: 2px;
     display: flex;
     flex-direction: column;
@@ -113,20 +112,13 @@ const cardDescription = css`
   word-break: break-word;
 `;
 
-const linkButton = {
-  root: {
-    padding: '0',
-    border: '0',
-  },
-  label: {
-    fontSize: '12px',
-    color: '#0078d4',
-    margin: '0',
-  },
-  textContainer: {
-    height: '16px',
-  },
-};
+const linkButton = css`
+  color: #0078d4;
+  float: right;
+  font-size: 12px;
+  height: auto;
+  margin: 4px 0 4px 8px;
+`;
 
 const getShimmerStyles = {
   root: {
@@ -156,25 +148,13 @@ export type NotificationProps = {
 };
 
 const makeLinkLabel = (link: NotificationLink) => (
-  <ActionButton styles={linkButton} onClick={link.onClick}>
+  <ActionButton css={linkButton} onClick={link.onClick}>
     {link.label}
   </ActionButton>
 );
 
 const defaultCardContentRenderer = (props: CardProps) => {
-  const { title, description, type, link, links, stretchLinks } = props;
-
-  const linkList = links ?? [link ?? null];
-
-  const stackProps: IStackProps = {
-    horizontalAlign: stretchLinks ? 'space-between' : 'end',
-    tokens: {
-      childrenGap: stretchLinks ? undefined : '20px',
-      padding: '0 16px 0 0',
-      maxHeight: '24px',
-    },
-  };
-
+  const { title, description, type, link, links } = props;
   return (
     <div css={cardContent}>
       {type === 'error' && <Icon css={errorType} iconName="ErrorBadge" />}
@@ -182,27 +162,13 @@ const defaultCardContentRenderer = (props: CardProps) => {
       {type === 'warning' && <Icon css={warningType} iconName="Warning" />}
       {type === 'question' && <Icon css={questionType} iconName="UnknownSolid" />}
       {type === 'congratulation' && <Icon css={congratulationType} iconName="Trophy2Solid" />}
-      {type === 'custom' && (
-        <Icon
-          css={css`
-            margin-top: ${iconMargin};
-            color: ${props.color ?? SharedColors.gray10};
-          `}
-          iconName={props.icon ?? 'UnknownSolid'}
-        />
-      )}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}
-        <Stack horizontal {...stackProps}>
-          {linkList.map((link) =>
-            link != null ? (
-              <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
-            ) : (
-              <span key="blank" style={{ width: '25px' }} />
-            )
-          )}
-        </Stack>
+        {link && makeLinkLabel(link)}
+        {links?.map((link) => (
+          <div key={link.label}>{makeLinkLabel(link)}</div>
+        ))}
         {type === 'pending' && (
           <Shimmer shimmerElements={[{ type: ShimmerElementType.line, height: 2 }]} styles={getShimmerStyles} />
         )}

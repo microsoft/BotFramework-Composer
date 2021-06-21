@@ -47,7 +47,6 @@ export default class ElectronWindow {
     this.currentBrowserWindow = new BrowserWindow(browserWindowOptions);
     this.currentBrowserWindow.on('page-title-updated', (ev) => ev.preventDefault()); // preserve explicit window title
     this.currentBrowserWindow.webContents.on('new-window', this.onOpenNewWindow.bind(this));
-    this.currentBrowserWindow.webContents.userAgent = 'Electron';
     log('Rendered Electron window dimensions: ', this.currentBrowserWindow.getSize());
   }
 

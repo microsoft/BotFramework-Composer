@@ -234,13 +234,6 @@ type PageView = {
   [PageNames.PackageManger]: undefined;
 };
 
-type SurveyEvents = {
-  HATSSurveyOffered: undefined;
-  HATSSurveyDismissed: undefined;
-  HATSSurveyAccepted: undefined;
-  HATSSurveyRejected: undefined;
-};
-
 export type TelemetryEvents = ApplicationEvents &
   GettingStartedEvents &
   BotProjectEvents &
@@ -259,8 +252,7 @@ export type TelemetryEvents = ApplicationEvents &
   LuEditorEvents &
   OrchestratorEvents &
   PropertyEditorEvents &
-  CreationEvents &
-  SurveyEvents;
+  CreationEvents;
 
 export type TelemetryEventName = keyof TelemetryEvents;
 
