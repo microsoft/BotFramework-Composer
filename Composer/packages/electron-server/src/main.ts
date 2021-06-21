@@ -295,11 +295,16 @@ async function run() {
     setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
 
     const mainWindow = getMainWindow();
+    const machineId = await getMachineId();
+
     mainWindow?.webContents.send('session-update', 'session-started');
 
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow?.webContents.openDevTools();
     }
+
+    log(`Machine ID is ${machineId}`);
+    mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
   });
 
   // Quit when all windows are closed.
