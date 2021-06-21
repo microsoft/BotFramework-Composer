@@ -684,7 +684,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             item.fileId === createQnAPairSettings.groupKey && index === createQnAPairSettings.sectionIndex;
 
           return (
-            <div data-is-focusable css={formCell}>
+            <div css={formCell}>
               <QnARichEditor
                 disabled={isAllowEdit}
                 id={item.sectionId}
@@ -713,6 +713,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 onChange={() => {}}
                 onFocus={() => setExpandedIndex(index)}
+                onReady={(editor) => {
+                  const navKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'];
+                  navKeys;
+                  editor.editing.view.document.on('keydown', (_, evtData) => {
+                    if (navKeys.includes(evtData.domEvent.key)) {
+                      evtData.stopPropagation();
+                    }
+                  });
+                }}
               />
             </div>
           );

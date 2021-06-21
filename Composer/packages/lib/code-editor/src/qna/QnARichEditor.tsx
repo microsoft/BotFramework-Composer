@@ -3,96 +3,20 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
-import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
-import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-import Heading from '@ckeditor/ckeditor5-heading/src/heading';
-import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
-import Image from '@ckeditor/ckeditor5-image/src/image';
-import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
-import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
-import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
-import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
-import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
-import Link from '@ckeditor/ckeditor5-link/src/link';
-import List from '@ckeditor/ckeditor5-list/src/list';
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import Markdown from '@ckeditor/ckeditor5-markdown-gfm/src/markdown';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import Table from '@ckeditor/ckeditor5-table/src/table';
-import Emoji from '@wwalc/ckeditor5-emoji/src/emoji';
 import formatMessage from 'format-message';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import React from 'react';
 
-const allowedNavigationKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'];
-
-const emoji = [
-  { name: 'smile', text: '😀' },
-  { name: 'wink', text: '😉' },
-  { name: 'cool', text: '😎' },
-  { name: 'surprise', text: '😮' },
-  { name: 'sad', text: '🙁' },
-  { name: 'wave', text: '👋' },
-  { name: 'OK', text: '👌' },
-  { name: 'victory', text: '✌' },
-  { name: 'like', text: '👍' },
-  { name: 'dislike', text: '👎' },
-];
-
-const imagePlugins = [Image, ImageToolbar, ImageInsert, ImageStyle, ImageResize];
-
-const pluginsConfig = [
-  SourceEditing,
-  Markdown,
-  Alignment,
-  Paragraph,
-  Heading,
-  Bold,
-  Italic,
-  Strikethrough,
-  Table,
-  Essentials,
-  Link,
-  List,
-  Emoji,
-  ...imagePlugins,
-];
-
-const alignmentConfig = {
-  options: ['left', 'right', 'center', 'justify'],
-};
-
-const imageConfig = {
-  toolbar: ['imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight', '|', 'imageTextAlternative'],
-  styles: ['full', 'alignLeft', 'alignCenter', 'alignRight'],
-};
-
-const toolbarConfig = {
-  items: [
-    'sourceediting',
-    '|',
-    'bold',
-    'italic',
-    'strikethrough',
-    '|',
-    'alignment',
-    'numberedList',
-    'bulletedList',
-    '|',
-    'heading',
-    'insertTable',
-    '|',
-    'insertImage',
-    'link',
-    'emoji',
-    'undo',
-    'redo',
-  ],
-};
+import { qnaRichEditorEmoji, qnaRichEditorLineHeight, qnaRichEditorMaxLines, qnaRichEditorMinLines } from './constants';
+import { qnaRichEditorPluginsConfig } from './plugins';
+import {
+  qnaRichEditorToolbarToolbarConfig,
+  qnaRichEditorImageToolbarConfig,
+  qnaRichEditorAlignmentConfig,
+} from './config';
 
 type Props = {
   id: string;
@@ -111,7 +35,6 @@ export const QnARichEditor = (props: Props) => {
 
   const { 0: editor, 1: setEditor } = React.useState<any>();
   const { 0: focused, 1: setFocused } = React.useState(false);
-  const { 0: sourceEditing, 1: setSourceEditing } = React.useState(false);
   const { 0: error, 1: setError } = React.useState<Error | undefined>();
 
   const toggleToolbar = React.useCallback(
@@ -131,17 +54,9 @@ export const QnARichEditor = (props: Props) => {
     setFocused(isFocused);
   }, []);
 
-  const sourceEditHandler = React.useCallback(
-    (_e, _d, isSourceEditingMode) => {
-      setSourceEditing(isSourceEditingMode);
-      editor.ui.view.toolbar.items.get(15).isEnabled = !isSourceEditingMode;
-    },
-    [editor]
-  );
-
   React.useEffect(() => {
-    toggleToolbar(focused || sourceEditing);
-  }, [focused, sourceEditing]);
+    toggleToolbar(focused);
+  }, [focused]);
 
   React.useEffect(() => {
     if (editor) {
@@ -150,13 +65,17 @@ export const QnARichEditor = (props: Props) => {
 
       editor.ui.focusTracker.on('change:isFocused', focusTrackerHandler);
 
-      const sourceEditingPlugin = editor.plugins.get('SourceEditing');
-      sourceEditingPlugin?.on('change:isSourceEditingMode', sourceEditHandler);
-
-      (window as any).editor = editor;
-
       editor.editing.view.change((writer) => {
-        writer.setStyle('min-height', '120px', editor.editing.view.document.getRoot());
+        writer.setStyle(
+          'min-height',
+          `${qnaRichEditorMinLines * qnaRichEditorLineHeight}px`,
+          editor.editing.view.document.getRoot()
+        );
+        writer.setStyle(
+          'max-height',
+          `${qnaRichEditorMaxLines * qnaRichEditorLineHeight}px`,
+          editor.editing.view.document.getRoot()
+        );
       });
 
       editor.keystrokes.set('space', (_, stop) => {
@@ -164,12 +83,6 @@ export const QnARichEditor = (props: Props) => {
           text: ' ',
         });
         stop();
-      });
-
-      allowedNavigationKeys.forEach((navKey) => {
-        editor.keystrokes.set(navKey.toLowerCase(), (e) => {
-          e.stopPropagation();
-        });
       });
     }
 
@@ -215,14 +128,14 @@ export const QnARichEditor = (props: Props) => {
   const dismissError = React.useCallback(() => setError(undefined), []);
 
   return (
-    <Stack verticalFill>
+    <Stack verticalFill data-is-focusable="false">
       <CKEditor
         config={{
-          emoji,
-          plugins: pluginsConfig,
-          toolbar: toolbarConfig,
-          image: imageConfig,
-          alignment: alignmentConfig,
+          emoji: qnaRichEditorEmoji,
+          plugins: qnaRichEditorPluginsConfig,
+          toolbar: qnaRichEditorToolbarToolbarConfig,
+          image: qnaRichEditorImageToolbarConfig,
+          alignment: qnaRichEditorAlignmentConfig,
           placeholder: formatMessage('Add an answer'),
         }}
         data={value}

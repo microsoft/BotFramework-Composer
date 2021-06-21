@@ -17,6 +17,7 @@ declare module '@ckeditor/ckeditor5-image/src/imageinsert';
 declare module '@ckeditor/ckeditor5-image/src/image';
 declare module '@ckeditor/ckeditor5-image/src/imagetoolbar';
 declare module '@ckeditor/ckeditor5-image/src/imagestyle';
+declare module '@ckeditor5-source-editing/src/sourceediting';
 
 declare module '@ckeditor/ckeditor5-markdown-gfm/src/html2markdown/html2markdown' {
   export const turndownService: import('turndown');
