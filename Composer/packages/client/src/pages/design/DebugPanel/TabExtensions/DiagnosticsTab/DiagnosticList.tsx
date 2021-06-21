@@ -32,7 +32,7 @@ import {
 } from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
 
-import { IDiagnosticInfo } from './types';
+import { IDiagnosticInfo } from './DiagnosticType';
 
 // -------------------- Styles -------------------- //
 
@@ -74,6 +74,7 @@ const detailList = css`
 const tableCell = css`
   margin-top: 4px;
   outline: none;
+
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
   }
@@ -85,6 +86,11 @@ const blodText = css`
 
 const content = css`
   outline: none;
+`;
+
+const textWrapStyle = css`
+  white-space: normal;
+  width: 400px;
 `;
 
 // -------------------- Diagnosticist -------------------- //
@@ -173,7 +179,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
           locationPath = item.friendlyLocationBreadcrumb.join(' > ');
         }
         return (
-          <div css={tableCell}>
+          <div css={[tableCell, textWrapStyle]}>
             <Link
               css={content}
               underline="true"

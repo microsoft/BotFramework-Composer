@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { TabExtensionConfig } from './types';
-import { DiagnosticsTabConfig } from './DiagnosticsTab/';
+import { DiagnosticsTabConfig } from './DiagnosticsTab';
 import { WebChatLogTabConfig } from './WebChatLog/config';
 import { RuntimeOutputTabConfig } from './RuntimeOutputLog';
 

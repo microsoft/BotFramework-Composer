@@ -12,7 +12,7 @@ export const useDebugPane = () => {
   useEffect(() => {
     if (currentLocation?.pathname) {
       const result = currentLocation.pathname.replace(/^\/|\/$/g, '').split('/');
-      setShowDebugPanel(result[2] !== 'home');
+      setShowDebugPanel(result?.[2] !== 'home');
     }
   }, [currentLocation]);
 

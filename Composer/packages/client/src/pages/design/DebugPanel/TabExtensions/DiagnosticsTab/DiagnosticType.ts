@@ -44,9 +44,10 @@ const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) 
     if (!dialogPath) {
       return [];
     }
-    const [dialogName, triggerPath, actionPath] = dialogPath.split('#')[0].split('.');
+    const [dialogName, triggerPath, ...actionPaths] = dialogPath.split('#')[0].split('.');
     if (dialogName) {
       const matchedDialog = dialogs.find(({ displayName }) => displayName === dialogName);
+
       if (matchedDialog && triggerPath) {
         breadcrumb.push(matchedDialog.displayName);
         const trigger: ITrigger = get(matchedDialog, triggerPath, '');
@@ -54,10 +55,17 @@ const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) 
           breadcrumb.push(trigger.displayName);
         }
 
-        if (trigger && actionPath) {
-          const action = get(trigger.content, actionPath, '');
-          if (action.$kind) {
-            breadcrumb.push(action.$kind);
+        if (trigger) {
+          let currentPath = trigger.content;
+          for (let i = 0; i < actionPaths.length; i++) {
+            if (!currentPath) {
+              break;
+            }
+            const actionPath = actionPaths[i];
+            currentPath = get(currentPath, actionPath, null);
+            if (currentPath.$kind) {
+              breadcrumb.push(currentPath.$kind);
+            }
           }
         }
       }
@@ -120,10 +128,21 @@ export class BotDiagnostic extends DiagnosticInfo {
 
 export class DialogDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.DIALOG;
-  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+  constructor(
+    rootProjectId: string,
+    projectId: string,
+    id: string,
+    location: string,
+    diagnostic: Diagnostic,
+    dialogs: DialogInfo[]
+  ) {
     super(rootProjectId, projectId, id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
+    const friendlyPath = getFriendlyPath(this.dialogPath, dialogs);
+    if (friendlyPath.length) {
+      this.friendlyLocationBreadcrumb = friendlyPath;
+    }
   }
 
   getUrl = () => {
@@ -136,8 +155,15 @@ export class DialogDiagnostic extends DiagnosticInfo {
 
 export class SchemaDiagnostic extends DialogDiagnostic {
   type = DiagnosticType.SCHEMA;
-  constructor(rootProjectId: string, projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(rootProjectId, projectId, id, location, diagnostic);
+  constructor(
+    rootProjectId: string,
+    projectId: string,
+    id: string,
+    location: string,
+    diagnostic: Diagnostic,
+    dialogs: DialogInfo[]
+  ) {
+    super(rootProjectId, projectId, id, location, diagnostic, dialogs);
     this.message = diagnostic.message;
     this.title = formatMessage('Deactivated action.');
     this.learnMore = formatMessage('Learn more about custom actions');

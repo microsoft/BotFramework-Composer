@@ -20,7 +20,7 @@ import {
   SettingDiagnostic,
   SkillSettingDiagnostic,
   SchemaDiagnostic,
-} from '../../pages/design/DebugPanel/TabExtensions/DiagnosticsTab/types';
+} from '../../pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticType';
 import {
   botDiagnosticsState,
   botProjectFileState,
@@ -164,7 +164,9 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
   key: 'dialogsDiagnosticsSelectorFamily',
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
+
     if (botAssets === null) return [];
+    const { dialogs } = botAssets;
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
     const dialogIds = get(dialogIdsState(projectId));
@@ -174,12 +176,8 @@ export const dialogsDiagnosticsSelectorFamily = selectorFamily({
     dialogIds.forEach((dialogId: string) => {
       const diagnostics = get(dialogDiagnosticsSelectorFamily({ projectId, dialogId })) || [];
       diagnostics.forEach((diagnostic) => {
-        const dialog: DialogInfo = get(dialogState({ projectId, dialogId }));
-        const splitPaths = diagnostic.path?.split('.');
-        console.log(splitPaths);
-
         const location = `${dialogId}.dialog`;
-        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic));
+        diagnosticList.push(new DialogDiagnostic(rootProjectId, projectId, dialogId, location, diagnostic, dialogs));
       });
     });
 
@@ -192,6 +190,7 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
   get: (projectId: string) => ({ get }) => {
     const botAssets = get(botAssetsSelectFamily(projectId));
     if (botAssets === null) return [];
+    const { dialogs } = botAssets;
 
     const rootProjectId = get(rootBotProjectIdSelector) ?? projectId;
 
@@ -221,7 +220,7 @@ export const schemaDiagnosticsSelectorFamily = selectorFamily({
               }),
             ].join('>');
           }
-          return new SchemaDiagnostic(rootProjectId, projectId, dialog.id, location, d);
+          return new SchemaDiagnostic(rootProjectId, projectId, dialog.id, location, d, dialogs);
         })
       );
     });

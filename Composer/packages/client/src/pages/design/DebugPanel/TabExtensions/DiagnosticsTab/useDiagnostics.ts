@@ -5,8 +5,7 @@ import { useRecoilValue } from 'recoil';
 
 import { allDiagnosticsSelectorFamily } from '../../../../../recoilModel';
 
-import { IDiagnosticInfo } from './types';
-import { DiagnosticSeverity } from './types';
+import { IDiagnosticInfo, DiagnosticSeverity } from './DiagnosticType';
 
 export const Severity = {
   Error: DiagnosticSeverity[0],

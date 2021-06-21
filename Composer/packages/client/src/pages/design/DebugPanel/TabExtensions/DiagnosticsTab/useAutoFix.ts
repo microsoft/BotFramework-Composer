@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 import { botProjectSpaceSelector, dispatcherState } from '../../../../../recoilModel';
 
-import { DiagnosticType, SchemaDiagnostic } from './types';
+import { DiagnosticType, SchemaDiagnostic } from './DiagnosticType';
 import { useDiagnosticsData } from './useDiagnostics';
 
 export const useAutoFix = () => {

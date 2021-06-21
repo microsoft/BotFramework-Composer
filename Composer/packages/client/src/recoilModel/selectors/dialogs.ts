@@ -13,8 +13,7 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
 
     return dialogIds
       .map((dialogId) => {
-        const result = get(dialogState({ projectId, dialogId }));
-        return result;
+        return get(dialogState({ projectId, dialogId }));
       })
       .filter((d) => !d.isTopic);
   },

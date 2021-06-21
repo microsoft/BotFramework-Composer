@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 import { DebugPanelTabHeaderProps } from '../types';
 import { dispatcherState, showErrorDiagnosticsState, showWarningDiagnosticsState } from '../../../../../recoilModel';
 
-import { IDiagnosticInfo } from './types';
+import { IDiagnosticInfo } from './DiagnosticType';
 import { DiagnosticList } from './DiagnosticList';
 import { Severity, useDiagnosticsData } from './useDiagnostics';
 import { DiagnosticsFilters } from './DiagnosticFilters';

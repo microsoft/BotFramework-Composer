@@ -57,7 +57,6 @@ export function validateDialog(
       }
       return false;
     };
-
     JsonWalk(id, content, visitor);
     return {
       diagnostics: diagnostics.map((e) => {
