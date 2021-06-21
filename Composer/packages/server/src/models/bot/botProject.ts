@@ -22,7 +22,6 @@ import merge from 'lodash/merge';
 import { UserIdentity } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
-import { ExtensionContext } from '../extension/extensionContext';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -66,7 +65,6 @@ export class BotProject implements IBotProject {
   public dataDir: string;
   public eTag?: string;
   public fileStorage: IFileStorage;
-  public builder: Builder;
   public defaultSDKSchema: {
     [key: string]: string;
   };
@@ -78,6 +76,7 @@ export class BotProject implements IBotProject {
   public settings: DialogSetting | null = null;
 
   private files = new Map<string, FileInfo>();
+  public _builder: Builder | undefined;
 
   constructor(ref: LocationRef, user?: UserIdentity, eTag?: string) {
     this.ref = ref;
@@ -91,7 +90,7 @@ export class BotProject implements IBotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+
     this.readme = '';
   }
 
@@ -181,6 +180,14 @@ export class BotProject implements IBotProject {
 
   public get schemaOverrides() {
     return this.files.get('app.override.schema') ?? this.files.get('sdk.override.schema');
+  }
+
+  public get builder() {
+    if (!this._builder) {
+      this._builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+    }
+
+    return this._builder;
   }
 
   public getFile(id: string) {
@@ -617,10 +624,6 @@ export class BotProject implements IBotProject {
   public async deleteAllFiles(): Promise<boolean> {
     try {
       await this.fileStorage.rmrfDir(this.dir);
-      const projectId = await BotProjectService.getProjectIdByPath(this.dir);
-      if (projectId) {
-        await this.removeLocalRuntimeData(projectId);
-      }
       await BotProjectService.cleanProject({ storageId: 'default', path: this.dir });
       await BotProjectService.deleteRecentProject(this.dir);
     } catch (e) {
@@ -711,23 +714,6 @@ export class BotProject implements IBotProject {
   public updateETag(eTag: string): void {
     this.eTag = eTag;
     // also update the bot project map
-  }
-
-  private async removeLocalRuntimeData(projectId) {
-    const method = 'localpublish';
-    if (ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
-      const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
-      if (typeof pluginMethod === 'function') {
-        await pluginMethod.call(null, projectId);
-      }
-    }
-
-    if (ExtensionContext.extensions.publish[method]?.methods?.removeRuntimeData) {
-      const pluginMethod = ExtensionContext.extensions.publish[method].methods.removeRuntimeData;
-      if (typeof pluginMethod === 'function') {
-        await pluginMethod.call(null, projectId);
-      }
-    }
   }
 
   private _cleanUp = (relativePath: string) => {
