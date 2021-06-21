@@ -35,7 +35,7 @@ const getStrings = () => {
   };
 };
 
-const textFieldStyles: Partial<ITextFieldStyles> = {
+const textFieldStyles = (errorMessage?: string): Partial<ITextFieldStyles> => ({
   field: {
     fontFamily: DEFAULT_FONT_SETTINGS.fontFamily,
     fontSize: 12,
@@ -48,10 +48,11 @@ const textFieldStyles: Partial<ITextFieldStyles> = {
     selectors: {
       '.ms-TextField-fieldGroup': {
         border: 'none',
+        outline: errorMessage ? `2px solid ${SharedColors.red20}` : 'none',
       },
     },
   },
-};
+});
 
 const pickerContainer = css`
   margin: '0';
@@ -214,9 +215,10 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
     <div ref={pickerContainerElement} css={pickerContainer}>
       <TextField
         componentRef={inputBoxElement}
+        errorMessage={errorMessage}
         id={variableId}
         placeholder={uiStrings.searchPlaceholder}
-        styles={textFieldStyles}
+        styles={textFieldStyles(errorMessage)}
         value={query}
         onChange={(_e: FormEvent<HTMLInputElement | HTMLTextAreaElement>, val: string | undefined) => {
           setQuery(val ?? '');
@@ -244,7 +246,6 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         onDismiss={onDismiss}
         onItemClick={onHideContextualMenu}
       />
-      {errorMessage ? <span css={redErrorMessage}>{errorMessage}</span> : null}
     </div>
   );
 });

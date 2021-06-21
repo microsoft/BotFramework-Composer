@@ -102,12 +102,28 @@ const removeIcon: IIconProps = {
 
 const NameColumnKey = 'column1';
 const ValueColumnKey = 'column2';
+// TODO: update to office-ui-fabric-react@7.170.x to gain access to "flexGrow" column property to distribute proprotional column widths
+// (name column takes up 1/3 of space and value column takes up the remaining 2/3)
 const watchTableColumns: IColumn[] = [
-  { key: NameColumnKey, name: 'Name', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true },
-  { key: ValueColumnKey, name: 'Value', fieldName: 'value', minWidth: 100, maxWidth: 360, isResizable: true },
+  {
+    key: NameColumnKey,
+    name: 'Name',
+    fieldName: 'name',
+    minWidth: 100,
+    maxWidth: 600,
+    isResizable: true,
+  },
+  {
+    key: ValueColumnKey,
+    name: 'Value',
+    fieldName: 'value',
+    minWidth: 100,
+    maxWidth: undefined,
+    isResizable: true,
+  },
 ];
 
-const watchTableLayout: DetailsListLayoutMode = DetailsListLayoutMode.fixedColumns;
+const watchTableLayout: DetailsListLayoutMode = DetailsListLayoutMode.justified;
 
 // this can be exported and used in other places
 const getValueFromBotTraceScope = (delimitedProperty: string, botTrace: Activity) => {
