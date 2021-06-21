@@ -23,6 +23,7 @@ const removePlaceholder = (config: string) => {
       return undefined;
     }
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
   }
 };

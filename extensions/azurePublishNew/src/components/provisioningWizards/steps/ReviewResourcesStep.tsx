@@ -35,23 +35,23 @@ const ListItem = styled.div`
   color: ${NeutralColors.gray130};
 `;
 
+const getResourceRegion = (item: ResourcesItem): string => {
+  const { key, region } = item;
+  switch (key) {
+    case AzureResourceTypes.APP_REGISTRATION:
+    case AzureResourceTypes.BOT_REGISTRATION:
+      return 'global';
+    default:
+      return region;
+  }
+};
+
 export const ReviewResourcesStep = () => {
   const requiredResources = useRecoilValue(requiredResourcesState);
   const enabledOptionalResource = useRecoilValue(enabledResourcesState);
   const resourceGroup = useRecoilValue(resourceGroupState);
   const deployLocation = useRecoilValue(deployLocationState);
   const luisRegion = useRecoilValue(luisRegionState);
-
-  const getResourceRegion = (item: ResourcesItem): string => {
-    const { key, region } = item;
-    switch (key) {
-      case AzureResourceTypes.APP_REGISTRATION:
-      case AzureResourceTypes.BOT_REGISTRATION:
-        return 'global';
-      default:
-        return region;
-    }
-  };
 
   const reviewCols: IColumn[] = React.useMemo(
     () => [

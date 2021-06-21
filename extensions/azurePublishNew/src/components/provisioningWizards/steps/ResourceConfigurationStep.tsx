@@ -97,15 +97,15 @@ export const ResourceConfigurationStep = (props: Props) => {
       isNewResourceGroup,
       hostName,
     },
-    handleChangeResourceGroup: handleResourceGroupChange,
-    handleChangeDeployLocation: handleDeployLocationChange,
-    handleChangeSubscription: handleSubscriptionChange,
-    handleValidateHostName: handleHostNameValidate,
-    handleValidateResourceGroupName: handleResourceGroupNameValidate,
-    handleChangeTenant: handleTenantChange,
-    handleFetchDeployLocation: handleDeployLocationFetch,
-    handleChangeLuisRegion: handleLuisRegionChange,
-    handleChangeHostName: handleHostNameChange,
+    handleChangeResourceGroup,
+    handleChangeDeployLocation,
+    handleChangeSubscription,
+    handleValidateHostName,
+    handleValidateResourceGroupName,
+    handleChangeTenant,
+    handleFetchDeployLocation,
+    handleChangeLuisRegion,
+    handleChangeHostName,
     isValidConfiguration,
     deployLocations,
   } = useResourceConfiguration();
@@ -148,12 +148,12 @@ export const ResourceConfigurationStep = (props: Props) => {
                 disabled: !!publishConfig?.tenantId,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (e, newValue) => {
-                  if (newValue.length === 0) handleTenantChange('');
+                  if (newValue.length === 0) handleChangeTenant('');
                 },
               }}
               value={tenantId}
-              onChangeTenant={handleTenantChange}
-              onClear={() => handleTenantChange('')}
+              onChangeTenant={handleChangeTenant}
+              onClear={() => handleChangeTenant('')}
               onUserInfoFetch={setUserInfo}
             />
           </Stack>
@@ -170,12 +170,12 @@ export const ResourceConfigurationStep = (props: Props) => {
                 disabled: !!publishConfig?.subscriptionId,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleSubscriptionChange('');
+                  if (newValue.length === 0) handleChangeSubscription('');
                 },
               }}
               value={subscriptionId}
-              onChangeSubscription={handleSubscriptionChange}
-              onClear={() => handleSubscriptionChange('')}
+              onChangeSubscription={handleChangeSubscription}
+              onClear={() => handleChangeSubscription('')}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -197,13 +197,13 @@ export const ResourceConfigurationStep = (props: Props) => {
                 disabled: !!publishConfig?.resourceGroup?.name,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleResourceGroupChange('', false);
+                  if (newValue.length === 0) handleChangeResourceGroup('', false);
                 },
               }}
               value={resourceGroupName}
-              onChangeResourceGroup={handleResourceGroupChange}
-              onClear={() => handleResourceGroupChange('', false)}
-              onValidateResourceGroupName={handleResourceGroupNameValidate}
+              onChangeResourceGroup={handleChangeResourceGroup}
+              onClear={() => handleChangeResourceGroup('', false)}
+              onValidateResourceGroupName={handleValidateResourceGroupName}
             />
           </Stack>
           <ConfigureResourcesSectionName>{formatMessage('Resource details')}</ConfigureResourcesSectionName>
@@ -221,8 +221,8 @@ export const ResourceConfigurationStep = (props: Props) => {
               styles={autoCompleteTextFieldStyles}
               subscriptionId={subscriptionId}
               value={hostName}
-              onChangeHostName={handleHostNameChange}
-              onValidateHostName={handleHostNameValidate}
+              onChangeHostName={handleChangeHostName}
+              onValidateHostName={handleValidateHostName}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -237,13 +237,13 @@ export const ResourceConfigurationStep = (props: Props) => {
                 disabled: !!publishConfig?.deployLocation,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleDeployLocationChange('');
+                  if (newValue.length === 0) handleChangeDeployLocation('');
                 },
               }}
               value={deployLocation}
-              onChangeDeployLocation={handleDeployLocationChange}
-              onClear={() => handleDeployLocationChange('')}
-              onFetchDeployLocations={handleDeployLocationFetch}
+              onChangeDeployLocation={handleChangeDeployLocation}
+              onClear={() => handleChangeDeployLocation('')}
+              onFetchDeployLocations={handleFetchDeployLocation}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -266,12 +266,12 @@ export const ResourceConfigurationStep = (props: Props) => {
                 disabled: !!publishConfig?.settings?.luis?.region,
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleLuisRegionChange(undefined);
+                  if (newValue.length === 0) handleChangeLuisRegion(undefined);
                 },
               }}
               value={luisRegion}
-              onChangeLuisRegion={handleLuisRegionChange}
-              onClear={() => handleLuisRegionChange(undefined)}
+              onChangeLuisRegion={handleChangeLuisRegion}
+              onClear={() => handleChangeLuisRegion(undefined)}
             />
           </Stack>
         </Stack>

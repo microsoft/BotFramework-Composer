@@ -19,6 +19,7 @@ import { useDispatcher } from '../../../hooks/useDispatcher';
 const AddResourcesSectionName = styled(Text)`
   font-size: ${FluentTheme.fonts.mediumPlus.fontSize};
 `;
+
 type Props = {
   enabledResources: ResourcesItem[] | undefined;
   onChangeSelection?: (requiredItems: ResourcesItem[]) => void;

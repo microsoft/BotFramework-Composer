@@ -126,8 +126,8 @@ export const useResourcesApi = () => {
       if (config.settings?.blobStorage?.connectionString) {
         result.push(AzureResourceTypes.BLOBSTORAGE);
       }
-      return result;
-    } else return [];
+    }
+    return result;
   }, []);
 
   return { getResourceList, getPreview, getExistingResources };
