@@ -378,8 +378,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         });
 
         await setPublishTargets(updatedPublishTargets, botProjectId);
+
         const updater = pollingUpdaterList.find((u) => u.isSameUpdater(botProjectId, bot.publishTarget || ''));
         updater?.restart(onReceiveUpdaterPayload);
+
+        //this removes the concurrency to the publish endpoint - per #7807, if
+        //we simulataneously publish many bots with the same LUIS authoring key or a key with low
+        //TPS, we will get a 429 status from LUIS.
+        await updater?.waitUntilStopped(5000);
       }
     }
   };
