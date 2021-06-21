@@ -84,11 +84,17 @@ export const useResourceConfiguration = () => {
   );
 
   const handleResourceGroupChange = React.useCallback(
-    (resourceGroupId: string, isNew: boolean, isInvalidName: boolean) => {
+    (resourceGroupId: string, isNew: boolean) => {
       setResourceGroup(resourceGroupId, isNew);
-      setIsInvalidResourceGroupName(isInvalidName);
     },
     [setResourceGroup]
+  );
+
+  const handleResourceGroupNameValidate = React.useCallback(
+    (isValid: boolean) => {
+      setIsInvalidResourceGroupName(isValid);
+    },
+    [setIsInvalidResourceGroupName]
   );
 
   const handleDeployLocationChange = React.useCallback(
@@ -116,11 +122,17 @@ export const useResourceConfiguration = () => {
   );
 
   const handleHostNameChange = React.useCallback(
-    (hostName: string, isInvalidName: boolean) => {
+    (hostName: string) => {
       setHostName(hostName);
-      setIsInvalidHostName(isInvalidName);
     },
     [setHostName]
+  );
+
+  const handleHostNameValidate = React.useCallback(
+    (isValid: boolean) => {
+      setIsInvalidHostName(isValid);
+    },
+    [setIsInvalidHostName]
   );
 
   const stashWizardState = () => {
@@ -148,6 +160,8 @@ export const useResourceConfiguration = () => {
     handleSubscriptionChange,
     handleResourceGroupChange,
     handleDeployLocationFetch: setDeployLocations,
+    handleHostNameValidate,
+    handleResourceGroupNameValidate,
     handleDeployLocationChange,
     handleLuisRegionChange,
     stashWizardState,
