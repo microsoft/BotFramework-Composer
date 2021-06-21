@@ -532,6 +532,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       },
     ];
 
+    const filteredKbs = kbs.filter((item) => item.locale === formData?.locale);
+
     return (
       <div>
         <div css={{ ...dialogBodyStyles, width: 800 }}>
@@ -546,7 +548,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               checkButtonAriaLabel="select row"
               columns={columns}
               getKey={(item) => item.name}
-              items={kbs}
+              items={filteredKbs}
               layoutMode={DetailsListLayoutMode.justified}
               selection={selectedKB}
               selectionMode={SelectionMode.single}
