@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selectorFamily, useRecoilState, useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { skillDispatcher } from '../skill';
 import { botProjectFileDispatcher } from '../botProjectFile';
@@ -22,24 +22,15 @@ import {
 import { botEndpointsState, botProjectIdsState, currentProjectIdState, displaySkillManifestState } from '../../atoms';
 import { Dispatcher } from '..';
 import { skillsStateSelector } from '../../selectors';
+import httpClient from '../../../utils/httpUtil';
 
 import mockBotProjectFileData from './mocks/mockBotProjectFile.json';
-
-jest.mock('../../../utils/httpUtil', () => {
-  return {
-    __esModule: true,
-    default: {
-      post: (url, skillObject) => ({
-        url,
-        data: skillObject.skills,
-      }),
-    },
-  };
-});
 
 const mockDialogComplete = jest.fn();
 const projectId = '42345.23432';
 const skillIds = ['1234.123', '234.234'];
+
+(httpClient.post as jest.Mock).mockImplementation((url, skillObject) => ({ url, data: skillObject.skills }));
 
 describe('skill dispatcher', () => {
   const skillsDataSelector = selectorFamily({
@@ -93,7 +84,7 @@ describe('skill dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     mockDialogComplete.mockClear();
