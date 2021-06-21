@@ -18,7 +18,7 @@ import {
   settingsState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
-import { DiagnosticList } from '../../../src/pages/diagnostics/DiagnosticList';
+import { DiagnosticList } from '../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticList';
 
 const state = {
   projectId: 'test',
@@ -124,7 +124,7 @@ describe('<DiagnosticList/>', () => {
 
   it('should render the DiagnosticList', () => {
     const { container } = renderWithRecoil(
-      <DiagnosticList diagnosticItems={state.diagnostics as any} onItemClick={jest.fn} />,
+      <DiagnosticList diagnosticItems={state.diagnostics as any} />,
       initRecoilState
     );
     expect(container).toHaveTextContent('server');

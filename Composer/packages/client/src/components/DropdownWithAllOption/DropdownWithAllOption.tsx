@@ -11,33 +11,35 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 };
 
 interface DropdownWithAllOptionProps {
-  optionAllText: string;
   placeholder: string;
   selectedKeys: string[];
   setSelectedKeys: (keys: string[]) => void;
   dropdownOptions: IDropdownOption[];
-  optionAllKey: string;
+  optionAll: {
+    key: string;
+    text: string;
+  };
 }
 
 export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (props) => {
-  const { optionAllText, selectedKeys, setSelectedKeys, placeholder, dropdownOptions, optionAllKey } = props;
+  const { selectedKeys, setSelectedKeys, placeholder, dropdownOptions, optionAll } = props;
   const [currentOptions, setCurrentOptions] = useState<IDropdownOption[]>([]);
 
   useEffect(() => {
-    const allOptions = [
-      {
-        key: optionAllKey,
-        text: optionAllText,
-      },
-      ...dropdownOptions,
-    ];
+    const allOptions = [...dropdownOptions];
+    if (allOptions.length > 1) {
+      allOptions.unshift({
+        key: optionAll.key,
+        text: optionAll.text,
+      });
+    }
 
     setCurrentOptions(allOptions);
   }, [dropdownOptions]);
 
   const onOptionSelectionChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
     if (item) {
-      if (item.key === optionAllKey) {
+      if (item.key === optionAll.key) {
         if (!item.selected) {
           setSelectedKeys([]);
         } else {
@@ -48,7 +50,7 @@ export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (prop
       }
 
       const tempState = [...selectedKeys];
-      const allIndex = tempState.findIndex((option) => option === optionAllKey);
+      const allIndex = tempState.findIndex((option) => option === optionAll.key);
       if (allIndex !== -1) {
         tempState.splice(allIndex, 1);
       }
@@ -57,7 +59,7 @@ export const DropdownWithAllOption: React.FC<DropdownWithAllOptionProps> = (prop
   };
 
   const onRenderTitle = (selectedItems: IDropdownOption[] | undefined): JSX.Element | null => {
-    const allIndex = selectedKeys.findIndex((option) => option === optionAllKey);
+    const allIndex = selectedKeys.findIndex((option) => option === optionAll.key);
     if (allIndex !== -1) {
       return <Fragment>{currentOptions[0].text}</Fragment>;
     }

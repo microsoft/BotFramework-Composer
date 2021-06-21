@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
+import { fireEvent } from '@botframework-composer/test-utils';
 import { Range, Position } from '@bfc/shared';
 
 import { renderWithRecoil } from '../../../testUtils';
@@ -19,6 +20,11 @@ import {
   settingsState,
 } from '../../../../src/recoilModel';
 import mockProjectResponse from '../../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
+
+const mockNavigationTo = jest.fn();
+jest.mock('../../../../src/utils/navigation', () => ({
+  navigateTo: (...args) => mockNavigationTo(...args),
+}));
 
 const state = {
   projectId: 'test',
@@ -128,5 +134,19 @@ describe('<DiagnosticList/>', () => {
       initRecoilState
     );
     expect(container).toHaveTextContent('server');
+  });
+
+  fit('should render the Diagnostics', () => {
+    const { container, getByText } = renderWithRecoil(
+      <DiagnosticList diagnosticItems={state.diagnostics as any} />,
+      initRecoilState
+    );
+
+    fireEvent.doubleClick(getByText(/test.en-us.lg/));
+    expect(mockNavigationTo).toBeCalledWith('/bot/testproj/language-generation/test/edit#L=13');
+    fireEvent.doubleClick(getByText(/test.en-us.lu/));
+    expect(mockNavigationTo).nthCalledWith(2, '/bot/testproj/language-understanding/test/edit#L=7');
+    fireEvent.doubleClick(getByText(/test.en-us.qna/));
+    expect(mockNavigationTo).nthCalledWith(3, '/bot/testproj/knowledge-base/test/edit#L=7');
   });
 });

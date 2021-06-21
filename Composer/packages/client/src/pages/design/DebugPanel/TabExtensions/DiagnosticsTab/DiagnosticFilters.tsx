@@ -19,11 +19,16 @@ const severityTextStyle = {
   marginRight: '6px',
 };
 
-const countFontWeight = {
+const countFontWeight: any = {
   fontWeight: FontWeights.bold,
 };
 
-const optionAllKey = 'All';
+const getOptionAll = () => {
+  return {
+    key: 'All',
+    text: formatMessage('All bots'),
+  };
+};
 
 const getSeverityButtonStyle = (severityType: DiagnosticSeverity, isChecked: boolean): any => {
   const baseStyle = {
@@ -144,8 +149,7 @@ export const DiagnosticsFilters: React.FC<DiagnosticsFiltersProps> = (props) => 
       >
         <DropdownWithAllOption
           dropdownOptions={projectSelectorOptions}
-          optionAllKey={optionAllKey}
-          optionAllText={formatMessage('All bots')}
+          optionAll={getOptionAll()}
           placeholder={formatMessage('Select a project')}
           selectedKeys={projectsToFilter}
           setSelectedKeys={setProjectsToFilter}

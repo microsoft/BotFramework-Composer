@@ -47,7 +47,7 @@ export const DiagnosticsStatus = () => {
 
   return (
     <div
-      css={{ height: '100%', display: 'flex', alignItems: 'center', paddingLeft: '8px' }}
+      css={{ height: '100%', display: 'flex', alignItems: 'center' }}
       data-testid="diagnostics-tab-header--collapsed"
     >
       {errorsCount > 0 && (
@@ -56,11 +56,12 @@ export const DiagnosticsStatus = () => {
           styles={{
             root: {
               height: '36px',
-              padding: '0',
-              minWidth: '20px',
               border: 'none',
+              minWidth: '40px',
+              margin: 0,
+              padding: 0,
             },
-            label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
+            label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI' },
           }}
           onClick={() => {
             setErrorDiagnosticsFilter(true);
@@ -69,9 +70,9 @@ export const DiagnosticsStatus = () => {
             setActiveTab(DiagnosticsTabKey);
           }}
         >
-          <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+          <span css={{ marginRight: '10px', display: 'flex', alignItems: 'center', width: '30px' }}>
             <FontIcon
-              css={{ color: SharedColors.red10, fontSize: FontSizes.size18, lineHeight: '18px', marginRight: '5px' }}
+              css={{ color: SharedColors.red10, fontSize: FontSizes.size18, marginRight: '5px' }}
               iconName="StatusErrorFull"
             />
             {errorsCount}
@@ -85,10 +86,12 @@ export const DiagnosticsStatus = () => {
           styles={{
             root: {
               height: '36px',
-              minWidth: '20px',
               border: 'none',
+              margin: 0,
+              minWidth: '40px',
+              padding: 0,
             },
-            label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI', lineHeight: '20px' },
+            label: { fontSize: FontSizes.size18, fontFamily: 'Segoe UI' },
           }}
           onClick={() => {
             setWarningDiagnosticsFilter(true);
@@ -102,7 +105,6 @@ export const DiagnosticsStatus = () => {
               css={{
                 color: `#F4BD00`,
                 fontSize: FontSizes.size18,
-                lineHeight: '18px',
                 marginRight: '5px',
               }}
               iconName="WarningSolid"

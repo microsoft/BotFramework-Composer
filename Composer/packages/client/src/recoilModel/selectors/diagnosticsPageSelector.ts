@@ -5,11 +5,11 @@ import { BotIndexer, validateSchema } from '@bfc/indexers';
 import { selectorFamily, selector } from 'recoil';
 import lodashGet from 'lodash/get';
 import formatMessage from 'format-message';
-import { getFriendlyName, DialogInfo } from '@bfc/shared';
+import { getFriendlyName } from '@bfc/shared';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
-import { botDisplayNameState, dialogIdsState, dialogState } from '../atoms/botState';
+import { botDisplayNameState, dialogIdsState } from '../atoms/botState';
 import {
   DialogDiagnostic,
   LgDiagnostic,

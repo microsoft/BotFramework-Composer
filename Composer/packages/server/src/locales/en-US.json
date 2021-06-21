@@ -251,6 +251,9 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
+  "add_regex_pattern_140335cb": {
+    "message": "Add regex pattern"
+  },
   "add_row_7ebc94fb": {
     "message": "Add row"
   },
@@ -258,7 +261,7 @@
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
+    "message": "> add some expected user responses:\n      > - Please remind me to '{'itemTitle=buy milk'}'\n      > - remind me to '{'itemTitle'}'\n      > - add '{'itemTitle'}' to my todo list\n      >\n      > entity definitions:\n      > @ ml itemTitle\n      "
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
@@ -277,6 +280,9 @@
   },
   "all_4321c3a1": {
     "message": "All"
+  },
+  "all_bots_649ccbd0": {
+    "message": "All bots"
   },
   "allowed_callers_31b26262": {
     "message": "Allowed Callers"
@@ -1178,21 +1184,6 @@
   "diagnostic_links_228dc6fe": {
     "message": "diagnostic links"
   },
-  "diagnostic_list_89b39c2e": {
-    "message": "Diagnostic List"
-  },
-  "diagnostic_message_msg_5387e951": {
-    "message": "Diagnostic Message { msg }"
-  },
-  "diagnostic_type_e1979c21": {
-    "message": "Diagnostic type"
-  },
-  "diagnostics_a11880f6": {
-    "message": "Diagnostics"
-  },
-  "diagnostics_pane_2d77c390": {
-    "message": "Diagnostics Pane"
-  },
   "diagnostics_tab_which_shows_errors_and_warnings_410e8f6": {
     "message": "Diagnostics tab which shows errors and warnings."
   },
@@ -1534,6 +1525,9 @@
   },
   "error_provisioning_25835400": {
     "message": "Error provisioning."
+  },
+  "errors_a0ac8807": {
+    "message": "Errors"
   },
   "errorscount_plural_0_no_errors_1_one_error_other_e_a8c998bb": {
     "message": "{ errorsCount, plural,\n     =0 {No errors}\n     =1 {One error}\n  other {# errors}\n}"
@@ -3257,6 +3251,9 @@
   "select_a_dialog_or_topic_4df93d0f": {
     "message": "Select a dialog or topic"
   },
+  "select_a_project_356cbc95": {
+    "message": "Select a project"
+  },
   "select_a_publish_target_d4530c94": {
     "message": "Select a publish target"
   },
@@ -3419,14 +3416,8 @@
   "short_description_for_6abb9a1b": {
     "message": "short description for"
   },
-  "show_all_diagnostics_c11f4e09": {
-    "message": "Show All Diagnostics"
-  },
   "show_code_f3e9d1cc": {
     "message": "Show code"
-  },
-  "show_item_diagnostics_f6e902c7": {
-    "message": "Show { item } Diagnostics"
   },
   "show_keys_3072a5b8": {
     "message": "Show keys"
@@ -3460,6 +3451,9 @@
   },
   "skill_host_endpoint_url_e68b65f6": {
     "message": "Skill host endpoint url"
+  },
+  "skill_manifest_d7db2e25": {
+    "message": "Skill Manifest"
   },
   "skill_manifest_url_1094fcba": {
     "message": "Skill Manifest URL"
@@ -3509,8 +3503,8 @@
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
   },
-  "specify_a_name_description_and_location_for_your_n_667f1438": {
-    "message": "Specify a name, description, and location for your new bot project."
+  "specify_a_name_runtime_type_and_location_for_your__594518ca": {
+    "message": "Specify a name, runtime type, and location for your new bot project."
   },
   "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
     "message": "Specify an attachment layout when there are more than one."
@@ -3677,6 +3671,9 @@
   "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
     "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
   },
+  "the_bot_is_already_part_of_the_bot_project_ab3250b1": {
+    "message": "The bot is already part of the Bot Project"
+  },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
   },
@@ -3794,9 +3791,6 @@
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
-  "this_is_a_severity_diagnostic_58312674": {
-    "message": "This is a { severity } diagnostic"
-  },
   "this_is_the_bot_language_you_are_currently_authori_4a26541": {
     "message": "This is the bot language you are currently authoring. Change the active language in the dropdown below."
   },
@@ -3817,6 +3811,9 @@
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
+  },
+  "this_path_does_not_exist_42c11e1": {
+    "message": "This path does not exist"
   },
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
     "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
@@ -3866,8 +3863,8 @@
   "to_create_a_bot_from_your_own_bot_framework_templa_2c5b1f2d": {
     "message": "To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>"
   },
-  "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+  "to_ensure_a_secure_connection_provide_the_app_id_o_61ccd30d": {
+    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration."
   },
   "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
     "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
@@ -3943,6 +3940,9 @@
   },
   "total_plural_1_starting_bot_other_starting_bots_ru_3d173401": {
     "message": "{ total, plural,\n     =1 {Starting bot..}\n  other {Starting bots.. ({ running }/{ total } running)}\n}"
+  },
+  "total_plural_1_starting_your_bot_other_starting_yo_6087bb1e": {
+    "message": "{ total, plural,\n     =1 {Starting your bot...}\n  other {Starting your bots...}\n}"
   },
   "total_plural_1_stopping_bot_other_stopping_bots_ru_f6afe9bd": {
     "message": "{ total, plural,\n     =1 {Stopping bot..}\n  other {Stopping bots.. ({ running }/{ total } running)}\n}"
@@ -4187,6 +4187,9 @@
   "warning_aacb8c24": {
     "message": "Warning"
   },
+  "warnings_d6acbbdb": {
+    "message": "Warnings"
+  },
   "warningscount_plural_0_no_warnings_1_one_warning_o_347cc928": {
     "message": "{ warningsCount, plural,\n     =0 {No warnings}\n     =1 {One warning}\n  other {# warnings}\n}"
   },
@@ -4334,8 +4337,8 @@
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
   },
-  "your_bot_project_is_not_running_actionbutton_start_9dfc86d5": {
-    "message": "Your bot project is not running. <actionButton>Start your bot</actionButton>"
+  "your_bot_project_is_not_running_actionbutton_total_bc1c8e8c": {
+    "message": "Your bot project is not running. <actionButton>{ total, plural,\n     =1 {Start bot}\n  other {Start all bots}\n}</actionButton>"
   },
   "your_bot_project_is_running_actionbutton_test_in_w_22d5f2de": {
     "message": "Your bot project is running. <actionButton>Test in Web Chat</actionButton>"

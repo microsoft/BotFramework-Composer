@@ -174,6 +174,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       isResizable: true,
       data: 'string',
       onRender: (item: IDiagnosticInfo) => {
+        console.log('Location', item.location);
         let locationPath = item.location;
         if (item.friendlyLocationBreadcrumb) {
           locationPath = item.friendlyLocationBreadcrumb.join(' > ');
@@ -242,7 +243,7 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
 
   const displayedDiagnosticItems = useMemo(() => {
     const sortFactor = columns[1].isSortedDescending ? 1 : -1;
-    return diagnosticItems.sort((a, b) => {
+    const result = diagnosticItems.sort((a, b) => {
       // Error before Warning
       const severityComparator = a.severity.localeCompare(b.severity);
       if (severityComparator === 0) {
@@ -251,6 +252,8 @@ export const DiagnosticList: React.FC<IDiagnosticListProps> = ({ diagnosticItems
       }
       return severityComparator;
     });
+    console.log('Result', diagnosticItems);
+    return result;
   }, [diagnosticItems, columns]);
 
   return (

@@ -100,15 +100,18 @@ const BotController: React.FC<BotControllerProps> = ({ onHideController, isContr
   }, [projectCollection, errors]);
 
   useEffect(() => {
+    console.log('Prokjject', projectCollection);
     const botsProcessing =
       startAllBotsOperationQueued ||
       projectCollection.some(({ status }) => isBotStarting(status) || status == BotStatus.stopping);
     setBotsProcessing(botsProcessing);
+    console.log('Botproce', botsProcessing);
 
     const botOperationsCompleted = projectCollection.some(
       ({ status }) => status === BotStatus.connected || status === BotStatus.failed
     );
     setBotsStartOperationCompleted(botOperationsCompleted);
+    console.log('Botprasdasd oce', projectCollection);
 
     if (botsProcessing) {
       setStatusIconClass(undefined);
