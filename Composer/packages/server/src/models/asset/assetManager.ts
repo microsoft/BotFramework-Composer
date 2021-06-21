@@ -100,7 +100,8 @@ export class AssetManager {
     runtimeType: RuntimeType,
     runtimeLanguage: FeedName,
     yeomanOptions?: any,
-    user?: UserIdentity
+    user?: UserIdentity,
+    isLocalGenerator?: boolean
   ): Promise<LocationRef> {
     try {
       // user storage maybe diff from template storage
@@ -127,6 +128,7 @@ export class AssetManager {
           runtimeType,
           runtimeLanguage,
           yeomanOptions,
+          isLocalGenerator,
         },
         (status, msg) => {
           BackgroundProcessManager.updateProcess(jobId, status, msg);

@@ -27,7 +27,7 @@ import { ListEntity, ListEntityItem } from '../types';
 
 import { useListEntityValidation } from './useListEntityValidation';
 
-const listEntityDocUrl = '';
+const listEntityDocUrl = 'https://aka.ms/lu-file-format#list-entity';
 
 const defaultRowsToShow = 6;
 const minRowHeight = 60;
@@ -254,7 +254,7 @@ export const ListEntityCreationDialog = (props: Props) => {
           'A list entity represents a fixed, closed set of related words along with their synonyms. The normalized value is the value returned when any of the corresponding synonyms are recognized. <link>Learn more about list entities</link>',
           {
             link: ({ children }) => (
-              <Link key="list-entity-doc-link" href={listEntityDocUrl} target="_blank">
+              <Link key="list-entity-doc-link" as="a" href={listEntityDocUrl} target="_blank">
                 {children}
               </Link>
             ),

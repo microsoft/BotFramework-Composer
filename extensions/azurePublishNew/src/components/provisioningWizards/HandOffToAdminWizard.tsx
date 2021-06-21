@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { WizardStep, Wizard } from '../shared/wizard';
 
 import { HandOffInstructionsStep } from './steps/HandOffInstructionsStep';
+import { WizardFooter } from './footers/WizardFooter';
 
 type Props = {
   onStepChange?: (stepIndex: number, stepId: string) => void;
@@ -17,7 +18,7 @@ type Props = {
 export const HandOffToAdminWizard = React.memo((props: Props) => {
   const { onStepChange } = props;
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
-  const { setTitle, onBack } = usePublishApi();
+  const { setTitle, onBack, closeDialog: onCancel } = usePublishApi();
 
   const setDialogTitle = (step: WizardStep) => {
     step && setTitle({ title: step.title, subText: step.subTitle });
@@ -32,14 +33,16 @@ export const HandOffToAdminWizard = React.memo((props: Props) => {
         subTitle: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
         onRenderContent: () => <HandOffInstructionsStep />,
         onBack,
+        onCancel,
       },
     ]);
   }, []);
 
   return (
     <Wizard
-      firstStepId={'handoff-instructions'}
+      firstStepId="handoff-instructions"
       steps={steps}
+      onRenderFooter={(navState) => <WizardFooter {...navState} />}
       onRenderHeader={(step) => setDialogTitle(step)}
       onStepChange={(index, step) => onStepChange(index, step.id)}
     />

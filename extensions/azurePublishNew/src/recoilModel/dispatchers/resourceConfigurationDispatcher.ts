@@ -3,52 +3,41 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { resourceConfigurationState } from '../atoms/resourceConfigurationState';
+import {
+  tenantState,
+  subscriptionState,
+  resourceGroupState,
+  deployLocationState,
+  luisRegionState,
+  hostNameState,
+} from '../atoms/resourceConfigurationState';
+import { LuisRegion } from '../../types';
 
 export const resourceConfigurationDispatcher = () => {
   const setTenantId = useRecoilCallback(({ set }: CallbackInterface) => (tenantId: string) => {
-    set(resourceConfigurationState, (currentResourceConfig) => {
-      return {
-        ...currentResourceConfig,
-        tenantId,
-      };
-    });
+    set(tenantState, tenantId);
   });
 
   const setSubscriptionId = useRecoilCallback(({ set }: CallbackInterface) => (subscriptionId: string) => {
-    set(resourceConfigurationState, (currentResourceConfig) => {
-      return {
-        ...currentResourceConfig,
-        subscriptionId,
-      };
-    });
+    set(subscriptionState, subscriptionId);
   });
 
-  const setResourceGroupName = useRecoilCallback(({ set }: CallbackInterface) => (resourceGroupName: string) => {
-    set(resourceConfigurationState, (currentResourceConfig) => {
-      return {
-        ...currentResourceConfig,
-        resourceGroupName,
-      };
-    });
-  });
+  const setResourceGroupName = useRecoilCallback(
+    ({ set }: CallbackInterface) => (resourceGroupName: string, isNew: boolean) => {
+      set(resourceGroupState, { name: resourceGroupName, isNew });
+    }
+  );
 
   const setDeployLocation = useRecoilCallback(({ set }: CallbackInterface) => (deployLocation: string) => {
-    set(resourceConfigurationState, (currentResourceConfig) => {
-      return {
-        ...currentResourceConfig,
-        deployLocation,
-      };
-    });
+    set(deployLocationState, deployLocation);
   });
 
-  const setLuisRegion = useRecoilCallback(({ set }: CallbackInterface) => (luisRegion: string) => {
-    set(resourceConfigurationState, (currentResourceConfig) => {
-      return {
-        ...currentResourceConfig,
-        luisRegion,
-      };
-    });
+  const setLuisRegion = useRecoilCallback(({ set }: CallbackInterface) => (luisRegion: LuisRegion) => {
+    set(luisRegionState, luisRegion);
+  });
+
+  const setHostName = useRecoilCallback(({ set }: CallbackInterface) => (hostName: string) => {
+    set(hostNameState, hostName);
   });
 
   return {
@@ -57,5 +46,6 @@ export const resourceConfigurationDispatcher = () => {
     setResourceGroupName,
     setDeployLocation,
     setLuisRegion,
+    setHostName,
   };
 };

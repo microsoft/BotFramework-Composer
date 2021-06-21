@@ -7,6 +7,7 @@ import { RecoilRoot } from 'recoil';
 import { usePublishApi } from '@bfc/extension-client';
 
 import { ProvisionAction } from '../types';
+import { usePublishProfileInitializer } from '../hooks/usePublishProfileInitializer';
 
 import { ChooseProvisionAction } from './ChooseProvisionAction';
 import { CreateResourcesWizard } from './provisioningWizards/CreateResourcesWizard';
@@ -25,6 +26,7 @@ export const AzureProvisionWizard = () => {
   const [provisionAction, setProvisionAction] = useState<ProvisionAction>('create');
   const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
   const { setTitle } = usePublishApi();
+  const initialize = usePublishProfileInitializer();
 
   const handleStepChange = (index, step) => {
     setActiveStepIndex(index);
@@ -43,7 +45,7 @@ export const AzureProvisionWizard = () => {
   }, [provisionAction]);
 
   return (
-    <RecoilRoot>
+    <RecoilRoot initializeState={initialize}>
       <Root>
         {!activeStepIndex && (
           <ChooseProvisionAction

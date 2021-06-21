@@ -9,13 +9,7 @@
     "build": "node ../scripts/build.js",
     "watch": "yarn build --watch"
   },
-  "dependencies": {
-    "@botframework-composer/types": "file:../../Composer/packages/types",
-    "path": "^0.12.7",
-    "portfinder": "^1.0.26",
-    "rimraf": "^3.0.2",
-    "uuid": "^7.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^14.11.8",
     "ts-loader": "^8.0.9",

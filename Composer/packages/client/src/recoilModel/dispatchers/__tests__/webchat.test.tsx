@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 
 import { Dispatcher } from '..';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -29,7 +29,7 @@ describe('web chat dispatcher', () => {
     };
   };
 
-  let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
+  let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
   beforeEach(() => {
     const { result } = renderRecoilHook(useRecoilTestHook, {

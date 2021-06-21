@@ -20,13 +20,16 @@ import {
   Link,
 } from 'office-ui-fabric-react';
 
-import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
 import { useDispatcher } from '../../../hooks/useDispatcher';
 import { TenantPicker } from '../../resourceConfiguration/TenantPicker';
 import { SubscriptionPicker } from '../../resourceConfiguration/SubscriptionPicker';
 import { ResourceGroupPicker } from '../../resourceConfiguration/ResourceGroupPicker';
 import { DeployLocationPicker } from '../../resourceConfiguration/DeployLocationPicker';
 import { useResourceConfiguration } from '../../../hooks/useResourceConfiguration';
+import { ResourceNameTextField } from '../../resourceConfiguration/ResourceNameTextField';
+import { LuisRegionPicker } from '../../resourceConfiguration/LuisRegionPicker';
+import { LuisAuthoringSupportLocation } from '../../../constants';
+import { userInfoState } from '../../../recoilModel/atoms/resourceConfigurationState';
 
 type Props = {
   onResourceConfigurationChange: (isValidConfiguration: boolean) => void;
@@ -80,15 +83,20 @@ const urls = {
 
 export const ResourceConfigurationStep = (props: Props) => {
   const { setUserInfo } = useDispatcher();
+
   const userInfo = useRecoilValue(userInfoState);
 
   const {
-    configuration: { tenantId, deployLocation, resourceGroupName, subscriptionId },
+    configuration: { tenantId, deployLocation, resourceGroupName, subscriptionId, luisRegion, isNewResourceGroup },
     handleResourceGroupChange,
     handleDeployLocationChange,
     handleSubscriptionChange,
     handleTenantChange,
+    handleDeployLocationFetch,
+    handleLuisRegionChange,
+    handleHostNameChange,
     isValidConfiguration,
+    deployLocations,
   } = useResourceConfiguration();
 
   const { onResourceConfigurationChange } = props;
@@ -170,15 +178,16 @@ export const ResourceConfigurationStep = (props: Props) => {
             </Stack>
             <ResourceGroupPicker
               accessToken={userInfo?.token}
+              isNewResourceGroup={isNewResourceGroup}
               subscriptionId={subscriptionId}
               textFieldProps={{
                 styles: autoCompleteTextFieldStyles,
                 onChange: (_, newValue) => {
-                  if (newValue.length === 0) handleResourceGroupChange('');
+                  if (newValue.length === 0) handleResourceGroupChange('', false, false);
                 },
               }}
               value={resourceGroupName}
-              onClear={() => handleResourceGroupChange('')}
+              onClear={() => handleResourceGroupChange('', false, false)}
               onResourceGroupChange={handleResourceGroupChange}
             />
           </Stack>
@@ -191,6 +200,11 @@ export const ResourceConfigurationStep = (props: Props) => {
               <ConfigureResourcesPropertyLabel required>{formatMessage('Name')}</ConfigureResourcesPropertyLabel>
               {renderPropertyInfoIcon(formatMessage('A unique name for your resources.'))}
             </Stack>
+            <ResourceNameTextField
+              accessToken={userInfo?.token}
+              styles={autoCompleteTextFieldStyles}
+              onHostNameChange={handleHostNameChange}
+            />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
             <Stack horizontal styles={configureResourcePropertyLabelStackStyles} verticalAlign="center">
@@ -209,6 +223,7 @@ export const ResourceConfigurationStep = (props: Props) => {
               value={deployLocation}
               onClear={() => handleDeployLocationChange('')}
               onDeployLocationChange={handleDeployLocationChange}
+              onDeployLocationsFetch={handleDeployLocationFetch}
             />
           </Stack>
           <Stack horizontal tokens={configureResourcePropertyStackTokens} verticalAlign="start">
@@ -223,6 +238,20 @@ export const ResourceConfigurationStep = (props: Props) => {
                 {formatMessage('Learn more')}
               </LearnMoreLink>
             </Stack>
+            <LuisRegionPicker
+              items={deployLocations
+                .filter((dl) => LuisAuthoringSupportLocation.includes(dl.name))
+                .map((i) => ({ key: i.name, text: i.displayName }))}
+              textFieldProps={{
+                styles: autoCompleteTextFieldStyles,
+                onChange: (_, newValue) => {
+                  if (newValue.length === 0) handleLuisRegionChange(undefined);
+                },
+              }}
+              value={luisRegion}
+              onClear={() => handleLuisRegionChange(undefined)}
+              onLuisRegionChange={handleLuisRegionChange}
+            />
           </Stack>
         </Stack>
       </FullWidthForm>

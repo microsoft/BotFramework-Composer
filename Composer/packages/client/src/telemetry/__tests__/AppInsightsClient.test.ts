@@ -6,8 +6,6 @@ import { TelemetryEventTypes } from '@bfc/shared';
 import httpClient from '../../utils/httpUtil';
 import AppInsightsClient from '../AppInsightsClient';
 
-jest.mock('../../utils/httpUtil');
-
 describe('Application Insights Logger', () => {
   beforeEach(() => {
     jest.clearAllMocks();

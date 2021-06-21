@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selectorFamily, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { act, RenderHookResult, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 import noop from 'lodash/noop';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -62,7 +62,7 @@ const useRecoilTestHook = () => {
   };
 };
 
-let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>;
+let renderedComponent: RenderResult<ReturnType<typeof useRecoilTestHook>>;
 
 beforeEach(() => {
   const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(
