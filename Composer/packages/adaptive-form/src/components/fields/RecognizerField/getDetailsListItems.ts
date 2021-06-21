@@ -5,7 +5,7 @@ import { RecognizerSchema, FallbackRecognizerKey, ShellApi, ShellData } from '@b
 import { checkForPVASchema } from '@bfc/shared';
 
 import { recognizerOrderMap } from './defaultRecognizerOrder';
-import { mapRecognizerSchemaToDropdownOption } from './mappers';
+import { mapRecognizerSchemaToListItems } from './mappers';
 
 const getRankScore = (r: RecognizerSchema, shellData: ShellData, shellApi: ShellApi) => {
   // Always put disabled recognizer behind. Handle 'disabled' before 'default'.
@@ -17,7 +17,7 @@ const getRankScore = (r: RecognizerSchema, shellData: ShellData, shellApi: Shell
   return recognizerOrderMap[r.id] ?? Number.MAX_VALUE - 1;
 };
 
-export const getDropdownOptions = (configs: RecognizerSchema[], shellData: ShellData, shellApi: ShellApi) => {
+export const getDetailsListItems = (configs: RecognizerSchema[], shellData: ShellData, shellApi: ShellApi) => {
   const isPVASchema = checkForPVASchema(shellData.schemas?.sdk);
   let recognizerConfigs: RecognizerSchema[] = configs;
   if (isPVASchema) {
@@ -31,5 +31,5 @@ export const getDropdownOptions = (configs: RecognizerSchema[], shellData: Shell
     .sort((r1, r2) => {
       return getRankScore(r1, shellData, shellApi) - getRankScore(r2, shellData, shellApi);
     })
-    .map(mapRecognizerSchemaToDropdownOption);
+    .map(mapRecognizerSchemaToListItems);
 };
