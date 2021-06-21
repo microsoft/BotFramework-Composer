@@ -19,14 +19,12 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-
 import { SubscriptionClient } from '@azure/arm-subscriptions';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { CognitiveServicesCredentials } from '@azure/ms-rest-azure-js';
 import { QnAMakerClient } from '@azure/cognitiveservices-qnamaker';
-
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { AzureTenant } from '@botframework-composer/types';
@@ -43,6 +41,7 @@ import { subText, styles, contentBox, formContainer, choiceContainer } from './s
 import { CreateQnAFromUrl } from './CreateQnAFromUrl';
 import { CreateQnAFromScratch } from './CreateQnAFromScratch';
 import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
+import { QnALanguageToLocale } from './utilities';
 
 // const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 // const KB = require('@microsoft/bf-lu/lib/parser/qna/qnamaker/kb.js');
@@ -56,9 +55,9 @@ type KeyRec = {
 };
 
 type KBRec = {
-  name: string;
-  language: string;
   id: string;
+  name: string;
+  locale: string;
   lastChangedTimestamp: string;
 };
 
@@ -66,7 +65,7 @@ type Step = 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
 const dropdownStyles = { dropdown: { width: '100%', marginBottom: 10 } };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 400, width: 960 };
+const dialogBodyStyles = { height: 400 };
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
@@ -295,20 +294,20 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
 
       const result = await resourceClient.knowledgebase.listAll();
+
       console.log(result);
       if (result.knowledgebases) {
         const kblist: KBRec[] = result.knowledgebases.map((item: any) => {
           return {
             id: item.id || '',
             name: item.name || '',
-            language: item.language || '',
+            locale: QnALanguageToLocale(item.language) || '',
             lastChangedTimestamp: item.lastChangedTimestamp || '',
           };
         });
-        if (kblist && kblist.length) {
+        if (kblist?.length) {
           setKbs(kblist);
         }
-        console.log(kbs);
       }
     }
   };
@@ -395,7 +394,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           </div>
         </div>
         <DialogFooter>
-          <PrimaryButton disabled={!!loading} text={formatMessage('Next')} onClick={performNextAction} />
+          <PrimaryButton disabled={!!loading || disabled} text={formatMessage('Next')} onClick={performNextAction} />
           <DefaultButton
             disabled={!!loading || showAuthDialog}
             text={formatMessage('Cancel')}
@@ -523,7 +522,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       {
         key: 'column4',
         name: 'Locale',
-        fieldName: 'language',
+        fieldName: 'locale',
         minWidth: 100,
         maxWidth: 200,
         isResizable: true,
@@ -535,22 +534,22 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
     return (
       <div>
-        <div css={dialogBodyStyles}>
+        <div css={{ ...dialogBodyStyles, width: 800 }}>
           <p css={{ marginTop: 0 }}>{formatMessage('Select one or more KB to import into your bot project')}</p>
           <div css={mainElementStyle}>
             <DetailsList
-              items={kbs}
+              enterModalSelectionOnTouch
+              isHeaderVisible
+              selectionPreservedOnEmptyClick
+              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+              ariaLabelForSelectionColumn="Toggle selection"
+              checkButtonAriaLabel="select row"
               columns={columns}
               getKey={(item) => item.name}
+              items={kbs}
+              layoutMode={DetailsListLayoutMode.justified}
               selection={selectedKB}
               selectionMode={SelectionMode.single}
-              layoutMode={DetailsListLayoutMode.justified}
-              isHeaderVisible={true}
-              selectionPreservedOnEmptyClick={true}
-              enterModalSelectionOnTouch={true}
-              ariaLabelForSelectionColumn="Toggle selection"
-              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-              checkButtonAriaLabel="select row"
             />
           </div>
         </div>
@@ -558,7 +557,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('resource')} />
           <PrimaryButton
-            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId}
+            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId || !selectedKb}
             text={formatMessage('Next')}
             onClick={onSubmitImportKB}
           />
@@ -576,6 +575,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         if (nextAction === 'portal') {
           return renderChooseResourceStep();
         }
+        break;
       }
       case 'knowledge-base':
         return renderKnowledgeBaseSelectionStep();
@@ -624,12 +624,10 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const onSubmitImportKB = async () => {
     console.log(selectedKb, formData);
-    if (key && token && selectedKb) {
-      const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
-      const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
-
-      const result = await resourceClient.knowledgebase.download(selectedKb.id, 'Prod');
-      console.log(result);
+    if (key && token && selectedKb && formData) {
+      onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id });
+      setInitialName('');
+      TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
     }
   };
 

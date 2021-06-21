@@ -60,6 +60,7 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     removeSkillFromBotProject,
     createQnAKBsFromUrls,
     createQnAKBFromScratch,
+    createQnAKBFromQnAMaker,
     createTrigger,
     createTriggerForRemoteSkill,
     createQnATrigger,
@@ -97,9 +98,18 @@ const Modals: React.FC<ModalsProps> = ({ projectId = '' }) => {
     if (!projectId || !dialogId) return;
     await createQnATrigger(projectId, dialogId);
 
-    const { name, urls = [], locales, multiTurn } = data;
+    const { name, urls = [], locales, multiTurn, endpoint, kbId, locale } = data;
     if (urls.length !== 0) {
       await createQnAKBsFromUrls({ id: dialogId, name, projectId, locales, urls, multiTurn });
+    } else if (kbId && endpoint && locale) {
+      await createQnAKBFromQnAMaker({
+        id: dialogId,
+        name,
+        projectId,
+        locale,
+        endpoint,
+        kbId,
+      });
     } else {
       await createQnAKBFromScratch({ id: dialogId, name, projectId });
     }

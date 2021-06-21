@@ -102,6 +102,7 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', '
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+router.get('/utilities/qna/import', UtilitiesController.importQnAContent);
 router.get('/utilities/retrieveRemoteFile', UtilitiesController.getRemoteFile);
 router.get('/utilities/checkNode', UtilitiesController.checkNodeVersion);
 

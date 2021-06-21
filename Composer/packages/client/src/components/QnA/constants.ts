@@ -33,6 +33,9 @@ export type CreateQnAFormData = {
   locales?: string[];
   name: string;
   multiTurn?: boolean;
+  endpoint?: string;
+  kbId?: string;
+  locale?: string;
 };
 
 export type CreateQnAModalProps = {

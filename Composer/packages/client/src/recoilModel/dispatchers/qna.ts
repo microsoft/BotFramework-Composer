@@ -590,6 +590,72 @@ ${response.data}
     }
   );
 
+  const createQnAKBFromQnAMaker = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      name,
+      endpoint,
+      locale,
+      kbId,
+      projectId,
+    }: {
+      id: string; // dialogId.locale
+      name: string;
+      endpoint: string;
+      locale: string;
+      kbId: string;
+      projectId: string;
+    }) => {
+      const { snapshot } = callbackHelpers;
+      await dismissCreateQnAModal({ projectId });
+      const notification = createNotification(getQnaPendingNotification(endpoint));
+      addNotificationInternal(callbackHelpers, notification);
+
+      let response;
+      try {
+        response = await httpClient.get(`/utilities/qna/import`, {
+          params: { endpoint: encodeURIComponent(endpoint), kbId },
+        });
+        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const notification = createNotification(
+          getQnaSuccessNotification(() => {
+            navigateTo(
+              rootBotProjectId === projectId
+                ? `/bot/${projectId}/knowledge-base/${getBaseName(id)}`
+                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${getBaseName(id)}`
+            );
+            deleteNotificationInternal(callbackHelpers, notification.id);
+          })
+        );
+        addNotificationInternal(callbackHelpers, notification);
+      } catch (err) {
+        addNotificationInternal(
+          callbackHelpers,
+          createNotification(getQnaFailedNotification(err.response?.data?.message))
+        );
+        createQnADialogCancel({ projectId });
+        return;
+      } finally {
+        deleteNotificationInternal(callbackHelpers, notification.id);
+      }
+
+      const contentForSourceQnA = `> !# @source.endpoint=${endpoint}
+> !# @source.kbId=${kbId}
+${response.data}
+`;
+
+      await createKBFileByLocaleState(callbackHelpers, {
+        id,
+        name,
+        content: contentForSourceQnA,
+        locale,
+        projectId,
+      });
+
+      await createQnADialogSuccess({ projectId });
+    }
+  );
+
   const createKBFileOnLocalesState = async (
     callbackHelpers: CallbackInterface,
     {
@@ -903,6 +969,7 @@ ${response.data}
     createQnAKBFromUrl,
     createQnAKBsFromUrls,
     createQnAKBFromScratch,
+    createQnAKBFromQnAMaker,
     createQnADialogBegin,
     createQnADialogCancel,
     importQnAFromUrl,
