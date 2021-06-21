@@ -3,6 +3,7 @@
 
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { formatMessage } from 'format-message';
 
 import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState, machineInfoState } from '../../recoilModel/atoms/appState';
@@ -10,7 +11,7 @@ import { MachineInfo } from '../../recoilModel/types';
 import { SURVEY_URL_BASE } from '../../constants';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
-function buildUrl(info: MachineInfo) {
+const buildUrl = (info: MachineInfo) => {
   // User OS
   // hashed machineId
   // composer version
@@ -20,8 +21,8 @@ function buildUrl(info: MachineInfo) {
 
   const parameters = {
     Source: 'Composer',
-    os: info.os || 'Unknown',
-    machineId: info.id,
+    os: info?.os || 'Unknown',
+    machineId: info?.id,
     version,
   };
 
@@ -31,7 +32,7 @@ function buildUrl(info: MachineInfo) {
       .map((key) => `${key}=${parameters[key]}`)
       .join('&')
   );
-}
+};
 
 export function useSurveyNotification() {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
@@ -49,12 +50,12 @@ export function useSurveyNotification() {
       addNotification({
         id: 'survey',
         type: 'question',
-        title: 'Would you mind taking a quick survey?',
-        description: `We read every response and will use your feedback to improve Composer.`,
+        title: formatMessage('Would you mind taking a quick survey?'),
+        description: formatMessage('We read every response and will use your feedback to improve Composer.'),
         stretchLinks: true,
-        links: [
+        leftLinks: [
           {
-            label: 'Take survey',
+            label: formatMessage('Take survey'),
             onClick: () => {
               // This is safe; we control what the URL that gets built is
               // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -66,15 +67,16 @@ export function useSurveyNotification() {
 
           {
             // this is functionally identical to clicking the close box
-            label: 'Remind me later',
+            label: formatMessage('Remind me later'),
             onClick: () => {
               TelemetryClient.track('HATSSurveyDismissed');
               deleteNotification('survey');
             },
           },
-          null,
+        ],
+        rightLinks: [
           {
-            label: 'No thanks',
+            label: formatMessage('No thanks'),
             onClick: () => {
               TelemetryClient.track('HATSSurveyRejected');
               deleteNotification('survey');

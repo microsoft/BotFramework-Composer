@@ -10,7 +10,7 @@ import { Split, SplitMeasuredSizes } from '@geoffcox/react-splitter';
 import { dispatcherState } from '../../recoilModel';
 import { renderThinSplitter } from '../../components/Split/ThinSplitter';
 import { Conversation } from '../../components/Conversation';
-import { useSurveyNotification } from '../../components/Notifications/SurveyNotification';
+import { useSurveyNotification } from '../../components/Notifications/useSurveyNotification';
 
 import SideBar from './SideBar';
 import CommandBar from './CommandBar';

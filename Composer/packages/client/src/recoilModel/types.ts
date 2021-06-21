@@ -130,7 +130,7 @@ export type WebChatInspectionData = {
 
 export type RuntimeOutputData = { standardOutput: string; standardError: BotStartError | null };
 
-export type MachineInfo = {
+export type MachineInfo = null | {
   id: string;
   os: string;
 };

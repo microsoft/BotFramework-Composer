@@ -120,7 +120,7 @@ const linkButton = {
   },
   label: {
     fontSize: '12px',
-    color: '#0078d4',
+    color: SharedColors.cyanBlue10,
     margin: '0',
   },
   textContainer: {
@@ -162,14 +162,16 @@ const makeLinkLabel = (link: NotificationLink) => (
 );
 
 const defaultCardContentRenderer = (props: CardProps) => {
-  const { title, description, type, link, links, stretchLinks } = props;
+  const { title, description, type, link, links, leftLinks, rightLinks } = props;
 
-  const linkList = links ?? [link ?? null];
+  const rightLinkList = rightLinks ?? links ?? [link];
+  const leftLinkList = leftLinks ?? [];
 
   const stackProps: IStackProps = {
-    horizontalAlign: stretchLinks ? 'space-between' : 'end',
+    horizontal: true,
+    horizontalAlign: 'space-between',
     tokens: {
-      childrenGap: stretchLinks ? undefined : '20px',
+      childrenGap: '20px',
       padding: '0 16px 0 0',
       maxHeight: '24px',
     },
@@ -194,14 +196,17 @@ const defaultCardContentRenderer = (props: CardProps) => {
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         {description && <div css={cardDescription}>{description}</div>}
-        <Stack horizontal {...stackProps}>
-          {linkList.map((link) =>
-            link != null ? (
-              <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
-            ) : (
-              <span key="blank" style={{ width: '25px' }} />
-            )
-          )}
+        <Stack horizontal>
+          <Stack {...stackProps}>
+            {leftLinkList.map(
+              (link) => link != null && <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
+            )}
+          </Stack>
+          <Stack {...stackProps}>
+            {rightLinkList.map(
+              (link) => link != null && <Stack.Item key={link.label}>{makeLinkLabel(link)}</Stack.Item>
+            )}
+          </Stack>
         </Stack>
         {type === 'pending' && (
           <Shimmer shimmerElements={[{ type: ShimmerElementType.line, height: 2 }]} styles={getShimmerStyles} />
