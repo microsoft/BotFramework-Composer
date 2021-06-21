@@ -823,8 +823,6 @@ export class AzureResourceMananger {
           cors: {
             allowedOrigins: ['https://botservice.hosting.portal.azure.net', 'https://hosting.onecloud.azure-test.net/'],
           },
-          // linuxFxVersion: operatingSystem === 'linux' ? '' : null,
-          // windowsFxVersion: operatingSystem === 'windows' ? '' : null,
         },
       });
 
