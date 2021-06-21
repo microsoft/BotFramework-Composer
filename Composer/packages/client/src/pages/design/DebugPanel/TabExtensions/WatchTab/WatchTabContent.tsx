@@ -125,25 +125,15 @@ const watchTableColumns: IColumn[] = [
 
 const watchTableLayout: DetailsListLayoutMode = DetailsListLayoutMode.justified;
 
-// this can be exported and used in other places
+// Returns the specified property from the bot state trace if it exists.
+// Ex. getValueFromBotTraceScope('user.address.city', trace)
 const getValueFromBotTraceScope = (delimitedProperty: string, botTrace: Activity) => {
   const propertySegments = delimitedProperty.split('.');
-  const value = propertySegments.reduce(
-    (accumulator: object | string | number | boolean | undefined, segment, index) => {
-      // first try to grab the specified property off the root of the bot trace's memory
-      if (index === 0) {
-        return botTrace?.value[segment];
-      }
-      // if we are not on the root, try accessing the next value of the desired property
-      if (typeof accumulator === 'object') {
-        return accumulator[segment];
-      } else {
-        return undefined;
-      }
-    },
-    undefined
-  );
-  return value;
+  let returnValue = botTrace?.value;
+  for (const property of propertySegments) {
+    returnValue = returnValue?.[property];
+  }
+  return returnValue;
 };
 
 export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }) => {
