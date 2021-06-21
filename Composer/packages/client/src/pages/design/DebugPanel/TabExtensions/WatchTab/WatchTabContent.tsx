@@ -134,6 +134,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
   const currentProjectId = useRecoilValue(rootBotProjectIdSelector);
   const rawWebChatTraffic = useRecoilValue(webChatTrafficState(currentProjectId ?? ''));
   const [watchedVars, setWatchedVars] = useState<Record<string, string>>({});
+  const [pickerErrorMessages, setPickerErrorMessages] = useState<Record<string, string>>({});
   const [selectedVars, setSelectedVars] = useState<IObjectWithKey[]>();
   const [memoryVariablesPayload, setMemoryVariablesPayload] = useState<WatchDataPayload>({
     kind: 'property',
@@ -177,13 +178,24 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
 
   const onSelectPath = useCallback(
     (variableId: string, path: string) => {
-      // TODO: if the variable path is already being watched, no-op
-      setWatchedVars({
-        ...watchedVars,
-        [variableId]: path,
-      });
+      const watchedVar = Object.values(watchedVars).find((varPath) => varPath === path);
+      if (watchedVar) {
+        // the variable is already being watched, so display a validation error under the picker
+        setPickerErrorMessages({
+          ...pickerErrorMessages,
+          [variableId]: formatMessage('You are already watching this property.'),
+        });
+      } else {
+        setWatchedVars({
+          ...watchedVars,
+          [variableId]: path,
+        });
+        // clear any error messages for the variable
+        delete pickerErrorMessages[variableId];
+        setPickerErrorMessages({ ...pickerErrorMessages });
+      }
     },
-    [watchedVars]
+    [pickerErrorMessages, watchedVars]
   );
 
   // we need to refresh the details list every time a new bot state comes in
@@ -194,7 +206,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
         value,
       };
     });
-  }, [mostRecentBotState, watchedVars]);
+  }, [mostRecentBotState, pickerErrorMessages, watchedVars]);
 
   const renderRow = useCallback((props?: IDetailsRowProps) => {
     if (props) {
@@ -211,6 +223,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
           return (
             <WatchVariablePicker
               key={item.key}
+              errorMessage={pickerErrorMessages[item.key]}
               path={item.value}
               payload={memoryVariablesPayload}
               variableId={item.key}
@@ -240,7 +253,7 @@ export const WatchTabContent: React.FC<DebugPanelTabHeaderProps> = ({ isActive }
       }
       return null;
     },
-    [mostRecentBotState, memoryVariablesPayload, watchedVars]
+    [pickerErrorMessages, mostRecentBotState, memoryVariablesPayload, watchedVars]
   );
 
   const onClickAdd = useCallback(() => {

@@ -8,6 +8,7 @@ import React, { useMemo, useCallback, useEffect, useRef, FocusEvent, KeyboardEve
 import { TextField, ITextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import debounce from 'lodash/debounce';
 import { IContextualMenuItem, ContextualMenu, DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { getDefaultFontSettings } from '../../../../recoilModel/utils/fontUtil';
 
@@ -21,6 +22,7 @@ const DEFAULT_FONT_SETTINGS = getDefaultFontSettings();
 type WatchVariablePickerProps = {
   payload: WatchDataPayload;
   disabled?: boolean;
+  errorMessage?: string;
   variableId: string;
   path: string;
   onSelectPath: (id: string, selectedPath: string) => void;
@@ -56,8 +58,12 @@ const pickerContainer = css`
   width: '240px';
 `;
 
+const redErrorMessage = css`
+  color: ${SharedColors.red20};
+`;
+
 export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) => {
-  const { payload, variableId, path, onSelectPath } = props;
+  const { errorMessage, payload, variableId, path, onSelectPath } = props;
   const [query, setQuery] = useState(path);
   const inputBoxElement = useRef<ITextField | null>(null);
   const pickerContainerElement = useRef<null | HTMLDivElement>(null);
@@ -238,6 +244,7 @@ export const WatchVariablePicker = React.memo((props: WatchVariablePickerProps) 
         onDismiss={onDismiss}
         onItemClick={onHideContextualMenu}
       />
+      {errorMessage ? <span css={redErrorMessage}>{errorMessage}</span> : null}
     </div>
   );
 });
