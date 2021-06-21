@@ -76,7 +76,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         : { $kind: selectedRecognizer.key as string, intents: [] }; // fallback to default Recognizer instance;
     onChange(recognizerInstance);
     telemetryClient?.track('RecognizerChanged', { recognizer: selectedRecognizer.key as string });
-  }, [selectedRecognizer, recognizerConfigs, shellData, shellApi, telemetryClient]);
+  }, [selectedRecognizer, recognizerConfigs, shellData, shellApi]);
 
   useEffect(() => {
     if (selection && currentRecognizer) {
