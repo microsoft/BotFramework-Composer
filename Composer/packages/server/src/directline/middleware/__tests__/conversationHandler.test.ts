@@ -94,17 +94,21 @@ describe('postActivityToBot handler', () => {
     };
   });
 
-  it('should throw an error if no conversation present while posting to bot', () => {
+  it('should throw an error if no conversation present while posting to bot', async () => {
     const state: any = {
       dispatchers: {
         logToDocument: jest.fn(),
       },
     };
 
-    const req: any = {};
+    const req: any = {
+      params: {
+        conversationId: '',
+      },
+    };
 
     const postActivityHandler = createPostActivityHandler(state);
-    postActivityHandler(req, res);
+    await postActivityHandler(req, res);
     expect(mockSend).toHaveBeenCalledWith('Conversation not found.');
     expect(mockStatus).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     expect(mockEnd).toHaveBeenCalled();

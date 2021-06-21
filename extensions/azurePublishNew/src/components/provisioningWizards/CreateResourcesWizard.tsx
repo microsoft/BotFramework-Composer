@@ -10,7 +10,7 @@ import { Wizard, WizardStep } from '../shared/wizard/Wizard';
 import { useResourceConfiguration } from '../../hooks/useResourceConfiguration';
 import { userInfoState } from '../../recoilModel/atoms/resourceConfigurationState';
 
-import { WizardFooterWithUserPersona } from './footers/WizardFooterWithUserPersona';
+import { WizardFooter } from './footers/WizardFooter';
 import { CreateResourceInstructionsStep } from './steps/CreateResourceInstructionsStep';
 import { ResourceConfigurationStep } from './steps/ResourceConfigurationStep';
 import { ChooseResourcesStep } from './steps/ChooseResourcesStep';
@@ -30,8 +30,8 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
   const userInfo = useRecoilValue(userInfoState);
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
   const [isValidResourceConfiguration, setIsValidResourceConfiguration] = useState<boolean>(false);
-  const { onBack } = usePublishApi();
-  const { persistResourceConfiguration } = useResourceConfiguration();
+  const { onBack, closeDialog: onCancel } = usePublishApi();
+  const { stashWizardState } = useResourceConfiguration();
 
   React.useEffect(() => {
     setSteps([
@@ -41,6 +41,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         subTitle: formatMessage('How would you like to provision Azure resources to your publishing profile?'),
         onRenderContent: () => <CreateResourceInstructionsStep />,
         onBack,
+        onCancel,
       },
       {
         id: 'configure-resources',
@@ -49,7 +50,8 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
           <ResourceConfigurationStep onResourceConfigurationChange={setIsValidResourceConfiguration} />
         ),
         navigationState: { canGoNext: isValidResourceConfiguration },
-        onBack: () => persistResourceConfiguration(),
+        onBack: () => stashWizardState(),
+        onCancel,
       },
       {
         id: 'add-resources',
@@ -65,6 +67,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
           }
         ),
         onRenderContent: () => <ChooseResourcesStep />,
+        onCancel,
       },
       {
         id: 'review-resources',
@@ -74,6 +77,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         ),
         onRenderContent: () => <ReviewResourcesStep />,
         navigationState: { nextText: formatMessage('Done') },
+        onCancel,
       },
     ]);
   }, [isValidResourceConfiguration, userInfo]);
@@ -82,7 +86,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
     <Wizard
       firstStepId="create-resource-instructions"
       steps={steps}
-      onRenderFooter={(navState) => <WizardFooterWithUserPersona userInfo={userInfo} {...navState} />}
+      onRenderFooter={(navState) => <WizardFooter userInfo={userInfo} {...navState} />}
       onRenderHeader={() => <></>}
       onStepChange={(index, step) => onStepChange(index, step)}
     />

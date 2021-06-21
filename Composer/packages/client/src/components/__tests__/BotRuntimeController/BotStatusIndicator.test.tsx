@@ -8,8 +8,6 @@ import { botBuildTimeErrorState, botStatusState } from '../../../recoilModel';
 import { BotStatus, BotStatusesCopy } from '../../../constants';
 import { BotStatusIndicator } from '../../BotRuntimeController/BotStatusIndicator';
 
-jest.mock('../../../utils/httpUtil');
-
 const mockStart = jest.fn();
 const mockStop = jest.fn();
 

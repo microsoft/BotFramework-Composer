@@ -1,0 +1,26 @@
+{
+  "name": "@bfc/integration-tests",
+  "version": "1.0.0",
+  "description": "Composer end-to-end tests using the cypress testing framework.",
+  "scripts": {
+    "start": "cypress run --browser edge",
+    "start:server": "node scripts/e2e.js",
+    "open": "cypress open",
+    "clean": "node scripts/clean-e2e.js",
+    "clean-all": "node scripts/clean-e2e.js --all",
+    "lint": "eslint --quiet cypress"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@testing-library/cypress": "7.0.6",
+    "chalk": "^4.0.0",
+    "cypress": "^7.5.0",
+    "eslint-plugin-cypress": "2.11.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.11",
+    "fs-extra": "^10.0.0"
+  }
+}

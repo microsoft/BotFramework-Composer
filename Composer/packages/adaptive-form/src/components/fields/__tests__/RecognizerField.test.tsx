@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, screen } from '@botframework-composer/test-utils';
+import { render, fireEvent, screen, getAllByText } from '@botframework-composer/test-utils';
 import { useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 import assign from 'lodash/assign';
 
@@ -37,12 +37,14 @@ describe('<RecognizerField />', () => {
       {
         id: 'one',
         displayName: 'One Recognizer',
+        description: 'test1',
         isSelected: () => false,
         seedNewRecognizer: handleChange,
       },
       {
         id: 'two',
         displayName: 'Two Recognizer',
+        description: 'test2',
         isSelected: () => true,
         seedNewRecognizer: jest.fn(),
       },
@@ -51,12 +53,17 @@ describe('<RecognizerField />', () => {
       recognizers,
       currentRecognizer: recognizers[1],
     });
-    const { getByTestId } = renderSubject({ value: { $kind: 'two' } });
-    const dropdown = getByTestId('recognizerTypeDropdown');
-    expect(dropdown).toHaveTextContent('Two Recognizer');
-    fireEvent.click(dropdown);
+    const { getByText, getAllByText } = renderSubject({ value: { $kind: 'two' } });
+    // two recognizer already choosed
+    expect(getByText('Two Recognizer')).not.toBeNull();
+
+    // click change recognizer, pop up dialog
+    fireEvent.click(getByText('Change'));
+    expect(getByText('One Recognizer')).not.toBeNull();
+    expect(getAllByText('Two Recognizer').length).toBe(2);
 
     fireEvent.click(screen.getByText('One Recognizer'));
+    fireEvent.click(screen.getByText('Done'));
     expect(handleChange).toHaveBeenCalled();
   });
 });

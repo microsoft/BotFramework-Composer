@@ -3,11 +3,13 @@
 
 import { resourceConfigurationDispatcher } from './resourceConfigurationDispatcher';
 import { userInfoDispatcher } from './userInfoDispatcher';
+import { importConfigurationDispatcher } from './importConfigurationDispatcher';
 
 const createDispatchers = () => {
   return {
     ...resourceConfigurationDispatcher(),
     ...userInfoDispatcher(),
+    ...importConfigurationDispatcher(),
   };
 };
 

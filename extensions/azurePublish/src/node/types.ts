@@ -52,7 +52,7 @@ export interface BotProjectDeployConfig {
   // Lubuild generated folder path, default is 'generated'
   generatedFolder?: string;
 
-  // Remote bot json dialog path, default is 'ComposerDialogs'
+  // Remote bot json dialog path
   remoteBotPath?: string;
 
   // Runtime Type for botproject
