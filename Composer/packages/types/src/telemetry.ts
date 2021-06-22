@@ -108,6 +108,9 @@ type QnaEvents = {
   AddNewKnowledgeBaseCanceled: undefined;
   NewQnAPair: undefined;
   AlternateQnAPhraseAdded: undefined;
+  ReplaceKnowledgeBaseStarted: undefined;
+  ReplaceKnowledgeBaseCompleted: undefined;
+  ReplaceKnowledgeBaseCanceled: undefined;
 };
 
 type ResourcesItem = {

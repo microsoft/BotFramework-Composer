@@ -68,6 +68,24 @@ export type ReplaceQnAModalProps = {
   onSubmit: (formData: CreateQnAFormData) => void;
 };
 
+export type ReplaceQnAOptionsModalProps = {
+  hidden: boolean;
+  projectId: string;
+  containerId: string;
+  dialogId: string;
+  qnaFile: QnAFile | undefined;
+  subscriptionKey?: string;
+  onDismiss?: () => void;
+};
+
+export type ReplaceQnAOptionsModalFormData = {
+  url?: string;
+  multiTurn?: boolean;
+  azureDirectory?: string;
+  azureSubscription?: string;
+  services?: string;
+};
+
 export const validateUrl: FieldValidator = (url: string): string => {
   let error = '';
 

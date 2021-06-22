@@ -152,3 +152,7 @@ export const titleStyle = {
   fontWeight: 600,
   marginBottom: 10,
 };
+
+export const replaceWithQnAportalHeader = {
+  width: 500,
+};

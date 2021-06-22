@@ -18,8 +18,6 @@ import { header, titleStyle, descriptionStyle, dialogWindow, textFieldKBNameFrom
 
 type ImportQnAFromUrlModalProps = {
   qnaFile: QnAFile;
-  onDismiss: () => void;
-  onSubmit: (formData: ImportQnAFromUrlFormData) => void;
 };
 
 export type ImportQnAFromUrlFormData = {
@@ -48,16 +46,14 @@ const description = (
 );
 
 export const ImportQnAFromUrl: React.FC<ImportQnAFromUrlModalProps> = (props) => {
-  const { onDismiss, onSubmit, qnaFile } = props;
-  const defaultUrl = getQnAFileUrlOption(qnaFile);
-  const defaultMultiTurn = getQnAFileMultiTurnOption(qnaFile);
-  console.log(qnaFile);
+  const { qnaFile } = props;
+  // const defaultUrl = getQnAFileUrlOption(qnaFile);
+  // const defaultMultiTurn = getQnAFileMultiTurnOption(qnaFile);
   const locale = getFileLocale(qnaFile.id);
   formConfig.url.validate = validateUrl;
   formConfig.url.defaultValue = getQnAFileUrlOption(qnaFile);
   formConfig.multiTurn.defaultValue = getQnAFileMultiTurnOption(qnaFile);
-  const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
-  const disabled = hasErrors;
+  const { formData, updateField, formErrors } = useForm(formConfig);
 
   const updateUrl = (url = '') => {
     updateField('url', url);
@@ -76,7 +72,7 @@ export const ImportQnAFromUrl: React.FC<ImportQnAFromUrlModalProps> = (props) =>
         </div>
 
         <TextField
-          data-testId={'ImportNewUrlToOverwriteQnAFile'}
+          data-testid={'ImportNewUrlToOverwriteQnAFile'}
           errorMessage={formErrors.url}
           label={formatMessage('Source URL or file')}
           placeholder={formatMessage('Enter a URL to Import QnA resource')}

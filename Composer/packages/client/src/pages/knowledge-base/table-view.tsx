@@ -352,7 +352,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return (
           <IconButton
             hidden
-            data-testId={'knowledgeBaseMore'}
+            data-testid={'knowledgeBaseMore'}
             menuIconProps={{ iconName: 'More' }}
             menuProps={{ items: overflowItems || [] }}
             role="menuitem"
@@ -931,17 +931,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onSubmit={onSubmitEditKB}
         ></EditQnAModal>
       )}
-      {importingResourceQnAFile && (
-        <ReplaceQnAOptionsModal
-          dialogId={dialogId}
-          projectId={projectId}
-          qnaFile={importingResourceQnAFile}
-          onDismiss={() => {
-            setImportingResourceQnAFile(undefined);
-          }}
-          onSubmit={() => {}}
-        ></ReplaceQnAOptionsModal>
-      )}
+      <ReplaceQnAOptionsModal
+        containerId={importingResourceQnAFile ? importingResourceQnAFile.id : ''}
+        dialogId={qnaFile ? getBaseName(qnaFile.id) : ''}
+        hidden={!importingResourceQnAFile}
+        projectId={projectId}
+        qnaFile={qnaFile}
+        onDismiss={() => {
+          setImportingResourceQnAFile(undefined);
+        }}
+      ></ReplaceQnAOptionsModal>
     </div>
   );
 };
