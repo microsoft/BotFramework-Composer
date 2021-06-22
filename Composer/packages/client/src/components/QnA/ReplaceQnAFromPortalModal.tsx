@@ -9,7 +9,6 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import {
   DetailsList,
   SelectionMode,
@@ -62,7 +61,7 @@ type Step = 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
 const dropdownStyles = { dropdown: { width: 245, marginBottom: 10 } };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 400, width: 960 };
+const dialogBodyStyles = { height: 400, width: 920 };
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
