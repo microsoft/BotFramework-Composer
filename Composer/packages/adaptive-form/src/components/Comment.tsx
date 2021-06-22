@@ -42,7 +42,7 @@ const styles = {
       : undefined}
   `,
   showMore: css`
-    display: 'flex';
+    display: flex;
     justify-content: flex-end;
     margin-top: 5px;
   `,
