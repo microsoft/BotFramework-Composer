@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useRef } from 'react';
 import formatMessage from 'format-message';
 import { DefaultButton } from 'office-ui-fabric-react';
@@ -29,7 +32,7 @@ export const BrowserModal = (props) => {
         text={formatMessage('Browser')}
         onClick={onClickOpen}
       />
-      <input type="file" ref={inputFileRef} accept="application/json" style={{ display: 'none' }} onChange={onChange} />
+      <input ref={inputFileRef} accept="application/json" style={{ display: 'none' }} type="file" onChange={onChange} />
     </>
   );
 };

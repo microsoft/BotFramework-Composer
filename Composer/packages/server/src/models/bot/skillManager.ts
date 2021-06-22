@@ -31,6 +31,7 @@ export const getSkillManifest = async (url: string, isJson = true): Promise<any>
     return content;
   } else if (filePathRegex.test(url)) {
     // get local manifest
+    // eslint-disable-next-line security/detect-non-literal-require
     return require(url);
   }
 };

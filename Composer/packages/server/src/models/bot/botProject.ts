@@ -557,7 +557,6 @@ export class BotProject implements IBotProject {
   };
 
   public deleteSkillFiles = async (skillName: string) => {
-    console.log(Path.join(this.dir, `skills/${skillName}`));
     await this.fileStorage.rmrfDir(Path.join(this.dir, `skills/${skillName}`));
   };
 
