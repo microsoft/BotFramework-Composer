@@ -10,8 +10,10 @@ import {
   deployLocationState,
   luisRegionState,
   hostNameState,
+  enabledResourcesState,
+  requiredResourcesState,
 } from '../atoms/resourceConfigurationState';
-import { LuisRegion } from '../../types';
+import { LuisRegion, ResourcesItem } from '../../types';
 
 export const resourceConfigurationDispatcher = () => {
   const setTenantId = useRecoilCallback(({ set }: CallbackInterface) => (tenantId: string) => {
@@ -22,7 +24,7 @@ export const resourceConfigurationDispatcher = () => {
     set(subscriptionState, subscriptionId);
   });
 
-  const setResourceGroupName = useRecoilCallback(
+  const setResourceGroup = useRecoilCallback(
     ({ set }: CallbackInterface) => (resourceGroupName: string, isNew: boolean) => {
       set(resourceGroupState, { name: resourceGroupName, isNew });
     }
@@ -40,12 +42,22 @@ export const resourceConfigurationDispatcher = () => {
     set(hostNameState, hostName);
   });
 
+  const setEnabledResources = useRecoilCallback(({ set }: CallbackInterface) => (resources: ResourcesItem[]) => {
+    set(enabledResourcesState, [...resources]);
+  });
+
+  const setRequiredResources = useRecoilCallback(({ set }: CallbackInterface) => (resources: ResourcesItem[]) => {
+    set(requiredResourcesState, [...resources]);
+  });
+
   return {
     setTenantId,
     setSubscriptionId,
-    setResourceGroupName,
+    setResourceGroup,
     setDeployLocation,
     setLuisRegion,
     setHostName,
+    setEnabledResources,
+    setRequiredResources,
   };
 };

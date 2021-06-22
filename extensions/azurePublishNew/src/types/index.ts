@@ -57,3 +57,9 @@ export type ImportConfiguration = {
 };
 
 export type LuisRegion = 'westus' | 'australiaeast' | 'westeurope';
+
+export type PreviewResourcesItem = {
+  name: string;
+  icon: string;
+  key: string;
+};
