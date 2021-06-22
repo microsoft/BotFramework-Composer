@@ -327,10 +327,10 @@ export class AssetManager {
 
     for (const feed of feedUrls) {
       const feedTemplates = await this.getFeedContents(feed);
-      if (feedTemplates === null) {
-        invalidFeedUrls.push(feed);
-      } else if (feedTemplates && Array.isArray(feedTemplates) && feedTemplates.length > 0) {
+      if (feedTemplates && Array.isArray(feedTemplates) && feedTemplates.length > 0) {
         templates = templates.concat(feedTemplates);
+      } else if (feedTemplates === null) {
+        invalidFeedUrls.push(feed);
       }
     }
 
@@ -345,16 +345,20 @@ export class AssetManager {
   }
 
   public async getNpmPackageVersions(packageName: string): Promise<string[]> {
-    const registryUrl = `https://registry.npmjs.org/${packageName}`;
-    const response = await fetch(registryUrl);
-    const data = await response.json();
-    const versionsMap = data?.versions ?? [];
-    const availableVersions: string[] = [];
-    for (const [key] of Object.entries(versionsMap)) {
-      if (key) {
-        availableVersions.push(key);
+    try {
+      const registryUrl = `https://registry.npmjs.org/${packageName}`;
+      const response = await fetch(registryUrl);
+      const data = await response.json();
+      const versionsMap = data?.versions ?? [];
+      const availableVersions: string[] = [];
+      for (const [key] of Object.entries(versionsMap)) {
+        if (key) {
+          availableVersions.push(key);
+        }
       }
+      return availableVersions;
+    } catch {
+      return [];
     }
-    return availableVersions;
   }
 }
