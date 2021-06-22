@@ -4,8 +4,6 @@
 import fs from 'fs';
 
 import { v4 as uuid } from 'uuid';
-import { CognitiveServicesCredentials } from '@azure/ms-rest-azure-js';
-import { QnAMakerClient } from '@azure/cognitiveservices-qnamaker';
 
 import { Path } from '../../utility/path';
 
@@ -16,6 +14,10 @@ import { DOC_EXTENSIONS, QNA_SUBSCRIPTION_KEY, COGNITIVE_SERVICES_ENDPOINTS } fr
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const KB = require('@microsoft/bf-lu/lib/parser/qna/qnamaker/kb.js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { CognitiveServicesCredentials } = require('@azure/ms-rest-azure-js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { QnAMakerClient } = require('@azure/cognitiveservices-qnamaker');
 
 const debug = log.extend('helper-parser');
 
@@ -69,11 +71,12 @@ export async function parseQnAContent(url: string, multiTurn: boolean) {
   return await importQnAFromUrl(builder, url, subscriptionKey, multiTurn);
 }
 
-async function importQnAFromQnAMakerPortal(builder: any, kbId: string, subscriptionKey: string, endpoint: string) {
+async function importQnAFromQnAMakerPortal(kbId: string, subscriptionKey: string, endpoint: string) {
   const cognitiveServicesCredentials = new CognitiveServicesCredentials(subscriptionKey);
   const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, endpoint);
 
-  const result = await resourceClient.knowledgebase.download(kbId, 'Prod');
+  // 'Test' or 'Prod'
+  const result = await resourceClient.knowledgebase.download(kbId, 'Test');
   let kbToLuContent = '';
   if (result) {
     const kb = new KB(result);
@@ -83,13 +86,11 @@ async function importQnAFromQnAMakerPortal(builder: any, kbId: string, subscript
 }
 
 export async function importQnAContentFromQnAMakerPortal(endpoint: string, kbId: string) {
-  const builder = new qnaBuild.Builder((message: string) => debug(message));
-
   const subscriptionKey = QNA_SUBSCRIPTION_KEY || getBuildEnvironment()?.QNA_SUBSCRIPTION_KEY;
 
   if (!subscriptionKey) {
     throw new Error('Missing subscription key for QnAMaker');
   }
 
-  return await importQnAFromQnAMakerPortal(builder, kbId, subscriptionKey, endpoint);
+  return await importQnAFromQnAMakerPortal(kbId, subscriptionKey, endpoint);
 }

@@ -243,6 +243,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     setSubscription('');
     setKeys([]);
     setCurrentStep('intro');
+    setSelectedKb(undefined);
+    setKbs([]);
   }, [showCreateQnAFrom]);
 
   const fetchKeys = async (cognitiveServicesManagementClient, accounts) => {
@@ -597,6 +599,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         }
         break;
       case 'knowledge-base':
+        setSelectedKb(undefined);
         setDialogTitle(formatMessage('Choose a knowledge base to import'));
         break;
     }
