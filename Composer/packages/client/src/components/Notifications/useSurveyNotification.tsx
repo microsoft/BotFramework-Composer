@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import querystring from 'query-string';
 
 import { ClientStorage } from '../../utils/storage';
 import { surveyEligibilityState, dispatcherState, machineInfoState } from '../../recoilModel/atoms/appState';
@@ -26,12 +27,7 @@ const buildUrl = (info: MachineInfo) => {
     version,
   };
 
-  return (
-    `${SURVEY_URL_BASE}?` +
-    Object.keys(parameters)
-      .map((key) => `${key}=${parameters[key]}`)
-      .join('&')
-  );
+  return `${SURVEY_URL_BASE}?${querystring.stringify(parameters)}`;
 };
 
 export function useSurveyNotification() {
