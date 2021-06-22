@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { useRecoilValue } from 'recoil';
 import { useEffect } from 'react';
 
-import { DiagnosticType, SchemaDiagnostic } from '../../../../diagnostics/types';
+import { DiagnosticType, SchemaDiagnostic } from '../../diagnosticTypes';
 import { botProjectSpaceSelector, dispatcherState } from '../../../../../recoilModel';
 
 import { useDiagnosticsData } from './useDiagnostics';

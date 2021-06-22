@@ -20,7 +20,7 @@ import {
   SettingDiagnostic,
   SkillSettingDiagnostic,
   SchemaDiagnostic,
-} from '../../pages/diagnostics/types';
+} from '../../pages/design/DebugPanel/diagnosticTypes';
 import {
   botDiagnosticsState,
   botProjectFileState,

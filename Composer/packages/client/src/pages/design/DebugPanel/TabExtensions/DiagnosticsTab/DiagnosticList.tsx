@@ -21,7 +21,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useEffect, useState } from 'react';
 
-import { IDiagnosticInfo } from '../../../../diagnostics/types';
+import { IDiagnosticInfo } from '../../diagnosticTypes';
 import { botDisplayNameState, botProjectSpaceSelector, exportSkillModalInfoState } from '../../../../../recoilModel';
 import { navigateTo } from '../../../../../utils/navigation';
 
