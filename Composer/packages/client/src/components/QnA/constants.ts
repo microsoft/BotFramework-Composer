@@ -63,6 +63,24 @@ export type CreateQnAFromFormProps = {
   onChange: (formData: CreateQnAFormData, disabled: boolean) => void;
 };
 
+export type ReplaceQnAModalProps = {
+  hidden: boolean;
+  projectId: string;
+  containerId: string;
+  dialogId: string;
+  qnaFile: QnAFile | undefined;
+  subscriptionKey?: string;
+  onDismiss?: () => void;
+  onSubmit: (formData: ReplaceQnAModalFormData) => void;
+};
+
+export type ReplaceQnAModalFormData = {
+  url?: string;
+  multiTurn?: boolean;
+  endpoint?: string;
+  kbId?: string;
+};
+
 export const validateUrl: FieldValidator = (url: string): string => {
   let error = '';
 

@@ -660,6 +660,58 @@ ${response.data}
     }
   );
 
+  const importQnAFromQnAMaker = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      containerId,
+      dialogId,
+      projectId,
+      endpoint,
+      kbId,
+    }: {
+      containerId: string; // qna container file id: {name}.source.{locale}
+      dialogId: string;
+      projectId: string;
+      endpoint: string;
+      kbId: string;
+    }) => {
+      const { snapshot } = callbackHelpers;
+      const notification = createNotification(getQnaPendingNotification(endpoint));
+      addNotificationInternal(callbackHelpers, notification);
+      let response;
+      try {
+        response = await httpClient.get(`/utilities/qna/import`, {
+          params: { endpoint: encodeURIComponent(endpoint), kbId },
+        });
+        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+        const notification = createNotification(
+          getQnaSuccessNotification(() => {
+            navigateTo(
+              rootBotProjectId === projectId
+                ? `/bot/${projectId}/knowledge-base/${dialogId}`
+                : `/bot/${rootBotProjectId}/skill/${projectId}/knowledge-base/${dialogId}`
+            );
+            deleteNotificationInternal(callbackHelpers, notification.id);
+          })
+        );
+        addNotificationInternal(callbackHelpers, notification);
+      } catch (err) {
+        addNotificationInternal(
+          callbackHelpers,
+          createNotification(getQnaFailedNotification(err.response?.data?.message))
+        );
+        return;
+      } finally {
+        deleteNotificationInternal(callbackHelpers, notification.id);
+      }
+
+      const contentForSourceQnA = `> !# @source.endpoint=${endpoint}
+> !# @source.kbId=${kbId}
+${response.data}
+`;
+      await updateContainerQnAFile({ id: containerId, content: contentForSourceQnA, projectId });
+    }
+  );
+
   const createKBFileOnLocalesState = async (
     callbackHelpers: CallbackInterface,
     {
@@ -977,5 +1029,6 @@ ${response.data}
     createQnADialogBegin,
     createQnADialogCancel,
     importQnAFromUrl,
+    importQnAFromQnAMaker,
   };
 };
