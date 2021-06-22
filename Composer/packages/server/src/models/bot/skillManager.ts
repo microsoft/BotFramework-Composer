@@ -19,15 +19,15 @@ const urlRegex = /^http[s]?:\/\/\w+/;
 const filePathRegex = /([^<>/\\:""]+\.\w+$)/;
 
 export const getSkillManifest = async (url: string): Promise<any> => {
-  if (filePathRegex.test(url)) {
-    // get local manifest
-    return require(url);
-  } else if (urlRegex.test(url)) {
+  if (urlRegex.test(url)) {
     // get remote manifest
     const { bodyAsText: content } = await client.sendRequest({
       url,
       method: 'GET',
     });
     return typeof content === 'string' ? JSON.parse(content) : {};
+  } else if (filePathRegex.test(url)) {
+    // get local manifest
+    return require(url);
   }
 };

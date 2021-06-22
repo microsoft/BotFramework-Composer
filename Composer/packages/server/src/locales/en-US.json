@@ -656,6 +656,9 @@
   "break_out_of_loop_ab30157c": {
     "message": "Break out of loop"
   },
+  "browser_30961fd8": {
+    "message": "Browser"
+  },
   "build_a_continuous_integration_and_deployment_ci_c_79188c70": {
     "message": "Build a continuous integration and deployment (CI/CD) pipeline with Azure Resource Manager templates."
   },

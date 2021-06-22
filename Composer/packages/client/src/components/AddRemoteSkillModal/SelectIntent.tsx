@@ -23,6 +23,7 @@ import { localeState, dispatcherState } from '../../recoilModel';
 import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { EnableOrchestrator } from './EnableOrchestrator';
+import { join } from 'path';
 
 const detailListContainer = css`
   width: 100%;
@@ -45,6 +46,8 @@ type SelectIntentProps = {
   luFeatures: ILUFeaturesConfig;
   rootLuFiles: LuFile[];
   dialogId: string;
+  zipContent: Record<string, string>;
+  manifestDirPath: string;
   onSubmit: (event: Event, content: string, enable: boolean) => Promise<void>;
   onDismiss: () => void;
   onUpdateTitle: (title: { title: string; subText: string }) => void;
@@ -63,35 +66,41 @@ const columns = [
   },
 ];
 
-const getRemoteLuFiles = async (skillLanguages: object, composerLangeages: string[], setWarningMsg) => {
-  const luFilePromise: Promise<any>[] = [];
+const getRemoteLuFiles = async (
+  skillLanguages: object,
+  composerLangeages: string[],
+  setWarningMsg,
+  zipContent: Record<string, string>,
+  manifestDirPath: string
+) => {
+  const luFiles: { id: string; content: string }[] = [];
   try {
     for (const [key, value] of Object.entries(skillLanguages)) {
       if (composerLangeages.includes(key)) {
-        value.map((item) => {
-          // get lu file
-          luFilePromise.push(
-            httpClient
-              .get(`/utilities/retrieveRemoteFile`, {
-                params: {
-                  url: item.url,
-                },
-              })
-              .catch((err) => {
-                console.error(err);
-                setWarningMsg('get remote file fail');
-              })
-          );
+        value.map(async (item) => {
+          if (/^http[s]?:\/\/\w+/.test(item.url)) {
+            // get lu file from remote
+            const { data } = await httpClient.get(`/utilities/retrieveRemoteFile`, {
+              params: {
+                url: item.url,
+              },
+            });
+            luFiles.push(data);
+          } else {
+            // get luFile from local
+            const fileKey = join(manifestDirPath, item.url);
+            luFiles.push({
+              id: fileKey.substr(fileKey.lastIndexOf('/') + 1),
+              content: zipContent[fileKey],
+            });
+          }
         });
       }
     }
-    const responses = await Promise.all(luFilePromise);
-    const files: { id: string; content: string }[] = responses.map((response) => {
-      return response.data;
-    });
-    return files;
+    return luFiles;
   } catch (e) {
     console.log(e);
+    setWarningMsg('get remote file fail');
   }
 };
 
@@ -123,6 +132,8 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
     dialogId,
     onUpdateTitle,
     onBack,
+    zipContent,
+    manifestDirPath,
   } = props;
   const [pageIndex, setPage] = useState(0);
   const [selectedIntents, setSelectedIntents] = useState<Array<string>>([]);
@@ -189,13 +200,13 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
   useEffect(() => {
     if (locale) {
       const skillLanguages = manifest.dispatchModels?.languages;
-      getRemoteLuFiles(skillLanguages, languages, setWarningMsg)
+      getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath)
         .then((items) => {
           items &&
             getParsedLuFiles(items, luFeatures, []).then((files) => {
               setLufiles(files);
               files.map((file) => {
-                if (file.id.includes(locale)) {
+                if (file.id.includes(locale) && file.id.endsWith('.lu')) {
                   setCurrentLuFile(file);
                 }
               });
@@ -206,7 +217,7 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
           setWarningMsg(formatMessage('get remote file fail'));
         });
     }
-  }, [manifest.dispatchModels?.languages, languages, locale, luFeatures]);
+  }, [manifest.dispatchModels?.languages, locale]);
 
   useEffect(() => {
     if (selectedIntents.length > 0) {
