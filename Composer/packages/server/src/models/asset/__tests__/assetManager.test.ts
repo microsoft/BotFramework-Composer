@@ -148,6 +148,30 @@ describe('assetManager', () => {
     });
   });
 
+  describe('getNpmPackageVersions', () => {
+    const mockFeedResponse = {
+      versions: {
+        '0.0.0': {
+          name: '@microsoft/generator-bot-core-language',
+          version: '0.0.0',
+        },
+        '1.0.0': {
+          name: '@microsoft/generator-bot-core-language',
+          version: '1.0.0',
+        },
+      },
+    };
+
+    enableFetchMocks();
+    fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
+    it('Get available versions for a given npm package', async () => {
+      const assetManager = new AssetManager();
+
+      const versions = await assetManager.getNpmPackageVersions('@microsoft/generator-bot-core-language');
+      expect(versions).toStrictEqual(['0.0.0', '1.0.0']);
+    });
+  });
+
   describe('copyRemoteProjectTemplateToV2', () => {
     it('Should instantiate npm driven template and return new conv ref', async () => {
       const mockLocRef = { path: '/path/to/npmbot', storageId: 'default' };
