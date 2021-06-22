@@ -17,7 +17,7 @@ export const proxyAgent = () => {
   return httpsProxyAgent(proxyOpt);
 };
 
-const httpsProxy = (config) => {
+export const httpsProxy = (config) => {
   const parsed = new URL(config.url);
   const protocol = parsed.protocol;
   if (protocol !== 'https:') {
@@ -33,5 +33,3 @@ const httpsProxy = (config) => {
 
   return config;
 };
-
-export default httpsProxy;

@@ -50,6 +50,7 @@
   "dependencies": {
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
+    "@bfc/shared": "../../Composer/packages/lib/shared",
     "@bfc/ui-shared": "file:../../Composer/packages/lib/ui-shared",
     "@emotion/core": "^10.0.35",
     "@microsoft/bf-dialog": "4.14.0-dev.20210604.3f9ee15",
@@ -58,7 +59,6 @@
     "axios-https-proxy": "^0.1.1",
     "date-fns": "^2.16.1",
     "format-message": "^6.2.3",
-    "https-proxy-agent": "^5.0.0",
     "office-ui-fabric-react": "7.71.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",

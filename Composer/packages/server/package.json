@@ -103,7 +103,6 @@
     "formidable": "^1.2.2",
     "globby": "^11.0.1",
     "http-errors": "^1.7.2",
-    "https-proxy-agent": "^5.0.0",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.0",

@@ -69,7 +69,6 @@
     "format-message": "^6.2.3",
     "format-message-generate-id": "^6.2.3",
     "fs-extra": "^9.0.0",
-    "https-proxy-agent": "^5.0.0",
     "lodash": "^4.17.19",
     "node-fetch": "2.6.1",
     "semver": "7.3.2",

@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import axios from 'axios';
-
-import httpsProxy from './httpsProxy';
+import { httpsProxy } from '@bfc/shared';
 
 axios.interceptors.request.use(httpsProxy);
 
