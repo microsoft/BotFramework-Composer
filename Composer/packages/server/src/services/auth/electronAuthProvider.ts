@@ -23,9 +23,12 @@ export class ElectronAuthProvider extends AuthProvider {
   private tokenRefreshFactor = 0.65; // refresh the token after 75% of the expiry time has passed
   private tokenCache: TokenCache;
 
-  constructor(config: AuthConfig) {
+  constructor(config: AuthConfig, _ctx?: ElectronContext) {
     super(config);
     this.tokenCache = {};
+    if (_ctx) {
+      this._electronContext = _ctx;
+    }
     log('Initialized.');
   }
 

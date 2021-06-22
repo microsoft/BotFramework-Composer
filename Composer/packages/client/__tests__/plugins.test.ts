@@ -53,7 +53,7 @@ describe('mergePluginConfigs', () => {
     const config1 = {
       uiSchema: {
         [SDKKinds.RegexRecognizer]: {
-          recognizer: { displayName: 'recognizer1' },
+          recognizer: { displayName: 'recognizer1', description: 'recognizer1' },
         },
       },
     };
@@ -61,17 +61,17 @@ describe('mergePluginConfigs', () => {
     const config2 = {
       uiSchema: {
         [SDKKinds.LuisRecognizer]: {
-          recognizer: { displayName: 'recognizer2' },
+          recognizer: { displayName: 'recognizer2', description: 'recognizer2' },
         },
       },
     };
 
     expect(mergePluginConfigs(config1, config2).uiSchema).toEqual({
       [SDKKinds.RegexRecognizer]: {
-        recognizer: { displayName: 'recognizer1' },
+        recognizer: { displayName: 'recognizer1', description: 'recognizer1' },
       },
       [SDKKinds.LuisRecognizer]: {
-        recognizer: { displayName: 'recognizer2' },
+        recognizer: { displayName: 'recognizer2', description: 'recognizer2' },
       },
     });
   });

@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import * as jwt from 'jsonwebtoken';
+
 import {
   usGovernmentAuthentication,
   authentication,
@@ -16,15 +18,9 @@ jest.mock('../../utils/openIdMetaData', () => ({
   })),
 }));
 
-let mockDecode;
-let mockVerify;
 jest.mock('jsonwebtoken', () => ({
-  get decode() {
-    return mockDecode;
-  },
-  get verify() {
-    return mockVerify;
-  },
+  decode: jest.fn(),
+  verify: jest.fn(),
 }));
 
 describe('botFrameworkAuthenticationMiddleware', () => {
@@ -40,13 +36,15 @@ describe('botFrameworkAuthenticationMiddleware', () => {
     mockNext.mockClear();
     mockEnd.mockClear();
     mockStatus.mockClear();
-    mockDecode = jest.fn(() => ({
+    (jwt.decode as jest.Mock).mockClear();
+    (jwt.verify as jest.Mock).mockClear();
+    (jwt.decode as jest.Mock).mockImplementation(() => ({
       header: {
         kid: 'someKeyId',
       },
       payload: mockPayload,
     }));
-    mockVerify = jest.fn(() => 'verifiedJwt');
+    (jwt.verify as jest.Mock).mockReturnValue('verifiedJwt');
     mockGetKey.mockClear();
   });
 
@@ -64,7 +62,7 @@ describe('botFrameworkAuthenticationMiddleware', () => {
   });
 
   it('should return a 401 if the token is not provided in the header', async () => {
-    mockDecode = jest.fn(() => null);
+    (jwt.decode as jest.Mock).mockReturnValue(null);
     const mockHeader = jest.fn(() => 'Bearer someToken');
     const req: any = {
       get: mockHeader,
@@ -77,7 +75,7 @@ describe('botFrameworkAuthenticationMiddleware', () => {
 
     expect(result).toBeUndefined();
     expect(mockHeader).toHaveBeenCalled();
-    expect(mockDecode).toHaveBeenCalledWith('someToken', { complete: true });
+    expect(jwt.decode).toHaveBeenCalledWith('someToken', { complete: true });
     expect(mockStatus).toHaveBeenCalledWith(401);
     expect(mockEnd).toHaveBeenCalled();
   });
@@ -118,7 +116,7 @@ describe('botFrameworkAuthenticationMiddleware', () => {
     const result = await authMiddleware(req, res, mockNext);
 
     expect(result).toBeUndefined();
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: usGovernmentAuthentication.botTokenAudience,
       clockTolerance: 300,
       issuer: usGovernmentAuthentication.tokenIssuerV1,
@@ -143,7 +141,7 @@ describe('botFrameworkAuthenticationMiddleware', () => {
     const result = await authMiddleware(req, res, mockNext);
 
     expect(result).toBeUndefined();
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: usGovernmentAuthentication.botTokenAudience,
       clockTolerance: 300,
       issuer: usGovernmentAuthentication.tokenIssuerV2,
@@ -165,13 +163,13 @@ describe('botFrameworkAuthenticationMiddleware', () => {
       status: mockStatus,
       end: mockEnd,
     };
-    mockVerify = jest.fn(() => {
+    (jwt.verify as jest.Mock).mockImplementation(() => {
       throw new Error('unverifiedJwt');
     });
     const result = await authMiddleware(req, res, mockNext);
 
     expect(result).toBeUndefined();
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: usGovernmentAuthentication.botTokenAudience,
       clockTolerance: 300,
       issuer: usGovernmentAuthentication.tokenIssuerV1,
@@ -241,7 +239,7 @@ describe('botFrameworkAuthenticationMiddleware', () => {
     const result = await authMiddleware(req, res, mockNext);
 
     expect(result).toBeUndefined();
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: authentication.botTokenAudience,
       clockTolerance: 300,
       issuer: v32Authentication.tokenIssuerV1,
@@ -266,7 +264,7 @@ describe('botFrameworkAuthenticationMiddleware', () => {
     const result = await authMiddleware(req, res, mockNext);
 
     expect(result).toBeUndefined();
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: authentication.botTokenAudience,
       clockTolerance: 300,
       issuer: v32Authentication.tokenIssuerV2,
@@ -289,19 +287,19 @@ describe('botFrameworkAuthenticationMiddleware', () => {
       end: mockEnd,
     };
     // verification attempt with v3.2 token characteristics should fail
-    mockVerify.mockImplementationOnce(() => {
+    (jwt.verify as jest.Mock).mockImplementationOnce(() => {
       throw new Error('unverifiedJwt');
     });
     const result = await authMiddleware(req, res, mockNext);
 
     expect(result).toBeUndefined();
-    expect(mockVerify).toHaveBeenCalledTimes(2);
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledTimes(2);
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: authentication.botTokenAudience,
       clockTolerance: 300,
       issuer: v32Authentication.tokenIssuerV1,
     });
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: authentication.botTokenAudience,
       clockTolerance: 300,
       issuer: v31Authentication.tokenIssuer,
@@ -323,7 +321,7 @@ describe('botFrameworkAuthenticationMiddleware', () => {
       status: mockStatus,
       end: mockEnd,
     };
-    mockVerify
+    (jwt.verify as jest.Mock)
       // verification attempt with v3.2 token characteristics should fail
       .mockImplementationOnce(() => {
         throw new Error('unverifiedJwt');
@@ -335,13 +333,13 @@ describe('botFrameworkAuthenticationMiddleware', () => {
     const result = await authMiddleware(req, res, mockNext);
 
     expect(result).toBeUndefined();
-    expect(mockVerify).toHaveBeenCalledTimes(2);
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledTimes(2);
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: authentication.botTokenAudience,
       clockTolerance: 300,
       issuer: v32Authentication.tokenIssuerV1,
     });
-    expect(mockVerify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
+    expect(jwt.verify).toHaveBeenCalledWith('someToken', 'openIdMetadataKey', {
       audience: authentication.botTokenAudience,
       clockTolerance: 300,
       issuer: v31Authentication.tokenIssuer,

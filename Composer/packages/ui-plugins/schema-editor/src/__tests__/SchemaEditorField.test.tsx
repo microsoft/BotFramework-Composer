@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { EditorExtension } from '@bfc/extension-client';
-import { render, fireEvent, findAllByRole } from '@botframework-composer/test-utils';
+import { render, fireEvent, screen } from '@botframework-composer/test-utils';
 
 import { SchemaEditorField } from '../Fields/SchemaEditorField';
 
@@ -25,7 +25,7 @@ const renderSchemaEditor = ({ updateDialogSchema = jest.fn() } = {}) => {
   };
 
   return render(
-    <EditorExtension plugins={{}} shell={shell}>
+    <EditorExtension plugins={{}} projectId="" shell={shell}>
       <SchemaEditorField />
     </EditorExtension>
   );
@@ -34,7 +34,7 @@ const renderSchemaEditor = ({ updateDialogSchema = jest.fn() } = {}) => {
 describe('Schema Editor', () => {
   it('adds value property', async () => {
     const updateDialogSchema = jest.fn();
-    const { baseElement, findAllByText, findByLabelText, getByPlaceholderText } = renderSchemaEditor({
+    const { findAllByRole, findAllByText, getByPlaceholderText, container } = renderSchemaEditor({
       updateDialogSchema,
     });
     const [add] = await findAllByText('Add new');
@@ -46,10 +46,10 @@ describe('Schema Editor', () => {
     fireEvent.change(propertyNameInput, { target: { value: 'propertyName' } });
     propertyNameInput.blur();
 
-    const listbox = await findByLabelText('Type');
-    fireEvent.click(listbox);
+    const listbox = container.querySelector('#propertyName\\.value\\.type');
+    fireEvent.click(listbox!);
 
-    const options = await findAllByRole(baseElement, 'option');
+    const options = await findAllByRole('option');
     fireEvent.click(options[options.length - 1]);
 
     expect(updateDialogSchema).toHaveBeenLastCalledWith(
@@ -74,7 +74,7 @@ describe('Schema Editor', () => {
 
   it('adds result property', async () => {
     const updateDialogSchema = jest.fn();
-    const { baseElement, findAllByText, findByLabelText, getByPlaceholderText } = renderSchemaEditor({
+    const { findAllByRole, findAllByText, getByPlaceholderText, container } = renderSchemaEditor({
       updateDialogSchema,
     });
     const [, add] = await findAllByText('Add new');
@@ -86,10 +86,10 @@ describe('Schema Editor', () => {
     fireEvent.change(propertyNameInput, { target: { value: 'propertyName' } });
     propertyNameInput.blur();
 
-    const listbox = await findByLabelText('Type');
-    fireEvent.click(listbox);
+    const listbox = container.querySelector('#propertyName\\.value\\.type');
+    fireEvent.click(listbox!);
 
-    const options = await findAllByRole(baseElement, 'option');
+    const options = await findAllByRole('option');
     fireEvent.click(options[1]);
 
     expect(updateDialogSchema).toHaveBeenLastCalledWith(
