@@ -20,7 +20,7 @@ export const styles = {
   modalCreateFromUrl: {
     main: {
       maxWidth: '960px !important',
-      width: '960px',
+      width: '920px',
     },
   },
   modalCreateFromScratch: {
@@ -40,6 +40,7 @@ export const formContainer = css`
   display: flex;
   flex-direction: column;
   max-width: 500px;
+  width: 500px;
   border-left: 1px solid #f3f2f1;
   padding: 10px 10px 10px 30px;
 `;
@@ -136,4 +137,19 @@ export const urlStackStyle = {
     overflowY: 'auto' as 'auto',
     marginBottom: 10,
   },
+};
+
+export const header = {
+  height: 50,
+  marginBottom: 20,
+};
+
+export const descriptionStyle = {
+  fontSize: 12,
+};
+
+export const titleStyle = {
+  fontSize: 16,
+  fontWeight: 600,
+  marginBottom: 10,
 };

@@ -40,7 +40,7 @@ import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
-import { ImportQnAFromUrlModal } from '../../components/QnA/ImportQnAFromUrlModal';
+import { ReplaceQnAFromPortalModal } from '../../components/QnA/ReplaceQnAFromPortalModal';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
@@ -108,6 +108,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     updateQnAAnswer,
     updateQnAQuestion,
     importQnAFromUrl,
+    importQnAFromQnAMaker,
   } = useRecoilValue(dispatcherState);
 
   const targetFileId = dialogId.endsWith(qnaSuffix(locale)) ? dialogId : `${dialogId}.${locale}`;
@@ -311,15 +312,28 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setEditQnAFile(undefined);
   };
 
-  const handleImportUrl = async ({ url, multiTurn }: { url: string; multiTurn: boolean }) => {
+  const handleImportQnA = async (data) => {
+    if (!projectId || !dialogId) return;
+    const { url, multiTurn, endpoint, kbId } = data;
+
     if (importingResourceQnAFile) {
-      importQnAFromUrl({
-        containerId: importingResourceQnAFile.id,
-        dialogId: qnaFile ? getBaseName(qnaFile.id) : '',
-        url,
-        multiTurn,
-        projectId,
-      });
+      if (url) {
+        importQnAFromUrl({
+          containerId: importingResourceQnAFile.id,
+          dialogId: qnaFile ? getBaseName(qnaFile.id) : '',
+          url,
+          multiTurn,
+          projectId,
+        });
+      } else if (kbId && endpoint) {
+        importQnAFromQnAMaker({
+          containerId: importingResourceQnAFile.id,
+          dialogId: qnaFile ? getBaseName(qnaFile.id) : '',
+          projectId,
+          endpoint,
+          kbId,
+        });
+      }
     }
     setImportingResourceQnAFile(undefined);
   };
@@ -456,7 +470,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       {
                         key: 'update',
                         iconProps: { iconName: 'Download' },
-                        name: formatMessage('Import new URL and overwrite'),
+                        name: formatMessage('Replace content'),
                         disabled: dialogId === 'all',
                         onClick: async () => {
                           if (!containerQnAFile) return;
@@ -931,15 +945,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onSubmit={onSubmitEditKB}
         ></EditQnAModal>
       )}
-      {importingResourceQnAFile && (
-        <ImportQnAFromUrlModal
-          qnaFile={importingResourceQnAFile}
-          onDismiss={() => {
-            setImportingResourceQnAFile(undefined);
-          }}
-          onSubmit={handleImportUrl}
-        ></ImportQnAFromUrlModal>
-      )}
+      <ReplaceQnAFromPortalModal
+        containerId={importingResourceQnAFile ? importingResourceQnAFile.id : ''}
+        dialogId={qnaFile ? getBaseName(qnaFile.id) : ''}
+        hidden={!importingResourceQnAFile}
+        projectId={projectId}
+        qnaFile={qnaFile}
+        onDismiss={() => {
+          setImportingResourceQnAFile(undefined);
+        }}
+        onSubmit={handleImportQnA}
+      ></ReplaceQnAFromPortalModal>
     </div>
   );
 };

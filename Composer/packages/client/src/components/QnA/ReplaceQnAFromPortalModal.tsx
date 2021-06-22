@@ -36,12 +36,9 @@ import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
 import { createQnAOnState, showCreateQnADialogState, settingsState, dispatcherState } from '../../recoilModel';
 
-import { CreateQnAFormData, CreateQnAModalProps, QnAMakerLearnMoreUrl } from './constants';
-import { subText, styles, contentBox, formContainer, choiceContainer } from './styles';
-import { CreateQnAFromUrl } from './CreateQnAFromUrl';
-import { CreateQnAFromScratch } from './CreateQnAFromScratch';
-import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
-import { QnALanguageToLocale } from './utilities';
+import { ReplaceQnAModalFormData, ReplaceQnAModalProps, QnAMakerLearnMoreUrl } from './constants';
+import { styles, contentBox, formContainer, choiceContainer, titleStyle, descriptionStyle } from './styles';
+import { ImportQnAFromUrl } from './ImportQnAFromUrl';
 
 // const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 // const KB = require('@microsoft/bf-lu/lib/parser/qna/qnamaker/kb.js');
@@ -55,30 +52,24 @@ type KeyRec = {
 };
 
 type KBRec = {
-  id: string;
   name: string;
-  locale: string;
+  language: string;
+  id: string;
   lastChangedTimestamp: string;
 };
 
 type Step = 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
-const dropdownStyles = { dropdown: { width: '100%', marginBottom: 10 } };
+const dropdownStyles = { dropdown: { width: 245, marginBottom: 10 } };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 400 };
+const dialogBodyStyles = { height: 400, width: 960 };
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
-export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
-  const { onDismiss, onSubmit } = props;
-  const { projectId } = useRecoilValue(createQnAOnState);
-  const settings = useRecoilValue(settingsState(projectId));
+export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props) => {
+  const { onDismiss, onSubmit, hidden, qnaFile, projectId } = props;
   const actions = useRecoilValue(dispatcherState);
-  const locales = settings.languages;
-  const defaultLocale = settings.defaultLanguage;
-  const showCreateQnAFrom = useRecoilValue(showCreateQnADialogState(projectId));
-  const [initialName, setInitialName] = useState<string>('');
-  const [formData, setFormData] = useState<CreateQnAFormData>();
+  const [formData, setFormData] = useState<ReplaceQnAModalFormData>();
   const [disabled, setDisabled] = useState(true);
 
   const [showAuthDialog, setShowAuthDialog] = useState(false);
@@ -105,12 +96,11 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const [currentStep, setCurrentStep] = useState<Step>('intro');
 
   const actionOptions: IChoiceGroupOption[] = [
-    { key: 'url', text: formatMessage('Create new KB from URL or file ') },
+    { key: 'url', text: formatMessage('Replace KB from URL or file ') },
     {
       key: 'portal',
-      text: formatMessage('Import existing KB from QnA maker portal'),
+      text: formatMessage('Replace with an existing KB from QnA maker portal'),
     },
-    { key: 'scratch', text: formatMessage('Create an empty KB') },
   ];
 
   /* Copied from Azure Publishing extension */
@@ -243,9 +233,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     setSubscription('');
     setKeys([]);
     setCurrentStep('intro');
-    setSelectedKb(undefined);
-    setKbs([]);
-  }, [showCreateQnAFrom]);
+  }, [hidden]);
 
   const fetchKeys = async (cognitiveServicesManagementClient, accounts) => {
     const keyList: KeyRec[] = [];
@@ -296,13 +284,12 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
 
       const result = await resourceClient.knowledgebase.listAll();
-
       if (result.knowledgebases) {
         const kblist: KBRec[] = result.knowledgebases.map((item: any) => {
           return {
             id: item.id || '',
             name: item.name || '',
-            locale: QnALanguageToLocale(item.language) || '',
+            language: item.language || '',
             lastChangedTimestamp: item.lastChangedTimestamp || '',
           };
         });
@@ -351,60 +338,40 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const renderIntroStep = () => {
     return (
       <div>
-        <p>
-          <span css={subText}>
-            {formatMessage('Use Azure QnA Maker to extract question-and-answer pairs from an online FAQ. ')}
-            <Link href={QnAMakerLearnMoreUrl} target={'_blank'}>
-              {formatMessage('Learn more')}
-            </Link>
-          </span>
-        </p>
         <div css={contentBox}>
           <div css={choiceContainer}>
-            <ChoiceGroup
-              data-testid={'createKBChoiceGroup'}
-              options={actionOptions}
-              selectedKey={nextAction}
-              onChange={onChangeAction}
-            />
+            <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
           </div>
           <div css={formContainer}>
             {nextAction === 'url' ? (
-              <CreateQnAFromUrl
-                {...props}
-                defaultLocale={defaultLocale}
-                initialName={initialName}
-                locales={locales}
-                onChange={onFormDataChange}
-                onUpdateInitialName={setInitialName}
-              />
-            ) : nextAction === 'scratch' ? (
-              <CreateQnAFromScratch
-                {...props}
-                defaultLocale={defaultLocale}
-                initialName={initialName}
-                locales={locales}
-                onChange={onFormDataChange}
-                onUpdateInitialName={setInitialName}
-              />
+              <ImportQnAFromUrl qnaFile={qnaFile} onChange={onFormDataChange} />
             ) : (
-              <CreateQnAFromQnAMaker
-                {...props}
-                defaultLocale={defaultLocale}
-                initialName={initialName}
-                locales={locales}
-                onChange={onFormDataChange}
-                onUpdateInitialName={setInitialName}
-              />
+              <div>
+                <div style={titleStyle}>{formatMessage('Replace with an existing KB from QnA maker portal')}</div>
+                <div style={descriptionStyle}>
+                  {formatMessage('Select this option when you want to Import existing KB from QnA maker portal. ')}
+                </div>
+              </div>
             )}
           </div>
         </div>
         <DialogFooter>
-          <PrimaryButton disabled={!!loading || disabled} text={formatMessage('Next')} onClick={performNextAction} />
           <DefaultButton
-            disabled={!!loading || showAuthDialog}
+            text={formatMessage('Back')}
+            onClick={() => {
+              handleDismiss();
+            }}
+          />
+          <PrimaryButton
+            data-testid={'ReplaceKnowledgeBase'}
+            text={formatMessage('Next')}
+            onClick={performNextAction}
+          />
+          <DefaultButton
             text={formatMessage('Cancel')}
-            onClick={props.onDismiss}
+            onClick={() => {
+              handleDismiss();
+            }}
           />
         </DialogFooter>
       </div>
@@ -492,11 +459,11 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const renderKnowledgeBaseSelectionStep = () => {
     const columns: IColumn[] = [
       {
-        key: 'column2',
+        key: 'column1',
         name: 'Name',
         fieldName: 'name',
         minWidth: 50,
-        maxWidth: 350,
+        maxWidth: 150,
         isRowHeader: true,
         isResizable: true,
         isSorted: true,
@@ -507,7 +474,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         isPadded: true,
       },
       {
-        key: 'column3',
+        key: 'column2',
         name: 'Last modified',
         fieldName: 'lastModified',
         minWidth: 200,
@@ -525,24 +492,11 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           );
         },
       },
-      {
-        key: 'column4',
-        name: 'Locale',
-        fieldName: 'locale',
-        minWidth: 100,
-        maxWidth: 200,
-        isResizable: true,
-        isCollapsible: true,
-        data: 'string',
-        isPadded: true,
-      },
     ];
-
-    const filteredKbs = kbs.filter((item) => item.locale === formData?.locale);
 
     return (
       <div>
-        <div css={{ ...dialogBodyStyles, width: 800 }}>
+        <div css={dialogBodyStyles}>
           <p css={{ marginTop: 0 }}>{formatMessage('Select one or more KB to import into your bot project')}</p>
           <div css={mainElementStyle}>
             <DetailsList
@@ -554,7 +508,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
               checkButtonAriaLabel="select row"
               columns={columns}
               getKey={(item) => item.name}
-              items={filteredKbs}
+              items={kbs}
               layoutMode={DetailsListLayoutMode.justified}
               selection={selectedKB}
               selectionMode={SelectionMode.single}
@@ -565,7 +519,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('resource')} />
           <PrimaryButton
-            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId || !selectedKb}
+            disabled={!!loading || (!userProvidedTokens && !tenantId) || !subscriptionId}
             text={formatMessage('Next')}
             onClick={onSubmitImportKB}
           />
@@ -595,15 +549,14 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   useEffect(() => {
     switch (currentStep) {
       case 'intro':
-        setDialogTitle(formatMessage('Add QnA Maker knowledge base'));
+        setDialogTitle(formatMessage('Replace knowledge base content'));
         break;
       case 'resource':
         if (nextAction === 'portal') {
-          setDialogTitle(formatMessage('Select source knowledge base location'));
+          setDialogTitle(formatMessage('Choose QnA resources'));
         }
         break;
       case 'knowledge-base':
-        setSelectedKb(undefined);
         setDialogTitle(formatMessage('Choose a knowledge base to import'));
         break;
     }
@@ -611,7 +564,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const handleDismiss = () => {
     onDismiss?.();
-    setInitialName('');
     actions.createQnADialogCancel({ projectId });
     TelemetryClient.track('AddNewKnowledgeBaseCanceled');
   };
@@ -626,21 +578,23 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       return;
     }
     onSubmit(formData);
-    setInitialName('');
     TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
   };
 
   const onSubmitImportKB = async () => {
     if (key && token && selectedKb && formData) {
+      // const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
+      // const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
+
+      // const result = await resourceClient.knowledgebase.download(selectedKb.id, 'Prod');
+      //console.log(result);
       onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id });
-      setInitialName('');
-      TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
     }
   };
 
   return (
     <Fragment>
-      {/* {showAuthDialog && (
+      {showAuthDialog && (
         <AuthDialog
           needGraph={false}
           next={hasAuth}
@@ -648,13 +602,13 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             setShowAuthDialog(false);
           }}
         />
-      )} */}
+      )}
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
           title: dialogTitle,
         }}
-        hidden={!showCreateQnAFrom || showAuthDialog}
+        hidden={hidden || showAuthDialog}
         minWidth={480}
         modalProps={{
           isBlocking: true,
@@ -669,4 +623,4 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   );
 };
 
-export default CreateQnAModal;
+export default ReplaceQnAFromPortalModal;
