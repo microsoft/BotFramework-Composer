@@ -8,7 +8,7 @@ import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { CommandButton } from 'office-ui-fabric-react/lib/components/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -73,7 +73,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
     props.template?.package?.packageVersion && setSelectedTemplateVersion(props.template.package.packageVersion);
   }, [props.template]);
 
-  const renderVersionButton = () => {
+  const renderVersionButton = useMemo(() => {
     if (!advancedTemplateOptionsEnabled) {
       return <span css={templateVersion}>{props.template?.package?.packageVersion}</span>;
     }
@@ -91,7 +91,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         text={selectedTemplateVersion}
       />
     );
-  };
+  }, [props.template, advancedTemplateOptionsEnabled]);
 
   const { localTemplatePath, onUpdateLocalTemplatePath, onValidateLocalTemplatePath, template } = props;
   const isLocalTemplate = template?.id === localTemplateId;
@@ -163,7 +163,7 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
             <span css={templateTitle(isLocalTemplate)}>
               {props.template?.name ? props.template.name : formatMessage('Template undefined')}
             </span>
-            {!isLocalTemplate && renderVersionButton()}
+            {!isLocalTemplate && renderVersionButton}
           </Stack.Item>
         </Stack>
       </div>
