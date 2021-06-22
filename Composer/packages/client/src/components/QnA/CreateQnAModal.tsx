@@ -43,9 +43,6 @@ import { CreateQnAFromScratch } from './CreateQnAFromScratch';
 import { CreateQnAFromQnAMaker } from './CreateQnAFromQnAMaker';
 import { QnALanguageToLocale } from './utilities';
 
-// const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
-// const KB = require('@microsoft/bf-lu/lib/parser/qna/qnamaker/kb.js');
-
 type KeyRec = {
   name: string;
   region: string;
@@ -361,12 +358,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         </p>
         <div css={contentBox}>
           <div css={choiceContainer}>
-            <ChoiceGroup
-              options={actionOptions}
-              selectedKey={nextAction}
-              onChange={onChangeAction}
-              data-testid={'createKBChoiceGroup'}
-            />
+            <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
           </div>
           <div css={formContainer}>
             {nextAction === 'url' ? (
@@ -632,7 +624,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   const onSubmitImportKB = async () => {
     if (key && token && selectedKb && formData) {
-      onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id });
+      onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id, subscriptionKey: key.key });
       setInitialName('');
       TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
     }
@@ -640,7 +632,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   return (
     <Fragment>
-      {/* {showAuthDialog && (
+      {showAuthDialog && (
         <AuthDialog
           needGraph={false}
           next={hasAuth}
@@ -648,13 +640,13 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             setShowAuthDialog(false);
           }}
         />
-      )} */}
+      )}
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
           title: dialogTitle,
         }}
-        // hidden={!showCreateQnAFrom || showAuthDialog}
+        hidden={!showCreateQnAFrom || showAuthDialog}
         minWidth={480}
         modalProps={{
           isBlocking: true,

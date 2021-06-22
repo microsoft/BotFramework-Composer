@@ -71,7 +71,8 @@ export async function parseQnAContent(url: string, multiTurn: boolean) {
   return await importQnAFromUrl(builder, url, subscriptionKey, multiTurn);
 }
 
-async function importQnAFromQnAMakerPortal(kbId: string, subscriptionKey: string, endpoint: string) {
+// subscriptionKey from selection.
+export async function importQnAContentFromQnAMakerPortal(endpoint: string, kbId: string, subscriptionKey: string) {
   const cognitiveServicesCredentials = new CognitiveServicesCredentials(subscriptionKey);
   const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, endpoint);
 
@@ -83,14 +84,4 @@ async function importQnAFromQnAMakerPortal(kbId: string, subscriptionKey: string
     kbToLuContent = kb.parseToLuContent();
   }
   return kbToLuContent;
-}
-
-export async function importQnAContentFromQnAMakerPortal(endpoint: string, kbId: string) {
-  const subscriptionKey = QNA_SUBSCRIPTION_KEY || getBuildEnvironment()?.QNA_SUBSCRIPTION_KEY;
-
-  if (!subscriptionKey) {
-    throw new Error('Missing subscription key for QnAMaker');
-  }
-
-  return await importQnAFromQnAMakerPortal(kbId, subscriptionKey, endpoint);
 }
