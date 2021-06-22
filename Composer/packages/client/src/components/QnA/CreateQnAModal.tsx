@@ -297,7 +297,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
       const result = await resourceClient.knowledgebase.listAll();
 
-      console.log(result);
       if (result.knowledgebases) {
         const kblist: KBRec[] = result.knowledgebases.map((item: any) => {
           return {
@@ -362,7 +361,12 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         </p>
         <div css={contentBox}>
           <div css={choiceContainer}>
-            <ChoiceGroup options={actionOptions} selectedKey={nextAction} onChange={onChangeAction} />
+            <ChoiceGroup
+              options={actionOptions}
+              selectedKey={nextAction}
+              onChange={onChangeAction}
+              data-testid={'createKBChoiceGroup'}
+            />
           </div>
           <div css={formContainer}>
             {nextAction === 'url' ? (
@@ -613,7 +617,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   };
 
   const onFormDataChange = (data, disabled) => {
-    console.log(data, disabled);
     setFormData(data);
     setDisabled(disabled);
   };
@@ -628,7 +631,6 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   };
 
   const onSubmitImportKB = async () => {
-    console.log(selectedKb, formData);
     if (key && token && selectedKb && formData) {
       onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id });
       setInitialName('');
@@ -638,7 +640,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
 
   return (
     <Fragment>
-      {showAuthDialog && (
+      {/* {showAuthDialog && (
         <AuthDialog
           needGraph={false}
           next={hasAuth}
@@ -646,13 +648,13 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             setShowAuthDialog(false);
           }}
         />
-      )}
+      )} */}
       <Dialog
         dialogContentProps={{
           type: DialogType.normal,
           title: dialogTitle,
         }}
-        hidden={!showCreateQnAFrom || showAuthDialog}
+        // hidden={!showCreateQnAFrom || showAuthDialog}
         minWidth={480}
         modalProps={{
           isBlocking: true,
