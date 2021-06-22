@@ -23,9 +23,9 @@ async function getQnaContent(req: Request, res: Response) {
 
 async function importQnAContent(req: Request, res: Response) {
   try {
-    const endpoint = decodeURIComponent(req.query.endpoint);
-    const kbId = req.query.kbId;
-    res.status(200).json(await importQnAContentFromQnAMakerPortal(endpoint, kbId));
+    const endpoint = decodeURIComponent(req.body.endpoint);
+    const { kbId, subscriptionKey } = req.body;
+    res.status(200).json(await importQnAContentFromQnAMakerPortal(endpoint, kbId, subscriptionKey));
   } catch (e) {
     res.status(400).json({
       message: e.message || e.text,
