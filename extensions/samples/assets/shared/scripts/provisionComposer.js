@@ -378,7 +378,7 @@ const getErrorMesssage = (err) => {
       if (err.body.error.details) {
         const details = err.body.error.details;
         let errMsg = '';
-        for (let detail of details) {
+        for (const detail of details) {
           errMsg += detail.message;
         }
         return errMsg;
@@ -799,8 +799,8 @@ msRestNodeAuth
         accessToken: token.accessToken,
         name: name,
         environment: environment,
-        hostname: `${name}-${environment}`,
-        luisResource: `${name}-${environment}-luis`,
+        hostname: `${name}`,
+        luisResource: `${name}-luis`,
         settings: createResult,
         runtimeIdentifier: 'win-x64',
         resourceGroup: resourceGroup,
