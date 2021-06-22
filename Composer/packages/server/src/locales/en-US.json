@@ -251,6 +251,9 @@
   "add_qna_pair_16c228f0": {
     "message": "+ Add QnA Pair"
   },
+  "add_regex_pattern_140335cb": {
+    "message": "Add regex pattern"
+  },
   "add_row_7ebc94fb": {
     "message": "Add row"
   },
@@ -258,7 +261,7 @@
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
+    "message": "> add some expected user responses:\n      > - Please remind me to '{'itemTitle=buy milk'}'\n      > - remind me to '{'itemTitle'}'\n      > - add '{'itemTitle'}' to my todo list\n      >\n      > entity definitions:\n      > @ ml itemTitle\n      "
   },
   "add_suggested_action_baf855ca": {
     "message": "Add suggested action"
@@ -695,6 +698,9 @@
   "carousel_a2321ac9": {
     "message": "Carousel"
   },
+  "change_dcaa253a": {
+    "message": "Change"
+  },
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
   },
@@ -709,6 +715,9 @@
   },
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
+  },
+  "choose_a_recognizer_type_fa398753": {
+    "message": "Choose a recognizer type"
   },
   "choose_a_valid_publish_profile_to_continue_d4bd0b96": {
     "message": "Choose a valid publish profile to continue"
@@ -1040,14 +1049,14 @@
   "current_40c0812f": {
     "message": " - Current"
   },
+  "custom_6979cd81": {
+    "message": "Custom"
+  },
   "custom_actions_5d396747": {
     "message": "Custom Actions"
   },
   "custom_events_d6f0e45b": {
     "message": "Custom events"
-  },
-  "custom_recognizer_951bab90": {
-    "message": "Custom recognizer"
   },
   "custom_runtime_426aa34f": {
     "message": "Custom runtime"
@@ -1094,14 +1103,14 @@
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
   },
+  "default_9db103d": {
+    "message": "Default"
+  },
   "default_language_486a558d": {
     "message": "Default language"
   },
   "default_language_a976938d": {
     "message": "DEFAULT LANGUAGE"
-  },
-  "default_recognizer_9c06c1a3": {
-    "message": "Default recognizer"
   },
   "define_conversation_objective_146d1cc6": {
     "message": "Define conversation objective"
@@ -1420,6 +1429,9 @@
   },
   "enables_creating_bots_from_local_templates_as_well_5608165d": {
     "message": "Enables creating bots from local templates as well as creating bots from older versions of published templates"
+  },
+  "enables_you_to_customize_your_own_recognizer_by_ed_c79b2f3b": {
+    "message": "Enables you to customize your own recognizer by editing JSON in the form"
   },
   "end_dialog_88fa2f7a": {
     "message": "End dialog"
@@ -1799,6 +1811,18 @@
   "github_c7cc3613": {
     "message": "GitHub"
   },
+  "gives_your_bot_the_ability_to_detect_and_route_use_663cf67d": {
+    "message": "Gives your bot the ability to detect and route user input to an appropriate skill or to a subsequent language understanding models."
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_8170cf3d": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on luis modal"
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_b33162e7": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on regular expression patterns."
+  },
+  "gives_your_bot_the_ability_to_extract_intent_and_e_c315fe1d": {
+    "message": "Gives your bot the ability to extract intent and entity data from an utterance based on a cross trained recognizer set."
+  },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Go to QnA all-up view page."
   },
@@ -2122,6 +2146,9 @@
   },
   "learn_more_about_orchestrator_c070e031": {
     "message": "Learn more about Orchestrator"
+  },
+  "learn_more_about_recognizers_e58eb215": {
+    "message": "Learn more about recognizers"
   },
   "learn_more_about_skill_manifests_7708ce2c": {
     "message": "Learn more about skill manifests"
@@ -2690,8 +2717,8 @@
   "orchestrator_downloading_language_model_e785be44": {
     "message": "Orchestrator: Downloading language model"
   },
-  "orchestrator_recognizer_cf38b65a": {
-    "message": "Orchestrator recognizer"
+  "orchestrator_intents_only_57c08345": {
+    "message": "Orchestrator (Intents only)"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
     "message": "origin lg file not found in store"
@@ -2996,8 +3023,8 @@
   "recent_f19e8c64": {
     "message": "Recent"
   },
-  "recognizer_type_dc591e16": {
-    "message": "Recognizer Type"
+  "recognizer_dispatch_type_309452a6": {
+    "message": "Recognizer/Dispatch type"
   },
   "recognizers_cefce9d1": {
     "message": "Recognizers"
@@ -3023,11 +3050,11 @@
   "region_939f2a6c": {
     "message": "Region"
   },
+  "regular_expression_ca08546f": {
+    "message": "Regular expression"
+  },
   "regular_expression_entity_e1cb91ce": {
     "message": "Regular expression entity"
-  },
-  "regular_expression_recognizer_44664557": {
-    "message": "Regular expression recognizer"
   },
   "release_1af20f26": {
     "message": "Release: "
@@ -3509,8 +3536,8 @@
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
   },
-  "specify_a_name_description_and_location_for_your_n_667f1438": {
-    "message": "Specify a name, description, and location for your new bot project."
+  "specify_a_name_runtime_type_and_location_for_your__594518ca": {
+    "message": "Specify a name, runtime type, and location for your new bot project."
   },
   "specify_an_attachment_layout_when_there_are_more_t_28ffc0c2": {
     "message": "Specify an attachment layout when there are more than one."
@@ -3677,6 +3704,9 @@
   "the_azure_bot_created_in_azure_bot_services_contai_6a71ef26": {
     "message": "The Azure Bot created in Azure Bot Services contains bot resources that can be used as the basis for a new bot, or to add or replace resources of an existing bot."
   },
+  "the_bot_is_already_part_of_the_bot_project_ab3250b1": {
+    "message": "The bot is already part of the Bot Project"
+  },
   "the_bot_responses_page_is_where_the_language_gener_31a6666b": {
     "message": "The Bot Responses page is where the Language Generation (LG) editor locates. From here users can view all the LG templates and edit them."
   },
@@ -3818,6 +3848,9 @@
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
   },
+  "this_path_does_not_exist_42c11e1": {
+    "message": "This path does not exist"
+  },
   "this_project_was_created_in_an_older_version_of_co_8b57954": {
     "message": "This project was created in an older version of Composer. To open this project in Composer 2.0, we must copy your project and convert it to the latest format. Your original project will not be changed."
   },
@@ -3866,8 +3899,8 @@
   "to_create_a_bot_from_your_own_bot_framework_templa_2c5b1f2d": {
     "message": "To create a bot from your own Bot Framework Template you need to add a path to your local templates index.js file. <templateDocLink>Learn more</templateDocLink>"
   },
-  "to_ensure_a_secure_connection_provide_the_app_id_o_6aaaba6": {
-    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration. Learn more."
+  "to_ensure_a_secure_connection_provide_the_app_id_o_61ccd30d": {
+    "message": "To ensure a secure connection, provide the App ID of the bots that can connect to your skill.  If you don’t have this information, you can also add this information in Skill Configuration."
   },
   "to_ensure_a_secure_connection_the_remote_skill_nee_f382d684": {
     "message": "To ensure a secure connection, the remote skill needs to know the Microsoft App ID of your bot. "
