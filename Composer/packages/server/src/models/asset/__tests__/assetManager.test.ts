@@ -127,7 +127,6 @@ describe('assetManager', () => {
     fetchMock.mockResponseOnce(JSON.stringify(mockFeedResponse));
     it('Get contents of a feed and return template array', async () => {
       const assetManager = new AssetManager();
-      (assetManager as any).getNpmPackageVersions = jest.fn().mockResolvedValue(['']);
 
       const mockFeedUrl =
         'https://registry.npmjs.org/-/v1/search?text=conversationalcore&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5';
@@ -142,7 +141,7 @@ describe('assetManager', () => {
             packageName: 'generator-conversational-core',
             packageSource: 'npm',
             packageVersion: '1.0.3',
-            availableVersions: [''],
+            availableVersions: [],
           },
         },
       ] as BotTemplate[]);
