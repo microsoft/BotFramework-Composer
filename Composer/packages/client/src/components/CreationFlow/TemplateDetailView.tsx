@@ -83,6 +83,9 @@ export const TemplateDetailView: React.FC<TemplateDetailViewProps> = (props) => 
         return { key: version, text: version };
       }),
       onItemClick: (ev, item) => setSelectedTemplateVersion(item.key),
+      calloutProps: {
+        calloutMaxHeight: 300,
+      },
     };
     return (
       <CommandButton
