@@ -5,11 +5,13 @@
 import { jsx } from '@emotion/core';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
+import { useRecoilValue } from 'recoil';
 
+import { dispatcherState, primaryTokenState } from '../../recoilModel/atoms';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotStatus } from './type';
@@ -17,6 +19,8 @@ import { BotStatus } from './type';
 export const PublishDialog = (props) => {
   const { items } = props;
   const [showItems, setShowItems] = useState<BotStatus[]>(items);
+  const token = useRecoilValue(primaryTokenState);
+  const { requireUserLogin } = useRecoilValue(dispatcherState);
   const columns = [
     {
       key: 'name',
@@ -93,6 +97,12 @@ export const PublishDialog = (props) => {
     await props.onSubmit(showItems);
     cleanComments();
   };
+
+  // Before a user can publish, they must first login!
+  useEffect(() => {
+    requireUserLogin();
+  }, []);
+
   return showItems?.length > 0 ? (
     <Dialog
       dialogContentProps={publishDialogProps}
@@ -123,7 +133,7 @@ export const PublishDialog = (props) => {
               props.onDismiss();
             }}
           />
-          <PrimaryButton text={formatMessage('Okay')} onClick={submit} />
+          <PrimaryButton disabled={!token} text={formatMessage('Okay')} onClick={submit} />
         </DialogFooter>
       </Fragment>
     </Dialog>

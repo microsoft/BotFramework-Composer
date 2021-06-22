@@ -269,6 +269,10 @@ export async function monitorWindowForQueryParam(
   });
 }
 
+export function setTokenInCache(key: string, token: string) {
+  storage.set(key, token);
+}
+
 export function getTokenFromCache(key: string) {
   const token = storage.get(key);
   if (isTokenExpired(token)) {

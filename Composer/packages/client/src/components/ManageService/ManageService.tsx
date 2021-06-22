@@ -809,5 +809,3 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
     </Fragment>
   );
 };
-
-export { ManageService };
