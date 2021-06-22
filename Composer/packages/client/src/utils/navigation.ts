@@ -58,6 +58,22 @@ export interface NavigationState {
   breadcrumb?: string[];
 }
 
+type ResourceType = 'language-generation' | 'language-understanding' | 'knowledge-base';
+export function generateResourcePageUrl(
+  rootProjectId: string,
+  skillId: string | null,
+  resourceType: ResourceType,
+  resourceId: string,
+  line = 0
+) {
+  let uri = `/bot/${rootProjectId}`;
+  if (skillId !== null && skillId !== rootProjectId) {
+    uri += `/skill/${skillId}`;
+  }
+
+  return `${uri}/${resourceType}/${resourceId}/edit#L=${line}`;
+}
+
 export function convertPathToUrl(
   projectId: string,
   skillId: string | null,

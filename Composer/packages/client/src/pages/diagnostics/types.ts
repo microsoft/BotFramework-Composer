@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 
 import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
-import { convertPathToUrl, createBotSettingUrl } from '../../utils/navigation';
+import { convertPathToUrl, createBotSettingUrl, generateResourcePageUrl } from '../../utils/navigation';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
 export enum DiagnosticType {
@@ -173,7 +173,13 @@ export class LgDiagnostic extends DiagnosticInfo {
 
   getUrl = () => {
     const { rootProjectId, projectId, resourceId, diagnostic, dialogPath } = this;
-    let uri = `/bot/${rootProjectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    let uri = generateResourcePageUrl(
+      rootProjectId,
+      projectId,
+      'language-generation',
+      resourceId,
+      diagnostic.range?.start.line
+    );
     //the format of item.id is lgFile#inlineTemplateId
     if (dialogPath) {
       uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
@@ -213,7 +219,13 @@ export class LuDiagnostic extends DiagnosticInfo {
 
   getUrl = () => {
     const { rootProjectId, projectId, resourceId, diagnostic, dialogPath } = this;
-    let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    let uri = generateResourcePageUrl(
+      rootProjectId,
+      projectId,
+      'language-understanding',
+      resourceId,
+      diagnostic.range?.start.line
+    );
     if (dialogPath) {
       uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
     }
@@ -230,7 +242,13 @@ export class QnADiagnostic extends DiagnosticInfo {
   }
 
   getUrl = () => {
-    const { rootProjectId, resourceId, diagnostic } = this;
-    return `/bot/${rootProjectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    const { rootProjectId, resourceId, projectId, diagnostic } = this;
+    return generateResourcePageUrl(
+      rootProjectId,
+      projectId,
+      'knowledge-base',
+      resourceId,
+      diagnostic.range?.start.line
+    );
   };
 }
