@@ -3,7 +3,7 @@
 
 import { atom } from 'recoil';
 
-import { UserInfo, ResourceGroup, LuisRegion } from '../../types';
+import { UserInfo, ResourceGroup, LuisRegion, ResourcesItem } from '../../types';
 
 export const subscriptionState = atom<string>({
   key: 'resourceConfiguration_subscription',
@@ -38,4 +38,14 @@ export const hostNameState = atom<string>({
 export const userInfoState = atom<UserInfo>({
   key: 'userInfo',
   default: undefined,
+});
+
+export const enabledResourcesState = atom<ResourcesItem[] | undefined>({
+  key: 'rc_optional_resources',
+  default: undefined,
+});
+
+export const requiredResourcesState = atom<ResourcesItem[]>({
+  key: 'rc_required_resources',
+  default: [],
 });
