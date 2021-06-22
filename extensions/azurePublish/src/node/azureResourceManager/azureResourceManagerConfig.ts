@@ -104,6 +104,7 @@ export interface WebAppConfig {
   sku?: string;
   appId?: string;
   appPwd?: string;
+  operatingSystem?: string;
 }
 
 export interface AzureFunctionsConfig {
@@ -119,6 +120,7 @@ export interface AzureFunctionsConfig {
    * Currently documented values: dotnet, node, java, python, or powershell
    */
   workerRuntime?: string;
+  operatingSystem?: string;
 }
 
 export interface DeploymentsConfig {

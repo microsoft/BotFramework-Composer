@@ -58,15 +58,10 @@ const content = jsonEscape(lgFile);
 
 describe('LG LSP server test', () => {
   const oldEnv = process.env;
-  beforeAll(() => {
-    process.env.NODE_ENV = 'test';
-  });
-
-  afterAll(() => {
-    process.env = oldEnv;
-  });
   const server = startServer();
+
   beforeAll(async () => {
+    process.env.NODE_ENV = 'test';
     await new Promise((resolve) => {
       ws.on('open', () => {
         resolve();
@@ -74,11 +69,13 @@ describe('LG LSP server test', () => {
     });
   });
 
-  afterAll(async (done) => {
+  afterAll((done) => {
     ws.close();
     server.close();
     done();
+    process.env = oldEnv;
   });
+
   it('websocket should connect server', async () => {
     await send(`{ "jsonrpc":"2.0","id":0,"method":"initialize","params": ${initializeParams} }`, [
       (response) => {

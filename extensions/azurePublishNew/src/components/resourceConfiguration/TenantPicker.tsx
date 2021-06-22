@@ -7,19 +7,19 @@ import formatMessage from 'format-message';
 import { usePublishApi, getTenants, getARMTokenForTenant } from '@bfc/extension-client';
 import jwtDecode from 'jwt-decode';
 
-import { UserInfo } from '../../recoilModel/types';
 import { SearchableDropdown, SearchableDropdownProps } from '../shared/searchableDropdown/SearchableDropdown';
 import { SearchableDropdownTextFieldProps } from '../shared/searchableDropdown/SearchableDropdownTextField';
+import { UserInfo } from '../../types';
 
 const { userShouldProvideTokens, getTokenFromCache, setTenantId } = usePublishApi();
 
 type Props = {
-  onTenantChange: (tenantId: string) => void;
+  onChangeTenant: (tenantId: string) => void;
   onUserInfoFetch: (userInfo: UserInfo) => void;
 } & Omit<SearchableDropdownProps, 'items' | 'onSubmit'>;
 
 export const TenantPicker = memo((props: Props) => {
-  const { onTenantChange, onUserInfoFetch, value } = props;
+  const { onChangeTenant, onUserInfoFetch, value } = props;
   const [tenants, setTenants] = useState<AzureTenant[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -37,7 +37,7 @@ export const TenantPicker = memo((props: Props) => {
       const { accessToken } = getTokenFromCache();
 
       const decoded = decodeToken(accessToken);
-      onTenantChange(decoded.tid as string);
+      onChangeTenant(decoded.tid as string);
       onUserInfoFetch({
         token: accessToken,
         email: decoded.upn,
@@ -67,7 +67,7 @@ export const TenantPicker = memo((props: Props) => {
           }
 
           if (!value && tenants?.length > 0) {
-            onTenantChange(tenants[0].tenantId);
+            onChangeTenant(tenants[0].tenantId);
           }
         } catch (err) {
           setTenants([]);
@@ -127,7 +127,7 @@ export const TenantPicker = memo((props: Props) => {
     <SearchableDropdown
       isLoading={isLoading}
       items={tenants.map((t) => ({ key: t.tenantId, text: t.displayName }))}
-      onSubmit={(option) => props.onTenantChange(option.key)}
+      onSubmit={(option) => props.onChangeTenant(option.key)}
       {...{
         ...props,
         textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },

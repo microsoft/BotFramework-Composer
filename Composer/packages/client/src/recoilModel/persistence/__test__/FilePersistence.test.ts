@@ -5,18 +5,6 @@ import { DialogInfo, DialogSchemaFile, LgFile, LuFile, BotAssets } from '@bfc/sh
 import FilePersistence from '../FilePersistence';
 const projectId = '2123.2234as';
 
-jest.mock('axios', () => {
-  return {
-    create: jest.fn(() => {
-      return {
-        put: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
-        post: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
-        delete: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
-      };
-    }),
-  };
-});
-
 jest.mock('../../parsers/fileDiffCalculator', () => {
   return {
     difference: require('../../parsers/workers/calculator.worker').getDifferenceItems,
