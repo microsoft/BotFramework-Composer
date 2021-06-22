@@ -15,7 +15,7 @@ export const AzureResourceTypes = {
   SERVICE_PLAN: 'servicePlan',
 };
 
-const hostingGroupName = 'Azure Hosting';
+const hostingGroupName = 'App Services';
 const cognitiveServicesGroupName = 'Cognitive Services';
 
 export const AzureResourceDefinitions = {

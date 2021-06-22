@@ -61,6 +61,18 @@ const locationRef = {
   path: mockCopyToPath,
 };
 
+const cleanup = (paths: string | string[]) => {
+  const targets = Array.isArray(paths) ? paths : [paths];
+
+  for (const target of targets) {
+    try {
+      rimraf.sync(target);
+    } catch {
+      // do nothing
+    }
+  }
+};
+
 beforeAll(() => {
   ExtensionContext.extensions.botTemplates.push({
     id: 'SampleBot',
@@ -70,7 +82,15 @@ beforeAll(() => {
   });
 });
 
+afterAll(() => {
+  cleanup(mockCopyToPath);
+});
+
 describe('assetManager', () => {
+  beforeEach(() => {
+    cleanup(mockCopyToPath);
+  });
+
   it('getProjectTemplate', async () => {
     const assetManager = new AssetManager();
     const result = await assetManager.getProjectTemplates();
@@ -84,12 +104,6 @@ describe('assetManager', () => {
     await assetManager.getProjectTemplates();
 
     await expect(assetManager.copyProjectTemplateTo('SampleBot', locationRef)).resolves.toBe(locationRef);
-    // remove the saveas files
-    try {
-      rimraf.sync(mockCopyToPath);
-    } catch (error) {
-      throw new Error(error);
-    }
   });
 
   describe('copyRemoteProjectTemplateTo', () => {

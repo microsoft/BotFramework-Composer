@@ -64,14 +64,6 @@ export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
     const runtime = ExtensionContext.getRuntimeByProject(currentProject);
     const runtimePath = currentProject.getRuntimePath();
     if (runtimePath) {
-      if (!fs.existsSync(runtimePath)) {
-        if (runtime.eject) {
-          await runtime.eject(currentProject, currentProject.fileStorage);
-        } else {
-          log('Eject skipped for project with invalid runtime setting');
-        }
-      }
-
       // TO-DO: Remove this once the SDK packages are public on Nuget instad of Myget
       // Inject a Nuget.config file into the project so that pre-release packages can be resolved.
       fs.writeFileSync(

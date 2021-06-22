@@ -77,7 +77,7 @@
     "@botframework-composer/types": "*",
     "@microsoft/bf-dialog": "4.14.0-dev.20210415.161c029",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
-    "@microsoft/bf-generate-library": "^4.14.0-preview.20210605.ff079e5",
+    "@microsoft/bf-generate-library": "^4.14.0-preview.20210617.22e26ac",
     "@microsoft/bf-lu": "4.14.0-dev.20210602.be805a8",
     "@microsoft/bf-orchestrator": "4.13.0-beta.20210316.e8ec340",
     "applicationinsights": "^1.8.7",

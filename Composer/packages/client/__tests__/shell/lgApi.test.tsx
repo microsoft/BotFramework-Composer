@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook, HookResult } from '@botframework-composer/test-utils/lib/hooks';
+import { renderHook, RenderResult } from '@botframework-composer/test-utils/lib/hooks';
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
@@ -31,7 +31,7 @@ const state = {
 
 describe('use lgApi hooks', () => {
   let removeLgTemplatesMock, initRecoilState, copyLgTemplateMock, updateLgTemplateMock;
-  let result: HookResult<any>;
+  let result: RenderResult<any>;
 
   beforeEach(() => {
     updateLgTemplateMock = jest.fn();
