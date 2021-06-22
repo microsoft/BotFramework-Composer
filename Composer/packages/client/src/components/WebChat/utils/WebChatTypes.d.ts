@@ -3,11 +3,10 @@
 
 // TODO: Remove the types declaration file when https://github.com/microsoft/BotFramework-WebChat/issues/3856 is fixed.
 declare module 'botframework-webchat' {
-  declare const renderWebChat: any;
-  export declare const createDirectLine: (options: any) => any;
-  export declare const createDirectLineAppServiceExtension: (options: any) => any;
-  declare const patchedHooks: any;
-  declare const Components: {
+  export const renderWebChat: any;
+  export const createDirectLine: (options: any) => any;
+  export const hooks: any;
+  export const Components: {
     AdaptiveCardContent: any;
     AudioCardContent: any;
     AnimationCardContent: any;
@@ -46,9 +45,8 @@ declare module 'botframework-webchat' {
     connectMicrophoneButton: any;
     connectSendButton: any;
     connectSendTextBox: any;
-    connectSuggestedActions: any;
+    UploadButton: any;
     connectUploadButton: any;
   };
   export default ReactWebChat;
-  export { Components, patchedHooks as hooks, renderWebChat };
 }
