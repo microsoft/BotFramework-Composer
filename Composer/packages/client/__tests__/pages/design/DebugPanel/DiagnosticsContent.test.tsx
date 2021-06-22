@@ -112,6 +112,14 @@ const state = {
         name: 'Email-Skill',
       },
     },
+    luis: {
+      name: 'luis',
+      endpointKey: 'asds',
+    },
+    qna: {
+      subscriptionKey: 'asd',
+      endpointKey: 'asds',
+    },
   },
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
@@ -150,5 +158,7 @@ describe('<DiagnosticList/>', () => {
 
     fireEvent.click(getByText(/test.en-us.lg/));
     expect(mockNavigationTo).toBeCalledWith('/bot/test/language-generation/test/edit#L=13');
+    fireEvent.click(getByText(/test.en-us.lu/));
+    expect(mockNavigationTo).nthCalledWith(2, '/bot/test/language-understanding/test/edit#L=7');
   });
 });
