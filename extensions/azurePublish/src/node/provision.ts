@@ -18,6 +18,7 @@ export interface ProvisionConfig {
   externalResources: ResourceType[];
   location: string;
   luisLocation: string;
+  appServiceOperatingSystem?: string;
   subscription: string;
   resourceGroup?: string;
   logger?: (string) => any;
@@ -301,6 +302,7 @@ export class BotProjectProvision {
               resourceGroupName: resourceGroupName,
               location: config.location ?? provisionResults.resourceGroup.location,
               name: config.hostname,
+              operatingSystem: config.appServiceOperatingSystem,
             });
             provisionResults.webApp = {
               hostname: hostname,
@@ -335,6 +337,7 @@ export class BotProjectProvision {
               workerRuntime: config.workerRuntime,
               appId: provisionResults.appId,
               appPwd: provisionResults.appPassword,
+              operatingSystem: config.appServiceOperatingSystem,
             });
             provisionResults.webApp = {
               hostname: functionsHostName,

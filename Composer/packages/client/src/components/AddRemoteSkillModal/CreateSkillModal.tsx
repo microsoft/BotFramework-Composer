@@ -22,6 +22,7 @@ import {
   dispatcherState,
   luFilesSelectorFamily,
   publishTypesState,
+  botProjectFileState,
 } from '../../recoilModel';
 import { addSkillDialog } from '../../constants';
 import httpClient from '../../utils/httpUtil';
@@ -53,7 +54,7 @@ export interface CreateSkillModalProps {
   onDismiss: () => void;
 }
 
-export const validateManifestUrl = async ({ formData, formDataErrors, setFormDataErrors }) => {
+export const validateManifestUrl = ({ formData, formDataErrors, setFormDataErrors }, skills: string[] = []) => {
   const { manifestUrl } = formData;
   const { manifestUrl: _, ...errors } = formDataErrors;
 
@@ -61,10 +62,16 @@ export const validateManifestUrl = async ({ formData, formDataErrors, setFormDat
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest URL') });
   } else if (!urlRegex.test(manifestUrl)) {
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('URL should start with http:// or https://') });
+  } else if (skills.includes(manifestUrl)) {
+    setFormDataErrors({
+      ...errors,
+      manifestUrl: formatMessage('The bot is already part of the Bot Project'),
+    });
   } else {
     setFormDataErrors({});
   }
 };
+
 export const getSkillManifest = async (projectId: string, manifestUrl: string, setSkillManifest, setFormDataErrors) => {
   try {
     const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
@@ -136,6 +143,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const { dialogId } = useRecoilValue(designPageLocationState(projectId));
   const luFiles = useRecoilValue(luFilesSelectorFamily(projectId));
   const { updateRecognizer, setMicrosoftAppProperties, setPublishTargets } = useRecoilValue(dispatcherState);
+  const { content: botProjectFile } = useRecoilValue(botProjectFileState(projectId));
+  const skillUrls = Object.keys(botProjectFile.skills).map((key) => botProjectFile.skills[key].manifest as string);
 
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
@@ -157,10 +166,13 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const handleManifestUrlChange = (_, currentManifestUrl = '') => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { manifestUrl, ...rest } = formData;
-    debouncedValidateManifestURl({
-      formData: { manifestUrl: currentManifestUrl },
-      ...validationHelpers,
-    });
+    debouncedValidateManifestURl(
+      {
+        formData: { manifestUrl: currentManifestUrl },
+        ...validationHelpers,
+      },
+      skillUrls
+    );
     setFormData({
       ...rest,
       manifestUrl: currentManifestUrl,

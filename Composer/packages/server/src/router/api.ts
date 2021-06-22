@@ -9,7 +9,6 @@ import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
-import { EjectController } from '../controllers/eject';
 import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
 import { ProvisionController } from '../controllers/provision';
@@ -89,10 +88,6 @@ router.post('/publish/:projectId/stopPublish/:target', PublishController.stopBot
 router.post('/publish/:projectId/pull/:target', PublishController.pull);
 
 router.get('/publish/:method', PublishController.publish);
-
-// runtime ejection
-router.get('/runtime/templates', EjectController.getTemplates);
-router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 
 //assets
 router.post('/assets/projectTemplates', AssetController.getProjTemplates);

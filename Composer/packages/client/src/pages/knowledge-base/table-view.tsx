@@ -352,7 +352,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return (
           <IconButton
             hidden
-            data-testId={'knowledgeBaseMore'}
+            data-testid="knowledgeBaseMore"
             menuIconProps={{ iconName: 'More' }}
             menuProps={{ items: overflowItems || [] }}
             role="menuitem"

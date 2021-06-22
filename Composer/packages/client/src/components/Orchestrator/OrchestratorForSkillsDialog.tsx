@@ -4,7 +4,7 @@
 import { DialogTypes, DialogWrapper } from '@bfc/ui-shared/lib/components/DialogWrapper';
 import { SDKKinds } from '@botframework-composer/types';
 import { Button } from 'office-ui-fabric-react/lib/components/Button/Button';
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { enableOrchestratorDialog } from '../../constants';
@@ -32,6 +32,12 @@ export const OrchestratorForSkillsDialog = () => {
     return curRecognizers.some((f) => f.id === fileName && f.content.$kind === SDKKinds.OrchestratorRecognizer);
   }, [curRecognizers, dialogId, locale]);
 
+  useEffect(() => {
+    if (showOrchestratorDialog && hasOrchestrator) {
+      setShowOrchestratorDialog(false);
+    }
+  }, [hasOrchestrator, showOrchestratorDialog]);
+
   const handleOrchestratorSubmit = async (event: React.MouseEvent<HTMLElement | Button>, enable?: boolean) => {
     event.preventDefault();
     if (enable) {
@@ -41,25 +47,14 @@ export const OrchestratorForSkillsDialog = () => {
     setShowOrchestratorDialog(false);
   };
 
-  const setVisibility = () => {
-    if (showOrchestratorDialog) {
-      if (hasOrchestrator) {
-        setShowOrchestratorDialog(false);
-        return false;
-      }
-      return true;
-    }
-    return false;
-  };
-
-  const onDismissHandler = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+  const onDismissHandler = () => {
     setShowOrchestratorDialog(false);
   };
 
   return (
     <DialogWrapper
       dialogType={DialogTypes.CreateFlow}
-      isOpen={setVisibility()}
+      isOpen={showOrchestratorDialog}
       title={enableOrchestratorDialog.title}
       onDismiss={onDismissHandler}
     >

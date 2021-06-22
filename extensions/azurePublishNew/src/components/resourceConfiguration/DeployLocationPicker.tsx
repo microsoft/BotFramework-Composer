@@ -14,18 +14,18 @@ type Props = {
   canRefresh?: boolean;
   accessToken: string;
   subscriptionId: string;
-  onDeployLocationChange: (location: string) => void;
-  onDeployLocationsFetch?: (deployLocations: DeployLocation[]) => void;
+  onChangeDeployLocation: (location: string) => void;
+  onFetchDeployLocations?: (deployLocations: DeployLocation[]) => void;
 } & Omit<SearchableDropdownProps, 'items' | 'onSubmit'>;
 
 export const DeployLocationPicker = React.memo((props: Props) => {
-  const { accessToken, subscriptionId, onDeployLocationsFetch } = props;
+  const { accessToken, subscriptionId, onFetchDeployLocations } = props;
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    onDeployLocationsFetch?.(deployLocations);
+    onFetchDeployLocations?.(deployLocations);
   }, [deployLocations]);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export const DeployLocationPicker = React.memo((props: Props) => {
         deployLocations.map((t) => ({ key: t.name, text: t.displayName })),
         [(location) => location.text]
       )}
-      onSubmit={(option) => props.onDeployLocationChange(option.key)}
+      onSubmit={(option) => props.onChangeDeployLocation(option.key)}
       {...{
         ...props,
         textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },

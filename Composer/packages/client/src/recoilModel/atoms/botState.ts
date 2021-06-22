@@ -359,11 +359,6 @@ export const onCreateQnADialogCompleteState = atomFamily<{ func: undefined | (()
   default: { func: undefined },
 });
 
-export const isEjectRuntimeExistState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('isEjectRuntimeExist'),
-  default: false,
-});
-
 export const currentPublishTargetState = atomFamily<PublishTarget, string>({
   key: getFullyQualifiedKey('currentTarget'),
   default: {} as PublishTarget,
