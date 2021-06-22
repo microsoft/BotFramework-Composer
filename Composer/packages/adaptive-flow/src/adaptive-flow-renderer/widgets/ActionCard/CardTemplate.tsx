@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
 import { StandardNodeWidth } from '../../constants/ElementSizes';
 import { ObiColors } from '../../constants/ElementColors';
@@ -18,8 +19,9 @@ import {
   CardContainerCSS,
   DisabledCardContainerCSS,
 } from './CardTemplateStyle';
+import { CardComment } from './CardComment';
 
-export interface CardTemplateProps {
+export interface CardTemplateProps extends WidgetContainerProps {
   header: ReactNode;
   body?: ReactNode;
   footer?: ReactNode;
@@ -35,6 +37,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   body,
   footer,
   disabled,
+  data,
   onClick,
   onClickHeader,
   onClickBody,
@@ -44,6 +47,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   const bodyCSS = BodyCSS;
   const footerCSS = FooterCSS;
   const containerCSS = disabled ? DisabledCardContainerCSS : CardContainerCSS;
+  const comment = data?.$designer?.comment;
 
   const renderHeader = (header: ReactNode) => (
     <div className="CardNode__Header" css={headerCSS} onClick={onClickHeader}>
@@ -53,6 +57,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
 
   const renderBody = (body: ReactNode) => (
     <div className="CardNode__Body" css={bodyCSS} onClick={onClickBody}>
+      {comment && <CardComment comment={comment} />}
       <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );

@@ -44,5 +44,7 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   const headerNode = safeRender(header) || <ActionHeader {...widgetContext} />;
   const bodyNode = safeRender(body);
   const footerNode = hideFooter ? null : safeRender(footer);
-  return <CardTemplate body={bodyNode} disabled={disabled} footer={footerNode} header={headerNode} />;
+  return (
+    <CardTemplate {...widgetContext} body={bodyNode} disabled={disabled} footer={footerNode} header={headerNode} />
+  );
 };
