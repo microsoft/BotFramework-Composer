@@ -20,6 +20,7 @@ import {
   schemasState,
   settingsState,
   projectMetaDataState,
+  dialogState,
 } from '../../../../src/recoilModel';
 import mockProjectResponse from '../../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 import { DiagnosticsContent } from '../../../../src/pages/design/DebugPanel/TabExtensions/DiagnosticsTab/DiagnosticsTabContent';
@@ -38,6 +39,7 @@ const state = {
       luFile: 'test',
       referredLuIntents: [],
       skills: [`=settings.skill['Email-Skill'].endpointUrl`],
+      projectId: 'test',
     },
   ],
   luFiles: [
@@ -121,7 +123,8 @@ describe('<DiagnosticList/>', () => {
     set(projectMetaDataState(state.projectId), {
       isRootBot: true,
     });
-    set(dialogIdsState(state.projectId), []);
+    set(dialogState({ projectId: state.projectId, dialogId: state.dialogs[0].id }), state.dialogs[0]);
+    set(dialogIdsState(state.projectId), ['test']);
     set(luFilesSelectorFamily(state.projectId), state.luFiles);
     set(lgFilesSelectorFamily(state.projectId), state.lgFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
