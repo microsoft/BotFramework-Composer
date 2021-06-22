@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, findByText } from '@botframework-composer/test-utils';
+import { render } from '@botframework-composer/test-utils';
 
-import { IconMenu } from '../../../src/adaptive-flow-editor/components/IconMenu';
+import { IconMenu } from '../IconMenu';
 
 describe('<IconMenu />', () => {
   let menuItems, iconName, onClick;
