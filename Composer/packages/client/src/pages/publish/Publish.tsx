@@ -350,6 +350,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       setSkillPublishStatus(SKILL_PUBLISH_STATUS.PUBLISHING);
     }
 
+    // initialize the update status for bots going to be published
     for (const bot of items) {
       const setting = botPropertyData[bot.id].setting;
       const publishTargets = botPropertyData[bot.id].publishTargets;
@@ -400,8 +401,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         updater?.restart(onReceiveUpdaterPayload);
 
         //this removes the concurrency to the publish endpoint - per #7807, if
-        //we simulataneously publish many bots with the same LUIS authoring key or a key with low
-        //TPS, we will get a 429 status from LUIS.
+        //we simulataneously publish many bots with the same LUIS authoring key or use a key with low
+        //TPS, we might get a 429 status from LUIS.
         await updater?.waitUntilStopped();
       }
     }
