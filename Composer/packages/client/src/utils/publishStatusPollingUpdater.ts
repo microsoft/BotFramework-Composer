@@ -83,10 +83,10 @@ export class PublishStatusPollingUpdater {
     );
   }
 
-  async waitUntilStopped() {
+  waitUntilStopped(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       try {
-        const timer = setInterval(async () => {
+        const timer = setInterval(() => {
           if (this.status === PollingStateEnum.Stopped) {
             clearInterval(timer);
             resolve(true);
