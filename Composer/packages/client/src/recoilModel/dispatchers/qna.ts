@@ -25,6 +25,7 @@ import {
 } from '../../utils/notifications';
 import httpClient from '../../utils/httpUtil';
 import { qnaFilesSelectorFamily, rootBotProjectIdSelector } from '../selectors';
+import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { addNotificationInternal, deleteNotificationInternal, createNotification } from './notification';
 
@@ -487,6 +488,7 @@ ${response.data}
           createNotification(getQnaFailedNotification(err.response?.data?.message))
         );
         createQnADialogCancel({ projectId });
+        TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
         return;
       } finally {
         deleteNotificationInternal(callbackHelpers, notification.id);
@@ -558,6 +560,8 @@ ${response.data}
               createNotification(getQnaFailedNotification(err.response?.data?.message))
             );
             createQnADialogCancel({ projectId });
+            TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
+
             return;
           } finally {
             deleteNotificationInternal(callbackHelpers, notification.id);
@@ -638,6 +642,7 @@ ${response.data}
           createNotification(getQnaFailedNotification(err.response?.data?.message))
         );
         createQnADialogCancel({ projectId });
+        TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
         return;
       } finally {
         deleteNotificationInternal(callbackHelpers, notification.id);
@@ -699,6 +704,7 @@ ${response.data}
           callbackHelpers,
           createNotification(getQnaFailedNotification(err.response?.data?.message))
         );
+        TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
         return;
       } finally {
         deleteNotificationInternal(callbackHelpers, notification.id);

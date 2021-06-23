@@ -577,7 +577,7 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
       return;
     }
     onSubmit(formData);
-    TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
+    TelemetryClient.track('AddNewKnowledgeBaseCompleted', { source: formData.url ? 'url' : 'none' });
   };
 
   const onSubmitImportKB = async () => {

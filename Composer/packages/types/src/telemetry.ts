@@ -104,7 +104,8 @@ type DesignerEvents = {
 
 type QnaEvents = {
   AddNewKnowledgeBaseStarted: undefined;
-  AddNewKnowledgeBaseCompleted: { scratch: boolean };
+  AddNewKnowledgeBaseCompleted: { source: 'none' | 'kb' | 'url' };
+  AddNewKnowledgeBaseError: { error: string };
   AddNewKnowledgeBaseCanceled: undefined;
   NewQnAPair: undefined;
   AlternateQnAPhraseAdded: undefined;

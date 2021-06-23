@@ -623,14 +623,14 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
     }
     onSubmit(formData);
     setInitialName('');
-    TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
+    TelemetryClient.track('AddNewKnowledgeBaseCompleted', { source: formData.urls?.length ? 'url' : 'none' });
   };
 
   const onSubmitImportKB = async () => {
     if (key && token && selectedKb && formData) {
       onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id, subscriptionKey: key.key });
       setInitialName('');
-      TelemetryClient.track('AddNewKnowledgeBaseCompleted', { scratch: true });
+      TelemetryClient.track('AddNewKnowledgeBaseCompleted', { source: 'kb' });
     }
   };
 
