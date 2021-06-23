@@ -10,15 +10,13 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useRecoilValue } from 'recoil';
 
-import { getTokenFromCache, userShouldProvideTokens, setTenantId, getTenantIdFromCache } from '../../../utils/auth';
+import { getTenantIdFromCache } from '../../../utils/auth';
 import { PublishType } from '../../../recoilModel/types';
 import { PluginAPI } from '../../../plugins/api';
 import { PluginHost } from '../../../components/PluginHost/PluginHost';
 import { defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from '../../publish/styles';
 import TelemetryClient from '../../../telemetry/TelemetryClient';
-import { AuthClient } from '../../../utils/authClient';
-import { graphScopes } from '../../../constants';
-import { dispatcherState } from '../../../recoilModel';
+import { dispatcherState, currentUserState } from '../../../recoilModel';
 import { createNotification } from '../../../recoilModel/dispatchers/notification';
 
 import { ProfileFormDialog } from './ProfileFormDialog';
@@ -61,10 +59,11 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
   } = props;
   const [name, setName] = useState(current?.item.name || '');
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
+  const currentUser = useRecoilValue(currentUserState);
 
   const [page, setPage] = useState(Page.ProfileForm);
   const [publishSurfaceStyles, setStyles] = useState(defaultPublishSurface);
-  const { provisionToTarget, addNotification } = useRecoilValue(dispatcherState);
+  const { provisionToTarget, addNotification, requireUserLogin } = useRecoilValue(dispatcherState);
   const [selectedType, setSelectType] = useState<PublishType | undefined>();
 
   const [dialogTitle, setTitle] = useState(formatDialogTitle(current));
@@ -99,27 +98,14 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
       setPage(Page.ProfileForm);
       setTitle(formatDialogTitle(current));
     };
-    PluginAPI.publish.getTokenFromCache = () => {
-      return {
-        accessToken: getTokenFromCache('accessToken'),
-        graphToken: getTokenFromCache('graphToken'),
-      };
-    };
-    /** @deprecated use `userShouldProvideTokens` instead */
-    PluginAPI.publish.isGetTokenFromUser = () => {
-      return userShouldProvideTokens();
-    };
-    PluginAPI.publish.userShouldProvideTokens = () => {
-      return userShouldProvideTokens();
+    PluginAPI.publish.requireUserLogin = () => {
+      return requireUserLogin();
     };
     PluginAPI.publish.setTitle = (value) => {
       setTitle(value);
     };
     PluginAPI.publish.getTenantIdFromCache = () => {
       return getTenantIdFromCache();
-    };
-    PluginAPI.publish.setTenantId = (value) => {
-      setTenantId(value);
     };
   }, []);
 
@@ -177,42 +163,35 @@ export const PublishProfileDialog: React.FC<PublishProfileDialogProps> = (props)
     PluginAPI.publish.startProvision = async (config) => {
       const fullConfig = { ...config, name: name, type: targetType };
 
-      let arm, graph;
-      if (!userShouldProvideTokens()) {
-        let tenantId = config.tenantId;
+      let tenantId = config.tenantId;
 
-        if (!tenantId) {
-          // eslint-disable-next-line no-console
-          console.log('Provision config does not include tenant id, using tenant id from cache.');
-          tenantId = getTenantIdFromCache();
-        }
-
-        // require tenant id to be set by plugin (handles multiple tenant scenario)
-        if (!tenantId) {
-          TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
-          const notification = createNotification({
-            type: 'error',
-            title: formatMessage('Error provisioning.'),
-            description: formatMessage(
-              'An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again.'
-            ),
-          });
-          addNotification(notification);
-          return;
-        }
-
-        // login or get token implicit
-        arm = await AuthClient.getARMTokenForTenant(tenantId);
-        graph = await AuthClient.getAccessToken(graphScopes);
-      } else {
-        // get token from cache
-        arm = getTokenFromCache('accessToken');
-        graph = getTokenFromCache('graphToken');
+      if (!tenantId) {
+        // eslint-disable-next-line no-console
+        console.log('Provision config does not include tenant id, using tenant id from cache.');
+        tenantId = getTenantIdFromCache();
       }
+
+      // require tenant id to be set by plugin (handles multiple tenant scenario)
+      if (!tenantId) {
+        TelemetryClient.track('ProvisioningProfileCreateFailure', { message: 'azure tenant not set' });
+        const notification = createNotification({
+          type: 'error',
+          title: formatMessage('Error provisioning.'),
+          description: formatMessage(
+            'An Azure tenant must be set in order to provision resources. Try recreating the publish profile and try again.'
+          ),
+        });
+        addNotification(notification);
+        return;
+      }
+
+      const arm = currentUser.token;
+      const graph = currentUser.graph;
+
       await provisionToTarget(fullConfig, config.type, projectId, arm, graph, current?.item);
       onUpdateIsCreateProfileFromSkill?.(true);
     };
-  }, [name, targetType, types, savePublishTarget]);
+  }, [currentUser, name, targetType, types, savePublishTarget]);
 
   return (
     <Fragment>

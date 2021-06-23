@@ -12,7 +12,6 @@ import { useCallback, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../../recoilModel/atoms';
-import storage from '../../utils/storage';
 import { isTokenExpired } from '../../utils/auth';
 
 export interface AuthDialogProps {
@@ -21,7 +20,7 @@ export interface AuthDialogProps {
   next?: () => void;
 }
 export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
-  const { setPrimaryToken, setGraphToken } = useRecoilValue(dispatcherState);
+  const { setCurrentUser, setGraphToken } = useRecoilValue(dispatcherState);
 
   const [graphToken, setLocalGraphToken] = useState('');
   const [accessToken, setAccessToken] = useState('');
@@ -93,9 +92,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
           onClick={() => {
             props.onDismiss();
             // cache tokens
-            storage.set('accessToken', accessToken);
-            storage.set('graphToken', graphToken);
-            setPrimaryToken(accessToken);
+            setCurrentUser(accessToken);
             setGraphToken(graphToken);
             if (props.next) props.next();
           }}

@@ -40,6 +40,8 @@ interface PublishAPI {
   userShouldProvideTokens?: () => boolean;
   getTenantIdFromCache?: () => string;
   setTenantId?: (value: string) => void;
+  requireUserLogin: (tenantId?: string) => void;
+  getPrimaryToken: () => string;
 }
 
 class API implements IAPI {

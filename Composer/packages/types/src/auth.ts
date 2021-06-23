@@ -30,3 +30,12 @@ export type WebAuthParameters = {
   /** List of OAuth scopes that will be granted once the user has authenticated. */
   scopes?: string[];
 };
+
+export type CurrentUser = {
+  token: string | null; // aad token
+  graph: string | null; // graph token
+  email?: string;
+  name?: string;
+  expiration?: number;
+  sessionExpired: boolean;
+};

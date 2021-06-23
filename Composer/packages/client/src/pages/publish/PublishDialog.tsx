@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 
-import { dispatcherState, primaryTokenState } from '../../recoilModel/atoms';
+import { dispatcherState, isAuthenticatedState } from '../../recoilModel/atoms';
 import TelemetryClient from '../../telemetry/TelemetryClient';
 
 import { BotStatus } from './type';
@@ -19,7 +19,7 @@ import { BotStatus } from './type';
 export const PublishDialog = (props) => {
   const { items } = props;
   const [showItems, setShowItems] = useState<BotStatus[]>(items);
-  const token = useRecoilValue(primaryTokenState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
   const { requireUserLogin } = useRecoilValue(dispatcherState);
   const columns = [
     {
@@ -133,7 +133,7 @@ export const PublishDialog = (props) => {
               props.onDismiss();
             }}
           />
-          <PrimaryButton disabled={!token} text={formatMessage('Okay')} onClick={submit} />
+          <PrimaryButton disabled={!isAuthenticated} text={formatMessage('Okay')} onClick={submit} />
         </DialogFooter>
       </Fragment>
     </Dialog>

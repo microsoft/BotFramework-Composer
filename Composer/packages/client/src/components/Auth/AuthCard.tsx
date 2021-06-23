@@ -14,12 +14,13 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
 import {
-  primaryTokenState,
+  currentUserState,
+  isAuthenticatedState,
   dispatcherState,
   showAuthDialogState,
   showTenantDialogState,
 } from '../../recoilModel/atoms';
-import { isTokenExpired, decodeToken, setTenantId } from '../../utils/auth';
+import { setTenantId } from '../../utils/auth';
 import { zIndices } from '../../utils/zIndices';
 
 import { AuthDialog } from './AuthDialog';
@@ -50,34 +51,18 @@ const styles = {
 };
 
 export const AuthCard: React.FC = () => {
-  const token = useRecoilValue(primaryTokenState);
   const [authCardVisible, setAuthCardVisible] = useState<boolean>(false);
   const { refreshLoginStatus, requireUserLogin, logoutUser, setShowAuthDialog, setShowTenantDialog } = useRecoilValue(
     dispatcherState
   );
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const currentUser = useRecoilValue(currentUserState);
   const showAuthDialog = useRecoilValue(showAuthDialogState);
   const showTenantDialog = useRecoilValue(showTenantDialogState);
-  const [currentUser, setCurrentUser] = useState<any>(undefined);
 
   useEffect(() => {
     refreshLoginStatus();
   }, []);
-
-  useEffect(() => {
-    try {
-      if (token && !isTokenExpired(token)) {
-        const profile = decodeToken(token);
-        setCurrentUser({
-          email: profile.upn,
-          name: profile.name,
-        });
-      } else {
-        setCurrentUser(undefined);
-      }
-    } catch (err) {
-      alert(err);
-    }
-  }, [token]);
 
   const switchTenants = () => {
     setTenantId('');
@@ -116,7 +101,7 @@ export const AuthCard: React.FC = () => {
           target={`#persona`}
           onDismiss={toggleAuthCardVisibility}
         >
-          {currentUser ? (
+          {isAuthenticated ? (
             <Stack tokens={{ childrenGap: 10, padding: 20 }}>
               <Stack.Item align="end">
                 <Link styles={styles.logoutLink as ILinkStyles} onClick={logout}>

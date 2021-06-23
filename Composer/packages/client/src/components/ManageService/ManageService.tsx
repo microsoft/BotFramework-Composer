@@ -22,11 +22,9 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { ProvisionHandoff } from '@bfc/ui-shared';
 import sortBy from 'lodash/sortBy';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import jwtDecode from 'jwt-decode';
 
 import TelemetryClient from '../../telemetry/TelemetryClient';
-import { dispatcherState, primaryTokenState, showAuthDialogState, currentTenantState } from '../../recoilModel/atoms';
-import { userShouldProvideTokens } from '../../utils/auth';
+import { dispatcherState, currentUserState, isAuthenticatedState, showAuthDialogState } from '../../recoilModel/atoms';
 
 type ManageServiceProps = {
   createService: (
@@ -70,8 +68,8 @@ const dialogBodyStyles = { height: 400 };
 const CREATE_NEW_KEY = 'CREATE_NEW';
 
 export const ManageService: React.FC<ManageServiceProps> = (props: ManageServiceProps) => {
-  const token = useRecoilValue(primaryTokenState);
-  const tenantId = useRecoilValue(currentTenantState);
+  const currentUser = useRecoilValue(currentUserState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
   const showAuthDialog = useRecoilValue(showAuthDialogState);
 
   const { setApplicationLevelError, requireUserLogin } = useRecoilValue(dispatcherState);
@@ -110,8 +108,8 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   ];
 
   const fetchLocations = async (subscriptionId) => {
-    if (token) {
-      const tokenCredentials = new TokenCredentials(token);
+    if (isAuthenticated) {
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const subscriptionClient = new SubscriptionClient(tokenCredentials);
       const locations = await subscriptionClient.subscriptions.listLocations(subscriptionId);
       setLocationList(
@@ -135,20 +133,11 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
       return [];
     }
   };
-  const decodeToken = (token: string) => {
-    try {
-      return jwtDecode<any>(token);
-    } catch (err) {
-      console.error('decode token error in ', err);
-      return null;
-    }
-  };
-
   useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       setAvailableSubscriptions([]);
       setSubscriptionsErrorMessage(undefined);
-      getSubscriptions(token)
+      getSubscriptions(currentUser.token)
         .then((data) => {
           setAvailableSubscriptions(data);
           if (data.length === 0) {
@@ -163,7 +152,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
           setSubscriptionsErrorMessage(err.message);
         });
     }
-  }, [token]);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     // reset the ui
@@ -209,10 +198,10 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   };
 
   const fetchAccounts = async (subscriptionId) => {
-    if (token) {
+    if (isAuthenticated) {
       setLoading(formatMessage('Loading keys...'));
       setNoKeys(false);
-      const tokenCredentials = new TokenCredentials(token);
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
       const accounts = await cognitiveServicesManagementClient.accounts.list();
 
@@ -231,8 +220,8 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   };
 
   const fetchResourceGroups = async (subscriptionId) => {
-    if (token) {
-      const tokenCredentials = new TokenCredentials(token);
+    if (isAuthenticated) {
+      const tokenCredentials = new TokenCredentials(currentUser.token);
       const resourceClient = new ResourceManagementClient(tokenCredentials, subscriptionId);
       const results = await resourceClient.resourceGroups.list();
       const groups = sortBy(results, ['name']);
@@ -248,10 +237,10 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
   };
 
   const createService = async () => {
-    if (token) {
+    if (isAuthenticated) {
       setLoading(formatMessage('Creating resources...'));
 
-      const tokenCredentials = new TokenCredentials(token);
+      const tokenCredentials = new TokenCredentials(currentUser.token);
 
       const resourceGroupName = resourceGroupKey === CREATE_NEW_KEY ? newResourceGroupName : resourceGroup;
       if (resourceGroupKey === CREATE_NEW_KEY) {
@@ -726,7 +715,7 @@ export const ManageService: React.FC<ManageServiceProps> = (props: ManageService
           {loading && <Spinner label={loading} labelPosition="right" styles={{ root: { float: 'left' } }} />}
           <DefaultButton disabled={!!loading} text={formatMessage('Back')} onClick={() => setCurrentStep('intro')} />
           <PrimaryButton
-            disabled={!!loading || (!userShouldProvideTokens && !tenantId) || !subscriptionId}
+            disabled={!!loading || !isAuthenticated || !subscriptionId}
             text={formatMessage('Next')}
             onClick={() => setCurrentStep('resourceCreation')}
           />

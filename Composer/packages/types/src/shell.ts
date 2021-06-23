@@ -21,6 +21,7 @@ import type { ILUFeaturesConfig, SkillSetting, UserSettings, DialogSetting } fro
 import { MicrosoftIDialog } from './sdk';
 import { FeatureFlagKey } from './featureFlags';
 import { TelemetryClient } from './telemetry';
+import { CurrentUser } from './auth';
 
 /** Recursively marks all properties as optional. */
 // type AllPartial<T> = {
@@ -106,6 +107,17 @@ export type ApplicationContext = {
   flowZoomRate: ZoomInfo;
 
   httpClient: HttpClient;
+};
+
+export type AuthContext = {
+  currentUser: CurrentUser;
+  currentTenant: string;
+  isAuthenticated: boolean;
+  showAuthDialog: boolean;
+};
+
+export type AuthContextApi = {
+  requireUserLogin: (tenantId?: string) => void;
 };
 
 export type LuContextApi = {
@@ -216,9 +228,10 @@ export type DialogEditingContext = {
   focusPath: string;
 };
 
-export type ShellData = ApplicationContext & ProjectContext & DialogEditingContext;
+export type ShellData = ApplicationContext & AuthContext & ProjectContext & DialogEditingContext;
 
 export type ShellApi = ApplicationContextApi &
+  AuthContextApi &
   ProjectContextApi &
   DialogEditingContextApi &
   LgContextApi &

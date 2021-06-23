@@ -5,8 +5,10 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import jwtDecode from 'jwt-decode';
 import pick from 'lodash/pick';
+import { CurrentUser } from '@botframework-composer/types';
 
-import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appState';
+import { currentUserState } from '../atoms/authState';
+import { userSettingsState } from '../atoms/appState';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
 import storage from '../../utils/storage';
 import { loadLocale } from '../../utils/fileUtil';

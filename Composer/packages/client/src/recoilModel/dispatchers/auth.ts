@@ -6,6 +6,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { AzureTenant } from '@botframework-composer/types';
 
 import {
+  decodeToken,
   userShouldProvideTokens,
   isShowAuthDialog,
   getTokenFromCache,
@@ -19,9 +20,12 @@ import {
   availableTenantsState,
   showTenantDialogState,
   currentTenantState,
-} from '../atoms/appState';
+  currentUserState,
+  isAuthenticatedState,
+} from '../atoms/authState';
 import { AuthClient } from '../../utils/authClient';
 import storage from '../../utils/storage';
+import { graphScopes } from '../../constants';
 
 import { addNotificationInternal, createNotification } from './notification';
 
@@ -49,8 +53,10 @@ export const authDispatcher = () => {
         try {
           console.log('Get arm token for tenant', tenant);
           const token = await AuthClient.getARMTokenForTenant(tenant);
+          const graph = await AuthClient.getAccessToken(graphScopes);
+
           if (token) {
-            setPrimaryToken(token);
+            setCurrentUser(token, graph);
 
             // fire notification
             if (notify !== false) {
@@ -85,13 +91,38 @@ export const authDispatcher = () => {
     callbackHelpers.set(showTenantDialogState, show);
   });
 
-  const refreshLoginStatus = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    setPrimaryToken(getTokenFromCache('accessToken'));
-    setGraphToken(getTokenFromCache('graphToken'));
+  const setCurrentUser = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (token: string | undefined, graph?: string) => {
+      setPrimaryToken(token || '');
+      setGraphToken(graph || '');
+
+      if (token) {
+        const decoded = decodeToken(token);
+
+        callbackHelpers.set(currentUserState, {
+          token,
+          graph,
+          email: decoded.upn,
+          name: decoded.name,
+          expiration: (decoded.exp || 0) * 1000, // convert to ms,
+          sessionExpired: false,
+        });
+        callbackHelpers.set(isAuthenticatedState, true);
+      } else {
+        callbackHelpers.set(currentUserState, {});
+        callbackHelpers.set(isAuthenticatedState, false);
+      }
+    }
+  );
+
+  const refreshLoginStatus = useRecoilCallback(() => async () => {
+    const token = getTokenFromCache('accessToken');
+    const graph = getTokenFromCache('graphToken');
+    setCurrentUser(token, graph);
   });
 
   const resetCreds = () => {
-    setPrimaryToken('');
+    setCurrentUser(undefined);
     setGraphToken('');
     setCurrentTenant('');
   };
@@ -111,7 +142,7 @@ export const authDispatcher = () => {
           setShowAuthDialog(true);
         } else {
           // update app state with token from cache
-          setPrimaryToken(getTokenFromCache('accessToken'));
+          setCurrentUser(getTokenFromCache('accessToken'));
           setGraphToken(getTokenFromCache('graphToken'));
         }
       } else if (desiredTenantId) {
@@ -157,6 +188,7 @@ export const authDispatcher = () => {
     setPrimaryToken,
     setShowTenantDialog,
     setCurrentTenant,
+    setCurrentUser,
     refreshLoginStatus,
     logoutUser,
   };
