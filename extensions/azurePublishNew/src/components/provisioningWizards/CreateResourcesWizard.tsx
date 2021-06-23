@@ -8,7 +8,8 @@ import { usePublishApi } from '@bfc/extension-client';
 
 import { Wizard, WizardStep } from '../shared/wizard/Wizard';
 import { useResourceConfiguration } from '../../hooks/useResourceConfiguration';
-import { userInfoState } from '../../recoilModel/atoms/resourceConfigurationState';
+import { userInfoState, enabledResourcesState } from '../../recoilModel/atoms/resourceConfigurationState';
+import { useDispatcher } from '../../hooks/useDispatcher';
 
 import { WizardFooter } from './footers/WizardFooter';
 import { CreateResourceInstructionsStep } from './steps/CreateResourceInstructionsStep';
@@ -32,6 +33,8 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
   const [isValidResourceConfiguration, setIsValidResourceConfiguration] = useState<boolean>(false);
   const { onBack, closeDialog: onCancel } = usePublishApi();
   const { stashWizardState } = useResourceConfiguration();
+  const enabledResources = useRecoilValue(enabledResourcesState);
+  const { setEnabledResources } = useDispatcher();
 
   React.useEffect(() => {
     setSteps([
@@ -66,7 +69,9 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
             ),
           }
         ),
-        onRenderContent: () => <ChooseResourcesStep />,
+        onRenderContent: () => (
+          <ChooseResourcesStep enabledResources={enabledResources} onChangeSelection={setEnabledResources} />
+        ),
         onCancel,
       },
       {
@@ -80,7 +85,7 @@ export const CreateResourcesWizard = React.memo((props: Props) => {
         onCancel,
       },
     ]);
-  }, [isValidResourceConfiguration, userInfo]);
+  }, [isValidResourceConfiguration, userInfo, enabledResources]);
 
   return (
     <Wizard

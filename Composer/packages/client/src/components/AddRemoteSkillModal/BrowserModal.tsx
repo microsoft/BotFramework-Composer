@@ -3,7 +3,8 @@
 
 import React, { useRef } from 'react';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react';
+import JSZip from 'jszip';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 export const BrowserModal = (props) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -12,16 +13,19 @@ export const BrowserModal = (props) => {
     inputFileRef?.current?.click();
   };
 
-  const onChange = () => {
-    const file = inputFileRef?.current?.files?.item(0);
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsText(file, 'UTF-8');
-      reader.onload = function () {
-        const fileString = this.result;
-        console.log(typeof fileString);
-        typeof fileString === 'string' && fileString && props.onUpdate(file.name, JSON.parse(fileString));
-      };
+  const onChange = async () => {
+    const zipFile = inputFileRef?.current?.files?.item(0);
+    if (zipFile) {
+      // create zip instance
+      const jszip = new JSZip();
+      jszip
+        .loadAsync(zipFile)
+        .then((zip) => {
+          props.onUpdate(zipFile.name, zip.files);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -32,7 +36,7 @@ export const BrowserModal = (props) => {
         text={formatMessage('Browser')}
         onClick={onClickOpen}
       />
-      <input ref={inputFileRef} accept="application/json" style={{ display: 'none' }} type="file" onChange={onChange} />
+      <input ref={inputFileRef} accept=".zip,.rar,.7zip" style={{ display: 'none' }} type="file" onChange={onChange} />
     </>
   );
 };

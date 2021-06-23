@@ -14,6 +14,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { JSZipObject } from 'jszip';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import {
@@ -140,6 +141,8 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
   const [showDetail, setShowDetail] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [createSkillDialogHidden, setCreateSkillDialogHidden] = useState(false);
+  const [manifestDirPath, setManifestDirPath] = useState('');
+  const [zipContent, setZipContent] = useState({});
 
   const publishTypes = useRecoilValue(publishTypesState(projectId));
   const { languages, luFeatures, runtime, publishTargets = [], MicrosoftAppId } = useRecoilValue(
@@ -194,6 +197,35 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
     },
     [projectId, formData]
   );
+
+  const validateLocalZip = useCallback(async (files: Record<string, JSZipObject>) => {
+    try {
+      // get manifest
+      const manifestFiles: JSZipObject[] = [];
+      const zipContent: Record<string, string> = {};
+      for (const fPath in files) {
+        if (fPath.match(/\.([^\.]+)$/)?.[1] === 'json') {
+          manifestFiles.push(files[fPath]);
+          setManifestDirPath(fPath.substr(0, fPath.lastIndexOf('/') + 1));
+        }
+        zipContent[fPath] = await files[fPath].async('string');
+      }
+
+      // update content for detail panel and show it
+      if (manifestFiles.length > 1) {
+        setFormDataErrors({ manifestUrl: formatMessage('zip folder has multiply manifest json') });
+      } else if (manifestFiles.length === 1) {
+        const content = await manifestFiles[0].async('string');
+        setSkillManifest(JSON.parse(content));
+        setFormDataErrors({});
+        setZipContent(zipContent);
+      }
+      setShowDetail(true);
+    } catch (err) {
+      // eslint-disable-next-line format-message/literal-pattern
+      setFormDataErrors({ manifestUrl: formatMessage(err.toString()) });
+    }
+  }, []);
 
   const handleSubmit = async (event, content: string, enable: boolean) => {
     event.preventDefault();
@@ -285,8 +317,10 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             languages={languages}
             luFeatures={luFeatures}
             manifest={skillManifest}
+            manifestDirPath={manifestDirPath}
             projectId={projectId}
             rootLuFiles={luFiles}
+            zipContent={zipContent}
             onBack={() => {
               setTitle({
                 subText: '',
@@ -306,27 +340,29 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
             </div>
             <Separator />
             <Stack horizontal horizontalAlign="start" styles={{ root: { height: 300 } }}>
-              <div style={{ width: '50%', display: 'flex' }}>
-                <TextField
-                  required
-                  errorMessage={formDataErrors.manifestUrl}
-                  label={formatMessage('Skill Manifest URL')}
-                  placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
-                  styles={{ root: { width: '300px' } }}
-                  value={formData.manifestUrl || ''}
-                  onChange={handleManifestUrlChange}
-                />
-                <BrowserModal
-                  onUpdate={(path: string, content: object) => {
-                    setFormData({
-                      ...formData,
-                      manifestUrl: path,
-                    });
-                    setSkillManifest(content);
-                    setShowDetail(true);
-                    setFormDataErrors({});
-                  }}
-                />
+              <div style={{ width: '50%' }}>
+                <div style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    errorMessage={formDataErrors.manifestUrl}
+                    label={formatMessage('Skill Manifest URL')}
+                    placeholder={formatMessage('Ask the skill owner for the URL and provide your bot’s App ID')}
+                    styles={{ root: { width: '300px' } }}
+                    value={formData.manifestUrl || ''}
+                    onChange={handleManifestUrlChange}
+                  />
+                  <BrowserModal
+                    onUpdate={(path: string, files: Record<string, JSZipObject>) => {
+                      // update path in input field
+                      setFormData({
+                        ...formData,
+                        manifestUrl: path,
+                      });
+
+                      validateLocalZip(files);
+                    }}
+                  />
+                </div>
                 {skillManifest?.endpoints?.length > 1 && (
                   <Dropdown
                     defaultSelectedKey={skillManifest.endpoints[0].name}

@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { SearchableDropdown, SearchableDropdownProps } from '../shared/searchableDropdown/SearchableDropdown';
 
 type Props = {
-  onLuisRegionChange: (luisRegion: string) => void;
+  onChangeLuisRegion: (luisRegion: string) => void;
 } & Omit<SearchableDropdownProps, 'onSubmit'>;
 
 export const LuisRegionPicker = React.memo((props: Props) => {
@@ -15,7 +15,7 @@ export const LuisRegionPicker = React.memo((props: Props) => {
   const { items } = props;
   return (
     <SearchableDropdown
-      onSubmit={(option) => props.onLuisRegionChange(option.key)}
+      onSubmit={(option) => props.onChangeLuisRegion(option.key)}
       {...{
         ...props,
         textFieldProps: { ...localTextFieldProps, ...props.textFieldProps },
