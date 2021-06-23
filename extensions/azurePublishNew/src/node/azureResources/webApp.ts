@@ -3,9 +3,9 @@
 
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
+import { parseRuntimeKey } from '@bfc/shared';
 
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
-import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
 import {
   ProvisionCredentials,
   ProvisionMethod,

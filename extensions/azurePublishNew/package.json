@@ -50,6 +50,7 @@
     "@azure/keyvault-secrets": "^4.1.0",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/ui-shared": "../../Composer/packages/lib/ui-shared",
+    "@bfc/shared": "../../Composer/packages/lib/shared",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@monaco-editor/react": "^3.1.0",
