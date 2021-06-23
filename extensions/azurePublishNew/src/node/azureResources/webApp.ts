@@ -1,22 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { WebSiteManagementClient } from '@azure/arm-appservice';
+import { TokenCredentials } from '@azure/ms-rest-js';
+
 import {
+  ProvisionCredentials,
   ProvisionMethod,
   ProvisionWorkingSet,
-  ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
 } from '../provisionService';
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
 
-type WebAppConfig = ResourceConfig & {
-  key: 'webApp';
-  name: string;
-  location: string;
-  resourceGroupName: string;
-};
+// type WebAppConfig = ResourceConfig & {
+//   key: 'webApp';
+//   name: string;
+//   location: string;
+//   resourceGroupName: string;
+// };
 
 export type WebAppResult = {
   key: 'webApp';
@@ -33,10 +36,43 @@ export const webAppResourceDefinition: ResourceDefinition = {
   group: AZURE_HOSTING_GROUP_NAME,
 };
 
-const getWebAppProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
-    const appRegistrationResult = workingSet.appRegistration;
-    const result = { hostname: '', endpoint: '' };
+const createWebApp = async (
+  webAppManagementClient: WebSiteManagementClient,
+  resourceGroupName: string,
+  location: string,
+  webAppName: string,
+  serverFarmId: string
+) => {
+  return await webAppManagementClient.webApps.createOrUpdate(resourceGroupName, webAppName, {
+    name: webAppName,
+    serverFarmId: serverFarmId,
+    location: location,
+    kind: 'app',
+    siteConfig: {
+      webSocketsEnabled: true,
+      appSettings: [
+        {
+          name: 'WEBSITE_NODE_DEFAULT_VERSION',
+          value: '10.14.1',
+        },
+      ],
+      cors: {
+        allowedOrigins: ['https://botservice.hosting.portal.azure.net', 'https://hosting.onecloud.azure-test.net/'],
+      },
+    },
+  });
+};
+
+const getWebAppProvisionMethod = (credentials: ProvisionCredentials): ProvisionMethod => {
+  const tokenCredentials = new TokenCredentials(credentials.token);
+  const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, credentials.subscriptionId);
+
+  return async <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
+    // const appRegistrationResult = workingSet.appRegistration;
+    const webAppResult = await createWebApp(webSiteManagementClient, 'rg-1', 'west-us', 'appName', 'serverfarmid');
+    const hostname = webAppResult?.hostNames?.[0];
+
+    const result = { hostname: hostname };
     return {
       ...workingSet,
       webAppResult: result,
@@ -44,13 +80,13 @@ const getWebAppProvisionMethod = (): ProvisionMethod => {
   };
 };
 
-export const getWebAppProvisionService = (): ResourceProvisionService => {
+export const getWebAppProvisionService = (credentials: ProvisionCredentials): ResourceProvisionService => {
   return {
     getDependencies: () => ['appRegistration', 'servicePlan'],
     getRecommendationForProject: (project) => {
       const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
       return runtimeType !== 'functions' ? 'required' : 'invalid';
     },
-    provision: getWebAppProvisionMethod(),
+    provision: getWebAppProvisionMethod(credentials),
   };
 };

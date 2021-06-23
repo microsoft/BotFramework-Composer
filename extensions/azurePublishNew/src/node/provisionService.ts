@@ -13,15 +13,18 @@ import { getLuisPredictionProvisionService } from './azureResources/luisPredicti
 import { getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { getQnAProvisionService } from './azureResources/qna';
 import { getAppServiceProvisionService } from './azureResources/servicePlan';
+import { getAppInsightsProvisionService } from './azureResources/appInsights';
 
 // bot project => candidate resources => select & configure resources => order & provision
 
 export type ProvisionWorkingSet = Record<string, object>;
 
+export type ProvisionMethod = (config: ResourceConfig, workingSet: ProvisionWorkingSet) => Promise<ProvisionWorkingSet>;
+
 export type ResourceProvisionService = {
   getDependencies: () => string[];
   getRecommendationForProject: (project: IBotProject) => 'required' | 'optional' | 'invalid';
-  provision: <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet) => void;
+  provision: ProvisionMethod;
 };
 
 export type ResourceDefinition = {
@@ -40,7 +43,7 @@ type ProvisionConfig = {
   key: string;
 };
 
-type ProvisionCredentials = {
+export type ProvisionCredentials = {
   token: string;
   graphToken: string;
   subscriptionId: string;
@@ -50,16 +53,14 @@ export type ResourceConfig = {
   key: string;
 };
 
-export type ProvisionMethod = <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet) => ProvisionWorkingSet;
-
-export const getProvisionServices = (): Record<string, ResourceProvisionService> => {
+export const getProvisionServices = (credentials: ProvisionCredentials): Record<string, ResourceProvisionService> => {
   return {
-    appRegistration: getAppRegistrationProvisionService(),
-    webApp: getWebAppProvisionService(),
+    appRegistration: getAppRegistrationProvisionService(credentials),
+    webApp: getWebAppProvisionService(credentials),
     botRegistration: getBotChannelProvisionService(),
     azureFunctionApp: getAzureFunctionsProvisionService(),
     cosmosDB: getCosmosDbProvisionService(),
-    appInsights: getWebAppProvisionService(),
+    appInsights: getAppInsightsProvisionService(),
     luisAuthoring: getLuisAuthoringProvisionService(),
     luisPrediction: getLuisPredictionProvisionService(),
     blobStorage: getBlogStorageProvisionService(),
@@ -68,16 +69,15 @@ export const getProvisionServices = (): Record<string, ResourceProvisionService>
   };
 };
 
-export const setUpProvisionService = (creds: ProvisionCredentials) => {
-  const token = creds.token;
-  const subscriptionId = creds.subscriptionId;
-  const graphToken = creds.graphToken;
+export const setUpProvisionService = (credentials: ProvisionCredentials) => {
+  const provisionServices = getProvisionServices(credentials);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const provision = (config: ProvisionConfig): void => {
     // config => sorted resource config
     const selectedResources: ResourceConfig[] = [];
 
-    const provisionServices = getProvisionServices();
+    const provisionServices = getProvisionServices(credentials);
 
     const workingSet: Record<string, object> = {};
     selectedResources.forEach((resourceConfig) => {
@@ -86,6 +86,11 @@ export const setUpProvisionService = (creds: ProvisionCredentials) => {
         service.provision(resourceConfig, workingSet);
       }
     });
+  };
+
+  return {
+    provisionServices,
+    provision,
   };
 };
 
