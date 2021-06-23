@@ -4406,6 +4406,9 @@
   "your_teams_adapter_is_configured_for_your_publishe_e84e9275": {
     "message": "Your Teams adapter is configured for your published bot. Copy the manifest, open App Studio in Teams and add the manifest so you can test your bot in Teams"
   },
+  "zip_folder_has_multiply_manifest_json_a7170462": {
+    "message": "zip folder has multiply manifest json"
+  },
   "zoom_in_3205e865": {
     "message": "Zoom in"
   },
