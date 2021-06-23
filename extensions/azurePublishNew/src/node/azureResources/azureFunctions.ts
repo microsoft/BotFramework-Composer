@@ -33,7 +33,7 @@ export const getAzureFunctionsProvisionService = (): ResourceProvisionService =>
     getDependencies: () => ['appRegistration'],
     getRecommendationForProject: (project) => {
       const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
-      return runtimeType === 'functions' ? 'required' : 'invalid';
+      return runtimeType === 'functions' ? 'required' : 'notAllowed';
     },
     provision: getAzureFunctionsProvisionMethod(),
   };

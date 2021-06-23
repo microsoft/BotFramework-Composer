@@ -85,7 +85,7 @@ export const getWebAppProvisionService = (credentials: ProvisionCredentials): Re
     getDependencies: () => ['appRegistration', 'servicePlan'],
     getRecommendationForProject: (project) => {
       const { runtimeType } = parseRuntimeKey(project.settings?.runtime?.key);
-      return runtimeType !== 'functions' ? 'required' : 'invalid';
+      return runtimeType !== 'functions' ? 'required' : 'notAllowed';
     },
     provision: getWebAppProvisionMethod(credentials),
   };

@@ -44,7 +44,7 @@ export const getResources = (project: IBotProject): GetResourcesResult[] => {
 
   return availableResources.map((availableResource) => {
     const service = provisionServices[availableResource.key];
-    if (service.getRecommendationForProject(project) !== 'invalid') {
+    if (service.getRecommendationForProject(project) !== 'notAllowed') {
       return {
         ...availableResource,
         required: service.getRecommendationForProject(project) === 'required',
