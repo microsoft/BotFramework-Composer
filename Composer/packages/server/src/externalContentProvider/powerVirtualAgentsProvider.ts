@@ -16,8 +16,9 @@ import { BotContentInfo, IContentProviderMetadata, ExternalContentProvider } fro
 const log = logger.extend('pva-provider');
 
 const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
-const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
-const PVA_PROD_APP_ID = '96ff4394-9197-43aa-b393-6a41652e21f8';
+export const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
+export const PVA_PROD_APP_ID = '96ff4394-9197-43aa-b393-6a41652e21f8';
+export const PVA_GOV_APP_ID = '9315aedd-209b-43b3-b149-2abff6a95d59';
 
 export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
   baseUrl: string;
@@ -37,6 +38,13 @@ const getAuthCredentials = (baseUrl: string) => {
       clientId: COMPOSER_1P_APP_ID,
       scopes: [`${PVA_TEST_APP_ID}/.default`],
       targetResource: PVA_TEST_APP_ID,
+    };
+  } else if (url.hostname.includes('gcc.api.powerva.microsoft.us')) {
+    log('Using GCC auth credentials.');
+    return {
+      clientId: COMPOSER_1P_APP_ID,
+      scopes: [`${PVA_GOV_APP_ID}/.default`],
+      targetResource: PVA_GOV_APP_ID,
     };
   }
   log('Using PROD auth credentials.');
