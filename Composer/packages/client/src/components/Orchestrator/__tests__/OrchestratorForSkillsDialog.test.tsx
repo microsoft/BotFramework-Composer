@@ -4,6 +4,7 @@
 import { act, screen, userEvent } from '@botframework-composer/test-utils';
 import { SDKKinds } from '@botframework-composer/types';
 import * as React from 'react';
+import { within } from '@testing-library/dom';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import {
@@ -90,7 +91,7 @@ describe('<OrchestratorForSkillsDialog />', () => {
         runtime: { key: 'node-webapp-v1', command: '', path: '', customRuntime: false },
       });
     });
-    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    const dialog = within(baseElement as HTMLElement).queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
   });
 
@@ -116,7 +117,7 @@ describe('<OrchestratorForSkillsDialog />', () => {
         runtime: { key: '', command: '', path: '', customRuntime: false },
       });
     });
-    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    const dialog = within(baseElement as HTMLElement).queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
   });
 
@@ -170,7 +171,7 @@ describe('<OrchestratorForSkillsDialog />', () => {
     });
 
     await act(async () => {
-      userEvent.click(within(baseElement).getByTestId('import-orchestrator'));
+      userEvent.click(within(baseElement as HTMLElement).getByTestId('import-orchestrator'));
     });
 
     expect(importOrchestrator).toBeCalledWith(

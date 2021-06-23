@@ -50,6 +50,17 @@ export const OrchestratorForSkillsDialog = () => {
     setShowOrchestratorDialog(false);
   };
 
+  const setVisibility = () => {
+    if (showOrchestratorDialog) {
+      if (hasOrchestrator || !canImportOrchestrator(setting?.runtime?.key)) {
+        setShowOrchestratorDialog(false);
+        return false;
+      }
+      return true;
+    }
+    return false;
+  };
+
   const onDismissHandler = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
     setShowOrchestratorDialog(false);
   };
@@ -57,7 +68,7 @@ export const OrchestratorForSkillsDialog = () => {
   return (
     <DialogWrapper
       dialogType={DialogTypes.CreateFlow}
-      isOpen={showOrchestratorDialog}
+      isOpen={setVisibility()}
       title={enableOrchestratorDialog.title}
       onDismiss={onDismissHandler}
     >
