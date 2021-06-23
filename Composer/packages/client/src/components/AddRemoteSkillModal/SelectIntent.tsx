@@ -73,10 +73,11 @@ const getRemoteLuFiles = async (
   zipContent: Record<string, string>,
   manifestDirPath: string
 ) => {
-  const luFiles: { id: string; content: string }[] = [];
+  const luFiles: Record<string, { id: string; content: string }[]> = {};
   try {
     for (const [key, value] of Object.entries(skillLanguages)) {
       if (composerLangeages.includes(key)) {
+        luFiles[key] = [];
         value.map(async (item) => {
           if (/^http[s]?:\/\/\w+/.test(item.url)) {
             // get lu file from remote
@@ -85,11 +86,11 @@ const getRemoteLuFiles = async (
                 url: item.url,
               },
             });
-            luFiles.push(data);
+            luFiles[key].push(data);
           } else {
             // get luFile from local
             const fileKey = join(manifestDirPath, item.url);
-            luFiles.push({
+            luFiles[key].push({
               id: fileKey.substr(fileKey.lastIndexOf('/') + 1),
               content: zipContent[fileKey],
             });
@@ -202,15 +203,16 @@ export const SelectIntent: React.FC<SelectIntentProps> = (props) => {
       const skillLanguages = manifest.dispatchModels?.languages;
       getRemoteLuFiles(skillLanguages, languages, setWarningMsg, zipContent, manifestDirPath)
         .then((items) => {
-          items &&
-            getParsedLuFiles(items, luFeatures, []).then((files) => {
+          for (let key in items) {
+            getParsedLuFiles(items[key], luFeatures, []).then((files) => {
               setLufiles(files);
               files.map((file) => {
-                if (file.id.includes(locale) && file.id.endsWith('.lu')) {
+                if (key === locale && file.id.endsWith('.lu')) {
                   setCurrentLuFile(file);
                 }
               });
             });
+          }
         })
         .catch((e) => {
           console.log(e);
