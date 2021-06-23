@@ -303,7 +303,6 @@ async function run() {
       mainWindow?.webContents.openDevTools();
     }
 
-    log(`Machine ID is ${machineId}`);
     mainWindow?.webContents.send('machine-info', { id: machineId, os: os.platform() });
   });
 

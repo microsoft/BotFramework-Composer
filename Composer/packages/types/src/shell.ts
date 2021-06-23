@@ -72,9 +72,9 @@ export type Notification = {
   description?: string;
   retentionTime?: number;
   link?: NotificationLink;
-  links?: (NotificationLink | null | undefined)[];
-  leftLinks?: (NotificationLink | null | undefined)[];
-  rightLinks?: (NotificationLink | null | undefined)[];
+  links?: NotificationLink[];
+  leftLinks?: NotificationLink[];
+  rightLinks?: NotificationLink[];
   icon?: string;
   color?: string;
   read?: boolean;

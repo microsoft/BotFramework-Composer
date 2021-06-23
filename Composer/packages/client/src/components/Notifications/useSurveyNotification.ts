@@ -30,7 +30,7 @@ const buildUrl = (info: MachineInfo) => {
   return `${SURVEY_URL_BASE}?${querystring.stringify(parameters)}`;
 };
 
-export function useSurveyNotification() {
+export const useSurveyNotification = () => {
   const { addNotification, deleteNotification } = useRecoilValue(dispatcherState);
   const surveyEligible = useRecoilValue(surveyEligibilityState);
   const machineInfo = useRecoilValue(machineInfoState);
@@ -82,4 +82,4 @@ export function useSurveyNotification() {
       });
     }
   }, []);
-}
+};

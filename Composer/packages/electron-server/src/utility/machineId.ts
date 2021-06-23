@@ -13,17 +13,20 @@ import { readTextFileSync, writeJsonFileSync } from './fs';
 
 export const persistedFilePath = path.join(app.getPath('userData'), 'persisted.json');
 
+function truncate(str: string): string {
+  return str.slice(0, str.length * 0.8);
+}
+
 export async function getMachineId(): Promise<string> {
   if (!existsSync(persistedFilePath)) {
-    const hashedMac = await getMacMachineId();
-    const machineId = hashedMac?.slice(0, hashedMac.length * 0.8) || uuid();
+    const machineId = (await getMacMachineId()) || uuid();
     const telemetrySettings = { machineId };
 
     writeJsonFileSync(persistedFilePath, telemetrySettings);
-    return machineId;
+    return truncate(machineId);
   } else {
     const raw = readTextFileSync(persistedFilePath);
-    return JSON.parse(raw).machineId;
+    return truncate(JSON.parse(raw).machineId);
   }
 }
 
