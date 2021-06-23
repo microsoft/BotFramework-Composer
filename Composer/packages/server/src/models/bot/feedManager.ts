@@ -1,14 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import axios from '../../utility/httpClient';
+import fetch from '../../utility/fetch';
 
 // TODO: update feed url
 const feedUrl = 'https://aka.ms/bf-composer-home-feed-v1';
 
 export const getFeedUrl = async (): Promise<any> => {
-  const { data: content } = await axios({
-    method: 'get',
-    url: feedUrl,
-  });
-  return content && typeof content === 'string' ? JSON.parse(content) : content;
+  const response = await fetch(feedUrl);
+  return await response.json();
 };
