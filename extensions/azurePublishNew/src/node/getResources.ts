@@ -21,7 +21,7 @@ import { blobStorageDefinition } from './azureResources/blobStorage';
 import { qnaDefinition } from './azureResources/qna';
 import { servicePlanDefinition } from './azureResources/servicePlan';
 
-export const AZURE_HOSTING_GROUP_NAME = 'Azure Hosting';
+export const AZURE_HOSTING_GROUP_NAME = 'App Services';
 export const COGNITIVE_SERVICES_GROUP_NAME = 'Cognitive Services';
 // export type HostingGroupName = 'Azure Hosting' | 'Cognitive Services';
 
