@@ -12,19 +12,18 @@ import querystring from 'query-string';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-import { dispatcherState, localBotPublishHistorySelector, localBotsDataSelector } from '../../recoilModel';
-import { AuthDialog } from '../../components/Auth/AuthDialog';
+import {
+  dispatcherState,
+  localBotPublishHistorySelector,
+  localBotsDataSelector,
+  isAuthenticatedState,
+  showAuthDialogState,
+  currentUserState,
+} from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
 import { getSensitiveProperties } from '../../recoilModel/dispatchers/utils/project';
-import {
-  getTokenFromCache,
-  isShowAuthDialog,
-  userShouldProvideTokens,
-  setTenantId,
-  getTenantIdFromCache,
-} from '../../utils/auth';
-// import { vaultScopes } from '../../constants';
+import { getTenantIdFromCache, userShouldProvideTokens } from '../../utils/auth';
 import { useLocation } from '../../utils/hooks';
 import { AuthClient } from '../../utils/authClient';
 import TelemetryClient from '../../telemetry/TelemetryClient';
@@ -77,12 +76,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const pendingNotificationRef = useRef<Notification>();
   const showNotificationsRef = useRef<Record<string, boolean>>({});
 
+  const currentUser = useRecoilValue(currentUserState);
+  const isAuthenticated = useRecoilValue(isAuthenticatedState);
+  const showAuthDialog = useRecoilValue(showAuthDialogState);
+
   const [activeTab, setActiveTab] = useState<string>('publish');
   const [provisionProject, setProvisionProject] = useState(projectId);
   const [currentBotList, setCurrentBotList] = useState<Bot[]>([]);
   const [publishDialogVisible, setPublishDialogVisiblity] = useState(false);
   const [pullDialogVisible, setPullDialogVisiblity] = useState(false);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [updaterStatus, setUpdaterStatus] = useState<{ [skillId: string]: boolean }>(
     initUpdaterStatus(publishHistoryList)
   );
@@ -272,11 +274,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const onPublish = () => {
-    if (isShowAuthDialog(false)) {
-      setShowAuthDialog(true);
-    } else {
-      setPublishDialogVisiblity(true);
-    }
+    setPublishDialogVisiblity(true);
     TelemetryClient.track('ToolbarButtonClicked', { name: 'publishSelectedBots' });
   };
 
@@ -289,7 +287,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         const { tenantId } = JSON.parse(target.configuration);
 
         if (userShouldProvideTokens()) {
-          token = getTokenFromCache('accessToken');
+          token = currentUser.token;
         } else if (tenantId) {
           token = tenantTokenMap.get(tenantId) ?? (await AuthClient.getARMTokenForTenant(tenantId));
           tenantTokenMap.set(tenantId, token);
@@ -302,8 +300,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               tenants = await AuthClient.getTenants();
 
               tenant = tenants?.[0]?.tenantId;
-              setTenantId(tenant);
-
               token = tenantTokenMap.get(tenant) ?? (await AuthClient.getARMTokenForTenant(tenant));
             } catch (err) {
               let notification;
@@ -411,16 +407,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   return (
     <Fragment>
-      {showAuthDialog && (
-        <AuthDialog
-          needGraph={false}
-          next={() => setPublishDialogVisiblity(true)}
-          onDismiss={() => {
-            setShowAuthDialog(false);
-          }}
-        />
-      )}
-      {publishDialogVisible && (
+      {publishDialogVisible && !showAuthDialog && (
         <PublishDialog
           items={selectedBots.filter((bot) => !!bot.publishTarget)}
           onDismiss={() => setPublishDialogVisiblity(false)}

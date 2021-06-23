@@ -57,6 +57,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = (props) => {
         placeholder={formatMessage('Paste token here')}
         rows={4}
         onChange={(event, newValue) => {
+          console.log('firing on change in auth dialog token field');
           newValue && setAccessToken(newValue);
           if (isTokenExpired(newValue || '')) {
             setTokenError('Token Expire or token invalid');
