@@ -46,6 +46,7 @@ import { mergePropertiesManagedByRootBot, postRootBotCreation } from '../../reco
 import { projectDialogsMapSelector, botDisplayNameState } from '../../recoilModel';
 import { deleteTrigger as DialogdeleteTrigger } from '../../utils/dialogUtil';
 import { BotConvertConfirmDialog } from '../../components/BotConvertDialog';
+import { getManifestJsonFromZip } from '../utils/skill';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -178,7 +179,11 @@ export const projectDispatcher = () => {
   );
 
   const addRemoteSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (manifestUrl: string, endpointName: string) => {
+    (callbackHelpers: CallbackInterface) => async (
+      manifestUrl: string,
+      endpointName: string,
+      zipContent: Record<string, any>
+    ) => {
       const { set, snapshot } = callbackHelpers;
       try {
         const dispatcher = await snapshot.getPromise(dispatcherState);
@@ -193,9 +198,11 @@ export const projectDispatcher = () => {
         }
 
         set(botOpeningState, true);
-        const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl);
+
+        const manifestFromZip = getManifestJsonFromZip(zipContent);
+        const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl, manifestFromZip);
         set(botProjectIdsState, (current) => [...current, projectId]);
-        await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, endpointName);
+        await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, zipContent, endpointName);
         // update appsetting
         await dispatcher.setSkillAndAllowCaller(rootBotProjectId, projectId, endpointName);
         navigateToSkillBot(rootBotProjectId, projectId);

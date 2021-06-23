@@ -540,20 +540,12 @@ export class BotProject implements IBotProject {
     await this._cleanUp(file.relativePath);
   };
 
-  public createSkillFiles = async (url: string, skillName: string) => {
-    const manifestContent = await getSkillManifest(url);
-    const manifestName = Path.basename(url, '.json');
-    const luUrls: string[] = [];
-    const languages = manifestContent.dispatchModels.languages;
-    Object.keys(languages).map((key) =>
-      languages[key].map((lu) => {
-        luUrls.push(lu.url);
-        lu.url = defaultSkillFilePath(skillName, Path.basename(lu.url, '.lu'), 'lu');
-        return lu;
-      })
-    );
-    await this.createSkillLuFiles(luUrls, skillName);
-    return await this.createManifestJsonFile(manifestName, manifestContent, skillName);
+  public createSkillFiles = async (url: string, skillName: string, zipContent: Record<string, any>) => {
+    if (Object.keys(zipContent).length === 0) {
+      return await this.createSkillFilesFromUrl(url, skillName);
+    } else {
+      return await this.createSkillFilesFromZip(zipContent);
+    }
   };
 
   public deleteSkillFiles = async (skillName: string) => {
@@ -736,6 +728,37 @@ export class BotProject implements IBotProject {
   public updateETag(eTag: string): void {
     this.eTag = eTag;
     // also update the bot project map
+  }
+
+  private async createSkillFilesFromUrl(url, skillName) {
+    const manifestContent = await getSkillManifest(url);
+    const manifestName = Path.basename(url, '.json');
+    const luUrls: string[] = [];
+    const languages = manifestContent.dispatchModels.languages;
+    Object.keys(languages).map((key) =>
+      languages[key].map((lu) => {
+        luUrls.push(lu.url);
+        lu.url = defaultSkillFilePath(skillName, Path.basename(lu.url, '.lu'), 'lu');
+        return lu;
+      })
+    );
+    await this.createSkillLuFiles(luUrls, skillName);
+    return await this.createManifestJsonFile(manifestName, manifestContent, skillName);
+  }
+
+  private async createSkillFilesFromZip(zipContent) {
+    const manifestKey = Object.keys(zipContent).find((key) => key.indexOf('.json') > -1 && key.indexOf('manifest'));
+    if (!manifestKey) {
+      throw new Error('Can not find manifest json');
+    }
+
+    const keys = Object.keys(zipContent).filter(
+      (key) => zipContent[key] !== '' && !(key.indexOf('.json') > -1 && key.indexOf('manifest'))
+    );
+    for (let i = 0; i < keys.length; i++) {
+      await this._createFile(`skills/${keys[i]}`, zipContent[keys[i]]);
+    }
+    return await this._createFile(`skills/${manifestKey}`, zipContent[manifestKey]);
   }
 
   private async createManifestJsonFile(name, content, skillName) {

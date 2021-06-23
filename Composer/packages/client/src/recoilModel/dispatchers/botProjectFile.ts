@@ -38,13 +38,18 @@ export const botProjectFileDispatcher = () => {
   });
 
   const addRemoteSkill = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (skillId: string, manifestUrl: string, endpointName: string) => {
+    ({ set, snapshot }: CallbackInterface) => async (
+      skillId: string,
+      manifestUrl: string,
+      zipContent: Record<string, any>,
+      endpointName: string
+    ) => {
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (!rootBotProjectId) {
         return;
       }
       const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
-      const data = await addSkillFiles(rootBotProjectId, botName, manifestUrl);
+      const data = await addSkillFiles(rootBotProjectId, botName, manifestUrl, zipContent);
       if (data.error) {
         throw data.error;
       }

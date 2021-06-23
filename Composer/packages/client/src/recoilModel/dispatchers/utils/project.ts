@@ -572,41 +572,51 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
   manifestUrl: string,
+  manifestFromZip: { name: string; content: Record<string, any> },
   botNameIdentifier = ''
 ) => {
   const { set } = callbackHelpers;
 
   const response = await httpClient.get(`/projects/generateProjectId`);
   const projectId = response.data;
-  const stringified = stringify({
-    url: manifestUrl,
-  });
+  let manifestResponseData: Record<string, any>;
+  let finalManifestUrl = '';
+  if (manifestFromZip.name) {
+    finalManifestUrl = manifestFromZip.name;
+    manifestResponseData = manifestFromZip.content;
+  } else {
+    finalManifestUrl = manifestUrl;
+    const stringified = stringify({
+      url: finalManifestUrl,
+    });
+
+    manifestResponseData = (
+      await httpClient.get(
+        `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
+      )
+    ).data;
+  }
 
   set(projectMetaDataState(projectId), {
     isRootBot: false,
     isRemote: true,
   });
-
-  const manifestResponse = await httpClient.get(
-    `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
-  );
-
   let uniqueSkillNameIdentifier = botNameIdentifier;
   if (!uniqueSkillNameIdentifier) {
-    uniqueSkillNameIdentifier = await getSkillNameIdentifier(callbackHelpers, manifestResponse.data.name);
+    uniqueSkillNameIdentifier = await getSkillNameIdentifier(callbackHelpers, manifestResponseData.name);
   }
 
   set(botNameIdentifierState(projectId), uniqueSkillNameIdentifier);
-  set(botDisplayNameState(projectId), manifestResponse.data.name);
-  set(locationState(projectId), manifestUrl);
+  set(botDisplayNameState(projectId), manifestResponseData.name);
+  set(locationState(projectId), finalManifestUrl);
   set(skillManifestsState(projectId), [
     {
-      content: manifestResponse.data,
-      id: getManifestNameFromUrl(manifestUrl),
+      content: manifestResponseData,
+      id: getManifestNameFromUrl(finalManifestUrl),
       lastModified: new Date().toDateString(),
     },
   ]);
-  return { projectId, manifestResponse: manifestResponse.data };
+  return { projectId, manifestResponse: manifestResponseData };
 };
 
 export const openLocalSkill = async (callbackHelpers, pathToBot: string, storageId, botNameIdentifier: string) => {

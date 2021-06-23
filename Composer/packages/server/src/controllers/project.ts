@@ -357,8 +357,8 @@ async function createSkillFiles(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const { url, skillName } = req.body;
-    const file = await currentProject.createSkillFiles(url, skillName);
+    const { url, skillName, zipContent } = req.body;
+    const file = await currentProject.createSkillFiles(url, skillName, zipContent);
     res.status(200).json(file);
   } else {
     res.status(404).json({

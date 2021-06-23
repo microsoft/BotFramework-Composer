@@ -8,10 +8,11 @@ import httpClient from '../../../utils/httpUtil';
 export const addSkillFiles = async (
   projectId: string,
   skillName: string,
-  url: string
+  url: string,
+  zipContent: Record<string, any>
 ): Promise<{ manifest: FileInfo | undefined; error?: any }> => {
   try {
-    const response = await httpClient.post(`/projects/${projectId}/skillFiles`, { url, skillName });
+    const response = await httpClient.post(`/projects/${projectId}/skillFiles`, { url, skillName, zipContent });
     return { manifest: response.data };
   } catch (error) {
     return { manifest: undefined, error };
