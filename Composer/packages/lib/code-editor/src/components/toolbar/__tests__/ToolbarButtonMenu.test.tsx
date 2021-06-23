@@ -35,7 +35,7 @@ const templatePayload: TemplateRefPayload = {
 const propertiesPayload: PropertyRefPayload = {
   kind: 'property',
   data: {
-    properties: ['this.test1', 'this.test2', 'turn.test1', 'turn.test2', 'turn.test2.test3'],
+    properties: ['foo.test1', 'foo.test2', 'turn.test1', 'turn.test2', 'turn.test2.test3'],
     onSelectProperty: jest.fn(),
   },
 };
@@ -103,7 +103,7 @@ describe('<ToolbarButtonMenu />', () => {
 
     fireEvent.click(screen.getByTestId('menuButton'));
 
-    expect(screen.getByText(/this/)).toBeTruthy();
+    expect(screen.getByText(/foo/)).toBeTruthy();
     expect(screen.getByText(/turn/)).toBeTruthy();
   });
 
@@ -111,20 +111,20 @@ describe('<ToolbarButtonMenu />', () => {
     render(<ToolbarButtonMenu payload={propertiesPayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
-    fireEvent.change(screen.getByPlaceholderText('Search properties'), { target: { value: 'this' } });
+    fireEvent.change(screen.getByPlaceholderText('Search properties'), { target: { value: 'foo' } });
 
     act(() => {
       jest.runAllTimers();
     });
 
-    expect((await screen.findAllByText(/this/)).length).toBe(2);
+    expect((await screen.findAllByText(/foo/)).length).toBe(2);
   });
 
   it('property: Should expand property in the menu on click if not leaf', async () => {
     render(<ToolbarButtonMenu payload={propertiesPayload} />);
 
     fireEvent.click(screen.getByTestId('menuButton'));
-    fireEvent.click(screen.getByText('this.'));
+    fireEvent.click(screen.getByText('foo.'));
 
     expect((await screen.findAllByText(/test/)).length).toBe(2);
   });
