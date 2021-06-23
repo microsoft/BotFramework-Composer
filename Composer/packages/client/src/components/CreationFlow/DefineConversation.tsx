@@ -22,11 +22,9 @@ import { RuntimeType, webAppRuntimeKey, localTemplateId } from '@bfc/shared';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
-import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { css } from '@emotion/core';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
 import { CreationFlowStatus, DialogCreationCopy, nameRegex, botNameRegex } from '../../constants';
