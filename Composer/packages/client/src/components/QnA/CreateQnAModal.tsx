@@ -250,15 +250,19 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
       const resourceGroup = accounts[account].id?.replace(/.*?\/resourceGroups\/(.*?)\/.*/, '$1');
       const name = accounts[account].name;
       if (resourceGroup && name) {
-        const keys = await cognitiveServicesManagementClient.accounts.listKeys(resourceGroup, name);
-        if (keys?.key1) {
-          keyList.push({
-            name: name,
-            resourceGroup: resourceGroup,
-            region: accounts[account].location || '',
-            key: keys?.key1 || '',
-            endpoint: accounts[account]?.properties?.endpoint ?? '',
-          });
+        try {
+          const keys = await cognitiveServicesManagementClient.accounts.listKeys(resourceGroup, name);
+          if (keys?.key1) {
+            keyList.push({
+              name: name,
+              resourceGroup: resourceGroup,
+              region: accounts[account].location || '',
+              key: keys?.key1 || '',
+              endpoint: accounts[account]?.properties?.endpoint ?? '',
+            });
+          }
+        } catch (_err) {
+          // pass, filter no authorization resource
         }
       }
     }
