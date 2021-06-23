@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
-import { WidgetContainerProps } from '@bfc/extension-client';
+import { WidgetContainerProps, useShellApi } from '@bfc/extension-client';
 
 import { StandardNodeWidth } from '../../constants/ElementSizes';
 import { ObiColors } from '../../constants/ElementColors';
@@ -43,6 +43,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   onClickBody,
   onClickFooter,
 }) => {
+  const { flowCommentsVisible } = useShellApi();
   const headerCSS = HeaderCSS;
   const bodyCSS = BodyCSS;
   const footerCSS = FooterCSS;
@@ -57,7 +58,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
 
   const renderBody = (body: ReactNode) => (
     <div className="CardNode__Body" css={bodyCSS} onClick={onClickBody}>
-      {comment && <CardComment comment={comment} />}
+      {flowCommentsVisible && comment && <CardComment comment={comment} />}
       <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );

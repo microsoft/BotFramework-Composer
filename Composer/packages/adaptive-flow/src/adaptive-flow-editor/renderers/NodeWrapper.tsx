@@ -84,6 +84,7 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, children }: NodeWrap
 
   const {
     shellApi: { addCoachMarkRef },
+    flowCommentsVisible,
   } = useShellApi();
   const actionRef = useCallback(
     (action) => {
@@ -153,7 +154,7 @@ export const ActionNodeWrapper = ({ id, tab, data, onEvent, children }: NodeWrap
       content={data.$designer?.comment}
     >
       <div css={css({ position: 'relative' })}>
-        <div css={tooltipTargetStyle} id={`${nodeId}-comment-target`}>
+        <div css={tooltipTargetStyle(flowCommentsVisible)} id={`${nodeId}-comment-target`}>
           <Icon iconName="QuickNote" />
         </div>
         {content}
