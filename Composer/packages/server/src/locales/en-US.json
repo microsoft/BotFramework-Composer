@@ -59,6 +59,9 @@
   "a_publishing_profile_provides_the_secure_connectiv_860d7d48": {
     "message": "A publishing profile provides the secure connectivity required to publish your bot."
   },
+  "a_runtime_type_must_be_selected_5274c266": {
+    "message": "A runtime type must be selected."
+  },
   "a_schema_or_form_is_the_list_of_properties_your_bo_8e107996": {
     "message": "A schema, or form, is the list of properties your bot will collect."
   },
@@ -506,6 +509,9 @@
   "azure_functions_5e23be5c": {
     "message": "Azure Functions"
   },
+  "azure_functions_is_a_solution_for_easily_running_s_6dacf7d9": {
+    "message": "Azure Functions is a solution for easily running small pieces of code, or \"functions,\" in the cloud. "
+  },
   "azure_functions_required_2a035b48": {
     "message": "Azure Functions required"
   },
@@ -514,6 +520,9 @@
   },
   "azure_language_understanding_5fc42020": {
     "message": "Azure Language Understanding"
+  },
+  "azure_offers_a_number_of_ways_to_host_your_applica_b3e2da97": {
+    "message": "Azure offers a number of ways to host your application code. The runtime type refers to the hosting model for the computing resources that your application runs on. Learn more"
   },
   "azure_qna_maker_fd153eb7": {
     "message": "Azure QnA Maker"
@@ -1762,6 +1771,9 @@
   },
   "full_description_for_fd03dbf8": {
     "message": "full description for"
+  },
+  "fully_managed_compute_platform_that_is_optimized_f_3f50ab37": {
+    "message": "Fully managed compute platform that is optimized for hosting websites and web applications."
   },
   "gb_7570760e": {
     "message": "GB"
