@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { act, getQueriesForElement, within } from '@botframework-composer/test-utils';
+import { act, screen, userEvent } from '@botframework-composer/test-utils';
 import { SDKKinds } from '@botframework-composer/types';
 import * as React from 'react';
-import userEvent from '@testing-library/user-event';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import {
@@ -50,22 +49,22 @@ describe('<OrchestratorForSkillsDialog />', () => {
   });
 
   it('should not open OrchestratorForSkillsDialog if orchestratorForSkillsDialogState is false', () => {
-    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+    renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
       set(orchestratorForSkillsDialogState, false);
     });
-    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    const dialog = screen.queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
   });
 
   it('should not open OrchestratorForSkillsDialog if orchestrator already being used in root', () => {
-    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+    renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
       set(recognizersSelectorFamily('rootBotId'), [
         { id: 'rootBotRootDialogId.en-us.lu.dialog', content: { $kind: SDKKinds.OrchestratorRecognizer } },
       ]);
     });
-    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    const dialog = screen.queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
   });
 
@@ -121,21 +120,21 @@ describe('<OrchestratorForSkillsDialog />', () => {
     expect(dialog).toBeNull();
   });
 
-  it('open OrchestratorForSkillsDialog if orchestratorForSkillsDialogState and Orchestrator not used in Root Bot Root Dialog, and using dotnet adaptive runtime', () => {
-    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+  it('open OrchestratorForSkillsDialog if orchestratorForSkillsDialogState and Orchestrator not used in Root Bot Root Dialog', () => {
+    renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
     });
-    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    const dialog = screen.queryByTestId(orchestratorTestId);
     expect(dialog).toBeTruthy();
   });
 
   it('should install Orchestrator package when user clicks Continue', async () => {
-    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+    renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
     });
 
     await act(async () => {
-      userEvent.click(within(baseElement).getByTestId('import-orchestrator'));
+      userEvent.click(screen.getByTestId('import-orchestrator'));
     });
 
     expect(importOrchestrator).toBeCalledWith(
@@ -188,15 +187,15 @@ describe('<OrchestratorForSkillsDialog />', () => {
   });
 
   it('should not install Orchestrator package when user clicks skip', async () => {
-    const { baseElement } = renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
+    renderWithRecoil(<OrchestratorForSkillsDialog />, ({ set }) => {
       makeInitialState(set);
     });
 
     await act(async () => {
-      userEvent.click(await within(baseElement).findByText('Skip'));
+      userEvent.click(await screen.findByText('Skip'));
     });
 
-    const dialog = getQueriesForElement(baseElement).queryByTestId(orchestratorTestId);
+    const dialog = screen.queryByTestId(orchestratorTestId);
     expect(dialog).toBeNull();
 
     expect(importOrchestrator).toBeCalledTimes(0);

@@ -60,6 +60,7 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 430px;
+  height: calc(100vh - 65px);
 `;
 
 const FooterButton = styled(DefaultButton)`
@@ -146,7 +147,7 @@ export const Wizard = (props: Props) => {
     backStep && onStepChange?.(stepIndex - 1, backStep, 'back');
   }, [currentStep, onStepChange]);
 
-  const onCancelClick = () => {};
+  const onCancelClick = React.useCallback(() => currentStep.onCancel(), [currentStep]);
 
   const defaultNavigationState = React.useMemo<WizardNavigationState>(() => {
     return {
