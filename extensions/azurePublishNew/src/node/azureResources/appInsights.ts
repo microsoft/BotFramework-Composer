@@ -2,12 +2,9 @@
 // Licensed under the MIT License.
 
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
-import {
-  ProvisionMethod,
-  ProvisionWorkingSet,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../provisionService';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+
+import { AppInsightsConfigNew } from './types';
 
 export const appInsightsDefinition: ResourceDefinition = {
   key: 'appInsights',
@@ -18,7 +15,7 @@ export const appInsightsDefinition: ResourceDefinition = {
 };
 
 const getAppInsightsProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
+  return (config: AppInsightsConfigNew, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     const provisionResult = { instrumentationKey: '', connectionString: '' };
     return {
       ...workingSet,

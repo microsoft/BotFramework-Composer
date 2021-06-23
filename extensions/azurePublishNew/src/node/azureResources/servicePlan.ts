@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ProvisionMethod, ProvisionWorkingSet, ResourceProvisionService } from '../provisionService';
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceProvisionService } from '../types';
+
+import { AppServiceConfig } from './types';
 
 export const servicePlanDefinition = {
   key: 'servicePlan',
@@ -15,7 +17,7 @@ export const servicePlanDefinition = {
 };
 
 const getAppServiceProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
+  return (config: AppServiceConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     const provisionResult = {};
 
     return {

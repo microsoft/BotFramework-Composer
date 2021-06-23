@@ -1,27 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ProvisionMethod,
-  ProvisionWorkingSet,
-  ResourceConfig,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../provisionService';
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
 
-import { AppRegistrationResult } from './appRegistration';
-import { WebAppResult } from './webApp';
-
-type BotServiceConfig = ResourceConfig & {
-  key: 'botChannel';
-  name: string;
-  resourceGroupName: string;
-};
-
-type BotChannelResult = {
-  botName: string;
-};
+import { AppRegistrationResult, BotChannelResult, BotServiceConfig, WebAppResult } from './types';
 
 export const botRegistrationDefinition: ResourceDefinition = {
   key: 'botRegistration',
@@ -35,7 +18,7 @@ export const botRegistrationDefinition: ResourceDefinition = {
 const getBotChannelProvisionMethod = (): ProvisionMethod => (
   config: BotServiceConfig,
   workingSet: ProvisionWorkingSet
-): ProvisionWorkingSet => {
+): Promise<ProvisionWorkingSet> => {
   const appRegistrationResult: AppRegistrationResult = workingSet.appRegistration;
   const webAppResult: WebAppResult = workingSet.webApp;
   const { appId } = appRegistrationResult.appId;

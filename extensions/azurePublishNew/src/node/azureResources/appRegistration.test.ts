@@ -1,11 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  AppRegistrationConfig,
-  AppRegistrationResult,
-  getAppRegistrationProvisionService,
-} from './azureResources/appRegistration';
+import { getAppRegistrationProvisionService } from './appRegistration';
+import { AppRegistrationConfig, AppRegistrationResult } from './types';
 
 const mockSubscriptionId = 'mockSubId';
 const mockToken = 'mockToken';

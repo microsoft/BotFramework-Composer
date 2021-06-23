@@ -2,12 +2,9 @@
 // Licensed under the MIT License.
 
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
-import {
-  ProvisionMethod,
-  ProvisionWorkingSet,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../provisionService';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+
+import { BlobStorageConfigNew } from './types';
 
 export const blobStorageDefinition: ResourceDefinition = {
   key: 'blobStorage',
@@ -19,7 +16,7 @@ export const blobStorageDefinition: ResourceDefinition = {
 };
 
 const getBlobStorageProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
+  return (config: BlobStorageConfigNew, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     const provisionResult = {};
 
     return {

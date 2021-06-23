@@ -1,14 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ProvisionMethod,
-  ProvisionWorkingSet,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../provisionService';
 import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+
+import { AzureFunctionConfig } from './types';
 
 export const azureFunctionsDefinition: ResourceDefinition = {
   key: 'azureFunctions',
@@ -19,7 +16,7 @@ export const azureFunctionsDefinition: ResourceDefinition = {
 };
 
 const getAzureFunctionsProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
+  return (config: AzureFunctionConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     const provisionResult = { hostname: '' };
     return {
       ...workingSet,

@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IBotProject } from '@botframework-composer/types';
-
 import { getAppRegistrationProvisionService } from './azureResources/appRegistration';
 import { getWebAppProvisionService } from './azureResources/webApp';
 import { getBotChannelProvisionService } from './azureResources/botChannel';
-import { getAzureFunctionsProvisionService } from './azureResources/azureFunctions';
+import { getAzureFunctionsProvisionService } from './azureResources/azureFunction';
 import { getCosmosDbProvisionService } from './azureResources/cosmosDb';
 import { getLuisAuthoringProvisionService } from './azureResources/luisAuthoring';
 import { getLuisPredictionProvisionService } from './azureResources/luisPrediction';
@@ -14,44 +12,9 @@ import { getBlogStorageProvisionService } from './azureResources/blobStorage';
 import { getQnAProvisionService } from './azureResources/qna';
 import { getAppServiceProvisionService } from './azureResources/servicePlan';
 import { getAppInsightsProvisionService } from './azureResources/appInsights';
+import { ProvisionConfig, ProvisionCredentials, ResourceConfig, ResourceProvisionService } from './types';
 
 // bot project => candidate resources => select & configure resources => order & provision
-
-export type ProvisionWorkingSet = Record<string, object>;
-
-export type ProvisionMethod = (config: ResourceConfig, workingSet: ProvisionWorkingSet) => Promise<ProvisionWorkingSet>;
-
-export type ResourceProvisionService = {
-  getDependencies: () => string[];
-  getRecommendationForProject: (project: IBotProject) => 'required' | 'optional' | 'invalid';
-  provision: ProvisionMethod;
-};
-
-export type ResourceDefinition = {
-  key: string;
-  text: string;
-  description: string;
-  tier: string;
-  group: string;
-};
-
-export type GetResourcesResult = ResourceDefinition & {
-  required: boolean;
-};
-
-type ProvisionConfig = {
-  key: string;
-};
-
-export type ProvisionCredentials = {
-  token: string;
-  graphToken: string;
-  subscriptionId: string;
-};
-
-export type ResourceConfig = {
-  key: string;
-};
 
 export const getProvisionServices = (credentials: ProvisionCredentials): Record<string, ResourceProvisionService> => {
   return {

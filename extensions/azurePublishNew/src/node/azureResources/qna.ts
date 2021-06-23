@@ -2,12 +2,9 @@
 // Licensed under the MIT License.
 
 import { COGNITIVE_SERVICES_GROUP_NAME } from '../getResources';
-import {
-  ProvisionMethod,
-  ProvisionWorkingSet,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../provisionService';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+
+import { QnAConfigNew } from './types';
 
 export const qnaDefinition: ResourceDefinition = {
   key: 'qna',
@@ -19,7 +16,7 @@ export const qnaDefinition: ResourceDefinition = {
 };
 
 const getQnAProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
+  return (config: QnAConfigNew, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     const provisionResult = {};
 
     return {

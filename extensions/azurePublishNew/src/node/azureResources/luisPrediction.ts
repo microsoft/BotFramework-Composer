@@ -1,13 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ProvisionMethod,
-  ProvisionWorkingSet,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from '../provisionService';
 import { COGNITIVE_SERVICES_GROUP_NAME } from '../getResources';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceDefinition, ResourceProvisionService } from '../types';
+
+import { LuisPredictionConfig } from './types';
 
 export const luisPredictionDefinition: ResourceDefinition = {
   key: 'luisPrediction',
@@ -19,7 +16,7 @@ export const luisPredictionDefinition: ResourceDefinition = {
 };
 
 const getLuisPredictionProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
+  return (config: LuisPredictionConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     return workingSet;
   };
 };

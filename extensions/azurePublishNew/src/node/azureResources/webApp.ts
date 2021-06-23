@@ -4,28 +4,17 @@
 import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 
+import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
+import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
 import {
   ProvisionCredentials,
   ProvisionMethod,
   ProvisionWorkingSet,
   ResourceDefinition,
   ResourceProvisionService,
-} from '../provisionService';
-import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
-import { parseRuntimeKey } from '../../../../../Composer/packages/lib/shared';
+} from '../types';
 
-// type WebAppConfig = ResourceConfig & {
-//   key: 'webApp';
-//   name: string;
-//   location: string;
-//   resourceGroupName: string;
-// };
-
-export type WebAppResult = {
-  key: 'webApp';
-  endpoint: string;
-  hostname: string;
-};
+import { WebAppConfig } from './types';
 
 export const webAppResourceDefinition: ResourceDefinition = {
   key: 'webApp',
@@ -67,7 +56,7 @@ const getWebAppProvisionMethod = (credentials: ProvisionCredentials): ProvisionM
   const tokenCredentials = new TokenCredentials(credentials.token);
   const webSiteManagementClient = new WebSiteManagementClient(tokenCredentials, credentials.subscriptionId);
 
-  return async <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
+  return async (config: WebAppConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     // const appRegistrationResult = workingSet.appRegistration;
     const webAppResult = await createWebApp(webSiteManagementClient, 'rg-1', 'west-us', 'appName', 'serverfarmid');
     const hostname = webAppResult?.hostNames?.[0];

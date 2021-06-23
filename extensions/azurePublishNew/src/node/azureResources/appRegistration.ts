@@ -4,26 +4,16 @@
 import { AxiosRequestConfig } from 'axios';
 import * as rp from 'request-promise';
 
+import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
 import {
   ProvisionCredentials,
   ProvisionMethod,
   ProvisionWorkingSet,
-  ResourceConfig,
   ResourceDefinition,
   ResourceProvisionService,
-} from '../provisionService';
-import { createCustomizeError, ProvisionErrors } from '../../../../azurePublish/src/node/utils/errorHandler';
+} from '../types';
 
-export type AppRegistrationConfig = ResourceConfig & {
-  key: 'appRegistration';
-  name: string;
-};
-
-export type AppRegistrationResult = {
-  key: 'appRegistration';
-  appId: string;
-  appPassword: string;
-};
+import { AppRegistrationConfig, AppRegistrationResult } from './types';
 
 export const appRegistrationDefinition: ResourceDefinition = {
   key: 'appRegistration',

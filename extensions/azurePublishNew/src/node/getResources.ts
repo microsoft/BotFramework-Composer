@@ -3,15 +3,10 @@
 
 import { IBotProject } from '@botframework-composer/types';
 
-import {
-  getProvisionServices,
-  GetResourcesResult,
-  ResourceDefinition,
-  ResourceProvisionService,
-} from './provisionService';
+import { getProvisionServices } from './provisionService';
 import { appRegistrationDefinition } from './azureResources/appRegistration';
 import { webAppResourceDefinition } from './azureResources/webApp';
-import { azureFunctionsDefinition } from './azureResources/azureFunctions';
+import { azureFunctionsDefinition } from './azureResources/azureFunction';
 import { botRegistrationDefinition } from './azureResources/botChannel';
 import { luisAuthoringDefinition } from './azureResources/luisAuthoring';
 import { appInsightsDefinition } from './azureResources/appInsights';
@@ -20,6 +15,7 @@ import { luisPredictionDefinition } from './azureResources/luisPrediction';
 import { blobStorageDefinition } from './azureResources/blobStorage';
 import { qnaDefinition } from './azureResources/qna';
 import { servicePlanDefinition } from './azureResources/servicePlan';
+import { GetResourcesResult, ResourceDefinition, ResourceProvisionService } from './types';
 
 export const AZURE_HOSTING_GROUP_NAME = 'App Services';
 export const COGNITIVE_SERVICES_GROUP_NAME = 'Cognitive Services';

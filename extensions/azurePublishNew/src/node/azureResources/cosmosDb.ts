@@ -1,15 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ProvisionMethod, ProvisionWorkingSet, ResourceConfig, ResourceProvisionService } from '../provisionService';
 import { AZURE_HOSTING_GROUP_NAME } from '../getResources';
+import { ProvisionMethod, ProvisionWorkingSet, ResourceProvisionService } from '../types';
 
-type CosmosDbConfig = ResourceConfig & {
-  key: 'cosmosDb';
-  name: string;
-  location: string;
-  resourceGroupName: string;
-};
+import { CosmosDbConfig } from './types';
 
 const getCosmosDbConfig: CosmosDbConfig = () => {
   return {
@@ -29,7 +24,7 @@ export const cosmosDbDefinition = {
 };
 
 const getCosmosDbProvisionMethod = (): ProvisionMethod => {
-  return <TConfig>(config: TConfig, workingSet: ProvisionWorkingSet): ProvisionWorkingSet => {
+  return (config: CosmosDbConfig, workingSet: ProvisionWorkingSet): Promise<ProvisionWorkingSet> => {
     const provisionResult = {};
 
     return {
