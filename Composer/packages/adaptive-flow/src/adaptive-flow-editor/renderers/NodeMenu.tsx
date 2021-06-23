@@ -48,7 +48,6 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
         marginRight: '1px',
       }}
       {...declareElementAttributes(id)}
-      id={`${id}-NodeMenu`}
     >
       <TooltipHost content={moreLabel}>
         <IconMenu
