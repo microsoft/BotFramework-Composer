@@ -34,6 +34,7 @@ export const contentBox = css`
   display: flex;
   min-height: 320px;
   border: 1px solid #f3f2f1;
+  height: 462px;
 `;
 
 export const formContainer = css`
@@ -141,11 +142,22 @@ export const urlStackStyle = {
 
 export const header = {
   height: 50,
-  marginBottom: 20,
+  marginBottom: 30,
+};
+
+export const signInButton = {
+  color: SharedColors.cyanBlue10,
+  cursor: 'pointer',
+};
+
+export const accountInfo = {
+  fontSize: 12,
+  color: '#4f4f4f',
 };
 
 export const descriptionStyle = {
   fontSize: 12,
+  marginBottom: 25,
 };
 
 export const titleStyle = {

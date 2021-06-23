@@ -33,14 +33,20 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
-import { createQnAOnState, showCreateQnADialogState, settingsState, dispatcherState } from '../../recoilModel';
+import { dispatcherState } from '../../recoilModel';
 
-import { ReplaceQnAModalFormData, ReplaceQnAModalProps, QnAMakerLearnMoreUrl } from './constants';
-import { styles, contentBox, formContainer, choiceContainer, titleStyle, descriptionStyle } from './styles';
+import { ReplaceQnAModalFormData, ReplaceQnAModalProps } from './constants';
+import {
+  styles,
+  contentBox,
+  formContainer,
+  choiceContainer,
+  titleStyle,
+  descriptionStyle,
+  signInButton,
+  accountInfo,
+} from './styles';
 import { ImportQnAFromUrl } from './ImportQnAFromUrl';
-
-// const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
-// const KB = require('@microsoft/bf-lu/lib/parser/qna/qnamaker/kb.js');
 
 type KeyRec = {
   name: string;
@@ -61,7 +67,7 @@ type Step = 'intro' | 'resource' | 'knowledge-base' | 'outcome';
 
 const dropdownStyles = { dropdown: { width: 245, marginBottom: 10 } };
 const mainElementStyle = { marginBottom: 20 };
-const dialogBodyStyles = { height: 400, width: 920 };
+const dialogBodyStyles = { height: 464, width: 920 };
 const serviceName = 'QnA Maker';
 const serviceKeyType = 'QnAMaker';
 
@@ -78,6 +84,7 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
   const [subscriptionId, setSubscription] = useState<string>('');
   const [tenantId, setTenantId] = useState<string>('');
   const [allTenants, setAllTenants] = useState<AzureTenant[]>([]);
+  const [signedInAccount, setSignedInAccount] = useState('');
   const [tenantsErrorMessage, setTenantsErrorMessage] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<string | undefined>(undefined);
   const [noKeys, setNoKeys] = useState<boolean>(false);
@@ -229,9 +236,11 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
 
   useEffect(() => {
     // reset the ui
-    setSubscription('');
-    setKeys([]);
-    setCurrentStep('intro');
+    if (!hidden) {
+      setSubscription('');
+      setKeys([]);
+      setCurrentStep('intro');
+    }
   }, [hidden]);
 
   const fetchKeys = async (cognitiveServicesManagementClient, accounts) => {
@@ -240,15 +249,19 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
       const resourceGroup = accounts[account].id?.replace(/.*?\/resourceGroups\/(.*?)\/.*/, '$1');
       const name = accounts[account].name;
       if (resourceGroup && name) {
-        const keys = await cognitiveServicesManagementClient.accounts.listKeys(resourceGroup, name);
-        if (keys?.key1) {
-          keyList.push({
-            name: name,
-            resourceGroup: resourceGroup,
-            region: accounts[account].location || '',
-            key: keys?.key1 || '',
-            endpoint: accounts[account]?.properties?.endpoint ?? '',
-          });
+        try {
+          const keys = await cognitiveServicesManagementClient.accounts.listKeys(resourceGroup, name);
+          if (keys?.key1) {
+            keyList.push({
+              name: name,
+              resourceGroup: resourceGroup,
+              region: accounts[account].location || '',
+              key: keys?.key1 || '',
+              endpoint: accounts[account]?.properties?.endpoint ?? '',
+            });
+          }
+        } catch (_err) {
+          // pass, filter no authorization resource
         }
       }
     }
@@ -262,7 +275,6 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
       const tokenCredentials = new TokenCredentials(token);
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(tokenCredentials, subscriptionId);
       const accounts = await cognitiveServicesManagementClient.accounts.list();
-
       const keylist: KeyRec[] = await fetchKeys(
         cognitiveServicesManagementClient,
         accounts.filter((a) => a.kind === serviceKeyType)
@@ -315,6 +327,11 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
 
   const onChangeAction = async (_, opt) => {
     setNextAction(opt.key);
+    if (opt.key === 'url') {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
   };
 
   const chooseExistingKey = () => {
@@ -335,6 +352,12 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
   };
 
   const renderIntroStep = () => {
+    const shouldProvideTokens = userShouldProvideTokens();
+    if (!shouldProvideTokens) {
+      AuthClient.getAccount().then((account) => {
+        setSignedInAccount(account.loginName);
+      });
+    }
     return (
       <div>
         <div css={contentBox}>
@@ -343,26 +366,35 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
           </div>
           <div css={formContainer}>
             {nextAction === 'url' ? (
-              <ImportQnAFromUrl qnaFile={qnaFile} onChange={onFormDataChange} />
+              qnaFile && <ImportQnAFromUrl qnaFile={qnaFile} onChange={onFormDataChange} />
             ) : (
               <div>
                 <div style={titleStyle}>{formatMessage('Replace with an existing KB from QnA maker portal')}</div>
                 <div style={descriptionStyle}>
                   {formatMessage('Select this option when you want to Import existing KB from QnA maker portal. ')}
                 </div>
+                {!shouldProvideTokens &&
+                  (signedInAccount ? (
+                    <div style={accountInfo}>
+                      <span>{`Signed in as ${signedInAccount}. Click `}</span>
+                      <span style={signInButton} onClick={performNextAction}>
+                        {'next '}
+                      </span>
+                      <span>{'to select KBs'}</span>
+                    </div>
+                  ) : (
+                    <div style={signInButton} onClick={performNextAction}>
+                      {formatMessage('Sign in to Azure to continue')}
+                    </div>
+                  ))}
               </div>
             )}
           </div>
         </div>
         <DialogFooter>
-          <DefaultButton
-            text={formatMessage('Back')}
-            onClick={() => {
-              handleDismiss();
-            }}
-          />
           <PrimaryButton
             data-testid={'ReplaceKnowledgeBase'}
+            disabled={disabled}
             text={formatMessage('Next')}
             onClick={performNextAction}
           />
@@ -564,7 +596,7 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
   const handleDismiss = () => {
     onDismiss?.();
     actions.createQnADialogCancel({ projectId });
-    TelemetryClient.track('AddNewKnowledgeBaseCanceled');
+    TelemetryClient.track('UpdateKnowledgeBaseCanceled');
   };
 
   const onFormDataChange = (data, disabled) => {
@@ -577,17 +609,13 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
       return;
     }
     onSubmit(formData);
-    TelemetryClient.track('AddNewKnowledgeBaseCompleted', { source: formData.url ? 'url' : 'none' });
+    TelemetryClient.track('UpdateKnowledgeBaseCompleted', { source: formData.url ? 'url' : 'none' });
   };
 
   const onSubmitImportKB = async () => {
     if (key && token && selectedKb && formData) {
-      // const cognitiveServicesCredentials = new CognitiveServicesCredentials(key.key);
-      // const resourceClient = new QnAMakerClient(cognitiveServicesCredentials, key.endpoint);
-
-      // const result = await resourceClient.knowledgebase.download(selectedKb.id, 'Prod');
-      //console.log(result);
       onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id });
+      TelemetryClient.track('UpdateKnowledgeBaseCompleted', { source: 'kb' });
     }
   };
 

@@ -11,7 +11,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { getQnAFileUrlOption, getQnAFileMultiTurnOption, getFileLocale } from '../../utils/qnaUtil';
+import { getQnAFileUrlOption, getQnAFileMultiTurnOption } from '../../utils/qnaUtil';
 import { getExtension } from '../../utils/fileUtil';
 
 import { validateUrl } from './constants';
@@ -49,8 +49,6 @@ const description = (
 
 export const ImportQnAFromUrl: React.FC<ImportQnAFromUrlModalProps> = (props) => {
   const { qnaFile, onChange } = props;
-  // const defaultUrl = getQnAFileUrlOption(qnaFile);
-  // const defaultMultiTurn = getQnAFileMultiTurnOption(qnaFile);
   const locale = getExtension(qnaFile.id);
   formConfig.url.validate = validateUrl;
   formConfig.url.defaultValue = getQnAFileUrlOption(qnaFile);

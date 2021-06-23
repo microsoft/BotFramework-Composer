@@ -118,6 +118,7 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 router.get('/auth/logOut', AuthController.logOut);
 router.get('/auth/getTenants', csrfProtection, AuthController.getTenants);
+router.get('/auth/getAccount', csrfProtection, AuthController.getAccount);
 router.get('/auth/getARMTokenForTenant', csrfProtection, AuthController.getARMTokenForTenant);
 
 // FeatureFlags

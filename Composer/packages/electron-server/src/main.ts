@@ -168,6 +168,7 @@ async function loadServer() {
     getARMTokenForTenant: OneAuthService.getARMTokenForTenant.bind(OneAuthService),
     getTenants: OneAuthService.getTenants.bind(OneAuthService),
     logOut: OneAuthService.signOut.bind(OneAuthService),
+    getAccount: OneAuthService.getAccount.bind(OneAuthService),
     telemetryData: {
       composerVersion: app.getVersion(),
       machineId,

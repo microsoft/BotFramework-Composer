@@ -107,6 +107,10 @@ type QnaEvents = {
   AddNewKnowledgeBaseCompleted: { source: 'none' | 'kb' | 'url' };
   AddNewKnowledgeBaseError: { error: string };
   AddNewKnowledgeBaseCanceled: undefined;
+  UpdateKnowledgeBaseStarted: undefined;
+  UpdateKnowledgeBaseCompleted: { source: 'none' | 'kb' | 'url' };
+  UpdateKnowledgeBaseCanceled: undefined;
+  UpdateKnowledgeBaseError: { error: string };
   NewQnAPair: undefined;
   AlternateQnAPhraseAdded: undefined;
 };

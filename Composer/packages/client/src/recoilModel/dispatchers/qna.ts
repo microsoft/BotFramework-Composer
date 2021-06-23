@@ -431,6 +431,7 @@ export const qnaDispatcher = () => {
           callbackHelpers,
           createNotification(getQnaFailedNotification(err.response?.data?.message))
         );
+        TelemetryClient.track('UpdateKnowledgeBaseError', { error: err.response?.data?.message });
         return;
       } finally {
         deleteNotificationInternal(callbackHelpers, notification.id);
@@ -704,7 +705,7 @@ ${response.data}
           callbackHelpers,
           createNotification(getQnaFailedNotification(err.response?.data?.message))
         );
-        TelemetryClient.track('AddNewKnowledgeBaseError', { error: err.response?.data?.message });
+        TelemetryClient.track('UpdateKnowledgeBaseError', { error: err.response?.data?.message });
         return;
       } finally {
         deleteNotificationInternal(callbackHelpers, notification.id);
