@@ -78,6 +78,7 @@ export type ReplaceQnAModalFormData = {
   url?: string;
   multiTurn?: boolean;
   endpoint?: string;
+  subscriptionKey?: string;
   kbId?: string;
 };
 

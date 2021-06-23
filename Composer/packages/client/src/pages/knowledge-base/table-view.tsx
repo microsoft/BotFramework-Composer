@@ -314,7 +314,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const handleImportQnA = async (data) => {
     if (!projectId || !dialogId) return;
-    const { url, multiTurn, endpoint, kbId } = data;
+    const { url, multiTurn, endpoint, subscriptionKey, kbId } = data;
 
     if (importingResourceQnAFile) {
       if (url) {
@@ -331,6 +331,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           dialogId: qnaFile ? getBaseName(qnaFile.id) : '',
           projectId,
           endpoint,
+          subscriptionKey,
           kbId,
         });
       }

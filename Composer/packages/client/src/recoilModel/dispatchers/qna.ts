@@ -672,12 +672,14 @@ ${response.data}
       dialogId,
       projectId,
       endpoint,
+      subscriptionKey,
       kbId,
     }: {
       containerId: string; // qna container file id: {name}.source.{locale}
       dialogId: string;
       projectId: string;
       endpoint: string;
+      subscriptionKey: string;
       kbId: string;
     }) => {
       const { snapshot } = callbackHelpers;
@@ -685,8 +687,10 @@ ${response.data}
       addNotificationInternal(callbackHelpers, notification);
       let response;
       try {
-        response = await httpClient.get(`/utilities/qna/import`, {
-          params: { endpoint: encodeURIComponent(endpoint), kbId },
+        response = await httpClient.post(`/utilities/qna/import`, {
+          endpoint: encodeURIComponent(endpoint),
+          subscriptionKey,
+          kbId,
         });
         const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
         const notification = createNotification(

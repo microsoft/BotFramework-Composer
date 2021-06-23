@@ -614,7 +614,7 @@ export const ReplaceQnAFromPortalModal: React.FC<ReplaceQnAModalProps> = (props)
 
   const onSubmitImportKB = async () => {
     if (key && token && selectedKb && formData) {
-      onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id });
+      onSubmit({ ...formData, endpoint: key.endpoint, kbId: selectedKb.id, subscriptionKey: key.key });
       TelemetryClient.track('UpdateKnowledgeBaseCompleted', { source: 'kb' });
     }
   };
