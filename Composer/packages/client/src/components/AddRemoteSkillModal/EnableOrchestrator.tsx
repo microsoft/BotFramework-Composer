@@ -8,6 +8,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { PrimaryButton, DefaultButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { useRecoilValue } from 'recoil';
+import { DialogSetting } from '@botframework-composer/types';
 
 import { dispatcherState } from '../../recoilModel';
 import { enableOrchestratorDialog } from '../../constants';
@@ -21,10 +22,11 @@ type OrchestratorProps = {
   onSubmit: (event: React.MouseEvent<HTMLElement | Button>, userSelected?: boolean) => Promise<void>;
   onBack?: (event: React.MouseEvent<HTMLElement | Button>) => void;
   hideBackButton?: boolean;
+  runtime: DialogSetting['runtime'];
 };
 
 const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
-  const { projectId, onSubmit, onBack, hideBackButton = false } = props;
+  const { projectId, onSubmit, onBack, hideBackButton = false, runtime } = props;
   const [enableOrchestrator, setEnableOrchestrator] = useState(true);
   const { setApplicationLevelError, reloadProject } = useRecoilValue(dispatcherState);
   const onChange = (ev, check) => {
@@ -59,7 +61,7 @@ const EnableOrchestrator: React.FC<OrchestratorProps> = (props) => {
               onSubmit(event, enableOrchestrator);
               if (enableOrchestrator) {
                 // TODO: Block UI from doing any work until import is complete. Item #7531
-                importOrchestrator(projectId, reloadProject, setApplicationLevelError);
+                importOrchestrator(projectId, runtime, reloadProject, setApplicationLevelError);
               }
             }}
           />
