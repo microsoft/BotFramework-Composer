@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 
 import { getBaseName } from '../../../../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../../../../utils/dialogUtil';
-import { convertPathToUrl, createBotSettingUrl, generateResourcePageUrl } from '../../../../../utils/navigation';
+import { convertPathToUrl, createBotSettingUrl } from '../../../../../utils/navigation';
 
 export enum DiagnosticType {
   DIALOG,
@@ -36,6 +36,22 @@ export interface IDiagnosticInfo {
   learnMore?: string;
   title?: string;
   friendlyLocationBreadcrumbItems?: string[];
+}
+
+type ResourceType = 'language-generation' | 'language-understanding' | 'knowledge-base';
+function generateResourcePageUrl(
+  rootProjectId: string,
+  skillId: string | null,
+  resourceType: ResourceType,
+  resourceId: string,
+  line = 0
+) {
+  let uri = `/bot/${rootProjectId}`;
+  if (skillId !== null && skillId !== rootProjectId) {
+    uri += `/skill/${skillId}`;
+  }
+
+  return `${uri}/${resourceType}/${resourceId}/edit#L=${line}`;
 }
 
 const getFriendlyPath = (dialogPath: string | undefined, dialogs: DialogInfo[]) => {
@@ -252,7 +268,6 @@ export class LgDiagnostic extends DiagnosticInfo {
     if (dialogPath) {
       uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
     }
-
     return uri;
   };
 }
