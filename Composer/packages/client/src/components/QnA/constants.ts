@@ -54,6 +54,7 @@ export type CreateQnAFromFormProps = {
   projectId: string;
   locales: string[];
   defaultLocale: string;
+  currentLocale: string;
   dialogId: string;
   qnaFiles: QnAFile[];
   initialName?: string;

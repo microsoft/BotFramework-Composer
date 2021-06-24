@@ -27,11 +27,11 @@ const formConfig: FieldConfig<CreateQnAFromQnAMakerFormData> = {
 };
 
 export const CreateQnAFromQnAMaker: React.FC<CreateQnAFromFormProps> = (props) => {
-  const { onChange, qnaFiles, locales, defaultLocale, initialName, onUpdateInitialName } = props;
+  const { onChange, qnaFiles, locales, currentLocale, initialName, onUpdateInitialName } = props;
 
   formConfig.name.validate = validateName(qnaFiles);
   formConfig.name.defaultValue = initialName || '';
-  formConfig.locale.defaultValue = defaultLocale;
+  formConfig.locale.defaultValue = currentLocale;
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
 
   const options: IDropdownOption[] = locales.map((item) => {

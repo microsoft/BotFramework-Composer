@@ -154,7 +154,7 @@ export const CreateQnAFromUrl: React.FC<CreateQnAFromFormProps> = (props) => {
               <TextField
                 data-testid={`add${locale}InCreateQnAFromUrlModal`}
                 errorMessage={formDataErrors.urls[i]}
-                label={usedLocales[i]}
+                prefix={usedLocales[i]}
                 placeholder={formatMessage('Type or paste URL')}
                 required={i === 0}
                 styles={textFieldUrl}

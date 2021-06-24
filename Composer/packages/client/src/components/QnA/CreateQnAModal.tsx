@@ -34,7 +34,13 @@ import TelemetryClient from '../../telemetry/TelemetryClient';
 import { AuthClient } from '../../utils/authClient';
 import { AuthDialog } from '../../components/Auth/AuthDialog';
 import { getTokenFromCache, isShowAuthDialog, userShouldProvideTokens } from '../../utils/auth';
-import { createQnAOnState, showCreateQnADialogState, settingsState, dispatcherState } from '../../recoilModel';
+import {
+  createQnAOnState,
+  showCreateQnADialogState,
+  settingsState,
+  dispatcherState,
+  localeState,
+} from '../../recoilModel';
 
 import { CreateQnAFormData, CreateQnAModalProps, QnAMakerLearnMoreUrl } from './constants';
 import { subText, styles, contentBox, formContainer, choiceContainer } from './styles';
@@ -73,6 +79,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const locales = settings.languages;
   const defaultLocale = settings.defaultLanguage;
+  const currentLocale = useRecoilValue(localeState(projectId));
   const showCreateQnAFrom = useRecoilValue(showCreateQnADialogState(projectId));
   const [initialName, setInitialName] = useState<string>('');
   const [formData, setFormData] = useState<CreateQnAFormData>();
@@ -368,6 +375,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             {nextAction === 'url' ? (
               <CreateQnAFromUrl
                 {...props}
+                currentLocale={currentLocale}
                 defaultLocale={defaultLocale}
                 initialName={initialName}
                 locales={locales}
@@ -377,6 +385,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             ) : nextAction === 'scratch' ? (
               <CreateQnAFromScratch
                 {...props}
+                currentLocale={currentLocale}
                 defaultLocale={defaultLocale}
                 initialName={initialName}
                 locales={locales}
@@ -386,6 +395,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
             ) : (
               <CreateQnAFromQnAMaker
                 {...props}
+                currentLocale={currentLocale}
                 defaultLocale={defaultLocale}
                 initialName={initialName}
                 locales={locales}
