@@ -36,13 +36,14 @@ const availableResources: ResourceDefinition[] = [
 export const getResources = (project: IBotProject): GetResourcesResult[] => {
   const provisionServices: Record<string, ResourceProvisionService> = getProvisionServices();
 
-  return availableResources.map((availableResource) => {
-    const service = provisionServices[availableResource.key];
+  return availableResources.reduce((resources: GetResourcesResult[], currentResource: ResourceDefinition) => {
+    const service = provisionServices[currentResource.key];
     if (service.getRecommendationForProject(project) !== 'notAllowed') {
-      return {
-        ...availableResource,
+      resources.push({
+        ...currentResource,
         required: service.getRecommendationForProject(project) === 'required',
-      };
+      });
     }
-  });
+    return resources;
+  }, []);
 };

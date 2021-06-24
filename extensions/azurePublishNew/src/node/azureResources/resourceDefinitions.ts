@@ -84,7 +84,7 @@ export const qnaDefinition: ResourceDefinition = {
   tier: 'S0 Standard',
   group: COGNITIVE_SERVICES_GROUP_NAME,
 };
-export const servicePlanDefinition = {
+export const servicePlanDefinition: ResourceDefinition = {
   key: 'servicePlan',
   description:
     'App Service plans give you the flexibility to allocate specific apps to a given set of resources and further optimize your Azure resource utilization. This way, if you want to save money on your testing environment you can share a plan across multiple apps.',
